@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,47 +15,61 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+namespace Zephir\Expression\Builder\Statements;
 
-namespace Zephir\Types;
-
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\FunctionCall;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Types;
-
-class CharType extends AbstractType
+/**
+ * CallMethodStatement
+ *
+ * Allows to manually build a method call AST node
+ */
+class CallMethodStatement extends CallFunctionStatement
 {
+
+    private $variable;
+
+
     /**
-     * {@inheritdoc}
+     * @param null $variable
+     * @param null $name
+     * @param array|null $parameters
+     * @param int $type
      */
-    public function getTypeName()
+    public function __construct($variable = null, $name = null, array $parameters = null, $type = self::TYPE_CALL_DIRECT)
     {
-        return 'char';
+        parent::__construct($name, $parameters, $type);
+
+        if ($name !== null) {
+            $this->setVariable($variable);
+        }
     }
 
     /**
-     * Transforms calls to method "toHex" to sprintf('%X') call
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     * @return bool|mixed|\Zephir\CompiledExpression
+     * @return mixed
      */
-    public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function getVariable()
     {
-        $exprBuilder = BuilderFactory::getInstance();
-        $functionCall = $exprBuilder->statements()
-            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+        return $this->variable;
+    }
 
-        $expression = new Expression($functionCall->build());
+    /**
+     * @param $variable
+     * @return $this
+     */
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
+        return $this;
+    }
 
-        return $expression->compile($compilationContext);
+    /**
+     * @return array
+     */
+    protected function preBuild()
+    {
+        $expression = parent::preBuild();
+        $expression['type'] = 'mcall';
+        $expression['variable'] = $this->getVariable();
+
+        return $expression;
     }
 }

@@ -26,6 +26,7 @@ use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Variable;
 use Zephir\Utils;
@@ -74,6 +75,7 @@ class ForStatement extends StatementAbstract
         }
 
         $codePrinter = $compilationContext->codePrinter;
+        $exprBuilder = BuilderFactory::getInstance();
 
         /**
          * Initialize 'key' variable
@@ -112,76 +114,48 @@ class ForStatement extends StatementAbstract
         /**
          * Create an implicit 'let' operation to set the current value in the upper bound of the range
          */
-        $statement = new LetStatement(array(
-            'type' => 'let',
-            'assignments' => array(
-                array(
-                    'assign-type' => 'variable',
-                    'variable' => $upperBoundVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => array(
-                        'type' => $parameters[1]->getType(),
-                        'value' => $parameters[1]->getCode(),
-                        'file' => $this->_statement['file'],
-                        'line' => $this->_statement['line'],
-                        'char' => $this->_statement['char']
-                    ),
-                    'file' => $this->_statement['file'],
-                    'line' => $this->_statement['line'],
-                    'char' => $this->_statement['char']
-                )
-            )
+        $builderLet = $exprBuilder->statements()->let();
+        $builderLet->setAssignments(array($exprBuilder->operators()
+            ->assignVariable($upperBoundVariable->getName(), $exprBuilder->literal($parameters[1]->getType(), $parameters[1]->getCode())
+                ->setFile($this->_statement['file'])
+                ->setLine($this->_statement['line'])
+                ->setChar($this->_statement['char']))
+            ->setFile($this->_statement['file'])
+            ->setLine($this->_statement['line'])
+            ->setChar($this->_statement['char'])
         ));
+
+        $statement = new LetStatement($builderLet->build());
         $statement->compile($compilationContext);
 
         if ($this->_statement['reverse']) {
             /**
-             * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
+             * Create an implicit 'let' operation for the initialize expression
              */
-            $statement = new LetStatement(array(
-                'type' => 'let',
-                'assignments' => array(
-                    array(
-                        'assign-type' => 'variable',
-                        'variable' => $tempVariable->getName(),
-                        'operator' => 'assign',
-                        'expr' => array(
-                            'type' => 'variable',
-                            'value' => $upperBoundVariable->getName(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
-                        ),
-                        'file' => $this->_statement['file'],
-                        'line' => $this->_statement['line'],
-                        'char' => $this->_statement['char']
-                    )
-                )
+            $builderLet->setAssignments(array($exprBuilder->operators()
+                ->assignVariable($tempVariable->getName(), $exprBuilder->variable($upperBoundVariable->getName())
+                    ->setFile($this->_statement['file'])
+                    ->setLine($this->_statement['line'])
+                    ->setChar($this->_statement['char']))
+                ->setFile($this->_statement['file'])
+                ->setLine($this->_statement['line'])
+                ->setChar($this->_statement['char'])
             ));
+            $statement = new LetStatement($builderLet->build());
         } else {
             /**
-             * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
+             * Create an implicit 'let' operation for the initialize expression
              */
-            $statement = new LetStatement(array(
-                'type' => 'let',
-                'assignments' => array(
-                    array(
-                        'assign-type' => 'variable',
-                        'variable' => $tempVariable->getName(),
-                        'operator' => 'assign',
-                        'expr' => array(
-                            'type'  => $parameters[0]->getType(),
-                            'value' => $parameters[0]->getCode(),
-                            'file'  => $this->_statement['file'],
-                            'line'  => $this->_statement['line'],
-                            'char'  => $this->_statement['char']
-                        ),
-                        'file' => $this->_statement['file'],
-                        'line' => $this->_statement['line'],
-                        'char' => $this->_statement['char']
-                    )
-                )
+            $builderLet->setAssignments(array($exprBuilder->operators()
+                ->assignVariable($tempVariable->getName(), $exprBuilder->literal($parameters[0]->getType(), $parameters[0]->getCode())
+                    ->setFile($this->_statement['file'])
+                    ->setLine($this->_statement['line'])
+                    ->setChar($this->_statement['char']))
+                ->setFile($this->_statement['file'])
+                ->setLine($this->_statement['line'])
+                ->setChar($this->_statement['char'])
             ));
+            $statement = new LetStatement($builderLet->build());
         }
 
         $statement->compile($compilationContext);

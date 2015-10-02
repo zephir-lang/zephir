@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,47 +15,52 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+namespace Zephir\Expression\Builder\Operators;
 
-namespace Zephir\Types;
-
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\FunctionCall;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Types;
-
-class CharType extends AbstractType
+/**
+ * Class RawOperator
+ * @package Zephir\Expression\Builder\Operators
+ */
+class RawOperator extends AbstractOperator
 {
     /**
-     * {@inheritdoc}
+     * @var array
      */
-    public function getTypeName()
+    private $expression;
+
+    /**
+     * @param array|null $expression
+     */
+    public function __construct(array $expression = null)
     {
-        return 'char';
+        if ($expression !== null) {
+            $this->setExpression($expression);
+        }
     }
 
     /**
-     * Transforms calls to method "toHex" to sprintf('%X') call
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     * @return bool|mixed|\Zephir\CompiledExpression
+     * @return array
      */
-    public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function getExpression()
     {
-        $exprBuilder = BuilderFactory::getInstance();
-        $functionCall = $exprBuilder->statements()
-            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+        return $this->expression;
+    }
 
-        $expression = new Expression($functionCall->build());
+    /**
+     * @param array $expression
+     * @return $this
+     */
+    public function setExpression(array $expression)
+    {
+        $this->expression = $expression;
+        return $this;
+    }
 
-        return $expression->compile($compilationContext);
+    /**
+     * @return array
+     */
+    protected function preBuild()
+    {
+        return $this->getExpression();
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,47 +15,50 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+namespace Zephir\Expression\Builder;
 
-namespace Zephir\Types;
-
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\FunctionCall;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Types;
-
-class CharType extends AbstractType
+/**
+ * RawExpression
+ *
+ * Allows to use a raw expression in a builder
+ */
+class RawExpression extends AbstractBuilder
 {
+    private $expression;
+
     /**
-     * {@inheritdoc}
+     * @param null $expression
      */
-    public function getTypeName()
+    public function __construct($expression = null)
     {
-        return 'char';
+        if ($expression !== null) {
+            $this->setExpression($expression);
+        }
     }
 
     /**
-     * Transforms calls to method "toHex" to sprintf('%X') call
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     * @return bool|mixed|\Zephir\CompiledExpression
+     * @return mixed
      */
-    public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function getExpression()
     {
-        $exprBuilder = BuilderFactory::getInstance();
-        $functionCall = $exprBuilder->statements()
-            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+        return $this->expression;
+    }
 
-        $expression = new Expression($functionCall->build());
+    /**
+     * @param $expr
+     * @return $this
+     */
+    public function setExpression($expr)
+    {
+        $this->expression = $expr;
+        return $this;
+    }
 
-        return $expression->compile($compilationContext);
+    /**
+     * @return array
+     */
+    protected function preBuild()
+    {
+        return $this->getExpression();
     }
 }

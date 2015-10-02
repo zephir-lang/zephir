@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,47 +15,70 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+namespace Zephir\Expression\Builder\Statements;
 
-namespace Zephir\Types;
+use Zephir\Expression\Builder\AbstractBuilder;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\FunctionCall;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Types;
-
-class CharType extends AbstractType
+/**
+ * StatementsBlock
+ *
+ * Allows to manually build a statements block AST node
+ */
+class StatementsBlock extends AbstractBuilder
 {
+    private $statements;
+
     /**
-     * {@inheritdoc}
+     * @param array|null $statements
      */
-    public function getTypeName()
+    public function __construct(array $statements = null)
     {
-        return 'char';
+        if ($statements !== null) {
+            $this->setStatements($statements);
+        }
     }
 
     /**
-     * Transforms calls to method "toHex" to sprintf('%X') call
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     * @return bool|mixed|\Zephir\CompiledExpression
+     * @return array
      */
-    public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function getStatements()
     {
-        $exprBuilder = BuilderFactory::getInstance();
-        $functionCall = $exprBuilder->statements()
-            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+        return $this->statements;
+    }
 
-        $expression = new Expression($functionCall->build());
+    /**
+     * @param array $statements
+     * @return $this
+     */
+    public function setStatements($statements)
+    {
+        $this->statements = $statements;
+        return $this;
+    }
 
-        return $expression->compile($compilationContext);
+    /**
+     * @param $statement
+     * @return $this
+     */
+    public function addStatement($statement)
+    {
+        $this->statements[] = $statement;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function build()
+    {
+        return $this->resolve($this->preBuild());
+    }
+
+    /**
+     * @return array
+     */
+    protected function preBuild()
+    {
+        return $this->getStatements();
     }
 }

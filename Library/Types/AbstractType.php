@@ -22,6 +22,7 @@ namespace Zephir\Types;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
@@ -83,15 +84,13 @@ abstract class AbstractType
                 }
             }
 
-            $builder = new FunctionCallBuilder(
-                $this->methodMap[$methodName],
-                $parameters,
-                FunctionCall::CALL_NORMAL,
-                $expression['file'],
-                $expression['line'],
-                $expression['char']
-            );
-            $expression = new Expression($builder->get());
+            $functionCall = BuilderFactory::getInstance()->statements()
+                ->functionCall($this->methodMap[$methodName], $parameters)
+                ->setFile($expression['file'])
+                ->setLine($expression['line'])
+                ->setChar($expression['char']);
+
+            $expression = new Expression($functionCall->build());
 
             return $expression->compile($compilationContext);
         }

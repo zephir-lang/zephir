@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,58 +15,15 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+namespace Zephir\Expression\Builder\Operators;
 
-namespace Zephir\Statements;
-
-use Zephir\CompilationContext;
-use Zephir\CompilerException;
-use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class StatementAbstract
+ * Class AbstractOperator
+ * @package Zephir\Expression\Builder\Operators
  */
-abstract class StatementAbstract
+abstract class AbstractOperator extends AbstractBuilder
 {
-    protected $_statement;
 
-    protected $_uniqueId;
-
-    protected $_evalExpression;
-
-    protected static $_uniqueGenerator;
-
-    /**
-     * StatementAbstract construct
-     *
-     * @param array $statement
-     */
-    public function __construct(array $statement)
-    {
-        $this->_statement = $statement;
-    }
-
-    /**
-     * Generates a uniqueId for those instructions that need it
-     *
-     * @return int
-     */
-    public function getUniqueId()
-    {
-        if (!$this->_uniqueId) {
-            $this->_uniqueId = self::$_uniqueGenerator++;
-        }
-        return $this->_uniqueId;
-    }
-
-    public function getEvalExpression()
-    {
-        return $this->_evalExpression;
-    }
-
-    /**
-     * Compiles the statement
-     *
-     * @param CompilationContext $compilationContext
-     */
-    abstract public function compile(CompilationContext $compilationContext);
 }

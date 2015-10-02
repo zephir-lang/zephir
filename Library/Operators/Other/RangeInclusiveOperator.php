@@ -22,10 +22,12 @@ namespace Zephir\Operators\Other;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
+use Zephir\Types;
 
 /**
  * RangeInclusive
@@ -50,17 +52,15 @@ class RangeInclusiveOperator extends BaseOperator
             throw new CompilerException("Invalid 'right' operand for 'irange' expression", $expression['right']);
         }
 
-        $builder = new FunctionCallBuilder('range', array(
-            array('parameter' => $expression['left']),
-            array('parameter' => $expression['right'])
-        ));
+        $exprBuilder = Expression\Builder\BuilderFactory::getInstance();
 
         /**
          * Implicit type coercing
          */
-        $castBuilder = new CastOperatorBuilder('array', $builder);
+        $castBuilder = $exprBuilder->operators()->cast(Types::ARRAY_, $exprBuilder->statements()
+            ->functionCall('range', array($expression['left'], $expression['right'])));
 
-        $expression = new Expression($castBuilder->get());
+        $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->_readOnly);
         return $expression->compile($compilationContext);
     }

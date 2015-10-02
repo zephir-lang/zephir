@@ -21,6 +21,7 @@ namespace Zephir\Expression;
 
 use Zephir\ClassMethod;
 use Zephir\Exception;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Variable;
 use Zephir\ClassMethodParameters;
 use Zephir\CompiledExpression;
@@ -82,13 +83,13 @@ class ClosureArrow extends Closure
             ),
         ));
 
-        $statementBlock = new StatementsBlockBuilder(array(
-            new ReturnStatementBuilder(
-                new RawExpressionBuilder($expression['right'])
-            )
+        $exprBuilder = BuilderFactory::getInstance();
+        $statementBlockBuilder = $exprBuilder->statements()->block(array(
+            $exprBuilder->statements()
+                ->returnX($exprBuilder->raw($expression['right']))
         ));
 
-        $block = $statementBlock->get();
+        $block = $statementBlockBuilder->build();
 
         $classMethod = new ClassMethod(
             $classDefinition,
