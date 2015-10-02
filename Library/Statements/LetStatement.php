@@ -48,6 +48,9 @@ use Zephir\Statements\Let\Decr as LetDecr;
 use Zephir\Statements\Let\Incr as LetIncr;
 use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
 use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
+use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Expression\Builder\Operators\AssignVariableOperator;
+use Zephir\Expression\Builder\Operators\BinaryOperator;
 
 /**
  * LetStatement
@@ -98,6 +101,12 @@ class LetStatement extends StatementAbstract
              * Incr/Decr assignments don't require an expression
              */
             if (isset($assignment['expr'])) {
+                /**
+                 * Replace on direct-assignment if this bitwise-assignment
+                 * @Todo: Replace on supported native bitwise-assignment
+                 */
+                $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
+
                 $expr = new Expression($assignment['expr']);
 
                 switch ($assignment['assign-type']) {
@@ -248,5 +257,53 @@ class LetStatement extends StatementAbstract
                     throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
             }
         }
+    }
+
+    /**
+     * @param $assignment
+     * @return mixed
+     * @throws CompilerException
+     */
+    protected function replaceAssignBitwiseOnDirect($assignment)
+    {
+        switch ($assignment['operator']) {
+            case AssignVariableOperator::OPERATOR_BITWISE_AND:
+                $operator = BinaryOperator::OPERATOR_BITWISE_AND;
+                break;
+
+            case AssignVariableOperator::OPERATOR_BITWISE_OR:
+                $operator = BinaryOperator::OPERATOR_BITWISE_OR;
+                break;
+
+            case AssignVariableOperator::OPERATOR_BITWISE_XOR:
+                $operator = BinaryOperator::OPERATOR_BITWISE_XOR;
+                break;
+
+            case AssignVariableOperator::OPERATOR_BITWISE_SHIFTLEFT:
+                $operator = BinaryOperator::OPERATOR_BITWISE_SHIFT_LEFT;
+                break;
+
+            case AssignVariableOperator::OPERATOR_BITWISE_SHIFTRIGHT:
+                $operator = BinaryOperator::OPERATOR_BITWISE_SHIFT_RIGHT;
+                break;
+
+            default:
+                return $assignment;
+        }
+
+        if ($assignment['assign-type'] != 'variable') {
+            throw new CompilerException("Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']);
+        }
+
+        $builderExpr = BuilderFactory::getInstance();
+
+        $leftExpression = $builderExpr->variable($assignment['variable']);
+
+        $assignment['expr'] = $builderExpr->operators()
+            ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
+            ->build();
+
+        $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+        return $assignment;
     }
 }
