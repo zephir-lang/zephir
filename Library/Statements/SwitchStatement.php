@@ -89,7 +89,7 @@ class SwitchStatement extends StatementAbstract
             }
 
             $clauses = $this->normalizeClauses($this->_statement['clauses']);
-            $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
+            $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getName());
 
             /**
              * In the first round we group case clauses that have block statements

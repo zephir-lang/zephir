@@ -26,6 +26,7 @@ namespace Zephir;
  */
 class Variable
 {
+    const BRANCH_MAGIC = '$$';
     /**
      * Variable's type
      */
@@ -763,7 +764,7 @@ class Variable
     public function initNonReferenced(CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/memory');
-        $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->name . ');');
+        $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->getName() . ');');
     }
 
     /**

@@ -1687,121 +1687,9 @@ class ClassMethod
         }
 
         /**
-         * Initialize default values in dynamic variables
+         * Initialize variable default values
          */
-        $initVarCode = "";
-        foreach ($symbolTable->getVariables() as $variable) {
-            /**
-             * Initialize 'dynamic' variables with default values
-             */
-            if ($variable->getType() == 'variable') {
-                if ($variable->getNumberUses() > 0) {
-                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
-                        $defaultValue = $variable->getDefaultInitValue();
-                        if (is_array($defaultValue)) {
-                            $symbolTable->mustGrownStack(true);
-                            $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
-                            switch ($defaultValue['type']) {
-                                case 'int':
-                                case 'uint':
-                                case 'long':
-                                    $initVarCode .= "\t" . $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
-                                    break;
-
-                                case 'bool':
-                                    $initVarCode .= "\t" . $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
-                                    break;
-
-                                case 'char':
-                                case 'uchar':
-                                    if (strlen($defaultValue['value']) > 2) {
-                                        if (strlen($defaultValue['value']) > 10) {
-                                            throw new CompilerException("Invalid char literal: '" . substr($defaultValue['value'], 0, 10) . "...'", $defaultValue);
-                                        } else {
-                                            throw new CompilerException("Invalid char literal: '" . $defaultValue['value'] . "'", $defaultValue);
-                                        }
-                                    }
-                                    $initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', \'' . $defaultValue['value'] . '\');' . PHP_EOL;
-                                    break;
-
-                                case 'null':
-                                    $initVarCode .= "\t" . $compilationContext->backend->assignNull($variable, $compilationContext, false) . PHP_EOL;
-                                    break;
-
-                                case 'double':
-                                    $initVarCode .= "\t" . 'ZVAL_DOUBLE(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
-                                    break;
-
-                                case 'string':
-                                    $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
-                                    break;
-
-                                case 'array':
-                                case 'empty-array':
-                                    $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
-                                    break;
-
-                                default:
-                                    throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
-                            }
-                        }
-                    }
-                }
-                continue;
-            }
-
-            /**
-             * Initialize 'string' variables with default values
-             */
-            if ($variable->getType() == 'string') {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
-                        $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
-                        switch ($defaultValue['type']) {
-                            case 'string':
-                                $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
-                                break;
-
-                            case 'null':
-                                $initVarCode .= "\t" . 'ZVAL_EMPTY_STRING(' . $variable->getName() . ');' . PHP_EOL;
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
-                        }
-                    }
-                }
-                continue;
-            }
-
-            /**
-             * Initialize 'array' variables with default values
-             */
-            if ($variable->getType() == 'array') {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
-                        $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
-                        switch ($defaultValue['type']) {
-                            case 'null':
-                                $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
-                                break;
-
-                            case 'array':
-                            case 'empty-array':
-                                $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
-                        }
-                    }
-                }
-            }
-        }
+        $initVarCode = $compilationContext->backend->initializeVariableDefaults($symbolTable->getVariables(), $compilationContext);
 
         /**
          * Fetch parameters from vm-top
@@ -2102,35 +1990,7 @@ class ClassMethod
         /**
          * Generate the variable definition for variables used
          */
-        $varInitCode = array();
-        $additionalCode = $compilationContext->backend->onPreInitVar($this, $compilationContext);
-
-        foreach ($usedVariables as $type => $variables) {
-            list ($pointer, $code) = $compilationContext->backend->getTypeDefinition($type);
-            $code .= ' ';
-            $groupVariables = array();
-            $defaultValues = array();
-
-            /**
-             * @var $variables Variable[]
-             */
-            foreach ($variables as $variable) {
-                $nextCode = $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
-                if ($nextCode && $additionalCode) {
-                    $additionalCode .= PHP_EOL . $nextCode;
-                } else {
-                    $additionalCode .= $nextCode;
-                }
-            }
-
-            $varInitCode[] = "\t" . $code . join(', ', $groupVariables) . ';';
-        }
-        /* Keep order consistent with previous zephir versions (BC-only) */
-        $varInitCode = array_reverse($varInitCode);
-        if ($additionalCode) {
-            $varInitCode[] = $additionalCode;
-        }
-        $initCode = implode(PHP_EOL, $varInitCode);
+        $initCode = "\t".implode(PHP_EOL."\t", $compilationContext->backend->declareVariables($this, $usedVariables, $compilationContext));
         if ($initCode) {
             $codePrinter->preOutput($initCode);
         }

@@ -200,6 +200,11 @@ class CodePrinter
         $this->level--;
     }
 
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
+
     /**
      * Returns the output in the buffer
      *
@@ -228,5 +233,12 @@ class CodePrinter
         $this->code = null;
         $this->lastLine = null;
         $this->level = 0;
+    }
+
+    public function duplicate()
+    {
+        $printer = new CodePrinter();
+        $printer->setLevel($this->level);
+        return $printer;
     }
 }

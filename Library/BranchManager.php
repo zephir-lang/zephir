@@ -32,6 +32,8 @@ class BranchManager
 
     protected $uniqueId = 1;
 
+    protected $rootBranch = null;
+
     /**
      * Sets the current active branch in the manager
      *
@@ -51,6 +53,10 @@ class BranchManager
 
         $this->level++;
         $this->uniqueId++;
+
+        if ($branch->getType() == Branch::TYPE_ROOT) {
+            $this->setRootBranch($branch);
+        }
     }
 
     /**
@@ -73,5 +79,20 @@ class BranchManager
     public function getCurrentBranch()
     {
         return $this->currentBranch;
+    }
+
+    public function getCurrentBranchId()
+    {
+        return $this->currentBranch->getUniqueId();
+    }
+
+    public function setRootBranch(Branch $branch)
+    {
+        $this->rootBranch = $branch;
+    }
+
+    public function getRootBranch()
+    {
+        return $this->rootBranch;
     }
 }
