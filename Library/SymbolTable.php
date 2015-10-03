@@ -130,7 +130,17 @@ class SymbolTable
      */
     public function addVariable($type, $name, CompilationContext $compilationContext, $defaultValue = null)
     {
-        $variable = new Variable($type, $name, $compilationContext->currentBranch, $defaultValue);
+        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+        $branchId = $currentBranch->getUniqueId();
+        if ($this->isSuperGlobal($name) || $type == 'zephir_fcall_cache_entry') {
+            $branchId = 1;
+        }
+        $varName = $name;
+        if ($branchId > 1 && $currentBranch->getType() != Branch::TYPE_ROOT) {
+            $varName = $name . Variable::BRANCH_MAGIC . $branchId;
+        }
+
+        $variable = new Variable($type, $varName, $compilationContext->currentBranch, $defaultValue);
         if ($type == 'variable') {
             if ($this->localContext) {
                 /**
@@ -142,14 +152,7 @@ class SymbolTable
             }
         }
 
-        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
-        $branchId = $currentBranch->getUniqueId();
-        if ($this->isSuperGlobal($name) || $type == 'zephir_fcall_cache_entry') {
-            $branchId = 1;
-        }
-        if ($branchId > 1 && $currentBranch->getType() != Branch::TYPE_ROOT) {
-            $variable->setLowName($name . Variable::BRANCH_MAGIC . $branchId);
-        }
+
         if (!isset($this->branchVariables[$branchId])) {
             $this->branchVariables[$branchId] = array();
         }
@@ -884,7 +887,12 @@ class SymbolTable
         foreach ($this->branchTempVariables[$branchId] as $location => $typeVariables) {
             foreach ($typeVariables as $type => $variables) {
                 foreach ($variables as $variable) {
-                    if ($branchId == $this->resolveVariableToBranch($variable->getRealName(), $compilationContext)->getUniqueId()) {
+                    $pos = strpos($variable->getName(), Variable::BRANCH_MAGIC);
+                    $otherBranchId = 1;
+                    if ($pos > -1) {
+                        $otherBranchId = intval(substr($variable->getName(), $pos + strlen(Variable::BRANCH_MAGIC)));
+                    }
+                    if ($branchId == $otherBranchId) {
                         $variable->setIdle(true);
                     }
                 }

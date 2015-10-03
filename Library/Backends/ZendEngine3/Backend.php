@@ -122,11 +122,11 @@ class Backend extends BackendZendEngine2
 
         if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
-            if ($variable->getName() == '__$null') {
+            if ($variable->getRealname() == '__$null') {
                 return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
-            } else if ($variable->getName() == '__$true') {
+            } else if ($variable->getRealname() == '__$true') {
                 return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);';
-            } else if ($variable->getName() == '__$false') {
+            } else if ($variable->getRealname() == '__$false') {
                 return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);';
             }
             return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
@@ -477,7 +477,8 @@ class Backend extends BackendZendEngine2
         if ($value == 'null' || $value == 'true' || $value == 'false') {
             $varName = '__$' . $value;
             if (!$context->symbolTable->hasVariable($varName)) {
-                $tempVariable = $context->symbolTable->addVariable('variable', $varName, $context);
+                $tempVariable = new Variable('variable', $varName, $context->currentBranch, null);
+                $context->symbolTable->addRawVariable($tempVariable);
             }
             $tempVariable = $context->symbolTable->getVariableForWrite($varName, $context);
             $tempVariable->increaseUses();

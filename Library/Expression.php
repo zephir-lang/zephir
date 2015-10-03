@@ -335,7 +335,17 @@ class Expression
                 return new LiteralCompiledExpression('char', $expression['value'], $expression);
 
             case 'variable':
-                return new CompiledExpression('variable', $expression['value'], $expression);
+                $var = $compilationContext->symbolTable->getVariable($expression['value']);
+                if ($var) {
+                    if ($var->getRealName() == 'this') {
+                        $var = 'this';
+                    } else {
+                        $var = $var->getName();
+                    }
+                } else {
+                    $var = $expression['value'];
+                }
+                return new CompiledExpression('variable', $var, $expression);
 
             case 'constant':
                 $compilableExpression = new Constants();
