@@ -1245,6 +1245,11 @@ class Backend extends BaseBackend
         }
 
         $codePrinter->output('}');
+        /* Make sure to free the duplicated hash table */
+        if ($duplicateHash) {
+            $codePrinter->output('zend_hash_destroy(' . $arrayHash->getName() . ');');
+            $codePrinter->output('FREE_HASHTABLE(' . $arrayHash->getName() . ');');
+        }
     }
 
     public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
