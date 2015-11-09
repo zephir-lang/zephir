@@ -137,7 +137,7 @@ class DocblockParser
                         if ($currentChar == "\n" || $currentChar == "\r") {
                             $this->__tryRegisterAnnotation();
 
-                            $this->ignoreSpaces = true;
+                            $this->ignoreSpaces = false;
                             $this->ignoreStar   = true;
                         } elseif ($this->annotationNameOpen) {
                             if (ctype_space($currentChar)) {
