@@ -689,6 +689,7 @@ class ForStatement extends StatementAbstract
 
             $variable->setMustInitNull(true);
             $variable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $variable->increaseVariantIfNull();
             $variable->setDynamicTypes('undefined');
         }
 
