@@ -111,13 +111,14 @@ class NativeArrayAccess
         $exprIndex = $expr->compile($compilationContext);
 
         $codePrinter = $compilationContext->codePrinter;
+        $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
 
         switch ($exprIndex->getType()) {
             case 'int':
             case 'uint':
             case 'long':
                 $compilationContext->headersManager->add('kernel/operators');
-                $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ');');
+                $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $exprIndex->getCode() . ');');
                 break;
 
             case 'variable':
@@ -126,7 +127,7 @@ class NativeArrayAccess
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ');');
+                        $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $variableIndex->getName() . ');');
                         break;
 
                     default:
