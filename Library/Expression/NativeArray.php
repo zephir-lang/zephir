@@ -213,10 +213,9 @@ class NativeArray
          */
         $arrayLength = count($expression['left']);
         if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
-            $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0 TSRMLS_CC);');
-        } else {
-            $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
+            $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
+        $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
 
         foreach ($expression['left'] as $item) {
             if (isset($item['key'])) {
