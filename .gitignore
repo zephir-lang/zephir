@@ -16,21 +16,7 @@ phpunit.xml
 
 .temp/
 .libs/
-ext/build/
-ext/kernel/
-ext/modules/
-ext/Makefile*
-ext/config*
-ext/acinclude.m4
-ext/aclocal.m4
-ext/autom4te*
-ext/install-sh
-ext/ltmain.sh
-ext/missing
-ext/mkinstalldirs
-ext/run-tests.php
-ext/.deps
-ext/libtool
+ext
 *.gch
 *.lo
 *.la
