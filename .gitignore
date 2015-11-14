@@ -17,6 +17,7 @@ phpunit.xml
 .temp/
 .libs/
 ext/build/
+ext/kernel/
 ext/modules/
 ext/Makefile*
 ext/config*
