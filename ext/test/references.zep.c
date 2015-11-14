@@ -24,6 +24,7 @@ ZEPHIR_INIT_CLASS(Test_References) {
 
 PHP_METHOD(Test_References, assignByRef) {
 
+	
 
 
 }

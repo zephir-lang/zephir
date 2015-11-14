@@ -33,7 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Arithmetic) {
 
 PHP_METHOD(Test_Arithmetic, intSum) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -45,7 +45,7 @@ PHP_METHOD(Test_Arithmetic, intSum) {
 
 PHP_METHOD(Test_Arithmetic, int2Sum) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -56,7 +56,7 @@ PHP_METHOD(Test_Arithmetic, int2Sum) {
 
 PHP_METHOD(Test_Arithmetic, intSumSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 3;
@@ -66,7 +66,7 @@ PHP_METHOD(Test_Arithmetic, intSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, boolSum) {
 
-	zend_bool a, b, c;
+	zend_bool a = 0, b = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Arithmetic, boolSum) {
 
 PHP_METHOD(Test_Arithmetic, bool2Sum) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -89,7 +89,7 @@ PHP_METHOD(Test_Arithmetic, bool2Sum) {
 
 PHP_METHOD(Test_Arithmetic, bool3Sum) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -100,7 +100,7 @@ PHP_METHOD(Test_Arithmetic, bool3Sum) {
 
 PHP_METHOD(Test_Arithmetic, boolSumSimple) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (3) ? 1 : 0;
@@ -110,9 +110,9 @@ PHP_METHOD(Test_Arithmetic, boolSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, boolSumExpression) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval _0, *_1 = NULL;
-	zend_bool a;
+	zend_bool a = 0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -127,7 +127,7 @@ PHP_METHOD(Test_Arithmetic, boolSumExpression) {
 
 PHP_METHOD(Test_Arithmetic, doubleSum) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -139,7 +139,7 @@ PHP_METHOD(Test_Arithmetic, doubleSum) {
 
 PHP_METHOD(Test_Arithmetic, double2Sum) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = 1.0;
@@ -151,7 +151,7 @@ PHP_METHOD(Test_Arithmetic, double2Sum) {
 
 PHP_METHOD(Test_Arithmetic, doubleSumSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (3);
@@ -161,7 +161,7 @@ PHP_METHOD(Test_Arithmetic, doubleSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 
-	double c;
+	double c = 0;
 
 
 	c = 3;
@@ -171,8 +171,8 @@ PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 
 PHP_METHOD(Test_Arithmetic, doubleSumExpression) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval _0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -186,9 +186,9 @@ PHP_METHOD(Test_Arithmetic, doubleSumExpression) {
 
 PHP_METHOD(Test_Arithmetic, doubleSumVarExpression) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval _0, *_1 = NULL;
-	double a;
+	double a = 0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -203,7 +203,7 @@ PHP_METHOD(Test_Arithmetic, doubleSumVarExpression) {
 
 PHP_METHOD(Test_Arithmetic, varSum) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -215,7 +215,7 @@ PHP_METHOD(Test_Arithmetic, varSum) {
 
 PHP_METHOD(Test_Arithmetic, varSumSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 3;
@@ -225,8 +225,8 @@ PHP_METHOD(Test_Arithmetic, varSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, intDoubleSum) {
 
-	double a;
-	int b, c;
+	double a = 0;
+	int b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -238,7 +238,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSum) {
 
 PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = (long) (3);
@@ -248,8 +248,8 @@ PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, doubleIntSum) {
 
-	double a, c;
-	int b;
+	double a = 0, c = 0;
+	int b = 0;
 
 
 	a = (double) (1);
@@ -261,7 +261,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSum) {
 
 PHP_METHOD(Test_Arithmetic, doubleIntSumSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = 3;
@@ -271,7 +271,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, varIntSum) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -283,7 +283,7 @@ PHP_METHOD(Test_Arithmetic, varIntSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarSum) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -295,8 +295,8 @@ PHP_METHOD(Test_Arithmetic, intVarSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
-	int c;
-	long a, b;
+	int c = 0;
+	long a = 0, b = 0;
 
 
 	a = 1;
@@ -308,8 +308,8 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
-	int b, c;
-	long a;
+	int b = 0, c = 0;
+	long a = 0;
 
 
 	a = 1;
@@ -321,7 +321,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
 PHP_METHOD(Test_Arithmetic, complexSum) {
 
-	double c;
+	double c = 0;
 
 
 	c = 3;
@@ -331,7 +331,7 @@ PHP_METHOD(Test_Arithmetic, complexSum) {
 
 PHP_METHOD(Test_Arithmetic, complex2Sum) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (1 | 1);
@@ -341,7 +341,7 @@ PHP_METHOD(Test_Arithmetic, complex2Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex3Sum) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 + 1.0)) ? 1 : 0;
@@ -351,18 +351,19 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
-	zval c;
+	zval *c = NULL;
 
+	ZEPHIR_MM_GROW();
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_DOUBLE(&c, (1.0 + 1));
-	RETURN_LCTORW(c);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_DOUBLE(c, (1.0 + 1));
+	RETURN_CCTOR(c);
 
 }
 
 PHP_METHOD(Test_Arithmetic, complex5Sum) {
 
-	int c;
+	int c = 0;
 
 
 	c = (1 + 1);
@@ -372,7 +373,7 @@ PHP_METHOD(Test_Arithmetic, complex5Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex6Sum) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 + 1)) ? 1 : 0;
@@ -382,8 +383,8 @@ PHP_METHOD(Test_Arithmetic, complex6Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex7Sum) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -395,8 +396,8 @@ PHP_METHOD(Test_Arithmetic, complex7Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex9Sum) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -408,9 +409,9 @@ PHP_METHOD(Test_Arithmetic, complex9Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex10Sum) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1.0) ? 1 : 0;
@@ -422,9 +423,9 @@ PHP_METHOD(Test_Arithmetic, complex10Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex11Sum) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -436,8 +437,8 @@ PHP_METHOD(Test_Arithmetic, complex11Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex12Sum) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -449,8 +450,8 @@ PHP_METHOD(Test_Arithmetic, complex12Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex13Sum) {
 
-	int c;
-	zend_bool a, b;
+	int c = 0;
+	zend_bool a = 0, b = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -462,8 +463,8 @@ PHP_METHOD(Test_Arithmetic, complex13Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex14Sum) {
 
-	zend_bool b;
-	int a, c;
+	zend_bool b = 0;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -475,9 +476,9 @@ PHP_METHOD(Test_Arithmetic, complex14Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex15Sum) {
 
-	zend_bool c;
-	double b;
-	int a;
+	zend_bool c = 0;
+	double b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -489,8 +490,8 @@ PHP_METHOD(Test_Arithmetic, complex15Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex16Sum) {
 
-	double b, c;
-	int a;
+	double b = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -502,9 +503,9 @@ PHP_METHOD(Test_Arithmetic, complex16Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex17Sum) {
 
-	double c;
-	zend_bool b;
-	int a;
+	double c = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -516,9 +517,9 @@ PHP_METHOD(Test_Arithmetic, complex17Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex18Sum) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -531,9 +532,9 @@ PHP_METHOD(Test_Arithmetic, complex18Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex19Sum) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -546,9 +547,9 @@ PHP_METHOD(Test_Arithmetic, complex19Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex20Sum) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -561,9 +562,9 @@ PHP_METHOD(Test_Arithmetic, complex20Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex21Sum) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -576,8 +577,8 @@ PHP_METHOD(Test_Arithmetic, complex21Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex22Sum) {
 
-	double d, c;
-	int a, b;
+	double d = 0, c = 0;
+	int a = 0, b = 0;
 
 
 	a = 1;
@@ -590,9 +591,9 @@ PHP_METHOD(Test_Arithmetic, complex22Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex23Sum) {
 
-	double d;
-	zend_bool b;
-	int a;
+	double d = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -604,9 +605,9 @@ PHP_METHOD(Test_Arithmetic, complex23Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex24Sum) {
 
-	zend_bool b;
-	double d;
-	int a;
+	zend_bool b = 0;
+	double d = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -618,7 +619,7 @@ PHP_METHOD(Test_Arithmetic, complex24Sum) {
 
 PHP_METHOD(Test_Arithmetic, addSum1) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -629,7 +630,7 @@ PHP_METHOD(Test_Arithmetic, addSum1) {
 
 PHP_METHOD(Test_Arithmetic, addSum2) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -640,7 +641,7 @@ PHP_METHOD(Test_Arithmetic, addSum2) {
 
 PHP_METHOD(Test_Arithmetic, addSum2b) {
 
-	int a;
+	int a = 0;
 
 
 	a = 5;
@@ -651,7 +652,7 @@ PHP_METHOD(Test_Arithmetic, addSum2b) {
 
 PHP_METHOD(Test_Arithmetic, addSum3) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -662,7 +663,7 @@ PHP_METHOD(Test_Arithmetic, addSum3) {
 
 PHP_METHOD(Test_Arithmetic, addSum4) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -673,7 +674,7 @@ PHP_METHOD(Test_Arithmetic, addSum4) {
 
 PHP_METHOD(Test_Arithmetic, addSum5) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -684,7 +685,7 @@ PHP_METHOD(Test_Arithmetic, addSum5) {
 
 PHP_METHOD(Test_Arithmetic, addSum6) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -695,7 +696,7 @@ PHP_METHOD(Test_Arithmetic, addSum6) {
 
 PHP_METHOD(Test_Arithmetic, addSum7) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -706,7 +707,7 @@ PHP_METHOD(Test_Arithmetic, addSum7) {
 
 PHP_METHOD(Test_Arithmetic, addSum8) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -717,7 +718,7 @@ PHP_METHOD(Test_Arithmetic, addSum8) {
 
 PHP_METHOD(Test_Arithmetic, addSum8b) {
 
-	double a;
+	double a = 0;
 
 
 	a = 6.3;
@@ -728,7 +729,7 @@ PHP_METHOD(Test_Arithmetic, addSum8b) {
 
 PHP_METHOD(Test_Arithmetic, addSum9) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -739,7 +740,7 @@ PHP_METHOD(Test_Arithmetic, addSum9) {
 
 PHP_METHOD(Test_Arithmetic, addSum10) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -750,7 +751,7 @@ PHP_METHOD(Test_Arithmetic, addSum10) {
 
 PHP_METHOD(Test_Arithmetic, addSum11) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -761,7 +762,7 @@ PHP_METHOD(Test_Arithmetic, addSum11) {
 
 PHP_METHOD(Test_Arithmetic, addSum12) {
 
-	int a, b;
+	int a = 0, b = 0;
 
 
 	a = 0;
@@ -773,8 +774,8 @@ PHP_METHOD(Test_Arithmetic, addSum12) {
 
 PHP_METHOD(Test_Arithmetic, addSum13) {
 
-	zend_bool b;
-	int a;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -786,8 +787,8 @@ PHP_METHOD(Test_Arithmetic, addSum13) {
 
 PHP_METHOD(Test_Arithmetic, addSum14) {
 
-	zend_bool b;
-	int a;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -799,8 +800,8 @@ PHP_METHOD(Test_Arithmetic, addSum14) {
 
 PHP_METHOD(Test_Arithmetic, addSum15) {
 
-	double b;
-	int a;
+	double b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -812,7 +813,7 @@ PHP_METHOD(Test_Arithmetic, addSum15) {
 
 PHP_METHOD(Test_Arithmetic, addSum16) {
 
-	double a, b;
+	double a = 0, b = 0;
 
 
 	a = 0.0;
@@ -824,8 +825,8 @@ PHP_METHOD(Test_Arithmetic, addSum16) {
 
 PHP_METHOD(Test_Arithmetic, addSum17) {
 
-	zend_bool b;
-	double a;
+	zend_bool b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -837,8 +838,8 @@ PHP_METHOD(Test_Arithmetic, addSum17) {
 
 PHP_METHOD(Test_Arithmetic, addSum18) {
 
-	zend_bool b;
-	double a;
+	zend_bool b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -850,8 +851,8 @@ PHP_METHOD(Test_Arithmetic, addSum18) {
 
 PHP_METHOD(Test_Arithmetic, addSum19) {
 
-	int b;
-	double a;
+	int b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -863,7 +864,7 @@ PHP_METHOD(Test_Arithmetic, addSum19) {
 
 PHP_METHOD(Test_Arithmetic, addSum20) {
 
-	int a, b;
+	int a = 0, b = 0;
 
 
 	a = (long) (0.0);
@@ -875,8 +876,8 @@ PHP_METHOD(Test_Arithmetic, addSum20) {
 
 PHP_METHOD(Test_Arithmetic, addSum21) {
 
-	int b;
-	double a;
+	int b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -888,7 +889,7 @@ PHP_METHOD(Test_Arithmetic, addSum21) {
 
 PHP_METHOD(Test_Arithmetic, addSum22) {
 
-	int b, _0;
+	int b = 0, _0;
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -897,15 +898,15 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_NVAR(a);
-	_0 = zephir_get_numberval(a);
-	ZVAL_LONG(a, _0 + b);
+	_0 = zephir_get_numberval(a) + b;
+	ZVAL_LONG(a, _0);
 	RETURN_CCTOR(a);
 
 }
 
 PHP_METHOD(Test_Arithmetic, addSum23) {
 
-	int a;
+	int a = 0;
 
 
 	a = 1;
@@ -934,7 +935,7 @@ PHP_METHOD(Test_Arithmetic, addSum24) {
 
 PHP_METHOD(Test_Arithmetic, intSub) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -946,7 +947,7 @@ PHP_METHOD(Test_Arithmetic, intSub) {
 
 PHP_METHOD(Test_Arithmetic, intLetSub) {
 
-	int b, c;
+	int b = 0, c = 0;
 
 
 	c = 1;
@@ -958,7 +959,7 @@ PHP_METHOD(Test_Arithmetic, intLetSub) {
 
 PHP_METHOD(Test_Arithmetic, intSub2) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -969,7 +970,7 @@ PHP_METHOD(Test_Arithmetic, intSub2) {
 
 PHP_METHOD(Test_Arithmetic, intSubSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = -1;
@@ -979,7 +980,7 @@ PHP_METHOD(Test_Arithmetic, intSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, boolSub) {
 
-	zend_bool a, b, c;
+	zend_bool a = 0, b = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -991,7 +992,7 @@ PHP_METHOD(Test_Arithmetic, boolSub) {
 
 PHP_METHOD(Test_Arithmetic, bool2Sub) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1002,7 +1003,7 @@ PHP_METHOD(Test_Arithmetic, bool2Sub) {
 
 PHP_METHOD(Test_Arithmetic, bool3Sub) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -1013,7 +1014,7 @@ PHP_METHOD(Test_Arithmetic, bool3Sub) {
 
 PHP_METHOD(Test_Arithmetic, bool4Sub) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -1024,7 +1025,7 @@ PHP_METHOD(Test_Arithmetic, bool4Sub) {
 
 PHP_METHOD(Test_Arithmetic, boolSubSimple) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (-1) ? 1 : 0;
@@ -1034,7 +1035,7 @@ PHP_METHOD(Test_Arithmetic, boolSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, doubleSub) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -1046,7 +1047,7 @@ PHP_METHOD(Test_Arithmetic, doubleSub) {
 
 PHP_METHOD(Test_Arithmetic, double2Sub) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = 1.0;
@@ -1058,7 +1059,7 @@ PHP_METHOD(Test_Arithmetic, double2Sub) {
 
 PHP_METHOD(Test_Arithmetic, doubleSubSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (-1);
@@ -1068,7 +1069,7 @@ PHP_METHOD(Test_Arithmetic, doubleSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, doubleSub2Simple) {
 
-	double c;
+	double c = 0;
 
 
 	c = -1;
@@ -1078,7 +1079,7 @@ PHP_METHOD(Test_Arithmetic, doubleSub2Simple) {
 
 PHP_METHOD(Test_Arithmetic, varSub) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -1090,7 +1091,7 @@ PHP_METHOD(Test_Arithmetic, varSub) {
 
 PHP_METHOD(Test_Arithmetic, varSubSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = -1;
@@ -1100,8 +1101,8 @@ PHP_METHOD(Test_Arithmetic, varSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, intDoubleSub) {
 
-	double a;
-	int b, c;
+	double a = 0;
+	int b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -1113,7 +1114,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSub) {
 
 PHP_METHOD(Test_Arithmetic, intDoubleSubSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = (long) (-1);
@@ -1123,8 +1124,8 @@ PHP_METHOD(Test_Arithmetic, intDoubleSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, doubleIntSub) {
 
-	double a, c;
-	int b;
+	double a = 0, c = 0;
+	int b = 0;
 
 
 	a = (double) (1);
@@ -1136,7 +1137,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSub) {
 
 PHP_METHOD(Test_Arithmetic, doubleIntSubSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = -1;
@@ -1146,7 +1147,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSubSimple) {
 
 PHP_METHOD(Test_Arithmetic, varIntSub) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -1158,7 +1159,7 @@ PHP_METHOD(Test_Arithmetic, varIntSub) {
 
 PHP_METHOD(Test_Arithmetic, intVarSub) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -1170,8 +1171,8 @@ PHP_METHOD(Test_Arithmetic, intVarSub) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSub) {
 
-	int c;
-	long a, b;
+	int c = 0;
+	long a = 0, b = 0;
 
 
 	a = 1;
@@ -1183,8 +1184,8 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSub) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sub) {
 
-	int b, c;
-	long a;
+	int b = 0, c = 0;
+	long a = 0;
 
 
 	a = 1;
@@ -1196,7 +1197,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sub) {
 
 PHP_METHOD(Test_Arithmetic, complexSub) {
 
-	double c;
+	double c = 0;
 
 
 	c = 1;
@@ -1206,7 +1207,7 @@ PHP_METHOD(Test_Arithmetic, complexSub) {
 
 PHP_METHOD(Test_Arithmetic, complex2Sub) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (1 & 1);
@@ -1216,7 +1217,7 @@ PHP_METHOD(Test_Arithmetic, complex2Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex3Sub) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 + 1.0)) ? 1 : 0;
@@ -1226,18 +1227,19 @@ PHP_METHOD(Test_Arithmetic, complex3Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex4Sub) {
 
-	zval c;
+	zval *c = NULL;
 
+	ZEPHIR_MM_GROW();
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_DOUBLE(&c, (1.0 - 1));
-	RETURN_LCTORW(c);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_DOUBLE(c, (1.0 - 1));
+	RETURN_CCTOR(c);
 
 }
 
 PHP_METHOD(Test_Arithmetic, complex5Sub) {
 
-	int c;
+	int c = 0;
 
 
 	c = (1 - 1);
@@ -1247,7 +1249,7 @@ PHP_METHOD(Test_Arithmetic, complex5Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex6Sub) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 + 1)) ? 1 : 0;
@@ -1257,8 +1259,8 @@ PHP_METHOD(Test_Arithmetic, complex6Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex7Sub) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1270,8 +1272,8 @@ PHP_METHOD(Test_Arithmetic, complex7Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex9Sub) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1283,9 +1285,9 @@ PHP_METHOD(Test_Arithmetic, complex9Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex10Sub) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1.0) ? 1 : 0;
@@ -1297,9 +1299,9 @@ PHP_METHOD(Test_Arithmetic, complex10Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex11Sub) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1311,8 +1313,8 @@ PHP_METHOD(Test_Arithmetic, complex11Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex12Sub) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1324,8 +1326,8 @@ PHP_METHOD(Test_Arithmetic, complex12Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex13Sub) {
 
-	int c;
-	zend_bool a, b;
+	int c = 0;
+	zend_bool a = 0, b = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -1337,8 +1339,8 @@ PHP_METHOD(Test_Arithmetic, complex13Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex14Sub) {
 
-	zend_bool b;
-	int a, c;
+	zend_bool b = 0;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -1350,9 +1352,9 @@ PHP_METHOD(Test_Arithmetic, complex14Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex15Sub) {
 
-	zend_bool c;
-	double b;
-	int a;
+	zend_bool c = 0;
+	double b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1364,8 +1366,8 @@ PHP_METHOD(Test_Arithmetic, complex15Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex16Sub) {
 
-	double b, c;
-	int a;
+	double b = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1377,9 +1379,9 @@ PHP_METHOD(Test_Arithmetic, complex16Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex17Sub) {
 
-	double c;
-	zend_bool b;
-	int a;
+	double c = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1391,9 +1393,9 @@ PHP_METHOD(Test_Arithmetic, complex17Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex18Sub) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1406,9 +1408,9 @@ PHP_METHOD(Test_Arithmetic, complex18Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex19Sub) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1421,9 +1423,9 @@ PHP_METHOD(Test_Arithmetic, complex19Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex20Sub) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1436,9 +1438,9 @@ PHP_METHOD(Test_Arithmetic, complex20Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex21Sub) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1451,8 +1453,8 @@ PHP_METHOD(Test_Arithmetic, complex21Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex22Sub) {
 
-	double d, c;
-	int a, b;
+	double d = 0, c = 0;
+	int a = 0, b = 0;
 
 
 	a = 1;
@@ -1465,9 +1467,9 @@ PHP_METHOD(Test_Arithmetic, complex22Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex23Sub) {
 
-	double d;
-	zend_bool b;
-	int a;
+	double d = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1479,9 +1481,9 @@ PHP_METHOD(Test_Arithmetic, complex23Sub) {
 
 PHP_METHOD(Test_Arithmetic, complex24Sub) {
 
-	zend_bool b;
-	double d;
-	int a;
+	zend_bool b = 0;
+	double d = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1493,7 +1495,7 @@ PHP_METHOD(Test_Arithmetic, complex24Sub) {
 
 PHP_METHOD(Test_Arithmetic, sub1) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1504,7 +1506,7 @@ PHP_METHOD(Test_Arithmetic, sub1) {
 
 PHP_METHOD(Test_Arithmetic, sub2) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1515,7 +1517,7 @@ PHP_METHOD(Test_Arithmetic, sub2) {
 
 PHP_METHOD(Test_Arithmetic, sub2b) {
 
-	int a;
+	int a = 0;
 
 
 	a = 5;
@@ -1526,7 +1528,7 @@ PHP_METHOD(Test_Arithmetic, sub2b) {
 
 PHP_METHOD(Test_Arithmetic, sub3) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1537,7 +1539,7 @@ PHP_METHOD(Test_Arithmetic, sub3) {
 
 PHP_METHOD(Test_Arithmetic, sub4) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1548,7 +1550,7 @@ PHP_METHOD(Test_Arithmetic, sub4) {
 
 PHP_METHOD(Test_Arithmetic, sub5) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1559,7 +1561,7 @@ PHP_METHOD(Test_Arithmetic, sub5) {
 
 PHP_METHOD(Test_Arithmetic, sub6) {
 
-	int a;
+	int a = 0;
 
 
 	a = 0;
@@ -1570,7 +1572,7 @@ PHP_METHOD(Test_Arithmetic, sub6) {
 
 PHP_METHOD(Test_Arithmetic, sub7) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1581,7 +1583,7 @@ PHP_METHOD(Test_Arithmetic, sub7) {
 
 PHP_METHOD(Test_Arithmetic, sub8) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1592,7 +1594,7 @@ PHP_METHOD(Test_Arithmetic, sub8) {
 
 PHP_METHOD(Test_Arithmetic, sub8b) {
 
-	double a;
+	double a = 0;
 
 
 	a = 6.3;
@@ -1603,7 +1605,7 @@ PHP_METHOD(Test_Arithmetic, sub8b) {
 
 PHP_METHOD(Test_Arithmetic, sub9) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1614,7 +1616,7 @@ PHP_METHOD(Test_Arithmetic, sub9) {
 
 PHP_METHOD(Test_Arithmetic, sub10) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1625,7 +1627,7 @@ PHP_METHOD(Test_Arithmetic, sub10) {
 
 PHP_METHOD(Test_Arithmetic, sub11) {
 
-	double a;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1636,7 +1638,7 @@ PHP_METHOD(Test_Arithmetic, sub11) {
 
 PHP_METHOD(Test_Arithmetic, sub12) {
 
-	int a, b;
+	int a = 0, b = 0;
 
 
 	a = 0;
@@ -1648,8 +1650,8 @@ PHP_METHOD(Test_Arithmetic, sub12) {
 
 PHP_METHOD(Test_Arithmetic, sub13) {
 
-	zend_bool b;
-	int a;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -1661,8 +1663,8 @@ PHP_METHOD(Test_Arithmetic, sub13) {
 
 PHP_METHOD(Test_Arithmetic, sub14) {
 
-	zend_bool b;
-	int a;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -1674,8 +1676,8 @@ PHP_METHOD(Test_Arithmetic, sub14) {
 
 PHP_METHOD(Test_Arithmetic, sub15) {
 
-	double b;
-	int a;
+	double b = 0;
+	int a = 0;
 
 
 	a = 0;
@@ -1687,7 +1689,7 @@ PHP_METHOD(Test_Arithmetic, sub15) {
 
 PHP_METHOD(Test_Arithmetic, sub16) {
 
-	double a, b;
+	double a = 0, b = 0;
 
 
 	a = 0.0;
@@ -1699,8 +1701,8 @@ PHP_METHOD(Test_Arithmetic, sub16) {
 
 PHP_METHOD(Test_Arithmetic, sub17) {
 
-	zend_bool b;
-	double a;
+	zend_bool b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1712,8 +1714,8 @@ PHP_METHOD(Test_Arithmetic, sub17) {
 
 PHP_METHOD(Test_Arithmetic, sub18) {
 
-	zend_bool b;
-	double a;
+	zend_bool b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1725,8 +1727,8 @@ PHP_METHOD(Test_Arithmetic, sub18) {
 
 PHP_METHOD(Test_Arithmetic, sub19) {
 
-	int b;
-	double a;
+	int b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1738,7 +1740,7 @@ PHP_METHOD(Test_Arithmetic, sub19) {
 
 PHP_METHOD(Test_Arithmetic, sub20) {
 
-	int a, b;
+	int a = 0, b = 0;
 
 
 	a = (long) (0.0);
@@ -1750,8 +1752,8 @@ PHP_METHOD(Test_Arithmetic, sub20) {
 
 PHP_METHOD(Test_Arithmetic, sub21) {
 
-	int b;
-	double a;
+	int b = 0;
+	double a = 0;
 
 
 	a = 0.0;
@@ -1763,7 +1765,7 @@ PHP_METHOD(Test_Arithmetic, sub21) {
 
 PHP_METHOD(Test_Arithmetic, sub22) {
 
-	int b, _0;
+	int b = 0, _0;
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -1780,7 +1782,7 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 
 PHP_METHOD(Test_Arithmetic, sub23) {
 
-	int a;
+	int a = 0;
 
 
 	a = 1;
@@ -1809,9 +1811,10 @@ PHP_METHOD(Test_Arithmetic, sub24) {
 
 PHP_METHOD(Test_Arithmetic, mul1) {
 
-	int a = 1;
+	int a;
 
 
+	a = 1;
 	a *= 5;
 	RETURN_LONG(a);
 
@@ -1837,9 +1840,10 @@ PHP_METHOD(Test_Arithmetic, mul2) {
 
 PHP_METHOD(Test_Arithmetic, mul3) {
 
-	int a = 1;
+	int a;
 
 
+	a = 1;
 	a *= 1024;
 	RETURN_LONG(a);
 
@@ -1847,18 +1851,22 @@ PHP_METHOD(Test_Arithmetic, mul3) {
 
 PHP_METHOD(Test_Arithmetic, less1) {
 
-	int a = 1, b = 2;
+	int a, b;
 
 
+	a = 1;
+	b = 2;
 	RETURN_BOOL(a < b);
 
 }
 
 PHP_METHOD(Test_Arithmetic, less2) {
 
-	int a = 2, b = 1;
+	int a, b;
 
 
+	a = 2;
+	b = 1;
 	RETURN_BOOL(a < b);
 
 }
@@ -1889,18 +1897,22 @@ PHP_METHOD(Test_Arithmetic, less4) {
 
 PHP_METHOD(Test_Arithmetic, greater1) {
 
-	int a = 1, b = 2;
+	int a, b;
 
 
+	a = 1;
+	b = 2;
 	RETURN_BOOL(a > b);
 
 }
 
 PHP_METHOD(Test_Arithmetic, greater2) {
 
-	int a = 2, b = 1;
+	int a, b;
 
 
+	a = 2;
+	b = 1;
 	RETURN_BOOL(a > b);
 
 }
@@ -1931,7 +1943,7 @@ PHP_METHOD(Test_Arithmetic, greater4) {
 
 PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
 
-	int a;
+	int a = 0;
 
 
 	a = -1;
@@ -1941,9 +1953,10 @@ PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
 
 PHP_METHOD(Test_Arithmetic, declaredIntMinus) {
 
-	int a = -1;
+	int a;
 
 
+	a = -1;
 	RETURN_LONG(a);
 
 }
@@ -1953,7 +1966,7 @@ PHP_METHOD(Test_Arithmetic, declaredIntMinus) {
  */
 PHP_METHOD(Test_Arithmetic, letStatementBoolMinus) {
 
-	zend_bool a;
+	zend_bool a = 0;
 	zval *b;
 
 	zephir_fetch_params(0, 1, 0, &b);
@@ -1983,9 +1996,10 @@ PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 
 PHP_METHOD(Test_Arithmetic, div1) {
 
-	int a = 100;
+	int a;
 
 
+	a = 100;
 	RETURN_DOUBLE(zephir_safe_div_long_long(((a - 1)), 4 TSRMLS_CC));
 
 }

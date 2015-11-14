@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Test_Typeoff) {
 
 PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
-	zval *testVar;
+	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -43,7 +43,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
 PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
-	zval *testVar;
+	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -55,7 +55,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
 PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
-	int testVar;
+	int testVar = 0;
 
 
 	testVar = 12345;
@@ -65,7 +65,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
 PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
-	int testVar;
+	int testVar = 0;
 
 
 	testVar = 12345;
@@ -75,7 +75,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
 PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
-	double testVar;
+	double testVar = 0;
 
 
 	testVar = (double) (12345);
@@ -85,7 +85,7 @@ PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
 PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
-	zend_bool testVar;
+	zend_bool testVar = 0;
 
 
 	testVar = 1;
@@ -95,7 +95,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
-	zend_bool testVar;
+	zend_bool testVar = 0;
 
 
 	testVar = 0;
@@ -105,7 +105,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 PHP_METHOD(Test_Typeoff, testArrayFalse) {
 
-	zval *testVar;
+	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -117,7 +117,7 @@ PHP_METHOD(Test_Typeoff, testArrayFalse) {
 
 PHP_METHOD(Test_Typeoff, testArrayTrue) {
 
-	zval *testVar;
+	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
 

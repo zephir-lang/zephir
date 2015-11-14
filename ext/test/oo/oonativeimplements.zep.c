@@ -36,54 +36,63 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoNativeImplements) {
 
 PHP_METHOD(Test_Oo_OoNativeImplements, count) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, current) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, key) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, next) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, rewind) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, valid) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, getInnerIterator) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, getChildren) {
 
+	
 
 
 }
 
 PHP_METHOD(Test_Oo_OoNativeImplements, hasChildren) {
 
+	
 
 
 }
@@ -103,6 +112,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 
 PHP_METHOD(Test_Oo_OoNativeImplements, getIterator) {
 
+	
 
 
 }
@@ -153,6 +163,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetUnset) {
 
 PHP_METHOD(Test_Oo_OoNativeImplements, serialize) {
 
+	
 
 
 }

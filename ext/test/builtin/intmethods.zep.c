@@ -15,7 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
-#include "kernel/math.h"
 #include "math.h"
 
 
@@ -48,8 +47,8 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval _0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -286,7 +285,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 
-	zval *num_param = NULL, *base_param = NULL, _0 = zval_used_for_init, *_1 = NULL, _2;
+	zval *num_param = NULL, *base_param = NULL, _0$$3, *_1$$3 = NULL, _2, _3, *_4 = NULL;
 	int num, base, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -301,19 +300,19 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 
 
 	if (base == -1) {
-		ZEPHIR_SINIT_VAR(_0);
-		ZVAL_LONG(&_0, num);
-		ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 12, &_0);
+		ZEPHIR_SINIT_VAR(_0$$3);
+		ZVAL_LONG(&_0$$3, num);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 12, &_0$$3);
 		zephir_check_call_status();
-		RETURN_CCTOR(_1);
+		RETURN_CCTOR(_1$$3);
 	}
-	ZEPHIR_SINIT_NVAR(_0);
-	ZVAL_LONG(&_0, num);
 	ZEPHIR_SINIT_VAR(_2);
-	ZVAL_LONG(&_2, base);
-	ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 12, &_0, &_2);
+	ZVAL_LONG(&_2, num);
+	ZEPHIR_SINIT_VAR(_3);
+	ZVAL_LONG(&_3, base);
+	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 12, &_2, &_3);
 	zephir_check_call_status();
-	RETURN_CCTOR(_1);
+	RETURN_CCTOR(_4);
 
 }
 

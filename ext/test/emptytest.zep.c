@@ -33,7 +33,7 @@ ZEPHIR_INIT_CLASS(Test_EmptyTest) {
 
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -45,7 +45,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 
-	zval *a, *_0 = NULL;
+	zval *a = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -69,7 +69,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 
 PHP_METHOD(Test_EmptyTest, testEmptyString) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -81,7 +81,7 @@ PHP_METHOD(Test_EmptyTest, testEmptyString) {
 
 PHP_METHOD(Test_EmptyTest, testNotEmptyString) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 

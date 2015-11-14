@@ -29,8 +29,8 @@ ZEPHIR_INIT_CLASS(Test_Oo_ExtendPdoClass) {
 
 PHP_METHOD(Test_Oo_ExtendPdoClass, __construct) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *dsn_param = NULL, *username_param = NULL, *password_param = NULL, *attrs = NULL, *_1;
 	zval *dsn = NULL, *username = NULL, *password = NULL;
 
@@ -63,7 +63,7 @@ PHP_METHOD(Test_Oo_ExtendPdoClass, __construct) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "Test\\PdoStatement", 1);
 	zephir_array_fast_append(_0, _1);
-	zephir_array_update_long(&attrs, 13, &_0, PH_COPY | PH_SEPARATE, "test/oo/extendpdoclass.zep", 8);
+	zephir_array_update_long(&attrs, 13, &_0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 	ZEPHIR_CALL_PARENT(NULL, test_oo_extendpdoclass_ce, this_ptr, "__construct", NULL, 0, dsn, username, password, attrs);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();

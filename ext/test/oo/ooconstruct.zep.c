@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoConstruct) {
 
 PHP_METHOD(Test_Oo_OoConstruct, __construct) {
 
+	
 
 
 }

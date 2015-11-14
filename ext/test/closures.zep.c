@@ -25,6 +25,7 @@ ZEPHIR_INIT_CLASS(Test_Closures) {
 
 PHP_METHOD(Test_Closures, simple1) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_1__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -33,6 +34,7 @@ PHP_METHOD(Test_Closures, simple1) {
 
 PHP_METHOD(Test_Closures, simple2) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_2__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -41,6 +43,7 @@ PHP_METHOD(Test_Closures, simple2) {
 
 PHP_METHOD(Test_Closures, simple3) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_3__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -49,6 +52,7 @@ PHP_METHOD(Test_Closures, simple3) {
 
 PHP_METHOD(Test_Closures, simple4) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_4__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -57,6 +61,7 @@ PHP_METHOD(Test_Closures, simple4) {
 
 PHP_METHOD(Test_Closures, simple5) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_5__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -65,6 +70,7 @@ PHP_METHOD(Test_Closures, simple5) {
 
 PHP_METHOD(Test_Closures, arrow1) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_6__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;
@@ -73,6 +79,7 @@ PHP_METHOD(Test_Closures, arrow1) {
 
 PHP_METHOD(Test_Closures, arrow2) {
 
+	
 
 	zephir_create_closure_ex(return_value, NULL, test_7__closure_ce, SS("__invoke") TSRMLS_CC);
 	return;

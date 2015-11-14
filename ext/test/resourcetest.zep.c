@@ -88,8 +88,8 @@ PHP_METHOD(Test_ResourceTest, testIsResource) {
 
 PHP_METHOD(Test_ResourceTest, testFunctionsForSTDIN) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a = NULL, _0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

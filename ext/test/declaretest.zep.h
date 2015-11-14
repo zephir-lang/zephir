@@ -20,6 +20,7 @@ PHP_METHOD(Test_DeclareTest, testDeclare12);
 PHP_METHOD(Test_DeclareTest, testDeclare13);
 PHP_METHOD(Test_DeclareTest, testDeclare14);
 PHP_METHOD(Test_DeclareTest, testDeclare15);
+PHP_METHOD(Test_DeclareTest, testDeclareMcallExpression);
 
 ZEPHIR_INIT_FUNCS(test_declaretest_method_entry) {
 	PHP_ME(Test_DeclareTest, testStringDeclare1, NULL, ZEND_ACC_PUBLIC)
@@ -39,5 +40,6 @@ ZEPHIR_INIT_FUNCS(test_declaretest_method_entry) {
 	PHP_ME(Test_DeclareTest, testDeclare13, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare14, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare15, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_DeclareTest, testDeclareMcallExpression, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -135,7 +135,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
-	zval *g;
+	zval *g = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -150,7 +150,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
-	zval *inp, *g;
+	zval *inp, *g = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &inp);
@@ -168,8 +168,8 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 static zend_object_value zephir_init_properties_Test_IssetTest(zend_class_entry *class_type TSRMLS_DC) {
 
-		zval *_1;
-		zval *_0;
+		zval *_1$$3;
+	zval *_0;
 
 		ZEPHIR_MM_GROW();
 	
@@ -178,10 +178,10 @@ static zend_object_value zephir_init_properties_Test_IssetTest(zend_class_entry 
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		_0 = zephir_fetch_nproperty_this(this_ptr, SL("s"), PH_NOISY_CC);
 		if (Z_TYPE_P(_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(_1);
-			zephir_create_array(_1, 1, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_1, SS("a"), SL("true"), 1);
-			zephir_update_property_this(this_ptr, SL("s"), _1 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_1$$3);
+			zephir_create_array(_1$$3, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_1$$3, SS("a"), SL("true"), 1);
+			zephir_update_property_this(this_ptr, SL("s"), _1$$3 TSRMLS_CC);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJVAL_P(this_ptr);

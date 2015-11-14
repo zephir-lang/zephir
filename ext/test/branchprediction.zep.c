@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_BranchPrediction) {
 
 PHP_METHOD(Test_BranchPrediction, testLikely1) {
 
+	
 
 	if (likely(1 == 1)) {
 		RETURN_BOOL(1);
@@ -56,6 +57,7 @@ PHP_METHOD(Test_BranchPrediction, testLikely2) {
 
 PHP_METHOD(Test_BranchPrediction, testUnlikely1) {
 
+	
 
 	if (likely(1 == 1)) {
 		RETURN_BOOL(1);

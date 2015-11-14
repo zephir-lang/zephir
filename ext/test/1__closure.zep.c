@@ -24,6 +24,7 @@ ZEPHIR_INIT_CLASS(test_1__closure) {
 
 PHP_METHOD(test_1__closure, __invoke) {
 
+	
 
 
 }

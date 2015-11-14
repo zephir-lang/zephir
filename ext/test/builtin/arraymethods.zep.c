@@ -53,9 +53,9 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getJoin1) {
 
 PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_1 = NULL, *_2 = NULL;
 	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -78,9 +78,9 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 
 PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_1 = NULL, *_2 = NULL;
 	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

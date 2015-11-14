@@ -45,9 +45,10 @@ ZEPHIR_INIT_CLASS(Test_Cblock) {
 
 PHP_METHOD(Test_Cblock, testCblock1) {
 
-	int a = 0;
+	int a;
 
 
+	a = 0;
 	
 			a = MAX_FACTOR;
 		
@@ -57,9 +58,10 @@ PHP_METHOD(Test_Cblock, testCblock1) {
 
 PHP_METHOD(Test_Cblock, testCblock2) {
 
-	long a = 0;
+	long a;
 
 
+	a = 0;
 	
 			a = fibonacci(MAX_FACTOR);
 		

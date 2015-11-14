@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 PHP_METHOD(Test_Vars, testVarDump) {
 
-	zval *a, *ar, *_0 = NULL;
+	zval *a = NULL, *ar = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -70,7 +70,7 @@ PHP_METHOD(Test_Vars, testVarDump2) {
 
 PHP_METHOD(Test_Vars, testVarExport) {
 
-	zval *a, *ar, *ret = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
+	zval *a = NULL, *ar = NULL, *ret = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -89,12 +89,12 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZEPHIR_CPY_WRT(_1, ar);
 	zephir_var_export(&_1 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(ret);
-	zephir_var_export_ex(ret, &(ar) TSRMLS_CC);
+	zephir_var_export_ex(ret, &ar TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_2);
 	ZEPHIR_CPY_WRT(_2, a);
 	zephir_var_export(&_2 TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(ret);
-	zephir_var_export_ex(ret, &(a) TSRMLS_CC);
+	zephir_var_export_ex(ret, &a TSRMLS_CC);
 	RETURN_CCTOR(ret);
 
 }
@@ -111,7 +111,6 @@ PHP_METHOD(Test_Vars, test88Issue) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-
 	if (likely(Z_TYPE_P(param1_param) == IS_STRING)) {
 		zephir_get_strval(param1, param1_param);
 	} else {
@@ -154,7 +153,6 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-
 	if (likely(Z_TYPE_P(param1_param) == IS_STRING)) {
 		zephir_get_strval(param1, param1_param);
 	} else {
@@ -256,7 +254,7 @@ PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 PHP_METHOD(Test_Vars, testIntVarDump) {
 
 	zval *_0 = NULL, *_1 = NULL;
-	int a;
+	int a = 0;
 
 	ZEPHIR_MM_GROW();
 
@@ -276,7 +274,7 @@ PHP_METHOD(Test_Vars, testIntVarDump) {
 PHP_METHOD(Test_Vars, testDoubleVarDump) {
 
 	zval *_0 = NULL, *_1 = NULL;
-	double a;
+	double a = 0;
 
 	ZEPHIR_MM_GROW();
 
@@ -296,7 +294,7 @@ PHP_METHOD(Test_Vars, testDoubleVarDump) {
 PHP_METHOD(Test_Vars, testBoolVarDump) {
 
 	zval *_0 = NULL, *_1 = NULL;
-	zend_bool a;
+	zend_bool a = 0;
 
 	ZEPHIR_MM_GROW();
 

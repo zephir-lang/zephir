@@ -106,6 +106,7 @@ PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray) {
 
 PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someGetterSetterArray");
 
@@ -125,8 +126,8 @@ PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 
 static zend_object_value zephir_init_properties_Test_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC) {
 
-		zval *_3 = NULL, *_4 = NULL;
-		zval *_0, *_1 = NULL, *_2, *_5, *_6, *_7;
+		zval *_3$$4, *_4$$4 = NULL, *_6$$5, *_8$$6;
+	zval *_0, *_2, *_5, *_7, *_10, *_1$$3, *_9$$6 = NULL, *_11$$7;
 
 		ZEPHIR_MM_GROW();
 	
@@ -135,64 +136,64 @@ static zend_object_value zephir_init_properties_Test_Properties_PublicProperties
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		_0 = zephir_fetch_nproperty_this(this_ptr, SL("someGetterSetterArray"), PH_NOISY_CC);
 		if (Z_TYPE_P(_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(_1);
-			array_init(_1);
-			zephir_update_property_this(this_ptr, SL("someGetterSetterArray"), _1 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_1$$3);
+			array_init(_1$$3);
+			zephir_update_property_this(this_ptr, SL("someGetterSetterArray"), _1$$3 TSRMLS_CC);
 		}
 		_2 = zephir_fetch_nproperty_this(this_ptr, SL("someArrayWithSubArray"), PH_NOISY_CC);
 		if (Z_TYPE_P(_2) == IS_NULL) {
-			ZEPHIR_INIT_VAR(_3);
-			zephir_create_array(_3, 4, 0 TSRMLS_CC);
-			ZEPHIR_INIT_VAR(_4);
-			zephir_create_array(_4, 1, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_4, SS("class"), SL("alert alert-success"), 1);
-			zephir_array_update_string(&_3, SL("success"), &_4, PH_COPY | PH_SEPARATE);
-			ZEPHIR_INIT_NVAR(_4);
-			zephir_create_array(_4, 1, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_4, SS("class"), SL("alert alert-info"), 1);
-			zephir_array_update_string(&_3, SL("info"), &_4, PH_COPY | PH_SEPARATE);
-			ZEPHIR_INIT_NVAR(_4);
-			zephir_create_array(_4, 1, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_4, SS("class"), SL("alert alert-warning"), 1);
-			zephir_array_update_string(&_3, SL("warning"), &_4, PH_COPY | PH_SEPARATE);
-			ZEPHIR_INIT_NVAR(_4);
-			zephir_create_array(_4, 1, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_4, SS("class"), SL("alert alert-danger"), 1);
-			zephir_array_update_string(&_3, SL("danger"), &_4, PH_COPY | PH_SEPARATE);
-			zephir_update_property_this(this_ptr, SL("someArrayWithSubArray"), _3 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_3$$4);
+			zephir_create_array(_3$$4, 4, 0 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_4$$4);
+			zephir_create_array(_4$$4, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_4$$4, SS("class"), SL("alert alert-success"), 1);
+			zephir_array_update_string(&_3$$4, SL("success"), &_4$$4, PH_COPY | PH_SEPARATE);
+			ZEPHIR_INIT_NVAR(_4$$4);
+			zephir_create_array(_4$$4, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_4$$4, SS("class"), SL("alert alert-info"), 1);
+			zephir_array_update_string(&_3$$4, SL("info"), &_4$$4, PH_COPY | PH_SEPARATE);
+			ZEPHIR_INIT_NVAR(_4$$4);
+			zephir_create_array(_4$$4, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_4$$4, SS("class"), SL("alert alert-warning"), 1);
+			zephir_array_update_string(&_3$$4, SL("warning"), &_4$$4, PH_COPY | PH_SEPARATE);
+			ZEPHIR_INIT_NVAR(_4$$4);
+			zephir_create_array(_4$$4, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_4$$4, SS("class"), SL("alert alert-danger"), 1);
+			zephir_array_update_string(&_3$$4, SL("danger"), &_4$$4, PH_COPY | PH_SEPARATE);
+			zephir_update_property_this(this_ptr, SL("someArrayWithSubArray"), _3$$4 TSRMLS_CC);
 		}
 		_5 = zephir_fetch_nproperty_this(this_ptr, SL("someArrayWithSpecifyKeys"), PH_NOISY_CC);
 		if (Z_TYPE_P(_5) == IS_NULL) {
-			ZEPHIR_INIT_NVAR(_3);
-			zephir_create_array(_3, 3, 0 TSRMLS_CC);
-			add_assoc_stringl_ex(_3, SS("a"), SL("A"), 1);
-			add_assoc_stringl_ex(_3, SS("b"), SL("B"), 1);
-			add_assoc_stringl_ex(_3, SS("c"), SL("C"), 1);
-			zephir_update_property_this(this_ptr, SL("someArrayWithSpecifyKeys"), _3 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_6$$5);
+			zephir_create_array(_6$$5, 3, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_6$$5, SS("a"), SL("A"), 1);
+			add_assoc_stringl_ex(_6$$5, SS("b"), SL("B"), 1);
+			add_assoc_stringl_ex(_6$$5, SS("c"), SL("C"), 1);
+			zephir_update_property_this(this_ptr, SL("someArrayWithSpecifyKeys"), _6$$5 TSRMLS_CC);
 		}
-		_6 = zephir_fetch_nproperty_this(this_ptr, SL("someArray"), PH_NOISY_CC);
-		if (Z_TYPE_P(_6) == IS_NULL) {
-			ZEPHIR_INIT_NVAR(_3);
-			zephir_create_array(_3, 4, 0 TSRMLS_CC);
-			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_LONG(_1, 1);
-			zephir_array_fast_append(_3, _1);
-			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_LONG(_1, 2);
-			zephir_array_fast_append(_3, _1);
-			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_LONG(_1, 3);
-			zephir_array_fast_append(_3, _1);
-			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_LONG(_1, 4);
-			zephir_array_fast_append(_3, _1);
-			zephir_update_property_this(this_ptr, SL("someArray"), _3 TSRMLS_CC);
-		}
-		_7 = zephir_fetch_nproperty_this(this_ptr, SL("someEmptyArray"), PH_NOISY_CC);
+		_7 = zephir_fetch_nproperty_this(this_ptr, SL("someArray"), PH_NOISY_CC);
 		if (Z_TYPE_P(_7) == IS_NULL) {
-			ZEPHIR_INIT_NVAR(_1);
-			array_init(_1);
-			zephir_update_property_this(this_ptr, SL("someEmptyArray"), _1 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_8$$6);
+			zephir_create_array(_8$$6, 4, 0 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_9$$6);
+			ZVAL_LONG(_9$$6, 1);
+			zephir_array_fast_append(_8$$6, _9$$6);
+			ZEPHIR_INIT_NVAR(_9$$6);
+			ZVAL_LONG(_9$$6, 2);
+			zephir_array_fast_append(_8$$6, _9$$6);
+			ZEPHIR_INIT_NVAR(_9$$6);
+			ZVAL_LONG(_9$$6, 3);
+			zephir_array_fast_append(_8$$6, _9$$6);
+			ZEPHIR_INIT_NVAR(_9$$6);
+			ZVAL_LONG(_9$$6, 4);
+			zephir_array_fast_append(_8$$6, _9$$6);
+			zephir_update_property_this(this_ptr, SL("someArray"), _8$$6 TSRMLS_CC);
+		}
+		_10 = zephir_fetch_nproperty_this(this_ptr, SL("someEmptyArray"), PH_NOISY_CC);
+		if (Z_TYPE_P(_10) == IS_NULL) {
+			ZEPHIR_INIT_VAR(_11$$7);
+			array_init(_11$$7);
+			zephir_update_property_this(this_ptr, SL("someEmptyArray"), _11$$7 TSRMLS_CC);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJVAL_P(this_ptr);

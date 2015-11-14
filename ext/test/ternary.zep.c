@@ -151,7 +151,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
  */
 PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 
-	zval *var2, *var3, *_0 = NULL, *_1 = NULL;
+	zval *var2 = NULL, *var3 = NULL, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -185,9 +185,9 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 	zval *s = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(s);
 	ZVAL_LONG(s, 23);
-
 	if (1 == 1) {
 		ZEPHIR_INIT_NVAR(s);
 		ZVAL_LONG(s, 3);
@@ -196,6 +196,21 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 		ZVAL_LONG(s, 10);
 	}
 	RETURN_CCTOR(s);
+
+}
+
+PHP_METHOD(Test_Ternary, testShortTernary) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	if (!(zephir_is_true(a))) {
+		ZVAL_BOOL(return_value, 0);
+	}
+	return;
 
 }
 

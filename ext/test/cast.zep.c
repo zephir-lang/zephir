@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Test_Cast) {
 /** To int cast */
 PHP_METHOD(Test_Cast, testIntCastFromFloat) {
 
+	
 
 	RETURN_LONG((int) 5.0);
 
@@ -38,15 +39,17 @@ PHP_METHOD(Test_Cast, testIntCastFromFloat) {
 
 PHP_METHOD(Test_Cast, testIntCastFromVariableFloat) {
 
-	double a = 5.0;
+	double a;
 
 
+	a = 5.0;
 	RETURN_LONG((int) (a));
 
 }
 
 PHP_METHOD(Test_Cast, testIntCastFromBooleanTrue) {
 
+	
 
 	RETURN_LONG(1);
 
@@ -54,6 +57,7 @@ PHP_METHOD(Test_Cast, testIntCastFromBooleanTrue) {
 
 PHP_METHOD(Test_Cast, testIntCastFromBooleanFalse) {
 
+	
 
 	RETURN_LONG(0);
 
@@ -61,18 +65,20 @@ PHP_METHOD(Test_Cast, testIntCastFromBooleanFalse) {
 
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanTrue) {
 
-	zend_bool a = 1;
+	zend_bool a;
 
 
+	a = 1;
 	RETURN_LONG((int) (a));
 
 }
 
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanFalse) {
 
-	zend_bool a = 0;
+	zend_bool a;
 
 
+	a = 0;
 	RETURN_LONG((int) (a));
 
 }
@@ -82,9 +88,9 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableNull) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_NULL(a);
-
 	RETURN_MM_LONG(zephir_get_intval(a));
 
 }
@@ -104,7 +110,7 @@ PHP_METHOD(Test_Cast, testIntCastFromStringValue) {
 
 PHP_METHOD(Test_Cast, testIntCastFromVariableString) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -131,6 +137,7 @@ PHP_METHOD(Test_Cast, testIntCastFromParameterString) {
 
 PHP_METHOD(Test_Cast, testIntCastFromNull) {
 
+	
 
 	RETURN_LONG(0);
 
@@ -138,12 +145,12 @@ PHP_METHOD(Test_Cast, testIntCastFromNull) {
 
 PHP_METHOD(Test_Cast, testIntCastFromVariableEmptyArray) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-
 	RETURN_MM_LONG(zephir_get_intval(a));
 
 }
@@ -165,10 +172,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableArray) {
 	zval *a = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
 
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_VAR(a);
 	zephir_create_array(a, 4, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -233,7 +238,7 @@ PHP_METHOD(Test_Cast, testIntCastFromStdClass) {
  */
 PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -246,6 +251,7 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 /** To float cast */
 PHP_METHOD(Test_Cast, testFloatCastFromFloat) {
 
+	
 
 	RETURN_DOUBLE(5.0);
 
@@ -253,15 +259,17 @@ PHP_METHOD(Test_Cast, testFloatCastFromFloat) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromVariableFloat) {
 
-	double a = 5.0;
+	double a;
 
 
+	a = 5.0;
 	RETURN_DOUBLE((double) (a));
 
 }
 
 PHP_METHOD(Test_Cast, testFloatCastFromBooleanTrue) {
 
+	
 
 	RETURN_DOUBLE(1);
 
@@ -269,6 +277,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromBooleanTrue) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromBooleanFalse) {
 
+	
 
 	RETURN_DOUBLE(0);
 
@@ -276,18 +285,20 @@ PHP_METHOD(Test_Cast, testFloatCastFromBooleanFalse) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanTrue) {
 
-	zend_bool a = 1;
+	zend_bool a;
 
 
+	a = 1;
 	RETURN_DOUBLE((double) (a));
 
 }
 
 PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanFalse) {
 
-	zend_bool a = 0;
+	zend_bool a;
 
 
+	a = 0;
 	RETURN_DOUBLE((double) (a));
 
 }
@@ -297,15 +308,16 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableNull) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_NULL(a);
-
 	RETURN_MM_DOUBLE(zephir_get_doubleval(a));
 
 }
 
 PHP_METHOD(Test_Cast, testFloatCastFromNull) {
 
+	
 
 	RETURN_DOUBLE(0);
 
@@ -313,12 +325,12 @@ PHP_METHOD(Test_Cast, testFloatCastFromNull) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromVariableEmptyArray) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-
 	RETURN_MM_DOUBLE(zephir_get_doubleval(a));
 
 }
@@ -340,10 +352,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableArray) {
 	zval *a = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
 
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_VAR(a);
 	zephir_create_array(a, 4, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -408,7 +418,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromStdClass) {
  */
 PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -421,6 +431,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 /** To boolean cast */
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 
+	
 
 	RETURN_BOOL((zend_bool) 1);
 
@@ -428,6 +439,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue2) {
 
+	
 
 	RETURN_BOOL((zend_bool) 1000);
 
@@ -435,6 +447,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue2) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromIntFalse) {
 
+	
 
 	RETURN_BOOL((zend_bool) 0);
 
@@ -442,7 +455,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntFalse) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromObject) {
 
-	zval *simpleObject;
+	zval *simpleObject = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -454,12 +467,12 @@ PHP_METHOD(Test_Cast, testBooleanCastFromObject) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromEmptyArray) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-
 	RETURN_MM_BOOL(zephir_get_boolval(a));
 
 }
@@ -469,10 +482,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 	zval *a = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
 
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_VAR(a);
 	zephir_create_array(a, 4, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -495,9 +506,9 @@ PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_NULL(a);
-
 	RETURN_MM_BOOL(zephir_get_boolval(a));
 
 }

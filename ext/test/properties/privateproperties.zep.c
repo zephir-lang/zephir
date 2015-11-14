@@ -60,6 +60,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PrivateProperties) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeNull) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someNull");
 
@@ -67,6 +68,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeNull) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeNullInitial) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someNullInitial");
 
@@ -74,6 +76,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeNullInitial) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeFalse) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someFalse");
 
@@ -81,6 +84,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeFalse) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeTrue) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someTrue");
 
@@ -88,6 +92,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeTrue) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeInteger) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someInteger");
 
@@ -95,6 +100,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeInteger) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeDouble) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someDouble");
 
@@ -102,6 +108,7 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeDouble) {
 
 PHP_METHOD(Test_Properties_PrivateProperties, getSomeString) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someString");
 

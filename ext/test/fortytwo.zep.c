@@ -32,12 +32,12 @@ ZEPHIR_INIT_CLASS(Test_FortyTwo) {
 
 PHP_METHOD(Test_FortyTwo, proof) {
 
-	zend_bool _5;
+	zend_bool _5$$3;
 	HashTable *_3;
 	HashPosition _2;
 	zval *_0 = NULL;
-	int i, j, _6, _7;
-	zval *box, *side = NULL, *_1 = NULL, **_4, *_8;
+	int i = 0, j = 0, _6$$3, _7$$3;
+	zval *box = NULL, *side = NULL, *_1 = NULL, **_4, *_8$$4;
 
 	ZEPHIR_MM_GROW();
 
@@ -230,22 +230,22 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	) {
 		ZEPHIR_GET_HVALUE(side, _4);
 		j = 0;
-		_7 = 2;
-		_6 = 0;
-		_5 = 0;
-		if (_6 <= _7) {
+		_7$$3 = 2;
+		_6$$3 = 0;
+		_5$$3 = 0;
+		if (_6$$3 <= _7$$3) {
 			while (1) {
-				if (_5) {
-					_6++;
-					if (!(_6 <= _7)) {
+				if (_5$$3) {
+					_6$$3++;
+					if (!(_6$$3 <= _7$$3)) {
 						break;
 					}
 				} else {
-					_5 = 1;
+					_5$$3 = 1;
 				}
-				i = _6;
-				zephir_array_fetch_long(&_8, side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26 TSRMLS_CC);
-				j += zephir_get_numberval(_8);
+				i = _6$$3;
+				zephir_array_fetch_long(&_8$$4, side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26 TSRMLS_CC);
+				j += zephir_get_numberval(_8$$4);
 			}
 		}
 		if (j != 42) {

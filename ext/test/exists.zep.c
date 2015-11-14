@@ -12,9 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 #include "kernel/file.h"
 
 
@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Exists) {
 PHP_METHOD(Test_Exists, testClassExists) {
 
 	zend_bool autoload;
-	zval *className, *autoload_param = NULL;
+	zval *className, *autoload_param = NULL, _0;
 
 	zephir_fetch_params(0, 1, 1, &className, &autoload_param);
 
@@ -40,14 +40,16 @@ PHP_METHOD(Test_Exists, testClassExists) {
 	}
 
 
-	RETURN_BOOL(zephir_class_exists(className, zephir_is_true((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
+	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0)  TSRMLS_CC));
 
 }
 
 PHP_METHOD(Test_Exists, testInterfaceExists) {
 
 	zend_bool autoload;
-	zval *interfaceName, *autoload_param = NULL;
+	zval *interfaceName, *autoload_param = NULL, _0;
 
 	zephir_fetch_params(0, 1, 1, &interfaceName, &autoload_param);
 
@@ -58,7 +60,9 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 	}
 
 
-	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
+	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0)  TSRMLS_CC));
 
 }
 

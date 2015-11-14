@@ -28,10 +28,11 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ACos) {
 PHP_METHOD(Test_Optimizers_ACos, testInt) {
 
 	zval _0;
-	int a = 1, ZEPHIR_LAST_CALL_STATUS;
+	int ZEPHIR_LAST_CALL_STATUS, a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 1;
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, a);
 	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
@@ -43,10 +44,11 @@ PHP_METHOD(Test_Optimizers_ACos, testInt) {
 PHP_METHOD(Test_Optimizers_ACos, testVar) {
 
 	zval _0;
-	int a = 1, ZEPHIR_LAST_CALL_STATUS;
+	int ZEPHIR_LAST_CALL_STATUS, a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 1;
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, a);
 	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
@@ -57,8 +59,8 @@ PHP_METHOD(Test_Optimizers_ACos, testVar) {
 
 PHP_METHOD(Test_Optimizers_ACos, testIntValue1) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval _0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

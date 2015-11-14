@@ -46,6 +46,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 PHP_METHOD(Test_Oo_OoConstructParams, getA) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "a");
 
@@ -53,6 +54,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, getA) {
 
 PHP_METHOD(Test_Oo_OoConstructParams, getB) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "b");
 

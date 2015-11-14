@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Test_FetchTest) {
 
 PHP_METHOD(Test_FetchTest, testFetchArray1) {
 
-	zval *a, *b, *c;
+	zval *a, *b, *c = NULL;
 
 	zephir_fetch_params(0, 2, 0, &a, &b);
 
@@ -44,7 +44,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray1) {
 PHP_METHOD(Test_FetchTest, testFetchArray2) {
 
 	int b;
-	zval *a, *b_param = NULL, *c;
+	zval *a, *b_param = NULL, *c = NULL;
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
 
@@ -58,7 +58,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray2) {
 PHP_METHOD(Test_FetchTest, testFetchArray3) {
 
 	zval *b = NULL;
-	zval *a, *b_param = NULL, *c;
+	zval *a, *b_param = NULL, *c = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
@@ -72,7 +72,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 
 PHP_METHOD(Test_FetchTest, testFetchObject1) {
 
-	zval *a, *b, *c;
+	zval *a, *b, *c = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);

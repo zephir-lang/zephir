@@ -44,11 +44,11 @@ PHP_METHOD(Test_ExitDie, testExit) {
 		_0 = ZEPHIR_IS_STRING(param, "");
 	}
 	if (_0) {
+		ZEPHIR_MM_RESTORE();
 		zephir_exit_empty();
-		ZEPHIR_MM_RESTORE();
 	} else {
-		zephir_exit(param);
 		ZEPHIR_MM_RESTORE();
+		zephir_exit(param);
 	}
 	ZEPHIR_MM_RESTORE();
 
@@ -73,11 +73,11 @@ PHP_METHOD(Test_ExitDie, testDie) {
 		_0 = ZEPHIR_IS_STRING(param, "");
 	}
 	if (_0) {
+		ZEPHIR_MM_RESTORE();
 		zephir_exit_empty();
-		ZEPHIR_MM_RESTORE();
 	} else {
-		zephir_exit(param);
 		ZEPHIR_MM_RESTORE();
+		zephir_exit(param);
 	}
 	ZEPHIR_MM_RESTORE();
 

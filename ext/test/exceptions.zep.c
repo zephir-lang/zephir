@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Exceptions) {
 
 PHP_METHOD(Test_Exceptions, testException1) {
 
+	
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello1", "test/exceptions.zep", 8);
 	return;
@@ -38,6 +39,7 @@ PHP_METHOD(Test_Exceptions, testException1) {
 
 PHP_METHOD(Test_Exceptions, testExceptionStringEscape) {
 
+	
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello \"simple code\" test", "test/exceptions.zep", 13);
 	return;
@@ -46,8 +48,8 @@ PHP_METHOD(Test_Exceptions, testExceptionStringEscape) {
 
 PHP_METHOD(Test_Exceptions, testException2) {
 
+	zval *msg = NULL, *_0;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *msg, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -65,8 +67,8 @@ PHP_METHOD(Test_Exceptions, testException2) {
 
 PHP_METHOD(Test_Exceptions, testException3) {
 
+	zval *ex = NULL, *msg = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *ex, *msg;
 
 	ZEPHIR_MM_GROW();
 
@@ -84,8 +86,8 @@ PHP_METHOD(Test_Exceptions, testException3) {
 
 PHP_METHOD(Test_Exceptions, getException) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -101,8 +103,8 @@ PHP_METHOD(Test_Exceptions, getException) {
 
 PHP_METHOD(Test_Exceptions, testException4) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -116,8 +118,8 @@ PHP_METHOD(Test_Exceptions, testException4) {
 
 PHP_METHOD(Test_Exceptions, testException5) {
 
+	zval *exception = NULL, *_0;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *exception, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -212,8 +214,8 @@ PHP_METHOD(Test_Exceptions, testExceptionConcat) {
 
 PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

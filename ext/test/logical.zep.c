@@ -93,7 +93,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 
 	zend_bool _0;
 	int b;
-	zval *a, *b_param = NULL, *_1;
+	zval *a, *b_param = NULL, *_1$$3;
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
 
@@ -105,8 +105,8 @@ PHP_METHOD(Test_Logical, testAnd9) {
 		_0 = zephir_array_isset_long(a, b);
 	}
 	if (_0) {
-		zephir_array_fetch_long(&_1, a, b, PH_NOISY | PH_READONLY, "test/logical.zep", 35 TSRMLS_CC);
-		RETURN_CTORW(_1);
+		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY | PH_READONLY, "test/logical.zep", 35 TSRMLS_CC);
+		RETURN_CTORW(_1$$3);
 	}
 	RETURN_NULL();
 
@@ -141,7 +141,7 @@ PHP_METHOD(Test_Logical, testOr2) {
 PHP_METHOD(Test_Logical, testMixed1) {
 
 	zend_bool _0, _1;
-	int first, second;
+	int first = 0, second = 0;
 
 
 	first = 0;
@@ -189,7 +189,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 
 PHP_METHOD(Test_Logical, testMixed3) {
 
-	zend_bool a, b, _0, _1, _2, _3;
+	zend_bool a = 0, b = 0, _0, _1, _2, _3;
 
 
 	_0 = (0) ? 1 : 0;
