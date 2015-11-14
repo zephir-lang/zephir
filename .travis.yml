@@ -1,6 +1,10 @@
 language: php
 sudo: false
 
+env:
+  global:
+    secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
+
 php:
   - 5.3
   - 5.4
@@ -12,7 +16,13 @@ cache:
     - apt
 
 before_install:
+ - openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d
+ - chmod 600 ~/.ssh/id_rsa
+ - git config push.default simple
+ - git config --global user.email "travis@zephir-lang.com"
+ - git config --global user.name "TravisCI"
  - git submodule --quiet update --init --recursive
+ - git remote set-url origin git@github.com:phalcon/zephir.git
  - ./unit-tests/ci/before_install.sh
 
 install:
@@ -33,6 +43,18 @@ before_script:
 script:
  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full phpunit --debug --coverage-clover coverage.clover
+
+after_success:
+ - export ZEPHIR_TARGET="legacy"
+ - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then export ZEPHIR_TARGET="ZendEngine_2"; fi
+ - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then export ZEPHIR_TARGET="ZendEngine_3"; fi
+ - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git checkout $TRAVIS_BRANCH; fi
+ - rm -rf generated/$ZEPHIR_TARGET/{*,.*}
+ - cp -a ext/test/. generated/$ZEPHIR_TARGET
+ - git add -A generated/$ZEPHIR_TARGET
+ - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
+ - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
+ - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git diff --ignore-space-at-eol -b -w --ignore-blank-lines generated/$ZEPHIR_TARGET; fi
 
 after_failure:
  - sudo apt-get -qq install gdb

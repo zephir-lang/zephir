@@ -1431,7 +1431,7 @@ class Compiler
         /**
          * ext_clean
          */
-        $content = file_get_contents(__DIR__ . '/../ext/clean');
+        $content = file_get_contents($templatePath . '/clean');
         if (empty($content)) {
             throw new Exception("Clean file doesn't exist");
         }
