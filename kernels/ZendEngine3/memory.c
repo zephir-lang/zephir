@@ -304,7 +304,7 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr)
 	}
 
 	zephir_globals_ptr->start_memory = start;
-	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
+	zephir_globals_ptr->end_memory   = &start[ZEPHIR_NUM_PREALLOCATED_FRAMES - 1];
 
 	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
 	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
