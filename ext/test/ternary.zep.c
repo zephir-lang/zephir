@@ -218,3 +218,22 @@ PHP_METHOD(Test_Ternary, testShortTernary) {
 
 }
 
+PHP_METHOD(Test_Ternary, testShortTernaryComplex) {
+
+	zval *left, *value, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &left, &value);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	if (!(zephir_is_true(left))) {
+		ZEPHIR_CPY_WRT(_0, value);
+	} else {
+		ZEPHIR_CPY_WRT(_0, left);
+	}
+	RETURN_CCTOR(_0);
+
+}
+
