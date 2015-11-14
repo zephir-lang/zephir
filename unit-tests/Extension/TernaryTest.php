@@ -30,6 +30,9 @@ class TernaryTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals(3, $t->testTernaryAfterLetVariable());
         $this->assertEquals(array('', 'c', ''), $t->testTernaryWithPromotedTemporaryVariable());
+
+        $this->assertEquals(true, $t->testShortTernary(true));
+        $this->assertEquals(false, $t->testShortTernary(false));
     }
 
     public function testComplex()

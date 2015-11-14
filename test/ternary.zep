@@ -55,4 +55,9 @@ class Ternary
 		let s = 1===1 ? 3 : 10;
 		return s;
 	}
+
+    public function testShortTernary(var a)
+    {
+		return a ?: false;
+    }
 }
