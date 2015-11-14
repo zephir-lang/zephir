@@ -114,6 +114,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/optimizers/createarray.zep.c
 	test/optimizers/sin.zep.c
 	test/optimizers/sqrt.zep.c
+	test/optimizers/strreplace.zep.c
 	test/optimizers/substr.zep.c
 	test/optimizers/tan.zep.c
 	test/pdostatement.zep.c
@@ -138,6 +139,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/scall.zep.c
 	test/scalldynamic.zep.c
 	test/scallexternal.zep.c
+	test/scope.zep.c
 	test/sort.zep.c
 	test/spectralnorm.zep.c
 	test/spropertyaccess.zep.c

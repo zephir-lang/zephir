@@ -201,16 +201,20 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
 PHP_METHOD(Test_Ternary, testShortTernary) {
 
-	zval *a;
+	zval *a, *_0 = NULL;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
+	ZEPHIR_INIT_VAR(_0);
 	if (!(zephir_is_true(a))) {
-		ZVAL_BOOL(return_value, 0);
+		ZVAL_BOOL(_0, 0);
+	} else {
+		ZEPHIR_CPY_WRT(_0, a);
 	}
-	return;
+	RETURN_CCTOR(_0);
 
 }
 
