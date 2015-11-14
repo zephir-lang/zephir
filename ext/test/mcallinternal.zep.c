@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_McallInternal) {
 
 }
 
-static void zep_Test_McallInternal_a(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC) {
+void zep_Test_McallInternal_a(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC) {
 
 	zval _0;
 
@@ -40,25 +40,29 @@ static void zep_Test_McallInternal_a(int ht, zval *return_value, zval **return_v
 
 }
 
-static void zep_Test_McallInternal_b(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_ext, zval *b_ext TSRMLS_DC) {
+void zep_Test_McallInternal_b(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_ext, zval *b_ext TSRMLS_DC) {
 
 	zval *a, *b;
 
 	a = a_ext;
+
 	b = b_ext;
+
 
 
 
 
 }
 
-static void zep_Test_McallInternal_c(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext TSRMLS_DC) {
+void zep_Test_McallInternal_c(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext TSRMLS_DC) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
 
 	a_param = a_param_ext;
+
 	b_param = b_param_ext;
+
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -81,12 +85,13 @@ PHP_METHOD(Test_McallInternal, e) {
 
 PHP_METHOD(Test_McallInternal, d) {
 
-	zval *_3 = NULL;
+	zval *_3$$3 = NULL;
 	zend_bool _0;
-	int a = 0, i, _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	int ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 
 	ZEPHIR_MM_GROW();
 
+	a = 0;
 	_2 = 1000000;
 	_1 = 0;
 	_0 = 0;
@@ -101,9 +106,9 @@ PHP_METHOD(Test_McallInternal, d) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_INTERNAL_METHOD_P0(&_3, this_ptr, zep_Test_McallInternal_a);
+			ZEPHIR_CALL_INTERNAL_METHOD_P0(&_3$$3, this_ptr, zep_Test_McallInternal_a);
 			zephir_check_call_status();
-			a += zephir_get_intval(_3);
+			a += zephir_get_intval(_3$$3);
 		}
 	}
 	RETURN_MM_LONG(a);
@@ -112,13 +117,14 @@ PHP_METHOD(Test_McallInternal, d) {
 
 PHP_METHOD(Test_McallInternal, f) {
 
-	zephir_fcall_cache_entry *_4 = NULL;
-	zval *_3 = NULL;
+	zval *_3$$3 = NULL;
 	zend_bool _0;
-	int a = 0, i, _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_4 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 
 	ZEPHIR_MM_GROW();
 
+	a = 0;
 	_2 = 1000000;
 	_1 = 0;
 	_0 = 0;
@@ -133,9 +139,9 @@ PHP_METHOD(Test_McallInternal, f) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_METHOD(&_3, this_ptr, "e", &_4, 0);
+			ZEPHIR_CALL_METHOD(&_3$$3, this_ptr, "e", &_4, 0);
 			zephir_check_call_status();
-			a += zephir_get_intval(_3);
+			a += zephir_get_intval(_3$$3);
 		}
 	}
 	RETURN_MM_LONG(a);
@@ -144,13 +150,14 @@ PHP_METHOD(Test_McallInternal, f) {
 
 PHP_METHOD(Test_McallInternal, g) {
 
-	zval *_3 = NULL, _4 = zval_used_for_init, _5 = zval_used_for_init;
+	zval *_3$$3 = NULL, *_4$$3 = NULL, *_5$$3 = NULL;
 	zend_bool _0;
-	long i;
-	int a = 0, _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	long i = 0;
+	int ZEPHIR_LAST_CALL_STATUS, a, _1, _2;
 
 	ZEPHIR_MM_GROW();
 
+	a = 0;
 	_2 = 1000;
 	_1 = 0;
 	_0 = 0;
@@ -165,26 +172,28 @@ PHP_METHOD(Test_McallInternal, g) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_SINIT_NVAR(_4);
-			ZVAL_LONG(&_4, i);
-			ZEPHIR_SINIT_NVAR(_5);
-			ZVAL_LONG(&_5, i);
-			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3, this_ptr, zep_Test_McallInternal_c, &_4, &_5);
+			ZEPHIR_INIT_NVAR(_4$$3);
+			ZVAL_LONG(_4$$3, i);
+			ZEPHIR_INIT_NVAR(_5$$3);
+			ZVAL_LONG(_5$$3, i);
+			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, zep_Test_McallInternal_c, _4$$3, _5$$3);
 			zephir_check_call_status();
-			a += zephir_get_intval(_3);
+			a += zephir_get_intval(_3$$3);
 		}
 	}
 	RETURN_MM_LONG(a);
 
 }
 
-static void zep_Test_McallInternal_other(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext TSRMLS_DC) {
+void zep_Test_McallInternal_other(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext TSRMLS_DC) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
 
 	a_param = a_param_ext;
+
 	b_param = b_param_ext;
+
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -196,14 +205,16 @@ static void zep_Test_McallInternal_other(int ht, zval *return_value, zval **retu
 
 PHP_METHOD(Test_McallInternal, callFibonacci) {
 
-	zval *_3 = NULL, _4 = zval_used_for_init, _5 = zval_used_for_init;
-	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zval *_3$$3 = NULL, *_4$$3 = NULL, *_5$$3 = NULL;
 	zend_bool _0;
-	long i = 0;
-	double p = 0;
+	long i;
+	double p;
+	int ZEPHIR_LAST_CALL_STATUS, _1, _2;
 
 	ZEPHIR_MM_GROW();
 
+	p = (double) (0);
+	i = 0;
 	_2 = 10000000;
 	_1 = 0;
 	_0 = 0;
@@ -218,13 +229,13 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_SINIT_NVAR(_4);
-			ZVAL_LONG(&_4, i);
-			ZEPHIR_SINIT_NVAR(_5);
-			ZVAL_LONG(&_5, (i + 1));
-			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3, this_ptr, zep_Test_McallInternal_other, &_4, &_5);
+			ZEPHIR_INIT_NVAR(_4$$3);
+			ZVAL_LONG(_4$$3, i);
+			ZEPHIR_INIT_NVAR(_5$$3);
+			ZVAL_LONG(_5$$3, (i + 1));
+			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3$$3, this_ptr, zep_Test_McallInternal_other, _4$$3, _5$$3);
 			zephir_check_call_status();
-			p += zephir_get_doubleval(_3);
+			p += zephir_get_doubleval(_3$$3);
 		}
 	}
 	RETURN_MM_DOUBLE(p);

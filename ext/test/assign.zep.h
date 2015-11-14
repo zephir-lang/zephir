@@ -42,6 +42,7 @@ PHP_METHOD(Test_Assign, testAssign34);
 PHP_METHOD(Test_Assign, testAssign35);
 PHP_METHOD(Test_Assign, testAssign36);
 PHP_METHOD(Test_Assign, testAssign37);
+PHP_METHOD(Test_Assign, testAssign38);
 PHP_METHOD(Test_Assign, testPropertyAssign1);
 PHP_METHOD(Test_Assign, testPropertyAssign2);
 PHP_METHOD(Test_Assign, testPropertyIncr1);
@@ -86,6 +87,10 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign);
 PHP_METHOD(Test_Assign, testConstantKeyAssign);
 PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign);
 PHP_METHOD(Test_Assign, testAssignSuperGlobals);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testassign38, 0, 0, 1)
+	ZEND_ARG_INFO(0, index)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray4, 0, 0, 1)
 	ZEND_ARG_INFO(0, index)
@@ -187,6 +192,7 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testAssign35, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign36, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign37, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssign38, arginfo_test_assign_testassign38, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testPropertyAssign1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testPropertyAssign2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testPropertyIncr1, NULL, ZEND_ACC_PUBLIC)

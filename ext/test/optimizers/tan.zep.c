@@ -29,10 +29,11 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_Tan) {
 PHP_METHOD(Test_Optimizers_Tan, testInt) {
 
 	zval *_0;
-	int a = 0;
+	int a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 0;
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
 	RETURN_MM_DOUBLE(tan(a));
@@ -42,10 +43,11 @@ PHP_METHOD(Test_Optimizers_Tan, testInt) {
 PHP_METHOD(Test_Optimizers_Tan, testVar) {
 
 	zval *_0;
-	int a = 0;
+	int a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 0;
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
 	RETURN_MM_DOUBLE(tan(a));
@@ -55,10 +57,11 @@ PHP_METHOD(Test_Optimizers_Tan, testVar) {
 PHP_METHOD(Test_Optimizers_Tan, testVar2) {
 
 	zval *_0;
-	int a = 1;
+	int a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 1;
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
 	RETURN_MM_DOUBLE(tan(a));

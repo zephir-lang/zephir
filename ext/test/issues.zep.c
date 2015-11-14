@@ -58,6 +58,7 @@ PHP_METHOD(Test_Issues, someMethod) {
 
 PHP_METHOD(Test_Issues, test) {
 
+	
 
 	php_printf("%s", "test");
 

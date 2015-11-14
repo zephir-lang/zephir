@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Unsettest) {
 
 PHP_METHOD(Test_Unsettest, getProperty) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "property");
 
@@ -110,6 +111,7 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 
+	
 
 	zephir_unset_property(this_ptr, "property" TSRMLS_CC);
 	RETURN_MEMBER(this_ptr, "property");
@@ -118,7 +120,7 @@ PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 
 PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 
-	zval *simpleObject, *_0;
+	zval *simpleObject = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 

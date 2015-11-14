@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Returns) {
 
 PHP_METHOD(Test_Returns, testReturnCast1) {
 
+	
 
 	RETURN_LONG((int) 5.0);
 
@@ -34,6 +35,7 @@ PHP_METHOD(Test_Returns, testReturnCast1) {
 
 PHP_METHOD(Test_Returns, testReturnCast2) {
 
+	
 
 	RETURN_LONG(1);
 
@@ -41,6 +43,7 @@ PHP_METHOD(Test_Returns, testReturnCast2) {
 
 PHP_METHOD(Test_Returns, testReturnCast3) {
 
+	
 
 	RETURN_LONG(0);
 
@@ -48,6 +51,7 @@ PHP_METHOD(Test_Returns, testReturnCast3) {
 
 PHP_METHOD(Test_Returns, testReturnCast4) {
 
+	
 
 	if (1) {
 		RETURN_LONG(1);

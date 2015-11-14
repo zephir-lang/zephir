@@ -32,8 +32,8 @@ ZEPHIR_INIT_CLASS(Test_TypeInstances) {
 PHP_METHOD(Test_TypeInstances, testInstanceOfString1) {
 
 	zval *_2 = NULL;
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -49,8 +49,8 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString1) {
 PHP_METHOD(Test_TypeInstances, testInstanceOfString2) {
 
 	zval *_2 = NULL;
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -66,8 +66,8 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString2) {
 PHP_METHOD(Test_TypeInstances, testInstanceOfString3) {
 
 	zval *_2 = NULL;
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

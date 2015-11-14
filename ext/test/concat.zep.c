@@ -98,12 +98,12 @@ PHP_METHOD(Test_Concat, testConcat2) {
 PHP_METHOD(Test_Concat, testConcatSelf1) {
 
 	zval *_1;
-	zval *url, *_0, *_2;
+	zval *url = NULL, *_0, *_2;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(url);
 	ZVAL_STRING(url, "", 1);
-
 	zephir_concat_self_str(&url, SL("test") TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_CONCAT_SVS(_0, "append", url, "other");

@@ -140,10 +140,9 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 	zephir_fetch_params(0, 1, 0, &age_param);
 
 	if (unlikely(Z_TYPE_P(age_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a long/integer") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a int") TSRMLS_CC);
 		RETURN_NULL();
 	}
-
 	age = Z_LVAL_P(age_param);
 
 
@@ -162,7 +161,6 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be a double") TSRMLS_CC);
 		RETURN_NULL();
 	}
-
 	average = Z_DVAL_P(average_param);
 
 
@@ -182,7 +180,6 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-
 	if (likely(Z_TYPE_P(name_param) == IS_STRING)) {
 		zephir_get_strval(name, name_param);
 	} else {
@@ -217,7 +214,6 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 	zephir_fetch_params(0, 1, 0, &someList_param);
 
 	someList = someList_param;
-
 
 
 	RETURN_CTORW(someList);

@@ -361,7 +361,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getParsedCsv) {
 PHP_METHOD(Test_BuiltIn_StringMethods, getParsedJson) {
 
 	zend_bool assoc;
-	zval *str_param = NULL, *assoc_param = NULL, *_0;
+	zval *str_param = NULL, *assoc_param = NULL, *_0, _1;
 	zval *str = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -376,6 +376,8 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getParsedJson) {
 
 
 	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_BOOL(&_1, (assoc ? 1 : 0));
 	zephir_json_decode(_0, &(_0), str, zephir_get_intval(str)  TSRMLS_CC);
 	RETURN_CCTOR(_0);
 

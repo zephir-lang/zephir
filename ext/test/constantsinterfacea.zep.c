@@ -25,6 +25,7 @@ ZEPHIR_INIT_CLASS(Test_ConstantsInterfaceA) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant1) {
 
+	
 
 	RETURN_NULL();
 
@@ -32,6 +33,7 @@ PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant1) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant2) {
 
+	
 
 	RETURN_BOOL(0);
 
@@ -39,6 +41,7 @@ PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant2) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant3) {
 
+	
 
 	RETURN_BOOL(1);
 
@@ -46,6 +49,7 @@ PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant3) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant4) {
 
+	
 
 	RETURN_LONG(10);
 
@@ -53,6 +57,7 @@ PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant4) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant5) {
 
+	
 
 	RETURN_DOUBLE(10.25);
 
@@ -60,6 +65,7 @@ PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant5) {
 
 PHP_METHOD(Test_ConstantsInterfaceA, testReadInterfaceConstant6) {
 
+	
 
 	RETURN_STRING("test", 1);
 

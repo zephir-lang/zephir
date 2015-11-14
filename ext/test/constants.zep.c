@@ -69,6 +69,7 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 PHP_METHOD(Test_Constants, getPropertyC1) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC1");
 
@@ -76,6 +77,7 @@ PHP_METHOD(Test_Constants, getPropertyC1) {
 
 PHP_METHOD(Test_Constants, getPropertyC2) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC2");
 
@@ -83,6 +85,7 @@ PHP_METHOD(Test_Constants, getPropertyC2) {
 
 PHP_METHOD(Test_Constants, getPropertyC3) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC3");
 
@@ -90,6 +93,7 @@ PHP_METHOD(Test_Constants, getPropertyC3) {
 
 PHP_METHOD(Test_Constants, getPropertyC4) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC4");
 
@@ -97,6 +101,7 @@ PHP_METHOD(Test_Constants, getPropertyC4) {
 
 PHP_METHOD(Test_Constants, getPropertyC5) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC5");
 
@@ -104,6 +109,7 @@ PHP_METHOD(Test_Constants, getPropertyC5) {
 
 PHP_METHOD(Test_Constants, getPropertyC6) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC6");
 
@@ -111,6 +117,7 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 PHP_METHOD(Test_Constants, getPropertyC7) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC7");
 
@@ -118,6 +125,7 @@ PHP_METHOD(Test_Constants, getPropertyC7) {
 
 PHP_METHOD(Test_Constants, getPropertyC8) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "propertyC8");
 
@@ -125,6 +133,7 @@ PHP_METHOD(Test_Constants, getPropertyC8) {
 
 PHP_METHOD(Test_Constants, testReadConstant) {
 
+	
 
 	RETURN_LONG(3);
 
@@ -132,6 +141,7 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
+	
 
 	RETURN_LONG(10);
 
@@ -139,6 +149,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
+	
 
 	RETURN_LONG(10);
 
@@ -146,6 +157,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
+	
 
 	RETURN_LONG(10);
 
@@ -153,6 +165,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
+	
 
 	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
 	return;
@@ -161,6 +174,7 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
 PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
+	
 
 	RETURN_STRING("Test\\Constants", 1);
 
@@ -168,6 +182,7 @@ PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
 PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
+	
 
 	RETURN_STRING("Constants:testMethodMagicConstant", 1);
 
@@ -175,6 +190,7 @@ PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
 PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
+	
 
 	RETURN_STRING("testFunctionMagicConstant", 1);
 
@@ -182,6 +198,7 @@ PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
 PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
+	
 
 	RETURN_STRING("Test", 1);
 
@@ -189,6 +206,7 @@ PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
 PHP_METHOD(Test_Constants, testDirConstant) {
 
+	
 
 	RETURN_NULL();
 

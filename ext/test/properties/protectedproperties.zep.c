@@ -75,6 +75,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someVar");
 
@@ -82,6 +83,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNull) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someNull");
 
@@ -101,6 +103,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNullInitial) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someNullInitial");
 
@@ -108,6 +111,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNullInitial) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeFalse) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someFalse");
 
@@ -115,6 +119,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeFalse) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeTrue) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someTrue");
 
@@ -122,6 +127,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeTrue) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeInteger) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someInteger");
 
@@ -129,6 +135,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeInteger) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someDouble");
 
@@ -136,6 +143,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeString) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someString");
 

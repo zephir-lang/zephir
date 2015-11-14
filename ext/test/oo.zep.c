@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Oo) {
 
 PHP_METHOD(Test_Oo, testInstance1) {
 
-	zval *o;
+	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -41,8 +41,8 @@ PHP_METHOD(Test_Oo, testInstance1) {
 
 PHP_METHOD(Test_Oo, testInstance2) {
 
+	zval *o = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o;
 
 	ZEPHIR_MM_GROW();
 
@@ -56,8 +56,8 @@ PHP_METHOD(Test_Oo, testInstance2) {
 
 PHP_METHOD(Test_Oo, testInstance3) {
 
+	zval *o = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o;
 
 	ZEPHIR_MM_GROW();
 
@@ -73,8 +73,8 @@ PHP_METHOD(Test_Oo, testInstance3) {
 
 PHP_METHOD(Test_Oo, testInstance4) {
 
+	zval *o = NULL, *a = NULL, *b = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *a, *b;
 
 	ZEPHIR_MM_GROW();
 
@@ -92,8 +92,8 @@ PHP_METHOD(Test_Oo, testInstance4) {
 
 PHP_METHOD(Test_Oo, testInstance5) {
 
+	zval *o = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
@@ -113,8 +113,8 @@ PHP_METHOD(Test_Oo, testInstance5) {
 
 PHP_METHOD(Test_Oo, testInstance6) {
 
+	zval *o = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
@@ -132,8 +132,8 @@ PHP_METHOD(Test_Oo, testInstance6) {
 
 PHP_METHOD(Test_Oo, testInstance7) {
 
+	zval *o = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
@@ -151,8 +151,8 @@ PHP_METHOD(Test_Oo, testInstance7) {
 
 PHP_METHOD(Test_Oo, testInstance8) {
 
+	zval *o = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
@@ -170,9 +170,9 @@ PHP_METHOD(Test_Oo, testInstance8) {
 
 PHP_METHOD(Test_Oo, testInstance9) {
 
+	zval *o = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
-	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -184,9 +184,9 @@ PHP_METHOD(Test_Oo, testInstance9) {
 
 PHP_METHOD(Test_Oo, testInstance10) {
 
+	zval *o = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
-	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -198,8 +198,8 @@ PHP_METHOD(Test_Oo, testInstance10) {
 
 PHP_METHOD(Test_Oo, testInstance11) {
 
+	zval *o = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 

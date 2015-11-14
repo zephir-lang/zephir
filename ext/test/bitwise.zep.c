@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Bitwise) {
 
 PHP_METHOD(Test_Bitwise, intAnd) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -41,7 +41,7 @@ PHP_METHOD(Test_Bitwise, intAnd) {
 
 PHP_METHOD(Test_Bitwise, int2And) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -52,7 +52,7 @@ PHP_METHOD(Test_Bitwise, int2And) {
 
 PHP_METHOD(Test_Bitwise, intAndSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 0;
@@ -62,7 +62,7 @@ PHP_METHOD(Test_Bitwise, intAndSimple) {
 
 PHP_METHOD(Test_Bitwise, boolAnd) {
 
-	zend_bool a, b, c;
+	zend_bool a = 0, b = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -74,7 +74,7 @@ PHP_METHOD(Test_Bitwise, boolAnd) {
 
 PHP_METHOD(Test_Bitwise, bool2And) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -85,7 +85,7 @@ PHP_METHOD(Test_Bitwise, bool2And) {
 
 PHP_METHOD(Test_Bitwise, bool3And) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -96,7 +96,7 @@ PHP_METHOD(Test_Bitwise, bool3And) {
 
 PHP_METHOD(Test_Bitwise, boolAndSimple) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (0) ? 1 : 0;
@@ -106,7 +106,7 @@ PHP_METHOD(Test_Bitwise, boolAndSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleAnd) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -118,7 +118,7 @@ PHP_METHOD(Test_Bitwise, doubleAnd) {
 
 PHP_METHOD(Test_Bitwise, double2And) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = 1.0;
@@ -130,7 +130,7 @@ PHP_METHOD(Test_Bitwise, double2And) {
 
 PHP_METHOD(Test_Bitwise, doubleAndSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (0);
@@ -140,7 +140,7 @@ PHP_METHOD(Test_Bitwise, doubleAndSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleAnd2Simple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (0.0);
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Bitwise, doubleAnd2Simple) {
 
 PHP_METHOD(Test_Bitwise, varAnd) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -162,7 +162,7 @@ PHP_METHOD(Test_Bitwise, varAnd) {
 
 PHP_METHOD(Test_Bitwise, varAndSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 0;
@@ -172,8 +172,8 @@ PHP_METHOD(Test_Bitwise, varAndSimple) {
 
 PHP_METHOD(Test_Bitwise, intDoubleAnd) {
 
-	double a;
-	int b, c;
+	double a = 0;
+	int b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -185,7 +185,7 @@ PHP_METHOD(Test_Bitwise, intDoubleAnd) {
 
 PHP_METHOD(Test_Bitwise, intDoubleAndSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 0;
@@ -195,8 +195,8 @@ PHP_METHOD(Test_Bitwise, intDoubleAndSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleIntAnd) {
 
-	double a, c;
-	int b;
+	double a = 0, c = 0;
+	int b = 0;
 
 
 	a = (double) (1);
@@ -208,7 +208,7 @@ PHP_METHOD(Test_Bitwise, doubleIntAnd) {
 
 PHP_METHOD(Test_Bitwise, doubleIntAndSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (0);
@@ -218,7 +218,7 @@ PHP_METHOD(Test_Bitwise, doubleIntAndSimple) {
 
 PHP_METHOD(Test_Bitwise, varIntAnd) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -230,7 +230,7 @@ PHP_METHOD(Test_Bitwise, varIntAnd) {
 
 PHP_METHOD(Test_Bitwise, intVarAnd) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -242,8 +242,8 @@ PHP_METHOD(Test_Bitwise, intVarAnd) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 
-	int c;
-	long a, b;
+	int c = 0;
+	long a = 0, b = 0;
 
 
 	a = 1;
@@ -255,8 +255,8 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCast2And) {
 
-	int b, c;
-	long a;
+	int b = 0, c = 0;
+	long a = 0;
 
 
 	a = 1;
@@ -268,7 +268,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2And) {
 
 PHP_METHOD(Test_Bitwise, complexAnd) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (0);
@@ -278,7 +278,7 @@ PHP_METHOD(Test_Bitwise, complexAnd) {
 
 PHP_METHOD(Test_Bitwise, complex2And) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 & 1)) ? 1 : 0;
@@ -288,7 +288,7 @@ PHP_METHOD(Test_Bitwise, complex2And) {
 
 PHP_METHOD(Test_Bitwise, complex3And) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 &((1.0) ? 1 : 0))) ? 1 : 0;
@@ -298,18 +298,19 @@ PHP_METHOD(Test_Bitwise, complex3And) {
 
 PHP_METHOD(Test_Bitwise, complex4And) {
 
-	zval c;
+	zval *c = NULL;
 
+	ZEPHIR_MM_GROW();
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, ((int) (1.0) & 1));
-	RETURN_LCTORW(c);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_LONG(c, ((int) (1.0) & 1));
+	RETURN_CCTOR(c);
 
 }
 
 PHP_METHOD(Test_Bitwise, complex5And) {
 
-	int c;
+	int c = 0;
 
 
 	c = (1 & 1);
@@ -319,7 +320,7 @@ PHP_METHOD(Test_Bitwise, complex5And) {
 
 PHP_METHOD(Test_Bitwise, complex6And) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 &((1) ? 1 : 0))) ? 1 : 0;
@@ -329,8 +330,8 @@ PHP_METHOD(Test_Bitwise, complex6And) {
 
 PHP_METHOD(Test_Bitwise, complex7And) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -342,8 +343,8 @@ PHP_METHOD(Test_Bitwise, complex7And) {
 
 PHP_METHOD(Test_Bitwise, complex9And) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -355,9 +356,9 @@ PHP_METHOD(Test_Bitwise, complex9And) {
 
 PHP_METHOD(Test_Bitwise, complex10And) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1.0) ? 1 : 0;
@@ -369,9 +370,9 @@ PHP_METHOD(Test_Bitwise, complex10And) {
 
 PHP_METHOD(Test_Bitwise, complex11And) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -383,8 +384,8 @@ PHP_METHOD(Test_Bitwise, complex11And) {
 
 PHP_METHOD(Test_Bitwise, complex12And) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -396,8 +397,8 @@ PHP_METHOD(Test_Bitwise, complex12And) {
 
 PHP_METHOD(Test_Bitwise, complex13And) {
 
-	int c;
-	zend_bool a, b;
+	int c = 0;
+	zend_bool a = 0, b = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -409,8 +410,8 @@ PHP_METHOD(Test_Bitwise, complex13And) {
 
 PHP_METHOD(Test_Bitwise, complex14And) {
 
-	zend_bool b;
-	int a, c;
+	zend_bool b = 0;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -422,9 +423,9 @@ PHP_METHOD(Test_Bitwise, complex14And) {
 
 PHP_METHOD(Test_Bitwise, complex15And) {
 
-	zend_bool c;
-	double b;
-	int a;
+	zend_bool c = 0;
+	double b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -436,8 +437,8 @@ PHP_METHOD(Test_Bitwise, complex15And) {
 
 PHP_METHOD(Test_Bitwise, complex16And) {
 
-	double b, c;
-	int a;
+	double b = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -449,9 +450,9 @@ PHP_METHOD(Test_Bitwise, complex16And) {
 
 PHP_METHOD(Test_Bitwise, complex17And) {
 
-	double c;
-	zend_bool b;
-	int a;
+	double c = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -463,9 +464,9 @@ PHP_METHOD(Test_Bitwise, complex17And) {
 
 PHP_METHOD(Test_Bitwise, complex18And) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -478,9 +479,9 @@ PHP_METHOD(Test_Bitwise, complex18And) {
 
 PHP_METHOD(Test_Bitwise, complex19And) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -493,9 +494,9 @@ PHP_METHOD(Test_Bitwise, complex19And) {
 
 PHP_METHOD(Test_Bitwise, complex20And) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -508,9 +509,9 @@ PHP_METHOD(Test_Bitwise, complex20And) {
 
 PHP_METHOD(Test_Bitwise, complex21And) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -523,8 +524,8 @@ PHP_METHOD(Test_Bitwise, complex21And) {
 
 PHP_METHOD(Test_Bitwise, complex22And) {
 
-	double d, c;
-	int a, b;
+	double d = 0, c = 0;
+	int a = 0, b = 0;
 
 
 	a = 1;
@@ -537,9 +538,9 @@ PHP_METHOD(Test_Bitwise, complex22And) {
 
 PHP_METHOD(Test_Bitwise, complex23And) {
 
-	double d;
-	zend_bool b;
-	int a;
+	double d = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -551,8 +552,8 @@ PHP_METHOD(Test_Bitwise, complex23And) {
 
 PHP_METHOD(Test_Bitwise, complex24And) {
 
-	zend_bool b;
-	int a, d;
+	zend_bool b = 0;
+	int a = 0, d = 0;
 
 
 	a = 1;
@@ -564,7 +565,7 @@ PHP_METHOD(Test_Bitwise, complex24And) {
 
 PHP_METHOD(Test_Bitwise, intOr) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -576,7 +577,7 @@ PHP_METHOD(Test_Bitwise, intOr) {
 
 PHP_METHOD(Test_Bitwise, int2Or) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -587,7 +588,7 @@ PHP_METHOD(Test_Bitwise, int2Or) {
 
 PHP_METHOD(Test_Bitwise, intOrSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 3;
@@ -597,7 +598,7 @@ PHP_METHOD(Test_Bitwise, intOrSimple) {
 
 PHP_METHOD(Test_Bitwise, boolOr) {
 
-	zend_bool a, b, c;
+	zend_bool a = 0, b = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -609,7 +610,7 @@ PHP_METHOD(Test_Bitwise, boolOr) {
 
 PHP_METHOD(Test_Bitwise, bool2Or) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -620,7 +621,7 @@ PHP_METHOD(Test_Bitwise, bool2Or) {
 
 PHP_METHOD(Test_Bitwise, bool3Or) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -631,7 +632,7 @@ PHP_METHOD(Test_Bitwise, bool3Or) {
 
 PHP_METHOD(Test_Bitwise, bool4Or) {
 
-	zend_bool a, c;
+	zend_bool a = 0, c = 0;
 
 
 	a = 1;
@@ -642,7 +643,7 @@ PHP_METHOD(Test_Bitwise, bool4Or) {
 
 PHP_METHOD(Test_Bitwise, boolOrSimple) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = (3) ? 1 : 0;
@@ -652,7 +653,7 @@ PHP_METHOD(Test_Bitwise, boolOrSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleOr) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -664,7 +665,7 @@ PHP_METHOD(Test_Bitwise, doubleOr) {
 
 PHP_METHOD(Test_Bitwise, double2Or) {
 
-	double a, b, c;
+	double a = 0, b = 0, c = 0;
 
 
 	a = 1.0;
@@ -676,7 +677,7 @@ PHP_METHOD(Test_Bitwise, double2Or) {
 
 PHP_METHOD(Test_Bitwise, doubleOrSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (3);
@@ -686,7 +687,7 @@ PHP_METHOD(Test_Bitwise, doubleOrSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleOr2Simple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (3.0);
@@ -696,7 +697,7 @@ PHP_METHOD(Test_Bitwise, doubleOr2Simple) {
 
 PHP_METHOD(Test_Bitwise, varOr) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -708,7 +709,7 @@ PHP_METHOD(Test_Bitwise, varOr) {
 
 PHP_METHOD(Test_Bitwise, varOrSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 3;
@@ -718,8 +719,8 @@ PHP_METHOD(Test_Bitwise, varOrSimple) {
 
 PHP_METHOD(Test_Bitwise, intDoubleOr) {
 
-	double a;
-	int b, c;
+	double a = 0;
+	int b = 0, c = 0;
 
 
 	a = (double) (1);
@@ -731,7 +732,7 @@ PHP_METHOD(Test_Bitwise, intDoubleOr) {
 
 PHP_METHOD(Test_Bitwise, intDoubleOrSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 3.0;
@@ -741,8 +742,8 @@ PHP_METHOD(Test_Bitwise, intDoubleOrSimple) {
 
 PHP_METHOD(Test_Bitwise, doubleIntOr) {
 
-	double a, c;
-	int b;
+	double a = 0, c = 0;
+	int b = 0;
 
 
 	a = (double) (1);
@@ -754,7 +755,7 @@ PHP_METHOD(Test_Bitwise, doubleIntOr) {
 
 PHP_METHOD(Test_Bitwise, doubleIntOrSimple) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (3.0);
@@ -764,7 +765,7 @@ PHP_METHOD(Test_Bitwise, doubleIntOrSimple) {
 
 PHP_METHOD(Test_Bitwise, varIntOr) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -776,7 +777,7 @@ PHP_METHOD(Test_Bitwise, varIntOr) {
 
 PHP_METHOD(Test_Bitwise, intVarOr) {
 
-	int b, c, a;
+	int b = 0, c = 0, a = 0;
 
 
 	a = 1;
@@ -788,8 +789,8 @@ PHP_METHOD(Test_Bitwise, intVarOr) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 
-	int c;
-	long a, b;
+	int c = 0;
+	long a = 0, b = 0;
 
 
 	a = 1;
@@ -801,8 +802,8 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCast2Or) {
 
-	int b, c;
-	long a;
+	int b = 0, c = 0;
+	long a = 0;
 
 
 	a = 1;
@@ -814,7 +815,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2Or) {
 
 PHP_METHOD(Test_Bitwise, complexOr) {
 
-	double c;
+	double c = 0;
 
 
 	c = (double) (3.0);
@@ -824,7 +825,7 @@ PHP_METHOD(Test_Bitwise, complexOr) {
 
 PHP_METHOD(Test_Bitwise, complex2Or) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 | 1)) ? 1 : 0;
@@ -834,7 +835,7 @@ PHP_METHOD(Test_Bitwise, complex2Or) {
 
 PHP_METHOD(Test_Bitwise, complex3Or) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 |((1.0) ? 1 : 0))) ? 1 : 0;
@@ -844,18 +845,19 @@ PHP_METHOD(Test_Bitwise, complex3Or) {
 
 PHP_METHOD(Test_Bitwise, complex4Or) {
 
-	zval c;
+	zval *c = NULL;
 
+	ZEPHIR_MM_GROW();
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, ((int) (1.0) | 1));
-	RETURN_LCTORW(c);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_LONG(c, ((int) (1.0) | 1));
+	RETURN_CCTOR(c);
 
 }
 
 PHP_METHOD(Test_Bitwise, complex5Or) {
 
-	int c;
+	int c = 0;
 
 
 	c = (1 | 1);
@@ -865,7 +867,7 @@ PHP_METHOD(Test_Bitwise, complex5Or) {
 
 PHP_METHOD(Test_Bitwise, complex6Or) {
 
-	zend_bool c;
+	zend_bool c = 0;
 
 
 	c = ((1 |((1) ? 1 : 0))) ? 1 : 0;
@@ -875,8 +877,8 @@ PHP_METHOD(Test_Bitwise, complex6Or) {
 
 PHP_METHOD(Test_Bitwise, complex7Or) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -888,8 +890,8 @@ PHP_METHOD(Test_Bitwise, complex7Or) {
 
 PHP_METHOD(Test_Bitwise, complex9Or) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -901,9 +903,9 @@ PHP_METHOD(Test_Bitwise, complex9Or) {
 
 PHP_METHOD(Test_Bitwise, complex10Or) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1.0) ? 1 : 0;
@@ -915,9 +917,9 @@ PHP_METHOD(Test_Bitwise, complex10Or) {
 
 PHP_METHOD(Test_Bitwise, complex11Or) {
 
-	double c;
-	int b;
-	zend_bool a;
+	double c = 0;
+	int b = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -929,8 +931,8 @@ PHP_METHOD(Test_Bitwise, complex11Or) {
 
 PHP_METHOD(Test_Bitwise, complex12Or) {
 
-	int b, c;
-	zend_bool a;
+	int b = 0, c = 0;
+	zend_bool a = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -942,8 +944,8 @@ PHP_METHOD(Test_Bitwise, complex12Or) {
 
 PHP_METHOD(Test_Bitwise, complex13Or) {
 
-	int c;
-	zend_bool a, b;
+	int c = 0;
+	zend_bool a = 0, b = 0;
 
 
 	a = (1) ? 1 : 0;
@@ -955,8 +957,8 @@ PHP_METHOD(Test_Bitwise, complex13Or) {
 
 PHP_METHOD(Test_Bitwise, complex14Or) {
 
-	zend_bool b;
-	int a, c;
+	zend_bool b = 0;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -968,9 +970,9 @@ PHP_METHOD(Test_Bitwise, complex14Or) {
 
 PHP_METHOD(Test_Bitwise, complex15Or) {
 
-	zend_bool c;
-	double b;
-	int a;
+	zend_bool c = 0;
+	double b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -982,8 +984,8 @@ PHP_METHOD(Test_Bitwise, complex15Or) {
 
 PHP_METHOD(Test_Bitwise, complex16Or) {
 
-	double b, c;
-	int a;
+	double b = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -995,9 +997,9 @@ PHP_METHOD(Test_Bitwise, complex16Or) {
 
 PHP_METHOD(Test_Bitwise, complex17Or) {
 
-	double c;
-	zend_bool b;
-	int a;
+	double c = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1009,9 +1011,9 @@ PHP_METHOD(Test_Bitwise, complex17Or) {
 
 PHP_METHOD(Test_Bitwise, complex18Or) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1024,9 +1026,9 @@ PHP_METHOD(Test_Bitwise, complex18Or) {
 
 PHP_METHOD(Test_Bitwise, complex19Or) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1039,9 +1041,9 @@ PHP_METHOD(Test_Bitwise, complex19Or) {
 
 PHP_METHOD(Test_Bitwise, complex20Or) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1054,9 +1056,9 @@ PHP_METHOD(Test_Bitwise, complex20Or) {
 
 PHP_METHOD(Test_Bitwise, complex21Or) {
 
-	zend_bool b;
-	double d, c;
-	int a;
+	zend_bool b = 0;
+	double d = 0, c = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1069,8 +1071,8 @@ PHP_METHOD(Test_Bitwise, complex21Or) {
 
 PHP_METHOD(Test_Bitwise, complex22Or) {
 
-	double d, c;
-	int a, b;
+	double d = 0, c = 0;
+	int a = 0, b = 0;
 
 
 	a = 1;
@@ -1083,9 +1085,9 @@ PHP_METHOD(Test_Bitwise, complex22Or) {
 
 PHP_METHOD(Test_Bitwise, complex23Or) {
 
-	double d;
-	zend_bool b;
-	int a;
+	double d = 0;
+	zend_bool b = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1097,9 +1099,9 @@ PHP_METHOD(Test_Bitwise, complex23Or) {
 
 PHP_METHOD(Test_Bitwise, complex24Or) {
 
-	zend_bool b;
-	double d;
-	int a;
+	zend_bool b = 0;
+	double d = 0;
+	int a = 0;
 
 
 	a = 1;
@@ -1111,7 +1113,7 @@ PHP_METHOD(Test_Bitwise, complex24Or) {
 
 PHP_METHOD(Test_Bitwise, intShiftLeft) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -1123,7 +1125,7 @@ PHP_METHOD(Test_Bitwise, intShiftLeft) {
 
 PHP_METHOD(Test_Bitwise, int2ShiftLeft) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -1134,7 +1136,7 @@ PHP_METHOD(Test_Bitwise, int2ShiftLeft) {
 
 PHP_METHOD(Test_Bitwise, intShiftLeftSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 4;
@@ -1144,7 +1146,7 @@ PHP_METHOD(Test_Bitwise, intShiftLeftSimple) {
 
 PHP_METHOD(Test_Bitwise, intShiftRight) {
 
-	int a, b, c;
+	int a = 0, b = 0, c = 0;
 
 
 	a = 1;
@@ -1156,7 +1158,7 @@ PHP_METHOD(Test_Bitwise, intShiftRight) {
 
 PHP_METHOD(Test_Bitwise, int2ShiftRight) {
 
-	int a, c;
+	int a = 0, c = 0;
 
 
 	a = 1;
@@ -1167,7 +1169,7 @@ PHP_METHOD(Test_Bitwise, int2ShiftRight) {
 
 PHP_METHOD(Test_Bitwise, intShiftRightSimple) {
 
-	int c;
+	int c = 0;
 
 
 	c = 0;

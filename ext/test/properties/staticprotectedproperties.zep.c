@@ -75,6 +75,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeVar) {
 
 PHP_METHOD(Test_Properties_StaticProtectedProperties, getSomeVar) {
 
+	
 
 	RETURN_MEMBER(this_ptr, "someVar");
 

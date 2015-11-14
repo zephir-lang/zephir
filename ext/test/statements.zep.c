@@ -49,7 +49,7 @@ ZEPHIR_INIT_CLASS(Test_Statements) {
 
 PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 
-	zval *result1, *result2, *result3, *result4, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
+	zval *result1 = NULL, *result2 = NULL, *result3 = NULL, *result4 = NULL, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
 
 	ZEPHIR_MM_GROW();
 
@@ -98,13 +98,14 @@ PHP_METHOD(Test_Statements, testElseIf) {
 PHP_METHOD(Test_Statements, testElseIf1) {
 
 	zval *num_param = NULL;
-	int num, total = 10;
+	int num, total;
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
 
+	total = 10;
 	if (num < total) {
 		RETURN_STRING("less", 1);
 	} else if (num == total) {
@@ -138,51 +139,50 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 PHP_METHOD(Test_Statements, test544Issue) {
 
 	zephir_fcall_cache_entry *_8 = NULL;
-	zval *step_param = NULL, *_0, *_1, *_2, *_3, *_4, *_5, _6 = zval_used_for_init, *_7 = NULL, *_9, *_10, *_11 = NULL;
-	int step, filledWidth, unfilledWidth, ZEPHIR_LAST_CALL_STATUS;
+	zval *step_param = NULL, *_0, *_1, *_2$$3, *_3$$3, *_4$$3, *_5$$3, _6$$3 = zval_used_for_init, *_7$$3 = NULL, *_9$$3, *_10$$3, *_11$$3 = NULL, *_12$$4, *_13$$4, *_14$$5, *_15$$5;
+	int step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (unlikely(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a long/integer") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a int") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-
 	step = Z_LVAL_P(step_param);
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
 	_1 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
 	if (ZEPHIR_GT_LONG(_0, step)) {
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		_3 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
-		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(_2) - 1)), _3 TSRMLS_CC) * step));
-		_4 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		unfilledWidth = (((zephir_get_numberval(_4) - 1)) - filledWidth);
-		_5 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
-		ZEPHIR_SINIT_VAR(_6);
-		ZVAL_LONG(&_6, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_7, "str_repeat", &_8, 17, _5, &_6);
+		_2$$3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		_3$$3 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
+		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(_2$$3) - 1)), _3$$3 TSRMLS_CC) * step));
+		_4$$3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		unfilledWidth = (((zephir_get_numberval(_4$$3) - 1)) - filledWidth);
+		_5$$3 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
+		ZEPHIR_SINIT_VAR(_6$$3);
+		ZVAL_LONG(&_6$$3, filledWidth);
+		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 17, _5$$3, &_6$$3);
 		zephir_check_call_status();
-		_9 = zephir_fetch_nproperty_this(this_ptr, SL("arrow"), PH_NOISY_CC);
-		_10 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_6);
-		ZVAL_LONG(&_6, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_11, "str_repeat", &_8, 17, _10, &_6);
+		_9$$3 = zephir_fetch_nproperty_this(this_ptr, SL("arrow"), PH_NOISY_CC);
+		_10$$3 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_6$$3);
+		ZVAL_LONG(&_6$$3, unfilledWidth);
+		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 17, _10$$3, &_6$$3);
 		zephir_check_call_status();
-		ZEPHIR_CONCAT_VVV(return_value, _7, _9, _11);
+		ZEPHIR_CONCAT_VVV(return_value, _7$$3, _9$$3, _11$$3);
 		RETURN_MM();
 	} else if (ZEPHIR_IS_LONG_IDENTICAL(_1, step)) {
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
-		_3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 17, _2, _3);
+		_12$$4 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
+		_13$$4 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 17, _12$$4, _13$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
-		_3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 17, _2, _3);
+		_14$$5 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
+		_15$$5 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 17, _14$$5, _15$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -192,50 +192,49 @@ PHP_METHOD(Test_Statements, test544Issue) {
 PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 
 	zephir_fcall_cache_entry *_6 = NULL;
-	zval *step_param = NULL, *_0, *_1, *_2, *_3, _4 = zval_used_for_init, *_5 = NULL, *_7, *_8, *_9 = NULL;
-	int step, filledWidth, unfilledWidth, totalSteps, ZEPHIR_LAST_CALL_STATUS;
+	zval *step_param = NULL, *_0, *_1$$3, *_2$$3, *_3$$3, _4$$3 = zval_used_for_init, *_5$$3 = NULL, *_7$$3, *_8$$3, *_9$$3 = NULL, *_10$$4, *_11$$4, *_12$$5, *_13$$5;
+	int step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0, totalSteps = 0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (unlikely(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a long/integer") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a int") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-
 	step = Z_LVAL_P(step_param);
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
 	totalSteps = zephir_get_numberval(_0);
 	if (step < totalSteps) {
-		_1 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(_1) - 1)), totalSteps TSRMLS_CC) * step));
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		unfilledWidth = (((zephir_get_numberval(_2) - 1)) - filledWidth);
-		_3 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
-		ZEPHIR_SINIT_VAR(_4);
-		ZVAL_LONG(&_4, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_5, "str_repeat", &_6, 17, _3, &_4);
+		_1$$3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(_1$$3) - 1)), totalSteps TSRMLS_CC) * step));
+		_2$$3 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		unfilledWidth = (((zephir_get_numberval(_2$$3) - 1)) - filledWidth);
+		_3$$3 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
+		ZEPHIR_SINIT_VAR(_4$$3);
+		ZVAL_LONG(&_4$$3, filledWidth);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 17, _3$$3, &_4$$3);
 		zephir_check_call_status();
-		_7 = zephir_fetch_nproperty_this(this_ptr, SL("arrow"), PH_NOISY_CC);
-		_8 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
-		ZEPHIR_SINIT_NVAR(_4);
-		ZVAL_LONG(&_4, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_9, "str_repeat", &_6, 17, _8, &_4);
+		_7$$3 = zephir_fetch_nproperty_this(this_ptr, SL("arrow"), PH_NOISY_CC);
+		_8$$3 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
+		ZEPHIR_SINIT_NVAR(_4$$3);
+		ZVAL_LONG(&_4$$3, unfilledWidth);
+		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 17, _8$$3, &_4$$3);
 		zephir_check_call_status();
-		ZEPHIR_CONCAT_VVV(return_value, _5, _7, _9);
+		ZEPHIR_CONCAT_VVV(return_value, _5$$3, _7$$3, _9$$3);
 		RETURN_MM();
 	} else if (step == totalSteps) {
-		_1 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 17, _1, _2);
+		_10$$4 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
+		_11$$4 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 17, _10$$4, _11$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
-		_1 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
-		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 17, _1, _2);
+		_12$$5 = zephir_fetch_nproperty_this(this_ptr, SL("unfilledChar"), PH_NOISY_CC);
+		_13$$5 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 17, _12$$5, _13$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}

@@ -48,24 +48,24 @@ PHP_METHOD(Test_Fcall, testCall1) {
 
 PHP_METHOD(Test_Fcall, testCall2) {
 
-	zval _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zval _0$$3 = zval_used_for_init, _1$$3 = zval_used_for_init;
 
 
 	while (1) {
-		ZEPHIR_SINIT_NVAR(_0);
-		ZVAL_LONG(&_0, 0);
-		ZEPHIR_SINIT_NVAR(_1);
-		ZVAL_LONG(&_1, 100);
-		RETURN_LONG(zephir_mt_rand(zephir_get_intval(&_0), zephir_get_intval(&_1) TSRMLS_CC));
+		ZEPHIR_SINIT_NVAR(_0$$3);
+		ZVAL_LONG(&_0$$3, 0);
+		ZEPHIR_SINIT_NVAR(_1$$3);
+		ZVAL_LONG(&_1$$3, 100);
+		RETURN_LONG(zephir_mt_rand(zephir_get_intval(&_0$$3), zephir_get_intval(&_1$$3) TSRMLS_CC));
 	}
 
 }
 
 PHP_METHOD(Test_Fcall, testCall3) {
 
+	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init, _3$$4 = zval_used_for_init;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_2 = NULL, *_3 = NULL;
-	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -83,9 +83,9 @@ PHP_METHOD(Test_Fcall, testCall3) {
 	zephir_check_call_status();
 	if (zephir_is_true(handle)) {
 		while (1) {
-			ZEPHIR_SINIT_NVAR(_0);
-			ZVAL_LONG(&_0, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, 27, handle, &_0);
+			ZEPHIR_SINIT_NVAR(_3$$4);
+			ZVAL_LONG(&_3$$4, 4096);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_4, 27, handle, &_3$$4);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE_IDENTICAL(buffer)) {
 				break;
@@ -101,9 +101,9 @@ PHP_METHOD(Test_Fcall, testCall3) {
 
 PHP_METHOD(Test_Fcall, testCall4) {
 
+	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init, _3$$4 = zval_used_for_init;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_2 = NULL, *_3 = NULL;
-	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -121,9 +121,9 @@ PHP_METHOD(Test_Fcall, testCall4) {
 	zephir_check_call_status();
 	if (zephir_is_true(handle)) {
 		while (1) {
-			ZEPHIR_SINIT_NVAR(_0);
-			ZVAL_LONG(&_0, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, 27, handle, &_0);
+			ZEPHIR_SINIT_NVAR(_3$$4);
+			ZVAL_LONG(&_3$$4, 4096);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_4, 27, handle, &_3$$4);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE_IDENTICAL(buffer)) {
 				break;
@@ -214,8 +214,8 @@ PHP_METHOD(Test_Fcall, testCall8) {
 
 PHP_METHOD(Test_Fcall, testCall1FromVar) {
 
+	zval *funcName = NULL, *_0, *_1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *funcName, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
@@ -235,6 +235,7 @@ PHP_METHOD(Test_Fcall, testCall1FromVar) {
 
 PHP_METHOD(Test_Fcall, testStrtokFalse) {
 
+	
 
 	RETURN_BOOL(0);
 
@@ -276,9 +277,9 @@ PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 
 PHP_METHOD(Test_Fcall, testArrayFill) {
 
+	zval *v1 = NULL, *v2 = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_3 = NULL;
-	zval *v1 = NULL, *v2 = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 

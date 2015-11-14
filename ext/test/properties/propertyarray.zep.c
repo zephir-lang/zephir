@@ -59,8 +59,8 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 
 static zend_object_value zephir_init_properties_Test_Properties_PropertyArray(zend_class_entry *class_type TSRMLS_DC) {
 
-		zval *_1;
-		zval *_0, *_2 = NULL, *_3;
+		zval *_1$$3;
+	zval *_0, *_3, *_2$$3 = NULL, *_4$$4;
 
 		ZEPHIR_MM_GROW();
 	
@@ -69,27 +69,27 @@ static zend_object_value zephir_init_properties_Test_Properties_PropertyArray(ze
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		_0 = zephir_fetch_nproperty_this(this_ptr, SL("someArray"), PH_NOISY_CC);
 		if (Z_TYPE_P(_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(_1);
-			zephir_create_array(_1, 4, 0 TSRMLS_CC);
-			ZEPHIR_INIT_VAR(_2);
-			ZVAL_LONG(_2, 1);
-			zephir_array_fast_append(_1, _2);
-			ZEPHIR_INIT_NVAR(_2);
-			ZVAL_LONG(_2, 2);
-			zephir_array_fast_append(_1, _2);
-			ZEPHIR_INIT_NVAR(_2);
-			ZVAL_LONG(_2, 3);
-			zephir_array_fast_append(_1, _2);
-			ZEPHIR_INIT_NVAR(_2);
-			ZVAL_LONG(_2, 4);
-			zephir_array_fast_append(_1, _2);
-			zephir_update_property_this(this_ptr, SL("someArray"), _1 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_1$$3);
+			zephir_create_array(_1$$3, 4, 0 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_2$$3);
+			ZVAL_LONG(_2$$3, 1);
+			zephir_array_fast_append(_1$$3, _2$$3);
+			ZEPHIR_INIT_NVAR(_2$$3);
+			ZVAL_LONG(_2$$3, 2);
+			zephir_array_fast_append(_1$$3, _2$$3);
+			ZEPHIR_INIT_NVAR(_2$$3);
+			ZVAL_LONG(_2$$3, 3);
+			zephir_array_fast_append(_1$$3, _2$$3);
+			ZEPHIR_INIT_NVAR(_2$$3);
+			ZVAL_LONG(_2$$3, 4);
+			zephir_array_fast_append(_1$$3, _2$$3);
+			zephir_update_property_this(this_ptr, SL("someArray"), _1$$3 TSRMLS_CC);
 		}
 		_3 = zephir_fetch_nproperty_this(this_ptr, SL("someEmptyArray"), PH_NOISY_CC);
 		if (Z_TYPE_P(_3) == IS_NULL) {
-			ZEPHIR_INIT_NVAR(_2);
-			array_init(_2);
-			zephir_update_property_this(this_ptr, SL("someEmptyArray"), _2 TSRMLS_CC);
+			ZEPHIR_INIT_VAR(_4$$4);
+			array_init(_4$$4);
+			zephir_update_property_this(this_ptr, SL("someEmptyArray"), _4$$4 TSRMLS_CC);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJVAL_P(this_ptr);

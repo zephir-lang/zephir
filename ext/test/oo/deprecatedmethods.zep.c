@@ -26,6 +26,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_DeprecatedMethods) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, deprecatedMethod) {
 
+	
 
 	RETURN_BOOL(1);
 
@@ -45,6 +46,7 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, privateDepricatedMethod) {
 
+	
 
 	RETURN_BOOL(1);
 

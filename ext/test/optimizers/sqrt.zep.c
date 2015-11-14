@@ -29,10 +29,11 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_Sqrt) {
 PHP_METHOD(Test_Optimizers_Sqrt, testInt) {
 
 	zval *_0;
-	int a = 4;
+	int a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 4;
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
 	RETURN_MM_DOUBLE(sqrt(a));
@@ -42,10 +43,11 @@ PHP_METHOD(Test_Optimizers_Sqrt, testInt) {
 PHP_METHOD(Test_Optimizers_Sqrt, testVar) {
 
 	zval *_0;
-	int a = 4;
+	int a;
 
 	ZEPHIR_MM_GROW();
 
+	a = 4;
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
 	RETURN_MM_DOUBLE(sqrt(a));

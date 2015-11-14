@@ -24,6 +24,7 @@ ZEPHIR_INIT_CLASS(test_9__closure) {
 
 PHP_METHOD(test_9__closure, __invoke) {
 
+	
 
 	RETURN_LONG(5);
 

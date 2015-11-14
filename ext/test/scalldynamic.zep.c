@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_ScallDynamic) {
 
 PHP_METHOD(Test_ScallDynamic, testMethod1) {
 
+	
 
 	RETURN_STRING("hello public", 1);
 
@@ -35,6 +36,7 @@ PHP_METHOD(Test_ScallDynamic, testMethod1) {
 
 PHP_METHOD(Test_ScallDynamic, testMethod2) {
 
+	
 
 	RETURN_STRING("hello protected", 1);
 
@@ -42,6 +44,7 @@ PHP_METHOD(Test_ScallDynamic, testMethod2) {
 
 PHP_METHOD(Test_ScallDynamic, testMethod3) {
 
+	
 
 	RETURN_STRING("hello private", 1);
 

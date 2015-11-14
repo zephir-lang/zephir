@@ -32,6 +32,7 @@ ZEPHIR_INIT_CLASS(Test_McallChained) {
 
 PHP_METHOD(Test_McallChained, testMethod1) {
 
+	
 
 	RETURN_THISW();
 
@@ -39,6 +40,7 @@ PHP_METHOD(Test_McallChained, testMethod1) {
 
 PHP_METHOD(Test_McallChained, testMethod2) {
 
+	
 
 	RETURN_THISW();
 
@@ -46,6 +48,7 @@ PHP_METHOD(Test_McallChained, testMethod2) {
 
 PHP_METHOD(Test_McallChained, testMethod3) {
 
+	
 
 	RETURN_THISW();
 
@@ -53,8 +56,8 @@ PHP_METHOD(Test_McallChained, testMethod3) {
 
 PHP_METHOD(Test_McallChained, testChained1) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -68,8 +71,8 @@ PHP_METHOD(Test_McallChained, testChained1) {
 
 PHP_METHOD(Test_McallChained, testChained2) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0 = NULL, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -85,8 +88,8 @@ PHP_METHOD(Test_McallChained, testChained2) {
 
 PHP_METHOD(Test_McallChained, testChained3) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0 = NULL, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -102,8 +105,8 @@ PHP_METHOD(Test_McallChained, testChained3) {
 
 PHP_METHOD(Test_McallChained, testChained4) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 

@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Json) {
 
 PHP_METHOD(Test_Json, testEncodeObject) {
 
-	zval *obj;
+	zval *obj = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -44,7 +44,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 
 PHP_METHOD(Test_Json, testEncodeArray) {
 
-	zval *arr, *_0 = NULL;
+	zval *arr = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -66,7 +66,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 
 PHP_METHOD(Test_Json, testEncodeOptions) {
 
-	zval *arr, *_0 = NULL, _1;
+	zval *arr = NULL, *_0 = NULL, _1;
 
 	ZEPHIR_MM_GROW();
 
@@ -93,12 +93,12 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 
 PHP_METHOD(Test_Json, testDecodeObject) {
 
-	zval *obj;
+	zval *obj = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(obj);
 	ZVAL_STRING(obj, "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}", 1);
-
 	zephir_json_decode(return_value, &(return_value), obj, 0  TSRMLS_CC);
 	RETURN_MM();
 
@@ -106,12 +106,12 @@ PHP_METHOD(Test_Json, testDecodeObject) {
 
 PHP_METHOD(Test_Json, testDecodeObject2) {
 
-	zval *obj;
+	zval *obj = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(obj);
 	ZVAL_STRING(obj, "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}", 1);
-
 	zephir_json_decode(return_value, &(return_value), obj, zephir_get_intval(ZEPHIR_GLOBAL(global_true))  TSRMLS_CC);
 	RETURN_MM();
 
@@ -119,7 +119,7 @@ PHP_METHOD(Test_Json, testDecodeObject2) {
 
 PHP_METHOD(Test_Json, testDecodeArray) {
 
-	zval *arr;
+	zval *arr = NULL;
 
 	ZEPHIR_MM_GROW();
 

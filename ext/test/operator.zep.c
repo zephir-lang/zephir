@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/array.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Operator) {
@@ -33,6 +34,28 @@ PHP_METHOD(Test_Operator, testIdentical) {
 
 
 	RETURN_BOOL(ZEPHIR_IS_IDENTICAL(param1, param2));
+
+}
+
+PHP_METHOD(Test_Operator, testIdenticalIfComplex) {
+
+	zend_bool b = 0;
+	zval *input, *a = NULL, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &input);
+
+
+
+	ZEPHIR_INIT_VAR(a);
+	zephir_create_array(a, 1, 0 TSRMLS_CC);
+	zephir_array_update_long(&a, 1, &input, PH_COPY ZEPHIR_DEBUG_PARAMS_DUMMY);
+	b = 0;
+	zephir_array_fetch_long(&_0, a, 1, PH_NOISY | PH_READONLY, "test/operator.zep", 16 TSRMLS_CC);
+	if (!ZEPHIR_IS_FALSE_IDENTICAL(_0)) {
+		RETURN_MM_BOOL(1);
+	}
+	RETURN_MM_BOOL(0);
 
 }
 

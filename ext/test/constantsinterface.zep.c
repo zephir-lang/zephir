@@ -25,6 +25,7 @@ ZEPHIR_INIT_CLASS(Test_ConstantsInterface) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant1) {
 
+	
 
 	RETURN_NULL();
 
@@ -32,6 +33,7 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant1) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant2) {
 
+	
 
 	RETURN_BOOL(0);
 
@@ -39,6 +41,7 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant2) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant3) {
 
+	
 
 	RETURN_BOOL(1);
 
@@ -46,6 +49,7 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant3) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant4) {
 
+	
 
 	RETURN_LONG(10);
 
@@ -53,6 +57,7 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant4) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant5) {
 
+	
 
 	RETURN_DOUBLE(10.25);
 
@@ -60,6 +65,55 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant5) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant6) {
 
+	
+
+	RETURN_STRING("test", 1);
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant1) {
+
+	
+
+	RETURN_NULL();
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant2) {
+
+	
+
+	RETURN_BOOL(0);
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant3) {
+
+	
+
+	RETURN_BOOL(1);
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant4) {
+
+	
+
+	RETURN_LONG(10);
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant5) {
+
+	
+
+	RETURN_DOUBLE(10.25);
+
+}
+
+PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant6) {
+
+	
 
 	RETURN_STRING("test", 1);
 

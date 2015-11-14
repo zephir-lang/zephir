@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Globals) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 
+	
 
 	RETURN_BOOL(ZEPHIR_GLOBAL(test).my_setting_1);
 
@@ -34,6 +35,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 
+	
 
 	RETURN_LONG(ZEPHIR_GLOBAL(test).my_setting_2);
 
@@ -41,6 +43,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
+	
 
 	RETURN_DOUBLE(ZEPHIR_GLOBAL(test).my_setting_3);
 
@@ -48,6 +51,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals4) {
 
+	
 
 	RETURN_BOOL(ZEPHIR_GLOBAL(my_setting_1));
 
@@ -55,6 +59,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals4) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals5) {
 
+	
 
 	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_2));
 
@@ -62,6 +67,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals5) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals6) {
 
+	
 
 	RETURN_DOUBLE(ZEPHIR_GLOBAL(my_setting_3));
 

@@ -26,6 +26,7 @@ ZEPHIR_INIT_CLASS(Test_InternalInterfaces) {
 
 PHP_METHOD(Test_InternalInterfaces, count) {
 
+	
 
 
 }

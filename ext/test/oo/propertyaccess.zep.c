@@ -35,7 +35,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_PropertyAccess) {
 PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 
 	zval *_0, *_6;
-	zval *test, *test1, *_1 = NULL, *_2, *_3, *_4, *_5, *_7, *_8 = NULL, *_9;
+	zval *test = NULL, *test1 = NULL, *_1 = NULL, *_2, *_3, *_4, *_5, *_7, *_8 = NULL, *_9;
 
 	ZEPHIR_MM_GROW();
 
