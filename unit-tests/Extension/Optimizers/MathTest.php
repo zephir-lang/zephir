@@ -24,9 +24,22 @@ use Test\Optimizers\ASin;
 use Test\Optimizers\Cos;
 use Test\Optimizers\ACos;
 use Test\Optimizers\Tan;
+use Test\Optimizers\Ldexp;
 
 class MathTest extends \PHPUnit_Framework_TestCase
 {
+
+    public function testLdexp()
+    {
+        $t = new Ldexp();
+
+        $this->assertSame(16.0, $t->testInt());
+        $this->assertSame(16.0, $t->testVar());
+        $this->assertSame(16.0, $t->testIntValue1());
+        $this->assertSame(524288.0, $t->testIntParameter(8, 16));
+        $this->assertSame(524288.0, $t->testvarParameter(8, 16));
+    }
+
     public function testSqrt()
     {
         $t = new Sqrt();

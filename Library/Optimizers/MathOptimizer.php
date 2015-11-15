@@ -30,6 +30,11 @@ use Zephir\Expression;
  */
 abstract class MathOptimizer extends OptimizerAbstract
 {
+    /**
+     * Gets function name
+     *
+     * @return string
+     */
     abstract public function getFunctionName();
 
     /**
@@ -41,12 +46,8 @@ abstract class MathOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        if (count($expression['parameters']) > 1) {
-            return false;
+        if (!isset($expression['parameters']) || count($expression['parameters']) > 1) {
+            throw new CompilerException(sprintf("'%s' requires one parameter", $this->getFunctionName()), $expression);
         }
 
         /**
