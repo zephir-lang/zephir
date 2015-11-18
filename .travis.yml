@@ -16,8 +16,7 @@ cache:
     - apt
 
 before_install:
- - openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d
- - chmod 600 ~/.ssh/id_rsa
+ - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
  - git config push.default simple
  - git config --global user.email "travis@zephir-lang.com"
  - git config --global user.name "TravisCI"
