@@ -21,7 +21,7 @@ before_install:
  - git config --global user.email "travis@zephir-lang.com"
  - git config --global user.name "TravisCI"
  - git submodule --quiet update --init --recursive
- - git remote set-url origin git@github.com:phalcon/zephir.git
+ - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
  - ./unit-tests/ci/before_install.sh
 
 install:
@@ -47,7 +47,7 @@ after_success:
  - export ZEPHIR_TARGET="legacy"
  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then export ZEPHIR_TARGET="ZendEngine_2"; fi
  - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then export ZEPHIR_TARGET="ZendEngine_3"; fi
- - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git checkout $TRAVIS_BRANCH; fi
+ - git checkout $TRAVIS_BRANCH
  - rm -rf generated/$ZEPHIR_TARGET/{*,.*}
  - cp -a ext/test/. generated/$ZEPHIR_TARGET
  - git add -A generated/$ZEPHIR_TARGET
