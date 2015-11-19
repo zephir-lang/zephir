@@ -31,4 +31,14 @@ class FetchTest
 		var c;
 		return fetch c, a->{b};
 	}
+
+	public function testFetchPost(var b)
+	{
+		var c;
+		if !fetch c, _POST[b] {
+			return false;
+		}
+
+		return c;
+	}
 }
