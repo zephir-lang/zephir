@@ -53,7 +53,7 @@ after_success:
  - git add -A generated/$ZEPHIR_TARGET
  - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
- - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git diff --ignore-space-at-eol -b -w --ignore-blank-lines generated/$ZEPHIR_TARGET; fi
+ - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git log -1 -p fi
 
 after_failure:
  - sudo apt-get -qq install gdb
