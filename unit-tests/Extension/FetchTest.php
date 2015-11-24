@@ -21,18 +21,61 @@ namespace Extension;
 
 class FetchTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPost()
+
+    public static $test;
+
+    public static function setUpBeforeClass()
     {
-        $t = new \Test\FetchTest();
-        
+        self::$test = new \Test\FetchTest();
+
         $_POST = array(
+            'somePOST' => 'some_post',
+            'VALUEPOST' => 'some_post2',
             1 => 'one',
             'two' => 2,
-            'three' => array(3)
+            'three' => array(3),
         );
-        
-        $this->assertEquals($t->testFetchPost(1), 'one');
-        $this->assertEquals($t->testFetchPost('two'), 2);
-        $this->assertEquals($t->testFetchPost('three'), array(3));
+
+        self::$test->setValues(array(
+            'someVALUE' => 'some_value',
+            'VALUEPOST' => 'some_value2',
+        ));
+    }
+
+    public function testPost()
+    {
+        $this->assertEquals(self::$test->testFetchPost(1), 'one');
+        $this->assertEquals(self::$test->testFetchPost('two'), 2);
+        $this->assertEquals(self::$test->testFetchPost('three'), array(3));
+    }
+
+    /**
+     * @dataProvider fieldProvider
+     */
+    public function testValue($input, $expected, $has)
+    {
+        $this->assertEquals(self::$test->hasValue($input), $has);
+        $this->assertEquals(self::$test->getValue($input), $expected);
+    }
+
+    public function fieldProvider()
+    {
+        /**
+         * input, expected, exist
+         */
+        return array(
+            array('somePOST', 'some_post', true),
+            array('VALUEPOST', 'some_post2', true),
+            array('someVALUE', 'some_value', true),
+            array('someUNDEFINED', null, false),
+            array(1, 'one', true),
+            array('two', 2, true),
+            array('three', array(3), true),
+        );
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$test = null;
     }
 }
