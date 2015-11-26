@@ -19,12 +19,12 @@ matrix:
 install:
   - echo Setting PHP version...
   - ps: >-
-      If ($(PHP_VERSION) -Match "latest") {
+      If ($env:PHP_VERSION -Match "latest") {
         Start-FileDownload 'http://windows.php.net/downloads/releases/sha1sum.txt'
-        PHP_VERSION: type sha1sum.txt | where { $_ -match "php-(5\.6\.\d+)-src" } | foreach { $matches[1] }
-        version: '{build}-$(PHP_VERSION)'
+        $env:PHP_VERSION=type sha1sum.txt | where { $_ -match "php-(5\.6\.\d+)-src" } | foreach { $matches[1] }
+        $env:version='{build}-$(PHP_VERSION)'
       } Else {
-        version: '{build}-$(PHP_VERSION)'
+        $env:version='{build}-$(PHP_VERSION)'
       }
   - echo Initializing Build...
   - cd %APPVEYOR_BUILD_FOLDER%
