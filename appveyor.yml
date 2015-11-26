@@ -1,6 +1,6 @@
 environment:
   matrix:
-  - PHP_VERSION: 5.6.15
+  - PHP_VERSION: latest
     PHP_DEP_VER: 5.6
   BUILD_PLATFORM: x86
   PHP_VC: 11
@@ -10,7 +10,6 @@ environment:
 cache:
   - vendor -> composer.json
 
-version: '{build}-$(PHP_VERSION)'
 os: Windows Server 2012
 clone_folder: c:\projects\zephir
 
@@ -18,6 +17,15 @@ matrix:
   fast_finish: true
 
 install:
+  - echo Setting PHP version...
+  - ps: >-
+      If ($env:PHP_VERSION -Match "latest") {
+        Start-FileDownload 'http://windows.php.net/downloads/releases/sha1sum.txt'
+        $env:PHP_VERSION=type sha1sum.txt | where { $_ -match "php-(5\.6\.\d+)-src" } | foreach { $matches[1] }
+        $env:version='{build}-$(PHP_VERSION)'
+      } Else {
+        $env:version='{build}-$(PHP_VERSION)'
+      }
   - echo Initializing Build...
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule update --init --recursive
