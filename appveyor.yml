@@ -16,7 +16,8 @@ clone_folder: c:\projects\zephir
 matrix:
   fast_finish: true
 
-before-install:
+install:
+  - echo Setting PHP version...
   - ps: >-
       If ($(PHP_VERSION) -Match "latest") {
         Start-FileDownload 'http://windows.php.net/downloads/releases/sha1sum.txt'
@@ -25,8 +26,6 @@ before-install:
       } Else {
         version: '{build}-$(PHP_VERSION)'
       }
-
-install:
   - echo Initializing Build...
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule update --init --recursive
