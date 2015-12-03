@@ -8,8 +8,7 @@ if [ ! -f lemon ]; then
 	gcc -w lemon.c -o lemon
 fi
 
-TEST=`re2c -v`
-if [ $? != 2 ]; then
+if [[ `re2c -v` != *re2c* ]]; then
   echo "error: re2c is not installed"
   exit 2
 fi
