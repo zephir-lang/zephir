@@ -80,8 +80,9 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        
-        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC(' . $symbol . ', ' . $resolvedParams[0] . ');');
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

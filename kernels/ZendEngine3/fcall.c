@@ -720,6 +720,48 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	return status;
 }
 
+/**
+ * Replaces call_user_func_array avoiding function lookup
+ * This function does not return FAILURE if an exception has ocurred
+ */
+int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *params)
+{
+	zend_fcall_info fci;
+	zend_fcall_info_cache fci_cache;
+	char *is_callable_error = NULL;
+	int status = FAILURE;
+
+	if (params && Z_TYPE_P(params) != IS_ARRAY) {
+		ZVAL_NULL(return_value);
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_call_user_func_array_noex()");
+		return FAILURE;
+	}
+
+	zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error);
+	if (is_callable_error) {
+		zend_error(E_WARNING, "%s", is_callable_error);
+		efree(is_callable_error);
+	} else {
+		status = SUCCESS;
+	}
+
+	if (status == SUCCESS) {
+		zend_fcall_info_args(&fci, params);
+
+		fci.retval = return_value;
+		zend_call_function(&fci, &fci_cache);
+
+		if (fci.params) {
+			efree(fci.params);
+		}
+	}
+
+	if (EG(exception)) {
+		status = SUCCESS;
+	}
+
+	return status;
+}
 
 /**
  * If a retval_ptr is specified, PHP's implementation of zend_eval_stringl
