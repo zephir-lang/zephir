@@ -6,7 +6,6 @@ env:
     secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
