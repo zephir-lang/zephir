@@ -188,8 +188,11 @@ class Compiler
      */
     public function compileParser()
     {
-        if ($this->parserCompiled && $this->parserCompiled !== 'force') {
-            return extension_loaded('zephir_parser');
+        if (extension_loaded('zephir_parser') && $this->parserCompiled !== 'force') {
+            $this->parserCompiled = true;
+        }
+        if ($this->parserCompiled === true) {
+            return true;
         }
 
         $extFile = null;
