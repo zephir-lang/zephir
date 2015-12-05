@@ -32,7 +32,7 @@ install:
 
 before_script:
  - if [[ "$TRAVIS_PHP_VERSION" == "7.0" ]]; then rm unit-tests/Extension/PregmatchTest.php; fi
- - $(phpenv which php) compiler.php generate
+ - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
  - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && make install && phpenv config-add ../unit-tests/ci/test.ini)

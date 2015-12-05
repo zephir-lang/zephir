@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Compiler;
 use Zephir\Commands\CommandAbstract;
 
 /**

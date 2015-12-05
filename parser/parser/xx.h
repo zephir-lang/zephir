@@ -25,7 +25,7 @@ typedef struct _xx_parser_token {
 
 typedef struct _xx_parser_status {
 	int status;
-	json_object *ret;
+	zval *ret;
 	xx_scanner_state *scanner_state;
 	xx_scanner_token *token;
 	char *syntax_error;

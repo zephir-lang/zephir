@@ -1,4 +1,0 @@
-[submodule "json-c"]
-	path = json-c
-	url = https://github.com/phalcon/json-c.git
-	branch = master

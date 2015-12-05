@@ -25,7 +25,7 @@
 
 %token_prefix XX_
 %token_type {xx_parser_token*}
-%default_type {json_object*}
+%default_type {zval*}
 %extra_argument {xx_parser_status *status}
 %name xx_
 
@@ -57,59 +57,130 @@
 
 %include {
 
-#include <json-c/json.h>
-
+#include <php.h>
 #include "string.h"
 #include "parser.h"
 #include "scanner.h"
 #include "xx.h"
 
-static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *state)
+#define SL(str) ZEND_STRL(str)
+
+static zval *parser_array_init() {
+#if PHP_VERSION_ID < 70000
+	zval *t;
+	MAKE_STD_ZVAL(t);
+#else
+	zval *t = emalloc(sizeof(zval));
+#endif
+	array_init(t);
+	return t;
+}
+
+static void parser_add_str(zval *arr, const char *key, const char *val) {
+#if PHP_VERSION_ID >= 70000
+	zval tmp;
+	zend_string *tmp_str = zend_string_init(val, strlen(val), 0);
+	ZVAL_STR(&tmp, tmp_str);
+	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), &tmp);
+#else
+	zval *tmp;
+	MAKE_STD_ZVAL(tmp);
+	ZVAL_STRING(tmp, val, strlen(val) - 1);
+	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
+#endif
+}
+
+static void parser_add_int(zval *arr, const char *key, int i) {
+#if PHP_VERSION_ID >= 70000
+	zval tmp;
+	ZVAL_LONG(&tmp, i);
+	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), &tmp);
+#else
+	zval *tmp;
+	MAKE_STD_ZVAL(tmp);
+	ZVAL_LONG(tmp, i);
+	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
+#endif
+}
+
+static void parser_add_zval(zval *arr, const char *key, zval *zv) {
+#if PHP_VERSION_ID >= 70000
+	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), zv);
+#else
+	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&zv, sizeof(zval *), NULL);
+#endif
+}
+
+static void parser_array_append(zval *arr, zval *zv) {
+#if PHP_VERSION_ID >= 70000
+    Z_TRY_ADDREF_P(zv);
+	add_next_index_zval(arr, zv);
+#else
+	Z_ADDREF_P(zv);
+	add_next_index_zval(arr, zv);
+#endif
+}
+
+static zval *parser_get_string(const char *str) {
+#if PHP_VERSION_ID >= 70000
+	zval *tmp = emalloc(sizeof(zval));
+	zend_string *zs = zend_string_init(str, strlen(str), 0);
+	ZVAL_STR(tmp, zs);
+	return tmp;
+#else
+	zval *tmp;
+	ALLOC_INIT_ZVAL(tmp);
+	ZVAL_STRING(tmp, str, 1);
+	return tmp;
+#endif
+}
+
+static zval *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	switch (type) {
 
 		case XX_T_CONSTANT:
-			json_object_object_add(ret, "type", json_object_new_string("constant"));
+			parser_add_str(ret, "type", "constant");
 			break;
 
 		case XX_T_IDENTIFIER:
-			json_object_object_add(ret, "type", json_object_new_string("variable"));
+			parser_add_str(ret, "type", "variable");
 			break;
 
 		case XX_T_INTEGER:
-			json_object_object_add(ret, "type", json_object_new_string("int"));
+			parser_add_str(ret, "type", "int");
 			break;
 
 		case XX_T_DOUBLE:
-			json_object_object_add(ret, "type", json_object_new_string("double"));
+			parser_add_str(ret, "type", "double");
 			break;
 
 		case XX_T_NULL:
-			json_object_object_add(ret, "type", json_object_new_string("null"));
+			parser_add_str(ret, "type", "null");
 			break;
 
 		case XX_T_STRING:
-			json_object_object_add(ret, "type", json_object_new_string("string"));
+			parser_add_str(ret, "type", "string");
 			break;
 
 		case XX_T_ISTRING:
-			json_object_object_add(ret, "type", json_object_new_string("istring"));
+			parser_add_str(ret, "type", "istring");
 			break;
 
 		case XX_T_CHAR:
-			json_object_object_add(ret, "type", json_object_new_string("char"));
+			parser_add_str(ret, "type", "char");
 			break;
 
 		default:
 			if (type == XX_T_TRUE) {
-				json_object_object_add(ret, "type", json_object_new_string("bool"));
-				json_object_object_add(ret, "value", json_object_new_string("true"));
+				parser_add_str(ret, "type", "bool");
+				parser_add_str(ret, "value", "true");
 			} else {
 				if (type == XX_T_FALSE) {
-					json_object_object_add(ret, "type", json_object_new_string("bool"));
-					json_object_object_add(ret, "value", json_object_new_string("false"));
+					parser_add_str(ret, "type", "bool");
+					parser_add_str(ret, "value", "false");
 				} else {
 					fprintf(stderr, "literal??\n");
 				}
@@ -117,1104 +188,1116 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 	}
 
 	if (T) {
-		json_object_object_add(ret, "value", json_object_new_string(T->token));
+		parser_add_str(ret, "value", T->token);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_expr(char *type, json_object *left, json_object *right, json_object *extra, xx_scanner_state *state)
+static zval *xx_ret_expr(char *type, zval *left, zval *right, zval *extra, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string(type));
+	parser_add_str(ret, "type", type);
 
 	if (left) {
-		json_object_object_add(ret, "left", left);
+		parser_add_zval(ret, "left", left);
 	}
 	if (right) {
-		json_object_object_add(ret, "right", right);
+		parser_add_zval(ret, "right", right);
 	}
 	if (extra) {
-		json_object_object_add(ret, "extra", extra);
+		parser_add_zval(ret, "extra", extra);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_array_item(json_object *key, json_object *value, xx_scanner_state *state)
+static zval *xx_ret_array_item(zval *key, zval *value, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (key) {
-		json_object_object_add(ret, "key", key);
+		parser_add_zval(ret, "key", key);
 	}
-	json_object_object_add(ret, "value", value);
+	parser_add_zval(ret, "value", value);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
-
-	return ret;
-}
-
-static json_object *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
-{
-	json_object *ret = json_object_new_object();
-
-	json_object_object_add(ret, "type", json_object_new_string("namespace"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
-
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_use_aliases(json_object *use_aliases_list, xx_scanner_state *state)
+static zval *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("use"));
-	json_object_object_add(ret, "aliases", use_aliases_list);
+	parser_add_str(ret, "type", "namespace");
+	parser_add_str(ret, "name", T->token);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_scanner_state *state)
+static zval *xx_ret_use_aliases(zval *use_aliases_list, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_str(ret, "type", "use");
+	parser_add_zval(ret, "aliases", use_aliases_list);
+
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
+
+	return ret;
+}
+
+static zval *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_scanner_state *state)
+{
+	zval *ret = parser_array_init(&ret);
+
+	parser_add_str(ret, "name", T->token);
 	if (A) {
-		json_object_object_add(ret, "alias", json_object_new_string(A->token));
+		parser_add_str(ret, "alias", A->token);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_function(xx_parser_token *T, json_object *parameters,
-	json_object *statements, xx_parser_token *D, json_object *return_type, xx_scanner_state *state)
+static zval *xx_ret_function(xx_parser_token *T, zval *parameters,
+	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("function"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_str(ret, "type", "function");
+	parser_add_str(ret, "name", T->token);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
 	if (D) {
-		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
+		parser_add_str(ret, "docblock", D->token);
 	}
 
 	if (return_type) {
-		json_object_object_add(ret, "return-type", return_type);
+		parser_add_zval(ret, "return-type", return_type);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->method_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->method_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->method_line);
+	parser_add_int(ret, "char", state->method_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, int is_final,
-	xx_parser_token *E, json_object *I, xx_scanner_state *state)
+static zval *xx_ret_class(xx_parser_token *T, zval *class_definition, int is_abstract, int is_final,
+	xx_parser_token *E, zval *I, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("class"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_str(ret, "type", "class");
+	parser_add_str(ret, "name", T->token);
 
-	json_object_object_add(ret, "abstract", json_object_new_int(is_abstract));
-	json_object_object_add(ret, "final", json_object_new_int(is_final));
+	parser_add_int(ret, "abstract", is_abstract);
+	parser_add_int(ret, "final", is_final);
 
 	if (E) {
-		json_object_object_add(ret, "extends", json_object_new_string(E->token));
+		parser_add_str(ret, "extends", E->token);
 	}
 
 	if (I) {
-		json_object_object_add(ret, "implements", I);
+		parser_add_zval(ret, "implements", I);
 	}
 
 	if (class_definition) {
-		json_object_object_add(ret, "definition", class_definition);
+		parser_add_zval(ret, "definition", class_definition);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->class_line);
+	parser_add_int(ret, "char", state->class_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_definition, json_object *extends_list, xx_scanner_state *state)
+static zval *xx_ret_interface(xx_parser_token *T, zval *interface_definition, zval *extends_list, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("interface"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_str(ret, "type", "interface");
+	parser_add_str(ret, "name", T->token);
 
 	if (extends_list) {
-		json_object_object_add(ret, "extends", extends_list);
+		parser_add_zval(ret, "extends", extends_list);
 	}
 
 	if (interface_definition) {
-		json_object_object_add(ret, "definition", interface_definition);
+		parser_add_zval(ret, "definition", interface_definition);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->class_line);
+	parser_add_int(ret, "char", state->class_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
+static zval *xx_ret_class_definition(zval *properties, zval *methods, zval *constants, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (properties) {
-		json_object_object_add(ret, "properties", properties);
+		parser_add_zval(ret, "properties", properties);
 	}
 	if (methods) {
-		json_object_object_add(ret, "methods", methods);
+		parser_add_zval(ret, "methods", methods);
 	}
 	if (constants) {
-		json_object_object_add(ret, "constants", constants);
+		parser_add_zval(ret, "constants", constants);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->class_line);
+	parser_add_int(ret, "char", state->class_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_interface_definition(json_object *methods, json_object *constants, xx_scanner_state *state)
+static zval *xx_ret_interface_definition(zval *methods, zval *constants, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (methods) {
-		json_object_object_add(ret, "methods", methods);
+		parser_add_zval(ret, "methods", methods);
 	}
 	if (constants) {
-		json_object_object_add(ret, "constants", constants);
+		parser_add_zval(ret, "constants", constants);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_class_property(json_object *visibility, xx_parser_token *T,
-		json_object *default_value, xx_parser_token *D, json_object *shortcuts, xx_scanner_state *state)
+static zval *xx_ret_class_property(zval *visibility, xx_parser_token *T,
+		zval *default_value, xx_parser_token *D, zval *shortcuts, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "visibility", visibility);
-	json_object_object_add(ret, "type", json_object_new_string("property"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_zval(ret, "visibility", visibility);
+	parser_add_str(ret, "type", "property");
+	parser_add_str(ret, "name", T->token);
 
 	if (default_value) {
-		json_object_object_add(ret, "default", default_value);
+		parser_add_zval(ret, "default", default_value);
 	}
 
 	if (D) {
-		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
+		parser_add_str(ret, "docblock", D->token);
 	}
 
 	if (shortcuts) {
-		json_object_object_add(ret, "shortcuts", shortcuts);
+		parser_add_zval(ret, "shortcuts", shortcuts);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_property_shortcut(xx_parser_token *C, xx_parser_token *D, xx_scanner_state *state)
+static zval *xx_ret_property_shortcut(xx_parser_token *C, xx_parser_token *D, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("shortcut"));
+	parser_add_str(ret, "type", "shortcut");
 	if (C) {
-		json_object_object_add(ret, "docblock", json_object_new_string(C->token));
+		parser_add_str(ret, "docblock", C->token);
 	}
-	json_object_object_add(ret, "name", json_object_new_string(D->token));
+	parser_add_str(ret, "name", D->token);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
+static zval *xx_ret_class_const(xx_parser_token *T, zval *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("const"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
-	json_object_object_add(ret, "default", default_value);
+	parser_add_str(ret, "type", "const");
+	parser_add_str(ret, "name", T->token);
+	parser_add_zval(ret, "default", default_value);
 
 	if (D) {
-		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
+		parser_add_str(ret, "docblock", D->token);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token *T, json_object *parameters,
-	json_object *statements, xx_parser_token *D, json_object *return_type, xx_scanner_state *state)
+static zval *xx_ret_class_method(zval *visibility, xx_parser_token *T, zval *parameters,
+	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "visibility", visibility);
-	json_object_object_add(ret, "type", json_object_new_string("method"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	parser_add_zval(ret, "visibility", visibility);
+	parser_add_str(ret, "type", "method");
+	parser_add_str(ret, "name", T->token);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
 	if (D) {
-		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
+		parser_add_str(ret, "docblock", D->token);
 	}
 
 	if (return_type) {
-		json_object_object_add(ret, "return-type", return_type);
+		parser_add_zval(ret, "return-type", return_type);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->method_line));
-	json_object_object_add(ret, "last-line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->method_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->method_line);
+	parser_add_int(ret, "last-line", state->active_line);
+	parser_add_int(ret, "char", state->method_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_parameter(int const_param, json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value,
+static zval *xx_ret_parameter(int const_param, zval *type, zval *cast, xx_parser_token *N, zval *default_value,
 	int mandatory, int reference, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("parameter"));
-	json_object_object_add(ret, "name", json_object_new_string(N->token));
-	json_object_object_add(ret, "const", json_object_new_int(const_param));
+	parser_add_str(ret, "type", "parameter");
+	parser_add_str(ret, "name", N->token);
+	parser_add_int(ret, "const", const_param);
 
 	if (type) {
-		json_object_object_add(ret, "data-type", type);
-		json_object_object_add(ret, "mandatory", json_object_new_int(mandatory));
+		parser_add_zval(ret, "data-type", type);
+		parser_add_int(ret, "mandatory", mandatory);
 	} else {
-		json_object_object_add(ret, "data-type", json_object_new_string("variable"));
-		json_object_object_add(ret, "mandatory", json_object_new_int(0));
+		parser_add_str(ret, "data-type", "variable");
+		parser_add_int(ret, "mandatory", 0);
 	}
 
 	if (cast) {
-		json_object_object_add(ret, "cast", cast);
+		parser_add_zval(ret, "cast", cast);
 	}
 	if (default_value) {
-		json_object_object_add(ret, "default", default_value);
+		parser_add_zval(ret, "default", default_value);
 	}
 
-    json_object_object_add(ret, "reference", json_object_new_int(reference));
+    parser_add_int(ret, "reference", reference);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
-
-	return ret;
-}
-
-static json_object *xx_ret_return_type(int is_void, json_object *return_type_list, xx_scanner_state *state)
-{
-	json_object *ret = json_object_new_object();
-
-	json_object_object_add(ret, "type", json_object_new_string("return-type"));
-
-	json_object_object_add(ret, "list", return_type_list);
-
-	json_object_object_add(ret, "void", json_object_new_int(is_void));
-
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_return_type_item(json_object *type, json_object *cast, int mandatory, int collection, xx_scanner_state *state)
+static zval *xx_ret_return_type(int is_void, zval *return_type_list, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("return-type-parameter"));
+	parser_add_str(ret, "type", "return-type");
+
+    if (return_type_list) {
+	   parser_add_zval(ret, "list", return_type_list);
+    }
+
+	parser_add_int(ret, "void", is_void);
+
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
+
+	return ret;
+}
+
+static zval *xx_ret_return_type_item(zval *type, zval *cast, int mandatory, int collection, xx_scanner_state *state)
+{
+	zval *ret = parser_array_init(&ret);
+
+	parser_add_str(ret, "type", "return-type-parameter");
 
 	if (type) {
-		json_object_object_add(ret, "data-type", type);
-		json_object_object_add(ret, "mandatory", json_object_new_int(mandatory));
+		parser_add_zval(ret, "data-type", type);
+		parser_add_int(ret, "mandatory", mandatory);
 	}
 
 	if (cast) {
-		json_object_object_add(ret, "cast", cast);
-		json_object_object_add(ret, "collection", json_object_new_int(collection));
+		parser_add_zval(ret, "cast", cast);
+		parser_add_int(ret, "collection", collection);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_type(int type)
+static zval *xx_ret_type(int type)
 {
 	switch (type) {
 		case XX_TYPE_INTEGER:
-			return json_object_new_string("int");
+			return parser_get_string("int");
 		case XX_TYPE_UINTEGER:
-			return json_object_new_string("uint");
+			return parser_get_string("uint");
 		case XX_TYPE_DOUBLE:
-			return json_object_new_string("double");
+			return parser_get_string("double");
 		case XX_TYPE_BOOL:
-			return json_object_new_string("bool");
+			return parser_get_string("bool");
 		case XX_TYPE_LONG:
-			return json_object_new_string("long");
+			return parser_get_string("long");
 		case XX_TYPE_ULONG:
-			return json_object_new_string("ulong");
+			return parser_get_string("ulong");
 		case XX_TYPE_STRING:
-			return json_object_new_string("string");
+			return parser_get_string("string");
 		case XX_TYPE_CHAR:
-			return json_object_new_string("char");
+			return parser_get_string("char");
 		case XX_TYPE_ARRAY:
-			return json_object_new_string("array");
+			return parser_get_string("array");
 		case XX_TYPE_VAR:
-			return json_object_new_string("variable");
+			return parser_get_string("variable");
 		case XX_TYPE_CALLABLE:
-			return json_object_new_string("callable");
+			return parser_get_string("callable");
 		case XX_TYPE_RESOURCE:
-			return json_object_new_string("resource");
+			return parser_get_string("resource");
 		case XX_TYPE_OBJECT:
-			return json_object_new_string("object");
+			return parser_get_string("object");
 		case XX_T_TYPE_NULL:
-			return json_object_new_string("null");
+			return parser_get_string("null");
 		case XX_T_TYPE_THIS:
-			return json_object_new_string("this");
+			return parser_get_string("this");
 		default:
 			fprintf(stderr, "unknown type?\n");
 	}
-	return json_object_new_string("unknown");
+	return parser_get_string("unknown");
 }
 
-static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
+static zval *xx_ret_list(zval *list_left, zval *list_right)
 {
-	json_object *ret;
-	int i, array_length;
+	zval *ret;
+#if PHP_VERSION_ID < 70000
+	HashTable *ht;
+	HashPosition pos;
+	zval **ppzv;
+#else
+	zval *val;
+#endif
 
-	ret = json_object_new_array();
+	ret = parser_array_init();
 
 	if (list_left) {
-
-		if (json_object_get_type(list_left) == json_type_array) {
-			array_length = json_object_array_length(list_left);
-			for (i = 0; i < array_length; i++) {
-				json_object_array_add(ret, json_object_array_get_idx(list_left, i));
+		if (Z_TYPE_P(list_left) == IS_ARRAY) {
+#if PHP_VERSION_ID >= 70000
+			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(list_left), val) {
+				parser_array_append(ret, val);
+			} ZEND_HASH_FOREACH_END();
+#else
+			ht = Z_ARRVAL_P(list_left);
+			zend_hash_internal_pointer_reset_ex(ht, &pos);
+			while (zend_hash_get_current_data_ex(ht, (void**)&ppzv, &pos) == SUCCESS) {
+				parser_array_append(ret, *ppzv);
+			    zend_hash_move_forward_ex(ht, &pos);
 			}
-			//json_object_put(list_left);
+#endif
+			//zval_ptr_dtor(&list_left);
 		} else {
-			json_object_array_add(ret, list_left);
+			parser_array_append(ret, list_left);
 		}
-
 	}
-
-	json_object_array_add(ret, right_list);
-
-	return ret;
-}
-
-static json_object *xx_ret_let_statement(json_object *assignments, xx_scanner_state *state)
-{
-	json_object *ret = json_object_new_object();
-
-	json_object_object_add(ret, "type", json_object_new_string("let"));
-	json_object_object_add(ret, "assignments", assignments);
-
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_array_append(ret, list_right);
 
 	return ret;
 }
 
-static json_object *xx_ret_let_assignment(char *type, json_object *operator, xx_parser_token *V, xx_parser_token *P, json_object *index_expr, json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_let_statement(zval *assignments, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "assign-type", json_object_new_string(type));
+	parser_add_str(ret, "type", "let");
+	parser_add_zval(ret, "assignments", assignments);
+
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
+
+	return ret;
+}
+
+static zval *xx_ret_let_assignment(char *type, zval *operator, xx_parser_token *V, xx_parser_token *P, zval *index_expr, zval *expr, xx_scanner_state *state)
+{
+	zval *ret = parser_array_init(&ret);
+
+	parser_add_str(ret, "assign-type", type);
 	if (operator) {
-		json_object_object_add(ret, "operator", operator);
+		parser_add_zval(ret, "operator", operator);
 	}
-	json_object_object_add(ret, "variable", json_object_new_string(V->token));
+	parser_add_str(ret, "variable", V->token);
 	if (P) {
-		json_object_object_add(ret, "property", json_object_new_string(P->token));
+		parser_add_str(ret, "property", P->token);
 	}
 	if (index_expr) {
-		json_object_object_add(ret, "index-expr", index_expr);
+		parser_add_zval(ret, "index-expr", index_expr);
 	}
 	if (expr) {
-		json_object_object_add(ret, "expr", expr);
+		parser_add_zval(ret, "expr", expr);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *elseif_statements, json_object *else_statements, xx_scanner_state *state)
+static zval *xx_ret_if_statement(zval *expr, zval *statements, zval *elseif_statements, zval *else_statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("if"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "if");
+	parser_add_zval(ret, "expr", expr);
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
 	if (elseif_statements) {
-		json_object_object_add(ret, "elseif_statements", elseif_statements);
+		parser_add_zval(ret, "elseif_statements", elseif_statements);
 	}
 
 	if (else_statements) {
-		json_object_object_add(ret, "else_statements", else_statements);
+		parser_add_zval(ret, "else_statements", else_statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_switch_statement(json_object *expr, json_object *clauses, xx_scanner_state *state)
+static zval *xx_ret_switch_statement(zval *expr, zval *clauses, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("switch"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "switch");
+	parser_add_zval(ret, "expr", expr);
 
 	if (clauses) {
-		json_object_object_add(ret, "clauses", clauses);
+		parser_add_zval(ret, "clauses", clauses);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_case_clause(json_object *expr, json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_case_clause(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (expr) {
-		json_object_object_add(ret, "type", json_object_new_string("case"));
-		json_object_object_add(ret, "expr", expr);
+		parser_add_str(ret, "type", "case");
+		parser_add_zval(ret, "expr", expr);
 	} else {
-		json_object_object_add(ret, "type", json_object_new_string("default"));
+		parser_add_str(ret, "type", "default");
 	}
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_while_statement(json_object *expr, json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("while"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "while");
+	parser_add_zval(ret, "expr", expr);
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_do_while_statement(json_object *expr, json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_do_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("do-while"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "do-while");
+	parser_add_zval(ret, "expr", expr);
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_try_catch_statement(json_object *statements, json_object *catches, xx_scanner_state *state)
+static zval *xx_ret_try_catch_statement(zval *statements, zval *catches, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("try-catch"));
+	parser_add_str(ret, "type", "try-catch");
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 	if (catches) {
-		json_object_object_add(ret, "catches", catches);
+		parser_add_zval(ret, "catches", catches);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_catch_statement(json_object *classes, json_object *variable, json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_catch_statement(zval *classes, zval *variable, zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (classes) {
-		json_object_object_add(ret, "classes", classes);
+		parser_add_zval(ret, "classes", classes);
 	}
 
 	if (variable) {
-		json_object_object_add(ret, "variable", variable);
+		parser_add_zval(ret, "variable", variable);
 	}
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_for_statement(json_object *expr, xx_parser_token *K, xx_parser_token *V, int reverse, json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_for_statement(zval *expr, xx_parser_token *K, xx_parser_token *V, int reverse, zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("for"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "for");
+	parser_add_zval(ret, "expr", expr);
 
 	if (K) {
-		json_object_object_add(ret, "key", json_object_new_string(K->token));
+		parser_add_str(ret, "key", K->token);
 	}
 	if (V) {
-		json_object_object_add(ret, "value", json_object_new_string(V->token));
+		parser_add_str(ret, "value", V->token);
 	}
 
-	json_object_object_add(ret, "reverse", json_object_new_int(reverse));
+	parser_add_int(ret, "reverse", reverse);
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_loop_statement(json_object *statements, xx_scanner_state *state)
+static zval *xx_ret_loop_statement(zval *statements, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("loop"));
+	parser_add_str(ret, "type", "loop");
 
 	if (statements) {
-		json_object_object_add(ret, "statements", statements);
+		parser_add_zval(ret, "statements", statements);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_empty_statement(xx_scanner_state *state)
+static zval *xx_ret_empty_statement(xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("empty"));
+	parser_add_str(ret, "type", "empty");
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_break_statement(xx_scanner_state *state)
+static zval *xx_ret_break_statement(xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("break"));
+	parser_add_str(ret, "type", "break");
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_continue_statement(xx_scanner_state *state)
+static zval *xx_ret_continue_statement(xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("continue"));
+	parser_add_str(ret, "type", "continue");
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_echo_statement(json_object *expressions, xx_scanner_state *state)
+static zval *xx_ret_echo_statement(zval *expressions, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("echo"));
-	json_object_object_add(ret, "expressions", expressions);
+	parser_add_str(ret, "type", "echo");
+	parser_add_zval(ret, "expressions", expressions);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_return_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("return"));
+	parser_add_str(ret, "type", "return");
 	if (expr) {
-		json_object_object_add(ret, "expr", expr);
+		parser_add_zval(ret, "expr", expr);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_require_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_require_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("require"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "require");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_fetch_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_fetch_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("fetch"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "fetch");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_fcall_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_fcall_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("fcall"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "fcall");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_mcall_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_mcall_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("mcall"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "mcall");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_scall_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_scall_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("scall"));
-	json_object_object_add(ret, "expr", expr);
+	parser_add_str(ret, "type", "scall");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_unset_statement(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_unset_statement(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("unset"));
+	parser_add_str(ret, "type", "unset");
+	parser_add_zval(ret, "expr", expr);
 
-	json_object_object_add(ret, "expr", expr);
-
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_declare_statement(int type, json_object *variables, xx_scanner_state *state)
+static zval *xx_ret_declare_statement(int type, zval *variables, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("declare"));
+	parser_add_str(ret, "type", "declare");
 
 	switch (type) {
 
 		case XX_T_TYPE_INTEGER:
-			json_object_object_add(ret, "data-type", json_object_new_string("int"));
+			parser_add_str(ret, "data-type", "int");
 			break;
 
 		case XX_T_TYPE_UINTEGER:
-			json_object_object_add(ret, "data-type", json_object_new_string("uint"));
+			parser_add_str(ret, "data-type", "uint");
 			break;
 
 		case XX_T_TYPE_LONG:
-			json_object_object_add(ret, "data-type", json_object_new_string("long"));
+			parser_add_str(ret, "data-type", "long");
 			break;
 
 		case XX_T_TYPE_ULONG:
-			json_object_object_add(ret, "data-type", json_object_new_string("ulong"));
+			parser_add_str(ret, "data-type", "ulong");
 			break;
 
 		case XX_T_TYPE_CHAR:
-			json_object_object_add(ret, "data-type", json_object_new_string("char"));
+			parser_add_str(ret, "data-type", "char");
 			break;
 
 		case XX_T_TYPE_UCHAR:
-			json_object_object_add(ret, "data-type", json_object_new_string("uchar"));
+			parser_add_str(ret, "data-type", "uchar");
 			break;
 
 		case XX_T_TYPE_DOUBLE:
-			json_object_object_add(ret, "data-type", json_object_new_string("double"));
+			parser_add_str(ret, "data-type", "double");
 			break;
 
 		case XX_T_TYPE_BOOL:
-			json_object_object_add(ret, "data-type", json_object_new_string("bool"));
+			parser_add_str(ret, "data-type", "bool");
 			break;
 
 		case XX_T_TYPE_STRING:
-			json_object_object_add(ret, "data-type", json_object_new_string("string"));
+			parser_add_str(ret, "data-type", "string");
 			break;
 
 		case XX_T_TYPE_ARRAY:
-			json_object_object_add(ret, "data-type", json_object_new_string("array"));
+			parser_add_str(ret, "data-type", "array");
 			break;
 
 		case XX_T_TYPE_VAR:
-			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
+			parser_add_str(ret, "data-type", "variable");
 			break;
 
 		case XX_T_TYPE_CALLABLE:
-			json_object_object_add(ret, "data-type", json_object_new_string("callable"));
+			parser_add_str(ret, "data-type", "callable");
 			break;
 
 		case XX_T_TYPE_RESOURCE:
-			json_object_object_add(ret, "data-type", json_object_new_string("resource"));
+			parser_add_str(ret, "data-type", "resource");
 			break;
 
 		case XX_T_TYPE_OBJECT:
-			json_object_object_add(ret, "data-type", json_object_new_string("object"));
+			parser_add_str(ret, "data-type", "object");
 			break;
 
 		default:
 			fprintf(stderr, "err 2?\n");
 	}
 
-	json_object_object_add(ret, "variables", variables);
+	parser_add_zval(ret, "variables", variables);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_declare_variable(xx_parser_token *T, zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "variable", json_object_new_string(T->token));
+	parser_add_str(ret, "variable", T->token);
 	if (expr) {
-		json_object_object_add(ret, "expr", expr);
+		parser_add_zval(ret, "expr", expr);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_new_static_instance(json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_new_static_instance(zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("new"));
-	json_object_object_add(ret, "class", json_object_new_string("static"));
-	json_object_object_add(ret, "dynamic", json_object_new_int(0));
+	parser_add_str(ret, "type", "new");
+	parser_add_str(ret, "class", "static");
+	parser_add_int(ret, "dynamic", 0);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_new_instance(int dynamic, xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_new_instance(int dynamic, xx_parser_token *T, zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("new"));
-	json_object_object_add(ret, "class", json_object_new_string(T->token));
-	json_object_object_add(ret, "dynamic", json_object_new_int(dynamic));
+	parser_add_str(ret, "type", "new");
+	parser_add_str(ret, "class", T->token);
+	parser_add_int(ret, "dynamic", dynamic);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_new_instance_type(json_object *type, json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_new_instance_type(zval *type, zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("new-type"));
-	json_object_object_add(ret, "internal-type", type);
+	parser_add_str(ret, "type", "new-type");
+	parser_add_zval(ret, "internal-type", type);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_throw_exception(json_object *expr, xx_scanner_state *state)
+static zval *xx_ret_throw_exception(zval *expr, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("throw"));
+	parser_add_str(ret, "type", "throw");
 	if (expr) {
-		json_object_object_add(ret, "expr", expr);
+		parser_add_zval(ret, "expr", expr);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_fcall(int type, xx_parser_token *F, json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_fcall(int type, xx_parser_token *F, zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("fcall"));
-	json_object_object_add(ret, "name", json_object_new_string(F->token));
-	json_object_object_add(ret, "call-type", json_object_new_int(type));
+	parser_add_str(ret, "type", "fcall");
+	parser_add_str(ret, "name", F->token);
+	parser_add_int(ret, "call-type", type);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_mcall(int type, json_object *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_mcall(int type, zval *O, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("mcall"));
-	json_object_object_add(ret, "variable", O);
-	json_object_object_add(ret, "name", json_object_new_string(M->token));
-	json_object_object_add(ret, "call-type", json_object_new_int(type));
+	parser_add_str(ret, "type", "mcall");
+	parser_add_zval(ret, "variable", O);
+	parser_add_str(ret, "name", M->token);
+	parser_add_int(ret, "call-type", type);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_scall(int dynamic_class, char *class_name, int dynamic_method, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static zval *xx_ret_scall(int dynamic_class, char *class_name, int dynamic_method, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("scall"));
-	json_object_object_add(ret, "dynamic-class", json_object_new_int(dynamic_class));
-	json_object_object_add(ret, "class", json_object_new_string(class_name));
-	json_object_object_add(ret, "dynamic", json_object_new_int(dynamic_method));
-	json_object_object_add(ret, "name", json_object_new_string(M->token));
+	parser_add_str(ret, "type", "scall");
+	parser_add_int(ret, "dynamic-class", dynamic_class);
+	parser_add_str(ret, "class", class_name);
+	parser_add_int(ret, "dynamic", dynamic_method);
+	parser_add_str(ret, "name", M->token);
 
 	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+		parser_add_zval(ret, "parameters", parameters);
 	}
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_call_parameter(xx_parser_token *N, json_object *parameter, xx_scanner_state *state)
+static zval *xx_ret_call_parameter(xx_parser_token *N, zval *parameter, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
 	if (N) {
-		json_object_object_add(ret, "name", json_object_new_string(N->token));
+		parser_add_str(ret, "name", N->token);
 	}
-	json_object_object_add(ret, "parameter", parameter);
+	parser_add_zval(ret, "parameter", parameter);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
-
-	return ret;
-}
-
-static json_object *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
-{
-	json_object *ret = json_object_new_object();
-
-	json_object_object_add(ret, "type", json_object_new_string("comment"));
-	json_object_object_add(ret, "value", json_object_new_string(T->token));
-
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
 
-static json_object *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
+static zval *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+	zval *ret = parser_array_init(&ret);
 
-	json_object_object_add(ret, "type", json_object_new_string("cblock"));
-	json_object_object_add(ret, "value", json_object_new_string(T->token));
+	parser_add_str(ret, "type", "comment");
+	parser_add_str(ret, "value", T->token);
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
+
+	return ret;
+}
+
+static zval *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
+{
+	zval *ret = parser_array_init(&ret);
+
+	parser_add_str(ret, "type", "cblock");
+	parser_add_str(ret, "value", T->token);
+
+	parser_add_str(ret, "file", state->active_file);
+	parser_add_int(ret, "line", state->active_line);
+	parser_add_int(ret, "char", state->active_char);
 
 	return ret;
 }
@@ -1225,9 +1308,9 @@ static json_object *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
 
 	//fprintf(stderr, "error!\n");
 
-	json_object *syntax_error = json_object_new_object();
+	zval *syntax_error = parser_array_init();
 
-	json_object_object_add(syntax_error, "type", json_object_new_string("error"));
+	parser_add_str(syntax_error, "type", "error");
 
 	/*if (status->scanner_state->start_length) {
 		fprintf(stderr, "Syntax error, %s", status->scanner_state->start);
@@ -1239,14 +1322,14 @@ static json_object *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
 	//status->syntax_error = emalloc(sizeof(char) * status->syntax_error_len);
 
 	if (status->scanner_state->start_length) {
-		json_object_object_add(syntax_error, "message", json_object_new_string("Syntax error"));
+		parser_add_str(syntax_error, "message", "Syntax error");
 	} else {
-		json_object_object_add(syntax_error, "message", json_object_new_string("Unexpected EOF"));
+		parser_add_str(syntax_error, "message", "Unexpected EOF");
 	}
 
-	json_object_object_add(syntax_error, "file", json_object_new_string(status->scanner_state->active_file));
-	json_object_object_add(syntax_error, "line", json_object_new_int(status->scanner_state->active_line));
-	json_object_object_add(syntax_error, "char", json_object_new_int(status->scanner_state->active_char));
+	parser_add_str(syntax_error, "file", status->scanner_state->active_file);
+	parser_add_int(syntax_error, "line", status->scanner_state->active_line);
+	parser_add_int(syntax_error, "char", status->scanner_state->active_char);
 
 	status->status = XX_PARSING_FAILED;
 
@@ -1260,6 +1343,7 @@ static json_object *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
 		if ($$->free_flag) {
 			efree($$->token);
 		}
+		zval_ptr_dtor($$);
 		efree($$);
 	}*/
 }
@@ -1268,7 +1352,7 @@ program ::= xx_language(Q) . {
 	status->ret = Q;
 }
 
-%destructor xx_language { json_object_put($$); }
+%destructor xx_language { zval_ptr_dtor(&$$); efree($$); }
 
 xx_language(R) ::= xx_top_statement_list(L) . {
 	R = L;
@@ -1776,43 +1860,43 @@ xx_visibility_list(R) ::= xx_visibility(K) . {
 }
 
 xx_visibility(R) ::= INTERNAL . {
-	R = json_object_new_string("internal");
+	R = parser_get_string("internal");
 }
 
 xx_visibility(R) ::= PUBLIC . {
-	R = json_object_new_string("public");
+	R = parser_get_string("public");
 }
 
 xx_visibility(R) ::= PROTECTED . {
-	R = json_object_new_string("protected");
+	R = parser_get_string("protected");
 }
 
 xx_visibility(R) ::= PRIVATE. {
-	R = json_object_new_string("private");
+	R = parser_get_string("private");
 }
 
 xx_visibility(R) ::= STATIC . {
-	R = json_object_new_string("static");
+	R = parser_get_string("static");
 }
 
 xx_visibility(R) ::= SCOPED . {
-	R = json_object_new_string("scoped");
+	R = parser_get_string("scoped");
 }
 
 xx_visibility(R) ::= INLINE . {
-	R = json_object_new_string("inline");
+	R = parser_get_string("inline");
 }
 
 xx_visibility(R) ::= DEPRECATED . {
-	R = json_object_new_string("deprecated");
+	R = parser_get_string("deprecated");
 }
 
 xx_visibility(R) ::= ABSTRACT . {
-	R = json_object_new_string("abstract");
+	R = parser_get_string("abstract");
 }
 
 xx_visibility(R) ::= FINAL . {
-	R = json_object_new_string("final");
+	R = parser_get_string("final");
 }
 
 /* return type */
@@ -2417,37 +2501,37 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 
 // =
 xx_assignment_operator(R) ::= ASSIGN . {
-	R = json_object_new_string("assign");
+	R = parser_get_string("assign");
 }
 
 // +=
 xx_assignment_operator(R) ::= ADDASSIGN . {
-	R = json_object_new_string("add-assign");
+	R = parser_get_string("add-assign");
 }
 
 // -=
 xx_assignment_operator(R) ::= SUBASSIGN . {
-	R = json_object_new_string("sub-assign");
+	R = parser_get_string("sub-assign");
 }
 
 // *=
 xx_assignment_operator(R) ::= MULASSIGN . {
-	R = json_object_new_string("mul-assign");
+	R = parser_get_string("mul-assign");
 }
 
 // /=
 xx_assignment_operator(R) ::= DIVASSIGN . {
-	R = json_object_new_string("div-assign");
+	R = parser_get_string("div-assign");
 }
 
 // .=
 xx_assignment_operator(R) ::= CONCATASSIGN . {
-	R = json_object_new_string("concat-assign");
+	R = parser_get_string("concat-assign");
 }
 
 // %=
 xx_assignment_operator(R) ::= MODASSIGN . {
-	R = json_object_new_string("mod-assign");
+	R = parser_get_string("mod-assign");
 }
 
 /* y = {expr} */
