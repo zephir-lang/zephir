@@ -45,17 +45,12 @@ install:
   - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:BUILD_PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
   - 7z.exe x php-dev.zip | FIND /V "ing  "
   - mv php-%PHP_VERSION%-devel-VC11-%BUILD_PLATFORM% php-devpack
-  - echo Building JSON-C
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - cd json-c
-  - msbuild.exe json-c.sln /t:Build /p:Configuration=Debug;Platform=Win32
   - echo Building Zephir Parser
-  - 'copy Debug\json-c.lib ..\parser\json-c.lib'
-  - 'cd ..\parser'
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 'cd parser/parser'
   - 'copy %PHP_SDK%\bin\re2c.exe .\re2c.exe'
-  - buildWin32.bat
-  - echo Building PHP [%PHP_VERSION%]
   - '"%VS110COMNTOOLS%\VsDevCmd" %BUILD_PLATFORM%'
+  - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - 'cd %APPVEYOR_BUILD_FOLDER%\..\php'
   - 'echo extension_dir=%APPVEYOR_BUILD_FOLDER%\..\php\ext > php.ini'
@@ -66,7 +61,6 @@ install:
   - 'set PATH=%cd%;%PATH%'
   - echo Building Zephir
   - cd %APPVEYOR_BUILD_FOLDER%
-  - 'copy parser\parser.exe bin\zephir-parser.exe'
   - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php & php composer.phar --prefer-source install)
 
 build_script:
@@ -75,5 +69,10 @@ build_script:
   - 'type compile.log'
   - 'php vendor\phpunit\phpunit\phpunit.php --debug'
 
+on_failure :
+  - 'dir'
+  - 'type compile-errors.log'
+  - 'type compile.log'
+
 artifacts:
-  - path: bin\zephir-parser.exe
+  - path: parser\Release\php_zephir_parser.dll

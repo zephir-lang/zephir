@@ -156,32 +156,29 @@ class CompilerFile
         $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
 
-        if (PHP_OS == "WINNT") {
-            $zephirParserBinary = ZEPHIRPATH . 'bin\zephir-parser.exe';
-        } else {
-            $zephirParserBinary = ZEPHIRPATH . 'bin/zephir-parser';
-        }
-
-        if (!file_exists($zephirParserBinary)) {
-            throw new Exception($zephirParserBinary . ' was not found');
-        }
-
         $changed = false;
+
         $fileSystem = $compiler->getFileSystem();
         if ($fileSystem->exists($compilePath)) {
             $modificationTime = $fileSystem->modificationTime($compilePath);
-            if ($modificationTime < filemtime($zepRealPath) || $modificationTime < filemtime($zephirParserBinary)) {
-                $fileSystem->system($zephirParserBinary . ' ' . $zepRealPath, 'stdout', $compilePath);
+            if ($modificationTime < filemtime($zepRealPath)) {
                 $changed = true;
             }
         } else {
-            $fileSystem->system($zephirParserBinary . ' ' . $zepRealPath, 'stdout', $compilePath);
             $changed = true;
         }
 
+        $ir = null;
+        if ($changed) {
+            $ir = zephir_parse_file(file_get_contents($zepRealPath), $zepRealPath);
+            $fileSystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
+        }
+
         if ($changed || !$fileSystem->exists($compilePath . '.php')) {
-            $json = json_decode($fileSystem->read($compilePath), true);
-            $data = '<?php return ' . var_export($json, true) . ';';
+            if (!isset($ir)) {
+                $ir = json_decode($fileSystem->read($compilePath), true);
+            }
+            $data = '<?php return ' . var_export($ir, true) . ';';
             $fileSystem->write($compilePath . '.php', $data);
         }
 

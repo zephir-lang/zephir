@@ -1,12 +1,13 @@
 .DS_Store
 .idea/
 parser/lemon
+parser/lemon.exe
 *.dSYM/
-bin/zephir-parser
 bin/zephir55
 parser/parser.c
 parser/scanner.c
 parser/parser.out
+parser/Release
 composer.lock
 vendor/
 build

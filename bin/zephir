@@ -19,22 +19,9 @@ if [ -z "$ZEPHIRDIR" ]; then
   fi
 fi
 
-if [ ! -r $ZEPHIRDIR/bin/zephir-parser ]; then
-    echo "You didn't install zephir. Install?"
-    read ch
-    case "$ch" in
-        n|N|no ) "You have to install zephir at first"
-            exit 1
-            ;;
-        * ) cd $ZEPHIRDIR
-            ./install
-            ;;
-    esac
-fi
-
 if [[ $1 && $2 && $3 && "$1"=="-c" ]]; then
-    php -c $2 $ZEPHIRDIR/compiler.php ${*:3}
+    php -d safe_mode=Off -d enable_dl=On -c $2 $ZEPHIRDIR/compiler.php ${*:3}
 else
-    php $ZEPHIRDIR/compiler.php $*
+    php -d safe_mode=Off -d enable_dl=On $ZEPHIRDIR/compiler.php $*
 fi
 

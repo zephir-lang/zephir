@@ -114,7 +114,7 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 /**
  * Parses a comment returning an intermediate array representation
  */
-int xx_parse_program(char *program, unsigned int program_length, char *file_path) {
+zval *xx_parse_program(char *program, unsigned int program_length, char *file_path) {
 
 	char *error;
 	xx_scanner_state *state;
@@ -630,51 +630,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 	}
 
 	if (parser_status->ret) {
-		printf("%s\n", json_object_to_json_string(parser_status->ret));
+		zval *ret_ptr = parser_status->ret;
+		free(parser_status);
+		free(state);
+		return ret_ptr;
 	}
-
-	//efree(Z_STRVAL(processed_comment));*/
-
 	free(parser_status);
 	free(state);
-
-	return status;
-}
-
-int main(int argc, char *argv[]) {
-
-	FILE *fp;
-	char ch;
-	char *program;
-	int i, length;
-
-	if (argc > 1) {
-
-		fp = fopen(argv[1], "r");
-		if (!fp) {
-			fprintf(stderr, "Cant open file\n");
-			exit(1);
-		}
-
-		length = 1024;
-		program = malloc(sizeof(char) * length);
-
-		i = 0;
-		while (!feof(fp)) {
-			ch = fgetc(fp);
-			if (i == length) {
-				length += 1024;
-				program = realloc(program, sizeof(char) * length);
-			}
-			program[i++] = ch;
-		}
-		program[i - 1] = '\0';
-		fclose(fp);
-
-		xx_parse_program(program, i - 1, argv[1]);
-
-		free(program);
-	}
-
-	return 0;
+	return NULL;
 }
