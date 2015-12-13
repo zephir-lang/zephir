@@ -21,7 +21,6 @@ before_install:
  - git config --global user.name "TravisCI"
  - git submodule --quiet update --init --recursive
  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
- - ./unit-tests/ci/before_install.sh
 
 install:
  - export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
