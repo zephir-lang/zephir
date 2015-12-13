@@ -57,8 +57,6 @@ Usage of Zephir
 
 Building the parser
 --------------------
-- Build zephir/json-c using VS2012 and copy the resulting **json-c.lib** (static library)
-  to the parser directory
 - Requirements: Copy re2c.exe to the parser folder (from PHP-SDK for example)
 - You may have to adjust the paths in buildWin32.bat (if you for example do not use VS2012 on a x64 machine)
 - Run parser/buildWin32.bat to build the parser.exe
