@@ -47,6 +47,8 @@ setx path "%path%;c:\path-to-zephir\bin"
 
 Usage of Zephir
 ----------------
+- [**PHP7 or later**] Open the Visual Studio 2015 Command Prompt
+(Find it by searching for cmd or just open ``"%VS140COMNTOOLS%\VsDevCmd"``)
 - [**PHP5.5 or later**] Open the Visual Studio 2012 Command Prompt
 (Find it by searching for cmd or just open ``"%VS110COMNTOOLS%\VsDevCmd"``)
 - [**below PHP5.5**] Open the Visual Studio 2008 Command Prompt
@@ -55,11 +57,10 @@ Usage of Zephir
 - ``CD`` to your extension and ``zephir build``
 - Take the built ``.dll`` from ``your_ext/Release/php_extname.dll``
 
-Building the parser
+Parser troubleshooting
 --------------------
 - Requirements: Copy re2c.exe to the parser folder (from PHP-SDK for example)
 - You may have to adjust the paths in buildWin32.bat (if you for example do not use VS2012 on a x64 machine)
-- Run parser/buildWin32.bat to build the parser.exe
 
 
 Additional Links
