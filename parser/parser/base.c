@@ -38,6 +38,7 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
+#ifndef HAVE_STRNDUP
 char *strndup(const char *s, size_t len)
 {
     if (s) {
@@ -50,6 +51,7 @@ char *strndup(const char *s, size_t len)
 
     return NULL;
 }
+#endif
 
 /**
  * Wrapper to alloc memory within the parser
