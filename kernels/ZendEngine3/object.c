@@ -1022,12 +1022,22 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 	return SUCCESS;
 }
 
+/* Imported since PHP is so nice to define this in a .c file... */
+typedef struct _zend_closure {
+	zend_object       std;
+	zend_function     func;
+	zval              this_ptr;
+	zend_class_entry *called_scope;
+	void (*orig_internal_handler)(INTERNAL_FUNCTION_PARAMETERS);
+} zend_closure;
+
 /**
  * Creates a closure
  */
 int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length)
 {
 	zend_function *function_ptr;
+	zend_closure *closure;
 
 	if ((function_ptr = zend_hash_str_find_ptr(&ce->function_table, method_name, method_length)) == NULL) {
 		ZVAL_NULL(return_value);
@@ -1035,6 +1045,9 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 	}
 
 	zend_create_closure(return_value, function_ptr, ce, ce, this_ptr);
+	// Make sure we can use a closure multiple times
+	closure = (zend_closure*)Z_OBJ_P(return_value);
+	closure->func.internal_function.handler = closure->orig_internal_handler;
 	return SUCCESS;
 }
 
