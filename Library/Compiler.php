@@ -198,9 +198,7 @@ class Compiler
         $extFile = null;
         $currentDir = realpath(dirname(__FILE__)). DIRECTORY_SEPARATOR  . '..' .DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR ;
         if (!extension_loaded('zephir_parser') || $this->parserCompiled === 'force') {
-
             if (Utils::isWindows()) {
-
                 $this->logger->output('zephir_parser extension not loaded, compiling it');
                 $oldCwd = getcwd();
                 chdir($currentDir);
@@ -242,9 +240,7 @@ class Compiler
 
                 chdir($oldCwd);
             } else {
-
                 if (!file_exists($currentDir . 'modules/zephir_parser.so')) {
-
                     $this->logger->output('zephir_parser extension not loaded, compiling it');
                     $oldCwd = getcwd();
                     chdir($currentDir);

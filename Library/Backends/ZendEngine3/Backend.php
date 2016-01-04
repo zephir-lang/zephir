@@ -63,7 +63,6 @@ class Backend extends BackendZendEngine2
     public function getTypeDefinition($type)
     {
         switch ($type) {
-
             case 'zend_ulong':
                 return array('', 'zend_ulong');
 
@@ -214,9 +213,7 @@ class Backend extends BackendZendEngine2
 
         $defaultValue = $variable->getDefaultInitValue();
         if ($defaultValue !== null) {
-
             switch ($type) {
-
                 case 'variable':
                 case 'string':
                 case 'array':
@@ -258,7 +255,6 @@ class Backend extends BackendZendEngine2
 
         $dType = null;
         switch ($type) {
-
             case 'bool':
                 $value = $value == 'false' ? '0' : 1;
                 break;
@@ -388,7 +384,6 @@ class Backend extends BackendZendEngine2
         }
 
         switch ($value->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
