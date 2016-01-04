@@ -329,7 +329,9 @@ void zephir_deinitialize_memory()
 		zephir_clean_restore_stack();
 	}
 
+#if 0
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache, zephir_cleanup_fcache, 0);
+#endif
 
 #ifndef ZEPHIR_RELEASE
 	assert(zephir_globals_ptr->start_memory != NULL);

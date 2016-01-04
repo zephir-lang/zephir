@@ -165,6 +165,14 @@ class Backend extends BaseBackend
         return array($pointer, $code);
     }
 
+    /**
+     * Checks the type of a variable using the ZendEngine constants
+     *
+     * @param Variable $variableVariable
+     * @param string $operator
+     * @param string $value
+     * @param CompilationContext $context
+     */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
         $variableName = $this->getVariableCode($variableVariable);

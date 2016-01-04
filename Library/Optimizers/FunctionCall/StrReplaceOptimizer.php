@@ -76,7 +76,10 @@ class StrReplaceOptimizer extends OptimizerAbstract
             }
         }
 
-        $context->codePrinter->output('zephir_fast_str_replace(&' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+
+        $context->codePrinter->output('zephir_fast_str_replace(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

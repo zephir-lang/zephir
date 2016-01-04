@@ -41,15 +41,21 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 
         if (count($expression['parameters']) != 1) {
             return false;
-        }
+        }        
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
+
         if ($context->backend->isZE3()) {
+
             if ($this->getType() == 'IS_BOOL') {
                 $condition = '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_TRUE || Z_TYPE_P(' . $resolvedParams[0] . ') == IS_FALSE)';
+            } else {
+                $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
             }
+        } else {
+            $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
         }
+
         return new CompiledExpression('bool', $condition, $expression);
     }
 

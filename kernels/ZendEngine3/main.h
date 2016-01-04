@@ -283,6 +283,9 @@ int zephir_declare_class_constant_double(zend_class_entry *ce, const char *name,
 int zephir_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length);
 int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value);
 
+/** Method declaration for API generation */
+#define ZEPHIR_DOC_METHOD(class_name, method)
+
 #ifndef ZEPHIR_RELEASE
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line
 #define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0

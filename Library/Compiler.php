@@ -243,7 +243,7 @@ class Compiler
                 chdir($oldCwd);
             } else {
 
-                if (!file_exists('modules/zephir_parser.so')) {
+                if (!file_exists($currentDir . 'modules/zephir_parser.so')) {
 
                     $this->logger->output('zephir_parser extension not loaded, compiling it');
                     $oldCwd = getcwd();

@@ -19,13 +19,13 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
-use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\CompilerException;
+use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 use Zephir\Builder\FunctionCallBuilder;
+use Zephir\Expression\Builder\BuilderFactory;
 
 /**
  * TypeOf

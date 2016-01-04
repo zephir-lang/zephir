@@ -68,7 +68,11 @@ class GetClassLowerOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_get_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 1 TSRMLS_CC);');
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+
+        $context->codePrinter->output('zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', 1 TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
