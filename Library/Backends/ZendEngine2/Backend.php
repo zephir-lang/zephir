@@ -781,11 +781,13 @@ class Backend extends BaseBackend
                 case 'variable':
                     $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
                     break;
+                    
                 case 'int':
                 case 'uint':
                 case 'long':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getName() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+
                 default:
                     throw new CompilerException('updateArray: Found a variable with unsupported type ' . $key->getType());
             }
@@ -794,12 +796,15 @@ class Backend extends BaseBackend
                 case 'string':
                     $compilationContext->codePrinter->output('zephir_array_update_string(' . $this->getVariableCodePointer($symbolVariable) . ', SL("' . $key->getCode() . '"), ' . $value . ', ' . $flags . ');');
                     break;
+
                 case 'int':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getCode() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+
                 case 'variable':
                     $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key->getCode()), $value, $compilationContext, $flags);
                     break;
+
                 default:
                     throw new CompilerException('updateArray: Found an expression with unsupported type ' . $key->getType());
             }
@@ -816,9 +821,11 @@ class Backend extends BaseBackend
         } else {
             $output = 'object_init_ex(' . $variableAccess . ', ' . $ce . ');';
         }
+
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
+
         return $output;
     }
 
@@ -826,17 +833,20 @@ class Backend extends BaseBackend
     {
         $context->headersManager->add('kernel/array');
         $isVariable = $index instanceof Variable;
+
         switch ($index->getType()) {
             case 'int':
             case 'uint':
             case 'long':
                 $type = 'long';
                 break;
+
             /* Types which map to the same */
             case 'variable':
             case 'string':
                 $type = $index->getType();
                 break;
+
             default:
                 throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
@@ -857,6 +867,7 @@ class Backend extends BaseBackend
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
+
         return $output;
     }
 
@@ -875,6 +886,7 @@ class Backend extends BaseBackend
         } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
             return new CompiledExpression('bool', 'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
         }
+
         throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
     }
 

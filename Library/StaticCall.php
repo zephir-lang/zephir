@@ -339,7 +339,6 @@ class StaticCall extends Call
         $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $compilationContext->backend->getVariableCode($classNameVariable) . ' TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
 
-
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
@@ -418,7 +417,9 @@ class StaticCall extends Call
         $compilationContext->headersManager->add('kernel/object');
 
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
+                
+        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $compilationContext->backend->getVariableCode($classNameVariable) . ' TSRMLS_CC);');
+
         $classEntry = $classEntryVariable->getName();
 
         /**
