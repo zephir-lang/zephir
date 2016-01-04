@@ -735,7 +735,7 @@ class Backend extends BackendZendEngine2
     {
         $compilationContext->codePrinter->output('zval *ZEPHIR_TMP_ITERATOR_PTR;');
         $compilationContext->codePrinter->output('ZEPHIR_TMP_ITERATOR_PTR = ' . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
-        $this->copyOnWrite($targetVariable, '(ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
+        $compilationContext->codePrinter->output('ZVAL_COPY(' . $this->getVariableCode($targetVariable) . ', ZEPHIR_TMP_ITERATOR_PTR);');
     }
 
     public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)

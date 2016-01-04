@@ -82,6 +82,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 #define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(&z)
 
 #define ZEPHIR_CPY_WRT(d, v) \
+	Z_TRY_ADDREF_P(v); \
 	if (Z_TYPE_P(d) > IS_UNDEF) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
 			zephir_ptr_dtor(d); \
@@ -89,7 +90,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} else { \
 		zephir_memory_observe(d); \
 	} \
-	ZVAL_COPY(d, v);
+	ZVAL_COPY_VALUE(d, v);
 
 #define ZEPHIR_CPY_WRT_CTOR(d, v) \
 	if (d) { \
