@@ -220,6 +220,7 @@ class Backend extends BaseBackend
             default:
                 throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
         }
+
         return $condition;
     }
 
