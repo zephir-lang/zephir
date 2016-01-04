@@ -2100,7 +2100,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 		{
 			zval *ZEPHIR_TMP_ITERATOR_PTR;
 			ZEPHIR_TMP_ITERATOR_PTR = _0->funcs->get_current_data(_0 TSRMLS_CC);
-			ZEPHIR_CPY_WRT(&v, (ZEPHIR_TMP_ITERATOR_PTR));
+			ZVAL_COPY(&v, ZEPHIR_TMP_ITERATOR_PTR);
 		}
 		zephir_array_append(&result, &v, PH_SEPARATE, "test/flow.zep", 710);
 	}
@@ -2144,7 +2144,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 			{
 				zval *ZEPHIR_TMP_ITERATOR_PTR;
 				ZEPHIR_TMP_ITERATOR_PTR = _0$$3->funcs->get_current_data(_0$$3 TSRMLS_CC);
-				ZEPHIR_CPY_WRT(&v, (ZEPHIR_TMP_ITERATOR_PTR));
+				ZVAL_COPY(&v, ZEPHIR_TMP_ITERATOR_PTR);
 			}
 			zephir_array_append(&result, &v, PH_SEPARATE, "test/flow.zep", 720);
 		}
