@@ -38,7 +38,7 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
-#ifndef HAVE_STRNDUP
+#if !defined HAVE_STRNDUP && !defined __USE_XOPEN2K8
 char *strndup(const char *s, size_t len)
 {
     if (s) {
