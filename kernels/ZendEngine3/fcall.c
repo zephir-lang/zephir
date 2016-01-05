@@ -56,7 +56,7 @@ static const unsigned char tolower_map[256] = {
 int zephir_has_constructor_ce(const zend_class_entry *ce)
 {
 	while (ce) {
-		if (ce->constructor) {
+		if (ce->constructor != NULL) {
 			return 1;
 		}
 		ce = ce->parent;

@@ -376,6 +376,60 @@ void zephir_fast_join_str(zval *return_value, char *glue, unsigned int glue_leng
 /**
  * Convert dash/underscored texts returning camelized
  */
+void zephir_camelize(zval *return_value, const zval *str)
+{
+
+	int i, len, first = 0;
+	smart_str camelize_str = {0};
+	char *marker, ch;
+
+	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
+		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
+		RETURN_EMPTY_STRING();
+	}
+
+	marker = Z_STRVAL_P(str);
+	len    = Z_STRLEN_P(str);
+
+	for (i = 0; i < len; i++) {
+
+		ch = marker[i];
+
+		if (first == 0) {
+
+			if (ch == '-' || ch == '_') {
+				continue;
+			}
+
+			first = 1;
+			smart_str_appendc(&camelize_str, toupper(ch));
+			continue;
+		}
+
+		if (ch == '-' || ch == '_') {
+			if (i != (len - 1)) {
+				i++;
+				ch = marker[i];
+				smart_str_appendc(&camelize_str, toupper(ch));
+			}
+			continue;
+		}
+
+		smart_str_appendc(&camelize_str, tolower(ch));
+	}
+
+	smart_str_0(&camelize_str);
+
+	if (camelize_str.s) {
+		RETURN_STR(camelize_str.s);
+	} else {
+		RETURN_EMPTY_STRING();
+	}
+}
+
+/**
+ * Convert a camelized to a dash/underscored texts
+ */
 void zephir_uncamelize(zval *return_value, const zval *str)
 {
 	unsigned int i;
@@ -383,7 +437,7 @@ void zephir_uncamelize(zval *return_value, const zval *str)
 	char *marker, ch;
 
 	if (Z_TYPE_P(str) != IS_STRING) {
-		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
+		zend_error(E_WARNING, "Invalid arguments supplied for uncamelize()");
 		return;
 	}
 

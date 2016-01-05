@@ -45,6 +45,7 @@ void zephir_fast_strpos_str(zval *return_value, const zval *haystack, char *need
 void zephir_fast_trim(zval *return_value, zval *str, zval *charlist, int where);
 void zephir_fast_str_replace(zval *return_value, zval *search, zval *replace, zval *subject);
 
+void zephir_camelize(zval *return_value, const zval *str);
 void zephir_uncamelize(zval *return_value, const zval *str);
 
 /** Starts/Ends with */

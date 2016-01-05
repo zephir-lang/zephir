@@ -305,7 +305,7 @@ void zephir_camelize(zval *return_value, const zval *str) {
 }
 
 /**
- * Convert dash/underscored texts returning camelized
+ * Convert a camelized to a dash/underscored texts
  */
 void zephir_uncamelize(zval *return_value, const zval *str) {
 
@@ -314,7 +314,7 @@ void zephir_uncamelize(zval *return_value, const zval *str) {
 	char *marker, ch;
 
 	if (Z_TYPE_P(str) != IS_STRING) {
-		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
+		zend_error(E_WARNING, "Invalid arguments supplied for uncamelize()");
 		return;
 	}
 

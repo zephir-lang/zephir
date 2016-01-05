@@ -167,7 +167,7 @@ void zephir_fast_count(zval *result, zval *value)
  */
 int zephir_fast_count_ev(zval *value)
 {
-	long count = 0;
+	zend_long count = 0;
 
 	if (Z_TYPE_P(value) == IS_ARRAY) {
 		return zend_hash_num_elements(Z_ARRVAL_P(value)) > 0;
@@ -212,7 +212,7 @@ int zephir_fast_count_ev(zval *value)
  */
 int zephir_fast_count_int(zval *value)
 {
-	long count = 0;
+	zend_long count = 0;
 
 	if (Z_TYPE_P(value) == IS_ARRAY) {
 		return zend_hash_num_elements(Z_ARRVAL_P(value));

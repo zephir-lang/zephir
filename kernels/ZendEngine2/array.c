@@ -971,7 +971,8 @@ int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index,
 /**
  * Appends every element of an array at the end of the left array
  */
-void zephir_merge_append(zval *left, zval *values){
+void zephir_merge_append(zval *left, zval *values)
+{
 
 	zval         **tmp;
 	HashTable      *arr_values;
