@@ -265,10 +265,22 @@ int zephir_function_quick_exists_ex(const char *method_name, unsigned int method
 }
 
 /**
+ * Check if a function exists
+ */
+int zephir_function_exists(const zval *function_name)
+{
+
+	return zephir_function_quick_exists_ex(
+		Z_STRVAL_P(function_name),
+		Z_STRLEN_P(function_name) + 1
+	);
+}
+
+/**
  * Check if a function exists using explicit char param
  *
  * @param function_name
- * @param function_len strlen(function_name)+1
+ * @param function_len strlen(function_name) + 1
  */
 int zephir_function_exists_ex(const char *function_name, unsigned int function_len)
 {

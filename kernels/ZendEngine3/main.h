@@ -207,7 +207,10 @@ int zephir_fast_count_int(zval *value);
 
 int zephir_is_callable(zval *var);
 int zephir_is_scalar(zval *var);
+
+int zephir_function_exists(const zval *function_name);
 int zephir_function_exists_ex(const char *func_name, unsigned int func_len);
+
 zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len);
 
 /* types */
