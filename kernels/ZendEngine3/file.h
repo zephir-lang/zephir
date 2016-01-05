@@ -30,6 +30,7 @@ int zephir_fclose(zval *stream_zval);
 void zephir_file_get_contents(zval *return_value, zval *filename);
 void zephir_file_put_contents(zval *return_value, zval *filename, zval *data);
 
+void zephir_basename(zval *return_value, zval *path TSRMLS_DC);
 void zephir_filemtime(zval *return_value, zval *path);
 int zephir_compare_mtime(zval *filename1, zval *filename2 TSRMLS_DC);
 void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator TSRMLS_DC);
