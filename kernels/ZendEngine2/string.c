@@ -670,7 +670,8 @@ void zephir_fast_strtoupper(zval *return_value, zval *str) {
 /**
  * Checks if a zval string starts with a zval string
  */
-int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive) {
+int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive)
+{
 
 	int i;
 	int sensitive = 0;
@@ -710,7 +711,8 @@ int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitiv
 /**
  * Checks if a zval string starts with a string
  */
-int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length) {
+int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length)
+{
 
 	if (Z_TYPE_P(str) != IS_STRING || compared_length > Z_STRLEN_P(str)) {
 		return 0;
@@ -722,7 +724,8 @@ int zephir_start_with_str(const zval *str, char *compared, unsigned int compared
 /**
  * Checks if a string starts with other string
  */
-int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length) {
+int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length)
+{
 
 	if (compared_length > str_length) {
 		return 0;

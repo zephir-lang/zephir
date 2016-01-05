@@ -372,7 +372,7 @@ class NativeArray
 
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);                                        
+                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }

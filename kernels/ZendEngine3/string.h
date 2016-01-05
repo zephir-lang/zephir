@@ -31,6 +31,7 @@
 #define ZEPHIR_SUBSTR_NO_LENGTH 1
 
 /** Fast char position */
+int zephir_memnstr(const zval *haystack, const zval *needle ZEPHIR_DEBUG_PARAMS);
 int zephir_memnstr_str(const zval *haystack, char *needle, unsigned int needle_length ZEPHIR_DEBUG_PARAMS);
 
 int zephir_fast_strlen_ev(zval *str);
@@ -51,6 +52,10 @@ void zephir_uncamelize(zval *return_value, const zval *str);
 /** Starts/Ends with */
 int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive);
 int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length);
+int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length);
+
+int zephir_end_with(const zval *str, const zval *compared, zval *case_sensitive);
+int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_length);
 
 /** spprintf */
 int zephir_spprintf(char **message, int max_len, char *format, ...);

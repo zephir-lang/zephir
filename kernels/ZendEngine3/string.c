@@ -32,12 +32,12 @@
 #include <ext/standard/php_rand.h>
 #include <ext/standard/php_lcg.h>
 #include <ext/standard/php_http.h>
-#include "ext/standard/base64.h"
-#include "ext/standard/md5.h"
-#include "ext/standard/crc32.h"
-#include "ext/standard/url.h"
-#include "ext/standard/html.h"
-#include "ext/date/php_date.h"
+#include <ext/standard/base64.h>
+#include <ext/standard/md5.h>
+#include <ext/standard/crc32.h>
+#include <ext/standard/url.h>
+#include <ext/standard/html.h>
+#include <ext/date/php_date.h>
 
 #ifdef ZEPHIR_USE_PHP_PCRE
 #include <ext/pcre/php_pcre.h>
@@ -155,6 +155,47 @@ void zephir_fast_strtoupper(zval *return_value, zval *str)
 }
 
 /**
+ * Checks if a zval string starts with a zval string
+ */
+int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive)
+{
+
+	int i;
+	int sensitive = 0;
+	char *op1_cursor, *op2_cursor;
+
+	if (Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(compared) != IS_STRING) {
+		return 0;
+	}
+
+	if (!Z_STRLEN_P(compared) || !Z_STRLEN_P(str) || Z_STRLEN_P(compared) > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	if (case_sensitive) {
+		sensitive = zend_is_true(case_sensitive);
+	}
+
+	if (!sensitive) {
+		return !memcmp(Z_STRVAL_P(str), Z_STRVAL_P(compared), Z_STRLEN_P(compared));
+	}
+
+	op1_cursor = Z_STRVAL_P(str);
+	op2_cursor = Z_STRVAL_P(compared);
+	for (i = 0; i < Z_STRLEN_P(compared); i++) {
+
+		if (tolower(*op1_cursor) != tolower(*op2_cursor)) {
+			return 0;
+		}
+
+		op1_cursor++;
+		op2_cursor++;
+	}
+
+	return 1;
+}
+
+/**
  * Checks if a zval string starts with a string
  */
 int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length)
@@ -165,6 +206,79 @@ int zephir_start_with_str(const zval *str, char *compared, unsigned int compared
 
 	return !memcmp(Z_STRVAL_P(str), compared, compared_length);
 }
+
+/**
+ * Checks if a string starts with other string
+ */
+int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length)
+{
+
+	if (compared_length > str_length) {
+		return 0;
+	}
+
+	return !memcmp(str, compared, compared_length);
+}
+
+/**
+ * Checks if a zval string ends with a zval string
+ */
+int zephir_end_with(const zval *str, const zval *compared, zval *case_sensitive)
+{
+
+	int sensitive = 0;
+	int i;
+	char *op1_cursor, *op2_cursor;
+
+	if (Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(compared) != IS_STRING) {
+		return 0;
+	}
+
+	if (!Z_STRLEN_P(compared) || !Z_STRLEN_P(str) || Z_STRLEN_P(compared) > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	if (case_sensitive) {
+		sensitive = zend_is_true(case_sensitive);
+	}
+
+	if (!sensitive) {
+		return !memcmp(Z_STRVAL_P(str) + Z_STRLEN_P(str) - Z_STRLEN_P(compared), Z_STRVAL_P(compared), Z_STRLEN_P(compared));
+	}
+
+	op1_cursor = Z_STRVAL_P(str) + Z_STRLEN_P(str) - Z_STRLEN_P(compared);
+	op2_cursor = Z_STRVAL_P(compared);
+
+	for (i = 0; i < Z_STRLEN_P(compared); ++i) {
+
+		if (tolower(*op1_cursor) != tolower(*op2_cursor)) {
+			return 0;
+		}
+
+		++op1_cursor;
+		++op2_cursor;
+	}
+
+	return 1;
+}
+
+/**
+ * Checks if a zval string ends with a *char string
+ */
+int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_length)
+{
+
+	if (Z_TYPE_P(str) != IS_STRING) {
+		return 0;
+	}
+
+	if (!compared_length || !Z_STRLEN_P(str) || compared_length > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	return !memcmp(Z_STRVAL_P(str) + Z_STRLEN_P(str) - compared_length, compared, compared_length);
+}
+
 
 /**
  * Makes a substr like the PHP function. This function SUPPORT negative from and length
@@ -464,6 +578,28 @@ void zephir_uncamelize(zval *return_value, const zval *str)
 	} else {
 		RETURN_EMPTY_STRING();
 	}
+}
+
+/**
+ * Check if a string is contained into another
+ */
+int zephir_memnstr(const zval *haystack, const zval *needle ZEPHIR_DEBUG_PARAMS)
+{
+
+	if (Z_TYPE_P(haystack) != IS_STRING || Z_TYPE_P(needle) != IS_STRING) {
+		#ifndef ZEPHIR_RELEASE
+		zend_error(E_WARNING, "Invalid arguments supplied for memnstr in %s on line %d", file, line);
+		#else
+		zend_error(E_WARNING, "Invalid arguments supplied for memnstr()");
+		#endif
+		return 0;
+	}
+
+	if (Z_STRLEN_P(haystack) >= Z_STRLEN_P(needle)) {
+		return php_memnstr(Z_STRVAL_P(haystack), Z_STRVAL_P(needle), Z_STRLEN_P(needle), Z_STRVAL_P(haystack) + Z_STRLEN_P(haystack)) ? 1 : 0;
+	}
+
+	return 0;
 }
 
 /**

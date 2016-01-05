@@ -22,5 +22,9 @@
 
 #include <php.h>
 
+void zephir_is_basic_charset(zval *return_value, const zval *param);
+void zephir_escape_multi(zval *return_value, zval *param, const char *escape_char, unsigned int escape_length, char escape_extra, int use_whitelist);
+void zephir_escape_js(zval *return_value, zval *param);
+void zephir_escape_css(zval *return_value, zval *param);
 
 #endif

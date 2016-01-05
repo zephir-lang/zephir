@@ -325,7 +325,6 @@ void zephir_escape_multi(zval *return_value, zval *param, const char *escape_cha
 	} else {
 		RETURN_EMPTY_STRING();
 	}
-
 }
 
 /**

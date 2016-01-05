@@ -405,7 +405,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'double':
-                                        return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);                                        
+                                        return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'variable':
                                         $variableRight = $compilationContext->symbolTable->getVariableForRead($variableRight->getCode(), $compilationContext, $expression);
