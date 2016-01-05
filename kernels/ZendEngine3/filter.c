@@ -38,6 +38,47 @@
 #include <zend_smart_str.h>
 
 /**
+ * Filter alphanum string
+ */
+void zephir_filter_alphanum(zval *return_value, zval *param) {
+
+	unsigned int i;
+	unsigned char ch;
+	smart_str filtered_str = {0};
+	zval copy;
+	int use_copy = 0;
+
+	if (Z_TYPE_P(param) != IS_STRING) {
+		zend_make_printable_zval(param, &copy, &use_copy);
+		if (use_copy) {
+			param = &copy;
+		}
+	}
+
+	for (i = 0; i < Z_STRLEN_P(param); i++) {
+		ch = Z_STRVAL_P(param)[i];
+		if (ch == '\0') {
+			break;
+		}
+		if (isalnum(ch)) {
+			smart_str_appendc(&filtered_str, ch);
+		}
+	}
+
+	if (use_copy) {
+		zval_dtor(param);
+	}
+
+	smart_str_0(&filtered_str);
+
+	if (filtered_str.s) {
+		RETURN_STRING(filtered_str.s);
+	} else {
+		RETURN_EMPTY_STRING();
+	}
+}
+
+/**
  * Check if a string is encoded with ASCII or ISO-8859-1
  */
 void zephir_is_basic_charset(zval *return_value, const zval *param)

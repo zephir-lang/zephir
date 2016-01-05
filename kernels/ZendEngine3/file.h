@@ -33,7 +33,8 @@ void zephir_file_put_contents(zval *return_value, zval *filename, zval *data);
 void zephir_basename(zval *return_value, zval *path TSRMLS_DC);
 void zephir_filemtime(zval *return_value, zval *path);
 int zephir_compare_mtime(zval *filename1, zval *filename2 TSRMLS_DC);
-void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator TSRMLS_DC);
+void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator);
+void zephir_unique_path_key(zval *return_value, zval *path);
 
 #ifdef TSRM_WIN32
 #define ZEPHIR_DIRECTORY_SEPARATOR "\\"

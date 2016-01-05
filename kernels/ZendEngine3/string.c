@@ -279,7 +279,6 @@ int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_l
 	return !memcmp(Z_STRVAL_P(str) + Z_STRLEN_P(str) - compared_length, compared, compared_length);
 }
 
-
 /**
  * Makes a substr like the PHP function. This function SUPPORT negative from and length
  */
@@ -382,6 +381,113 @@ void zephir_substr(zval *return_value, zval *str, long f, long l, int flags)
 	}
 
 	return;
+}
+
+/**
+ * Appends to a smart_str a printable version of a zval
+ */
+static void zephir_append_printable_zval(smart_str *implstr, zval *tmp)
+{
+	switch (Z_TYPE_P(tmp)) {
+
+		case IS_STRING:
+			smart_str_appendl(implstr, Z_STRVAL_P(tmp), Z_STRLEN_P(tmp));
+			break;
+
+		default:
+			smart_str_append(implstr, _zval_get_string_func(tmp));
+			break;
+	}
+}
+
+void zephir_append_printable_array(smart_str *implstr, const zval *value)
+{
+
+	zval           *tmp;
+	zend_array     *arr;
+	HashPosition   pos;
+	unsigned int numelems, i = 0, str_len;
+
+	arr = Z_ARRVAL_P(value);
+	numelems = zend_hash_num_elements(arr);
+
+	smart_str_appendc(implstr, '[');
+
+	if (numelems > 0) {
+
+		ZEND_HASH_FOREACH_VAL(arr, tmp) {
+
+			if (Z_TYPE_P(tmp) == IS_OBJECT) {
+
+			} else {
+				if (Z_TYPE_P(tmp) == IS_ARRAY) {
+					zephir_append_printable_array(implstr, tmp);
+				} else {
+					zephir_append_printable_zval(implstr, tmp);
+				}
+			}
+
+			if (++i != numelems) {
+				smart_str_appendc(implstr, ',');
+			}
+
+		} ZEND_HASH_FOREACH_END();
+
+		/*zend_hash_internal_pointer_reset_ex(arr, &pos);
+		while (zend_hash_get_current_data_ex(arr, (void **) &tmp, &pos) == SUCCESS) {
+
+			if (Z_TYPE_PP(tmp) == IS_OBJECT) {
+				smart_str_appendc(implstr, 'O');
+				{
+					char stmp[MAX_LENGTH_OF_LONG + 1];
+					str_len = slprintf(stmp, sizeof(stmp), "%ld", Z_OBJVAL_PP(tmp).handle);
+					smart_str_appendl(implstr, stmp, str_len);
+				}
+			} else {
+				if (Z_TYPE_PP(tmp) == IS_ARRAY) {
+					zephir_append_printable_array(implstr, *tmp TSRMLS_CC);
+				} else {
+					zephir_append_printable_zval(implstr, tmp);
+				}
+			}
+
+			if (++i != numelems) {
+				smart_str_appendc(implstr, ',');
+			}
+
+			zend_hash_move_forward_ex(arr, &pos);
+		}*/
+	}
+
+	smart_str_appendc(implstr, ']');
+}
+
+/**
+ * Creates a unique key to be used as index in a hash
+ */
+void zephir_unique_key(zval *return_value, const zval *prefix, zval *value)
+{
+
+	smart_str implstr = {0};
+
+	if (Z_TYPE_P(prefix) == IS_STRING) {
+		smart_str_appendl(&implstr, Z_STRVAL_P(prefix), Z_STRLEN_P(prefix));
+	}
+
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		zephir_append_printable_array(&implstr, value);
+	} else {
+		zephir_append_printable_zval(&implstr, value);
+	}
+
+	smart_str_0(&implstr);
+
+	if (implstr.s) {
+		RETURN_STR(implstr.s);
+	} else {
+		smart_str_free(&implstr);
+		RETURN_NULL();
+	}
 }
 
 /**

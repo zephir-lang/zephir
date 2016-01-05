@@ -74,7 +74,10 @@ class ExportSymbol
         ));
         $letStatement->compile($compilationContext);
 
-        $codePrinter->output('if (zephir_set_symbol(' . $symbolVariable->getName() . ', ' . $variable->getName() . ' TSRMLS_CC) == FAILURE){');
+        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+        $variable = $compilationContext->backend->getVariableCode($variable);
+
+        $codePrinter->output('if (zephir_set_symbol(' . $symbol . ', ' . $variable . ' TSRMLS_CC) == FAILURE) {');
         $codePrinter->output("\t" . 'return;');
         $codePrinter->output('}');
     }

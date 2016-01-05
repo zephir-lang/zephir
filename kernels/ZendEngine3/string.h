@@ -23,6 +23,7 @@
 
 #include <php.h>
 #include <Zend/zend.h>
+#include <zend_smart_str.h>
 #include "kernel/main.h"
 
 #define ZEPHIR_TRIM_LEFT  1
@@ -78,5 +79,8 @@ void zephir_crc32(zval *return_value, zval *str);
 void zephir_ucfirst(zval *return_value, zval *s);
 void zephir_addslashes(zval *return_value, zval *str);
 void zephir_stripslashes(zval *return_value, zval *str);
+void zephir_unique_key(zval *return_value, const zval *prefix, zval *value);
+
+void zephir_append_printable_array(smart_str *implstr, const zval *value);
 
 #endif /* ZEPHIR_KERNEL_STRING_H */

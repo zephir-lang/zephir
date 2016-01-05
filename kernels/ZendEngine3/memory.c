@@ -353,6 +353,79 @@ void zephir_deinitialize_memory()
 }
 
 /**
+ * Creates virtual symbol tables dynamically
+ */
+void zephir_create_symbol_table(TSRMLS_D)
+{
+
+	/*zephir_symbol_table *entry;
+	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	HashTable *symbol_table;
+
+#ifndef ZEPHIR_RELEASE
+	if (!zephir_globals_ptr->active_memory) {
+		fprintf(stderr, "ERROR: Trying to create a virtual symbol table without a memory frame");
+		zephir_print_backtrace();
+		return;
+	}
+#endif
+
+	entry = (zephir_symbol_table *) emalloc(sizeof(zephir_symbol_table));
+	entry->scope = zephir_globals_ptr->active_memory;
+	entry->symbol_table = EG(active_symbol_table);
+	entry->prev = zephir_globals_ptr->active_symbol_table;
+	zephir_globals_ptr->active_symbol_table = entry;
+
+	ALLOC_HASHTABLE(symbol_table);
+	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
+	EG(active_symbol_table) = symbol_table;*/
+}
+
+/**
+ * Exports symbols to the active symbol table
+ */
+int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
+{
+
+	/*if (!EG(active_symbol_table)) {
+		zend_rebuild_symbol_table(TSRMLS_C);
+	}
+
+	if (EG(active_symbol_table)) {
+		if (Z_TYPE_P(key_name) == IS_STRING) {
+			Z_ADDREF_P(value);
+			zend_hash_update(EG(active_symbol_table), Z_STRVAL_P(key_name), Z_STRLEN_P(key_name) + 1, &value, sizeof(zval *), NULL);
+			if (EG(exception)) {
+				return FAILURE;
+			}
+		}
+	}*/
+
+	return SUCCESS;
+}
+
+/**
+ * Exports a string symbol to the active symbol table
+ */
+int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
+{
+
+	/*if (!EG(active_symbol_table)) {
+		zend_rebuild_symbol_table(TSRMLS_C);
+	}
+
+	if (&EG(symbol_table)) {
+		Z_ADDREF_P(value);
+		zend_hash_update(&EG(symbol_table), key_name, key_length, &value, sizeof(zval *), NULL);
+		if (EG(exception)) {
+			return FAILURE;
+		}
+	}*/
+
+	return SUCCESS;
+}
+
+/**
  * Cleans the function/method cache up
  */
 int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key *hash_key)

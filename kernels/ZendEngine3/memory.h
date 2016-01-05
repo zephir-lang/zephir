@@ -57,6 +57,10 @@ void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var);
 
 int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 
+void zephir_create_symbol_table(TSRMLS_D);
+int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC);
+int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
+
 #define ZEPHIR_INIT_VAR(z) zephir_memory_alloc(z);
 
 #define ZEPHIR_SINIT_VAR(z) ZVAL_NULL(&z);

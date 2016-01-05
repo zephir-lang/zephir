@@ -317,7 +317,7 @@ void zephir_filemtime(zval *return_value, zval *path)
 /**
  * Replaces directory separators by the virtual separator
  */
-void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator TSRMLS_DC)
+void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator)
 {
 
 	unsigned int i;
@@ -353,4 +353,24 @@ void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_s
 	} else {
 		RETURN_EMPTY_STRING();
 	}
+}
+
+/**
+ * Generates a unique id for a path
+ */
+void zephir_unique_path_key(zval *return_value, zval *path)
+{
+	unsigned long h;
+	char *strKey;
+
+	if (Z_TYPE_P(path) != IS_STRING) {
+		return;
+	}
+
+	h = zend_hash_func(Z_STRVAL_P(path), Z_STRLEN_P(path) + 1);
+
+	strKey = emalloc(24);
+	sprintf(strKey, "v%lu", h);
+
+	RETURN_STRING(strKey);
 }

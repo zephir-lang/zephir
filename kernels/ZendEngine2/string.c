@@ -1090,7 +1090,8 @@ void zephir_append_printable_array(smart_str *implstr, zval *value TSRMLS_DC) {
 /**
  * Creates a unique key to be used as index in a hash
  */
-void zephir_unique_key(zval *return_value, zval *prefix, zval *value TSRMLS_DC) {
+void zephir_unique_key(zval *return_value, zval *prefix, zval *value TSRMLS_DC)
+{
 
 	smart_str implstr = {0};
 
@@ -1112,7 +1113,6 @@ void zephir_unique_key(zval *return_value, zval *prefix, zval *value TSRMLS_DC) 
 		smart_str_free(&implstr);
 		RETURN_NULL();
 	}
-
 }
 
 /**
