@@ -49,7 +49,7 @@ void zephir_filter_alphanum(zval *return_value, zval *param) {
 	int use_copy = 0;
 
 	if (Z_TYPE_P(param) != IS_STRING) {
-		zend_make_printable_zval(param, &copy, &use_copy);
+		use_copy = zend_make_printable_zval(param, &copy);
 		if (use_copy) {
 			param = &copy;
 		}
@@ -72,7 +72,7 @@ void zephir_filter_alphanum(zval *return_value, zval *param) {
 	smart_str_0(&filtered_str);
 
 	if (filtered_str.s) {
-		RETURN_STRING(filtered_str.s);
+		RETURN_STR(filtered_str.s);
 	} else {
 		RETURN_EMPTY_STRING();
 	}

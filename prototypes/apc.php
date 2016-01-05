@@ -1,6 +1,6 @@
 <?php
 
-if (!class_exists('APCIterator')) {
+if (!class_exists('APCIterator', false)) {
 
 /**
  * Class APCIterator
@@ -169,4 +169,3 @@ function apc_bin_load($data, $flags = 0){}
  * @param int $flags
  */
 function apc_bin_loadfile($filename, $context = null, $flags = 0){}
-
