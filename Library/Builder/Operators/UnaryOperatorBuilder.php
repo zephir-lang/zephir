@@ -54,9 +54,15 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
      */
     public function get()
     {
+        if (is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
+            $expr = $this->leftExpression->get();
+        } else {
+            $expr = $this->leftExpression;
+        }
+
         return array(
             'type'       => $this->operator,
-            'left'       => $this->leftExpression->get(),
+            'left'       => $expr,
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char

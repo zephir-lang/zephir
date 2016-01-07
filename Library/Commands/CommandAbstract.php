@@ -97,6 +97,13 @@ abstract class CommandAbstract implements CommandInterface
         }
         $backend = new $className();
         $compiler = new Compiler($config, $logger, $backend);
+        if (isset($params['parser-compiled'])) {
+            if ($params['parser-compiled'] !== 'force') {
+                $compiler->parserCompiled = true;
+            } else {
+                $compiler->parserCompiled = 'force';
+            }
+        }
         $command = $this->getCommand();
         $compiler->$command($this);
     }

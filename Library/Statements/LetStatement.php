@@ -140,6 +140,10 @@ class LetStatement extends StatementAbstract
                 }
             }
 
+            if ($symbolVariable) {
+                $variable = $symbolVariable->getName();
+            }
+
             /**
              * There are four types of assignments
              */

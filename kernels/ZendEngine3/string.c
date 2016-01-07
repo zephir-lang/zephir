@@ -2,7 +2,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -32,12 +32,12 @@
 #include <ext/standard/php_rand.h>
 #include <ext/standard/php_lcg.h>
 #include <ext/standard/php_http.h>
-#include "ext/standard/base64.h"
-#include "ext/standard/md5.h"
-#include "ext/standard/crc32.h"
-#include "ext/standard/url.h"
-#include "ext/standard/html.h"
-#include "ext/date/php_date.h"
+#include <ext/standard/base64.h>
+#include <ext/standard/md5.h>
+#include <ext/standard/crc32.h>
+#include <ext/standard/url.h>
+#include <ext/standard/html.h>
+#include <ext/date/php_date.h>
 
 #ifdef ZEPHIR_USE_PHP_PCRE
 #include <ext/pcre/php_pcre.h>
@@ -155,6 +155,47 @@ void zephir_fast_strtoupper(zval *return_value, zval *str)
 }
 
 /**
+ * Checks if a zval string starts with a zval string
+ */
+int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive)
+{
+
+	int i;
+	int sensitive = 0;
+	char *op1_cursor, *op2_cursor;
+
+	if (Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(compared) != IS_STRING) {
+		return 0;
+	}
+
+	if (!Z_STRLEN_P(compared) || !Z_STRLEN_P(str) || Z_STRLEN_P(compared) > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	if (case_sensitive) {
+		sensitive = zend_is_true(case_sensitive);
+	}
+
+	if (!sensitive) {
+		return !memcmp(Z_STRVAL_P(str), Z_STRVAL_P(compared), Z_STRLEN_P(compared));
+	}
+
+	op1_cursor = Z_STRVAL_P(str);
+	op2_cursor = Z_STRVAL_P(compared);
+	for (i = 0; i < Z_STRLEN_P(compared); i++) {
+
+		if (tolower(*op1_cursor) != tolower(*op2_cursor)) {
+			return 0;
+		}
+
+		op1_cursor++;
+		op2_cursor++;
+	}
+
+	return 1;
+}
+
+/**
  * Checks if a zval string starts with a string
  */
 int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length)
@@ -164,6 +205,78 @@ int zephir_start_with_str(const zval *str, char *compared, unsigned int compared
 	}
 
 	return !memcmp(Z_STRVAL_P(str), compared, compared_length);
+}
+
+/**
+ * Checks if a string starts with other string
+ */
+int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length)
+{
+
+	if (compared_length > str_length) {
+		return 0;
+	}
+
+	return !memcmp(str, compared, compared_length);
+}
+
+/**
+ * Checks if a zval string ends with a zval string
+ */
+int zephir_end_with(const zval *str, const zval *compared, zval *case_sensitive)
+{
+
+	int sensitive = 0;
+	int i;
+	char *op1_cursor, *op2_cursor;
+
+	if (Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(compared) != IS_STRING) {
+		return 0;
+	}
+
+	if (!Z_STRLEN_P(compared) || !Z_STRLEN_P(str) || Z_STRLEN_P(compared) > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	if (case_sensitive) {
+		sensitive = zend_is_true(case_sensitive);
+	}
+
+	if (!sensitive) {
+		return !memcmp(Z_STRVAL_P(str) + Z_STRLEN_P(str) - Z_STRLEN_P(compared), Z_STRVAL_P(compared), Z_STRLEN_P(compared));
+	}
+
+	op1_cursor = Z_STRVAL_P(str) + Z_STRLEN_P(str) - Z_STRLEN_P(compared);
+	op2_cursor = Z_STRVAL_P(compared);
+
+	for (i = 0; i < Z_STRLEN_P(compared); ++i) {
+
+		if (tolower(*op1_cursor) != tolower(*op2_cursor)) {
+			return 0;
+		}
+
+		++op1_cursor;
+		++op2_cursor;
+	}
+
+	return 1;
+}
+
+/**
+ * Checks if a zval string ends with a *char string
+ */
+int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_length)
+{
+
+	if (Z_TYPE_P(str) != IS_STRING) {
+		return 0;
+	}
+
+	if (!compared_length || !Z_STRLEN_P(str) || compared_length > Z_STRLEN_P(str)) {
+		return 0;
+	}
+
+	return !memcmp(Z_STRVAL_P(str) + Z_STRLEN_P(str) - compared_length, compared, compared_length);
 }
 
 /**
@@ -268,6 +381,113 @@ void zephir_substr(zval *return_value, zval *str, long f, long l, int flags)
 	}
 
 	return;
+}
+
+/**
+ * Appends to a smart_str a printable version of a zval
+ */
+static void zephir_append_printable_zval(smart_str *implstr, zval *tmp)
+{
+	switch (Z_TYPE_P(tmp)) {
+
+		case IS_STRING:
+			smart_str_appendl(implstr, Z_STRVAL_P(tmp), Z_STRLEN_P(tmp));
+			break;
+
+		default:
+			smart_str_append(implstr, _zval_get_string_func(tmp));
+			break;
+	}
+}
+
+void zephir_append_printable_array(smart_str *implstr, const zval *value)
+{
+
+	zval           *tmp;
+	zend_array     *arr;
+	HashPosition   pos;
+	unsigned int numelems, i = 0, str_len;
+
+	arr = Z_ARRVAL_P(value);
+	numelems = zend_hash_num_elements(arr);
+
+	smart_str_appendc(implstr, '[');
+
+	if (numelems > 0) {
+
+		ZEND_HASH_FOREACH_VAL(arr, tmp) {
+
+			if (Z_TYPE_P(tmp) == IS_OBJECT) {
+
+			} else {
+				if (Z_TYPE_P(tmp) == IS_ARRAY) {
+					zephir_append_printable_array(implstr, tmp);
+				} else {
+					zephir_append_printable_zval(implstr, tmp);
+				}
+			}
+
+			if (++i != numelems) {
+				smart_str_appendc(implstr, ',');
+			}
+
+		} ZEND_HASH_FOREACH_END();
+
+		/*zend_hash_internal_pointer_reset_ex(arr, &pos);
+		while (zend_hash_get_current_data_ex(arr, (void **) &tmp, &pos) == SUCCESS) {
+
+			if (Z_TYPE_PP(tmp) == IS_OBJECT) {
+				smart_str_appendc(implstr, 'O');
+				{
+					char stmp[MAX_LENGTH_OF_LONG + 1];
+					str_len = slprintf(stmp, sizeof(stmp), "%ld", Z_OBJVAL_PP(tmp).handle);
+					smart_str_appendl(implstr, stmp, str_len);
+				}
+			} else {
+				if (Z_TYPE_PP(tmp) == IS_ARRAY) {
+					zephir_append_printable_array(implstr, *tmp TSRMLS_CC);
+				} else {
+					zephir_append_printable_zval(implstr, tmp);
+				}
+			}
+
+			if (++i != numelems) {
+				smart_str_appendc(implstr, ',');
+			}
+
+			zend_hash_move_forward_ex(arr, &pos);
+		}*/
+	}
+
+	smart_str_appendc(implstr, ']');
+}
+
+/**
+ * Creates a unique key to be used as index in a hash
+ */
+void zephir_unique_key(zval *return_value, const zval *prefix, zval *value)
+{
+
+	smart_str implstr = {0};
+
+	if (Z_TYPE_P(prefix) == IS_STRING) {
+		smart_str_appendl(&implstr, Z_STRVAL_P(prefix), Z_STRLEN_P(prefix));
+	}
+
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		zephir_append_printable_array(&implstr, value);
+	} else {
+		zephir_append_printable_zval(&implstr, value);
+	}
+
+	smart_str_0(&implstr);
+
+	if (implstr.s) {
+		RETURN_STR(implstr.s);
+	} else {
+		smart_str_free(&implstr);
+		RETURN_NULL();
+	}
 }
 
 /**
@@ -376,6 +596,60 @@ void zephir_fast_join_str(zval *return_value, char *glue, unsigned int glue_leng
 /**
  * Convert dash/underscored texts returning camelized
  */
+void zephir_camelize(zval *return_value, const zval *str)
+{
+
+	int i, len, first = 0;
+	smart_str camelize_str = {0};
+	char *marker, ch;
+
+	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
+		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
+		RETURN_EMPTY_STRING();
+	}
+
+	marker = Z_STRVAL_P(str);
+	len    = Z_STRLEN_P(str);
+
+	for (i = 0; i < len; i++) {
+
+		ch = marker[i];
+
+		if (first == 0) {
+
+			if (ch == '-' || ch == '_') {
+				continue;
+			}
+
+			first = 1;
+			smart_str_appendc(&camelize_str, toupper(ch));
+			continue;
+		}
+
+		if (ch == '-' || ch == '_') {
+			if (i != (len - 1)) {
+				i++;
+				ch = marker[i];
+				smart_str_appendc(&camelize_str, toupper(ch));
+			}
+			continue;
+		}
+
+		smart_str_appendc(&camelize_str, tolower(ch));
+	}
+
+	smart_str_0(&camelize_str);
+
+	if (camelize_str.s) {
+		RETURN_STR(camelize_str.s);
+	} else {
+		RETURN_EMPTY_STRING();
+	}
+}
+
+/**
+ * Convert a camelized to a dash/underscored texts
+ */
 void zephir_uncamelize(zval *return_value, const zval *str)
 {
 	unsigned int i;
@@ -383,7 +657,7 @@ void zephir_uncamelize(zval *return_value, const zval *str)
 	char *marker, ch;
 
 	if (Z_TYPE_P(str) != IS_STRING) {
-		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
+		zend_error(E_WARNING, "Invalid arguments supplied for uncamelize()");
 		return;
 	}
 
@@ -410,6 +684,28 @@ void zephir_uncamelize(zval *return_value, const zval *str)
 	} else {
 		RETURN_EMPTY_STRING();
 	}
+}
+
+/**
+ * Check if a string is contained into another
+ */
+int zephir_memnstr(const zval *haystack, const zval *needle ZEPHIR_DEBUG_PARAMS)
+{
+
+	if (Z_TYPE_P(haystack) != IS_STRING || Z_TYPE_P(needle) != IS_STRING) {
+		#ifndef ZEPHIR_RELEASE
+		zend_error(E_WARNING, "Invalid arguments supplied for memnstr in %s on line %d", file, line);
+		#else
+		zend_error(E_WARNING, "Invalid arguments supplied for memnstr()");
+		#endif
+		return 0;
+	}
+
+	if (Z_STRLEN_P(haystack) >= Z_STRLEN_P(needle)) {
+		return php_memnstr(Z_STRVAL_P(haystack), Z_STRVAL_P(needle), Z_STRLEN_P(needle), Z_STRVAL_P(haystack) + Z_STRLEN_P(haystack)) ? 1 : 0;
+	}
+
+	return 0;
 }
 
 /**

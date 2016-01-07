@@ -68,7 +68,10 @@ class CamelizeOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_camelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

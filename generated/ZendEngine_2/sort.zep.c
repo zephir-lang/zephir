@@ -1,0 +1,96 @@
+
+#ifdef HAVE_CONFIG_H
+#include "../ext_config.h"
+#endif
+
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
+
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
+
+#include "kernel/main.h"
+#include "kernel/memory.h"
+#include "kernel/array.h"
+#include "kernel/operators.h"
+#include "kernel/fcall.h"
+
+
+ZEPHIR_INIT_CLASS(Test_Sort) {
+
+	ZEPHIR_REGISTER_CLASS(Test, Sort, test, sort, test_sort_method_entry, 0);
+
+	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Sort, quick) {
+
+	zend_bool _1;
+	zephir_fcall_cache_entry *_8 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS, i = 0, length = 0, pivot = 0, item = 0, _2, _3;
+	zval *arr_param = NULL, *left = NULL, *right = NULL, *_0, *_7 = NULL, *_10, *_11 = NULL, *_4$$4 = NULL, *_5$$5 = NULL, *_6$$6 = NULL;
+	zval *arr = NULL, *_9;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &arr_param);
+
+	zephir_get_arrval(arr, arr_param);
+
+
+	length = zephir_fast_count_int(arr TSRMLS_CC);
+	if (length <= 1) {
+		RETURN_CTOR(arr);
+	}
+	ZEPHIR_OBS_VAR(_0);
+	zephir_array_fetch_long(&_0, arr, 0, PH_NOISY, "test/sort.zep", 18 TSRMLS_CC);
+	pivot = zephir_get_intval(_0);
+	ZEPHIR_INIT_VAR(left);
+	array_init(left);
+	ZEPHIR_INIT_VAR(right);
+	array_init(right);
+	_3 = (length - 1);
+	_2 = 1;
+	_1 = 0;
+	if (_2 <= _3) {
+		while (1) {
+			if (_1) {
+				_2++;
+				if (!(_2 <= _3)) {
+					break;
+				}
+			} else {
+				_1 = 1;
+			}
+			i = _2;
+			ZEPHIR_OBS_NVAR(_4$$4);
+			zephir_array_fetch_long(&_4$$4, arr, i, PH_NOISY, "test/sort.zep", 23 TSRMLS_CC);
+			item = zephir_get_intval(_4$$4);
+			if (item < pivot) {
+				ZEPHIR_INIT_NVAR(_5$$5);
+				ZVAL_LONG(_5$$5, item);
+				zephir_array_append(&left, _5$$5, PH_SEPARATE, "test/sort.zep", 25);
+			} else {
+				ZEPHIR_INIT_NVAR(_6$$6);
+				ZVAL_LONG(_6$$6, item);
+				zephir_array_append(&right, _6$$6, PH_SEPARATE, "test/sort.zep", 27);
+			}
+		}
+	}
+	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 66, left);
+	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_9);
+	zephir_create_array(_9, 1, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_10);
+	ZVAL_LONG(_10, pivot);
+	zephir_array_fast_append(_9, _10);
+	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 66, right);
+	zephir_check_call_status();
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 67, _7, _9, _11);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+

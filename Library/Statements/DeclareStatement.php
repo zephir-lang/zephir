@@ -22,6 +22,7 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\LiteralCompiledExpression;
 
 /**
@@ -47,8 +48,9 @@ class DeclareStatement extends StatementAbstract
         $symbolTable = $compilationContext->symbolTable;
 
         foreach ($statement['variables'] as $variable) {
-            if ($symbolTable->hasVariable($variable['variable'])) {
-                throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
+            $varName = $variable['variable'];
+            if ($symbolTable->hasVariableInBranch($varName, $compilationContext->branchManager->getCurrentBranch())) {
+                throw new CompilerException("Variable '" . $varName . "' is already defined", $variable);
             }
 
             $currentType = $statement['data-type'];
@@ -58,7 +60,7 @@ class DeclareStatement extends StatementAbstract
              */
             if ($typeInference) {
                 if ($currentType == 'variable') {
-                    $type = $typeInference->getInferedType($variable['variable']);
+                    $type = $typeInference->getInferedType($varName);
                     if (is_string($type)) {
                         $currentType = $type;
                     }
@@ -82,10 +84,11 @@ class DeclareStatement extends StatementAbstract
              * Variables are added to the symbol table
              */
             if (isset($variable['expr'])) {
-                $symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext, $variable['expr']);
+                $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext, $variable['expr']);
             } else {
-                $symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext);
+                $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
             }
+            $varName = $symbolVariable->getName();
 
             /**
              * Set the node where the variable is declared
@@ -102,17 +105,13 @@ class DeclareStatement extends StatementAbstract
             //$symbolVariable->increaseVariantIfNull();
 
             if (isset($variable['expr'])) {
-                $letStatement = new LetStatement(array(
-                    'type' => 'let',
-                    'assignments' => array(
-                        array(
-                            'assign-type' => 'variable',
-                            'variable' => $variable['variable'],
-                            'operator' => 'assign',
-                            'expr' => $variable['expr']
-                        )
-                    )
+                $builder = BuilderFactory::getInstance();
+                $letBuilder = $builder->statements()->let(array(
+                    $builder->operators()
+                        ->assignVariable($varName, $builder->raw($variable['expr']))
                 ));
+
+                $letStatement = new LetStatement($letBuilder->build());
                 $letStatement->compile($compilationContext);
             } else {
                 $symbolVariable->enableDefaultAutoInitValue();

@@ -21,7 +21,8 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
-use Zephir\Optimizers\EvalExpression;
+use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
@@ -72,6 +73,8 @@ class TryCatchStatement extends StatementAbstract
             $codePrinter->output('if (EG(exception)) {');
             $codePrinter->increaseLevel();
 
+            $exprBuilder = BuilderFactory::getInstance();
+
             foreach ($this->_statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
@@ -94,19 +97,20 @@ class TryCatchStatement extends StatementAbstract
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
-                    $ifCheck = new IfStatementBuilder(
-                        new BinaryOperatorBuilder(
-                            'instanceof',
-                            new VariableBuilder($variable->getName()),
-                            new VariableBuilder($class['value'])
-                        ),
-                        new StatementsBlockBuilder(array_merge(
-                            array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_C);')),
+                    $ifCheck = $exprBuilder->statements()->ifX()
+                        ->setCondition(
+                            $exprBuilder->operators()->binary(
+                                BinaryOperator::OPERATOR_INSTANCEOF,
+                                $exprBuilder->variable($variable->getName()),
+                                $exprBuilder->variable($class['value'])
+                            )
+                        )
+                        ->setStatements($exprBuilder->statements()->block(array_merge(
+                            array($exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);')),
                             isset($catch['statements']) ? $catch['statements'] : array()
-                        ), true)
-                    );
+                        )));
 
-                    $ifStatement = new IfStatement($ifCheck->get());
+                    $ifStatement = new IfStatement($ifCheck->build());
                     $ifStatement->compile($compilationContext);
                 }
 

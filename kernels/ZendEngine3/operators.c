@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -309,9 +309,9 @@ long zephir_get_intval_ex(const zval *op)
 			return (long) Z_DVAL_P(op);
 
 		case IS_STRING: {
-			long long_value = 0;
-			double double_value = 0;
 			zend_uchar type;
+			double double_value = 0;
+			zend_long long_value = 0;
 
 			ASSUME(Z_STRVAL_P(op) != NULL);
 			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0);
@@ -334,26 +334,31 @@ long zephir_get_intval_ex(const zval *op)
 double zephir_get_doubleval_ex(const zval *op)
 {
 	int type;
-	long long_value = 0;
+	zend_long long_value = 0;
 	double double_value = 0;
 
 	switch (Z_TYPE_P(op)) {
+
         case IS_ARRAY:
             return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
-            break;
 
 	    case IS_CALLABLE:
 	    case IS_RESOURCE:
 	    case IS_OBJECT:
 	        return (double) 1;
+
 		case IS_LONG:
 			return (double) Z_LVAL_P(op);
+
 		case IS_TRUE:
 			return (double) 1;
+
 		case IS_FALSE:
 			return (double) 0;
+
 		case IS_DOUBLE:
 			return Z_DVAL_P(op);
+
 		case IS_STRING:
 			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0))) {
 				if (type == IS_LONG) {
@@ -377,25 +382,31 @@ double zephir_get_doubleval_ex(const zval *op)
 zend_bool zephir_get_boolval_ex(const zval *op)
 {
 	int type;
-	long long_value = 0;
+	zend_long long_value = 0;
 	double double_value = 0;
 
 	switch (Z_TYPE_P(op)) {
+
         case IS_ARRAY:
             return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (zend_bool) 1 : 0;
-            break;
+
 	    case IS_CALLABLE:
 	    case IS_RESOURCE:
 	    case IS_OBJECT:
 	        return (zend_bool) 1;
+
 		case IS_LONG:
 			return (Z_LVAL_P(op) ? (zend_bool) 1 : 0);
+
 		case IS_TRUE:
 			return 1;
+
 		case IS_FALSE:
 			return 0;
+
 		case IS_DOUBLE:
 			return (Z_DVAL_P(op) ? (zend_bool) 1 : 0);
+
 		case IS_STRING:
 			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0))) {
 				if (type == IS_LONG) {
@@ -421,13 +432,17 @@ int zephir_is_numeric_ex(const zval *op)
 	int type;
 
 	switch (Z_TYPE_P(op)) {
+
 		case IS_LONG:
 			return 1;
+
 		case IS_TRUE:
 		case IS_FALSE:
 			return 0;
+
 		case IS_DOUBLE:
 			return 1;
+
 		case IS_STRING:
 			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), NULL, NULL, 0))) {
 				if (type == IS_LONG || type == IS_DOUBLE) {

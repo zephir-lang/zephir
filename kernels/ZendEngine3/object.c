@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -112,7 +112,7 @@ void zephir_get_called_class(zval *return_value)
 	}
 }
 
-zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type)
+zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t length, int fetch_type)
 {
 	zend_class_entry *retval;
 	zend_string *str = zend_string_init(class_name, length, 0);
@@ -1022,12 +1022,22 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 	return SUCCESS;
 }
 
+/* Imported since PHP is so nice to define this in a .c file... */
+typedef struct _zend_closure {
+	zend_object       std;
+	zend_function     func;
+	zval              this_ptr;
+	zend_class_entry *called_scope;
+	void (*orig_internal_handler)(INTERNAL_FUNCTION_PARAMETERS);
+} zend_closure;
+
 /**
  * Creates a closure
  */
 int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length)
 {
 	zend_function *function_ptr;
+	zend_closure *closure;
 
 	if ((function_ptr = zend_hash_str_find_ptr(&ce->function_table, method_name, method_length)) == NULL) {
 		ZVAL_NULL(return_value);
@@ -1035,6 +1045,9 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 	}
 
 	zend_create_closure(return_value, function_ptr, ce, ce, this_ptr);
+	// Make sure we can use a closure multiple times
+	closure = (zend_closure*)Z_OBJ_P(return_value);
+	closure->func.internal_function.handler = closure->orig_internal_handler;
 	return SUCCESS;
 }
 
@@ -1062,4 +1075,66 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 	}
 
 	return SUCCESS;
+}
+
+/**
+ * Creates a new instance dynamically calling constructor with parameters
+ */
+int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params TSRMLS_DC)
+{
+	int outcome;
+	zend_class_entry *ce;
+
+	if (Z_TYPE_P(class_name) != IS_STRING) {
+		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Invalid class name") TSRMLS_CC);
+		return FAILURE;
+	}
+
+	if (Z_TYPE_P(params) != IS_ARRAY) {
+		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Instantiation parameters must be an array") TSRMLS_CC);
+		return FAILURE;
+	}
+
+	ce = zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_AUTO);
+	if (!ce) {
+		ZVAL_NULL(return_value);
+		return FAILURE;
+	}
+
+	object_init_ex(return_value, ce);
+	outcome = SUCCESS;
+
+	if (zephir_has_constructor_ce(ce)) {
+
+		int param_count = zend_hash_num_elements(Z_ARRVAL_P(params));
+		zval *static_params[10];
+		zval **params_ptr, **params_arr = NULL;
+
+		if (param_count > 0) {
+			zval *item;
+			int i = 0;
+
+			if (likely(param_count) <= 10) {
+				params_ptr = static_params;
+			} else {
+				params_arr = emalloc(param_count * sizeof(zval*));
+				params_ptr = params_arr;
+			}
+
+			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(params), item) {
+				params_ptr[i] = item;
+			} ZEND_HASH_FOREACH_END();
+
+		} else {
+			params_ptr = NULL;
+		}
+
+		outcome = zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, param_count, params_ptr);
+
+		if (unlikely(params_arr != NULL)) {
+			efree(params_arr);
+		}
+	}
+
+	return outcome;
 }

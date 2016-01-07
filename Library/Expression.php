@@ -24,6 +24,7 @@ use Zephir\Operators\Arithmetical\SubOperator;
 use Zephir\Operators\Arithmetical\MulOperator;
 use Zephir\Operators\Arithmetical\DivOperator;
 use Zephir\Operators\Arithmetical\ModOperator;
+use Zephir\Operators\Other\ShortTernaryOperator;
 use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 use Zephir\Operators\Logical\AndOperator;
@@ -335,7 +336,17 @@ class Expression
                 return new LiteralCompiledExpression('char', $expression['value'], $expression);
 
             case 'variable':
-                return new CompiledExpression('variable', $expression['value'], $expression);
+                $var = $compilationContext->symbolTable->getVariable($expression['value']);
+                if ($var) {
+                    if ($var->getRealName() == 'this') {
+                        $var = 'this';
+                    } else {
+                        $var = $var->getName();
+                    }
+                } else {
+                    $var = $expression['value'];
+                }
+                return new CompiledExpression('variable', $var, $expression);
 
             case 'constant':
                 $compilableExpression = new Constants();
@@ -542,6 +553,12 @@ class Expression
             case 'ternary':
                 $compilableExpression = new TernaryOperator();
                 break;
+
+            case 'short-ternary':
+                $expr = new ShortTernaryOperator();
+                $expr->setReadOnly($this->isReadOnly());
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
 
             case 'likely':
                 if (!$this->_evalMode) {

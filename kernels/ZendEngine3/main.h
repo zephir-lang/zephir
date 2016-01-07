@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -207,7 +207,10 @@ int zephir_fast_count_int(zval *value);
 
 int zephir_is_callable(zval *var);
 int zephir_is_scalar(zval *var);
+
+int zephir_function_exists(const zval *function_name);
 int zephir_function_exists_ex(const char *func_name, unsigned int func_len);
+
 zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len);
 
 /* types */
@@ -275,6 +278,8 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 	ZVAL_COPY(return_value, _constant_ptr); \
 } while(0)
 
+#define ZEPHIR_GET_IMKEY(var, it) it->funcs->get_current_key(it, &var);
+
 /* Declare class constants */
 int zephir_declare_class_constant_null(zend_class_entry *ce, const char *name, size_t name_length);
 int zephir_declare_class_constant_long(zend_class_entry *ce, const char *name, size_t name_length, zend_long value);
@@ -282,6 +287,11 @@ int zephir_declare_class_constant_bool(zend_class_entry *ce, const char *name, s
 int zephir_declare_class_constant_double(zend_class_entry *ce, const char *name, size_t name_length, double value);
 int zephir_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length);
 int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value);
+
+#define zephir_is_php_version(id) (PHP_VERSION_ID / 10 == id / 10 ?  1 : 0)
+
+/** Method declaration for API generation */
+#define ZEPHIR_DOC_METHOD(class_name, method)
 
 #ifndef ZEPHIR_RELEASE
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line

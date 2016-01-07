@@ -65,11 +65,74 @@ class Backend extends BackendZendEngine2
         switch ($type) {
             case 'zend_ulong':
                 return array('', 'zend_ulong');
+
             case 'zend_string':
                 return array('*', 'zend_string');
         }
+
         list ($pointer, $code) = parent::getTypeDefinition($type);
+
         return array($pointer, $code);
+    }
+
+    /**
+     * Checks the type of a variable using the ZendEngine constants
+     *
+     * @param Variable $variableVariable
+     * @param string $operator
+     * @param string $value
+     * @param CompilationContext $context
+     */
+    public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
+    {
+        $variableName = $this->getVariableCode($variableVariable);
+
+        switch ($value) {
+            case 'array':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY';
+                break;
+
+            case 'object':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_OBJECT';
+                break;
+
+            case 'null':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_NULL';
+                break;
+
+            case 'string':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_STRING';
+                break;
+
+            case 'int':
+            case 'long':
+            case 'integer':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG';
+                break;
+
+            case 'double':
+            case 'float':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_DOUBLE';
+                break;
+
+            case 'boolean':
+            case 'bool':
+                $condition = '(Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_TRUE || Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_FALSE)';
+                break;
+
+            case 'resource':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_RESOURCE';
+                break;
+
+            case 'callable':
+                $condition = 'zephir_is_callable(' . $variableName . ' TSRMLS_CC) ' . $operator . ' 1';
+                break;
+
+            default:
+                throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
+        }
+
+        return $condition;
     }
 
     public function onPreInitVar($method, CompilationContext $context)
@@ -122,11 +185,11 @@ class Backend extends BackendZendEngine2
 
         if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
-            if ($variable->getName() == '__$null') {
+            if ($variable->getRealname() == '__$null') {
                 return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
-            } else if ($variable->getName() == '__$true') {
+            } else if ($variable->getRealname() == '__$true') {
                 return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);';
-            } else if ($variable->getName() == '__$false') {
+            } else if ($variable->getRealname() == '__$false') {
                 return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);';
             }
             return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
@@ -189,17 +252,21 @@ class Backend extends BackendZendEngine2
     public function declareConstant($type, $name, $value, CompilationContext $context)
     {
         $ce = $context->classDefinition->getClassEntry($context);
+
         $dType = null;
         switch ($type) {
             case 'bool':
                 $value = $value == 'false' ? '0' : 1;
                 break;
+
             case 'long':
             case 'int':
                 $dType = 'long';
                 break;
+
             case 'double':
                 break;
+
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
@@ -208,6 +275,7 @@ class Backend extends BackendZendEngine2
                 $dType = 'string';
                 break;
         }
+
         if (!isset($dType)) {
             $dType = $type;
         }
@@ -322,17 +390,21 @@ class Backend extends BackendZendEngine2
             case 'ulong':
                 $type = 'long';
                 break;
+
             case 'double':
                 $type = 'double';
                 break;
+
             case 'string':
                 $type = 'stringl';
                 break;
+
             case 'variable':
             case 'array':
                 $type = 'zval';
                 break;
         }
+
         if (!$type) {
             throw new CompilerException("Unknown type mapping: " . $value->getType());
         }
@@ -345,6 +417,7 @@ class Backend extends BackendZendEngine2
                 $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
             }
         }
+
         if ($type == 'stringl') {
             if ($value instanceof Variable) {
                 $valueStr = 'Z_STRVAL_P(' . $this->getVariableCode($value) . '), Z_STRLEN_P(' . $this->getVariableCode($value) . ')';
@@ -368,6 +441,7 @@ class Backend extends BackendZendEngine2
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
+
         return $output;
     }
 
@@ -477,7 +551,8 @@ class Backend extends BackendZendEngine2
         if ($value == 'null' || $value == 'true' || $value == 'false') {
             $varName = '__$' . $value;
             if (!$context->symbolTable->hasVariable($varName)) {
-                $tempVariable = $context->symbolTable->addVariable('variable', $varName, $context);
+                $tempVariable = new Variable('variable', $varName, $context->currentBranch, null);
+                $context->symbolTable->addRawVariable($tempVariable);
             }
             $tempVariable = $context->symbolTable->getVariableForWrite($varName, $context);
             $tempVariable->increaseUses();
@@ -488,18 +563,22 @@ class Backend extends BackendZendEngine2
                 $tempVariable->setDynamicTypes('bool');
             }
             $value = $this->getVariableCode($tempVariable);
-        } else if ($value instanceof CompiledExpression) {
-            if ($value->getType() == 'array') {
-                $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
-            } else if ($value->getType() == 'variable') {
-                $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
-            } else {
-                return $value->getCode();
+        } else {
+            if ($value instanceof CompiledExpression) {
+                if ($value->getType() == 'array') {
+                    $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
+                } else if ($value->getType() == 'variable') {
+                    $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
+                } else {
+                    return $value->getCode();
+                }
             }
         }
+
         if ($value instanceof Variable) {
             $value = $this->getVariableCode($value);
         }
+
         return $value;
     }
 
@@ -651,7 +730,7 @@ class Backend extends BackendZendEngine2
     {
         $compilationContext->codePrinter->output('zval *ZEPHIR_TMP_ITERATOR_PTR;');
         $compilationContext->codePrinter->output('ZEPHIR_TMP_ITERATOR_PTR = ' . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
-        $this->copyOnWrite($targetVariable, '(ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
+        $compilationContext->codePrinter->output('ZVAL_COPY(' . $this->getVariableCode($targetVariable) . ', ZEPHIR_TMP_ITERATOR_PTR);');
     }
 
     public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)

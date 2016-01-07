@@ -1,6 +1,0 @@
-#!/bin/bash
-git submodule update --init
-cd json-c
-sh autogen.sh
-./configure
-make && sudo make install

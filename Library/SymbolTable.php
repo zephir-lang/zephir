@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Variable;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 
@@ -31,16 +32,31 @@ class SymbolTable
 {
     protected $mustGrownStack = false;
 
-    protected $variables = array();
+    protected $branchVariables = array();
 
-    protected $tempVariable = 0;
+    protected $tempVarCount = 0;
 
-    protected $tempVariables = array();
+    protected $branchTempVariables = array();
 
     /**
      * @var LocalContextPass
      */
     protected $localContext;
+
+    protected $compilationContext;
+
+    public function resolveVariableToBranch($name, $compilationContext)
+    {
+        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+        do {
+            $currentId = $currentBranch->getUniqueId();
+            if (isset($this->branchVariables[$currentId]) && isset($this->branchVariables[$currentId][$name])) {
+                return $currentBranch;
+            }
+            $currentBranch = $currentBranch->getParentBranch();
+        } while ($currentBranch != null);
+        return null;
+    }
 
     /**
      * SymbolTable
@@ -49,6 +65,9 @@ class SymbolTable
      */
     public function __construct(CompilationContext $compilationContext)
     {
+        /* The variables are registered in branch 1, which is the external branch */
+        $this->compilationContext = $compilationContext;
+        $this->branchVariables[1] = array();
         /* this_ptr */
         $thisVar = new Variable('variable', 'this', $compilationContext->currentBranch);
         $thisVar->setIsInitialized(true, $compilationContext, array());
@@ -56,17 +75,17 @@ class SymbolTable
         $thisVar->setReadOnly(true);
         $thisVar->setLowName('this_ptr');
         $thisVar->setDynamicTypes('object');
-        $this->variables['this'] = $thisVar;
+        $this->branchVariables[1]['this'] = $thisVar;
 
         $returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
         $returnValue->setIsInitialized(true, $compilationContext, array());
         $returnValue->increaseUses();
-        $this->variables['return_value'] = $returnValue;
+        $this->branchVariables[1]['return_value'] = $returnValue;
 
         $returnValue = new Variable('variable', 'return_value_ptr', $compilationContext->currentBranch);
         $returnValue->setIsInitialized(true, $compilationContext, array());
         $returnValue->increaseUses();
-        $this->variables['return_value_ptr'] = $returnValue;
+        $this->branchVariables[1]['return_value_ptr'] = $returnValue;
     }
 
     /**
@@ -85,9 +104,19 @@ class SymbolTable
      * @param string $name
      * @return boolean
      */
-    public function hasVariable($name)
+    public function hasVariable($name, $compilationContext = null)
     {
-        return isset($this->variables[$name]);
+        return $this->getVariable($name, $compilationContext ?: $this->compilationContext) !== false;
+    }
+
+
+    public function hasVariableInBranch($name, $compareBranch, $compilationContext = null)
+    {
+        $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
+        if (!$branch || $branch != $compareBranch) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -101,7 +130,17 @@ class SymbolTable
      */
     public function addVariable($type, $name, CompilationContext $compilationContext, $defaultValue = null)
     {
-        $variable = new Variable($type, $name, $compilationContext->currentBranch, $defaultValue);
+        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+        $branchId = $currentBranch->getUniqueId();
+        if ($this->isSuperGlobal($name) || $type == 'zephir_fcall_cache_entry') {
+            $branchId = 1;
+        }
+        $varName = $name;
+        if ($branchId > 1 && $currentBranch->getType() != Branch::TYPE_ROOT) {
+            $varName = $name . Variable::BRANCH_MAGIC . $branchId;
+        }
+
+        $variable = new Variable($type, $varName, $compilationContext->currentBranch, $defaultValue);
         if ($type == 'variable') {
             if ($this->localContext) {
                 /**
@@ -112,19 +151,27 @@ class SymbolTable
                 }
             }
         }
-        $this->variables[$name] = $variable;
+
+
+        if (!isset($this->branchVariables[$branchId])) {
+            $this->branchVariables[$branchId] = array();
+        }
+        $this->branchVariables[$branchId][$name] = $variable;
         return $variable;
     }
 
     /**
-     * Adds a raw variable to the symbol table
+     * Adds a raw variable to the symbol table (root branch)
      *
      * @param Variable $variable
      * @return Variable
      */
     public function addRawVariable(Variable $variable)
     {
-        $this->variables[$variable->getName()] = $variable;
+        if (!isset($this->branchVariables[1])) {
+            $this->branchVariables[1] = array();
+        }
+        $this->branchVariables[1][$variable->getName()] = $variable;
         return $variable;
     }
 
@@ -134,13 +181,24 @@ class SymbolTable
      * @param $name
      * @return \Zephir\Variable|bool
      */
-    public function getVariable($name)
+    public function getVariable($name, $compilationContext = null)
     {
-        if (isset($this->variables[$name])) {
-            return $this->variables[$name];
+        /* Check if the variable already is referencing a branch */
+        $pos = strpos($name, Variable::BRANCH_MAGIC);
+        if ($pos > -1) {
+            $branchId = intval(substr($name, $pos + strlen(Variable::BRANCH_MAGIC)));
+            $name = substr($name, 0, $pos);
+        } else {
+            $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
+            if (!$branch) {
+                return false;
+            }
+            $branchId = $branch->getUniqueId();
         }
-
-        return false;
+        if (!isset($this->branchVariables[$branchId]) || !isset($this->branchVariables[$branchId][$name])) {
+            return false;
+        }
+        return $this->branchVariables[$branchId][$name];
     }
 
     /**
@@ -150,7 +208,21 @@ class SymbolTable
      */
     public function getVariables()
     {
-        return $this->variables;
+        $ret = array();
+        foreach ($this->branchVariables as $branchId => $vars) {
+            foreach ($vars as $var) {
+                $ret[$var->getName()] = $var;
+            }
+        }
+        return $ret;
+    }
+
+    public function getVariablesByBranch($branchId)
+    {
+        if (isset($this->branchVariables[$branchId])) {
+            return $this->branchVariables[$branchId];
+        }
+        return null;
     }
 
     /**
@@ -195,7 +267,7 @@ class SymbolTable
                 $variable->setIsInitialized(true, $compilationContext, $statement);
                 $variable->setDynamicTypes('array');
                 $variable->setIsExternal(true);
-                $this->variables[$name] = $variable;
+                $this->addRawVariable($variable);
             } else {
                 $variable = $this->getVariable($name);
             }
@@ -366,7 +438,7 @@ class SymbolTable
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
                 $superVar->setUsed(true, $statement);
-                $this->variables[$name] = $superVar;
+                $this->addRawVariable($superVar);
                 return $superVar;
             }
         }
@@ -419,7 +491,7 @@ class SymbolTable
                 $superVar->increaseUses();
                 $superVar->setIsExternal(true);
                 $superVar->setUsed(true, $statement);
-                $this->variables[$name] = $superVar;
+                $this->addRawVariable($superVar);
                 return $superVar;
             }
         }
@@ -469,12 +541,15 @@ class SymbolTable
      * @param string $location
      * @param Variable $variable
      */
-    protected function registerTempVariable($type, $location, Variable $variable)
+    protected function registerTempVariable($type, $location, Variable $variable, $compilationContext = null)
     {
-        if (!isset($this->tempVariables[$location][$type])) {
-            $this->tempVariables[$location][$type] = array();
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        if (!isset($this->branchTempVariables[$branchId][$location][$type])) {
+            $this->branchTempVariables[$branchId][$location][$type] = array();
         }
-        $this->tempVariables[$location][$type][] = $variable;
+        $this->branchTempVariables[$branchId][$location][$type][] = $variable;
     }
 
     /**
@@ -484,10 +559,13 @@ class SymbolTable
      * @param string $location
      * @return Variable
      */
-    protected function reuseTempVariable($type, $location)
+    protected function reuseTempVariable($type, $location, $compilationContext = null)
     {
-        if (isset($this->tempVariables[$location][$type])) {
-            foreach ($this->tempVariables[$location][$type] as $variable) {
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        if (isset($this->branchTempVariables[$branchId][$location][$type])) {
+            foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
                 if (!$variable->isDoublePointer()) {
                     if ($variable->isIdle()) {
                         $variable->setIdle(false);
@@ -499,6 +577,11 @@ class SymbolTable
         return null;
     }
 
+    public function getNextTempVar($compilationContext = null)
+    {
+        return $this->tempVarCount++;
+    }
+
     /**
      * Returns a temporal variable
      *
@@ -508,7 +591,10 @@ class SymbolTable
      */
     public function getTempVariable($type, CompilationContext $compilationContext)
     {
-        $tempVar = $this->tempVariable++;
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $compilationContext);
         $variable->setTemporal(true);
         return $variable;
@@ -533,7 +619,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -568,7 +654,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -602,7 +688,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -636,7 +722,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->increaseUses();
@@ -670,7 +756,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->increaseUses();
@@ -701,7 +787,7 @@ class SymbolTable
             return $variable;
         }*/
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -730,7 +816,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -760,7 +846,8 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->tempVariable++;
+
+        $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -779,6 +866,7 @@ class SymbolTable
      */
     public function getTemporalVariables()
     {
+        exit("TBI");
         return $this->tempVariables;
     }
 
@@ -790,11 +878,21 @@ class SymbolTable
      */
     public function markTemporalVariablesIdle(CompilationContext $compilationContext)
     {
-        $branch = $compilationContext->currentBranch;
-        foreach ($this->tempVariables as $location => $typeVariables) {
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        if (!isset($this->branchTempVariables[$branchId])) {
+            return;
+        }
+        foreach ($this->branchTempVariables[$branchId] as $location => $typeVariables) {
             foreach ($typeVariables as $type => $variables) {
                 foreach ($variables as $variable) {
-                    if ($branch == $variable->getBranch()) {
+                    $pos = strpos($variable->getName(), Variable::BRANCH_MAGIC);
+                    $otherBranchId = 1;
+                    if ($pos > -1) {
+                        $otherBranchId = intval(substr($variable->getName(), $pos + strlen(Variable::BRANCH_MAGIC)));
+                    }
+                    if ($branchId == $otherBranchId) {
                         $variable->setIdle(true);
                     }
                 }

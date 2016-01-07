@@ -213,10 +213,9 @@ class NativeArray
          */
         $arrayLength = count($expression['left']);
         if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
-            $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0 TSRMLS_CC);');
-        } else {
-            $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
+            $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
+        $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
 
         foreach ($expression['left'] as $item) {
             if (isset($item['key'])) {
@@ -330,6 +329,7 @@ class NativeArray
                                     case 'string':
                                         $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         break;
+
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
@@ -337,6 +337,7 @@ class NativeArray
                                             $valueVariable->setIdle(true);
                                         }
                                         break;
+
                                     default:
                                         throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
                                 }
@@ -371,7 +372,7 @@ class NativeArray
 
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $resolvedExprKey->getCode() . '), Z_STRLEN_P(' . $item['key']['value'] . '), &' . $valueVariable->getName() . ', PH_COPY);');
+                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }

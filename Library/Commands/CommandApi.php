@@ -78,8 +78,8 @@ class CommandApi extends CommandAbstract
                 } else {
                     throw new Exception("Invalid value for argument '$k'");
                 }
-            } else {
-                throw new Exception("Invalid argument '$k''");
+            } else if (!in_array($k, array('parser-compiled'))) {
+                throw new Exception("Invalid argument '$k' for api command'");
             }
         }
 

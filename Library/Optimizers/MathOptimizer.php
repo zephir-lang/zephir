@@ -30,6 +30,11 @@ use Zephir\Expression;
  */
 abstract class MathOptimizer extends OptimizerAbstract
 {
+    /**
+     * Gets function name
+     *
+     * @return string
+     */
     abstract public function getFunctionName();
 
     /**

@@ -917,7 +917,7 @@ class ClassDefinition
     public function getLocalOrParentInitMethod()
     {
         $method = $this->getInitMethod();
-        if (!$method) {
+        if ($method) {
             $parentClassDefinition = $this->getExtendsClassDefinition();
             if ($parentClassDefinition instanceof ClassDefinition) {
                 $method = $parentClassDefinition->getInitMethod();

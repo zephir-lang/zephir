@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -409,6 +409,40 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 
 	ZVAL_NULL(return_value);
 	return FAILURE;
+}
+
+/**
+ * Appends every element of an array at the end of the left array
+ */
+void zephir_merge_append(zval *left, zval *values)
+{
+
+	zval           **tmp;
+	HashTable      *arr_values;
+	HashPosition   pos;
+
+	if (Z_TYPE_P(left) != IS_ARRAY) {
+		zend_error(E_NOTICE, "First parameter of zephir_merge_append must be an array");
+		return;
+	}
+
+	if (Z_TYPE_P(values) == IS_ARRAY) {
+
+		/*arr_values = Z_ARRVAL_P(values);
+		zend_hash_internal_pointer_reset_ex(arr_values, &pos);
+
+		while (zend_hash_get_current_data_ex(arr_values, (void **) &tmp, &pos) == SUCCESS) {
+
+			Z_ADDREF_PP(tmp);
+			add_next_index_zval(left, *tmp);
+
+			zend_hash_move_forward_ex(arr_values, &pos);
+		}*/
+
+	} else {
+		Z_TRY_ADDREF_P(values);
+		add_next_index_zval(left, values);
+	}
 }
 
 int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)

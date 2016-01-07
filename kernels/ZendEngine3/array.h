@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -51,6 +51,7 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 
 /** Append elements to arrays */
 int zephir_array_append(zval *arr, zval *value, int separate ZEPHIR_DEBUG_PARAMS);
+void zephir_merge_append(zval *left, zval *values);
 
 /** Modify array */
 int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags);

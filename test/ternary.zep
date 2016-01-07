@@ -55,4 +55,14 @@ class Ternary
 		let s = 1===1 ? 3 : 10;
 		return s;
 	}
+
+    public function testShortTernary(var a) -> var
+    {
+		return a ?: false;
+    }
+
+    public function testShortTernaryComplex(var left, var value) -> var|boolean
+    {
+		return left ?: value;
+    }
 }

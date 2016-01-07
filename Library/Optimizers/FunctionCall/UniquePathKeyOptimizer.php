@@ -66,7 +66,10 @@ class UniquePathKeyOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/file');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_unique_path_key(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_unique_path_key(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

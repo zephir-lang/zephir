@@ -2,6 +2,7 @@
 namespace Zephir\Backends\ZendEngine2;
 
 use Zephir\Variable;
+use Zephir\CodePrinter;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\CompilerException;
@@ -164,6 +165,14 @@ class Backend extends BaseBackend
         return array($pointer, $code);
     }
 
+    /**
+     * Checks the type of a variable using the ZendEngine constants
+     *
+     * @param Variable $variableVariable
+     * @param string $operator
+     * @param string $value
+     * @param CompilationContext $context
+     */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
         $variableName = $this->getVariableCode($variableVariable);
@@ -211,6 +220,7 @@ class Backend extends BaseBackend
             default:
                 throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
         }
+
         return $condition;
     }
 
@@ -313,6 +323,162 @@ class Backend extends BaseBackend
         }
 
         $groupVariables[] = $pointer . $variable->getName();
+    }
+
+    public function initializeVariableDefaults($variables, CompilationContext $compilationContext)
+    {
+        $codePrinter = new CodePrinter();
+        $codePrinter->increaseLevel();
+        $oldCodePrinter = $compilationContext->codePrinter;
+        $compilationContext->codePrinter = $codePrinter;
+
+        /* Initialize default values in dynamic variables */
+        foreach ($variables as $variable) {
+            /**
+             * Initialize 'dynamic' variables with default values
+             */
+            if ($variable->getType() == 'variable') {
+                if ($variable->getNumberUses() > 0) {
+                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
+                        $defaultValue = $variable->getDefaultInitValue();
+                        if (is_array($defaultValue)) {
+                            $symbolTable->mustGrownStack(true);
+                            $compilationContext->backend->initVar($variable, $compilationContext);
+                            switch ($defaultValue['type']) {
+                                case 'int':
+                                case 'uint':
+                                case 'long':
+                                    $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'bool':
+                                    $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'char':
+                                case 'uchar':
+                                    if (strlen($defaultValue['value']) > 2) {
+                                        if (strlen($defaultValue['value']) > 10) {
+                                            throw new CompilerException("Invalid char literal: '" . substr($defaultValue['value'], 0, 10) . "...'", $defaultValue);
+                                        } else {
+                                            throw new CompilerException("Invalid char literal: '" . $defaultValue['value'] . "'", $defaultValue);
+                                        }
+                                    }
+                                    $compilationContext->backend->assignLong($variable, '\'' . $defaultValue['value'] . '\'', $compilationContext);
+                                    break;
+
+                                case 'null':
+                                    $compilationContext->backend->assignNull($variable, $compilationContext);
+                                    break;
+
+                                case 'double':
+                                    $compilationContext->backend->assignDouble($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'string':
+                                    $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                    break;
+
+                                case 'array':
+                                case 'empty-array':
+                                    $compilationContext->backend->initArray($variable, $compilationContext, null);
+                                    break;
+
+                                default:
+                                    throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
+                            }
+                        }
+                    }
+                }
+                continue;
+            }
+
+            /**
+             * Initialize 'string' variables with default values
+             */
+            if ($variable->getType() == 'string') {
+                if ($variable->getNumberUses() > 0) {
+                    $defaultValue = $variable->getDefaultInitValue();
+                    if (is_array($defaultValue)) {
+                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->backend->initVar($variable, $compilationContext);
+                        switch ($defaultValue['type']) {
+                            case 'string':
+                                $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                break;
+
+                            case 'null':
+                                $compilationContext->backend->assignString($variable, null, $compilationContext);
+                                break;
+
+                            default:
+                                throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
+                        }
+                    }
+                }
+                continue;
+            }
+
+            /**
+             * Initialize 'array' variables with default values
+             */
+            if ($variable->getType() == 'array') {
+                if ($variable->getNumberUses() > 0) {
+                    $defaultValue = $variable->getDefaultInitValue();
+                    if (is_array($defaultValue)) {
+                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->backend->initVar($variable, $compilationContext);
+                        switch ($defaultValue['type']) {
+                            case 'null':
+                                $compilationContext->backend->assignNull($variable, $compilationContext);
+                                break;
+
+                            case 'array':
+                            case 'empty-array':
+                                $compilationContext->backend->initArray($variable, $compilationContext, null);
+                                break;
+
+                            default:
+                                throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
+                        }
+                    }
+                }
+            }
+        }
+        $compilationContext->codePrinter = $oldCodePrinter;
+        return $codePrinter->getOutput();
+    }
+
+    public function declareVariables($method, $typeToVariables, CompilationContext $compilationContext)
+    {
+        $varInitCode = array();
+        $additionalCode = $method ? $this->onPreInitVar($method, $compilationContext) : '';
+
+        foreach ($typeToVariables as $type => $variables) {
+            list ($pointer, $code) = $this->getTypeDefinition($type);
+            $code .= ' ';
+            $groupVariables = array();
+
+            /**
+             * @var $variables Variable[]
+             */
+            foreach ($variables as $variable) {
+                $nextCode = $this->generateInitCode($groupVariables, $type, $pointer, $variable);
+                if ($nextCode && $additionalCode) {
+                    $additionalCode .= PHP_EOL . $nextCode;
+                } else {
+                    $additionalCode .= $nextCode;
+                }
+            }
+
+            $varInitCode[] = $code . join(', ', $groupVariables) . ';';
+        }
+        /* Keep order consistent with previous zephir versions (BC-only) */
+        $varInitCode = array_reverse($varInitCode);
+        if ($additionalCode) {
+            $varInitCode[] = $additionalCode;
+        }
+        return $varInitCode;
     }
 
     public function initVar(Variable $variable, CompilationContext $context, $useCodePrinter = true, $second = false)
@@ -615,11 +781,13 @@ class Backend extends BaseBackend
                 case 'variable':
                     $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
                     break;
+                    
                 case 'int':
                 case 'uint':
                 case 'long':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getName() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+
                 default:
                     throw new CompilerException('updateArray: Found a variable with unsupported type ' . $key->getType());
             }
@@ -628,12 +796,15 @@ class Backend extends BaseBackend
                 case 'string':
                     $compilationContext->codePrinter->output('zephir_array_update_string(' . $this->getVariableCodePointer($symbolVariable) . ', SL("' . $key->getCode() . '"), ' . $value . ', ' . $flags . ');');
                     break;
+
                 case 'int':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getCode() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+
                 case 'variable':
                     $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key->getCode()), $value, $compilationContext, $flags);
                     break;
+
                 default:
                     throw new CompilerException('updateArray: Found an expression with unsupported type ' . $key->getType());
             }
@@ -650,9 +821,11 @@ class Backend extends BaseBackend
         } else {
             $output = 'object_init_ex(' . $variableAccess . ', ' . $ce . ');';
         }
+
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
+
         return $output;
     }
 
@@ -660,17 +833,20 @@ class Backend extends BaseBackend
     {
         $context->headersManager->add('kernel/array');
         $isVariable = $index instanceof Variable;
+
         switch ($index->getType()) {
             case 'int':
             case 'uint':
             case 'long':
                 $type = 'long';
                 break;
+
             /* Types which map to the same */
             case 'variable':
             case 'string':
                 $type = $index->getType();
                 break;
+
             default:
                 throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
@@ -691,6 +867,7 @@ class Backend extends BaseBackend
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
+
         return $output;
     }
 
@@ -709,6 +886,7 @@ class Backend extends BaseBackend
         } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
             return new CompiledExpression('bool', 'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
         }
+
         throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
     }
 
@@ -1088,6 +1266,11 @@ class Backend extends BaseBackend
         }
 
         $codePrinter->output('}');
+        /* Make sure to free the duplicated hash table */
+        if ($duplicateHash) {
+            $codePrinter->output('zend_hash_destroy(' . $arrayHash->getName() . ');');
+            $codePrinter->output('FREE_HASHTABLE(' . $arrayHash->getName() . ');');
+        }
     }
 
     public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)

@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -24,12 +24,12 @@
 
 #include "php.h"
 #include "php_ext.h"
-#include "php_main.h"
-#include "main/php_streams.h"
-#include "ext/standard/file.h"
-#include "ext/standard/php_smart_string.h"
-#include "ext/standard/php_filestat.h"
-#include "ext/standard/php_string.h"
+#include <php_main.h>
+#include <main/php_streams.h>
+#include <ext/standard/file.h>
+#include <ext/standard/php_smart_string.h>
+#include <ext/standard/php_filestat.h>
+#include <ext/standard/php_string.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -37,8 +37,9 @@
 #include "kernel/operators.h"
 #include "kernel/file.h"
 
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
+#include <zend_smart_str.h>
 
 #define PHP_STREAM_TO_ZVAL(stream, arg) \
 	php_stream_from_zval_no_verify(stream, arg); \
@@ -49,6 +50,19 @@
 			return; \
 		} \
 	}
+
+void zephir_basename(zval *return_value, zval *path)
+{
+	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+		char *ret;
+		size_t ret_len;
+
+		php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0);
+		ZVAL_STRINGL(return_value, ret, (int)ret_len);
+	} else {
+		ZVAL_FALSE(return_value);
+	}
+}
 
 /**
  * Checks if a file exist
@@ -71,6 +85,31 @@ int zephir_file_exists(zval *filename)
 	return SUCCESS;
 }
 
+/**
+ * Compares two file paths returning 1 if the first mtime is greater or equal than the second
+ */
+int zephir_compare_mtime(zval *filename1, zval *filename2 TSRMLS_DC)
+{
+
+	php_stream_statbuf statbuffer1, statbuffer2;
+
+	if (Z_TYPE_P(filename1) != IS_STRING || Z_TYPE_P(filename2) != IS_STRING) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for compare_mtime()");
+		return 0;
+	}
+
+	if (php_stream_stat_path_ex(Z_STRVAL_P(filename1), 0, &statbuffer1, NULL)) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename1));
+		return 0;
+	}
+
+	if (php_stream_stat_path_ex(Z_STRVAL_P(filename2), 0, &statbuffer2, NULL)) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename2));
+		return 0;
+	}
+
+	return (int) (statbuffer1.sb.st_mtime >= statbuffer2.sb.st_mtime);
+}
 
 void zephir_fwrite(zval *return_value, zval *stream_zval, zval *data)
 {
@@ -273,4 +312,65 @@ void zephir_filemtime(zval *return_value, zval *path)
 	} else {
 		ZVAL_FALSE(return_value);
 	}
+}
+
+/**
+ * Replaces directory separators by the virtual separator
+ */
+void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator)
+{
+
+	unsigned int i;
+	unsigned char ch;
+	smart_str virtual_str = {0};
+
+	if (Z_TYPE_P(path) != IS_STRING || Z_TYPE_P(virtual_separator) != IS_STRING) {
+		if (Z_TYPE_P(path) == IS_STRING) {
+			RETURN_STR(zval_get_string(path));
+		} else {
+			RETURN_EMPTY_STRING();
+		}
+		return;
+	}
+
+	for (i = 0; i < Z_STRLEN_P(path); i++) {
+		ch = Z_STRVAL_P(path)[i];
+		if (ch == '\0') {
+			break;
+		}
+		if (ch == '/' || ch == '\\' || ch == ':') {
+			smart_str_appendl(&virtual_str, Z_STRVAL_P(virtual_separator), Z_STRLEN_P(virtual_separator));
+		}
+		else {
+			smart_str_appendc(&virtual_str, tolower(ch));
+		}
+	}
+
+	smart_str_0(&virtual_str);
+
+	if (virtual_str.s) {
+		RETURN_STR(virtual_str.s);
+	} else {
+		RETURN_EMPTY_STRING();
+	}
+}
+
+/**
+ * Generates a unique id for a path
+ */
+void zephir_unique_path_key(zval *return_value, zval *path)
+{
+	unsigned long h;
+	char *strKey;
+
+	if (Z_TYPE_P(path) != IS_STRING) {
+		return;
+	}
+
+	h = zend_hash_func(Z_STRVAL_P(path), Z_STRLEN_P(path) + 1);
+
+	strKey = emalloc(24);
+	sprintf(strKey, "v%lu", h);
+
+	RETURN_STRING(strKey);
 }

@@ -1,5 +1,33 @@
 <?php
 
+if (!class_exists('APCIterator', false)) {
+
+/**
+ * Class APCIterator
+ * @link http://www.php.net/manual/en/class.apciterator.php
+ */
+class APCIterator implements Iterator
+{
+	public function __construct($cache, $search = null, $format = APC_ITER_ALL, $chunk_size = 100, $list = APC_LIST_ACTIVE){}
+
+	public function rewind(){}
+
+	public function valid(){}
+
+	public function current(){}
+
+	public function key(){}
+
+	public function next(){}
+
+	public function getTotalHits(){}
+
+	public function getTotalSize(){}
+
+	public function getTotalCount(){}
+}
+}
+
 if (function_exists('apc_cache_info')) {
 	return false;
 }
@@ -141,28 +169,3 @@ function apc_bin_load($data, $flags = 0){}
  * @param int $flags
  */
 function apc_bin_loadfile($filename, $context = null, $flags = 0){}
-
-/**
- * Class APCIterator
- * @link http://www.php.net/manual/en/class.apciterator.php
- */
-class APCIterator implements Iterator
-{
-	public function __construct($cache, $search = null, $format = APC_ITER_ALL, $chunk_size = 100, $list = APC_LIST_ACTIVE){}
-
-	public function rewind(){}
-
-	public function valid(){}
-
-	public function current(){}
-
-	public function key(){}
-
-	public function next(){}
-
-	public function getTotalHits(){}
-
-	public function getTotalSize(){}
-
-	public function getTotalCount(){}
-}

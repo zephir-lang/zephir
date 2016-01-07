@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -57,6 +57,12 @@ void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var);
 
 int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 
+#define zephir_safe_zval_ptr_dtor(pzval)
+
+void zephir_create_symbol_table(TSRMLS_D);
+int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC);
+int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
+
 #define ZEPHIR_INIT_VAR(z) zephir_memory_alloc(z);
 
 #define ZEPHIR_SINIT_VAR(z) ZVAL_NULL(&z);
@@ -82,6 +88,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 #define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(&z)
 
 #define ZEPHIR_CPY_WRT(d, v) \
+	Z_TRY_ADDREF_P(v); \
 	if (Z_TYPE_P(d) > IS_UNDEF) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
 			zephir_ptr_dtor(d); \
@@ -89,7 +96,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} else { \
 		zephir_memory_observe(d); \
 	} \
-	ZVAL_COPY(d, v);
+	ZVAL_COPY_VALUE(d, v);
 
 #define ZEPHIR_CPY_WRT_CTOR(d, v) \
 	if (d) { \

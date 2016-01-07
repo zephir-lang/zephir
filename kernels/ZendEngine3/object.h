@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -32,7 +32,7 @@ int zephir_class_exists(const zval *class_name, int autoload);
 int zephir_interface_exists(const zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
 zend_class_entry *zephir_fetch_class(const zval *class_name);
-zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
+zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t length, int fetch_type);
 void zephir_get_class(zval *result, zval *object, int lower);
 void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
 void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
@@ -81,6 +81,7 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 
 /** Create instances */
 int zephir_create_instance(zval *return_value, const zval *class_name);
+int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params TSRMLS_DC);
 
 /** Increment/Decrement properties */
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
@@ -96,5 +97,7 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 		} \
 	}
 
+/** Methods */
+int zephir_method_exists_ex(const zval *object, const char *method_name, unsigned int method_len);
 
 #endif

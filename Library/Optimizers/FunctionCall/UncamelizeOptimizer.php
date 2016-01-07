@@ -67,8 +67,10 @@ class UncamelizeOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_uncamelize(' . $symbol . ', ' . $resolvedParams[0] . ');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

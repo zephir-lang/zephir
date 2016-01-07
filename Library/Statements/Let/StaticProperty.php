@@ -256,7 +256,7 @@ class StaticProperty
                                 $expression->compile($compilationContext);
                                 $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);
                                 $tempVariableCode = $compilationContext->backend->getVariableCode($tempVariable);
-                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode .' TSRMLS_CC);');
+                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode .');');
                                 //continue
 
                             case 'assign':

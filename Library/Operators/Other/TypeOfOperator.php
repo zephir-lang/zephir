@@ -19,12 +19,13 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
-use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
+use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 use Zephir\Builder\FunctionCallBuilder;
+use Zephir\Expression\Builder\BuilderFactory;
 
 /**
  * TypeOf
@@ -45,8 +46,8 @@ class TypeOfOperator extends BaseOperator
             throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
         }
 
-        $builder = new FunctionCallBuilder('gettype', array(array('parameter' => $expression['left'])));
-        $expression = new Expression($builder->get());
+        $functionCall = BuilderFactory::getInstance()->statements()->functionCall('gettype', array($expression['left']));
+        $expression = new Expression($functionCall->build());
         return $expression->compile($compilationContext);
     }
 }

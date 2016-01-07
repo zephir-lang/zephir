@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -101,6 +101,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 
 	if (&EG(symbol_table)) {
 		if ((gv = zend_hash_find(&EG(symbol_table), str)) != NULL) {
+			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
 				ZVAL_COPY_VALUE(arr, gv);
 				zend_string_free(str);
@@ -166,7 +167,7 @@ void zephir_fast_count(zval *result, zval *value)
  */
 int zephir_fast_count_ev(zval *value)
 {
-	long count = 0;
+	zend_long count = 0;
 
 	if (Z_TYPE_P(value) == IS_ARRAY) {
 		return zend_hash_num_elements(Z_ARRVAL_P(value)) > 0;
@@ -211,7 +212,7 @@ int zephir_fast_count_ev(zval *value)
  */
 int zephir_fast_count_int(zval *value)
 {
-	long count = 0;
+	zend_long count = 0;
 
 	if (Z_TYPE_P(value) == IS_ARRAY) {
 		return zend_hash_num_elements(Z_ARRVAL_P(value));
@@ -264,10 +265,22 @@ int zephir_function_quick_exists_ex(const char *method_name, unsigned int method
 }
 
 /**
+ * Check if a function exists
+ */
+int zephir_function_exists(const zval *function_name)
+{
+
+	return zephir_function_quick_exists_ex(
+		Z_STRVAL_P(function_name),
+		Z_STRLEN_P(function_name) + 1
+	);
+}
+
+/**
  * Check if a function exists using explicit char param
  *
  * @param function_name
- * @param function_len strlen(function_name)+1
+ * @param function_len strlen(function_name) + 1
  */
 int zephir_function_exists_ex(const char *function_name, unsigned int function_len)
 {

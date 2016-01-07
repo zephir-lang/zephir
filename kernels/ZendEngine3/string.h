@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2015 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -23,6 +23,7 @@
 
 #include <php.h>
 #include <Zend/zend.h>
+#include <zend_smart_str.h>
 #include "kernel/main.h"
 
 #define ZEPHIR_TRIM_LEFT  1
@@ -31,6 +32,7 @@
 #define ZEPHIR_SUBSTR_NO_LENGTH 1
 
 /** Fast char position */
+int zephir_memnstr(const zval *haystack, const zval *needle ZEPHIR_DEBUG_PARAMS);
 int zephir_memnstr_str(const zval *haystack, char *needle, unsigned int needle_length ZEPHIR_DEBUG_PARAMS);
 
 int zephir_fast_strlen_ev(zval *str);
@@ -45,11 +47,16 @@ void zephir_fast_strpos_str(zval *return_value, const zval *haystack, char *need
 void zephir_fast_trim(zval *return_value, zval *str, zval *charlist, int where);
 void zephir_fast_str_replace(zval *return_value, zval *search, zval *replace, zval *subject);
 
+void zephir_camelize(zval *return_value, const zval *str);
 void zephir_uncamelize(zval *return_value, const zval *str);
 
 /** Starts/Ends with */
 int zephir_start_with(const zval *str, const zval *compared, zval *case_sensitive);
 int zephir_start_with_str(const zval *str, char *compared, unsigned int compared_length);
+int zephir_start_with_str_str(char *str, unsigned int str_length, char *compared, unsigned int compared_length);
+
+int zephir_end_with(const zval *str, const zval *compared, zval *case_sensitive);
+int zephir_end_with_str(const zval *str, char *compared, unsigned int compared_length);
 
 /** spprintf */
 int zephir_spprintf(char **message, int max_len, char *format, ...);
@@ -72,5 +79,8 @@ void zephir_crc32(zval *return_value, zval *str);
 void zephir_ucfirst(zval *return_value, zval *s);
 void zephir_addslashes(zval *return_value, zval *str);
 void zephir_stripslashes(zval *return_value, zval *str);
+void zephir_unique_key(zval *return_value, const zval *prefix, zval *value);
+
+void zephir_append_printable_array(smart_str *implstr, const zval *value);
 
 #endif /* ZEPHIR_KERNEL_STRING_H */

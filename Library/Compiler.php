@@ -30,7 +30,9 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.8.0a';
+    const VERSION = '0.9.1a-dev';
+
+    public $parserCompiled = false;
 
     /**
      * @var CompilerFile[]
@@ -182,12 +184,117 @@ class Compiler
     }
 
     /**
+     * Compile the parser PHP extension
+     */
+    public function compileParser()
+    {
+        if (extension_loaded('zephir_parser') && $this->parserCompiled !== 'force') {
+            $this->parserCompiled = true;
+        }
+        if ($this->parserCompiled === true) {
+            return true;
+        }
+
+        $extFile = null;
+        $currentDir = realpath(dirname(__FILE__)). DIRECTORY_SEPARATOR  . '..' .DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR ;
+        if (!extension_loaded('zephir_parser') || $this->parserCompiled === 'force') {
+            if (Utils::isWindows()) {
+                $this->logger->output('zephir_parser extension not loaded, compiling it');
+                $oldCwd = getcwd();
+                chdir($currentDir);
+
+                echo shell_exec('cd parser && cmd /c build_win32.bat');
+                exec('%PHP_DEVPACK%\\phpize --clean', $output, $exit);
+                if (file_exists('Release')) {
+                    exec('rd /s /q "' . $currentDir . '"Release', $output, $exit);
+                }
+
+                $this->logger->output('Preparing for parser compilation...');
+                exec('%PHP_DEVPACK%\\phpize', $output, $exit);
+                /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
+                $fixMarker = "/* zephir_phpize_fix */";
+                $configureFile = file_get_contents("configure.js");
+                $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
+                if (strpos($configureFile, $fixMarker) === false) {
+                    file_put_contents("configure.js", $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile);
+                }
+
+                exec('configure --enable-zephir_parser');
+                $this->logger->output('Compiling the parser...');
+                exec('nmake 2> compile-errors.log 1> compile.log', $output, $exit);
+                echo file_get_contents('compile-errors.log') . PHP_EOL;
+                $buildLog = file_get_contents('compile.log');
+                echo $buildLog . PHP_EOL;
+
+                $buildType = 'Release';
+                if (strpos($buildLog, 'Debug_TS\\') !== false) {
+                    $buildType = 'Debug_TS';
+                } else if (strpos($buildLog, 'Release_TS\\') !== false) {
+                    $buildType = 'Release_TS';
+                } else if (strpos($buildLog, 'Debug\\') !== false) {
+                    $buildType = 'Debug';
+                }
+
+                copy($buildType . '/php_zephir_parser.dll', 'php_zephir_parser.dll');
+                $extFile = $currentDir . 'php_zephir_parser.dll';
+
+                chdir($oldCwd);
+            } else {
+                if (!file_exists($currentDir . 'modules/zephir_parser.so')) {
+                    $this->logger->output('zephir_parser extension not loaded, compiling it');
+                    $oldCwd = getcwd();
+                    chdir($currentDir);
+
+                    echo shell_exec('cd parser && ./build_linux.sh');
+                    exec('make clean && phpize --clean', $output, $exit);
+                    $this->logger->output('Preparing for parser compilation...');
+                    exec('phpize', $output, $exit);
+
+                    exec('export CC="gcc" && ./configure --enable-zephir_parser');
+                    $this->logger->output('Compiling the parser...');
+
+                    exec(
+                        '(make --silent -j2 2> ./compile-errors.log 1> ./compile.log)',
+                        $output,
+                        $exit
+                    );
+
+                    echo file_get_contents('compile-errors.log') . PHP_EOL;
+                    echo file_get_contents('compile.log') . PHP_EOL;
+                    copy('modules/zephir_parser.so', 'zephir_parser.so');
+
+                    chdir($oldCwd);
+                }
+
+                $extFile = $currentDir . 'zephir_parser.so';
+            }
+
+            if (!$extFile || !file_exists($extFile)) {
+                throw new Exception('The zephir parser extension could not be found or compiled!');
+            }
+        }
+
+        return $extFile;
+    }
+
+    /**
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
      */
     protected function preCompile($filePath)
     {
+        $parserExt = $this->compileParser();
+        /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
+        if ($parserExt && $parserExt !== true) {
+            $cmd = PHP_BINARY . ' -dextension="'.$parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
+            echo $cmd;
+            passthru($cmd, $exitCode);
+            exit($exitCode);
+        }
+        if (!$parserExt) {
+            throw new Exception('The zephir parser extension is not loaded!');
+        }
         if (preg_match('#\.zep$#', $filePath)) {
             $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
             $className = preg_replace('#.zep$#', '', $className);
@@ -1431,7 +1538,7 @@ class Compiler
         /**
          * ext_clean
          */
-        $content = file_get_contents(__DIR__ . '/../ext/clean');
+        $content = file_get_contents($templatePath . '/clean');
         if (empty($content)) {
             throw new Exception("Clean file doesn't exist");
         }
