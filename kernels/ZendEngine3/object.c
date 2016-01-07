@@ -1104,41 +1104,37 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 	object_init_ex(return_value, ce);
 	outcome = SUCCESS;
 
-	/*if (zephir_has_constructor_ce(ce)) {
+	if (zephir_has_constructor_ce(ce)) {
 
 		int param_count = zend_hash_num_elements(Z_ARRVAL_P(params));
 		zval *static_params[10];
 		zval **params_ptr, **params_arr = NULL;
 
 		if (param_count > 0) {
-			HashPosition pos;
-			zval **item;
+			zval *item;
 			int i = 0;
 
 			if (likely(param_count) <= 10) {
 				params_ptr = static_params;
 			} else {
 				params_arr = emalloc(param_count * sizeof(zval*));
-				params_ptr = &params;
+				params_ptr = params_arr;
 			}
 
-			for (
-				zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(params), &pos);
-				zend_hash_get_current_data_ex(Z_ARRVAL_P(params), (void**) &item, &pos) == SUCCESS;
-				zend_hash_move_forward_ex(Z_ARRVAL_P(params), &pos), ++i
-			) {
-				params_ptr[i] = *item;
-			}
+			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(params), item) {
+				params_ptr[i] = item;
+			} ZEND_HASH_FOREACH_END();
+
 		} else {
 			params_ptr = NULL;
 		}
 
-		outcome = zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, param_count, params_ptr TSRMLS_CC);
+		outcome = zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, param_count, params_ptr);
 
 		if (unlikely(params_arr != NULL)) {
 			efree(params_arr);
 		}
-	}*/
+	}
 
 	return outcome;
 }
