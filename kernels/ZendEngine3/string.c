@@ -1058,11 +1058,9 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+/*#ifdef ZEPHIR_USE_PHP_PCRE
 
-/**
- * Execute preg-match without function lookup in the PHP userland
- */
+ // Execute preg-match without function lookup in the PHP userland
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
 	zval copy, tmp_matches;
@@ -1081,7 +1079,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 		}
 	}
 
-	/* Compile regex or get it from cache. */
+	// Compile regex or get it from cache.
 	if ((pce = pcre_get_compiled_regex_cache(Z_STR_P(regex))) == NULL) {
 
 		if (use_copy) {
@@ -1106,7 +1104,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 }
 
-#else
+#else*/
 
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
@@ -1140,7 +1138,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 }
 
-#endif /* ZEPHIR_USE_PHP_PCRE */
+/*#endif  ZEPHIR_USE_PHP_PCRE */
 
 #ifdef ZEPHIR_USE_PHP_JSON
 

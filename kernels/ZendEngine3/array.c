@@ -35,7 +35,6 @@
 #include "kernel/hash.h"
 #include "kernel/backtrace.h"
 
-
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int initialize)
 {
 	uint i;
@@ -426,7 +425,7 @@ void zephir_merge_append(zval *left, zval *values)
 		return;
 	}
 
-	if (Z_TYPE_P(values) == IS_ARRAY) {		
+	if (Z_TYPE_P(values) == IS_ARRAY) {
 
 		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(values), tmp) {
 
