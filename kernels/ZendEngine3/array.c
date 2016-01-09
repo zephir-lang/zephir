@@ -417,7 +417,7 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 void zephir_merge_append(zval *left, zval *values)
 {
 
-	zval           **tmp;
+	zval           *tmp;
 	HashTable      *arr_values;
 	HashPosition   pos;
 
@@ -426,18 +426,14 @@ void zephir_merge_append(zval *left, zval *values)
 		return;
 	}
 
-	if (Z_TYPE_P(values) == IS_ARRAY) {
+	if (Z_TYPE_P(values) == IS_ARRAY) {		
 
-		/*arr_values = Z_ARRVAL_P(values);
-		zend_hash_internal_pointer_reset_ex(arr_values, &pos);
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(values), tmp) {
 
-		while (zend_hash_get_current_data_ex(arr_values, (void **) &tmp, &pos) == SUCCESS) {
+			Z_TRY_ADDREF_P(tmp);
+			add_next_index_zval(left, tmp);
 
-			Z_ADDREF_PP(tmp);
-			add_next_index_zval(left, *tmp);
-
-			zend_hash_move_forward_ex(arr_values, &pos);
-		}*/
+		} ZEND_HASH_FOREACH_END();
 
 	} else {
 		Z_TRY_ADDREF_P(values);
