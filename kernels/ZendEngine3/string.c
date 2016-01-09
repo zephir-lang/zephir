@@ -1058,12 +1058,14 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-/*#ifdef ZEPHIR_USE_PHP_PCRE
+#ifdef ZEPHIR_USE_PHP_PCRE
 
- // Execute preg-match without function lookup in the PHP userland
+/**
+ * Execute preg-match without function lookup in the PHP userland
+ */
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
-	zval copy, tmp_matches;
+	zval copy;
 	int use_copy = 0;
 	pcre_cache_entry *pce;
 
@@ -1079,7 +1081,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 		}
 	}
 
-	// Compile regex or get it from cache.
+	/* Compile regex or get it from cache */
 	if ((pce = pcre_get_compiled_regex_cache(Z_STR_P(regex))) == NULL) {
 
 		if (use_copy) {
@@ -1090,13 +1092,9 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 
 	if (flags != 0 || offset != 0) {
-		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, &tmp_matches, global, 1, flags, offset);
+		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, matches, global, 1, flags, offset);
 	} else {
-		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, &tmp_matches, global, 0, 0, 0);
-	}
-
-	if (matches) {
-		ZVAL_COPY(matches, Z_REFVAL(tmp_matches));
+		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, matches, global, 0, 0, 0);
 	}
 
 	if (use_copy) {
@@ -1104,7 +1102,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 }
 
-#else*/
+#else
 
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
@@ -1138,7 +1136,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 }
 
-/*#endif  ZEPHIR_USE_PHP_PCRE */
+#endif /* ZEPHIR_USE_PHP_PCRE */
 
 #ifdef ZEPHIR_USE_PHP_JSON
 
