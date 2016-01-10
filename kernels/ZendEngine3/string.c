@@ -1133,7 +1133,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 		if (Z_TYPE(tmp_matches) == IS_REFERENCE) {
 			ZVAL_COPY(matches, Z_REFVAL(tmp_matches));
 		} else {
-			ZVAL_NULL(&matches);
+			ZVAL_NULL(matches);
 		}
 	}
 
