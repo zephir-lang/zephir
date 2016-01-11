@@ -301,4 +301,13 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 #define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0
 #endif
 
+#define ZEPHIR_INIT_THIS() zval this_zv; \
+    zval *this_ptr = getThis(); \
+    if (EXPECTED(this_ptr)) { \
+        ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr)); \
+        this_ptr = &this_zv; \
+    } else { \
+        this_ptr = NULL; \
+    }
+
 #endif /* ZEPHIR_KERNEL_MAIN_H */

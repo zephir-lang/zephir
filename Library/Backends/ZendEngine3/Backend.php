@@ -141,12 +141,7 @@ class Backend extends BackendZendEngine2
             return;
         }
         if (!$method->isInternal()) {
-            return "\t" . 'zval this_zv;' . "\n\t" .
-                'zval *this_ptr = getThis();' . "\n\t" .
-                'if (EXPECTED(this_ptr)) {' . "\n\t\t" .
-                'ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));' . "\n\t\t" .
-                'this_ptr = &this_zv;' . "\n\t" .
-                '} else this_ptr = NULL;'. "\n\t"; //TODO: think about a better way to solve this.
+            return "ZEPHIR_INIT_THIS();\n"; //TODO: think about a better way to solve this.
         }
     }
 

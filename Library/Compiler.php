@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.9.1a-dev';
+    const VERSION = '0.9.2a-dev';
 
     public $parserCompiled = false;
 
@@ -287,14 +287,15 @@ class Compiler
         $parserExt = $this->compileParser();
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
-            $cmd = PHP_BINARY . ' -dextension="'.$parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
-            echo $cmd;
+            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';            
             passthru($cmd, $exitCode);
             exit($exitCode);
         }
+
         if (!$parserExt) {
             throw new Exception('The zephir parser extension is not loaded!');
         }
+
         if (preg_match('#\.zep$#', $filePath)) {
             $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
             $className = preg_replace('#.zep$#', '', $className);
@@ -1047,6 +1048,7 @@ class Compiler
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
+
         $needConfigure  = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();

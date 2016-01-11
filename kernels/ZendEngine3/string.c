@@ -1058,7 +1058,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-#ifdef ZEPHIR_USE_PHP_PCRE && PHP_VERSION_ID < 70000
+#ifdef ZEPHIR_USE_PHP_PCRE
 
 /**
  * Execute preg-match without function lookup in the PHP userland
