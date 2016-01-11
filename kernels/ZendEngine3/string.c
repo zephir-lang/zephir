@@ -1058,15 +1058,15 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+#ifdef ZEPHIR_USE_PHP_PCRE && PHP_VERSION_ID < 70000
 
 /**
  * Execute preg-match without function lookup in the PHP userland
  */
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
-	zval copy, tmp_matches;
 	int use_copy = 0;
+	zval copy, tmp_matches;
 	pcre_cache_entry *pce;
 
 	if (Z_TYPE_P(regex) != IS_STRING) {
