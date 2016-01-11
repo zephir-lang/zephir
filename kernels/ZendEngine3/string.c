@@ -1065,7 +1065,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
  */
 void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *matches, int global, long flags, long offset)
 {
-	zval copy;
+	zval copy, tmp_matches;
 	int use_copy = 0;
 	pcre_cache_entry *pce;
 
@@ -1091,11 +1091,23 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 		RETURN_FALSE;
 	}
 
+	ZVAL_UNDEF(&tmp_matches);
+
 	if (flags != 0 || offset != 0) {
-		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, matches, global, 1, flags, offset);
+		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, &tmp_matches, global, 1, flags, offset);
 	} else {
-		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, matches, global, 0, 0, 0);
+		php_pcre_match_impl(pce, Z_STRVAL_P(subject), Z_STRLEN_P(subject), return_value, &tmp_matches, global, 0, 0, 0);
 	}
+
+	if (matches) {
+		if (Z_TYPE(tmp_matches) == IS_REFERENCE) {
+			ZVAL_COPY(matches, Z_REFVAL(tmp_matches));
+		} else {
+			ZVAL_NULL(matches);
+		}
+	}
+
+	zval_dtor(&tmp_matches);
 
 	if (use_copy) {
 		zval_dtor(&copy);

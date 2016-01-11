@@ -54,11 +54,9 @@
 void zephir_basename(zval *return_value, zval *path)
 {
 	if (likely(Z_TYPE_P(path) == IS_STRING)) {
-		char *ret;
-		size_t ret_len;
-
-		php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0);
-		ZVAL_STRINGL(return_value, ret, (int)ret_len);
+		zend_string *ret;
+		ret = php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0);
+		ZVAL_STR(return_value, ret);
 	} else {
 		ZVAL_FALSE(return_value);
 	}
