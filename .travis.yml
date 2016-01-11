@@ -30,7 +30,6 @@ install:
  - ./install
 
 before_script:
- - if [[ "$TRAVIS_PHP_VERSION" == "7.0" ]]; then rm unit-tests/Extension/PregmatchTest.php; fi
  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
