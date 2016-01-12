@@ -586,7 +586,7 @@ void zephir_dump_memory_frame(zephir_memory_entry *active_memory)
 				case IS_FALSE:    fprintf(stderr, "value=(bool)false\n"); break;
 				case IS_ARRAY:    fprintf(stderr, "value=array(%p), %d elements\n", Z_ARRVAL_P(var), zend_hash_num_elements(Z_ARRVAL_P(var))); break;
 				case IS_OBJECT:   fprintf(stderr, "value=object(%u), %s\n", Z_OBJ_HANDLE_P(var), ZSTR_VAL(Z_OBJCE_P(var)->name)); break;
-				case IS_STRING:   fprintf(stderr, "value=%*s (%p)\n", Z_STRLEN_P(var), Z_STRVAL_P(var), Z_STRVAL_P(var)); break;
+				case IS_STRING:   fprintf(stderr, "value=%*s (%d)\n", Z_STRVAL_P(var), Z_STRLEN_P(var)); break;
 				case IS_RESOURCE: fprintf(stderr, "value=(resource)%ld\n", Z_LVAL_P(var)); break;
 				default:          fprintf(stderr, "\n"); break;
 			}

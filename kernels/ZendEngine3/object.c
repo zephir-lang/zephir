@@ -890,7 +890,6 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 {
 	zval garbage;
 	zval *property;
-	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_class_entry *old_scope = EG(scope);
 
 	EG(scope) = scope;

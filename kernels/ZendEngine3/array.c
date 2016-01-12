@@ -417,8 +417,6 @@ void zephir_merge_append(zval *left, zval *values)
 {
 
 	zval           *tmp;
-	HashTable      *arr_values;
-	HashPosition   pos;
 
 	if (Z_TYPE_P(left) != IS_ARRAY) {
 		zend_error(E_NOTICE, "First parameter of zephir_merge_append must be an array");
@@ -556,7 +554,7 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 
 void zephir_array_keys(zval *return_value, zval *input)
 {
-    zval *entry, new_val;
+	zval *entry, new_val;
 	zend_ulong num_idx;
 	zend_string *str_idx;
 

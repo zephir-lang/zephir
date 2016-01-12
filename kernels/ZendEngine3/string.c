@@ -405,8 +405,7 @@ void zephir_append_printable_array(smart_str *implstr, const zval *value)
 
 	zval           *tmp;
 	zend_array     *arr;
-	HashPosition   pos;
-	unsigned int numelems, i = 0, str_len;
+	unsigned int numelems, i = 0;
 
 	arr = Z_ARRVAL_P(value);
 	numelems = zend_hash_num_elements(arr);
@@ -432,31 +431,6 @@ void zephir_append_printable_array(smart_str *implstr, const zval *value)
 			}
 
 		} ZEND_HASH_FOREACH_END();
-
-		/*zend_hash_internal_pointer_reset_ex(arr, &pos);
-		while (zend_hash_get_current_data_ex(arr, (void **) &tmp, &pos) == SUCCESS) {
-
-			if (Z_TYPE_PP(tmp) == IS_OBJECT) {
-				smart_str_appendc(implstr, 'O');
-				{
-					char stmp[MAX_LENGTH_OF_LONG + 1];
-					str_len = slprintf(stmp, sizeof(stmp), "%ld", Z_OBJVAL_PP(tmp).handle);
-					smart_str_appendl(implstr, stmp, str_len);
-				}
-			} else {
-				if (Z_TYPE_PP(tmp) == IS_ARRAY) {
-					zephir_append_printable_array(implstr, *tmp TSRMLS_CC);
-				} else {
-					zephir_append_printable_zval(implstr, tmp);
-				}
-			}
-
-			if (++i != numelems) {
-				smart_str_appendc(implstr, ',');
-			}
-
-			zend_hash_move_forward_ex(arr, &pos);
-		}*/
 	}
 
 	smart_str_appendc(implstr, ']');

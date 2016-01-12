@@ -682,7 +682,9 @@ static zend_bool zephir_is_callable_ex(zval *callable, zend_object *object, uint
 
 				*callable_name = estrndup(Z_STRVAL(expr_copy), Z_STRLEN(expr_copy));
 				*callable_name_len = Z_STRLEN(expr_copy);
-				zval_dtor(&expr_copy);
+				if (use_copy) {
+					zval_dtor(&expr_copy);
+				}
 			}
 			if (error) zephir_spprintf(error, 0, "no array or string given");
 			return 0;
