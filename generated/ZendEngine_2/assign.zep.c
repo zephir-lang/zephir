@@ -1687,6 +1687,7 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 	int _0;
 	zval *index, *value, *_POST;
 
+	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	zephir_fetch_params(0, 2, 0, &index, &value);
 
@@ -1697,6 +1698,7 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 	if (_0) {
 		ZEND_SET_SYMBOL(&EG(symbol_table), "_POST", _POST);
 	}
+	ZEPHIR_MM_RESTORE();
 
 }
 

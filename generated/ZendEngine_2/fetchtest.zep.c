@@ -110,15 +110,16 @@ PHP_METHOD(Test_FetchTest, testFetchPost) {
 
 	zval *b, *_POST, *c = NULL;
 
+	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	zephir_fetch_params(0, 1, 0, &b);
 
 
 
 	if (!(zephir_array_isset_fetch(&c, _POST, b, 1 TSRMLS_CC))) {
-		RETURN_BOOL(0);
+		RETURN_MM_BOOL(0);
 	}
-	RETURN_CTORW(c);
+	RETURN_CTOR(c);
 
 }
 
