@@ -466,6 +466,7 @@ class StaticTypeInference
                 return 'variable';
 
             case 'ternary':
+            case 'short-ternary':
                 //$right = $this->passExpression($expression['right']);
                 //$extra = $this->passExpression($expression['extra']);
                 /*if ($right == $extra) {

@@ -425,6 +425,7 @@ class LocalContextPass
             case 'unlikely'
             /* do special pass later */:
             case 'ternary':
+            case 'short-ternary':
                 $this->passExpression($expression['left']);
                 break;
 

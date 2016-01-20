@@ -173,6 +173,7 @@ class CallGathererPass
             case 'closure':
             case 'closure-arrow':
             case 'reference':
+            case 'short-ternary':
                 break;
 
             case 'div':
@@ -296,8 +297,8 @@ class CallGathererPass
                 break;
 
             case 'ternary':
+            case 'short-ternary':
                 $this->passExpression($expression['right']);
-                $this->passExpression($expression['extra']);
                 break;
 
             default:

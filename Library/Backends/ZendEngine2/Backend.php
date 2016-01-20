@@ -781,7 +781,7 @@ class Backend extends BaseBackend
                 case 'variable':
                     $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
                     break;
-                    
+
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -1044,6 +1044,7 @@ class Backend extends BaseBackend
     {
         $name = $globalVar->getName();
         $output = 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);';
+        $compilationContext->symbolTable->mustGrownStack(true);
         if ($useCodePrinter) {
             $compilationContext->codePrinter->output($output);
         }

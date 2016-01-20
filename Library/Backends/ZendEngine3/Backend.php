@@ -480,6 +480,7 @@ class Backend extends BackendZendEngine2
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
         $name = $globalVar->getName();
+        $compilationContext->symbolTable->mustGrownStack(true);
         $output = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
         if ($useCodePrinter) {
             $codePrinter->output($output);
@@ -507,11 +508,18 @@ class Backend extends BackendZendEngine2
         }
         $variableCode = $this->getVariableCode($variableVariable);
         $symbol = $this->getVariableCode($symbolVariable);
-        //TODO: maybe optimizations (read_nproperty/quick) for thisScope access in NG (as in ZE2 - if necessary)
-        if ($property instanceof Variable) {
-            $context->codePrinter->output('zephir_read_property_zval(' . $symbol . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+        if ($useOptimized) {
+            if ($property instanceof Variable) {
+                $context->codePrinter->output('zephir_read_property_zval(' . $symbol . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+            } else {
+                $context->codePrinter->output('zephir_read_property_this(' . $symbol . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
+            }
         } else {
-            $context->codePrinter->output('zephir_read_property(' . $symbol . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
+            if ($property instanceof Variable) {
+                $context->codePrinter->output('zephir_read_property_zval(' . $symbol . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+            } else {
+                $context->codePrinter->output('zephir_read_property(' . $symbol . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
+            }
         }
     }
 
