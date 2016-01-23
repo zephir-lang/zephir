@@ -91,7 +91,7 @@ class Compiler
     protected $stringManager;
 
     /**
-     * @var FcallManager
+     * @var \Zephir\Backends\ZendEngine3\FcallManager|\Zephir\Backends\ZendEngine2\FcallManager
      */
     protected $fcallManager;
 
@@ -130,6 +130,8 @@ class Compiler
      *
      * @param Config $config
      * @param Logger $logger
+     * @param BaseBackend $backend
+     * @throws Exception
      */
     public function __construct(Config $config, Logger $logger, BaseBackend $backend)
     {
@@ -169,6 +171,7 @@ class Compiler
      *
      * @param FunctionDefinition $func
      * @param array $statement
+     * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
@@ -281,6 +284,9 @@ class Compiler
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
+     * @throws CompilerException
+     * @throws Exception
+     * @throws ParseException
      */
     protected function preCompile($filePath)
     {
@@ -353,6 +359,9 @@ class Compiler
      *
      * @param string $className
      * @param string $location
+     * @throws CompilerException
+     * @throws Exception
+     * @throws ParseException
      */
     public function loadExternalClass($className, $location)
     {
