@@ -300,7 +300,6 @@ class Compiler
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
             $cmd = PHP_BINARY . ' -dextension="'.$parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
-            echo $cmd;
             passthru($cmd, $exitCode);
             exit($exitCode);
         }
