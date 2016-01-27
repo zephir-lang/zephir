@@ -423,6 +423,56 @@ class CompilerFile implements FileInterface
                     ), $shortcut);
                     break;
 
+                case 'add':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        array('public'),
+                        'set' . ucfirst($name),
+                        new ClassMethodParameters(array(
+                            array(
+                                'type' => 'parameter',
+                                'name' => $name,
+                                'const' => 0,
+                                'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
+                                'mandatory' => 0
+                            )
+                        )),
+                        new StatementsBlock(array(
+                            array(
+                                'type' => 'let',
+                                'assignments' => array(
+                                    array(
+                                        'assign-type' => 'object-property',
+                                        'operator' => 'assign',
+                                        'variable' => 'this',
+                                        'property' => $property['name'],
+                                        'expr' => array(
+                                            'type' => 'variable',
+                                            'value' => $name,
+                                            'file'  => $property['file'],
+                                            'line'  => $property['line'],
+                                            'char'  => $property['char']
+                                        ),
+                                        'file'  => $property['file'],
+                                        'line'  => $property['line'],
+                                        'char'  => $property['char']
+                                    )
+                                )
+                            ),
+                            array(
+                                'type' => 'return',
+                                'expr' => array(
+                                    'type' => 'variable',
+                                    'value' => 'this'
+                                )
+                            )
+                        )),
+                        $docBlock,
+                        $this->createReturnsType(array('object')),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
                 case 'toString':
                 case '__toString':
                     $classDefinition->addMethod(new ClassMethod(
