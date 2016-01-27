@@ -427,7 +427,7 @@ class CompilerFile implements FileInterface
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'set' . ucfirst($name),
+                        'add' . ucfirst($name),
                         new ClassMethodParameters(array(
                             array(
                                 'type' => 'parameter',
