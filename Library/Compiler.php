@@ -126,12 +126,10 @@ class Compiler
     public $backend;
 
     /**
-     * Compiler constructor
-     *
+     * Compiler constructor.
      * @param Config $config
      * @param Logger $logger
      * @param BaseBackend $backend
-     * @throws Exception
      */
     public function __construct(Config $config, Logger $logger, BaseBackend $backend)
     {
@@ -168,9 +166,8 @@ class Compiler
 
     /**
      * Adds a function to the function definitions
-     *
      * @param FunctionDefinition $func
-     * @param array $statement
+     * @param null $statement
      * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
@@ -197,6 +194,7 @@ class Compiler
         if ($this->parserCompiled === true) {
             return true;
         }
+
 
         $extFile = null;
         $currentDir = realpath(dirname(__FILE__)). DIRECTORY_SEPARATOR  . '..' .DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR ;
@@ -243,17 +241,25 @@ class Compiler
 
                 chdir($oldCwd);
             } else {
-                if (!file_exists($currentDir . 'modules/zephir_parser.so')) {
+                if (
+                    false === file_exists($currentDir . 'modules/zephir_parser.so') ||
+                     true === $this->config->get('environment')['alwaysCompileParser']
+                ) {
                     $this->logger->output('zephir_parser extension not loaded, compiling it');
                     $oldCwd = getcwd();
                     chdir($currentDir);
 
-                    echo shell_exec('cd parser && ./build_linux.sh');
-                    exec('make clean && phpize --clean', $output, $exit);
-                    $this->logger->output('Preparing for parser compilation...');
-                    exec('phpize', $output, $exit);
+                    $env_paths = $this->getEnvironmentLocations();
 
-                    exec('export CC="gcc" && ./configure --enable-zephir_parser');
+                    $phpize = $env_paths['phpize'];
+                    $php_config = $env_paths['php-config'];
+
+                    echo shell_exec('cd parser && ./build_linux.sh');
+                    exec('make clean && '.$phpize.' --clean', $output, $exit);
+                    $this->logger->output('Preparing for parser compilation...');
+                    exec($phpize, $output, $exit);
+
+                    exec('export CC="gcc" && ./configure --enable-zephir_parser'.$php_config);
                     $this->logger->output('Compiling the parser...');
 
                     exec(
@@ -293,15 +299,14 @@ class Compiler
         $parserExt = $this->compileParser();
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
-            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
+            $cmd = PHP_BINARY . ' -dextension="'.$parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
+            echo $cmd;
             passthru($cmd, $exitCode);
             exit($exitCode);
         }
-
         if (!$parserExt) {
             throw new Exception('The zephir parser extension is not loaded!');
         }
-
         if (preg_match('#\.zep$#', $filePath)) {
             $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
             $className = preg_replace('#.zep$#', '', $className);
@@ -1057,7 +1062,6 @@ class Compiler
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
-
         $needConfigure  = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
@@ -1103,6 +1107,8 @@ class Compiler
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
         $needConfigure = $this->generate($command);
+
+
         if ($needConfigure) {
             if (Utils::isWindows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
@@ -1123,10 +1129,16 @@ class Compiler
 
                 exec('cd ext && configure --enable-' . $namespace);
             } else {
-                exec('cd ext && make clean && phpize --clean', $output, $exit);
+
+                $env_paths = $this->getEnvironmentLocations();
+
+                $phpize = $env_paths['phpize'];
+                $php_config = $env_paths['php-config'];
+
+                exec('cd ext && make clean && '.$phpize.' --clean', $output, $exit);
 
                 $this->logger->output('Preparing for PHP compilation...');
-                exec('cd ext && phpize', $output, $exit);
+                exec('cd ext && '.$phpize, $output, $exit);
 
                 $this->logger->output('Preparing configuration file...');
 
@@ -1136,7 +1148,7 @@ class Compiler
                     'cd ext && export CC="gcc" && export CFLAGS="' .
                     $gccFlags .
                     '" && ./configure --enable-' .
-                    $namespace
+                    $namespace . $php_config
                 );
             }
         }
@@ -1160,6 +1172,42 @@ class Compiler
                 $exit
             );
         }
+    }
+
+
+    /**
+     * @return array with 2 keys phpize and php-config with their paths as strings
+     * @throws CompilerException
+     */
+
+    protected function getEnvironmentLocations(){
+
+        $config = $this->config->get("environment");
+
+        if ($config === null || $config['phpize'] == "" || $config['php-config'] == ""){
+            //paths to a specific php versions are not defined so just return the default ones
+            return array(
+                "phpize" => "phpize",
+                "php-config" => ""
+            );
+        }
+
+        if (false === is_file($config['phpize'])){
+            throw new CompilerException(
+                "phpize path is defined, but file does NOT exists."
+            );
+        }
+
+        if (false === is_file($config['php-config'])){
+            throw new CompilerException(
+                "php-config path is defined, but file does NOT exists."
+            );
+        }
+
+        return array(
+            "phpize"     => $config['phpize'],
+            "php-config" => " --with-php-config=" . $config['php-config']
+        );
     }
 
     /**
@@ -1212,14 +1260,23 @@ class Compiler
      */
     public function install(CommandInterface $command, $development = false)
     {
+
         /**
          * Get global namespace
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
 
-        @unlink("compile.log");
-        @unlink("compile-errors.log");
-        @unlink("ext/modules/" . $namespace . ".so");
+        if (is_file("compile.log")){
+            unlink("compile.log");
+        }
+
+        if (is_file("compile-errors.log")){
+            unlink("compile-errors.log");
+        }
+
+        if (is_file("ext/modules/" . $namespace . ".so")){
+            unlink("ext/modules/" . $namespace . ".so");
+        }
 
         $this->compile($command, $development);
         if (Utils::isWindows()) {
@@ -1339,7 +1396,8 @@ class Compiler
     /**
      * Checks which files in the base kernel must be copied
      *
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
     protected function checkKernelFiles()
     {
