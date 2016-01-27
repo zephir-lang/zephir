@@ -94,6 +94,11 @@ class Config
         'verbose'     => false,
         'requires'    => array(
             'extensions'    => array()
+        ),
+        'environment'  => array(
+            "phpize" => "",
+            "php-config" => "",
+            "alwaysCompileParser" => false
         )
     );
 
