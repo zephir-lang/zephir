@@ -21,12 +21,20 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\Utils;
 
 /**
  * Class OptimizerAbstract
  */
 abstract class OptimizerAbstract
 {
+	protected $functionName;
+
+	public function __construct() {
+		$fqcn = explode('\\', get_called_class());
+		$this->functionName = Utils::uncamelize(substr(array_pop($fqcn), 0, strlen('Optimizer')));
+	}
+
     /**
      * @param array $expression
      * @param Call $call
