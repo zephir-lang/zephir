@@ -352,11 +352,12 @@ class CompilerFile implements FileInterface
             }
 
             switch ($shortcut['name']) {
+                case 'is':
                 case 'get':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'get' . Utils::camelize($name),
+                        $shortcut['name'] . Utils::camelize($name),
                         null,
                         new StatementsBlock(array(
                             array(
