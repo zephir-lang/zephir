@@ -1,57 +1,50 @@
-<html>
-
-
-    <head>
-
-        <?= $this->partial("partials/assets.phtml") ?>
-
-        <script>var ZepCurrentPath = '<?=$this->url("/")?>'</script>
-
-        <?= $this->partial("partials/analytics.phtml") ?>
-
-    </head>
-
-
-    <body onload="prettyPrint()">
+<?php
+/**
+ * @var string $contentPartial
+ */
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="<?php echo $this->projectConfig("name") ?> API doc" name="description">
+    <title>
+        <?php if ($this->themeOption("title")): ?>
+            <?php echo str_replace(["%_name_%", "%_version_%"], [$this->projectConfig("name"), $this->projectConfig('version')], $this->themeOption("title")) ?>
+        <?php else: ?>
+            <?php echo $this->projectConfig("name") ?> API Documentation
+        <?php endif; ?>
+    </title>
+    <?php echo $this->partial("partials/assets.phtml") ?>
+    <script>var ZepCurrentPath = '<?php echo $this->url("/")?>'</script>
+    <?php echo $this->partial("partials/analytics.phtml") ?>
+</head>
+ <body onload="prettyPrint()">
         <div id="top-bar">
             <div id="top-left">
-                <?php if ($this->themeOption("title")){ ?>
-                    <?= str_replace( array("%_name_%", "%_version_%") , array($this->projectConfig("name"), $this->projectConfig('version')) , $this->themeOption("title")) ?>
-                <?php }else{ ?>
-                    <?= $this->projectConfig("name") ?> Documentation <span class="version">v<?php echo $this->projectConfig('version'); ?></span>
-                <?php } ?>
+                <?php if ($this->themeOption("title")): ?>
+                    <?php echo str_replace(["%_name_%", "%_version_%"], [$this->projectConfig("name"), $this->projectConfig('version')], $this->themeOption("title")) ?>
+                <?php else: ?>
+                    <?php echo $this->projectConfig("name") ?> Documentation <span class="version">v<?php echo $this->projectConfig('version'); ?></span>
+                <?php endif; ?>
             </div>
             <div id="top-right">
-
             </div>
         </div>
-
         <div id="body">
-
             <div id="body-left">
-
                 <div class="header-search">
-
                     <input class="search-box" placeholder="Search for a class or namespace " type="text" />
-
                     <div id="menu-wrapper">
-
-
                     </div>
-
                 </div>
-
             </div>
             <div id="body-right">
                 <div class="content">
-                    <?= $this->partial($contentPartial) ?>
+                    <?php echo $this->partial($contentPartial) ?>
                 </div>
             </div>
-
         </div>
-
     </body>
-
-
-
 </html>
