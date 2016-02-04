@@ -67,11 +67,11 @@ class MethodCall extends Call
         } else {
             $classTypes = $caller->getClassTypes();
             foreach ($classTypes as $classType) {
-                if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
-                    if ($compiler->isInterface($classType)) {
-                        continue;
-                    }
+                if ($compiler->isInterface($classType)) {
+                    continue;
+                }
 
+                if ($compiler->isClass($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
                     if ($compiler->isClass($classType)) {
                         $classDefinition = $compiler->getClassDefinition($classType);
                     } else {

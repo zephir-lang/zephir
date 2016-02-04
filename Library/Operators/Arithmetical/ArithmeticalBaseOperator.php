@@ -131,15 +131,9 @@ class ArithmeticalBaseOperator extends BaseOperator
         /**
          * Check for constant folding optimizations
          */
-        switch ($this->_operator) {
-            case '+':
-            case '-':
-            case '*':
-                $optimized = $this->optimizeConstantFolding($expression, $compilationContext);
-                if (is_object($optimized)) {
-                    return $optimized;
-                }
-                break;
+        $optimized = $this->optimizeConstantFolding($expression, $compilationContext);
+        if ($optimized) {
+            return $optimized;
         }
 
         $leftExpr = new Expression($expression['left']);

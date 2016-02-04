@@ -996,10 +996,9 @@ class CompilerFile
     }
 
     /**
-     *
      * Returns the path to the source file
      *
-     * @return type
+     * @return string
      */
     public function getFilePath()
     {
@@ -1010,9 +1009,9 @@ class CompilerFile
      * @param array $types
      * @return array|null
      */
-    protected function createReturnsType(Array $types)
+    protected function createReturnsType(array $types)
     {
-        if (empty($types)) {
+        if (!$types) {
             return null;
         }
 
