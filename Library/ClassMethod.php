@@ -1664,7 +1664,7 @@ class ClassMethod
                 /**
                  * Assuming they're initialized
                  */
-                $symbol->setIsInitialized(true, $compilationContext, $parameter);
+                $symbol->setIsInitialized(true, $compilationContext);
 
                 /**
                  * Variables with class/type must be objects across the execution
