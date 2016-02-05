@@ -1074,14 +1074,13 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	}
 
 	if (matches) {
-		if (Z_TYPE(tmp_matches) == IS_REFERENCE) {
-			ZVAL_COPY(matches, Z_REFVAL(tmp_matches));
-		} else {
-			ZVAL_NULL(matches);
-		}
+		zval *php_matches = &tmp_matches;
+
+		ZVAL_DEREF(php_matches);
+		ZVAL_COPY(matches, php_matches);
 	}
 
-	zval_dtor(&tmp_matches);
+	zval_ptr_dtor(&tmp_matches);
 
 	if (use_copy) {
 		zval_dtor(&copy);
