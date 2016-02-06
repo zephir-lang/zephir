@@ -31,13 +31,8 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 	long result, i = 0;
 	zval *n_param = NULL;
 	int n, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &n_param);
 
@@ -71,13 +66,8 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 	zend_bool _1;
 	zval *num_param = NULL, _0, _2, _3;
 	int num, ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);

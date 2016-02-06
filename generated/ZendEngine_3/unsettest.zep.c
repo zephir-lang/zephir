@@ -33,13 +33,8 @@ ZEPHIR_INIT_CLASS(Test_Unsettest) {
 
 PHP_METHOD(Test_Unsettest, getProperty) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "property");
 
@@ -48,13 +43,8 @@ PHP_METHOD(Test_Unsettest, getProperty) {
 PHP_METHOD(Test_Unsettest, has) {
 
 	zval *key, key_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -70,13 +60,8 @@ PHP_METHOD(Test_Unsettest, has) {
 PHP_METHOD(Test_Unsettest, addValueToProperty) {
 
 	zval *key, key_sub, *value, value_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&value_sub);
 
@@ -91,13 +76,8 @@ PHP_METHOD(Test_Unsettest, addValueToProperty) {
 PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 
 	zval *key, key_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -113,13 +93,8 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 
 	zval *arrayParameter, arrayParameter_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arrayParameter_sub);
 
 	ZEPHIR_MM_GROW();
@@ -137,13 +112,8 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 	zval *arrayParameter, arrayParameter_sub, *index, index_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arrayParameter_sub);
 	ZVAL_UNDEF(&index_sub);
 
@@ -161,13 +131,8 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_unset_property(this_ptr, "property" TSRMLS_CC);
 	RETURN_MEMBER(this_ptr, "property");
@@ -177,13 +142,8 @@ PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 
 	zval simpleObject, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&simpleObject);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -212,13 +172,8 @@ PHP_METHOD(Test_Unsettest, testUnsetTypedArray) {
 	zval key;
 	zval *arr_param = NULL, *key_param = NULL;
 	zval arr;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&key);
 

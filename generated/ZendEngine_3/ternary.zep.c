@@ -33,13 +33,8 @@ ZEPHIR_INIT_CLASS(Test_Ternary) {
 PHP_METHOD(Test_Ternary, testTernary1) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -58,13 +53,8 @@ PHP_METHOD(Test_Ternary, testTernary2) {
 
 	zval *b_param = NULL, _0;
 	zend_bool b;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -87,13 +77,8 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&y_sub);
 	ZVAL_UNDEF(&_0);
@@ -126,13 +111,8 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&y_sub);
 	ZVAL_UNDEF(&_0);
@@ -165,13 +145,8 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
 	zval *a, a_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -199,13 +174,8 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 
 	zval var2, var3, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&var2);
 	ZVAL_UNDEF(&var3);
 	ZVAL_UNDEF(&_0);
@@ -241,13 +211,8 @@ PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
 	zval s;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&s);
 
 	ZEPHIR_MM_GROW();
@@ -268,13 +233,8 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 PHP_METHOD(Test_Ternary, testShortTernary) {
 
 	zval *a, a_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -296,13 +256,8 @@ PHP_METHOD(Test_Ternary, testShortTernary) {
 PHP_METHOD(Test_Ternary, testShortTernaryComplex) {
 
 	zval *left, left_sub, *value, value_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&left_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);

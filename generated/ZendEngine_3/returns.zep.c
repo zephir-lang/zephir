@@ -27,13 +27,8 @@ ZEPHIR_INIT_CLASS(Test_Returns) {
 
 PHP_METHOD(Test_Returns, testReturnCast1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG((int) 5.0);
 
@@ -41,13 +36,8 @@ PHP_METHOD(Test_Returns, testReturnCast1) {
 
 PHP_METHOD(Test_Returns, testReturnCast2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(1);
 
@@ -55,13 +45,8 @@ PHP_METHOD(Test_Returns, testReturnCast2) {
 
 PHP_METHOD(Test_Returns, testReturnCast3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(0);
 
@@ -69,13 +54,8 @@ PHP_METHOD(Test_Returns, testReturnCast3) {
 
 PHP_METHOD(Test_Returns, testReturnCast4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	if (1) {
 		RETURN_LONG(1);

@@ -27,13 +27,8 @@ ZEPHIR_INIT_CLASS(Test_ResourceTest) {
 PHP_METHOD(Test_ResourceTest, testLetStatementSTDIN) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -47,13 +42,8 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDIN) {
 PHP_METHOD(Test_ResourceTest, testLetStatementSTDOUT) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -67,13 +57,8 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDOUT) {
 PHP_METHOD(Test_ResourceTest, testLetStatementSTDERR) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -87,13 +72,8 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDERR) {
 PHP_METHOD(Test_ResourceTest, testTypeOffResource) {
 
 	zval a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
@@ -110,13 +90,8 @@ PHP_METHOD(Test_ResourceTest, testTypeOffResource) {
 PHP_METHOD(Test_ResourceTest, testIsResource) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -131,13 +106,8 @@ PHP_METHOD(Test_ResourceTest, testFunctionsForSTDIN) {
 
 	zval a, _0;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 

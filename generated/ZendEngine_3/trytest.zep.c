@@ -30,13 +30,8 @@ ZEPHIR_INIT_CLASS(Test_TryTest) {
 
 PHP_METHOD(Test_TryTest, testThrow1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(TSRMLS_C), "error", "test/trytest.zep", 10);
 	return;
@@ -47,13 +42,8 @@ PHP_METHOD(Test_TryTest, testThrow2) {
 
 	zval message, _0;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&message);
 	ZVAL_UNDEF(&_0);
 
@@ -73,13 +63,8 @@ PHP_METHOD(Test_TryTest, testThrow2) {
 
 PHP_METHOD(Test_TryTest, testTry1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	/* try_start_1: */
@@ -95,13 +80,8 @@ PHP_METHOD(Test_TryTest, testTry2) {
 
 	zval _0$$3, _1$$3;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 
@@ -130,13 +110,8 @@ PHP_METHOD(Test_TryTest, testTry3) {
 
 	zval _0$$3, _1$$3, _2;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2);
@@ -176,13 +151,8 @@ PHP_METHOD(Test_TryTest, testTry4) {
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4;
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
@@ -247,13 +217,8 @@ PHP_METHOD(Test_TryTest, testTry5) {
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4;
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
@@ -315,13 +280,8 @@ PHP_METHOD(Test_TryTest, testTry6) {
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, e, _0$$4, _1$$4, _2$$5, _3$$5;
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&e);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
@@ -384,13 +344,8 @@ PHP_METHOD(Test_TryTest, testTry7) {
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, e, _0$$4, _1$$4, _2$$5, _3$$5;
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&e);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
@@ -449,13 +404,8 @@ PHP_METHOD(Test_TryTest, testTry8) {
 
 	zval _0$$3, _1$$3;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 
@@ -484,13 +434,8 @@ PHP_METHOD(Test_TryTest, testTry8) {
 
 PHP_METHOD(Test_TryTest, someMethod1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_RuntimeException, "some external exception", "test/trytest.zep", 118);
 	return;
@@ -499,13 +444,8 @@ PHP_METHOD(Test_TryTest, someMethod1) {
 
 PHP_METHOD(Test_TryTest, someMethod2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_DomainException, "some external exception", "test/trytest.zep", 123);
 	return;
@@ -516,13 +456,8 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 	zval e;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&e);
 
 	ZEPHIR_MM_GROW();
@@ -552,13 +487,8 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 	zval e;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&e);
 
 	ZEPHIR_MM_GROW();
@@ -587,13 +517,8 @@ PHP_METHOD(Test_TryTest, testTry10) {
 PHP_METHOD(Test_TryTest, testTry11) {
 
 	zval ex;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&ex);
 
 

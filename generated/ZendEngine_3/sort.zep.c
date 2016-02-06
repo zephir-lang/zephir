@@ -33,13 +33,8 @@ PHP_METHOD(Test_Sort, quick) {
 	int ZEPHIR_LAST_CALL_STATUS, i = 0, length = 0, pivot = 0, item = 0, _2, _3;
 	zval *arr_param = NULL, left, right, _0, _7, _10, _11, _4$$4, _5$$5, _6$$6;
 	zval arr, _9;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_9);
 	ZVAL_UNDEF(&left);

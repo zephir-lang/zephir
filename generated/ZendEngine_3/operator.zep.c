@@ -28,13 +28,8 @@ ZEPHIR_INIT_CLASS(Test_Operator) {
 PHP_METHOD(Test_Operator, testIdentical) {
 
 	zval *param1, param1_sub, *param2, param2_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
 
@@ -50,13 +45,8 @@ PHP_METHOD(Test_Operator, testIdenticalIfComplex) {
 
 	zend_bool b = 0;
 	zval *input, input_sub, a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&input_sub);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
@@ -81,13 +71,8 @@ PHP_METHOD(Test_Operator, testIdenticalIfComplex) {
 PHP_METHOD(Test_Operator, testIdenticalVarFalse) {
 
 	zval *param, param_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&param_sub);
 
 	zephir_fetch_params(0, 1, 0, &param);
@@ -101,13 +86,8 @@ PHP_METHOD(Test_Operator, testIdenticalVarFalse) {
 PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
 
 	zval *param, param_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&param_sub);
 
 	zephir_fetch_params(0, 1, 0, &param);

@@ -36,13 +36,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyInt) {
 
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -72,13 +67,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolTrue) {
 
 	zval *property_param = NULL, __$true;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$true, 1);
 
@@ -106,13 +96,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolFalse) {
 
 	zval *property_param = NULL, __$false;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$false, 0);
 
@@ -140,13 +125,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyString) {
 
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -177,13 +157,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyChar) {
 	char a;
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -215,13 +190,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyUChar) {
 	unsigned char a;
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -252,13 +222,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 
 	zval *property_param = NULL, __$null;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_NULL(&__$null);
 
@@ -287,13 +252,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableInt) {
 	int a;
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -324,13 +284,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableString) {
 
 	zval *property_param = NULL, a;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&a);
 
@@ -361,13 +316,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 	zend_bool a;
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -399,13 +349,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 	zend_bool a;
 	zval *property_param = NULL, _0;
 	zval property;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 
@@ -435,13 +380,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 PHP_METHOD(Test_Oo_DynamicProp, setExistingStringProperty) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -457,13 +397,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString) {
 
 	zval *value_param = NULL;
 	zval value;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&value);
 
 	ZEPHIR_MM_GROW();
@@ -489,13 +424,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString) {
 PHP_METHOD(Test_Oo_DynamicProp, setNonExistingStringProperty) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();

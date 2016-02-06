@@ -34,13 +34,8 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoConstructParams) {
 PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 	zval *a, a_sub, *b, b_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -55,13 +50,8 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 PHP_METHOD(Test_Oo_OoConstructParams, getA) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "a");
 
@@ -69,13 +59,8 @@ PHP_METHOD(Test_Oo_OoConstructParams, getA) {
 
 PHP_METHOD(Test_Oo_OoConstructParams, getB) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "b");
 

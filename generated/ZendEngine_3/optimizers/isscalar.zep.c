@@ -27,13 +27,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testIntVar) {
 
 	zval _0;
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -47,13 +42,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testDoubleVar) {
 
 	zval _0;
 	double a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -67,13 +57,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testBoolVar) {
 
 	zval _0;
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -86,13 +71,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testBoolVar) {
 PHP_METHOD(Test_Optimizers_IsScalar, testStringVar) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -106,13 +86,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testStringVar) {
 PHP_METHOD(Test_Optimizers_IsScalar, testEmptyArrayVar) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -127,13 +102,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testVar) {
 
 	zval _0;
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -146,13 +116,8 @@ PHP_METHOD(Test_Optimizers_IsScalar, testVar) {
 PHP_METHOD(Test_Optimizers_IsScalar, testVarParameter) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);

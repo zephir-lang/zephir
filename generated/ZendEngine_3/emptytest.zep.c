@@ -34,13 +34,8 @@ ZEPHIR_INIT_CLASS(Test_EmptyTest) {
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -54,13 +49,8 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 
 	zval a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
@@ -87,13 +77,8 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 PHP_METHOD(Test_EmptyTest, testEmptyString) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -107,13 +92,8 @@ PHP_METHOD(Test_EmptyTest, testEmptyString) {
 PHP_METHOD(Test_EmptyTest, testNotEmptyString) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -128,13 +108,8 @@ PHP_METHOD(Test_EmptyTest, testString) {
 
 	zval *a_param = NULL;
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();

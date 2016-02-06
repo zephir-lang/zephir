@@ -30,13 +30,8 @@ PHP_METHOD(Test_Optimizers_Cos, testInt) {
 
 	zval _0;
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -50,13 +45,8 @@ PHP_METHOD(Test_Optimizers_Cos, testVar) {
 
 	zval _0;
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -69,13 +59,8 @@ PHP_METHOD(Test_Optimizers_Cos, testVar) {
 PHP_METHOD(Test_Optimizers_Cos, testIntValue1) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -87,13 +72,8 @@ PHP_METHOD(Test_Optimizers_Cos, testIntValue1) {
 PHP_METHOD(Test_Optimizers_Cos, testIntValue2) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 
@@ -106,13 +86,8 @@ PHP_METHOD(Test_Optimizers_Cos, testIntParameter) {
 
 	zval *a_param = NULL, _0;
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &a_param);
@@ -128,13 +103,8 @@ PHP_METHOD(Test_Optimizers_Cos, testIntParameter) {
 PHP_METHOD(Test_Optimizers_Cos, testVarParameter) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);

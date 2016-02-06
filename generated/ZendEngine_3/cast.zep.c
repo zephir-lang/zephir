@@ -31,13 +31,8 @@ ZEPHIR_INIT_CLASS(Test_Cast) {
 /** To int cast */
 PHP_METHOD(Test_Cast, testIntCastFromFloat) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG((int) 5.0);
 
@@ -46,13 +41,8 @@ PHP_METHOD(Test_Cast, testIntCastFromFloat) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableFloat) {
 
 	double a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 5.0;
@@ -62,13 +52,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableFloat) {
 
 PHP_METHOD(Test_Cast, testIntCastFromBooleanTrue) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(1);
 
@@ -76,13 +61,8 @@ PHP_METHOD(Test_Cast, testIntCastFromBooleanTrue) {
 
 PHP_METHOD(Test_Cast, testIntCastFromBooleanFalse) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(0);
 
@@ -91,13 +71,8 @@ PHP_METHOD(Test_Cast, testIntCastFromBooleanFalse) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanTrue) {
 
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 1;
@@ -108,13 +83,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanTrue) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanFalse) {
 
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 0;
@@ -125,13 +95,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanFalse) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableNull) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -145,13 +110,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableNull) {
 PHP_METHOD(Test_Cast, testIntCastFromStringValue) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -166,13 +126,8 @@ PHP_METHOD(Test_Cast, testIntCastFromStringValue) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableString) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -187,13 +142,8 @@ PHP_METHOD(Test_Cast, testIntCastFromParameterString) {
 
 	zval *a_param = NULL;
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -208,13 +158,8 @@ PHP_METHOD(Test_Cast, testIntCastFromParameterString) {
 
 PHP_METHOD(Test_Cast, testIntCastFromNull) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(0);
 
@@ -223,13 +168,8 @@ PHP_METHOD(Test_Cast, testIntCastFromNull) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableEmptyArray) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -243,13 +183,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableEmptyArray) {
 PHP_METHOD(Test_Cast, testIntCastFromEmptyArray) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -263,13 +198,8 @@ PHP_METHOD(Test_Cast, testIntCastFromEmptyArray) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableArray) {
 
 	zval a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
@@ -297,13 +227,8 @@ PHP_METHOD(Test_Cast, testIntCastFromArray) {
 
 	zval _1;
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -334,13 +259,8 @@ PHP_METHOD(Test_Cast, testIntCastFromArray) {
 PHP_METHOD(Test_Cast, testIntCastFromStdClass) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -358,13 +278,8 @@ PHP_METHOD(Test_Cast, testIntCastFromStdClass) {
 PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -378,13 +293,8 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 /** To float cast */
 PHP_METHOD(Test_Cast, testFloatCastFromFloat) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(5.0);
 
@@ -393,13 +303,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromFloat) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableFloat) {
 
 	double a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 5.0;
@@ -409,13 +314,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableFloat) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromBooleanTrue) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(1);
 
@@ -423,13 +323,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromBooleanTrue) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromBooleanFalse) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(0);
 
@@ -438,13 +333,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromBooleanFalse) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanTrue) {
 
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 1;
@@ -455,13 +345,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanTrue) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanFalse) {
 
 	zend_bool a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 0;
@@ -472,13 +357,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanFalse) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableNull) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -491,13 +371,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableNull) {
 
 PHP_METHOD(Test_Cast, testFloatCastFromNull) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(0);
 
@@ -506,13 +381,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromNull) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableEmptyArray) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -526,13 +396,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableEmptyArray) {
 PHP_METHOD(Test_Cast, testFloatCastFromEmptyArray) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -546,13 +411,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromEmptyArray) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableArray) {
 
 	zval a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
@@ -580,13 +440,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromArray) {
 
 	zval _1;
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -617,13 +472,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromArray) {
 PHP_METHOD(Test_Cast, testFloatCastFromStdClass) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -641,13 +491,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromStdClass) {
 PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -661,13 +506,8 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 /** To boolean cast */
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL((zend_bool) 1);
 
@@ -675,13 +515,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL((zend_bool) 1000);
 
@@ -689,13 +524,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue2) {
 
 PHP_METHOD(Test_Cast, testBooleanCastFromIntFalse) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL((zend_bool) 0);
 
@@ -704,13 +534,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromIntFalse) {
 PHP_METHOD(Test_Cast, testBooleanCastFromObject) {
 
 	zval simpleObject;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&simpleObject);
 
 	ZEPHIR_MM_GROW();
@@ -724,13 +549,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromObject) {
 PHP_METHOD(Test_Cast, testBooleanCastFromEmptyArray) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -744,13 +564,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromEmptyArray) {
 PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 
 	zval a, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
@@ -777,13 +592,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();
@@ -798,13 +608,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 PHP_METHOD(Test_Cast, testObjectCastFromInt) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -819,13 +624,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromInt) {
 PHP_METHOD(Test_Cast, testObjectCastFromFloat) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -840,13 +640,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromFloat) {
 PHP_METHOD(Test_Cast, testObjectCastFromFalse) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -861,13 +656,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromFalse) {
 PHP_METHOD(Test_Cast, testObjectCastFromTrue) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -882,13 +672,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromTrue) {
 PHP_METHOD(Test_Cast, testObjectCastFromNull) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -903,13 +688,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromNull) {
 PHP_METHOD(Test_Cast, testObjectCastFromEmptyArray) {
 
 	zval _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -927,13 +707,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 
 	zval _1, _2;
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -963,13 +738,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 PHP_METHOD(Test_Cast, testObjectCastFromEmptyString) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -984,13 +754,8 @@ PHP_METHOD(Test_Cast, testObjectCastFromEmptyString) {
 PHP_METHOD(Test_Cast, testObjectCastFromString) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();

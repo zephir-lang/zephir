@@ -36,13 +36,8 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 
 	zval _0, _6;
 	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&test);
 	ZVAL_UNDEF(&test1);
 	ZVAL_UNDEF(&_1);

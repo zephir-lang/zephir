@@ -35,13 +35,8 @@ ZEPHIR_INIT_CLASS(Test_SPropertyAccess) {
 PHP_METHOD(Test_SPropertyAccess, __construct) {
 
 	zval _0, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);

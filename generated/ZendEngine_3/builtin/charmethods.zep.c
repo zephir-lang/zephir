@@ -29,13 +29,8 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHex) {
 
 	zval _0, _1, _2;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -59,13 +54,8 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 	zephir_fcall_cache_entry *_5 = NULL;
 	zval *str_param = NULL, o, _1$$3, _2$$3, _3$$3, _4$$3;
 	zval str;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&o);
 	ZVAL_UNDEF(&_1$$3);

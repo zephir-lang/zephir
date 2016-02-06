@@ -28,13 +28,8 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_CreateArray) {
 PHP_METHOD(Test_Optimizers_CreateArray, createNoSize) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	zephir_create_array(return_value, 0, 1 TSRMLS_CC);
@@ -46,13 +41,8 @@ PHP_METHOD(Test_Optimizers_CreateArray, createSize) {
 
 	zval *n_param = NULL, _0;
 	int n, ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &n_param);

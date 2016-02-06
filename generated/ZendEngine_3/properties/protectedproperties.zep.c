@@ -64,13 +64,8 @@ ZEPHIR_INIT_CLASS(Test_Properties_ProtectedProperties) {
 PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 	zval *someVar, someVar_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&someVar_sub);
 
 	zephir_fetch_params(0, 1, 0, &someVar);
@@ -83,13 +78,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someVar");
 
@@ -97,13 +87,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNull) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someNull");
 
@@ -112,13 +97,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNull) {
 PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 	zval *param, param_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&param_sub);
 
 	zephir_fetch_params(0, 1, 0, &param);
@@ -131,13 +111,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNullInitial) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someNullInitial");
 
@@ -145,13 +120,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNullInitial) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeFalse) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someFalse");
 
@@ -159,13 +129,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeFalse) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeTrue) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someTrue");
 
@@ -173,13 +138,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeTrue) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeInteger) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someInteger");
 
@@ -187,13 +147,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeInteger) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someDouble");
 
@@ -201,13 +156,8 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble) {
 
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeString) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someString");
 

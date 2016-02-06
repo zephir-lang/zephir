@@ -34,13 +34,8 @@ PHP_METHOD(Test_ScallExternal, testCall1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_MM_GROW();
 
@@ -55,13 +50,8 @@ PHP_METHOD(Test_ScallExternal, testCall2) {
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *a, a_sub, *b, b_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -80,13 +70,8 @@ PHP_METHOD(Test_ScallExternal, testMethod3) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 

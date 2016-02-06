@@ -35,13 +35,8 @@ ZEPHIR_INIT_CLASS(Test_IssetTest) {
 PHP_METHOD(Test_IssetTest, testIssetArray1) {
 
 	zval *a, a_sub, *b, b_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -57,13 +52,8 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 
 	int b;
 	zval *a, a_sub, *b_param = NULL;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
@@ -79,13 +69,8 @@ PHP_METHOD(Test_IssetTest, testIssetArray3) {
 
 	zval b;
 	zval *a, a_sub, *b_param = NULL;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b);
 
@@ -102,13 +87,8 @@ PHP_METHOD(Test_IssetTest, testIssetArray3) {
 PHP_METHOD(Test_IssetTest, testIssetArray4) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -122,13 +102,8 @@ PHP_METHOD(Test_IssetTest, testIssetArray4) {
 PHP_METHOD(Test_IssetTest, testIssetArray5) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -142,13 +117,8 @@ PHP_METHOD(Test_IssetTest, testIssetArray5) {
 PHP_METHOD(Test_IssetTest, testIssetProperty1) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -162,13 +132,8 @@ PHP_METHOD(Test_IssetTest, testIssetProperty1) {
 PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 
 	zval *a, a_sub, *b, b_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -183,13 +148,8 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -203,13 +163,8 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 	zval g;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&g);
 
 	ZEPHIR_MM_GROW();
@@ -226,13 +181,8 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 	zval *inp, inp_sub, g;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&inp_sub);
 	ZVAL_UNDEF(&g);
 

@@ -32,13 +32,8 @@ ZEPHIR_INIT_CLASS(Test_Logical) {
 PHP_METHOD(Test_Logical, testAnd1) {
 
 	zend_bool _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -52,13 +47,8 @@ PHP_METHOD(Test_Logical, testAnd1) {
 PHP_METHOD(Test_Logical, testAnd2) {
 
 	zend_bool _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -72,13 +62,8 @@ PHP_METHOD(Test_Logical, testAnd2) {
 PHP_METHOD(Test_Logical, testAnd3) {
 
 	zend_bool _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -96,13 +81,8 @@ PHP_METHOD(Test_Logical, testAnd3) {
 PHP_METHOD(Test_Logical, testAnd4) {
 
 	zend_bool _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (1) ? 1 : 0;
@@ -122,13 +102,8 @@ PHP_METHOD(Test_Logical, testAnd9) {
 	zend_bool _0;
 	int b;
 	zval *a, a_sub, *b_param = NULL, _1$$3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
 
@@ -152,13 +127,8 @@ PHP_METHOD(Test_Logical, testAnd9) {
 PHP_METHOD(Test_Logical, testOr1) {
 
 	zend_bool _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -172,13 +142,8 @@ PHP_METHOD(Test_Logical, testOr1) {
 PHP_METHOD(Test_Logical, testOr2) {
 
 	zend_bool _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -193,13 +158,8 @@ PHP_METHOD(Test_Logical, testMixed1) {
 
 	zend_bool _0, _1;
 	int first = 0, second = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	first = 0;
@@ -224,13 +184,8 @@ PHP_METHOD(Test_Logical, testMixed2) {
 
 	zend_bool _0, _1;
 	zval *match, match_sub, *minLength, minLength_sub, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&match_sub);
 	ZVAL_UNDEF(&minLength_sub);
 	ZVAL_UNDEF(&_2);
@@ -258,13 +213,8 @@ PHP_METHOD(Test_Logical, testMixed2) {
 PHP_METHOD(Test_Logical, testMixed3) {
 
 	zend_bool a = 0, b = 0, _0, _1, _2, _3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	_0 = (0) ? 1 : 0;
@@ -293,13 +243,8 @@ PHP_METHOD(Test_Logical, testMixed4) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	zend_bool a, b, _0, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 

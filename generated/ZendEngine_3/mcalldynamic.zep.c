@@ -31,13 +31,8 @@ ZEPHIR_INIT_CLASS(Test_McallDynamic) {
 
 PHP_METHOD(Test_McallDynamic, testMethod1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(1);
 
@@ -47,13 +42,8 @@ PHP_METHOD(Test_McallDynamic, testMagicCall1) {
 
 	zval _0, _1;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -72,13 +62,8 @@ PHP_METHOD(Test_McallDynamic, __call) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *method, method_sub, *arguments, arguments_sub, realMethod;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&method_sub);
 	ZVAL_UNDEF(&arguments_sub);
 	ZVAL_UNDEF(&realMethod);

@@ -28,13 +28,8 @@ ZEPHIR_INIT_CLASS(Test_Strings) {
 PHP_METHOD(Test_Strings, testTrim) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -49,13 +44,8 @@ PHP_METHOD(Test_Strings, testTrim) {
 PHP_METHOD(Test_Strings, testRtrim) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -70,13 +60,8 @@ PHP_METHOD(Test_Strings, testRtrim) {
 PHP_METHOD(Test_Strings, testLtrim) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -91,13 +76,8 @@ PHP_METHOD(Test_Strings, testLtrim) {
 PHP_METHOD(Test_Strings, testTrim2Params) {
 
 	zval *str, str_sub, *charlist, charlist_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -113,13 +93,8 @@ PHP_METHOD(Test_Strings, testTrim2Params) {
 PHP_METHOD(Test_Strings, testRtrim2Params) {
 
 	zval *str, str_sub, *charlist, charlist_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -135,13 +110,8 @@ PHP_METHOD(Test_Strings, testRtrim2Params) {
 PHP_METHOD(Test_Strings, testLtrim2Params) {
 
 	zval *str, str_sub, *charlist, charlist_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -157,13 +127,8 @@ PHP_METHOD(Test_Strings, testLtrim2Params) {
 PHP_METHOD(Test_Strings, testImplode) {
 
 	zval *glue, glue_sub, *pieces, pieces_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&glue_sub);
 	ZVAL_UNDEF(&pieces_sub);
 
@@ -179,13 +144,8 @@ PHP_METHOD(Test_Strings, testImplode) {
 PHP_METHOD(Test_Strings, testStrpos) {
 
 	zval *haystack, haystack_sub, *needle, needle_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
 
@@ -202,13 +162,8 @@ PHP_METHOD(Test_Strings, testStrposOffset) {
 
 	int offset;
 	zval *haystack, haystack_sub, *needle, needle_sub, *offset_param = NULL, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
@@ -227,13 +182,8 @@ PHP_METHOD(Test_Strings, testStrposOffset) {
 PHP_METHOD(Test_Strings, testExplode) {
 
 	zval *delimiter, delimiter_sub, *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_UNDEF(&str_sub);
 
@@ -249,13 +199,8 @@ PHP_METHOD(Test_Strings, testExplode) {
 PHP_METHOD(Test_Strings, testExplodeStr) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -271,13 +216,8 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 	int limit;
 	zval *str, str_sub, *limit_param = NULL, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -296,13 +236,8 @@ PHP_METHOD(Test_Strings, testSubstr) {
 
 	int from, len;
 	zval *str, str_sub, *from_param = NULL, *len_param = NULL, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -324,13 +259,8 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 
 	int from;
 	zval *str, str_sub, *from_param = NULL, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -348,13 +278,8 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 PHP_METHOD(Test_Strings, testSubstr3) {
 
 	zval *str, str_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -371,13 +296,8 @@ PHP_METHOD(Test_Strings, testSubstr3) {
 PHP_METHOD(Test_Strings, testSubstr4) {
 
 	zval *str, str_sub, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -396,13 +316,8 @@ PHP_METHOD(Test_Strings, testSubstr4) {
 PHP_METHOD(Test_Strings, testAddslashes) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -417,13 +332,8 @@ PHP_METHOD(Test_Strings, testAddslashes) {
 PHP_METHOD(Test_Strings, testStripslashes) {
 
 	zval *str, str_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -437,13 +347,8 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 
 PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("\n            Hello world\n        ");
 
@@ -451,13 +356,8 @@ PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
 PHP_METHOD(Test_Strings, testEchoMultilineString) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	php_printf("%s", "\n            Hello world\n        ");
 
@@ -466,13 +366,8 @@ PHP_METHOD(Test_Strings, testEchoMultilineString) {
 PHP_METHOD(Test_Strings, testTrimMultilineString) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -487,13 +382,8 @@ PHP_METHOD(Test_Strings, testTrimMultilineString) {
 PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -507,13 +397,8 @@ PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 
 PHP_METHOD(Test_Strings, testInternedString1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("\"hello");
 
@@ -522,13 +407,8 @@ PHP_METHOD(Test_Strings, testInternedString1) {
 PHP_METHOD(Test_Strings, testInternedString2) {
 
 	zval _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 

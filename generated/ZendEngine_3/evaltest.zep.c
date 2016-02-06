@@ -29,13 +29,8 @@ PHP_METHOD(Test_EvalTest, evalCode) {
 
 	zval *code_param = NULL;
 	zval code;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&code);
 
 	ZEPHIR_MM_GROW();

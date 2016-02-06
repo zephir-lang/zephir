@@ -28,13 +28,8 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_Substr) {
 PHP_METHOD(Test_Optimizers_Substr, testTwoArguments) {
 
 	zval *str, str_sub, *start, start_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 
@@ -50,13 +45,8 @@ PHP_METHOD(Test_Optimizers_Substr, testTwoArguments) {
 PHP_METHOD(Test_Optimizers_Substr, testThreeArguments) {
 
 	zval *str, str_sub, *start, start_sub, *offset, offset_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 	ZVAL_UNDEF(&offset_sub);

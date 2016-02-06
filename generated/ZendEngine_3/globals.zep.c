@@ -27,13 +27,8 @@ ZEPHIR_INIT_CLASS(Test_Globals) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(ZEPHIR_GLOBAL(test).my_setting_1);
 
@@ -41,13 +36,8 @@ PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(ZEPHIR_GLOBAL(test).my_setting_2);
 
@@ -55,13 +45,8 @@ PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(ZEPHIR_GLOBAL(test).my_setting_3);
 
@@ -69,13 +54,8 @@ PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(ZEPHIR_GLOBAL(my_setting_1));
 
@@ -83,13 +63,8 @@ PHP_METHOD(Test_Globals, getDefaultGlobals4) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals5) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_2));
 
@@ -97,13 +72,8 @@ PHP_METHOD(Test_Globals, getDefaultGlobals5) {
 
 PHP_METHOD(Test_Globals, getDefaultGlobals6) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(ZEPHIR_GLOBAL(my_setting_3));
 

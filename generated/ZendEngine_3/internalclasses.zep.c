@@ -29,13 +29,8 @@ PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 	zend_class_entry *_0;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_MM_GROW();
 
@@ -48,13 +43,8 @@ PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 PHP_METHOD(Test_InternalClasses, testStaticPropertyFetch) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(303);
 

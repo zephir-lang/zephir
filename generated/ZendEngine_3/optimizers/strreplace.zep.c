@@ -33,13 +33,8 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1055) {
 
 	zval _1, _3;
 	zval _0, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_1);
@@ -68,13 +63,8 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1055) {
 PHP_METHOD(Test_Optimizers_StrReplace, issue1087) {
 
 	zval filtered, sanitize, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&filtered);
 	ZVAL_UNDEF(&sanitize);
 	ZVAL_UNDEF(&_0);
@@ -124,13 +114,8 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732A) {
 	zval subject;
 	zval _0;
 	zval search, replace;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&search);
 	ZVAL_UNDEF(&replace);
 	ZVAL_UNDEF(&_0);
@@ -186,13 +171,8 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732B) {
 	zval _0;
 	zval patterns, replacements;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&patterns);
 	ZVAL_UNDEF(&replacements);
 	ZVAL_UNDEF(&_0);

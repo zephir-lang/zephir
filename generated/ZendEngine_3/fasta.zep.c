@@ -35,13 +35,8 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	int ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
 	zval seq;
 	zval *n, n_sub, *seq_param = NULL, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&len);
 	ZVAL_UNDEF(&j);
@@ -149,13 +144,8 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 
 PHP_METHOD(Test_Fasta, fastRandom) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 }
@@ -165,13 +155,8 @@ PHP_METHOD(Test_Fasta, main) {
 	zval _0;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *n, n_sub, alu, iub, homoSap, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&alu);
 	ZVAL_UNDEF(&iub);

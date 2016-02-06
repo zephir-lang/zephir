@@ -25,13 +25,8 @@ ZEPHIR_INIT_CLASS(Test_ConstantsInterface) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_NULL();
 
@@ -39,13 +34,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant1) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(0);
 
@@ -53,13 +43,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant2) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(1);
 
@@ -67,13 +52,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant3) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(10);
 
@@ -81,13 +61,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant4) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant5) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(10.25);
 
@@ -95,13 +70,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant5) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant6) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("test");
 
@@ -109,13 +79,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInterfaceConstant6) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_NULL();
 
@@ -123,13 +88,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant1) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(0);
 
@@ -137,13 +97,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant2) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(1);
 
@@ -151,13 +106,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant3) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(10);
 
@@ -165,13 +115,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant4) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant5) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_DOUBLE(10.25);
 
@@ -179,13 +124,8 @@ PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant5) {
 
 PHP_METHOD(Test_ConstantsInterface, testReadInheritanceFromInterfaceConstant6) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("test");
 

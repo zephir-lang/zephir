@@ -69,13 +69,8 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 PHP_METHOD(Test_Constants, getPropertyC1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC1");
 
@@ -83,13 +78,8 @@ PHP_METHOD(Test_Constants, getPropertyC1) {
 
 PHP_METHOD(Test_Constants, getPropertyC2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC2");
 
@@ -97,13 +87,8 @@ PHP_METHOD(Test_Constants, getPropertyC2) {
 
 PHP_METHOD(Test_Constants, getPropertyC3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC3");
 
@@ -111,13 +96,8 @@ PHP_METHOD(Test_Constants, getPropertyC3) {
 
 PHP_METHOD(Test_Constants, getPropertyC4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC4");
 
@@ -125,13 +105,8 @@ PHP_METHOD(Test_Constants, getPropertyC4) {
 
 PHP_METHOD(Test_Constants, getPropertyC5) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC5");
 
@@ -139,13 +114,8 @@ PHP_METHOD(Test_Constants, getPropertyC5) {
 
 PHP_METHOD(Test_Constants, getPropertyC6) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC6");
 
@@ -153,13 +123,8 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 PHP_METHOD(Test_Constants, getPropertyC7) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC7");
 
@@ -167,13 +132,8 @@ PHP_METHOD(Test_Constants, getPropertyC7) {
 
 PHP_METHOD(Test_Constants, getPropertyC8) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "propertyC8");
 
@@ -181,13 +141,8 @@ PHP_METHOD(Test_Constants, getPropertyC8) {
 
 PHP_METHOD(Test_Constants, testReadConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(3);
 
@@ -195,13 +150,8 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(10);
 
@@ -209,13 +159,8 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(10);
 
@@ -223,13 +168,8 @@ PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_LONG(10);
 
@@ -237,13 +177,8 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
 	return;
@@ -252,13 +187,8 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
 PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("Test\\Constants");
 
@@ -266,13 +196,8 @@ PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
 PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("Constants:testMethodMagicConstant");
 
@@ -280,13 +205,8 @@ PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
 PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("testFunctionMagicConstant");
 
@@ -294,13 +214,8 @@ PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
 PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("Test");
 
@@ -308,13 +223,8 @@ PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
 PHP_METHOD(Test_Constants, testDirConstant) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_NULL();
 
@@ -323,13 +233,8 @@ PHP_METHOD(Test_Constants, testDirConstant) {
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 
 	zval a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a);
 
 	ZEPHIR_MM_GROW();

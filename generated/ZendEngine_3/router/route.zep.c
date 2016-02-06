@@ -65,13 +65,8 @@ PHP_METHOD(Test_Router_Route, __construct) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, *httpMethods = NULL, httpMethods_sub, __$null;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&paths_sub);
 	ZVAL_UNDEF(&httpMethods_sub);
@@ -106,13 +101,8 @@ PHP_METHOD(Test_Router_Route, __construct) {
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
 	zval *pattern = NULL, pattern_sub, idPattern, _0$$4, _1$$4, _2$$5, _3$$5, _4$$6, _5$$6, _6$$7, _7$$7, _8$$8, _9$$8, _10$$8, _11$$9, _12$$9, _13$$9;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&idPattern);
 	ZVAL_UNDEF(&_0$$4);
@@ -213,13 +203,8 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 PHP_METHOD(Test_Router_Route, via) {
 
 	zval *httpMethods, httpMethods_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&httpMethods_sub);
 
 	zephir_fetch_params(0, 1, 0, &httpMethods);
@@ -244,13 +229,8 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	char ch = 0;
 	zval *pattern_param = NULL, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
 	zval pattern, route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&route);
 	ZVAL_UNDEF(&item);
@@ -482,13 +462,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 	int ZEPHIR_LAST_CALL_STATUS, _0$$5;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, moduleName, controllerName, actionName, parts, routePaths, realClassName, namespaceName, pcrePattern, compiledPattern, extracted, _1$$10, _2$$19, _3$$19;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&paths_sub);
 	ZVAL_NULL(&__$null);
@@ -621,13 +596,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
  */
 PHP_METHOD(Test_Router_Route, getName) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_name");
 
@@ -648,13 +618,8 @@ PHP_METHOD(Test_Router_Route, getName) {
 PHP_METHOD(Test_Router_Route, setName) {
 
 	zval *name, name_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&name_sub);
 
 	zephir_fetch_params(0, 1, 0, &name);
@@ -677,13 +642,8 @@ PHP_METHOD(Test_Router_Route, setName) {
 PHP_METHOD(Test_Router_Route, beforeMatch) {
 
 	zval *callback, callback_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&callback_sub);
 
 	zephir_fetch_params(0, 1, 0, &callback);
@@ -702,13 +662,8 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
  */
 PHP_METHOD(Test_Router_Route, getBeforeMatch) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_beforeMatch");
 
@@ -721,13 +676,8 @@ PHP_METHOD(Test_Router_Route, getBeforeMatch) {
  */
 PHP_METHOD(Test_Router_Route, getRouteId) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_id");
 
@@ -740,13 +690,8 @@ PHP_METHOD(Test_Router_Route, getRouteId) {
  */
 PHP_METHOD(Test_Router_Route, getPattern) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_pattern");
 
@@ -759,13 +704,8 @@ PHP_METHOD(Test_Router_Route, getPattern) {
  */
 PHP_METHOD(Test_Router_Route, getCompiledPattern) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_compiledPattern");
 
@@ -778,13 +718,8 @@ PHP_METHOD(Test_Router_Route, getCompiledPattern) {
  */
 PHP_METHOD(Test_Router_Route, getPaths) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_paths");
 
@@ -800,13 +735,8 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	zend_string *_3;
 	zend_ulong _2;
 	zval reversed, path, position, _0, *_1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&reversed);
 	ZVAL_UNDEF(&path);
 	ZVAL_UNDEF(&position);
@@ -850,13 +780,8 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 PHP_METHOD(Test_Router_Route, setHttpMethods) {
 
 	zval *httpMethods, httpMethods_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&httpMethods_sub);
 
 	zephir_fetch_params(0, 1, 0, &httpMethods);
@@ -875,13 +800,8 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
  */
 PHP_METHOD(Test_Router_Route, getHttpMethods) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_methods");
 
@@ -900,13 +820,8 @@ PHP_METHOD(Test_Router_Route, getHttpMethods) {
 PHP_METHOD(Test_Router_Route, setHostname) {
 
 	zval *hostname, hostname_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&hostname_sub);
 
 	zephir_fetch_params(0, 1, 0, &hostname);
@@ -925,13 +840,8 @@ PHP_METHOD(Test_Router_Route, setHostname) {
  */
 PHP_METHOD(Test_Router_Route, getHostname) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_hostname");
 
@@ -947,13 +857,8 @@ PHP_METHOD(Test_Router_Route, getHostname) {
 PHP_METHOD(Test_Router_Route, convert) {
 
 	zval *name, name_sub, *converter, converter_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
 
@@ -973,13 +878,8 @@ PHP_METHOD(Test_Router_Route, convert) {
  */
 PHP_METHOD(Test_Router_Route, getConverters) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "_converters");
 

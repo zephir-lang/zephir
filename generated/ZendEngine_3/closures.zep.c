@@ -25,13 +25,8 @@ ZEPHIR_INIT_CLASS(Test_Closures) {
 
 PHP_METHOD(Test_Closures, simple1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_1__closure_ce, SL("__invoke"));
 	return;
@@ -40,13 +35,8 @@ PHP_METHOD(Test_Closures, simple1) {
 
 PHP_METHOD(Test_Closures, simple2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_2__closure_ce, SL("__invoke"));
 	return;
@@ -55,13 +45,8 @@ PHP_METHOD(Test_Closures, simple2) {
 
 PHP_METHOD(Test_Closures, simple3) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_3__closure_ce, SL("__invoke"));
 	return;
@@ -70,13 +55,8 @@ PHP_METHOD(Test_Closures, simple3) {
 
 PHP_METHOD(Test_Closures, simple4) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_4__closure_ce, SL("__invoke"));
 	return;
@@ -85,13 +65,8 @@ PHP_METHOD(Test_Closures, simple4) {
 
 PHP_METHOD(Test_Closures, simple5) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_5__closure_ce, SL("__invoke"));
 	return;
@@ -100,13 +75,8 @@ PHP_METHOD(Test_Closures, simple5) {
 
 PHP_METHOD(Test_Closures, arrow1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_6__closure_ce, SL("__invoke"));
 	return;
@@ -115,13 +85,8 @@ PHP_METHOD(Test_Closures, arrow1) {
 
 PHP_METHOD(Test_Closures, arrow2) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_create_closure_ex(return_value, NULL, test_7__closure_ce, SL("__invoke"));
 	return;

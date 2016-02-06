@@ -35,13 +35,8 @@ ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 PHP_METHOD(Test_SpectralNorm, Ax) {
 
 	zval *i, i_sub, *j, j_sub, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&i_sub);
 	ZVAL_UNDEF(&j_sub);
 	ZVAL_UNDEF(&_0);
@@ -66,13 +61,8 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	int n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
@@ -146,13 +136,8 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	int n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
@@ -224,13 +209,8 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *n, n_sub, *u, u_sub, *v, v_sub, *w, w_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
@@ -255,13 +235,8 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	zephir_fcall_cache_entry *_6 = NULL, *_11 = NULL, *_17 = NULL;
 	zval *n_param = NULL, u, v, w, _0, _4$$3, _5$$3, _10$$4, _15$$5, _16$$5, _18$$5, _19$$5, _20$$5;
 	int n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&u);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&w);

@@ -34,13 +34,8 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 	zend_class_entry *_1;
 	zval className, fullClassName, _0;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&className);
 	ZVAL_UNDEF(&fullClassName);
 	ZVAL_UNDEF(&_0);

@@ -29,13 +29,8 @@ ZEPHIR_INIT_CLASS(Test_Scope) {
 
 PHP_METHOD(Test_Scope, getStr) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_STRING("internal_string");
 
@@ -45,13 +40,8 @@ PHP_METHOD(Test_Scope, getDyStr) {
 
 	zval *g_param = NULL, _0;
 	int g;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &g_param);
@@ -71,13 +61,8 @@ PHP_METHOD(Test_Scope, test1) {
 	zval ret, k, k$$3;
 	int ZEPHIR_LAST_CALL_STATUS, r;
 	zephir_fcall_cache_entry *_0 = NULL;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&k$$3);
@@ -104,13 +89,8 @@ PHP_METHOD(Test_Scope, test2) {
 	zend_bool _0;
 	zval k, c, _5, _3$$3, _4$$3;
 	int p, _1, _2, p$$3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_5);
@@ -160,13 +140,8 @@ PHP_METHOD(Test_Scope, test3) {
 	zval k, c, str$$3;
 	int ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_3 = NULL;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&str$$3);

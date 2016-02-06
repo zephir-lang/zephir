@@ -29,13 +29,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testInt) {
 
 	zval _0, _1;
 	int x, exponent;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -53,13 +48,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDoubleInt) {
 	zval _0, _1;
 	int exponent;
 	double x;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -76,13 +66,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDouble) {
 
 	zval _0, _1;
 	double x, exponent;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -99,13 +84,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVar) {
 
 	zval _0, _1;
 	int x, exponent;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -121,13 +101,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVar) {
 PHP_METHOD(Test_Optimizers_Ldexp, testIntValue1) {
 
 	zval _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -142,13 +117,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntParameter) {
 
 	zval *x_param = NULL, *exponent_param = NULL, _0, _1;
 	int x, exponent;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -167,13 +137,8 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntParameter) {
 PHP_METHOD(Test_Optimizers_Ldexp, testVarParameter) {
 
 	zval *x, x_sub, *exponent, exponent_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&x_sub);
 	ZVAL_UNDEF(&exponent_sub);
 

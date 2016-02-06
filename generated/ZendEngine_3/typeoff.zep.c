@@ -32,13 +32,8 @@ ZEPHIR_INIT_CLASS(Test_Typeoff) {
 PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
 	zval testVar;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&testVar);
 
 	ZEPHIR_MM_GROW();
@@ -52,13 +47,8 @@ PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
 	zval testVar;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&testVar);
 
 	ZEPHIR_MM_GROW();
@@ -72,13 +62,8 @@ PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
 	int testVar = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	testVar = 12345;
@@ -89,13 +74,8 @@ PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
 	int testVar = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	testVar = 12345;
@@ -106,13 +86,8 @@ PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
 	double testVar = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	testVar = (double) (12345);
@@ -123,13 +98,8 @@ PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 	zend_bool testVar = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	testVar = 1;
@@ -140,13 +110,8 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 	zend_bool testVar = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	testVar = 0;
@@ -157,13 +122,8 @@ PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 PHP_METHOD(Test_Typeoff, testArrayFalse) {
 
 	zval testVar;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&testVar);
 
 	ZEPHIR_MM_GROW();
@@ -177,13 +137,8 @@ PHP_METHOD(Test_Typeoff, testArrayFalse) {
 PHP_METHOD(Test_Typeoff, testArrayTrue) {
 
 	zval testVar;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&testVar);
 
 	ZEPHIR_MM_GROW();
@@ -197,13 +152,8 @@ PHP_METHOD(Test_Typeoff, testArrayTrue) {
 PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 
 	zval _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -222,13 +172,8 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
 	zval *u, u_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -246,13 +191,8 @@ PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 PHP_METHOD(Test_Typeoff, testCallableTypeOf) {
 
 	zval *cb, cb_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&cb_sub);
 
 	zephir_fetch_params(0, 1, 0, &cb);

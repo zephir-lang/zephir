@@ -27,13 +27,8 @@ ZEPHIR_INIT_CLASS(Test_Requires) {
 PHP_METHOD(Test_Requires, requireExternal1) {
 
 	zval *path, path_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -53,13 +48,8 @@ PHP_METHOD(Test_Requires, requireExternal1) {
 PHP_METHOD(Test_Requires, requireExternal2) {
 
 	zval *path, path_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&path_sub);
 
 	zephir_fetch_params(0, 1, 0, &path);

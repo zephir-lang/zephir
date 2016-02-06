@@ -30,13 +30,8 @@ PHP_METHOD(Test_Exists, testClassExists) {
 
 	zend_bool autoload;
 	zval *className, className_sub, *autoload_param = NULL, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -58,13 +53,8 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 
 	zend_bool autoload;
 	zval *interfaceName, interfaceName_sub, *autoload_param = NULL, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&interfaceName_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -85,13 +75,8 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 PHP_METHOD(Test_Exists, testMethodExists) {
 
 	zval *obj, obj_sub, *methodName, methodName_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&methodName_sub);
 
@@ -106,13 +91,8 @@ PHP_METHOD(Test_Exists, testMethodExists) {
 PHP_METHOD(Test_Exists, testFileExists) {
 
 	zval *fileName, fileName_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&fileName_sub);
 
 	zephir_fetch_params(0, 1, 0, &fileName);

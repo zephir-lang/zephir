@@ -33,13 +33,8 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoParams) {
 PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_MM_GROW();
 
@@ -55,13 +50,8 @@ PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_MM_GROW();
 
@@ -78,13 +68,8 @@ PHP_METHOD(Test_Oo_OoParams, setAge) {
 
 	zval *age_param = NULL;
 	int age;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
@@ -99,13 +84,8 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 
 	zval *average_param = NULL;
 	double average;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
@@ -120,13 +100,8 @@ PHP_METHOD(Test_Oo_OoParams, setName) {
 
 	zval *name_param = NULL;
 	zval name;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&name);
 
 	ZEPHIR_MM_GROW();
@@ -143,13 +118,8 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 	zval *enabled_param = NULL;
 	zend_bool enabled;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
@@ -164,13 +134,8 @@ PHP_METHOD(Test_Oo_OoParams, setList) {
 
 	zval *someList_param = NULL;
 	zval someList;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&someList);
 
 	ZEPHIR_MM_GROW();
@@ -187,13 +152,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	zval *age_param = NULL;
 	int age;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
@@ -212,13 +172,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 
 	zval *average_param = NULL;
 	double average;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
@@ -237,13 +192,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 
 	zval *name_param = NULL;
 	zval name;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&name);
 
 	ZEPHIR_MM_GROW();
@@ -269,13 +219,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 	zval *enabled_param = NULL;
 	zend_bool enabled;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
@@ -290,13 +235,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	zval *someList_param = NULL;
 	zval someList;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&someList);
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
@@ -312,13 +252,8 @@ PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
 
 	zval *age_param = NULL;
 	int age;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 0, 1, &age_param);
 
@@ -337,13 +272,8 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 
 	zval *average_param = NULL;
 	double average;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 0, 1, &average_param);
 
@@ -362,13 +292,8 @@ PHP_METHOD(Test_Oo_OoParams, setNameDefault) {
 
 	zval *name_param = NULL;
 	zval name;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&name);
 
 	ZEPHIR_MM_GROW();
@@ -390,13 +315,8 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 
 	zval *enabled_param = NULL;
 	zend_bool enabled;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 0, 1, &enabled_param);
 
@@ -415,13 +335,8 @@ PHP_METHOD(Test_Oo_OoParams, setListDefault) {
 
 	zval *someList_param = NULL;
 	zval someList;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&someList);
 
 	ZEPHIR_MM_GROW();
@@ -443,13 +358,8 @@ PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 
 	zval *age_param = NULL;
 	int age;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
@@ -464,13 +374,8 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 
 	zval *average_param = NULL;
 	double average;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
@@ -484,13 +389,8 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 PHP_METHOD(Test_Oo_OoParams, setObject) {
 
 	zval *obj, obj_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
@@ -505,13 +405,8 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
 	zval *obj, obj_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
@@ -526,13 +421,8 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 PHP_METHOD(Test_Oo_OoParams, setResource) {
 
 	zval *obj, obj_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
@@ -547,13 +437,8 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 PHP_METHOD(Test_Oo_OoParams, setObjectClassCast) {
 
 	zval *parameter, parameter_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&parameter_sub);
 
 	zephir_fetch_params(0, 1, 0, &parameter);

@@ -95,13 +95,8 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray) {
 
 	zval *someGetterSetterArray, someGetterSetterArray_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&someGetterSetterArray_sub);
 
 	zephir_fetch_params(0, 1, 0, &someGetterSetterArray);
@@ -114,13 +109,8 @@ PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray) {
 
 PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_MEMBER(this_ptr, "someGetterSetterArray");
 
@@ -129,13 +119,8 @@ PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray) {
 PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();

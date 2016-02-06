@@ -29,13 +29,8 @@ ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
 PHP_METHOD(Test_Fibonnaci, fibInt) {
 
 	int x = 0, y = 0, n = 0, z = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	z = 0;
@@ -57,13 +52,8 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 PHP_METHOD(Test_Fibonnaci, fibDouble) {
 
 	double x = 0, y = 0, n = 0, z = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	z = 0.0;
@@ -86,13 +76,8 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	int i = 0, n = 0, k = 0, j = 0;
 	zval fib, a, b, c, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&fib);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
@@ -132,13 +117,8 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 	int i = 0, n = 0;
 	zval fib, _0, _1$$3, _2$$3, _3$$3;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&fib);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
@@ -177,13 +157,8 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
 	int n, ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$6);
 	ZVAL_UNDEF(&_1$$6);
 	ZVAL_UNDEF(&_3$$6);
@@ -218,13 +193,8 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
 	int n, ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0$$6);
 	ZVAL_UNDEF(&_1$$6);
 	ZVAL_UNDEF(&_3$$6);

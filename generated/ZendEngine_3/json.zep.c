@@ -29,13 +29,8 @@ ZEPHIR_INIT_CLASS(Test_Json) {
 PHP_METHOD(Test_Json, testEncodeObject) {
 
 	zval obj;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj);
 
 	ZEPHIR_MM_GROW();
@@ -53,13 +48,8 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 PHP_METHOD(Test_Json, testEncodeArray) {
 
 	zval arr, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
 
@@ -84,13 +74,8 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 PHP_METHOD(Test_Json, testEncodeOptions) {
 
 	zval arr, _0, _1;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -120,13 +105,8 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 PHP_METHOD(Test_Json, testDecodeObject) {
 
 	zval obj;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&obj);
 
 	ZEPHIR_MM_GROW();
@@ -141,13 +121,8 @@ PHP_METHOD(Test_Json, testDecodeObject) {
 PHP_METHOD(Test_Json, testDecodeObject2) {
 
 	zval __$true, obj;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&obj);
 
@@ -163,13 +138,8 @@ PHP_METHOD(Test_Json, testDecodeObject2) {
 PHP_METHOD(Test_Json, testDecodeArray) {
 
 	zval arr;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&arr);
 
 	ZEPHIR_MM_GROW();

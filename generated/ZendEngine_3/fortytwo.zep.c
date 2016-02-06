@@ -36,13 +36,8 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zval _0;
 	int i = 0, j = 0, _4$$3, _5$$3;
 	zval box, side, _1, *_2, _6$$4;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&box);
 	ZVAL_UNDEF(&side);
 	ZVAL_UNDEF(&_1);

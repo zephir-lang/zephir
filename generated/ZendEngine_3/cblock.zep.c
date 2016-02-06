@@ -46,13 +46,8 @@ ZEPHIR_INIT_CLASS(Test_Cblock) {
 PHP_METHOD(Test_Cblock, testCblock1) {
 
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 0;
@@ -66,13 +61,8 @@ PHP_METHOD(Test_Cblock, testCblock1) {
 PHP_METHOD(Test_Cblock, testCblock2) {
 
 	long a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 0;

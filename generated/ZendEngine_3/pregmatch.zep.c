@@ -30,13 +30,8 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 
 	zval pattern, subject, _0, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&_0);
@@ -61,13 +56,8 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
 	zval pattern, subject, matches, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&matches);
@@ -90,13 +80,8 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
 	zval pattern, subject, matched, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&matched);
@@ -118,13 +103,8 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 
 	zval pattern, subject, results;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&results);
@@ -146,13 +126,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 	zval pattern, subject, matches, _0, _1;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&matches);
@@ -182,13 +157,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
 
 	zval *pattern, pattern_sub, *subject, subject_sub, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&_0);
@@ -207,13 +177,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
 PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
 
 	zval *pattern, pattern_sub, *subject, subject_sub, *matches, matches_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
@@ -231,13 +196,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, pattern_sub, *subject, subject_sub, *matches, matches_sub, *flags, flags_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
@@ -260,13 +220,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, pattern_sub, *subject, subject_sub, *matches, matches_sub, *flags, flags_sub, *offset, offset_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
@@ -293,13 +248,8 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
 	zval *str_param = NULL, *pattern_param = NULL, matches, _0;
 	zval str, pattern;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&matches);
@@ -324,13 +274,8 @@ PHP_METHOD(Test_Pregmatch, testMatchAll) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *flags, flags_sub, text, matches, _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&flags_sub);
 	ZVAL_UNDEF(&text);
 	ZVAL_UNDEF(&matches);
@@ -360,13 +305,8 @@ PHP_METHOD(Test_Pregmatch, testMatchAllInZep) {
 	zval m1, m2, _0;
 	zephir_fcall_cache_entry *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&m1);
 	ZVAL_UNDEF(&m2);
 	ZVAL_UNDEF(&_0);

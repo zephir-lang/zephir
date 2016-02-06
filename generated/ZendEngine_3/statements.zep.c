@@ -50,13 +50,8 @@ ZEPHIR_INIT_CLASS(Test_Statements) {
 PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 
 	zval result1, result2, result3, result4, _0, _1, _2, _3, _4, _5, _6, _7;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&result1);
 	ZVAL_UNDEF(&result2);
 	ZVAL_UNDEF(&result3);
@@ -96,13 +91,8 @@ PHP_METHOD(Test_Statements, testElseIf) {
 
 	zval *num_param = NULL;
 	int num;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
@@ -125,13 +115,8 @@ PHP_METHOD(Test_Statements, testElseIf1) {
 
 	zval *num_param = NULL;
 	int num, total;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
@@ -153,13 +138,8 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 
 	zval *num_param = NULL, *total, total_sub;
 	int num;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&total_sub);
 
 	zephir_fetch_params(0, 2, 0, &num_param, &total);
@@ -182,13 +162,8 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	zephir_fcall_cache_entry *_8 = NULL;
 	zval *step_param = NULL, _0, _1, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _9$$3, _10$$3, _11$$3, _12$$4, _13$$4, _14$$5, _15$$5;
 	int step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2$$3);
@@ -255,13 +230,8 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	zephir_fcall_cache_entry *_6 = NULL;
 	zval *step_param = NULL, _0, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _7$$3, _8$$3, _9$$3, _10$$4, _11$$4, _12$$5, _13$$5;
 	int step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0, totalSteps = 0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);

@@ -29,13 +29,8 @@ ZEPHIR_INIT_CLASS(Test_BranchPrediction) {
 
 PHP_METHOD(Test_BranchPrediction, testLikely1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	if (likely(1 == 1)) {
 		RETURN_BOOL(1);
@@ -48,13 +43,8 @@ PHP_METHOD(Test_BranchPrediction, testLikely1) {
 PHP_METHOD(Test_BranchPrediction, testLikely2) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -71,13 +61,8 @@ PHP_METHOD(Test_BranchPrediction, testLikely2) {
 
 PHP_METHOD(Test_BranchPrediction, testUnlikely1) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	if (likely(1 == 1)) {
 		RETURN_BOOL(1);
@@ -90,13 +75,8 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely1) {
 PHP_METHOD(Test_BranchPrediction, testUnlikely2) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);

@@ -33,13 +33,8 @@ PHP_METHOD(Test_Geometry, run) {
 	int count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3;
 	zval list;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&list);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
@@ -84,13 +79,8 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 	int count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, item, _1$$3, _2$$3, _3$$3, _4$$3;
 	zval list;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&list);
 	ZVAL_UNDEF(&item);
 	ZVAL_UNDEF(&_1$$3);
@@ -128,13 +118,8 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 
 	zval *x1_param = NULL, *y1_param = NULL, *x2_param = NULL, *y2_param = NULL, _0;
 	double x1, y1, x2, y2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);

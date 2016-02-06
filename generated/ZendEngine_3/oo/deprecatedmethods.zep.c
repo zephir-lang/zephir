@@ -26,13 +26,8 @@ ZEPHIR_INIT_CLASS(Test_Oo_DeprecatedMethods) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, deprecatedMethod) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(1);
 
@@ -41,13 +36,8 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, deprecatedMethod) {
 PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	ZEPHIR_MM_GROW();
 
@@ -59,13 +49,8 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, privateDepricatedMethod) {
 
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	RETURN_BOOL(1);
 

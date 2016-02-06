@@ -32,13 +32,8 @@ PHP_METHOD(Test_Compare, isLessInt) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	int a, b;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -54,13 +49,8 @@ PHP_METHOD(Test_Compare, isGreaterEqual) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	int a, b;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -76,13 +66,8 @@ PHP_METHOD(Test_Compare, isLessDouble) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	double a, b;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -98,13 +83,8 @@ PHP_METHOD(Test_Compare, isLessThenPi) {
 
 	zval *a_param = NULL;
 	double a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &a_param);
 
@@ -119,13 +99,8 @@ PHP_METHOD(Test_Compare, isMoreThenPi) {
 
 	zval *a_param = NULL;
 	double a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 	zephir_fetch_params(0, 1, 0, &a_param);
 
@@ -143,13 +118,8 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 
 	zval *str_param = NULL;
 	zval str;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&str);
 
 	ZEPHIR_MM_GROW();
@@ -191,13 +161,8 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 PHP_METHOD(Test_Compare, testVarEqualsNull) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -214,13 +179,8 @@ PHP_METHOD(Test_Compare, testVarEqualsNull) {
 PHP_METHOD(Test_Compare, testNullEqualsVar) {
 
 	zval *a, a_sub;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -237,13 +197,8 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 PHP_METHOD(Test_Compare, testNotIdenticalZeroVar) {
 
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 5;
@@ -254,13 +209,8 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroVar) {
 PHP_METHOD(Test_Compare, testNotIdenticalZeroInt) {
 
 	int a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 5;
@@ -271,13 +221,8 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroInt) {
 PHP_METHOD(Test_Compare, testNotIdenticalZeroLong) {
 
 	long a;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 
 
 	a = 5;

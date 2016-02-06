@@ -79,13 +79,8 @@ void zep_Test_McallInternal_c(int ht, zval *return_value, zval *this_ptr, int re
 PHP_METHOD(Test_McallInternal, e) {
 
 	zval _0;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -101,13 +96,8 @@ PHP_METHOD(Test_McallInternal, d) {
 	zval _3$$3;
 	zend_bool _0;
 	int ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_3$$3);
 
 	ZEPHIR_MM_GROW();
@@ -142,13 +132,8 @@ PHP_METHOD(Test_McallInternal, f) {
 	zend_bool _0;
 	zephir_fcall_cache_entry *_4 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_3$$3);
 
 	ZEPHIR_MM_GROW();
@@ -183,13 +168,8 @@ PHP_METHOD(Test_McallInternal, g) {
 	zend_bool _0;
 	long i = 0;
 	int ZEPHIR_LAST_CALL_STATUS, a, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
@@ -247,13 +227,8 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 	long i;
 	double p;
 	int ZEPHIR_LAST_CALL_STATUS, _1, _2;
-		zval this_zv;
-	zval *this_ptr = getThis();
-	if (EXPECTED(this_ptr)) {
-		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));
-		this_ptr = &this_zv;
-	} else this_ptr = NULL;
-	
+	ZEPHIR_INIT_THIS();
+
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
