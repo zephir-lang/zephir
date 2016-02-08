@@ -341,7 +341,7 @@ class CompilerFile
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'get' . ucfirst($name),
+                        'get' . Utils::camelize($name),
                         null,
                         new StatementsBlock(array(
                             array(
@@ -369,7 +369,7 @@ class CompilerFile
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'set' . ucfirst($name),
+                        'set' . Utils::camelize($name),
                         new ClassMethodParameters(array(
                             array(
                                 'type' => 'parameter',
