@@ -71,8 +71,8 @@ External Links
 --------------
 * [Documentation](http://zephir-lang.com/)
 * [Official Blog](http://blog.zephir-lang.com/)
-* [Forum](http://forum.zephir-lang.com/)
-* [Twitter](http://twitter.com/zephirlang)
+* [Forum](https://forum.zephir-lang.com/)
+* [Twitter](https://twitter.com/zephirlang)
 
 License
 -------
