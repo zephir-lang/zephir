@@ -15,7 +15,10 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/phalcon/zephir/issues?state=open"
+        "issues": "https://github.com/phalcon/zephir/issues?state=open",
+        "source": "https://github.com/phalcon/zephir",
+        "forum": "https://forum.zephir-lang.com/",
+        "docs": "http://docs.zephir-lang.com/"
     },
     "require": {
         "php": ">=5.4",
