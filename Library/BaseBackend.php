@@ -109,6 +109,20 @@ abstract class BaseBackend
     abstract public function onPreCompile($method, CompilationContext $context);
     abstract public function onPostCompile($method, CompilationContext $context);
 
+    /**
+     * @param Variable $variable
+     * @return string
+     */
+    abstract public function getVariableCode(Variable $variable);
+
+    /**
+     * Get a double pointer to the variable
+     *
+     * @param Variable $variable
+     * @return string
+     */
+    abstract public function getVariableCodePointer(Variable $variable);
+
     public static function getActiveBackend()
     {
         if (version_compare(phpversion(), '7.0', '>=')) {

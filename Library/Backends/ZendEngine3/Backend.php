@@ -23,6 +23,9 @@ class Backend extends BackendZendEngine2
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isDoublePointer() ||
@@ -30,9 +33,13 @@ class Backend extends BackendZendEngine2
             in_array($variable->getType(), array('int', 'long'))) {
             return $variable->getName();
         }
+
         return '&' . $variable->getName();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getVariableCodePointer(Variable $variable)
     {
         return $this->getVariableCode($variable);
@@ -44,6 +51,7 @@ class Backend extends BackendZendEngine2
         if ($useCodePrinter) {
             $context->codePrinter->output($code);
         }
+        
         return $code;
     }
 

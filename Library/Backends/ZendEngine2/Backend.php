@@ -25,7 +25,7 @@ class Backend extends BaseBackend
     }
 
     /**
-     * Get a double pointer to the variable
+     * {@inheritdoc}
      */
     public function getVariableCodePointer(Variable $variable)
     {
@@ -35,6 +35,9 @@ class Backend extends BaseBackend
         return '&' . $variable->getName();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isLocalOnly() && !in_array($variable->getType(), array('int'))) {
