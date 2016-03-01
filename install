@@ -5,11 +5,21 @@ options='c'
 while getopts $options option
 do
   if [[ "$option" == "c" ]]; then
-    ZEPHIRDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    # Use ZEPHIRDIR env variable if defined as installation destination dir
+    ZEPHIRSRC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    if [[ -z $ZEPHIRDIR ]]; then
+      ZEPHIRDIR=$ZEPHIRSRC
+    elif [[ ! -d $ZEPHIRDIR ]]; then
+      echo "Directory defined by environment variable ZEPHIRDIR doesn't exist"
+      exit 1
+    fi
     sed "s#%ZEPHIRDIR%#$ZEPHIRDIR#g" bin/zephir > bin/zephir-cmd
     chmod 755 bin/zephir-cmd
     sudo cp bin/zephir-cmd /usr/local/bin/zephir
     rm bin/zephir-cmd
+    if [[ $ZEPHIRDIR != $ZEPHIRSRC ]]; then
+        sudo cp -r $ZEPHIRSRC/* $ZEPHIRDIR
+    fi
     exit 0
   fi
 done
