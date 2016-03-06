@@ -973,6 +973,29 @@ class Compiler
                 }
             }
 
+            /**
+             * Load customer additional extension prototypes
+             */
+            $prototypeDirs = $this->config->get('prototype-dir');
+            if (is_array($prototypeDirs)) {
+                foreach ($prototypeDirs as $prototype => $prototypeDir) {
+                    /**
+                     * Check if the extension is installed
+                     */
+                    if (!extension_loaded($prototype)) {
+                        
+                        $prototypeRealpath = realpath($prototypeDir);
+                        if ($prototypeRealpath) {
+                            foreach (new \DirectoryIterator($prototypeRealpath) as $file) {
+                                if (!$file->isDir()) {
+                                    require $file->getRealPath();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             self::$loadedPrototypes = true;
         }
 
