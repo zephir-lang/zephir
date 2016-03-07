@@ -982,7 +982,7 @@ class Compiler
                     /**
                      * Check if the extension is installed
                      */
-                    if (!extension_loaded($prototype)) {                      
+                    if (!extension_loaded($prototype)) {
                         $prototypeRealpath = realpath($prototypeDir);
                         if ($prototypeRealpath) {
                             foreach (new \DirectoryIterator($prototypeRealpath) as $file) {
