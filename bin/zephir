@@ -19,9 +19,17 @@ if [ -z "$ZEPHIRDIR" ]; then
   fi
 fi
 
-if [[ $1 && $2 && $3 && "$1"=="-c" ]]; then
-    php -d safe_mode=Off -d enable_dl=On -c $2 $ZEPHIRDIR/compiler.php ${*:3}
-else
-    php -d safe_mode=Off -d enable_dl=On $ZEPHIRDIR/compiler.php $*
-fi
+args[0]=$0
+args+=("$@")
+commands=(clean init builddev compile stubs fullclean version install build api help generate)
 
+k=1
+for ((i=1; i<=$#; i++)); do 
+    for j in "${commands[@]}"; do
+        if [[ "${args[${i}]}" == "$j" ]]; then
+            k=$i
+        fi
+    done
+done
+
+php ${*:1:$k-1} $ZEPHIRDIR/compiler.php ${*:$k}
