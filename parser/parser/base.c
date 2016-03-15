@@ -116,7 +116,7 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 /**
  * Parses a comment returning an intermediate array representation
  */
-zval *xx_parse_program(char *program, unsigned int program_length, char *file_path) {
+zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 
 	char *error;
 	xx_scanner_state *state;
@@ -128,12 +128,8 @@ zval *xx_parse_program(char *program, unsigned int program_length, char *file_pa
 	/**
 	 * Check if the program has any length
 	 */
-	if (!program_length) {
-		return FAILURE;
-	}
-
 	if (program_length < 2) {
-		return SUCCESS;
+		return NULL;
 	}
 
 	/**
