@@ -131,10 +131,10 @@ class NewInstanceOperator extends BaseOperator
                     $safeSymbolVariable->setMustInitNull(true);
                     $safeSymbolVariable->setIsInitialized(true, $compilationContext, $expression);
                     $safeSymbolVariable->increaseUses();
-
-                    $compilationContext->codePrinter->output('zephir_fetch_safe_class(' . $safeSymbolVariable->getName() .', ' . $classNameVariable->getName() .');');
-
                     $safeSymbol = $compilationContext->backend->getVariableCode($safeSymbolVariable);
+                    $classNameSymbol = $compilationContext->backend->getVariableCode($classNameVariable);
+
+                    $compilationContext->codePrinter->output('zephir_fetch_safe_class(' . $safeSymbol .', ' . $classNameSymbol .');');
                     $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbol . '), Z_STRLEN_P(' . $safeSymbol . ')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();

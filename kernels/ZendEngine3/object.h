@@ -89,11 +89,11 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 int zephir_property_incr_decr(zval *object, char *property_name, unsigned int property_length, unsigned int increment);
 
 #define zephir_fetch_safe_class(destination, var) { \
-		if (Z_TYPE(var) == IS_STRING) { \
-			ZEPHIR_CPY_WRT(&destination, &var); \
+		if (Z_TYPE_P(var) == IS_STRING) { \
+			ZEPHIR_CPY_WRT(destination, var); \
 		} else { \
-			ZEPHIR_INIT_NVAR(&destination); \
-			ZVAL_STRING(&destination, "<undefined class>"); \
+			ZEPHIR_INIT_NVAR(destination); \
+			ZVAL_STRING(destination, "<undefined class>"); \
 		} \
 	}
 
