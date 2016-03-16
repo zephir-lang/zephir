@@ -27,7 +27,7 @@
 #include "ext/standard/info.h"
 #include "php_zephir_parser.h"
 
-extern zval *xx_parse_program(char *program, unsigned int program_length, char *file_path);
+extern zval *xx_parse_program(char *program, size_t program_length, char *file_path);
 
 /* {{{ proto string zephir_parse_file(string arg)
    Return a string to confirm that the module is compiled in */
