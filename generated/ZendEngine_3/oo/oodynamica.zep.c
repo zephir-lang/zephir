@@ -46,7 +46,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 	zephir_get_called_class(&className TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&fullClassName);
 	ZEPHIR_CONCAT_SV(&fullClassName, "\\", &className);
-	zephir_fetch_safe_class(_0, fullClassName);
+	zephir_fetch_safe_class(&_0, &fullClassName);
 	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
 	object_init_ex(return_value, _1);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
