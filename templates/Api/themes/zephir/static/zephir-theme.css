@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+html {
+    font-family: sans-serif;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -28,9 +32,11 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-body {
-    line-height: 1;
+
+code, kbd, pre, samp {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
+
 ol, ul {
     list-style: none;
 }
@@ -47,20 +53,13 @@ table {
     border-spacing: 0;
 }
 
-
-
-body{
-    background: #ebebeb;
-
-    margin-top: 76px;
-    margin-left:240px;
+body {
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Geneva,Arial,sans-serif;
+    font-size: 1rem;
+    line-height: 1.3;
+    background-color: #ebebeb;
+    margin: 76px 0 0 240px;
     min-width: 360px;
-
-}
-
-
-body,div,a,p{
-    font-family:arial, sans-serif;
 }
 
 a:link,
@@ -81,7 +80,7 @@ a:visited:hover
     background : %_main_color_%;
     padding: 8px;
     margin-top:8px;
-    font-size: 24px;
+    font-size: 1.2em;
     color:white;
     font-weight: bold;
 }
@@ -159,13 +158,12 @@ ul.method-summary-list{
 ul.method-summary-list li{
     border-bottom: 1px solid #C4ADDD;
     padding: 11px 0 4px 0;
-    display: table-row;
 }
 
 ul.method-summary-list li>*{
     display: table-cell;
-    height: 35px;
-    vertical-align: middle;
+    vertical-align: top;
+    padding-right: 1em;
 }
 
 
@@ -179,10 +177,20 @@ ul.method-summary-list li:nth-child(even){
 
 .method-summary-list .class-method{
     font-size: 13px;
+    padding: 0.3em 0.2em;
 }
 
-.method-summary-list .method-return{
+.method-summary-list .method-details .method-return{
     width:200px;
+}
+
+.keyword {
+    font-weight: bold;
+    color: #069;
+}
+
+.method-signature .variable {
+    color: #a70;
 }
 
 .method-name{
@@ -194,37 +202,66 @@ ul.method-summary-list li:nth-child(even){
 .param-data-type{
     font-weight: bold;
     color:#555;
-
 }
-
-
 
 ul.method-details-list li{
     border-bottom: 1px solid #C4ADDD;
     padding: 11px 0 4px 3px;
-
 }
 
 .method-details-list .method-name{
-
     font-size: 16px;
-
 }
 
-.method-details .method-signature{
+.method-summary .method-signature,
+.method-details .method-signature {
     font-size: 12px;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace!important;
+    padding: 0 0 1em;
 }
 
-.method-details .method-signature h3.method-name{
-    display: inline;
+.method-details .method-signature span.method-name{
+    font-weight: bold;
 }
 
 .method-details .method-signature .method-name{
     font-size: 14px;
 }
 
+.method-details .method-signature span.method-name {
+    font-size: 1em!important;
+}
+
 .method-details-details{
     margin-left:25px;
+}
+
+.method-details .method-doc {
+    font-size: 12px;
+}
+
+.method-details .method-doc code {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    font-size: inherit;
+    padding: 2em 0;
+    white-space: pre-wrap;
+    position: relative;
+    display: block;
+}
+
+.method-details .method-doc code::after {
+    color: #959595;
+    content: "Example";
+    font-size: 12px;
+    font-weight: 700;
+    left: 15px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 15px;
 }
 
 .breadcrumb>ul>li{
@@ -322,7 +359,7 @@ ul.method-details-list li{
     border:0;
     text-indent: 5px;
     border-bottom: 1px solid #DDD;
-    
+
 }
 
 #menu-wrapper{

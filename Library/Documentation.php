@@ -287,9 +287,7 @@ class Documentation
 
     public function build()
     {
-        $byNamespace = array();
-
-        foreach ($this->classes as $className => $class) {
+        foreach ($this->classes as $class) {
             // class files (class/ns1/n2/class.html)
             $cfile = new File\ClassFile($this->config, $class);
             $this->theme->drawFile($cfile);

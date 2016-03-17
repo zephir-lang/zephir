@@ -6,23 +6,23 @@ var ZepDoc = (function($){
     ZepDoc.drawLeftMenu = function(search){
 
         if(search){
-            
+
             // TODO : improve search to perform better on large datasets
 
             search = search.toLowerCase();
-            
+
             var fullData = {
-                
+
                 "allClasses"    : {},
                 "allNamespaces" : {}
-                
+
             };
-            
+
             var buildDataRecur = function(localData,fullData){
-                
+
                 var subClasses    = [];
                 var subNamespaces = [];
-                
+
                 for(var i = 0 ; i<localData.classes.length ; i++){
                     var subCs = ZephirApi.allClasses[localData.classes[i]];
 
@@ -36,42 +36,42 @@ var ZepDoc = (function($){
                     var subNs = ZephirApi.allNamespaces[localData.namespaces[i]];
 
                     var children = buildDataRecur(subNs,fullData);
-                                        
+
                     if( children.classes.length > 0 || children.namespaces.length > 0 || subNs.shortName.toLowerCase().indexOf(search) >= 0 ){
                         subNs = JSON.parse(JSON.stringify(subNs));
-                        
+
                         subNs.classes    = children.classes;
                         subNs.namespaces = children.namespaces;
-                        
+
                         fullData.allNamespaces[subNs.name] = subNs;
                         subNamespaces.push(subNs.name);
-                        
+
                     }
-                    
+
                 }
-                
+
                 return {
-                    
+
                     classes    : subClasses,
                     namespaces : subNamespaces
-                    
+
                 };
-                
+
             };
-            
+
             var fullData = {
-                
+
                 "allClasses"    : {},
                 "allNamespaces" : {}
-                
+
             };
-            
+
             var builtTree = buildDataRecur(ZephirApi,fullData);
-            
+
             fullData.classes    = builtTree.classes;
             fullData.namespaces = builtTree.namespaces;
-        
-            
+
+
 
         }else{
             var fullData = ZephirApi;
@@ -108,7 +108,7 @@ var ZepDoc = (function($){
             $cItem.find("a").html(curClass.shortname);
             $cItem.attr("title",curClass.name);
 
-            $cItem.find("a").attr("href", ZepCurrentPath  + "class/" + curClass.name.replace("\\","/") + ".html");
+            $cItem.find("a").attr("href", ZepCurrentPath  + "class/" + curClass.name.split('\\').join('/') + ".html");
             $cItem.addClass( "type-" + curClass.type);
             $cItem.attr("data-class-name",curClass.name);
 
@@ -126,26 +126,26 @@ var ZepDoc = (function($){
     $(function(){
 
         ZepDoc.drawLeftMenu();
-        
+
         var searchTimer = null;
-        
+
         $("#body-left .search-box").bind("input",function(){
-            
+
             var self = this;
-            
+
             if(null !== searchTimer)
                 clearTimeout(searchTimer);
-            
+
             searchTimer = setTimeout(function(){
-                
+
                 var search = $(self).val().trim();
                 if(search.length > 1)
                     ZepDoc.drawLeftMenu( search );
                 else
                     ZepDoc.drawLeftMenu( );
-                    
+
             },500);
-            
+
         });
 
     });

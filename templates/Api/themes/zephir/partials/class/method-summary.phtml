@@ -1,62 +1,54 @@
 <?php
+/**
+ * @var $method \Zephir\ClassMethod
+ */
 
-/* @var $method \Zephir\ClassMethod */
+$allTypes = [];
+$_lClasses = $method->getReturnClassTypes();
 
+foreach ($_lClasses as $c) {
+    if ($c{0} == "\\") {
+        $allTypes[] = substr($c,1);
+    } else {
+        $_lFullClassName = $classNamespace . "\\" . $c;
+        $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
+
+        $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+    }
+}
+
+$types = $method->getReturnTypes();
+
+if ($types && count($types)>0 ) {
+    foreach ($types as $type) {
+        if ($type && isset($type["data-type"])) {
+            $allTypes[] =  $type["data-type"];
+        }
+    }
+}
+
+$docblock = $method->getParsedDocblock();
 ?>
 
 <li class="class-method clearfix">
-
-    <div class="method-return">
-
-        <?php
-
-            $allTypes = array();
-
-            $_lClasses = $method->getReturnClassTypes();
-            
-            foreach($_lClasses as $c){
-                
-                if ($c{0} == "\\") {
-                    $allTypes[] = substr($c,1);
-                } else {
-
-                    $_lFullClassName = $classNamespace . "\\" . $c;
-                    $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
-
-                    $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
-                    
-                }
-                
-            }
-
-            $types = $method->getReturnTypes();
-
-            if($types && count($types)>0 ){
-
-                foreach($types as $type){
-
-                    if($type && isset($type["data-type"]))
-                        $allTypes[] =  $type["data-type"];
-                }
-            }
-
-            echo implode("|",$allTypes);
-
-        ?>
-
-        <?php 
-            
-            $docblock = $method->getParsedDocblock();
-        
- 
-        ?>
-        
-    </div>
     <div class="method-summary">
-        <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
-        <?php if($docblock){ ?>
-        <div class="summary-text"><?= $docblock->getSummary() ?></div>
-        <?php } ?>
+        <div class="method-signature">
+            <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
+            <span class="method-return">
+                &nbsp;<strong>:</strong>&nbsp;
+                <?php if (!empty($allTypes)):?>
+                    <?php echo join(' | ', $allTypes); ?>
+                <?php else: ?>
+                    void
+                <?php endif; ?>
+            </span>
+        </div>
+        <?php if ($docblock):?>
+            <div class="method-doc">
+                <div class="summary-text">
+                    <?php echo $docblock->getSummary(); ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
-
 </li>
