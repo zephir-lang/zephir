@@ -238,6 +238,10 @@ class Compiler
                     $buildType = 'Debug';
                 }
 
+                if (strpos($buildLog, '/out:x64\\') !== false) {
+                    $buildType = 'x64/' . $buildType;
+                }
+
                 copy($buildType . '/php_zephir_parser.dll', 'php_zephir_parser.dll');
                 $extFile = $currentDir . 'php_zephir_parser.dll';
 
