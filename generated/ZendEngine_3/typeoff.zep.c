@@ -107,6 +107,23 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 }
 
+PHP_METHOD(Test_Typeoff, testNotBoolTrue) {
+
+	zval testVar;
+	ZEPHIR_INIT_THIS();
+
+	ZVAL_UNDEF(&testVar);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&testVar);
+	ZVAL_STRING(&testVar, "");
+	ZEPHIR_INIT_NVAR(&testVar);
+	ZVAL_BOOL(&testVar, 1);
+	RETURN_MM_BOOL(((Z_TYPE_P(&testVar) == IS_TRUE || Z_TYPE_P(&testVar) == IS_FALSE) != 1));
+
+}
+
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 	zend_bool testVar = 0;
