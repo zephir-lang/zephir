@@ -93,6 +93,20 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 }
 
+PHP_METHOD(Test_Typeoff, testNotBoolTrue) {
+
+	zval *testVar = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(testVar);
+	ZVAL_STRING(testVar, "", 1);
+	ZEPHIR_INIT_NVAR(testVar);
+	ZVAL_BOOL(testVar, 1);
+	RETURN_MM_BOOL(Z_TYPE_P(testVar) != IS_BOOL);
+
+}
+
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 	zend_bool testVar = 0;

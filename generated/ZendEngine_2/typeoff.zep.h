@@ -9,6 +9,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntFalse);
 PHP_METHOD(Test_Typeoff, testNativeIntTrue);
 PHP_METHOD(Test_Typeoff, testNativeDoubleTrue);
 PHP_METHOD(Test_Typeoff, testNativeBoolTrue);
+PHP_METHOD(Test_Typeoff, testNotBoolTrue);
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse);
 PHP_METHOD(Test_Typeoff, testArrayFalse);
 PHP_METHOD(Test_Typeoff, testArrayTrue);
@@ -31,6 +32,7 @@ ZEPHIR_INIT_FUNCS(test_typeoff_method_entry) {
 	PHP_ME(Test_Typeoff, testNativeIntTrue, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testNativeDoubleTrue, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testNativeBoolTrue, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Typeoff, testNotBoolTrue, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testNativeBoolFalse, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testArrayFalse, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testArrayTrue, NULL, ZEND_ACC_PUBLIC)
