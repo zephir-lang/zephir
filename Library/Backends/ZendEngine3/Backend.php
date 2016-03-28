@@ -51,7 +51,7 @@ class Backend extends BackendZendEngine2
         if ($useCodePrinter) {
             $context->codePrinter->output($code);
         }
-        
+
         return $code;
     }
 
@@ -125,7 +125,7 @@ class Backend extends BackendZendEngine2
 
             case 'boolean':
             case 'bool':
-                $condition = '(Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_TRUE || Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_FALSE)';
+                $condition = '((Z_TYPE_P(' . $variableName . ') == IS_TRUE || Z_TYPE_P(' . $variableName . ') == IS_FALSE) ' . $operator . ' 1)';
                 break;
 
             case 'resource':

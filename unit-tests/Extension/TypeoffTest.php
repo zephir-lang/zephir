@@ -46,6 +46,7 @@ class TypeoffTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Typeoff();
         $this->assertTrue($t->testNativeBoolFalse() == false);
         $this->assertTrue($t->testNativeBoolTrue() == true);
+        $this->assertFalse($t->testNotBoolTrue());
     }
 
     public function testArray()

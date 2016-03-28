@@ -57,6 +57,15 @@ class Typeoff
 		return typeof testVar == "boolean";
 	}
 
+	public function testNotBoolTrue()
+	{
+		// force usage of a zval
+		var testVar = "";
+		let testVar = true;
+
+		return typeof testVar != "boolean";
+	}
+
 	public function testNativeBoolFalse()
 	{
 		bool testVar;
