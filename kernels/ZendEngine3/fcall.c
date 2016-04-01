@@ -420,7 +420,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fci.params         = NULL;
 	//fci.params: Passed as separate parameter to prevent the need to convert zval ** to zval *
 	fci.no_separation  = 1;
-	fci.symbol_table   = NULL;
 
 	fcic.initialized = 0;
 	fcic.function_handler = NULL;
