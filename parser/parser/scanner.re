@@ -25,6 +25,8 @@
 #define YYLIMIT (s->end)
 #define YYMARKER q
 
+extern char *strndup(const char *s, size_t len);
+
 int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 	char next, *q = YYCURSOR, *start = YYCURSOR;

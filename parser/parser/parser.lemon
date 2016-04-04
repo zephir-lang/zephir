@@ -1352,7 +1352,7 @@ program ::= xx_language(Q) . {
 	status->ret = Q;
 }
 
-%destructor xx_language { zval_ptr_dtor(&$$); efree($$); }
+%destructor xx_language { zval_ptr_dtor($$); efree($$); }
 
 xx_language(R) ::= xx_top_statement_list(L) . {
 	R = L;

@@ -238,7 +238,7 @@ class Compiler
                     $buildType = 'Debug';
                 }
 
-                if (strpos($buildLog, '/out:x64\\') !== false) {
+                if (strpos($buildLog, 'x64\\'.$buildType) !== false) {
                     $buildType = 'x64/' . $buildType;
                 }
 
