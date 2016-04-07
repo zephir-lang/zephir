@@ -297,6 +297,7 @@ class Compiler
         $parserExt = $this->compileParser();
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
+            // exclude --parser-compiled argument, we'll specify it additionally
             $args = array_filter($_SERVER['argv'], function($arg) {
                 return 0 !== strpos($arg, "--parser-compiled");
             });
