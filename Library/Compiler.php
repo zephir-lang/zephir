@@ -1146,26 +1146,6 @@ class Compiler
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
                 }
-                /* fix php's broken phpize pathing ... */
-                /*$marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
-                $pos = strpos($configureFile, $marker);
-                if ($pos !== false) {
-                    $spMarker = "if (MODE_PHPIZE) {";
-                    $sp = strpos($configureFile, $spMarker, $pos - 200);
-                    if ($sp === false) {
-                        throw new CompilerException("outofdate... phpize seems broken again");
-                    }
-                    $configureFile = substr($configureFile, 0, $sp) . 'if (false) {' . substr($configureFile, $sp + strlen($spMarker));
-                    $hasChanged = true;
-                }
-
-				 Fix wrong path inside Release directory
-				$path_marker = 'var build_dir = (dirname ? (dir + "\\\\" + dirname) : dir).replace(new RegExp("^..\\\\\\\\"), "");';
-				$path_pos = strpos($configureFile, $path_marker);
-				if ($path_pos !== false) {
-                    $configureFile = substr($configureFile, 0, $path_pos) . 'var build_dir = (dirname ? (dir + "\\\\" + dirname) : dir).replace(PHP_SRC_DIR, "");' . substr($configureFile, $path_pos + strlen($path_marker));
-                    $hasChanged = true;
-				}*/
 				
                 if ($hasChanged) {
                     file_put_contents("ext/configure.js", $configureFile);
@@ -1433,18 +1413,9 @@ class Compiler
      */
     protected function processAddSources($sources, $project)
     {
-        $groupSources = array();
-        foreach ($sources as $source) {
-            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
-            if (!isset($groupSources[$dirName])) {
-                $groupSources[$dirName] = array();
-            }
-            $groupSources[$dirName][] = basename($source);
-        }
         $groups = array();
-        foreach ($groupSources as $dirname => $files) {
-            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
-                        join(' ', $files) . '", "' . $project . '");';
+        foreach ($sources as $file) {
+            $groups[] = 'ADD_SOURCES(configure_module_dirname, "' . str_replace("\\", "\\\\", $file) . '", "' . $project . '");';
         }
         return $groups;
     }
