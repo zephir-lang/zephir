@@ -1147,7 +1147,7 @@ class Compiler
                     $hasChanged = true;
                 }
                 /* fix php's broken phpize pathing ... */
-                $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
+                /*$marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
                 $pos = strpos($configureFile, $marker);
                 if ($pos !== false) {
                     $spMarker = "if (MODE_PHPIZE) {";
@@ -1159,13 +1159,13 @@ class Compiler
                     $hasChanged = true;
                 }
 
-				// Fix wrong path inside Release directory
+				 Fix wrong path inside Release directory
 				$path_marker = 'var build_dir = (dirname ? (dir + "\\\\" + dirname) : dir).replace(new RegExp("^..\\\\\\\\"), "");';
 				$path_pos = strpos($configureFile, $path_marker);
 				if ($path_pos !== false) {
                     $configureFile = substr($configureFile, 0, $path_pos) . 'var build_dir = (dirname ? (dir + "\\\\" + dirname) : dir).replace(PHP_SRC_DIR, "");' . substr($configureFile, $path_pos + strlen($path_marker));
                     $hasChanged = true;
-				}
+				}*/
 				
                 if ($hasChanged) {
                     file_put_contents("ext/configure.js", $configureFile);
