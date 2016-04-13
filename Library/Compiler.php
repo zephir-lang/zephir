@@ -1413,9 +1413,18 @@ class Compiler
      */
     protected function processAddSources($sources, $project)
     {
+        $groupSources = array();
+        foreach ($sources as $source) {
+            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
+            if (!isset($groupSources[$dirName])) {
+                $groupSources[$dirName] = array();
+            }
+            $groupSources[$dirName][] = basename($source);
+        }
         $groups = array();
-        foreach ($sources as $file) {
-            $groups[] = 'ADD_SOURCES(configure_module_dirname, "' . str_replace("\\", "\\\\", $file) . '", "' . $project . '");';
+        foreach ($groupSources as $dirname => $files) {
+            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
+                        join(' ', $files) . '", "' . $project . '");';
         }
         return $groups;
     }
