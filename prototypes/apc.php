@@ -2,6 +2,31 @@
 
 if (!class_exists('APCIterator', false)) {
 
+// See: https://github.com/php/pecl-caching-apc/blob/master/apc_bin.h
+defined('APC_BIN_VERIFY_CRC32') || define('APC_BIN_VERIFY_CRC32', 1 << 1);
+defined('APC_BIN_VERIFY_MD5') || define('APC_BIN_VERIFY_MD5', 1 << 0);
+
+// See: https://github.com/php/pecl-caching-apc/blob/master/apc_iterator.h
+defined('APC_ITER_ALL') || define('APC_ITER_ALL', 0xffffffff);
+defined('APC_ITER_ATIME') || define('APC_ITER_ATIME', 1 << 11);
+defined('APC_ITER_CTIME') || define('APC_ITER_CTIME', 1 << 9);
+defined('APC_ITER_DEVICE') || define('APC_ITER_DEVICE', 1 << 3);
+defined('APC_ITER_DTIME') || define('APC_ITER_DTIME', 1 << 10);
+defined('APC_ITER_FILENAME') || define('APC_ITER_FILENAME', 1 << 2);
+defined('APC_ITER_INODE') || define('APC_ITER_INODE', 1 << 4);
+defined('APC_ITER_KEY') || define('APC_ITER_KEY', 1 << 1);
+defined('APC_ITER_MD5') || define('APC_ITER_MD5', 1 << 6);
+defined('APC_ITER_MEM_SIZE') || define('APC_ITER_MEM_SIZE', 1 << 13);
+defined('APC_ITER_MTIME') || define('APC_ITER_MTIME', 1 << 8);
+defined('APC_ITER_NONE') || define('APC_ITER_NONE', 0x00000000);
+defined('APC_ITER_NUM_HITS') || define('APC_ITER_NUM_HITS', 1 << 7);
+defined('APC_ITER_REFCOUNT') || define('APC_ITER_REFCOUNT', 1 << 12);
+defined('APC_ITER_TTL') || define('APC_ITER_TTL', 1 << 14);
+defined('APC_ITER_TYPE') || define('APC_ITER_TYPE', 1 << 0);
+defined('APC_ITER_VALUE') || define('APC_ITER_VALUE', 1 << 5);
+defined('APC_LIST_ACTIVE') || define('APC_LIST_ACTIVE', 0x1);
+defined('APC_LIST_DELETED') || define('APC_LIST_DELETED', 0x2);
+
 /**
  * Class APCIterator
  * @link http://www.php.net/manual/en/class.apciterator.php
