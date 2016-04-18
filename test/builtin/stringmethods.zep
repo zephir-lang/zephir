@@ -3,6 +3,16 @@ namespace Test\BuiltIn;
 
 class StringMethods
 {
+	public function camelize(string str, var delimiter = null)
+	{
+		return str->camelize(delimiter);
+	}
+
+	public function uncamelize(string str, var delimiter = null)
+	{
+		return str->uncamelize(delimiter);
+	}
+
 	public function getLength1()
 	{
 		return "hello"->length();

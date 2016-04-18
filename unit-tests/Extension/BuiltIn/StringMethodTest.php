@@ -23,6 +23,50 @@ use Test\BuiltIn\StringMethods;
 
 class StringMethodTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @dataProvider providerCamelize
+     */
+    public function testCamelize($actual, $expected, $delimiter)
+    {
+        $t = new StringMethods();
+
+        $this->assertEquals($expected, $t->camelize($actual, $delimiter));
+    }
+
+    /**
+     * @dataProvider providerCamelizeWrongSecondParam
+     * @expectedException \Exception
+     * @expectedExceptionMessage Second argument passed to the camelize() must be a string of one character
+     */
+    public function testCamelizeWrongSecondParam($delimiter)
+    {
+        $t = new StringMethods();
+
+        $t->camelize('CameLiZe', $delimiter);
+    }
+
+    /**
+     * @dataProvider providerUnCamelize
+     */
+    public function testUnCamelize($actual, $expected, $delimiter)
+    {
+        $t = new StringMethods();
+
+        $this->assertEquals($expected, $t->uncamelize($actual, $delimiter));
+    }
+
+    /**
+     * @dataProvider providerCamelizeWrongSecondParam
+     * @expectedException \Exception
+     * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
+     */
+    public function testUnCamelizeWrongSecondParam($delimiter)
+    {
+        $t = new StringMethods();
+
+        $t->uncamelize('CameLiZe', $delimiter);
+    }
+
     public function testLength()
     {
         $t = new StringMethods();
@@ -97,5 +141,54 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
         $t = new StringMethods();
         // $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
         $this->assertEquals(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
+    }
+
+    public function providerCamelize()
+    {
+        return [
+            ["=_camelize",      '=Camelize', "_" ],
+            ["camelize",        'Camelize',  "_" ],
+            ["came_li_ze",      'CameLiZe',  "_" ],
+            ["came_li_ze",      'CameLiZe',  null],
+            ["came#li#ze",      'CameLiZe',  "#" ],
+            ["came li ze",      'CameLiZe',  " " ],
+            ["came.li.ze",      'CameLiZe',  "." ],
+            ["came-li-ze",      'CameLiZe',  "-" ],
+            ["c+a+m+e+l+i+z+e", 'CAMELIZE',  "+" ],
+        ];
+    }
+
+    public function providerUnCamelize()
+    {
+        return [
+            ["=Camelize", '=_camelize',      "_" ],
+            ["Camelize",  'camelize',        "_" ],
+            ["Camelize",  'camelize',        null],
+            ["CameLiZe",  'came_li_ze',      "_" ],
+            ["CameLiZe",  'came#li#ze',      "#" ],
+            ["CameLiZe",  'came li ze',      " " ],
+            ["CameLiZe",  'came.li.ze',      "." ],
+            ["CameLiZe",  'came-li-ze',      "-" ],
+            ["CAMELIZE",  'c/a/m/e/l/i/z/e', "/" ],
+        ];
+    }
+
+    public function providerCamelizeWrongSecondParam()
+    {
+        return [
+            [""                         ],
+            ["--"                       ],
+            [true                       ],
+            [false                      ],
+            [1                          ],
+            [0                          ],
+            [[]                         ],
+            [
+                function () {
+                    return "-";
+                }
+            ],
+            [new \stdClass              ],
+        ];
     }
 }
