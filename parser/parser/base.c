@@ -40,21 +40,6 @@ const xx_token_names xx_tokens[] =
 
 xx_memory_manager *parser_memory_manager = NULL;
 
-#if !defined HAVE_STRNDUP && !defined __USE_XOPEN2K8
-char *strndup(const char *s, size_t len)
-{
-    if (s) {
-        char *ns = emalloc(len + 1);
-        if (ns) {
-            ns[len] = 0;
-            return strncpy(ns, s, len);
-        }
-    }
-
-    return NULL;
-}
-#endif
-
 /**
  * Wrapper to alloc memory within the parser
  */
@@ -140,7 +125,7 @@ void parser_free_memory()
 {
 	//if (parser_memory_manager->slots != NULL) {
 		int i;
-		for (i = 0; i < parser_memory_manager->number; i++) {			
+		for (i = 0; i < parser_memory_manager->number; i++) {
 			efree(parser_memory_manager->slots[i]);
 		}
 		//efree(parser_memory_manager->slots);

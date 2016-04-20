@@ -142,7 +142,7 @@ static zval *parser_get_string(const char *str) {
 
 static zval *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	switch (type) {
 
@@ -205,7 +205,7 @@ static zval *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *stat
 
 static zval *xx_ret_expr(char *type, zval *left, zval *right, zval *extra, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", type);
 
@@ -228,7 +228,7 @@ static zval *xx_ret_expr(char *type, zval *left, zval *right, zval *extra, xx_sc
 
 static zval *xx_ret_array_item(zval *key, zval *value, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (key) {
 		parser_add_zval(ret, "key", key);
@@ -244,7 +244,7 @@ static zval *xx_ret_array_item(zval *key, zval *value, xx_scanner_state *state)
 
 static zval *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "namespace");
 	parser_add_str(ret, "name", T->token);
@@ -258,7 +258,7 @@ static zval *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
 
 static zval *xx_ret_use_aliases(zval *use_aliases_list, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "use");
 	parser_add_zval(ret, "aliases", use_aliases_list);
@@ -272,7 +272,7 @@ static zval *xx_ret_use_aliases(zval *use_aliases_list, xx_scanner_state *state)
 
 static zval *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "name", T->token);
 	if (A) {
@@ -289,7 +289,7 @@ static zval *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_
 static zval *xx_ret_function(xx_parser_token *T, zval *parameters,
 	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "function");
 	parser_add_str(ret, "name", T->token);
@@ -320,7 +320,7 @@ static zval *xx_ret_function(xx_parser_token *T, zval *parameters,
 static zval *xx_ret_class(xx_parser_token *T, zval *class_definition, int is_abstract, int is_final,
 	xx_parser_token *E, zval *I, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "class");
 	parser_add_str(ret, "name", T->token);
@@ -349,7 +349,7 @@ static zval *xx_ret_class(xx_parser_token *T, zval *class_definition, int is_abs
 
 static zval *xx_ret_interface(xx_parser_token *T, zval *interface_definition, zval *extends_list, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "interface");
 	parser_add_str(ret, "name", T->token);
@@ -371,7 +371,7 @@ static zval *xx_ret_interface(xx_parser_token *T, zval *interface_definition, zv
 
 static zval *xx_ret_class_definition(zval *properties, zval *methods, zval *constants, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (properties) {
 		parser_add_zval(ret, "properties", properties);
@@ -392,7 +392,7 @@ static zval *xx_ret_class_definition(zval *properties, zval *methods, zval *cons
 
 static zval *xx_ret_interface_definition(zval *methods, zval *constants, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (methods) {
 		parser_add_zval(ret, "methods", methods);
@@ -411,7 +411,7 @@ static zval *xx_ret_interface_definition(zval *methods, zval *constants, xx_scan
 static zval *xx_ret_class_property(zval *visibility, xx_parser_token *T,
 		zval *default_value, xx_parser_token *D, zval *shortcuts, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_zval(ret, "visibility", visibility);
 	parser_add_str(ret, "type", "property");
@@ -438,7 +438,7 @@ static zval *xx_ret_class_property(zval *visibility, xx_parser_token *T,
 
 static zval *xx_ret_property_shortcut(xx_parser_token *C, xx_parser_token *D, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "shortcut");
 	if (C) {
@@ -455,7 +455,7 @@ static zval *xx_ret_property_shortcut(xx_parser_token *C, xx_parser_token *D, xx
 
 static zval *xx_ret_class_const(xx_parser_token *T, zval *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "const");
 	parser_add_str(ret, "name", T->token);
@@ -475,7 +475,7 @@ static zval *xx_ret_class_const(xx_parser_token *T, zval *default_value, xx_pars
 static zval *xx_ret_class_method(zval *visibility, xx_parser_token *T, zval *parameters,
 	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_zval(ret, "visibility", visibility);
 	parser_add_str(ret, "type", "method");
@@ -508,7 +508,7 @@ static zval *xx_ret_class_method(zval *visibility, xx_parser_token *T, zval *par
 static zval *xx_ret_parameter(int const_param, zval *type, zval *cast, xx_parser_token *N, zval *default_value,
 	int mandatory, int reference, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "parameter");
 	parser_add_str(ret, "name", N->token);
@@ -540,7 +540,7 @@ static zval *xx_ret_parameter(int const_param, zval *type, zval *cast, xx_parser
 
 static zval *xx_ret_return_type(int is_void, zval *return_type_list, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "return-type");
 
@@ -559,7 +559,7 @@ static zval *xx_ret_return_type(int is_void, zval *return_type_list, xx_scanner_
 
 static zval *xx_ret_return_type_item(zval *type, zval *cast, int mandatory, int collection, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "return-type-parameter");
 
@@ -658,7 +658,7 @@ static zval *xx_ret_list(zval *list_left, zval *list_right)
 
 static zval *xx_ret_let_statement(zval *assignments, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "let");
 	parser_add_zval(ret, "assignments", assignments);
@@ -672,7 +672,7 @@ static zval *xx_ret_let_statement(zval *assignments, xx_scanner_state *state)
 
 static zval *xx_ret_let_assignment(char *type, zval *operator, xx_parser_token *V, xx_parser_token *P, zval *index_expr, zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "assign-type", type);
 	if (operator) {
@@ -698,7 +698,7 @@ static zval *xx_ret_let_assignment(char *type, zval *operator, xx_parser_token *
 
 static zval *xx_ret_if_statement(zval *expr, zval *statements, zval *elseif_statements, zval *else_statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "if");
 	parser_add_zval(ret, "expr", expr);
@@ -724,7 +724,7 @@ static zval *xx_ret_if_statement(zval *expr, zval *statements, zval *elseif_stat
 
 static zval *xx_ret_switch_statement(zval *expr, zval *clauses, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "switch");
 	parser_add_zval(ret, "expr", expr);
@@ -742,7 +742,7 @@ static zval *xx_ret_switch_statement(zval *expr, zval *clauses, xx_scanner_state
 
 static zval *xx_ret_case_clause(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (expr) {
 		parser_add_str(ret, "type", "case");
@@ -764,7 +764,7 @@ static zval *xx_ret_case_clause(zval *expr, zval *statements, xx_scanner_state *
 
 static zval *xx_ret_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "while");
 	parser_add_zval(ret, "expr", expr);
@@ -782,7 +782,7 @@ static zval *xx_ret_while_statement(zval *expr, zval *statements, xx_scanner_sta
 
 static zval *xx_ret_do_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "do-while");
 	parser_add_zval(ret, "expr", expr);
@@ -800,7 +800,7 @@ static zval *xx_ret_do_while_statement(zval *expr, zval *statements, xx_scanner_
 
 static zval *xx_ret_try_catch_statement(zval *statements, zval *catches, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "try-catch");
 
@@ -820,7 +820,7 @@ static zval *xx_ret_try_catch_statement(zval *statements, zval *catches, xx_scan
 
 static zval *xx_ret_catch_statement(zval *classes, zval *variable, zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (classes) {
 		parser_add_zval(ret, "classes", classes);
@@ -843,7 +843,7 @@ static zval *xx_ret_catch_statement(zval *classes, zval *variable, zval *stateme
 
 static zval *xx_ret_for_statement(zval *expr, xx_parser_token *K, xx_parser_token *V, int reverse, zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "for");
 	parser_add_zval(ret, "expr", expr);
@@ -870,7 +870,7 @@ static zval *xx_ret_for_statement(zval *expr, xx_parser_token *K, xx_parser_toke
 
 static zval *xx_ret_loop_statement(zval *statements, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "loop");
 
@@ -887,7 +887,7 @@ static zval *xx_ret_loop_statement(zval *statements, xx_scanner_state *state)
 
 static zval *xx_ret_empty_statement(xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "empty");
 
@@ -900,7 +900,7 @@ static zval *xx_ret_empty_statement(xx_scanner_state *state)
 
 static zval *xx_ret_break_statement(xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "break");
 
@@ -913,7 +913,7 @@ static zval *xx_ret_break_statement(xx_scanner_state *state)
 
 static zval *xx_ret_continue_statement(xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "continue");
 
@@ -926,7 +926,7 @@ static zval *xx_ret_continue_statement(xx_scanner_state *state)
 
 static zval *xx_ret_echo_statement(zval *expressions, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "echo");
 	parser_add_zval(ret, "expressions", expressions);
@@ -940,7 +940,7 @@ static zval *xx_ret_echo_statement(zval *expressions, xx_scanner_state *state)
 
 static zval *xx_ret_return_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "return");
 	if (expr) {
@@ -956,7 +956,7 @@ static zval *xx_ret_return_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_require_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "require");
 	parser_add_zval(ret, "expr", expr);
@@ -970,7 +970,7 @@ static zval *xx_ret_require_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_fetch_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "fetch");
 	parser_add_zval(ret, "expr", expr);
@@ -984,7 +984,7 @@ static zval *xx_ret_fetch_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_fcall_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "fcall");
 	parser_add_zval(ret, "expr", expr);
@@ -998,7 +998,7 @@ static zval *xx_ret_fcall_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_mcall_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "mcall");
 	parser_add_zval(ret, "expr", expr);
@@ -1012,7 +1012,7 @@ static zval *xx_ret_mcall_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_scall_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "scall");
 	parser_add_zval(ret, "expr", expr);
@@ -1026,7 +1026,7 @@ static zval *xx_ret_scall_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_unset_statement(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "unset");
 	parser_add_zval(ret, "expr", expr);
@@ -1040,7 +1040,7 @@ static zval *xx_ret_unset_statement(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_declare_statement(int type, zval *variables, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "declare");
 
@@ -1117,7 +1117,7 @@ static zval *xx_ret_declare_statement(int type, zval *variables, xx_scanner_stat
 
 static zval *xx_ret_declare_variable(xx_parser_token *T, zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "variable", T->token);
 	if (expr) {
@@ -1133,7 +1133,7 @@ static zval *xx_ret_declare_variable(xx_parser_token *T, zval *expr, xx_scanner_
 
 static zval *xx_ret_new_static_instance(zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "new");
 	parser_add_str(ret, "class", "static");
@@ -1152,7 +1152,7 @@ static zval *xx_ret_new_static_instance(zval *parameters, xx_scanner_state *stat
 
 static zval *xx_ret_new_instance(int dynamic, xx_parser_token *T, zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "new");
 	parser_add_str(ret, "class", T->token);
@@ -1171,7 +1171,7 @@ static zval *xx_ret_new_instance(int dynamic, xx_parser_token *T, zval *paramete
 
 static zval *xx_ret_new_instance_type(zval *type, zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "new-type");
 	parser_add_zval(ret, "internal-type", type);
@@ -1189,7 +1189,7 @@ static zval *xx_ret_new_instance_type(zval *type, zval *parameters, xx_scanner_s
 
 static zval *xx_ret_throw_exception(zval *expr, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "throw");
 	if (expr) {
@@ -1205,7 +1205,7 @@ static zval *xx_ret_throw_exception(zval *expr, xx_scanner_state *state)
 
 static zval *xx_ret_fcall(int type, xx_parser_token *F, zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "fcall");
 	parser_add_str(ret, "name", F->token);
@@ -1224,7 +1224,7 @@ static zval *xx_ret_fcall(int type, xx_parser_token *F, zval *parameters, xx_sca
 
 static zval *xx_ret_mcall(int type, zval *O, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "mcall");
 	parser_add_zval(ret, "variable", O);
@@ -1244,7 +1244,7 @@ static zval *xx_ret_mcall(int type, zval *O, xx_parser_token *M, zval *parameter
 
 static zval *xx_ret_scall(int dynamic_class, char *class_name, int dynamic_method, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "scall");
 	parser_add_int(ret, "dynamic-class", dynamic_class);
@@ -1265,7 +1265,7 @@ static zval *xx_ret_scall(int dynamic_class, char *class_name, int dynamic_metho
 
 static zval *xx_ret_call_parameter(xx_parser_token *N, zval *parameter, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	if (N) {
 		parser_add_str(ret, "name", N->token);
@@ -1281,7 +1281,7 @@ static zval *xx_ret_call_parameter(xx_parser_token *N, zval *parameter, xx_scann
 
 static zval *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "comment");
 	parser_add_str(ret, "value", T->token);
@@ -1295,7 +1295,7 @@ static zval *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
 
 static zval *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
 {
-	zval *ret = parser_array_init(&ret);
+	zval *ret = parser_array_init();
 
 	parser_add_str(ret, "type", "cblock");
 	parser_add_str(ret, "value", T->token);
@@ -1358,7 +1358,7 @@ program ::= xx_language(Q) . {
 }
 
 %destructor xx_language {
-	//zval_ptr_dtor($$); 
+	//zval_ptr_dtor($$);
 	//efree($$);
 }
 
@@ -3167,12 +3167,12 @@ xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKE
 
 /* o::{m}() */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_scall(0, O, 1, M, NULL, status->scanner_state);
+	R = xx_ret_scall(0, O->token, 1, M, NULL, status->scanner_state);
 }
 
 /* o::{m}(false, x) */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_scall(0, O, 1, M, P, status->scanner_state);
+	R = xx_ret_scall(0, O->token, 1, M, P, status->scanner_state);
 }
 
 /* o->m(false, x) */
