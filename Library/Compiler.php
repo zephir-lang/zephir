@@ -149,19 +149,19 @@ class Compiler
      */
     protected function checkRequires()
     {
-        $extension_requires = $this->config->get("requires");
-        $extension_requires = $extension_requires["extensions"];
-        if ($extension_requires) {
-            $collection_error = PHP_EOL . "\tCould not load Extension : ";
-            foreach ($extension_requires as $key => $value) {
+        $extensionRequires = $this->config->get("requires");
+        $extensionRequires = $extensionRequires["extensions"];
+        if ($extensionRequires) {
+            $collectionError = PHP_EOL . "\tCould not load extension : ";
+            foreach ($extensionRequires as $key => $value) {
                 if (!extension_loaded($value)) {
-                    $collection_error .= $value . ", ";
+                    $collectionError .= $value . ", ";
                 }
             }
 
-            if ($collection_error != PHP_EOL . "\tCould not load Extension : ") {
-                $collection_error .= PHP_EOL . "\tYou must add extensions above before build this extension!";
-                throw new Exception($collection_error);
+            if ($collectionError != PHP_EOL . "\tCould not load extension : ") {
+                $collectionError .= PHP_EOL . "\tYou must add extensions above before build this extension";
+                throw new Exception($collectionError);
             }
         }
     }

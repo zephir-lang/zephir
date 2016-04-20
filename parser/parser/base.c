@@ -99,18 +99,12 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 
 void parser_track_variable(zval **var)
 {
-	/*if (parser_memory_manager->slots == NULL) {
+	if (parser_memory_manager->slots == NULL) {
 		parser_memory_manager->slots = emalloc(sizeof(zval **) * 128);
 		parser_memory_manager->number = 0;
 	} else {
 		if (parser_memory_manager->number % 128 == 0) {
 			parser_memory_manager->slots = erealloc(parser_memory_manager->slots, parser_memory_manager->number + 128);
-		}
-	}*/
-	if (parser_memory_manager->number == 0) {
-		int i;
-		for (i = 0; i < 255; i++) {
-			parser_memory_manager->slots[i]	= NULL;
 		}
 	}
 
@@ -120,15 +114,17 @@ void parser_track_variable(zval **var)
 
 void parser_free_memory()
 {
-	//if (parser_memory_manager->slots != NULL) {
-		int i;
-		for (i = 0; i < parser_memory_manager->number; i++) {
-			//efree(parser_memory_manager->slots[i]);
+	if (parser_memory_manager != NULL) {
+		if (parser_memory_manager->slots != NULL) {
+			int i;
+			for (i = 0; i < parser_memory_manager->number; i++) {
+				efree(parser_memory_manager->slots[i]);
+			}
+			efree(parser_memory_manager->slots);
+			efree(parser_memory_manager);
+			parser_memory_manager = NULL;
 		}
-		//efree(parser_memory_manager->slots);
-		efree(parser_memory_manager);
-		parser_memory_manager = NULL;
-	//}
+	}
 }
 
 /**
@@ -151,7 +147,7 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 	}
 
 	parser_memory_manager = emalloc(sizeof(xx_memory_manager));
-	//parser_memory_manager->slots = NULL;
+	parser_memory_manager->slots = NULL;
 
 	/**
 	 * Start the reentrant parser
@@ -652,7 +648,7 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 		zval *ret_ptr = parser_status->ret;
 #else
 		zval *ret_ptr = emalloc(sizeof(zval *));
-		ZVAL_COPY(ret_ptr, parser_status->ret);
+		ZVAL_DUP(ret_ptr, parser_status->ret);
 
 		parser_free_memory();
 #endif
@@ -666,7 +662,9 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 
 	xx_Free(xx_parser, xx_wrapper_free);
 
+#if PHP_VERSION_ID >= 70000
 	parser_free_memory();
+#endif
 
 	efree(parser_status);
 	efree(state);

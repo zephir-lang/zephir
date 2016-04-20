@@ -17,7 +17,7 @@
 */
 
 typedef struct _xx_memory_manager {
-	zval *slots[256];
+	zval **slots;
 	int number;
 } xx_memory_manager;
 
