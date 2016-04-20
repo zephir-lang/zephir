@@ -16,9 +16,6 @@
  +--------------------------------------------------------------------------+
 */
 
-#define SUCCESS 1
-#define FAILURE 0
-
 const xx_token_names xx_tokens[] =
 {
 	{ XX_T_INTEGER,             "INTEGER" },
@@ -126,7 +123,7 @@ void parser_free_memory()
 	//if (parser_memory_manager->slots != NULL) {
 		int i;
 		for (i = 0; i < parser_memory_manager->number; i++) {
-			efree(parser_memory_manager->slots[i]);
+			//efree(parser_memory_manager->slots[i]);
 		}
 		//efree(parser_memory_manager->slots);
 		efree(parser_memory_manager);
@@ -651,10 +648,14 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 
 	if (parser_status->ret) {
 
+#if PHP_VERSION_ID < 70000
+		zval *ret_ptr = parser_status->ret;
+#else
 		zval *ret_ptr = emalloc(sizeof(zval *));
 		ZVAL_COPY(ret_ptr, parser_status->ret);
 
 		parser_free_memory();
+#endif
 
 		xx_Free(xx_parser, xx_wrapper_free);
 
