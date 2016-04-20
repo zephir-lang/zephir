@@ -38,11 +38,13 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
+xx_memory_manager *parser_memory_manager = NULL;
+
 #if !defined HAVE_STRNDUP && !defined __USE_XOPEN2K8
 char *strndup(const char *s, size_t len)
 {
     if (s) {
-        char *ns = malloc(len + 1);
+        char *ns = emalloc(len + 1);
         if (ns) {
             ns[len] = 0;
             return strncpy(ns, s, len);
@@ -57,14 +59,14 @@ char *strndup(const char *s, size_t len)
  * Wrapper to alloc memory within the parser
  */
 static void *xx_wrapper_alloc(size_t bytes){
-	return malloc(bytes);
+	return emalloc(bytes);
 }
 
 /**
  * Wrapper to free memory within the parser
  */
 static void xx_wrapper_free(void *pointer){
-	//free(pointer);
+	efree(pointer);
 }
 
 /**
@@ -74,7 +76,7 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 
 	xx_parser_token *pToken;
 
-	pToken = malloc(sizeof(xx_parser_token));
+	pToken = emalloc(sizeof(xx_parser_token));
 	pToken->opcode = opcode;
 	pToken->token = token->value;
 	pToken->token_len = token->len;
@@ -113,6 +115,40 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 	efree(error);*/
 }
 
+void parser_track_variable(zval **var)
+{
+	/*if (parser_memory_manager->slots == NULL) {
+		parser_memory_manager->slots = emalloc(sizeof(zval **) * 128);
+		parser_memory_manager->number = 0;
+	} else {
+		if (parser_memory_manager->number % 128 == 0) {
+			parser_memory_manager->slots = erealloc(parser_memory_manager->slots, parser_memory_manager->number + 128);
+		}
+	}*/
+	if (parser_memory_manager->number == 0) {
+		int i;
+		for (i = 0; i < 255; i++) {
+			parser_memory_manager->slots[i]	= NULL;
+		}
+	}
+
+	parser_memory_manager->slots[parser_memory_manager->number] = *var;
+	parser_memory_manager->number++;
+}
+
+void parser_free_memory()
+{
+	//if (parser_memory_manager->slots != NULL) {
+		int i;
+		for (i = 0; i < parser_memory_manager->number; i++) {			
+			efree(parser_memory_manager->slots[i]);
+		}
+		//efree(parser_memory_manager->slots);
+		efree(parser_memory_manager);
+		parser_memory_manager = NULL;
+	//}
+}
+
 /**
  * Parses a comment returning an intermediate array representation
  */
@@ -132,13 +168,16 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 		return NULL;
 	}
 
+	parser_memory_manager = emalloc(sizeof(xx_memory_manager));
+	//parser_memory_manager->slots = NULL;
+
 	/**
 	 * Start the reentrant parser
 	 */
 	xx_parser = xx_Alloc(xx_wrapper_alloc);
 
-	parser_status = malloc(sizeof(xx_parser_status));
-	state = malloc(sizeof(xx_scanner_state));
+	parser_status = emalloc(sizeof(xx_parser_status));
+	state = emalloc(sizeof(xx_scanner_state));
 
 	parser_status->status = XX_PARSING_OK;
 	parser_status->scanner_state = state;
@@ -581,14 +620,14 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 			case XX_SCANNER_RETCODE_ERR:
 			case XX_SCANNER_RETCODE_IMPOSSIBLE:
 				{
-					char *x = malloc(sizeof(char) * 1024);
+					char *x = emalloc(sizeof(char) * 1024);
 					if (state->start) {
 						sprintf(x, "Scanner error: %d %s", scanner_status, state->start);
 					} else {
 						sprintf(x, "Scanner error: %d", scanner_status);
 					}
 					fprintf(stderr, "%s\n", x);
-					free(x);
+					efree(x);
 					status = FAILURE;
 				}
 				break;
@@ -612,8 +651,6 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 		//fprintf(stderr, "error!\n");
 	}
 
-	xx_Free(xx_parser, xx_wrapper_free);
-
 	if (status != FAILURE) {
 		if (parser_status->status == XX_PARSING_OK) {
 			//printf("%s\n", json_object_to_json_string(parser_status->ret));
@@ -628,12 +665,24 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 	}
 
 	if (parser_status->ret) {
-		zval *ret_ptr = parser_status->ret;
-		free(parser_status);
-		free(state);
+
+		zval *ret_ptr = emalloc(sizeof(zval *));
+		ZVAL_COPY(ret_ptr, parser_status->ret);
+
+		parser_free_memory();
+
+		xx_Free(xx_parser, xx_wrapper_free);
+
+		efree(parser_status);
+		efree(state);
 		return ret_ptr;
 	}
-	free(parser_status);
-	free(state);
+
+	xx_Free(xx_parser, xx_wrapper_free);
+
+	parser_free_memory();
+
+	efree(parser_status);
+	efree(state);
 	return NULL;
 }

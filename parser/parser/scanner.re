@@ -16,8 +16,7 @@
  +--------------------------------------------------------------------------+
 */
 
-#include <stdio.h>
-#include <string.h>
+#include <php.h>
 #include "scanner.h"
 
 #define YYCTYPE unsigned char
@@ -553,7 +552,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 				s->active_char = ch;
 			}
-			free(token->value);
+			efree(token->value);
 			token->len = 0;
 			q = YYCURSOR;
 			return 0;
@@ -641,10 +640,10 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			}
 
 			/* This is hack */
-			if (token->len == 1 && !memcmp(token->value, "_", sizeof("_")-1)
-				|| token->len == 2 && !memcmp(token->value, "__", sizeof("__")-1)
-				|| token->len == 3 && !memcmp(token->value, "___", sizeof("___")-1)
-				|| token->len == 4 && !memcmp(token->value, "____", sizeof("____")-1)
+			if ((token->len == 1 && (!memcmp(token->value, "_", sizeof("_")-1)))
+				|| (token->len == 2 && (!memcmp(token->value, "__", sizeof("__")-1)))
+				|| (token->len == 3 && (!memcmp(token->value, "___", sizeof("___")-1)))
+				|| (token->len == 4 && (!memcmp(token->value, "____", sizeof("____")-1)))
 				) {
 				token->opcode = XX_T_IDENTIFIER;
 				return 0;

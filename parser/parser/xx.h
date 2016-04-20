@@ -16,6 +16,11 @@
  +--------------------------------------------------------------------------+
 */
 
+typedef struct _xx_memory_manager {
+	zval *slots[256];
+	int number;
+} xx_memory_manager;
+
 typedef struct _xx_parser_token {
 	int opcode;
 	char *token;
@@ -36,3 +41,4 @@ typedef struct _xx_parser_status {
 #define XX_PARSING_OK 1
 #define XX_PARSING_FAILED 0
 
+void parser_track_variable(zval **var);

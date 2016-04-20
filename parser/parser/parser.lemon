@@ -63,6 +63,10 @@
 #include "scanner.h"
 #include "xx.h"
 
+#if PHP_VERSION_ID < 70000
+#include "Zend/zend_variables.h"
+#endif
+
 #define SL(str) ZEND_STRL(str)
 
 static zval *parser_array_init() {
@@ -71,6 +75,7 @@ static zval *parser_array_init() {
 	MAKE_STD_ZVAL(t);
 #else
 	zval *t = emalloc(sizeof(zval));
+	parser_track_variable(&t);
 #endif
 	array_init(t);
 	return t;
@@ -1352,7 +1357,10 @@ program ::= xx_language(Q) . {
 	status->ret = Q;
 }
 
-%destructor xx_language { zval_ptr_dtor($$); efree($$); }
+%destructor xx_language {
+	//zval_ptr_dtor($$); 
+	//efree($$);
+}
 
 xx_language(R) ::= xx_top_statement_list(L) . {
 	R = L;
