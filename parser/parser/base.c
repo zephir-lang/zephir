@@ -118,7 +118,7 @@ void parser_free_memory()
 		if (parser_memory_manager->slots != NULL) {
 			int i;
 			for (i = 0; i < parser_memory_manager->number; i++) {
-				efree(parser_memory_manager->slots[i]);
+				//efree(parser_memory_manager->slots[i]);
 			}
 			efree(parser_memory_manager->slots);
 			efree(parser_memory_manager);
