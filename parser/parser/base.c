@@ -73,9 +73,9 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 /**
  * Creates an error message when it's triggered by the scanner
  */
-static void xx_scanner_error_msg(xx_parser_status *parser_status){
+/*static void xx_scanner_error_msg(xx_parser_status *parser_status){
 
-	/*char *error, *error_part;
+	char *error, *error_part;
 	XX_scanner_state *state = parser_status->scanner_state;
 
 	ALLOC_INIT_ZVAL(*error_msg);
@@ -94,8 +94,8 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 		sprintf(error, "Parsing error near to EOF in %s", Z_STRVAL_P(state->active_file));
 		ZVAL_STRING(*error_msg, error, 1);
 	}
-	efree(error);*/
-}
+	efree(error);
+}*/
 
 void parser_track_variable(zval **var)
 {
@@ -130,7 +130,7 @@ void parser_free_memory()
 /**
  * Parses a comment returning an intermediate array representation
  */
-zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
+zval *xx_parse_program(char *program, size_t program_length, char *file_path, zval **error_msg) {
 
 	char *error;
 	xx_scanner_state *state;
@@ -574,14 +574,13 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 
 			default:
 				parser_status->status = XX_PARSING_FAILED;
-				fprintf(stderr, "Scanner: unknown opcode %d\n", token.opcode);
-				/*if (!*error_msg) {
-					error = emalloc(sizeof(char) * (48 + Z_STRLEN_P(state->active_file)));
-					sprintf(error, "Scanner: unknown opcode %d on in %s line %d", token.opcode, Z_STRVAL_P(state->active_file), state->active_line);
-					ALLOC_INIT_ZVAL(*error_msg);
-					ZVAL_STRING(*error_msg, error, 1);
+				if (!*error_msg) {
+					int length = (48 + strlen(file_path));
+					error = emalloc(sizeof(char) * length);
+					snprintf(error, length, "Scanner: unknown opcode %d on in %s line %d", token.opcode, file_path, state->active_line);
+					//ZVAL_STRING(*error_msg, error, 1);
 					efree(error);
-				}*/
+				}
 				break;
 		}
 
@@ -598,14 +597,15 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 			case XX_SCANNER_RETCODE_ERR:
 			case XX_SCANNER_RETCODE_IMPOSSIBLE:
 				{
-					char *x = emalloc(sizeof(char) * 1024);
+					error = emalloc(sizeof(char) * 1024);
 					if (state->start) {
-						sprintf(x, "Scanner error: %d %s", scanner_status, state->start);
+						snprintf(error, 1024, "Scanner error: %d %s", scanner_status, state->start);
 					} else {
-						sprintf(x, "Scanner error: %d", scanner_status);
+						snprintf(error, 1024, "Scanner error: %d", scanner_status);
 					}
-					fprintf(stderr, "%s\n", x);
-					efree(x);
+					//ALLOC_INIT_ZVAL(*error_msg);
+					//ZVAL_STRING(*error_msg, error, 1);
+					efree(error);
 					status = FAILURE;
 				}
 				break;
@@ -619,14 +619,13 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 
 	if (parser_status->status != XX_PARSING_OK) {
 		status = FAILURE;
-		/*if (parser_status->syntax_error) {
+		if (parser_status->syntax_error) {
 			if (!*error_msg) {
-				ALLOC_INIT_ZVAL(*error_msg);
-				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
+				//ALLOC_INIT_ZVAL(*error_msg);
+				//ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}
 			efree(parser_status->syntax_error);
-		}*/
-		//fprintf(stderr, "error!\n");
+		}
 	}
 
 	if (status != FAILURE) {
@@ -647,8 +646,9 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path) {
 #if PHP_VERSION_ID < 70000
 		zval *ret_ptr = parser_status->ret;
 #else
-		zval *ret_ptr = emalloc(sizeof(zval *));
-		ZVAL_DUP(ret_ptr, parser_status->ret);
+		//zval *ret_ptr = emalloc(sizeof(zval *));
+		//ZVAL_DUP(ret_ptr, parser_status->ret);
+		zval *ret_ptr = parser_status->ret;
 
 		parser_free_memory();
 #endif
