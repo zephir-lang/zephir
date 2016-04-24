@@ -45,8 +45,15 @@ class CamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
-            throw new CompilerException("'camelize' only accepts one parameter");
+        if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
+            throw new CompilerException("'camelize' only accepts one or two parameters");
+        }
+        
+        $delimiter = 'NULL ';
+        if (count($expression['parameters']) == 2) {
+            if ($expression['parameters'][1]['parameter']['type'] == 'null') {
+                unset($expression['parameters'][1]);
+            }
         }
 
         /**
@@ -69,8 +76,12 @@ class CamelizeOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
+        if (isset($resolvedParams[1])) {
+            $delimiter = $resolvedParams[1];
+        }
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

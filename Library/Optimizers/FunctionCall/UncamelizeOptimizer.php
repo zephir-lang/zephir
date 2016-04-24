@@ -45,8 +45,15 @@ class UncamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
-            throw new CompilerException("'uncamelize' only accepts one parameter");
+        if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
+            throw new CompilerException("'uncamelize' only accepts one or two parameters");
+        }
+
+        $delimiter = 'NULL ';
+        if (count($expression['parameters']) == 2) {
+            if ($expression['parameters'][1]['parameter']['type'] == 'null') {
+                unset($expression['parameters'][1]);
+            }
         }
 
         /**
@@ -64,12 +71,17 @@ class UncamelizeOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        
+        if (isset($resolvedParams[1])) {
+            $delimiter = $resolvedParams[1];
+        }
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_uncamelize(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_uncamelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

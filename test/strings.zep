@@ -2,6 +2,16 @@ namespace Test;
 
 class Strings
 {
+	public function camelize(string str, var delimiter = null)
+	{
+		return camelize(str, delimiter);
+	}
+
+	public function uncamelize(string str, var delimiter = null)
+	{
+		return uncamelize(str, delimiter);
+	}
+
 	public function testTrim(var str)
 	{
 		return trim(str);
