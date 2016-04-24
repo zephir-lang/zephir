@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/string.h"
-#include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Strings) {
@@ -22,6 +22,44 @@ ZEPHIR_INIT_CLASS(Test_Strings) {
 	ZEPHIR_REGISTER_CLASS(Test, Strings, test, strings, test_strings_method_entry, 0);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Strings, camelize) {
+
+	zval *str_param = NULL, *delimiter = NULL;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+
+	zephir_get_strval(str, str_param);
+	if (!delimiter) {
+		delimiter = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	zephir_camelize(return_value, str, delimiter );
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Strings, uncamelize) {
+
+	zval *str_param = NULL, *delimiter = NULL;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+
+	zephir_get_strval(str, str_param);
+	if (!delimiter) {
+		delimiter = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	zephir_uncamelize(return_value, str, delimiter );
+	RETURN_MM();
 
 }
 

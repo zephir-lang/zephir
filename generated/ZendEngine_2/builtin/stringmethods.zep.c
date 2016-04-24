@@ -12,10 +12,10 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/string.h"
 #include "kernel/memory.h"
-#include "kernel/concat.h"
+#include "kernel/string.h"
 #include "kernel/operators.h"
+#include "kernel/concat.h"
 #include "kernel/fcall.h"
 
 
@@ -24,6 +24,46 @@ ZEPHIR_INIT_CLASS(Test_BuiltIn_StringMethods) {
 	ZEPHIR_REGISTER_CLASS(Test\\BuiltIn, StringMethods, test, builtin_stringmethods, test_builtin_stringmethods_method_entry, 0);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_BuiltIn_StringMethods, camelize) {
+
+	zval *str_param = NULL, *delimiter = NULL, *_0;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+
+	zephir_get_strval(str, str_param);
+	if (!delimiter) {
+		delimiter = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_camelize(_0, str, delimiter );
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_BuiltIn_StringMethods, uncamelize) {
+
+	zval *str_param = NULL, *delimiter = NULL, *_0;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+
+	zephir_get_strval(str, str_param);
+	if (!delimiter) {
+		delimiter = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_uncamelize(_0, str, delimiter );
+	RETURN_CCTOR(_0);
 
 }
 

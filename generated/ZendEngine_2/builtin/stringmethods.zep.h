@@ -3,6 +3,8 @@ extern zend_class_entry *test_builtin_stringmethods_ce;
 
 ZEPHIR_INIT_CLASS(Test_BuiltIn_StringMethods);
 
+PHP_METHOD(Test_BuiltIn_StringMethods, camelize);
+PHP_METHOD(Test_BuiltIn_StringMethods, uncamelize);
 PHP_METHOD(Test_BuiltIn_StringMethods, getLength1);
 PHP_METHOD(Test_BuiltIn_StringMethods, getLength2);
 PHP_METHOD(Test_BuiltIn_StringMethods, getLength3);
@@ -31,6 +33,16 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getCompare);
 PHP_METHOD(Test_BuiltIn_StringMethods, getCompareLocale);
 PHP_METHOD(Test_BuiltIn_StringMethods, getReversed);
 PHP_METHOD(Test_BuiltIn_StringMethods, getHtmlSpecialChars);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_camelize, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, delimiter)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_uncamelize, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, delimiter)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getlength4, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
@@ -137,6 +149,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_gethtmlspecialchars, 0
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_builtin_stringmethods_method_entry) {
+	PHP_ME(Test_BuiltIn_StringMethods, camelize, arginfo_test_builtin_stringmethods_camelize, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_BuiltIn_StringMethods, uncamelize, arginfo_test_builtin_stringmethods_uncamelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getLength1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getLength2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getLength3, NULL, ZEND_ACC_PUBLIC)

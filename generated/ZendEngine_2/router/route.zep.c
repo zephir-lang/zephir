@@ -482,7 +482,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					ZEPHIR_CPY_WRT(realClassName, controllerName);
 				}
 				ZEPHIR_INIT_VAR(_1$$10);
-				zephir_uncamelize(_1$$10, realClassName);
+				zephir_uncamelize(_1$$10, realClassName, NULL  );
 				zephir_array_update_string(&routePaths, SL("controller"), &_1$$10, PH_COPY | PH_SEPARATE);
 			}
 			if (Z_TYPE_P(actionName) != IS_NULL) {

@@ -3,6 +3,8 @@ extern zend_class_entry *test_strings_ce;
 
 ZEPHIR_INIT_CLASS(Test_Strings);
 
+PHP_METHOD(Test_Strings, camelize);
+PHP_METHOD(Test_Strings, uncamelize);
 PHP_METHOD(Test_Strings, testTrim);
 PHP_METHOD(Test_Strings, testRtrim);
 PHP_METHOD(Test_Strings, testLtrim);
@@ -27,6 +29,16 @@ PHP_METHOD(Test_Strings, testTrimMultilineString);
 PHP_METHOD(Test_Strings, testWellEscapedMultilineString);
 PHP_METHOD(Test_Strings, testInternedString1);
 PHP_METHOD(Test_Strings, testInternedString2);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_camelize, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, delimiter)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_uncamelize, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, delimiter)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testtrim, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
@@ -113,6 +125,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_teststripslashes, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
+	PHP_ME(Test_Strings, camelize, arginfo_test_strings_camelize, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, uncamelize, arginfo_test_strings_uncamelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testTrim, arginfo_test_strings_testtrim, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testRtrim, arginfo_test_strings_testrtrim, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testLtrim, arginfo_test_strings_testltrim, ZEND_ACC_PUBLIC)
