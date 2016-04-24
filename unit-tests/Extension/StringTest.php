@@ -33,7 +33,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \Exception
+     * @expectedException \PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage Second argument passed to the camelize() must be a string of one character
      */
     public function testCamelizeWrongSecondParam($delimiter)
@@ -55,7 +55,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \Exception
+     * @expectedException \PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
