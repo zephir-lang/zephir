@@ -35,7 +35,7 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
-xx_memory_manager *parser_memory_manager = NULL;
+//xx_memory_manager *parser_memory_manager = NULL;
 
 /**
  * Wrapper to alloc memory within the parser
@@ -99,7 +99,7 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 
 void parser_track_variable(zval **var)
 {
-	if (parser_memory_manager->slots == NULL) {
+	/*if (parser_memory_manager->slots == NULL) {
 		parser_memory_manager->slots = emalloc(sizeof(zval **) * 128);
 		parser_memory_manager->number = 0;
 	} else {
@@ -109,12 +109,12 @@ void parser_track_variable(zval **var)
 	}
 
 	parser_memory_manager->slots[parser_memory_manager->number] = *var;
-	parser_memory_manager->number++;
+	parser_memory_manager->number++;*/
 }
 
 void parser_free_memory()
 {
-	if (parser_memory_manager != NULL) {
+	/*if (parser_memory_manager != NULL) {
 		if (parser_memory_manager->slots != NULL) {
 			int i;
 			for (i = 0; i < parser_memory_manager->number; i++) {
@@ -124,7 +124,7 @@ void parser_free_memory()
 			efree(parser_memory_manager);
 			parser_memory_manager = NULL;
 		}
-	}
+	}*/
 }
 
 /**
@@ -146,8 +146,8 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 		return NULL;
 	}
 
-	parser_memory_manager = emalloc(sizeof(xx_memory_manager));
-	parser_memory_manager->slots = NULL;
+	//parser_memory_manager = emalloc(sizeof(xx_memory_manager));
+	//parser_memory_manager->slots = NULL;
 
 	/**
 	 * Start the reentrant parser
