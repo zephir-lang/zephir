@@ -21,7 +21,6 @@
 #ifndef ZEPHIR_RELEASE
 #if defined(linux) || defined(DARWIN) || defined(__APPLE__)
 
-
 #include <execinfo.h>
 #include <Zend/zend.h>
 #include <ext/standard/php_smart_string.h>

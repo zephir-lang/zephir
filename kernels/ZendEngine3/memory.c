@@ -90,6 +90,9 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 	zephir_memory_entry *prev, *active_memory;
 	zephir_symbol_table *active_symbol_table;
 	zval *ptr;
+#ifndef ZEPHIR_RELEASE
+	int show_backtrace = 0;
+#endif	
 
 	active_memory = g->active_memory;
 	assert(active_memory != NULL);
@@ -124,15 +127,20 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 				zval *var = active_memory->addresses[i];
 				if (Z_TYPE_P(var) > IS_CALLABLE) {
 					fprintf(stderr, "%s: observed variable #%d (%p) has invalid type %u [%s]\n", __func__, (int)i, var, Z_TYPE_P(var), active_memory->func);
+					show_backtrace = 1;
 				}
 
-				if (!Z_REFCOUNTED_P(var)) continue;
+				if (!Z_REFCOUNTED_P(var)) {
+					continue;
+				}
 
 				if (Z_REFCOUNT_P(var) == 0) {
 					fprintf(stderr, "%s: observed variable #%d (%p) has 0 references, type=%d [%s]\n", __func__, (int)i, var, Z_TYPE_P(var), active_memory->func);
+					show_backtrace = 1;
 				}
 				else if (Z_REFCOUNT_P(var) >= 1000000) {
 					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u), type=%d  [%s]\n", __func__, (int)i, var, Z_REFCOUNT_P(var), Z_TYPE_P(var), active_memory->func);
+					show_backtrace = 1;
 				}
 #if 0
 				/* Skip this check, PDO does return variables with is_ref = 1 and refcount = 1*/
@@ -202,7 +210,12 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 			}
 		}
 	}
+
+	if (show_backtrace == 1) {
+		zephir_print_backtrace();
+	}
 #endif
+
 }
 
 #ifndef ZEPHIR_RELEASE
