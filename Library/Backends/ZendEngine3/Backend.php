@@ -351,9 +351,9 @@ class Backend extends BackendZendEngine2
     {
         $code = $this->resolveValue($code, $context);
         if (!$variable->isDoublePointer()) {
+            $context->symbolTable->mustGrownStack(true);
             $symbolVariable = $this->getVariableCode($variable);
-            $context->codePrinter->output('ZEPHIR_OBS_VAR_ONCE(' . $symbolVariable . ');');
-            $context->codePrinter->output('ZVAL_COPY(' . $symbolVariable . ', ' . $code . ');');
+            $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $symbolVariable . ', ' . $code . ');');
         } else {
             $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
         }
