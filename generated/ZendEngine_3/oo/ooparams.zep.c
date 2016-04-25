@@ -239,13 +239,13 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	ZVAL_UNDEF(&someList);
 
-	zephir_fetch_params(0, 1, 0, &someList_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &someList_param);
 
-	ZEPHIR_OBS_VAR_ONCE(&someList);
-	ZVAL_COPY(&someList, someList_param);
+	ZEPHIR_CPY_WRT(&someList, someList_param);
 
 
-	RETURN_CTORW(someList);
+	RETURN_CTOR(someList);
 
 }
 
