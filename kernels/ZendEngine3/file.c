@@ -173,12 +173,11 @@ int zephir_fclose(zval *stream_zval)
 	php_stream *stream;
 
 	if (Z_TYPE_P(stream_zval) != IS_RESOURCE) {
-		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_fclose()");
 		return 0;
 	}
 
-	php_stream_from_zval_no_verify(stream, stream_zval);
-	if (stream == NULL) {
+	if ((stream = (php_stream*)zend_fetch_resource2(Z_RES_P(stream_zval), "stream", php_file_le_stream(), php_file_le_pstream())) == NULL) {
 		return 0;
 	}
 
@@ -187,11 +186,7 @@ int zephir_fclose(zval *stream_zval)
 		return 0;
 	}
 
-	if (!stream->is_persistent) {
-		php_stream_close(stream);
-	} else {
-		php_stream_pclose(stream);
-	}
+	php_stream_free(stream, PHP_STREAM_FREE_KEEP_RSRC | (stream->is_persistent ? PHP_STREAM_FREE_CLOSE_PERSISTENT : PHP_STREAM_FREE_CLOSE));
 
 	return 1;
 }

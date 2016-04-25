@@ -1068,7 +1068,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		}
 	}
 
-	for (i=0; i<fci->param_count; i++) {
+	for (i = 0; i < fci->param_count; i++) {
 		zval *param;
 		zval *arg = params[i];
 
