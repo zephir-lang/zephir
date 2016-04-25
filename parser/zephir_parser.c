@@ -46,6 +46,7 @@ PHP_FUNCTION(zephir_parse_file)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &content, &content_len, &filepath, &filepath_len) == FAILURE) {
 		return;
 	}
+    
     ret = xx_parse_program(content, content_len, filepath, error_msg);
 
 #if PHP_VERSION_ID >= 70000

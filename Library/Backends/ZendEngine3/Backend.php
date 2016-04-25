@@ -340,11 +340,20 @@ class Backend extends BackendZendEngine2
         return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, null);
     }
 
+    /**
+     * Assigns a zval to another
+     *
+     * @param Variable $variable
+     * @param string $code
+     * @param CompilationContext $context
+     */
     public function assignZval(Variable $variable, $code, CompilationContext $context)
     {
         $code = $this->resolveValue($code, $context);
         if (!$variable->isDoublePointer()) {
-            $context->codePrinter->output('ZVAL_COPY_VALUE(' . $this->getVariableCode($variable) . ', ' . $code . ');');
+            $symbolVariable = $this->getVariableCode($variable);
+            $context->codePrinter->output('ZEPHIR_OBS_VAR_ONCE(' . $symbolVariable . ');');
+            $context->codePrinter->output('ZVAL_COPY(' . $symbolVariable . ', ' . $code . ');');
         } else {
             $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
         }

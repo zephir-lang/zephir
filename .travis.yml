@@ -63,7 +63,6 @@ after_script:
 notifications:
   email:
     - andres@phalconphp.com
-    - eduar@phalconphp.com
 
 addons:
   apt:
