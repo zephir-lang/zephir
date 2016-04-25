@@ -26,6 +26,10 @@
 #include "php_ext.h"
 #include "kernel/globals.h"
 
+#if defined(__x86_64__) || defined(__LP64__) || defined(_LP64) || defined(_WIN64)
+	#define ZEPHIR_ENABLE_64BITS 1
+#endif
+
 #define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);

@@ -52,14 +52,14 @@ ZEND_END_MODULE_GLOBALS(%PROJECT_LOWER%)
 ZEND_EXTERN_MODULE_GLOBALS(%PROJECT_LOWER%)
 
 #ifdef ZTS
-	#define ZEPHIR_GLOBAL(v) TSRMG(%PROJECT_LOWER%_globals_id, zend_%PROJECT_LOWER%_globals *, v)
+	#define ZEPHIR_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(%PROJECT_LOWER%, v)
 #else
 	#define ZEPHIR_GLOBAL(v) (%PROJECT_LOWER%_globals.v)
 #endif
 
 #ifdef ZTS
 	void ***tsrm_ls;
-	#define ZEPHIR_VGLOBAL ((zend_%PROJECT_LOWER%_globals *) (*((void ***) tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(%PROJECT_LOWER%_globals_id)])
+	#define ZEPHIR_VGLOBAL ((zend_%PROJECT_LOWER%_globals *) (*((void ***) TSRMLS_CACHE))[TSRM_UNSHUFFLE_RSRC_ID(id)])
 #else
 	#define ZEPHIR_VGLOBAL &(%PROJECT_LOWER%_globals)
 #endif
