@@ -575,7 +575,7 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 
 	int i, len, first = 0;
 	smart_str camelize_str = {0};
-	char *marker, ch, *delim;
+	char *marker, ch, delim;
 
 	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
 		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
