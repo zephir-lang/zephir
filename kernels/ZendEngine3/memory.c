@@ -580,14 +580,22 @@ void zephir_dump_memory_frame(zephir_memory_entry *active_memory)
 			fprintf(stderr, "Obs var %lu (%p), type=%u, refcnted=%d, refcnt=%u; ", (ulong)i, var, Z_TYPE_P(var), Z_REFCOUNTED_P(var), Z_REFCOUNTED_P(var) ? Z_REFCOUNT_P(var) : 0);
 			switch (Z_TYPE_P(var)) {
 				case IS_NULL:     fprintf(stderr, "value=NULL\n"); break;
+#ifdef ZEND_ENABLE_ZVAL_LONG64
 				case IS_LONG:     fprintf(stderr, "value=%lld\n", Z_LVAL_P(var)); break;
+#else
+				case IS_LONG:     fprintf(stderr, "value=%ld\n", Z_LVAL_P(var)); break;
+#endif
 				case IS_DOUBLE:   fprintf(stderr, "value=%E\n", Z_DVAL_P(var)); break;
 				case IS_TRUE:     fprintf(stderr, "value=(bool)true\n"); break;
 				case IS_FALSE:    fprintf(stderr, "value=(bool)false\n"); break;
 				case IS_ARRAY:    fprintf(stderr, "value=array(%p), %d elements\n", Z_ARRVAL_P(var), zend_hash_num_elements(Z_ARRVAL_P(var))); break;
 				case IS_OBJECT:   fprintf(stderr, "value=object(%u), %s\n", Z_OBJ_HANDLE_P(var), ZSTR_VAL(Z_OBJCE_P(var)->name)); break;
 				case IS_STRING:   fprintf(stderr, "value=%s (%zu)\n", Z_STRVAL_P(var), Z_STRLEN_P(var)); break;
+#ifdef ZEND_ENABLE_ZVAL_LONG64
 				case IS_RESOURCE: fprintf(stderr, "value=(resource)%lld\n", Z_LVAL_P(var)); break;
+#else
+				case IS_RESOURCE: fprintf(stderr, "value=(resource)%ld\n", Z_LVAL_P(var)); break;
+#endif
 				default:          fprintf(stderr, "\n"); break;
 			}
 		}
