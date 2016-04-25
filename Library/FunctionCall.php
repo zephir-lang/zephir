@@ -178,7 +178,6 @@ class FunctionCall extends Call
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
-                                $compilationContext->codePrinter->output('ZVAL_UNDEF(' . $referenceSymbol . ');');
                                 $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
                                 $references[] = $parameters[$n - 1] ;
                             }
