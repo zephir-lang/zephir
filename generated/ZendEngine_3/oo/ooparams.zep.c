@@ -241,7 +241,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
 
-	ZVAL_COPY_VALUE(&someList, someList_param);
+	ZEPHIR_OBS_VAR_ONCE(&someList);
+	ZVAL_COPY(&someList, someList_param);
 
 
 	RETURN_CTORW(someList);
