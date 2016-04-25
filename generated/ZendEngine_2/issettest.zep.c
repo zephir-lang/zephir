@@ -166,7 +166,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 }
 
-static zend_object_value zephir_init_properties_Test_IssetTest(zend_class_entry *class_type TSRMLS_DC) {
+zend_object_value zephir_init_properties_Test_IssetTest(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval *_1$$3;
 	zval *_0;
