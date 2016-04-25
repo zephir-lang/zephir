@@ -6,7 +6,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties);
 PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray);
 PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray);
 PHP_METHOD(Test_Properties_PublicProperties, test394Issue);
-static zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC);
+zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_publicproperties_setsomegettersetterarray, 0, 0, 1)
 	ZEND_ARG_INFO(0, someGetterSetterArray)

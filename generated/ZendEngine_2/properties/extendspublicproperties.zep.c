@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_ExtendsPublicProperties) {
 
 }
 
-static zend_object_value zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object_value zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval *_1$$3, *_2$$3 = NULL, *_4$$4, *_6$$5, *_11$$7;
 	zval *_0, *_3, *_5, *_8, *_10, *_7$$5 = NULL, *_9$$6, *_12$$7;
