@@ -1230,7 +1230,8 @@ class ClassDefinition
                     if (!$method->isInternal()) {
                         $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
                     } else {
-                        $codePrinter->output($compilationContext->backend->getInternalSignature($method, $compilationContext) . ';');
+                        $internalSignature = $compilationContext->backend->getInternalSignature($method, $compilationContext);
+                        $codePrinter->output($internalSignature . ';');
                     }
                 }
                 $codePrinter->outputBlankLine();

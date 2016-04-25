@@ -256,6 +256,16 @@ class ClassMethod
     }
 
     /**
+     * Checks whether the method is empty
+     *
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->statements->isEmpty();
+    }
+
+    /**
      * Checks for visibility congruence
      *
      * @param array $visibility

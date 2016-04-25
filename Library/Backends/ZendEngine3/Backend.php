@@ -296,7 +296,7 @@ class Backend extends BackendZendEngine2
     public function getInternalSignature(ClassMethod $method, CompilationContext $context)
     {
         if ($method->isInitializer() && !$method->isStatic()) {
-            return 'static zend_object *' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
+            return 'zend_object *' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
         }
 
         if ($method->isInitializer() && $method->isStatic()) {

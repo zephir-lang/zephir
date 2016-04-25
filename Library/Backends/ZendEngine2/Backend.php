@@ -500,7 +500,7 @@ class Backend extends BaseBackend
     public function getInternalSignature(ClassMethod $method, CompilationContext $context)
     {
         if ($method->isInitializer() && !$method->isStatic()) {
-            return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
+            return 'zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
         }
 
         if ($method->isInitializer() && $method->isStatic()) {
