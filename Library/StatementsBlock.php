@@ -377,6 +377,16 @@ class StatementsBlock
     }
 
     /**
+     * Checks whether the block is empty or not
+     *
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return count($this->statements) == 0;
+    }
+
+    /**
      * Create/Returns a mutate gatherer pass for this block
      *
      * @param boolean $pass

@@ -19,9 +19,9 @@
 
 namespace Zephir;
 
+use Zephir\HeadersManager;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
-use Zephir\HeadersManager;
 
 /**
  * ClassDefinition
@@ -936,18 +936,20 @@ class ClassDefinition
      */
     public function addInitMethod(StatementsBlock $statementsBlock)
     {
-        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        if (!$statementsBlock->isEmpty()) {
+            $initClassName = $this->getCNamespace() . '_' . $this->getName();
 
-        $classMethod = new ClassMethod(
-            $this,
-            array('internal'),
-            'zephir_init_properties_' . $initClassName,
-            null,
-            $statementsBlock
-        );
+            $classMethod = new ClassMethod(
+                $this,
+                array('internal'),
+                'zephir_init_properties_' . $initClassName,
+                null,
+                $statementsBlock
+            );
 
-        $classMethod->setIsInitializer(true);
-        $this->addMethod($classMethod);
+            $classMethod->setIsInitializer(true);
+            $this->addMethod($classMethod);
+        }
     }
 
     /**
