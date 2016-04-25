@@ -160,13 +160,15 @@ class FunctionCall extends Call
             if ($numberParameters > 0) {
                 $n = 1;
                 $funcParameters = $reflector->getParameters();
+                $isZendEngine3 = $compilationContext->backend->isZE3();
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
                             /* TODO hack, fix this better */
-                            if ($compilationContext->backend->isZE3() && $parameters[$n - 1][0] == '&') {
+                            if ($isZendEngine3 && $parameters[$n - 1][0] == '&') {
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
+
                             if (!preg_match('/^[a-zA-Z0-9$\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
                                 continue;
@@ -175,9 +177,10 @@ class FunctionCall extends Call
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
-                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $compilationContext->backend->getVariableCode($variable) . ');');
+                                $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
+                                $compilationContext->codePrinter->output('ZVAL_UNDEF(' . $referenceSymbol . ');');
+                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
                                 $references[] = $parameters[$n - 1] ;
-                                return false;
                             }
                         }
                     }
