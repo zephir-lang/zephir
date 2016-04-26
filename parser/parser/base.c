@@ -71,33 +71,6 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 }
 
 /**
- * Creates an error message when it's triggered by the scanner
- */
-/*static void xx_scanner_error_msg(xx_parser_status *parser_status){
-
-	char *error, *error_part;
-	XX_scanner_state *state = parser_status->scanner_state;
-
-	ALLOC_INIT_ZVAL(*error_msg);
-	if (state->start) {
-		error = emalloc(sizeof(char) * (128 + state->start_length +  Z_STRLEN_P(state->active_file)));
-		if (state->start_length > 16) {
-			error_part = estrndup(state->start, 16);
-			sprintf(error, "Parsing error before '%s...' in %s on line %d", error_part, Z_STRVAL_P(state->active_file), state->active_line);
-			efree(error_part);
-		} else {
-			sprintf(error, "Parsing error before '%s' in %s on line %d", state->start, Z_STRVAL_P(state->active_file), state->active_line);
-		}
-		ZVAL_STRING(*error_msg, error, 1);
-	} else {
-		error = emalloc(sizeof(char) * (64 + Z_STRLEN_P(state->active_file)));
-		sprintf(error, "Parsing error near to EOF in %s", Z_STRVAL_P(state->active_file));
-		ZVAL_STRING(*error_msg, error, 1);
-	}
-	efree(error);
-}*/
-
-/**
  * Parses a comment returning an intermediate array representation
  */
 void xx_parse_program(zval *return_value, char *program, size_t program_length, char *file_path, zval **error_msg) {
@@ -418,6 +391,9 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 			case XX_T_COMMENT:
 				if (parser_status->number_brackets <= 1) {
 					xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
+				} else {
+					efree(token.value);
+					token.value = NULL;
 				}
 				break;
 			case XX_T_CBLOCK:
@@ -553,11 +529,6 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 					efree(error);
 				}
 				break;
-		}
-
-		if (token.value) {
-			efree(token.value);
-			token.value = NULL;
 		}
 
 		if (parser_status->status != XX_PARSING_OK) {
