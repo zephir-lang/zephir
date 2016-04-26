@@ -550,8 +550,8 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 					} else {
 						snprintf(error, 1024, "Scanner error: %d", scanner_status);
 					}
-					//ALLOC_INIT_ZVAL(*error_msg);
-					//ZVAL_STRING(*error_msg, error, 1);
+					ALLOC_INIT_ZVAL(*error_msg);
+					ZVAL_STRING(*error_msg, error, 1);
 					efree(error);
 					status = FAILURE;
 				}
@@ -568,8 +568,8 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 		status = FAILURE;
 		if (parser_status->syntax_error) {
 			if (!*error_msg) {
-				//ALLOC_INIT_ZVAL(*error_msg);
-				//ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
+				ALLOC_INIT_ZVAL(*error_msg);
+				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}
 			efree(parser_status->syntax_error);
 		}
@@ -577,20 +577,19 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 
 	if (status != FAILURE) {
 		if (parser_status->status == XX_PARSING_OK) {
-			//printf("%s\n", json_object_to_json_string(parser_status->ret));
-			/*if (parser_status->ret) {
-				ZVAL_ZVAL(*result, parser_status->ret, 0, 0);
+#if PHP_VERSION_ID >= 70000
+			ZVAL_ZVAL(return_value, &parser_status->ret, 1, 1);
+#else
+			if (parser_status->ret) {
+				ZVAL_ZVAL(return_value, parser_status->ret, 0, 0);
 				ZVAL_NULL(parser_status->ret);
 				zval_ptr_dtor(&parser_status->ret);
 			} else {
-				array_init(*result);
-			}*/
+				array_init(return_value);
+			}
+#endif
 		}
 	}
-
-#if PHP_VERSION_ID >= 70000
-	ZVAL_ZVAL(return_value, &parser_status->ret, 1, 1);
-#endif
 
 	xx_Free(xx_parser, xx_wrapper_free);
 
