@@ -35,19 +35,19 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
-//xx_memory_manager *parser_memory_manager = NULL;
-
 /**
  * Wrapper to alloc memory within the parser
  */
-static void *xx_wrapper_alloc(size_t bytes){
+static void *xx_wrapper_alloc(size_t bytes)
+{
 	return emalloc(bytes);
 }
 
 /**
  * Wrapper to free memory within the parser
  */
-static void xx_wrapper_free(void *pointer){
+static void xx_wrapper_free(void *pointer)
+{
 	efree(pointer);
 }
 
@@ -71,66 +71,9 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 }
 
 /**
- * Creates an error message when it's triggered by the scanner
- */
-/*static void xx_scanner_error_msg(xx_parser_status *parser_status){
-
-	char *error, *error_part;
-	XX_scanner_state *state = parser_status->scanner_state;
-
-	ALLOC_INIT_ZVAL(*error_msg);
-	if (state->start) {
-		error = emalloc(sizeof(char) * (128 + state->start_length +  Z_STRLEN_P(state->active_file)));
-		if (state->start_length > 16) {
-			error_part = estrndup(state->start, 16);
-			sprintf(error, "Parsing error before '%s...' in %s on line %d", error_part, Z_STRVAL_P(state->active_file), state->active_line);
-			efree(error_part);
-		} else {
-			sprintf(error, "Parsing error before '%s' in %s on line %d", state->start, Z_STRVAL_P(state->active_file), state->active_line);
-		}
-		ZVAL_STRING(*error_msg, error, 1);
-	} else {
-		error = emalloc(sizeof(char) * (64 + Z_STRLEN_P(state->active_file)));
-		sprintf(error, "Parsing error near to EOF in %s", Z_STRVAL_P(state->active_file));
-		ZVAL_STRING(*error_msg, error, 1);
-	}
-	efree(error);
-}*/
-
-void parser_track_variable(zval **var)
-{
-	/*if (parser_memory_manager->slots == NULL) {
-		parser_memory_manager->slots = emalloc(sizeof(zval **) * 128);
-		parser_memory_manager->number = 0;
-	} else {
-		if (parser_memory_manager->number % 128 == 0) {
-			parser_memory_manager->slots = erealloc(parser_memory_manager->slots, parser_memory_manager->number + 128);
-		}
-	}
-
-	parser_memory_manager->slots[parser_memory_manager->number] = *var;
-	parser_memory_manager->number++;*/
-}
-
-void parser_free_memory()
-{
-	/*if (parser_memory_manager != NULL) {
-		if (parser_memory_manager->slots != NULL) {
-			int i;
-			for (i = 0; i < parser_memory_manager->number; i++) {
-				//efree(parser_memory_manager->slots[i]);
-			}
-			efree(parser_memory_manager->slots);
-			efree(parser_memory_manager);
-			parser_memory_manager = NULL;
-		}
-	}*/
-}
-
-/**
  * Parses a comment returning an intermediate array representation
  */
-zval *xx_parse_program(char *program, size_t program_length, char *file_path, zval **error_msg) {
+void xx_parse_program(zval *return_value, char *program, size_t program_length, char *file_path, zval **error_msg) {
 
 	char *error;
 	xx_scanner_state *state;
@@ -143,11 +86,8 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	 * Check if the program has any length
 	 */
 	if (program_length < 2) {
-		return NULL;
+		return;
 	}
-
-	//parser_memory_manager = emalloc(sizeof(xx_memory_manager));
-	//parser_memory_manager->slots = NULL;
 
 	/**
 	 * Start the reentrant parser
@@ -159,7 +99,9 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 
 	parser_status->status = XX_PARSING_OK;
 	parser_status->scanner_state = state;
+#if PHP_VERSION_ID < 70000
 	parser_status->ret = NULL;
+#endif
 	parser_status->token = &token;
 	parser_status->syntax_error = NULL;
 	parser_status->number_brackets = 0;
@@ -179,6 +121,8 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	state->method_char = 0;
 
 	state->end = state->start;
+
+	token.value = NULL;
 
 	while (0 <= (scanner_status = xx_get_token(state, &token))) {
 
@@ -447,6 +391,9 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 			case XX_T_COMMENT:
 				if (parser_status->number_brackets <= 1) {
 					xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
+				} else {
+					efree(token.value);
+					token.value = NULL;
 				}
 				break;
 			case XX_T_CBLOCK:
@@ -603,8 +550,10 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 					} else {
 						snprintf(error, 1024, "Scanner error: %d", scanner_status);
 					}
-					//ALLOC_INIT_ZVAL(*error_msg);
-					//ZVAL_STRING(*error_msg, error, 1);
+#if PHP_VERSION_ID < 70000
+					ALLOC_INIT_ZVAL(*error_msg);
+					ZVAL_STRING(*error_msg, error, 1);
+#endif					
 					efree(error);
 					status = FAILURE;
 				}
@@ -620,53 +569,34 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	if (parser_status->status != XX_PARSING_OK) {
 		status = FAILURE;
 		if (parser_status->syntax_error) {
+#if PHP_VERSION_ID < 70000
 			if (!*error_msg) {
-				//ALLOC_INIT_ZVAL(*error_msg);
-				//ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
+				ALLOC_INIT_ZVAL(*error_msg);
+				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}
+#endif
 			efree(parser_status->syntax_error);
 		}
 	}
 
 	if (status != FAILURE) {
 		if (parser_status->status == XX_PARSING_OK) {
-			//printf("%s\n", json_object_to_json_string(parser_status->ret));
-			/*if (parser_status->ret) {
-				ZVAL_ZVAL(*result, parser_status->ret, 0, 0);
+#if PHP_VERSION_ID >= 70000
+			ZVAL_ZVAL(return_value, &parser_status->ret, 1, 1);
+#else
+			if (parser_status->ret) {
+				ZVAL_ZVAL(return_value, parser_status->ret, 0, 0);
 				ZVAL_NULL(parser_status->ret);
 				zval_ptr_dtor(&parser_status->ret);
 			} else {
-				array_init(*result);
-			}*/
-		}
-	}
-
-	if (parser_status->ret) {
-
-#if PHP_VERSION_ID < 70000
-		zval *ret_ptr = parser_status->ret;
-#else
-		//zval *ret_ptr = emalloc(sizeof(zval *));
-		//ZVAL_DUP(ret_ptr, parser_status->ret);
-		zval *ret_ptr = parser_status->ret;
-
-		parser_free_memory();
+				array_init(return_value);
+			}
 #endif
-
-		xx_Free(xx_parser, xx_wrapper_free);
-
-		efree(parser_status);
-		efree(state);
-		return ret_ptr;
+		}
 	}
 
 	xx_Free(xx_parser, xx_wrapper_free);
 
-#if PHP_VERSION_ID >= 70000
-	parser_free_memory();
-#endif
-
 	efree(parser_status);
 	efree(state);
-	return NULL;
 }

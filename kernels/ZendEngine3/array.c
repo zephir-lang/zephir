@@ -572,7 +572,7 @@ void zephir_array_keys(zval *return_value, zval *input)
 				ZEND_HASH_FILL_ADD(&new_val);
 			} ZEND_HASH_FOREACH_END();
 		} ZEND_HASH_FILL_END();
-	}
+	}	
 }
 
 int zephir_array_key_exists(zval *arr, zval *key)
