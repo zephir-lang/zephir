@@ -52,6 +52,7 @@ PHP_FUNCTION(zephir_parse_file)
 #if PHP_VERSION_ID >= 70000
     xx_parse_program(&ret, content, content_len, filepath, error_msg);
 #else
+    MAKE_STD_ZVAL(ret);
     xx_parse_program(ret, content, content_len, filepath, error_msg);
 #endif
 
