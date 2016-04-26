@@ -19,7 +19,7 @@ static void parser_add_str_free(zval *arr, const char *key, char *val) {
 	zend_string *tmp_str = zend_string_init(val, strlen(val), 0);
 	ZVAL_STR(&tmp, tmp_str);
 	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), &tmp);
-	efree(val);
+	//efree(val);
 }
 
 static void parser_add_int(zval *arr, const char *key, int i) {

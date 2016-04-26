@@ -555,6 +555,11 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 				break;
 		}
 
+		if (token.value) {
+			efree(token.value);
+			token.value = NULL;
+		}
+
 		if (parser_status->status != XX_PARSING_OK) {
 			status = FAILURE;
 			break;
@@ -613,7 +618,7 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 	}
 
 #if PHP_VERSION_ID >= 70000
-	ZVAL_COPY_VALUE(return_value, &parser_status->ret);
+	ZVAL_ZVAL(return_value, &parser_status->ret, 1, 1);
 #else
 	if (parser_status->ret) {
 		return_value = parser_status->ret;
