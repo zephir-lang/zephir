@@ -65,15 +65,6 @@
 
 	parser_add_str(syntax_error, "type", "error");
 
-	/*if (status->scanner_state->start_length) {
-		fprintf(stderr, "Syntax error, %s", status->scanner_state->start);
-	} else {
-		fprintf(stderr, "EOF");
-	}*/
-
-	//status->syntax_error_len = 48 + Z_STRLEN_P(status->scanner_state->active_file);
-	//status->syntax_error = emalloc(sizeof(char) * status->syntax_error_len);
-
 	if (status->scanner_state->start_length) {
 		parser_add_str(syntax_error, "message", "Syntax error");
 	} else {
@@ -87,15 +78,13 @@
 	status->status = XX_PARSING_FAILED;
 
 	status->ret = syntax_error;
-
-	//status->scanner_state->active_file
 }
 
 %token_destructor {
 	if ($$) {
 		if ($$->free_flag) {
 			efree($$->token);
-		}		
+		}
 		efree($$);
 	}
 }

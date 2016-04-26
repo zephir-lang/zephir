@@ -590,10 +590,6 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 
 #if PHP_VERSION_ID >= 70000
 	ZVAL_ZVAL(return_value, &parser_status->ret, 1, 1);
-#else
-	if (parser_status->ret) {
-		return_value = parser_status->ret;
-	}
 #endif
 
 	xx_Free(xx_parser, xx_wrapper_free);

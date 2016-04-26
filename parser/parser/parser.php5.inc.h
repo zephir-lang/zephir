@@ -41,7 +41,6 @@ static void parser_add_zval(zval *arr, const char *key, zval *zv) {
 }
 
 static void parser_array_append(zval *arr, zval *zv) {
-	Z_ADDREF_P(zv);
 	add_next_index_zval(arr, zv);
 }
 
@@ -572,31 +571,22 @@ static zval *xx_ret_type(int type)
 static zval *xx_ret_list(zval *list_left, zval *list_right, xx_scanner_state *state)
 {
 	zval *ret;
-#if PHP_VERSION_ID < 70000
 	HashTable *ht;
 	HashPosition pos;
 	zval **ppzv;
-#else
-	zval *val;
-#endif
 
 	ret = parser_array_init(state);
 
 	if (list_left) {
 		if (Z_TYPE_P(list_left) == IS_ARRAY) {
-#if PHP_VERSION_ID >= 70000
-			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(list_left), val) {
-				parser_array_append(ret, val);
-			} ZEND_HASH_FOREACH_END();
-#else
 			ht = Z_ARRVAL_P(list_left);
 			zend_hash_internal_pointer_reset_ex(ht, &pos);
 			while (zend_hash_get_current_data_ex(ht, (void**)&ppzv, &pos) == SUCCESS) {
+				Z_ADDREF_P(zv);
 				parser_array_append(ret, *ppzv);
 			    zend_hash_move_forward_ex(ht, &pos);
 			}
-#endif
-			//zval_ptr_dtor(&list_left);
+			zval_ptr_dtor(&list_left);
 		} else {
 			parser_array_append(ret, list_left);
 		}
@@ -624,11 +614,6 @@ static zval *xx_ret_let_statement(zval *assignments, xx_scanner_state *state)
 static zval *xx_ret_let_assignment(char *type, zval *operator, xx_parser_token *V, xx_parser_token *P, zval *index_expr, zval *expr, xx_scanner_state *state)
 {
 	zval *ret = parser_array_init(state);
-#if PHP_VERSION_ID >= 70000
-	zval soperator, sindex_expr, sexpr;
-	PARSER_STACKIFY_ZVAL(state, soperator, operator);
-	PARSER_STACKIFY_ZVAL(state, sindex_expr, index_expr);
-#endif
 
 	parser_add_str(ret, "assign-type", type);
 	if (operator) {
