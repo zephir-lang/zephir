@@ -33,7 +33,6 @@ static void parser_add_zval(zval *arr, const char *key, zval *zv) {
 }
 
 static void parser_array_append(zval *arr, zval *zv) {
-    Z_TRY_ADDREF_P(zv);
 	add_next_index_zval(arr, zv);
 }
 
@@ -548,8 +547,10 @@ static void xx_ret_list(zval *ret, zval *list_left, zval *list_right, xx_scanner
 	if (list_left) {
 		if (Z_TYPE_P(list_left) == IS_ARRAY) {
 			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(list_left), val) {
+				Z_TRY_ADDREF_P(val);
 				parser_array_append(ret, val);
 			} ZEND_HASH_FOREACH_END();
+			zval_ptr_dtor(list_left);
 		} else {
 			parser_array_append(ret, list_left);
 		}
