@@ -1121,7 +1121,7 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 			}
 
 			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(params), item) {
-				params_ptr[i] = item;
+				params_ptr[i++] = item;
 			} ZEND_HASH_FOREACH_END();
 
 		} else {
