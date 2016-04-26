@@ -550,8 +550,10 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 					} else {
 						snprintf(error, 1024, "Scanner error: %d", scanner_status);
 					}
+#if PHP_VERSION_ID < 70000
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
+#endif					
 					efree(error);
 					status = FAILURE;
 				}
@@ -567,10 +569,12 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 	if (parser_status->status != XX_PARSING_OK) {
 		status = FAILURE;
 		if (parser_status->syntax_error) {
+#if PHP_VERSION_ID < 70000
 			if (!*error_msg) {
 				ALLOC_INIT_ZVAL(*error_msg);
 				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}
+#endif
 			efree(parser_status->syntax_error);
 		}
 	}

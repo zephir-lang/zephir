@@ -87,5 +87,7 @@ parser/parser/lemon
 parser/parser/parser.c
 parser/parser/parser.out
 parser/parser/scanner.c
+parser/parser/parser.php5.out
+parser/parser/parser.php7.out
 parser/run-tests.php
 parser/zephir_parser.so
