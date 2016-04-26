@@ -43,8 +43,7 @@ typedef struct _xx_scanner_state {
 	unsigned int class_char;
 	unsigned int method_line;
 	unsigned int method_char;
-	char *active_file;
-	xx_memory_manager *memory_manager;
+	char *active_file;	
 } xx_scanner_state;
 
 /* Extra information tokens */

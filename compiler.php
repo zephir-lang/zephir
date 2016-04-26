@@ -19,3 +19,5 @@
 
 require __DIR__ . '/bootstrap.php';
 Zephir\Bootstrap::boot();
+
+echo memory_get_usage(true);
