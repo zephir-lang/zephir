@@ -35,19 +35,19 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
-//xx_memory_manager *parser_memory_manager = NULL;
-
 /**
  * Wrapper to alloc memory within the parser
  */
-static void *xx_wrapper_alloc(size_t bytes){
+static void *xx_wrapper_alloc(size_t bytes)
+{
 	return emalloc(bytes);
 }
 
 /**
  * Wrapper to free memory within the parser
  */
-static void xx_wrapper_free(void *pointer){
+static void xx_wrapper_free(void *pointer)
+{
 	efree(pointer);
 }
 
@@ -67,7 +67,7 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 	xx_(xx_parser, parsercode, pToken, parser_status);
 
 	token->value = NULL;
-	token->len = 0;
+	token->len = 0;	
 }
 
 /**
@@ -97,34 +97,52 @@ static void xx_parse_with_token(void* xx_parser, int opcode, int parsercode, xx_
 	efree(error);
 }*/
 
-void parser_track_variable(zval **var)
+void parser_track_variable(xx_scanner_state *state, zval **var)
 {
-	/*if (parser_memory_manager->slots == NULL) {
-		parser_memory_manager->slots = emalloc(sizeof(zval **) * 128);
-		parser_memory_manager->number = 0;
+	if (state->memory_manager->slots == NULL) {
+		state->memory_manager->slots = emalloc(sizeof(zval **) * 128);
+		state->memory_manager->number = 0;
 	} else {
-		if (parser_memory_manager->number % 128 == 0) {
-			parser_memory_manager->slots = erealloc(parser_memory_manager->slots, parser_memory_manager->number + 128);
+		if (state->memory_manager->number % 128 == 0) {
+			state->memory_manager->slots = erealloc(state->memory_manager->slots, sizeof(zval **) * (state->memory_manager->number + 128));
 		}
 	}
 
-	parser_memory_manager->slots[parser_memory_manager->number] = *var;
-	parser_memory_manager->number++;*/
+	state->memory_manager->slots[state->memory_manager->number] = var;
+	state->memory_manager->number++;
 }
 
-void parser_free_memory()
+int parser_is_tracked(xx_scanner_state *state, zval **var)
 {
-	/*if (parser_memory_manager != NULL) {
-		if (parser_memory_manager->slots != NULL) {
-			int i;
-			for (i = 0; i < parser_memory_manager->number; i++) {
-				//efree(parser_memory_manager->slots[i]);
-			}
-			efree(parser_memory_manager->slots);
-			efree(parser_memory_manager);
-			parser_memory_manager = NULL;
+	int i;
+	for (i = 0; i < state->memory_manager->number; i++) {
+		if (state->memory_manager->slots[i] == var) {
+			return 1;
 		}
-	}*/
+	}
+	return 0;
+}
+
+void parser_free_variable(xx_scanner_state *state, zval **var)
+{
+	int i;
+	for (i = 0; i < state->memory_manager->number; i++) {
+		if (state->memory_manager->slots[i] == var) {
+			ZVAL_UNDEF(*state->memory_manager->slots[i]);
+			state->memory_manager->slots[i] = NULL;
+		}
+	}
+}
+
+void parser_free_memory(xx_scanner_state *state)
+{
+	if (state->memory_manager != NULL) {
+		if (state->memory_manager->slots != NULL) {
+			//efree(state->memory_manager->slots);
+			efree(state->memory_manager);
+			state->memory_manager = NULL;
+		}
+	}
 }
 
 /**
@@ -137,6 +155,7 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	xx_scanner_token token;
 	int scanner_status, status = SUCCESS, start_lines;
 	xx_parser_status *parser_status = NULL;
+	xx_memory_manager *parser_memory_manager = NULL;
 	void* xx_parser;
 
 	/**
@@ -145,9 +164,6 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	if (program_length < 2) {
 		return NULL;
 	}
-
-	//parser_memory_manager = emalloc(sizeof(xx_memory_manager));
-	//parser_memory_manager->slots = NULL;
 
 	/**
 	 * Start the reentrant parser
@@ -165,8 +181,15 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	parser_status->number_brackets = 0;
 
 	/**
+	 * Initialize the memory manager
+	 */
+	parser_memory_manager = emalloc(sizeof(xx_memory_manager));
+ 	parser_memory_manager->slots = NULL;
+
+	/**
 	 * Initialize the scanner state
 	 */
+	state->memory_manager = parser_memory_manager;
 	state->active_token = 0;
 	state->start = program;
 	state->start_length = 0;
@@ -179,6 +202,8 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	state->method_char = 0;
 
 	state->end = state->start;
+
+	token.value = NULL;
 
 	while (0 <= (scanner_status = xx_get_token(state, &token))) {
 
@@ -642,15 +667,10 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	}
 
 	if (parser_status->ret) {
-
-#if PHP_VERSION_ID < 70000
-		zval *ret_ptr = parser_status->ret;
-#else
-		//zval *ret_ptr = emalloc(sizeof(zval *));
-		//ZVAL_DUP(ret_ptr, parser_status->ret);
 		zval *ret_ptr = parser_status->ret;
 
-		parser_free_memory();
+#if PHP_VERSION_ID >= 70000
+		parser_free_memory(state);
 #endif
 
 		xx_Free(xx_parser, xx_wrapper_free);
@@ -663,7 +683,7 @@ zval *xx_parse_program(char *program, size_t program_length, char *file_path, zv
 	xx_Free(xx_parser, xx_wrapper_free);
 
 #if PHP_VERSION_ID >= 70000
-	parser_free_memory();
+	parser_free_memory(state);
 #endif
 
 	efree(parser_status);

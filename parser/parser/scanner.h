@@ -16,6 +16,9 @@
  +--------------------------------------------------------------------------+
 */
 
+#ifndef PHP_ZEPHIR_SCANNER_H
+#define PHP_ZEPHIR_SCANNER_H
+
 #define XX_SCANNER_RETCODE_EOF -1
 #define XX_SCANNER_RETCODE_ERR -2
 #define XX_SCANNER_RETCODE_IMPOSSIBLE -3
@@ -158,35 +161,4 @@
 #define XX_T_ELSEIF 452
 #define XX_T_INTERNAL 453
 
-/* List of tokens and their names */
-typedef struct _xx_token_names {
-	unsigned int code;
-	char *name;
-} xx_token_names;
-
-/* Active token state */
-typedef struct _xx_scanner_state {
-	int active_token;
-	char* start;
-	char* end;
-	unsigned int start_length;
-	int mode;
-	unsigned int active_line;
-	unsigned int active_char;
-	unsigned int class_line;
-	unsigned int class_char;
-	unsigned int method_line;
-	unsigned int method_char;
-	char *active_file;
-} xx_scanner_state;
-
-/* Extra information tokens */
-typedef struct _xx_scanner_token {
-	int opcode;
-	char *value;
-	int len;
-} xx_scanner_token;
-
-int xx_get_token(xx_scanner_state *s, xx_scanner_token *token);
-
-extern const xx_token_names xx_tokens[];
+#endif

@@ -17,6 +17,7 @@
 */
 
 #include <php.h>
+#include "xx.h"
 #include "scanner.h"
 
 #define YYCTYPE unsigned char

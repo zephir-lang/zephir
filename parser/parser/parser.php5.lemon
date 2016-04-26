@@ -56,1264 +56,14 @@
 %right ARROW .
 
 %include {
-
-#include <php.h>
-#include "string.h"
-#include "parser.h"
-#include "scanner.h"
-#include "xx.h"
-
-#if PHP_VERSION_ID < 70000
-#include "Zend/zend_variables.h"
-#endif
-
-#define SL(str) ZEND_STRL(str)
-
-static zval *parser_array_init() {
-#if PHP_VERSION_ID < 70000
-	zval *t;
-	MAKE_STD_ZVAL(t);
-#else
-	zval *t = emalloc(sizeof(zval));
-	parser_track_variable(&t);
-#endif
-	array_init(t);
-	return t;
-}
-
-static void parser_add_str(zval *arr, const char *key, const char *val) {
-#if PHP_VERSION_ID >= 70000
-	zval tmp;
-	zend_string *tmp_str = zend_string_init(val, strlen(val), 0);
-	ZVAL_STR(&tmp, tmp_str);
-	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), &tmp);
-#else
-	zval *tmp;
-	MAKE_STD_ZVAL(tmp);
-	ZVAL_STRING(tmp, val, strlen(val) - 1);
-	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
-#endif
-}
-
-static void parser_add_int(zval *arr, const char *key, int i) {
-#if PHP_VERSION_ID >= 70000
-	zval tmp;
-	ZVAL_LONG(&tmp, i);
-	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), &tmp);
-#else
-	zval *tmp;
-	MAKE_STD_ZVAL(tmp);
-	ZVAL_LONG(tmp, i);
-	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
-#endif
-}
-
-static void parser_add_zval(zval *arr, const char *key, zval *zv) {
-#if PHP_VERSION_ID >= 70000
-	zend_hash_str_add(Z_ARRVAL_P(arr), key, strlen(key), zv);
-#else
-	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&zv, sizeof(zval *), NULL);
-#endif
-}
-
-static void parser_array_append(zval *arr, zval *zv) {
-#if PHP_VERSION_ID >= 70000
-    Z_TRY_ADDREF_P(zv);
-	add_next_index_zval(arr, zv);
-#else
-	Z_ADDREF_P(zv);
-	add_next_index_zval(arr, zv);
-#endif
-}
-
-static zval *parser_get_string(const char *str) {
-#if PHP_VERSION_ID >= 70000
-	zval *tmp = emalloc(sizeof(zval));
-	zend_string *zs = zend_string_init(str, strlen(str), 0);
-	ZVAL_STR(tmp, zs);
-	return tmp;
-#else
-	zval *tmp;
-	ALLOC_INIT_ZVAL(tmp);
-	ZVAL_STRING(tmp, str, 1);
-	return tmp;
-#endif
-}
-
-static zval *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	switch (type) {
-
-		case XX_T_CONSTANT:
-			parser_add_str(ret, "type", "constant");
-			break;
-
-		case XX_T_IDENTIFIER:
-			parser_add_str(ret, "type", "variable");
-			break;
-
-		case XX_T_INTEGER:
-			parser_add_str(ret, "type", "int");
-			break;
-
-		case XX_T_DOUBLE:
-			parser_add_str(ret, "type", "double");
-			break;
-
-		case XX_T_NULL:
-			parser_add_str(ret, "type", "null");
-			break;
-
-		case XX_T_STRING:
-			parser_add_str(ret, "type", "string");
-			break;
-
-		case XX_T_ISTRING:
-			parser_add_str(ret, "type", "istring");
-			break;
-
-		case XX_T_CHAR:
-			parser_add_str(ret, "type", "char");
-			break;
-
-		default:
-			if (type == XX_T_TRUE) {
-				parser_add_str(ret, "type", "bool");
-				parser_add_str(ret, "value", "true");
-			} else {
-				if (type == XX_T_FALSE) {
-					parser_add_str(ret, "type", "bool");
-					parser_add_str(ret, "value", "false");
-				} else {
-					fprintf(stderr, "literal??\n");
-				}
-			}
-	}
-
-	if (T) {
-		parser_add_str(ret, "value", T->token);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_expr(char *type, zval *left, zval *right, zval *extra, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", type);
-
-	if (left) {
-		parser_add_zval(ret, "left", left);
-	}
-	if (right) {
-		parser_add_zval(ret, "right", right);
-	}
-	if (extra) {
-		parser_add_zval(ret, "extra", extra);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_array_item(zval *key, zval *value, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (key) {
-		parser_add_zval(ret, "key", key);
-	}
-	parser_add_zval(ret, "value", value);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "namespace");
-	parser_add_str(ret, "name", T->token);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_use_aliases(zval *use_aliases_list, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "use");
-	parser_add_zval(ret, "aliases", use_aliases_list);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "name", T->token);
-	if (A) {
-		parser_add_str(ret, "alias", A->token);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_function(xx_parser_token *T, zval *parameters,
-	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "function");
-	parser_add_str(ret, "name", T->token);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	if (D) {
-		parser_add_str(ret, "docblock", D->token);
-	}
-
-	if (return_type) {
-		parser_add_zval(ret, "return-type", return_type);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->method_line);
-	parser_add_int(ret, "char", state->method_char);
-
-	return ret;
-}
-
-static zval *xx_ret_class(xx_parser_token *T, zval *class_definition, int is_abstract, int is_final,
-	xx_parser_token *E, zval *I, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "class");
-	parser_add_str(ret, "name", T->token);
-
-	parser_add_int(ret, "abstract", is_abstract);
-	parser_add_int(ret, "final", is_final);
-
-	if (E) {
-		parser_add_str(ret, "extends", E->token);
-	}
-
-	if (I) {
-		parser_add_zval(ret, "implements", I);
-	}
-
-	if (class_definition) {
-		parser_add_zval(ret, "definition", class_definition);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->class_line);
-	parser_add_int(ret, "char", state->class_char);
-
-	return ret;
-}
-
-static zval *xx_ret_interface(xx_parser_token *T, zval *interface_definition, zval *extends_list, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "interface");
-	parser_add_str(ret, "name", T->token);
-
-	if (extends_list) {
-		parser_add_zval(ret, "extends", extends_list);
-	}
-
-	if (interface_definition) {
-		parser_add_zval(ret, "definition", interface_definition);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->class_line);
-	parser_add_int(ret, "char", state->class_char);
-
-	return ret;
-}
-
-static zval *xx_ret_class_definition(zval *properties, zval *methods, zval *constants, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (properties) {
-		parser_add_zval(ret, "properties", properties);
-	}
-	if (methods) {
-		parser_add_zval(ret, "methods", methods);
-	}
-	if (constants) {
-		parser_add_zval(ret, "constants", constants);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->class_line);
-	parser_add_int(ret, "char", state->class_char);
-
-	return ret;
-}
-
-static zval *xx_ret_interface_definition(zval *methods, zval *constants, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (methods) {
-		parser_add_zval(ret, "methods", methods);
-	}
-	if (constants) {
-		parser_add_zval(ret, "constants", constants);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_class_property(zval *visibility, xx_parser_token *T,
-		zval *default_value, xx_parser_token *D, zval *shortcuts, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_zval(ret, "visibility", visibility);
-	parser_add_str(ret, "type", "property");
-	parser_add_str(ret, "name", T->token);
-
-	if (default_value) {
-		parser_add_zval(ret, "default", default_value);
-	}
-
-	if (D) {
-		parser_add_str(ret, "docblock", D->token);
-	}
-
-	if (shortcuts) {
-		parser_add_zval(ret, "shortcuts", shortcuts);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_property_shortcut(xx_parser_token *C, xx_parser_token *D, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "shortcut");
-	if (C) {
-		parser_add_str(ret, "docblock", C->token);
-	}
-	parser_add_str(ret, "name", D->token);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_class_const(xx_parser_token *T, zval *default_value, xx_parser_token *D, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "const");
-	parser_add_str(ret, "name", T->token);
-	parser_add_zval(ret, "default", default_value);
-
-	if (D) {
-		parser_add_str(ret, "docblock", D->token);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_class_method(zval *visibility, xx_parser_token *T, zval *parameters,
-	zval *statements, xx_parser_token *D, zval *return_type, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_zval(ret, "visibility", visibility);
-	parser_add_str(ret, "type", "method");
-	parser_add_str(ret, "name", T->token);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	if (D) {
-		parser_add_str(ret, "docblock", D->token);
-	}
-
-	if (return_type) {
-		parser_add_zval(ret, "return-type", return_type);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->method_line);
-	parser_add_int(ret, "last-line", state->active_line);
-	parser_add_int(ret, "char", state->method_char);
-
-	return ret;
-}
-
-static zval *xx_ret_parameter(int const_param, zval *type, zval *cast, xx_parser_token *N, zval *default_value,
-	int mandatory, int reference, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "parameter");
-	parser_add_str(ret, "name", N->token);
-	parser_add_int(ret, "const", const_param);
-
-	if (type) {
-		parser_add_zval(ret, "data-type", type);
-		parser_add_int(ret, "mandatory", mandatory);
-	} else {
-		parser_add_str(ret, "data-type", "variable");
-		parser_add_int(ret, "mandatory", 0);
-	}
-
-	if (cast) {
-		parser_add_zval(ret, "cast", cast);
-	}
-	if (default_value) {
-		parser_add_zval(ret, "default", default_value);
-	}
-
-    parser_add_int(ret, "reference", reference);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_return_type(int is_void, zval *return_type_list, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "return-type");
-
-    if (return_type_list) {
-	   parser_add_zval(ret, "list", return_type_list);
-    }
-
-	parser_add_int(ret, "void", is_void);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_return_type_item(zval *type, zval *cast, int mandatory, int collection, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "return-type-parameter");
-
-	if (type) {
-		parser_add_zval(ret, "data-type", type);
-		parser_add_int(ret, "mandatory", mandatory);
-	}
-
-	if (cast) {
-		parser_add_zval(ret, "cast", cast);
-		parser_add_int(ret, "collection", collection);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_type(int type)
-{
-	switch (type) {
-		case XX_TYPE_INTEGER:
-			return parser_get_string("int");
-		case XX_TYPE_UINTEGER:
-			return parser_get_string("uint");
-		case XX_TYPE_DOUBLE:
-			return parser_get_string("double");
-		case XX_TYPE_BOOL:
-			return parser_get_string("bool");
-		case XX_TYPE_LONG:
-			return parser_get_string("long");
-		case XX_TYPE_ULONG:
-			return parser_get_string("ulong");
-		case XX_TYPE_STRING:
-			return parser_get_string("string");
-		case XX_TYPE_CHAR:
-			return parser_get_string("char");
-		case XX_TYPE_ARRAY:
-			return parser_get_string("array");
-		case XX_TYPE_VAR:
-			return parser_get_string("variable");
-		case XX_TYPE_CALLABLE:
-			return parser_get_string("callable");
-		case XX_TYPE_RESOURCE:
-			return parser_get_string("resource");
-		case XX_TYPE_OBJECT:
-			return parser_get_string("object");
-		case XX_T_TYPE_NULL:
-			return parser_get_string("null");
-		case XX_T_TYPE_THIS:
-			return parser_get_string("this");
-		default:
-			fprintf(stderr, "unknown type?\n");
-	}
-	return parser_get_string("unknown");
-}
-
-static zval *xx_ret_list(zval *list_left, zval *list_right)
-{
-	zval *ret;
-#if PHP_VERSION_ID < 70000
-	HashTable *ht;
-	HashPosition pos;
-	zval **ppzv;
-#else
-	zval *val;
-#endif
-
-	ret = parser_array_init();
-
-	if (list_left) {
-		if (Z_TYPE_P(list_left) == IS_ARRAY) {
-#if PHP_VERSION_ID >= 70000
-			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(list_left), val) {
-				parser_array_append(ret, val);
-			} ZEND_HASH_FOREACH_END();
-#else
-			ht = Z_ARRVAL_P(list_left);
-			zend_hash_internal_pointer_reset_ex(ht, &pos);
-			while (zend_hash_get_current_data_ex(ht, (void**)&ppzv, &pos) == SUCCESS) {
-				parser_array_append(ret, *ppzv);
-			    zend_hash_move_forward_ex(ht, &pos);
-			}
-#endif
-			//zval_ptr_dtor(&list_left);
-		} else {
-			parser_array_append(ret, list_left);
-		}
-	}
-	parser_array_append(ret, list_right);
-
-	return ret;
-}
-
-static zval *xx_ret_let_statement(zval *assignments, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "let");
-	parser_add_zval(ret, "assignments", assignments);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_let_assignment(char *type, zval *operator, xx_parser_token *V, xx_parser_token *P, zval *index_expr, zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "assign-type", type);
-	if (operator) {
-		parser_add_zval(ret, "operator", operator);
-	}
-	parser_add_str(ret, "variable", V->token);
-	if (P) {
-		parser_add_str(ret, "property", P->token);
-	}
-	if (index_expr) {
-		parser_add_zval(ret, "index-expr", index_expr);
-	}
-	if (expr) {
-		parser_add_zval(ret, "expr", expr);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_if_statement(zval *expr, zval *statements, zval *elseif_statements, zval *else_statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "if");
-	parser_add_zval(ret, "expr", expr);
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	if (elseif_statements) {
-		parser_add_zval(ret, "elseif_statements", elseif_statements);
-	}
-
-	if (else_statements) {
-		parser_add_zval(ret, "else_statements", else_statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_switch_statement(zval *expr, zval *clauses, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "switch");
-	parser_add_zval(ret, "expr", expr);
-
-	if (clauses) {
-		parser_add_zval(ret, "clauses", clauses);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_case_clause(zval *expr, zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (expr) {
-		parser_add_str(ret, "type", "case");
-		parser_add_zval(ret, "expr", expr);
-	} else {
-		parser_add_str(ret, "type", "default");
-	}
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "while");
-	parser_add_zval(ret, "expr", expr);
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_do_while_statement(zval *expr, zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "do-while");
-	parser_add_zval(ret, "expr", expr);
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_try_catch_statement(zval *statements, zval *catches, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "try-catch");
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-	if (catches) {
-		parser_add_zval(ret, "catches", catches);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_catch_statement(zval *classes, zval *variable, zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (classes) {
-		parser_add_zval(ret, "classes", classes);
-	}
-
-	if (variable) {
-		parser_add_zval(ret, "variable", variable);
-	}
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_for_statement(zval *expr, xx_parser_token *K, xx_parser_token *V, int reverse, zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "for");
-	parser_add_zval(ret, "expr", expr);
-
-	if (K) {
-		parser_add_str(ret, "key", K->token);
-	}
-	if (V) {
-		parser_add_str(ret, "value", V->token);
-	}
-
-	parser_add_int(ret, "reverse", reverse);
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_loop_statement(zval *statements, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "loop");
-
-	if (statements) {
-		parser_add_zval(ret, "statements", statements);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_empty_statement(xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "empty");
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_break_statement(xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "break");
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_continue_statement(xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "continue");
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_echo_statement(zval *expressions, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "echo");
-	parser_add_zval(ret, "expressions", expressions);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_return_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "return");
-	if (expr) {
-		parser_add_zval(ret, "expr", expr);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_require_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "require");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_fetch_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "fetch");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_fcall_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "fcall");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_mcall_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "mcall");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_scall_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "scall");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_unset_statement(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "unset");
-	parser_add_zval(ret, "expr", expr);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_declare_statement(int type, zval *variables, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "declare");
-
-	switch (type) {
-
-		case XX_T_TYPE_INTEGER:
-			parser_add_str(ret, "data-type", "int");
-			break;
-
-		case XX_T_TYPE_UINTEGER:
-			parser_add_str(ret, "data-type", "uint");
-			break;
-
-		case XX_T_TYPE_LONG:
-			parser_add_str(ret, "data-type", "long");
-			break;
-
-		case XX_T_TYPE_ULONG:
-			parser_add_str(ret, "data-type", "ulong");
-			break;
-
-		case XX_T_TYPE_CHAR:
-			parser_add_str(ret, "data-type", "char");
-			break;
-
-		case XX_T_TYPE_UCHAR:
-			parser_add_str(ret, "data-type", "uchar");
-			break;
-
-		case XX_T_TYPE_DOUBLE:
-			parser_add_str(ret, "data-type", "double");
-			break;
-
-		case XX_T_TYPE_BOOL:
-			parser_add_str(ret, "data-type", "bool");
-			break;
-
-		case XX_T_TYPE_STRING:
-			parser_add_str(ret, "data-type", "string");
-			break;
-
-		case XX_T_TYPE_ARRAY:
-			parser_add_str(ret, "data-type", "array");
-			break;
-
-		case XX_T_TYPE_VAR:
-			parser_add_str(ret, "data-type", "variable");
-			break;
-
-		case XX_T_TYPE_CALLABLE:
-			parser_add_str(ret, "data-type", "callable");
-			break;
-
-		case XX_T_TYPE_RESOURCE:
-			parser_add_str(ret, "data-type", "resource");
-			break;
-
-		case XX_T_TYPE_OBJECT:
-			parser_add_str(ret, "data-type", "object");
-			break;
-
-		default:
-			fprintf(stderr, "err 2?\n");
-	}
-
-	parser_add_zval(ret, "variables", variables);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_declare_variable(xx_parser_token *T, zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "variable", T->token);
-	if (expr) {
-		parser_add_zval(ret, "expr", expr);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_new_static_instance(zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "new");
-	parser_add_str(ret, "class", "static");
-	parser_add_int(ret, "dynamic", 0);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_new_instance(int dynamic, xx_parser_token *T, zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "new");
-	parser_add_str(ret, "class", T->token);
-	parser_add_int(ret, "dynamic", dynamic);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_new_instance_type(zval *type, zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "new-type");
-	parser_add_zval(ret, "internal-type", type);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_throw_exception(zval *expr, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "throw");
-	if (expr) {
-		parser_add_zval(ret, "expr", expr);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_fcall(int type, xx_parser_token *F, zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "fcall");
-	parser_add_str(ret, "name", F->token);
-	parser_add_int(ret, "call-type", type);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_mcall(int type, zval *O, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "mcall");
-	parser_add_zval(ret, "variable", O);
-	parser_add_str(ret, "name", M->token);
-	parser_add_int(ret, "call-type", type);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_scall(int dynamic_class, char *class_name, int dynamic_method, xx_parser_token *M, zval *parameters, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "scall");
-	parser_add_int(ret, "dynamic-class", dynamic_class);
-	parser_add_str(ret, "class", class_name);
-	parser_add_int(ret, "dynamic", dynamic_method);
-	parser_add_str(ret, "name", M->token);
-
-	if (parameters) {
-		parser_add_zval(ret, "parameters", parameters);
-	}
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_call_parameter(xx_parser_token *N, zval *parameter, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	if (N) {
-		parser_add_str(ret, "name", N->token);
-	}
-	parser_add_zval(ret, "parameter", parameter);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "comment");
-	parser_add_str(ret, "value", T->token);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
-static zval *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
-{
-	zval *ret = parser_array_init();
-
-	parser_add_str(ret, "type", "cblock");
-	parser_add_str(ret, "value", T->token);
-
-	parser_add_str(ret, "file", state->active_file);
-	parser_add_int(ret, "line", state->active_line);
-	parser_add_int(ret, "char", state->active_char);
-
-	return ret;
-}
-
+#include "parser.php5.h"
 }
 
 %syntax_error {
 
 	//fprintf(stderr, "error!\n");
 
-	zval *syntax_error = parser_array_init();
+	zval *syntax_error = parser_array_init(status->scanner_state);
 
 	parser_add_str(syntax_error, "type", "error");
 
@@ -1344,13 +94,21 @@ static zval *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
 }
 
 %token_destructor {
-	/*if ($$) {
+#if PHP_VERSION_ID < 70000
+	if ($$) {
 		if ($$->free_flag) {
 			efree($$->token);
 		}
 		zval_ptr_dtor($$);
 		efree($$);
-	}*/
+	}
+#else
+	if ($$) {
+		if ($$->free_flag) {
+			efree($$->token);
+		}
+	}
+#endif
 }
 
 program ::= xx_language(Q) . {
@@ -1367,11 +125,11 @@ xx_language(R) ::= xx_top_statement_list(L) . {
 }
 
 xx_top_statement_list(R) ::= xx_top_statement_list(L) xx_top_statement(T) . {
-	R = xx_ret_list(L, T);
+	R = xx_ret_list(L, T, status->scanner_state);
 }
 
 xx_top_statement_list(R) ::= xx_top_statement(T) . {
-	R = xx_ret_list(NULL, T);
+	R = xx_ret_list(NULL, T, status->scanner_state);
 }
 
 xx_top_statement(R) ::= xx_namespace_def(T) . {
@@ -1411,11 +169,11 @@ xx_namespace_def(R) ::= USE xx_use_aliases_list(L) DOTCOMMA . {
 }
 
 xx_use_aliases_list(R) ::= xx_use_aliases_list(L) COMMA xx_use_aliases(U) . {
-	R = xx_ret_list(L, U);
+	R = xx_ret_list(L, U, status->scanner_state);
 }
 
 xx_use_aliases_list(R) ::= xx_use_aliases(U) . {
-	R = xx_ret_list(NULL, U);
+	R = xx_ret_list(NULL, U, status->scanner_state);
 }
 
 xx_use_aliases(R) ::= IDENTIFIER(I) . {
@@ -1549,11 +307,11 @@ xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
 }
 
 xx_implements_list(R) ::= xx_implements_list(L) COMMA xx_implements(I) . {
-	R = xx_ret_list(L, I);
+	R = xx_ret_list(L, I, status->scanner_state);
 }
 
 xx_implements_list(R) ::= xx_implements(I) . {
-	R = xx_ret_list(NULL, I);
+	R = xx_ret_list(NULL, I, status->scanner_state);
 }
 
 xx_implements(R) ::= IDENTIFIER(I) . {
@@ -1617,11 +375,11 @@ xx_interface_definition(R) ::= xx_class_consts_definition(C) xx_interface_method
 }
 
 xx_class_properties_definition(R) ::= xx_class_properties_definition(L) xx_class_property_definition(P) . {
-	R = xx_ret_list(L, P);
+	R = xx_ret_list(L, P, status->scanner_state);
 }
 
 xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
-	R = xx_ret_list(NULL, P);
+	R = xx_ret_list(NULL, P, status->scanner_state);
 }
 
 /* property definition */
@@ -1666,11 +424,11 @@ xx_class_property_shortcuts(R) ::= BRACKET_OPEN xx_class_property_shortcuts_list
 }
 
 xx_class_property_shortcuts_list(R) ::= xx_class_property_shortcuts_list(L) COMMA xx_class_property_shortcut(S) . {
-	R = xx_ret_list(L, S);
+	R = xx_ret_list(L, S, status->scanner_state);
 }
 
 xx_class_property_shortcuts_list(R) ::= xx_class_property_shortcut(S) . {
-	R = xx_ret_list(NULL, S);
+	R = xx_ret_list(NULL, S, status->scanner_state);
 }
 
 xx_class_property_shortcut(R) ::= IDENTIFIER(D) . {
@@ -1683,27 +441,27 @@ xx_class_property_shortcut(R) ::= COMMENT(C) IDENTIFIER(D) . {
 
 /* constants definition */
 xx_class_consts_definition(R) ::= xx_class_consts_definition(L) xx_class_const_definition(K) . {
-	R = xx_ret_list(L, K);
+	R = xx_ret_list(L, K, status->scanner_state);
 }
 
 xx_class_consts_definition(R) ::= xx_class_const_definition(K) . {
-	R = xx_ret_list(NULL, K);
+	R = xx_ret_list(NULL, K, status->scanner_state);
 }
 
 xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_method_definition(P) . {
-	R = xx_ret_list(L, P);
+	R = xx_ret_list(L, P, status->scanner_state);
 }
 
 xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
-	R = xx_ret_list(NULL, P);
+	R = xx_ret_list(NULL, P, status->scanner_state);
 }
 
 xx_interface_methods_definition(R) ::= xx_interface_methods_definition(L) xx_interface_method_definition(P) . {
-	R = xx_ret_list(L, P);
+	R = xx_ret_list(L, P, status->scanner_state);
 }
 
 xx_interface_methods_definition(R) ::= xx_interface_method_definition(P) . {
-	R = xx_ret_list(NULL, P);
+	R = xx_ret_list(NULL, P, status->scanner_state);
 }
 
 xx_class_const_definition(R) ::= COMMENT(C) CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
@@ -1860,11 +618,11 @@ xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION 
 
 /* visibility and modifiers */
 xx_visibility_list(R) ::= xx_visibility_list(L) xx_visibility(K) . {
-	R = xx_ret_list(L, K);
+	R = xx_ret_list(L, K, status->scanner_state);
 }
 
 xx_visibility_list(R) ::= xx_visibility(K) . {
-	R = xx_ret_list(NULL, K);
+	R = xx_ret_list(NULL, K, status->scanner_state);
 }
 
 xx_visibility(R) ::= INTERNAL . {
@@ -1917,11 +675,11 @@ xx_method_return_type(R) ::= xx_method_return_type_list(L) . {
 }
 
 xx_method_return_type_list(R) ::= xx_method_return_type_list(L) BITWISE_OR xx_method_return_type_item(I) . {
-	R = xx_ret_list(L, I);
+	R = xx_ret_list(L, I, status->scanner_state);
 }
 
 xx_method_return_type_list(R) ::= xx_method_return_type_item(I) . {
-	R = xx_ret_list(NULL, I);
+	R = xx_ret_list(NULL, I, status->scanner_state);
 }
 
 xx_method_return_type_item(R) ::= xx_parameter_type(T) . {
@@ -1950,11 +708,11 @@ xx_method_return_type_item(R) ::= xx_parameter_cast_collection(T) . {
 
 /* parameters list */
 xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {
-	R = xx_ret_list(L, P);
+	R = xx_ret_list(L, P, status->scanner_state);
 }
 
 xx_parameter_list(R) ::= xx_parameter(P) . {
-	R = xx_ret_list(NULL, P);
+	R = xx_ret_list(NULL, P, status->scanner_state);
 }
 
 /* xx_parameter_list */
@@ -2185,11 +943,11 @@ xx_parameter_type(R) ::= TYPE_OBJECT . {
 }
 
 xx_statement_list(R) ::= xx_statement_list(L) xx_statement(S) . {
-	R = xx_ret_list(L, S);
+	R = xx_ret_list(L, S, status->scanner_state);
 }
 
 xx_statement_list(R) ::= xx_statement(S) . {
-	R = xx_ret_list(NULL, S);
+	R = xx_ret_list(NULL, S, status->scanner_state);
 }
 
 xx_statement(R) ::= xx_cblock(S) . {
@@ -2354,11 +1112,11 @@ xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKE
 }
 
 xx_elseif_statements(R) ::= xx_elseif_statements(C) xx_elseif_statement(K) . {
-	R = xx_ret_list(C, K);
+	R = xx_ret_list(C, K, status->scanner_state);
 }
 
 xx_elseif_statements(R) ::= xx_elseif_statement(K) . {
-	R = xx_ret_list(NULL, K);
+	R = xx_ret_list(NULL, K, status->scanner_state);
 }
 
 /* elseif(b) {} */
@@ -2380,11 +1138,11 @@ xx_switch_statement(R) ::= SWITCH xx_eval_expr(E) BRACKET_OPEN xx_case_clauses(C
 }
 
 xx_case_clauses(R) ::= xx_case_clauses(C) xx_case_clause(K) . {
-	R = xx_ret_list(C, K);
+	R = xx_ret_list(C, K, status->scanner_state);
 }
 
 xx_case_clauses(R) ::= xx_case_clause(K) . {
-	R = xx_ret_list(NULL, K);
+	R = xx_ret_list(NULL, K, status->scanner_state);
 }
 
 xx_case_clause(R) ::= CASE xx_eval_expr(E) COLON . {
@@ -2436,11 +1194,11 @@ xx_try_catch_statement(R) ::= TRY BRACKET_OPEN xx_statement_list(L) BRACKET_CLOS
 }
 
 xx_catch_statement_list(R) ::= xx_catch_statement_list(L) xx_catch_statement(C) . {
-	R = xx_ret_list(L, C);
+	R = xx_ret_list(L, C, status->scanner_state);
 }
 
 xx_catch_statement_list(R) ::= xx_catch_statement(C) . {
-	R = xx_ret_list(NULL, C);
+	R = xx_ret_list(NULL, C, status->scanner_state);
 }
 
 xx_catch_statement(R) ::= CATCH xx_catch_classes_list(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
@@ -2460,11 +1218,11 @@ xx_catch_statement(R) ::= CATCH xx_catch_classes_list(E) COMMA IDENTIFIER(V) BRA
 }
 
 xx_catch_classes_list(R) ::= xx_catch_classes_list(L) BITWISE_OR xx_catch_class(C) . {
-	R = xx_ret_list(L, C);
+	R = xx_ret_list(L, C, status->scanner_state);
 }
 
 xx_catch_classes_list(R) ::= xx_catch_class(C) . {
-	R = xx_ret_list(NULL, C);
+	R = xx_ret_list(NULL, C, status->scanner_state);
 }
 
 xx_catch_class(R) ::= IDENTIFIER(C) . {
@@ -2500,11 +1258,11 @@ xx_let_statement(R) ::= LET xx_let_assignments(A) DOTCOMMA . {
 }
 
 xx_let_assignments(R) ::= xx_let_assignments(L) COMMA xx_let_assignment(A) . {
-	R = xx_ret_list(L, A);
+	R = xx_ret_list(L, A, status->scanner_state);
 }
 
 xx_let_assignments(R) ::= xx_let_assignment(A) . {
-	R = xx_ret_list(NULL, A);
+	R = xx_ret_list(NULL, A, status->scanner_state);
 }
 
 // =
@@ -2612,11 +1370,11 @@ xx_let_assignment(R) ::= IDENTIFIER(D) xx_array_offset_list(A) SBRACKET_OPEN SBR
 }
 
 xx_array_offset_list(R) ::= xx_array_offset_list(L) xx_array_offset(O) . {
-	R = xx_ret_list(L, O);
+	R = xx_ret_list(L, O, status->scanner_state);
 }
 
 xx_array_offset_list(R) ::= xx_array_offset(O) . {
-	R = xx_ret_list(NULL, O);
+	R = xx_ret_list(NULL, O, status->scanner_state);
 }
 
 xx_array_offset(R) ::= SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE . {
@@ -2662,11 +1420,11 @@ xx_echo_statement(R) ::= ECHO xx_echo_expressions(E) DOTCOMMA . {
 }
 
 xx_echo_expressions(R) ::= xx_echo_expressions(L) COMMA xx_echo_expression(A) . {
-	R = xx_ret_list(L, A);
+	R = xx_ret_list(L, A, status->scanner_state);
 }
 
 xx_echo_expressions(R) ::= xx_echo_expression(A) . {
-	R = xx_ret_list(NULL, A);
+	R = xx_ret_list(NULL, A, status->scanner_state);
 }
 
 xx_echo_expression(R) ::= xx_common_expr(E) . {
@@ -2763,11 +1521,11 @@ xx_declare_statement(R) ::= TYPE_ARRAY xx_declare_variable_list(L) DOTCOMMA . {
 }
 
 xx_declare_variable_list(R) ::= xx_declare_variable_list(L) COMMA xx_declare_variable(V) . {
-	R = xx_ret_list(L, V);
+	R = xx_ret_list(L, V, status->scanner_state);
 }
 
 xx_declare_variable_list(R) ::= xx_declare_variable(V) . {
-	R = xx_ret_list(NULL, V);
+	R = xx_ret_list(NULL, V, status->scanner_state);
 }
 
 xx_declare_variable(R) ::= IDENTIFIER(I) . {
@@ -3128,11 +1886,15 @@ xx_fcall_expr(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN P
 /* o::m() */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_scall(0, O->token, 0, M, NULL, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* o::m(false, x) */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_scall(0, O->token, 0, M, P, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* static::m(false, x) */
@@ -3148,31 +1910,43 @@ xx_scall_expr(R) ::= STATIC DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHES
 /* {o}::m() */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_scall(1, O->token, 0, M, NULL, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* {o}::m(false, x) */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_scall(1, O->token, 0, M, P, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* {o}::{m}() */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_scall(1, O->token, 1, M, NULL, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* {o}::{m}(false, x) */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_scall(1, O->token, 1, M, P, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* o::{m}() */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_scall(0, O->token, 1, M, NULL, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* o::{m}(false, x) */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_scall(0, O->token, 1, M, P, status->scanner_state);
+	efree(O->token);
+	efree(O);
 }
 
 /* o->m(false, x) */
@@ -3231,11 +2005,11 @@ xx_common_expr(R) ::= xx_common_expr(O1) QUESTION COLON xx_common_expr(O3) . {
 }
 
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
-	R = xx_ret_list(L, P);
+	R = xx_ret_list(L, P, status->scanner_state);
 }
 
 xx_call_parameters(R) ::= xx_call_parameter(P) . {
-	R = xx_ret_list(NULL, P);
+	R = xx_ret_list(NULL, P, status->scanner_state);
 }
 
 /* func(expr) */
@@ -3274,11 +2048,11 @@ xx_common_expr(R) ::= IDENTIFIER(I) DOUBLEARROW xx_common_expr(E) . {
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {
-	R = xx_ret_list(L, I);
+	R = xx_ret_list(L, I, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_item(I) . {
-	R = xx_ret_list(NULL, I);
+	R = xx_ret_list(NULL, I, status->scanner_state);
 }
 
 xx_array_item(R) ::= xx_array_key(K) COLON xx_array_value(V) . {
@@ -3343,11 +2117,11 @@ xx_literal_expr(R) ::= SBRACKET_OPEN xx_literal_array_list(L) SBRACKET_CLOSE . {
 }
 
 xx_literal_array_list(R) ::= xx_literal_array_list(L) COMMA xx_literal_array_item(I) . {
-	R = xx_ret_list(L, I);
+	R = xx_ret_list(L, I, status->scanner_state);
 }
 
 xx_literal_array_list(R) ::= xx_literal_array_item(I) . {
-	R = xx_ret_list(NULL, I);
+	R = xx_ret_list(NULL, I, status->scanner_state);
 }
 
 xx_literal_array_item(R) ::= xx_literal_array_key(K) COLON xx_literal_array_value(V) . {
