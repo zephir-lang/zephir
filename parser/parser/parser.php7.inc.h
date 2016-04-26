@@ -471,65 +471,66 @@ static void xx_ret_return_type_item(zval *ret, zval *type, zval *cast, int manda
 static void xx_ret_type(zval *ret, int type)
 {
 	switch (type) {
+
 		case XX_TYPE_INTEGER:
 			parser_get_string(ret, "int");
-            break;
+            return;
 
 		case XX_TYPE_UINTEGER:
 			parser_get_string(ret, "uint");
-            break;
+            return;
 
 		case XX_TYPE_DOUBLE:
 			parser_get_string(ret, "double");
-            break;
+            return;
 
 		case XX_TYPE_BOOL:
 			parser_get_string(ret, "bool");
-            break;
+            return;
 
 		case XX_TYPE_LONG:
 			parser_get_string(ret, "long");
-            break;
+            return;
 
 		case XX_TYPE_ULONG:
 			parser_get_string(ret, "ulong");
-            break;
+            return;
 
 		case XX_TYPE_STRING:
 			parser_get_string(ret, "string");
-            break;
+            return;
 
 		case XX_TYPE_CHAR:
 			parser_get_string(ret, "char");
-            break;
+            return;
 
 		case XX_TYPE_ARRAY:
 			parser_get_string(ret, "array");
-            break;
+            return;
 
 		case XX_TYPE_VAR:
 			parser_get_string(ret, "variable");
-            break;
+            return;
 
 		case XX_TYPE_CALLABLE:
 			parser_get_string(ret, "callable");
-            break;
+            return;
 
 		case XX_TYPE_RESOURCE:
 			parser_get_string(ret, "resource");
-            break;
+            return;
 
 		case XX_TYPE_OBJECT:
 			parser_get_string(ret, "object");
-            break;
+            return;
 
 		case XX_T_TYPE_NULL:
 			parser_get_string(ret, "null");
-            break;
+            return;
 
 		case XX_T_TYPE_THIS:
 			parser_get_string(ret, "this");
-            break;
+            return;
 
 		default:
 			fprintf(stderr, "unknown type?\n");
