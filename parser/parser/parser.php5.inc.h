@@ -18,15 +18,16 @@ static zval *parser_array_init(xx_scanner_state *state) {
 static void parser_add_str(zval *arr, const char *key, const char *val) {
 	zval *tmp;
 	MAKE_STD_ZVAL(tmp);
-	ZVAL_STRING(tmp, val, strlen(val) - 1);
+	ZVAL_STRING(tmp, val, 1);
 	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
 }
 
 static void parser_add_str_free(zval *arr, const char *key, char *val) {
 	zval *tmp;
 	MAKE_STD_ZVAL(tmp);
-	ZVAL_STRING(tmp, val, strlen(val) - 1);
+	ZVAL_STRING(tmp, val, 1);
 	zend_hash_add(Z_ARRVAL_P(arr), key, strlen(key) + 1, (void **)&tmp, sizeof(zval *), NULL);
+	efree(val);
 }
 
 static void parser_add_int(zval *arr, const char *key, int i) {
