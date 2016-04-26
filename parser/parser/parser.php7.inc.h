@@ -304,7 +304,9 @@ static void xx_ret_class_property(zval *ret, zval *visibility, xx_parser_token *
 
 	parser_add_zval(ret, "visibility", visibility);
 	parser_add_str(ret, "type", "property");
-	parser_add_str(ret, "name", T->token);
+
+	parser_add_str_free(ret, "name", T->token);
+	efree(T);
 
 	if (default_value) {
 		parser_add_zval(ret, "default", default_value);
