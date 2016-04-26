@@ -582,7 +582,7 @@ static zval *xx_ret_list(zval *list_left, zval *list_right, xx_scanner_state *st
 			ht = Z_ARRVAL_P(list_left);
 			zend_hash_internal_pointer_reset_ex(ht, &pos);
 			while (zend_hash_get_current_data_ex(ht, (void**)&ppzv, &pos) == SUCCESS) {
-				Z_ADDREF_P(zv);
+				Z_ADDREF_PP(ppzv);
 				parser_array_append(ret, *ppzv);
 			    zend_hash_move_forward_ex(ht, &pos);
 			}
