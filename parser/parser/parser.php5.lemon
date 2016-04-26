@@ -95,8 +95,7 @@
 	if ($$) {
 		if ($$->free_flag) {
 			efree($$->token);
-		}
-		zval_ptr_dtor($$);
+		}		
 		efree($$);
 	}
 }
