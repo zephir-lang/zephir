@@ -6,9 +6,9 @@ class y {
 
 private x;
 
-public function x(int p, double x)
+public function x()
 {
-
+    let a += 1 << 10;
 }
 
 } ", "1"));

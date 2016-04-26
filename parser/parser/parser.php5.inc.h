@@ -1,7 +1,7 @@
 
 #include <php.h>
 #include "string.h"
-#include "parser.h"
+#include "parser.php5.h"
 #include "xx.h"
 #include "scanner.h"
 #include "Zend/zend_variables.h"

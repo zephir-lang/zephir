@@ -252,7 +252,13 @@ class Compiler
                     $oldCwd = getcwd();
                     chdir($currentDir);
 
-                    echo shell_exec('cd parser && ./build_linux.sh');
+                    if (version_compare(phpversion(), '7.0.0', '>=')) {
+                        $version = 'php7';
+                    } else {
+                        $version = 'php5';
+                    }
+
+                    echo shell_exec('cd parser && ./build_linux.sh ' . $version);
                     exec('make clean && phpize --clean', $output, $exit);
                     $this->logger->output('Preparing for parser compilation...');
                     exec('phpize', $output, $exit);

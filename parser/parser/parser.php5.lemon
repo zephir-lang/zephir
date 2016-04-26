@@ -56,12 +56,10 @@
 %right ARROW .
 
 %include {
-#include "parser.php5.h"
+#include "parser.php5.inc.h"
 }
 
 %syntax_error {
-
-	//fprintf(stderr, "error!\n");
 
 	zval *syntax_error = parser_array_init(status->scanner_state);
 
@@ -94,7 +92,6 @@
 }
 
 %token_destructor {
-#if PHP_VERSION_ID < 70000
 	if ($$) {
 		if ($$->free_flag) {
 			efree($$->token);
@@ -102,13 +99,6 @@
 		zval_ptr_dtor($$);
 		efree($$);
 	}
-#else
-	if ($$) {
-		if ($$->free_flag) {
-			efree($$->token);
-		}
-	}
-#endif
 }
 
 program ::= xx_language(Q) . {
