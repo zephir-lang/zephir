@@ -106,6 +106,8 @@ static void xx_ret_literal(zval *ret, int type, xx_parser_token *T, xx_scanner_s
 
 static void xx_ret_expr(zval *ret, const char *type, zval *left, zval *right, zval *extra, xx_scanner_state *state)
 {
+	array_init(ret);
+
 	parser_add_str(ret, "type", type);
 
 	if (left) {
@@ -139,6 +141,8 @@ static void xx_ret_array_item(zval *ret, zval *key, zval *value, xx_scanner_stat
 
 static void xx_ret_namespace(zval *ret, xx_parser_token *T, xx_scanner_state *state)
 {
+	array_init(ret);
+
 	parser_add_str(ret, "type", "namespace");
 	parser_add_str_free(ret, "name", T->token);
 	efree(T);
@@ -1148,7 +1152,7 @@ static void xx_ret_comment(zval *ret, xx_parser_token *T, xx_scanner_state *stat
 	parser_add_int(ret, "char", state->active_char);
 }
 
-static void xx_ret_cblock(zval *ret, zval *return_value, xx_parser_token *T, xx_scanner_state *state)
+static void xx_ret_cblock(zval *ret, xx_parser_token *T, xx_scanner_state *state)
 {
     array_init(ret);
 

@@ -27,7 +27,7 @@
 #include "ext/standard/info.h"
 #include "php_zephir_parser.h"
 
-extern zval *xx_parse_program(char *program, size_t program_length, char *file_path, zval **error_msg);
+extern void *xx_parse_program(zval *return_value, char *program, size_t program_length, char *file_path, zval **error_msg);
 
 /* {{{ proto string zephir_parse_file(string arg)
    Return a string to confirm that the module is compiled in */
@@ -37,22 +37,26 @@ PHP_FUNCTION(zephir_parse_file)
     size_t content_len = 0;
 	char *content = NULL;
     char *filepath = NULL;
-    zval *ret = NULL;
 #if PHP_VERSION_ID >= 70000
 	zend_array *arr = NULL;
+    zval ret;
+#else
+    zval *ret = NULL;
 #endif
     zval **error_msg = NULL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &content, &content_len, &filepath, &filepath_len) == FAILURE) {
 		return;
 	}
-    
-    ret = xx_parse_program(content, content_len, filepath, error_msg);
 
 #if PHP_VERSION_ID >= 70000
-    arr = Z_ARRVAL_P(ret);
-    efree(ret);
-	RETURN_ARR(arr);
+    xx_parse_program(&ret, content, content_len, filepath, error_msg);
+#else
+    xx_parse_program(ret, content, content_len, filepath, error_msg);
+#endif
+
+#if PHP_VERSION_ID >= 70000
+    RETURN_ZVAL(&ret, 1, 0);
 #else
 	RETVAL_ZVAL(ret, 1, 0);
 #endif

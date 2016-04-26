@@ -63,7 +63,11 @@ typedef struct _xx_parser_token {
 
 typedef struct _xx_parser_status {
 	int status;
+#if PHP_VERSION_ID < 70000
+	zval *ret;
+#else
 	zval ret;
+#endif
 	xx_scanner_state *scanner_state;
 	xx_scanner_token *token;
 	char *syntax_error;
