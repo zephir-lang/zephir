@@ -278,7 +278,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 {
 	zval *zv;
 	HashTable *ht;
-	int result, found = 0;
+	int result = SUCCESS, found = 0;
 	ulong uidx = 0;
 	char *sidx = NULL;
 
