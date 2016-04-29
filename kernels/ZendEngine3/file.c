@@ -365,5 +365,6 @@ void zephir_unique_path_key(zval *return_value, zval *path)
 	strKey = emalloc(24);
 	sprintf(strKey, "v%lu", h);
 
-	RETURN_STRING(strKey);
+	RETVAL_STRING(strKey);
+	efree(strKey);
 }
