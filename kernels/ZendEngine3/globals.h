@@ -45,7 +45,7 @@ typedef struct _zephir_memory_entry {
 /** Virtual Symbol Table */
 typedef struct _zephir_symbol_table {
 	struct _zephir_memory_entry *scope;
-	HashTable *symbol_table;
+	zend_array *symbol_table;
 	struct _zephir_symbol_table *prev;
 } zephir_symbol_table;
 

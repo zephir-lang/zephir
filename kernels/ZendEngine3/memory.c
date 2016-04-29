@@ -92,7 +92,7 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 	zval *ptr;
 #ifndef ZEPHIR_RELEASE
 	int show_backtrace = 0;
-#endif	
+#endif
 
 	active_memory = g->active_memory;
 	assert(active_memory != NULL);
@@ -102,9 +102,11 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 		if (g->active_symbol_table) {
 			active_symbol_table = g->active_symbol_table;
 			if (active_symbol_table->scope == active_memory) {
-				zend_hash_destroy(EG(current_execute_data)->symbol_table);
-				FREE_HASHTABLE(EG(current_execute_data)->symbol_table);
-				EG(current_execute_data)->symbol_table = active_symbol_table->symbol_table;
+				zend_execute_data *ex = EG(current_execute_data);
+				//zend_hash_destroy(EG(current_execute_data)->symbol_table);
+				//FREE_HASHTABLE(EG(current_execute_data)->symbol_table);
+				//EG(current_execute_data)->symbol_table = active_symbol_table->symbol_table;
+				ex->symbol_table = active_symbol_table->symbol_table;
 				g->active_symbol_table = active_symbol_table->prev;
 				efree(active_symbol_table);
 			}
@@ -370,10 +372,10 @@ void zephir_deinitialize_memory()
  */
 void zephir_create_symbol_table(TSRMLS_D)
 {
-
 	/*zephir_symbol_table *entry;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
-	HashTable *symbol_table;
+	zend_execute_data *ex = EG(current_execute_data);
+	zend_array *symbol_table;
 
 #ifndef ZEPHIR_RELEASE
 	if (!zephir_globals_ptr->active_memory) {
@@ -385,13 +387,14 @@ void zephir_create_symbol_table(TSRMLS_D)
 
 	entry = (zephir_symbol_table *) emalloc(sizeof(zephir_symbol_table));
 	entry->scope = zephir_globals_ptr->active_memory;
-	entry->symbol_table = EG(active_symbol_table);
+	entry->symbol_table = ex->symbol_table;
 	entry->prev = zephir_globals_ptr->active_symbol_table;
 	zephir_globals_ptr->active_symbol_table = entry;
 
-	ALLOC_HASHTABLE(symbol_table);
+	symbol_table = (zend_array *) emalloc(sizeof(zend_array *));
 	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
-	EG(active_symbol_table) = symbol_table;*/
+	zend_hash_real_init(symbol_table, 0);
+	ex->symbol_table = symbol_table;*/
 }
 
 /**
@@ -399,20 +402,18 @@ void zephir_create_symbol_table(TSRMLS_D)
  */
 int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
 {
+	zend_array *symbol_table;
 
-	/*if (!EG(active_symbol_table)) {
-		zend_rebuild_symbol_table(TSRMLS_C);
+	symbol_table = zend_rebuild_symbol_table();
+	if (!symbol_table) {
+		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
+		return FAILURE;
 	}
 
-	if (EG(active_symbol_table)) {
-		if (Z_TYPE_P(key_name) == IS_STRING) {
-			Z_ADDREF_P(value);
-			zend_hash_update(EG(active_symbol_table), Z_STRVAL_P(key_name), Z_STRLEN_P(key_name) + 1, &value, sizeof(zval *), NULL);
-			if (EG(exception)) {
-				return FAILURE;
-			}
-		}
-	}*/
+	if (Z_TYPE_P(key_name) == IS_STRING) {
+		Z_TRY_ADDREF_P(value);
+		zend_hash_update(symbol_table, Z_STR_P(key_name), value);
+	}
 
 	return SUCCESS;
 }
@@ -422,18 +423,16 @@ int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
  */
 int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
 {
+	zend_array *symbol_table;
 
-	/*if (!EG(active_symbol_table)) {
-		zend_rebuild_symbol_table(TSRMLS_C);
+	symbol_table = zend_rebuild_symbol_table();
+	if (!symbol_table) {
+		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
+		return FAILURE;
 	}
 
-	if (&EG(symbol_table)) {
-		Z_ADDREF_P(value);
-		zend_hash_update(&EG(symbol_table), key_name, key_length, &value, sizeof(zval *), NULL);
-		if (EG(exception)) {
-			return FAILURE;
-		}
-	}*/
+	Z_TRY_ADDREF_P(value);
+	zend_hash_str_update(symbol_table, key_name, key_length, value);
 
 	return SUCCESS;
 }

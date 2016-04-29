@@ -49,16 +49,20 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
         }
 
         if ($expression['parameters'][0]['parameter']['type'] != 'string') {
-            throw new CompilerException("This function requires a string parameter", $expression);
+            throw new CompilerException("This function requires a constant string parameter", $expression);
         }
 
-        preg_match('/^([0-9]+)\.([0-9]+)\.?([0-9]+)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
+        preg_match('/^([0-9]+)\.?([0-9]+)?\.?([0-9]+)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
         if (!count($matches)) {
             throw new CompilerException("Could not parse PHP version", $expression);
         }
 
         $major = $matches[1] * 10000;
-        $minor = $matches[2] * 100;
+        if (isset($matches[2])) {
+            $minor = $matches[2] * 100;
+        } else {
+            $minor = 0;
+        }
 
         $version = $major + $minor;
 
