@@ -278,7 +278,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 {
 	zval *zv;
 	HashTable *ht;
-	int result;
+	int result, found = 0;
 	ulong uidx = 0;
 	char *sidx = NULL;
 
@@ -286,34 +286,34 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		ht = Z_ARRVAL_P(arr);
 		switch (Z_TYPE_P(index)) {
 			case IS_NULL:
-				result = (zv = zend_hash_str_find(ht, SL(""))) != NULL;
+				found = (zv = zend_hash_str_find(ht, SL(""))) != NULL;
 				sidx   = "";
 				break;
 
 			case IS_DOUBLE:
 				uidx   = (ulong)Z_DVAL_P(index);
-				result = (zv = zend_hash_index_find(ht, uidx)) != NULL;
+				found  = (zv = zend_hash_index_find(ht, uidx)) != NULL;
 				break;
 
 			case IS_LONG:
 			case IS_RESOURCE:
 				uidx   = Z_LVAL_P(index);
-				result = (zv = zend_hash_index_find(ht, uidx)) != NULL;
+				found  = (zv = zend_hash_index_find(ht, uidx)) != NULL;
 				break;
 
 			case IS_FALSE:
 				uidx = 0;
-				result = (zv = zend_hash_index_find(ht, uidx)) != NULL;
+				found  = (zv = zend_hash_index_find(ht, uidx)) != NULL;
 				break;
 
 			case IS_TRUE:
 				uidx = 1;
-				result = (zv = zend_hash_index_find(ht, uidx)) != NULL;
+				found  = (zv = zend_hash_index_find(ht, uidx)) != NULL;
 				break;
 
 			case IS_STRING:
 				sidx   = Z_STRLEN_P(index) ? Z_STRVAL_P(index) : "";
-				result = (zv = zend_symtable_str_find(ht, Z_STRVAL_P(index), Z_STRLEN_P(index))) != NULL;
+				found  = (zv = zend_symtable_str_find(ht, Z_STRVAL_P(index), Z_STRLEN_P(index))) != NULL;
 				break;
 
 			default:
@@ -324,7 +324,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 				break;
 		}
 
-		if (result != FAILURE) {
+		if (result != FAILURE && found == 1) {
 			if ((flags & PH_READONLY) == PH_READONLY) {
 				ZVAL_COPY_VALUE(return_value, zv);
 			} else {
@@ -572,7 +572,12 @@ void zephir_array_keys(zval *return_value, zval *input)
 				ZEND_HASH_FILL_ADD(&new_val);
 			} ZEND_HASH_FOREACH_END();
 		} ZEND_HASH_FILL_END();
-	}	
+	}
+
+	entry = NULL;
+	str_idx = NULL;
+	num_idx = 0;
+	ZVAL_UNDEF(&new_val);
 }
 
 int zephir_array_key_exists(zval *arr, zval *key)
