@@ -109,9 +109,11 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 			}
 		}
 	}
+
 	array_init(arr);
 	zend_hash_update(&EG(symbol_table), str, arr);
-	zend_string_free(str);
+	//zend_string_free(str);
+
 	return SUCCESS;
 }
 
