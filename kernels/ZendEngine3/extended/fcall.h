@@ -19,6 +19,14 @@
 #ifndef ZEPHIR_KERNEL_FCALL_EXT_H
 #define ZEPHIR_KERNEL_FCALL_EXT_H
 
+#include "php_ext.h"
+#include "kernel/main.h"
+#include "kernel/memory.h"
+#include "kernel/fcall.h"
+
+#include <Zend/zend.h>
+#include <Zend/zend_hash.h>
+
 #define ZEPHIR_FCALL_TYPE_UNKNOWN 0
 #define ZEPHIR_FCALL_TYPE_FUNC 1
 #define ZEPHIR_FCALL_TYPE_ZVAL_METHOD 2

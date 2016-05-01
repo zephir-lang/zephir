@@ -765,6 +765,11 @@ class Compiler
         }
     }
 
+    /**
+     * Returns the php include directories returned by php-config
+     *
+     * @return string
+     */
     public function getPhpIncludeDirs()
     {
         if (!Utils::isWindows()) {
@@ -773,6 +778,9 @@ class Compiler
         return trim($this->fileSystem->read(self::VERSION . '/php-includes'));
     }
 
+    /**
+     * Pre-compile headers to speed up compilation
+     */
     public function preCompileHeaders()
     {
         if (!Utils::isWindows()) {
