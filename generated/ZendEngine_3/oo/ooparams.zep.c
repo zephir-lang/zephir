@@ -242,7 +242,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &someList_param);
 
-	ZEPHIR_CPY_WRT(&someList, someList_param);
+	ZEPHIR_OBS_VAR_ONCE(&someList);
+	ZVAL_COPY(&someList, someList_param);
 
 
 	RETURN_CTOR(someList);
