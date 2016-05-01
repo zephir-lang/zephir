@@ -26,4 +26,19 @@
 
 zend_object_iterator *zephir_get_iterator(zval *iterator);
 
+#define ZEPHIR_ITERATOR_COPY(var, it) \
+	{ \
+		zval *ZEPHIR_TMP_ITERATOR_PTR; \
+		ZEPHIR_TMP_ITERATOR_PTR = it->funcs->get_current_data(it); \
+		if (UNEXPECTED(EG(exception) != NULL)) { \
+			return; \
+		} \
+		if (Z_ISREF_P(var)) { \
+			ZEPHIR_OBS_VAR_ONCE(var); \
+			ZVAL_DUP(var, Z_REFVAL_P(var)); \
+		} else { \
+			ZEPHIR_CPY_WRT(var, ZEPHIR_TMP_ITERATOR_PTR); \
+		} \
+	}
+
 #endif

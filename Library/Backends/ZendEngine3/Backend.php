@@ -353,7 +353,8 @@ class Backend extends BackendZendEngine2
         if (!$variable->isDoublePointer()) {
             $context->symbolTable->mustGrownStack(true);
             $symbolVariable = $this->getVariableCode($variable);
-            $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $symbolVariable . ', ' . $code . ');');
+            $context->codePrinter->output('ZEPHIR_OBS_VAR_ONCE(' . $symbolVariable . ');');
+            $context->codePrinter->output('ZVAL_COPY(' . $symbolVariable . ', ' . $code . ');');
         } else {
             $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
         }
@@ -741,9 +742,8 @@ class Backend extends BackendZendEngine2
 
     public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
     {
-        $compilationContext->codePrinter->output('zval *ZEPHIR_TMP_ITERATOR_PTR;');
-        $compilationContext->codePrinter->output('ZEPHIR_TMP_ITERATOR_PTR = ' . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
-        $compilationContext->codePrinter->output('ZVAL_COPY(' . $this->getVariableCode($targetVariable) . ', ZEPHIR_TMP_ITERATOR_PTR);');
+        $compilationContext->symbolTable->mustGrownStack(true);
+        $compilationContext->codePrinter->output('ZEPHIR_ITERATOR_COPY(' . $this->getVariableCode($targetVariable) . ', ' . $iteratorVariable->getName() . ');');
     }
 
     public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)

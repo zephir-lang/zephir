@@ -24,7 +24,9 @@
 
 #include <php.h>
 
-#define PHV(v) zephir_vdump(v)
+void zephir_vdump(zval *var, const char *func);
+
+#define PHV(v) zephir_vdump(zval *var, const char *func)
 #define PHPR(v) zephir_print_r(v)
 
 typedef struct _zephir_debug_entry {

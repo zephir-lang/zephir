@@ -42,9 +42,10 @@ void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int init
 	HashTable *hashTable;
 	ZVAL_NULL(&null_value);
 
-	array_init_size(return_value, size);
+	array_init(return_value);
 	hashTable = Z_ARRVAL_P(return_value);
 	if (size > 0) {
+		zend_hash_real_init(hashTable, 0);
 		if (initialize) {
 			for (i = 0; i < size; i++) {
 				zend_hash_next_index_insert(hashTable, &null_value);
