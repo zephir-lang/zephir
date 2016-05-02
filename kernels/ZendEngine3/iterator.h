@@ -33,11 +33,11 @@ zend_object_iterator *zephir_get_iterator(zval *iterator);
 		if (UNEXPECTED(EG(exception) != NULL)) { \
 			return; \
 		} \
+		ZEPHIR_INIT_NVAR(var); \
 		if (Z_ISREF_P(var)) { \
-			ZEPHIR_OBS_VAR_ONCE(var); \
 			ZVAL_DUP(var, Z_REFVAL_P(var)); \
 		} else { \
-			ZEPHIR_CPY_WRT(var, ZEPHIR_TMP_ITERATOR_PTR); \
+			ZVAL_COPY(var, ZEPHIR_TMP_ITERATOR_PTR); \
 		} \
 	}
 

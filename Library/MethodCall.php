@@ -214,11 +214,25 @@ class MethodCall extends Call
                 if (!$classDefinition->hasMethod($methodName)) {
                     if ($check) {
                         $found = false;
-                        $interfaces = $classDefinition->isAbstract() ? $classDefinition->getImplementedInterfaces() : null;
+
+                        if ($classDefinition->isAbstract()) {
+                            $interfaces = $classDefinition->getImplementedInterfaces();
+                        } else {
+                            $interfaces = null;
+                        }
+
                         if (is_array($interfaces)) {
                             $compiler = $compilationContext->compiler;
                             foreach ($interfaces as $interface) {
                                 $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+
+                                if (!$classInterfaceDefinition) {
+                                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                                    if (!$classInterfaceDefinition) {
+                                        throw new CompilerException("Couldn't locate internal or external interface: " . $interface, $expression);
+                                    }
+                                }
+
                                 if ($classInterfaceDefinition->hasMethod($methodName)) {
                                     $found = true;
                                     $classMethod = $classInterfaceDefinition->getMethod($methodName);
@@ -226,13 +240,14 @@ class MethodCall extends Call
                                 }
                             }
                         }
+
                         if (!$found) {
                             $possibleMethod = $classDefinition->getPossibleMethodName($expression['name']);
                             if ($possibleMethod && $expression['name'] != $possibleMethod) {
                                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'. Did you mean '" . $possibleMethod . "'?", $expression);
-                            } else {
-                                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
                             }
+
+                            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
                         }
                     }
                 } else {
