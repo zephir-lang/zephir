@@ -748,7 +748,6 @@ class Backend extends BackendZendEngine2
 
     public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)
     {
-        parent::destroyIterator($iteratorVariable, $context);
         $context->codePrinter->output('zend_iterator_dtor(' . $iteratorVariable->getName() . ');');
     }
 
