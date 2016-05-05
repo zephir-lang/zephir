@@ -1782,7 +1782,6 @@ PHP_METHOD(Test_Flow, testFor33) {
 		}
 		zephir_array_append(&result, &v, PH_SEPARATE, "test/flow.zep", 710);
 	}
-	_0->funcs->dtor(_0 TSRMLS_CC);
 	zend_iterator_dtor(_0);
 	RETURN_CCTOR(result);
 
@@ -1819,7 +1818,6 @@ PHP_METHOD(Test_Flow, testFor34) {
 			}
 			zephir_array_append(&result, &v, PH_SEPARATE, "test/flow.zep", 720);
 		}
-		_0$$3->funcs->dtor(_0$$3 TSRMLS_CC);
 		zend_iterator_dtor(_0$$3);
 		RETURN_CCTOR(result);
 	}
