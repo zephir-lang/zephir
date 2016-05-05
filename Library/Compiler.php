@@ -247,7 +247,7 @@ class Compiler
 
                 chdir($oldCwd);
             } else {
-                if (!file_exists($currentDir . 'modules/zephir_parser.so')) {
+                if (!file_exists($currentDir . 'modules/zephir_parser.so') || ($this->parserCompiled === 'force')) {
                     $this->logger->output('zephir_parser extension not loaded, compiling it');
                     $oldCwd = getcwd();
                     chdir($currentDir);
@@ -303,7 +303,11 @@ class Compiler
         $parserExt = $this->compileParser();
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
-            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $_SERVER['argv']) . ' --parser-compiled';
+            // exclude --parser-compiled argument, we'll specify it additionally
+            $args = array_filter($_SERVER['argv'], function ($arg) {
+                return 0 !== strpos($arg, "--parser-compiled");
+            });
+            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $args) . ' --parser-compiled';
             passthru($cmd, $exitCode);
             exit($exitCode);
         }
