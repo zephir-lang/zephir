@@ -1120,7 +1120,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 		EG(scope) = func->common.scope;
+#if PHP_VERSION_ID < 70100
 		call->symbol_table = fci->symbol_table;
+#else
+		call->symbol_table = NULL;
+#endif
 		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
 			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
 			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
