@@ -23,6 +23,32 @@ use Zephir\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Common directory.
+     *
+     * @var string
+     */
+    private $pwd;
+
+    public function setUp()
+    {
+        /* Store the current directory before to be change */
+        $this->pwd = getcwd();
+    }
+
+    /**
+     * Test when we have a bad config.json file.
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage config.json is not valid or there is
+     * no Zephir extension initialized in this directory
+     */
+    public function testConstructWithBadConfigFile()
+    {
+        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
+        $config = new Config();
+    }
+
     public function testGetWithoutNamespace()
     {
         $config = new Config();
@@ -49,5 +75,45 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config();
         $config->set('unused-variable', false, 'warnings');
         $this->assertFalse($config->get('unused-variable', 'warnings'));
+    }
+
+    /**
+     * Test saveOnExit method.
+     */
+    public function testSaveOnExit()
+    {
+        chdir(sys_get_temp_dir());
+        $config = new Config();
+        $config->set('name', 'foo');
+        $config->saveOnExit();
+        $configJson = json_decode(file_get_contents('config.json'), true);
+        $this->assertInternalType('array', $configJson);
+        $this->assertSame($configJson['name'], 'foo');
+        $this->cleanTmpConfigFile();
+    }
+
+    /** 
+     * Restore current directory, and clean config.json.
+     */
+    public function tearDown()
+    {
+        if (getcwd() != $this->pwd) {
+            chdir($this->pwd);
+        }
+
+        $this->cleanTmpConfigFile();
+    }
+
+    /**
+     * Clean config.json file into tmp dir.
+     */
+    private function cleanTmpConfigFile()
+    {
+        /* clean config.json into tmp dir */
+        $tmpConfigFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'config.json';
+
+        if (file_exists($tmpConfigFile)) {
+            unlink($tmpConfigFile);
+        }
     }
 }
