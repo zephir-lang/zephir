@@ -575,7 +575,7 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 
 	int i, len, first = 0;
 	smart_str camelize_str = {0};
-	char *marker, ch, delim;
+	char *marker, ch, *delim;
 
 	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
 		zend_error(E_WARNING, "Invalid arguments supplied for camelize()");
@@ -583,12 +583,12 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 	}
 
 	if (delimiter == NULL || Z_TYPE_P(delimiter) == IS_NULL) {
-		delim = '_';
-	} else if (Z_TYPE_P(delimiter) == IS_STRING && Z_STRLEN_P(delimiter) == 1) {
-		delim = *(Z_STRVAL_P(delimiter));
-	} else {
-		zend_error(E_WARNING, "Second argument passed to the camelize() must be a string of one character");
+		delim = "-_\0";
+	} else if (Z_TYPE_P(delimiter) != IS_STRING || Z_STRLEN_P(delimiter) < 1) {
+		zend_error(E_WARNING, "The second argument passed to the camelize() must be a string containing at least one character");
 		RETURN_EMPTY_STRING();
+	} else {
+		delim = Z_STRVAL_P(delimiter);
 	}
 
 	marker = Z_STRVAL_P(str);
@@ -600,7 +600,7 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 
 		if (first == 0) {
 
-			if (ch == delim) {
+			if (strchr(delim, ch) != NULL) {
 				continue;
 			}
 
@@ -609,7 +609,7 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 			continue;
 		}
 
-		if (ch == delim) {
+		if (strchr(delim, ch) != NULL) {
 			if (i != (len - 1)) {
 				i++;
 				ch = marker[i];
