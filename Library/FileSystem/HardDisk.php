@@ -19,6 +19,8 @@
 
 namespace Zephir\FileSystem;
 
+use Zephir\Compiler;
+
 /**
  * HardDisk
  *
@@ -191,7 +193,7 @@ class HardDisk
             return hash_file($algorithm, $path);
         } else {
             $changed = false;
-            $cacheFile = $this->basePath . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
+            $cacheFile = $this->basePath . Compiler::getCurrentVersion() . DIRECTORY_SEPARATOR . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 file_put_contents($cacheFile, $hash);

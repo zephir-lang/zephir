@@ -153,7 +153,7 @@ class CompilerFile
     public function genIR(Compiler $compiler)
     {
         $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->_filePath));
-        $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
+        $compilePath = DIRECTORY_SEPARATOR . Compiler::getCurrentVersion() . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
 
         $changed = false;

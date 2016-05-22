@@ -116,6 +116,11 @@ class Compiler
     protected static $loadedPrototypes = false;
 
     /**
+     * @var string
+     */
+    protected static $currentVersion;
+
+    /**
      * @var array
      */
     protected $extraFiles = array();
@@ -679,6 +684,37 @@ class Compiler
     }
 
     /**
+     * Returns the current version + the ident if available
+     *
+     * @return string
+     */
+    public static function getCurrentVersion()
+    {
+        $version = '$Id$';
+        if (strlen($version) != 4) {
+            return self::VERSION . '-' . substr($version, 0, 10);
+        }
+
+        if (!Utils::isWindows()) {
+
+            if (self::$currentVersion === null) {
+                exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
+                if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
+                    self::$currentVersion = substr($xversion[0], 0, 10);
+                } else {
+                    self::$currentVersion = false;
+                }
+            }
+
+            if (self::$currentVersion) {
+                return self::VERSION . '-' . self::$currentVersion;
+            }
+        }
+
+        return self::VERSION;
+    }
+
+    /**
      * Checks if the current directory is a valid Zephir project
      *
      * @return string
@@ -699,13 +735,15 @@ class Compiler
             $this->fileSystem->initialize();
         }
 
-        if (!$this->fileSystem->exists(self::VERSION)) {
+        $version = self::getCurrentVersion();
+
+        if (!$this->fileSystem->exists($version)) {
             if (!$this->checkIfPhpized()) {
                 $this->logger->output(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
-            $this->fileSystem->makeDirectory(self::VERSION);
+            $this->fileSystem->makeDirectory($version);
         }
 
         return $namespace;
@@ -718,24 +756,26 @@ class Compiler
      */
     protected function getGccVersion()
     {
+        $version = self::getCurrentVersion();
+
         if (!Utils::isWindows()) {
-            if ($this->fileSystem->exists(self::VERSION . '/gcc-version')) {
-                return $this->fileSystem->read(self::VERSION . '/gcc-version');
+            if ($this->fileSystem->exists($version . '/gcc-version')) {
+                return $this->fileSystem->read($version . '/gcc-version');
             }
 
-            $this->fileSystem->system('gcc -v', 'stderr', self::VERSION . '/gcc-version-temp');
-            $lines = $this->fileSystem->file(self::VERSION . '/gcc-version-temp');
+            $this->fileSystem->system('gcc -v', 'stderr', $version . '/gcc-version-temp');
+            $lines = $this->fileSystem->file($version . '/gcc-version-temp');
 
             foreach ($lines as $line) {
                 if (strpos($line, 'LLVM') !== false) {
-                    $this->fileSystem->write(self::VERSION . '/gcc-version', '4.8.0');
+                    $this->fileSystem->write($version . '/gcc-version', '4.8.0');
                     return '4.8.0';
                 }
             }
 
             $lastLine = $lines[count($lines) - 1];
             if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
-                $this->fileSystem->write(self::VERSION . '/gcc-version', $matches[0]);
+                $this->fileSystem->write($version . '/gcc-version', $matches[0]);
                 return $matches[0];
             }
         }
@@ -776,10 +816,13 @@ class Compiler
      */
     public function getPhpIncludeDirs()
     {
+        $version = self::getCurrentVersion();
+
         if (!Utils::isWindows()) {
-            $this->fileSystem->system('php-config --includes', 'stdout', self::VERSION . '/php-includes');
+            $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
         }
-        return trim($this->fileSystem->read(self::VERSION . '/php-includes'));
+
+        return trim($this->fileSystem->read($version . '/php-includes'));
     }
 
     /**
@@ -788,6 +831,7 @@ class Compiler
     public function preCompileHeaders()
     {
         if (!Utils::isWindows()) {
+            $version = self::getCurrentVersion();
             $phpIncludes = $this->getPhpIncludeDirs();
 
             foreach (new \DirectoryIterator('ext/kernel') as $file) {
@@ -799,7 +843,7 @@ class Compiler
                                 'cd ext && gcc -c kernel/' . $file->getBaseName() .
                                 ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
                                 'stdout',
-                                self::VERSION . '/compile-header'
+                                $version . '/compile-header'
                             );
                         } else {
                             if (filemtime($path) > filemtime($path . '.gch')) {
@@ -807,7 +851,7 @@ class Compiler
                                     'cd ext && gcc -c kernel/' . $file->getBaseName() .
                                     ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
                                     'stdout',
-                                    self::VERSION . '/compile-header'
+                                    $version . '/compile-header'
                                 );
                             }
                         }
@@ -1106,17 +1150,19 @@ class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
+        $version = self::getCurrentVersion();
+
         /**
          * When a new file is added or removed we need to run configure again
          */
         if (!($command instanceof CommandGenerate)) {
-            if (!$this->fileSystem->exists(self::VERSION . '/compiled-files-sum')) {
+            if (!$this->fileSystem->exists($version . '/compiled-files-sum')) {
                 $needConfigure = true;
-                $this->fileSystem->write(self::VERSION . '/compiled-files-sum', $hash);
+                $this->fileSystem->write($version . '/compiled-files-sum', $hash);
             } else {
-                if ($this->fileSystem->read(self::VERSION . '/compiled-files-sum') != $hash) {
+                if ($this->fileSystem->read($version . '/compiled-files-sum') != $hash) {
                     $needConfigure = true;
-                    $this->fileSystem->write(self::VERSION . '/compiled-files-sum', $hash);
+                    $this->fileSystem->write($version . '/compiled-files-sum', $hash);
                 }
             }
         }
@@ -1327,10 +1373,13 @@ class Compiler
         $namespace = $this->checkDirectory();
 
         $this->logger->output('Running tests...');
-        system(
-            'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
-            $exit
-        );
+
+        if (!Utils::isWindows()) {
+            system(
+                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
+                $exit
+            );
+        }
     }
 
     /**
@@ -2134,6 +2183,8 @@ class Compiler
             throw new Exception('Template php_project.h doesn`t exist');
         }
 
+        $version = self::getCurrentVersion();
+
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
@@ -2143,7 +2194,7 @@ class Compiler
             '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
             '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
             '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => self::VERSION,
+            '%PROJECT_ZEPVERSION%'       => $version,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         );
@@ -2333,9 +2384,6 @@ class Compiler
                     }
                 } else {
                     switch ($ar[0]) {
-                        default:
-                            $version = trim($ar[1]);
-                            break;
                         case '<':
                             $operator = '<=';
                             $operatorCmd = '--max-version';
@@ -2346,14 +2394,17 @@ class Compiler
                             $operatorCmd = '--atleast-version';
                             $version = trim($ar[1]);
                             break;
+                        default:
+                            $version = trim($ar[1]);
+                            break;
                     }
                 }
 
                 $toReplace = array(
                     '%PACKAGE_LOWER%'        => strtolower($pkg),
                     '%PACKAGE_UPPER%'        => strtoupper($pkg),
-                    '%PACKAGE_REQUESTED_VERSION%'        => $operator.' '.$version,
-                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd.'='.$version,
+                    '%PACKAGE_REQUESTED_VERSION%'        => $operator . ' ' . $version,
+                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd . '=' . $version,
                 );
 
                 foreach ($toReplace as $mark => $replace) {

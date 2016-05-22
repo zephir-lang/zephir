@@ -857,13 +857,13 @@ class ClassDefinition
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
-                throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
+                throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement a method called: \"" . $method->getName() . "\" as requirement of interface: \"" . $interfaceDefinition->getCompleteName() . "\"");
             }
 
             if ($method->hasParameters()) {
                 $implementedMethod = $classDefinition->getMethod($method->getName());
                 if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()) {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: " . $interfaceDefinition->getCompleteName());
+                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: \"" . $interfaceDefinition->getCompleteName() . "\"");
                 }
             }
         }

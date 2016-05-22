@@ -305,6 +305,9 @@ int zephir_is_callable(zval *var)
 	return (int) retval;
 }
 
+/**
+ * Checks whether a variable has a scalar type
+ */
 int zephir_is_scalar(zval *var)
 {
 	switch (Z_TYPE_P(var)) {

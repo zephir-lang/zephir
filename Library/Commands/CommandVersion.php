@@ -67,6 +67,6 @@ class CommandVersion extends CommandAbstract
      */
     public function execute(Config $config, Logger $logger)
     {
-        echo Compiler::VERSION, PHP_EOL;
+        echo Compiler::getCurrentVersion(), PHP_EOL;
     }
 }
