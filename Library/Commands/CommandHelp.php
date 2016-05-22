@@ -72,13 +72,14 @@ class CommandHelp extends CommandAbstract
 
     /**
      * Executes the command
+     *
      * @param Config $config
      * @param Logger $logger
      */
     public function execute(Config $config, Logger $logger)
     {
         echo self::LOGO, PHP_EOL;
-        echo "Zephir version " , Compiler::VERSION,  PHP_EOL, PHP_EOL;
+        echo "Zephir version " , Compiler::getCurrentVersion(),  PHP_EOL, PHP_EOL;
         echo "Usage: ", PHP_EOL;
         echo "\tcommand [options]", PHP_EOL;
         echo PHP_EOL;

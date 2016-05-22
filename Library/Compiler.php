@@ -696,7 +696,6 @@ class Compiler
         }
 
         if (!Utils::isWindows()) {
-
             if (self::$currentVersion === null) {
                 exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
                 if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
