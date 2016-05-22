@@ -11,8 +11,17 @@ php:
   - 5.6
   - 7.0
 
+git:
+  depth: 1
+
 cache:
-    - apt
+  apt: true
+  ccache: true
+  timeout: 691200
+  directories:
+    - vendor
+    - $HOME/.ccache
+    - $HOME/.composer/cache
 
 before_install:
  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
@@ -23,6 +32,7 @@ before_install:
  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
 
 install:
+ - export CC="ccache gcc"
  - export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
  - export LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
  - export C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
