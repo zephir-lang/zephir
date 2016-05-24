@@ -237,10 +237,14 @@ class Compiler
                 $buildType = 'Release';
                 if (strpos($buildLog, 'Debug_TS\\') !== false) {
                     $buildType = 'Debug_TS';
-                } else if (strpos($buildLog, 'Release_TS\\') !== false) {
-                    $buildType = 'Release_TS';
-                } else if (strpos($buildLog, 'Debug\\') !== false) {
-                    $buildType = 'Debug';
+                } else {
+                    if (strpos($buildLog, 'Release_TS\\') !== false) {
+                        $buildType = 'Release_TS';
+                    } else {
+                        if (strpos($buildLog, 'Debug\\') !== false) {
+                            $buildType = 'Debug';
+                        }
+                    }
                 }
 
                 if (strpos($buildLog, 'x64\\'.$buildType) !== false) {
@@ -697,11 +701,13 @@ class Compiler
 
         if (!Utils::isWindows()) {
             if (self::$currentVersion === null) {
-                exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
-                if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
-                    self::$currentVersion = substr($xversion[0], 0, 10);
-                } else {
-                    self::$currentVersion = false;
+                if (file_exists(__DIR__ . '/../.git')) {
+                    exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
+                    if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
+                        self::$currentVersion = substr($xversion[0], 0, 10);
+                    } else {
+                        self::$currentVersion = false;
+                    }
                 }
             }
 
