@@ -1326,3 +1326,23 @@ void zephir_stripslashes(zval *return_value, zval *str)
 		zval_dtor(&copy);
 	}
 }
+
+void zephir_stripcslashes(zval *return_value, zval *str)
+{
+	zval copy;
+	int use_copy = 0;
+
+	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
+		use_copy = zend_make_printable_zval(str, &copy);
+		if (use_copy) {
+			str = &copy;
+		}
+	}
+
+	ZVAL_STRINGL(return_value, Z_STRVAL_P(str), Z_STRLEN_P(str));
+	php_stripcslashes(Z_STR_P(return_value));
+
+	if (unlikely(use_copy)) {
+		zval_dtor(&copy);
+	}
+}
