@@ -170,6 +170,18 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testStripslashes(addslashes("hello\0world")) == "hello\0world");
     }
 
+    public function testStripcslashes()
+    {
+        $t = new \Test\Strings();
+
+        parent::assertSame(
+            stripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z'),
+            $t->testStripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z')
+        );
+        parent::assertSame(stripcslashes('\065\x64'), $t->testStripcslashes('\065\x64'));
+        parent::assertSame(stripcslashes(''), $t->testStripcslashes(''));
+    }
+
     public function testMultilineStrings()
     {
         $hardcodedString = '
