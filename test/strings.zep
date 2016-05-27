@@ -102,6 +102,11 @@ class Strings
 		return stripslashes(str);
 	}
 
+	public function testStripcslashes(var str) -> string
+	{
+		return stripcslashes(str);
+	}
+
     public function testHardcodedMultilineString()
     {
         return "
