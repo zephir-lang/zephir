@@ -60,7 +60,7 @@ class Docblock
     /**
      * @param Annotation[] $annotations
      */
-    public function setAnnotations(Array $annotations)
+    public function setAnnotations(array $annotations)
     {
         $this->annotations = $annotations;
     }

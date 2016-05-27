@@ -114,10 +114,8 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                         $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
                         $compilationContext->backend->assignLong($indexVariable, $variableIndex, $compilationContext);
                         break;
-
                 }
                 break;
-
         }
 
         /**
@@ -231,7 +229,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
                             default:
                                 throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
-
                         }
                         break;
 

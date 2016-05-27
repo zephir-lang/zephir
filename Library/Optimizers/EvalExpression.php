@@ -181,7 +181,6 @@ class EvalExpression
 
                                     default:
                                         //echo $possibleValue->getType();
-
                                 }
                             }
                         }
