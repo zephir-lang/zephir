@@ -23,6 +23,7 @@ PHP_METHOD(Test_Strings, testSubstr3);
 PHP_METHOD(Test_Strings, testSubstr4);
 PHP_METHOD(Test_Strings, testAddslashes);
 PHP_METHOD(Test_Strings, testStripslashes);
+PHP_METHOD(Test_Strings, testStripcslashes);
 PHP_METHOD(Test_Strings, testHardcodedMultilineString);
 PHP_METHOD(Test_Strings, testEchoMultilineString);
 PHP_METHOD(Test_Strings, testTrimMultilineString);
@@ -124,6 +125,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_teststripslashes, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_teststripcslashes, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, camelize, arginfo_test_strings_camelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, uncamelize, arginfo_test_strings_uncamelize, ZEND_ACC_PUBLIC)
@@ -145,6 +150,7 @@ ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testSubstr4, arginfo_test_strings_testsubstr4, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testAddslashes, arginfo_test_strings_testaddslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testStripslashes, arginfo_test_strings_teststripslashes, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testStripcslashes, arginfo_test_strings_teststripcslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testHardcodedMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testEchoMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testTrimMultilineString, NULL, ZEND_ACC_PUBLIC)

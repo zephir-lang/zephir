@@ -322,6 +322,19 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 
 }
 
+PHP_METHOD(Test_Strings, testStripcslashes) {
+
+	zval *str;
+
+	zephir_fetch_params(0, 1, 0, &str);
+
+
+
+	zephir_stripcslashes(return_value, str TSRMLS_CC);
+	return;
+
+}
+
 PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
 	
