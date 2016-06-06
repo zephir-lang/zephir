@@ -45,6 +45,7 @@
 #define ZEPHIR_IS_NOT_FALSE(var)   ((Z_TYPE_P(var) != IS_TRUE && Z_TYPE_P(var) != IS_FALSE) || Z_TYPE_P(var) == IS_TRUE)
 #define ZEPHIR_IS_NOT_TRUE(var)    ((Z_TYPE_P(var) != IS_TRUE && Z_TYPE_P(var) != IS_FALSE) || Z_TYPE_P(var) == IS_FALSE)
 #define ZEPHIR_IS_BOOL(op1, op2)   (((Z_TYPE_P(op1) == IS_TRUE || Z_TYPE_P(op1) == IS_FALSE) && Z_TYPE_P(op1) == Z_TYPE_P(op2)) || zephir_compare_strict_bool(op1, op2))
+#define ZEPHIR_IS_BOOL_VALUE(op1, op2) ((Z_TYPE_P(op1) == IS_TRUE || Z_TYPE_P(op1) == IS_FALSE) && zephir_compare_strict_bool(op1, op2))
 
 /** SQL null empty **/
 #define ZEPHIR_IS_EMPTY(var)       (Z_TYPE_P(var) == IS_NULL || ZEPHIR_IS_FALSE(var) || (Z_TYPE_P(var) == IS_STRING && !Z_STRLEN_P(var)) || !zend_is_true(var))

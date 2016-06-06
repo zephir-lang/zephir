@@ -35,6 +35,8 @@ class EqualsOperator extends ComparisonBaseOperator
 
     protected $_zvalStringOperator = 'ZEPHIR_IS_STRING';
 
+    protected $_zvalBoolOperator = 'ZEPHIR_IS_BOOL_VALUE';
+
     protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
 
     protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';

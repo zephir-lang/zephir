@@ -101,6 +101,8 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 	parser_status->scanner_state = state;
 #if PHP_VERSION_ID < 70000
 	parser_status->ret = NULL;
+#else
+	ZVAL_UNDEF(&parser_status->ret);
 #endif
 	parser_status->token = &token;
 	parser_status->syntax_error = NULL;
@@ -554,7 +556,7 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
 #else
-					//ZVAL_STRING(*error_msg, error);
+					ZVAL_STRING(*error_msg, error);
 #endif
 					efree(error);
 					status = FAILURE;
@@ -575,6 +577,10 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 			if (!*error_msg) {
 				ALLOC_INIT_ZVAL(*error_msg);
 				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
+			}
+#else
+			if (Z_TYPE_P(*error_msg) == IS_UNDEF) {
+				ZVAL_STRING(*error_msg, parser_status->syntax_error);
 			}
 #endif
 			efree(parser_status->syntax_error);
