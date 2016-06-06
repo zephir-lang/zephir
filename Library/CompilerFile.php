@@ -170,6 +170,11 @@ class CompilerFile
 
         $ir = null;
         if ($changed) {
+
+            if (!function_exists('zephir_parse_file')) {
+                throw new Exception('Parser extension couldn\'t be loaded');
+            }
+
             $ir = zephir_parse_file(file_get_contents($zepRealPath), $zepRealPath);
             $fileSystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
         }

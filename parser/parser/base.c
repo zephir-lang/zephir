@@ -553,7 +553,9 @@ void xx_parse_program(zval *return_value, char *program, size_t program_length, 
 #if PHP_VERSION_ID < 70000
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
-#endif					
+#else
+					//ZVAL_STRING(*error_msg, error);
+#endif
 					efree(error);
 					status = FAILURE;
 				}
