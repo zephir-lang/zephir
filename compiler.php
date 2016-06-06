@@ -19,4 +19,3 @@
 
 require __DIR__ . '/bootstrap.php';
 Zephir\Bootstrap::boot();
-
