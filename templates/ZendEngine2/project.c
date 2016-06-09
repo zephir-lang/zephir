@@ -97,6 +97,14 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
 %INIT_GLOBALS%
 }
 
+/**
+ * Initialize globals only on each thread started
+ */
+static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
+{
+%INIT_MODULE_GLOBALS%
+}
+
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
 
@@ -140,6 +148,7 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	php_zephir_init_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
+	php_zephir_init_module_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
