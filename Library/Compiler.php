@@ -1702,7 +1702,7 @@ class Compiler
     {
         $globalCode = '';
         $globalStruct = '';
-        $globalsDefault = '';
+        $globalsDefault = array(array(), array());
         $initEntries = array();
 
         /**
@@ -1737,7 +1737,8 @@ class Compiler
 
                     $structBuilder->addProperty($field, $global);
 
-                    $globalsDefault .= $structBuilder->getCDefault($field, $global, $namespace) . PHP_EOL;
+                    $isModuleGlobal = (int) !empty($global['module']);
+                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace) . PHP_EOL;
                     $initEntries[] = $structBuilder->getInitEntry($field, $global, $namespace);
                 }
 
@@ -1761,15 +1762,16 @@ class Compiler
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
 
+                $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
                         $type = 'zend_bool';
                         if ($global['default'] === true) {
-                            $globalsDefault .= "\t" . $namespace . '_globals->' . $name . ' = 1;' . PHP_EOL;
+                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 1;' . PHP_EOL;
                         } else {
-                            $globalsDefault .= "\t" . $namespace . '_globals->' . $name . ' = 0;' . PHP_EOL;
+                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 0;' . PHP_EOL;
                         }
                         break;
 
@@ -1777,15 +1779,15 @@ class Compiler
                     case 'uint':
                     case 'long':
                     case 'double':
-                        $globalsDefault
-                            .= "\t" . $namespace . '_globals->' . $name . ' = ' .
+                        $globalsDefault[$isModuleGlobal][]
+                            = "\t" . $namespace . '_globals->' . $name . ' = ' .
                             $global['default'] . ';' . PHP_EOL;
                         break;
 
                     case 'char':
                     case 'uchar':
-                        $globalsDefault
-                            .= "\t" . $namespace . '_globals->' . $name . ' = \'' .
+                        $globalsDefault[$isModuleGlobal][]
+                            = "\t" . $namespace . '_globals->' . $name . ' = \'' .
                             $global['default'] . '\'";' . PHP_EOL;
                         break;
 
@@ -1833,6 +1835,9 @@ class Compiler
                 }
             }
         }
+        $globalsDefault[0] = implode('', $globalsDefault[0]);
+        $globalsDefault[1] = implode('', $globalsDefault[1]);
+
         return array($globalCode, $globalStruct, $globalsDefault, $initEntries);
     }
 
@@ -2111,7 +2116,8 @@ class Compiler
                 PHP_EOL . "\t",
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
-            '%INIT_GLOBALS%'        => $globalsDefault,
+            '%INIT_GLOBALS%'        => $globalsDefault[0],
+            '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
             '%EXTENSION_INFO%'      => $phpInfo,
             '%EXTRA_INCLUDES%'      => $includes,
             '%DESTRUCTORS%'         => $destructors,
