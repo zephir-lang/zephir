@@ -92,7 +92,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cleanTmpConfigFile();
     }
 
-    /** 
+    /**
      * Restore current directory, and clean config.json.
      */
     public function tearDown()
