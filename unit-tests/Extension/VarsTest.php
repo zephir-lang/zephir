@@ -157,10 +157,17 @@ class VarsTest extends \PHPUnit_Framework_TestCase
 
     public function testDoubleVarDump()
     {
-        $this->expectOutputString(
-            'float(1)' . PHP_EOL .
-            '1.0'
-        );
+        if (PHP_VERSION_ID < 70000) {
+            $this->expectOutputString(
+                'float(1)' . PHP_EOL .
+                '1'
+            );
+        } else {
+            $this->expectOutputString(
+                'float(1)' . PHP_EOL .
+                '1.0'
+            );
+        }
 
         $t = new \Test\Vars();
         $t->testDoubleVarDump();
