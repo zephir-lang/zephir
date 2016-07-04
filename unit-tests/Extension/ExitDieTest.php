@@ -23,16 +23,12 @@ class ExitDieTest extends \PHPUnit_Framework_TestCase
 {
     public function testExitDie()
     {
-        /* Only available since PHP 5.4 */
-        if (defined('PHP_BINARY')) {
-            $phpBinary = constant('PHP_BINARY');
-            /* If we use phpdbg, you need to add options -qrr */
-            if (defined('PHP_SAPI') && constant('PHP_SAPI') == 'phpdbg') {
-                $phpBinary .= ' -qrr';
-            }
-        } else {
-            $phpBinary = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
+        $phpBinary = constant('PHP_BINARY');
+        /* If we use phpdbg, you need to add options -qrr */
+        if (defined('PHP_SAPI') && constant('PHP_SAPI') == 'phpdbg') {
+            $phpBinary .= ' -qrr';
         }
+
         $testfile1 = __DIR__ .'/fixtures/exit.php';
         $return1 = `$phpBinary $testfile1`;
         $this->assertEquals("", trim($return1));
