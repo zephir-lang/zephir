@@ -239,6 +239,8 @@ EOF;
                         $cast = $parameter['cast']['value'];
                     }
                     $paramStr .= $cast . ' ';
+                } elseif (isset($parameter['data-type']) && $parameter['data-type'] == 'array') {
+                    $paramStr .= 'array ';
                 }
 
                 $paramStr .= '$' . $parameter['name'];
