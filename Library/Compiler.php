@@ -1205,6 +1205,7 @@ class Compiler
                 $fixMarker = "/* zephir_phpize_fix */";
                 $configureFile = file_get_contents("ext/configure.js");
                 $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
+                $hasChanged = false;
                 if (strpos($configureFile, $fixMarker) === false) {
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
@@ -1226,7 +1227,6 @@ class Compiler
                 }
 
                 $this->logger->output('Preparing configuration file...');
-
                 exec('cd ext && configure --enable-' . $namespace);
             } else {
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
