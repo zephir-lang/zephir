@@ -29,7 +29,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         $this->setOutputCallback(
             function ($output) {
                 /* To prevent differences between PHP version */
-                return str_replace(array(PHP_EOL, ' '), '', $output);
+                return str_replace(array("\n", ' '), '', $output);
             }
         );
 
@@ -52,8 +52,8 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     public function testVarDumpWithTwoParams()
     {
         $this->expectOutputString(
-            'float(3.1)' . PHP_EOL .
-            'bool(true)' . PHP_EOL
+            'float(3.1)' . "\n" .
+            'bool(true)' . "\n"
         );
 
         $t = new \Test\Vars();
@@ -68,7 +68,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array(PHP_EOL, ' '), '', $output);
+                return str_replace(array("\n", ' '), '', $output);
             }
         );
 
@@ -87,7 +87,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array(PHP_EOL, ' '), '', $output);
+                return str_replace(array("\n", ' '), '', $output);
             }
         );
 
@@ -104,8 +104,8 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Vars();
 
         $this->expectOutputString(
-            'string(3) "foo"' . PHP_EOL .
-            'string(3) "bar"' . PHP_EOL .
+            'string(3) "foo"' . "\n" .
+            'string(3) "bar"' . "\n" .
             "'foo'" .
             "'bar'" .
             "'bar'"
@@ -119,7 +119,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     public function testVarDumpAndCountOptimizer()
     {
         $this->expectOutputString(
-            'int(5)' . PHP_EOL .
+            'int(5)' . "\n" .
             '5'
         );
 
@@ -131,7 +131,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array(PHP_EOL, ' '), '', $output);
+                return str_replace(array("\n", ' '), '', $output);
             }
         );
 
@@ -147,7 +147,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     public function testIntVarDump()
     {
         $this->expectOutputString(
-            'int(1)' . PHP_EOL .
+            'int(1)' . "\n" .
             '1'
         );
 
@@ -159,12 +159,12 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     {
         if (PHP_VERSION_ID < 70000) {
             $this->expectOutputString(
-                'float(1)' . PHP_EOL .
+                'float(1)' . "\n" .
                 '1'
             );
         } else {
             $this->expectOutputString(
-                'float(1)' . PHP_EOL .
+                'float(1)' . "\n" .
                 '1.0'
             );
         }
@@ -176,7 +176,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
     public function testBoolVarDump()
     {
         $this->expectOutputString(
-            'bool(true)' . PHP_EOL .
+            'bool(true)' . "\n" .
             'true'
         );
 
