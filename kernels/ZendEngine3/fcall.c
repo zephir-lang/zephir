@@ -740,6 +740,7 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	}
 
 	zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error);
+
 	if (is_callable_error) {
 		zend_error(E_WARNING, "%s", is_callable_error);
 		efree(is_callable_error);
@@ -753,9 +754,7 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 		fci.retval = return_value;
 		zend_call_function(&fci, &fci_cache);
 
-		if (fci.params) {
-			efree(fci.params);
-		}
+		zend_fcall_info_args_clear(&fci, 1);
 	}
 
 	if (EG(exception)) {
