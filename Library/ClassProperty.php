@@ -180,7 +180,6 @@ class ClassProperty
 
                 default:
                     throw new Exception("Unknown modifier " . $visibility);
-
             }
         }
         return join('|', array_keys($modifiers));
