@@ -65,13 +65,10 @@ after_success:
 after_failure:
  - ./unit-tests/ci/after_failure.sh
 
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
 notifications:
   email:
     - andres@phalconphp.com
+    - serghei@phalconphp.com
 
 addons:
   apt:
