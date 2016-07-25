@@ -1409,7 +1409,6 @@ class ClassMethod
 
             default:
                 throw new CompilerException("Parameter type: " . $dataType, $parameter);
-
         }
     }
 
