@@ -120,7 +120,7 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 		zephir_memory_observe(z); \
 	}
 
-#define ZEPHIR_OBS_COPY_OR_DUP(z, v) \		
+#define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
 		ZVAL_DUP(z, v);
 
 #define ZEPHIR_OBS_NVAR(z) \
