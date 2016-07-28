@@ -311,7 +311,8 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			}
 			else {
 				fcic->called_scope = fcic->calling_scope;
-			}*/
+			}
+			*/
 
 			break;
 		}
