@@ -352,7 +352,7 @@ class Backend extends BackendZendEngine2
         $code = $this->resolveValue($code, $context);
         if (!$variable->isDoublePointer()) {
             $context->symbolTable->mustGrownStack(true);
-            $symbolVariable = $this->getVariableCode($variable);            
+            $symbolVariable = $this->getVariableCode($variable);
             $context->codePrinter->output('ZEPHIR_OBS_COPY_OR_DUP(' . $symbolVariable . ', ' . $code . ');');
         } else {
             $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
