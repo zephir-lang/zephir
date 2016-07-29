@@ -344,6 +344,15 @@ void zephir_deinitialize_memory()
 		zephir_clean_restore_stack();
 	}
 
+#ifndef ZEPHIR_RELEASE
+	{
+		zephir_fcall_cache_entry *cache_entry_temp = NULL;
+		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
+			free(cache_entry_temp);
+		} ZEND_HASH_FOREACH_END();
+	}
+#endif
+
 #if 0
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache, zephir_cleanup_fcache, 0);
 #endif

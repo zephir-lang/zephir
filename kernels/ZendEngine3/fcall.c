@@ -468,6 +468,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #endif
 			if (NULL == zend_hash_str_add_ptr(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, cache_entry_temp)) {
 #ifndef ZEPHIR_RELEASE
+				free(cache_entry_temp);
 				free(temp_cache_entry);
 #endif
 			} else {
