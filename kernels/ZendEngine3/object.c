@@ -593,6 +593,10 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				}
 			}
 		} else {
+			zval new_zv;
+			ZVAL_DUP(&new_zv, &tmp);
+			ZVAL_COPY_VALUE(&tmp, &new_zv);
+			Z_TRY_DELREF(new_zv);
 			separated = 1;
 		}
 
@@ -655,6 +659,10 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			}
 		}
 	} else {
+		zval new_zv;
+		ZVAL_DUP(&new_zv, &tmp);
+		ZVAL_COPY_VALUE(&tmp, &new_zv);
+		Z_TRY_DELREF(new_zv);
 		separated = 1;
 	}
 
@@ -703,6 +711,10 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				}
 			}
 		} else {
+			zval new_zv;
+			ZVAL_DUP(&new_zv, &tmp_arr);
+			ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
+			Z_TRY_DELREF(new_zv);
 			separated = 1;
 		}
 
@@ -763,14 +775,22 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 		Z_TRY_DELREF(tmp);
 
 		/** Separation only when refcount > 1 */
-		if (Z_REFCOUNTED(tmp) && Z_REFCOUNT(tmp) > 1) {
-			if (!Z_ISREF(tmp)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp);
-				ZVAL_COPY_VALUE(&tmp, &new_zv);
-				Z_TRY_DELREF(new_zv);
-				separated = 1;
+		if (Z_REFCOUNTED(tmp)) {
+			if (Z_REFCOUNT(tmp) > 1) {
+				if (!Z_ISREF(tmp)) {
+					zval new_zv;
+					ZVAL_DUP(&new_zv, &tmp);
+					ZVAL_COPY_VALUE(&tmp, &new_zv);
+					Z_TRY_DELREF(new_zv);
+					separated = 1;
+				}
 			}
+		} else {
+			zval new_zv;
+			ZVAL_DUP(&new_zv, &tmp);
+			ZVAL_COPY_VALUE(&tmp, &new_zv);
+			Z_TRY_DELREF(new_zv);
+			separated = 1;
 		}
 
 		zephir_array_unset(&tmp, index, PH_SEPARATE);
@@ -940,6 +960,10 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			}
 		}
 	} else {
+		zval new_zv;
+		ZVAL_DUP(&new_zv, &tmp_arr);
+		ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
+		Z_TRY_DELREF(new_zv);
 		separated = 1;
 	}
 
@@ -1004,6 +1028,10 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 				}
 			}
 		} else {
+			zval new_zv;
+			ZVAL_DUP(&new_zv, &tmp);
+			ZVAL_COPY_VALUE(&tmp, &new_zv);
+			Z_TRY_DELREF(new_zv);
 			separated = 1;
 		}
 
