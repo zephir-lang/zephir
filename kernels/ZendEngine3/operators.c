@@ -204,9 +204,9 @@ int zephir_compare_strict_bool(zval *op1, zend_bool op2)
 		case IS_NULL:
 			return 0 == op2;
 		case IS_TRUE:
-			return 1;
+			return 1 == op2;
 		case IS_FALSE:
-			return 0;
+			return 0 == op2;
 		default:
 			{
 				zval result, op2_tmp;
