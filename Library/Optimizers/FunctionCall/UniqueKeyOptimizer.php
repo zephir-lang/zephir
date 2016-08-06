@@ -46,7 +46,7 @@ class UniqueKeyOptimizer extends OptimizerAbstract
         }
 
         if (count($expression['parameters']) != 2) {
-            throw new CompilerException("'unique_key' only accepts three parameter", $expression);
+            throw new CompilerException("'unique_key' only accepts two parameter", $expression);
         }
 
         /**

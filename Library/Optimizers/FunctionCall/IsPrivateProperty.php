@@ -26,18 +26,17 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * UniquePathKeyOptimizer
+ * IsPrivateProperty
  *
- * Optimizes calls to 'unique_path_key' using internal function
+ * Allows to fastly check if a property has private visibility
  */
-class UniquePathKeyOptimizer extends OptimizerAbstract
+class IsPrivatePropertyOptimizer extends OptimizerAbstract
 {
     /**
      * @param array $expression
      * @param Call $call
      * @param CompilationContext $context
      * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -46,30 +45,12 @@ class UniquePathKeyOptimizer extends OptimizerAbstract
         }
 
         if (count($expression['parameters']) != 1) {
-            throw new CompilerException("'unique_path_key' only accepts one parameter", $expression);
+            return false;
         }
 
-        /**
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-        }
-
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
-        $context->headersManager->add('kernel/file');
+        $context->headersManager->add('kernel/object');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_unique_path_key(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
-
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        return new CompiledExpression('bool', 'zephir_is_private_prop(' . $resolvedParams[0] . ')', $expression);
     }
 }
