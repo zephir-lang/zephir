@@ -32,6 +32,7 @@
 #define ZEPHIR_IS_LONG_IDENTICAL(op1, op2)   (Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) == op2)
 #define ZEPHIR_IS_DOUBLE_IDENTICAL(op1, op2) (Z_TYPE_P(op1) == IS_DOUBLE && Z_DVAL_P(op1) == op2)
 #define ZEPHIR_IS_STRING_IDENTICAL(op1, op2) (Z_TYPE_P(op1) == IS_STRING && zephir_compare_strict_string(op1, op2, strlen(op2)))
+#define ZEPHIR_IS_BOOL_IDENTICAL(op1, op2) (Z_TYPE_P(op1) == IS_BOOL && zephir_compare_strict_bool(op1, op2))
 
 /** strict boolean comparison */
 #define ZEPHIR_IS_FALSE(var)       ((Z_TYPE_P(var) == IS_BOOL && !Z_BVAL_P(var)) || zephir_compare_strict_bool(var, 0 TSRMLS_CC))
