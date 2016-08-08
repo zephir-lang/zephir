@@ -114,6 +114,7 @@ int zephir_compare_strict_bool(zval *op1, zend_bool op2 TSRMLS_DC);
 void zephir_cast(zval *result, zval *var, zend_uint type);
 void zephir_convert_to_object(zval *op);
 long zephir_get_intval_ex(const zval *op);
+long zephir_get_charval_ex(const zval *op);
 double zephir_get_doubleval_ex(const zval *op);
 zend_bool zephir_get_boolval_ex(const zval *op);
 
@@ -158,6 +159,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2 TSRMLS_DC);
 #define zephir_get_intval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_intval_ex(z))
 #define zephir_get_doubleval(z) (Z_TYPE_P(z) == IS_DOUBLE ? Z_DVAL_P(z) : zephir_get_doubleval_ex(z))
 #define zephir_get_boolval(z) (Z_TYPE_P(z) == IS_BOOL ? Z_BVAL_P(z) : zephir_get_boolval_ex(z))
+#define zephir_get_charval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_charval_ex(z))
 
 #ifndef PHP_WIN32
 
