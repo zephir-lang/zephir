@@ -181,7 +181,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
-                                break;
 
                             default:
                                 throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -241,7 +240,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
                                 return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
-                                break;
 
                             default:
                                 throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
@@ -292,7 +290,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -301,6 +298,38 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                             default:
                                 throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
+                        }
+                        break;
+
+                    case 'char':
+                        switch ($right->getType()) {
+                            case 'int':
+                            case 'uint':
+                            case 'long':
+                            case 'ulong':
+                                return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
+                            case 'variable':
+                                $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
+                                switch ($variableRight->getType()) {
+                                    case 'int':
+                                    case 'uint':
+                                    case 'long':
+                                    case 'ulong':
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
+                                    case 'variable':
+                                        $compilationContext->headersManager->add('kernel/operators');
+                                        $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
+
+                                    default:
+                                        throw new CompilerException("Cannot operate variable('char') with variable('" . $variableRight->getType() . "')", $expression);
+                                }
+                                break;
+
+                            default:
+                                throw new CompilerException("Cannot operate variable('char') with '" . $right->getType() . "'", $expression);
                         }
                         break;
 
@@ -332,7 +361,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -377,7 +405,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
@@ -483,6 +510,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                                         $expected->setDynamicTypes($this->getDynamicTypes($variableLeft, $variableRight));
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
+
                                     default:
                                         throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
                                 }
