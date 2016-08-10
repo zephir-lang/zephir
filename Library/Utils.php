@@ -184,4 +184,25 @@ class Utils
     {
         return strncasecmp(PHP_OS, 'WIN', 3) == 0;
     }
+
+    /**
+     * Check if the host OS is BSD based
+     *
+     * @link https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+     * @return boolean
+     */
+    public static function isBsd()
+    {
+        return false !== stristr(strtolower(PHP_OS), 'bsd');
+    }
+
+    /**
+     * Check if the host OS is MacOs
+     *
+     * @return boolean
+     */
+    public static function isMacOs()
+    {
+        return 'darwin' === strtolower(substr(PHP_OS, 0, 6));
+    }
 }
