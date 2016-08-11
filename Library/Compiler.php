@@ -270,7 +270,7 @@ class Compiler
                     $this->logger->output('Compiling the parser...');
 
                     exec(
-                        '(make --silent -j2 2> ./compile-errors.log 1> ./compile.log)',
+                        '(make -s -j2 2> ./compile-errors.log 1> ./compile.log)',
                         $output,
                         $exit
                     );
@@ -1259,7 +1259,7 @@ class Compiler
         } else {
             $this->preCompileHeaders();
             exec(
-                'cd ext && (make --silent -j2 2>' . $currentDir . '/compile-errors.log 1>' .
+                'cd ext && (make -s -j2 2>' . $currentDir . '/compile-errors.log 1>' .
                 $currentDir .
                 '/compile.log)',
                 $output,
