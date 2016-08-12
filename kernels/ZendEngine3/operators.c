@@ -412,7 +412,7 @@ double zephir_get_doubleval_ex(const zval *op)
  */
 zend_bool zephir_get_boolval_ex(zval *op)
 {
-	return (zend_bool) zend_is_true(zval);
+	return (zend_bool) zend_is_true(op);
 }
 
 /**
