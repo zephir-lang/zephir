@@ -400,7 +400,7 @@ PHP_METHOD(Test_Assign, testAssign28) {
 
 
 	b = 1;
-	a = (b) ? 1 : 0;
+	a = ((b) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
@@ -482,7 +482,7 @@ PHP_METHOD(Test_Assign, testAssign34) {
 
 
 	b = 0;
-	a = (b) ? 1 : 0;
+	a = ((b) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
