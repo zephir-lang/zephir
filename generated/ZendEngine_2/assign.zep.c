@@ -106,7 +106,7 @@ PHP_METHOD(Test_Assign, testAssign6) {
 	zend_bool a = 0;
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
@@ -116,7 +116,7 @@ PHP_METHOD(Test_Assign, testAssign7) {
 	zend_bool a = 0;
 
 
-	a = (1.0) ? 1 : 0;
+	a = ((1.0 != 0.0) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
@@ -353,7 +353,7 @@ PHP_METHOD(Test_Assign, testAssign29) {
 
 
 	b = 1.0;
-	a = (b) ? 1 : 0;
+	a = ((b != 0.0) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
@@ -423,7 +423,7 @@ PHP_METHOD(Test_Assign, testAssign35) {
 
 
 	b = 0;
-	a = (b) ? 1 : 0;
+	a = ((b != 0.0) ? 1 : 0);
 	RETURN_BOOL(a);
 
 }
