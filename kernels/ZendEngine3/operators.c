@@ -410,49 +410,9 @@ double zephir_get_doubleval_ex(const zval *op)
 /**
  * Returns the long value of a zval
  */
-zend_bool zephir_get_boolval_ex(const zval *op)
+zend_bool zephir_get_boolval_ex(zval *op)
 {
-	int type;
-	zend_long long_value = 0;
-	double double_value = 0;
-
-	switch (Z_TYPE_P(op)) {
-
-        case IS_ARRAY:
-            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (zend_bool) 1 : 0;
-
-	    case IS_CALLABLE:
-	    case IS_RESOURCE:
-	    case IS_OBJECT:
-	        return (zend_bool) 1;
-
-		case IS_LONG:
-			return (Z_LVAL_P(op) ? (zend_bool) 1 : 0);
-
-		case IS_TRUE:
-			return 1;
-
-		case IS_FALSE:
-			return 0;
-
-		case IS_DOUBLE:
-			return (Z_DVAL_P(op) ? (zend_bool) 1 : 0);
-
-		case IS_STRING:
-			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0))) {
-				if (type == IS_LONG) {
-					return (long_value ? (zend_bool) 1 : 0);
-				} else {
-					if (type == IS_DOUBLE) {
-						return (double_value ? (zend_bool) 1 : 0);
-					} else {
-						return 0;
-					}
-				}
-			}
-	}
-
-	return 0;
+	return (zend_bool) zend_is_true(zval);
 }
 
 /**
