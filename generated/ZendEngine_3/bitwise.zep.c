@@ -73,9 +73,9 @@ PHP_METHOD(Test_Bitwise, boolAnd) {
 
 
 
-	a = (1) ? 1 : 0;
-	b = (2) ? 1 : 0;
-	c = ((a & b)) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	b = ((2) ? 1 : 0);
+	c = (((a & b)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -87,8 +87,8 @@ PHP_METHOD(Test_Bitwise, bool2And) {
 
 
 
-	a = (1) ? 1 : 0;
-	c = ((a & 2)) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	c = (((a & 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -101,7 +101,7 @@ PHP_METHOD(Test_Bitwise, bool3And) {
 
 
 	a = 1;
-	c = ((a & 0)) ? 1 : 0;
+	c = (((a & 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -113,7 +113,7 @@ PHP_METHOD(Test_Bitwise, boolAndSimple) {
 
 
 
-	c = (0) ? 1 : 0;
+	c = ((0) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -327,7 +327,7 @@ PHP_METHOD(Test_Bitwise, complex2And) {
 
 
 
-	c = ((1 & 1)) ? 1 : 0;
+	c = (((1 & 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -339,7 +339,7 @@ PHP_METHOD(Test_Bitwise, complex3And) {
 
 
 
-	c = ((1 &((1.0) ? 1 : 0))) ? 1 : 0;
+	c = (((1 &((1.0) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -378,7 +378,7 @@ PHP_METHOD(Test_Bitwise, complex6And) {
 
 
 
-	c = ((1 &((1) ? 1 : 0))) ? 1 : 0;
+	c = (((1 &((1) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -391,7 +391,7 @@ PHP_METHOD(Test_Bitwise, complex7And) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a & b);
 	RETURN_LONG(c);
@@ -406,7 +406,7 @@ PHP_METHOD(Test_Bitwise, complex9And) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (b & a);
 	RETURN_LONG(c);
@@ -422,7 +422,7 @@ PHP_METHOD(Test_Bitwise, complex10And) {
 
 
 
-	a = (1.0) ? 1 : 0;
+	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b & a));
 	RETURN_DOUBLE(c);
@@ -438,7 +438,7 @@ PHP_METHOD(Test_Bitwise, complex11And) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (double) ((b & a));
 	RETURN_DOUBLE(c);
@@ -453,7 +453,7 @@ PHP_METHOD(Test_Bitwise, complex12And) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b & a);
 	RETURN_LONG(c);
@@ -468,8 +468,8 @@ PHP_METHOD(Test_Bitwise, complex13And) {
 
 
 
-	a = (1) ? 1 : 0;
-	b = (2.0) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
 	RETURN_LONG(c);
 
@@ -484,7 +484,7 @@ PHP_METHOD(Test_Bitwise, complex14And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
 	RETURN_LONG(c);
 
@@ -501,7 +501,7 @@ PHP_METHOD(Test_Bitwise, complex15And) {
 
 	a = 1;
 	b = 2.0;
-	c = (((int) (b) &  a)) ? 1 : 0;
+	c = ((((int) (b) &  a)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -531,7 +531,7 @@ PHP_METHOD(Test_Bitwise, complex17And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a & b));
 	RETURN_DOUBLE(c);
 
@@ -547,7 +547,7 @@ PHP_METHOD(Test_Bitwise, complex18And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((a & (b & (int) (d))));
 	RETURN_DOUBLE(c);
@@ -564,7 +564,7 @@ PHP_METHOD(Test_Bitwise, complex19And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((a & ((int) (d) & b)));
 	RETURN_DOUBLE(c);
@@ -581,7 +581,7 @@ PHP_METHOD(Test_Bitwise, complex20And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) (((int) (d) & ((int) (d) & ((int) (d) & (int) (d)))));
 	RETURN_DOUBLE(c);
@@ -598,7 +598,7 @@ PHP_METHOD(Test_Bitwise, complex21And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((b & ((int) (d) & (b & ((int) (d) & ((int) (d) & (b & ((int) (d) & b))))))));
 	RETURN_DOUBLE(c);
@@ -631,7 +631,7 @@ PHP_METHOD(Test_Bitwise, complex23And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	RETURN_DOUBLE(d);
 
@@ -646,7 +646,7 @@ PHP_METHOD(Test_Bitwise, complex24And) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (1 & (a & ((int) (0) & b)));
 	RETURN_LONG(d);
 
@@ -698,9 +698,9 @@ PHP_METHOD(Test_Bitwise, boolOr) {
 
 
 
-	a = (1) ? 1 : 0;
-	b = (2) ? 1 : 0;
-	c = ((a | b)) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	b = ((2) ? 1 : 0);
+	c = (((a | b)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -712,8 +712,8 @@ PHP_METHOD(Test_Bitwise, bool2Or) {
 
 
 
-	a = (1) ? 1 : 0;
-	c = ((a | 2)) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	c = (((a | 2)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -726,7 +726,7 @@ PHP_METHOD(Test_Bitwise, bool3Or) {
 
 
 	a = 1;
-	c = ((a | 0)) ? 1 : 0;
+	c = (((a | 0)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -739,7 +739,7 @@ PHP_METHOD(Test_Bitwise, bool4Or) {
 
 
 	a = 1;
-	c = ((a | 1)) ? 1 : 0;
+	c = (((a | 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -751,7 +751,7 @@ PHP_METHOD(Test_Bitwise, boolOrSimple) {
 
 
 
-	c = (3) ? 1 : 0;
+	c = ((3) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -965,7 +965,7 @@ PHP_METHOD(Test_Bitwise, complex2Or) {
 
 
 
-	c = ((1 | 1)) ? 1 : 0;
+	c = (((1 | 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -977,7 +977,7 @@ PHP_METHOD(Test_Bitwise, complex3Or) {
 
 
 
-	c = ((1 |((1.0) ? 1 : 0))) ? 1 : 0;
+	c = (((1 |((1.0) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -1016,7 +1016,7 @@ PHP_METHOD(Test_Bitwise, complex6Or) {
 
 
 
-	c = ((1 |((1) ? 1 : 0))) ? 1 : 0;
+	c = (((1 |((1) ? 1 : 0))) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -1029,7 +1029,7 @@ PHP_METHOD(Test_Bitwise, complex7Or) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a | b);
 	RETURN_LONG(c);
@@ -1044,7 +1044,7 @@ PHP_METHOD(Test_Bitwise, complex9Or) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (b | a);
 	RETURN_LONG(c);
@@ -1060,7 +1060,7 @@ PHP_METHOD(Test_Bitwise, complex10Or) {
 
 
 
-	a = (1.0) ? 1 : 0;
+	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b | a));
 	RETURN_DOUBLE(c);
@@ -1076,7 +1076,7 @@ PHP_METHOD(Test_Bitwise, complex11Or) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (double) ((b | a));
 	RETURN_DOUBLE(c);
@@ -1091,7 +1091,7 @@ PHP_METHOD(Test_Bitwise, complex12Or) {
 
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b | a);
 	RETURN_LONG(c);
@@ -1106,8 +1106,8 @@ PHP_METHOD(Test_Bitwise, complex13Or) {
 
 
 
-	a = (1) ? 1 : 0;
-	b = (2.0) ? 1 : 0;
+	a = ((1) ? 1 : 0);
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
 	RETURN_LONG(c);
 
@@ -1122,7 +1122,7 @@ PHP_METHOD(Test_Bitwise, complex14Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
 	RETURN_LONG(c);
 
@@ -1139,7 +1139,7 @@ PHP_METHOD(Test_Bitwise, complex15Or) {
 
 	a = 1;
 	b = 2.0;
-	c = (((int) (b) |  a)) ? 1 : 0;
+	c = ((((int) (b) |  a)) ? 1 : 0);
 	RETURN_BOOL(c);
 
 }
@@ -1169,7 +1169,7 @@ PHP_METHOD(Test_Bitwise, complex17Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a | b));
 	RETURN_DOUBLE(c);
 
@@ -1185,7 +1185,7 @@ PHP_METHOD(Test_Bitwise, complex18Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((a | b) | (int) (d)));
 	RETURN_DOUBLE(c);
@@ -1202,7 +1202,7 @@ PHP_METHOD(Test_Bitwise, complex19Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((a | (int) (d)) | b));
 	RETURN_DOUBLE(c);
@@ -1219,7 +1219,7 @@ PHP_METHOD(Test_Bitwise, complex20Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((((int) (d) | (int) (d)) | (int) (d)) | (int) (d)));
 	RETURN_DOUBLE(c);
@@ -1236,7 +1236,7 @@ PHP_METHOD(Test_Bitwise, complex21Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) ((((((((b | (int) (d)) | b) | (int) (d)) | (int) (d)) | b) | (int) (d)) | b));
 	RETURN_DOUBLE(c);
@@ -1269,7 +1269,7 @@ PHP_METHOD(Test_Bitwise, complex23Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	RETURN_DOUBLE(d);
 
@@ -1285,7 +1285,7 @@ PHP_METHOD(Test_Bitwise, complex24Or) {
 
 
 	a = 1;
-	b = (2.0) ? 1 : 0;
+	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((((1 | a) | 0) | b));
 	RETURN_DOUBLE(d);
 
