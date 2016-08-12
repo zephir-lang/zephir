@@ -54,4 +54,20 @@ class OperatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testIdenticalIfComplex(0));
         $this->assertTrue($t->testIdenticalIfComplex(''));
     }
+
+    public function test1279Issue()
+    {
+        $t = new \Test\Operator();
+
+        $values = $t->testBoolComparison(true, false);
+
+        $this->assertTrue($values[0]);
+        $this->assertTrue($values[1]);
+        $this->assertTrue($values[2]);
+        $this->assertTrue($values[3]);
+        $this->assertTrue($values[4]);
+        $this->assertTrue($values[5]);
+        $this->assertTrue($values[6]);
+        $this->assertTrue($values[7]);
+    }
 }

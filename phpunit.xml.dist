@@ -3,6 +3,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="./unit-tests/Bootstrap.php">
+
     <testsuites>
         <testsuite name="Extension Test Suite">
             <directory>./unit-tests/Extension/</directory>
@@ -11,4 +12,11 @@
             <directory>./unit-tests/Zephir/</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./Library</directory>
+        </whitelist>
+    </filter>
+
 </phpunit>

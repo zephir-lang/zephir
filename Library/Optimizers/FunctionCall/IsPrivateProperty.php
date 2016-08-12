@@ -17,38 +17,40 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Class Loader
- * Loads classes when the composer autoloader is not installed
+ * IsPrivateProperty
  *
- * @package Zephir
+ * Allows to fastly check if a property has private visibility
  */
-class Loader
+class IsPrivatePropertyOptimizer extends OptimizerAbstract
 {
     /**
-     * Register autoload
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
      */
-    public static function register()
+    public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
-    }
-
-    /**
-     * @param string $className
-     */
-    public static function autoload($className)
-    {
-        $filename = __DIR__ .
-            str_replace(
-                'Zephir' . DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $className)
-            ) . '.php';
-
-        if (file_exists($filename)) {
-            require $filename;
+        if (!isset($expression['parameters'])) {
+            return false;
         }
+
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
+
+        $context->headersManager->add('kernel/object');
+
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', 'zephir_is_private_prop(' . $resolvedParams[0] . ')', $expression);
     }
 }

@@ -28,4 +28,21 @@ class Operator
 	{
 		return FALSE === param;
 	}
+
+	public function testBoolComparison(varTrue, varFalse)
+    {
+		var var1 = true;
+        var var2 = false;
+
+        return [
+			varTrue == var1,
+			varTrue === var1,
+			varFalse == var2,
+			varFalse === var2,
+			varTrue != var2,
+			varTrue !== var2,
+			varFalse != var1,
+			varFalse !== var1
+	  	];
+    }
 }

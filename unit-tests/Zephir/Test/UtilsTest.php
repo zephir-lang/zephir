@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2015 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -17,38 +17,33 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Zephir\Test;
 
-/**
- * Class Loader
- * Loads classes when the composer autoloader is not installed
- *
- * @package Zephir
- */
-class Loader
+use Zephir\Utils;
+
+class UtilsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Register autoload
+     * Test escapeClassName method.
      */
-    public static function register()
+    public function testEscapeClassName()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        $classname = '\Bar\Foo';
+        $this->assertSame(
+            Utils::escapeClassName($classname),
+            '\\\\Bar\\\\Foo'
+        );
     }
 
     /**
-     * @param string $className
+     * Test camelize method.
      */
-    public static function autoload($className)
+    public function testCamelize()
     {
-        $filename = __DIR__ .
-            str_replace(
-                'Zephir' . DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $className)
-            ) . '.php';
-
-        if (file_exists($filename)) {
-            require $filename;
-        }
+        $name = 'foo_Bar_Foo_bar';
+        $this->assertSame(
+            Utils::camelize($name),
+            'FooBarFooBar'
+        );
     }
 }

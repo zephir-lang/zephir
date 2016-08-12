@@ -98,3 +98,49 @@ PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
 
 }
 
+PHP_METHOD(Test_Operator, testBoolComparison) {
+
+	zend_bool var1, var2;
+	zval *varTrue, varTrue_sub, *varFalse, varFalse_sub, _0;
+	ZEPHIR_INIT_THIS();
+
+	ZVAL_UNDEF(&varTrue_sub);
+	ZVAL_UNDEF(&varFalse_sub);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &varTrue, &varFalse);
+
+
+
+	var1 = 1;
+	var2 = 0;
+	zephir_create_array(return_value, 8, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_BOOL(&_0, ZEPHIR_IS_BOOL_VALUE(varTrue, var1));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, ZEPHIR_IS_BOOL_IDENTICAL(varTrue, var1));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, ZEPHIR_IS_BOOL_VALUE(varFalse, var2));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, ZEPHIR_IS_BOOL_IDENTICAL(varFalse, var2));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_VALUE(varTrue, var2));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_IDENTICAL(varTrue, var2));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_VALUE(varFalse, var1));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_IDENTICAL(varFalse, var1));
+	zephir_array_fast_append(return_value, &_0);
+	RETURN_MM();
+
+}
+

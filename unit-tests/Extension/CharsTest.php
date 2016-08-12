@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2015 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -17,38 +17,23 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Extension;
 
-/**
- * Class Loader
- * Loads classes when the composer autoloader is not installed
- *
- * @package Zephir
- */
-class Loader
+class CharsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Register autoload
-     */
-    public static function register()
+    public function testSumChars()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        $t = new \Test\Chars();
+
+        $this->assertEquals(chr($t->sumChars1()), 'a');
+        $this->assertEquals(chr($t->sumChars2('A')), 'a');
     }
 
-    /**
-     * @param string $className
-     */
-    public static function autoload($className)
+    public function testDiffChars()
     {
-        $filename = __DIR__ .
-            str_replace(
-                'Zephir' . DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $className)
-            ) . '.php';
+        $t = new \Test\Chars();
 
-        if (file_exists($filename)) {
-            require $filename;
-        }
+        $this->assertEquals(chr($t->diffChars1()), 'A');
+        $this->assertEquals(chr($t->diffChars2('a')), 'A');
     }
 }

@@ -204,9 +204,9 @@ int zephir_compare_strict_bool(zval *op1, zend_bool op2)
 		case IS_NULL:
 			return 0 == op2;
 		case IS_TRUE:
-			return 1;
+			return 1 == op2;
 		case IS_FALSE:
-			return 0;
+			return 0 == op2;
 		default:
 			{
 				zval result, op2_tmp;
@@ -289,7 +289,6 @@ long zephir_get_intval_ex(const zval *op)
 	switch (Z_TYPE_P(op)) {
         case IS_ARRAY:
             return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
-            break;
 
 	    case IS_CALLABLE:
 	    case IS_RESOURCE:
@@ -320,6 +319,38 @@ long zephir_get_intval_ex(const zval *op)
 			}
 			if (type == IS_DOUBLE) {
 				return (long) double_value;
+			}
+			return 0;
+		}
+	}
+
+	return 0;
+}
+
+long zephir_get_charval_ex(const zval *op)
+{
+	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+	    case IS_CALLABLE:
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return 0;
+
+		case IS_LONG:
+			return Z_LVAL_P(op);
+
+		case IS_TRUE:
+			return 1;
+
+		case IS_FALSE:
+			return 0;
+
+		case IS_DOUBLE:
+			return (long) Z_DVAL_P(op);
+
+		case IS_STRING: {
+			if (Z_STRLEN_P(op) > 0) {
+				return Z_STRVAL_P(op)[0];
 			}
 			return 0;
 		}
