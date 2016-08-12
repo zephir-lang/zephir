@@ -630,10 +630,19 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
+                switch ($statement['operator']) {
+                    case 'assign':
+                        $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ') ? 1 : 0);');
+                        break;
+                    default:
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                }
+                break;
+
             case 'double':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
+                        $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ' != 0.0) ? 1 : 0);');
                         break;
                     default:
                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
@@ -644,7 +653,7 @@ class Variable
             case 'uchar':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = (\'' . $resolvedExpr->getCode() . '\') ? 1 : 0;');
+                        $codePrinter->output($variable . ' = ((\'' . $resolvedExpr->getCode() . '\') ? 1 : 0);');
                         break;
                     default:
                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
@@ -668,10 +677,19 @@ class Variable
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                    case 'double':
                         switch ($statement['operator']) {
                             case 'assign':
                                 $codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
+                                break;
+                            default:
+                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                        }
+                        break;
+
+                    case 'double':
+                        switch ($statement['operator']) {
+                            case 'assign':
+                                $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ' != 0.0) ? 1 : 0);');
                                 break;
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
