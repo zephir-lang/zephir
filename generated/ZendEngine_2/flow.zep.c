@@ -90,7 +90,7 @@ PHP_METHOD(Test_Flow, testIf5) {
 	zend_bool a = 0;
 
 
-	a = (1) ? 1 : 0;
+	a = ((1) ? 1 : 0);
 	if (a) {
 		RETURN_LONG(1);
 	}
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Flow, testIf6) {
 	zend_bool a = 0;
 
 
-	a = (0) ? 1 : 0;
+	a = ((0) ? 1 : 0);
 	if (a) {
 		RETURN_LONG(1);
 	}
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Flow, testIf9) {
 	if (a) {
 		b = (double) (1);
 		if (b) {
-			c = (1) ? 1 : 0;
+			c = ((1) ? 1 : 0);
 			if (c) {
 				RETURN_LONG(1);
 			}
@@ -171,7 +171,7 @@ PHP_METHOD(Test_Flow, testIf10) {
 	if (a) {
 		b = (double) (1);
 		if (b) {
-			c = (1) ? 1 : 0;
+			c = ((1) ? 1 : 0);
 			if (c) {
 				RETURN_LONG(654);
 			} else {
@@ -197,7 +197,7 @@ PHP_METHOD(Test_Flow, testIf12) {
 	if (a) {
 		b = (double) (1);
 		if (b) {
-			c = (1) ? 1 : 0;
+			c = ((1) ? 1 : 0);
 			if (c) {
 				RETURN_LONG(987);
 			} else {
