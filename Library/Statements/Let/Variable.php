@@ -679,7 +679,7 @@ class Variable
                     case 'ulong':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
+                                $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ') ? 1 : 0);');
                                 break;
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
