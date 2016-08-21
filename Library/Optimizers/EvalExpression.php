@@ -215,7 +215,6 @@ class EvalExpression
                         $compilationContext->headersManager->add('kernel/operators');
                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
                         return 'zephir_is_true(' . $variableRightCode . ')';
-                        break;
 
                     default:
                         throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);

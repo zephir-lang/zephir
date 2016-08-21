@@ -57,9 +57,12 @@ class UnlikelyOperator extends BaseOperator
         if ($left->getType() == 'variable') {
             $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
             switch ($variable->getType()) {
+
                 case 'bool':
                     return new CompiledExpression('bool', 'unlikely(' . $variable->getName() . ')', $expression);
+
                 default:
+                    $compilationContext->headersManager->add('kernel/operators');
                     $symbol = $compilationContext->backend->getVariableCode($variable);
                     return new CompiledExpression('bool', 'unlikely(zephir_is_true(' . $symbol . '))', $expression);
             }

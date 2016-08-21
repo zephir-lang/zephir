@@ -78,7 +78,6 @@ class LogicalBaseOperator extends BaseOperator
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                 return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
-                                break;
 
                             default:
                                 throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -115,7 +114,6 @@ class LogicalBaseOperator extends BaseOperator
                                 $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                 $compilationContext->headersManager->add('kernel/operators');
                                 return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
-                                break;
 
                             default:
                                 throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -173,7 +171,6 @@ class LogicalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -206,7 +203,6 @@ class LogicalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -245,7 +241,6 @@ class LogicalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                         return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . ')', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
@@ -287,7 +282,6 @@ class LogicalBaseOperator extends BaseOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . ')', $expression);
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
@@ -330,13 +324,11 @@ class LogicalBaseOperator extends BaseOperator
                                     case 'int':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->_operator . ' ' . $variableRightCode, $expression);
-                                        break;
 
                                     /* a(var) && a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->_operator . ' ' . $variableRightCode, $expression);
-                                        break;
 
                                     /* a(var) && a(var) */
                                     case 'variable':

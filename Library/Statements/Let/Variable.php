@@ -710,9 +710,12 @@ class Variable
                     case 'string':
                     case 'array':
                         switch ($statement['operator']) {
+
                             case 'assign':
+                                $compilationContext->headersManager->add('kernel/operators');
                                 $codePrinter->output($variable . ' = zephir_is_true(' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
                                 break;
+
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
                         }
