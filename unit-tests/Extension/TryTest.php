@@ -23,7 +23,12 @@ class TryTest extends \PHPUnit_Framework_TestCase
 {
     public function testThrow1()
     {
-        $this->setExpectedException('\Exception', 'error');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception', 'error');
+        } else {
+            $this->expectException('\Exception', 'error');
+        }
 
         $t = new \Test\TryTest();
         $t->testThrow1();
@@ -31,7 +36,12 @@ class TryTest extends \PHPUnit_Framework_TestCase
 
     public function testThrow2()
     {
-        $this->setExpectedException('\Exception', 'error');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception', 'error');
+        } else {
+            $this->expectException('\Exception', 'error');
+        }
 
         $t = new \Test\TryTest();
         $t->testThrow2();

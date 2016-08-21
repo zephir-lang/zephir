@@ -55,7 +55,13 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Oo\OoParams();
 
-        $this->setExpectedException('\InvalidArgumentException');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
         $t->setStrictAge(17.0);
     }
 
@@ -63,7 +69,13 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Oo\OoParams();
 
-        $this->setExpectedException('\InvalidArgumentException');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
         $t->setStrictAge("17");
     }
 
@@ -71,33 +83,54 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Oo\OoParams();
 
-        $this->assertTrue($t->setStrictAverage(17.1) === 17.1);
+        $this->assertSame($t->setStrictAverage(17.1), 17.1);
     }
 
     public function testSetStrictAverageException1()
     {
         $t = new \Test\Oo\OoParams();
-        $this->setExpectedException('\InvalidArgumentException');
+
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
         $t->setStrictAverage(17);
     }
 
     public function testSetStrictAverageException2()
     {
         $t = new \Test\Oo\OoParams();
-        $this->setExpectedException('\InvalidArgumentException');
-        $t->setStrictAverage("17");
+
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
+        $t->setStrictAverage('17');
     }
 
     public function testSetStrictNameSuccess()
     {
         $t = new \Test\Oo\OoParams();
-        $this->assertTrue($t->setStrictName("peter") === "peter");
+        $this->assertSame($t->setStrictName('peter'), 'peter');
     }
 
     public function testSetStrickNameException()
     {
         $t = new \Test\Oo\OoParams();
-        $this->setExpectedException('\InvalidArgumentException');
+
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
         $t->setStrictName(1234);
     }
 
