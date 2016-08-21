@@ -106,16 +106,16 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         /**
          * @see LetStatement::_assignArrayIndexSingle();
          */
-        assert(!isset($_POST['test_index']));
+        $this->assertTrue(!isset($_POST['test_index']));
         $t->testGlobalVarAssign('test_index', 'value');
-        assert($_POST['test_index'] == 'value');
+        $this->assertSame($_POST['test_index'], 'value');
 
         /* Check primitive types */
         $t->testAssignSuperGlobals();
-        assert($_GET["steststr"] == "stest");
-        assert($_GET["steststr2"] == "stest2");
-        assert($_GET["stestint"] == 1);
-        assert($_GET["stestint2"] == 2);
-        assert($_GET["stest2"] == "testval");
+        $this->assertSame($_GET['steststr'], 'stest');
+        $this->assertSame($_GET['steststr2'], 'stest2');
+        $this->assertEquals($_GET['stestint'], 1);
+        $this->assertEquals($_GET['stestint2'], 2);
+        $this->assertEquals($_GET['stest2'], 'testval');
     }
 }

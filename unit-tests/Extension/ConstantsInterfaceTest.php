@@ -23,47 +23,47 @@ class ConstantsInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstants()
     {
-        assert(\Test\TestInterface::C1 === null);
-        assert(\Test\TestInterface::C2 === false);
-        assert(\Test\TestInterface::C3 === true);
-        assert(\Test\TestInterface::C4 === 10);
-        assert(\Test\TestInterface::C5 === 10.25);
-        assert(\Test\TestInterface::C6 === "test");
+        $this->assertSame(\Test\TestInterface::C1, null);
+        $this->assertSame(\Test\TestInterface::C2, false);
+        $this->assertSame(\Test\TestInterface::C3, true);
+        $this->assertSame(\Test\TestInterface::C4, 10);
+        $this->assertSame(\Test\TestInterface::C5, 10.25);
+        $this->assertSame(\Test\TestInterface::C6, 'test');
     }
 
     public function testClassOfInterface()
     {
         $t = new \Test\ConstantsInterface();
 
-        assert(is_object($t));
-        assert($t->testReadInterfaceConstant1() === null);
-        assert($t->testReadInterfaceConstant2() === false);
-        assert($t->testReadInterfaceConstant3() === true);
-        assert($t->testReadInterfaceConstant4() === 10);
-        assert($t->testReadInterfaceConstant5() === 10.25);
-        assert($t->testReadInterfaceConstant6() === "test");
+        $this->assertTrue(is_object($t));
+        $this->assertSame($t->testReadInterfaceConstant1(), null);
+        $this->assertSame($t->testReadInterfaceConstant2(), false);
+        $this->assertSame($t->testReadInterfaceConstant3(), true);
+        $this->assertSame($t->testReadInterfaceConstant4(), 10);
+        $this->assertSame($t->testReadInterfaceConstant5(), 10.25);
+        $this->assertSame($t->testReadInterfaceConstant6(), 'test');
     }
 
     public function testStaticConstantsInheritanceFromInterface()
     {
-        assert(\Test\ConstantsInterface::C1 === null);
-        assert(\Test\ConstantsInterface::C2 === false);
-        assert(\Test\ConstantsInterface::C3 === true);
-        assert(\Test\ConstantsInterface::C4 === 10);
-        assert(\Test\ConstantsInterface::C5 === 10.25);
-        assert(\Test\ConstantsInterface::C6 === "test");
+        $this->assertSame(\Test\ConstantsInterface::C1, null);
+        $this->assertSame(\Test\ConstantsInterface::C2, false);
+        $this->assertSame(\Test\ConstantsInterface::C3, true);
+        $this->assertSame(\Test\ConstantsInterface::C4, 10);
+        $this->assertSame(\Test\ConstantsInterface::C5, 10.25);
+        $this->assertSame(\Test\ConstantsInterface::C6, 'test');
     }
 
     public function testInstanceConstantsInheritanceFromInterface()
     {
         $t = new \Test\ConstantsInterface();
 
-        assert(is_object($t));
-        assert($t->testReadInheritanceFromInterfaceConstant1() === null);
-        assert($t->testReadInheritanceFromInterfaceConstant2() === false);
-        assert($t->testReadInheritanceFromInterfaceConstant3() === true);
-        assert($t->testReadInheritanceFromInterfaceConstant4() === 10);
-        assert($t->testReadInheritanceFromInterfaceConstant5() === 10.25);
-        assert($t->testReadInheritanceFromInterfaceConstant6() === "test");
+        $this->assertTrue(is_object($t));
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant1(), null);
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant2(), false);
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant3(), true);
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant4(), 10);
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant5(), 10.25);
+        $this->assertSame($t->testReadInheritanceFromInterfaceConstant6(), 'test');
     }
 }
