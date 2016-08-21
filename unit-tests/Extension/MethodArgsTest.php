@@ -36,7 +36,13 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($callback, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setCallableStrict(true);
     }
 
@@ -53,7 +59,13 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($obj, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setObjectStrict(true);
     }
 
@@ -64,7 +76,13 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(STDIN, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setResourceStrict(true);
     }
 

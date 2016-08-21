@@ -124,7 +124,14 @@ class MCallTest extends \PHPUnit_Framework_TestCase
     public function testOptionalParameterBooleanException()
     {
         $t = new Mcall();
-        $this->setExpectedException('\InvalidArgumentException');
+
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\InvalidArgumentException');
+        } else {
+            $this->expectException('\InvalidArgumentException');
+        }
+
         $t->optionalParameterBoolean('test');
     }
 
