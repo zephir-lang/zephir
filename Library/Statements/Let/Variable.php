@@ -710,7 +710,6 @@ class Variable
                     case 'string':
                     case 'array':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $codePrinter->output($variable . ' = zephir_is_true(' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
