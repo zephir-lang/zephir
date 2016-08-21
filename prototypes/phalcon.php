@@ -1,7 +1,7 @@
 <?php
 
 namespace Phalcon {
-    class DI
+    class Di
     {
         static protected $di;
 
