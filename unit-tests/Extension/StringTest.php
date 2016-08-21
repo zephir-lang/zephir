@@ -110,8 +110,8 @@ class StringTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Strings();
 
-        $pieces = array("a", "b", "c");
-        assert($t->testImplode(",", $pieces) == "a,b,c");
+        $pieces = array('a', 'b', 'c');
+        $this->assertSame($t->testImplode(',', $pieces), 'a,b,c');
     }
 
     public function testExplode()
