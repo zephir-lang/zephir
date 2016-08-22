@@ -1131,7 +1131,7 @@ class Variable
          * Only initialize variables if it's direct assignment
          */
         if ($statement['operator'] == 'assign') {
-            $symbolVariable->setIsInitialized(true, $compilationContext, $statement);
+            $symbolVariable->setIsInitialized(true, $compilationContext);
         } else {
             if (!$symbolVariable->isInitialized()) {
                 throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
