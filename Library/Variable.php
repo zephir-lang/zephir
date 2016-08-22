@@ -45,6 +45,7 @@ class Variable
 
     /**
      * Branch where the variable was declared
+     * @var Branch
      */
     protected $branch;
 
@@ -182,7 +183,7 @@ class Variable
     /**
      * Get init marked branch
      *
-     * @return bool|int
+     * @return array
      */
     public function getInitBranches()
     {
@@ -411,7 +412,7 @@ class Variable
     /**
      * Get the branch where the variable was declared
      *
-     * @return int
+     * @return Branch
      */
     public function getBranch()
     {
@@ -532,6 +533,7 @@ class Variable
      * Checks if the variable has any of the passed dynamic
      *
      * @param mixed $types
+     * @return bool
      */
     public function hasAnyDynamicType($types)
     {
@@ -551,6 +553,7 @@ class Variable
      * Check if the variable has at least one dynamic type to the ones passed in the list
      *
      * @param array|string $types
+     * @return bool
      */
     public function hasDifferentDynamicType($types)
     {
@@ -582,7 +585,7 @@ class Variable
     /**
      * Return the number of uses
      *
-     * @return long
+     * @return int
      */
     public function getNumberUses()
     {
@@ -592,7 +595,7 @@ class Variable
     /**
      * Returns the number of mutations performed over the variable
      *
-     * @return long
+     * @return int
      */
     public function getNumberMutations()
     {
@@ -768,7 +771,7 @@ class Variable
     }
 
     /**
-     * Increase the number of times the varible has been initialized
+     * Increase the number of times the variable has been initialized
      */
     public function increaseVariantIfNull()
     {
@@ -1067,7 +1070,7 @@ class Variable
     }
 
     /**
-     * Sets the lastest CompiledExpression assigned to a variable
+     * Sets the latest CompiledExpression assigned to a variable
      *
      * @param CompiledExpression $possibleValue
      * @param CompilationContext $compilationContext
@@ -1079,7 +1082,7 @@ class Variable
     }
 
     /**
-     * Returns the lastest CompiledExpression assigned to a variable
+     * Returns the latest CompiledExpression assigned to a variable
      *
      * @return mixed
      */
