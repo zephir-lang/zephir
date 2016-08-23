@@ -1210,18 +1210,7 @@ class Compiler
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
                 }
-                /* fix php's broken phpize pathing ... */
-                $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
-                $pos = strpos($configureFile, $marker);
-                if ($pos !== false) {
-                    $spMarker = "if (MODE_PHPIZE) {";
-                    $sp = strpos($configureFile, $spMarker, $pos - 200);
-                    if ($sp === false) {
-                        throw new CompilerException("outofdate... phpize seems broken again");
-                    }
-                    $configureFile = substr($configureFile, 0, $sp) . 'if (false) {' . substr($configureFile, $sp + strlen($spMarker));
-                    $hasChanged = true;
-                }
+				
                 if ($hasChanged) {
                     file_put_contents("ext/configure.js", $configureFile);
                 }
