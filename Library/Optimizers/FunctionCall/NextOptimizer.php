@@ -33,7 +33,7 @@ use Zephir\Optimizers\OptimizerAbstract;
 class NextOptimizer extends OptimizerAbstract
 {
     /**
-     * @todo This optimizer doesn`t work at while and etc statements
+     * @todo This optimizer doesn't work at while and etc statements
      *
      * @param array $expression
      * @param Call $call

@@ -51,7 +51,7 @@ class ClassFile extends AbstractFile
     {
         $nsPieces = explode('\\', $this->class->getNamespace());
 
-        $nsPathes = array();
+        $nsPatches = array();
         $nsStr = "";
 
         foreach ($nsPieces as $n) {
@@ -59,7 +59,7 @@ class ClassFile extends AbstractFile
                 $nsStr.= '\\';
             }
             $nsStr.= $n;
-            $nsPathes[$n] = $nsStr;
+            $nsPatches[$n] = $nsStr;
         }
 
         return array(
@@ -70,7 +70,7 @@ class ClassFile extends AbstractFile
             "classNamespace" => $this->class->getNamespace(),
             "fullName"  => $this->class->getCompleteName(),
             "methods"   => $this->class->getMethods(),
-            "namespacePieces" => $nsPathes
+            "namespacePieces" => $nsPatches
 
         );
     }

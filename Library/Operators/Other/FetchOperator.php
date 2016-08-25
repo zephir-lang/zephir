@@ -165,7 +165,7 @@ class FetchOperator extends BaseOperator
 
                 $exprCompiledVariableProperty = $exprVariableProperty->compile($compilationContext);
                 if ($exprCompiledVariableProperty->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariableProperty->getType() . " cannot be used in property-dynamic-acces", $expression['right']['right']);
+                    throw new CompilerException("Expression type: " . $exprCompiledVariableProperty->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
                 }
 
                 $evalVariableProperty = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariableProperty->getCode(), $compilationContext, $expression['right']['right']);

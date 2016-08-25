@@ -375,6 +375,10 @@ class ClassMethod
     /**
      * Generate internal method's based on the equivalent PHP methods,
      * allowing bypassing php userspace for internal method calls
+     *
+     * @param CompilationContext $compilationContext
+     *
+     * @return $this|void
      */
     public function setupOptimized(CompilationContext $compilationContext)
     {
@@ -982,6 +986,8 @@ class ClassMethod
      *
      * @param SymbolTable $symbolTable
      * @param string $containerCode
+     *
+     * @return mixed
      */
     public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)
     {
@@ -1488,7 +1494,7 @@ class ClassMethod
         $compilationContext->methodWarmUp = null;
 
         /**
-         * Assign pre-made compilation passses
+         * Assign pre-made compilation passes
          */
         $localContext = $this->localContext;
         $typeInference = $this->typeInference;
@@ -1643,7 +1649,7 @@ class ClassMethod
                     $symbolParam->setIsInitialized(true, $compilationContext, $parameter);
 
                     /**
-                     * Initialize auxiliar parameter zvals to null
+                     * Initialize auxiliary parameter zvals to null
                      */
                     $symbolParam->setMustInitNull(true);
 

@@ -41,6 +41,9 @@ class ArrayIndex
      *
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
+     *
+     * @return GlobalConstant|ZephirVariable
+     * @throws CompilerException
      */
     protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {
@@ -137,6 +140,8 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
+     *
+     * @throws CompilerException
      */
     protected function _assignArrayIndexSingle($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
@@ -214,6 +219,8 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
+     *
+     * @throws CompilerException
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
@@ -263,6 +270,8 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
+     *
+     * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {

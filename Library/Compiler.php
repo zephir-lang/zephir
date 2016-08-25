@@ -2185,7 +2185,7 @@ class Compiler
          */
         $content = file_get_contents($templatePath . '/php_project.h');
         if (empty($content)) {
-            throw new Exception('Template php_project.h doesn`t exist');
+            throw new Exception("Template php_project.h doesn't exist");
         }
 
         $version = self::getCurrentVersion();

@@ -288,7 +288,7 @@ class SymbolTable
         $variable->increaseUses();
 
         /**
-         * Analize branches to detect possible initialization of variables in conditional branches
+         * Analise branches to detect possible initialization of variables in conditional branches
          */
         if (!$variable->isTemporal() && !$variable->getSkipVariant()) {
             if ($name != 'return_value' && $name != 'this') {
@@ -314,12 +314,12 @@ class SymbolTable
                     if (count($branches) == 1) {
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if ($branches[0]->isUnreachable() === true) {
-                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize it at its declaration', $statement);
+                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unreachable branch, consider initialize it at its declaration', $statement);
                             }
                         } else {
                             if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
                                 if ($branches[0]->isUnreachable() === false) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize at its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreachable branch, consider initialize at its declaration', $statement);
                                 }
                             }
                         }
@@ -328,7 +328,7 @@ class SymbolTable
                         while ($tempBranch) {
                             if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                 if ($tempBranch->isUnreachable() === true) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize it at its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreachable branch, consider initialize it at its declaration', $statement);
                                 }
                             }
 
@@ -406,7 +406,7 @@ class SymbolTable
         }
 
         /**
-         * Saves the lastest place where the variable was used
+         * Saves the latest place where the variable was used
          */
         $variable->setUsed(true, $statement);
 
@@ -420,7 +420,9 @@ class SymbolTable
      * @param string $name
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @return Variable
+     *
+     * @return bool|\Zephir\Variable
+     * @throws CompilerException
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {

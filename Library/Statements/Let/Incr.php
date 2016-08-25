@@ -43,6 +43,8 @@ class Incr
      * @param ZephirVariable $symbolVariable
      * @param CompilationContext $compilationContext
      * @param array $statement
+     *
+     * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
     {

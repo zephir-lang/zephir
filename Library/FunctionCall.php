@@ -86,7 +86,9 @@ class FunctionCall extends Call
      *
      * @param string $funcName
      * @param array $expression
-     * @return boolean
+     *
+     * @return bool
+     * @throws CompilerException
      */
     protected function isReadOnly($funcName, array $expression)
     {
@@ -459,6 +461,9 @@ class FunctionCall extends Call
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
+     *
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {

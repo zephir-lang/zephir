@@ -44,11 +44,13 @@ class EvalExpression
      *
      * @param array $expr
      * @param CompilationContext $compilationContext
+     *
+     * @return bool|string
      */
     public function optimizeNot($expr, CompilationContext $compilationContext)
     {
         /**
-         * Compile the expression negating the evaluted expression
+         * Compile the expression negating the evaluated expression
          */
         if ($expr['type'] == 'not') {
             $conditions = $this->optimize($expr['left'], $compilationContext);

@@ -65,6 +65,8 @@ class FunctionCache
      * @param Call $call
      * @param CompilationContext $compilationContext
      * @param boolean $exists
+     *
+     * @return string
      */
     public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
     {

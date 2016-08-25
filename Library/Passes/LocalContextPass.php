@@ -89,7 +89,7 @@ class LocalContextPass
     }
 
     /**
-     * Marks the lastest use/read of a variable
+     * Marks the latest use/read of a variable
      *
      * @param string $variable
      * @param array $node
