@@ -176,7 +176,12 @@ EOF;
      */
     protected function buildProperty(ClassProperty $property, $indent)
     {
-        $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
+        $visibility = "public";
+
+        if ($property->isPublic() === false) {
+            $visibility = $property->isProtected() ? 'protected' : 'private';
+        }
+
         if ($property->isStatic()) {
             $visibility = 'static ' . $visibility;
         }
