@@ -50,7 +50,7 @@ interface CommandInterface
 
     /**
      * Returns parameter named parameterName if specified
-     * on the commmand line else null
+     * on the command line else null
      * @param string $parameterName
      * @return string
      */

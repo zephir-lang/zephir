@@ -155,8 +155,9 @@ class ClassProperty
      * Returns the C-visibility accessors for the model
      *
      * @return string
+     * @throws Exception
      */
-    public function getVisibilityAccesor()
+    public function getVisibilityAccessor()
     {
         $modifiers = array();
 
@@ -438,26 +439,26 @@ class ClassProperty
         switch ($type) {
             case 'long':
             case 'int':
-                $codePrinter->output("zend_declare_property_long(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                $codePrinter->output("zend_declare_property_long(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
                 break;
 
             case 'double':
-                $codePrinter->output("zend_declare_property_double(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                $codePrinter->output("zend_declare_property_double(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
                 break;
 
             case 'bool':
-                $codePrinter->output("zend_declare_property_bool(" . $classEntry . ", SL(\"" . $this->getName() . "\"), ".$this->getBooleanCode($value).", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                $codePrinter->output("zend_declare_property_bool(" . $classEntry . ", SL(\"" . $this->getName() . "\"), ".$this->getBooleanCode($value).", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
                 break;
 
             case Types::CHAR:
             case Types::STRING:
-                $codePrinter->output("zend_declare_property_string(" . $classEntry . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                $codePrinter->output("zend_declare_property_string(" . $classEntry . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
                 break;
 
             case 'array':
             case 'empty-array':
             case 'null':
-                $codePrinter->output("zend_declare_property_null(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                $codePrinter->output("zend_declare_property_null(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
                 break;
 
             default:

@@ -33,7 +33,7 @@ use Zephir\LiteralCompiledExpression;
 /**
  * Closure
  *
- * Creates an anonymous function whitin the extension simulating a closure
+ * Creates an anonymous function within the extension simulating a closure
  */
 class Closure
 {

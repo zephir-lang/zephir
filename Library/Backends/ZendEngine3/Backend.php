@@ -90,6 +90,9 @@ class Backend extends BackendZendEngine2
      * @param string $operator
      * @param string $value
      * @param CompilationContext $context
+     *
+     * @return string
+     * @throws CompilerException
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -539,7 +542,7 @@ class Backend extends BackendZendEngine2
         if ($readOnly) {
             $flags .= ' | PH_READONLY';
         }
-        //TODO: maybe optimizations aswell as above
+        //TODO: maybe optimizations as well as above
         $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
     }
 
@@ -597,7 +600,7 @@ class Backend extends BackendZendEngine2
 
     public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
     {
-        //TODO: maybe optimizations aswell as above
+        //TODO: maybe optimizations as well as above
         $value = $this->resolveValue($value, $context);
         if ($propertyName instanceof Variable) {
             $context->codePrinter->output('zephir_update_property_zval_zval(' . $this->getVariableCode($symbolVariable) . ', ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');

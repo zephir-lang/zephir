@@ -2,7 +2,6 @@ Zephir
 ======
 
 [![Dependency Status](https://www.versioneye.com/package/phalcon:zephir/badge.png)](https://www.versioneye.com/package/phalcon:zephir)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/zephir/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phalcon/zephir/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/phalcon/zephir/v/stable.png)](https://packagist.org/packages/phalcon/zephir)
 [![Total Downloads](https://poser.pugx.org/phalcon/zephir/downloads.png)](https://packagist.org/packages/phalcon/zephir)
 [![License](https://poser.pugx.org/phalcon/zephir/license.svg)](https://packagist.org/packages/phalcon/zephir)
@@ -68,8 +67,8 @@ Compile the extension:
 
 External Links
 --------------
-* [Documentation](http://zephir-lang.com/)
-* [Official Blog](http://blog.zephir-lang.com/)
+* [Documentation](https://zephir-lang.com/)
+* [Official Blog](https://blog.zephir-lang.com/)
 * [Forum](https://forum.zephir-lang.com/)
 * [Twitter](https://twitter.com/zephirlang)
 

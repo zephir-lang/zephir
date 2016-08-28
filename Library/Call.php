@@ -201,13 +201,16 @@ class Call
     }
 
     /**
-     * Resolves paramameters
+     * Resolves parameters
      *
      * @param array $parameters
      * @param CompilationContext $compilationContext
      * @param array $expression
      * @param boolean $readOnly
      * @return array|null|CompiledExpression[]
+     *
+     * @return array
+     * @throws CompilerException
      */
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
@@ -487,7 +490,10 @@ class Call
      * @param array $parameters
      * @param CompilationContext $compilationContext
      * @param array $expression
+     *
      * @return array
+     * @throws CompilerException
+     * @throws Exception
      */
     public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, array $expression)
     {

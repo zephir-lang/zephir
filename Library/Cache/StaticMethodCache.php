@@ -52,6 +52,8 @@ class StaticMethodCache
      * @param CompilationContext $compilationContext
      * @param ClassMethod|\ReflectionMethod $method
      * @param boolean $allowNtsCache
+     *
+     * @return string
      */
     public function get(CompilationContext $compilationContext, $method, $allowNtsCache = true)
     {

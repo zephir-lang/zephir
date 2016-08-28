@@ -108,6 +108,8 @@ class Apc
      * Writes data from a temporary entry
      *
      * @param string $path
+     *
+     * @return mixed|void
      */
     public function read($path)
     {

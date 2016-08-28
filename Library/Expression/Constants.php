@@ -78,7 +78,7 @@ class Constants
      * @link http://www.php.net/manual/ru/reserved.constants.php
      * @var array
      */
-    protected $envConstans = array(
+    protected $envConstants = array(
         'PHP_VERSION',
         'PHP_MAJOR_VERSION',
         'PHP_MINOR_VERSION',
@@ -100,11 +100,11 @@ class Constants
     );
 
     /**
-     * Magick constants
+     * Magic constants
      * @link http://php.net/manual/en/language.constants.predefined.php
      * @var array
      */
-    protected $magickConstants = array(
+    protected $magicConstants = array(
         '__LINE__',
         '__FILE__',
         '__DIR__',
@@ -136,7 +136,7 @@ class Constants
 
         $constantName    = $expression['value'];
 
-        $mergedConstants = array_merge($this->envConstans, $this->magickConstants, $this->resources);
+        $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistent-constant', $expression);
@@ -178,7 +178,7 @@ class Constants
             }
         }
 
-        if (in_array($constantName, $this->magickConstants)) {
+        if (in_array($constantName, $this->magicConstants)) {
             switch ($constantName) {
                 case '__CLASS__':
                     return new CompiledExpression(
