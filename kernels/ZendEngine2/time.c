@@ -56,7 +56,8 @@ if (get_as_float && ZEPHIR_IS_TRUE(get_as_float)) {
 
 	params[0] = z_as_float;
 
-	return zephir_return_call_function(return_value, NULL, ZEND_STRL("microtime"), NULL, 0, 1, params TSRMLS_CC);
+	zephir_return_call_function(return_value, NULL, ZEND_STRL("microtime"), NULL, 0, 1, params TSRMLS_CC);
+	return;
 #else
 	struct timeval tp = {0};
 	char ret[100];
