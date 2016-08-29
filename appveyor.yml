@@ -79,4 +79,4 @@ artifacts:
     name: php_zephir_parser.dll
 
 on_finish:
-  - ps: Push-AppveyorArtifact parser\Release\php_zephir_parser.dll
+  - ps: Push-AppveyorArtifact parser\Release_TS\php_zephir_parser.dll
