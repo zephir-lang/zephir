@@ -1,11 +1,16 @@
+clone_depth: 10
+
 environment:
-  matrix:
-  - PHP_VERSION: latest
-    PHP_DEP_VER: 5.6
-  BUILD_PLATFORM: x86
-  PHP_VC: 11
+  PHP_VERSION: latest
+  PHP_DEP_VER: 5.6
   PHP_SDK: c:\projects\php-sdk
   PHP_DEVPACK: c:\projects\php-devpack
+
+  matrix:
+  - BUILD_PLATFORM: x86
+    PHP_VC: 11
+  - BUILD_PLATFORM: x64
+    PHP_VC: 11
 
 cache:
   - vendor -> composer.json
@@ -61,7 +66,7 @@ install:
   - 'set PATH=%cd%;%PATH%'
   - echo Building Zephir
   - cd %APPVEYOR_BUILD_FOLDER%
-  - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php & php composer.phar --prefer-source install)
+  - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php & php composer.phar update)
 
 build_script:
   - 'bin\zephir build'
