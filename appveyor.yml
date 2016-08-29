@@ -75,4 +75,4 @@ on_failure :
   - 'type compile.log'
 
 artifacts:
-  - path: parser\Release\php_zephir_parser.dll
+  - path: c:\projects\zephir\parser\Release\php_zephir_parser.dll
