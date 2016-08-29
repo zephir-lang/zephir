@@ -77,3 +77,6 @@ on_failure :
 artifacts:
   - path: parser\Release\php_zephir_parser.dll
     name: php_zephir_parser.dll
+
+on_finish:
+  - ps: Push-AppveyorArtifact parser\Release\php_zephir_parser.dll
