@@ -219,6 +219,7 @@ class Compiler
 
                 $this->logger->output('Preparing for parser compilation...');
                 exec('%PHP_DEVPACK%\\phpize', $output, $exit);
+
                 /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
                 $fixMarker = "/* zephir_phpize_fix */";
                 $configureFile = file_get_contents("configure.js");
@@ -230,6 +231,7 @@ class Compiler
                 exec('configure --enable-zephir_parser');
                 $this->logger->output('Compiling the parser...');
                 exec('nmake 2> compile-errors.log 1> compile.log', $output, $exit);
+
                 echo file_get_contents('compile-errors.log') . PHP_EOL;
                 $buildLog = file_get_contents('compile.log');
                 echo $buildLog . PHP_EOL;
@@ -1210,6 +1212,7 @@ class Compiler
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
                 }
+
                 /* fix php's broken phpize pathing ... */
                 $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
                 $pos = strpos($configureFile, $marker);
@@ -1222,6 +1225,7 @@ class Compiler
                     $configureFile = substr($configureFile, 0, $sp) . 'if (false) {' . substr($configureFile, $sp + strlen($spMarker));
                     $hasChanged = true;
                 }
+
                 if ($hasChanged) {
                     file_put_contents("ext/configure.js", $configureFile);
                 }
