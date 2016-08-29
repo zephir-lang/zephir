@@ -34,6 +34,8 @@
 
 #include "kernel/main.h"
 #include "kernel/time.h"
+#include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/operators.h"
 
 void zephir_time(zval *return_value)
@@ -54,7 +56,7 @@ if (get_as_float && ZEPHIR_IS_TRUE(get_as_float)) {
 	ZVAL_BOOL(&z_as_float, 0);
 }
 
-	params[0] = z_as_float;
+	params[0] = &z_as_float;
 
 	zephir_return_call_function(return_value, NULL, ZEND_STRL("microtime"), NULL, 0, 1, params TSRMLS_CC);
 	return;
