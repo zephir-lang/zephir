@@ -10,9 +10,6 @@ environment:
   - BUILD_PLATFORM: x86
     PHP_VC: 11
     platform: x86
-  - BUILD_PLATFORM: x64
-    PHP_VC: 11
-    platform: x64
 
 cache:
   - vendor -> composer.json
