@@ -109,8 +109,6 @@ int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint 
 {
 	zval *zv;
 
-	ZVAL_NULL(fetched);
-
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
 			if (!readonly) {
@@ -121,14 +119,15 @@ int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint 
 			return 1;
 		}
 	}
+
+	ZVAL_NULL(fetched);
+
 	return 0;
 }
 
 int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index, int readonly)
 {
 	zval *zv;
-
-	ZVAL_NULL(fetched);
 
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
@@ -140,6 +139,9 @@ int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index,
 			return 1;
 		}
 	}
+
+	ZVAL_NULL(fetched);
+
 	return 0;
 }
 
