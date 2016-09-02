@@ -669,13 +669,14 @@ class Call
     public function addCallStatusOrJump(CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/fcall');
-        if (!$compilationContext->insideTryCatch) {
-            $compilationContext->codePrinter->output('zephir_check_call_status();');
-        } else {
+        if ($compilationContext->insideTryCatch) {
             $compilationContext->codePrinter->output(
-                'zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');'
+                'zephir_check_call_status_or_jump(try_end_' . $compilationContext->currentTryCatch . ');'
             );
+            return;
         }
+        
+        $compilationContext->codePrinter->output('zephir_check_call_status();');
     }
 
     /**
