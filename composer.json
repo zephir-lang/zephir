@@ -24,7 +24,8 @@
         "php": ">=5.4",
         "ext-json": "*",
         "ext-hash": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-xml": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~2.6",
