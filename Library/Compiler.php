@@ -387,16 +387,20 @@ class Compiler
         $filePath = $location . DIRECTORY_SEPARATOR .
                     strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.zep';
 
-        if (!file_exists($filePath)) {
-            throw new CompilerException("Class '$className' must be located at '$filePath' but this file is missing");
-        }
-
         /**
          * Fix the class name
          */
         $className = join('\\', array_map(function ($i) {
             return ucfirst($i);
         }, explode('\\', $className)));
+
+        if (isset($this->files[$className])) {
+            return;
+        }
+
+        if (!file_exists($filePath)) {
+            throw new CompilerException("Class '$className' must be located at '$filePath' but this file is missing");
+        }
 
         $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
         $this->files[$className]->setIsExternal(true);

@@ -138,6 +138,11 @@ class ClassDefinition
     protected $isGeneratedConstructor = false;
 
     /**
+     * @var Compiler
+     */
+    protected $compiler;
+
+    /**
      * ClassDefinition
      *
      * @param string $namespace
@@ -394,6 +399,12 @@ class ClassDefinition
      */
     public function getExtendsClassDefinition()
     {
+        if (!$this->extendsClassDefinition && $this->extendsClass) {
+            if ($this->compiler) {
+                $this->setExtendsClassDefinition($this->compiler->getClassDefinition($this->extendsClass));
+            }
+        }
+
         return $this->extendsClassDefinition;
     }
 
@@ -541,7 +552,7 @@ class ClassDefinition
         if (isset($this->properties[$name])) {
             return true;
         } else {
-            $extendsClassDefinition = $this->extendsClassDefinition;
+            $extendsClassDefinition = $this->getExtendsClassDefinition();
             if ($extendsClassDefinition) {
                 if ($extendsClassDefinition->hasProperty($name)) {
                     return true;
@@ -563,7 +574,7 @@ class ClassDefinition
             return $this->properties[$propertyName];
         }
 
-        $extendsClassDefinition = $this->extendsClassDefinition;
+        $extendsClassDefinition = $this->getExtendsClassDefinition();
         if ($extendsClassDefinition) {
             if ($extendsClassDefinition->hasProperty($propertyName)) {
                 return $extendsClassDefinition->getProperty($propertyName);
@@ -582,6 +593,13 @@ class ClassDefinition
     {
         if (isset($this->constants[$name])) {
             return true;
+        }
+
+        $extendsClassDefinition = $this->getExtendsClassDefinition();
+        if ($extendsClassDefinition) {
+            if ($extendsClassDefinition->hasConstant($name)) {
+                return true;
+            }
         }
 
         /**
@@ -608,6 +626,13 @@ class ClassDefinition
 
         if (isset($this->constants[$constantName])) {
             return $this->constants[$constantName];
+        }
+
+        $extendsClassDefinition = $this->getExtendsClassDefinition();
+        if ($extendsClassDefinition) {
+            if ($extendsClassDefinition->hasConstant($constantName)) {
+                return $extendsClassDefinition->getConstant($constantName);
+            }
         }
 
         /**
@@ -698,7 +723,7 @@ class ClassDefinition
             }
         }
 
-        $extendsClassDefinition = $this->extendsClassDefinition;
+        $extendsClassDefinition = $this->getExtendsClassDefinition();
         if ($extendsClassDefinition instanceof ClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return true;
@@ -727,12 +752,14 @@ class ClassDefinition
         if (!$checkExtends) {
             return false;
         }
-        $extendsClassDefinition = $this->extendsClassDefinition;
+
+        $extendsClassDefinition = $this->getExtendsClassDefinition();
         if ($extendsClassDefinition instanceof ClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return $extendsClassDefinition->getMethod($methodName);
             }
         }
+
         return false;
     }
 
@@ -795,6 +822,8 @@ class ClassDefinition
             if (!is_object($compilationContext)) {
                 throw new Exception('A compilation context is required');
             }
+
+            $this->compiler = $compilationContext->compiler;
 
             /**
              * Automatically add the external header
@@ -877,6 +906,8 @@ class ClassDefinition
      */
     public function preCompile(CompilationContext $compilationContext)
     {
+        $this->compiler = $compilationContext->compiler;
+
         /**
          * Pre-Compile methods
          */
@@ -984,6 +1015,8 @@ class ClassDefinition
      */
     public function compile(CompilationContext $compilationContext)
     {
+        $this->compiler = $compilationContext->compiler;
+
         /**
          * Sets the current object as global class definition
          */
@@ -1339,6 +1372,8 @@ class ClassDefinition
      */
     public function getClassEntryByClassName($className, CompilationContext $compilationContext, $check = true)
     {
+        $this->compiler = $compilationContext->compiler;
+
         switch (strtolower($className)) {
             /**
              * Zend classes

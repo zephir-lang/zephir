@@ -704,6 +704,17 @@ class CompilerFile
             }
         }
 
+        if ($compilationContext->classDefinition) {
+            if ($extendsClass = $compilationContext->classDefinition->getExtendsClass()) {
+                $compiler->isClass($extendsClass);
+            }
+            if ($interfaces = $compilationContext->classDefinition->getImplementedInterfaces()) {
+                foreach ($interfaces as $interface) {
+                    $compiler->isInterface($interface);
+                }
+            }
+        }
+
         $this->_ir = $ir;
     }
 
