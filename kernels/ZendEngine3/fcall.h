@@ -99,6 +99,22 @@ typedef enum _zephir_call_type {
 	} \
 	else { ZEPHIR_SET_THIS_EXPLICIT_NULL(); } \
 
+#if PHP_VERSION_ID >= 70100
+
+#define ZEPHIR_BACKUP_SCOPE() \
+	zend_class_entry *old_scope = EG(fake_scope); \
+	zend_class_entry *old_called_scope = zend_get_called_scope(EG(current_execute_data));
+
+#define ZEPHIR_RESTORE_SCOPE() \
+	zephir_set_called_scope(EG(current_execute_data), old_called_scope); \
+	EG(fake_scope) = old_scope; \
+
+#define ZEPHIR_SET_SCOPE(_scope, _scope_called) \
+	EG(fake_scope) = _scope; \
+	zephir_set_called_scope(EG(current_execute_data), _scope_called); \
+
+#else
+
 #define ZEPHIR_BACKUP_SCOPE() \
 	zend_class_entry *old_scope = EG(scope); \
 	zend_class_entry *old_called_scope = EG(current_execute_data)->called_scope;
@@ -110,6 +126,8 @@ typedef enum _zephir_call_type {
 #define ZEPHIR_SET_SCOPE(_scope, _scope_called) \
 	EG(scope) = _scope; \
 	EG(current_execute_data)->called_scope = _scope_called; \
+
+#endif
 
 /* End internal calls */
 
@@ -459,5 +477,23 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 #endif
 
 void zephir_eval_php(zval *str, zval *retval_ptr, char *context);
+
+static inline void zephir_set_called_scope(zend_execute_data *ex, zend_class_entry *called_scope)
+{
+	while (ex) {
+		if (Z_TYPE(ex->This) == IS_OBJECT) {
+			Z_OBJCE(ex->This) = called_scope;
+			return;
+		} else if (Z_CE(ex->This)) {
+			Z_CE(ex->This) = called_scope;
+			return;
+		} else if (ex->func) {
+			if (ex->func->type != ZEND_INTERNAL_FUNCTION || ex->func->common.scope) {
+				return;
+			}
+		}
+		ex = ex->prev_execute_data;
+	}
+}
 
 #endif /* ZEPHIR_KERNEL_FCALL_H */

@@ -76,7 +76,7 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 	ulong hash = 5381;
 
 #if PHP_VERSION_ID >= 70100
-	calling_scope = EG(fake_scope);
+	calling_scope = zend_get_executed_scope();
 #else
 	calling_scope = EG(scope);
 #endif
