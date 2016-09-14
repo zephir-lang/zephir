@@ -58,7 +58,11 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		return FAILURE; /* we would result in an instable executor otherwise */
 	}
 
-	orig_scope = EG(scope);
+#if PHP_VERSION_ID >= 70100
+		orig_scope = EG(fake_scope);
+#else
+		orig_scope = EG(scope);
+#endif
 
 	/* Initialize execute_data */
 	if (!EG(current_execute_data)) {
@@ -135,12 +139,21 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		ZVAL_COPY_VALUE(param, arg);
 	}
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope)= calling_scope;
+#else
 	EG(scope) = calling_scope;
+#endif
+
 	Z_OBJ(call->This) = NULL;
 
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
+#if PHP_VERSION_ID >= 70100
+		EG(fake_scope)= func->common.scope;
+#else
 		EG(scope) = func->common.scope;
+#endif
 		call->symbol_table = NULL;
 		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
 			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
@@ -160,7 +173,11 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 	} else if (func->type == ZEND_INTERNAL_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 		if (func->common.scope) {
+#if PHP_VERSION_ID >= 70100
+			EG(fake_scope)= func->common.scope;
+#else
 			EG(scope) = func->common.scope;
+#endif
 		}
 		call->prev_execute_data = EG(current_execute_data);
 		call->return_value = NULL; /* this is not a constructor call */
@@ -206,7 +223,11 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		}
 	}
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope)= orig_scope;
+#else
 	EG(scope) = orig_scope;
+#endif
 	zend_vm_stack_free_call_frame(call);
 
 	if (EG(current_execute_data) == &dummy_execute_data) {
@@ -223,15 +244,22 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 {
 	int ret = 0;
 	zend_class_entry *pce;
+	zend_class_entry *scope, *called_scope;
 	char *lcname = zend_str_tolower_dup(name, name_len);
-
+#if PHP_VERSION_ID >= 70100
+	scope = EG(fake_scope);
+	called_scope = zend_get_called_scope(EG(current_execute_data));
+#else
+	scope = EG(scope);
+	called_scope = EG(current_execute_data)->called_scope;
+#endif
 	*strict_class = 0;
 	if (name_len == sizeof("self") - 1 &&
 		!memcmp(lcname, "self", sizeof("self") - 1)) {
-		if (!EG(scope)) {
+		if (!scope) {
 			if (error) *error = estrdup("cannot access self:: when no class scope is active");
 		} else {
-			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->called_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -239,12 +267,12 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 		}
 	} else if (name_len == sizeof("parent") - 1 &&
 			   !memcmp(lcname, "parent", sizeof("parent") - 1)) {
-		if (!EG(scope)) {
+		if (!scope) {
 			if (error) *error = estrdup("cannot access parent:: when no class scope is active");
-		} else if (!EG(scope)->parent) {
+		} else if (!scope->parent) {
 			if (error) *error = estrdup("cannot access parent:: when current class scope has no parent");
 		} else {
-			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->called_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -253,10 +281,10 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 		}
 	} else if (name_len == sizeof("static") - 1 &&
 			   !memcmp(lcname, "static", sizeof("static") - 1)) {
-		if (!EG(current_execute_data)->called_scope) {
+		if (!called_scope) {
 			if (error) *error = estrdup("cannot access static:: when no class scope is active");
 		} else {
-			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->called_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -267,7 +295,7 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 		zend_string *class_name;
 		class_name = zend_string_init(name, name_len, 0);
 		if ((pce = zend_lookup_class_ex(class_name, NULL, 1)) != NULL) {
-			zend_class_entry *scope = EG(current_execute_data) ? EG(current_execute_data)->func->common.scope : NULL;
+			scope = EG(current_execute_data) ? EG(current_execute_data)->func->common.scope : NULL;
 			fcc->calling_scope = pce;
 			if (scope && !fcc->object && EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) &&
 				instanceof_function(Z_OBJCE(EG(current_execute_data)->This), scope TSRMLS_CC) &&
@@ -341,6 +369,18 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 
 		/* This is a compound name.
 		 * Try to fetch class and then find static method. */
+#if PHP_VERSION_ID >= 70100
+		last_scope = EG(fake_scope);
+		if (ce_org) {
+			EG(fake_scope) = ce_org;
+		}
+
+		if (!zephir_is_callable_check_class(Z_STRVAL_P(callable), clen, fcc, &strict_class, error TSRMLS_CC)) {
+			EG(fake_scope) = last_scope;
+			return 0;
+		}
+		EG(fake_scope) = last_scope;
+#else
 		last_scope = EG(scope);
 		if (ce_org) {
 			EG(scope) = ce_org;
@@ -351,6 +391,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 			return 0;
 		}
 		EG(scope) = last_scope;
+#endif
 
 		ftable = &fcc->calling_scope->function_table;
 		if (ce_org && !instanceof_function(ce_org, fcc->calling_scope TSRMLS_CC)) {
@@ -384,14 +425,19 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 		}
 	} else if ((fcc->function_handler = zend_hash_str_find_ptr(ftable, lmname, mlen)) != NULL) {
 		retval = 1;
+#if PHP_VERSION_ID >= 70100
+		last_scope = EG(fake_scope);
+#else
+		last_scope = EG(scope);
+#endif
 		if ((fcc->function_handler->op_array.fn_flags & ZEND_ACC_CHANGED) &&
-			!strict_class && EG(scope) &&
-			instanceof_function(fcc->function_handler->common.scope, EG(scope) TSRMLS_CC)) {
+			!strict_class && last_scope &&
+			instanceof_function(fcc->function_handler->common.scope, last_scope TSRMLS_CC)) {
 			zend_function *priv_fbc;
 
-			if ((priv_fbc = zend_hash_str_find_ptr(&EG(scope)->function_table, lmname, mlen)) != NULL
+			if ((priv_fbc = zend_hash_str_find_ptr(&last_scope->function_table, lmname, mlen)) != NULL
 				&& priv_fbc->common.fn_flags & ZEND_ACC_PRIVATE
-				&& priv_fbc->common.scope == EG(scope)) {
+				&& priv_fbc->common.scope == last_scope) {
 				fcc->function_handler = priv_fbc;
 			}
 		}
@@ -743,8 +789,16 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_info_cache *fcc TSRMLS_DC)
 {
 	int retval = 0;
-	zend_class_entry *ce_org = fcc->calling_scope;
+	zend_class_entry *ce_org = fcc->calling_scope, *scope, *called_scope;
 	zend_fcall_info_cache fcc_local;
+
+#if PHP_VERSION_ID >= 70100
+	scope = EG(fake_scope);
+	called_scope = zend_get_called_scope(EG(current_execute_data));
+#else
+	scope = EG(scope);
+	called_scope = EG(current_execute_data)->called_scope;
+#endif
 
 	if (fcc == NULL) {
 		fcc = &fcc_local;
@@ -811,12 +865,12 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
-			if (!EG(scope)) {
+			if (!scope) {
 				return 0; // cannot access self:: when no class scope is active
 			}
 
-			fcc->called_scope = EG(current_execute_data)->called_scope;
-			fcc->calling_scope = EG(scope);
+			fcc->called_scope = called_scope;
+			fcc->calling_scope = scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -842,16 +896,16 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 
 		case ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD:
 
-			if (!EG(scope)) {
+			if (!scope) {
 				return 0; // cannot access parent:: when no class scope is active
 			}
 
-			if (!EG(scope)->parent) {
+			if (!scope->parent) {
 				return 0; // cannot access parent:: when current class scope has no parent
 			}
 
-			fcc->calling_scope = EG(scope)->parent;
-			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->calling_scope = scope->parent;
+			fcc->called_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -878,11 +932,11 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 
 		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
 
-			if (!EG(current_execute_data) || !EG(current_execute_data)->called_scope) {
+			if (!EG(current_execute_data) || !called_scope) {
 				return 0; // cannot access static:: when no class scope is active
 			}
 
-			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->called_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -981,7 +1035,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 			break;
 	}
 
+#if PHP_VERSION_ID >= 70100
+	orig_scope = EG(fake_scope);
+#else
 	orig_scope = EG(scope);
+#endif
 
 	/* Initialize execute_data */
 	if (!EG(current_execute_data)) {
@@ -1111,7 +1169,12 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		ZVAL_COPY_VALUE(param, arg);
 	}
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = calling_scope;
+#else
 	EG(scope) = calling_scope;
+#endif
+
 	if (func->common.fn_flags & ZEND_ACC_STATIC) {
 		fci->object = NULL;
 	}
@@ -1119,11 +1182,13 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
-		EG(scope) = func->common.scope;
-#if PHP_VERSION_ID < 70100
-		call->symbol_table = fci->symbol_table;
-#else
+		
+#if PHP_VERSION_ID >= 70100
+		EG(fake_scope) = func->common.scope;
 		call->symbol_table = NULL;
+#else
+		EG(scope) = func->common.scope;
+		call->symbol_table = fci->symbol_table;
 #endif
 		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
 			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
@@ -1144,7 +1209,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 		ZVAL_NULL(fci->retval);
 		if (func->common.scope) {
+#if PHP_VERSION_ID >= 70100
+			EG(fake_scope) = func->common.scope;
+#else
 			EG(scope) = func->common.scope;
+#endif
 		}
 		call->prev_execute_data = EG(current_execute_data);
 		call->return_value = NULL; /* this is not a constructor call */
@@ -1199,7 +1268,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		}
 	}
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = orig_scope;
+#else
 	EG(scope) = orig_scope;
+#endif
 	zend_vm_stack_free_call_frame(call);
 
 	if (EG(current_execute_data) == &dummy_execute_data) {

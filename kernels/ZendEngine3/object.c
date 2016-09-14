@@ -101,6 +101,16 @@ int zephir_zval_is_traversable(zval *object)
  */
 void zephir_get_called_class(zval *return_value)
 {
+#if PHP_VERSION_ID >= 70100
+	zend_class_entry *called_scope = zend_get_called_scope(EG(current_execute_data));
+	if (called_scope) {
+		ZVAL_STR(return_value, zend_string_dup(called_scope->name, 0));
+	}
+
+	if (!zend_get_executed_scope())  {
+		php_error_docref(NULL, E_WARNING, "zephir_get_called_class() called from outside a class");
+	}
+#else
 	if (EG(current_execute_data)->called_scope) {
 		zend_string *ret = EG(current_execute_data)->called_scope->name;
 		zend_string_addref(ret);
@@ -110,6 +120,7 @@ void zephir_get_called_class(zval *return_value)
 	if (!EG(scope))  {
 		php_error_docref(NULL, E_WARNING, "zephir_get_called_class() called from outside a class");
 	}
+#endif
 }
 
 zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t length, int fetch_type)
@@ -436,8 +447,13 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 		ce = zephir_lookup_class_ce(ce, property_name, property_length);
 	}
 
+#if PHP_VERSION_ID >= 70100
+	old_scope = EG(fake_scope);
+	EG(fake_scope) = ce;
+#else
 	old_scope = EG(scope);
 	EG(scope) = ce;
+#endif
 
 	if (!Z_OBJ_HT_P(object)->read_property) {
 		const char *class_name;
@@ -457,7 +473,11 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 
 	zval_ptr_dtor(&property);
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = old_scope;
+#else
 	EG(scope) = old_scope;
+#endif
 	return SUCCESS;
 }
 
@@ -527,7 +547,12 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	zend_class_entry *ce, *old_scope;
 	zval property;
 
+#if PHP_VERSION_ID >= 70100
+	old_scope = EG(fake_scope);
+#else
 	old_scope = EG(scope);
+#endif
+
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		php_error_docref(NULL, E_WARNING, "Attempt to assign property of non-object");
 		return FAILURE;
@@ -538,7 +563,11 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 		ce = zephir_lookup_class_ce(ce, property_name, property_length);
 	}
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = ce;
+#else
 	EG(scope) = ce;
+#endif
 
 	if (!Z_OBJ_HT_P(object)->write_property) {
 		const char *class_name;
@@ -553,7 +582,11 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
 	zval_ptr_dtor(&property);
 
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = old_scope;
+#else
 	EG(scope) = old_scope;
+#endif
 	return SUCCESS;
 }
 
@@ -748,12 +781,22 @@ int zephir_unset_property(zval* object, const char* name)
 		zend_class_entry *old_scope;
 
 		ZVAL_STRING(&member, name);
+
+#if PHP_VERSION_ID >= 70100
+		old_scope = EG(fake_scope);
+		EG(fake_scope) = Z_OBJCE_P(object);
+#else
 		old_scope = EG(scope);
 		EG(scope) = Z_OBJCE_P(object);
+#endif
 
 		Z_OBJ_HT_P(object)->unset_property(object, &member, 0);
 
+#if PHP_VERSION_ID >= 70100
+		EG(fake_scope) = old_scope;
+#else
 		EG(scope) = old_scope;
+#endif
 
 		return SUCCESS;
 	}
@@ -910,11 +953,21 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 {
 	zval garbage;
 	zval *property;
-	zend_class_entry *old_scope = EG(scope);
+	zend_class_entry *old_scope;
 
+#if PHP_VERSION_ID >= 70100
+	old_scope = EG(fake_scope);
+	EG(fake_scope) = scope;
+#else
+	old_scope = EG(scope);
 	EG(scope) = scope;
+#endif
 	property = zephir_std_get_static_property(scope, name, name_length, 0, property_info);
+#if PHP_VERSION_ID >= 70100
+	EG(fake_scope) = old_scope;
+#else
 	EG(scope) = old_scope;
+#endif
 
 	if (!property) {
 		return FAILURE;
