@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 if [ -z "$ZEPHIRDIR" ]; then
   ZEPHIRDIR="%ZEPHIRDIR%"
   if [[ "$ZEPHIRDIR" == "%""ZEPHIRDIR""%" ]]; then
