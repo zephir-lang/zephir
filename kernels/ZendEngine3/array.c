@@ -59,9 +59,9 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	HashTable *h;
 	zval *result;
 
-	ZVAL_NULL(fetched);
-
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		ZVAL_NULL(fetched);
+
 		return 0;
 	}
 
@@ -102,6 +102,9 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 		}
 		return 1;
 	}
+
+	ZVAL_NULL(fetched);
+
 	return 0;
 }
 
