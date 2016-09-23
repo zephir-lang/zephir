@@ -16,22 +16,42 @@ class FetchTest
 		return fetch c, a[b];
 	}
 
-	public function testFetchArray2(var a, int b)
+	public function testFetchArray2(var a, var b)
+	{
+		return fetch a, a[b];
+	}
+
+	public function testFetchArray3(var a, int b)
 	{
 		var c;
 		return fetch c, a[b];
 	}
 
-	public function testFetchArray3(var a, string b)
+	public function testFetchArray4(var a, int b)
+	{
+		return fetch a, a[b];
+	}
+
+	public function testFetchArray5(var a, string b)
 	{
 		var c;
 		return fetch c, a[b];
+	}
+
+	public function testFetchArray6(var a, string b)
+	{
+		return fetch a, a[b];
 	}
 
 	public function testFetchObject1(var a, var b)
 	{
 		var c;
 		return fetch c, a->{b};
+	}
+
+	public function testFetchObject2(var a, var b)
+	{
+		return fetch a, a->{b};
 	}
 
 	public function testFetchPost(var b)
