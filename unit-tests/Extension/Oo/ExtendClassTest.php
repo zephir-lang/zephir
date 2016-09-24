@@ -28,8 +28,8 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         if (!extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extendsion is not loaded');
         }
-        $this->assertEquals(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
-        $this->assertEquals(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
+        $this->assertSame(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
+        $this->assertSame(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
     public function testPDOStatementExtending()

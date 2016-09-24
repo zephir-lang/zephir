@@ -25,30 +25,30 @@ class ScallTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Scall();
 
-        $this->assertTrue($t->testMethod1() === "hello public");
-        $this->assertTrue($t::testMethod1() === "hello public");
-        $this->assertTrue(\Test\Scall::testMethod1() === "hello public");
+        $this->assertSame($t->testMethod1(), 'hello public');
+        $this->assertSame($t::testMethod1(), 'hello public');
+        $this->assertSame(\Test\Scall::testMethod1(), 'hello public');
 
-        $this->assertTrue($t->testCall1() === "hello public");
-        $this->assertTrue($t->testCall2() === "hello protected");
-        $this->assertTrue($t->testCall3() === "hello private");
+        $this->assertSame($t->testCall1(), 'hello public');
+        $this->assertSame($t->testCall2(), 'hello protected');
+        $this->assertSame($t->testCall3(), 'hello private');
 
-        $this->assertTrue($t->testCall4(2, 3) === 5);
-        $this->assertTrue($t->testCall5(6, 7) === 13);
-        $this->assertTrue($t->testCall6(4, 5) === 9);
+        $this->assertSame($t->testCall4(2, 3), 5);
+        $this->assertSame($t->testCall5(6, 7), 13);
+        $this->assertSame($t->testCall6(4, 5), 9);
 
-        $this->assertTrue($t->testCall7() === "hello public");
-        $this->assertTrue($t->testCall8() === "hello protected");
-        $this->assertTrue($t->testCall9() === "hello private");
+        $this->assertSame($t->testCall7(), 'hello public');
+        $this->assertSame($t->testCall8(), 'hello protected');
+        $this->assertSame($t->testCall9(), 'hello private');
 
-        $this->assertTrue($t->testCall10(2, 3) === 5);
-        $this->assertTrue($t->testCall11(6, 7) === 13);
-        $this->assertTrue($t->testCall12(4, 5) === 9);
+        $this->assertSame($t->testCall10(2, 3), 5);
+        $this->assertSame($t->testCall11(6, 7), 13);
+        $this->assertSame($t->testCall12(4, 5), 9);
 
-        $this->assertTrue($t->testCall13() == "hello parent public");
-        $this->assertTrue($t->testCall14() == "hello parent protected");
+        $this->assertSame($t->testCall13(), 'hello parent public');
+        $this->assertSame($t->testCall14(), 'hello parent protected');
 
-        $this->assertEquals("hello ScallParent", \Test\Scallparent::testCallStatic());
-        $this->assertEquals("hello Scall", $t::testCallStatic());
+        $this->assertSame('hello ScallParent', \Test\Scallparent::testCallStatic());
+        $this->assertSame('hello Scall', $t::testCallStatic());
     }
 }

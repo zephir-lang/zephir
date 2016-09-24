@@ -26,9 +26,9 @@ class RegexDNATest extends \PHPUnit_Framework_TestCase
         $t = new \Test\RegexDNA();
 
         ob_start();
-        $t->process(__DIR__ . "/regexdna-input.txt");
+        $t->process(__DIR__ . '/regexdna-input.txt');
         $content = ob_get_clean();
 
-        $this->assertTrue($content == file_get_contents(__DIR__ . "/regexdna-output.txt"));
+        $this->assertSame($content, file_get_contents(__DIR__ . '/regexdna-output.txt'));
     }
 }

@@ -24,42 +24,42 @@ class TypeoffTest extends \PHPUnit_Framework_TestCase
     public function testNativeString()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testNativeStringFalse() == false);
-        $this->assertTrue($t->testNativeStringTrue() == true);
+        $this->assertFalse($t->testNativeStringFalse());
+        $this->assertTrue($t->testNativeStringTrue());
     }
 
     public function testNativeInt()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testNativeIntFalse() == false);
-        $this->assertTrue($t->testNativeIntTrue() == true);
+        $this->assertFalse($t->testNativeIntFalse());
+        $this->assertTrue($t->testNativeIntTrue());
     }
 
     public function testNativeDouble()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testNativeDoubleTrue() == true);
+        $this->assertTrue($t->testNativeDoubleTrue());
     }
 
     public function testNativeBool()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testNativeBoolFalse() == false);
-        $this->assertTrue($t->testNativeBoolTrue() == true);
+        $this->assertFalse($t->testNativeBoolFalse());
+        $this->assertTrue($t->testNativeBoolTrue());
         $this->assertFalse($t->testNotBoolTrue());
     }
 
     public function testArray()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testArrayFalse() == false);
-        $this->assertTrue($t->testArrayTrue() == true);
+        $this->assertFalse($t->testArrayFalse());
+        $this->assertTrue($t->testArrayTrue());
     }
 
     public function testClassProperty()
     {
         $t = new \Test\Typeoff();
-        $this->assertTrue($t->testClassPropertyAccess() == true);
+        $this->assertTrue($t->testClassPropertyAccess());
     }
 
     public function testCallable()

@@ -26,19 +26,19 @@ class InstanceOffTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf1()
     {
         $t = new InstanceOff();
-        $this->assertTrue($t->testInstanceOf1() === true);
+        $this->assertTrue($t->testInstanceOf1());
     }
 
     public function testInstanceOf2()
     {
         $t = new InstanceOff();
-        $this->assertTrue($t->testInstanceOf2() === true);
+        $this->assertTrue($t->testInstanceOf2());
     }
 
     public function testInstanceOf3()
     {
         $t = new InstanceOff();
-        $this->assertTrue($t->testInstanceOf3() === false);
+        $this->assertFalse($t->testInstanceOf3());
     }
 
     public function testInstanceOf4()

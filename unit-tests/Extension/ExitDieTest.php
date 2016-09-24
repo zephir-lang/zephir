@@ -31,19 +31,17 @@ class ExitDieTest extends \PHPUnit_Framework_TestCase
 
         $testfile1 = __DIR__ .'/fixtures/exit.php';
         $return1 = `$phpBinary $testfile1`;
-        $this->assertEquals("", trim($return1));
+        $this->assertSame('', trim($return1));
 
-
-        $arg = "Hello World";
+        $arg = 'Hello World';
         $testfile2 = __DIR__ .'/fixtures/exit_string.php';
         $return2 = `$phpBinary $testfile2 "$arg"`;
-        $this->assertEquals($arg, trim($return2));
-
+        $this->assertSame($arg, trim($return2));
 
         $testfile3 = __DIR__ .'/fixtures/exit_int.php';
-        $int_arg = 128;
-        $cmd3 = "$phpBinary $testfile3 $int_arg";
+        $intArg = 128;
+        $cmd3 = "$phpBinary $testfile3 $intArg";
         exec($cmd3, $out3, $return3);
-        $this->assertTrue($return3 == $int_arg);
+        $this->assertSame($return3, $intArg);
     }
 }

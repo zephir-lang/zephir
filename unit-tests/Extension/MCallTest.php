@@ -31,12 +31,12 @@ class MCallTest extends \PHPUnit_Framework_TestCase
 
     public function assertNumberOfParameters($number)
     {
-        $this->assertEquals($number, $this->getReflection()->getMethod($this->getName())->getNumberOfParameters());
+        $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfParameters());
     }
 
     public function assertNumberOfRequiredParameters($number)
     {
-        $this->assertEquals($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
+        $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
     }
 
     private function getReflection()
@@ -64,61 +64,61 @@ class MCallTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Mcall();
 
-        $this->assertTrue($t->testCall1() === "hello public");
-        $this->assertTrue($t->testCall2() === "hello protected");
-        $this->assertTrue($t->testCall3() === "hello private");
+        $this->assertSame($t->testCall1(), 'hello public');
+        $this->assertSame($t->testCall2(), 'hello protected');
+        $this->assertSame($t->testCall3(), 'hello private');
 
-        $this->assertTrue($t->testCall4(2, 3) === 5);
-        $this->assertTrue($t->testCall5(6, 7) === 13);
-        $this->assertTrue($t->testCall6(4, 5) === 9);
+        $this->assertSame($t->testCall4(2, 3), 5);
+        $this->assertSame($t->testCall5(6, 7), 13);
+        $this->assertSame($t->testCall6(4, 5), 9);
 
-        $this->assertTrue($t->testCall7(2, 3) === 10);
-        $this->assertTrue($t->testCall8(6, 7) === 26);
-        $this->assertTrue($t->testCall9(4, 5) === 18);
+        $this->assertSame($t->testCall7(2, 3), 10);
+        $this->assertSame($t->testCall8(6, 7), 26);
+        $this->assertSame($t->testCall9(4, 5), 18);
 
-        $this->assertTrue($t->testCall10() === "hello public");
-        $this->assertTrue($t->testCall11() === "hello protected");
-        $this->assertTrue($t->testCall12() === "hello private");
+        $this->assertSame($t->testCall10(), 'hello public');
+        $this->assertSame($t->testCall11(), 'hello protected');
+        $this->assertSame($t->testCall12(), 'hello private');
 
-        $this->assertTrue($t->testCall13(2, 3) === 5);
-        $this->assertTrue($t->testCall14(6, 7) === 13);
-        $this->assertTrue($t->testCall15(4, 5) === 9);
+        $this->assertSame($t->testCall13(2, 3), 5);
+        $this->assertSame($t->testCall14(6, 7), 13);
+        $this->assertSame($t->testCall15(4, 5), 9);
     }
 
     public function testOptionalParameterString()
     {
         $t = new Mcall();
-        $this->assertTrue($t->optionalParameterString("test") == 'test');
-        $this->assertTrue($t->optionalParameterString() == "test string");
-        $this->assertTrue($t->optionalParameterStringNull() == "");
+        $this->assertSame($t->optionalParameterString('test'), 'test');
+        $this->assertSame($t->optionalParameterString(), 'test string');
+        $this->assertSame($t->optionalParameterStringNull(), '');
     }
 
     public function testOptionalParameterInt()
     {
         $t = new Mcall();
-        $this->assertTrue($t->optionalParameterInt(1) == 1);
-        $this->assertTrue($t->optionalParameterInt() == 2);
+        $this->assertSame($t->optionalParameterInt(1), 1);
+        $this->assertSame($t->optionalParameterInt(), 2);
     }
 
     public function testOptionalParameterVar()
     {
         $t = new Mcall();
-        $this->assertTrue($t->optionalParameterVar(1) === 1);
-        $this->assertTrue($t->optionalParameterVar("testtesttesttest") === "testtesttesttest");
-        $this->assertTrue($t->optionalParameterVar() === null);
+        $this->assertSame($t->optionalParameterVar(1), 1);
+        $this->assertSame($t->optionalParameterVar('testtesttesttest'), 'testtesttesttest');
+        $this->assertNull($t->optionalParameterVar());
     }
 
     public function testOptionalParameterBoolean()
     {
         $t = new Mcall();
-        $this->assertTrue($t->optionalParameterBoolFalse() === false);
-        $this->assertTrue($t->optionalParameterBoolTrue() === true);
+        $this->assertFalse($t->optionalParameterBoolFalse());
+        $this->assertTrue($t->optionalParameterBoolTrue());
 
-        $this->assertTrue($t->optionalParameterBooleanNull() == false);
-        $this->assertTrue($t->optionalParameterBooleanNull(true) == true);
+        $this->assertFalse($t->optionalParameterBooleanNull());
+        $this->assertTrue($t->optionalParameterBooleanNull(true));
 
-        $this->assertTrue($t->optionalParameterBoolean() === true);
-        $this->assertTrue($t->optionalParameterBoolean(false) === false);
+        $this->assertTrue($t->optionalParameterBoolean());
+        $this->assertFalse($t->optionalParameterBoolean(false));
     }
 
     public function testOptionalParameterBooleanException()
@@ -146,8 +146,8 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertTrue($t->arrayParamWithDefaultEmptyArray() === array());
-        $this->assertTrue($t->arrayParamWithDefaultEmptyArray(array(1)) === array(1));
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray(), array());
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray(array(1)), array(1));
     }
 
     /**
@@ -161,8 +161,8 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertTrue($t->arrayParamWithDefaultNullValue() === array());
-        $this->assertTrue($t->arrayParamWithDefaultNullValue(array(1)) === array(1));
+        $this->assertSame($t->arrayParamWithDefaultNullValue(), array());
+        $this->assertSame($t->arrayParamWithDefaultNullValue(array(1)), array(1));
     }
 
     /**
@@ -176,8 +176,8 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertTrue($t->arrayParam(array()) === array());
-        $this->assertTrue($t->arrayParam(array(1, 2, 3)) === array(1, 2, 3));
+        $this->assertSame($t->arrayParam(array()), array());
+        $this->assertSame($t->arrayParam(array(1, 2, 3)), array(1, 2, 3));
     }
 
     /**

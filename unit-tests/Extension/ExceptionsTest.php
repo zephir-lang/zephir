@@ -140,7 +140,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             $t->testExceptionRethrow();
             $this->assertFalse();
         } catch (\Exception $e) {
-            $this->assertEquals(8, $e->getLine());
+            $this->assertSame(8, $e->getLine());
         }
     }
 }

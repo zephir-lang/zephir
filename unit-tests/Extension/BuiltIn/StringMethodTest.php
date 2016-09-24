@@ -30,7 +30,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
     {
         $t = new StringMethods();
 
-        $this->assertEquals($expected, $t->camelize($actual, $delimiter));
+        $this->assertSame($expected, $t->camelize($actual, $delimiter));
     }
 
     /**
@@ -52,7 +52,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
     {
         $t = new StringMethods();
 
-        $this->assertEquals($expected, $t->uncamelize($actual, $delimiter));
+        $this->assertSame($expected, $t->uncamelize($actual, $delimiter));
     }
 
     /**
@@ -71,47 +71,47 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
     {
         $t = new StringMethods();
 
-        $this->assertEquals(5, $t->getLength1());
-        $this->assertEquals(5, $t->getLength2());
-        $this->assertEquals(10, $t->getLength3());
-        $this->assertEquals(3, $t->getLength4('foo'));
-        $this->assertEquals(8, $t->getLength5('bar'));
+        $this->assertSame(5, $t->getLength1());
+        $this->assertSame(5, $t->getLength2());
+        $this->assertSame(10, $t->getLength3());
+        $this->assertSame(3, $t->getLength4('foo'));
+        $this->assertSame(8, $t->getLength5('bar'));
     }
 
     public function testIndex()
     {
         $t = new StringMethods();
 
-        $this->assertEquals(0, $t->getIndex('test', 't'));
-        $this->assertEquals(3, $t->getIndexWithPosition('test', 't', 1));
+        $this->assertSame(0, $t->getIndex('test', 't'));
+        $this->assertSame(3, $t->getIndexWithPosition('test', 't', 1));
     }
 
     public function testTrim()
     {
         $t = new StringMethods();
 
-        $this->assertEquals('hello', $t->getTrimmed());
-        $this->assertEquals('foo bar', $t->getTrimmed1(' foo bar  '));
-        $this->assertEquals('foo bar  ', $t->getLeftTrimmed(' foo bar  '));
-        $this->assertEquals(' foo bar', $t->getRightTrimmed(' foo bar  '));
+        $this->assertSame('hello', $t->getTrimmed());
+        $this->assertSame('foo bar', $t->getTrimmed1(' foo bar  '));
+        $this->assertSame('foo bar  ', $t->getLeftTrimmed(' foo bar  '));
+        $this->assertSame(' foo bar', $t->getRightTrimmed(' foo bar  '));
     }
 
     public function testChangeCase()
     {
         $t = new StringMethods();
 
-        $this->assertEquals('FOO', $t->getUpper('foo'));
-        $this->assertEquals('foo', $t->getLower('FOO'));
+        $this->assertSame('FOO', $t->getUpper('foo'));
+        $this->assertSame('foo', $t->getLower('FOO'));
 
-        $this->assertEquals('Foo', $t->getUpperFirst('foo'));
-        $this->assertEquals('fOO', $t->getLowerFirst('FOO'));
+        $this->assertSame('Foo', $t->getUpperFirst('foo'));
+        $this->assertSame('fOO', $t->getLowerFirst('FOO'));
     }
 
     public function testFormat()
     {
         $t = new StringMethods();
 
-        $this->assertEquals('hello zephir!', $t->getFormatted('zephir'));
+        $this->assertSame('hello zephir!', $t->getFormatted('zephir'));
     }
 
     public function testHashes()
@@ -119,28 +119,28 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
         $t = new StringMethods();
         $str = 'hello world!';
 
-        $this->assertEquals(md5($str), $t->getMd5($str));
-        $this->assertEquals(sha1($str), $t->getSha1($str));
+        $this->assertSame(md5($str), $t->getMd5($str));
+        $this->assertSame(sha1($str), $t->getSha1($str));
     }
 
     public function testModifications()
     {
         $t = new StringMethods();
-        $this->assertEquals("<br />\nfoo<br />\n", $t->getNl2br("\nfoo\n"));
-        $this->assertEquals('foobarfoobar', $t->getRepeatted('foobar', 2));
+        $this->assertSame("<br />\nfoo<br />\n", $t->getNl2br("\nfoo\n"));
+        $this->assertSame('foobarfoobar', $t->getRepeatted('foobar', 2));
 
         $shuffled = $t->getShuffled('hello world');
         $this->assertNotEquals('hello world', $shuffled);
-        $this->assertEquals(strlen('hello world'), strlen($shuffled));
+        $this->assertSame(strlen('hello world'), strlen($shuffled));
 
-        $this->assertEquals('olleh', $t->getReversed('hello'));
+        $this->assertSame('olleh', $t->getReversed('hello'));
     }
 
     public function testParsers()
     {
         $t = new StringMethods();
-        // $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
-        $this->assertEquals(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
+        // $this->assertSame(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
+        $this->assertSame(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
     }
 
     public function providerCamelize()

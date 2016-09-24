@@ -28,34 +28,34 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Constants();
 
-        $this->assertTrue(Constants::C1 === null);
-        $this->assertTrue(Constants::C2 === false);
-        $this->assertTrue(Constants::C3 === true);
-        $this->assertTrue(Constants::C4 === 10);
-        $this->assertTrue(Constants::C5 === 10.25);
-        $this->assertTrue(Constants::C6 === 'test');
-        $this->assertTrue(Constants::className === 'Test\Constants');
-        $this->assertTrue(Constants::STD_PROP_LIST === \ArrayObject::STD_PROP_LIST);
+        $this->assertNull(Constants::C1);
+        $this->assertFalse(Constants::C2);
+        $this->assertTrue(Constants::C3);
+        $this->assertSame(Constants::C4, 10);
+        $this->assertSame(Constants::C5, 10.25);
+        $this->assertSame(Constants::C6, 'test');
+        $this->assertSame(Constants::className, 'Test\Constants');
+        $this->assertSame(Constants::STD_PROP_LIST, \ArrayObject::STD_PROP_LIST);
     }
 
     public function testConstantGetters()
     {
         $t = new Constants();
-        $this->assertTrue($t->getPropertyC1() === null);
-        $this->assertTrue($t->getPropertyC2() === false);
-        $this->assertTrue($t->getPropertyC3() === true);
-        $this->assertTrue($t->getPropertyC4() === 10);
-        $this->assertTrue($t->getPropertyC5() === 10.25);
-        $this->assertTrue($t->getPropertyC6() === "test");
+        $this->assertNull($t->getPropertyC1());
+        $this->assertFalse($t->getPropertyC2());
+        $this->assertTrue($t->getPropertyC3());
+        $this->assertSame($t->getPropertyC4(), 10);
+        $this->assertSame($t->getPropertyC5(), 10.25);
+        $this->assertSame($t->getPropertyC6(), "test");
     }
 
     public function testConstantsRead()
     {
         $t = new Constants();
-        $this->assertTrue($t->testReadConstant() === ENT_QUOTES);
-        $this->assertTrue($t->testReadClassConstant1() === Constants::C4);
-        $this->assertTrue($t->testReadClassConstant2() === Constants::C4);
-        $this->assertTrue($t->testReadClassConstant3() === \Test\ConstantsParent::P4);
+        $this->assertSame($t->testReadConstant(), ENT_QUOTES);
+        $this->assertSame($t->testReadClassConstant1(), Constants::C4);
+        $this->assertSame($t->testReadClassConstant2(), Constants::C4);
+        $this->assertSame($t->testReadClassConstant3(), \Test\ConstantsParent::P4);
     }
 
     public function testEnvConstants()

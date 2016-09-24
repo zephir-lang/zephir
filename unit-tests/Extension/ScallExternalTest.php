@@ -24,12 +24,12 @@ class ScallExternalTest extends \PHPUnit_Framework_TestCase
     public function testCall1()
     {
         $t = new \Test\ScallExternal();
-        $this->assertTrue($t->testCall1() == "hello public");
+        $this->assertSame($t->testCall1(), 'hello public');
     }
 
     public function testCall2()
     {
         $t = new \Test\ScallExternal();
-        $this->assertTrue($t->testCall2(2, 3) === 5);
+        $this->assertSame($t->testCall2(2, 3), 5);
     }
 }

@@ -90,7 +90,7 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Pregmatch;
         $arr = $t->testMatchAllInZep();
-        $this->assertEquals($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
-        $this->assertEquals($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
+        $this->assertSame($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
+        $this->assertSame($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
     }
 }

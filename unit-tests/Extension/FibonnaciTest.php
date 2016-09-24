@@ -25,12 +25,12 @@ class FibonnaciTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Fibonnaci();
 
-        $this->assertTrue($t->fibInt() == 13);
-        $this->assertTrue($t->fibDouble() == 13.0);
-        $this->assertTrue($t->fibArray() === array(
+        $this->assertSame($t->fibInt(), 13);
+        $this->assertSame($t->fibDouble(), 13.0);
+        $this->assertSame($t->fibArray(), array(
             0, 1, 1, 2, 3, 5, 8, 13, 21, 34
         ));
-        $this->assertTrue($t->fibArray2() === array(
+        $this->assertSame($t->fibArray2(), array(
             0, 1, 1, 2, 3, 5, 8, 13, 21, 34
         ));
     }

@@ -189,8 +189,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         foreach ($tests as $n => $test) {
             $router->handle($test['uri']);
-            $this->assertTrue($router->getControllerName() === $test['controller']);
-            $this->assertTrue($router->getActionName() === $test['action']);
+            $this->assertSame($router->getControllerName(), $test['controller']);
+            $this->assertSame($router->getActionName(), $test['action']);
         }
     }
 }

@@ -25,9 +25,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Json();
 
-        $this->assertTrue($t->testEncodeObject() == '{"a":"hello","b":"world","c":128}');
-        $this->assertTrue($t->testEncodeArray() == '[1,2,3]');
-        $this->assertTrue($t->testEncodeOptions() == '["\\u003Cfoo\\u003E","\'bar\'","&blong&","\\u00e9"]');
+        $this->assertSame($t->testEncodeObject(), '{"a":"hello","b":"world","c":128}');
+        $this->assertSame($t->testEncodeArray(), '[1,2,3]');
+        $this->assertSame($t->testEncodeOptions(), '["\\u003Cfoo\\u003E","\'bar\'","&blong&","\\u00e9"]');
     }
 
     public function testDecode()
@@ -35,12 +35,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Json();
 
         $obj1 = $t->testDecodeObject();
-        $this->assertTrue($obj1->a == 'hello');
+        $this->assertSame($obj1->a, 'hello');
 
         $arr1 = $t->testDecodeArray();
-        $this->assertTrue($arr1[1] == 2);
+        $this->assertSame($arr1[1], 2);
 
         $obj2 = $t->testDecodeObject2();
-        $this->assertTrue($obj2['a'] == 'hello');
+        $this->assertSame($obj2['a'], 'hello');
     }
 }

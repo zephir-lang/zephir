@@ -96,7 +96,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         );
 
         $t = new \Test\Vars();
-        $this->assertEquals($t->testVarExport(), "'hello'");
+        $this->assertSame($t->testVarExport(), "'hello'");
     }
 
     public function test88Issue()

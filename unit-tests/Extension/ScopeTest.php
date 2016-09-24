@@ -25,8 +25,8 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 {
     public function testScope1()
     {
-        $this->assertEquals(Scope::test1(), "testinternal_string");
-        $this->assertEquals(Scope::test2(), array(15, "0_66_132_198_"));
-        $this->assertEquals(Scope::test3(), "internal_0internal_1internal_2internal_3");
+        $this->assertSame(Scope::test1(), 'testinternal_string');
+        $this->assertSame(Scope::test2(), array(15, '0_66_132_198_'));
+        $this->assertSame(Scope::test3(), 'internal_0internal_1internal_2internal_3');
     }
 }

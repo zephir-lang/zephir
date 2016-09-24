@@ -89,12 +89,12 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
     public function testMethodOptionalValueWithDefaultStaticConstantAccess()
     {
         $t = new MethodArgs;
-        $this->assertEquals('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
+        $this->assertSame('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 
-        $this->assertEquals(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_INT, $t->methodOptionalIntValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_INT, $t->methodOptionalIntValueWithDefaultStaticConstantAccess());
     }
 }

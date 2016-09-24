@@ -47,7 +47,7 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($t->has('testVar'));
 
         $t->testUnsetProperty();
-        $this->assertEquals(null, $t->getProperty());
+        $this->assertSame(null, $t->getProperty());
     }
 
     public function xtestStdClassUnset()
@@ -59,6 +59,6 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
         $equalsStdClass->property1 = 12345;
         $equalsStdClass->property3 = 12345;
 
-        $this->assertEquals($equalsStdClass, $t->testStdClassUnset());
+        $this->assertSame($equalsStdClass, $t->testStdClassUnset());
     }
 }

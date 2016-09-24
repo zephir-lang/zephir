@@ -28,16 +28,16 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
     {
         $t = new PublicProperties();
 
-        $this->assertTrue($t->someNull === null);
-        $this->assertTrue($t->someNullInitial === null);
-        $this->assertTrue($t->someFalse === false);
-        $this->assertTrue($t->someTrue === true);
-        $this->assertTrue($t->someInteger === 10);
-        $this->assertTrue($t->someDouble === 10.25);
-        $this->assertTrue($t->someString === "test");
+        $this->assertNull($t->someNull);
+        $this->assertNull($t->someNullInitial);
+        $this->assertFalse($t->someFalse);
+        $this->assertTrue($t->someTrue);
+        $this->assertSame($t->someInteger, 10);
+        $this->assertSame($t->someDouble, 10.25);
+        $this->assertSame($t->someString, 'test');
 
         $this->assertInternalType('array', $t->someEmptyArray);
-        $this->assertEquals(array(1, 2, 3, 4), $t->someArray);
+        $this->assertSame(array(1, 2, 3, 4), $t->someArray);
     }
 
     public function test394Issue()
@@ -52,6 +52,6 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
     public function test537Issue()
     {
         $t = new ExtendsPublicProperties();
-        $this->assertEquals($t->getSomeGetterSetterArray(), array("holy"));
+        $this->assertSame($t->getSomeGetterSetterArray(), array('holy'));
     }
 }

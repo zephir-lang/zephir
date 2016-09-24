@@ -24,22 +24,22 @@ class TernaryTest extends \PHPUnit_Framework_TestCase
     public function testTernary()
     {
         $t = new \Test\Ternary();
-        $this->assertEquals(101, $t->testTernary1());
-        $this->assertEquals('foo', $t->testTernary2(true));
-        $this->assertEquals('bar', $t->testTernary2(false));
+        $this->assertSame(101, $t->testTernary1());
+        $this->assertSame('foo', $t->testTernary2(true));
+        $this->assertSame('bar', $t->testTernary2(false));
         
-        $this->assertEquals(3, $t->testTernaryAfterLetVariable());
-        $this->assertEquals(array('', 'c', ''), $t->testTernaryWithPromotedTemporaryVariable());
+        $this->assertSame(3, $t->testTernaryAfterLetVariable());
+        $this->assertSame(array('', 'c', ''), $t->testTernaryWithPromotedTemporaryVariable());
 
-        $this->assertEquals(true, $t->testShortTernary(true));
-        $this->assertEquals(false, $t->testShortTernary(array()));
-        $this->assertEquals(array(1,2,3), $t->testShortTernary(array(1,2,3)));
-        $this->assertEquals(false, $t->testShortTernary(false));
-        $this->assertEquals(false, $t->testShortTernary(0));
+        $this->assertSame(true, $t->testShortTernary(true));
+        $this->assertSame(false, $t->testShortTernary(array()));
+        $this->assertSame(array(1,2,3), $t->testShortTernary(array(1,2,3)));
+        $this->assertSame(false, $t->testShortTernary(false));
+        $this->assertSame(false, $t->testShortTernary(0));
 
-        $this->assertEquals(1, $t->testShortTernaryComplex(false, 1));
-        $this->assertEquals("test string", $t->testShortTernaryComplex(false, "test string"));
-        $this->assertEquals(array(), $t->testShortTernaryComplex(false, array()));
+        $this->assertSame(1, $t->testShortTernaryComplex(false, 1));
+        $this->assertSame("test string", $t->testShortTernaryComplex(false, "test string"));
+        $this->assertSame(array(), $t->testShortTernaryComplex(false, array()));
     }
 
     public function testComplex()
