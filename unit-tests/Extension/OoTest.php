@@ -25,45 +25,45 @@ class OoTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Oo();
 
-        $this->assertTrue($t->testInstance1() == new \stdClass);
-        $this->assertTrue($t->testInstance2() == new \Test\Oo\OoConstruct);
-        $this->assertTrue($t->testInstance3() == new \Test\Oo\OoNoConstruct);
+        $this->assertEquals($t->testInstance1(), new \stdClass);
+        $this->assertEquals($t->testInstance2(), new \Test\Oo\OoConstruct);
+        $this->assertEquals($t->testInstance3(), new \Test\Oo\OoNoConstruct);
 
         $obj4 = $t->testInstance4();
         $this->assertTrue(is_object($obj4));
-        $this->assertTrue($obj4->getA() == "a");
-        $this->assertTrue($obj4->getB() == "b");
+        $this->assertSame($obj4->getA(), "a");
+        $this->assertSame($obj4->getB(), "b");
 
         $obj5 = $t->testInstance5();
         $this->assertTrue(is_object($obj5));
-        $this->assertTrue($obj5->getA() == "a");
-        $this->assertTrue($obj5->getB() == "b");
+        $this->assertSame($obj5->getA(), "a");
+        $this->assertSame($obj5->getB(), "b");
 
         $obj6 = $t->testInstance6();
         $this->assertTrue(is_object($obj6));
-        $this->assertTrue($obj6->getA() == 1);
-        $this->assertTrue($obj6->getB() == 2);
+        $this->assertSame($obj6->getA(), 1);
+        $this->assertSame($obj6->getB(), 2);
 
         $obj7 = $t->testInstance7();
         $this->assertTrue(is_object($obj7));
-        $this->assertTrue($obj7->getA() == false);
-        $this->assertTrue($obj7->getB() == true);
+        $this->assertSame($obj7->getA(), false);
+        $this->assertSame($obj7->getB(), true);
 
         $obj8 = $t->testInstance8();
         $this->assertTrue(is_object($obj8));
-        $this->assertTrue($obj8->getA() == 1.2);
-        $this->assertTrue($obj8->getB() == 7.30);
+        $this->assertSame($obj8->getA(), 1.2);
+        $this->assertSame($obj8->getB(), 7.30);
 
         $obj9 = $t->testInstance9();
         $this->assertTrue(is_object($obj9));
-        $this->assertTrue($obj9 instanceof \Test\Oo\OoDynamicA);
+        $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj9);
 
         $obj10 = $t->testInstance10();
         $this->assertTrue(is_object($obj10));
-        $this->assertTrue($obj10 instanceof \Test\Oo\OoDynamicB);
+        $this->assertInstanceOf('Test\Oo\OoDynamicB', $obj10);
 
         $obj = $t->testInstance11();
         $this->assertTrue(is_object($obj));
-        $this->assertTrue($obj instanceof \Test\Oo\OoConstructParams);
+        $this->assertInstanceOf('Test\Oo\OoConstructParams', $obj);
     }
 }

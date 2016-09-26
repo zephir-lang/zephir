@@ -42,7 +42,6 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
         if (version_compare(phpversion(), '7.0', '<')) {
             $string = 'Hello, world. [*], this is \ a string';
             $match1 = null;
-            var_dump($match1);
             $this->assertSame(1, $t->testPregMatch3Params('/^[hH]ello,\s/', $string, $match1)); //finds "Hello, "
             $this->assertSame("Hello, ", $match1[0]);
 
@@ -90,7 +89,7 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Pregmatch;
         $arr = $t->testMatchAllInZep();
-        $this->assertEquals($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
-        $this->assertEquals($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
+        $this->assertSame($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
+        $this->assertSame($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
     }
 }

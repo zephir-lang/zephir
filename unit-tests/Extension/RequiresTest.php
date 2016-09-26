@@ -24,7 +24,7 @@ class RequiresTest extends \PHPUnit_Framework_TestCase
     public function testRequireExternal1()
     {
         $r = new \Test\Requires();
-        $this->assertTrue($r->requireExternal1(__DIR__ . "/php/require-me-1.php") == array(1, 2, 3));
-        $this->assertTrue($r->requireExternal1(__DIR__ . "/php/require-me-2.php") && defined('REQUIRE_ME'));
+        $this->assertSame($r->requireExternal1(__DIR__ . '/php/require-me-1.php'), array(1, 2, 3));
+        $this->assertTrue($r->requireExternal1(__DIR__ . '/php/require-me-2.php') && defined('REQUIRE_ME'));
     }
 }

@@ -24,6 +24,6 @@ class DeclareTest extends \PHPUnit_Framework_TestCase
     public function testDeclareMcallExpression()
     {
         $t = new \Test\DeclareTest();
-        $this->assertEquals($t->testDeclareMcallExpression(), "hello");
+        $this->assertSame($t->testDeclareMcallExpression(), "hello");
     }
 }

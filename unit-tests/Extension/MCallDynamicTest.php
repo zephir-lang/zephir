@@ -26,7 +26,7 @@ class MCallTestDynamic extends \PHPUnit_Framework_TestCase
     public function testCallDynamic()
     {
         $a = new McallDynamic;
-        $this->assertEquals($a->method1(), 1);
-        $this->assertEquals($a->testMagicCall1(), 2);
+        $this->assertSame($a->method1(), 1);
+        $this->assertSame($a->testMagicCall1(), 2);
     }
 }

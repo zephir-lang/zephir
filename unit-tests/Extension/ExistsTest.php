@@ -25,20 +25,19 @@ class ExistsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Exists();
 
-        $this->assertTrue($t->testClassExists("TestExClass") == true);
-        $this->assertTrue($t->testClassExists("TestExClassx") == false);
-        $this->assertTrue($t->testClassExists("TestExInterface") == false);
+        $this->assertTrue($t->testClassExists('TestExClass'));
+        $this->assertFalse($t->testClassExists('TestExClassx'));
+        $this->assertFalse($t->testClassExists('TestExInterface'));
         // with namespace
-        $this->assertTrue($t->testClassExists("\\Test\\Exists") == true);
+        $this->assertTrue($t->testClassExists('\\Test\\Exists'));
 
+        $this->assertFalse($t->testInterfaceExists('TestExClass')); // class not interface
+        $this->assertTrue($t->testInterfaceExists('TestExInterface'));
+        $this->assertFalse($t->testInterfaceExists('TestExInterfacex'));
 
-        $this->assertTrue($t->testInterfaceExists("TestExClass") == false); // class not interface
-        $this->assertTrue($t->testInterfaceExists("TestExInterface") == true);
-        $this->assertTrue($t->testInterfaceExists("TestExInterfacex") == false);
+        $this->assertTrue($t->testMethodExists($t, 'testMethodExists'));
 
-        $this->assertTrue($t->testMethodExists($t, "testMethodExists") == true);
-
-        $this->assertTrue($t->testFileExists(__DIR__ . "/php/exists.php") == true);
-        $this->assertTrue($t->testFileExists(__DIR__ . "/php/existsxxxx.php") == false);
+        $this->assertTrue($t->testFileExists(__DIR__ . '/php/exists.php'));
+        $this->assertFalse($t->testFileExists(__DIR__ . '/php/existsxxxx.php'));
     }
 }

@@ -23,12 +23,12 @@ class StaticPublicPropertiesTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someNull === null);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someNullInitial === null);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someFalse === false);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someTrue === true);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someInteger === 10);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someDouble === 10.25);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someString === "test");
+        $this->assertNull(\Test\Properties\StaticPublicProperties::$someNull);
+        $this->assertNull(\Test\Properties\StaticPublicProperties::$someNullInitial);
+        $this->assertFalse(\Test\Properties\StaticPublicProperties::$someFalse);
+        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someTrue);
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someInteger, 10);
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someDouble, 10.25);
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, 'test');
     }
 }

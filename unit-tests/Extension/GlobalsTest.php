@@ -25,11 +25,11 @@ class GlobalsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Globals();
 
-        $this->assertTrue($t->getDefaultGlobals1() === true);
-        $this->assertTrue($t->getDefaultGlobals2() === 100);
-        $this->assertTrue($t->getDefaultGlobals3() === 7.5);
-        $this->assertTrue($t->getDefaultGlobals4() === true);
-        $this->assertTrue($t->getDefaultGlobals5() === 10);
-        $this->assertTrue($t->getDefaultGlobals6() === 15.2);
+        $this->assertTrue($t->getDefaultGlobals1());
+        $this->assertSame($t->getDefaultGlobals2(), 100);
+        $this->assertSame($t->getDefaultGlobals3(), 7.5);
+        $this->assertTrue($t->getDefaultGlobals4());
+        $this->assertSame($t->getDefaultGlobals5(), 10);
+        $this->assertSame($t->getDefaultGlobals6(), 15.2);
     }
 }

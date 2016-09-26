@@ -27,10 +27,10 @@ class IssetTest extends \PHPUnit_Framework_TestCase
     public function testIssetArray()
     {
         $t = new \Test\IssetTest();
-        $testArray = array("a", "abc" => "def", "gef" => "123");
-        $this->assertTrue($t->testIssetArray1($testArray, "abc"));
+        $testArray = array('a', 'abc' => 'def', 'gef' => '123');
+        $this->assertTrue($t->testIssetArray1($testArray, 'abc'));
         $this->assertTrue(!$t->testIssetArray2($testArray, 12));
-        $this->assertTrue($t->testIssetArray3($testArray, "gef"));
+        $this->assertTrue($t->testIssetArray3($testArray, 'gef'));
         $this->assertTrue($t->testIssetArray4($testArray));
         $this->assertTrue(!$t->testIssetArray5($testArray));
     }
@@ -39,8 +39,8 @@ class IssetTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\IssetTest();
         $this->assertTrue($t->testIssetProperty1($this));
-        $this->assertTrue($t->testIssetProperty2($this, "test2"));
-        $this->assertTrue(!$t->testIssetProperty2($this, "test3"));
+        $this->assertTrue($t->testIssetProperty2($this, 'test2'));
+        $this->assertTrue(!$t->testIssetProperty2($this, 'test3'));
         $this->assertTrue($t->testIssetProperty3($this));
     }
 
@@ -49,7 +49,7 @@ class IssetTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\IssetTest();
         $this->assertTrue($t->testIssetDynamicProperty1());
         $this->assertTrue(!$t->testIssetDynamicProperty2($this));
-        $this->s = array("a" => "true");
+        $this->s = array('a' => 'true');
         $this->assertTrue($t->testIssetDynamicProperty2($this));
     }
 }

@@ -36,7 +36,13 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($callback, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setCallableStrict(true);
     }
 
@@ -53,7 +59,13 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($obj, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setObjectStrict(true);
     }
 
@@ -64,19 +76,25 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(STDIN, $t->a);
 
-        $this->setExpectedException('\Exception');
+        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->expectException('\Exception');
+        }
+
         $t->setResourceStrict(true);
     }
 
     public function testMethodOptionalValueWithDefaultStaticConstantAccess()
     {
         $t = new MethodArgs;
-        $this->assertEquals('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
+        $this->assertSame('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 
-        $this->assertEquals(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
-        $this->assertEquals(MethodArgs::MY_INT, $t->methodOptionalIntValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_INT, $t->methodOptionalIntValueWithDefaultStaticConstantAccess());
     }
 }

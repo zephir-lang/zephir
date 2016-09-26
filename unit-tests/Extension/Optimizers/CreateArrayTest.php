@@ -25,13 +25,13 @@ class CreateArrayTest extends \PHPUnit_Framework_TestCase
     public function testCreateArrayNoSize()
     {
         $t = new CreateArray;
-        $this->assertEquals(count($t->createNoSize()), 0);
+        $this->assertSame(count($t->createNoSize()), 0);
     }
 
     public function testCreateArraySize()
     {
         $t = new CreateArray;
-        $this->assertEquals(count($t->createSize(3)), 3);
-        $this->assertEquals(count($t->createSize(10)), 10);
+        $this->assertSame(count($t->createSize(3)), 3);
+        $this->assertSame(count($t->createSize(10)), 10);
     }
 }

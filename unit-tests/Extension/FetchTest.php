@@ -44,9 +44,9 @@ class FetchTest extends \PHPUnit_Framework_TestCase
 
     public function testPost()
     {
-        $this->assertEquals(self::$test->testFetchPost(1), 'one');
-        $this->assertEquals(self::$test->testFetchPost('two'), 2);
-        $this->assertEquals(self::$test->testFetchPost('three'), array(3));
+        $this->assertSame(self::$test->testFetchPost(1), 'one');
+        $this->assertSame(self::$test->testFetchPost('two'), 2);
+        $this->assertSame(self::$test->testFetchPost('three'), array(3));
     }
 
     /**
@@ -54,8 +54,8 @@ class FetchTest extends \PHPUnit_Framework_TestCase
      */
     public function testValue($input, $expected, $has)
     {
-        $this->assertEquals(self::$test->hasValue($input), $has);
-        $this->assertEquals(self::$test->getValue($input), $expected);
+        $this->assertSame(self::$test->hasValue($input), $has);
+        $this->assertSame(self::$test->getValue($input), $expected);
     }
 
     public function fieldProvider()

@@ -25,15 +25,15 @@ class CharsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Chars();
 
-        $this->assertEquals(chr($t->sumChars1()), 'a');
-        $this->assertEquals(chr($t->sumChars2('A')), 'a');
+        $this->assertSame(chr($t->sumChars1()), 'a');
+        $this->assertSame(chr($t->sumChars2('A')), 'a');
     }
 
     public function testDiffChars()
     {
         $t = new \Test\Chars();
 
-        $this->assertEquals(chr($t->diffChars1()), 'A');
-        $this->assertEquals(chr($t->diffChars2('a')), 'A');
+        $this->assertSame(chr($t->diffChars1()), 'A');
+        $this->assertSame(chr($t->diffChars2('a')), 'A');
     }
 }

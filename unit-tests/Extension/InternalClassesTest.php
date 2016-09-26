@@ -32,12 +32,12 @@ class InternalClassesTest extends \PHPUnit_Framework_TestCase
     public function testStaticMethodCall()
     {
         $class = new InternalClasses();
-        $this->assertEquals(Di::getDefault(), $class->testStaticCall());
+        $this->assertSame(Di::getDefault(), $class->testStaticCall());
     }
 
     public function testStaticPropertyFetch()
     {
         $class = new InternalClasses();
-        $this->assertEquals(Query::TYPE_DELETE, $class->testStaticPropertyFetch());
+        $this->assertSame(Query::TYPE_DELETE, $class->testStaticPropertyFetch());
     }
 }

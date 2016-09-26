@@ -32,7 +32,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     public function testTypeOffResource()
     {
         $t = new \Test\ResourceTest();
-        $this->assertEquals('resource', $t->testTypeOffResource());
+        $this->assertSame('resource', $t->testTypeOffResource());
     }
 
     public function testIsResource()

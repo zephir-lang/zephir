@@ -24,18 +24,18 @@ class McallChainedTest extends \PHPUnit_Framework_TestCase
     public function testChained1()
     {
         $t = new \Test\McallChained();
-        $this->assertTrue($t->testChained1() === $t);
+        $this->assertSame($t->testChained1(), $t);
     }
 
     public function testChained2()
     {
         $t = new \Test\McallChained();
-        $this->assertTrue($t->testChained2() === $t);
+        $this->assertSame($t->testChained2(), $t);
     }
 
     public function testChained3()
     {
         $t = new \Test\McallChained();
-        $this->assertTrue($t->testChained3() === $t);
+        $this->assertSame($t->testChained3(), $t);
     }
 }

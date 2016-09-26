@@ -25,12 +25,12 @@ class PrivatePropertiesTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Properties\PrivateProperties();
 
-        $this->assertTrue($t->getSomeNull() === null);
-        $this->assertTrue($t->getSomeNullInitial() === null);
-        $this->assertTrue($t->getSomeFalse() === false);
-        $this->assertTrue($t->getSomeTrue() === true);
-        $this->assertTrue($t->getSomeInteger() === 10);
-        $this->assertTrue($t->getSomeDouble() === 10.25);
-        $this->assertTrue($t->getSomeString() === "test");
+        $this->assertNull($t->getSomeNull());
+        $this->assertNull($t->getSomeNullInitial());
+        $this->assertFalse($t->getSomeFalse());
+        $this->assertTrue($t->getSomeTrue());
+        $this->assertSame($t->getSomeInteger(), 10);
+        $this->assertSame($t->getSomeDouble(), 10.25);
+        $this->assertSame($t->getSomeString(), 'test');
     }
 }

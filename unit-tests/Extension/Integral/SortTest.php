@@ -27,6 +27,6 @@ class SortTest extends \PHPUnit_Framework_TestCase
         shuffle($data);
 
         $t = new \Test\Sort();
-        $this->assertTrue($t->quick($data) === $original);
+        $this->assertSame($t->quick($data), $original);
     }
 }

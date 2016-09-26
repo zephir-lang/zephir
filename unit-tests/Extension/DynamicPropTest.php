@@ -24,52 +24,52 @@ class DynamicPropTest extends \PHPUnit_Framework_TestCase
     public function testSetProperty()
     {
         $class = new \Test\Oo\DynamicProp();
-        $this->assertEquals(null, $class->test);
+        $this->assertSame(null, $class->test);
 
         $class->setPropertyInt('test');
-        $this->assertEquals(10, $class->test);
+        $this->assertSame(10, $class->test);
 
         $class->setPropertyBoolTrue('test');
-        $this->assertEquals(true, $class->test);
+        $this->assertSame(true, $class->test);
 
         $class->setPropertyBoolFalse('test');
-        $this->assertEquals(false, $class->test);
+        $this->assertSame(false, $class->test);
 
         $class->setPropertyString('test');
-        $this->assertEquals('string', $class->test);
+        $this->assertSame('string', $class->test);
 
         $class->setPropertyChar('test');
-        $this->assertEquals(ord('A'), $class->test);
+        $this->assertSame(ord('A'), $class->test);
 
         $class->setPropertyUChar('test');
-        $this->assertEquals(ord('B')-1, $class->test);
+        $this->assertSame(ord('B')-1, $class->test);
 
         $class->setPropertyNull('test');
-        $this->assertEquals(null, $class->test);
+        $this->assertSame(null, $class->test);
 
 
         $class->setPropertyVariableInt('test');
-        $this->assertEquals(10, $class->test);
+        $this->assertSame(10, $class->test);
 
         $class->setPropertyVariableString('test');
-        $this->assertEquals("test", $class->test);
+        $this->assertSame("test", $class->test);
 
         $class->setPropertyVariableBoolTrue('test');
-        $this->assertEquals(true, $class->test);
+        $this->assertSame(true, $class->test);
 
         $class->setPropertyVariableBoolFalse('test');
-        $this->assertEquals(false, $class->test);
+        $this->assertSame(false, $class->test);
 
         $class->setPropertyInt("property");
-        $this->assertEquals(10, $class->property);
+        $this->assertSame(10, $class->property);
 
         $class->setExistingStringProperty();
-        $this->assertEquals("works", $class->test);
+        $this->assertSame("works", $class->test);
 
         $class->setExistingStringPropertyString("test");
-        $this->assertEquals("test", $class->eproperty);
+        $this->assertSame("test", $class->eproperty);
 
         $class->setNonExistingStringProperty();
-        $this->assertEquals("works", $class->property);
+        $this->assertSame("works", $class->property);
     }
 }

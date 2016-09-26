@@ -66,36 +66,35 @@ class CastTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Cast();
 
-        $this->assertTrue($t->testFloatCastFromFloat() === 5.0);
-        $this->assertTrue($t->testFloatCastFromBooleanTrue() === 1.0);
-        $this->assertTrue($t->testFloatCastFromBooleanFalse() === 0.0);
-        $this->assertTrue($t->testFloatCastFromNull() === 0.0);
-        $this->assertTrue($t->testFloatCastFromEmptyArray() === 0.0);
-        $this->assertTrue($t->testFloatCastFromArray() === 1.0);
-        $this->assertTrue($t->testFloatCastFromStdClass() === 1.0);
+        $this->assertSame($t->testFloatCastFromFloat(), 5.0);
+        $this->assertSame($t->testFloatCastFromBooleanTrue(), 1.0);
+        $this->assertSame($t->testFloatCastFromBooleanFalse(), 0.0);
+        $this->assertSame($t->testFloatCastFromNull(), 0.0);
+        $this->assertSame($t->testFloatCastFromEmptyArray(), 0.0);
+        $this->assertSame($t->testFloatCastFromArray(), 1.0);
+        $this->assertSame($t->testFloatCastFromStdClass(), 1.0);
 
-        $this->assertTrue($t->testFloatCastFromVariableFloat() === 5.0);
-        $this->assertTrue($t->testFloatCastFromVariableBooleanTrue() === 1.0);
-        $this->assertTrue($t->testFloatCastFromVariableBooleanFalse() === 0.0);
-        $this->assertTrue($t->testFloatCastFromVariableNull() === 0.0);
-        $this->assertTrue($t->testFloatCastFromVariableEmptyArray() === 0.0);
-        $this->assertTrue($t->testFloatCastFromVariableArray() === 1.0);
-        $this->assertTrue($t->testFloatCastFromVariableStdClass() === 1.0);
+        $this->assertSame($t->testFloatCastFromVariableFloat(), 5.0);
+        $this->assertSame($t->testFloatCastFromVariableBooleanTrue(), 1.0);
+        $this->assertSame($t->testFloatCastFromVariableBooleanFalse(), 0.0);
+        $this->assertSame($t->testFloatCastFromVariableNull(), 0.0);
+        $this->assertSame($t->testFloatCastFromVariableEmptyArray(), 0.0);
+        $this->assertSame($t->testFloatCastFromVariableArray(), 1.0);
+        $this->assertSame($t->testFloatCastFromVariableStdClass(), 1.0);
     }
 
     public function testBooleanCast()
     {
         $t = new Cast();
 
-        $this->assertTrue($t->testBooleanCastFromIntTrue1() === true);
-        $this->assertTrue($t->testBooleanCastFromIntTrue2() === true);
-        $this->assertTrue($t->testBooleanCastFromIntFalse() === false);
-        $this->assertTrue($t->testBooleanCastFromObject() === true);
-        $this->assertTrue($t->testBooleanCastFromEmptyArray() === false);
-        $this->assertTrue($t->testBooleanCastFromArray() === true);
-        $this->assertTrue($t->testBooleanCastFromNull() === false);
+        $this->assertTrue($t->testBooleanCastFromIntTrue1());
+        $this->assertTrue($t->testBooleanCastFromIntTrue2());
+        $this->assertFalse($t->testBooleanCastFromIntFalse());
+        $this->assertTrue($t->testBooleanCastFromObject());
+        $this->assertFalse($t->testBooleanCastFromEmptyArray());
+        $this->assertTrue($t->testBooleanCastFromArray());
+        $this->assertFalse($t->testBooleanCastFromNull());
     }
-
 
     public function testObjectCast()
     {

@@ -24,7 +24,7 @@ class CblockTest extends \PHPUnit_Framework_TestCase
     public function testBlock()
     {
         $t = new \Test\Cblock();
-        $this->assertEquals($t->testCblock1(), 10);
-        $this->assertEquals($t->testCblock2(), 55);
+        $this->assertSame($t->testCblock1(), 10);
+        $this->assertSame($t->testCblock2(), 55);
     }
 }

@@ -26,10 +26,10 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
     public function testStaticPropertyConcatBySelfContext()
     {
         $t = new Concat();
-        $this->assertEquals(null, $t->getTestProperty());
+        $this->assertSame(null, $t->getTestProperty());
         $t->testConcatBySelfProperty("test");
-        $this->assertEquals("test", $t->getTestProperty());
+        $this->assertSame("test", $t->getTestProperty());
         $t->testConcatBySelfProperty(" string");
-        $this->assertEquals("test string", $t->getTestProperty());
+        $this->assertSame("test string", $t->getTestProperty());
     }
 }

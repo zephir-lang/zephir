@@ -26,26 +26,26 @@ class StatementsTest extends \PHPUnit_Framework_TestCase
     public function testElseIf()
     {
         $t = new Statements;
-        $this->assertEquals('more', $t->testElseIf(10));
-        $this->assertEquals('equal', $t->testElseIf(0));
-        $this->assertEquals('-1', $t->testElseIf(-1));
-        $this->assertEquals('less', $t->testElseIf(-10));
+        $this->assertSame('more', $t->testElseIf(10));
+        $this->assertSame('equal', $t->testElseIf(0));
+        $this->assertSame('-1', $t->testElseIf(-1));
+        $this->assertSame('less', $t->testElseIf(-10));
     }
 
     public function testElseIf1()
     {
         $t = new Statements;
-        $this->assertEquals('equal', $t->testElseIf1(10));
-        $this->assertEquals('less', $t->testElseIf1(5));
-        $this->assertEquals('else', $t->testElseIf1(11));
+        $this->assertSame('equal', $t->testElseIf1(10));
+        $this->assertSame('less', $t->testElseIf1(5));
+        $this->assertSame('else', $t->testElseIf1(11));
     }
 
     public function testElseIf2()
     {
         $t = new Statements;
-        $this->assertEquals('equal', $t->testElseIf2(10, 10));
-        $this->assertEquals('less', $t->testElseIf2(5, 10));
-        $this->assertEquals('else', $t->testElseIf2(11, 10));
+        $this->assertSame('equal', $t->testElseIf2(10, 10));
+        $this->assertSame('less', $t->testElseIf2(5, 10));
+        $this->assertSame('else', $t->testElseIf2(11, 10));
     }
 
     public function test544Issue()
