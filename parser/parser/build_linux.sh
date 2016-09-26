@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 rm -f *.o *.lo
 
 #Compile lemon
@@ -6,7 +6,7 @@ if [ ! -f lemon ]; then
     gcc -w lemon.c -o lemon
 fi
 
-if [[ `re2c -v` != *re2c* ]]; then
+if ! command -v re2c > /dev/null; then
   echo "error: re2c is not installed"
   exit 2
 fi
@@ -16,8 +16,6 @@ if [ ! -f scanner.c ]; then
     echo "error: re2c is not installed"
     exit 2
 fi
-
-#! /bin/sh
 
 rm -f parser.o
 rm -f parser.lo

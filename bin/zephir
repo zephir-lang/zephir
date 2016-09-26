@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 if [ -z "$ZEPHIRDIR" ]; then
   ZEPHIRDIR="%ZEPHIRDIR%"
-  if [[ "$ZEPHIRDIR" == "%""ZEPHIRDIR""%" ]]; then
+  if [ "$ZEPHIRDIR" = "%""ZEPHIRDIR""%" ]; then
     if [ -h $0 ]; then
         REALPATH="`dirname $0`/`readlink $0`"
         CURDIR=`dirname $REALPATH`
@@ -19,9 +19,8 @@ if [ -z "$ZEPHIRDIR" ]; then
   fi
 fi
 
-if [[ $1 && $2 && $3 && "$1"=="-c" ]]; then
+if [ $1 -a $2 -a $3 -a $1 = "-c" ]; then
     php -d safe_mode=Off -d enable_dl=On -c $2 $ZEPHIRDIR/compiler.php ${*:3}
 else
     php -d safe_mode=Off -d enable_dl=On $ZEPHIRDIR/compiler.php $*
 fi
-
