@@ -19,7 +19,7 @@ if [ -z "$ZEPHIRDIR" ]; then
   fi
 fi
 
-if [ $1 -a $2 -a $3 -a $1 = "-c" ]; then
+if [ ! -z $1 ] && [ ! -z $2 ] && [ ! -z $3 ] && [ "$1" = "-c" ]; then
     php -d safe_mode=Off -d enable_dl=On -c $2 $ZEPHIRDIR/compiler.php ${*:3}
 else
     php -d safe_mode=Off -d enable_dl=On $ZEPHIRDIR/compiler.php $*
