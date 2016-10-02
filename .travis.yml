@@ -1,5 +1,7 @@
 language: php
-sudo: false
+
+sudo: required
+dist: trusty
 
 env:
   global:
