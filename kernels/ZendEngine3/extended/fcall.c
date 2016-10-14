@@ -160,12 +160,17 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
 		}
+#if PHP_VERSION_ID >= 70100
+		zend_init_execute_data(call, &func->op_array, retval_ptr);
+		zend_execute_ex(call);
+#else
 		if (EXPECTED((func->op_array.fn_flags & ZEND_ACC_GENERATOR) == 0)) {
 			zend_init_execute_data(call, &func->op_array, retval_ptr);
 			zend_execute_ex(call);
 		} else {
 			zend_generator_create_zval(call, &func->op_array, retval_ptr);
 		}
+#endif
 		if (call_via_handler) {
 			/* We must re-initialize function again */
 			*cache_entry = NULL;
@@ -1195,12 +1200,17 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
 		}
+#if PHP_VERSION_ID >= 70100
+		zend_init_execute_data(call, &func->op_array, fci->retval);
+		zend_execute_ex(call);
+#else
 		if (EXPECTED((func->op_array.fn_flags & ZEND_ACC_GENERATOR) == 0)) {
 			zend_init_execute_data(call, &func->op_array, fci->retval);
 			zend_execute_ex(call);
 		} else {
 			zend_generator_create_zval(call, &func->op_array, fci->retval);
 		}
+#endif
 		if (call_via_handler) {
 			/* We must re-initialize function again */
 			fci_cache->initialized = 0;
