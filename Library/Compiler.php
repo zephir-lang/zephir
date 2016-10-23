@@ -378,6 +378,7 @@ class Compiler
      *
      * @param string $className
      * @param string $location
+     * @return boolean
      * @throws CompilerException
      * @throws Exception
      * @throws ParseException
@@ -395,11 +396,11 @@ class Compiler
         }, explode('\\', $className)));
 
         if (isset($this->files[$className])) {
-            return;
+            return true;
         }
 
         if (!file_exists($filePath)) {
-            throw new CompilerException("Class '$className' must be located at '$filePath' but this file is missing");
+            return false;
         }
 
         $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
@@ -407,6 +408,7 @@ class Compiler
         $this->files[$className]->preCompile($this);
 
         $this->definitions[$className] = $this->files[$className]->getClassDefinition();
+        return true;
     }
 
     /**
@@ -431,8 +433,7 @@ class Compiler
         if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
-                    $this->loadExternalClass($className, $location);
-                    return true;
+                    return $this->loadExternalClass($className, $location);
                 }
             }
         }
@@ -463,8 +464,7 @@ class Compiler
         if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
-                    $this->loadExternalClass($className, $location);
-                    return true;
+                    return $this->loadExternalClass($className, $location);
                 }
             }
         }
