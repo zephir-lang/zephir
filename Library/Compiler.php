@@ -1197,6 +1197,10 @@ class Compiler
          * Get global namespace
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
+        $extensionName  = $this->config->get('extension-name');
+        if (empty($extensionName) || !is_string($extensionName)) {
+            $extensionName = $namespace;
+        }
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
             if (Utils::isWindows()) {
@@ -1235,7 +1239,7 @@ class Compiler
                 }
 
                 $this->logger->output('Preparing configuration file...');
-                exec('cd ext && configure --enable-' . $namespace);
+                exec('cd ext && configure --enable-' . $extensionName);
             } else {
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
 
@@ -1250,7 +1254,7 @@ class Compiler
                     'cd ext && export CC="gcc" && export CFLAGS="' .
                     $gccFlags .
                     '" && ./configure --enable-' .
-                    $namespace
+                    $extensionName
                 );
             }
         }

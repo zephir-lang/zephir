@@ -43,6 +43,11 @@ class ClassDefinition
     /**
      * @var string
      */
+    protected $shortName;
+
+    /**
+     * @var string
+     */
     protected $type = 'class';
 
     /**
@@ -148,10 +153,11 @@ class ClassDefinition
      * @param string $namespace
      * @param string $name
      */
-    public function __construct($namespace, $name)
+    public function __construct($namespace, $name, $shortName = null)
     {
         $this->namespace = $namespace;
         $this->name = $name;
+        $this->shortName = $shortName ? $shortName : $name;
 
         $this->eventsManager = new EventsManager();
     }
@@ -248,13 +254,23 @@ class ClassDefinition
     }
 
     /**
-     * Returns the class name without namespace
+     * Returns the class name
      *
      * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Returns the class name without namespace
+     *
+     * @return string
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
     }
 
     /**
@@ -314,7 +330,7 @@ class ClassDefinition
      */
     public function getCompleteName()
     {
-        return $this->namespace . '\\' . $this->name;
+        return $this->namespace . '\\' . $this->shortName;
     }
 
     /**
@@ -1761,7 +1777,7 @@ class ClassDefinition
      */
     public static function buildFromReflection(\ReflectionClass $class)
     {
-        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
+        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName(), $class->getShortName());
 
         $methods = $class->getMethods();
         if (count($methods) > 0) {
