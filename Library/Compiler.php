@@ -1358,7 +1358,9 @@ class Compiler
             $exit
         );
 
-        if (!file_exists("ext/modules/" . $namespace . ".so")) {
+        $fileName = $this->getConfig()->get('extension-name') ?: $namespace;
+
+        if (!file_exists("ext/modules/" . $fileName . ".so")) {
             throw new CompilerException(
                 "Internal extension compilation failed. Check compile-errors.log for more information"
             );
