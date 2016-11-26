@@ -31,7 +31,7 @@ class CheckDependenciesTest extends \PHPUnit_Framework_TestCase
     {
         $config       = new Config();
         $logger       = $this->getMockBuilder('Zephir\Logger')->disableOriginalConstructor()->getMock();
-        $compiler     = new Compiler($config, $logger, new Backend());
+        $compiler     = new Compiler($config, $logger, new Backend($config));
         $topStatement = array('name' => 'myClass', 'extends' => array(array('value' => 'doesNotExist')));
         $sUT          = new sUT('myClass', 'myClass.zep', $config, $logger);
 

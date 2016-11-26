@@ -1529,13 +1529,12 @@ class Compiler
      */
     public function createConfigFiles($project)
     {
-        $templatePath = $this->backend->getInternalTemplatePath();
-        $contentM4 = file_get_contents($templatePath . '/config.m4');
+        $contentM4 = $this->backend->getTemplateFileContents('config.m4');
         if (empty($contentM4)) {
             throw new Exception("Template config.m4 doesn't exist");
         }
 
-        $contentW32 = file_get_contents($templatePath . '/config.w32');
+        $contentW32 = $this->backend->getTemplateFileContents('config.w32');
         if (empty($contentW32)) {
             throw new Exception("Template config.w32 doesn't exist");
         }
@@ -1616,7 +1615,7 @@ class Compiler
         /**
          * php_ext.h
          */
-        $content = file_get_contents($templatePath . '/php_ext.h');
+        $content = $this->backend->getTemplateFileContents('php_ext.h');
         if (empty($content)) {
             throw new Exception("Template php_ext.h doesn't exist");
         }
@@ -1634,7 +1633,7 @@ class Compiler
         /**
          * ext.h
          */
-        $content = file_get_contents($templatePath . '/ext.h');
+        $content = $this->backend->getTemplateFileContents('ext.h');
         if (empty($content)) {
             throw new Exception("Template ext.h doesn't exist");
         }
@@ -1652,7 +1651,7 @@ class Compiler
         /**
          * ext_config.h
          */
-        $content = file_get_contents($templatePath . '/ext_config.h');
+        $content = $this->backend->getTemplateFileContents('ext_config.h');
         if (empty($content)) {
             throw new Exception("Template ext_config.h doesn't exist");
         }
@@ -1670,7 +1669,7 @@ class Compiler
         /**
          * ext_clean
          */
-        $content = file_get_contents($templatePath . '/clean');
+        $content = $this->backend->getTemplateFileContents('clean');
         if (empty($content)) {
             throw new Exception("Clean file doesn't exist");
         }
@@ -1682,7 +1681,7 @@ class Compiler
         /**
          * ext_install
          */
-        $content = file_get_contents($templatePath . '/install');
+        $content = $this->backend->getTemplateFileContents('install');
         if (empty($content)) {
             throw new Exception("Install file doesn't exist");
         }
@@ -1972,12 +1971,11 @@ class Compiler
     public function createProjectFiles($project)
     {
         $needConfigure = $this->checkKernelFiles();
-        $templatePath = $this->backend->getInternalTemplatePath();
 
         /**
          * project.c
          */
-        $content = file_get_contents($templatePath . '/project.c');
+        $content = $this->backend->getTemplateFileContents('project.c');
         if (empty($content)) {
             throw new Exception("Template project.c doesn't exist");
         }
@@ -2154,7 +2152,7 @@ class Compiler
         /**
          * Round 6. Generate the project main header
          */
-        $content = file_get_contents($templatePath . '/project.h');
+        $content = $this->backend->getTemplateFileContents('project.h');
         if (empty($content)) {
             throw new Exception("Template project.h doesn't exists");
         }
@@ -2195,7 +2193,7 @@ class Compiler
         /**
          * Round 7. Create php_project.h
          */
-        $content = file_get_contents($templatePath . '/php_project.h');
+        $content = $this->backend->getTemplateFileContents('php_project.h');
         if (empty($content)) {
             throw new Exception("Template php_project.h doesn't exist");
         }
@@ -2380,11 +2378,10 @@ class Compiler
      */
     public function generatePackageDependenciesM4($contentM4)
     {
-        $templatePath = $this->backend->getInternalTemplatePath();
         $packageDependencies = $this->config->get('package-dependencies');
         if (is_array($packageDependencies)) {
-            $pkgconfigM4 = file_get_contents($templatePath . '/pkg-config.m4');
-            $pkgconfigCheckM4 = file_get_contents($templatePath . '/pkg-config-check.m4');
+            $pkgconfigM4 = $this->backend->getTemplateFileContents('pkg-config.m4');
+            $pkgconfigCheckM4 = $this->backend->getTemplateFileContents('pkg-config-check.m4');
             $extraCFlags = '';
 
             foreach ($packageDependencies as $pkg => $version) {
