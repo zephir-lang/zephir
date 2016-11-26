@@ -1,13 +1,31 @@
 <?php
 namespace Zephir;
 
+use Zephir\Config;
+
 abstract class BaseBackend
 {
+    /**
+     * @var Config
+     */
+    protected $config;
+
     /**
      * The name of the backend (e.g. ZendEngine2)
      * @var string
      */
     protected $name;
+
+    /**
+     * BaseBackend constructor
+     *
+     * @param Config $config
+     * @throws Exception
+     */
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     public function getName()
     {
@@ -30,6 +48,19 @@ abstract class BaseBackend
     public function getInternalTemplatePath()
     {
         return realpath(__DIR__ . '/../templates/' . $this->name);
+    }
+
+    /**
+     * Resolves the path to the source template file of the backend
+     * @return string Absolute path to template file
+     */
+    public function getTemplateFileContents($filename)
+    {
+        $filepath = realpath(rtrim($this->config->get('templatepath', 'backend'), '/').'/'.$this->name.'/'.$filename);
+        if (!file_exists($filepath)) {
+            $filepath = realpath(__DIR__ . '/../templates/'.$this->name.'/'.$filename);
+        }
+        return file_get_contents($filepath);
     }
 
     abstract public function getStringsManager();

@@ -95,7 +95,7 @@ abstract class CommandAbstract implements CommandInterface
         if (!class_exists($className)) {
             throw new \InvalidArgumentException('Backend '.$params['backend'].' does not exist');
         }
-        $backend = new $className();
+        $backend = new $className($config);
         $compiler = new Compiler($config, $logger, $backend);
         if (isset($params['parser-compiled'])) {
             if ($params['parser-compiled'] !== 'force') {
