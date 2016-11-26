@@ -153,7 +153,7 @@ class HardDisk
      * Requires a file from the temporary directory
      *
      * @param string $path
-     * @return boolean
+     * @return mixed
      */
     public function requireFile($path)
     {

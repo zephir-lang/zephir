@@ -1190,6 +1190,8 @@ class Compiler
      *
      * @param CommandInterface $command
      * @param boolean $development
+     *
+     * @throws CompilerException
      */
     public function compile(CommandInterface $command, $development = false)
     {
@@ -2001,6 +2003,7 @@ class Compiler
          * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
          */
         foreach ($files as $file) {
+            /** @var \Zephir\Compiler\FileInterface $file */
             if (!$file->isExternal()) {
                 $classDefinition = $file->getClassDefinition();
                 if ($classDefinition) {
