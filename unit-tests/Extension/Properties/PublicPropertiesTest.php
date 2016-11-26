@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2015 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2016 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -45,7 +45,7 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
         $t = new PublicProperties();
         $this->assertTrue($t->test394Issue());
     }
-    
+
     /**
      * @link https://github.com/phalcon/zephir/issues/537
      */

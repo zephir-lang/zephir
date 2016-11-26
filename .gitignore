@@ -23,7 +23,6 @@ ext
 *.la
 *.o
 *.loT
-*.gch
 ide/
 compile.log
 compile-errors.log

@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2015 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2016 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -160,7 +160,7 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $t->issue743c(array("str" => array("hey" => array("hey")))));
         $this->assertSame($expected, $t->issue743c(array("str" => array("hey" => new \stdClass()))));
     }
-    
+
     public function testIssue709()
     {
         $t = new NativeArray();

@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2015 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2016 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -50,7 +50,7 @@ class FcallTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Fcall();
         $this->assertSame($t->testArrayFill(), array(array_fill(0, 5, '?'), array_fill(0, 6, '?')));
     }
-    
+
     public function testFunctionDeclaration()
     {
         $this->assertSame(\Test\zephir_namespaced_method_test("a"), "aaaaa");
