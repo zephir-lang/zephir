@@ -173,7 +173,7 @@ class Bootstrap
                          */
                         $command = new $className();
 
-                        if (!($command instanceof CommandAbstract)) {
+                        if (!$command instanceof CommandAbstract) {
                             throw new \Exception('Class ' . $class->name . ' must be instance of CommandAbstract');
                         }
 

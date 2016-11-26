@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Config;
 use Zephir\Logger;
+use Zephir\Compiler\FileInterface;
 
 /**
  * CompilerFileAnonymous
@@ -28,7 +29,7 @@ use Zephir\Logger;
  * This class represents an anonymous file created to dump
  * the code produced by an internal closure
  */
-class CompilerFileAnonymous
+class CompilerFileAnonymous implements FileInterface
 {
     /**
      * @var string
@@ -72,7 +73,7 @@ class CompilerFileAnonymous
     }
 
     /**
-     * Returns the class definition related to the compiled file
+     * {@inheritdoc}
      *
      * @return ClassDefinition
      */
@@ -92,7 +93,7 @@ class CompilerFileAnonymous
     }
 
     /**
-     * Checks if the class file belongs to an external dependency or not
+     * {@inheritdoc}
      *
      * @return bool
      */

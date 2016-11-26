@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 
 /**
@@ -27,7 +28,7 @@ use Zephir\Documentation\DocblockParser;
  * This class represents every file compiled in a project
  * Every file may contain a class or an interface
  */
-class CompilerFile
+class CompilerFile implements FileInterface
 {
     /**
      * Namespace of the
@@ -75,6 +76,11 @@ class CompilerFile
     protected $_logger = null;
 
     /**
+     * @var AliasManager
+     */
+    protected $_aliasManager;
+
+    /**
      * CompilerFile constructor
      *
      * @param string $className
@@ -93,7 +99,7 @@ class CompilerFile
     }
 
     /**
-     * Returns the class definition related to the compiled file
+     * {@inheritdoc}
      *
      * @return ClassDefinition
      */
@@ -119,7 +125,7 @@ class CompilerFile
     }
 
     /**
-     * Checks if the class file belongs to an external dependency or not
+     * {@inheritdoc}
      *
      * @return bool
      */
@@ -131,8 +137,11 @@ class CompilerFile
     /**
      * Adds a function to the function definitions
      *
+     * @param Compiler $compiler
      * @param FunctionDefinition $func
      * @param array $statement
+     *
+     * @throws CompilerException
      */
     public function addFunction(Compiler $compiler, FunctionDefinition $func, $statement = null)
     {
@@ -149,6 +158,8 @@ class CompilerFile
      *
      * @param Compiler $compiler
      * @return array
+     *
+     * @throws Exception
      */
     public function genIR(Compiler $compiler)
     {
