@@ -63,9 +63,8 @@ class MethodDocBlock extends DocBlock
 
     protected function parseMethodReturnType(ClassMethod $method)
     {
-        $return = array();
+        $return = [];
         $returnTypes = $method->getReturnTypes();
-
 
         if ($returnTypes) {
             foreach ($returnTypes as $type) {
@@ -74,6 +73,7 @@ class MethodDocBlock extends DocBlock
                 }
             }
         }
+
         $returnClassTypes = $method->getReturnClassTypes();
         if ($returnClassTypes) {
             foreach ($returnClassTypes as $key => $returnClassType) {
@@ -85,26 +85,29 @@ class MethodDocBlock extends DocBlock
             $return = array_merge($return, $returnClassTypes);
         }
 
-        //@TODO: refactoring
-        if (($returnClassTypes = $method->getReturnTypesRaw()) && isset($returnClassTypes['list'])) {
-            foreach ($returnClassTypes['list'] as $returnType) {
-                if (empty($returnType['cast']) || !$returnType['collection']) {
-                    continue;
+        if ($method->hasReturnTypesRaw()) {
+            $returnClassTypes = $method->getReturnTypesRaw();
+
+            if (!empty($returnClassTypes['list'])) {
+                foreach ($returnClassTypes['list'] as $returnType) {
+                    if (empty($returnType['cast']) || !$returnType['collection']) {
+                        continue;
+                    }
+
+                    $key  = $returnType['cast']['value'];
+                    $type = $key;
+
+                    if ($this->aliasManager->isAlias($type)) {
+                        $type = "\\" . $this->aliasManager->getAlias($type);
+                    }
+
+                    $return[$key] = $type . '[]';
                 }
-
-                $key  = $returnType['cast']['value'];
-                $type = $key;
-
-                if ($this->aliasManager->isAlias($type)) {
-                    $returnClassTypes[$key] = "\\" . $this->aliasManager->getAlias($type);
-                }
-
-                $return[$key] = $type . '[]';
             }
         }
 
-        if ($return) {
-            $this->return = array(join('|', $return), '');
+        if (!empty($return)) {
+            $this->return = [implode('|', $return), ''];
         }
     }
 

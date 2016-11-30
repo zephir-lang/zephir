@@ -31,17 +31,23 @@ class ClassMethodParameters implements \Countable, \Iterator
     private $_position = 0;
 
     /**
+     * ClassMethodParameters constructor.
      *
-     * @param array $parameters
+     * @param  array $parameters
+     * @throws CompilerException
      */
     public function __construct(array $parameters)
     {
-        // @todo: Remove this
         foreach ($parameters as $parameter) {
             if (isset($parameter['reference']) && $parameter['reference']) {
-                throw new CompilerException('Zephir not support reference parameters for now. Stay tuned for https://github.com/phalcon/zephir/issues/203', $parameter);
+                throw new CompilerException(
+                    'Zephir not support reference parameters for now. ' .
+                    'Stay tuned for https://github.com/phalcon/zephir/issues/203',
+                    $parameter
+                );
             }
         }
+
         $this->_parameters = $parameters;
     }
 
