@@ -28,14 +28,16 @@ class DocBlock
      * @var string
      */
     protected $indent;
+
     /**
      * @var string
      */
-    protected $description;
+    protected $description = '';
+
     /**
      * @var array
      */
-    protected $lines = array();
+    protected $lines = [];
 
     /**
      * @param string $source Raw doc-block
@@ -58,6 +60,7 @@ class DocBlock
                 $this->lines[] = array_pop($this->lines) . "\n{$this->indent} * " . $line;
             }
         }
+
         if (!empty($this->lines) && strpos($this->lines[0], '@') !== 0) {
             $this->description = array_shift($this->lines);
         }
@@ -70,16 +73,20 @@ class DocBlock
     {
         $doc = '';
         $indent = $this->indent;
-        if ($this->description) {
+
+        if (!empty($this->description)) {
             $doc = $this->description;
         }
-        if ($this->lines) {
+
+        if (!empty($this->lines)) {
             $lines = array_map(function ($line) use ($indent) {
                 return "$indent * $line";
             }, $this->lines);
-            if ($doc !== '') {
+
+            if (!empty($doc)) {
                 $doc .= "\n$indent *";
             }
+
             $doc .= "\n" . join("\n", $lines);
         }
 

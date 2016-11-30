@@ -36,11 +36,12 @@ class Generator
      * Not php visible style variants
      * @var array
      */
-    protected $ignoreModifiers = array(
+    protected $ignoreModifiers = [
         'inline',
         'internal',
-        'scoped'
-    );
+        'scoped',
+        'deprecated',
+    ];
 
     /**
      * @var CompilerFile[]
@@ -112,7 +113,6 @@ class Generator
 <?php
 
 namespace {$class->getNamespace()};
-
 
 EOF;
 
@@ -258,7 +258,8 @@ EOF;
             }
         }
 
-        $methodBody = $indent . $modifier . ' function ' . $method->getName() . '(' . implode(', ', $parameters) . ')';
+        $function = trim($modifier . ' function', ' ') . ' ';
+        $methodBody = $indent . $function . $method->getName() . '(' . implode(', ', $parameters) . ')';
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';

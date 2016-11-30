@@ -743,6 +743,11 @@ class ClassMethod
         return $this->visibility;
     }
 
+    public function isDeprecated()
+    {
+        return !empty($this->visibility) && in_array('deprecated', $this->visibility, true);
+    }
+
     /**
      * Returns the C-modifier flags
      *
