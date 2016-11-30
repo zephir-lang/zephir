@@ -28,7 +28,7 @@ use Zephir\ClassMethod;
  */
 class MethodDocBlock extends DocBlock
 {
-    private $parameters = array();
+    private $parameters = [];
 
     private $return;
 
@@ -45,18 +45,13 @@ class MethodDocBlock extends DocBlock
 
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
+
         $this->parseMethodParameters($method);
         $this->parseLines();
+        $this->parseMethodReturnType($method);
+        $this->appendParametersLines();
 
-        if (!$this->return) {
-            $this->parseMethodReturnType($method);
-        }
-
-        if ($this->parameters) {
-            $this->appendParametersLines();
-        }
-
-        if ($this->return) {
+        if (!empty($this->return)) {
             $this->appendReturnLine();
         }
     }
@@ -166,19 +161,25 @@ class MethodDocBlock extends DocBlock
     private function parseMethodParameters(ClassMethod $method)
     {
         $parameters = $method->getParameters();
+        $aliasManager = $method->getClassDefinition()->getAliasManager();
+
         if (!$parameters) {
             return;
         }
 
         foreach ($method->getParameters() as $parameter) {
-            if (isset($parameter['data-type'])) {
+            if (isset($parameter['cast'])) {
+                if ($aliasManager->isAlias($parameter['cast']['value'])) {
+                    $type = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
+                } else {
+                    $type = $parameter['cast']['value'];
+                }
+            } elseif (isset($parameter['data-type'])) {
                 if ($parameter['data-type'] == 'variable') {
                     $type = 'mixed';
                 } else {
                     $type = $parameter['data-type'];
                 }
-            } elseif (isset($parameter['cast'])) {
-                $type = $parameter['cast']['value'];
             } else {
                 $type = 'mixed';
             }
