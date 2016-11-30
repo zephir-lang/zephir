@@ -159,7 +159,8 @@ class MethodDocBlock extends DocBlock
     {
         list($type, $description) = $this->return;
 
-        $this->lines[] = '@return ' . $type . ' ' . $description;
+        $return = $type . ' ' . $description;
+        $this->lines[] = '@return ' . trim($return);
     }
 
     private function parseMethodParameters(ClassMethod $method)
@@ -189,7 +190,9 @@ class MethodDocBlock extends DocBlock
     {
         foreach ($this->parameters as $name => $parameter) {
             list($type, $description) = $parameter;
-            $this->lines[] = '@param ' . $type . ' ' . $name . ' ' . $description;
+
+            $param = $type . ' ' . $name . ' ' . $description;
+            $this->lines[] = '@param ' . trim($param);
         }
     }
 }
