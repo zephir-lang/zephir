@@ -235,6 +235,11 @@ class ClassMethod
         return $this->returnTypesRaw;
     }
 
+    public function hasReturnTypesRaw()
+    {
+        return !empty($this->returnTypesRaw);
+    }
+
     /**
      * Getter for statements block
      *
