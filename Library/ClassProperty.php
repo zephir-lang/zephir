@@ -137,6 +137,8 @@ class ClassProperty
      * @param array $visibility
      * @param string $name
      * @param array $original
+     *
+     * @throws CompilerException
      */
     public function checkVisibility($visibility, $name, $original)
     {

@@ -34,6 +34,8 @@ class MethodDocBlock extends DocBlock
 
     private $shortcutName = '';
 
+    private $deprecated = false;
+
     /**
      * @var AliasManager
      */
@@ -43,6 +45,7 @@ class MethodDocBlock extends DocBlock
     {
         parent::__construct($method->getDocBlock(), $indent);
 
+        $this->deprecated = $method->isDeprecated();
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
 
@@ -108,7 +111,7 @@ class MethodDocBlock extends DocBlock
 
     protected function parseLines()
     {
-        $lines = array();
+        $lines = [];
 
         foreach ($this->lines as $line) {
             if (preg_match('#^@(param|return|var) +(.*)$#', $line, $matches) === 0) {
@@ -155,7 +158,7 @@ class MethodDocBlock extends DocBlock
         list($type, $description) = $this->return;
 
         $return = $type . ' ' . $description;
-        $this->lines[] = '@return ' . trim($return);
+        $this->lines[] = '@return ' . trim($return, ' ');
     }
 
     private function parseMethodParameters(ClassMethod $method)
@@ -193,7 +196,13 @@ class MethodDocBlock extends DocBlock
             list($type, $description) = $parameter;
 
             $param = $type . ' ' . $name . ' ' . $description;
-            $this->lines[] = '@param ' . trim($param);
+            $this->lines[] = '@param ' . trim($param, ' ');
         }
+
+        if ($this->deprecated) {
+            $this->lines[] = '@deprecated';
+        }
+
+        $this->lines = array_unique($this->lines);
     }
 }
