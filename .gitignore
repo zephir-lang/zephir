@@ -17,7 +17,6 @@ phpunit.xml
 
 .temp/
 .libs/
-ext
 *.gch
 *.lo
 *.la
