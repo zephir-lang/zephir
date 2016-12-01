@@ -157,7 +157,7 @@ class ClassMethod
     /**
      * Static Type Inference Pass
      *
-     * @var StaticTypeInferencePass
+     * @var StaticTypeInference
      */
     protected $typeInference;
 
@@ -383,17 +383,17 @@ class ClassMethod
      *
      * @param CompilationContext $compilationContext
      *
-     * @return $this|void
+     * @return $this
      */
     public function setupOptimized(CompilationContext $compilationContext)
     {
         if (!$compilationContext->config->get('internal-call-transformation', 'optimizations')) {
-            return;
+            return $this;
         }
         $classDefinition = $this->getClassDefinition();
         /* Skip for closures */
         if ($this->getName() == '__invoke' || $classDefinition->isInterface()) {
-            return;
+            return $this;
         }
         if (!$this->isInternal() && !$classDefinition->isBundled()) {
             /* Not supported for now */

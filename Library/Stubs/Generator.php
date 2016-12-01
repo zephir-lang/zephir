@@ -114,6 +114,7 @@ class Generator
 
 namespace {$class->getNamespace()};
 
+
 EOF;
 
         $source .= (new DocBlock($class->getDocBlock(), '')) . "\n";
