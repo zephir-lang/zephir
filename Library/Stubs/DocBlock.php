@@ -46,23 +46,57 @@ class DocBlock
     public function __construct($source, $indent = '    ')
     {
         $this->indent = $indent;
+        $lines = explode("\n", trim($source));
+        $count = count($lines);
 
-        foreach (explode("\n", trim($source, '/')) as $line) {
-            $line = trim($line, "\t*\0 ");
-            if ('' === $line) {
+        foreach ($lines as $i => $line) {
+            $line = preg_replace('#^([\s\t]+)?/?([*]+)([\s\t]+)?$#im', '', rtrim($line));
+            $line = preg_replace('#^([\s\t]+)?([*]+)([\s\t]+)?/?$#im', '', rtrim($line));
+
+            if (($i === 0 || $i === $count - 1) && empty($line)) {
                 continue;
             }
 
-            if (strpos($line, '@') === 0) {
-                $this->lines[] = $line;
+            $cleaned = trim($line, "\t*\0 ");
+
+            if (strpos($cleaned, '@') === 0) {
+                $this->lines[] = $line = $cleaned;
             } else {
-                $line = preg_replace('~([\s\t]+)[*]([\s\t]+)~', '', $line);
-                $this->lines[] = array_pop($this->lines) . "\n{$this->indent} * " . $line;
+                $line = preg_replace('#([\s\t]+)?[*]#', '', $line);
+                $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * ' . $line);
+                $line = preg_replace('#[*]([\s\t]){1,}$#', '*', $line);
+                $line = preg_replace('#\t#', $indent, $line);
+
+                $this->lines[] = array_pop($this->lines) . "\n{$this->indent}" . $line;
             }
         }
 
-        if (!empty($this->lines) && strpos($this->lines[0], '@') !== 0) {
-            $this->description = array_shift($this->lines);
+        if (!empty($this->lines) && strpos(trim($this->lines[0], "\t*\0 "), '@') !== 0) {
+            $description = array_shift($this->lines);
+            $description = explode("\n", $description);
+
+            $cleaned = [];
+            $empty = 0;
+            foreach ($description as $i => $line) {
+                if (preg_match('#^([\s\t]+)?[*]([\s\t]+)?$#', $line)) {
+                    $empty++;
+                } else {
+                    $empty = 0;
+                }
+
+                if ($empty > 1) {
+                    continue;
+                }
+
+                $cleaned[] = $line;
+            }
+
+            $reversed = array_reverse($cleaned);
+            if (empty($reversed[0]) || trim($reversed[0], "\t*\0 ") === '') {
+                unset($reversed[0]);
+            }
+
+            $this->description = implode("\n", array_reverse($reversed));
         }
     }
 
@@ -87,7 +121,7 @@ class DocBlock
                 $doc .= "\n$indent *";
             }
 
-            $doc .= "\n" . join("\n", $lines);
+            $doc .= "\n" . implode("\n", $lines);
         }
 
         return $doc === '' ? '' : "$indent/**$doc\n$indent */";
