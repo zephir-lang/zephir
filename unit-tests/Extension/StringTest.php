@@ -22,6 +22,35 @@ namespace Extension;
 class StringTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @dataProvider providerHashEquals
+     * @param string $knownString
+     * @param string $userString
+     * @param string $expected
+     */
+    public function testHashEquals($knownString, $userString, $expected)
+    {
+        $t = new \Test\Strings();
+
+        $salt = '$2a$07$usesomesillystringforsalt$';
+        $knownString = crypt($knownString, $salt);
+        $userString = crypt($userString, $salt);
+
+        $this->assertSame($expected, $t->testHashEquals($knownString, $userString));
+    }
+
+    /**
+     * @dataProvider providerHashEqualsNonString
+     * @param string $knownString
+     * @param string $userString
+     */
+    public function testHashEqualsNonString($knownString, $userString)
+    {
+        $t = new \Test\Strings();
+
+        $this->assertFalse($t->testHashEquals($knownString, $userString));
+    }
+
+    /**
      * @dataProvider providerCamelize
      */
     public function testCamelize($actual, $expected, $delimiter)
@@ -198,6 +227,37 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
         $escapedString = '\"\}\$hello\$\"\\\'';
         $this->assertSame($escapedString, $t->testWellEscapedMultilineString());
+    }
+
+    public function providerHashEquals()
+    {
+        return [
+            ['Phalcon',    'Phalcony',    false],
+            ['Phalcony',   'Phalcon',     false],
+            ['Phalcon',    'Phalcon',     true],
+            ['kristoffer', 'ingemansson', false],
+            ['kris',       'ingemansson', false],
+            ['Phalcon',    'phalcon',     false],
+            [' phalcon',   'phalcon',     false],
+            ['phalcon',    'phalcon',     true],
+            ['1234567890', '1234567890',  true],
+            ['',           'phalcon',     false],
+            ['phalcon',    '',            false],
+        ];
+    }
+
+    public function providerHashEqualsNonString()
+    {
+        return [
+            [null,       123,        false],
+            [123,        null,       false],
+            [123,        123,        false],
+            [123456,     123,        false],
+            [null,       'phalcon',  false],
+            ['phalcon',  null,       false],
+            [[],         false,      false],
+            [true,       [],         false],
+        ];
     }
 
     public function providerCamelize()

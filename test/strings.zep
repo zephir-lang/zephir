@@ -107,33 +107,38 @@ class Strings
 		return stripcslashes(str);
 	}
 
-    public function testHardcodedMultilineString()
-    {
-        return "
+	public function testHashEquals(var str1, var str2) -> bool
+	{
+		return hash_equals(str1, str2);
+	}
+
+	public function testHardcodedMultilineString()
+	{
+		return "
             Hello world
         ";
-    }
+	}
 
-    public function testEchoMultilineString()
-    {
-        echo "
+	public function testEchoMultilineString()
+	{
+		echo "
             Hello world
         ";
-    }
+	}
 
-    public function testTrimMultilineString()
-    {
-        return trim("
+	public function testTrimMultilineString()
+	{
+		return trim("
             Hello world
         ");
-    }
+	}
 
-    public function testWellEscapedMultilineString()
-    {
-        return trim("
+	public function testWellEscapedMultilineString()
+	{
+		return trim("
             \\\"\}\$hello\$\\\"\'
         ");
-    }
+	}
 
 	public function testInternedString1()
 	{
