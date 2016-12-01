@@ -335,6 +335,18 @@ PHP_METHOD(Test_Strings, testStripcslashes) {
 
 }
 
+PHP_METHOD(Test_Strings, testHashEquals) {
+
+	zval *str1, *str2;
+
+	zephir_fetch_params(0, 2, 0, &str1, &str2);
+
+
+
+	RETURN_BOOL(zephir_hash_equals(str1, str2));
+
+}
+
 PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
 	
