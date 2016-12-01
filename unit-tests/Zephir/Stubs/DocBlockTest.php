@@ -70,4 +70,51 @@ DOC;
 
         $this->assertSame($expected, (string)$docBlock);
     }
+
+    public function testPhpDocWithCodeBloc()
+    {
+        $doc = <<<DOC
+/**
+ * Some method.
+ *
+ * <code>
+ * if (\$foo !== \$bar) {
+ *     // Some comment
+ *
+ *     // Another comment
+ *
+ *     while (true) {
+ *         // Some staff
+ *     }
+ * }
+ * </code>
+ *
+ * @return string
+ */
+DOC;
+
+        $expected = <<<DOC
+    /**
+     * Some method.
+     *
+     * <code>
+     * if (\$foo !== \$bar) {
+     *     // Some comment
+     *
+     *     // Another comment
+     *
+     *     while (true) {
+     *         // Some staff
+     *     }
+     * }
+     * </code>
+     *
+     * @return string
+     */
+DOC;
+
+        $docBlock = new DocBlock($doc);
+
+        $this->assertSame($expected, (string)$docBlock);
+    }
 }

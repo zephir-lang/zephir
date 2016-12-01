@@ -152,12 +152,13 @@ class ClassDefinition
      *
      * @param string $namespace
      * @param string $name
+     * @param string $shortName
      */
     public function __construct($namespace, $name, $shortName = null)
     {
         $this->namespace = $namespace;
         $this->name = $name;
-        $this->shortName = $shortName ? $shortName : $name;
+        $this->shortName = $shortName ?: $name;
 
         $this->eventsManager = new EventsManager();
     }
