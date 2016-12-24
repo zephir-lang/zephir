@@ -76,6 +76,11 @@ class Imagick
 	{
 
 	}
+
+    public function getVersion()
+	{
+
+	}
 }
 
 class ImagickPixel
