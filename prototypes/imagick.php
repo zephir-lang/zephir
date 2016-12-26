@@ -77,7 +77,7 @@ class Imagick
 
 	}
 
-    public function getVersion()
+    public static function getVersion()
 	{
 
 	}
