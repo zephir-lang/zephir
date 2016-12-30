@@ -220,7 +220,7 @@ void zephir_gettype(zval *return_value, zval *arg);
 static inline int zephir_maybe_separate_zval(zval* z)
 {
 	if (!Z_REFCOUNTED_P(z) || (Z_REFCOUNT_P(z) > 1 && !Z_ISREF_P(z))) {
-		if (!Z_IMMUTABLE_P(z)) {
+		if (!(Z_COPYABLE_P(z) && !Z_REFCOUNTED_P(z))) {
 			Z_DELREF_P(z);
 		}
 		zval_copy_ctor_func(z);

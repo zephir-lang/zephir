@@ -602,7 +602,7 @@ void zephir_dump_memory_frame(zephir_memory_entry *active_memory)
 			switch (Z_TYPE_P(var)) {
 				case IS_NULL:     fprintf(stderr, "value=NULL\n"); break;
 #ifdef ZEPHIR_ENABLE_64BITS
-				case IS_LONG:     fprintf(stderr, "value=%lld\n", Z_LVAL_P(var)); break;
+				case IS_LONG:     fprintf(stderr, "value=%lld\n", (long long int)Z_LVAL_P(var)); break;
 #else
 				case IS_LONG:     fprintf(stderr, "value=%ld\n", Z_LVAL_P(var)); break;
 #endif
@@ -613,7 +613,7 @@ void zephir_dump_memory_frame(zephir_memory_entry *active_memory)
 				case IS_OBJECT:   fprintf(stderr, "value=object(%u), %s\n", Z_OBJ_HANDLE_P(var), ZSTR_VAL(Z_OBJCE_P(var)->name)); break;
 				case IS_STRING:   fprintf(stderr, "value=%s (%zu)\n", Z_STRVAL_P(var), Z_STRLEN_P(var)); break;
 #ifdef ZEPHIR_ENABLE_64BITS
-				case IS_RESOURCE: fprintf(stderr, "value=(resource)%lld\n", Z_LVAL_P(var)); break;
+				case IS_RESOURCE: fprintf(stderr, "value=(resource)%lld\n", (long long int)Z_LVAL_P(var)); break;
 #else
 				case IS_RESOURCE: fprintf(stderr, "value=(resource)%ld\n", Z_LVAL_P(var)); break;
 #endif
