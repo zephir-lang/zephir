@@ -352,12 +352,11 @@ class CompilerFile implements FileInterface
             }
 
             switch ($shortcut['name']) {
-                case 'is':
                 case 'get':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        $shortcut['name'] . Utils::camelize($name),
+                        'get' . Utils::camelize($name),
                         null,
                         new StatementsBlock(array(
                             array(
@@ -377,6 +376,34 @@ class CompilerFile implements FileInterface
                         )),
                         $docBlock,
                         $this->createReturnsType($returnsType),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                case 'is':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        array('public'),
+                        'is' . Utils::camelize($name),
+                        null,
+                        new StatementsBlock(array(
+                            array(
+                                'type' => 'return',
+                                'expr' => array(
+                                    'type' => 'property-access',
+                                    'left' => array(
+                                        'type' => 'variable',
+                                        'value' => 'this'
+                                    ),
+                                    'right' => array(
+                                        'type' => 'variable',
+                                        'value' => $property['name']
+                                    )
+                                )
+                            )
+                        )),
+                        $docBlock,
+                        $this->createReturnsType('boolean'),
                         $shortcut
                     ), $shortcut);
                     break;
