@@ -403,7 +403,7 @@ class CompilerFile implements FileInterface
                             )
                         )),
                         $docBlock,
-                        $this->createReturnsType('boolean'),
+                        $this->createReturnsType(array('boolean')),
                         $shortcut
                     ), $shortcut);
                     break;
