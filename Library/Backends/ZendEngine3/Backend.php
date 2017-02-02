@@ -287,9 +287,9 @@ class Backend extends BackendZendEngine2
         }
 
         if ($dType == 'null') {
-            $context->codePrinter->output('zephir_declare_class_constant_null(' . $ce . ', SL("' . $name . '"));');
+            $context->codePrinter->output('zend_declare_class_constant_null(' . $ce . ', SL("' . $name . '"));');
         } else {
-            $context->codePrinter->output('zephir_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ');');
+            $context->codePrinter->output('zend_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ');');
         }
     }
 
@@ -362,7 +362,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function returnString($value, CompilationContext $context, $useCodePrinter = true)
+    public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
         return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, null);
     }
