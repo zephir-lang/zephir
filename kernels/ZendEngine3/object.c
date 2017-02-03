@@ -305,12 +305,30 @@ void zephir_get_ns_class(zval *result, zval *object, int lower)
 int zephir_class_exists(const zval *class_name, int autoload)
 {
 	zend_class_entry *ce;
+        zend_string *lc_name;
 
 	if (Z_TYPE_P(class_name) == IS_STRING) {
-		if ((ce = zend_lookup_class(Z_STR_P(class_name))) != NULL) {
-			return (ce->ce_flags & (ZEND_ACC_INTERFACE | (ZEND_ACC_TRAIT - ZEND_ACC_EXPLICIT_ABSTRACT_CLASS))) == 0;
-		}
-		return 0;
+                zend_string *s_class_name = Z_STR_P(class_name);
+                if (!autoload) {
+                        if (ZSTR_VAL(s_class_name)[0] == '\\') {
+                                /* Ignore leading "\" */
+                                lc_name = zend_string_alloc(ZSTR_LEN(s_class_name) - 1, 0);
+                                zend_str_tolower_copy(ZSTR_VAL(lc_name), ZSTR_VAL(s_class_name) + 1, ZSTR_LEN(s_class_name) - 1);
+                        } else {
+                                lc_name = zend_string_tolower(s_class_name);
+                        }
+
+                        ce = zend_hash_find_ptr(EG(class_table), lc_name);
+                        zend_string_release(lc_name);
+                } else {
+                        ce = zend_lookup_class(s_class_name);
+                }
+
+                if (ce) {
+                        return ((ce->ce_flags & (ZEND_ACC_INTERFACE | ZEND_ACC_TRAIT)) == 0);
+                } else {
+                        return 0;
+                }
 	}
 
 	php_error_docref(NULL, E_WARNING, "class name must be a string");
