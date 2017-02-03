@@ -1105,10 +1105,10 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	}
 
 	func = fci_cache->function_handler;
-	call = zend_vm_stack_push_call_frame(ZEND_CALL_TOP_FUNCTION,
-		func, fci->param_count, fci_cache->called_scope, fci_cache->object);
+	call = zend_vm_stack_push_call_frame(ZEND_CALL_TOP_FUNCTION | ZEND_CALL_DYNAMIC,
+		func, fci->param_count, fci_cache->called_scope, fci->object);
 	calling_scope = fci_cache->calling_scope;
-	fci->object = fci_cache->object;
+	fci->object = (func->common.fn_flags & ZEND_ACC_STATIC) ? NULL : fci_cache->object;
 	if (fci->object &&
 	    (!EG(objects_store).object_buckets ||
 	     !IS_OBJ_VALID(EG(objects_store).object_buckets[fci->object->handle]))) {
