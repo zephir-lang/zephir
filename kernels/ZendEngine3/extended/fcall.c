@@ -177,6 +177,7 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		}
 	} else if (func->type == ZEND_INTERNAL_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
+                ZVAL_NULL(retval_ptr);
 		if (func->common.scope) {
 #if PHP_VERSION_ID >= 70100
 			EG(fake_scope)= func->common.scope;
@@ -870,12 +871,12 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
-			if (!scope) {
+			if (!called_scope) {
 				return 0; // cannot access self:: when no class scope is active
 			}
 
 			fcc->called_scope = called_scope;
-			fcc->calling_scope = scope;
+			fcc->calling_scope = called_scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
@@ -1077,14 +1078,14 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		}
 
 		if (!info) {
-			char *callable_name;
-			if (!zephir_is_callable_ex(&fci->function_name, fci->object, IS_CALLABLE_CHECK_SILENT, &callable_name, NULL, fci_cache, &error)) {
+			zend_string *callable_name;
+			if (!zend_is_callable_ex(&fci->function_name, fci->object, IS_CALLABLE_CHECK_SILENT, &callable_name, fci_cache, &error)) {
 				if (error) {
 					zend_error(E_WARNING, "Invalid callback %s, %s", callable_name, error);
 					efree(error);
 				}
 				if (callable_name) {
-					efree(callable_name);
+					zend_string_release(callable_name);
 				}
 				if (EG(current_execute_data) == &dummy_execute_data) {
 					EG(current_execute_data) = dummy_execute_data.prev_execute_data;
@@ -1096,7 +1097,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 					efree(error);
 				}
 			}
-			efree(callable_name);
+			zend_string_release(callable_name);
 		} else {
 			if (!zephir_is_info_callable_ex(info, fci_cache)) {
 				return FAILURE;
@@ -1105,10 +1106,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	}
 
 	func = fci_cache->function_handler;
-	call = zend_vm_stack_push_call_frame(ZEND_CALL_TOP_FUNCTION | ZEND_CALL_DYNAMIC,
+        fci->object = (func->common.fn_flags & ZEND_ACC_STATIC) ? NULL : fci_cache->object;
+	call = zend_vm_stack_push_call_frame(ZEND_CALL_TOP_FUNCTION,
 		func, fci->param_count, fci_cache->called_scope, fci->object);
 	calling_scope = fci_cache->calling_scope;
-	fci->object = (func->common.fn_flags & ZEND_ACC_STATIC) ? NULL : fci_cache->object;
+	
 	if (fci->object &&
 	    (!EG(objects_store).object_buckets ||
 	     !IS_OBJ_VALID(EG(objects_store).object_buckets[fci->object->handle]))) {
@@ -1183,7 +1185,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	if (func->common.fn_flags & ZEND_ACC_STATIC) {
 		fci->object = NULL;
 	}
-	Z_OBJ(call->This) = fci->object;
+	//Z_OBJ(call->This) = fci->object;
 
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
