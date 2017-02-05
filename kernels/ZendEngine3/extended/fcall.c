@@ -799,7 +799,11 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 	zend_fcall_info_cache fcc_local;
 
 #if PHP_VERSION_ID >= 70100
-	scope = EG(fake_scope);
+	if (ce_org) {
+            scope = ce_org;
+        } else {
+            scope = zend_get_executed_scope();
+        }
 	called_scope = zend_get_called_scope(EG(current_execute_data));
 #else
 	scope = EG(scope);
@@ -871,12 +875,12 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
-			if (!called_scope) {
+			if (!scope) {
 				return 0; // cannot access self:: when no class scope is active
 			}
 
 			fcc->called_scope = called_scope;
-			fcc->calling_scope = called_scope;
+			fcc->calling_scope = scope;
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}
