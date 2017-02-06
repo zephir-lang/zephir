@@ -1082,14 +1082,14 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		}
 
 		if (!info) {
-			zend_string *callable_name;
-			if (!zend_is_callable_ex(&fci->function_name, fci->object, IS_CALLABLE_CHECK_SILENT, &callable_name, fci_cache, &error)) {
+			char *callable_name;
+			if (!zephir_is_callable_ex(&fci->function_name, fci->object, IS_CALLABLE_CHECK_SILENT, &callable_name, NULL, fci_cache, &error)) {
 				if (error) {
 					zend_error(E_WARNING, "Invalid callback %s, %s", callable_name, error);
 					efree(error);
 				}
 				if (callable_name) {
-					zend_string_release(callable_name);
+					efree(callable_name);
 				}
 				if (EG(current_execute_data) == &dummy_execute_data) {
 					EG(current_execute_data) = dummy_execute_data.prev_execute_data;
@@ -1101,7 +1101,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 					efree(error);
 				}
 			}
-			zend_string_release(callable_name);
+			efree(callable_name);
 		} else {
 			if (!zephir_is_info_callable_ex(info, fci_cache)) {
 				return FAILURE;
