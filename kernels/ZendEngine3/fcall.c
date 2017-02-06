@@ -659,7 +659,7 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 		}
 	}
 
-	if (!cache_entry || !*cache_entry) {
+	//if (!cache_entry || !*cache_entry) {
 
 		switch (type) {
 
@@ -694,7 +694,7 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 
 		info.func_name = method_name;
 		info.func_length = method_len;
-	}
+	//}
 
 	status = zephir_call_user_function(object ? object : NULL, ce, type, fn, rvp, cache_entry, cache_slot, param_count, params, &info);
 

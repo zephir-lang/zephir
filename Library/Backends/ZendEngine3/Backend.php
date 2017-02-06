@@ -287,9 +287,9 @@ class Backend extends BackendZendEngine2
         }
 
         if ($dType == 'null') {
-            $context->codePrinter->output('zend_declare_class_constant_null(' . $ce . ', SL("' . $name . '"));');
+            $context->codePrinter->output('zephir_declare_class_constant_null(' . $ce . ', SL("' . $name . '"));');
         } else {
-            $context->codePrinter->output('zend_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ');');
+            $context->codePrinter->output('zephir_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ');');
         }
     }
 
