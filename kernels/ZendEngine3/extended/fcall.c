@@ -1180,32 +1180,15 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		ZVAL_COPY_VALUE(param, arg);
 	}
 
-#if PHP_VERSION_ID >= 70100
-	EG(fake_scope) = calling_scope;
-#else
-	EG(scope) = calling_scope;
-#endif
-
-	if (func->common.fn_flags & ZEND_ACC_STATIC) {
-		fci->object = NULL;
-	}
-	//Z_OBJ(call->This) = fci->object;
+        if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
+                ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
+                GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
+                ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
+        }
 
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 		
-#if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = func->common.scope;
-		call->symbol_table = NULL;
-#else
-		EG(scope) = func->common.scope;
-		call->symbol_table = fci->symbol_table;
-#endif
-		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
-			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
-			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
-			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
-		}
 #if PHP_VERSION_ID >= 70100
 		zend_init_execute_data(call, &func->op_array, fci->retval);
 		zend_execute_ex(call);
@@ -1224,13 +1207,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	} else if (func->type == ZEND_INTERNAL_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 		ZVAL_NULL(fci->retval);
-		if (func->common.scope) {
-#if PHP_VERSION_ID >= 70100
-			EG(fake_scope) = func->common.scope;
-#else
-			EG(scope) = func->common.scope;
-#endif
-		}
+                
 		call->prev_execute_data = EG(current_execute_data);
 		call->return_value = NULL; /* this is not a constructor call */
 		EG(current_execute_data) = call;
@@ -1284,11 +1261,6 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		}
 	}
 
-#if PHP_VERSION_ID >= 70100
-	EG(fake_scope) = orig_scope;
-#else
-	EG(scope) = orig_scope;
-#endif
 	zend_vm_stack_free_call_frame(call);
 
 	if (EG(current_execute_data) == &dummy_execute_data) {

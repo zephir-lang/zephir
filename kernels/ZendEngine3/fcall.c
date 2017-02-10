@@ -417,14 +417,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		}
 	}
 
-	if (obj_ce) {
-#if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = obj_ce;
-#else
-		EG(scope) = obj_ce;
-#endif
-	}
-
 	if (!cache_entry || !*cache_entry) {
 		if (zephir_globals_ptr->cache_enabled) {
 
@@ -492,12 +484,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	/* fcic.initialized = 0; */
 	//status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic, info);
 	status = zephir_call_function_opt(&fci, &fcic, info, params);
-
-#if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = old_scope;
-#else
-		EG(scope) = old_scope;
-#endif
 
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry && fcic.initialized) {
