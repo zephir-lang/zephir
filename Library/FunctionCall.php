@@ -116,8 +116,17 @@ class FunctionCall extends Call
                  * Check if the number of parameters
                  */
                 $numberParameters = count($expression['parameters']);
-                if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
-                    throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
+                if ($funcName == "unpack" && (version_compare(PHP_VERSION, '7.1.0') == 0 || version_compare(PHP_VERSION, '7.1.1') == 0)) {
+                    if ($numberParameters < 2) {
+                        throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
+                    }
+                } else {
+                    if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
+                        throw new CompilerException(
+                            "The number of parameters passed is lesser than the number of required parameters by '".$funcName."'",
+                            $expression
+                        );
+                    }
                 }
             } else {
                 $numberParameters = 0;
