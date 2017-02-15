@@ -389,13 +389,13 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	zephir_fcall_cache_entry *temp_cache_entry = NULL;
 	zend_class_entry *old_scope;
 	int reload_cache = 1;
-/*
+
 #if PHP_VERSION_ID >= 70100
-	old_scope = EG(fake_scope);
+	//old_scope = EG(fake_scope);
 #else
 	old_scope = EG(scope);
 #endif
-*/
+
 	assert(obj_ce || !object_pp);
 	ZVAL_UNDEF(&local_retval_ptr);
 
@@ -417,15 +417,15 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 			obj_ce = Z_OBJCE_P(object_pp);
 		}
 	}
-/*
+
 	if (obj_ce) {
 #if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = obj_ce;
+		//EG(fake_scope) = obj_ce;
 #else
 		EG(scope) = obj_ce;
 #endif
 	}
-*/
+
 	if (!cache_entry || !*cache_entry) {
 		if (zephir_globals_ptr->cache_enabled) {
 
@@ -488,19 +488,21 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #else
 		fcic.function_handler = *cache_entry;
 #endif
+#if PHP_VERSION_ID >= 70100
                 fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? Z_OBJ(EG(current_execute_data)->This) : NULL);
+#endif
 	}
 
 	/* fcic.initialized = 0; */
 	//status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic, info);
 	status = zephir_call_function_opt(&fci, &fcic, info, params);
-/*
+
 #if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = old_scope;
+		//EG(fake_scope) = old_scope;
 #else
 		EG(scope) = old_scope;
 #endif
-*/
+
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry && fcic.initialized) {
 #ifndef ZEPHIR_RELEASE
@@ -660,7 +662,9 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 			return FAILURE;
 		}
 	}
-
+#if PHP_VERSION_ID < 70100
+	if (!cache_entry || !*cache_entry) {
+#endif
 	switch (type) {
 
 		case zephir_fcall_parent:
@@ -694,6 +698,9 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 
 	info.func_name = method_name;
 	info.func_length = method_len;
+#if PHP_VERSION_ID < 70100
+	}
+#endif
 
 	status = zephir_call_user_function(object ? object : NULL, ce, type, fn, rvp, cache_entry, cache_slot, param_count, params, &info);
 
