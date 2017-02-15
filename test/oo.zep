@@ -88,4 +88,11 @@ class Oo
 		let o = new Oo\OoConstructParams(1, 2);
 		return o;
 	}
+
+	public function testInstance12()
+	{
+		var o;
+		let o = Oo\OoDynamicA::call1();
+		return o;
+	}
 }

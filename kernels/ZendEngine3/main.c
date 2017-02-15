@@ -391,13 +391,13 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 {
 #if PHP_VERSION_ID >= 70100
 	int ret;
-
+ 
 	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
 	ret = zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
 	zend_string_release(key);
-        return ret;
+	return ret;
 #else
-        if (Z_CONSTANT_P(value)) {
+	if (Z_CONSTANT_P(value)) {
 		ce->ce_flags &= ~ZEND_ACC_CONSTANTS_UPDATED;
 	}
 	ZVAL_NEW_PERSISTENT_REF(value, value);

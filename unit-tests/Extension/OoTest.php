@@ -65,5 +65,9 @@ class OoTest extends \PHPUnit_Framework_TestCase
         $obj = $t->testInstance11();
         $this->assertTrue(is_object($obj));
         $this->assertInstanceOf('Test\Oo\OoConstructParams', $obj);
+
+        $obj12 = $t->testInstance12();
+        $this->assertTrue(is_object($obj12));
+        $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj12);
     }
 }
