@@ -52,3 +52,27 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 }
 
+PHP_METHOD(Test_Oo_OoDynamicA, call2) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_RETURN_CALL_SELF("getnew", NULL, 0);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Oo_OoDynamicA, call1) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_RETURN_CALL_SELF("call2", NULL, 0);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+

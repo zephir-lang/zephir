@@ -215,3 +215,17 @@ PHP_METHOD(Test_Oo, testInstance11) {
 
 }
 
+PHP_METHOD(Test_Oo, testInstance12) {
+
+	zval *o = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "call1", &_0, 50);
+	zephir_check_call_status();
+	RETURN_CCTOR(o);
+
+}
+

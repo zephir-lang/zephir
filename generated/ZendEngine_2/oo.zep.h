@@ -14,6 +14,7 @@ PHP_METHOD(Test_Oo, testInstance8);
 PHP_METHOD(Test_Oo, testInstance9);
 PHP_METHOD(Test_Oo, testInstance10);
 PHP_METHOD(Test_Oo, testInstance11);
+PHP_METHOD(Test_Oo, testInstance12);
 
 ZEPHIR_INIT_FUNCS(test_oo_method_entry) {
 	PHP_ME(Test_Oo, testInstance1, NULL, ZEND_ACC_PUBLIC)
@@ -27,5 +28,6 @@ ZEPHIR_INIT_FUNCS(test_oo_method_entry) {
 	PHP_ME(Test_Oo, testInstance9, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo, testInstance10, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo, testInstance11, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo, testInstance12, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
