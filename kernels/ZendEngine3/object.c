@@ -307,7 +307,7 @@ int zephir_class_exists(const zval *class_name, int autoload)
 	zend_class_entry *ce;
 
 	if (Z_TYPE_P(class_name) == IS_STRING) {
-		if ((ce = zend_lookup_class(Z_STR_P(class_name))) != NULL) {
+		if ((ce = zend_lookup_class_ex(Z_STR_P(class_name), NULL, autoload)) != NULL) {
 			return (ce->ce_flags & (ZEND_ACC_INTERFACE | (ZEND_ACC_TRAIT - ZEND_ACC_EXPLICIT_ABSTRACT_CLASS))) == 0;
 		}
 		return 0;

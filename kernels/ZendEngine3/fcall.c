@@ -391,10 +391,11 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	int reload_cache = 1;
 
 #if PHP_VERSION_ID >= 70100
-	old_scope = EG(fake_scope);
+	//old_scope = EG(fake_scope);
 #else
 	old_scope = EG(scope);
 #endif
+
 	assert(obj_ce || !object_pp);
 	ZVAL_UNDEF(&local_retval_ptr);
 
@@ -419,7 +420,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 	if (obj_ce) {
 #if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = obj_ce;
+		//EG(fake_scope) = obj_ce;
 #else
 		EG(scope) = obj_ce;
 #endif
@@ -487,6 +488,9 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #else
 		fcic.function_handler = *cache_entry;
 #endif
+#if PHP_VERSION_ID >= 70100
+                fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? Z_OBJ(EG(current_execute_data)->This) : NULL);
+#endif
 	}
 
 	/* fcic.initialized = 0; */
@@ -494,7 +498,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	status = zephir_call_function_opt(&fci, &fcic, info, params);
 
 #if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = old_scope;
+		//EG(fake_scope) = old_scope;
 #else
 		EG(scope) = old_scope;
 #endif
@@ -658,43 +662,45 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 			return FAILURE;
 		}
 	}
-
+#if PHP_VERSION_ID < 70100
 	if (!cache_entry || !*cache_entry) {
+#endif
+	switch (type) {
 
-		switch (type) {
+		case zephir_fcall_parent:
+			info.type = ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD;
+			break;
 
-			case zephir_fcall_parent:
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD;
-				break;
+		case zephir_fcall_self:
+			assert(!ce);
+			info.type = ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD;
+			break;
 
-			case zephir_fcall_self:
-				assert(!ce);
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD;
-				break;
+		case zephir_fcall_static:
+			assert(!ce);
+			info.type = ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD;
+			break;
 
-			case zephir_fcall_static:
-				assert(!ce);
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD;
-				break;
+		case zephir_fcall_ce:
+			assert(ce != NULL);
+			info.type = ZEPHIR_FCALL_TYPE_CE_METHOD;
+			info.ce = ce;
+			break;
 
-			case zephir_fcall_ce:
-				assert(ce != NULL);
-				info.type = ZEPHIR_FCALL_TYPE_CE_METHOD;
-				info.ce = ce;
-				break;
-
-			case zephir_fcall_method:
-			default:
-				assert(object != NULL);
-				info.type = ZEPHIR_FCALL_TYPE_ZVAL_METHOD;
-				info.object_ptr = object;
-				info.ce = ce;
-				break;
-		}
-
-		info.func_name = method_name;
-		info.func_length = method_len;
+		case zephir_fcall_method:
+		default:
+			assert(object != NULL);
+			info.type = ZEPHIR_FCALL_TYPE_ZVAL_METHOD;
+			info.object_ptr = object;
+			info.ce = ce;
+			break;
 	}
+
+	info.func_name = method_name;
+	info.func_length = method_len;
+#if PHP_VERSION_ID < 70100
+	}
+#endif
 
 	status = zephir_call_user_function(object ? object : NULL, ce, type, fn, rvp, cache_entry, cache_slot, param_count, params, &info);
 

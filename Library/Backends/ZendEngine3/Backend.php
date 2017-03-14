@@ -362,7 +362,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function returnString($value, CompilationContext $context, $useCodePrinter = true)
+    public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
         return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, null);
     }
