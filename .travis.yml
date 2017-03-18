@@ -1,5 +1,7 @@
 language: php
-sudo: false
+
+sudo: required
+dist: trusty
 
 env:
   global:
@@ -52,7 +54,7 @@ before_script:
  - ulimit -c unlimited || true
 
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
+ - '[[ "$TRAVIS_PHP_VERSION" == "7.1" ]] || ( vendor/bin/phpcs --standard=PSR2 --extensions=php --warning-severity=0 --encoding=utf-8 Library/ )'
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full phpunit --debug --coverage-clover coverage.clover
 
 after_success:
