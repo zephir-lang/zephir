@@ -141,17 +141,17 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 
 #if PHP_VERSION_ID >= 70100
 	//EG(fake_scope)= calling_scope;
-        
-        if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
+
+	if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
 		ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
 		GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
 		ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
 	}
-        
+
         ZVAL_NULL(retval_ptr);
 #else
 	EG(scope) = calling_scope;
-        
+
         Z_OBJ(call->This) = NULL;
 #endif
 
@@ -163,7 +163,7 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		EG(scope) = func->common.scope;
 #endif
 		call->symbol_table = NULL;
-		
+
 #if PHP_VERSION_ID >= 70100
 		zend_init_execute_data(call, &func->op_array, retval_ptr);
 		zend_execute_ex(call);
@@ -1197,9 +1197,12 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 
 #if PHP_VERSION_ID >= 70100
 	//EG(fake_scope) = calling_scope;
-        if(fci_cache->object) {
-            Z_OBJ(call->This) = fci_cache->object;
-        }
+	if (fci_cache->object) {
+		Z_OBJ(call->This) = fci_cache->object;
+	} else {
+		Z_OBJ(call->This) = fci->object;
+	}
+
 	if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
 		ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
 		GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
@@ -1212,7 +1215,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	}
 	Z_OBJ(call->This) = fci->object;
 #endif
-        
+
 	if (func->type == ZEND_USER_FUNCTION) {
 		int call_via_handler = (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) != 0;
 
@@ -1223,7 +1226,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		EG(scope) = func->common.scope;
 		call->symbol_table = fci->symbol_table;
 #endif
-		
+
 #if PHP_VERSION_ID >= 70100
 		zend_init_execute_data(call, &func->op_array, fci->retval);
 		zend_execute_ex(call);
