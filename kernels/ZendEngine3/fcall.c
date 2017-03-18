@@ -489,7 +489,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		fcic.function_handler = *cache_entry;
 #endif
 #if PHP_VERSION_ID >= 70100
-                fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? Z_OBJ(EG(current_execute_data)->This) : NULL);
+                fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? Z_OBJCE(EG(current_execute_data)->This) : NULL);
 #endif
 	}
 
