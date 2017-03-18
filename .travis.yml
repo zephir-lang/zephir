@@ -29,6 +29,7 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+ - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
  - git config push.default simple
  - git config --global user.email "travis@zephir-lang.com"
@@ -48,12 +49,12 @@ before_script:
  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
- - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && make install && phpenv config-add ../unit-tests/ci/test.ini)
+ - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
 script:
  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
- - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full phpunit --debug --coverage-clover coverage.clover
+ - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit --bootstrap unit-tests/Bootstrap.php --debug unit-tests/
 
 after_success:
  - export ZEPHIR_TARGET="legacy"
@@ -72,8 +73,7 @@ after_failure:
 
 notifications:
   email:
-    - andres@phalconphp.com
-    - serghei@phalconphp.com
+    - build@phalconphp.com
 
 addons:
   apt:
