@@ -48,12 +48,12 @@ before_script:
  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
- - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && make install && phpenv config-add ../unit-tests/ci/test.ini)
+ - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
 script:
  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
- - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full phpunit --debug --coverage-clover coverage.clover
+ - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full phpunit --debug
 
 after_success:
  - export ZEPHIR_TARGET="legacy"
@@ -72,8 +72,7 @@ after_failure:
 
 notifications:
   email:
-    - andres@phalconphp.com
-    - serghei@phalconphp.com
+    - build@phalconphp.com
 
 addons:
   apt:
