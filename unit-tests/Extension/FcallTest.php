@@ -56,4 +56,10 @@ class FcallTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(\Test\zephir_namespaced_method_test("a"), "aaaaa");
         $this->assertSame(zephir_global_method_test("ab/c"), "ab");
     }
+
+    public function testSelfCalls()
+    {
+        $t = new \Test\Fcall();
+        $this->assertSame($t->fistFunc(), "Test\\Fcall");
+    }
 }
