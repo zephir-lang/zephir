@@ -289,7 +289,11 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			if (scope && scope->parent) {
 				fcic->calling_scope = scope->parent;
 				fcic->called_scope  = called_scope;
-				fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#if PHP_VERSION_ID >= 70100
+					fcic->object        = fci->object ? fci->object : zend_get_this_object(EG(current_execute_data));
+				#else
+					fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#endif
 				fcic->initialized   = 1;
 			}
 
@@ -299,7 +303,11 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			if (scope) {
 				fcic->calling_scope = scope;
 				fcic->called_scope  = called_scope;
-				fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#if PHP_VERSION_ID >= 70100
+					fcic->object        = fci->object ? fci->object : zend_get_this_object(EG(current_execute_data));
+				#else
+					fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#endif
 				fcic->initialized   = 1;
 			}
 
@@ -309,7 +317,11 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			if (called_scope) {
 				fcic->called_scope  = called_scope;
 				fcic->calling_scope = called_scope;
-				fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#if PHP_VERSION_ID >= 70100
+					fcic->object        = fci->object ? fci->object : zend_get_this_object(EG(current_execute_data));
+				#else
+					fcic->object        = fci->object ? fci->object : Z_OBJ(EG(current_execute_data)->This);
+				#endif
 				fcic->initialized   = 1;
 			}
 
@@ -412,7 +424,11 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	}
 
 	if (type != zephir_fcall_function && !object_pp) {
-		object_pp = EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) ? &EG(current_execute_data)->This : NULL;
+		#if PHP_VERSION_ID >= 70100
+			object_pp = EG(current_execute_data) && zend_get_this_object(EG(current_execute_data)) ? &EG(current_execute_data)->This : NULL;
+		#else
+			object_pp = EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) ? &EG(current_execute_data)->This : NULL;
+		#endif
 		if (!obj_ce && object_pp) {
 			obj_ce = Z_OBJCE_P(object_pp);
 		}
@@ -489,7 +505,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		fcic.function_handler = *cache_entry;
 #endif
 #if PHP_VERSION_ID >= 70100
-                fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? Z_OBJCE(EG(current_execute_data)->This) : NULL);
+                fcic.called_scope = obj_ce ? obj_ce : (EG(current_execute_data) ? zend_get_this_object(EG(current_execute_data)) : NULL);
 #endif
 	}
 

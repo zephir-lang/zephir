@@ -127,4 +127,19 @@ class Fcall
 		let v2 = array_fill(0, 6, "?");
 		return [v1, v2];
 	}
+
+	public function fistFunc()
+	{
+		return self::thirdFunc();
+	}
+
+	public static function secondFun()
+	{
+		return self::thirdFunc();
+	}
+
+	protected static function thirdFunc()
+	{
+		return get_called_class();
+	}
 }
