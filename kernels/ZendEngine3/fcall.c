@@ -283,8 +283,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 	zval p[fci.param_count];
 	for (i=0; i<fci.param_count; ++i) {
-		/** FIXME: ZVAL_COPY or ZVAL_COPY_VALUE? */
-		ZVAL_COPY(&p[i], params[i]);
+		ZVAL_COPY_VALUE(&p[i], params[i]);
 	}
 
 	fci.params = p;
