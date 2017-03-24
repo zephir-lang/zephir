@@ -261,17 +261,15 @@ PHP_METHOD(Test_Fcall, testStrtokVarBySlash) {
 
 PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
 	zval *param1, *param2;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &param1, &param2);
+	zephir_fetch_params(0, 2, 0, &param1, &param2);
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("func_get_args", NULL, 31);
-	zephir_check_call_status();
-	RETURN_MM();
+	array_init(return_value);
+	zend_copy_parameters_array(ZEND_NUM_ARGS(), return_value TSRMLS_CC);
+	return;
 
 }
 
@@ -289,7 +287,7 @@ PHP_METHOD(Test_Fcall, testArrayFill) {
 	ZVAL_LONG(_1, 5);
 	ZEPHIR_INIT_VAR(_2);
 	ZVAL_STRING(_2, "?", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_FUNCTION(&v1, "array_fill", &_3, 32, _0, _1, _2);
+	ZEPHIR_CALL_FUNCTION(&v1, "array_fill", &_3, 31, _0, _1, _2);
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_0);
@@ -298,7 +296,7 @@ PHP_METHOD(Test_Fcall, testArrayFill) {
 	ZVAL_LONG(_1, 6);
 	ZEPHIR_INIT_NVAR(_2);
 	ZVAL_STRING(_2, "?", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_FUNCTION(&v2, "array_fill", &_3, 32, _0, _1, _2);
+	ZEPHIR_CALL_FUNCTION(&v2, "array_fill", &_3, 31, _0, _1, _2);
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
@@ -323,7 +321,7 @@ PHP_FUNCTION(g_test_zephir_global_method_test) {
 		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	ZEPHIR_RETURN_CALL_METHOD(_0, "teststrtokvarbyslash", NULL, 33, str);
+	ZEPHIR_RETURN_CALL_METHOD(_0, "teststrtokvarbyslash", NULL, 32, str);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -346,7 +344,7 @@ PHP_FUNCTION(f_Test_zephir_namespaced_method_test) {
 	}
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 5);
-	ZEPHIR_RETURN_CALL_METHOD(_0, "testcall5", NULL, 34, str, _1);
+	ZEPHIR_RETURN_CALL_METHOD(_0, "testcall5", NULL, 33, str, _1);
 	zephir_check_call_status();
 	RETURN_MM();
 
