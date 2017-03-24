@@ -32,6 +32,7 @@
 #include "kernel/operators.h"
 #include "kernel/exception.h"
 #include "kernel/backtrace.h"
+#include "kernel/variables.h"
 
 static const unsigned char tolower_map[256] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
@@ -288,7 +289,19 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 	fci.params = p;
 
+#if 0
+//	fcic.initialized = 0;
+	zval tmp;
+	zephir_var_export_ex(&tmp, function_name);
+	if (obj_ce) {
+		fprintf(stderr, "obj_ce: %s\n", ZSTR_VAL(obj_ce->name));
+	}
+	fprintf(stderr, "> %s called: %p, calling: %p, obj: %p, h: %p, type=%d\n", Z_STRVAL(tmp), fcic.called_scope, fcic.calling_scope, fcic.object, fcic.function_handler, (int)type);
+#endif
 	status = zend_call_function(&fci, &fcic);
+#if 0
+	fprintf(stderr, "< called: %p, calling: %p, obj: %p, h: %p\n", fcic.called_scope, fcic.calling_scope, fcic.object, fcic.function_handler);
+#endif
 
 #if PHP_VERSION_ID < 70100
 	EG(scope) = old_scope;
@@ -316,8 +329,8 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		}
 
 		if (cache_entry) {
-			*cache_entry = cache_entry_temp;
 			if (cache_slot > 0) {
+				*cache_entry = cache_entry_temp;
 				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
 			}
 		}
