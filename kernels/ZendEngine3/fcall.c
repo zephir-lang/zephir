@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -27,7 +27,6 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
-#include "kernel/extended/fcall.h"
 #include "kernel/memory.h"
 #include "kernel/hash.h"
 #include "kernel/operators.h"
@@ -101,12 +100,12 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 	}
 
 	if (
-		calling_scope
-		&& obj_ce
-		&& calling_scope != obj_ce
-		&& !instanceof_function(obj_ce, calling_scope)
-		&& !instanceof_function(calling_scope, obj_ce)
-			) {
+		    calling_scope
+		 && obj_ce
+		 && calling_scope != obj_ce
+		 && !instanceof_function(obj_ce, calling_scope)
+		 && !instanceof_function(calling_scope, obj_ce)
+	) {
 		calling_scope = NULL;
 	}
 
@@ -125,10 +124,10 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		zval *method;
 		HashTable *function_hash = Z_ARRVAL_P(function_name);
 		if (
-			function_hash->nNumOfElements == 2
-			&& ((method = zend_hash_index_find(function_hash, 1)) != NULL)
-			&& Z_TYPE_P(method) == IS_STRING
-				) {
+			    function_hash->nNumOfElements == 2
+			 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
+			 && Z_TYPE_P(method) == IS_STRING
+		) {
 			l   = (size_t)(Z_STRLEN_P(method)) + 1;
 			c   = Z_STRVAL_P(method);
 			len = 2 * ppzce_size + l + 1;
@@ -236,7 +235,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fci.no_separation  = 1;
 
 	if (cache_entry && *cache_entry) {
-		/* We have a cache record, initialize scope */
+	/* We have a cache record, initialize scope */
 		fcic.initialized   = 1;
 		fcic.calling_scope = obj_ce;
 
@@ -269,7 +268,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #endif
 	}
 	else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
-		/* The caller is interested in caching OR we have the call cache enabled */
+	/* The caller is interested in caching OR we have the call cache enabled */
 		zend_string *callable_name = NULL;
 		char *error = NULL;
 
@@ -436,7 +435,6 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
 	zval *fn = NULL;
 	int status;
-	zephir_fcall_info info;
 
 	ZVAL_UNDEF(&rv);
 
