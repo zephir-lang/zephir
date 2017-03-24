@@ -205,7 +205,7 @@ PHP_METHOD(Test_Oo, testInstance9) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "getnew", &_0, 48);
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "getnew", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -222,7 +222,7 @@ PHP_METHOD(Test_Oo, testInstance10) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamicb_ce, "getnew", &_0, 48);
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamicb_ce, "getnew", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -261,7 +261,7 @@ PHP_METHOD(Test_Oo, testInstance12) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "call1", &_0, 49);
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "call1", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 

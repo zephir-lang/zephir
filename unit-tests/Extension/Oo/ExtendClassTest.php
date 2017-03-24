@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -19,6 +19,8 @@
 
 namespace Extension\Oo;
 
+use PDO;
+use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
 
 class ExtendClassTest extends \PHPUnit_Framework_TestCase
@@ -28,18 +30,19 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         if (!extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extendsion is not loaded');
         }
-        $this->assertSame(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
-        $this->assertSame(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
+        $this->assertSame(PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
+        $this->assertSame(PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
     public function testPDOStatementExtending()
     {
-        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
         $this->assertInstanceof('Test\\PdoStatement', $stmt);
     }
 
+    // FIXME
     public function testInstanceOfPhalconMvcApplication()
     {
         /*if (!extension_loaded('phalcon')) {
@@ -49,6 +52,7 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Phalcon\Mvc\Application', $class);*/
     }
 
+    // FIXME
     public function testInstanceOfMemcache()
     {
         /*if (!extension_loaded('memcache')) {
@@ -56,5 +60,14 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         }
         $class = new \Test\Oo\Extend\Memcache();
         $this->assertInstanceOf('Memcache', $class);*/
+    }
+
+    /**
+     * @test
+     * @issue 1392
+     */
+    public function shouldCorrectWorkWithLateStaticBinding()
+    {
+        $this->assertSame('Test\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
     }
 }

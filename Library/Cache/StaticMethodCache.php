@@ -85,7 +85,7 @@ class StaticMethodCache
             if (!($method instanceof \ReflectionMethod)) {
                 $classDefinition = $method->getClassDefinition();
                 if (!$classDefinition->isBundled() && $allowNtsCache) {
-                    $mustBeCached = true;
+                    $mustBeCached = !$compilationContext->backend->isZE3();
                 } else {
                     if (!$method->isPrivate() && !$method->isFinal()) {
                         return 'NULL, 0';

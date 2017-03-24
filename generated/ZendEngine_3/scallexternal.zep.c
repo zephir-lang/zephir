@@ -39,7 +39,7 @@ PHP_METHOD(Test_ScallExternal, testCall1) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod1", &_0, 62);
+	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod1", &_0, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -60,7 +60,7 @@ PHP_METHOD(Test_ScallExternal, testCall2) {
 
 
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod4", &_0, 63, a, b);
+	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod4", &_0, 0, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 
