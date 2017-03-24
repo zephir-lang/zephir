@@ -70,4 +70,14 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame('Test\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
     }
+
+    /**
+     * @test
+     * @issue 1372
+     */
+    public function shouldCallParentMethodFromStaticByUsingSelf()
+    {
+        $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
+        $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
+    }
 }
