@@ -58,8 +58,7 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         $context->codePrinter->output('array_init(' . $symbol . ');');
         if ($context->backend->isZE3()) {
             $context->codePrinter->output('zend_copy_parameters_array(ZEND_NUM_ARGS(), ' . $symbol . ');');
-        }
-        else {
+        } else {
             $context->codePrinter->output('zend_copy_parameters_array(ZEND_NUM_ARGS(), ' . $symbol . ' TSRMLS_CC);');
         }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
