@@ -25,7 +25,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/fcall_internal.h"
-#include "kernel/extended/fcall.h"
 
 #include <Zend/zend_hash.h>
 #include <Zend/zend.h>
