@@ -25,6 +25,18 @@ env:
     - CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
     - CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+  include:
+    - env: CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
+      php: nightly
+      compiler: gcc
+    - env: CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
+      php: nightly
+      compiler: clang
+
 cache:
   apt: true
   ccache: true
@@ -53,6 +65,7 @@ before_script:
  - $(phpenv which php) compiler.php api
  - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
+ - $CC --version
 
 script:
  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
