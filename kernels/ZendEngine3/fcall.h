@@ -486,4 +486,6 @@ static inline void zephir_set_called_scope(zend_execute_data *ex, zend_class_ent
 	}
 }
 
+void zephir_func_get_arg(zval *return_value, zend_long requested_offset);
+
 #endif /* ZEPHIR_KERNEL_FCALL_H */

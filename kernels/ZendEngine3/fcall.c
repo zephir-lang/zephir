@@ -636,3 +636,43 @@ void zephir_eval_php(zval *str, zval *retval_ptr, char *context)
 		efree_size(new_op_array, sizeof(zend_op_array));
 	}
 }
+
+void zephir_func_get_arg(zval *return_value, zend_long requested_offset) {
+    uint32_t arg_count, first_extra_arg;
+    zval *arg;
+    zend_long requested_offset;
+    zend_execute_data *ex;
+
+    if (requested_offset < 0) {
+    	zend_error(E_WARNING, "func_get_arg():  The argument number should be >= 0");
+    	RETURN_FALSE;
+    }
+
+    ex = EX(prev_execute_data);
+    if (ZEND_CALL_INFO(ex) & ZEND_CALL_CODE) {
+    	zend_error(E_WARNING, "func_get_arg():  Called from the global scope - no function context");
+    	RETURN_FALSE;
+    }
+
+	if (zend_forbid_dynamic_call("func_get_arg()") == FAILURE) {
+    	RETURN_FALSE;
+    }
+
+    arg_count = ZEND_CALL_NUM_ARGS(ex);
+
+	if ((zend_ulong)requested_offset >= arg_count) {
+    	zend_error(E_WARNING, "func_get_arg():  Argument " ZEND_LONG_FMT " not passed to function", requested_offset);
+    	RETURN_FALSE;
+    }
+
+    first_extra_arg = ex->func->op_array.num_args;
+    if ((zend_ulong)requested_offset >= first_extra_arg && (ZEND_CALL_NUM_ARGS(ex) > first_extra_arg)) {
+    	arg = ZEND_CALL_VAR_NUM(ex, ex->func->op_array.last_var + ex->func->op_array.T) + (requested_offset - first_extra_arg);
+    } else {
+    	arg = ZEND_CALL_ARG(ex, requested_offset + 1);
+    }
+    if (EXPECTED(!Z_ISUNDEF_P(arg))) {
+    	ZVAL_DEREF(arg);
+    	ZVAL_COPY(return_value, arg);
+    }
+}

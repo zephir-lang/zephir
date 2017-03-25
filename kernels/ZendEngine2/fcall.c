@@ -1039,3 +1039,31 @@ void zephir_eval_php(zval *str, zval *retval_ptr, char *context TSRMLS_DC)
 		EG(return_value_ptr_ptr) = original_return_value_ptr_ptr;
 	}
 }
+
+void zephir_func_get_arg(int requested_offset) {
+    zend_execute_data *ex = EG(current_execute_data)->prev_execute_data;
+    zval *arg;
+    void **p;
+    int arg_count;
+
+    if (requested_offset < 0) {
+    	zend_error(E_WARNING, "func_get_arg():  The argument number should be >= 0");
+    	RETURN_FALSE;
+    }
+
+    if (!ex || !ex->function_state.arguments) {
+		zend_error(E_WARNING, "func_get_arg():  Called from the global scope - no function context");
+		RETURN_FALSE;
+	}
+
+	p = ex->function_state.arguments;
+	arg_count = (int)(zend_uintptr_t) *p;
+
+	if (requested_offset >= arg_count) {
+    	zend_error(E_WARNING, "func_get_arg():  Argument %ld not passed to function", requested_offset);
+    	RETURN_FALSE;
+    }
+
+    arg = *(p-(arg_count-requested_offset));
+    RETURN_ZVAL_FAST(arg);
+}
