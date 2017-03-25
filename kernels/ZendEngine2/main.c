@@ -439,3 +439,49 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
 
     return *temp_ce;
 }
+
+void zephir_get_args(zval *return_value TSRMLS_DC)
+{
+	zend_execute_data *ex = EG(current_execute_data);
+	void **p              = ex->function_state.arguments;
+	int arg_count         = (int)(zend_uintptr_t)*p;
+	int i;
+
+	array_init_size(return_value, arg_count);
+	for (i=0; i<arg_count; ++i) {
+		zval *arg = *((zval**)(p - arg_count + i));
+		zval *q;
+		if (!Z_ISREF_P(arg)) {
+			q = arg;
+			Z_ADDREF_P(q);
+		}
+		else {
+			ALLOC_ZVAL(q);
+			INIT_PZVAL_COPY(q, arg);
+			zval_copy_ctor(q);
+		}
+
+		zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &q, sizeof(zval*), NULL);
+	}
+}
+
+void zephir_get_arg(zval *return_value, int idx TSRMLS_DC)
+{
+	zend_execute_data *ex = EG(current_execute_data);
+	void **p              = ex->function_state.arguments;
+	int arg_count         = (int)(zend_uintptr_t)*p;
+	zval *arg;
+
+	if (UNEXPECTED(idx < 0)) {
+		zend_error(E_WARNING, "zephir_get_arg():  The argument number should be >= 0");
+		RETURN_FALSE;
+	}
+
+	if (UNEXPECTED((zend_ulong)idx >= arg_count)) {
+		zend_error(E_WARNING, "zephir_get_arg():  Argument %d not passed to function", idx);
+		RETURN_FALSE;
+	}
+
+	arg = *((zval**)(p - arg_count + idx));
+	RETURN_ZVAL(arg, 1, 0);
+}

@@ -312,4 +312,7 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
         this_ptr = NULL; \
     }
 
+void zephir_get_args(zval* return_value);
+void zephir_get_arg(zval* return_value, zend_long idx);
+
 #endif /* ZEPHIR_KERNEL_MAIN_H */

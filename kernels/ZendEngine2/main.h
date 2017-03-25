@@ -567,4 +567,7 @@ static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
 
 #define zephir_is_php_version(id) (PHP_VERSION_ID / 10 == id / 10 ?  1 : 0)
 
+void zephir_get_args(zval* return_value TSRMLS_DC);
+void zephir_get_arg(zval* return_value, int idx TSRMLS_DC);
+
 #endif /* ZEPHIR_KERNEL_MAIN_H */
