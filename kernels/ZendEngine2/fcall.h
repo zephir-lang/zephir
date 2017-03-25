@@ -834,5 +834,6 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 #endif
 
 void zephir_eval_php(zval *str, zval *retval_ptr, char *context TSRMLS_DC);
+void zephir_func_get_arg(int requested_offset);
 
 #endif /* ZEPHIR_KERNEL_FCALL_H */
