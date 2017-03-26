@@ -196,7 +196,7 @@ class Compiler
      */
     public function compileParser()
     {
-        if (extension_loaded('zephir_parser') && $this->parserCompiled !== 'force') {
+        if (function_exists('zephir_parse_file') && $this->parserCompiled !== 'force') {
             $this->parserCompiled = true;
         }
         if ($this->parserCompiled === true) {
@@ -205,9 +205,9 @@ class Compiler
 
         $extFile = null;
         $currentDir = realpath(dirname(__FILE__)). DIRECTORY_SEPARATOR  . '..' .DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR ;
-        if (!extension_loaded('zephir_parser') || $this->parserCompiled === 'force') {
+        if (!function_exists('zephir_parse_file') || $this->parserCompiled === 'force') {
             if (Utils::isWindows()) {
-                $this->logger->output('zephir_parser extension not loaded, compiling it');
+                $this->logger->output('Zephir Parser extension not loaded, compiling it');
                 $oldCwd = getcwd();
                 chdir($currentDir);
 
@@ -259,7 +259,7 @@ class Compiler
                 chdir($oldCwd);
             } else {
                 if (!file_exists($currentDir . 'modules/zephir_parser.so') || ($this->parserCompiled === 'force')) {
-                    $this->logger->output('zephir_parser extension not loaded, compiling it');
+                    $this->logger->output('Zephir Parser extension not loaded, compiling it');
                     $oldCwd = getcwd();
                     chdir($currentDir);
 
@@ -306,6 +306,7 @@ class Compiler
     protected function preCompile($filePath)
     {
         $parserExt = $this->compileParser();
+
         /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
         if ($parserExt && $parserExt !== true) {
             // exclude --parser-compiled argument, we'll specify it additionally
