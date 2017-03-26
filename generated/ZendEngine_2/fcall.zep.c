@@ -18,6 +18,7 @@
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 #include "kernel/file.h"
+#include "kernel/main.h"
 #include "kernel/array.h"
 
 
@@ -267,9 +268,32 @@ PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 
 
 
-	array_init(return_value);
-	zend_copy_parameters_array(ZEND_NUM_ARGS(), return_value TSRMLS_CC);
+	zephir_get_args(return_value TSRMLS_CC);
 	return;
+
+}
+
+PHP_METHOD(Test_Fcall, testFunctionGetArg) {
+
+	zval *param1, *param2, *_0 = NULL, _1, _2;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &param1, &param2);
+
+
+
+	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_LONG(&_1, 0);
+	zephir_get_arg(_0, zephir_get_intval(&_1) TSRMLS_CC);
+	zephir_array_fast_append(return_value, _0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_SINIT_VAR(_2);
+	ZVAL_LONG(&_2, 1);
+	zephir_get_arg(_0, zephir_get_intval(&_2) TSRMLS_CC);
+	zephir_array_fast_append(return_value, _0);
+	RETURN_MM();
 
 }
 
