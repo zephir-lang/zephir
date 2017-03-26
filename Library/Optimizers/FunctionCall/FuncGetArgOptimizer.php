@@ -61,7 +61,6 @@ class FuncGetArgOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         $context->headersManager->add('kernel/main');
-        $context->codePrinter->output('array_init(' . $symbol . ');');
         if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_get_arg(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . '));');
         } else {

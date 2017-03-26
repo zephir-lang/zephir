@@ -56,7 +56,6 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/main');
-        $context->codePrinter->output('array_init(' . $symbol . ');');
         if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_get_args(' . $symbol . ');');
         } else {
