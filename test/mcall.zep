@@ -256,6 +256,14 @@ class Mcall
 		return a->setCallable([this, "bb"]);
 	}
 
+	public function callProtectedFromOther()
+	{
+		var a;
+		let a = new Oo\OoOther();
+
+		return a->callProtected(this);
+	}
+
 	public function aa()
 	{
 		var a;
