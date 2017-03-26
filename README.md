@@ -38,22 +38,48 @@ To build the PHP extension:
 
 * g++ >= 4.4/clang++ >= 3.x/vc++ 9
 * gnu make 3.81 or later
+* automake
 * php development headers and tools
 
 Installation
 ------------
 
-You can install zephir using composer.
-Run `composer require phalcon/zephir`, run `./install` and then run `zephir`
-from your `bin-dir`. By default it is `./vendor/bin/zephir`.
-You can read more about composer binaries
-in it's [documentation](https://getcomposer.org/doc/articles/vendor-binaries.md).
+First, clone Zephir repository.
 
-For global installation via composer you can use `composer global require`.
-Do not forget add `~/.composer/vendor/bin` into your `$PATH`.
+Next, you have to get [Zephir Parser](https://github.com/phalcon/php-zephir-parser).
+The most easy way to do it is to use `git submodule` command:
 
-Also you can just clone zephir repository and run `./install`.
+```bash
+git submodule init
+git submodule update
+```
+
+Then you have to install it:
+
+```bash
+cd modules/php-zephir-parser
+sudo ./install
+```
+
+Add the extension to your **php.ini**:
+
+```ini
+[Zephir Parser]
+extension=zephir_parser.so
+```
+
+Finally, install Zephir by using command `./install` from project root dir.
 For global installation add `-c` flag.
+
+### Easy way pull latest of all submodules
+
+For git 1.6.1 or above you can use something similar to:
+
+```bash
+git submodule update --remote --merge
+```
+
+See [git-submodule(1)](http://www.kernel.org/pub/software/scm/git/docs/v1.6.1.3/git-submodule.html) for details.
 
 Additional notes on Ubuntu
 --------------------------

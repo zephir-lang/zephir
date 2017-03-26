@@ -26,3 +26,6 @@ indent_style = tab
 
 [*.re]
 indent_style = tab
+
+[.gitmodules]
+indent_style = tab

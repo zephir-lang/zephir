@@ -1,0 +1,3 @@
+[submodule "php-zephir-parser"]
+	path = modules/php-zephir-parser
+	url = git://github.com/phalcon/php-zephir-parser.git
