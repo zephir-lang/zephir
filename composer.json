@@ -29,11 +29,11 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "~2.6",
-        "phpunit/phpunit": "3.7.*",
         "ext-gmp": "*",
         "ext-pdo": "*",
-        "ext-pdo_sqlite": "*"
+        "ext-pdo_sqlite": "*",
+        "squizlabs/php_codesniffer": "^2.8",
+        "phpunit/phpunit": "^4.8"
     },
     "autoload": {
         "psr-4": {
