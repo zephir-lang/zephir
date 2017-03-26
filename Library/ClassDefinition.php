@@ -1293,7 +1293,7 @@ class ClassDefinition
          */
         foreach ($methods as $method) {
             $parameters = $method->getParameters();
-            if (count($parameters)) {
+            if ($parameters && count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
