@@ -80,7 +80,7 @@ build_script:
   - 'bin\zephir build'
   - 'type compile-errors.log'
   - 'type compile.log'
-  - 'php vendor\bin\phpunit --bootstrap unit-tests\Bootstrap.php --debug unit-tests\'
+  - 'php vendor\bin\phpunit -c phpunit.xml.dist --debug unit-tests\'
 
 on_failure:
   - 'dir'
