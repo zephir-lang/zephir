@@ -1,22 +1,33 @@
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.2/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="./unit-tests/Bootstrap.php">
+<?xml version="1.0" encoding="UTF-8"?>
 
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="./unit-tests/Bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true"
+         verbose="true"
+>
     <testsuites>
         <testsuite name="Extension Test Suite">
-            <directory>./unit-tests/Extension/</directory>
+            <directory suffix=".php">./unit-tests/Extension/</directory>
         </testsuite>
         <testsuite name="Zephir Test Suite">
-            <directory>./unit-tests/Zephir/</directory>
+            <directory suffix=".php">./unit-tests/Zephir/</directory>
         </testsuite>
     </testsuites>
-
     <filter>
         <whitelist>
-            <directory>./Library</directory>
+            <directory suffix=".php">./Library</directory>
         </whitelist>
     </filter>
-
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+        <log type="coverage-html" target="coverage" showUncoveredFiles="true"/>
+        <log type="coverage-clover" target="coverage.xml" showUncoveredFiles="true"/>
+    </logging>
 </phpunit>

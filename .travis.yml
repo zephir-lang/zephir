@@ -69,7 +69,7 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit --bootstrap unit-tests/Bootstrap.php --debug unit-tests/
+  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit -c phpunit.xml.dist --debug unit-tests/
 
 after_success:
   - export ZEPHIR_TARGET="legacy"
