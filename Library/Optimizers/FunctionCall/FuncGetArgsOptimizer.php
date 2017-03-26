@@ -55,11 +55,11 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('array_init(' . $symbol . ');');
+        $context->headersManager->add('kernel/main');
         if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zend_copy_parameters_array(ZEND_NUM_ARGS(), ' . $symbol . ');');
+            $context->codePrinter->output('zephir_get_args(' . $symbol . ');');
         } else {
-            $context->codePrinter->output('zend_copy_parameters_array(ZEND_NUM_ARGS(), ' . $symbol . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_get_args(' . $symbol . ' TSRMLS_CC);');
         }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
