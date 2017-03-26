@@ -1293,7 +1293,7 @@ class ClassDefinition
          */
         foreach ($methods as $method) {
             $parameters = $method->getParameters();
-            if ($parameters && count($parameters)) {
+            if ($method->hasParameters()) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
@@ -1330,10 +1330,9 @@ class ClassDefinition
         if (count($methods)) {
             $codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
             foreach ($methods as $method) {
-                $parameters = $method->getParameters();
                 if ($this->getType() == 'class') {
                     if (!$method->isInternal()) {
-                        if (count($parameters)) {
+                        if ($method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
@@ -1341,13 +1340,13 @@ class ClassDefinition
                     }
                 } else {
                     if ($method->isStatic()) {
-                        if (count($parameters)) {
+                        if ($method->hasParameters()) {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         } else {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         }
                     } else {
-                        if (count($parameters)) {
+                        if ($method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');
