@@ -14,7 +14,7 @@ environment:
 cache:
   - vendor -> composer.json
 
-os: Windows Server 2012
+os: Windows Server 2012 R2
 clone_folder: c:\projects\zephir
 
 matrix:
@@ -73,7 +73,7 @@ build_script:
   - 'type compile.log'
   - 'php vendor\phpunit\phpunit\phpunit.php --debug'
 
-on_failure :
+on_failure:
   - 'dir'
   - 'type compile-errors.log'
   - 'type compile.log'
