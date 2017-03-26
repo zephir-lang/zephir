@@ -47,44 +47,44 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
- - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
- - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
- - git config push.default simple
- - git config --global user.email "travis@zephir-lang.com"
- - git config --global user.name "TravisCI"
- - git submodule --quiet update --init --recursive
- - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
+  - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
+  - git config push.default simple
+  - git config --global user.email "travis@zephir-lang.com"
+  - git config --global user.name "TravisCI"
+  - git submodule --quiet update --init --recursive
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
 
 install:
- - composer --prefer-source install
- - ./install
+  - composer --prefer-source install
+  - ./install
 
 before_script:
- - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
- - $(phpenv which php) compiler.php stubs
- - $(phpenv which php) compiler.php api
- - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
- - ulimit -c unlimited || true
- - $CC --version
+  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
+  - $(phpenv which php) compiler.php stubs
+  - $(phpenv which php) compiler.php api
+  - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
+  - ulimit -c unlimited || true
+  - $CC --version
 
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
- - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit --bootstrap unit-tests/Bootstrap.php --debug unit-tests/
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
+  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit --bootstrap unit-tests/Bootstrap.php --debug unit-tests/
 
 after_success:
- - export ZEPHIR_TARGET="legacy"
- - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then export ZEPHIR_TARGET="ZendEngine_2"; fi
- - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then export ZEPHIR_TARGET="ZendEngine_3"; fi
- - git checkout $TRAVIS_BRANCH
- - rm -rf generated/$ZEPHIR_TARGET/{*,.*}
- - cp -a ext/test/. generated/$ZEPHIR_TARGET
- - git add -A generated/$ZEPHIR_TARGET
- - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
- - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
- - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git log -1 -p; fi
+  - export ZEPHIR_TARGET="legacy"
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then export ZEPHIR_TARGET="ZendEngine_2"; fi
+  - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then export ZEPHIR_TARGET="ZendEngine_3"; fi
+  - git checkout $TRAVIS_BRANCH
+  - rm -rf generated/$ZEPHIR_TARGET/{*,.*}
+  - cp -a ext/test/. generated/$ZEPHIR_TARGET
+  - git add -A generated/$ZEPHIR_TARGET
+  - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
+  - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git log -1 -p; fi
 
 after_failure:
- - ./unit-tests/ci/after_failure.sh
+  - ./unit-tests/ci/after_failure.sh
 
 notifications:
   email:
