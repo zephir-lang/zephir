@@ -6,8 +6,7 @@ Zephir
 [![Total Downloads](https://poser.pugx.org/phalcon/zephir/downloads.png)](https://packagist.org/packages/phalcon/zephir)
 [![License](https://poser.pugx.org/phalcon/zephir/license.svg)](https://packagist.org/packages/phalcon/zephir)
 [![Build on Linux](https://secure.travis-ci.org/phalcon/zephir.svg?branch=master)](http://travis-ci.org/phalcon/zephir)
-[![Build on Windows](https://ci.appveyor.com/api/projects/status/51encyoxdf4b6f31/branch/master?svg=true)](https://ci.appveyor.com/project/phalcon/zephir/branch/master)
-
+[![Build on Windows](https://ci.appveyor.com/api/projects/status/cxa1810md7v6n095/branch/master?svg=true)](https://ci.appveyor.com/project/sergeyklay/zephir/branch/master)
 
 
 Zephir - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability

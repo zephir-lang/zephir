@@ -3,7 +3,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -43,7 +43,7 @@ typedef struct _xx_scanner_state {
 	unsigned int class_char;
 	unsigned int method_line;
 	unsigned int method_char;
-	char *active_file;	
+	char *active_file;
 } xx_scanner_state;
 
 /* Extra information tokens */
