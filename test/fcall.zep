@@ -120,6 +120,11 @@ class Fcall
 		return func_get_args();
 	}
 
+	public function testFunctionGetArg(var param1, var param2)
+	{
+		return [func_get_arg(0), func_get_arg(1)];
+	}
+
 	public function testArrayFill()
 	{
 		var v1, v2;

@@ -43,6 +43,10 @@ class FcallTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($t->testFunctionGetArgs(1025, false), array(1025, false));
         $this->assertSame($t->testFunctionGetArgs(false, 1234), array(false, 1234));
         $this->assertSame($t->testFunctionGetArgs(array(1, 2, 3), false), array(array(1, 2, 3), false));
+
+        $this->assertSame($t->testFunctionGetArg(true, false), array(true, false));
+        $this->assertSame($t->testFunctionGetArg(1025, false), array(1025, false));
+        $this->assertSame($t->testFunctionGetArg(false, 1234), array(false, 1234));
     }
 
     public function testArrayFill()
