@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Parser\ParseException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 
@@ -80,6 +81,8 @@ class CompilerFile implements FileInterface
      */
     protected $_aliasManager;
 
+    protected $parser;
+
     /**
      * CompilerFile constructor
      *
@@ -96,6 +99,7 @@ class CompilerFile implements FileInterface
         $this->_config = $config;
         $this->_logger = $logger;
         $this->_aliasManager = new AliasManager();
+        $this->parser = new Parser();
     }
 
     /**
@@ -159,7 +163,7 @@ class CompilerFile implements FileInterface
      * @param Compiler $compiler
      * @return array
      *
-     * @throws Exception
+     * @throws ParseException
      */
     public function genIR(Compiler $compiler)
     {
@@ -181,11 +185,7 @@ class CompilerFile implements FileInterface
 
         $ir = null;
         if ($changed) {
-            if (!function_exists('zephir_parse_file')) {
-                throw new Exception("Parser extension couldn't be loaded");
-            }
-
-            $ir = zephir_parse_file(file_get_contents($zepRealPath), $zepRealPath);
+            $ir = $this->parser->parse($zepRealPath);
             $fileSystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
         }
 
