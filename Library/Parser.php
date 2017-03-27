@@ -20,6 +20,7 @@
 namespace Zephir;
 
 use Zephir\Parser\ParseException;
+use Zephir\Parser\SystemException;
 
 /**
  * Zephir\Parser
@@ -43,12 +44,13 @@ class Parser
      *
      * @param string $filepath Absolute path to the *.zep file
      * @return array
+     * @throws SystemException
      * @throws ParseException
      */
     public function parse($filepath)
     {
         if (!$this->isAvailable()) {
-            throw new ParseException("Zephir Parser extension couldn't be loaded.");
+            throw new SystemException("Zephir Parser extension couldn't be loaded.");
         }
 
         if (!is_file($filepath) || !is_readable($filepath)) {
