@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Parser\Manager;
 use Zephir\Parser\ParseException;
+use Zephir\Parser\SystemException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 
@@ -168,6 +169,7 @@ class CompilerFile implements FileInterface
      * @param Compiler $compiler
      * @return array
      *
+     * @throws SystemException
      * @throws ParseException
      */
     public function genIR(Compiler $compiler)
