@@ -368,6 +368,7 @@ void zephir_gettype(zval *return_value, zval *arg)
 					break;
 				}
 			}
+			/* no break */
 
 		default:
 			RETVAL_STRING("unknown type");
