@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit backupGlobals="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
+         backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="./unit-tests/Bootstrap.php"
          colors="true"
@@ -9,7 +11,6 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="true"
          verbose="true"
 >
     <testsuites>
@@ -27,7 +28,10 @@
     </filter>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-        <log type="coverage-html" target="coverage" showUncoveredFiles="true"/>
-        <log type="coverage-clover" target="coverage.xml" showUncoveredFiles="true"/>
     </logging>
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+        <ini name="display_errors" value="on"/>
+        <ini name="display_startup_errors" value="on"/>
+    </php>
 </phpunit>
