@@ -153,7 +153,7 @@ PHP_METHOD(Test_Scall, testCall3) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 56);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 57);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -214,7 +214,7 @@ PHP_METHOD(Test_Scall, testCall6) {
 
 
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 57, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 58, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -257,7 +257,7 @@ PHP_METHOD(Test_Scall, testCall9) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 56);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 57);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -318,7 +318,7 @@ PHP_METHOD(Test_Scall, testCall12) {
 
 
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 57, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 58, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 

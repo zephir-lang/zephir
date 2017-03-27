@@ -41,7 +41,7 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedepricatedmethod", NULL, 48);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedepricatedmethod", NULL, 49);
 	zephir_check_call_status();
 	RETURN_MM();
 
