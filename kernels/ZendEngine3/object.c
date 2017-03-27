@@ -1194,7 +1194,7 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 			zval *item;
 			int i = 0;
 
-			if (likely(param_count) <= 10) {
+			if (EXPECTED(param_count <= 10)) {
 				params_ptr = static_params;
 			} else {
 				params_arr = emalloc(param_count * sizeof(zval*));
@@ -1211,7 +1211,7 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 
 		outcome = zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, param_count, params_ptr);
 
-		if (unlikely(params_arr != NULL)) {
+		if (UNEXPECTED(params_arr != NULL)) {
 			efree(params_arr);
 		}
 	}
