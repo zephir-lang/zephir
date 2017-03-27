@@ -57,7 +57,7 @@ before_install:
 
 install:
   - composer --prefer-source install
-  - (cd modules/php-zephir-parser; TRAVIS_BUILD_DIR=$(pwd) bash ./tests/ci/install-travis && phpenv config-add ./tests/ci/zephir_parser.ini)
+  - (cd modules/php-zephir-parser; TRAVIS_BUILD_DIR=$(pwd) bash ./tests/ci/install-travis)
   - php --ri "Zephir Parser"
   - ./install
 
