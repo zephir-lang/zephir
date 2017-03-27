@@ -89,11 +89,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		}
 	}
 	else if (type == zephir_fcall_static) {
-#if PHP_VERSION_ID >= 70100
 		calling_scope = zend_get_called_scope(EG(current_execute_data));
-#else
-		calling_scope = EG(current_execute_data)->called_scope;
-#endif
 		if (UNEXPECTED(!calling_scope)) {
 			return 0;
 		}
