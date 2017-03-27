@@ -79,7 +79,7 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 		}
 
 #if PHP_VERSION_ID >= 70100
-		new_op_array->scope = EG(fake_scope);
+		new_op_array->scope = EG(fake_scope) ? EG(fake_scope) : zend_get_executed_scope();
 #else
 		new_op_array->scope = EG(scope);
 #endif
