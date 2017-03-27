@@ -26,9 +26,6 @@
             <directory suffix=".php">./Library</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-    </logging>
     <php>
         <ini name="date.timezone" value="UTC"/>
         <ini name="display_errors" value="on"/>
