@@ -41,14 +41,18 @@ class Parser
     /**
      * Parses a file and returning an intermediate array representation.
      *
-     * @param string $filepath
+     * @param string $filepath Absolute path to the *.zep file
      * @return array
      * @throws ParseException
      */
     public function parse($filepath)
     {
         if (!$this->isAvailable()) {
-            throw new ParseException("Parser extension couldn't be loaded");
+            throw new ParseException("Zephir Parser extension couldn't be loaded.");
+        }
+
+        if (!is_file($filepath) || !is_readable($filepath)) {
+            throw new ParseException('Unable to locate source file to parse.');
         }
 
         $content = file_get_contents($filepath);

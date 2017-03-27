@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Parser\Manager;
 use Zephir\Parser\ParseException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
@@ -81,7 +82,11 @@ class CompilerFile implements FileInterface
      */
     protected $_aliasManager;
 
-    protected $parser;
+    /**
+     * Zephir Parser Manager
+     * @var Manager
+     */
+    protected $parserManager;
 
     /**
      * CompilerFile constructor
@@ -99,7 +104,7 @@ class CompilerFile implements FileInterface
         $this->_config = $config;
         $this->_logger = $logger;
         $this->_aliasManager = new AliasManager();
-        $this->parser = new Parser();
+        $this->parserManager = new Manager(new Parser());
     }
 
     /**
@@ -185,7 +190,8 @@ class CompilerFile implements FileInterface
 
         $ir = null;
         if ($changed) {
-            $ir = $this->parser->parse($zepRealPath);
+            $parser = $this->parserManager->getParser();
+            $ir = $parser->parse($zepRealPath);
             $fileSystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
         }
 
