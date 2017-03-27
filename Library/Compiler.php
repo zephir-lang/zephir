@@ -4,12 +4,12 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
  | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | https://zephir-lang.com/license.html                                     |
  |                                                                          |
  | If you did not receive a copy of the MIT license and are unable          |
  | to obtain it through the world-wide-web, please send a note to           |
@@ -19,20 +19,32 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandInterface;
+use Zephir\Parser\Manager;
+use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
+use Zephir\Commands\CommandInterface;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
 /**
- * Compiler
+ * Zephir\Compiler
  *
- * Main compiler
+ * The main compiler.
  */
 class Compiler
 {
     const VERSION = '0.9.6a-dev';
 
     public $parserCompiled = false;
+
+    /**
+     * @var BaseBackend
+     */
+    public $backend;
+
+    /**
+     * @var FunctionDefinition[]
+     */
+    public $functionDefinitions = array();
 
     /**
      * @var CompilerFile[]
@@ -55,11 +67,6 @@ class Compiler
      * @var ClassDefinition[]
      */
     protected $definitions = array();
-
-    /**
-     * @var FunctionDefinition[]
-     */
-    public $functionDefinitions = array();
 
     /**
      * @var array|string[]
@@ -126,9 +133,10 @@ class Compiler
     protected $extraFiles = array();
 
     /**
-     * @var BaseBackend
+     * The Zephir Parser Manager
+     * @var Manager
      */
-    public $backend;
+    protected $parserManager;
 
     /**
      * Compiler constructor
@@ -136,9 +144,11 @@ class Compiler
      * @param Config $config
      * @param Logger $logger
      * @param BaseBackend $backend
+     * @param Manager $manager
+     *
      * @throws Exception
      */
-    public function __construct(Config $config, Logger $logger, BaseBackend $backend)
+    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager)
     {
         $this->config = $config;
         $this->logger = $logger;
@@ -147,28 +157,18 @@ class Compiler
         $this->stringManager = $this->backend->getStringsManager();
         $this->fcallManager = $this->backend->getFcallManager();
         $this->checkRequires();
+
+        $this->parserManager = $manager;
     }
 
     /**
-     * Check require extensions orther when build your extension
+     * Gets the Zephir Parser Manager.
+     *
+     * @return Manager
      */
-    protected function checkRequires()
+    public function getParserManager()
     {
-        $extensionRequires = $this->config->get("requires");
-        $extensionRequires = $extensionRequires["extensions"];
-        if ($extensionRequires) {
-            $collectionError = PHP_EOL . "\tCould not load extension : ";
-            foreach ($extensionRequires as $key => $value) {
-                if (!extension_loaded($value)) {
-                    $collectionError .= $value . ", ";
-                }
-            }
-
-            if ($collectionError != PHP_EOL . "\tCould not load extension : ") {
-                $collectionError .= PHP_EOL . "\tYou must add extensions above before build this extension";
-                throw new Exception($collectionError);
-            }
-        }
+        return $this->parserManager;
     }
 
     /**
@@ -192,107 +192,23 @@ class Compiler
     }
 
     /**
-     * Compile the parser PHP extension
+     * Compile the parser PHP extension.
+     *
+     * Returns TRUE if parser is available or compiled extions file (string).
+     *
+     * @return bool|string
      */
     public function compileParser()
     {
-        if (function_exists('zephir_parse_file') && $this->parserCompiled !== 'force') {
-            $this->parserCompiled = true;
-        }
-        if ($this->parserCompiled === true) {
-            return true;
-        }
-
-        $extFile = null;
-        $currentDir = realpath(dirname(__FILE__)). DIRECTORY_SEPARATOR  . '..' .DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR ;
-        if (!function_exists('zephir_parse_file') || $this->parserCompiled === 'force') {
-            if (Utils::isWindows()) {
-                $this->logger->output('Zephir Parser extension not loaded, compiling it');
-                $oldCwd = getcwd();
-                chdir($currentDir);
-
-                echo shell_exec('cd parser && cmd /c build_win32.bat');
-                exec('%PHP_DEVPACK%\\phpize --clean', $output, $exit);
-                if (file_exists('Release')) {
-                    exec('rd /s /q "' . $currentDir . '"Release', $output, $exit);
-                }
-
-                $this->logger->output('Preparing for parser compilation...');
-                exec('%PHP_DEVPACK%\\phpize', $output, $exit);
-
-                /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
-                $fixMarker = "/* zephir_phpize_fix */";
-                $configureFile = file_get_contents("configure.js");
-                $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
-                if (strpos($configureFile, $fixMarker) === false) {
-                    file_put_contents("configure.js", $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile);
-                }
-
-                exec('configure --enable-zephir_parser');
-                $this->logger->output('Compiling the parser...');
-                exec('nmake 2> compile-errors.log 1> compile.log', $output, $exit);
-
-                echo file_get_contents('compile-errors.log') . PHP_EOL;
-                $buildLog = file_get_contents('compile.log');
-                echo $buildLog . PHP_EOL;
-
-                $buildType = 'Release';
-                if (strpos($buildLog, 'Debug_TS\\') !== false) {
-                    $buildType = 'Debug_TS';
-                } else {
-                    if (strpos($buildLog, 'Release_TS\\') !== false) {
-                        $buildType = 'Release_TS';
-                    } else {
-                        if (strpos($buildLog, 'Debug\\') !== false) {
-                            $buildType = 'Debug';
-                        }
-                    }
-                }
-
-                if (strpos($buildLog, 'x64\\'.$buildType) !== false) {
-                    $buildType = 'x64/' . $buildType;
-                }
-
-                copy($buildType . '/php_zephir_parser.dll', 'php_zephir_parser.dll');
-                $extFile = $currentDir . 'php_zephir_parser.dll';
-
-                chdir($oldCwd);
-            } else {
-                if (!file_exists($currentDir . 'modules/zephir_parser.so') || ($this->parserCompiled === 'force')) {
-                    $this->logger->output('Zephir Parser extension not loaded, compiling it');
-                    $oldCwd = getcwd();
-                    chdir($currentDir);
-
-                    echo shell_exec('cd parser && /bin/sh ./build_linux.sh');
-                    exec('make clean && phpize --clean', $output, $exit);
-                    $this->logger->output('Preparing for parser compilation...');
-                    exec('phpize', $output, $exit);
-
-                    exec('export CC="gcc" && ./configure --enable-zephir_parser');
-                    $this->logger->output('Compiling the parser...');
-
-                    exec(
-                        '(make -s -j2 2> ./compile-errors.log 1> ./compile.log)',
-                        $output,
-                        $exit
-                    );
-
-                    echo file_get_contents('compile-errors.log') . PHP_EOL;
-                    echo file_get_contents('compile.log') . PHP_EOL;
-                    copy('modules/zephir_parser.so', 'zephir_parser.so');
-
-                    chdir($oldCwd);
-                }
-
-                $extFile = $currentDir . 'zephir_parser.so';
-            }
-
-            if (!$extFile || !file_exists($extFile)) {
-                throw new Exception('The zephir parser extension could not be found or compiled!');
-            }
+        if (!$this->parserManager->isAvailable()) {
+            $this->logger->output('The Zephir Parser extension not loaded, compiling it');
+            return $this->parserManager->compileParser();
+        } elseif ($this->parserManager->hasToRecompileParser()) {
+            $this->logger->output('The Zephir Parser is loaded but will be recompiled');
+            return $this->parserManager->compileParser();
         }
 
-        return $extFile;
+        return true;
     }
 
     /**
@@ -307,7 +223,8 @@ class Compiler
     {
         $parserExt = $this->compileParser();
 
-        /* Check if we need to load the parser extension and also allow users to manage the zephir parser extension on their own (zephir won't handle updating)*/
+        // Check if we need to load the parser extension and also allow users to manage the Zephir Parser extension
+        // on their own (Zephir won't handle updating)
         if ($parserExt && $parserExt !== true) {
             // exclude --parser-compiled argument, we'll specify it additionally
             $args = array_filter($_SERVER['argv'], function ($arg) {
@@ -718,75 +635,6 @@ class Compiler
         }
 
         return self::VERSION;
-    }
-
-    /**
-     * Checks if the current directory is a valid Zephir project
-     *
-     * @return string
-     * @throws Exception
-     */
-    protected function checkDirectory()
-    {
-        $namespace = $this->config->get('namespace');
-        if (!$namespace) {
-            throw new Exception("Extension namespace cannot be loaded");
-        }
-
-        if (!is_string($namespace)) {
-            throw new Exception("Extension namespace is invalid");
-        }
-
-        if (!$this->fileSystem->isInitialized()) {
-            $this->fileSystem->initialize();
-        }
-
-        $version = self::getCurrentVersion();
-
-        if (!$this->fileSystem->exists($version)) {
-            if (!$this->checkIfPhpized()) {
-                $this->logger->output(
-                    'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
-                );
-            }
-            $this->fileSystem->makeDirectory($version);
-        }
-
-        return $namespace;
-    }
-
-    /**
-     * Returns current GCC version
-     *
-     * @return string
-     */
-    protected function getGccVersion()
-    {
-        $version = self::getCurrentVersion();
-
-        if (!Utils::isWindows()) {
-            if ($this->fileSystem->exists($version . '/gcc-version')) {
-                return $this->fileSystem->read($version . '/gcc-version');
-            }
-
-            $this->fileSystem->system('gcc -v', 'stderr', $version . '/gcc-version-temp');
-            $lines = $this->fileSystem->file($version . '/gcc-version-temp');
-
-            foreach ($lines as $line) {
-                if (strpos($line, 'LLVM') !== false) {
-                    $this->fileSystem->write($version . '/gcc-version', '4.8.0');
-                    return '4.8.0';
-                }
-            }
-
-            $lastLine = $lines[count($lines) - 1];
-            if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
-                $this->fileSystem->write($version . '/gcc-version', $matches[0]);
-                return $matches[0];
-            }
-        }
-
-        return '0.0.0';
     }
 
     /**
@@ -1439,63 +1287,6 @@ class Compiler
     public function buildDev(CommandInterface $command)
     {
         $this->install($command, true);
-    }
-
-    /**
-     * Checks if a file must be copied
-     *
-     * @param string $src
-     * @param string $dst
-     *
-     * @return boolean
-     */
-    protected function checkKernelFile($src, $dst)
-    {
-        if (preg_match('#kernels/ZendEngine[2-9]/concat\.#', $src)) {
-            return true;
-        }
-
-        if (!file_exists($dst)) {
-            return false;
-        }
-
-        return md5_file($src) == md5_file($dst);
-    }
-
-    /**
-     * Checks which files in the base kernel must be copied
-     *
-     * @return boolean
-     */
-    protected function checkKernelFiles()
-    {
-        $kernelPath = "ext/kernel";
-
-        if (!file_exists($kernelPath)) {
-            $kernelDone = mkdir($kernelPath, 0775, true);
-            if (!$kernelDone) {
-                throw new Exception("Cannot create kernel directory");
-            }
-        }
-
-        $kernelPath = realpath($kernelPath);
-        $sourceKernelPath = $this->backend->getInternalKernelPath();
-
-        $configured = $this->recursiveProcess(
-            $sourceKernelPath,
-            $kernelPath,
-            '@.*\.[ch]$@',
-            array($this, 'checkKernelFile')
-        );
-
-        if (!$configured) {
-            $this->logger->output('Copying new kernel files...');
-            $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
-            @mkdir($kernelPath);
-            $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
-        }
-
-        return !$configured;
     }
 
     /**
@@ -2443,5 +2234,153 @@ class Compiler
 
         $contentM4 = str_replace('%PROJECT_PACKAGE_DEPENDENCIES%', '', $contentM4);
         return $contentM4;
+    }
+
+    /**
+     * Check require extensions orther when build your extension
+     */
+    protected function checkRequires()
+    {
+        $extensionRequires = $this->config->get("requires");
+        $extensionRequires = $extensionRequires["extensions"];
+        if ($extensionRequires) {
+            $collectionError = PHP_EOL . "\tCould not load extension : ";
+            foreach ($extensionRequires as $key => $value) {
+                if (!extension_loaded($value)) {
+                    $collectionError .= $value . ", ";
+                }
+            }
+
+            if ($collectionError != PHP_EOL . "\tCould not load extension : ") {
+                $collectionError .= PHP_EOL . "\tYou must add extensions above before build this extension";
+                throw new Exception($collectionError);
+            }
+        }
+    }
+
+    /**
+     * Checks if a file must be copied
+     *
+     * @param string $src
+     * @param string $dst
+     *
+     * @return boolean
+     */
+    protected function checkKernelFile($src, $dst)
+    {
+        if (preg_match('#kernels/ZendEngine[2-9]/concat\.#', $src)) {
+            return true;
+        }
+
+        if (!file_exists($dst)) {
+            return false;
+        }
+
+        return md5_file($src) == md5_file($dst);
+    }
+
+    /**
+     * Checks which files in the base kernel must be copied
+     *
+     * @return boolean
+     */
+    protected function checkKernelFiles()
+    {
+        $kernelPath = "ext/kernel";
+
+        if (!file_exists($kernelPath)) {
+            $kernelDone = mkdir($kernelPath, 0775, true);
+            if (!$kernelDone) {
+                throw new Exception("Cannot create kernel directory");
+            }
+        }
+
+        $kernelPath = realpath($kernelPath);
+        $sourceKernelPath = $this->backend->getInternalKernelPath();
+
+        $configured = $this->recursiveProcess(
+            $sourceKernelPath,
+            $kernelPath,
+            '@.*\.[ch]$@',
+            array($this, 'checkKernelFile')
+        );
+
+        if (!$configured) {
+            $this->logger->output('Copying new kernel files...');
+            $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
+            @mkdir($kernelPath);
+            $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
+        }
+
+        return !$configured;
+    }
+
+    /**
+     * Checks if the current directory is a valid Zephir project
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function checkDirectory()
+    {
+        $namespace = $this->config->get('namespace');
+        if (!$namespace) {
+            throw new Exception("Extension namespace cannot be loaded");
+        }
+
+        if (!is_string($namespace)) {
+            throw new Exception("Extension namespace is invalid");
+        }
+
+        if (!$this->fileSystem->isInitialized()) {
+            $this->fileSystem->initialize();
+        }
+
+        $version = self::getCurrentVersion();
+
+        if (!$this->fileSystem->exists($version)) {
+            if (!$this->checkIfPhpized()) {
+                $this->logger->output(
+                    'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
+                );
+            }
+            $this->fileSystem->makeDirectory($version);
+        }
+
+        return $namespace;
+    }
+
+    /**
+     * Returns current GCC version
+     *
+     * @return string
+     */
+    protected function getGccVersion()
+    {
+        $version = self::getCurrentVersion();
+
+        if (!Utils::isWindows()) {
+            if ($this->fileSystem->exists($version . '/gcc-version')) {
+                return $this->fileSystem->read($version . '/gcc-version');
+            }
+
+            $this->fileSystem->system('gcc -v', 'stderr', $version . '/gcc-version-temp');
+            $lines = $this->fileSystem->file($version . '/gcc-version-temp');
+
+            foreach ($lines as $line) {
+                if (strpos($line, 'LLVM') !== false) {
+                    $this->fileSystem->write($version . '/gcc-version', '4.8.0');
+                    return '4.8.0';
+                }
+            }
+
+            $lastLine = $lines[count($lines) - 1];
+            if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
+                $this->fileSystem->write($version . '/gcc-version', $matches[0]);
+                return $matches[0];
+            }
+        }
+
+        return '0.0.0';
     }
 }

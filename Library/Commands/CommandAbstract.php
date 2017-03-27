@@ -4,12 +4,12 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
  | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | https://zephir-lang.com/license.html                                     |
  |                                                                          |
  | If you did not receive a copy of the MIT license and are unable          |
  | to obtain it through the world-wide-web, please send a note to           |
@@ -24,6 +24,8 @@ use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Compiler;
+use Zephir\Parser;
+use Zephir\Parser\Manager;
 
 /**
  * CommandAbstract
@@ -80,7 +82,8 @@ abstract class CommandAbstract implements CommandInterface
     }
 
     /**
-     * Executes the command
+     * Executes the command.
+     *
      * @param Config $config
      * @param Logger $logger
      */
@@ -96,14 +99,10 @@ abstract class CommandAbstract implements CommandInterface
             throw new \InvalidArgumentException('Backend '.$params['backend'].' does not exist');
         }
         $backend = new $className($config);
-        $compiler = new Compiler($config, $logger, $backend);
-        if (isset($params['parser-compiled'])) {
-            if ($params['parser-compiled'] !== 'force') {
-                $compiler->parserCompiled = true;
-            } else {
-                $compiler->parserCompiled = 'force';
-            }
-        }
+
+        $parserManager = new Manager(new Parser(), $logger, $params);
+        $compiler = new Compiler($config, $logger, $backend, $parserManager);
+
         $command = $this->getCommand();
         $compiler->$command($this);
     }
