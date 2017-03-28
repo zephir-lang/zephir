@@ -200,15 +200,22 @@ class Compiler
      */
     public function compileParser()
     {
-        if (!$this->parserManager->isAvailable()) {
-            $this->logger->output('The Zephir Parser extension not loaded, compiling it');
-            return $this->parserManager->compileParser();
-        } elseif ($this->parserManager->hasToRecompileParser()) {
+        if ($this->parserManager->hasToRecompileParser()) {
             $this->logger->output('The Zephir Parser is loaded but will be recompiled');
             return $this->parserManager->compileParser();
         }
 
-        return true;
+        if ($this->parserManager->isAvailable()) {
+            return true;
+        }
+
+        if ($this->parserManager->isAlreadyCompiled()) {
+            return $this->parserManager->getParserFilePath();
+        }
+
+        $this->logger->output('The Zephir Parser is loaded but will be recompiled');
+
+        return $this->parserManager->compileParser();
     }
 
     /**
