@@ -97,13 +97,41 @@ class Manager
     }
 
     /**
-     * Should we recompile the Zephir Parser,
+     * Should we recompile the Zephir Parser or not?
      *
      * @return bool
      */
     public function hasToRecompileParser()
     {
         return $this->forceCompileParser;
+    }
+
+    /**
+     * Checks if the Zephir parser already compiled and stored in the local path.
+     *
+     * @return bool
+     */
+    public function isAlreadyCompiled()
+    {
+        $parserPath = $this->getParserFilePath();
+
+        return file_exists($parserPath);
+    }
+
+    /**
+     * Gets real path to the parser extension.
+     *
+     * @return string
+     */
+    public function getParserFilePath()
+    {
+        $modulesPath = $this->getLocalParserPath()  . 'modules' . DIRECTORY_SEPARATOR;
+
+        if (Utils::isWindows()) {
+            return  $modulesPath . 'zephir_parser.dll';
+        }
+
+        return $modulesPath . 'zephir_parser.so';
     }
 
     protected function compileLinuxParser($destination)
@@ -201,7 +229,7 @@ class Manager
     {
         $extFile = null;
 
-        $parserDir = realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR;
+        $parserDir = $this->getLocalParserPath();
 
         $this->logger->output('Preparing for parser compilation...');
 
@@ -216,5 +244,10 @@ class Manager
         }
 
         return $extFile;
+    }
+
+    protected function getLocalParserPath()
+    {
+        return realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'parser' . DIRECTORY_SEPARATOR;
     }
 }
