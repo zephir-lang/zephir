@@ -72,7 +72,7 @@ class Manager
                 $this->parserEnabled = true;
             }
         } else {
-            $this->parserEnabled = function_exists('zephir_parse_file');
+            $this->parserEnabled = $parser->isAvailable();
         }
     }
 

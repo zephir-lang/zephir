@@ -30,6 +30,16 @@ use Zephir\Parser\SystemException;
 class Parser
 {
     /**
+     * Check if Zephir Parser available.
+     *
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        return function_exists('zephir_parse_file');
+    }
+
+    /**
      * Parses a file and returning an intermediate array representation.
      *
      * @param string $filepath Absolute path to the *.zep file
@@ -39,7 +49,7 @@ class Parser
      */
     public function parse($filepath)
     {
-        if (!function_exists('zephir_parse_file')) {
+        if (!$this->isAvailable()) {
             throw new SystemException("Zephir Parser extension couldn't be loaded.");
         }
 
