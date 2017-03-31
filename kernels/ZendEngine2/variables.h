@@ -32,4 +32,6 @@ void zephir_var_export_ex(zval *return_value, zval **var TSRMLS_DC);
 
 void zephir_var_dump(zval **var TSRMLS_DC);
 
+void zephir_get_defined_vars(zval *return_value TSRMLS_DC);
+
 #endif
