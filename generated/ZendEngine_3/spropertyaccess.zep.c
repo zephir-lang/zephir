@@ -14,7 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
-#include "kernel/array.h"
+#include "kernel/string.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -28,18 +29,24 @@ ZEPHIR_INIT_CLASS(Test_SPropertyAccess) {
 
 	zend_declare_property_null(test_spropertyaccess_ce, SL("b"), ZEND_ACC_PRIVATE|ZEND_ACC_STATIC TSRMLS_CC);
 
+	zend_declare_property_string(test_spropertyaccess_ce, SL("delimiter"), ".", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+
+	zend_declare_property_string(test_spropertyaccess_ce, SL("_delimiterWithUnderscore"), ".", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+
 	return SUCCESS;
 
 }
 
 PHP_METHOD(Test_SPropertyAccess, __construct) {
 
-	zval _0, _1, _2;
+	zval _0, _1, _2, _3, _4;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&_4);
 
 	ZEPHIR_MM_GROW();
 
@@ -48,15 +55,76 @@ PHP_METHOD(Test_SPropertyAccess, __construct) {
 	ZVAL_STRING(&_0, "abc");
 	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("a"), &_0 TSRMLS_CC);
 	zephir_read_static_property_ce(&_0, test_spropertyaccess_ce, SL("a"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_1, &_0, 0, PH_NOISY | PH_READONLY, "test/spropertyaccess.zep", 15 TSRMLS_CC);
-	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("b"), &_1);
-	ZEPHIR_OBS_VAR(&_2);
-	zephir_read_static_property_ce(&_2, test_spropertyaccess_ce, SL("b"), PH_NOISY_CC);
-	zephir_update_static_property_ce(test_scallexternal_ce, SL("sproperty"), &_2);
-	ZEPHIR_OBS_NVAR(&_2);
-	zephir_read_static_property_ce(&_2, test_scallexternal_ce, SL("sproperty"), PH_NOISY_CC);
-	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("b"), &_2);
+	ZVAL_LONG(&_1, 0);
+	ZVAL_LONG(&_2, 1);
+	ZEPHIR_INIT_VAR(&_3);
+	zephir_substr(&_3, &_0, 0 , 1 , 0);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("b"), &_3);
+	ZEPHIR_OBS_VAR(&_4);
+	zephir_read_static_property_ce(&_4, test_spropertyaccess_ce, SL("b"), PH_NOISY_CC);
+	zephir_update_static_property_ce(test_scallexternal_ce, SL("sproperty"), &_4);
+	ZEPHIR_OBS_NVAR(&_4);
+	zephir_read_static_property_ce(&_4, test_scallexternal_ce, SL("sproperty"), PH_NOISY_CC);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("b"), &_4);
 	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_SPropertyAccess, testArgumentWithUnderscore) {
+
+	zval *delimiter = NULL, delimiter_sub, __$null;
+	ZEPHIR_INIT_THIS();
+
+	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&__$null);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &delimiter);
+
+	if (!delimiter) {
+		delimiter = &delimiter_sub;
+		ZEPHIR_CPY_WRT(delimiter, &__$null);
+	} else {
+		ZEPHIR_SEPARATE_PARAM(delimiter);
+	}
+
+
+	if (ZEPHIR_IS_EMPTY(delimiter)) {
+		ZEPHIR_OBS_NVAR(delimiter);
+		zephir_read_static_property_ce(delimiter, test_spropertyaccess_ce, SL("_delimiterWithUnderscore"), PH_NOISY_CC);
+	}
+	RETVAL_ZVAL(delimiter, 1, 0);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_SPropertyAccess, testArgument) {
+
+	zval *delimiter = NULL, delimiter_sub, __$null, _0$$3;
+	ZEPHIR_INIT_THIS();
+
+	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&__$null);
+	ZVAL_UNDEF(&_0$$3);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &delimiter);
+
+	if (!delimiter) {
+		delimiter = &delimiter_sub;
+		ZEPHIR_CPY_WRT(delimiter, &__$null);
+	} else {
+		ZEPHIR_SEPARATE_PARAM(delimiter);
+	}
+
+
+	if (ZEPHIR_IS_EMPTY(delimiter)) {
+		ZEPHIR_OBS_VAR(&_0$$3);
+		zephir_read_static_property_ce(&_0$$3, test_spropertyaccess_ce, SL("delimiter"), PH_NOISY_CC);
+		ZEPHIR_CPY_WRT(delimiter, &_0$$3);
+	}
+	RETVAL_ZVAL(delimiter, 1, 0);
+	RETURN_MM();
 
 }
 
