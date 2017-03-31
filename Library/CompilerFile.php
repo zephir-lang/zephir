@@ -388,22 +388,46 @@ class CompilerFile implements FileInterface
                         null,
                         new StatementsBlock(array(
                             array(
+                                'type' => 'declare',
+                                'data-type' => 'variable',
+                                'variables' => array(
+                                    array(
+                                        'variable' => 'is'
+                                    )
+                                )
+                            ),
+                            array(
+                                'type' => 'let',
+                                'assignments' => array(
+                                    array(
+                                        //'type' => 'variable',
+                                        'assign-type' => 'variable',
+                                        'operator' => 'assign',
+                                        'variable' => 'is',
+                                        'expr' => array(
+                                            'type' => 'property-access',
+                                            'left' => array(
+                                                'type' => 'variable',
+                                                'value' => 'this'
+                                            ),
+                                            'right' => array(
+                                                'type' => 'variable',
+                                                'value' => $property['name']
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            array(
                                 'type' => 'return',
                                 'expr' => array(
-                                    'type' => 'property-access',
-                                    'left' => array(
-                                        'type' => 'variable',
-                                        'value' => 'this'
-                                    ),
-                                    'right' => array(
-                                        'type' => 'variable',
-                                        'value' => $property['name']
-                                    )
+                                    'type' => 'bool',
+                                    'value' => 'zephir_get_boolval(is)'
                                 )
                             )
                         )),
                         $docBlock,
-                        $this->createReturnsType(array('boolean')),
+                        $this->createReturnsType(array('bool')),
                         $shortcut
                     ), $shortcut);
                     break;
