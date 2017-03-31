@@ -400,7 +400,6 @@ class CompilerFile implements FileInterface
                                 'type' => 'let',
                                 'assignments' => array(
                                     array(
-                                        //'type' => 'variable',
                                         'assign-type' => 'variable',
                                         'operator' => 'assign',
                                         'variable' => 'is',
