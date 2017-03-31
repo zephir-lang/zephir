@@ -543,7 +543,11 @@ class Backend extends BackendZendEngine2
             $flags .= ' | PH_READONLY';
         }
         //TODO: maybe optimizations as well as above
-        $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
+        if ($symbolVariable->isDoublePointer()) {
+            $context->codePrinter->output('zephir_read_static_property_ce(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
+        } else {
+            $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
+        }
     }
 
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
