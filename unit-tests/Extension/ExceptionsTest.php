@@ -151,9 +151,9 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         try {
             $t->testMultiException("test", new Exception("Some Exception"));
         } catch (Exception $e) {
-            $this->assertSame($e->getMessage(),"Some Exception");
+            $this->assertSame($e->getMessage(), "Some Exception");
         }
-        $t->internalExceptionCallable = function() {
+        $t->internalExceptionCallable = function () {
             return false;
         };
         try {
@@ -165,9 +165,9 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         try {
             $t->testMultiException("test", new \Exception("Some Exception"));
         } catch (\Exception $e) {
-            $this->assertSame($e->getMessage(),"Some Exception");
+            $this->assertSame($e->getMessage(), "Some Exception");
         }
-        $t->exceptionCallable = function() {
+        $t->exceptionCallable = function () {
             return false;
         };
         try {
