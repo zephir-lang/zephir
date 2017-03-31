@@ -86,7 +86,7 @@ class Exceptions
 
     public function testMultiException(var returnValue, var exception)
     {
-        var e, iexc, exc;
+        var e, f, iexc, exc;
 
         let iexc = this->internalExceptionCallable;
         let exc = this->exceptionCallable;
@@ -106,6 +106,13 @@ class Exceptions
             }
             else {
                 throw e;
+            }
+        }
+        catch \RuntimeError | \LogicError, f {
+            if is_callable(exc) && {exc}() === false {
+            }
+            else {
+                throw f;
             }
         }
 
