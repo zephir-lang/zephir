@@ -183,4 +183,14 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Vars();
         $t->testBoolVarDump();
     }
+
+    public function testGetDefinedVars()
+    {
+        $t = new \Test\Vars();
+        // get_defined_vars() does NOT work in C (and hence Zephir) functions
+        // It will return variables of the most recent userland function
+        // down the call stack.
+        // In this case, all local variables of this method will be returned
+        $this->assertEquals(['t' => $t], $t->testGetDefinedVars());
+    }
 }

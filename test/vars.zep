@@ -99,4 +99,11 @@ class Vars
         var_dump(a);
         var_export(a);
     }
+
+    public function testGetDefinedVars()
+    {
+        int a = 1;
+        double pi = 3.14;
+        return get_defined_vars();
+    }
 }
