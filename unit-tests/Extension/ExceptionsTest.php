@@ -20,6 +20,7 @@
 namespace Extension;
 
 use Test\Exceptions;
+use Test\Exception;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -141,6 +142,39 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse();
         } catch (\Exception $e) {
             $this->assertSame(8, $e->getLine());
+        }
+    }
+
+    public function testMultiException()
+    {
+        $t = new Exceptions();
+        try {
+            $t->testMultiException("test", new Exception("Some Exception"));
+        } catch (Exception $e) {
+            $this->assertSame($e->getMessage(),"Some Exception");
+        }
+        $t->internalExceptionCallable = function() {
+            return false;
+        };
+        try {
+            $value = $t->testMultiException("test", new Exception("Some Exception"));
+            $this->assertSame($value, "test");
+        } catch (Exception $e) {
+            $this->assertSame(true, false);
+        }
+        try {
+            $t->testMultiException("test", new \Exception("Some Exception"));
+        } catch (\Exception $e) {
+            $this->assertSame($e->getMessage(),"Some Exception");
+        }
+        $t->exceptionCallable = function() {
+            return false;
+        };
+        try {
+            $t->testMultiException("test", new \Exception("Some Exception"));
+            $this->assertSame($value, "test");
+        } catch (\Exception $e) {
+            $this->assertSame(true, false);
         }
     }
 }
