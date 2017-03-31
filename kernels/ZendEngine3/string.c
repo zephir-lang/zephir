@@ -1111,7 +1111,8 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	ZVAL_LONG(&tmp_flags, flags);
 	ZVAL_LONG(&tmp_offset, offset);
 
-	ZVAL_UNDEF(&tmp_matches);
+	ZVAL_NULL(&tmp_matches);
+	ZVAL_MAKE_REF(&tmp_matches);
 
 	{
 		zval *tmp_params[5] = { regex, subject, &tmp_matches, &tmp_flags, &tmp_offset };
