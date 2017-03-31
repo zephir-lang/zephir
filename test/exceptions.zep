@@ -3,6 +3,9 @@ namespace Test;
 
 class Exceptions
 {
+    public internalExceptionCallable;
+    public exceptionCallable;
+
     public function testException1()
     {
         throw new Exception("hello1");
@@ -79,5 +82,40 @@ class Exceptions
         catch \Exception, e {
             throw e;
         }
+    }
+
+    public function testMultiException(var returnValue, var exception)
+    {
+        var e, f, iexc, exc;
+
+        let iexc = this->internalExceptionCallable;
+        let exc = this->exceptionCallable;
+
+        try {
+            throw exception;
+        }
+        catch Exception, e {
+            if is_callable(iexc) && {iexc}() === false {
+            }
+            else {
+                throw e;
+            }
+        }
+        catch \Exception, e {
+            if is_callable(exc) && {exc}() === false {
+            }
+            else {
+                throw e;
+            }
+        }
+        catch \RuntimeError | \LogicError, f {
+            if is_callable(exc) && {exc}() === false {
+            }
+            else {
+                throw f;
+            }
+        }
+
+        return returnValue;
     }
 }
