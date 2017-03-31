@@ -89,7 +89,11 @@ class TryCatchStatement extends StatementAbstract
                     $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $compilationContext);
                 }
 
-//                 $compilationContext->backend->copyOnWrite($variable, 'EG(exception)', $compilationContext);
+                if ($compilationContext->backend->isZE3()) {
+                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&' . $variable->getName() . ', &' . $exc_var->getName() . ');');
+                } else {
+                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(' . $variable->getName() . ', ' . $exc_var->getName() . ');');
+                }
 
                 /**
                  * @TODO, use a builder here
@@ -101,6 +105,12 @@ class TryCatchStatement extends StatementAbstract
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
+                    $assignExceptVar = $exprBuilder->statements()->let(array(
+                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
+                    ));
+
+                    $assignExceptVarStmt = new \Zephir\Expression\Builder\Statements\LetStatement($assignExceptVar->build());
+
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(
                             $exprBuilder->operators()->binary(
@@ -112,7 +122,7 @@ class TryCatchStatement extends StatementAbstract
                         ->setStatements($exprBuilder->statements()->block(array_merge(
                             array(
                                 $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
-                                $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&' . $variable->getName() . ', &' . $exc_var->getName() . ');'),
+                                 $assignExceptionVarStmt
                             ),
                             isset($catch['statements']) ? $catch['statements'] : array()
                         )));
