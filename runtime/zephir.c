@@ -108,7 +108,7 @@ static void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSR
 static void zephir_compile_program(zval *program TSRMLS_DC)
 {
 	HashTable           *ht = Z_ARRVAL_P(program);
-	HashPosition        pos = {0};
+	HashPosition        pos;
 	zval                **z, *type;
 	char                *msg;
 	zephir_context      *context;
@@ -139,7 +139,7 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
 
 	zend_hash_internal_pointer_reset_ex(ht, &pos);
 	for (
-	 ; zend_hash_get_current_data_ex(ht, (void**) &z, &pos) == SUCCESS
+	 ; z = zend_hash_get_current_data_ex(ht, &pos) != NULL
 	 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
 
