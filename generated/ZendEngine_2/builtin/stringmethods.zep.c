@@ -284,7 +284,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getLowerFirst) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, 13, str);
+	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, 12, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -321,7 +321,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getFormatted) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "hello %s!", 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 4, &_0, str);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 13, &_0, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);
 

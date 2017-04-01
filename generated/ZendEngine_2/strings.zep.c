@@ -15,6 +15,7 @@
 #include "kernel/string.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Strings) {
@@ -406,6 +407,41 @@ PHP_METHOD(Test_Strings, testInternedString2) {
 	ZVAL_STRING(&_1, "\" hello ", 0);
 	zephir_fast_trim(_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Strings, strToHex) {
+
+	unsigned char _1$$3;
+	int ZEPHIR_LAST_CALL_STATUS, i;
+	zephir_fcall_cache_entry *_4 = NULL, *_6 = NULL;
+	zval *value_param = NULL, *_0 = NULL, _2$$3 = zval_used_for_init, *_3$$3 = NULL, *_5$$3 = NULL;
+	zval *value = NULL, *ret;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value_param);
+
+	zephir_get_strval(value, value_param);
+
+
+	i = 0;
+	ZEPHIR_INIT_VAR(ret);
+	ZVAL_EMPTY_STRING(ret);
+	while (1) {
+		if (!(i < zephir_fast_strlen_ev(value))) {
+			break;
+		}
+		_1$$3 = ZEPHIR_STRING_OFFSET(value, i);
+		ZEPHIR_SINIT_NVAR(_2$$3);
+		ZVAL_STRINGL(&_2$$3, &_1$$3, 1, 1);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 79, &_2$$3);
+		zephir_check_call_status();
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 6, _3$$3);
+		zephir_check_call_status();
+		zephir_concat_self(&ret, _5$$3 TSRMLS_CC);
+		i++;
+	}
+	RETURN_CTOR(ret);
 
 }
 

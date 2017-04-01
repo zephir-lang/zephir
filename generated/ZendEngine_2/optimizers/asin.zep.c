@@ -35,7 +35,7 @@ PHP_METHOD(Test_Optimizers_ASin, testInt) {
 	a = 1;
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 8, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -51,7 +51,7 @@ PHP_METHOD(Test_Optimizers_ASin, testVar) {
 	a = 1;
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 8, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -66,7 +66,7 @@ PHP_METHOD(Test_Optimizers_ASin, testIntValue1) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 8, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -85,7 +85,7 @@ PHP_METHOD(Test_Optimizers_ASin, testIntParameter) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 8, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -101,7 +101,7 @@ PHP_METHOD(Test_Optimizers_ASin, testVarParameter) {
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 8, a);
 	zephir_check_call_status();
 	RETURN_MM();
 
