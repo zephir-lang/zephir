@@ -86,4 +86,6 @@ void zephir_append_printable_array(smart_str *implstr, const zval *value);
 
 int zephir_hash_equals(const zval *known_zval, const zval *user_zval);
 
+void zephir_string_to_hex(zval *return_value, zval *var);
+
 #endif /* ZEPHIR_KERNEL_STRING_H */
