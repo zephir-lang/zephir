@@ -1,40 +1,45 @@
-# Set up environment variables
 init:
     - SET ANSICON=121x90 (121x90)
     - SET COMPOSER_NO_INTERACTION=1
+    - SET PARSER_RELEASE=1.0.1
+    - SET PARSER_VERSION=1.0.1-232
+    - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "development") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
 
 clone_depth: 1
+clone_folder: c:\projects\zephir
+
+version: 0.9.7-{build}
 
 environment:
-    PHP_VERSION: latest
-    PHP_DEP_VER: 5.6
+    matrix:
+        - PHP_TARGET: 5.6
+          PHP_VC: 11
     PHP_SDK: c:\projects\php-sdk
     PHP_DEVPACK: c:\projects\php-devpack
 
-    matrix:
-    - BUILD_PLATFORM: x86
-      PHP_VC: 11
-      platform: x86
-
 cache:
     - vendor -> composer.json
+    - composer.phar -> composer.json
 
 os: Windows Server 2012 R2
-clone_folder: c:\projects\zephir
+platform:
+    - x86
 
 matrix:
     fast_finish: true
 
+branches:
+    only:
+        - master
+        - development
+
 install:
+    # ==================================================
     - echo Setting PHP version...
+    # ==================================================
     - appveyor DownloadFile http://windows.php.net/downloads/releases/sha1sum.txt
-    - ps: >-
-        If ($env:PHP_VERSION -Match "latest") {
-          $env:PHP_VERSION=type sha1sum.txt | where { $_ -match "php-(5\.6\.\d+)-src" } | foreach { $matches[1] }
-          $env:version='{build}-$(PHP_VERSION)'
-        } Else {
-          $env:version='{build}-$(PHP_VERSION)'
-        }
+    - ps: $env:PHP_VERSION=type sha1sum.txt | where { $_ -match "php-(${env:PHP_TARGET}\.\d+)-src" } | foreach { $matches[1] }
+    - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_RELEASE}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_VERSION}_${env:PARSER_VERSION}.zip"
 
     - echo Initializing Build...
     - cd %APPVEYOR_BUILD_FOLDER%
@@ -42,7 +47,7 @@ install:
     - echo Preparing zephir win32 build...
 
     - echo Downloading PHP source code [%PHP_VERSION%]
-    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:BUILD_PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php.zip')
+    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php.zip')
     - cd ..
     - 'mkdir php && mv php.zip php\php.zip && cd php'
     - 7z.exe x php.zip | FIND /V "ing  "
@@ -55,28 +60,32 @@ install:
     - cd ..
 
     - echo Downloading PHP-Devel-Pack
-    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:BUILD_PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
+    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
     - 7z.exe x php-dev.zip | FIND /V "ing  "
-    - mv php-%PHP_VERSION%-devel-VC11-%BUILD_PLATFORM% php-devpack
+    - mv php-%PHP_VERSION%-devel-VC11-%PLATFORM% php-devpack
 
-    - echo Building Zephir Parser
-    - cd %APPVEYOR_BUILD_FOLDER%
-    - 'cd parser/parser'
-    - 'copy %PHP_SDK%\bin\re2c.exe .\re2c.exe'
-    - '"%VS110COMNTOOLS%\VsDevCmd" %BUILD_PLATFORM%'
+    - echo Enable Zephir Parser
+    - 'cd %APPVEYOR_BUILD_FOLDER%\..\php\ext'
+    - curl --location --silent --show-error %PARSER_DOWNLOAD_URL% --output zephir_parser.zip
+    - 7z.exe x zephir_parser.zip | FIND /V "ing  "
 
     - echo Building PHP [%PHP_VERSION%]
+    - '"%VS110COMNTOOLS%\VsDevCmd" %PLATFORM%'
     - '%PHP_SDK%\bin\phpsdk_setvars'
     - 'cd %APPVEYOR_BUILD_FOLDER%\..\php'
     - 'echo extension_dir=%APPVEYOR_BUILD_FOLDER%\..\php\ext > php.ini'
     - 'echo extension=php_openssl.dll >> php.ini'
     - 'echo extension=php_pdo_sqlite.dll >> php.ini'
     - 'echo extension=php_gmp.dll >> php.ini'
+    - 'echo extension=php_zephir_parser.dll >> php.ini'
     - 'set PATH=%cd%;%PATH%'
 
-    - echo Building Zephir
+    # ==================================================
+    - echo Download tests dependencies...
+    # ==================================================
     - cd %APPVEYOR_BUILD_FOLDER%
-    - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php & php composer.phar update)
+    - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php && php composer.phar --version)
+    - if not exist vendor (php composer.phar update --quiet --no-ansi --no-interaction --no-progress --optimize-autoloader --dev --prefer-dist --no-suggest)
 
 build_script:
     - 'cd %APPVEYOR_BUILD_FOLDER%\..\php'
@@ -90,14 +99,15 @@ test_script:
 
 on_failure:
     - 'dir'
-    - 'type compile-errors.log'
-    - 'type compile.log'
+    - ps: >-
+        IF (Test-Path -Path compile-errors.log) {
+            type compile-errors.log
+        }
 
-artifacts:
-    - path: parser\Release\php_zephir_parser.dll
-      name: php_zephir_parser.dll
-    - path: parser\Release_TS\php_zephir_parser.dll
-      name: php_zephir_parser.dll
+        IF (Test-Path -Path compile.log) {
+            type compile.log
+        }
 
-on_finish:
-    - ps: Push-AppveyorArtifact parser\Release_TS\php_zephir_parser.dll
+        IF (Test-Path -Path configure.js) {
+            type configure.js
+        }
