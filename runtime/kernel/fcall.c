@@ -104,7 +104,7 @@ static inline ulong zephirt_update_hash(const char *arKey, uint nKeyLength, ulon
 
 static ulong zephirt_make_fcall_key(char **result, size_t *length, const zend_class_entry *obj_ce, zephirt_call_type type, zval *function_name TSRMLS_DC)
 {
-	const zend_class_entry *calling_scope = EG(scope);
+	const zend_class_entry *calling_scope = zend_get_executed_scope();
 	char *buf = NULL, *c;
 	size_t l = 0, len = 0;
 	const size_t ppzce_size = sizeof(zend_class_entry**);
@@ -120,7 +120,7 @@ static ulong zephirt_make_fcall_key(char **result, size_t *length, const zend_cl
 		}
 	}
 	else if (type == zephirt_fcall_static) {
-		calling_scope = EG(called_scope);
+		calling_scope = zend_get_called_scope(EG(current_execute_data));
 		if (UNEXPECTED(!calling_scope)) {
 			return 0;
 		}
@@ -147,21 +147,23 @@ static ulong zephirt_make_fcall_key(char **result, size_t *length, const zend_cl
 		memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
 	}
 	else if (Z_TYPE_P(function_name) == IS_ARRAY) {
-		zval **method;
+		zval *method;
 		HashTable *function_hash = Z_ARRVAL_P(function_name);
+
 		if (
 			    function_hash->nNumOfElements == 2
-			 && zend_hash_index_find(function_hash, 1, (void**)&method) == SUCCESS
-			 && Z_TYPE_PP(method) == IS_STRING
+			 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
+			 && Z_TYPE_P(method) == IS_STRING
 		) {
-			l   = (size_t)(Z_STRLEN_PP(method)) + 1;
-			c   = Z_STRVAL_PP(method);
+			l   = (size_t)(Z_STRLEN_P(method)) + 1;
+			c   = Z_STRVAL_P(method);
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
 
 			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
 			memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
+			buf[len - 1] = '\0';
 		}
 	}
 	else if (Z_TYPE_P(function_name) == IS_OBJECT) {
