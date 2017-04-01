@@ -23,7 +23,7 @@ env:
     - secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
   matrix:
     - CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
-    - CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
+    - CC="clang" CFLAGS="-g3 -O0 -Wall -DZEPHIR_RELEASE=1"
 
 matrix:
   fast_finish: true
@@ -33,7 +33,7 @@ matrix:
     - env: CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
       php: nightly
       compiler: gcc
-    - env: CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
+    - env: CC="clang" CFLAGS="-g3 -O0 -Wall -DZEPHIR_RELEASE=1"
       php: nightly
       compiler: clang
 
