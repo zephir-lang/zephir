@@ -100,7 +100,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	ZVAL_UNDEF(arr);
 
 	if (&EG(symbol_table)) {
-		if ((gv = zend_hash_find(&EG(symbol_table), str)) != NULL) {
+		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
 				ZVAL_COPY_VALUE(arr, gv);
@@ -111,9 +111,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	}
 
 	array_init(arr);
-	zend_hash_update(&EG(symbol_table), str, arr);
-	//zend_string_free(str);
-
+	zend_string_free(str);
 	return SUCCESS;
 }
 
