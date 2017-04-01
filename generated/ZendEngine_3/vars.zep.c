@@ -374,3 +374,18 @@ PHP_METHOD(Test_Vars, testBoolVarDump) {
 
 }
 
+PHP_METHOD(Test_Vars, testGetDefinedVars) {
+
+	double pi;
+	int a;
+	ZEPHIR_INIT_THIS();
+
+
+
+	a = 1;
+	pi = 3.14;
+	zephir_get_defined_vars(return_value);
+	return;
+
+}
+
