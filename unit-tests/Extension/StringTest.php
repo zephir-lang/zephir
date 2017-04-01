@@ -229,6 +229,12 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($escapedString, $t->testWellEscapedMultilineString());
     }
 
+    public function testStrToHex()
+    {
+        $t = new \Test\Strings();
+        $this->assertSame('746573742073656e74656e73652e2e2e', $t->strToHex("test sentense..."));
+    }
+
     public function providerHashEquals()
     {
         return [
