@@ -1,5 +1,4 @@
-Zephir
-======
+# Zephir
 
 [![Dependency Status](https://www.versioneye.com/package/phalcon:zephir/badge.png)](https://www.versioneye.com/package/phalcon:zephir)
 [![Latest Stable Version](https://poser.pugx.org/phalcon/zephir/v/stable.png)](https://packagist.org/packages/phalcon/zephir)
@@ -9,7 +8,7 @@ Zephir
 [![Build on Windows](https://ci.appveyor.com/api/projects/status/cxa1810md7v6n095/branch/master?svg=true)](https://ci.appveyor.com/project/sergeyklay/zephir/branch/master)
 
 
-Zephir - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
+**Zephir** - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
 of extensions for PHP. Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
 such as gcc/clang/vc++. Functionality is exposed to the PHP language.
 
@@ -27,26 +26,33 @@ Compiler design goals:
 * Type speculation/inference
 * Allow runtime profile-guided optimizations, pseudo-constant propagation and indirect/virtual function inlining
 
-Requirements
-------------
+## Requirements
 
-To compile zephir-parser:
+To compile Zephir Parser:
 
 * [re2c](http://re2c.org/)
 
 To build the PHP extension:
 
-* g++ >= 4.4/clang++ >= 3.x/vc++ 9
-* gnu make 3.81 or later
-* automake
-* php development headers and tools
+* `g++` >= 4.4 | `clang++` >= 3.x | `vc++` >= 11
+* GNU `make` >= 3.81
+* `automake`
+* PHP development headers and tools
 
-Installation
-------------
+## Installation
+
+### Windows
+
+To install Zephir on Windows [follow this guide](https://github.com/phalcon/zephir/blob/master/WINDOWS.md).
+
+### Linux | macOS | BSD | Solaris
+
+#### Git way
 
 First, clone Zephir repository.
 
 Next, you have to get [Zephir Parser](https://github.com/phalcon/php-zephir-parser).
+
 The most easy way to do it is to use `git submodule` command:
 
 ```bash
@@ -65,52 +71,58 @@ Add the extension to your **php.ini**:
 
 ```ini
 [Zephir Parser]
+; You can use here absolute path to your custom modules dir
+; or relative to the PHP modules dir
 extension=zephir_parser.so
 ```
 
 Finally, install Zephir by using command `./install` from project root dir.
 For global installation add `-c` flag.
 
-### Easy way pull latest of all submodules
+**NOTE:** For git 1.6.1 or above you can use something similar to `git submodule update --remote --merge`
+to pull latest of all submodules. See [git-submodule(1)](http://www.kernel.org/pub/software/scm/git/docs/v1.6.1.3/git-submodule.html) for details.
 
-For git 1.6.1 or above you can use something similar to:
+### Composer way
 
-```bash
-git submodule update --remote --merge
-```
+You can install Zephir using composer.
 
-See [git-submodule(1)](http://www.kernel.org/pub/software/scm/git/docs/v1.6.1.3/git-submodule.html) for details.
+First, run `composer require phalcon/zephir`.
 
-Additional notes on Ubuntu
---------------------------
+Unfortunately Composer doesn't support Git submodules, as the main aim of Composer is to provide a similar
+inter-project dependency functionality and it would be pointless to try to replicate submodules in Composer.
+
+Composer has the option to download the source via a Git clone (`--prefer-source`) rather than downloading a
+zipball (`--prefer-dist`) which is the default. This allows you to edit the source code inside the vendors directory
+and then commit it through Git.
+
+After getting Zephir go to `vendor/phalcon/zephir` and follow the above guide related to submodule.
+
+### Additional notes on Ubuntu
 
 The following packages are needed in Ubuntu:
 
-* apt-get install re2c libpcre3-dev
+* `apt-get install re2c libpcre3-dev`
 
-Usage
------
+## Usage
 
 Compile the extension:
 
 ```bash
-./bin/zephir compile
+zephir compile
 ```
 
-External Links
---------------
+## External Links
 
 * [Documentation](https://zephir-lang.com/)
 * [Official Blog](https://blog.zephir-lang.com/)
 * [Forum](https://forum.zephir-lang.com/)
 * [Twitter](https://twitter.com/zephirlang)
 
-Contributing
-------------
+## Contributing
 
 See [CONTRIBUTING.md](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
 
-License
--------
+## License
 
-Zephir is open-sourced software licensed under the MIT License. See the LICENSE file for more information.
+Zephir is open-sourced software licensed under the MIT License.
+See the LICENSE file for more information.
