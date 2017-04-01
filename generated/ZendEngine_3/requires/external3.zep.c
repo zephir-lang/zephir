@@ -33,26 +33,29 @@ ZEPHIR_INIT_CLASS(Test_Requires_External3) {
 PHP_METHOD(Test_Requires_External3, req) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *path, path_sub, *requires, requires_sub, _0;
+	zephir_fcall_cache_entry *_0 = NULL;
+	zval *path, path_sub, *requires, requires_sub, _1;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&requires_sub);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &path, &requires);
 
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 56);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", &_0, 56);
 	zephir_check_call_status();
 	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 57);
+	ZEPHIR_CALL_FUNCTION(&_1, "ob_get_contents", NULL, 57);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, requires, "setcontent", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD(NULL, requires, "setcontent", NULL, 0, &_1);
+	zephir_check_call_status();
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", &_0, 56);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

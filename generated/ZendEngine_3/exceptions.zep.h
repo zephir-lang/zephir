@@ -14,6 +14,7 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral);
 PHP_METHOD(Test_Exceptions, testExceptionSprintf);
 PHP_METHOD(Test_Exceptions, testExceptionConcat);
 PHP_METHOD(Test_Exceptions, testExceptionRethrow);
+PHP_METHOD(Test_Exceptions, testMultiException);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionliteral, 0, 0, 1)
 	ZEND_ARG_INFO(0, type)
@@ -28,6 +29,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionconcat, 0, 0, 2)
 	ZEND_ARG_INFO(0, language)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testmultiexception, 0, 0, 2)
+	ZEND_ARG_INFO(0, returnValue)
+	ZEND_ARG_INFO(0, exception)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_exceptions_method_entry) {
 	PHP_ME(Test_Exceptions, testException1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, testExceptionStringEscape, NULL, ZEND_ACC_PUBLIC)
@@ -40,5 +46,6 @@ ZEPHIR_INIT_FUNCS(test_exceptions_method_entry) {
 	PHP_ME(Test_Exceptions, testExceptionSprintf, arginfo_test_exceptions_testexceptionsprintf, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, testExceptionConcat, arginfo_test_exceptions_testexceptionconcat, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, testExceptionRethrow, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Exceptions, testMultiException, arginfo_test_exceptions_testmultiexception, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

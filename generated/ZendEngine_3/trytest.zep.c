@@ -108,13 +108,14 @@ PHP_METHOD(Test_TryTest, testTry2) {
 
 PHP_METHOD(Test_TryTest, testTry3) {
 
-	zval _0$$3, _1$$3, _2;
+	zval _0$$3, _1$$3, _2, _3;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
 
 	ZEPHIR_MM_GROW();
 
@@ -137,8 +138,10 @@ PHP_METHOD(Test_TryTest, testTry3) {
 		ZEPHIR_INIT_VAR(&_2);
 		ZVAL_OBJ(&_2, EG(exception));
 		Z_ADDREF_P(&_2);
+		ZEPHIR_INIT_VAR(&_3);
 		if (zephir_instance_of_ev(&_2, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&_3, &_2);
 			RETURN_MM_STRING("error");
 		}
 	}
@@ -149,7 +152,7 @@ PHP_METHOD(Test_TryTest, testTry3) {
 PHP_METHOD(Test_TryTest, testTry4) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4;
+	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4, _5, _6;
 	zend_bool a;
 	ZEPHIR_INIT_THIS();
 
@@ -158,6 +161,8 @@ PHP_METHOD(Test_TryTest, testTry4) {
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
 	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_5);
+	ZVAL_UNDEF(&_6);
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
@@ -196,16 +201,18 @@ PHP_METHOD(Test_TryTest, testTry4) {
 		ZEPHIR_INIT_VAR(&_4);
 		ZVAL_OBJ(&_4, EG(exception));
 		Z_ADDREF_P(&_4);
+		ZEPHIR_INIT_VAR(&_5);
+		ZEPHIR_INIT_VAR(&_6);
 		if (zephir_instance_of_ev(&_4, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&_5, &_4);
 			RETURN_MM_STRING("domain error");
-		}
-		ZEPHIR_INIT_NVAR(&_4);
-		ZVAL_OBJ(&_4, EG(exception));
-		Z_ADDREF_P(&_4);
-		if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-			zend_clear_exception(TSRMLS_C);
-			RETURN_MM_STRING("error");
+		} else {
+			if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+				zend_clear_exception(TSRMLS_C);
+				ZEPHIR_CPY_WRT(&_6, &_4);
+				RETURN_MM_STRING("error");
+			}
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -215,7 +222,7 @@ PHP_METHOD(Test_TryTest, testTry4) {
 PHP_METHOD(Test_TryTest, testTry5) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4;
+	zval *a_param = NULL, _0$$4, _1$$4, _2$$5, _3$$5, _4, _5;
 	zend_bool a;
 	ZEPHIR_INIT_THIS();
 
@@ -224,6 +231,7 @@ PHP_METHOD(Test_TryTest, testTry5) {
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
 	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_5);
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
@@ -262,13 +270,17 @@ PHP_METHOD(Test_TryTest, testTry5) {
 		ZEPHIR_INIT_VAR(&_4);
 		ZVAL_OBJ(&_4, EG(exception));
 		Z_ADDREF_P(&_4);
+		ZEPHIR_INIT_VAR(&_5);
 		if (zephir_instance_of_ev(&_4, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&_5, &_4);
 			RETURN_MM_STRING("any error");
-		}
-		if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-			zend_clear_exception(TSRMLS_C);
-			RETURN_MM_STRING("any error");
+		} else {
+			if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+				zend_clear_exception(TSRMLS_C);
+				ZEPHIR_CPY_WRT(&_5, &_4);
+				RETURN_MM_STRING("any error");
+			}
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -278,11 +290,12 @@ PHP_METHOD(Test_TryTest, testTry5) {
 PHP_METHOD(Test_TryTest, testTry6) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a_param = NULL, e, _0$$4, _1$$4, _2$$5, _3$$5;
+	zval *a_param = NULL, e, _4, _0$$4, _1$$4, _2$$5, _3$$5;
 	zend_bool a;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&e);
+	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
@@ -322,17 +335,19 @@ PHP_METHOD(Test_TryTest, testTry6) {
 	try_end_1:
 
 	if (EG(exception)) {
-		ZVAL_OBJ(&e, EG(exception));
-		Z_ADDREF_P(&e);
-		if (zephir_instance_of_ev(&e, spl_ce_RuntimeException TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(&_4);
+		ZVAL_OBJ(&_4, EG(exception));
+		Z_ADDREF_P(&_4);
+		if (zephir_instance_of_ev(&_4, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&e, &_4);
 			RETURN_MM_STRING("domain error");
-		}
-		ZVAL_OBJ(&e, EG(exception));
-		Z_ADDREF_P(&e);
-		if (zephir_instance_of_ev(&e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-			zend_clear_exception(TSRMLS_C);
-			RETURN_MM_STRING("error");
+		} else {
+			if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+				zend_clear_exception(TSRMLS_C);
+				ZEPHIR_CPY_WRT(&e, &_4);
+				RETURN_MM_STRING("error");
+			}
 		}
 	}
 	RETURN_MM_BOOL(0);
@@ -342,11 +357,12 @@ PHP_METHOD(Test_TryTest, testTry6) {
 PHP_METHOD(Test_TryTest, testTry7) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a_param = NULL, e, _0$$4, _1$$4, _2$$5, _3$$5;
+	zval *a_param = NULL, e, _4, _0$$4, _1$$4, _2$$5, _3$$5;
 	zend_bool a;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&e);
+	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
@@ -386,15 +402,19 @@ PHP_METHOD(Test_TryTest, testTry7) {
 	try_end_1:
 
 	if (EG(exception)) {
-		ZVAL_OBJ(&e, EG(exception));
-		Z_ADDREF_P(&e);
-		if (zephir_instance_of_ev(&e, spl_ce_RuntimeException TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(&_4);
+		ZVAL_OBJ(&_4, EG(exception));
+		Z_ADDREF_P(&_4);
+		if (zephir_instance_of_ev(&_4, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&e, &_4);
 			RETURN_MM_STRING("any error");
-		}
-		if (zephir_instance_of_ev(&e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-			zend_clear_exception(TSRMLS_C);
-			RETURN_MM_STRING("any error");
+		} else {
+			if (zephir_instance_of_ev(&_4, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+				zend_clear_exception(TSRMLS_C);
+				ZEPHIR_CPY_WRT(&e, &_4);
+				RETURN_MM_STRING("any error");
+			}
 		}
 	}
 
@@ -454,11 +474,12 @@ PHP_METHOD(Test_TryTest, someMethod2) {
 
 PHP_METHOD(Test_TryTest, testTry9) {
 
-	zval e;
+	zval e, _0;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&e);
+	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
 
@@ -472,10 +493,12 @@ PHP_METHOD(Test_TryTest, testTry9) {
 	try_end_1:
 
 	if (EG(exception)) {
-		ZVAL_OBJ(&e, EG(exception));
-		Z_ADDREF_P(&e);
-		if (zephir_instance_of_ev(&e, spl_ce_RuntimeException TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(&_0);
+		ZVAL_OBJ(&_0, EG(exception));
+		Z_ADDREF_P(&_0);
+		if (zephir_instance_of_ev(&_0, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
 		}
 	}
@@ -485,11 +508,12 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 PHP_METHOD(Test_TryTest, testTry10) {
 
-	zval e;
+	zval e, _0;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&e);
+	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
 
@@ -503,10 +527,12 @@ PHP_METHOD(Test_TryTest, testTry10) {
 	try_end_1:
 
 	if (EG(exception)) {
-		ZVAL_OBJ(&e, EG(exception));
-		Z_ADDREF_P(&e);
-		if (zephir_instance_of_ev(&e, spl_ce_RuntimeException TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(&_0);
+		ZVAL_OBJ(&_0, EG(exception));
+		Z_ADDREF_P(&_0);
+		if (zephir_instance_of_ev(&_0, spl_ce_RuntimeException TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&e, &_0);
 			RETURN_MM_STRING("domain error");
 		}
 	}
@@ -516,24 +542,28 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 PHP_METHOD(Test_TryTest, testTry11) {
 
-	zval ex;
+	zval ex, _0;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&ex);
+	ZVAL_UNDEF(&_0);
 
+	ZEPHIR_MM_GROW();
 
 
 	/* try_start_1: */
 
-		RETURN_STRING("test");
+		RETURN_MM_STRING("test");
 
 	try_end_1:
 
 	if (EG(exception)) {
-		ZVAL_OBJ(&ex, EG(exception));
-		Z_ADDREF_P(&ex);
-		if (zephir_instance_of_ev(&ex, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(&_0);
+		ZVAL_OBJ(&_0, EG(exception));
+		Z_ADDREF_P(&_0);
+		if (zephir_instance_of_ev(&_0, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
+			ZEPHIR_CPY_WRT(&ex, &_0);
 		}
 	}
 
