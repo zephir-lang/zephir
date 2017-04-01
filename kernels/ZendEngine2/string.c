@@ -1666,3 +1666,32 @@ int zephir_hash_equals(const zval *known_zval, const zval *user_zval)
 
 	return (int) (result == 0);
 }
+
+void zephir_string_to_hex(zval *return_value, zval *var)
+{
+	int use_copy = 0;
+	zval copy;
+	size_t i;
+	char *s;
+	char *res;
+
+	if (Z_TYPE_P(var) != IS_STRING) {
+		zend_make_printable_zval(var, &copy, &use_copy);
+		if (use_copy) {
+			var = &copy;
+		}
+	}
+
+	res = emalloc(2*Z_STRLEN_P(var) + 1);
+	s   = Z_STRVAL_P(var);
+	for (i=0; i<Z_STRLEN_P(var); ++i) {
+		sprintf(res + 2*i, "%hhX", s[i]);
+	}
+
+	res[2*Z_STRLEN_P(var)] = 0;
+	ZVAL_STRINGL(return_value, res, 2*Z_STRLEN_P(var), 0);
+
+	if (use_copy) {
+		zval_dtor(var);
+	}
+}

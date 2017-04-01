@@ -50,7 +50,7 @@ class CharType extends AbstractType
     {
         $exprBuilder = BuilderFactory::getInstance();
         $functionCall = $exprBuilder->statements()
-            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
+            ->functionCall('zephir_string_to_hex', array($caller))
             ->setFile($expression['file'])
             ->setLine($expression['line'])
             ->setChar($expression['char']);

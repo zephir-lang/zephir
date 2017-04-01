@@ -149,4 +149,15 @@ class Strings
 	{
 		return ~" hello "->trim();
 	}
+
+	public function strToHex(string value) -> string
+	{
+		int i = 0;
+		string ret = "";
+		while (i < value->length()) {
+			let ret .= dechex(ord(value[i]));
+			let i++;
+		}
+		return ret;
+	}
 }

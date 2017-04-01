@@ -119,4 +119,6 @@ void zephir_stripcslashes(zval *return_value, zval *str TSRMLS_DC);
 
 int zephir_hash_equals(const zval *known_zval, const zval *user_zval);
 
+void zephir_string_to_hex(zval *return_value, zval *var);
+
 #endif /* ZEPHIR_KERNEL_STRING_H */
