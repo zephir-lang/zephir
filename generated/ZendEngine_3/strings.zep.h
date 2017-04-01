@@ -31,6 +31,7 @@ PHP_METHOD(Test_Strings, testTrimMultilineString);
 PHP_METHOD(Test_Strings, testWellEscapedMultilineString);
 PHP_METHOD(Test_Strings, testInternedString1);
 PHP_METHOD(Test_Strings, testInternedString2);
+PHP_METHOD(Test_Strings, strToHex);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_camelize, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
@@ -135,6 +136,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testhashequals, 0, 0, 2)
 	ZEND_ARG_INFO(0, str2)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_strtohex, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, camelize, arginfo_test_strings_camelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, uncamelize, arginfo_test_strings_uncamelize, ZEND_ACC_PUBLIC)
@@ -164,5 +169,6 @@ ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, strToHex, arginfo_test_strings_strtohex, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
