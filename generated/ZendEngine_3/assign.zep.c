@@ -2013,7 +2013,6 @@ PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 
 PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 
-	int _0;
 	zval *index, index_sub, *value, value_sub, _POST;
 	ZEPHIR_INIT_THIS();
 
@@ -2029,18 +2028,13 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 
 	ZEPHIR_INIT_VAR(&_POST);
 	array_init(&_POST);
-	_0 = zephir_maybe_separate_zval(&_POST);
-	zephir_array_update_zval(&_POST, index, value, PH_COPY | PH_SEPARATE);
-	if (_0) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_POST", &_POST);
-	}
+	zephir_array_update_zval(&_POST, index, value, PH_COPY);
 	RETURN_CCTOR(_POST);
 
 }
 
 PHP_METHOD(Test_Assign, testArrayProperty) {
 
-	int _0;
 	zval *index, index_sub, *value, value_sub, _POST;
 	ZEPHIR_INIT_THIS();
 
@@ -2056,11 +2050,7 @@ PHP_METHOD(Test_Assign, testArrayProperty) {
 
 	ZEPHIR_INIT_VAR(&_POST);
 	array_init(&_POST);
-	_0 = zephir_maybe_separate_zval(&_POST);
-	zephir_array_update_zval(&_POST, index, value, PH_COPY | PH_SEPARATE);
-	if (_0) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_POST", &_POST);
-	}
+	zephir_array_update_zval(&_POST, index, value, PH_COPY);
 	RETURN_CCTOR(_POST);
 
 }
@@ -2070,7 +2060,6 @@ PHP_METHOD(Test_Assign, testArrayProperty) {
  */
 PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 
-	int _0;
 	zval *index, index_sub, *value, value_sub, _POST;
 	ZEPHIR_INIT_THIS();
 
@@ -2084,11 +2073,7 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 
 
 
-	_0 = zephir_maybe_separate_zval(&_POST);
-	zephir_array_update_zval(&_POST, index, value, PH_COPY | PH_SEPARATE);
-	if (_0) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_POST", &_POST);
-	}
+	zephir_array_update_zval(&_POST, index, value, PH_COPY);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -2156,16 +2141,15 @@ PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign) {
  */
 PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 
-	int _1, _2, _4, _6, _8;
-	zval _GET, v, _0, _3, _5, _7;
+	zval _GET, v, _0, _1, _2, _3;
 	ZEPHIR_INIT_THIS();
 
 	ZVAL_UNDEF(&_GET);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
-	ZVAL_UNDEF(&_5);
-	ZVAL_UNDEF(&_7);
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_GET, SL("_GET"));
@@ -2174,37 +2158,17 @@ PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 	ZVAL_STRING(&v, "stest2");
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "stest");
-	_1 = zephir_maybe_separate_zval(&_GET);
-	zephir_array_update_string(&_GET, SL("steststr"), &_0, PH_COPY | PH_SEPARATE);
-	if (_1) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_GET", &_GET);
-	}
-	_2 = zephir_maybe_separate_zval(&_GET);
-	zephir_array_update_string(&_GET, SL("steststr2"), &v, PH_COPY | PH_SEPARATE);
-	if (_2) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_GET", &_GET);
-	}
+	zephir_array_update_string(&_GET, SL("steststr"), &_0, PH_COPY);
+	zephir_array_update_string(&_GET, SL("steststr2"), &v, PH_COPY);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_array_update_string(&_GET, SL("stestint"), &_1, PH_COPY);
+	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_LONG(&_2, 2);
+	zephir_array_update_string(&_GET, SL("stestint2"), &_2, PH_COPY);
 	ZEPHIR_INIT_VAR(&_3);
-	ZVAL_LONG(&_3, 1);
-	_4 = zephir_maybe_separate_zval(&_GET);
-	zephir_array_update_string(&_GET, SL("stestint"), &_3, PH_COPY | PH_SEPARATE);
-	if (_4) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_GET", &_GET);
-	}
-	ZEPHIR_INIT_VAR(&_5);
-	ZVAL_LONG(&_5, 2);
-	_6 = zephir_maybe_separate_zval(&_GET);
-	zephir_array_update_string(&_GET, SL("stestint2"), &_5, PH_COPY | PH_SEPARATE);
-	if (_6) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_GET", &_GET);
-	}
-	ZEPHIR_INIT_VAR(&_7);
-	ZVAL_STRING(&_7, "testval");
-	_8 = zephir_maybe_separate_zval(&_GET);
-	zephir_array_update_zval(&_GET, &v, &_7, PH_COPY | PH_SEPARATE);
-	if (_8) {
-		ZEPHIR_SET_SYMBOL(&EG(symbol_table), "_GET", &_GET);
-	}
+	ZVAL_STRING(&_3, "testval");
+	zephir_array_update_zval(&_GET, &v, &_3, PH_COPY);
 	ZEPHIR_MM_RESTORE();
 
 }
