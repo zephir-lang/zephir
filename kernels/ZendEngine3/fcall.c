@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (https://www.zephir-lang.com)      |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -178,10 +178,10 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	ulong fcall_key_hash;
 	size_t fcall_key_len;
 	zephir_fcall_cache_entry *temp_cache_entry = NULL;
-	zend_class_entry *old_scope;
 	int reload_cache = 1, i;
 
 #if PHP_VERSION_ID < 70100
+	zend_class_entry *old_scope;
 	old_scope = EG(scope);
 #endif
 
@@ -445,7 +445,6 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	uint param_count, zval **params)
 {
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
-	zval *fn = NULL;
 	int status;
 
 	ZVAL_UNDEF(&rv);
@@ -504,7 +503,6 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	zval_ptr_dtor(&method);
 
 	if (status == FAILURE && !EG(exception)) {
-		// @TODO: Cleanup ZendEngine2 Backend
 		switch (type) {
 			case zephir_fcall_parent:
 				zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined method parent::%s()", method_name);

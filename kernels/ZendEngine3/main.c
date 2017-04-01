@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (https://www.zephir-lang.com)      |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -392,7 +392,7 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 {
 #if PHP_VERSION_ID >= 70100
 	int ret;
- 
+
 	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
 	ret = zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
 	zend_string_release(key);
@@ -456,7 +456,6 @@ void zephir_get_args(zval *return_value)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
-	zval *param_ptr       = ZEND_CALL_ARG(ex, 1);
 
 	array_init_size(return_value, arg_count);
 	if (arg_count) {
@@ -500,7 +499,6 @@ void zephir_get_arg(zval *return_value, zend_long idx)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
-	zval *param_ptr       = ZEND_CALL_ARG(ex, 1);
 	zval *arg;
 	uint32_t first_extra_arg;
 
