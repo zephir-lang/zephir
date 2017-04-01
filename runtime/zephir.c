@@ -161,10 +161,9 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
  */
 static void zephir_parse_file(const char *file_name TSRMLS_DC)
 {
-    char *file_name_pass = (char*) file_name;
-	char *contents;
+	char *file_name_pass = (char*) file_name;
+	zend_string *contents;
 	php_stream *stream;
-	int len;
 	long maxlen = PHP_STREAM_COPY_ALL;
 	zval *zcontext = NULL, *return_value = NULL;
 	php_stream_context *context = NULL;
@@ -176,9 +175,9 @@ static void zephir_parse_file(const char *file_name TSRMLS_DC)
 		return;
 	}
 
-	if ((len = php_stream_copy_to_mem(stream, &contents, maxlen, 0)) > 0) {
+	if (contents = php_stream_copy_to_mem(stream, PHP_STREAM_COPY_ALL, 0)) {
 
-		zephir_parse_program(&return_value, contents, len, file_name, NULL TSRMLS_CC);
+		zephir_parse_program(&return_value, contents, ZSTR_LEN(contents), file_name, NULL TSRMLS_CC);
 		efree(contents);
 
 		zephir_compile_program(return_value TSRMLS_CC);
