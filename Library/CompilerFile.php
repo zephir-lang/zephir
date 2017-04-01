@@ -420,8 +420,12 @@ class CompilerFile implements FileInterface
                             array(
                                 'type' => 'return',
                                 'expr' => array(
-                                    'type' => 'bool',
-                                    'value' => 'zephir_get_boolval(is)'
+                                    'type' => 'cast',
+                                    'left' => 'bool',
+                                    'right' => array(
+                                        'type' => 'variable',
+                                        'value' => 'is'
+                                    )
                                 )
                             )
                         )),
