@@ -174,8 +174,7 @@ class ArrayIndex
         $compilationContext->headersManager->add('kernel/array');
 
         if ($isGlobalVariable) {
-            $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
-            $compilationContext->backend->maybeSeparate($variableTempSeparated, $realSymbolVariable, $compilationContext);
+            $flags = 'PH_COPY';
         }
 
         switch ($exprIndex->getType()) {
@@ -204,10 +203,6 @@ class ArrayIndex
                 break;
             default:
                 throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
-        }
-
-        if ($isGlobalVariable) {
-            $compilationContext->backend->setSymbolIfSeparated($variableTempSeparated, $realSymbolVariable, $compilationContext);
         }
     }
 
