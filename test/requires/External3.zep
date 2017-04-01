@@ -14,5 +14,6 @@ class External3
 		ob_clean();
 		require path;
 		requires->setContent(ob_get_contents());
+		ob_clean();
 	}
 }
