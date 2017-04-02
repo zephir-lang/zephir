@@ -32,7 +32,6 @@
 #include "kernel/object.h"
 #include "kernel/exception.h"
 #include "kernel/fcall.h"
-#include "kernel/hash.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
@@ -44,7 +43,7 @@ int zephir_get_class_constant(zval *return_value, zend_class_entry *ce, char *co
 
 	zval **result_ptr;
 
-	if (zephir_hash_find(&ce->constants_table, constant_name, constant_length, (void **) &result_ptr) != SUCCESS) {
+	if (zend_hash_find(&ce->constants_table, constant_name, constant_length, (void **) &result_ptr) != SUCCESS) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Undefined class constant '%s::%s'", ce->name, constant_name);
 		return FAILURE;
 	}
@@ -400,10 +399,10 @@ int zephir_clone(zval *destination, zval *obj TSRMLS_DC) {
 int zephir_isset_property_quick(zval *object, const char *property_name, unsigned int property_length, unsigned long hash TSRMLS_DC) {
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (EXPECTED(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length, hash))) {
+		if (EXPECTED(zend_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length, hash))) {
 			return 1;
 		} else {
-			return zephir_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), property_name, property_length, hash);
+			return zend_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), property_name, property_length, hash);
 		}
 	}
 
@@ -430,10 +429,10 @@ int zephir_isset_property_zval(zval *object, const zval *property TSRMLS_DC) {
 
 			hash = zend_inline_hash_func(Z_STRVAL_P(property), Z_STRLEN_P(property) + 1);
 
-			if (EXPECTED(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash))) {
+			if (EXPECTED(zend_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash))) {
 				return 1;
 			} else {
-				return zephir_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash);
+				return zend_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash);
 			}
 		}
 	}
@@ -450,7 +449,7 @@ static inline zend_class_entry *zephir_lookup_class_ce_quick(zend_class_entry *c
 	zend_class_entry *original_ce = ce;
 
 	while (ce) {
-		if (zephir_hash_quick_exists(&ce->properties_info, property_name, property_length + 1, hash)) {
+		if (zend_hash_quick_exists(&ce->properties_info, property_name, property_length + 1, hash)) {
 			return ce;
 		}
 		ce = ce->parent;
@@ -540,7 +539,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 
 		zobj = zend_objects_get_address(object TSRMLS_CC);
 
-		if (zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS) {
+		if (zend_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS) {
 			int flag;
 			if (EXPECTED((property_info->flags & ZEND_ACC_STATIC) == 0) && property_info->offset >= 0) {
 				if (zobj->properties) {
@@ -552,7 +551,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 				}
 			} else if (UNEXPECTED(!zobj->properties)) {
 				flag = 1;
-			} else if (UNEXPECTED(zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)) {
+			} else if (UNEXPECTED(zend_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)) {
 				flag = 2;
 			} else {
 				flag = 0;
@@ -560,7 +559,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 
 			if (UNEXPECTED(flag) && zobj->properties) {
 				if (
-					(flag == 2 || zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
+					(flag == 2 || zend_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
 					&& zv && *zv
 				) {
 					flag = 0;
@@ -606,7 +605,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 
 		zobj = zend_objects_get_address(object TSRMLS_CC);
 
-		if (zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS) {
+		if (zend_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS) {
 			int flag;
 			if (EXPECTED((property_info->flags & ZEND_ACC_STATIC) == 0) && property_info->offset >= 0) {
 				if (zobj->properties) {
@@ -618,7 +617,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 				}
 			} else if (UNEXPECTED(!zobj->properties)) {
 				flag = 1;
-			} else if (UNEXPECTED(zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)) {
+			} else if (UNEXPECTED(zend_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)) {
 				flag = 2;
 			} else {
 				flag = 0;
@@ -626,7 +625,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 
 			if (UNEXPECTED(flag) && zobj->properties) {
 				if (
-					(flag == 2 || zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
+					(flag == 2 || zend_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
 					&& zv && *zv
 				) {
 					flag = 0;
@@ -811,11 +810,11 @@ int zephir_update_property_this_quick(zval *object, const char *property_name, z
 
 		zobj = zend_objects_get_address(object TSRMLS_CC);
 
-		if (EXPECTED(zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS)) {
+		if (EXPECTED(zend_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS)) {
 			assert(property_info != NULL);
 
 			/** This is as zend_std_write_property, but we're not interesed in validate properties visibility */
-			if (property_info->offset >= 0 ? (zobj->properties ? ((variable_ptr = (zval**) zobj->properties_table[property_info->offset]) != NULL) : (*(variable_ptr = &zobj->properties_table[property_info->offset]) != NULL)) : (EXPECTED(zobj->properties != NULL) && EXPECTED(zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length + 1, property_info->h, (void **) &variable_ptr) == SUCCESS))) {
+			if (property_info->offset >= 0 ? (zobj->properties ? ((variable_ptr = (zval**) zobj->properties_table[property_info->offset]) != NULL) : (*(variable_ptr = &zobj->properties_table[property_info->offset]) != NULL)) : (EXPECTED(zobj->properties != NULL) && EXPECTED(zend_hash_quick_find(zobj->properties, property_info->name, property_info->name_length + 1, property_info->h, (void **) &variable_ptr) == SUCCESS))) {
 
 				if (EXPECTED(*variable_ptr != value)) {
 
@@ -1231,7 +1230,7 @@ int zephir_method_quick_exists_ex(const zval *object, const char *method_name, u
 	}
 
 	while (ce) {
-		if (zephir_hash_quick_exists(&ce->function_table, method_name, method_len, hash)) {
+		if (zend_hash_quick_exists(&ce->function_table, method_name, method_len, hash)) {
 			return SUCCESS;
 		}
 		ce = ce->parent;

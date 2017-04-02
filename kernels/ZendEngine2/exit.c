@@ -26,8 +26,8 @@
 #include "kernel/main.h"
 #include "kernel/exit.h"
 
-void zephir_exit_empty() {
-	TSRMLS_FETCH();
+void zephir_exit_empty()
+{
 	zend_bailout();
 }
 

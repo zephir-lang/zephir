@@ -32,8 +32,26 @@
 #include "kernel/debug.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
-#include "kernel/hash.h"
 #include "kernel/backtrace.h"
+
+static zval zephir_get_current_key_w(const HashTable *hash_table, HashPosition *hash_position)
+{
+	Bucket *p;
+	zval result;
+
+	INIT_ZVAL(result);
+	p = hash_position ? (*hash_position) : hash_table->pInternalPointer;
+
+	if (p) {
+		if (p->nKeyLength) {
+			ZVAL_STRINGL(&result, (char *) p->arKey, p->nKeyLength - 1, 0);
+		} else {
+			ZVAL_LONG(&result, p->h);
+		}
+	}
+
+	return result;
+}
 
 /**
  * @brief Fetches @a index if it exists from the array @a arr
@@ -64,7 +82,7 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index, int r
 	h = Z_ARRVAL_P(arr);
 	switch (Z_TYPE_P(index)) {
 		case IS_NULL:
-			result = zephir_hash_find(h, SS(""), (void**)&val);
+			result = zend_hash_find(h, SS(""), (void**)&val);
 			break;
 
 		case IS_DOUBLE:
@@ -110,7 +128,7 @@ int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index
 	zval **zv;
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
-		if (zephir_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
+		if (zend_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*fetched = *zv;
 			if (!readonly) {
 				Z_ADDREF_P(*fetched);
@@ -173,7 +191,7 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index) {
 	h = Z_ARRVAL_P(arr);
 	switch (Z_TYPE_P(index)) {
 		case IS_NULL:
-			return zephir_hash_exists(h, SS(""));
+			return zend_hash_exists(h, SS(""));
 
 		case IS_DOUBLE:
 			return zend_hash_index_exists(h, (ulong)Z_DVAL_P(index));
@@ -807,7 +825,7 @@ int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int flags ZE
 		ht = Z_ARRVAL_P(arr);
 		switch (Z_TYPE_P(index)) {
 			case IS_NULL:
-				result = zephir_hash_find(ht, SS(""), (void**) &zv);
+				result = zend_hash_find(ht, SS(""), (void**) &zv);
 				sidx   = "";
 				break;
 
@@ -880,7 +898,7 @@ int zephir_array_fetch_quick_string(zval **return_value, zval *arr, const char *
 	zval **zv;
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
-		if (zephir_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
+		if (zend_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*return_value = *zv;
 			if ((flags & PH_READONLY) != PH_READONLY) {
 				Z_ADDREF_PP(return_value);
@@ -1481,7 +1499,7 @@ void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int init
 	if (size > 0) {
 
 		hashTable = (HashTable *) emalloc(sizeof(HashTable));
-		zephir_hash_init(hashTable, size, NULL, ZVAL_PTR_DTOR, 0);
+		zend_hash_init(hashTable, size, NULL, ZVAL_PTR_DTOR, 0);
 
 		if (initialize) {
 
