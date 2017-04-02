@@ -20,7 +20,6 @@
 #include "kernel/operators.h"
 #include "kernel/array.h"
 #include "kernel/exception.h"
-#include "kernel/hash.h"
 
 
 /**
@@ -666,8 +665,8 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_paths"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 0, "test/router/route.zep", 478);
 	for (
-	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_2, &_1)
+	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zend_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HMKEY(path, _2, _1);
 		ZEPHIR_GET_HVALUE(position, _3);

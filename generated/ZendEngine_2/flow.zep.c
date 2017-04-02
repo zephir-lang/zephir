@@ -17,7 +17,6 @@
 #include "kernel/concat.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
-#include "kernel/hash.h"
 #include "kernel/iterator.h"
 #include "kernel/math.h"
 
@@ -732,8 +731,8 @@ PHP_METHOD(Test_Flow, testFor1) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0, "test/flow.zep", 443);
 	for (
-	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_2, &_1)
+	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zend_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
 		c += zephir_get_numberval(v);
@@ -768,8 +767,8 @@ PHP_METHOD(Test_Flow, testFor2) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0, "test/flow.zep", 453);
 	for (
-	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_2, &_1)
+	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zend_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HMKEY(k, _2, _1);
 		ZEPHIR_GET_HVALUE(v, _3);
@@ -805,8 +804,8 @@ PHP_METHOD(Test_Flow, testFor3) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 1, "test/flow.zep", 464);
 	for (
-	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zephir_hash_move_backwards_ex(_2, &_1)
+	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zend_hash_move_backwards_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
 		zephir_array_append(&c, v, PH_SEPARATE, "test/flow.zep", 462);
@@ -1488,8 +1487,8 @@ PHP_METHOD(Test_Flow, testFor24) {
 	zephir_array_fast_append(_0, _1);
 	zephir_is_iterable(_0, &_3, &_2, 0, 0, "test/flow.zep", 674);
 	for (
-	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_3, &_2)
+	  ; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+	  ; zend_hash_move_forward_ex(_3, &_2)
 	) {
 		ZEPHIR_GET_HVALUE(a, _4);
 		zephir_concat_self(&b, a TSRMLS_CC);
@@ -1560,8 +1559,8 @@ PHP_METHOD(Test_Flow, testFor32) {
 	sum = 0;
 	zephir_is_iterable(e, &_1, &_0, 0, 0, "test/flow.zep", 703);
 	for (
-	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_1, &_0)
+	  ; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
+	  ; zend_hash_move_forward_ex(_1, &_0)
 	) {
 		ZEPHIR_GET_HVALUE(v, _2);
 		sum += zephir_get_numberval(v);

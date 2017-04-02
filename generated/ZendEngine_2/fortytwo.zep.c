@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/hash.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"
 
@@ -225,8 +224,8 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(box, _0);
 	zephir_is_iterable(box, &_3, &_2, 0, 0, "test/fortytwo.zep", 32);
 	for (
-	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_3, &_2)
+	  ; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+	  ; zend_hash_move_forward_ex(_3, &_2)
 	) {
 		ZEPHIR_GET_HVALUE(side, _4);
 		j = 0;

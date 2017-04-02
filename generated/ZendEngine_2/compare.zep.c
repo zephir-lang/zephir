@@ -112,11 +112,11 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &str_param);
 
-	if (unlikely(Z_TYPE_P(str_param) != IS_STRING && Z_TYPE_P(str_param) != IS_NULL)) {
+	if (UNEXPECTED(Z_TYPE_P(str_param) != IS_STRING && Z_TYPE_P(str_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'str' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-	if (likely(Z_TYPE_P(str_param) == IS_STRING)) {
+	if (EXPECTED(Z_TYPE_P(str_param) == IS_STRING)) {
 		zephir_get_strval(str, str_param);
 	} else {
 		ZEPHIR_INIT_VAR(str);
