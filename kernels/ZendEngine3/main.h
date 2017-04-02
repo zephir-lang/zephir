@@ -136,11 +136,11 @@
 
 /** Return zval with always ctor, without restoring the memory stack */
 #define RETURN_THISW() \
-	RETURN_ZVAL(this_ptr, 1, 0);
+	RETURN_ZVAL(getThis(), 1, 0);
 
 /** Return this pointer */
 #define RETURN_THIS() { \
-		RETVAL_ZVAL(this_ptr, 1, 0); \
+		RETVAL_ZVAL(getThis(), 1, 0); \
 	} \
 	ZEPHIR_MM_RESTORE(); \
 	return;
@@ -302,15 +302,6 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line
 #define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0
 #endif
-
-#define ZEPHIR_INIT_THIS() zval this_zv; \
-    zval *this_ptr = getThis(); \
-    if (EXPECTED(this_ptr)) { \
-        ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr)); \
-        this_ptr = &this_zv; \
-    } else { \
-        this_ptr = NULL; \
-    }
 
 void zephir_get_args(zval* return_value);
 void zephir_get_arg(zval* return_value, zend_long idx);

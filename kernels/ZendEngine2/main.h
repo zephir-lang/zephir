@@ -172,14 +172,14 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 
 /** Return this pointer */
 #define RETURN_THIS() { \
-		RETVAL_ZVAL(this_ptr, 1, 0); \
+		RETVAL_ZVAL(getThis(), 1, 0); \
 	} \
 	ZEPHIR_MM_RESTORE(); \
 	return;
 
 /** Return zval with always ctor, without restoring the memory stack */
 #define RETURN_THISW() \
-	RETURN_ZVAL(this_ptr, 1, 0);
+	RETURN_ZVAL(getThis(), 1, 0);
 
 #else
 
@@ -211,14 +211,14 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 
 /** Return this pointer */
 #define RETURN_THIS() { \
-		RETVAL_ZVAL_FAST(this_ptr); \
+		RETVAL_ZVAL_FAST(getThis()); \
 	} \
 	ZEPHIR_MM_RESTORE(); \
 	return;
 
 /** Return zval with always ctor, without restoring the memory stack */
 #define RETURN_THISW() \
-	RETURN_ZVAL_FAST(this_ptr);
+	RETURN_ZVAL_FAST(getThis());
 
 #endif
 
