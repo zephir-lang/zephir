@@ -49,11 +49,12 @@ class ExitOptimizer extends OptimizerAbstract
         if (isset($expression['parameters'])) {
             //TODO: protect resolvedParams[0] from restore
         }
-        $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
         if (!isset($expression['parameters'])) {
+            $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
             $context->codePrinter->output('zephir_exit_empty();');
         } else {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+            $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
             $context->codePrinter->output('zephir_exit(' . $resolvedParams[0] .');');
         }
         return new CompiledExpression('void ', '', $expression);
