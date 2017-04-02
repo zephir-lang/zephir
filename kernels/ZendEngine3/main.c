@@ -180,7 +180,7 @@ int zephir_fast_count_ev(zval *value)
 		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
-			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count > 0;
 		}
 
@@ -225,7 +225,7 @@ int zephir_fast_count_int(zval *value)
 		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
-			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count;
 		}
 

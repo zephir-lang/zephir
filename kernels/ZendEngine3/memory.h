@@ -59,12 +59,12 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack();
 void ZEPHIR_FASTCALL zephir_memory_observe(zval *var);
 void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var);
 
-int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
+int ZEPHIR_FASTCALL zephir_clean_restore_stack();
 
 #define zephir_safe_zval_ptr_dtor(pzval)
 
-void zephir_create_symbol_table(TSRMLS_D);
-int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC);
+void zephir_create_symbol_table();
+int zephir_set_symbol(zval *key_name, zval *value);
 int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 
 #define ZEPHIR_INIT_VAR(z) zephir_memory_alloc(z);

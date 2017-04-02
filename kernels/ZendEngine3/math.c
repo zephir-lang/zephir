@@ -208,7 +208,7 @@ long zephir_mt_rand(long min, long max)
 	return number;
 }
 
-double zephir_ldexp(zval *value, zval *expval TSRMLS_DC)
+double zephir_ldexp(zval *value, zval *expval)
 {
 	int exp = (int) zephir_get_numberval(expval);
 

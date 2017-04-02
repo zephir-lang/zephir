@@ -224,7 +224,7 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 /**
  * Finishes the current memory stack by releasing allocated memory
  */
-int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func)
 {
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
@@ -253,7 +253,7 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func)
 	zephir_memory_entry *entry;
 	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
 	if (g->start_memory == NULL) {
-		zephir_initialize_memory(g TSRMLS_CC);
+		zephir_initialize_memory(g);
 	}
 	entry = zephir_memory_grow_stack_common(g);
 	entry->func = func;
@@ -379,7 +379,7 @@ void zephir_deinitialize_memory()
 /**
  * Creates virtual symbol tables dynamically
  */
-void zephir_create_symbol_table(TSRMLS_D)
+void zephir_create_symbol_table()
 {
 	/*zephir_symbol_table *entry;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
@@ -409,7 +409,7 @@ void zephir_create_symbol_table(TSRMLS_D)
 /**
  * Exports symbols to the active symbol table
  */
-int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
+int zephir_set_symbol(zval *key_name, zval *value)
 {
 	zend_array *symbol_table;
 
