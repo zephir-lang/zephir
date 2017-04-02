@@ -377,7 +377,7 @@ int zephir_clone(zval *destination, zval *obj)
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
+		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
 			return 1;
 		}
 		return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), property_name, property_length);
@@ -394,7 +394,7 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		if (Z_TYPE_P(property) == IS_STRING) {
 
-			if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
+			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
 				return 1;
 			} else {
 				return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), Z_STRVAL_P(property), Z_STRLEN_P(property));
@@ -501,7 +501,7 @@ int zephir_fetch_property(zval *result, zval *object, const char *property_name,
  */
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
 {
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 		ZVAL_NULL(result);
 		return 0;
 	}
@@ -527,7 +527,7 @@ int zephir_return_property(zval *return_value, zval *object, char *property_name
  */
 int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags)
 {
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
 		}
@@ -850,7 +850,7 @@ int zephir_method_exists_ex(const zval *object, const char *method_name, unsigne
 {
 	zend_class_entry *ce;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 		ce = Z_OBJCE_P(object);
 	} else {
 		if (Z_TYPE_P(object) == IS_STRING) {

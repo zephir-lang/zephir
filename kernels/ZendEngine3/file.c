@@ -53,7 +53,7 @@
 
 void zephir_basename(zval *return_value, zval *path)
 {
-	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+	if (EXPECTED(Z_TYPE_P(path) == IS_STRING)) {
 		zend_string *ret;
 		ret = php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0);
 		ZVAL_STR(return_value, ret);
@@ -300,7 +300,7 @@ void zephir_file_put_contents(zval *return_value, zval *filename, zval *data)
 
 void zephir_filemtime(zval *return_value, zval *path)
 {
-	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+	if (EXPECTED(Z_TYPE_P(path) == IS_STRING)) {
 		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value);
 	} else {
 		ZVAL_FALSE(return_value);

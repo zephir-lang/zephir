@@ -150,16 +150,16 @@ class Backend extends BaseBackend
 
             case 'static_zephir_fcall_cache_entry':
                 $pointer = '*';
-                $code = 'zephir_nts_static zephir_fcall_cache_entry';
+                $code = 'zephir_fcall_cache_entry';
                 break;
 
             case 'static_zend_class_entry':
                 $pointer = '*';
-                $code = 'zephir_nts_static zend_class_entry';
+                $code = 'zend_class_entry';
                 break;
 
             case 'zephir_ce_guard':
-                $code = 'zephir_nts_static zend_bool';
+                $code = 'zend_bool';
                 break;
 
             default:
@@ -1351,7 +1351,7 @@ class Backend extends BaseBackend
 
         /* Generate verification code */
         if (count($conditions)) {
-            $codePrinter->output('if (unlikely(' . implode(' && ', $conditions) . ')) {');
+            $codePrinter->output('if (UNEXPECTED(' . implode(' && ', $conditions) . ')) {');
             $codePrinter->increaseLevel();
             $codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $var['name'] . '\' must be a ' . $type . '") TSRMLS_CC);');
             $codePrinter->output('RETURN_MM_NULL();');
@@ -1376,7 +1376,7 @@ class Backend extends BaseBackend
             case 'ulong':
                 $context->headersManager->add('kernel/operators');
                 $context->symbolTable->mustGrownStack(true);
-                $codePrinter->output('if (likely(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
+                $codePrinter->output('if (EXPECTED(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
                 $codePrinter->increaseLevel();
                 $targetVar = $var['name'];
                 if ($this->isZE3()) {

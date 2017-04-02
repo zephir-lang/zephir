@@ -400,7 +400,7 @@ int zephir_clone(zval *destination, zval *obj TSRMLS_DC) {
 int zephir_isset_property_quick(zval *object, const char *property_name, unsigned int property_length, unsigned long hash TSRMLS_DC) {
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (likely(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length, hash))) {
+		if (EXPECTED(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length, hash))) {
 			return 1;
 		} else {
 			return zephir_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), property_name, property_length, hash);
@@ -430,7 +430,7 @@ int zephir_isset_property_zval(zval *object, const zval *property TSRMLS_DC) {
 
 			hash = zend_inline_hash_func(Z_STRVAL_P(property), Z_STRLEN_P(property) + 1);
 
-			if (likely(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash))) {
+			if (EXPECTED(zephir_hash_quick_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash))) {
 				return 1;
 			} else {
 				return zephir_hash_quick_exists(Z_OBJ_HT_P(object)->get_properties(object TSRMLS_CC), Z_STRVAL_P(property), Z_STRLEN_P(property) + 1, hash);
@@ -528,7 +528,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 	zend_property_info *property_info;
 	zend_class_entry *ce, *old_scope;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 
 		ce = Z_OBJCE_P(object);
 		if (ce->parent) {
@@ -558,7 +558,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 				flag = 0;
 			}
 
-			if (unlikely(flag) && zobj->properties) {
+			if (UNEXPECTED(flag) && zobj->properties) {
 				if (
 					(flag == 2 || zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
 					&& zv && *zv
@@ -567,7 +567,7 @@ zval* zephir_fetch_property_this_quick(zval *object, const char *property_name, 
 				}
 			}
 
-			if (likely(!flag)) {
+			if (EXPECTED(!flag)) {
 				EG(scope) = old_scope;
 				return *zv;
 			}
@@ -594,7 +594,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 	zend_property_info *property_info;
 	zend_class_entry *ce, *old_scope;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 
 		ce = Z_OBJCE_P(object);
 		if (ce->parent) {
@@ -624,7 +624,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 				flag = 0;
 			}
 
-			if (unlikely(flag) && zobj->properties) {
+			if (UNEXPECTED(flag) && zobj->properties) {
 				if (
 					(flag == 2 || zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length+1, property_info->h, (void **) &zv) == FAILURE)
 					&& zv && *zv
@@ -633,7 +633,7 @@ int zephir_return_property_quick(zval *return_value, zval **return_value_ptr, zv
 				}
 			}
 
-			if (likely(!flag)) {
+			if (EXPECTED(!flag)) {
 				EG(scope) = old_scope;
 
 				if (return_value_ptr) {
@@ -672,7 +672,7 @@ int zephir_return_property(zval *return_value, zval **return_value_ptr, zval *ob
  */
 int zephir_read_property_zval(zval **result, zval *object, zval *property, int flags TSRMLS_DC) {
 
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
@@ -791,7 +791,7 @@ int zephir_update_property_this_quick(zval *object, const char *property_name, z
 
 	zend_class_entry *ce, *old_scope;
 
-	if (unlikely(Z_TYPE_P(object) != IS_OBJECT)) {
+	if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Attempt to assign property of non-object");
 		return FAILURE;
 	}
@@ -811,7 +811,7 @@ int zephir_update_property_this_quick(zval *object, const char *property_name, z
 
 		zobj = zend_objects_get_address(object TSRMLS_CC);
 
-		if (likely(zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS)) {
+		if (EXPECTED(zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS)) {
 			assert(property_info != NULL);
 
 			/** This is as zend_std_write_property, but we're not interesed in validate properties visibility */
@@ -1009,7 +1009,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 	zval *tmp;
 	int separated = 0;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 
 		zephir_read_property(&tmp, object, property, property_length, PH_NOISY_CC);
 
@@ -1220,7 +1220,7 @@ int zephir_method_quick_exists_ex(const zval *object, const char *method_name, u
 
 	zend_class_entry *ce;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 		ce = Z_OBJCE_P(object);
 	} else {
 		if (Z_TYPE_P(object) == IS_STRING) {
@@ -1482,7 +1482,7 @@ int zephir_read_class_property(zval **result, int type, const char *property, in
 	type &= ZEND_FETCH_CLASS_MASK;
 	ce    = zend_fetch_class(NULL, 0, type TSRMLS_CC);
 
-	if (likely(ce != NULL)) {
+	if (EXPECTED(ce != NULL)) {
 		return zephir_read_static_property_ce(result, ce, property, len TSRMLS_CC);
 	}
 
@@ -1697,7 +1697,7 @@ int zephir_fetch_property(zval **result, zval *object, const char *property_name
  */
 int zephir_fetch_property_zval(zval **result, zval *object, zval *property, int silent TSRMLS_DC) {
 
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 		*result = ZEPHIR_GLOBAL(global_null);
 		Z_ADDREF_P(*result);
 		return 0;

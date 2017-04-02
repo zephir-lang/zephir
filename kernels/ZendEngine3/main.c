@@ -36,7 +36,7 @@
 
 int zephir_is_iterable_ex(zval *arr, int duplicate)
 {
-	if (unlikely(Z_TYPE_P(arr) != IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
     //TODO: duplicate
