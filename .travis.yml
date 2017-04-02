@@ -82,7 +82,7 @@ after_success:
   - cp -a ext/test/. generated/$ZEPHIR_TARGET
   - git add -A generated/$ZEPHIR_TARGET
   - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
-  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" && "$TRAVIS_REPO_SLUG" == "phalcon/zephir" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
   - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git log -1 -p; fi
 
 after_failure:
