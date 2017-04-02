@@ -280,7 +280,11 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		fcic.initialized = 0;
 	}
 
-	zval p[fci.param_count+1];
+#ifdef _MSC_VER
+	zval *p = emalloc(sizeof(zval) * (fci.param_count + 1));
+#else
+	zval p[fci.param_count];
+#endif
 	for (i=0; i<fci.param_count; ++i) {
 		ZVAL_COPY_VALUE(&p[i], params[i]);
 	}
@@ -299,6 +303,10 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	status = zend_call_function(&fci, &fcic);
 #if 0
 	fprintf(stderr, "< called: %p, calling: %p, obj: %p, h: %p\n", fcic.called_scope, fcic.calling_scope, fcic.object, fcic.function_handler);
+#endif
+
+#ifdef _MSC_VER
+	efree(p);
 #endif
 
 #if PHP_VERSION_ID < 70100
