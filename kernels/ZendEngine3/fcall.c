@@ -280,7 +280,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		fcic.initialized = 0;
 	}
 
-	zval p[fci.param_count];
+	zval p[fci.param_count+1];
 	for (i=0; i<fci.param_count; ++i) {
 		ZVAL_COPY_VALUE(&p[i], params[i]);
 	}
