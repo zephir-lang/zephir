@@ -152,4 +152,7 @@ typedef zend_function zephir_fcall_cache_entry;
 # define ZEPHIR_NO_OPT
 #endif
 
+#define likely(x)   EXPECTED(x)
+#define unlikely(x) UNEXPECTED(x)
+
 #endif
