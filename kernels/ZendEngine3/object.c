@@ -32,7 +32,6 @@
 #include "kernel/object.h"
 #include "kernel/exception.h"
 #include "kernel/fcall.h"
-#include "kernel/hash.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
@@ -138,7 +137,7 @@ zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t lengt
 zend_class_entry *zephir_fetch_class(const zval *class_name)
 {
 	if (Z_TYPE_P(class_name) == IS_STRING) {
-		return zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_DEFAULT TSRMLS_CC);
+		return zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_DEFAULT);
 	}
 
 	php_error_docref(NULL, E_WARNING, "class name must be a string");
@@ -331,7 +330,7 @@ int zephir_interface_exists(const zval *class_name, int autoload)
 		return 0;
 	}
 
-	php_error_docref(NULL TSRMLS_CC, E_WARNING, "interface name must be a string");
+	php_error_docref(NULL, E_WARNING, "interface name must be a string");
 	return 0;
 }
 
@@ -377,7 +376,7 @@ int zephir_clone(zval *destination, zval *obj)
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
-		if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
+		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
 			return 1;
 		}
 		return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), property_name, property_length);
@@ -394,7 +393,7 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		if (Z_TYPE_P(property) == IS_STRING) {
 
-			if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
+			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
 				return 1;
 			} else {
 				return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), Z_STRVAL_P(property), Z_STRLEN_P(property));
@@ -501,7 +500,7 @@ int zephir_fetch_property(zval *result, zval *object, const char *property_name,
  */
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
 {
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 		ZVAL_NULL(result);
 		return 0;
 	}
@@ -527,7 +526,7 @@ int zephir_return_property(zval *return_value, zval *object, char *property_name
  */
 int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags)
 {
-	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+	if (UNEXPECTED(Z_TYPE_P(property) != IS_STRING)) {
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
 		}
@@ -850,7 +849,7 @@ int zephir_method_exists_ex(const zval *object, const char *method_name, unsigne
 {
 	zend_class_entry *ce;
 
-	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 		ce = Z_OBJCE_P(object);
 	} else {
 		if (Z_TYPE_P(object) == IS_STRING) {
@@ -1160,18 +1159,18 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 /**
  * Creates a new instance dynamically calling constructor with parameters
  */
-int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params TSRMLS_DC)
+int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params)
 {
 	int outcome;
 	zend_class_entry *ce;
 
 	if (Z_TYPE_P(class_name) != IS_STRING) {
-		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Invalid class name") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Invalid class name"));
 		return FAILURE;
 	}
 
 	if (Z_TYPE_P(params) != IS_ARRAY) {
-		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Instantiation parameters must be an array") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Instantiation parameters must be an array"));
 		return FAILURE;
 	}
 

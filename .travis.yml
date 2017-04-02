@@ -21,19 +21,20 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
+    - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
   matrix:
-    - CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
-    - CC="clang" CFLAGS="-g3 -O0 -Wall -DZEPHIR_RELEASE=1"
+    - CC="ccache gcc" 
+    - CC="clang"
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
   include:
-    - env: CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
+    - env: CC="ccache gcc"
       php: nightly
       compiler: gcc
-    - env: CC="clang" CFLAGS="-g3 -O0 -Wall -DZEPHIR_RELEASE=1"
+    - env: CC="clang"
       php: nightly
       compiler: clang
 

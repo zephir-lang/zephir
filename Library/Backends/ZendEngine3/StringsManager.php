@@ -188,7 +188,7 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2) /* {{{ */
 {
     zval tmp;
     /* Force separate zval, if op2=result will be reallocated */
-    if (unlikely(result == op2)) {
+    if (UNEXPECTED(result == op2)) {
         ZVAL_COPY_VALUE(&tmp, op2);
         op2 = &tmp;
     }

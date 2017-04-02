@@ -26,7 +26,6 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
-#include "kernel/hash.h"
 #include "kernel/string.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"

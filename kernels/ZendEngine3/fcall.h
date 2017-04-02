@@ -441,22 +441,24 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 }
 
 #define zephir_check_call_status() \
-	do \
+	do { \
 		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
 			ZEPHIR_MM_RESTORE(); \
 			return; \
-	} \
-	while(0)
+		} \
+	} while(0)
 
 #define zephir_check_call_status_or_jump(label) \
-	if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
-		if (EG(exception)) { \
-			goto label; \
-		} else { \
-			ZEPHIR_MM_RESTORE(); \
-			return; \
+	do { \
+		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
+			if (EG(exception)) { \
+				goto label; \
+			} else { \
+				ZEPHIR_MM_RESTORE(); \
+				return; \
+			} \
 		} \
-	}
+	} while (0)
 
 #ifdef ZEPHIR_RELEASE
 #define ZEPHIR_TEMP_PARAM_COPY 0
@@ -467,23 +469,5 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 #endif
 
 void zephir_eval_php(zval *str, zval *retval_ptr, char *context);
-
-static inline void zephir_set_called_scope(zend_execute_data *ex, zend_class_entry *called_scope)
-{
-	while (ex) {
-		if (Z_TYPE(ex->This) == IS_OBJECT) {
-			Z_OBJCE(ex->This) = called_scope;
-			return;
-		} else if (Z_CE(ex->This)) {
-			Z_CE(ex->This) = called_scope;
-			return;
-		} else if (ex->func) {
-			if (ex->func->type != ZEND_INTERNAL_FUNCTION || ex->func->common.scope) {
-				return;
-			}
-		}
-		ex = ex->prev_execute_data;
-	}
-}
 
 #endif /* ZEPHIR_KERNEL_FCALL_H */

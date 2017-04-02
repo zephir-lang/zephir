@@ -28,7 +28,6 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
-#include "kernel/hash.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"
 #include "kernel/backtrace.h"
@@ -459,7 +458,7 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 
 	if (object) {
 		if (Z_TYPE_P(object) != IS_OBJECT) {
-			zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Trying to call method %s on a non-object", method_name);
+			zephir_throw_exception_format(spl_ce_RuntimeException, "Trying to call method %s on a non-object", method_name);
 			if (return_value_ptr) {
 				zval_ptr_dtor(return_value_ptr);
 				ZVAL_UNDEF(return_value_ptr);

@@ -72,7 +72,9 @@ void zephir_fast_array_merge(zval *return_value, zval *array1, zval *array2);
 int zephir_fast_in_array(zval *needle, zval *haystack);
 
 #define zephir_array_fast_append(arr, value) \
-  Z_TRY_ADDREF_P(value); \
-  zend_hash_next_index_insert(Z_ARRVAL_P(arr), value);
+	do { \
+		Z_TRY_ADDREF_P(value); \
+		zend_hash_next_index_insert(Z_ARRVAL_P(arr), value); \
+	} while (0)
 
 #endif /* ZEPHIR_KERNEL_ARRAY_H */
