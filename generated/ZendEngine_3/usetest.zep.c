@@ -47,7 +47,7 @@ PHP_METHOD(Test_UseTest, count) {
 
 PHP_METHOD(Test_UseTest, testUseClass1) {
 
-	zephir_nts_static zend_class_entry *_0 = NULL;
+	zend_class_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 
@@ -68,7 +68,7 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 
 PHP_METHOD(Test_UseTest, testUseClass2) {
 
-	zephir_nts_static zend_class_entry *_0 = NULL;
+	zend_class_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 
@@ -89,7 +89,7 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 
 PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 
-	zephir_nts_static zend_class_entry *_0 = NULL;
+	zend_class_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	ZEPHIR_INIT_THIS();
 

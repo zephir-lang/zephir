@@ -20,7 +20,6 @@
 #include "kernel/operators.h"
 #include "kernel/array.h"
 #include "kernel/exception.h"
-#include "kernel/hash.h"
 
 
 /**

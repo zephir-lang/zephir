@@ -18,7 +18,6 @@
 #include "kernel/string.h"
 #include "kernel/concat.h"
 #include "kernel/fcall.h"
-#include "kernel/hash.h"
 
 
 /**
