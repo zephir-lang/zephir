@@ -441,22 +441,24 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 }
 
 #define zephir_check_call_status() \
-	do \
+	do { \
 		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
 			ZEPHIR_MM_RESTORE(); \
 			return; \
-	} \
-	while(0)
+		} \
+	} while(0)
 
 #define zephir_check_call_status_or_jump(label) \
-	if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
-		if (EG(exception)) { \
-			goto label; \
-		} else { \
-			ZEPHIR_MM_RESTORE(); \
-			return; \
+	do { \
+		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
+			if (EG(exception)) { \
+				goto label; \
+			} else { \
+				ZEPHIR_MM_RESTORE(); \
+				return; \
+			} \
 		} \
-	}
+	} while (0)
 
 #ifdef ZEPHIR_RELEASE
 #define ZEPHIR_TEMP_PARAM_COPY 0
