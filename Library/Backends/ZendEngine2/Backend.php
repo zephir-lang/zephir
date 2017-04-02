@@ -1235,11 +1235,11 @@ class Backend extends BaseBackend
         $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $reverse . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
 
         $codePrinter->output('for (');
-        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
+        $codePrinter->output('  ; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
         if ($reverse) {
-            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         } else {
-            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         }
         $codePrinter->output(') {');
 
