@@ -32,7 +32,6 @@
 #include "kernel/debug.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
-#include "kernel/hash.h"
 #include "kernel/backtrace.h"
 
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int initialize)

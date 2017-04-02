@@ -698,7 +698,7 @@ class ForStatement extends StatementAbstract
          */
         $compilationContext->insideCycle++;
 
-        $compilationContext->headersManager->add('kernel/hash');
+//         $compilationContext->headersManager->add('kernel/hash');
 
         $duplicateHash = '0';
         $duplicateKey = true;
