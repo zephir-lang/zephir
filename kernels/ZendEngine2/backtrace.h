@@ -23,7 +23,7 @@
 
 #ifndef ZEPHIR_RELEASE
 
-extern void zephir_print_backtrace(void);
+void zephir_print_backtrace(void);
 
 #else
 
