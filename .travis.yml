@@ -23,7 +23,7 @@ env:
     - secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
   matrix:
-    - CC="ccache gcc" 
+    - CC="ccache gcc"
     - CC="clang"
 
 matrix:
@@ -58,8 +58,7 @@ before_install:
 
 install:
   - composer --prefer-source install
-  - (cd modules/php-zephir-parser; TRAVIS_BUILD_DIR=$(pwd) bash ./tests/ci/install-travis)
-  - php --ri "Zephir Parser"
+  - bash unit-tests/ci/install_zephir_parser.sh
   - ./install
 
 before_script:
@@ -90,8 +89,11 @@ after_failure:
   - ./unit-tests/ci/after_failure.sh
 
 notifications:
-  email:
-    - build@phalconphp.com
+    email:
+        recipients:
+            - build@phalconphp.com
+        on_success: change
+        on_failure: always
 
 addons:
   apt:
