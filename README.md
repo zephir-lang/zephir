@@ -41,6 +41,8 @@ To build the PHP extension:
 
 ## Installation
 
+First, you have to get [Zephir Parser](https://github.com/phalcon/php-zephir-parser).
+
 ### Windows
 
 To install Zephir on Windows [follow this guide](https://github.com/phalcon/zephir/blob/master/WINDOWS.md).
@@ -49,53 +51,17 @@ To install Zephir on Windows [follow this guide](https://github.com/phalcon/zeph
 
 #### Git way
 
-First, clone Zephir repository.
+Clone Zephir repository.
 
-Next, you have to get [Zephir Parser](https://github.com/phalcon/php-zephir-parser).
-
-The most easy way to do it is to use `git submodule` command:
-
-```bash
-git submodule init
-git submodule update
-```
-
-Then you have to install it:
-
-```bash
-cd modules/php-zephir-parser
-sudo ./install
-```
-
-Add the extension to your **php.ini**:
-
-```ini
-[Zephir Parser]
-; You can use here absolute path to your custom modules dir
-; or relative to the PHP modules dir
-extension=zephir_parser.so
-```
-
-Finally, install Zephir by using command `./install` from project root dir.
+Then, install Zephir by using command `./install` from project root dir.
 For global installation add `-c` flag.
-
-**NOTE:** For git 1.6.1 or above you can use something similar to `git submodule update --remote --merge`
-to pull latest of all submodules. See [git-submodule(1)](http://www.kernel.org/pub/software/scm/git/docs/v1.6.1.3/git-submodule.html) for details.
 
 ### Composer way
 
 You can install Zephir using composer.
 
-First, run `composer require phalcon/zephir`.
-
-Unfortunately Composer doesn't support Git submodules, as the main aim of Composer is to provide a similar
-inter-project dependency functionality and it would be pointless to try to replicate submodules in Composer.
-
-Composer has the option to download the source via a Git clone (`--prefer-source`) rather than downloading a
-zipball (`--prefer-dist`) which is the default. This allows you to edit the source code inside the vendors directory
-and then commit it through Git.
-
-After getting Zephir go to `vendor/phalcon/zephir` and follow the above guide related to submodule.
+To ge Zephir, run `composer require phalcon/zephir`.
+After getting Zephir follow the above guide to install Zephir Parser.
 
 ### Additional notes on Ubuntu
 

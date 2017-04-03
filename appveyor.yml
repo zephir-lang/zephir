@@ -40,7 +40,7 @@ install:
     # ==================================================
     - appveyor DownloadFile http://windows.php.net/downloads/releases/sha1sum.txt
     - ps: $env:PHP_VERSION=type sha1sum.txt | where { $_ -match "php-(${env:PHP_TARGET}\.\d+)-src" } | foreach { $matches[1] }
-    - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_RELEASE}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_VERSION}_${env:PARSER_VERSION}.zip"
+    - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_RELEASE}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_TARGET}_${env:PARSER_VERSION}.zip"
 
     - echo Initializing Build...
     - cd %APPVEYOR_BUILD_FOLDER%
