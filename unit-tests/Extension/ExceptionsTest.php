@@ -189,7 +189,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("I am exception", $t->testMemoryException());
     }
 
-        /**
+    /**
      * @test
      * @issue 1325
      */
@@ -197,6 +197,6 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Exceptions();
 
-        $this->assertSame("I am exception", $t->testMemoryExceptionOnAssignment());
+        $this->assertSame("whoops", $t->testMemoryExceptionOnAssignment());
     }
 }
