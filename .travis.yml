@@ -23,6 +23,8 @@ env:
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
     - ZEPHIR_PARSER_VERSION="v1.0.2"
+    - USE_ZEND_ALLOC=0
+    - ZEND_DONT_UNLOAD_MODULES=1
   matrix:
     - CC="ccache gcc"
     - CC="clang"
@@ -34,10 +36,14 @@ matrix:
   include:
     - env: CC="ccache gcc"
       php: nightly
-      compiler: gcc
     - env: CC="clang"
       php: nightly
-      compiler: clang
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: 5.6
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: 7.0
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: 7.1
 
 cache:
   apt: true
@@ -63,7 +69,7 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full --num-callers=20 --suppressions=unit-tests/ci/zephir.3.7.0.sup $(phpenv which php) ./unit-tests/phpunit -c phpunit.xml.dist --debug unit-tests/
   - $(phpenv which php) unit-tests/microbench.php
 
 after_failure:

@@ -1,0 +1,192 @@
+{
+   phar_compile_file
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:phar_compile_file
+   fun:zend_execute_scripts
+}
+{
+   php_libxml_initialize
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:php_libxml_initialize
+   fun:zm_startup_libxml
+}
+{
+   phar_compile_file
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:phar_compile_file
+}
+{
+   openssl
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zm_startup_openssl
+}
+{
+   php_ini_register_extensions
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:zend_load_extension
+   ...
+   fun:php_ini_register_extensions
+}
+{
+   php_execute_script
+   Memcheck:Leak
+   fun:malloc
+   fun:_emalloc
+   fun:i_init_execute_data
+   fun:zend_execute
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   fun:do_cli
+   fun:main
+}
+{
+   expand_dynamic_string_token
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:expand_dynamic_string_token
+   ...
+   fun:php_load_extension
+}
+{
+   expand_dynamic_string_token
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:expand_dynamic_string_token
+   ...
+   fun:zend_load_extension
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:dlopen*
+   fun:php_load_extension
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:dlopen*
+   fun:zend_load_extension
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:dlopen*
+   fun:php_load_extension
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:dlopen*
+   fun:zend_load_extension
+}
+{
+   php_build_argv
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:php_build_argv
+   fun:php_hash_environment
+   fun:php_request_startup
+}
+{
+   PHPUnit
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_objects_new
+   fun:_object_and_properties_init
+   fun:_object_init_ex
+   fun:ZEND_NEW_SPEC_CONST_HANDLER
+   ...
+   fun:zend_execute
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   fun:do_cli
+   fun:main
+}
+{
+   ZEND_NEW_SPEC_CONST_HANDLER
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_objects_new
+   fun:_object_and_properties_init
+   fun:ZEND_NEW_SPEC_CONST_HANDLER
+}
+{
+   ZEND_NEW_SPEC_VAR_HANDLER
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_objects_new
+   fun:_object_and_properties_init
+   fun:ZEND_NEW_SPEC_VAR_HANDLER
+}
+{
+   ZEND_NEW_SPEC_UNUSED_HANDLER
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_objects_new
+   fun:_object_and_properties_init
+   fun:ZEND_NEW_SPEC_UNUSED_HANDLER
+}
+{
+   persistent_compile_file
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_accel_load_script
+   fun:persistent_compile_file
+}
+{
+   DeprecatedMethodsTest::testPublicMethodThrowsDeprecatedWarning
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:zend_objects_new
+   fun:_object_and_properties_init
+   fun:_object_init_ex
+   fun:ZEND_NEW_SPEC_CONST_HANDLER
+   ...
+   fun:zend_call_function
+   fun:zim_reflection_method_invokeArgs
+   fun:ZEND_DO_FCALL_SPEC_HANDLER
+}
+{
+    Extension\VarsTest::testVarExport
+    Memcheck:Leak
+    fun:malloc
+    ...
+    fun:zend_closure_new
+    fun:_object_and_properties_init
+    fun:zend_create_closure
+    fun:ZEND_DECLARE_LAMBDA_FUNCTION_SPEC_CONST_UNUSED_HANDLER
+}
+{
+   zm_startup_openssl (ZE2)
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:zm_startup_openssl
+}
