@@ -427,6 +427,10 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS
 int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
 {
 	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**) pDest;
+	free(*entry);
+	return ZEND_HASH_APPLY_REMOVE;
+
+#if 0
 	zend_class_entry *scope;
 	uint len = hash_key->nKeyLength;
 
@@ -448,19 +452,23 @@ int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zen
 
 #ifndef ZEPHIR_RELEASE
 	if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+		free(*entry);
 		return ZEND_HASH_APPLY_REMOVE;
 	}
 #else
 	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+		free(*entry);
 		return ZEND_HASH_APPLY_REMOVE;
 	}
 #endif
 
 	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
+		free(*entry);
 		return ZEND_HASH_APPLY_REMOVE;
 	}
 
 	return ZEND_HASH_APPLY_KEEP;
+#endif
 }
 
 /**
@@ -481,6 +489,13 @@ void zephir_deinitialize_memory(TSRMLS_D)
 	}
 
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache TSRMLS_CC, zephir_cleanup_fcache, 0);
+
+	for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
+		zephir_fcall_cache_entry* e = zephir_globals_ptr->scache[i];
+		if (e) {
+			free(e);
+		}
+	}
 
 #ifndef ZEPHIR_RELEASE
 	assert(zephir_globals_ptr->start_memory != NULL);
