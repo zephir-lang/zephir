@@ -17,12 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-error_reporting(-1);
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
-setlocale(LC_ALL, 'en_US.utf-8');
+require __DIR__ . '/../bootstrap.php';
 
 if (extension_loaded('xdebug')) {
     ini_set('xdebug.cli_color', 1);
@@ -33,12 +28,9 @@ if (extension_loaded('xdebug')) {
     ini_set('xdebug.var_display_max_depth', 4);
 }
 
-if (!ini_get('date.timezone')) {
-    ini_set('date.timezone', 'UTC');
-}
-
-clearstatcache();
-
-define('ROOT_PATH', dirname(dirname(__FILE__)));
 define('TESTS_PATH', dirname(__FILE__));
 define('DATA_PATH', dirname(__FILE__) . '/Data');
+
+if (!extension_loaded('phalcon')) {
+    include_once ZEPHIRPATH . 'prototypes/phalcon.php';
+}

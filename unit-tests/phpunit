@@ -18,16 +18,7 @@
  +--------------------------------------------------------------------------+
 */
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require __DIR__ . '/../vendor/autoload.php';
-} else {
-    require __DIR__ . '/../Library/Loader.php';
-    Zephir\Loader::register();
-}
-
-if (!extension_loaded('phalcon')) {
-    include_once __DIR__ . '/../prototypes/phalcon.php';
-}
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 $exit = true;
 if ($index = array_search('--not-exit', $_SERVER['argv'])) {
