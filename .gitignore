@@ -5,14 +5,8 @@
 #
 # https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
 
-parser/lemon
-parser/lemon.exe
 *.dSYM/
 bin/zephir55
-parser/parser.c
-parser/scanner.c
-parser/parser.out
-parser/Release
 composer.lock
 vendor/
 build/
@@ -94,3 +88,9 @@ parser/parser/parser.php5.out
 parser/parser/parser.php7.out
 parser/run-tests.php
 parser/zephir_parser.so
+parser/parser.c
+parser/scanner.c
+parser/parser.out
+parser/Release
+parser/lemon
+parser/lemon.exe
