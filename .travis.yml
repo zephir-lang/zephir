@@ -55,6 +55,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
+  - phpenv config-rm xdebug.ini || true
   - composer --prefer-source install
   - bash unit-tests/ci/install_zephir_parser.sh
   - ./install
