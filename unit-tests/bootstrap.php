@@ -17,15 +17,28 @@
  +--------------------------------------------------------------------------+
 */
 
-error_reporting(E_ALL);
+error_reporting(-1);
 
-define('ZEPHIRPATH', __DIR__ . DIRECTORY_SEPARATOR);
-define('T', "\t");
-define('2T', "\t\t");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require __DIR__ . '/vendor/autoload.php';
-} else {
-    require __DIR__ . '/Library/Loader.php';
-    Zephir\Loader::register();
+setlocale(LC_ALL, 'en_US.utf-8');
+
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.cli_color', 1);
+    ini_set('xdebug.collect_params', 0);
+    ini_set('xdebug.dump_globals', 'on');
+    ini_set('xdebug.show_local_vars', 'on');
+    ini_set('xdebug.max_nesting_level', 100);
+    ini_set('xdebug.var_display_max_depth', 4);
 }
+
+if (!ini_get('date.timezone')) {
+    ini_set('date.timezone', 'UTC');
+}
+
+clearstatcache();
+
+define('ROOT_PATH', dirname(dirname(__FILE__)));
+define('TESTS_PATH', dirname(__FILE__));
+define('DATA_PATH', dirname(__FILE__) . '/Data');

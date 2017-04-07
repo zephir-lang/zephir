@@ -61,7 +61,7 @@ before_script:
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit -c phpunit.xml.dist --debug unit-tests/
+  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full $(phpenv which php) ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
 
 after_failure:
   - ./unit-tests/ci/after_failure.sh

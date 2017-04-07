@@ -19,11 +19,16 @@
 
 namespace Extension;
 
+use Test\Exists;
+
+require DATA_PATH . '/TestExClass.php';
+require DATA_PATH . '/TestExInterface.php';
+
 class ExistsTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
-        $t = new \Test\Exists();
+        $t = new Exists();
 
         $this->assertTrue($t->testClassExists('TestExClass'));
         $this->assertFalse($t->testClassExists('TestExClassx'));
@@ -31,7 +36,8 @@ class ExistsTest extends \PHPUnit_Framework_TestCase
         // with namespace
         $this->assertTrue($t->testClassExists('\\Test\\Exists'));
 
-        $this->assertFalse($t->testInterfaceExists('TestExClass')); // class not interface
+        // class not interface
+        $this->assertFalse($t->testInterfaceExists('TestExClass'));
         $this->assertTrue($t->testInterfaceExists('TestExInterface'));
         $this->assertFalse($t->testInterfaceExists('TestExInterfacex'));
 

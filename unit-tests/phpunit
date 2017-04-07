@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /*
@@ -17,20 +18,31 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . '/../bootstrap.php';
-
-class TestExClass
-{
-}
-
-interface TestExInterface
-{
-}
-
-function TestExFunction()
-{
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require __DIR__ . '/../vendor/autoload.php';
+} else {
+    require __DIR__ . '/../Library/Loader.php';
+    Zephir\Loader::register();
 }
 
 if (!extension_loaded('phalcon')) {
     include_once __DIR__ . '/../prototypes/phalcon.php';
 }
+
+$exit = true;
+if ($index = array_search('--not-exit', $_SERVER['argv'])) {
+    $exit = false;
+    unset($_SERVER['argv'][$index]);
+}
+
+if (!class_exists('PHPUnit_TextUI_Command')) {
+    fwrite(STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+    );
+
+    die(1);
+}
+
+PHPUnit_TextUI_Command::main($exit);
