@@ -273,8 +273,7 @@ class Backend extends BaseBackend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
-        if ($isComplex && $variable->mustInitNull()) {
+        if ($variable->isComplex() && $variable->mustInitNull()) {
             if ($variable->isLocalOnly()) {
                 $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
             } else {
