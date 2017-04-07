@@ -312,6 +312,9 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 			if (cache_slot > 0) {
 #ifndef ZEPHIR_RELEASE
 				zephir_fcall_cache_entry *t;
+				if (zephir_globals_ptr->scache[cache_slot]) {
+					free(zephir_globals_ptr->scache[cache_slot]);
+				}
 #endif
 				*cache_entry = cache_entry_temp;
 				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
