@@ -664,16 +664,6 @@ void ZEND_FASTCALL zephir_ptr_dtor(zval **var)
 }
 
 /**
- * Releases memory for an allocated zval
- */
-void ZEND_FASTCALL zephir_dtor(zval *var)
-{
-	if (!Z_ISREF_P(var)) {
-		zval_dtor(var);
-	}
-}
-
-/**
  * Observes a variable and allocates memory for it
  * Marks hash key zvals to be nulled before freeing
  */
@@ -818,55 +808,4 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value T
 	}
 
 	return SUCCESS;
-}
-
-static inline void zephir_dtor_func(zval *zvalue ZEND_FILE_LINE_DC)
-{
-	switch (Z_TYPE_P(zvalue) & IS_CONSTANT_TYPE_MASK) {
-		case IS_STRING:
-		case IS_CONSTANT:
-			CHECK_ZVAL_STRING_REL(zvalue);
-			STR_FREE_REL(zvalue->value.str.val);
-			break;
-#if PHP_VERSION_ID < 50600
-		case IS_CONSTANT_ARRAY:
-#endif
-		case IS_ARRAY:  {
-				TSRMLS_FETCH();
-				if (zvalue->value.ht && (zvalue->value.ht != &EG(symbol_table))) {
-					/* break possible cycles */
-					Z_TYPE_P(zvalue) = IS_NULL;
-					zend_hash_destroy(zvalue->value.ht);
-					FREE_HASHTABLE(zvalue->value.ht);
-				}
-			}
-			break;
-		case IS_OBJECT:
-			{
-				TSRMLS_FETCH();
-				Z_OBJ_HT_P(zvalue)->del_ref(zvalue TSRMLS_CC);
-			}
-			break;
-		case IS_RESOURCE:
-			{
-				TSRMLS_FETCH();
-				zend_list_delete(zvalue->value.lval);
-			}
-			break;
-		case IS_LONG:
-		case IS_DOUBLE:
-		case IS_BOOL:
-		case IS_NULL:
-		default:
-			return;
-			break;
-	}
-}
-
-void zephir_value_dtor(zval *zvalue ZEND_FILE_LINE_DC)
-{
-	if (zvalue->type <= IS_BOOL) {
-		return;
-	}
-	zephir_dtor_func(zvalue ZEND_FILE_LINE_RELAY_CC);
 }

@@ -29,13 +29,10 @@
 #define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
 
 /* Variable Tracking */
-void zephir_init_nvar(zval **var TSRMLS_DC);
-void zephir_cpy_wrt(zval **dest, zval *var TSRMLS_DC);
-void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC);
-
-void zephir_value_dtor(zval *zvalue ZEND_FILE_LINE_DC);
+/**
+ * @todo Is it safe?
+ */
 void ZEND_FASTCALL zephir_ptr_dtor(zval **var);
-void ZEND_FASTCALL zephir_dtor(zval *var);
 
 /* Memory Frames */
 #ifndef ZEPHIR_RELEASE
@@ -78,19 +75,24 @@ int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zen
 void zephir_deinitialize_memory(TSRMLS_D);
 
 /* Memory macros */
-#define ZEPHIR_ALLOC_ZVAL(z) \
-	ALLOC_INIT_ZVAL(z)
-
 #define ZEPHIR_SINIT_VAR(z) \
-	INIT_PZVAL(&z); \
-	ZVAL_NULL(&z);
+	do {                    \
+		INIT_PZVAL(&z);     \
+		ZVAL_NULL(&z);      \
+	} while (0)
 
-#define ZEPHIR_SINIT_NVAR(z) Z_SET_REFCOUNT_P(&z, 1)
+#define ZEPHIR_SINIT_NVAR(z) \
+	do {                     \
+		zval_dtor(&z);       \
+		INIT_PZVAL(&z);      \
+	} while (0)
 
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
-	ALLOC_ZVAL(z); \
-	Z_SET_REFCOUNT_P(z, 0); \
-	Z_UNSET_ISREF_P(z);
+	do {                         \
+		ALLOC_ZVAL(z);           \
+		Z_SET_REFCOUNT_P(z, 0);  \
+		Z_UNSET_ISREF_P(z);      \
+	} while (0)
 
 #define ZEPHIR_INIT_VAR(z) \
 	zephir_memory_alloc(&z TSRMLS_CC)
@@ -104,7 +106,7 @@ void zephir_deinitialize_memory(TSRMLS_D);
 				Z_SET_REFCOUNT_P(z, 1); \
 				Z_UNSET_ISREF_P(z); \
 			} else { \
-				zephir_dtor(z); \
+				zval_dtor(z); \
 				Z_SET_REFCOUNT_P(z, 1); \
 				Z_UNSET_ISREF_P(z); \
 			} \
@@ -155,7 +157,7 @@ void zephir_deinitialize_memory(TSRMLS_D);
 			Z_UNSET_ISREF_P(z); \
 		} else { \
 			if (!Z_ISREF_P(z)) { \
-				zephir_value_dtor(z ZEND_FILE_LINE_CC); \
+				zval_dtor(z); \
 			} \
 			Z_SET_REFCOUNT_P(z, 1); \
 			Z_UNSET_ISREF_P(z); \
