@@ -177,4 +177,26 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             $this->assertSame(true, false);
         }
     }
+
+    /**
+     * @test
+     * @issue 1325
+     */
+    public function shouldCorrectHandleUseCaseWithExceptionInNestedCall()
+    {
+        $t = new Exceptions();
+
+        $this->assertSame("I am exception", $t->testMemoryException());
+    }
+
+    /**
+     * @test
+     * @issue 1325
+     */
+    public function shouldCorrectHandleUseCaseWithExceptionOnMethodAssignment()
+    {
+        $t = new Exceptions();
+
+        $this->assertSame("whoops", $t->testMemoryExceptionOnAssignment());
+    }
 }
