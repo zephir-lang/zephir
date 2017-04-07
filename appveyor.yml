@@ -97,7 +97,7 @@ build_script:
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'vendor/bin/phpunit -c phpunit.xml.dist --debug'
+    - 'php unit-tests/phpunit -c phpunit.xml.dist --not-exit --debug'
 
 on_failure:
     - 'dir'

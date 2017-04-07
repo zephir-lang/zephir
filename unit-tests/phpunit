@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /*
@@ -17,6 +18,22 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-Zephir\Bootstrap::boot();
+$exit = true;
+if ($index = array_search('--not-exit', $_SERVER['argv'])) {
+    $exit = false;
+    unset($_SERVER['argv'][$index]);
+}
+
+if (!class_exists('PHPUnit_TextUI_Command')) {
+    fwrite(STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+    );
+
+    die(1);
+}
+
+PHPUnit_TextUI_Command::main($exit);

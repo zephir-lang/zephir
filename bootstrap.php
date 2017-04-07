@@ -17,15 +17,29 @@
  +--------------------------------------------------------------------------+
 */
 
-error_reporting(E_ALL);
+error_reporting(-1);
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+setlocale(LC_ALL, 'en_US.utf-8');
+
+set_time_limit(-1);
+
+if (!ini_get('date.timezone')) {
+    ini_set('date.timezone', 'UTC');
+}
+
+clearstatcache();
 
 define('ZEPHIRPATH', __DIR__ . DIRECTORY_SEPARATOR);
+
 define('T', "\t");
 define('2T', "\t\t");
 
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require __DIR__ . '/vendor/autoload.php';
+if (file_exists(ZEPHIRPATH . 'vendor/autoload.php')) {
+    require ZEPHIRPATH . 'vendor/autoload.php';
 } else {
-    require __DIR__ . '/Library/Loader.php';
+    require ZEPHIRPATH . 'Library/Loader.php';
     Zephir\Loader::register();
 }

@@ -17,20 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . '/../bootstrap.php';
-
-class TestExClass
-{
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.cli_color', 1);
+    ini_set('xdebug.collect_params', 0);
+    ini_set('xdebug.dump_globals', 'on');
+    ini_set('xdebug.show_local_vars', 'on');
+    ini_set('xdebug.max_nesting_level', 100);
+    ini_set('xdebug.var_display_max_depth', 4);
 }
 
-interface TestExInterface
-{
-}
-
-function TestExFunction()
-{
-}
+define('TESTS_PATH', dirname(__FILE__));
+define('DATA_PATH', dirname(__FILE__) . '/Data');
 
 if (!extension_loaded('phalcon')) {
-    include_once __DIR__ . '/../prototypes/phalcon.php';
+    include_once ZEPHIRPATH . 'prototypes/phalcon.php';
 }
