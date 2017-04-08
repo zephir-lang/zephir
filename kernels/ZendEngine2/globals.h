@@ -31,6 +31,9 @@ typedef struct _zephir_memory_entry {
 	size_t pointer;
 	size_t capacity;
 	zval ***addresses;
+	size_t alt_pointer;
+	size_t alt_capacity;
+	zval **alt_addresses;
 	size_t hash_pointer;
 	size_t hash_capacity;
 	zval ***hash_addresses;

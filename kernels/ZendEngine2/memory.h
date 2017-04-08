@@ -55,6 +55,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D);
 #endif
 
 void ZEPHIR_FASTCALL zephir_memory_observe(zval **var TSRMLS_DC);
+void ZEPHIR_FASTCALL zephir_memory_observe_alt(zval *var TSRMLS_DC);
 void ZEPHIR_FASTCALL zephir_memory_remove(zval **var TSRMLS_DC);
 void ZEPHIR_FASTCALL zephir_memory_alloc(zval **var TSRMLS_DC);
 void ZEPHIR_FASTCALL zephir_memory_alloc_pnull(zval **var TSRMLS_DC);
