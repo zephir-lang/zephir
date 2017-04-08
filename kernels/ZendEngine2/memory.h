@@ -71,7 +71,6 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value T
 void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS_DC);
-int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key);
 void zephir_deinitialize_memory(TSRMLS_D);
 
 /* Memory macros */

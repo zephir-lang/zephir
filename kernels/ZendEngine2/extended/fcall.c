@@ -155,12 +155,7 @@ int zephir_call_func_aparams_fast(zval **return_value_ptr, zephir_fcall_cache_en
 		memset(&execute_data, 0, sizeof(zend_execute_data));
 	}
 
-#ifndef ZEPHIR_RELEASE
-	function_state->function = (*cache_entry)->f;
-	++(*cache_entry)->times;
-#else
 	function_state->function = *cache_entry;
-#endif
 	func = function_state->function;
 
 	calling_scope = NULL;

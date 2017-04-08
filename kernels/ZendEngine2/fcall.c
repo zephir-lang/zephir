@@ -99,61 +99,6 @@ static inline ulong zephir_update_hash(const char *arKey, uint nKeyLength, ulong
 }
 #endif
 
-static char *zephir_fcall_possible_method(zend_class_entry *ce, const char *wrong_name TSRMLS_DC)
-{
-	HashTable *methods;
-	HashPosition   pos;
-	zend_function *method;
-	char *possible_method = NULL;
-	zval *left = NULL, *right = NULL, method_name;
-	zval *params[1];
-	int count;
-
-	count = zend_hash_num_elements(&ce->function_table);
-	if (count > 0) {
-
-		ZEPHIR_SINIT_VAR(method_name);
-		ZVAL_STRING(&method_name, wrong_name, 0);
-
-		params[0] = &method_name;
-		zephir_call_func_aparams(&right, SL("metaphone"), NULL, 0, 1, params TSRMLS_CC);
-
-		methods = &ce->function_table;
-		zend_hash_internal_pointer_reset_ex(methods, &pos);
-
-		while (zend_hash_get_current_data_ex(methods, (void **) &method, &pos) == SUCCESS) {
-
-			ZEPHIR_SINIT_VAR(method_name);
-			ZVAL_STRING(&method_name, method->common.function_name, 0);
-
-			if (left) {
-				zephir_ptr_dtor(&left);
-			}
-			left = NULL;
-
-			params[0] = &method_name;
-			zephir_call_func_aparams(&left, SL("metaphone"), NULL, 0, 1, params TSRMLS_CC);
-
-			if (zephir_is_equal(left, right TSRMLS_CC)) {
-				possible_method = (char *) method->common.function_name;
-				break;
-			}
-
-			zend_hash_move_forward_ex(methods, &pos);
-		}
-
-		if (left) {
-			zephir_ptr_dtor(&left);
-		}
-
-		if (right) {
-			zephir_ptr_dtor(&right);
-		}
-	}
-
-	return possible_method;
-}
-
 /**
  * Creates a unique key to cache the current method/function call address for the current scope
  */
@@ -538,31 +483,13 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	if (!cache_entry || !*cache_entry) {
 		if (fcall_key && zend_hash_quick_find(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, (void**)&temp_cache_entry) != FAILURE) {
 			zephir_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
-
-#ifndef ZEPHIR_RELEASE
-			fcic.function_handler = (*temp_cache_entry)->f;
-			++(*temp_cache_entry)->times;
-#else
 			fcic.function_handler = *temp_cache_entry;
-#endif
 			/*memcpy(&clone, &fcic, sizeof(clone));*/
 		}
 	} else {
 		zephir_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
-#ifndef ZEPHIR_RELEASE
-		fcic.function_handler = (*cache_entry)->f;
-		++(*cache_entry)->times;
-#else
 		fcic.function_handler = *cache_entry;
-#endif
 	}
-
-	/* Xdebug fix */
-	//if (fcic.function_handler && fcic.function_handler->type == ZEND_INTERNAL_FUNCTION && fcic.function_handler->op_array) {
-	//	fcic.function_handler->op_array.filename = "?";
-	//	fcic.function_handler->op_array.line_start = 0;
-	//	fcic.function_handler->op_array.line_end = 0;
-	//}
 
 	/* fcic.initialized = 0; */
 #if PHP_VERSION_ID >= 50600
@@ -602,32 +529,11 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry && fcic.initialized) {
-#ifndef ZEPHIR_RELEASE
-			zephir_fcall_cache_entry *cache_entry_temp = malloc(sizeof(zephir_fcall_cache_entry));
-			cache_entry_temp->f     = fcic.function_handler;
-			cache_entry_temp->times = 0;
-#else
 			zephir_fcall_cache_entry *cache_entry_temp = fcic.function_handler;
-#endif
-			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &cache_entry_temp, sizeof(zephir_fcall_cache_entry*), NULL)) {
-#ifndef ZEPHIR_RELEASE
-				free(temp_cache_entry);
-#endif
-			} else {
+			if (SUCCESS == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &cache_entry_temp, sizeof(zephir_fcall_cache_entry*), NULL)) {
 				if (cache_entry) {
-#ifndef ZEPHIR_RELEASE
-					zephir_fcall_cache_entry *t = malloc(sizeof(zephir_fcall_cache_entry));
-					t->f     = fcic.function_handler;
-					t->times = 0;
-					cache_entry_temp = t;
-#endif
 					*cache_entry = cache_entry_temp;
 					if (cache_slot > 0) {
-#ifndef ZEPHIR_RELEASE
-						if (zephir_globals_ptr->scache[cache_slot]) {
-							free(zephir_globals_ptr->scache[cache_slot]);
-						}
-#endif
 						zephir_globals_ptr->scache[cache_slot] = *cache_entry;
 					}
 				}
