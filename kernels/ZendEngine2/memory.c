@@ -143,12 +143,6 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g TSRMLS
 				else if (Z_REFCOUNT_PP(var) >= 1000000) {
 					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u), type=%d  [%s]\n", __func__, (int)i, *var, Z_REFCOUNT_PP(var), Z_TYPE_PP(var), active_memory->func);
 				}
-#if 0
-				/* Skip this check, PDO does return variables with is_ref = 1 and refcount = 1*/
-				else if (Z_REFCOUNT_PP(var) == 1 && Z_ISREF_PP(var)) {
-					fprintf(stderr, "%s: observed variable #%d (%p) is a reference with reference count = 1, type=%d  [%s]\n", __func__, (int)i, *var, Z_TYPE_PP(var), active_memory->func);
-				}
-#endif
 			}
 		}
 #endif
@@ -440,19 +434,13 @@ void zephir_deinitialize_memory(TSRMLS_D)
 
 	zend_hash_clean(zephir_globals_ptr->fcache);
 
-//	for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
-//		zend_function* e = zephir_globals_ptr->scache[i];
-//		if (e) {
-//			free(e);
-//		}
-//	}
-
 #ifndef ZEPHIR_RELEASE
 	assert(zephir_globals_ptr->start_memory != NULL);
 #endif
 
 	for (i = 0; i < ZEPHIR_NUM_PREALLOCATED_FRAMES; ++i) {
 		pefree(zephir_globals_ptr->start_memory[i].hash_addresses, 1);
+		pefree(zephir_globals_ptr->start_memory[i].alt_addresses, 1);
 		pefree(zephir_globals_ptr->start_memory[i].addresses, 1);
 	}
 
