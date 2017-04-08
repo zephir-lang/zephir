@@ -77,16 +77,18 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	ZVAL_UNDEF(&z); \
 
 #define ZEPHIR_INIT_NVAR(z) \
-	if (Z_TYPE_P(z) == IS_UNDEF) { \
-		zephir_memory_observe(z); \
-	} else if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
-		if (Z_REFCOUNT_P(z) > 1) { \
-			Z_DELREF_P(z); \
-		} else { \
-			zephir_dtor(z); \
+	do { \
+		if (Z_TYPE_P(z) == IS_UNDEF) { \
+			zephir_memory_observe(z); \
+		} else if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
+			if (Z_REFCOUNT_P(z) > 1) { \
+				Z_DELREF_P(z); \
+			} else { \
+				zephir_dtor(z); \
+			} \
 		} \
-	} \
-	ZVAL_NULL(z); \
+		ZVAL_NULL(z); \
+	} while (0)
 
 /* only removes the value body of the zval */
 #define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(&z)
@@ -141,14 +143,14 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
  */
 #define ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(ppzv) \
 	do { \
-		zval * restrict tmp_ = (ppzv); \
+		zval *tmp_ = (ppzv); \
 		if (tmp_ != NULL) { \
 			if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
 				zephir_ptr_dtor(tmp_); \
-				ZVAL_UNDEF(tmp_); \
 			} else { \
 				zephir_memory_observe(tmp_); \
 			} \
+			ZVAL_NULL(tmp_); \
 		} \
 	} while (0)
 
