@@ -189,7 +189,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 	if (retval_ptr) {
 		zval_ptr_dtor(retval_ptr);
-		ZVAL_UNDEF(retval_ptr);
+		ZVAL_NULL(retval_ptr);
 	}
 
 	++zephir_globals_ptr->recursive_lock;
@@ -354,6 +354,9 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	if (!retval_ptr) {
 		zval_ptr_dtor(&local_retval_ptr);
 	}
+	else if (FAILURE == status || EG(exception)) {
+		ZVAL_NULL(retval_ptr);
+	}
 
 	--zephir_globals_ptr->recursive_lock;
 	return status;
@@ -383,18 +386,8 @@ int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint
 
 	if (status == FAILURE && !EG(exception)) {
 		zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined function %s()", func_name);
-		if (return_value_ptr) {
-			zval_ptr_dtor(return_value_ptr);
-			ZVAL_UNDEF(return_value_ptr);
-		}
-	} else {
-		if (EG(exception)) {
-			status = FAILURE;
-			if (return_value_ptr) {
-				zval_ptr_dtor(return_value_ptr);
-				ZVAL_UNDEF(return_value_ptr);
-			}
-		}
+	} else if (EG(exception)) {
+		status = FAILURE;
 	}
 
 	if (!return_value_ptr) {
@@ -425,18 +418,8 @@ int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
 
 	if (status == FAILURE && !EG(exception)) {
 		zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
-		if (return_value_ptr) {
-			zval_ptr_dtor(return_value_ptr);
-			ZVAL_NULL(return_value_ptr);
-		}
-	} else {
-		if (EG(exception)) {
-			status = FAILURE;
-			if (return_value_ptr) {
-				zval_ptr_dtor(return_value_ptr);
-				ZVAL_NULL(return_value_ptr);
-			}
-		}
+	} else if (EG(exception)) {
+		status = FAILURE;
 	}
 
 	if (!return_value_ptr) {
@@ -468,8 +451,7 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 		if (Z_TYPE_P(object) != IS_OBJECT) {
 			zephir_throw_exception_format(spl_ce_RuntimeException, "Trying to call method %s on a non-object", method_name);
 			if (return_value_ptr) {
-				zval_ptr_dtor(return_value_ptr);
-				ZVAL_UNDEF(return_value_ptr);
+				ZVAL_NULL(return_value_ptr);
 			}
 			return FAILURE;
 		}
@@ -534,19 +516,8 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 			default:
 				zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined method ?::%s()", method_name);
 		}
-
-		if (return_value_ptr) {
-			zval_ptr_dtor(return_value_ptr);
-			ZVAL_UNDEF(return_value_ptr);
-		}
-	} else {
-		if (EG(exception)) {
-			status = FAILURE;
-			if (return_value_ptr) {
-				zval_ptr_dtor(return_value_ptr);
-				ZVAL_UNDEF(return_value_ptr);
-			}
-		}
+	} else if (EG(exception)) {
+		status = FAILURE;
 	}
 
 	if (!return_value_ptr) {

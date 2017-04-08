@@ -177,4 +177,11 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             $this->assertSame(true, false);
         }
     }
+
+    public function testIssue1325()
+    {
+        $t   = new Exceptions();
+        $res = $t->issue1325();
+        $this->assertSame(1, $res);
+    }
 }
