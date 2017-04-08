@@ -36,4 +36,7 @@ if (!class_exists('PHPUnit_TextUI_Command')) {
     die(1);
 }
 
-PHPUnit_TextUI_Command::main($exit);
+$res = PHPUnit_TextUI_Command::main($exit);
+if ($res) {
+    exit($res);
+}
