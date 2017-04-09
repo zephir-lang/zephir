@@ -101,14 +101,18 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 		/* Clean active symbol table */
 		if (g->active_symbol_table) {
 			active_symbol_table = g->active_symbol_table;
-			if (active_symbol_table->scope == active_memory) {
+			while (active_symbol_table && active_symbol_table->scope == active_memory) {
 				zend_execute_data *ex = EG(current_execute_data);
-				//zend_hash_destroy(EG(current_execute_data)->symbol_table);
-				//FREE_HASHTABLE(EG(current_execute_data)->symbol_table);
-				//EG(current_execute_data)->symbol_table = active_symbol_table->symbol_table;
+
+				zend_hash_destroy(ex->symbol_table);
+				efree(ex->symbol_table);
 				ex->symbol_table = active_symbol_table->symbol_table;
+				zend_attach_symbol_table(ex);
+				zend_rebuild_symbol_table();
+
 				g->active_symbol_table = active_symbol_table->prev;
 				efree(active_symbol_table);
+				active_symbol_table = g->active_symbol_table;
 			}
 		}
 
@@ -144,12 +148,6 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u), type=%d  [%s]\n", __func__, (int)i, var, Z_REFCOUNT_P(var), Z_TYPE_P(var), active_memory->func);
 					show_backtrace = 1;
 				}
-#if 0
-				/* Skip this check, PDO does return variables with is_ref = 1 and refcount = 1*/
-				else if (Z_REFCOUNT_PP(var) == 1 && Z_ISREF_PP(var)) {
-					fprintf(stderr, "%s: observed variable #%d (%p) is a reference with reference count = 1, type=%d  [%s]\n", __func__, (int)i, *var, Z_TYPE_PP(var), active_memory->func);
-				}
-#endif
 			}
 		}
 #endif
@@ -377,33 +375,37 @@ void zephir_deinitialize_memory()
 }
 
 /**
- * Creates virtual symbol tables dynamically
+ * Creates a virtual symbol tables dynamically
  */
 void zephir_create_symbol_table()
 {
-	/*zephir_symbol_table *entry;
-	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zephir_symbol_table *entry;
+	zend_zephir_globals_def *gptr = ZEPHIR_VGLOBAL;
 	zend_execute_data *ex = EG(current_execute_data);
 	zend_array *symbol_table;
 
 #ifndef ZEPHIR_RELEASE
-	if (!zephir_globals_ptr->active_memory) {
+	if (!gptr->active_memory) {
 		fprintf(stderr, "ERROR: Trying to create a virtual symbol table without a memory frame");
 		zephir_print_backtrace();
 		return;
 	}
 #endif
 
-	entry = (zephir_symbol_table *) emalloc(sizeof(zephir_symbol_table));
-	entry->scope = zephir_globals_ptr->active_memory;
-	entry->symbol_table = ex->symbol_table;
-	entry->prev = zephir_globals_ptr->active_symbol_table;
-	zephir_globals_ptr->active_symbol_table = entry;
+	zend_rebuild_symbol_table();
+	zend_detach_symbol_table(ex);
 
-	symbol_table = (zend_array *) emalloc(sizeof(zend_array *));
+	entry               = (zephir_symbol_table*)emalloc(sizeof(zephir_symbol_table));
+	entry->scope        = gptr->active_memory;
+	entry->symbol_table = ex->symbol_table;
+	entry->prev         = gptr->active_symbol_table;
+
+	symbol_table = (zend_array*)emalloc(sizeof(zend_array *));
 	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
 	zend_hash_real_init(symbol_table, 0);
-	ex->symbol_table = symbol_table;*/
+
+	ex->symbol_table          = symbol_table;
+	gptr->active_symbol_table = entry;
 }
 
 /**
@@ -432,9 +434,8 @@ int zephir_set_symbol(zval *key_name, zval *value)
  */
 int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
 {
-	zend_array *symbol_table;
+	zend_array *symbol_table = zend_rebuild_symbol_table();
 
-	symbol_table = zend_rebuild_symbol_table();
 	if (!symbol_table) {
 		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
 		return FAILURE;
