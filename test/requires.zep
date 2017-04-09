@@ -22,10 +22,7 @@ class Requires
 	{
 		var external3;
 
-		if PHP_MAJOR_VERSION == 5 {
-			create_symbol_table();
-		}
-
+		create_symbol_table();
 		let external3 = new External3();
 		external3->req(path, this);
 		return this->content;
