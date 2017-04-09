@@ -308,23 +308,32 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		zephir_fcall_cache_entry *cache_entry_temp = fcic.function_handler;
 #endif
 
-		if (zephir_globals_ptr->cache_enabled) {
-			/** TODO: maybe construct zend_string (we do have a valid fcall_key) to avoid hash recalculation */
-			if (NULL == zend_hash_str_add_ptr(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, cache_entry_temp)) {
-				add_failed = 1;
+		if (cache_entry) {
+			if (cache_slot > 0) {
+#ifndef ZEPHIR_RELEASE
+				zephir_fcall_cache_entry *t;
+				if (zephir_globals_ptr->scache[cache_slot]) {
+					free(zephir_globals_ptr->scache[cache_slot]);
+				}
+#endif
+				*cache_entry = cache_entry_temp;
+				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
+#ifndef ZEPHIR_RELEASE
+				t = malloc(sizeof(zephir_fcall_cache_entry));
+				t->f     = fcic.function_handler;
+				t->times = 0;
+				cache_entry_temp = t;
+#endif
 			}
 		}
 
-		if (cache_entry) {
-			if (cache_slot > 0) {
-				*cache_entry = cache_entry_temp;
-				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
-			}
-		}
-		else if (add_failed) {
+		if (zephir_globals_ptr->cache_enabled) {
+			/** TODO: maybe construct zend_string (we do have a valid fcall_key) to avoid hash recalculation */
+			if (NULL == zend_hash_str_add_ptr(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, cache_entry_temp)) {
 #ifndef ZEPHIR_RELEASE
-			free(cache_entry_temp);
+				free(cache_entry_temp);
 #endif
+			}
 		}
 	}
 

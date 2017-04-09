@@ -1085,6 +1085,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	if (matches) {
 		zval *php_matches = &tmp_matches;
 
+		zval_dtor(matches);
 		ZVAL_DEREF(php_matches);
 		ZVAL_COPY(matches, php_matches);
 	}

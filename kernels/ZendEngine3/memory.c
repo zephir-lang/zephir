@@ -344,6 +344,13 @@ void zephir_deinitialize_memory()
 
 #ifndef ZEPHIR_RELEASE
 	{
+		size_t i;
+		for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
+			zephir_fcall_cache_entry* e = zephir_globals_ptr->scache[i];
+			if (e) {
+				free(e);
+			}
+		}
 		zephir_fcall_cache_entry *cache_entry_temp = NULL;
 		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
 			free(cache_entry_temp);
