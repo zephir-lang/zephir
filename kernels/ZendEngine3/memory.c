@@ -400,7 +400,7 @@ void zephir_create_symbol_table()
 	entry->symbol_table = ex->symbol_table;
 	entry->prev         = gptr->active_symbol_table;
 
-	symbol_table = (zend_array*)emalloc(sizeof(zend_array *));
+	symbol_table = (zend_array*)emalloc(sizeof(zend_array));
 	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
 	zend_hash_real_init(symbol_table, 0);
 
