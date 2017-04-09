@@ -152,7 +152,7 @@ class Backend extends BackendZendEngine2
             return;
         }
         if (!$method->isInternal()) {
-            return "ZEPHIR_INIT_THIS();\n"; //TODO: think about a better way to solve this.
+            return "zval *this_ptr = getThis();\n"; //TODO: think about a better way to solve this.
         }
     }
 

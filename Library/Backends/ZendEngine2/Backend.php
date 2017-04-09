@@ -1122,9 +1122,9 @@ class Backend extends BaseBackend
         $value = $this->resolveValue($value, $context);
         if ($symbolVariable->getName() == 'this_ptr') {
             if ($propertyName instanceof Variable) {
-                $context->codePrinter->output('zephir_update_property_zval_zval(this_ptr, ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
+                $context->codePrinter->output('zephir_update_property_zval_zval(getThis(), ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
             } else {
-                $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+                $context->codePrinter->output('zephir_update_property_this(getThis(), SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
             }
         } else {
             if ($propertyName instanceof Variable) {

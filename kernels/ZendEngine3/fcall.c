@@ -89,11 +89,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		}
 	}
 	else if (type == zephir_fcall_static) {
-#if PHP_VERSION_ID >= 70100
 		calling_scope = zend_get_called_scope(EG(current_execute_data));
-#else
-		calling_scope = EG(current_execute_data)->called_scope;
-#endif
 		if (UNEXPECTED(!calling_scope)) {
 			return 0;
 		}
@@ -179,11 +175,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	zephir_fcall_cache_entry *temp_cache_entry = NULL;
 	int reload_cache = 1, i;
 
-#if PHP_VERSION_ID < 70100
-	zend_class_entry *old_scope;
-	old_scope = EG(scope);
-#endif
-
 	assert(obj_ce || !object_pp);
 	ZVAL_UNDEF(&local_retval_ptr);
 
@@ -197,12 +188,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	if (UNEXPECTED(zephir_globals_ptr->recursive_lock > 2048)) {
 		zend_error(E_ERROR, "Maximum recursion depth exceeded");
 		return FAILURE;
-	}
-
-	if (obj_ce) {
-#if PHP_VERSION_ID < 70100
-		EG(scope) = obj_ce;
-#endif
 	}
 
 	if ((!cache_entry || !*cache_entry) && zephir_globals_ptr->cache_enabled) {
@@ -307,10 +292,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 #ifdef _MSC_VER
 	efree(p);
-#endif
-
-#if PHP_VERSION_ID < 70100
-	EG(scope) = old_scope;
 #endif
 
 	/* Skip caching IF:

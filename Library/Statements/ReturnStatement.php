@@ -70,7 +70,7 @@ class ReturnStatement extends StatementAbstract
                             }
 
                             $compilationContext->headersManager->add('kernel/object');
-                            $codePrinter->output('RETURN_MM_MEMBER(this_ptr, "' . $property . '");');
+                            $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
                             return;
                         }
                     }
