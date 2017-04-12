@@ -1117,7 +1117,7 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 /**
  * Creates a new instance dynamically calling constructor with parameters
  */
-int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params)
+int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params)
 {
 	zend_class_entry *ce;
 

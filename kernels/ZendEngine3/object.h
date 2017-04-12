@@ -80,7 +80,7 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 
 /** Create instances */
 int zephir_create_instance(zval *return_value, const zval *class_name);
-int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params);
+int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params);
 
 /** Increment/Decrement properties */
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
