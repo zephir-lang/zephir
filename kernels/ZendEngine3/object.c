@@ -1080,8 +1080,35 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 	}
 
 	object_init_ex(return_value, ce);
-	if (zephir_has_constructor_ce(ce)) {
-		return zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, 0, NULL);
+	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
+		zend_object* obj    = Z_OBJ_P(return_value);
+		zend_function* ctor = Z_OBJ_HT_P(return_value)->get_constructor(obj);
+		if (ctor) {
+			zend_fcall_info fci;
+			zend_fcall_info_cache fcc;
+
+			zend_class_entry* ce = Z_OBJCE_P(return_value);
+
+			fci.size             = sizeof(fci);
+#if PHP_VERSION_ID < 70100
+			fci.function_table   = &ce->function_table;
+			fci.symbol_table     = NULL;
+#endif
+			fci.object           = obj;
+			fci.retval           = 0;
+			fci.param_count      = 0;
+			fci.params           = 0;
+			fci.no_separation    = 1;
+			ZVAL_NULL(&fci.function_name);
+
+			fcc.initialized      = 1;
+			fcc.object           = obj;
+			fcc.called_scope     = ce;
+			fcc.calling_scope    = ce;
+			fcc.function_handler = ctor;
+
+			return zend_fcall_info_call(&fci, &fcc, NULL, NULL);
+		}
 	}
 
 	return SUCCESS;
@@ -1092,7 +1119,6 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
  */
 int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params)
 {
-	int outcome;
 	zend_class_entry *ce;
 
 	if (Z_TYPE_P(class_name) != IS_STRING) {
@@ -1112,39 +1138,41 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, co
 	}
 
 	object_init_ex(return_value, ce);
-	outcome = SUCCESS;
 
-	if (zephir_has_constructor_ce(ce)) {
+	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
+		zend_object* obj    = Z_OBJ_P(return_value);
+		zend_function* ctor = Z_OBJ_HT_P(return_value)->get_constructor(obj);
+		if (ctor) {
+			int status;
+			zend_fcall_info fci;
+			zend_fcall_info_cache fcc;
 
-		int param_count = zend_hash_num_elements(Z_ARRVAL_P(params));
-		zval *static_params[10];
-		zval **params_ptr, **params_arr = NULL;
+			zend_class_entry* ce = Z_OBJCE_P(return_value);
 
-		if (param_count > 0) {
-			zval *item;
-			int i = 0;
+			fci.size             = sizeof(fci);
+#if PHP_VERSION_ID < 70100
+			fci.function_table   = &ce->function_table;
+			fci.symbol_table     = NULL;
+#endif
+			fci.object           = obj;
+			fci.retval           = 0;
+			fci.param_count      = 0;
+			fci.params           = 0;
+			fci.no_separation    = 1;
+			ZVAL_NULL(&fci.function_name);
 
-			if (EXPECTED(param_count <= 10)) {
-				params_ptr = static_params;
-			} else {
-				params_arr = emalloc(param_count * sizeof(zval*));
-				params_ptr = params_arr;
-			}
+			fcc.initialized      = 1;
+			fcc.object           = obj;
+			fcc.called_scope     = ce;
+			fcc.calling_scope    = ce;
+			fcc.function_handler = ctor;
 
-			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(params), item) {
-				params_ptr[i++] = item;
-			} ZEND_HASH_FOREACH_END();
-
-		} else {
-			params_ptr = NULL;
-		}
-
-		outcome = zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, param_count, params_ptr);
-
-		if (UNEXPECTED(params_arr != NULL)) {
-			efree(params_arr);
+			zend_fcall_info_args_ex(&fci, fcc.function_handler, params);
+			status = zend_fcall_info_call(&fci, &fcc, NULL, NULL);
+			zend_fcall_info_args_clear(&fci, 1);
+			return status;
 		}
 	}
 
-	return outcome;
+	return SUCCESS;
 }
