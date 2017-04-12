@@ -75,11 +75,11 @@ class Backend extends BaseBackend
         $pointer = null;
         switch ($type) {
             case 'int':
-                $code = 'int';
+                $code = 'zend_long';
                 break;
 
             case 'uint':
-                $code = 'unsigned int';
+                $code = 'zend_ulong';
                 break;
 
             case 'char':
