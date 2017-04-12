@@ -205,4 +205,33 @@ class Utils
     {
         return 'darwin' === strtolower(substr(PHP_OS, 0, 6));
     }
+
+    /**
+     * Remove $dir recursively
+     *
+     * @param string $dir
+     */
+    public static function recursiveRmDir($dir)
+    {
+        try {
+            $it = new \RecursiveDirectoryIterator(
+                $dir,
+                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS
+            );
+
+            $items = iterator_to_array(
+                new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST)
+            );
+
+            foreach ($items as $item) {
+                if ($item->isFile()) {
+                    unlink($item->getRealPath());
+                } elseif ($item->isDir()) {
+                    rmdir($item->getRealPath());
+                }
+            }
+        } catch (\UnexpectedValueException $e) {
+            // Ignore
+        }
+    }
 }
