@@ -35,14 +35,15 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
-int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce)
+int zephir_instance_of_ev(zval *object, const zend_class_entry *ce)
 {
-	if (Z_TYPE_P(object) != IS_OBJECT) {
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
+	if (Z_TYPE_P(z) != IS_OBJECT) {
 		php_error_docref(NULL, E_WARNING, "instanceof expects an object instance");
 		return 0;
 	}
 
-	return instanceof_function(Z_OBJCE_P(object), ce);
+	return instanceof_function(Z_OBJCE_P(z), ce);
 }
 
 /**
@@ -51,10 +52,11 @@ int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce)
 int zephir_is_instance_of(zval *object, const char *class_name, unsigned int class_length)
 {
 	zend_class_entry *ce, *temp_ce;
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
+	if (Z_TYPE_P(z) == IS_OBJECT) {
 
-		ce = Z_OBJCE_P(object);
+		ce = Z_OBJCE_P(z);
 		if (ZSTR_LEN(ce->name) == class_length) {
 			if (!zend_binary_strcasecmp(ZSTR_VAL(ce->name), ZSTR_LEN(ce->name), class_name, class_length)) {
 				return 1;
@@ -74,9 +76,10 @@ int zephir_zval_is_traversable(zval *object)
 {
 	zend_class_entry *ce;
 	zend_uint i;
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		ce = Z_OBJCE_P(object);
+	if (Z_TYPE_P(z) == IS_OBJECT) {
+		ce = Z_OBJCE_P(z);
 
 		if (ce->get_iterator || (ce->parent && ce->parent->get_iterator)) {
 			return 1;
@@ -134,14 +137,15 @@ zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t lengt
 /**
  * Fetches a zend class entry from a zval value
  */
-zend_class_entry *zephir_fetch_class(const zval *class_name)
+zend_class_entry *zephir_fetch_class(zval *class_name)
 {
-	if (Z_TYPE_P(class_name) == IS_STRING) {
-		return zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_DEFAULT);
+	zval *z = Z_ISREF_P(class_name) ? Z_REFVAL_P(class_name) : class_name;
+	if (Z_TYPE_P(z) == IS_STRING) {
+		return zend_fetch_class(Z_STR_P(z), ZEND_FETCH_CLASS_DEFAULT);
 	}
 
 	php_error_docref(NULL, E_WARNING, "class name must be a string");
-	return zephir_fetch_class_str_ex(SL("stdclass"), ZEND_FETCH_CLASS_DEFAULT);
+	return zend_standard_class_def;
 }
 
 /**
@@ -151,10 +155,11 @@ void zephir_get_class(zval *result, zval *object, int lower)
 {
 	zend_class_entry *ce;
 	zend_string *class_name;
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
+	if (Z_TYPE_P(z) == IS_OBJECT) {
 
-		ce = Z_OBJCE_P(object);
+		ce = Z_OBJCE_P(z);
 		//zval_ptr_dtor(result);
 		class_name = zend_string_init(ZSTR_VAL(ce->name), ZSTR_LEN(ce->name), 0);
 		ZVAL_STR(result, class_name);
@@ -175,25 +180,24 @@ void zephir_get_class(zval *result, zval *object, int lower)
 void zephir_get_class_ns(zval *result, zval *object, int lower)
 {
 	int found = 0;
-	zend_class_entry *ce;
 	unsigned int i, class_length;
 	char *cursor, *class_name;
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
 
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		if (Z_TYPE_P(object) != IS_STRING) {
+	if (Z_TYPE_P(z) != IS_OBJECT) {
+		if (Z_TYPE_P(z) != IS_STRING) {
 			ZVAL_NULL(result);
 			php_error_docref(NULL, E_WARNING, "zephir_get_class_ns expects an object");
 			return;
 		}
-	}
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		ce = Z_OBJCE_P(object);
-		class_name = ZSTR_VAL(ce->name);
+		class_name   = Z_STRVAL_P(z);
+		class_length = Z_STRLEN_P(z);
+	}
+	else {
+		zend_class_entry *ce = Z_OBJCE_P(z);
+		class_name   = ZSTR_VAL(ce->name);
 		class_length = ZSTR_LEN(ce->name);
-	} else {
-		class_name = Z_STRVAL_P(object);
-		class_length = Z_STRLEN_P(object);
 	}
 
 	if (!class_length) {
@@ -235,30 +239,29 @@ void zephir_get_class_ns(zval *result, zval *object, int lower)
  */
 void zephir_get_ns_class(zval *result, zval *object, int lower)
 {
-	zend_class_entry *ce;
 	int found = 0;
 	unsigned int i, j, class_length;
 	char *cursor, *class_name;
+	zval *z = Z_ISREF_P(object) ? Z_REFVAL_P(object) : object;
 
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		if (Z_TYPE_P(object) != IS_STRING) {
+	ZVAL_NULL(result);
+
+	if (Z_TYPE_P(z) != IS_OBJECT) {
+		if (Z_TYPE_P(z) != IS_STRING) {
 			php_error_docref(NULL, E_WARNING, "zephir_get_ns_class expects an object");
-			ZVAL_NULL(result);
 			return;
 		}
-	}
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		ce = Z_OBJCE_P(object);
-		class_name = ZSTR_VAL(ce->name);
+		class_name   = Z_STRVAL_P(z);
+		class_length = Z_STRLEN_P(z);
+	}
+	else {
+		zend_class_entry *ce = Z_OBJCE_P(z);
+		class_name   = ZSTR_VAL(ce->name);
 		class_length = ZSTR_LEN(ce->name);
-	} else {
-		class_name = Z_STRVAL_P(object);
-		class_length = Z_STRLEN_P(object);
 	}
 
 	if (!class_length) {
-		ZVAL_NULL(result);
 		return;
 	}
 
@@ -292,22 +295,20 @@ void zephir_get_ns_class(zval *result, zval *object, int lower)
 		if (lower) {
 			zend_str_tolower(Z_STRVAL_P(result), Z_STRLEN_P(result));
 		}
-	} else {
-		ZVAL_NULL(result);
 	}
-
 }
 
 /**
  * Checks if a class exist
  */
-int zephir_class_exists(const zval *class_name, int autoload)
+int zephir_class_exists(zval *class_name, int autoload)
 {
 	zend_class_entry *ce;
+	zval *z = Z_ISREF_P(class_name) ? Z_REFVAL_P(class_name) : class_name;
 
-	if (Z_TYPE_P(class_name) == IS_STRING) {
-		if ((ce = zend_lookup_class_ex(Z_STR_P(class_name), NULL, autoload)) != NULL) {
-			return (ce->ce_flags & (ZEND_ACC_INTERFACE | (ZEND_ACC_TRAIT - ZEND_ACC_EXPLICIT_ABSTRACT_CLASS))) == 0;
+	if (Z_TYPE_P(z) == IS_STRING) {
+		if ((ce = zend_lookup_class_ex(Z_STR_P(z), NULL, autoload)) != NULL) {
+			return (ce->ce_flags & (ZEND_ACC_INTERFACE | (ZEND_ACC_INTERFACE | ZEND_ACC_TRAIT))) == 0;
 		}
 		return 0;
 	}
@@ -319,12 +320,13 @@ int zephir_class_exists(const zval *class_name, int autoload)
 /**
  * Checks if a interface exist
  */
-int zephir_interface_exists(const zval *class_name, int autoload)
+int zephir_interface_exists(zval *class_name, int autoload)
 {
 	zend_class_entry *ce;
+	zval *z = Z_ISREF_P(class_name) ? Z_REFVAL_P(class_name) : class_name;
 
-	if (Z_TYPE_P(class_name) == IS_STRING) {
-		if ((ce = zend_lookup_class(Z_STR_P(class_name))) != NULL) {
+	if (Z_TYPE_P(z) == IS_STRING) {
+		if ((ce = zend_lookup_class(Z_STR_P(z))) != NULL) {
 			return ((ce->ce_flags & ZEND_ACC_INTERFACE) > 0);
 		}
 		return 0;
@@ -845,31 +847,48 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 	return SUCCESS;
 }
 
-int zephir_method_exists_ex(const zval *object, const char *method_name, unsigned int method_len)
+int zephir_method_exists_ex(zval *object, const char *method_name, unsigned int method_len)
 {
 	zend_class_entry *ce;
+	union _zend_function *func = NULL;
+	zend_string *method;
 
 	if (EXPECTED(Z_TYPE_P(object) == IS_OBJECT)) {
 		ce = Z_OBJCE_P(object);
+	} else if (Z_TYPE_P(object) == IS_STRING) {
+		ce = zend_fetch_class(Z_STR_P(object), ZEND_FETCH_CLASS_DEFAULT);
 	} else {
-		if (Z_TYPE_P(object) == IS_STRING) {
-			ce = zend_fetch_class(Z_STR_P(object), ZEND_FETCH_CLASS_DEFAULT);
-		} else {
-			return FAILURE;
-		}
+		return FAILURE;
 	}
 
-	while (ce) {
-		if (zend_hash_str_exists(&ce->function_table, method_name, method_len)) {
-			return SUCCESS;
-		}
-		ce = ce->parent;
+	if (zend_hash_str_exists(&ce->function_table, method_name, method_len)) {
+		return SUCCESS;
 	}
 
+	method = zend_string_init(method_name, method_len, 0);
+	if (
+		   Z_TYPE_P(object) == IS_OBJECT
+		&& Z_OBJ_HT_P(object)->get_method
+		&& (func = Z_OBJ_HT_P(object)->get_method(&Z_OBJ_P(object), method, NULL))
+	) {
+		if (func->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE) {
+			int status = (func->common.scope == zend_ce_closure && zend_string_equals_literal(method, ZEND_INVOKE_FUNC_NAME));
+
+			zend_string_release(method);
+			zend_string_release(func->common.function_name);
+			zend_free_trampoline(func);
+			return status ? SUCCESS : FAILURE;
+		}
+
+		zend_string_release(method);
+		return SUCCESS;
+	}
+
+	zend_string_release(method);
 	return FAILURE;
 }
 
-int zephir_method_exists(const zval *object, const zval *method_name)
+int zephir_method_exists(zval *object, const zval *method_name)
 {
 	if (Z_TYPE_P(method_name) != IS_STRING) {
 		zend_error(E_WARNING, "method_exists expected a string");
@@ -899,92 +918,10 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 	return FAILURE;
 }
 
-static zval *zephir_std_get_static_property(zend_class_entry *ce, const char *property_name, int property_name_len, zend_bool silent, zend_property_info **param_property_info)
-{
-	zend_property_info *property_info;
-	zval *ret;
-
-	if (param_property_info == NULL)
-	{
-		property_info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_name_len);
-		if (UNEXPECTED(property_info == NULL)) {
-			goto undeclared_property;
-		}
-
-		/*if (UNEXPECTED(!zend_verify_property_access(property_info, ce))) {
-			if (!silent) {
-				zend_throw_error(NULL, "Cannot access %s property %s::$%s", zend_visibility_string(property_info->flags), ZSTR_VAL(ce->name), property_name);
-			}
-			return NULL;
-		}*/
-
-		if (UNEXPECTED((property_info->flags & ZEND_ACC_STATIC) == 0)) {
-			goto undeclared_property;
-		}
-
-		if (UNEXPECTED(!(ce->ce_flags & ZEND_ACC_CONSTANTS_UPDATED))) {
-			if (UNEXPECTED(zend_update_class_constants(ce)) != SUCCESS) {
-				return NULL;
-			}
-		}
-		ret = CE_STATIC_MEMBERS(ce) + property_info->offset;
-
-		if (param_property_info) {
-			*param_property_info = property_info;
-		}
-	} else {
-		property_info = *param_property_info;
-	}
-
-	/* check if static properties were destoyed */
-	if (UNEXPECTED(CE_STATIC_MEMBERS(ce) == NULL)) {
-undeclared_property:
-		if (!silent) {
-			zend_throw_error(NULL, "Access to undeclared static property: %s::$%s", ZSTR_VAL(ce->name), property_name);
-		}
-		ret = NULL;
-	}
-
-	return ret;
-}
-
-static int zephir_update_static_property_ex(zend_class_entry *scope, const char *name, int name_length, zval *value, zend_property_info **property_info)
-{
-	zval garbage;
-	zval *property;
-	zend_class_entry *old_scope;
-
-#if PHP_VERSION_ID >= 70100
-	old_scope = EG(fake_scope);
-	EG(fake_scope) = scope;
-#else
-	old_scope = EG(scope);
-	EG(scope) = scope;
-#endif
-	property = zephir_std_get_static_property(scope, name, name_length, 0, property_info);
-#if PHP_VERSION_ID >= 70100
-	EG(fake_scope) = old_scope;
-#else
-	EG(scope) = old_scope;
-#endif
-
-	if (!property) {
-		return FAILURE;
-	} else {
-		ZVAL_COPY_VALUE(&garbage, property);
-		if (Z_ISREF_P(value)) {
-			SEPARATE_ZVAL(value);
-		}
-		ZVAL_COPY(property, value);
-		zval_ptr_dtor(&garbage);
-		return SUCCESS;
-	}
-}
-
 int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value)
 {
 	assert(ce != NULL);
-	return zephir_update_static_property_ex(ce, name, len, value, NULL);
+	return zend_update_static_property(ce, name, len, value);
 }
 
 /*
