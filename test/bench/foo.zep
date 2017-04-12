@@ -138,15 +138,14 @@ class Foo
 		}
 	}
 
-    static public function staticMethod() -> void
-    {
+	static public function staticMethod() -> void
+	{
+	}
 
-    }
-
-    static public function staticMethod1() -> boolean
-    {
-        return true;
-    }
+	static public function staticMethod1() -> boolean
+	{
+		return true;
+	}
 
 	public function scall(var n)
 	{
