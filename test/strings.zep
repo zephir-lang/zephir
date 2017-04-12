@@ -160,4 +160,13 @@ class Strings
 		}
 		return ret;
 	}
+
+	public function issue1267(value)
+	{
+		var x;
+		let value = str_replace(["\\", "\"", "'"], "", value);
+		let value = filter_var(value, FILTER_SANITIZE_STRING);
+		let x = trim(stripslashes(strip_tags(value)));
+		return trim(stripcslashes(strip_tags(value)));
+	}
 }
