@@ -1209,9 +1209,9 @@ class Compiler
 
         $currentDir = getcwd();
         exec(
-            '(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' .
-            $currentDir . '/compile-errors.log 1>>' .
-            $currentDir . '/compile.log)',
+            '(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ' .
+            'make 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log" && ' .
+            'sudo make install 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log")',
             $output,
             $exit
         );
@@ -1260,7 +1260,12 @@ class Compiler
      */
     public function clean(CommandInterface $command)
     {
-        system('cd ext && make clean 1> /dev/null');
+        $this->fileSystem->clean();
+        if (Utils::isWindows()) {
+            system('cd ext && nmake clean-all');
+        } else {
+            system('cd ext && make clean > /dev/null');
+        }
     }
 
     /**
@@ -1271,9 +1276,15 @@ class Compiler
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        system('cd ext && sudo make clean 1> /dev/null');
-        system('cd ext && sudo phpize --clean 1> /dev/null');
-        system('cd ext && sudo ./clean 1> /dev/null');
+        if (Utils::isWindows()) {
+            system('cd ext && nmake clean-all');
+            system('cd ext && phpize --clean');
+            system('cd ext && ./clean');
+        } else {
+            system('cd ext && make clean > /dev/null');
+            system('cd ext && phpize --clean > /dev/null');
+            system('cd ext && ./clean > /dev/null');
+        }
     }
 
     /**
