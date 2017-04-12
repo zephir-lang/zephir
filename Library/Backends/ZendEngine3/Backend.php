@@ -616,7 +616,7 @@ class Backend extends BackendZendEngine2
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
     {
         $value = $this->resolveValue($value, $context);
-        $context->codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $value . ');');
+        $context->codePrinter->output('zend_update_static_property(' . $classEntry .', ZEND_STRL("' . $property . '"), ' . $value . ');');
     }
 
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)

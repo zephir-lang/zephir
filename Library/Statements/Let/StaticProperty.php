@@ -154,7 +154,7 @@ class StaticProperty
                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
                 }
 
-                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &' . $tempVariable->getName() . ' TSRMLS_CC);');
+                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                 break;
 
             case 'bool':
