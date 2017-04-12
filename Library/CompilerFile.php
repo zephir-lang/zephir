@@ -415,6 +415,16 @@ class CompilerFile implements FileInterface
                                         'char'  => $property['char']
                                     )
                                 )
+                            ),
+                            array(
+                                'type' => 'return',
+                                'expr' => array(
+                                    'type'  => 'variable',
+                                    'value' => 'this',
+                                    'file'  => $property['file'],
+                                    'line'  => $property['line'],
+                                    'char'  => $property['char']
+                                )
                             )
                         )),
                         $docBlock,
