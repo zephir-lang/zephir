@@ -20,6 +20,7 @@
 namespace Zephir\FileSystem;
 
 use Zephir\Compiler;
+use Zephir\Utils;
 
 /**
  * HardDisk
@@ -166,15 +167,8 @@ class HardDisk
     public function clean()
     {
         if (is_dir($this->basePath)) {
-            $objects = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($this->basePath),
-                \RecursiveIteratorIterator::SELF_FIRST
-            );
-            foreach ($objects as $name => $object) {
-                if (!$object->isDir()) {
-                    @unlink($name);
-                }
-            }
+            Utils::recursiveRmDir($this->basePath);
+            rmdir($this->basePath);
         }
     }
 
