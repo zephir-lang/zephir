@@ -63,6 +63,8 @@
   Z_UNSET_ISREF_P(z);
 #endif
 
+typedef long zend_long;
+
 /* Startup functions */
 zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC);
 
