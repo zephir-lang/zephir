@@ -918,12 +918,6 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 	return FAILURE;
 }
 
-int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value)
-{
-	assert(ce != NULL);
-	return zend_update_static_property(ce, name, len, value);
-}
-
 /*
  * Multiple array-offset update
  */
@@ -973,7 +967,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	va_end(ap);
 
 	if (separated) {
-		zephir_update_static_property_ce(ce, property, property_length, &tmp_arr);
+		zend_update_static_property(ce, property, property_length, &tmp_arr);
 	}
 
 	return SUCCESS;
