@@ -68,7 +68,17 @@ class StripcslashesOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_stripcslashes(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+
+        if ($context->backend->getName() == 'ZendEngine2') {
+            $context->codePrinter->output('zephir_stripcslashes(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        } else {
+            $name = $symbolVariable->getName();
+            if ($name !== 'return_value' && $name !== 'this_ptr') {
+                $name = '&' . $name;
+            }
+
+            $context->codePrinter->output('zephir_stripcslashes(' . $name . ', ' . $resolvedParams[0] . ');');
+        }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
