@@ -117,6 +117,7 @@ class ObjectProperty
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignLong($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
+                        $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
                         $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
                         break;
 
@@ -169,6 +170,7 @@ class ObjectProperty
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignDouble($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
+                        $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
                         $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
                         break;
 
