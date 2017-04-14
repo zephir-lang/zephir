@@ -342,19 +342,21 @@ void zephir_deinitialize_memory()
 		zephir_clean_restore_stack();
 	}
 
-//	{
-//		size_t i;
-//		for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
-//			zephir_fcall_cache_entry* e = zephir_globals_ptr->scache[i];
-//			if (e) {
-//				free(e);
-//			}
-//		}
-//		zephir_fcall_cache_entry *cache_entry_temp = NULL;
-//		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
-//			free(cache_entry_temp);
-//		} ZEND_HASH_FOREACH_END();
-//	}
+#ifndef ZEPHIR_RELEASE
+	{
+		size_t i;
+		for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
+			zephir_fcall_cache_entry* e = zephir_globals_ptr->scache[i];
+			if (e) {
+				free(e);
+			}
+		}
+		zephir_fcall_cache_entry *cache_entry_temp = NULL;
+		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
+			free(cache_entry_temp);
+		} ZEND_HASH_FOREACH_END();
+	}
+#endif
 
 #if 0
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache, zephir_cleanup_fcache, 0);
@@ -477,9 +479,15 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 #endif
 */
 
+#ifndef ZEPHIR_RELEASE
+	if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+		return ZEND_HASH_APPLY_REMOVE;
+	}
+#else
 	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
 		return ZEND_HASH_APPLY_REMOVE;
 	}
+#endif
 
 	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
 		return ZEND_HASH_APPLY_REMOVE;
