@@ -1,14 +1,34 @@
 #!/usr/bin/env bash
 
-echo -e "Install Zephir Parser..."
+# trace ERR through pipes
+set -o pipefail
+
+# trace ERR through 'time command' and other functions
+set -o errtrace
+
+# set -u : exit the script if you try to use an uninitialised variable
+set -o nounset
+
+# set -e : exit the script if any statement returns a non-true return value
+set -o errexit
+
+# Ensure that this is being run inside a CI container
+if [ "${CI}" != "true" ]; then
+    echo "This script is designed to run inside a CI container only. Exiting"
+    exit 1
+fi
 
 CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TRAVIS_BUILD_DIR="${TRAVIS_BUILD_DIR:-$(dirname $(dirname $CURRENT_DIR))}"
 
-git clone --depth=1 -v https://github.com/phalcon/php-zephir-parser.git /tmp/parser
-cd /tmp/parser
+PARSER_DIR=$HOME/zephir-parser-${ZEPHIR_PARSER_VERSION}
 
-# Only for Travis CI
-TRAVIS_BUILD_DIR=$(pwd) bash ./tests/ci/install-travis
+# Use Travis cache
+if [ ! -f ${PARSER_DIR}/tests/ci/install-travis ]; then
+    git clone --depth=1 -v https://github.com/phalcon/php-zephir-parser.git -b ${ZEPHIR_PARSER_VERSION} ${PARSER_DIR}
+fi
 
-cd ${TRAVIS_BUILD_DIR}
+
+cd ${PARSER_DIR}
+
+bash ./unit-tests/ci/install-travis
