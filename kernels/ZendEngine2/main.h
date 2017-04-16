@@ -21,8 +21,10 @@
 #define ZEPHIR_KERNEL_MAIN_H
 
 #include <Zend/zend_interfaces.h>
+#include <Zend/zend_constants.h>
 #include <ext/spl/spl_exceptions.h>
 #include <ext/spl/spl_iterators.h>
+#include "kernel/exception.h"
 
 /** Main macros */
 #define PH_DEBUG 0
@@ -39,16 +41,34 @@
 #define PH_CTOR 4096
 
 #ifndef zend_uint
- #define zend_uint uint
+#define zend_uint uint
+#endif
+
+#ifndef str_erealloc
+#define str_erealloc(str, new_len) \
+	(IS_INTERNED(str) ? _str_erealloc(str, new_len, INTERNED_LEN(str)) : erealloc(str, new_len))
+
+static inline char* _str_erealloc(char *str, size_t new_len, size_t old_len)
+{
+	char *buf = (char*)emalloc(new_len);
+	memcpy(buf, str, old_len);
+	return buf;
+}
+#endif
+
+#ifndef str_efree
+#define str_efree(s) \
+	do { \
+		if (!IS_INTERNED(s)) { \
+			efree(s); \
+		} \
+	} while (0)
 #endif
 
 #define SL(str) ZEND_STRL(str)
 #define SS(str) ZEND_STRS(str)
 #define ISL(str) (zephir_interned_##str), (sizeof(#str)-1)
 #define ISS(str) (zephir_interned_##str), (sizeof(#str))
-
-#include <Zend/zend_constants.h>
-#include "kernel/exception.h"
 
 /* Compatibility with PHP 5.3 */
 #ifndef ZVAL_COPY_VALUE
@@ -335,34 +355,6 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 /* Return double */
 #define RETURN_MM_DOUBLE(value)     { RETVAL_DOUBLE(value); ZEPHIR_MM_RESTORE(); return; }
 
-/* Compat for interned strings < 5.4 */
-#ifndef IS_INTERNED
-#define IS_INTERNED(key) 0
-#define INTERNED_HASH(key) 0
-#endif
-
-/* Compat for reallocation of interned strings < 5.4 */
-#ifndef str_erealloc
-#define str_erealloc(str, new_len) \
-	(IS_INTERNED(str) \
-	? _str_erealloc(str, new_len, INTERNED_LEN(str)) \
-	: erealloc(str, new_len))
-
-static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
-	char *buf = (char *) emalloc(new_len);
-	memcpy(buf, str, old_len);
-	return buf;
-}
-#endif
-
-#ifndef str_efree
-#define str_efree(s) do { \
-	if (!IS_INTERNED(s)) { \
-		efree((char*)s); \
-	} \
-} while (0)
-#endif
-
 /** Get the current hash key without copying the hash key */
 #define ZEPHIR_GET_HKEY(var, hash, hash_position) \
 	zephir_get_current_key(&var, hash, &hash_position TSRMLS_CC);
@@ -470,15 +462,6 @@ static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
 			return FAILURE; \
 		} \
 		lower_ns## _ ##lcname## _ce->ce_flags |= flags;  \
-	}
-
-#define ZEPHIR_CREATE_OBJECT(obj_ptr, class_type) \
-	{ \
-		zend_object *object; \
-		ZEPHIR_INIT_ZVAL_NREF(obj_ptr); \
-		Z_TYPE_P(obj_ptr) = IS_OBJECT; \
-		Z_OBJVAL_P(obj_ptr) = zend_objects_new(&object, class_type TSRMLS_CC); \
-		object_properties_init(object, class_type); \
 	}
 
 #define ZEPHIR_MAKE_REF(obj) Z_SET_ISREF_P(obj);

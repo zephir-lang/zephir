@@ -148,6 +148,20 @@ class Variable
     protected $usedNode;
 
     /**
+     * Complex variable type, they may need special treatment
+     *
+     * @var array
+     */
+    protected $complexTypes = array(
+        'variable' => 1,
+        'string'   => 1,
+        'array'    => 1,
+        'resource' => 1,
+        'callable' => 1,
+        'object'   => 1,
+    );
+
+    /**
      * Variable constructor
      *
      * @param string $type
@@ -977,6 +991,16 @@ class Variable
 
             $this->setMustInitNull(true);
         }
+    }
+
+    /**
+     * Whether the variable is of a complex type
+     *
+     * @return boolean
+     */
+    public function isComplex()
+    {
+        return isset($this->complexTypes[$this->type]);
     }
 
     /**

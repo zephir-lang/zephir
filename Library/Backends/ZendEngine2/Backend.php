@@ -242,8 +242,19 @@ class Backend extends BaseBackend
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
             $codePrinter->increaseLevel();
-            $codePrinter->output('zval *this_ptr = NULL;');
-            $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
+            $codePrinter->output('zval zthis       = zval_used_for_init;');
+            $codePrinter->output('zval *this_ptr   = &zthis;');
+            $codePrinter->output('zend_object* obj = ecalloc(1, sizeof(zend_object));');
+            $codePrinter->output('zend_object_value retval;');
+            $codePrinter->outputBlankLine();
+            $codePrinter->output('zend_object_std_init(obj, class_type TSRMLS_CC);');
+            $codePrinter->output('object_properties_init(obj, class_type);');
+            $codePrinter->output('retval.handle   = zend_objects_store_put(obj, (zend_objects_store_dtor_t)zend_objects_destroy_object, zephir_free_object_storage, NULL TSRMLS_CC);');
+            $codePrinter->output('retval.handlers = zend_get_std_object_handlers();');
+            $codePrinter->outputBlankLine();
+            $codePrinter->output('Z_TYPE(zthis)   = IS_OBJECT;');
+            $codePrinter->output('Z_OBJVAL(zthis) = retval;');
+            $codePrinter->outputBlankLine();
             $codePrinter->decreaseLevel();
         }
     }
@@ -253,7 +264,7 @@ class Backend extends BaseBackend
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
             $codePrinter->increaseLevel();
-            $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
+            $codePrinter->output('return retval;');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
             $codePrinter->decreaseLevel();
@@ -337,6 +348,11 @@ class Backend extends BaseBackend
 
         /* Initialize default values in dynamic variables */
         foreach ($variables as $variable) {
+            if (!$this->isZE3() && $variable->isComplex() && $variable->isLocalOnly() && $variable->mustInitNull()) {
+                $codePrinter->output('zephir_memory_observe_alt(&' . $variable->getName() . ' TSRMLS_CC);');
+                $compilationContext->symbolTable->mustGrownStack(true);
+            }
+
             /**
              * Initialize 'dynamic' variables with default values
              */
