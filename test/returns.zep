@@ -30,4 +30,8 @@ class Returns
 			return (int)0;
 		}
 	}
+
+	public function testReturnCast5(array arr) -> void
+	{
+	}
 }
