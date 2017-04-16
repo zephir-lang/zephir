@@ -242,7 +242,7 @@ class StaticProperty
                     case 'string':
                         switch ($statement['operator']) {
                             case 'concat-assign':
-                                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, true);
                                 $expression = new Expression(array(
                                     'type' => 'static-property-access',
                                     'left' => array(
