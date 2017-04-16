@@ -41,17 +41,18 @@ class Utils
      * Prepares a string to be used as a C-string
      *
      * @param string $str
-     * @param bool $escapeSlash
      * @return string
      */
-    public static function addSlashes($str, $escapeSlash = false)
+    public static function addSlashes($str)
     {
         $newstr = "";
         $after = null;
         $before = null;
         $length = strlen($str);
+
         for ($i = 0; $i < $length; $i++) {
-            $ch = substr($str, $i, 1);
+            $ch = $str[$i];
+
             if ($i != ($length -1)) {
                 $after = substr($str, $i + 1, 1);
             } else {
@@ -74,12 +75,20 @@ class Utils
                 case "\v":
                     $newstr .= "\\" . 'v';
                     break;
+                case "\u":
+                    $newstr .= "\\" . 'u';
+                    break;
+                case "\U":
+                    $newstr .= "\\" . 'U';
+                    break;
                 case '\\':
                     switch ($after) {
                         case "n":
                         case "v":
                         case "t":
                         case "r":
+                        case "u":
+                        case "U":
                         case '"':
                         case "\\":
                             $newstr .= $ch . $after;
