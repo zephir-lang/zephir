@@ -1401,6 +1401,9 @@ class ClassDefinition
             /**
              * Zend interfaces (Zend/zend_interfaces.h)
              */
+            case 'traversable':
+                $classEntry = 'zend_ce_traversable';
+                break;
             case 'iterator':
                 $classEntry = 'zend_ce_iterator';
                 break;
