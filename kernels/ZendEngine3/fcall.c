@@ -49,7 +49,7 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
  */
 static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entry *ce, zval *function)
 {
-	const zend_class_entry *calling_scope;
+	const zend_class_entry *calling_scope, *called_scope;
 	zend_string *res = NULL;
 	char *buf = NULL, *c;
 	size_t l = 0, len = 0;
@@ -61,70 +61,83 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 	calling_scope = EG(scope);
 #endif
 
-	if (calling_scope && type == zephir_fcall_parent) {
-		calling_scope = calling_scope->parent;
-		if (UNEXPECTED(!calling_scope)) {
-			return 0;
+	called_scope = zend_get_called_scope(EG(current_execute_data));
+
+	switch (type) {
+		case zephir_fcall_parent:
+			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
+				return NULL;
+			}
+
+			calling_scope = calling_scope->parent;
+			break;
+
+		case zephir_fcall_static:
+			calling_scope = called_scope;
+			if (UNEXPECTED(!calling_scope)) {
+				return NULL;
+			}
+
+			break;
+
+		case zephir_fcall_self:
+			/* EG(scope) */
+			break;
+
+		case zephir_fcall_function:
+			calling_scope = NULL;
+			called_scope  = NULL;
+			break;
+
+		case zephir_fcall_ce:
+			calling_scope = ce;
+			called_scope  = ce;
+			break;
+
+		case zephir_fcall_method:
+			calling_scope = ce;
+			called_scope  = ce;
+			break;
+
+		default:
+			return NULL;
+	}
+
+	{
+		char* cls = calling_scope ? ZSTR_VAL(calling_scope->name) : "";
+		char* mth;
+		char* buf;
+
+		if (Z_TYPE_P(function) == IS_STRING) {
+			mth = Z_STRVAL_P(function);
 		}
-	}
-	else if (type == zephir_fcall_static) {
-		calling_scope = zend_get_called_scope(EG(current_execute_data));
-		if (UNEXPECTED(!calling_scope)) {
-			return 0;
+		else if (Z_TYPE_P(function) == IS_ARRAY) {
+			zval *method;
+			HashTable *function_hash = Z_ARRVAL_P(function);
+			if (
+					function_hash->nNumOfElements == 2
+				 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
+				 && Z_TYPE_P(method) == IS_STRING
+			) {
+				mth = Z_STRVAL_P(method);
+			}
+			else {
+				return NULL;
+			}
 		}
-	}
+		else {
+			return NULL;
+		}
 
-	if (
-		    calling_scope
-		 && ce
-		 && calling_scope != ce
-		 && !instanceof_function(ce, calling_scope)
-		 && !instanceof_function(calling_scope, ce)
-	) {
-		calling_scope = NULL;
-	}
-
-	if (type == zephir_fcall_function) {
-		calling_scope = NULL;
-	}
-
-	if (Z_TYPE_P(function) == IS_STRING) {
-		l   = (size_t)(Z_STRLEN_P(function)) + 1;
-		c   = Z_STRVAL_P(function);
-		len = 2 * ppzce_size + l;
-		res = zend_string_alloc(len, 0);
+		res = zend_string_alloc(strlen(cls) + 1 + strlen(mth) + ppzce_size, 0);
 		buf = ZSTR_VAL(res);
-
-		zend_str_tolower_copy(buf, c, l);
-		memcpy(buf + l,              &calling_scope,  ppzce_size);
-		memcpy(buf + l + ppzce_size, &ce,             ppzce_size);
-		buf[len - 1] = '\0';
-	}
-	else if (Z_TYPE_P(function) == IS_ARRAY) {
-		zval *method;
-		HashTable *function_hash = Z_ARRVAL_P(function);
-		if (
-			    function_hash->nNumOfElements == 2
-			 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
-			 && Z_TYPE_P(method) == IS_STRING
-		) {
-			l   = (size_t)(Z_STRLEN_P(method)) + 1;
-			c   = Z_STRVAL_P(method);
-			len = 2 * ppzce_size + l;
-			res = zend_string_alloc(len, 0);
-			buf = ZSTR_VAL(res);
-
-			zend_str_tolower_copy(buf, c, l);
-			memcpy(buf + l,              &calling_scope,  ppzce_size);
-			memcpy(buf + l + ppzce_size, &ce,             ppzce_size);
-			buf[len - 1] = '\0';
-		}
+		zend_str_tolower_copy(buf, cls, strlen(cls) + 1);
+		zend_str_tolower_copy(buf + strlen(cls) + 1, mth, strlen(mth));
+		memcpy(buf + strlen(cls) + 1 + strlen(mth), &called_scope, ppzce_size);
+		buf[strlen(cls) + 1 + strlen(mth) + ppzce_size] = '\0';
 	}
 
-	if (EXPECTED(res != NULL)) {
-		ZSTR_H(res) = zend_hash_func(ZSTR_VAL(res), ZSTR_LEN(res));
-	}
-
+	ZSTR_H(res) = zend_hash_func(ZSTR_VAL(res), ZSTR_LEN(res));
 	return res;
 }
 
@@ -164,6 +177,70 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 
 	Z_TRY_ADDREF_P(function);
 	add_next_index_zval(retval, function);
+}
+
+static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr)
+{
+	zend_class_entry* calling_scope;
+	fcic->initialized = 0;
+
+	if (type == zephir_fcall_function) {
+		fcic->initialized   = 1;
+		fcic->called_scope  = NULL;
+		fcic->calling_scope = NULL;
+		fcic->object        = NULL;
+		return;
+	}
+
+	fcic->called_scope = zend_get_called_scope(EG(current_execute_data));
+
+#if PHP_VERSION_ID >= 70100
+	calling_scope = zend_get_executed_scope();
+#else
+	calling_scope = EG(scope);
+#endif
+
+	switch (type) {
+		case zephir_fcall_parent:
+			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
+				return;
+			}
+
+			fcic->calling_scope = calling_scope->parent;
+			break;
+
+		case zephir_fcall_static:
+			fcic->calling_scope = fcic->called_scope;
+			if (UNEXPECTED(!calling_scope)) {
+				return;
+			}
+
+			break;
+
+		case zephir_fcall_self:
+			fcic->calling_scope = calling_scope;
+			break;
+
+		case zephir_fcall_function:
+			/* already handled */
+			break;
+
+		case zephir_fcall_ce:
+			fcic->calling_scope = ce;
+			fcic->called_scope  = ce;
+			break;
+
+		case zephir_fcall_method:
+			fcic->calling_scope = Z_OBJCE_P(this_ptr);
+			fcic->called_scope  = fcic->calling_scope;
+			break;
+
+		default:
+			return;
+	}
+
+	fcic->initialized = 1;
+	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
 }
 
 /**
@@ -234,26 +311,8 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fcic.initialized = 0;
 	if (cache_entry && *cache_entry) {
 	/* We have a cache record, initialize scope */
-		fcic.initialized   = 1;
-		fcic.calling_scope = obj_ce;
-
-		if (object_pp) {
-			fcic.called_scope = Z_OBJCE_P(object_pp);
-		}
-		else {
-			zend_class_entry *called_scope = zend_get_called_scope(EG(current_execute_data));
-
-			if (obj_ce && (!called_scope || instanceof_function(called_scope, obj_ce))) {
-				fcic.called_scope = obj_ce;
-			}
-			else {
-				fcic.called_scope = called_scope;
-			}
-		}
-
-		fcic.object           = object_pp ? Z_OBJ_P(object_pp) : NULL;
+		populate_fcic(&fcic, type, obj_ce, object_pp);
 		fcic.function_handler = *cache_entry;
-
 		ZVAL_UNDEF(&fci.function_name);
 	}
 	else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
