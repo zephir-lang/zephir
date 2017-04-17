@@ -184,16 +184,28 @@ class StringsManager extends BaseStringsManager
         }
 
         $code .= <<<EOF
-void zephir_concat_function(zval *result, zval *op1, zval *op2) /* {{{ */
+void zephir_concat_function(zval *result, zval *op1, zval *op2)
 {
-    zval tmp;
-    /* Force separate zval, if op2=result will be reallocated */
-    if (UNEXPECTED(result == op2)) {
-        ZVAL_COPY_VALUE(&tmp, op2);
-        op2 = &tmp;
-    }
+	zval tmp;
+	SEPARATE_ZVAL_IF_NOT_REF(result);
 
-    concat_function(result, op1, op2 TSRMLS_CC);
+	/*
+		res == op1 == op2: won't leak
+		res == op1 != op2: won't leak
+		res == op2 != op1: will leak
+	 */
+	if (result == op2 && result != op1) {
+		ZVAL_COPY_VALUE(&tmp, result);
+		ZVAL_NULL(result);
+		op2 = &tmp;
+	}
+	else {
+		ZVAL_UNDEF(&tmp);
+	}
+
+	concat_function(result, op1, op2);
+	assert(!Z_REFCOUNTED(tmp) || 1 == Z_REFCOUNT(tmp));
+	zval_dtor(&tmp);
 }
 EOF;
 
