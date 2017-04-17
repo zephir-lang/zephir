@@ -23,6 +23,11 @@
 #include <Zend/zend_interfaces.h>
 #include <ext/spl/spl_exceptions.h>
 #include <ext/spl/spl_iterators.h>
+#include <Zend/zend_string.h>
+
+extern zend_string* i_parent;
+extern zend_string* i_static;
+extern zend_string* i_self;
 
 /** Main macros */
 #define PH_DEBUG 0
@@ -305,5 +310,7 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 
 void zephir_get_args(zval* return_value);
 void zephir_get_arg(zval* return_value, zend_long idx);
+
+void zephir_module_init();
 
 #endif /* ZEPHIR_KERNEL_MAIN_H */

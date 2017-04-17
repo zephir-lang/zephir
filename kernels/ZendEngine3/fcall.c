@@ -149,34 +149,45 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 	}
 
 	array_init_size(retval, 2);
-	switch (type) {
-		case zephir_fcall_parent:
-			add_next_index_string(retval, "parent");
-			break;
+	zend_hash_real_init(Z_ARRVAL_P(retval), 1);
+	ZEND_HASH_FILL_PACKED(Z_ARRVAL_P(retval)) {
+		zval q;
+		switch (type) {
+			case zephir_fcall_parent:
+				zend_string_addref(i_parent);
+				ZVAL_STR(&q, i_parent);
+				ZEND_HASH_FILL_ADD(&q);
+				break;
 
-		case zephir_fcall_self:
-			add_next_index_string(retval, "self");
-			break;
+			case zephir_fcall_self:
+				zend_string_addref(i_self);
+				ZVAL_STR(&q, i_self);
+				ZEND_HASH_FILL_ADD(&q);
+				break;
 
-		case zephir_fcall_static:
-			add_next_index_string(retval, "static");
-			break;
+			case zephir_fcall_static:
+				zend_string_addref(i_static);
+				ZVAL_STR(&q, i_static);
+				ZEND_HASH_FILL_ADD(&q);
+				break;
 
-		case zephir_fcall_ce:
-			assert(ce);
-			zend_string_addref(ce->name);
-			add_next_index_str(retval, ce->name);
-			break;
+			case zephir_fcall_ce:
+				assert(ce);
+				zend_string_addref(ce->name);
+				ZVAL_STR(&q, ce->name);
+				ZEND_HASH_FILL_ADD(&q);
+				break;
 
-		default:
-			assert(object);
-			Z_TRY_ADDREF_P(object);
-			add_next_index_zval(retval, object);
-			break;
-	}
+			default:
+				assert(object);
+				Z_TRY_ADDREF_P(object);
+				ZEND_HASH_FILL_ADD(object);
+				break;
+		}
 
-	Z_TRY_ADDREF_P(function);
-	add_next_index_zval(retval, function);
+		Z_TRY_ADDREF_P(function);
+		ZEND_HASH_FILL_ADD(function);
+	} ZEND_HASH_FILL_END();
 }
 
 static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr)
