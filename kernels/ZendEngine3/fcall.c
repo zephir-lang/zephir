@@ -53,7 +53,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 	zend_string *res = NULL;
 	char *buf = NULL, *c;
 	size_t l = 0, len = 0;
-	const size_t ppzce_size = sizeof(zend_class_entry**);
+	unsigned char t;
 
 #if PHP_VERSION_ID >= 70100
 	calling_scope = zend_get_executed_scope();
@@ -103,13 +103,29 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			return NULL;
 	}
 
+	if (called_scope == calling_scope) {
+	/* Calls within the same scope, this won't trigger magic methods or failures due to restricted visibility */
+		t = 0;
+	}
+	else if (called_scope && calling_scope && (instanceof_function(called_scope, calling_scope) || instanceof_function(calling_scope, called_scope))) {
+	/* Calls within the same chain of inheritance; can call protected methods */
+		t = 1;
+	}
+	else {
+	/* Can safely call only public methods */
+		t = 2;
+	}
+
 	{
-		char* cls = calling_scope ? ZSTR_VAL(calling_scope->name) : "";
-		char* mth;
+		char* cls      = calling_scope ? ZSTR_VAL(calling_scope->name) : "";
+		size_t cls_len = calling_scope ? ZSTR_LEN(calling_scope->name) : 0;
+		char* mth      = NULL;
+		size_t mth_len = 0;
 		char* buf;
 
 		if (Z_TYPE_P(function) == IS_STRING) {
-			mth = Z_STRVAL_P(function);
+			mth     = Z_STRVAL_P(function);
+			mth_len = Z_STRLEN_P(function);
 		}
 		else if (Z_TYPE_P(function) == IS_ARRAY) {
 			zval *method;
@@ -119,22 +135,17 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 				 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
 				 && Z_TYPE_P(method) == IS_STRING
 			) {
-				mth = Z_STRVAL_P(method);
+				mth     = Z_STRVAL_P(method);
+				mth_len = Z_STRLEN_P(method);
 			}
-			else {
-				return NULL;
-			}
-		}
-		else {
-			return NULL;
 		}
 
-		res = zend_string_alloc(strlen(cls) + 1 + strlen(mth) + ppzce_size, 0);
+		res = zend_string_alloc(cls_len + 1 + mth_len + sizeof(unsigned char), 0);
 		buf = ZSTR_VAL(res);
-		zend_str_tolower_copy(buf, cls, strlen(cls) + 1);
-		zend_str_tolower_copy(buf + strlen(cls) + 1, mth, strlen(mth));
-		memcpy(buf + strlen(cls) + 1 + strlen(mth), &called_scope, ppzce_size);
-		buf[strlen(cls) + 1 + strlen(mth) + ppzce_size] = '\0';
+		zend_str_tolower_copy(buf, cls, cls_len + 1);
+		zend_str_tolower_copy(buf + cls_len + 1, mth, mth_len);
+		memcpy(buf + cls_len + 1 + mth_len, &t, sizeof(t));
+		buf[cls_len + 1 + mth_len + sizeof(t)] = '\0';
 	}
 
 	ZSTR_H(res) = zend_hash_func(ZSTR_VAL(res), ZSTR_LEN(res));
