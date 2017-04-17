@@ -173,7 +173,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $t = new Mcall();
 
         $this->assertNumberOfParameters(1);
-        $this->assertNumberOfRequiredParameters(1);
+        $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
         $this->assertSame($t->arrayParam(array()), array());
@@ -188,7 +188,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $t = new Mcall();
 
         $this->assertNumberOfParameters(1);
-        $this->assertNumberOfRequiredParameters(1);
+        $this->assertNumberOfRequiredParameters(0);
 
         $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('stdClass', $t->objectParamCastStdClass(new \stdClass()));
@@ -202,7 +202,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $t = new Mcall();
 
         $this->assertNumberOfParameters(1);
-        $this->assertNumberOfRequiredParameters(1);
+        $this->assertNumberOfRequiredParameters(0);
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
