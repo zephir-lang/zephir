@@ -27,7 +27,9 @@ namespace Zephir;
 class BranchGraphNode
 {
     protected $_increase = 0;
-
+    
+    protected $_branch;
+    
     protected $_branches = array();
 
     /**
