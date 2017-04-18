@@ -54,18 +54,7 @@ typedef struct _zephir_function_cache {
 	zend_function *func;
 } zephir_function_cache;
 
-#ifndef ZEPHIR_RELEASE
-
-typedef struct _zephir_fcall_cache_entry {
-	zend_function *f;
-	uint times;
-} zephir_fcall_cache_entry;
-
-#else
-
 typedef zend_function zephir_fcall_cache_entry;
-
-#endif
 
 #define ZEPHIR_INIT_FUNCS(class_functions) static const zend_function_entry class_functions[] =
 

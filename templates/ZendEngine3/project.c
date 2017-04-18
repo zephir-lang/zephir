@@ -34,6 +34,7 @@ PHP_INI_END()
 static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	REGISTER_INI_ENTRIES();
+	zephir_module_init();
 	%CLASS_INITS%
 	return SUCCESS;
 }
