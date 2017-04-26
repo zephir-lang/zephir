@@ -7,7 +7,8 @@ class Issue1521
 	public function test()
 	{
 		let this->params = [
-			"merchantNumber":"0818217122"
+			"merchantNumber":"0818217122",
+			"zero":"0"
 		];
 
 		return this->params["merchantNumber"];
