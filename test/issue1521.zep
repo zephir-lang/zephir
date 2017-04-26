@@ -11,6 +11,6 @@ class Issue1521
 			"zero":"0"
 		];
 
-		return this->params["merchantNumber"];
+		return this->params;
 	}
 }
