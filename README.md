@@ -60,7 +60,7 @@ For global installation add `-c` flag.
 
 You can install Zephir using composer.
 
-To ge Zephir, run `composer require phalcon/zephir`.
+To get Zephir, run `composer require phalcon/zephir`.
 After getting Zephir follow the above guide to install Zephir Parser.
 
 ### Additional notes on Ubuntu
