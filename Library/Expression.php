@@ -313,8 +313,9 @@ class Expression
                 return new LiteralCompiledExpression($type, $expression['value'], $expression);
 
             case 'string':
+                $v = $expression['value'];
                 if (!$this->_stringOperation) {
-                    if (ctype_digit($expression['value'])) {
+                    if (ctype_digit($v) && (strlen($v) == 1 || '0' != substr($v, 0, 1))) {
                         return new CompiledExpression('int', $expression['value'], $expression);
                     }
                 }
