@@ -85,6 +85,10 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			break;
 
 		case zephir_fcall_function:
+			if (Z_TYPE_P(function) == IS_OBJECT) {
+				return NULL;
+			}
+
 			calling_scope = NULL;
 			called_scope  = NULL;
 			break;
@@ -95,6 +99,10 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			break;
 
 		case zephir_fcall_method:
+			if (Z_TYPE_P(function) == IS_OBJECT) {
+				return NULL;
+			}
+
 			calling_scope = ce;
 			called_scope  = ce;
 			break;
@@ -154,7 +162,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 
 static void resolve_callable(zval* retval, zephir_call_type type, zend_class_entry *ce, zval *object, zval *function)
 {
-	if (type == zephir_fcall_function || IS_ARRAY == Z_TYPE_P(function)) {
+	if (type == zephir_fcall_function || IS_ARRAY == Z_TYPE_P(function) || IS_OBJECT == Z_TYPE_P(function)) {
 		ZVAL_COPY(retval, function);
 		return;
 	}
@@ -201,12 +209,13 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 	} ZEND_HASH_FILL_END();
 }
 
-static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr)
+static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr, zval *func)
 {
 	zend_class_entry* calling_scope;
-	fcic->initialized = 0;
+	fcic->initialized      = 0;
+	fcic->function_handler = NULL;
 
-	if (type == zephir_fcall_function) {
+	if (type == zephir_fcall_function && Z_TYPE_P(func) == IS_STRING) {
 		fcic->initialized   = 1;
 		fcic->called_scope  = NULL;
 		fcic->calling_scope = NULL;
@@ -222,6 +231,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 	calling_scope = EG(scope);
 #endif
 
+	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
 	switch (type) {
 		case zephir_fcall_parent:
 			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
@@ -243,17 +253,23 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			fcic->calling_scope = calling_scope;
 			break;
 
-		case zephir_fcall_function:
-			/* already handled */
-			break;
-
 		case zephir_fcall_ce:
 			fcic->calling_scope = ce;
 			fcic->called_scope  = ce;
 			break;
 
+		case zephir_fcall_function:
 		case zephir_fcall_method:
-			fcic->calling_scope = Z_OBJCE_P(this_ptr);
+			if (Z_TYPE_P(func) == IS_OBJECT) {
+				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
+					fcic->called_scope = fcic->calling_scope;
+					break;
+				}
+
+				return;
+			}
+
+			fcic->calling_scope = this_ptr ? Z_OBJCE_P(this_ptr) : NULL;
 			fcic->called_scope  = fcic->calling_scope;
 			break;
 
@@ -262,7 +278,6 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 	}
 
 	fcic->initialized = 1;
-	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
 }
 
 /**
@@ -333,8 +348,11 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fcic.initialized = 0;
 	if (cache_entry && *cache_entry) {
 	/* We have a cache record, initialize scope */
-		populate_fcic(&fcic, type, obj_ce, object_pp);
-		fcic.function_handler = *cache_entry;
+		populate_fcic(&fcic, type, obj_ce, object_pp, function_name);
+		if (!fcic.function_handler) {
+			fcic.function_handler = *cache_entry;
+		}
+
 		ZVAL_UNDEF(&fci.function_name);
 	}
 	else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
@@ -362,7 +380,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #if 0
 /*
 	fcic.initialized = 0;
-	if (Z_TYPE_P(callable) == IS_NULL) {
+	if (Z_TYPE(callable) == IS_NULL) {
 		resolve_callable(&callable, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
 	}
 */
