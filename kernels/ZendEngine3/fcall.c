@@ -85,6 +85,10 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			break;
 
 		case zephir_fcall_function:
+			if (Z_TYPE_P(function) == IS_OBJECT) {
+				return NULL;
+			}
+
 			calling_scope = NULL;
 			called_scope  = NULL;
 			break;
@@ -95,6 +99,10 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			break;
 
 		case zephir_fcall_method:
+			if (Z_TYPE_P(function) == IS_OBJECT) {
+				return NULL;
+			}
+
 			calling_scope = ce;
 			called_scope  = ce;
 			break;
@@ -154,7 +162,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 
 static void resolve_callable(zval* retval, zephir_call_type type, zend_class_entry *ce, zval *object, zval *function)
 {
-	if (type == zephir_fcall_function || IS_ARRAY == Z_TYPE_P(function)) {
+	if (type == zephir_fcall_function || IS_ARRAY == Z_TYPE_P(function) || IS_OBJECT == Z_TYPE_P(function)) {
 		ZVAL_COPY(retval, function);
 		return;
 	}
@@ -207,7 +215,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 	fcic->initialized      = 0;
 	fcic->function_handler = NULL;
 
-	if (type == zephir_fcall_function && Z_TYPE_P(func) != IS_OBJECT) {
+	if (type == zephir_fcall_function && Z_TYPE_P(func) == IS_STRING) {
 		fcic->initialized   = 1;
 		fcic->called_scope  = NULL;
 		fcic->calling_scope = NULL;
@@ -245,23 +253,12 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			fcic->calling_scope = calling_scope;
 			break;
 
-		case zephir_fcall_function:
-			if (Z_TYPE_P(func) == IS_OBJECT) {
-				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
-					fcic->called_scope = fcic->calling_scope;
-					break;
-				}
-
-				return;
-			}
-
-			break;
-
 		case zephir_fcall_ce:
 			fcic->calling_scope = ce;
 			fcic->called_scope  = ce;
 			break;
 
+		case zephir_fcall_function:
 		case zephir_fcall_method:
 			if (Z_TYPE_P(func) == IS_OBJECT) {
 				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
@@ -272,7 +269,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 				return;
 			}
 
-			fcic->calling_scope = Z_OBJCE_P(this_ptr);
+			fcic->calling_scope = this_ptr ? Z_OBJCE_P(this_ptr) : NULL;
 			fcic->called_scope  = fcic->calling_scope;
 			break;
 
