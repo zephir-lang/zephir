@@ -81,11 +81,7 @@ void zephir_deinitialize_memory(TSRMLS_D);
 		ZVAL_NULL(&z);      \
 	} while (0)
 
-#define ZEPHIR_SINIT_NVAR(z) \
-	do {                     \
-		zval_dtor(&z);       \
-		INIT_PZVAL(&z);      \
-	} while (0)
+#define ZEPHIR_SINIT_NVAR(z) Z_SET_REFCOUNT_P(&z, 1)
 
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	do {                         \

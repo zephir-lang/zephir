@@ -348,11 +348,6 @@ class Backend extends BaseBackend
 
         /* Initialize default values in dynamic variables */
         foreach ($variables as $variable) {
-            if (!$this->isZE3() && $variable->isComplex() && $variable->isLocalOnly() && $variable->mustInitNull()) {
-                $codePrinter->output('zephir_memory_observe_alt(&' . $variable->getName() . ' TSRMLS_CC);');
-                $compilationContext->symbolTable->mustGrownStack(true);
-            }
-
             /**
              * Initialize 'dynamic' variables with default values
              */
