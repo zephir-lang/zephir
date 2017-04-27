@@ -143,12 +143,6 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g TSRMLS
 				else if (Z_REFCOUNT_PP(var) >= 1000000) {
 					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u), type=%d  [%s]\n", __func__, (int)i, *var, Z_REFCOUNT_PP(var), Z_TYPE_PP(var), active_memory->func);
 				}
-#if 0
-				/* Skip this check, PDO does return variables with is_ref = 1 and refcount = 1*/
-				else if (Z_REFCOUNT_PP(var) == 1 && Z_ISREF_PP(var)) {
-					fprintf(stderr, "%s: observed variable #%d (%p) is a reference with reference count = 1, type=%d  [%s]\n", __func__, (int)i, *var, Z_TYPE_PP(var), active_memory->func);
-				}
-#endif
 			}
 		}
 #endif
@@ -422,48 +416,6 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS
 }
 
 /**
- * Cleans the function/method cache up
- */
-int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
-{
-	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**) pDest;
-	zend_class_entry *scope;
-	uint len = hash_key->nKeyLength;
-
-	assert(hash_key->arKey != NULL);
-	assert(hash_key->nKeyLength > 2 * sizeof(zend_class_entry**));
-
-	memcpy(&scope, &hash_key->arKey[(len -1) - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
-
-/*
-#ifndef ZEPHIR_RELEASE
-	{
-		zend_class_entry *cls;
-		memcpy(&cls, &hash_key->arKey[len - sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
-
-		fprintf(stderr, "func: %s, cls: %s, scope: %s [%u]\n", (*entry)->f->common.function_name, (cls ? cls->name : "N/A"), (scope ? scope->name : "N/A"), (uint)(*entry)->times);
-	}
-#endif
-*/
-
-#ifndef ZEPHIR_RELEASE
-	if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-#else
-	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-#endif
-
-	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-
-	return ZEND_HASH_APPLY_KEEP;
-}
-
-/**
  * Deinitializes all the memory allocated by Zephir
  */
 void zephir_deinitialize_memory(TSRMLS_D)
@@ -480,7 +432,7 @@ void zephir_deinitialize_memory(TSRMLS_D)
 		zephir_clean_restore_stack(TSRMLS_C);
 	}
 
-	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache TSRMLS_CC, zephir_cleanup_fcache, 0);
+	zend_hash_clean(zephir_globals_ptr->fcache);
 
 #ifndef ZEPHIR_RELEASE
 	assert(zephir_globals_ptr->start_memory != NULL);
@@ -488,6 +440,7 @@ void zephir_deinitialize_memory(TSRMLS_D)
 
 	for (i = 0; i < ZEPHIR_NUM_PREALLOCATED_FRAMES; ++i) {
 		pefree(zephir_globals_ptr->start_memory[i].hash_addresses, 1);
+		pefree(zephir_globals_ptr->start_memory[i].alt_addresses, 1);
 		pefree(zephir_globals_ptr->start_memory[i].addresses, 1);
 	}
 
