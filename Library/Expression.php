@@ -313,12 +313,13 @@ class Expression
                 return new LiteralCompiledExpression($type, $expression['value'], $expression);
 
             case 'string':
+                $v = $expression['value'];
                 if (!$this->_stringOperation) {
-                    if (ctype_digit($expression['value'])) {
-                        return new CompiledExpression('int', $expression['value'], $expression);
+                    if (ctype_digit($v) && (strlen($v) == 1 || '0' != substr($v, 0, 1))) {
+                        return new CompiledExpression('int', $v, $expression);
                     }
                 }
-                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
+                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $v), $expression);
             case 'istring':
                 return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 
