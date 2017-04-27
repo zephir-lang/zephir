@@ -47,12 +47,9 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
 /**
  * Creates a unique key to cache the current method/function call address for the current scope
  */
-static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_class_entry *ce, zval *function, zend_class_entry* called_scope)
+static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_class_entry *ce, zval *function, const zend_class_entry* called_scope)
 {
 	const zend_class_entry *calling_scope;
-	zend_string *res = NULL;
-	char *buf = NULL, *c;
-	size_t l = 0, len = 0;
 	unsigned char t;
 
 #if PHP_VERSION_ID >= 70100
@@ -154,7 +151,7 @@ static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_cla
 		buf = ZSTR_VAL(s);
 		zend_str_tolower_copy(buf, cls, cls_len + 1);
 		zend_str_tolower_copy(buf + cls_len + 1, mth, mth_len);
-		memcpy(buf + cls_len + 1 + mth_len, &t, sizeof(t));
+		buf[cls_len + 1 + mth_len] = t;
 		buf[cls_len + 1 + mth_len + sizeof(t)] = '\0';
 	}
 
