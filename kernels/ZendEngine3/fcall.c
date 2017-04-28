@@ -404,9 +404,11 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	if (EXPECTED(status != FAILURE) && !EG(exception) && SUCCESS == key_ok && fcic.initialized && !temp_cache_entry) {
 		zephir_fcall_cache_entry *cache_entry_temp = fcic.function_handler;
 
-		if (cache_entry && cache_slot > 0) {
+		if (cache_entry) {
 			*cache_entry = cache_entry_temp;
-			zephir_globals_ptr->scache[cache_slot] = *cache_entry;
+			if (cache_slot > 0) {
+				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
+			}
 		}
 
 		if (zephir_globals_ptr->cache_enabled) {
