@@ -25,7 +25,6 @@ use Zephir\Passes\CallGathererPass;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
-use Zephir\Statements\Let\Variable;
 
 /**
  * ClassMethod

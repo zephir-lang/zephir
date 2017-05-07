@@ -152,13 +152,28 @@ class Variable
      *
      * @var array
      */
-    protected $complexTypes = array(
+    protected static $complexTypes = array(
         'variable' => 1,
         'string'   => 1,
         'array'    => 1,
         'resource' => 1,
         'callable' => 1,
         'object'   => 1,
+    );
+
+    /**
+     * Names of superglobal variables
+     *
+     * @var array
+     */
+    protected static $superglobals = array(
+        '_GET'     => 1,
+        '_POST'    => 1,
+        '_COOKIE'  => 1,
+        '_SERVER'  => 1,
+        '_SESSION' => 1,
+        '_REQUEST' => 1,
+        '_FILES'   => 1,
     );
 
     /**
@@ -793,21 +808,6 @@ class Variable
     }
 
     /**
-     * Checks if a variable is a superglobal
-     *
-     * @param string $name
-     * @return boolean
-     */
-    public function isSuperGlobal()
-    {
-        $name = $this->getName();
-        if (!$this->isExternal) {
-            return false;
-        }
-        return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION' || $name == '_REQUEST' || $name == '_FILES';
-    }
-
-    /**
      * Initializes a variant variable
      *
      * @param CompilationContext $compilationContext
@@ -1015,7 +1015,22 @@ class Variable
      */
     public function isComplex()
     {
-        return isset($this->complexTypes[$this->type]);
+        return isset(self::$complexTypes[$this->type]);
+    }
+
+    /**
+     * Checks if a variable is a superglobal
+     *
+     * @return boolean
+     */
+    public function isSuperGlobal()
+    {
+        if (!$this->isExternal) {
+            return false;
+        }
+
+        $name = $this->getName();
+        return isset(self::$superglobals[$name]);
     }
 
     /**

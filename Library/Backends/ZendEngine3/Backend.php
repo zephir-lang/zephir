@@ -499,12 +499,19 @@ class Backend extends BackendZendEngine2
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
-        $name = $globalVar->getName();
-        $output = 'zephir_get_global(&' . $name . ', ZEND_STRL("' . $name . '"));';
+        $name    = $globalVar->getName();
+        $lines   = array();
+        $lines[] = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
+        $lines[] = 'if (!' . $name . ') {';
+        $lines[] = "\t" . 'ZEPHIR_THROW_EXCEPTION_STR(zend_exception_get_default(), "Invalid superglobal");';
+        $lines[] = "\t" . 'return;';
+        $lines[] = '}';
         if ($useCodePrinter) {
-            $codePrinter->output($output);
+            foreach ($lines as $line) {
+                $codePrinter->output($line);
+            }
         }
-        return $output;
+        return join("\n\t", $lines);
     }
 
     public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)

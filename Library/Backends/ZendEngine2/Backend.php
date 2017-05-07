@@ -358,7 +358,6 @@ class Backend extends BaseBackend
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);
                             $compilationContext->backend->initVar($variable, $compilationContext);
-
                             switch ($defaultValue['type']) {
                                 case 'int':
                                 case 'uint':
