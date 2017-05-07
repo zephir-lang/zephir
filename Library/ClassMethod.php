@@ -25,6 +25,7 @@ use Zephir\Passes\CallGathererPass;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Statements\Let\Variable;
 
 /**
  * ClassMethod
@@ -1962,8 +1963,9 @@ class ClassMethod
          * Fetch used superglobals
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
-            if ($symbolTable->isSuperGlobal($name)) {
+            if ($variable->isSuperGlobal()) {
                 $globalVar = $symbolTable->getVariable($name);
+                $globalVar->setIsDoublePointer(true);
                 $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
         }

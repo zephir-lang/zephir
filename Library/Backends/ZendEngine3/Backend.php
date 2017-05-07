@@ -500,8 +500,7 @@ class Backend extends BackendZendEngine2
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
         $name = $globalVar->getName();
-        $compilationContext->symbolTable->mustGrownStack(true);
-        $output = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
+        $output = 'zephir_get_global(&' . $name . ', ZEND_STRL("' . $name . '"));';
         if ($useCodePrinter) {
             $codePrinter->output($output);
         }

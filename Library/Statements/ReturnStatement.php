@@ -218,7 +218,7 @@ class ReturnStatement extends StatementAbstract
 
                         case 'string':
                         case 'array':
-                            $codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
+                            $codePrinter->output('RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                             break;
 
                         case 'bool':
@@ -232,12 +232,12 @@ class ReturnStatement extends StatementAbstract
                                 if ($symbolVariable->getName() != 'return_value') {
                                     if (!$symbolVariable->isExternal()) {
                                         if ($symbolVariable->isLocalOnly()) {
-                                            $codePrinter->output('RETURN_LCTOR(' . $symbolVariable->getName() . ');');
+                                            $codePrinter->output('RETURN_LCTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                         } else {
                                             if (!$symbolVariable->isMemoryTracked()) {
-                                                $codePrinter->output('RETURN_CTOR(' . $symbolVariable->getName() . ');');
+                                                $codePrinter->output('RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                             } else {
-                                                $codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+                                                $codePrinter->output('RETURN_CCTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                             }
                                         }
                                     } else {

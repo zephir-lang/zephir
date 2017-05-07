@@ -114,30 +114,34 @@ extern zend_string* i_self;
 	}
 
 /** Return zval with always ctor */
-#define RETURN_CTOR(var) { \
-		RETVAL_ZVAL(&var, 1, 0); \
-	} \
-	ZEPHIR_MM_RESTORE(); \
-	return;
+#define RETURN_CTOR(var)        \
+	do {                        \
+		RETVAL_ZVAL(var, 1, 0); \
+		ZEPHIR_MM_RESTORE();    \
+		return;                 \
+	} while (0)
 
 /** Return zval with always ctor, without restoring the memory stack */
-#define RETURN_CTORW(var) { \
-		RETVAL_ZVAL(&var, 1, 0); \
-	} \
-	return;
+#define RETURN_CTORW(var)       \
+	do {                        \
+		RETVAL_ZVAL(var, 1, 0); \
+		return;                 \
+	} while (0)
 
 /** Return zval checking if it's needed to ctor */
-#define RETURN_CCTOR(var) { \
-	ZVAL_DUP(return_value, &var); \
-	ZEPHIR_MM_RESTORE(); \
-	return; \
-}
+#define RETURN_CCTOR(v)            \
+	do {                           \
+		ZVAL_DUP(return_value, v); \
+		ZEPHIR_MM_RESTORE();       \
+		return;                    \
+	} while (0)
 
 /** Return zval checking if it's needed to ctor, without restoring the memory stack  */
-#define RETURN_CCTORW(var) { \
-		ZVAL_DUP(return_value, &var); \
-		return; \
-}
+#define RETURN_CCTORW(v)           \
+	do {                           \
+		ZVAL_DUP(return_value, v); \
+		return;                    \
+	} while (0)
 
 /** Return zval with always ctor, without restoring the memory stack */
 #define RETURN_THISW() \
@@ -203,7 +207,7 @@ extern zend_string* i_self;
 #define RETURN_MM_NULL()            { RETVAL_NULL(); ZEPHIR_MM_RESTORE(); return; }
 
 /* Globals functions */
-int zephir_get_global(zval *arr, const char *global, unsigned int global_length);
+int zephir_get_global(zval **arr, const char *global, unsigned int global_length);
 
 /* Count */
 void zephir_fast_count(zval *result, zval *array);

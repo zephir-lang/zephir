@@ -793,6 +793,21 @@ class Variable
     }
 
     /**
+     * Checks if a variable is a superglobal
+     *
+     * @param string $name
+     * @return boolean
+     */
+    public function isSuperGlobal()
+    {
+        $name = $this->getName();
+        if (!$this->isExternal) {
+            return false;
+        }
+        return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION' || $name == '_REQUEST' || $name == '_FILES';
+    }
+
+    /**
      * Initializes a variant variable
      *
      * @param CompilationContext $compilationContext
