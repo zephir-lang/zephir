@@ -1965,7 +1965,6 @@ class ClassMethod
         foreach ($symbolTable->getVariables() as $name => $variable) {
             if ($variable->isSuperGlobal()) {
                 $globalVar = $symbolTable->getVariable($name);
-                $globalVar->setIsDoublePointer(true);
                 $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
         }
