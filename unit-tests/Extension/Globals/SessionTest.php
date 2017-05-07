@@ -46,5 +46,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame([], $result);
         $this->assertSame([], $_SESSION);
+        $this->assertSame($_SESSION, $result);
     }
 }
