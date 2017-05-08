@@ -1958,11 +1958,22 @@ class ClassMethod
         $code .= $initCode . $initVarCode;
         $codePrinter->preOutput($code);
 
+        // @deprecated Will be removed after drop ZE2
+        // See: https://github.com/phalcon/zephir/pull/1533
+        // and https://github.com/phalcon/zephir/pull/1532
+        $isSuperGlobal = function ($variable) use ($compilationContext, $symbolTable) {
+            if ($compilationContext->backend->isZE3()) {
+                return $variable->isSuperGlobal();
+            }
+
+            return $symbolTable->isSuperGlobal($variable->getName());
+        };
+
         /**
          * Fetch used superglobals
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
-            if ($symbolTable->isSuperGlobal($name)) {
+            if ($isSuperGlobal($variable)) {
                 $globalVar = $symbolTable->getVariable($name);
                 $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
