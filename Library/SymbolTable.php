@@ -152,7 +152,6 @@ class SymbolTable
             }
         }
 
-
         if (!isset($this->branchVariables[$branchId])) {
             $this->branchVariables[$branchId] = array();
         }

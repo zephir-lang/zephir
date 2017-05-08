@@ -9,7 +9,6 @@ use Zephir\CompilationContext;
 use Zephir\ClassMethod;
 use Zephir\FunctionDefinition;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
-use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
 use Zephir\Utils;
 
@@ -29,6 +28,7 @@ class Backend extends BackendZendEngine2
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isDoublePointer() ||
+            $variable->isSuperGlobal() ||
             in_array($variable->getName(), array('this_ptr', 'return_value')) ||
             in_array($variable->getType(), array('int', 'long'))) {
             return $variable->getName();
@@ -189,7 +189,7 @@ class Backend extends BackendZendEngine2
 
         $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
 
-        if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
+        if ($isComplex && !$variable->isDoublePointer() && !$variable->isSuperGlobal()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
             if ($variable->getRealname() == '__$null') {
                 return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
@@ -206,7 +206,7 @@ class Backend extends BackendZendEngine2
             return;
         }
 
-        if ($variable->isDoublePointer()) {
+        if ($variable->isDoublePointer() || $variable->isSuperGlobal()) {
             /* Double pointers for ZE3 are used as zval * */
             $ptr = $isComplex ? $pointer : $pointer . $pointer;
             if ($variable->mustInitNull()) {
@@ -499,13 +499,19 @@ class Backend extends BackendZendEngine2
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
-        $name = $globalVar->getName();
-        $compilationContext->symbolTable->mustGrownStack(true);
-        $output = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
+        $name    = $globalVar->getName();
+        $lines   = array();
+        $lines[] = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
+        $lines[] = 'if (!' . $name . ') {';
+        $lines[] = "\t" . 'ZEPHIR_THROW_EXCEPTION_STR(zend_exception_get_default(), "Invalid superglobal");';
+        $lines[] = "\t" . 'return;';
+        $lines[] = '}';
         if ($useCodePrinter) {
-            $codePrinter->output($output);
+            foreach ($lines as $line) {
+                $codePrinter->output($line);
+            }
         }
-        return $output;
+        return join("\n\t", $lines);
     }
 
     public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)

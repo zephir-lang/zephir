@@ -53,11 +53,6 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
-
-                if ($compilationContext->symbolTable->isSuperGlobal($variable)) {
-                    $flags = 0;
-                }
-
                 break;
 
             case 'property-access':

@@ -1962,7 +1962,7 @@ class ClassMethod
          * Fetch used superglobals
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
-            if ($symbolTable->isSuperGlobal($name)) {
+            if ($variable->isSuperGlobal()) {
                 $globalVar = $symbolTable->getVariable($name);
                 $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
