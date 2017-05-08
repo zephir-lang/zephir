@@ -203,7 +203,7 @@ class SymbolTable
     /**
      * Returns all the variables defined in the symbol table
      *
-     * @return array
+     * @return \Zephir\Variable[]
      */
     public function getVariables()
     {
