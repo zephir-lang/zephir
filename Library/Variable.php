@@ -1025,7 +1025,7 @@ class Variable
      */
     public function isSuperGlobal()
     {
-        return isset($this->superglobals[$this->name]);
+        return $this->isExternal && isset($this->superglobals[$this->name]);
     }
 
     /**
