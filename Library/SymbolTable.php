@@ -267,10 +267,6 @@ class SymbolTable
                 $variable->setDynamicTypes('array');
                 $variable->setIsExternal(true);
                 $this->addRawVariable($variable);
-
-                if ($compilationContext->backend->isZE3()) {
-                    $variable->setIsDoublePointer(true);
-                }
             } else {
                 $variable = $this->getVariable($name);
             }
@@ -444,11 +440,6 @@ class SymbolTable
                 $superVar->increaseUses();
                 $superVar->setUsed(true, $statement);
                 $this->addRawVariable($superVar);
-
-                if ($compilationContext->backend->isZE3()) {
-                    $superVar->setIsDoublePointer(true);
-                }
-
                 return $superVar;
             }
         }
@@ -501,11 +492,6 @@ class SymbolTable
                 $superVar->increaseUses();
                 $superVar->setIsExternal(true);
                 $superVar->setUsed(true, $statement);
-
-                if ($compilationContext->backend->isZE3()) {
-                    $superVar->setIsDoublePointer(true);
-                }
-
                 $this->addRawVariable($superVar);
                 return $superVar;
             }
