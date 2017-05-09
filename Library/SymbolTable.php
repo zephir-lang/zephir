@@ -242,6 +242,7 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array $statement
      * @return Variable
+     * @throws CompilerException
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -438,6 +439,7 @@ class SymbolTable
                 $superVar->setDynamicTypes('array');
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
+                $superVar->setIsExternal(true);
                 $superVar->setUsed(true, $statement);
                 $this->addRawVariable($superVar);
                 return $superVar;
@@ -474,6 +476,7 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array $statement
      * @return Variable
+     * @throws CompilerException
      */
     public function getVariableForUpdate($name, CompilationContext $compilationContext, array $statement = null)
     {

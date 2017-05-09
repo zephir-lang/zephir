@@ -696,7 +696,6 @@ class Variable
      * Set if the variable must be initialized to null
      *
      * @param boolean $mustInitNull
-     * @return boolean
      */
     public function setMustInitNull($mustInitNull)
     {
