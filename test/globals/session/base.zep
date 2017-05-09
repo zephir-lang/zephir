@@ -10,9 +10,19 @@ class Base
 		return _SESSION;
 	}
 
+	public function remove(string index)
+	{
+		unset _SESSION[index];
+	}
+
 	public function __set(string index, var value)
 	{
 		return this->set(index, value);
+	}
+
+	public function __unset(string index)
+	{
+		this->remove(index);
 	}
 
 	protected function removeSessionData()

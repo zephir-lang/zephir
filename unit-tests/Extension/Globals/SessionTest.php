@@ -48,4 +48,40 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $_SESSION);
         $this->assertSame($_SESSION, $result);
     }
+
+    /** @test */
+    public function directUnset()
+    {
+        $this->assertSame([], $_SESSION);
+        $_SESSION['bar'] = 'foo';
+
+        $tester = new Child();
+        $tester->__unset('bar');
+
+        $this->assertSame([], $_SESSION);
+    }
+
+    /** @test */
+    public function remove()
+    {
+        $this->assertSame([], $_SESSION);
+        $_SESSION['foo'] = 'bar';
+
+        $tester = new Child();
+        $tester->remove('foo');
+
+        $this->assertSame([], $_SESSION);
+    }
+
+    /** @test */
+    public function removeFromUnset()
+    {
+        $this->assertSame([], $_SESSION);
+        $_SESSION['bar'] = 'foo';
+
+        $tester = new Child();
+        unset($tester->bar);
+
+        $this->assertSame([], $_SESSION);
+    }
 }

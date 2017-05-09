@@ -820,6 +820,7 @@ class CompilerFile implements FileInterface
      *
      * @param Compiler $compiler
      * @param StringsManager $stringsManager
+     * @throws CompilerException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
     {

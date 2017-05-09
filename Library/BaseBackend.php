@@ -1,8 +1,6 @@
 <?php
 namespace Zephir;
 
-use Zephir\Config;
-
 abstract class BaseBackend
 {
     /**

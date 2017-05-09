@@ -152,21 +152,21 @@ class Variable
      *
      * @var array
      */
-    protected static $complexTypes = array(
+    protected $complexTypes = [
         'variable' => 1,
         'string'   => 1,
         'array'    => 1,
         'resource' => 1,
         'callable' => 1,
         'object'   => 1,
-    );
+    ];
 
     /**
      * Names of superglobal variables
      *
      * @var array
      */
-    protected static $superglobals = array(
+    protected $superglobals = [
         '_GET'     => 1,
         '_POST'    => 1,
         '_COOKIE'  => 1,
@@ -174,7 +174,7 @@ class Variable
         '_SESSION' => 1,
         '_REQUEST' => 1,
         '_FILES'   => 1,
-    );
+    ];
 
     /**
      * Variable constructor
@@ -696,7 +696,6 @@ class Variable
      * Set if the variable must be initialized to null
      *
      * @param boolean $mustInitNull
-     * @return boolean
      */
     public function setMustInitNull($mustInitNull)
     {
@@ -1015,7 +1014,7 @@ class Variable
      */
     public function isComplex()
     {
-        return isset(self::$complexTypes[$this->type]);
+        return isset($this->complexTypes[$this->type]);
     }
 
     /**
@@ -1025,12 +1024,7 @@ class Variable
      */
     public function isSuperGlobal()
     {
-        if (!$this->isExternal) {
-            return false;
-        }
-
-        $name = $this->getName();
-        return isset(self::$superglobals[$name]);
+        return $this->isExternal && isset($this->superglobals[$this->name]);
     }
 
     /**

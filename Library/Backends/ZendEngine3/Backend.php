@@ -508,7 +508,7 @@ class Backend extends BackendZendEngine2
         $lines[] = '}';
         if ($useCodePrinter) {
             foreach ($lines as $line) {
-                $codePrinter->output($line);
+                $compilationContext->codePrinter->output($line);
             }
         }
         return join("\n\t", $lines);
