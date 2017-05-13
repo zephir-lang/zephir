@@ -19,8 +19,8 @@ branches:
 init:
     - SET ANSICON=121x90 (121x90)
     - SET COMPOSER_NO_INTERACTION=1
-    - SET PARSER_RELEASE=1.0.2
-    - SET PARSER_VERSION=1.0.2-255
+    - SET PARSER_RELEASE=1.0.3
+    - SET PARSER_VERSION=1.0.3-258
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "development") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
 
 cache:
