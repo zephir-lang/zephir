@@ -22,6 +22,9 @@ use Test\Globals\Session\Child;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * This method is called before a test is executed.
+     */
     public function setUp()
     {
         parent::setUp();
