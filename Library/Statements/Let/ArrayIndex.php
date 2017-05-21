@@ -169,13 +169,8 @@ class ArrayIndex
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
         $flags = 'PH_COPY | PH_SEPARATE';
-        $isGlobalVariable = $compilationContext->symbolTable->isSuperGlobal($variable);
 
         $compilationContext->headersManager->add('kernel/array');
-
-        if ($isGlobalVariable) {
-            $flags = 'PH_COPY';
-        }
 
         switch ($exprIndex->getType()) {
             case 'int':

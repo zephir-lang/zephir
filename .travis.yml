@@ -22,7 +22,7 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - ZEPHIR_PARSER_VERSION="v1.0.2"
+    - ZEPHIR_PARSER_VERSION="v1.0.3"
   matrix:
     - CC="ccache gcc"
     - CC="clang"
@@ -62,6 +62,7 @@ before_script:
   - $CC --version
 
 script:
+  - echo 'variables_order=EGPCS' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
   - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
   - $(phpenv which php) unit-tests/microbench.php

@@ -9,7 +9,7 @@
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
  | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | https://zephir-lang.com/license.html                                     |
  |                                                                          |
  | If you did not receive a copy of the MIT license and are unable          |
  | to obtain it through the world-wide-web, please send a note to           |
@@ -18,6 +18,8 @@
 */
 
 namespace Zephir;
+
+use Zephir\Variable\Globals;
 
 /**
  * Variable
@@ -148,18 +150,23 @@ class Variable
     protected $usedNode;
 
     /**
+     * @var Globals
+     */
+    protected $globalsManager;
+
+    /**
      * Complex variable type, they may need special treatment
      *
      * @var array
      */
-    protected $complexTypes = array(
+    protected $complexTypes = [
         'variable' => 1,
         'string'   => 1,
         'array'    => 1,
         'resource' => 1,
         'callable' => 1,
         'object'   => 1,
-    );
+    ];
 
     /**
      * Variable constructor
@@ -171,6 +178,8 @@ class Variable
      */
     public function __construct($type, $name, $branch, $defaultInitValue = null)
     {
+        $this->globalsManager = new Globals();
+
         switch ($type) {
             case 'callable':
             case 'object':
@@ -681,7 +690,6 @@ class Variable
      * Set if the variable must be initialized to null
      *
      * @param boolean $mustInitNull
-     * @return boolean
      */
     public function setMustInitNull($mustInitNull)
     {
@@ -1001,6 +1009,16 @@ class Variable
     public function isComplex()
     {
         return isset($this->complexTypes[$this->type]);
+    }
+
+    /**
+     * Checks if a variable is a superglobal
+     *
+     * @return boolean
+     */
+    public function isSuperGlobal()
+    {
+        return $this->isExternal && $this->globalsManager->isSuperGlobal($this->name);
     }
 
     /**

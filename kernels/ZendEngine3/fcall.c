@@ -47,12 +47,9 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
 /**
  * Creates a unique key to cache the current method/function call address for the current scope
  */
-static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entry *ce, zval *function)
+static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_class_entry *ce, zval *function, const zend_class_entry* called_scope)
 {
-	const zend_class_entry *calling_scope, *called_scope;
-	zend_string *res = NULL;
-	char *buf = NULL, *c;
-	size_t l = 0, len = 0;
+	const zend_class_entry *calling_scope;
 	unsigned char t;
 
 #if PHP_VERSION_ID >= 70100
@@ -61,12 +58,10 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 	calling_scope = EG(scope);
 #endif
 
-	called_scope = zend_get_called_scope(EG(current_execute_data));
-
 	switch (type) {
 		case zephir_fcall_parent:
 			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
-				return NULL;
+				return FAILURE;
 			}
 
 			calling_scope = calling_scope->parent;
@@ -75,7 +70,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 		case zephir_fcall_static:
 			calling_scope = called_scope;
 			if (UNEXPECTED(!calling_scope)) {
-				return NULL;
+				return FAILURE;
 			}
 
 			break;
@@ -86,7 +81,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 
 		case zephir_fcall_function:
 			if (Z_TYPE_P(function) == IS_OBJECT) {
-				return NULL;
+				return FAILURE;
 			}
 
 			calling_scope = NULL;
@@ -100,7 +95,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 
 		case zephir_fcall_method:
 			if (Z_TYPE_P(function) == IS_OBJECT) {
-				return NULL;
+				return FAILURE;
 			}
 
 			calling_scope = ce;
@@ -108,7 +103,7 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			break;
 
 		default:
-			return NULL;
+			return FAILURE;
 	}
 
 	if (called_scope == calling_scope) {
@@ -148,16 +143,20 @@ static zend_string* zephir_make_fcall_key(zephir_call_type type, zend_class_entr
 			}
 		}
 
-		res = zend_string_alloc(cls_len + 1 + mth_len + sizeof(unsigned char), 0);
-		buf = ZSTR_VAL(res);
+		if (cls_len + 1 + mth_len + sizeof(unsigned char) > 255) {
+			return FAILURE;
+		}
+
+		ZSTR_LEN(s) = cls_len + 1 + mth_len + sizeof(unsigned char);
+		buf = ZSTR_VAL(s);
 		zend_str_tolower_copy(buf, cls, cls_len + 1);
 		zend_str_tolower_copy(buf + cls_len + 1, mth, mth_len);
-		memcpy(buf + cls_len + 1 + mth_len, &t, sizeof(t));
+		buf[cls_len + 1 + mth_len] = t;
 		buf[cls_len + 1 + mth_len + sizeof(t)] = '\0';
 	}
 
-	ZSTR_H(res) = zend_hash_func(ZSTR_VAL(res), ZSTR_LEN(res));
-	return res;
+	ZSTR_H(s) = zend_hash_func(ZSTR_VAL(s), ZSTR_LEN(s));
+	return SUCCESS;
 }
 
 static void resolve_callable(zval* retval, zephir_call_type type, zend_class_entry *ce, zval *object, zval *function)
@@ -209,7 +208,7 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 	} ZEND_HASH_FILL_END();
 }
 
-static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr, zval *func)
+static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, zend_class_entry* ce, zval *this_ptr, zval *func, zend_class_entry* called_scope)
 {
 	zend_class_entry* calling_scope;
 	fcic->initialized      = 0;
@@ -223,7 +222,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 		return;
 	}
 
-	fcic->called_scope = zend_get_called_scope(EG(current_execute_data));
+	fcic->called_scope = called_scope;
 
 #if PHP_VERSION_ID >= 70100
 	calling_scope = zend_get_executed_scope();
@@ -292,28 +291,19 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	zend_fcall_info fci;
 	zend_fcall_info_cache fcic;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
-	zend_string *fcall_key = NULL;
+	char fcall_key[sizeof(zend_string) + 256];
+	int key_ok = FAILURE;
 	zephir_fcall_cache_entry *temp_cache_entry = NULL;
 	zval callable;
-	int reload_cache = 1, i;
+	int i;
+	zend_class_entry* called_scope = zend_get_called_scope(EG(current_execute_data));
 
 	assert(obj_ce || !object_pp);
 	ZVAL_UNDEF(&callable);
 	ZVAL_UNDEF(&local_retval_ptr);
 
-	if (retval_ptr) {
-		zval_ptr_dtor(retval_ptr);
-		ZVAL_NULL(retval_ptr);
-	}
-
-	++zephir_globals_ptr->recursive_lock;
-
-	if (UNEXPECTED(zephir_globals_ptr->recursive_lock > 2048)) {
-		zend_error(E_ERROR, "Maximum recursion depth exceeded");
-		return FAILURE;
-	}
-
 	if ((!cache_entry || !*cache_entry) && zephir_globals_ptr->cache_enabled) {
+		int reload_cache = 1;
 		if (cache_slot > 0 && zephir_globals_ptr->scache[cache_slot]) {
 			reload_cache = 0;
 			temp_cache_entry = zephir_globals_ptr->scache[cache_slot];
@@ -323,9 +313,13 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		}
 
 		if (reload_cache) {
-			fcall_key = zephir_make_fcall_key(type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), function_name);
-			if (fcall_key) {
-				temp_cache_entry = zend_hash_find_ptr(zephir_globals_ptr->fcache, fcall_key);
+			key_ok = zephir_make_fcall_key((zend_string*)fcall_key, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), function_name, called_scope);
+			if (SUCCESS == key_ok) {
+				zend_string* zs  = (zend_string*)fcall_key;
+				GC_REFCOUNT(zs)  = 1;
+				GC_TYPE_INFO(zs) = IS_STRING;
+
+				temp_cache_entry = zend_hash_find_ptr(zephir_globals_ptr->fcache, zs);
 				if (temp_cache_entry) {
 					cache_entry = &temp_cache_entry;
 				}
@@ -342,13 +336,12 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fci.retval         = retval_ptr ? retval_ptr : &local_retval_ptr;
 	fci.param_count    = param_count;
 	fci.params         = NULL;
-	/* fci.params: Passed as separate parameter to prevent the need to convert zval ** to zval * */
 	fci.no_separation  = 1;
 
 	fcic.initialized = 0;
 	if (cache_entry && *cache_entry) {
 	/* We have a cache record, initialize scope */
-		populate_fcic(&fcic, type, obj_ce, object_pp, function_name);
+		populate_fcic(&fcic, type, obj_ce, object_pp, function_name, called_scope);
 		if (!fcic.function_handler) {
 			fcic.function_handler = *cache_entry;
 		}
@@ -408,26 +401,20 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	 * call failed OR there was an exception (to be safe) OR cache key is not defined OR
 	 * fcall cache was deinitialized OR we have a slot cache
 	 */
-	if (EXPECTED(status != FAILURE) && !EG(exception) && fcall_key && fcic.initialized && !temp_cache_entry) {
-		int add_failed = 0;
+	if (EXPECTED(status != FAILURE) && !EG(exception) && SUCCESS == key_ok && fcic.initialized && !temp_cache_entry) {
 		zephir_fcall_cache_entry *cache_entry_temp = fcic.function_handler;
 
 		if (cache_entry) {
+			*cache_entry = cache_entry_temp;
 			if (cache_slot > 0) {
-				*cache_entry = cache_entry_temp;
 				zephir_globals_ptr->scache[cache_slot] = *cache_entry;
 			}
 		}
 
 		if (zephir_globals_ptr->cache_enabled) {
-			/** TODO: maybe construct zend_string (we do have a valid fcall_key) to avoid hash recalculation */
-			if (NULL == zend_hash_add_ptr(zephir_globals_ptr->fcache, fcall_key, cache_entry_temp)) {
-			}
+			zend_string *zs = (zend_string*)fcall_key;
+			zend_hash_str_add_ptr(zephir_globals_ptr->fcache, ZSTR_VAL(zs), ZSTR_LEN(zs), cache_entry_temp);
 		}
-	}
-
-	if (fcall_key) {
-		zend_string_release(fcall_key);
 	}
 
 	if (!retval_ptr) {
@@ -437,7 +424,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 		ZVAL_NULL(retval_ptr);
 	}
 
-	--zephir_globals_ptr->recursive_lock;
 	return status;
 }
 
