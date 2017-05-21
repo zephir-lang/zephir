@@ -62,12 +62,12 @@ class Globals
     /**
      * By default contains the contents of $_COOKIE, $_GET, and $_POST.
      */
-    const REQUEST = 'REQUEST';
+    const REQUEST = '_REQUEST';
 
     /**
      * The items uploaded to the current script via the HTTP POST method.
      */
-    const FILES = 'FILES';
+    const FILES = '_FILES';
 
     /**
      * Names of superglobal variables.
