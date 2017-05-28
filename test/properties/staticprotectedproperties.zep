@@ -81,4 +81,17 @@ class StaticProtectedProperties
 		return self::someString;
 	}
 
+	public function compareStaticNull() -> boolean
+	{
+		var someNull;
+
+		let someNull = self::someNull;
+
+		if someNull === null {
+			let someNull = true;
+			return someNull;
+		}
+
+		return someNull;
+	}
 }
