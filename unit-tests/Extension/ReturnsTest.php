@@ -37,9 +37,27 @@ class ReturnsTest extends \PHPUnit_Framework_TestCase
      * @test
      * @issue 1534
      */
+    public function shouldReturnWithParameterStaticVersion()
+    {
+        $this->assertSame('Return back', Returns::returnWithParameter('Hello World!'));
+    }
+
+    /**
+     * @test
+     * @issue 1534
+     */
     public function shouldReturnWithoutParameter()
     {
         $tester = new Returns();
         $this->assertSame('Return back', $tester->returnWithoutParameter());
+    }
+
+    /**
+     * @test
+     * @issue 1534
+     */
+    public function shouldReturnWithoutParameterStaticVersion()
+    {
+        $this->assertSame('Return back', Returns::returnWithoutParameter());
     }
 }
