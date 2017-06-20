@@ -32,4 +32,11 @@ class GlobalsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($t->getDefaultGlobals5(), 10);
         $this->assertSame($t->getDefaultGlobals6(), 15.2);
     }
+
+    public function testSetGlobals()
+    {
+        $t = new \Test\Globals();
+        $t->setDefaultGlobals5(20);
+        $this->assertSame($t->getDefaultGlobals5(), 20);
+    }
 }

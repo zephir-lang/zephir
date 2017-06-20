@@ -37,4 +37,9 @@ class Globals
 	{
 		return globals_get("my_setting_3");
 	}
+
+	public function setDefaultGlobals5(int value)
+	{
+		globals_set("my_setting_2", value);
+	}
 }
