@@ -655,10 +655,6 @@ int zephirt_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache
 #define ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER zend_call_function
 #endif
 
-#ifndef zend_error_noreturn
-#define zend_error_noreturn zend_error
-#endif
-
 #define zephirt_check_call_status() \
 	do \
 		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
