@@ -262,4 +262,9 @@ class Mcall
 		let a = new self;
 		return a->bb();
 	}
+
+	public function callOtherExtending(object a)
+	{
+		return a->testExtending();
+	}
 }

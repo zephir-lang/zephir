@@ -22,6 +22,8 @@ namespace Extension;
 use Test\Mcall;
 use stdClass;
 
+require DATA_PATH . '/TestMcallDynamic.php';
+
 class MCallTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -206,5 +208,12 @@ class MCallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
+
+    public function testOtherExtending()
+    {
+        $a = new Mcall();
+        $b = new \TestMcallDynamic();
+        $this->assertSame($a->callOtherExtending($b), true);
     }
 }
