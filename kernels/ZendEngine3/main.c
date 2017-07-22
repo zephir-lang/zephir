@@ -256,7 +256,7 @@ int zephir_fast_count_int(zval *value)
 /**
  * Check if a function exists using explicit function length
  *
- * @todo Deprected. Will be removed in future
+ * @todo Deprecated. Will be removed in future
  */
 int zephir_function_quick_exists_ex(const char *function_name, size_t function_len)
 {
@@ -285,7 +285,7 @@ int zephir_function_exists(const zval *function_name)
 /**
  * Check if a function exists using explicit function length
  *
- * @todo Deprected. Will be removed in future
+ * @todo Deprecated. Will be removed in future
  * @param function_name
  * @param function_len strlen(function_name) + 1
  */

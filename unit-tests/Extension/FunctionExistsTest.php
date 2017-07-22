@@ -58,13 +58,16 @@ class FunctionExistsTest extends \PHPUnit_Framework_TestCase
 
     public function providerInternalFunctions()
     {
-        $functions = get_defined_functions();
+        $allFunctions = get_defined_functions();
+        shuffle($allFunctions['internal']);
 
-        return array_map(
+        $functions = array_map(
             function ($value) {
                 return [$value];
             },
-            $functions['internal']
+            $allFunctions['internal']
         );
+
+        return array_slice($functions, 0, 10);
     }
 }
