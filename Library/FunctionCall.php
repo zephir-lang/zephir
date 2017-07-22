@@ -207,6 +207,9 @@ class FunctionCall extends Call
      * @param array $expression
      * @param Call $call
      * @param CompilationContext $compilationContext
+     * @return bool|mixed
+     *
+     * @throws \Exception
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
@@ -217,6 +220,7 @@ class FunctionCall extends Call
          */
         if (!isset(self::$_optimizers[$funcName])) {
             $camelizeFunctionName = Utils::camelize($funcName);
+
 
             /**
              * Check every optimizer directory for an optimizer
@@ -257,6 +261,7 @@ class FunctionCall extends Call
      * Checks if the function is a built-in provided by Zephir
      *
      * @param string $functionName
+     * @return bool
      */
     public function isBuiltInFunction($functionName)
     {
@@ -309,8 +314,11 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
