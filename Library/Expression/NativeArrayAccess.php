@@ -143,9 +143,12 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array $expression
-     * @param Variable $variableVariable
+     * @param array              $expression
+     * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     protected function _accessDimensionArray($expression, Variable $variableVariable, CompilationContext $compilationContext)
     {
