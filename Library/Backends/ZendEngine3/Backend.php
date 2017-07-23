@@ -564,6 +564,9 @@ class Backend extends BackendZendEngine2
         );
     }
 
+    /**
+     * @return Variable
+     */
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
         if ($value instanceof GlobalConstant) {
