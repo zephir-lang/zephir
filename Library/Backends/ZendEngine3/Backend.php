@@ -1,6 +1,7 @@
 <?php
 namespace Zephir\Backends\ZendEngine3;
 
+use Zephir\ClassDefinition;
 use Zephir\Variable;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -542,18 +543,25 @@ class Backend extends BackendZendEngine2
         }
     }
 
+    /**
+     * @param Variable           $symbolVariable
+     * @param ClassDefinition    $classDefinition
+     * @param                    $property
+     * @param bool               $readOnly
+     * @param CompilationContext $context
+     */
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
     {
-        $flags = 'PH_NOISY_CC';
-        if ($readOnly) {
-            $flags .= ' | PH_READONLY';
-        }
-        //TODO: maybe optimizations as well as above
-        if ($symbolVariable->isDoublePointer()) {
-            $context->codePrinter->output('zephir_read_static_property_ce(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
-        } else {
-            $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
-        }
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                $symbolVariable->isDoublePointer() ? '' : '&',
+                $symbolVariable->getName(),
+                $classDefinition->getClassEntry(),
+                $property,
+                $readOnly ? ' | PH_READONLY' : ''
+            )
+        );
     }
 
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
