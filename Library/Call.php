@@ -44,13 +44,13 @@ class Call
 
     protected $_reflection;
 
-    protected $_resolvedTypes = array();
+    protected $_resolvedTypes = [];
 
-    protected $_resolvedDynamicTypes = array();
+    protected $_resolvedDynamicTypes = [];
 
-    protected $_temporalVariables = array();
+    protected $_temporalVariables = [];
 
-    protected $_mustCheckForCopy = array();
+    protected $_mustCheckForCopy = [];
 
     /**
      * Processes the symbol variable that will be used to return
@@ -72,7 +72,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                         'variable',
@@ -112,7 +112,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
                 } else {
@@ -148,7 +148,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
                 } else {
@@ -305,6 +305,8 @@ class Call
      * @param array $expression
      * @param array $calleeDefinition
      * @return array
+     *
+     * @throws CompilerException
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
@@ -664,7 +666,7 @@ class Call
     {
         if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
             $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
-            $callStatus->setIsInitialized(true, $compilationContext, array());
+            $callStatus->setIsInitialized(true, $compilationContext);
             $callStatus->increaseUses();
             $callStatus->setReadOnly(true);
             $compilationContext->symbolTable->addRawVariable($callStatus);

@@ -40,11 +40,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        if (count($expression['parameters']) != 1) {
+        if (!isset($expression['parameters']) || count($expression['parameters']) != 1) {
             return false;
         }
 
