@@ -56,6 +56,9 @@ class Backend extends BackendZendEngine2
         return $code;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
@@ -421,7 +424,7 @@ class Backend extends BackendZendEngine2
                 break;
         }
 
-        if (!$type) {
+        if ($type === null) {
             throw new CompilerException("Unknown type mapping: " . $value->getType());
         }
 
@@ -495,7 +498,8 @@ class Backend extends BackendZendEngine2
             $context->codePrinter->output('zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
             return;
         }
-        return parent::arrayUnset($variable, $exprIndex, $flags, $context);
+
+        parent::arrayUnset($variable, $exprIndex, $flags, $context);
     }
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
@@ -552,6 +556,7 @@ class Backend extends BackendZendEngine2
      */
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
     {
+        // TODO: maybe optimizations as well as above
         $context->codePrinter->output(
             sprintf(
                 'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
@@ -565,7 +570,11 @@ class Backend extends BackendZendEngine2
     }
 
     /**
-     * @return Variable
+     * @param                    $value
+     * @param CompilationContext $context
+     * @param bool               $usePointer
+     * @return bool|string|Variable
+     * @throws CompilerException
      */
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
@@ -581,7 +590,9 @@ class Backend extends BackendZendEngine2
                     $value = 'false';
                     break;
                 default:
-                    throw new CompilerException('ZE3: Unknown constant '.$value->getName());
+                    throw new CompilerException(
+                        $this->name . ': Unknown constant ' . $value->getName()
+                    );
             }
         }
 

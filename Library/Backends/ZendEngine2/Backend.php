@@ -55,11 +55,13 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
     }
-
 
     public function getFcallManager()
     {

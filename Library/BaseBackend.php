@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\StringsManager;
+
 abstract class BaseBackend
 {
     /**
@@ -68,6 +70,8 @@ abstract class BaseBackend
 
     /**
      * Resolves the path to the source template file of the backend
+     *
+     * @param string $filename
      * @return string Absolute path to template file
      */
     public function getTemplateFileContents($filename)
@@ -79,7 +83,11 @@ abstract class BaseBackend
         return file_get_contents($filepath);
     }
 
+    /**
+     * @return StringsManager
+     */
     abstract public function getStringsManager();
+
     abstract public function getTypeDefinition($type);
     abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
