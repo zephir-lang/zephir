@@ -30,4 +30,9 @@ class FunctionExists
 
 		return result;
 	}
+
+	public function testWithString() -> bool
+	{
+		return function_exists("substr");
+	}
 }
