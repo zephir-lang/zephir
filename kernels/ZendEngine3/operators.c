@@ -528,6 +528,15 @@ int zephir_less_long(zval *op1, long op2)
 	return Z_TYPE(result) == IS_TRUE;
 }
 
+int zephir_less_double(zval *op1, double op2)
+{
+	zval result, op2_zval;
+	ZVAL_DOUBLE(&op2_zval, op2);
+
+	is_smaller_function(&result, op1, &op2_zval);
+	return Z_TYPE(result) == IS_TRUE;
+}
+
 int zephir_less_equal_long(zval *op1, long op2)
 {
 	zval result, op2_zval;
@@ -544,6 +553,15 @@ int zephir_greater_long(zval *op1, long op2)
 {
 	zval result, op2_zval;
 	ZVAL_LONG(&op2_zval, op2);
+
+	is_smaller_or_equal_function(&result, op1, &op2_zval);
+	return Z_TYPE(result) == IS_FALSE;
+}
+
+int zephir_greater_double(zval *op1, double op2)
+{
+	zval result, op2_zval;
+	ZVAL_DOUBLE(&op2_zval, op2);
 
 	is_smaller_or_equal_function(&result, op1, &op2_zval);
 	return Z_TYPE(result) == IS_FALSE;
