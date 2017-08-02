@@ -1,6 +1,7 @@
 <?php
 namespace Zephir\Backends\ZendEngine3;
 
+use Zephir\ClassDefinition;
 use Zephir\Variable;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -55,6 +56,9 @@ class Backend extends BackendZendEngine2
         return $code;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
@@ -420,7 +424,7 @@ class Backend extends BackendZendEngine2
                 break;
         }
 
-        if (!$type) {
+        if ($type === null) {
             throw new CompilerException("Unknown type mapping: " . $value->getType());
         }
 
@@ -494,7 +498,8 @@ class Backend extends BackendZendEngine2
             $context->codePrinter->output('zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
             return;
         }
-        return parent::arrayUnset($variable, $exprIndex, $flags, $context);
+
+        parent::arrayUnset($variable, $exprIndex, $flags, $context);
     }
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
@@ -542,20 +547,35 @@ class Backend extends BackendZendEngine2
         }
     }
 
+    /**
+     * @param Variable           $symbolVariable
+     * @param ClassDefinition    $classDefinition
+     * @param                    $property
+     * @param bool               $readOnly
+     * @param CompilationContext $context
+     */
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
     {
-        $flags = 'PH_NOISY_CC';
-        if ($readOnly) {
-            $flags .= ' | PH_READONLY';
-        }
-        //TODO: maybe optimizations as well as above
-        if ($symbolVariable->isDoublePointer()) {
-            $context->codePrinter->output('zephir_read_static_property_ce(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
-        } else {
-            $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
-        }
+        // TODO: maybe optimizations as well as above
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                $symbolVariable->isDoublePointer() ? '' : '&',
+                $symbolVariable->getName(),
+                $classDefinition->getClassEntry(),
+                $property,
+                $readOnly ? ' | PH_READONLY' : ''
+            )
+        );
     }
 
+    /**
+     * @param                    $value
+     * @param CompilationContext $context
+     * @param bool               $usePointer
+     * @return bool|string|Variable
+     * @throws CompilerException
+     */
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
         if ($value instanceof GlobalConstant) {
@@ -570,7 +590,9 @@ class Backend extends BackendZendEngine2
                     $value = 'false';
                     break;
                 default:
-                    throw new CompilerException('ZE3: Unknown constant '.$value->getName());
+                    throw new CompilerException(
+                        $this->name . ': Unknown constant ' . $value->getName()
+                    );
             }
         }
 

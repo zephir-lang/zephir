@@ -55,11 +55,13 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
     }
-
 
     public function getFcallManager()
     {
@@ -175,6 +177,9 @@ class Backend extends BaseBackend
      * @param string $operator
      * @param string $value
      * @param CompilationContext $context
+     * @return string
+     *
+     * @throws CompilerException
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -356,7 +361,7 @@ class Backend extends BaseBackend
                     if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
-                            $symbolTable->mustGrownStack(true);
+                            $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->backend->initVar($variable, $compilationContext);
                             switch ($defaultValue['type']) {
                                 case 'int':
@@ -414,7 +419,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'string':
@@ -440,7 +445,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'null':

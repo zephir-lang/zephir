@@ -1,5 +1,25 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir Language                                                          |
+ +--------------------------------------------------------------------------+
+ | Copyright (c) 2013-2017 Zephir Team and contributors                     |
+ +--------------------------------------------------------------------------+
+ | This source file is subject the MIT license, that is bundled with        |
+ | this package in the file LICENSE, and is available through the           |
+ | world-wide-web at the following url:                                     |
+ | http://zephir-lang.com/license.html                                      |
+ |                                                                          |
+ | If you did not receive a copy of the MIT license and are unable          |
+ | to obtain it through the world-wide-web, please send a note to           |
+ | license@zephir-lang.com so we can mail you a copy immediately.           |
+ +--------------------------------------------------------------------------+
+*/
+
 namespace Zephir;
+
+use Zephir\StringsManager;
 
 abstract class BaseBackend
 {
@@ -50,6 +70,8 @@ abstract class BaseBackend
 
     /**
      * Resolves the path to the source template file of the backend
+     *
+     * @param string $filename
      * @return string Absolute path to template file
      */
     public function getTemplateFileContents($filename)
@@ -61,7 +83,11 @@ abstract class BaseBackend
         return file_get_contents($filepath);
     }
 
+    /**
+     * @return StringsManager
+     */
     abstract public function getStringsManager();
+
     abstract public function getTypeDefinition($type);
     abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
@@ -151,6 +177,8 @@ abstract class BaseBackend
      * @return string
      */
     abstract public function getVariableCodePointer(Variable $variable);
+
+    abstract public function resolveValue($value, CompilationContext $context, $usePointer = false);
 
     public static function getActiveBackend()
     {

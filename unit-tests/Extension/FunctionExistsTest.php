@@ -56,6 +56,16 @@ class FunctionExistsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $t->testBuiltInFunctions());
     }
 
+    /**
+     * @test
+     * @issue 1547
+     */
+    public function shouldCorrectDetectestExistenceByUsingString()
+    {
+        $t = new FunctionExists();
+        $this->assertTrue($t->testWithString());
+    }
+
     public function providerInternalFunctions()
     {
         $allFunctions = get_defined_functions();
