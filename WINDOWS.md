@@ -18,7 +18,8 @@ PHP-Version requirements are marked using `[ ]`
     ```cmd
     setx path "%path%;c:\path-to-php\"
     ```
-- [Install PHP SDK](http://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
+- [Install PHP SDK for PHP 5.6](http://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
+- [Install PHP SDK for PHP 7.0+](https://github.com/OSTC/php-sdk-binary-tools) 
 ```cmd
 setx php_sdk "c:\path-to-php-sdk"
 ```
