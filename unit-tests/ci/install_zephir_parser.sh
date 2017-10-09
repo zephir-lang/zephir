@@ -28,7 +28,10 @@ if [ ! -f ${PARSER_DIR}/tests/ci/install-travis ]; then
     git clone --depth=1 -v https://github.com/phalcon/php-zephir-parser.git -b ${ZEPHIR_PARSER_VERSION} ${PARSER_DIR}
 fi
 
-
 cd ${PARSER_DIR}
 
-bash ./unit-tests/ci/install-travis
+if [ -z "${TRAVIS}" ]; then
+    bash ./install
+else
+    bash ./unit-tests/ci/install-travis
+fi
