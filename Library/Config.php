@@ -199,11 +199,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function get($key, $namespace = null)
     {
-        if ($namespace !== null) {
-            return $this->offsetGet([$namespace => $key]);
-        }
-
-        return $this->offsetGet($key);
+        return $namespace !== null ? $this->offsetGet([$namespace => $key]) : $this->offsetGet($key);
     }
 
     /**
@@ -215,12 +211,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function set($key, $value, $namespace = null)
     {
-        if ($namespace !== null) {
-            $this->offsetSet([$namespace => $key], $value);
-            return;
-        }
-
-        $this->offsetSet($key, $value);
+        $namespace !== null ? $this->offsetSet([$namespace => $key], $value): $this->offsetSet($key, $value);
     }
 
     /**
