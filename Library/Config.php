@@ -113,6 +113,7 @@ class Config implements \ArrayAccess
     public function __construct()
     {
         $this->populate();
+        $this->changed = false;
     }
 
     /**
@@ -141,7 +142,7 @@ class Config implements \ArrayAccess
         $namespace = key($key);
         $key = current($key);
 
-        if (!$this->offsetExists($namespace) || is_array($this->container[$namespace])) {
+        if (!$this->offsetExists($namespace) || !is_array($this->container[$namespace])) {
             return null;
         }
 
@@ -260,6 +261,15 @@ class Config implements \ArrayAccess
             );
         }
 
-        $this->container = array_merge_recursive($this->container, $config);
+        foreach ($config as $key => $configSection) {
+            if (!is_array($configSection)) {
+                $this->offsetSet($key, $configSection);
+                continue;
+            }
+
+            foreach ($configSection as $subKey => $subValue) {
+                $this->offsetSet([$key => $subKey], $subValue);
+            }
+        }
     }
 }
