@@ -263,14 +263,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         }
 
         foreach ($config as $key => $configSection) {
-            if (!is_array($configSection)) {
-                $this->offsetSet($key, $configSection);
-                continue;
-            }
-
-            foreach ($configSection as $subKey => $subValue) {
-                $this->offsetSet([$key => $subKey], $subValue);
-            }
+            $this->offsetSet($key, $configSection);
         }
     }
 }
