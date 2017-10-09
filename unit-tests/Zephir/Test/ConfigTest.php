@@ -85,7 +85,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         chdir(sys_get_temp_dir());
         $config = new Config();
         $config->set('name', 'foo');
-        $config->saveOnExit();
+        $config->dumpToFile();
         $configJson = json_decode(file_get_contents('config.json'), true);
         $this->assertInternalType('array', $configJson);
         $this->assertSame($configJson['name'], 'foo');

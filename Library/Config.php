@@ -20,37 +20,38 @@
 namespace Zephir;
 
 /**
- * Manages compiler global configuration
+ * Zephir\Config
  *
- * Class Config
+ * Manages compiler global configuration.
+ *
  * @package Zephir
  */
-class Config
+class Config implements \ArrayAccess
 {
     /**
      * Default configuration for project
      *
      * @var array
      */
-    protected $config = array(
-        'stubs' => array(
+    private $container = [
+        'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
-        ),
-        'api' => array(
+        ],
+        'api' => [
             'path' => 'doc/%version%',
-            'theme' => array(
+            'theme' => [
                 'name'    => 'zephir',
-                'options' => array(
+                'options' => [
                     'github'           => null,
                     'analytics'        => null,
                     'main_color'       => '#3E6496',
                     'link_color'       => '#3E6496',
                     'link_hover_color' => '#5F9AE7'
-                )
-            )
-        ),
-        'warnings' => array(
+                ]
+            ]
+        ],
+        'warnings' => [
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
             'possible-wrong-parameter'           => true,
@@ -75,8 +76,8 @@ class Config
             'invalid-reference'                  => true,
             'invalid-typeof-comparison'          => true,
             'conditional-initialization'         => true
-        ),
-        'optimizations' => array(
+        ],
+        'optimizations' => [
             'static-type-inference'              => true,
             'static-type-inference-second-pass'  => true,
             'local-context-pass'                 => true,
@@ -85,17 +86,17 @@ class Config
             'call-gatherer-pass'                 => true,
             'check-invalid-reads'                => false,
             'internal-call-transformation'       => false
-        ),
+        ],
         'namespace'   => '',
         'name'        => '',
         'description' => '',
         'author'      => '',
         'version'     => '0.0.1',
         'verbose'     => false,
-        'requires'    => array(
-            'extensions'    => array()
-        )
-    );
+        'requires'    => [
+            'extensions'    => []
+        ]
+    ];
 
     /**
      * Is config changed?
@@ -105,88 +106,160 @@ class Config
     protected $changed = false;
 
     /**
-     * Config constructor
+     * Config constructor.
      *
      * @throws Exception
      */
     public function __construct()
     {
-        if (file_exists('config.json')) {
-            $config = json_decode(file_get_contents('config.json'), true);
-            if (!is_array($config)) {
-                throw new Exception(
-                    "config.json is not valid or there is no Zephir extension initialized in this directory"
-                );
-            }
-
-            foreach ($config as $key => $configSection) {
-                if (!is_array($configSection)) {
-                    $this->config[$key] = $configSection;
-                } else {
-                    foreach ($configSection as $subKey => $subValue) {
-                        $this->config[$key][$subKey] = $subValue;
-                    }
-                }
-            }
-        }
+        $this->populate();
     }
 
     /**
-     * Retrieves a configuration setting
+     * Allows to check whether an $key is defined.
      *
-     * @param $key
-     * @param null $namespace
-     * @return mixed
+     * @param mixed $key
+     * @return bool
      */
-    public function get($key, $namespace = null)
+    public function offsetExists($key)
     {
-        if ($namespace !== null) {
-            if (isset($this->config[$namespace][$key])) {
-                return $this->config[$namespace][$key];
-            } else {
-                //new \Exception('Option [' . $namespace . '][' . $key . '] not exists');
-            }
-        } else {
-            if (isset($this->config[$key])) {
-                return $this->config[$key];
-            } else {
-                //new \Exception('Option [' . $key . '] not exists');
-            }
+        return isset($this->container[$key]) || array_key_exists($key, $this->container);
+    }
+
+    /**
+     * Gets a $key from the internal container.
+     *
+     * @param mixed $key
+     * @return mixed|null
+     */
+    public function  offsetGet($key)
+    {
+        if (!is_array($key)) {
+            return $this->offsetExists($key) ? $this->container[$key] : null;
+        }
+
+        $namespace = key($key);
+        $key = current($key);
+
+        if (!$this->offsetExists($namespace) || is_array($this->container[$namespace])) {
+            return null;
+        }
+
+        if (isset($this->container[$namespace][$key]) || array_key_exists($key, $this->container[$namespace])) {
+            return $this->container[$namespace][$key];
         }
 
         return null;
     }
 
     /**
-     * Changes a configuration setting
+     * Sets a configuration value.
      *
-     * @param $key
-     * @param $value
-     * @param null $namespace
+     * @param mixed $key
+     * @param mixed $value
      */
-    public function set($key, $value, $namespace = null)
+    public function offsetSet($key, $value)
     {
-        if ($namespace !== null) {
-            $this->config[$namespace][$key] = $value;
-        } else {
-            $this->config[$key] = $value;
+        if (!is_array($key)) {
+            $this->container[$key] = $value;
+            $this->changed = true;
+            return;
         }
+
+        $namespace = key($key);
+        $key = current($key);
+
+        if (!array_key_exists($namespace, $this->container)) {
+            $this->container[$namespace] = [];
+        }
+
+        $this->container[$namespace][$key] = $value;
+        $this->changed = true;
+    }
+
+    /**
+     * Unsets a $key from internal container.
+     *
+     * @param mixed $key
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->container[$key]);
 
         $this->changed = true;
     }
 
     /**
+     * Retrieves a configuration setting.
+     *
+     * @param mixed $key
+     * @param mixed $namespace
+     * @return mixed|null
+     */
+    public function get($key, $namespace = null)
+    {
+        if ($namespace !== null) {
+            return $this->offsetGet([$namespace => $key]);
+        }
+
+        return $this->offsetGet($key);
+    }
+
+    /**
+     * Changes a configuration setting
+     *
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $namespace
+     */
+    public function set($key, $value, $namespace = null)
+    {
+        if ($namespace !== null) {
+            $this->offsetSet([$namespace => $key], $value);
+            return;
+        }
+
+        $this->offsetSet($key, $value);
+    }
+
+    /**
      * Writes the configuration if it has been changed
      */
-    public function saveOnExit()
+    public function dumpToFile()
     {
         if ($this->changed && !file_exists('config.json')) {
-            if (defined('JSON_PRETTY_PRINT')) {
-                $config = json_encode($this->config, JSON_PRETTY_PRINT);
-            } else {
-                $config = json_encode($this->config);
-            }
-            file_put_contents('config.json', $config);
+            file_put_contents('config.json', $this);
         }
+    }
+
+    /**
+     * Returns JSON representation of the project config.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this->container, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Populate project configuration.
+     *
+     * @throws Exception
+     */
+    protected function populate()
+    {
+        if (!file_exists('config.json')) {
+            return;
+        }
+
+        $config = json_decode(file_get_contents('config.json'), true);
+        if (!is_array($config)) {
+            throw new Exception(
+                'The config.json file is not valid or there is no Zephir extension initialized in this directory.'
+            );
+        }
+
+        $this->container = array_merge_recursive($this->container, $config);
     }
 }
