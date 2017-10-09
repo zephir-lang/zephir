@@ -54,7 +54,7 @@ install:
   - ./install
 
 before_script:
-  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
+  - $(phpenv which php) -d safe_mode=Off compiler.php generate
   - $(phpenv which php) compiler.php stubs
   - $(phpenv which php) compiler.php api
   - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
