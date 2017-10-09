@@ -26,7 +26,7 @@ namespace Zephir;
  *
  * @package Zephir
  */
-class Config implements \ArrayAccess
+class Config implements \ArrayAccess, \JsonSerializable
 {
     /**
      * Default configuration for project
@@ -133,7 +133,7 @@ class Config implements \ArrayAccess
      * @param mixed $key
      * @return mixed|null
      */
-    public function  offsetGet($key)
+    public function offsetGet($key)
     {
         if (!is_array($key)) {
             return $this->offsetExists($key) ? $this->container[$key] : null;
@@ -240,7 +240,17 @@ class Config implements \ArrayAccess
      */
     public function __toString()
     {
-        return json_encode($this->container, JSON_PRETTY_PRINT);
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->container;
     }
 
     /**

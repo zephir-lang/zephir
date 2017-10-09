@@ -40,8 +40,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * Test when we have a bad config.json file.
      *
      * @expectedException Exception
-     * @expectedExceptionMessage config.json is not valid or there is
-     * no Zephir extension initialized in this directory
+     * @expectedExceptionMessage The config.json file is not valid or there is
+     * no Zephir extension initialized in this directory.
      */
     public function testConstructWithBadConfigFile()
     {
