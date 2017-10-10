@@ -22,12 +22,12 @@ namespace Zephir;
  */
 class Logger
 {
-    private static $files = [];
-
     /**
-     * Stderr handler
+     * The contents of the files that are involved in the log message.
+     *
+     * @var array
      */
-    protected $handler;
+    private $filesContent = [];
 
     /**
      * @var Config
@@ -66,19 +66,12 @@ class Logger
             } else {
                 $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
             }
+
             $warning .= ' [' . $type . ']' . PHP_EOL;
             $warning .= PHP_EOL;
             if (isset($node['file'])) {
-                if (!isset($_files[$node['file']])) {
-                    if (file_exists($node['file'])) {
-                        $lines = file($node['file']);
-                    } else {
-                        $lines = array();
-                    }
-                    $_files[$node['file']] = $lines;
-                } else {
-                    $lines = $_files[$node['file']];
-                }
+                $lines = $this->getFileContents($node['file']);
+
                 if (isset($lines[$node['line'] - 1])) {
                     $line = $lines[$node['line'] - 1];
                     $warning .= "\t" . str_replace("\t", " ", $line);
@@ -86,14 +79,11 @@ class Logger
                         $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
                     }
                 }
+
                 $warning .= PHP_EOL;
             }
 
-            if (!$this->handler) {
-                $this->handler = STDERR;
-            }
-
-            fprintf($this->handler, "%s", Color::warning($warning));
+            fprintf(STDERR, "%s", Color::warning($warning));
 
             return true;
         }
@@ -110,9 +100,24 @@ class Logger
     public function output($message)
     {
         if (!$this->config->get('silent')) {
-            echo $message . PHP_EOL;
+            fwrite(STDOUT, $message . PHP_EOL);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets the contents of the files that are involved in the log message.
+     *
+     * @param string $file File path
+     * @return array
+     */
+    protected function getFileContents($file)
+    {
+        if (!isset($this->filesContent[$file])) {
+            $this->filesContent[$file] = file_exists($file) ? file($file) : [];
+        }
+
+        return $this->filesContent[$file];
     }
 }
