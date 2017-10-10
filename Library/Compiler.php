@@ -18,7 +18,6 @@ use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
-use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
@@ -1152,7 +1151,7 @@ class Compiler
      * @param CommandInterface $command
      * @param boolean $development
      *
-     * @throws RuntimeException
+     * @throws CompilerException
      */
     public function install(CommandInterface $command, $development = false)
     {
@@ -1167,7 +1166,8 @@ class Compiler
 
         $this->compile($command, $development);
         if (Utils::isWindows()) {
-            throw new RuntimeException("Installation is not implemented for windows yet! Aborting!");
+            $this->logger->output("Installation is not implemented for windows yet! Aborting!");
+            exit();
         }
 
         $this->logger->output('Installing...');
