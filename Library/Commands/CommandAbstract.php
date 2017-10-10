@@ -28,8 +28,6 @@ use Zephir\BaseBackend;
  */
 abstract class CommandAbstract implements CommandInterface
 {
-    use CommandUsageTrait;
-
     private $_parameters = null;
 
     /**
@@ -127,7 +125,7 @@ abstract class CommandAbstract implements CommandInterface
         $params = $this->parseArguments();
 
         if ($this->hasHelpOption()) {
-            $this->formatUsage();
+            echo $this->getSynopsis();
             return;
         }
 
@@ -146,5 +144,28 @@ abstract class CommandAbstract implements CommandInterface
 
         $command = $this->getCommand();
         $compiler->$command($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getSynopsis()
+    {
+        $template =<<<EOF
+Name:
+    %s -- %s
+
+Synopsis:
+    zephir %s
+
+EOF;
+        return sprintf(
+            $template,
+            $this->getCommand(),
+            rtrim($this->getDescription(), '.') . '.',
+            $this->getUsage()
+        );
     }
 }

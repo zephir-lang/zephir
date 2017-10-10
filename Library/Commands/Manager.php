@@ -84,6 +84,7 @@ class Manager extends SplObjectStorage
             $data = [
                 'usage'       => $command->getUsage(),
                 'description' => $command->getDescription(),
+                'synopsis'    => $command->getSynopsis(),
             ];
 
             $this->attach($command, (object) $data);

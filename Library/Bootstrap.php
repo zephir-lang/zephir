@@ -86,7 +86,9 @@ class Bootstrap
     }
 
     /**
-     * Boots the compiler executing the specified action
+     * Boots the compiler executing the specified action.
+     *
+     * @return void
      */
     public function boot()
     {

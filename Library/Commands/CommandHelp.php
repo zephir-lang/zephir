@@ -74,7 +74,7 @@ class CommandHelp extends CommandAbstract
     public function execute(Config $config, Logger $logger)
     {
         if ($this->hasHelpOption()) {
-            $this->formatUsage();
+            echo $this->getSynopsis();
             return;
         }
 
@@ -97,7 +97,7 @@ class CommandHelp extends CommandAbstract
 
         echo PHP_EOL;
         echo "Options:", PHP_EOL;
-        echo sprintf("\t%-20s%s\n", '--help|--h', "Displays command help and exit");
+        echo sprintf("\t%-20s%s\n", '--help|-h', "Displays command help and exit");
         echo sprintf("\t%-20s%s\n", '-f([a-z0-9\-]+)', "Enables compiler optimizations");
         echo sprintf("\t%-20s%s\n", '-fno-([a-z0-9\-]+)', "Disables compiler optimizations");
         echo sprintf("\t%-20s%s\n", '-w([a-z0-9\-]+)', "Turns a warning on");

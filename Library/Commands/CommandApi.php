@@ -26,9 +26,6 @@ use Zephir\Logger;
  */
 class CommandApi extends CommandAbstract
 {
-    use CommandUsageTrait;
-
-
     /**
      * {@inheritdoc}
      *
@@ -72,7 +69,7 @@ class CommandApi extends CommandAbstract
     public function execute(Config $config, Logger $logger)
     {
         if ($this->hasHelpOption()) {
-            $this->formatUsage();
+            echo $this->getSynopsis();
             return;
         }
 

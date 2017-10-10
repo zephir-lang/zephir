@@ -47,6 +47,13 @@ interface CommandInterface
     public function getDescription();
 
     /**
+     * Returns command's synopsis.
+     *
+     * @return string
+     */
+    public function getSynopsis();
+
+    /**
      * Returns parameter named parameterName if specified on the command line else null.
      *
      * @param string $parameterName

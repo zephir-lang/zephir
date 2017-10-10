@@ -65,7 +65,7 @@ class CommandVersion extends CommandAbstract
     public function execute(Config $config, Logger $logger)
     {
         if ($this->hasHelpOption()) {
-            $this->formatUsage();
+            echo $this->getSynopsis();
             return;
         }
 
