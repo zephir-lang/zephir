@@ -26,15 +26,6 @@ use Zephir\Compiler;
  */
 class CommandHelp extends CommandAbstract
 {
-    const LOGO = '
- _____              __    _
-/__  /  ___  ____  / /_  (_)____
-  / /  / _ \/ __ \/ __ \/ / ___/
- / /__/  __/ /_/ / / / / / /
-/____/\___/ .___/_/ /_/_/_/
-         /_/
-';
-
     /**
      * {@inheritdoc}
      *

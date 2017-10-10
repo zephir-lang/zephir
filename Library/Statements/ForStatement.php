@@ -41,7 +41,7 @@ class ForStatement extends StatementAbstract
      * Compiles a for statement that use a 'range' as expression
      *
      * @param array $exprRaw
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return boolean
      */
     public function compileRange($exprRaw, CompilationContext $compilationContext)
@@ -403,7 +403,7 @@ class ForStatement extends StatementAbstract
      * Compiles a 'for' statement that use an 'iterator' as expression
      *
      * @param array $exprRaw
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return boolean
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext)

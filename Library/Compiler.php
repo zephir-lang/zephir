@@ -31,7 +31,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.10.0';
+    const VERSION = '0.10.1';
 
     public $parserCompiled = false;
 
@@ -1151,7 +1151,7 @@ class Compiler
      * @param CommandInterface $command
      * @param boolean $development
      *
-     * @throws Exception
+     * @throws CompilerException
      */
     public function install(CommandInterface $command, $development = false)
     {
@@ -2014,14 +2014,13 @@ class Compiler
         /**
          * Create argument info
          */
-
         foreach ($this->functionDefinitions as $func) {
             $funcName = $func->getInternalName();
             $argInfoName = 'arginfo_' . strtolower($funcName);
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
-            if (count($parameters)) {
+            if (count($parameters->getParameters())) {
                 $headerPrinter->output(
                     'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
                     $func->getNumberOfRequiredParameters() . ')'
@@ -2040,7 +2039,9 @@ class Compiler
                             if (isset($parameter['cast'])) {
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
+                                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
                                         $value = $parameter['cast']['value'];
+
                                         $headerPrinter->output(
                                             "\t" . 'ZEND_ARG_OBJ_INFO(0, ' .
                                             $parameter['name'] . ', ' .

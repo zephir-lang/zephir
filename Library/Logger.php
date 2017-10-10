@@ -13,6 +13,8 @@
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
+
 /**
  * Logger
  *

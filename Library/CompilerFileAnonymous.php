@@ -162,7 +162,7 @@ class CompilerFileAnonymous implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities
          */
-        $compilationContext = new CompilationContext;
+        $compilationContext = new CompilationContext();
 
         /**
          * Set global compiler in the compilation context
