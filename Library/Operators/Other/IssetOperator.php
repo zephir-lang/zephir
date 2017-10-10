@@ -24,7 +24,6 @@ use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
-use Zephir\Optimizers\EvalExpression;
 
 /**
  * IssetOperator

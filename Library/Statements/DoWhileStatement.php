@@ -20,7 +20,6 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 

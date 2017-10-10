@@ -22,14 +22,6 @@ namespace Zephir;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
-use Zephir\Builder\LiteralBuilder;
-use Zephir\Builder\VariableBuilder;
-use Zephir\Builder\StatementsBlockBuilder;
-use Zephir\Builder\Statements\LetStatementBuilder;
-use Zephir\Builder\Statements\IfStatementBuilder;
-use Zephir\Builder\Operators\UnaryOperatorBuilder;
-use Zephir\Builder\Operators\BinaryOperatorBuilder;
-use Zephir\Statements\LetStatement;
 
 /**
  * ClassProperty

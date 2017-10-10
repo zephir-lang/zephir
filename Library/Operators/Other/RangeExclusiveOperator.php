@@ -25,8 +25,6 @@ use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Builder\Operators\CastOperatorBuilder;
 
 /**
  * RangeExclusive

@@ -20,8 +20,6 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
-use Zephir\Expression\Builder\BuilderFactory;
 
 /**
  * Class StatementAbstract

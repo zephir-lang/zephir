@@ -19,8 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\HeadersManager;
-
 /**
  * ClassDefinitionRuntime
  *

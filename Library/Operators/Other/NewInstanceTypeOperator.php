@@ -19,7 +19,6 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Utils;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;

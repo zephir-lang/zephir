@@ -19,8 +19,6 @@
 
 namespace Zephir\Builder\Statements;
 
-use Zephir\Builder\Operators\AbstractOperatorBuilder;
-
 /**
  * IfStatementBuilder
  *

@@ -26,7 +26,6 @@ use Zephir\Expression;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Statements\Let\Variable as LetVariable;
-use Zephir\Builder\FunctionCallBuilder;
 
 /**
  * Cast

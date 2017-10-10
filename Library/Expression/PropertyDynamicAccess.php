@@ -20,7 +20,6 @@
 
 namespace Zephir\Expression;
 
-use Zephir\Statements\LetStatement;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;

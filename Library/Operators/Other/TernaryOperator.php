@@ -21,11 +21,9 @@ namespace Zephir\Operators\Other;
 
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Statements\LetStatement;
-use Zephir\Compiler\CompilerException;
 
 /**
  * Ternary

@@ -19,7 +19,6 @@
 
 namespace Zephir\Statements;
 
-use Zephir\Compiler;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\FunctionCall;

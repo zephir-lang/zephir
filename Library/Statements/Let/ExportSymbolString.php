@@ -20,13 +20,8 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
 use Zephir\Variable as ZephirVariable;
-use Zephir\Detectors\ReadDetector;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Compiler;
-use Zephir\Utils;
 use Zephir\Statements\LetStatement;
 
 /**

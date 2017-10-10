@@ -23,7 +23,6 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
-use Zephir\Expression;
 
 /**
  * Class OptimizerAbstract

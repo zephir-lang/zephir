@@ -19,10 +19,6 @@
 
 namespace Zephir\Cache;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Passes\CallGathererPass;
-
 /**
  * SlotsCache
  *

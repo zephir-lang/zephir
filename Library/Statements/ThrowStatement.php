@@ -24,7 +24,6 @@ use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Types;
 use Zephir\Utils;
 
 /**

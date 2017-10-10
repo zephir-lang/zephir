@@ -24,7 +24,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Operators\BaseOperator;
 use Zephir\Compiler\CompilerException;
-use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
