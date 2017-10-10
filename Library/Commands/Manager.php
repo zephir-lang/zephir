@@ -17,6 +17,9 @@ use ReflectionClass;
 use SplObjectStorage;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Zephir\Exception\ValidationException;
+use Zephir\Exception\OutOfBoundsException;
+use Zephir\Exception\BadMethodCallException;
 use Zephir\Exception\InvalidArgumentException;
 
 /**
@@ -26,6 +29,8 @@ use Zephir\Exception\InvalidArgumentException;
  */
 class Manager extends SplObjectStorage
 {
+    private $similarSounds = [];
+
     /**
      * Registers builtin commands.
      *
@@ -66,18 +71,119 @@ class Manager extends SplObjectStorage
     }
 
     /**
-     * Calculate a unique identifier for the contained command.
+     * {@inheritdoc}
      *
      * @param CommandInterface $object object whose identifier is to be calculated.
      * @return string
-     * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function getHash($object)
     {
-        if (!is_object($object) || $object instanceof CommandInterface) {
-            throw new InvalidArgumentException('Command must implement ' . CommandInterface::class);
-        }
+        $this->validate($object);
 
         return $object->getCommand();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param CommandInterface $object The command to add.
+     * @param mixed $data
+     * @throws ValidationException
+     */
+    public function attach($object, $data = null)
+    {
+        $this->validate($object);
+
+        parent::attach($object, $data);
+
+        $action = $this->getHash($object);
+        $this->similarSounds[metaphone($action)] = $action;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param CommandInterface $object The command to remove.
+     * @return void
+     * @throws ValidationException
+     */
+    public function detach($object)
+    {
+        $this->validate($object);
+
+        parent::detach($object);
+
+        $action = $this->getHash($object);
+        unset($this->similarSounds[metaphone($action)]);
+    }
+
+    /**
+     * Resolves and returns a compiller command.
+     *
+     * @param string $action Action name
+     * @return CommandInterface
+     * @throws OutOfBoundsException
+     * @throws BadMethodCallException
+     */
+    public function resolveByActionName($action)
+    {
+        if (!$this->count()) {
+            throw new OutOfBoundsException(
+                'The command stack is not initialized yet. No one command available at this time.'
+            );
+        }
+
+        if (!is_string($action) || empty($action)) {
+            throw new BadMethodCallException(
+                'A command name must be a nonempty string.'
+            );
+        }
+
+        // Sanitize
+        $action = trim($action);
+
+        $this->rewind();
+        while ($this->valid()) {
+            /** @var CommandInterface $command */
+            $command = $this->current();
+            if ($command->getCommand() === $action) {
+                return $command;
+            }
+
+            $this->next();
+        }
+
+        $message = sprintf("Unrecognized action '%s'.", $action);
+        $metaphone = metaphone($action);
+
+        foreach ($this->similarSounds as $alias => $name) {
+            if ($alias == $metaphone) {
+                $message .= sprintf(" Did you mean '%s' ?", $name);
+            }
+        }
+
+        throw new OutOfBoundsException($message);
+    }
+
+    /**
+     * Internal validator.
+     *
+     * @param mixed $object
+     * @throws ValidationException
+     */
+    private function validate($object)
+    {
+        if (!is_object($object) || !$object instanceof CommandInterface) {
+            if (is_object($object)) {
+                $got = get_class($object);
+            } else {
+                $got = gettype($object);
+            }
+
+            throw new ValidationException(
+                sprintf('Command must implement %s got %s.', CommandInterface::class, $got)
+            );
+        }
     }
 }
