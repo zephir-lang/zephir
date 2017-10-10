@@ -140,13 +140,21 @@ class Bootstrap
         }
 
         $message .= PHP_EOL;
-
-        if ($config && $config->get('verbose')) {
-            $path = is_string($this->baseDir) ? str_replace($this->baseDir, '', $e->getFile()) : $e->getFile();
-
-            $message .= sprintf("%s(%s)\n", $path, $e->getLine());
-            $message .= sprintf("%s(%s)\n", $path, $e->getTraceAsString());
+        if (!$config || !$config->get('verbose')) {
+            return $message;
         }
+
+        $base = $this->baseDir;
+        $preparePaths = function ($path) use ($base) {
+            if (is_string($base)) {
+                $path = str_replace(rtrim($base, '\\/') . DIRECTORY_SEPARATOR, '', $path);
+            }
+
+            return $path;
+        };
+
+        $message .= sprintf("at %s(%s)\n\n", $preparePaths($e->getFile()), $e->getLine());
+        $message .= sprintf("Trace:\n%s\n", $preparePaths($e->getTraceAsString()));
 
         return $message;
     }
