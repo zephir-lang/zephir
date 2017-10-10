@@ -2,20 +2,14 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
@@ -26,6 +20,7 @@ use Zephir\Logger;
 use Zephir\Compiler;
 use Zephir\Parser;
 use Zephir\Parser\Manager;
+use Zephir\Commands\Manager as CommandsManager;
 
 /**
  * CommandAbstract
@@ -35,6 +30,32 @@ use Zephir\Parser\Manager;
 abstract class CommandAbstract implements CommandInterface
 {
     private $_parameters = null;
+
+    /**
+     * Currently initialized Command Manager.
+     * @var CommandsManager
+     */
+    private $commandsManager;
+
+    /**
+     * CommandAbstract constructor.
+     *
+     * @param CommandsManager $commandsManager
+     */
+    public function __construct(CommandsManager $commandsManager)
+    {
+        $this->commandsManager = $commandsManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Manager
+     */
+    public function getCommandsManager()
+    {
+        return $this->commandsManager;
+    }
 
     /**
      * Returns parameter named $name if specified
