@@ -77,9 +77,13 @@ class Bootstrap
 
     /**
      * Boots the compiler executing the specified action
+     *
+     * @param string $baseDir Base Zephir direcrory
      */
-    public static function boot()
+    public static function boot($baseDir = null)
     {
+        $baseDir = realpath($baseDir?: dirname(__DIR__));
+
         try {
             /**
              * Global config
@@ -101,7 +105,7 @@ class Bootstrap
              * Register built-in commands
              * @var $item \DirectoryIterator
              */
-            foreach (new \DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
+            foreach (new \DirectoryIterator($baseDir . '/Library/Commands') as $item) {
                 if (!$item->isDir()) {
                     $className = 'Zephir\\Commands\\' . str_replace('.php', '', $item->getBaseName());
                     $class = new \ReflectionClass($className);

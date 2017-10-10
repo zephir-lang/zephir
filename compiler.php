@@ -19,4 +19,4 @@
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-Zephir\Bootstrap::boot();
+Zephir\Bootstrap::boot(getenv('ZEPHIRDIR') ?: __DIR__);
