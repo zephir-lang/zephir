@@ -2039,7 +2039,9 @@ class Compiler
                             if (isset($parameter['cast'])) {
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
+                                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
                                         $value = $parameter['cast']['value'];
+
                                         $headerPrinter->output(
                                             "\t" . 'ZEND_ARG_OBJ_INFO(0, ' .
                                             $parameter['name'] . ', ' .
