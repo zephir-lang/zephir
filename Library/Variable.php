@@ -2,20 +2,14 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
@@ -175,10 +169,11 @@ class Variable
      * @param string $type
      * @param string $name
      * @param Branch $branch
-     * @param mixed $defaultInitValue
+     * @param mixed $defaultInitValue The default init value [optional].
      */
     public function __construct($type, $name, $branch, $defaultInitValue = null)
     {
+
         $this->globalsManager = new Globals();
 
         switch ($type) {
@@ -192,6 +187,8 @@ class Variable
         $this->type = $type;
         $this->name = $name;
         $this->branch = $branch;
+
+        $this->setDefaultInitValue($defaultInitValue);
     }
 
     /**
@@ -690,11 +687,11 @@ class Variable
     /**
      * Set if the variable must be initialized to null
      *
-     * @param boolean $mustInitNull
+     * @param mixed $mustInitNull
      */
     public function setMustInitNull($mustInitNull)
     {
-        $this->mustInitNull = (boolean) $mustInitNull;
+        $this->mustInitNull = (bool) $mustInitNull;
     }
 
     /**

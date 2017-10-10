@@ -623,7 +623,7 @@ class Backend extends BackendZendEngine2
         if ($value == 'null' || $value == 'true' || $value == 'false') {
             $varName = '__$' . $value;
             if (!$context->symbolTable->hasVariable($varName)) {
-                $tempVariable = new Variable('variable', $varName, $context->currentBranch, null);
+                $tempVariable = new Variable('variable', $varName, $context->currentBranch);
                 $context->symbolTable->addRawVariable($tempVariable);
             }
             $tempVariable = $context->symbolTable->getVariableForWrite($varName, $context);
