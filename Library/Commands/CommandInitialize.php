@@ -40,19 +40,6 @@ class CommandInitialize extends CommandAbstract
      *
      * @return string
      */
-    public function getUsage()
-    {
-        return sprintf(
-            '%s [namespace]',
-            $this->getCommand()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getDescription()
     {
         return 'Initializes a Zephir extension';
@@ -79,5 +66,24 @@ class CommandInitialize extends CommandAbstract
         }
 
         parent::execute($config, $logger);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    namespace        The extension namespace.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

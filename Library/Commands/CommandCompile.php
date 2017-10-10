@@ -37,9 +37,9 @@ class CommandCompile extends CommandAbstract
      *
      * @return string
      */
-    public function getUsage()
+    public function getDescription()
     {
-        return $this->getCommand();
+        return 'Compile a Zephir extension';
     }
 
     /**
@@ -47,8 +47,17 @@ class CommandCompile extends CommandAbstract
      *
      * @return string
      */
-    public function getDescription()
+    public function getUsage()
     {
-        return 'Compile a Zephir extension';
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --backend=ZendEngine2|ZendEngine3        The extension namespace.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

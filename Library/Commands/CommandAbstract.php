@@ -18,6 +18,7 @@ use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Compiler;
 use Zephir\BaseBackend;
+use Zephir\Backends\IllegalStateException;
 
 /**
  * CommandAbstract
@@ -28,7 +29,7 @@ use Zephir\BaseBackend;
  */
 abstract class CommandAbstract implements CommandInterface
 {
-    private $_parameters = null;
+    private $parameters = [];
 
     /**
      * Currently initialized Command Manager.
@@ -57,7 +58,7 @@ abstract class CommandAbstract implements CommandInterface
     }
 
     /**
-     * Returns parameter named $name if specified on the command line else null.
+     * Sets named parameter.
      *
      * @param string $name
      * @param string $value
@@ -65,22 +66,20 @@ abstract class CommandAbstract implements CommandInterface
      */
     protected function setParameter($name, $value)
     {
-        if (!isset($this->_parameters)) {
-            $this->_parameters = array();
-        }
-
-        $this->_parameters[$name] = $value;
+        $this->parameters[$name] = $value;
     }
 
     /**
-     * Returns parameter named $name if specified
-     * on the command line else null
+     * Gets named parameter.
+     *
+     * Returns parameter named $name if specified on the command line otherwise returns NULL.
+     *
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function getParameter($name)
     {
-        return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
     }
 
     /**
@@ -115,7 +114,7 @@ abstract class CommandAbstract implements CommandInterface
     }
 
     /**
-     * Executes the command.
+     * {@inheritdoc}
      *
      * @param Config $config
      * @param Logger $logger
@@ -129,14 +128,13 @@ abstract class CommandAbstract implements CommandInterface
             return;
         }
 
-        $backend = null;
-        if (!isset($params['backend'])) {
-            $params['backend'] = BaseBackend::getActiveBackend();
-        }
-        $className = 'Zephir\\Backends\\'.$params['backend'].'\\Backend';
+        $backend = empty($params['backend']) ? BaseBackend::getActiveBackend() : $params['backend'];
+        $className = "Zephir\\Backends\\{$backend}\\Backend";
+
         if (!class_exists($className)) {
-            throw new \InvalidArgumentException('Backend '.$params['backend'].' does not exist');
+            throw new IllegalStateException("Backend {$backend} doesn't exist.");
         }
+
         $backend = new $className($config);
 
         $parserManager = new Parser\Manager(new Parser(), $logger, $params);
@@ -154,11 +152,13 @@ abstract class CommandAbstract implements CommandInterface
     public function getSynopsis()
     {
         $template =<<<EOF
+
 Name:
     %s -- %s
 
 Synopsis:
     zephir %s
+
 
 EOF;
         return sprintf(

@@ -37,9 +37,9 @@ class CommandGenerate extends CommandAbstract
      *
      * @return string
      */
-    public function getUsage()
+    public function getDescription()
     {
-        return $this->getCommand();
+        return 'Generates C code from the Zephir code without compiling it';
     }
 
     /**
@@ -47,8 +47,17 @@ class CommandGenerate extends CommandAbstract
      *
      * @return string
      */
-    public function getDescription()
+    public function getUsage()
     {
-        return 'Generates C code from the Zephir code without compiling it';
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --backend=ZendEngine2|ZendEngine3        The extension namespace.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

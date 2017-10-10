@@ -41,19 +41,6 @@ class CommandApi extends CommandAbstract
      *
      * @return string
      */
-    public function getUsage()
-    {
-        return sprintf(
-            '%s [--theme-path=/path][--output-directory=/path][--theme-options={json}|/path]',
-            $this->getCommand()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getDescription()
     {
         return 'Generates a HTML API based on the classes exposed in the extension';
@@ -95,5 +82,28 @@ class CommandApi extends CommandAbstract
         }
 
         parent::execute($config, $logger);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --theme-path=/path               The API theme to be used.
+
+    --output-directory=/path         Output directory to generate theme.
+
+    --theme-options={json}|/path     Theme options.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

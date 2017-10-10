@@ -185,6 +185,7 @@ abstract class BaseBackend
         if (version_compare(phpversion(), '7.0', '>=')) {
             return 'ZendEngine3';
         }
+
         return 'ZendEngine2';
     }
 }

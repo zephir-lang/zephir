@@ -37,9 +37,9 @@ class CommandBuildDev extends CommandAbstract
      *
      * @return string
      */
-    public function getUsage()
+    public function getDescription()
     {
-        return $this->getCommand();
+        return 'Generates/Builds/Installs a Zephir extension in development mode';
     }
 
     /**
@@ -47,8 +47,17 @@ class CommandBuildDev extends CommandAbstract
      *
      * @return string
      */
-    public function getDescription()
+    public function getUsage()
     {
-        return 'Generates/Builds/Installs a Zephir extension in development mode';
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --backend=ZendEngine2|ZendEngine3        The extension namespace.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }
