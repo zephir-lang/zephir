@@ -22,7 +22,7 @@ namespace Zephir\Operators\Arithmetical;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 
 /**

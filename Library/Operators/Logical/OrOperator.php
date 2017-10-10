@@ -22,7 +22,7 @@ namespace Zephir\Operators\Logical;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Statements\LetStatement;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 
 class OrOperator extends LogicalBaseOperator

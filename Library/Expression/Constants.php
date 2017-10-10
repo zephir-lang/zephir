@@ -23,8 +23,7 @@ use Zephir\Types;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\CompilerException;
-use Zephir\Expression;
+use Zephir\Compiler\CompilerException;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Utils;
 
@@ -127,7 +126,7 @@ class Constants
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\CompilerException
+     * @throws \Zephir\Compiler\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

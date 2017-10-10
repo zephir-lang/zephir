@@ -20,7 +20,6 @@
 namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
-use Zephir\Documentation\Docblock;
 
 /**
  * A link annotation that looks like  `(@)link uri text`
@@ -35,24 +34,24 @@ class See extends Annotation
     protected function parseContent()
     {
         $spaceIndex = strpos($this->string, " ");
-        
+
         if (false !== $spaceIndex) {
             $this->resource = substr($this->string, 0, $spaceIndex);
             $this->text = substr($this->string, $spaceIndex + 1);
         } else {
             $this->resource = $this->string;
         }
-        
+
         $this->contentParsed = true;
     }
-    
-    
+
+
     public function getResource()
     {
         if (!$this->contentParsed) {
             $this->parseContent();
         }
-        
+
         return $this->resource;
     }
 
@@ -61,7 +60,7 @@ class See extends Annotation
         if (!$this->contentParsed) {
             $this->parseContent();
         }
-        
+
         return $this->text;
     }
 }

@@ -19,8 +19,6 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Config;
-
 abstract class AbstractFile
 {
     abstract public function getTemplateName();

@@ -17,9 +17,6 @@
 */
 namespace Zephir\Expression\Builder\Statements;
 
-use Zephir\Expression\Builder\AbstractBuilder;
-use Zephir\FunctionCall;
-
 /**
  * CallStaticStatement
  *

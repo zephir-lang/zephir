@@ -88,6 +88,7 @@ function apc_store($key, $var, $ttl = 0){}
  * @link http://www.php.net/manual/en/function.apc-fetch.php
  * @param $key
  * @param null $success
+ * @return mixed
  */
 function apc_fetch($key, &$success = null){}
 

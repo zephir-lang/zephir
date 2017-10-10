@@ -19,9 +19,10 @@
 
 namespace Zephir;
 
-use Zephir\StringsManager;
+use Zephir\Fcall\FcallAwareInterface;
+use Zephir\Fcall\FcallManagerInterface;
 
-abstract class BaseBackend
+abstract class BaseBackend implements FcallAwareInterface
 {
     /**
      * @var Config
@@ -33,6 +34,11 @@ abstract class BaseBackend
      * @var string
      */
     protected $name;
+
+    /**
+     * @var FcallManagerInterface
+     */
+    protected $fcallManager;
 
     /**
      * BaseBackend constructor
@@ -185,6 +191,17 @@ abstract class BaseBackend
         if (version_compare(phpversion(), '7.0', '>=')) {
             return 'ZendEngine3';
         }
+
         return 'ZendEngine2';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param FcallManagerInterface $fcallManager
+     */
+    public function setFcallManager(FcallManagerInterface $fcallManager)
+    {
+        $this->fcallManager = $fcallManager;
     }
 }

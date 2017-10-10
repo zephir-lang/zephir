@@ -23,9 +23,6 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\FunctionCall;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Types;
 
 class CharType extends AbstractType
 {

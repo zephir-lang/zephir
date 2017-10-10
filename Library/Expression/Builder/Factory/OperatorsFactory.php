@@ -24,7 +24,6 @@ use Zephir\Expression\Builder\Operators\AssignVariableOperator;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Operators\RawOperator;
 use Zephir\Expression\Builder\Operators\UnaryOperator;
-use Zephir\Types;
 
 /**
  * Class OperatorsFactory

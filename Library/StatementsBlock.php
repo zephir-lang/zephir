@@ -19,7 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\Exception;
 use Zephir\Statements\DeclareStatement;
 use Zephir\Statements\IfStatement;
 use Zephir\Statements\ForStatement;

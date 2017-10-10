@@ -19,8 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\Config;
-use Zephir\Logger;
 use Zephir\Compiler\FileInterface;
 
 /**

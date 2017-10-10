@@ -2,20 +2,14 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
@@ -23,16 +17,21 @@ use Zephir\Parser\Manager;
 use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
+use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
 /**
  * Zephir\Compiler
  *
  * The main compiler.
+ *
+ * @package Zephir
  */
 class Compiler
 {
-    const VERSION = '0.9.11';
+    const VERSION = '0.10.0';
 
     public $parserCompiled = false;
 
@@ -98,7 +97,7 @@ class Compiler
     protected $stringManager;
 
     /**
-     * @var \Zephir\Backends\ZendEngine3\FcallManager|\Zephir\Backends\ZendEngine2\FcallManager
+     * @var FcallManagerInterface
      */
     protected $fcallManager;
 
@@ -137,6 +136,11 @@ class Compiler
      * @var Manager
      */
     protected $parserManager;
+
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
 
     /**
      * Compiler constructor
@@ -192,58 +196,21 @@ class Compiler
     }
 
     /**
-     * Compile the parser PHP extension.
-     *
-     * Returns TRUE if parser is available or compiled extions file (string).
-     *
-     * @return bool|string
-     */
-    public function compileParser()
-    {
-        if ($this->parserManager->hasToRecompileParser()) {
-            $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-            return $this->parserManager->compileParser();
-        }
-
-        if ($this->parserManager->isAvailable()) {
-            return true;
-        }
-
-        if ($this->parserManager->isAlreadyCompiled()) {
-            return $this->parserManager->getParserFilePath();
-        }
-
-        $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-
-        return $this->parserManager->compileParser();
-    }
-
-    /**
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
      * @throws CompilerException
-     * @throws Exception
+     * @throws IllegalStateException
      * @throws ParseException
      */
     protected function preCompile($filePath)
     {
-        $parserExt = $this->compileParser();
-
-        // Check if we need to load the parser extension and also allow users to manage the Zephir Parser extension
-        // on their own (Zephir won't handle updating)
-        if ($parserExt && $parserExt !== true) {
-            // exclude --parser-compiled argument, we'll specify it additionally
-            $args = array_filter($_SERVER['argv'], function ($arg) {
-                return 0 !== strpos($arg, "--parser-compiled");
-            });
-            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $args) . ' --parser-compiled';
-            passthru($cmd, $exitCode);
-            exit($exitCode);
-        }
-
-        if (!$parserExt) {
-            throw new Exception('The zephir parser extension is not loaded!');
+        if (!$this->parserManager->isAvailable()) {
+            throw new IllegalStateException(
+                'The zephir parser extension is not loaded! ' . PHP_EOL .
+                'Note: Zephir no longer distributed with internal Zephir Parser. ' . PHP_EOL .
+                'To install Zephir Parser please refer to: https://github.com/phalcon/php-zephir-parser'
+            );
         }
 
         if (preg_match('#\.zep$#', $filePath)) {

@@ -19,7 +19,7 @@
 
 namespace Zephir\Operators\Bitwise;
 
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
@@ -32,7 +32,6 @@ class BitwiseNotOperator extends BaseOperator
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
-     * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

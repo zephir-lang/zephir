@@ -20,15 +20,10 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
-use Zephir\Builder\StatementsBlockBuilder;
-use Zephir\Builder\Operators\BinaryOperatorBuilder;
-use Zephir\Builder\Statements\IfStatementBuilder;
-use Zephir\Builder\VariableBuilder;
-use Zephir\Statements\IfStatement;
 
 /**
  * TryCatchStatement

@@ -23,9 +23,8 @@ use Zephir\Exception;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Compiler;
 
 /**
  * Reference

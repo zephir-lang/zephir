@@ -19,8 +19,6 @@
 
 namespace Zephir\Builder\Operators;
 
-use Zephir\Builder\Operators\AbstractOperatorBuilder;
-
 /**
  * TypeOfOperatorBuilder
  *

@@ -19,8 +19,6 @@
 
 namespace Zephir\Detectors;
 
-use Zephir\StatementsBlock;
-
 /**
  * ForValueUseDetector
  *

@@ -19,9 +19,6 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Documentation\Annotation;
-use Zephir\Documentation\Docblock;
-
 /**
  * Helper to parse raw docblocks to structured object
  */

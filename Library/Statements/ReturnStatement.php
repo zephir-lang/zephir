@@ -20,10 +20,9 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 use Zephir\Utils;
-use Zephir\Types;
 
 /**
  * ReturnStatement

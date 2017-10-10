@@ -23,7 +23,6 @@ use Zephir\Commands\CommandInterface;
 use Zephir\Documentation\File;
 use Zephir\Documentation\Theme;
 use Zephir\Documentation\NamespaceAccessor;
-use Zephir\Logger;
 
 /**
  * Documentation Generator

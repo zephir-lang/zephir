@@ -21,7 +21,7 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -48,7 +48,7 @@ class CamelizeOptimizer extends OptimizerAbstract
         if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
             throw new CompilerException("'camelize' only accepts one or two parameters");
         }
-        
+
         $delimiter = 'NULL ';
         if (count($expression['parameters']) == 2) {
             if ($expression['parameters'][1]['parameter']['type'] == 'null') {

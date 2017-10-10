@@ -19,11 +19,11 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\CompilerException;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\CompilerException;
 
 class NotOperator extends BaseOperator
 {
@@ -32,7 +32,6 @@ class NotOperator extends BaseOperator
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
-     * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
