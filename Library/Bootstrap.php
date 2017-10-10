@@ -44,7 +44,7 @@ class Bootstrap
      */
     public function __construct($baseDir = null)
     {
-        $baseDir = realpath($baseDir?: dirname(__DIR__));
+        $baseDir = realpath($baseDir ?: dirname(__DIR__));
 
         if (!is_string($baseDir) || !is_dir($baseDir)) {
             fwrite(

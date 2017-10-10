@@ -274,7 +274,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function set($key, $value, $namespace = null)
     {
-        $namespace !== null ? $this->offsetSet([$namespace => $key], $value): $this->offsetSet($key, $value);
+        $namespace !== null ? $this->offsetSet([$namespace => $key], $value) : $this->offsetSet($key, $value);
     }
 
     /**
