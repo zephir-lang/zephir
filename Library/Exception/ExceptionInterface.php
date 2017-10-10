@@ -26,4 +26,11 @@ interface ExceptionInterface
      * @return array
      */
     public function getExtra();
+
+    /**
+     * Returns the code block in which the error occurred.
+     *
+     * @return string
+     */
+    public function getErrorRegion();
 }
