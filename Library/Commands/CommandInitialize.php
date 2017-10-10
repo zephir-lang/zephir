@@ -66,6 +66,11 @@ class CommandInitialize extends CommandAbstract
      */
     public function execute(Config $config, Logger $logger)
     {
+        if ($this->hasHelpOption()) {
+            $this->formatUsage();
+            return;
+        }
+
         if (isset($_SERVER['argv'][2])) {
             $this->setParameter(
                 'namespace',

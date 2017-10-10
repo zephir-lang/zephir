@@ -52,7 +52,7 @@ class Bootstrap
                 sprintf(
                     "Unable to locate Zephir installation path.\n\nDouble check Zephir installation " .
                     "and/or try to setup ZEPHIRDIR variable to the proper Zephir installation path.\n\n" .
-                    "Current ZEPHIRDIR value: %s\nThe base path passed to bootstrap: %s\n",
+                    "Current ZEPHIRDIR value: %s\nThe base path passed to the Bootstrap: %s\n",
                     getenv('ZEPHIRDIR'),
                     is_string($baseDir) ? $baseDir : gettype($baseDir)
                 )

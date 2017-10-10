@@ -26,6 +26,9 @@ use Zephir\Logger;
  */
 class CommandApi extends CommandAbstract
 {
+    use CommandUsageTrait;
+
+
     /**
      * {@inheritdoc}
      *
@@ -68,14 +71,19 @@ class CommandApi extends CommandAbstract
      */
     public function execute(Config $config, Logger $logger)
     {
+        if ($this->hasHelpOption()) {
+            $this->formatUsage();
+            return;
+        }
+
         $params = $this->parseArguments();
 
-        $allowedArgs = array(
+        $allowedArgs = [
             "theme-path"       => "@.+@",
             "output-directory" => "@.+@",
             "theme-options"    => "@.+@",
             "base-url"         => "@.+@",
-        );
+        ];
 
         foreach ($params as $k => $p) {
             if (isset($allowedArgs[$k])) {
@@ -84,7 +92,7 @@ class CommandApi extends CommandAbstract
                 } else {
                     throw new Exception("Invalid value for argument '$k'");
                 }
-            } else if (!in_array($k, array('parser-compiled'))) {
+            } elseif (!in_array($k, ['parser-compiled'])) {
                 throw new Exception("Invalid argument '$k' for api command'");
             }
         }

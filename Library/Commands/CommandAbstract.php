@@ -18,7 +18,6 @@ use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Compiler;
 use Zephir\BaseBackend;
-use Zephir\CommandArgumentParser;
 
 /**
  * CommandAbstract
@@ -29,6 +28,8 @@ use Zephir\CommandArgumentParser;
  */
 abstract class CommandAbstract implements CommandInterface
 {
+    use CommandUsageTrait;
+
     private $_parameters = null;
 
     /**
@@ -84,22 +85,35 @@ abstract class CommandAbstract implements CommandInterface
         return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
     }
 
-
     /**
-     * Parse the input arguments for the command and returns theme as an associative array
+     * Parse the input arguments for the command and returns theme as an associative array.
+     *
      * @return array the list of the parameters
      */
     public function parseArguments()
     {
+        $params = [];
+
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
-            $parser = new CommandArgumentParser();
-            $params = $parser->parseArgs(array_merge(array("command"), $commandArgs));
-        } else {
-            $params = array();
+            $parser = $this->getCommandsManager()->getCommandArgumentParser();
+            $params = $parser->parseArgs(array_merge(['command'], $commandArgs));
         }
 
         return $params;
+    }
+
+    /**
+     * Whether the current command called with help option.
+     *
+     * @return bool
+     */
+    public function hasHelpOption()
+    {
+        $params = $this->parseArguments();
+        $parser = $this->getCommandsManager()->getCommandArgumentParser();
+
+        return $parser->hasHelpOption($params);
     }
 
     /**
@@ -111,6 +125,12 @@ abstract class CommandAbstract implements CommandInterface
     public function execute(Config $config, Logger $logger)
     {
         $params = $this->parseArguments();
+
+        if ($this->hasHelpOption()) {
+            $this->formatUsage();
+            return;
+        }
+
         $backend = null;
         if (!isset($params['backend'])) {
             $params['backend'] = BaseBackend::getActiveBackend();

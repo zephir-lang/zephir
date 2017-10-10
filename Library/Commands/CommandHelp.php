@@ -20,7 +20,7 @@ use Zephir\Compiler;
 /**
  * Zephir\Commands\CommandHelp
  *
- * Shows compiler help
+ * Shows Zephir help and exit
  *
  * @package Zephir\Commands
  */
@@ -62,7 +62,7 @@ class CommandHelp extends CommandAbstract
      */
     public function getDescription()
     {
-        return 'Displays this help';
+        return 'Displays this help and exit';
     }
 
     /**
@@ -73,21 +73,34 @@ class CommandHelp extends CommandAbstract
      */
     public function execute(Config $config, Logger $logger)
     {
+        if ($this->hasHelpOption()) {
+            $this->formatUsage();
+            return;
+        }
+
         echo self::LOGO, PHP_EOL;
         echo "Zephir version " , Compiler::getCurrentVersion(),  PHP_EOL, PHP_EOL;
         echo "Usage: ", PHP_EOL;
         echo "\tcommand [options]", PHP_EOL;
         echo PHP_EOL;
         echo "Available commands:", PHP_EOL;
-        foreach ($this->getCommandsManager() as $command) {
-            echo sprintf("\t%-20s%s\n", $command->getUsage(), $command->getDescription());
+
+        $commands = $this->getCommandsManager();
+        $commands->rewind();
+
+        while ($commands->valid()) {
+            $command = $commands->current();
+            echo sprintf("\t%-20s%s\n", $command->getCommand(), $command->getDescription());
+
+            $commands->next();
         }
+
         echo PHP_EOL;
         echo "Options:", PHP_EOL;
+        echo sprintf("\t%-20s%s\n", '--help|--h', "Displays command help and exit");
         echo sprintf("\t%-20s%s\n", '-f([a-z0-9\-]+)', "Enables compiler optimizations");
         echo sprintf("\t%-20s%s\n", '-fno-([a-z0-9\-]+)', "Disables compiler optimizations");
         echo sprintf("\t%-20s%s\n", '-w([a-z0-9\-]+)', "Turns a warning on");
         echo sprintf("\t%-20s%s\n", '-W([a-z0-9\-]+)', "Turns a warning off");
-        echo PHP_EOL;
     }
 }

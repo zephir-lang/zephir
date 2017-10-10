@@ -17,6 +17,7 @@ use ReflectionClass;
 use SplObjectStorage;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Zephir\CommandArgumentParser;
 use Zephir\Exception\ValidationException;
 use Zephir\Exception\OutOfBoundsException;
 use Zephir\Exception\BadMethodCallException;
@@ -31,6 +32,21 @@ class Manager extends SplObjectStorage
     private $similarSounds = [];
 
     /**
+     * Command argument parser
+     *
+     * @var CommandArgumentParser
+     */
+    private $argumentParser;
+
+    /**
+     * Manager constructor.
+     */
+    public function __construct()
+    {
+        $this->argumentParser = new CommandArgumentParser();
+    }
+
+    /**
      * Registers builtin commands.
      *
      * @return void
@@ -40,7 +56,7 @@ class Manager extends SplObjectStorage
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__)));
         $iterator->rewind();
 
-        while($iterator->valid()) {
+        while ($iterator->valid()) {
             $fileInfo = $iterator->current();
             if ($fileInfo->isDir() || $fileInfo->getExtension() !== 'php') {
                 $iterator->next();
@@ -64,7 +80,13 @@ class Manager extends SplObjectStorage
                 continue;
             }
 
-            $this->attach($command->newInstanceArgs([$this]));
+            $command = $command->newInstanceArgs([$this]);
+            $data = [
+                'usage'       => $command->getUsage(),
+                'description' => $command->getDescription(),
+            ];
+
+            $this->attach($command, (object) $data);
             $iterator->next();
         }
     }
@@ -81,6 +103,16 @@ class Manager extends SplObjectStorage
         $this->validate($object);
 
         return $object->getCommand();
+    }
+
+    /**
+     * Gets Command argument parser
+     *
+     * @return CommandArgumentParser
+     */
+    public function getCommandArgumentParser()
+    {
+        return $this->argumentParser;
     }
 
     /**
