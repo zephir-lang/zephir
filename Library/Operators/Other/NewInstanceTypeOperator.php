@@ -23,8 +23,8 @@ use Zephir\Utils;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
 

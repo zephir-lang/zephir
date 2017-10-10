@@ -5,7 +5,7 @@ use Zephir\ClassDefinition;
 use Zephir\Variable;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompilationContext;
 use Zephir\ClassMethod;
 use Zephir\FunctionDefinition;

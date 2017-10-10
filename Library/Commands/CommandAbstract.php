@@ -18,7 +18,7 @@ use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Compiler;
 use Zephir\BaseBackend;
-use Zephir\Backends\IllegalStateException;
+use Zephir\Exception\IllegalStateException;
 
 /**
  * CommandAbstract

@@ -23,7 +23,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
 

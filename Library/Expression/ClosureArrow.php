@@ -47,7 +47,7 @@ class ClosureArrow extends Closure
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\CompilerException
+     * @throws \Zephir\Compiler\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

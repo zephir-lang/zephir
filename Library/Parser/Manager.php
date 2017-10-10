@@ -22,7 +22,7 @@ namespace Zephir\Parser;
 use Zephir\Utils;
 use Zephir\Logger;
 use Zephir\Parser;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 
 /**
  * Zephir\Parser\Manager

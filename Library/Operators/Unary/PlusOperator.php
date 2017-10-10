@@ -19,11 +19,11 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\CompilerException;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\CompilerException;
 
 class PlusOperator extends BaseOperator
 {
@@ -34,12 +34,11 @@ class PlusOperator extends BaseOperator
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
-     * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new \Exception("Missing left part of the expression");
+            throw new CompilerException("Missing left part of the expression");
         }
 
         $leftExpr = new Expression($expression['left']);

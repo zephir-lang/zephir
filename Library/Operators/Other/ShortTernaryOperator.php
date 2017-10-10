@@ -26,7 +26,6 @@ use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Statements\IfStatement;

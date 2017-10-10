@@ -19,7 +19,7 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;

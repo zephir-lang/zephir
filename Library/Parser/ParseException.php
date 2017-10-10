@@ -32,7 +32,6 @@ class ParseException extends RuntimeException
      */
     public function __construct($message = '', $extra = null, $code = 0, $previous = null)
     {
-        // $message = "", $code = 0, Throwable $previous = null
         if (is_array($extra) && isset($extra['file'])) {
             $message .= " in " . $extra['file'] . " on line " . $extra['line'];
         }
