@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**

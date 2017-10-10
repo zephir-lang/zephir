@@ -18,6 +18,7 @@ use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
+use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
@@ -1151,7 +1152,7 @@ class Compiler
      * @param CommandInterface $command
      * @param boolean $development
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function install(CommandInterface $command, $development = false)
     {
@@ -1166,8 +1167,7 @@ class Compiler
 
         $this->compile($command, $development);
         if (Utils::isWindows()) {
-            $this->logger->output("Installation is not implemented for windows yet! Aborting!");
-            exit();
+            throw new RuntimeException("Installation is not implemented for windows yet! Aborting!");
         }
 
         $this->logger->output('Installing...');
@@ -2014,14 +2014,13 @@ class Compiler
         /**
          * Create argument info
          */
-
         foreach ($this->functionDefinitions as $func) {
             $funcName = $func->getInternalName();
             $argInfoName = 'arginfo_' . strtolower($funcName);
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
-            if (count($parameters)) {
+            if (count($parameters->getParameters())) {
                 $headerPrinter->output(
                     'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
                     $func->getNumberOfRequiredParameters() . ')'

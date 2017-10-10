@@ -15,6 +15,7 @@ namespace Zephir;
 
 use Zephir\Parser\ParseException;
 use Zephir\Compiler\FileInterface;
+use Zephir\Compiler\CompilerException;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\IllegalStateException;
 
@@ -592,7 +593,7 @@ class CompilerFile implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities
          */
-        $compilationContext = new CompilationContext;
+        $compilationContext = new CompilationContext();
 
         /**
          * Set global compiler in the compilation context
@@ -832,7 +833,7 @@ class CompilerFile implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities
          */
-        $compilationContext = new CompilationContext;
+        $compilationContext = new CompilationContext();
 
         /**
          * Set global compiler in the compilation context

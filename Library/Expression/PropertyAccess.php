@@ -81,7 +81,7 @@ class PropertyAccess
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

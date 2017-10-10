@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\Passes\CallGathererPass;
@@ -370,7 +371,7 @@ class ClassMethod
     /**
      * Returns the class definition where the method was declared
      *
-     * @return ClassDefinition
+     * @return ClassDefinition|null
      */
     public function getClassDefinition()
     {

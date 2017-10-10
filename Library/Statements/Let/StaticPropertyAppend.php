@@ -19,6 +19,7 @@
 
 namespace Zephir\Statements\Let;
 
+use Zephir\ClassProperty;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;

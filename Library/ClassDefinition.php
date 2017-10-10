@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Compiler\CompilerException;
 
 /**
  * ClassDefinition
