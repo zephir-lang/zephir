@@ -36,5 +36,3 @@ interface FcallAwareInterface
      */
     public function getFcallManager();
 }
-
-

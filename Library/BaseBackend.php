@@ -49,7 +49,6 @@ abstract class BaseBackend implements FcallAwareInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
-
     }
 
     public function getName()
