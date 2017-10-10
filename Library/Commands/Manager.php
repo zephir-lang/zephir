@@ -158,7 +158,7 @@ class Manager extends SplObjectStorage
 
         foreach ($this->similarSounds as $alias => $name) {
             if ($alias == $metaphone) {
-                $message .= sprintf(" Did you mean '%s' ?", $name);
+                $message .= sprintf(" Did you mean '%s'?", $name);
             }
         }
 

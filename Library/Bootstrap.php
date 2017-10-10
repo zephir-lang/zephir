@@ -13,7 +13,8 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandAbstract;
+use Zephir\Commands\Manager;
+use Zephir\Exception\ExceptionInterface;
 
 /**
  * Zephir\Bootstrap
@@ -25,74 +26,75 @@ use Zephir\Commands\CommandAbstract;
 class Bootstrap
 {
     /**
-     * @var CommandAbstract[]
+     * The Zephir base direcrory.
+     * @var string
      */
-    protected static $commands = array();
+    private $baseDir;
 
     /**
-     * Shows an exception opening the file and highlighting the wrong part
-     *
-     * @param \Exception $e
-     * @param Config $config
+     * Commands manager.
+     * @var Manager
      */
-    protected static function showException(\Exception $e, Config $config = null)
+    private $commandsManager;
+
+    /**
+     * Bootstrap constructor.
+     *
+     * @param string $baseDir The base Zephir direcrory.
+     */
+    public function __construct($baseDir = null)
     {
-        echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
-        if (method_exists($e, 'getExtra')) {
-            $extra = $e->getExtra();
-            if (is_array($extra)) {
-                if (isset($extra['file'])) {
-                    echo PHP_EOL;
-                    $lines = file($extra['file']);
-                    if (isset($lines[$extra['line'] - 1])) {
-                        $line = $lines[$extra['line'] - 1];
-                        echo "\t", str_replace("\t", " ", $line);
-                        if (($extra['char'] - 1) > 0) {
-                            echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
-                        }
-                    }
-                }
-            }
-        }
-        echo PHP_EOL;
+        $baseDir = realpath($baseDir?: dirname(__DIR__));
 
-        if ($config && $config->get('verbose')) {
-            echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
-            echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
+        if (!is_string($baseDir) || !is_dir($baseDir)) {
+            fwrite(
+                STDERR,
+                sprintf(
+                    "Unable to locate Zephir installation path.\n\nDouble check Zephir installation " .
+                    "and/or try to setup ZEPHIRDIR variable to the proper Zephir installation path.\n\n" .
+                    "Current ZEPHIRDIR value: %s\nThe base path passed to bootstrap: %s\n",
+                    getenv('ZEPHIRDIR'),
+                    is_string($baseDir) ? $baseDir : gettype($baseDir)
+                )
+            );
+
+            exit(1);
         }
 
-        exit(1);
+        $this->baseDir = rtrim($baseDir, '\\/');
+        $this->commandsManager = new Manager();
     }
 
+    /**
+     * Gets the Zephir base direcrory.
+     *
+     * @return string
+     */
+    public function getBaseDir()
+    {
+        return $this->baseDir;
+    }
 
     /**
-     * Returns the commands registered in the compiler
+     * Gets currently initialized Command Manager.
      *
-     * @return CommandAbstract[]
+     * @return Manager
      */
-    public static function getCommands()
+    public function getCommandsManager()
     {
-        return self::$commands;
+        return $this->commandsManager;
     }
 
     /**
      * Boots the compiler executing the specified action
-     *
-     * @param string $baseDir Base Zephir direcrory
      */
-    public static function boot($baseDir = null)
+    public function boot()
     {
-        $baseDir = realpath($baseDir?: dirname(__DIR__));
-
         try {
-            /**
-             * Global config
-             */
+            // Global Config
             $config = Config::fromServer();
 
-            /**
-             * Global Logger
-             */
+            // Global Logger
             $logger = new Logger($config);
 
             if (isset($_SERVER['argv'][1])) {
@@ -101,48 +103,49 @@ class Bootstrap
                 $action = 'help';
             }
 
-            /**
-             * Register built-in commands
-             * @var $item \DirectoryIterator
-             */
-            foreach (new \DirectoryIterator($baseDir . '/Library/Commands') as $item) {
-                if (!$item->isDir()) {
-                    $className = 'Zephir\\Commands\\' . str_replace('.php', '', $item->getBaseName());
-                    $class = new \ReflectionClass($className);
+            $manager = new Manager();
+            $manager->registerBuiltinCommands();
 
-                    if (!$class->isAbstract() && !$class->isInterface()) {
-                        /**
-                         * @var $command CommandAbstract
-                         */
-                        $command = new $className();
+            $command = $manager->resolveByActionName($action);
 
-                        if (!$command instanceof CommandAbstract) {
-                            throw new \Exception('Class ' . $class->name . ' must be instance of CommandAbstract');
-                        }
-
-                        self::$commands[$command->getCommand()] = $command;
-                    }
-                }
-            }
-
-            if (!isset(self::$commands[$action])) {
-                $message = 'Unrecognized action "' . $action . '"';
-                $metaphone = metaphone($action);
-                foreach (self::$commands as $key => $command) {
-                    if (metaphone($key) == $metaphone) {
-                        $message .= PHP_EOL . PHP_EOL . 'Did you mean "' . $key . '"?';
-                    }
-                }
-
-                throw new \Exception($message);
-            }
-
-            /**
-             * Execute the command
-             */
-            self::$commands[$action]->execute($config, $logger);
+            // Execute the command
+            $command->execute($config, $logger);
         } catch (\Exception $e) {
-            self::showException($e, isset($config) ? $config : null);
+            fwrite(STDERR, $this->formatErrorMessage($e, isset($config) ? $config : null));
+            exit(1);
         }
+    }
+
+    /**
+     * Formats error message to show an exception opening the file and highlighting the wrong part.
+     *
+     * @param \Exception $e
+     * @param Config $config Current config object [optional].
+     * @return string
+     */
+    protected function formatErrorMessage(\Exception $e, Config $config = null)
+    {
+        $message = '';
+
+        if ($config && $config->get('verbose')) {
+            $message .= sprintf('[%s]: ', get_class($e));
+        }
+
+        $message .= $e->getMessage() . PHP_EOL;
+
+        if ($e instanceof ExceptionInterface && $extraInfo = $e->getErrorRegion()) {
+            $message .= sprintf("\n%s", $extraInfo);
+        }
+
+        $message .= PHP_EOL;
+
+        if ($config && $config->get('verbose')) {
+            $path = is_string($this->baseDir) ? str_replace($this->baseDir, '', $e->getFile()) : $e->getFile();
+
+            $message .= sprintf("%s(%s)\n", $path, $e->getLine());
+            $message .= sprintf("%s(%s)\n", $path, $e->getTraceAsString());
+        }
+
+        return $message;
     }
 }
