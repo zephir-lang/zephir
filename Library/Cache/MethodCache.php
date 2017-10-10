@@ -19,7 +19,6 @@
 
 namespace Zephir\Cache;
 
-use Zephir\Call;
 use Zephir\ClassMethod;
 use Zephir\Variable;
 use Zephir\ClassDefinition;

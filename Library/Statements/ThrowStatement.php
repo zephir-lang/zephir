@@ -22,9 +22,8 @@ namespace Zephir\Statements;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Types;
 use Zephir\Utils;
 
 /**

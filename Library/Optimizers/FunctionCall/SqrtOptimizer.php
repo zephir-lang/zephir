@@ -19,7 +19,6 @@
 
 namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Expression;
 use Zephir\Optimizers\MathOptimizer;
 
 /**

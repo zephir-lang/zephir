@@ -22,11 +22,8 @@ namespace Zephir\Operators\Other;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\CompilerException;
 use Zephir\CompiledExpression;
-use Zephir\Builder\FunctionCallBuilder;
-use Zephir\Builder\Operators\CastOperatorBuilder;
+use Zephir\Compiler\CompilerException;
 use Zephir\Types;
 
 /**

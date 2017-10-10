@@ -19,23 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\Passes\LocalContextPass;
-use Zephir\Passes\StaticTypeInference;
-use Zephir\Passes\CallGathererPass;
-use Zephir\Builder\VariableBuilder;
-use Zephir\Builder\LiteralBuilder;
-use Zephir\Builder\ParameterBuilder;
-use Zephir\Builder\StatementsBlockBuilder;
-use Zephir\Builder\Statements\LetStatementBuilder;
-use Zephir\Builder\Operators\UnaryOperatorBuilder;
-use Zephir\Builder\Operators\BinaryOperatorBuilder;
-use Zephir\Builder\Operators\TypeOfOperatorBuilder;
-use Zephir\Builder\Operators\NewInstanceOperatorBuilder;
-use Zephir\Builder\Statements\IfStatementBuilder;
-use Zephir\Builder\Statements\ThrowStatementBuilder;
-use Zephir\Statements\IfStatement;
-use Zephir\Detectors\WriteDetector;
-
 /**
  * FunctionDefinition
  *

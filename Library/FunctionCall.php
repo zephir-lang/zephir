@@ -19,7 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\Utils;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**

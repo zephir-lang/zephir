@@ -20,10 +20,8 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
-use Zephir\Expression;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\LiteralCompiledExpression;
 
 /**
  * DeclareStatement

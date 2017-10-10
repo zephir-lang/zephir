@@ -22,8 +22,7 @@ namespace Zephir\Optimizers;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\CompilerException;
-use Zephir\Expression;
+use Zephir\Compiler\CompilerException;
 
 /**
  * Class OptimizerAbstract

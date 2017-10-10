@@ -19,8 +19,6 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Documentation\NamespaceHelper;
-
 class NamespaceAccessor
 {
     /**
@@ -30,7 +28,7 @@ class NamespaceAccessor
     protected $classes;
 
     protected $namespaceTree;
-    
+
     protected $byNamespace;
 
     /**

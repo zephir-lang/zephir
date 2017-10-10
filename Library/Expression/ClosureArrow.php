@@ -20,19 +20,13 @@
 namespace Zephir\Expression;
 
 use Zephir\ClassMethod;
-use Zephir\Exception;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Variable;
 use Zephir\ClassMethodParameters;
 use Zephir\CompiledExpression;
 use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\CompilerFileAnonymous;
-use Zephir\LiteralCompiledExpression;
-use Zephir\Builder\StatementsBlockBuilder;
-use Zephir\Builder\Statements\ReturnStatementBuilder;
-use Zephir\Builder\RawExpressionBuilder;
 
 /**
  * ClosureArrow
@@ -47,7 +41,7 @@ class ClosureArrow extends Closure
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\CompilerException
+     * @throws \Zephir\Compiler\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

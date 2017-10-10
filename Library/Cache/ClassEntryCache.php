@@ -19,7 +19,6 @@
 
 namespace Zephir\Cache;
 
-use Zephir\Call;
 use Zephir\CompilationContext;
 
 /**

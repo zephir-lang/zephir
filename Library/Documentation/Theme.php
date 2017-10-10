@@ -19,7 +19,6 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\ClassDefinition;
 use Zephir\Documentation;
 use Zephir\Exception;
 

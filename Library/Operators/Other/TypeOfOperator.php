@@ -20,11 +20,10 @@
 namespace Zephir\Operators\Other;
 
 use Zephir\Expression;
-use Zephir\CompilerException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Operators\BaseOperator;
-use Zephir\Builder\FunctionCallBuilder;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**

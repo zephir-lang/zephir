@@ -21,7 +21,7 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -78,7 +78,7 @@ class TrimOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_fast_trim(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $charlist . ', ' . static::$TRIM_WHERE . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

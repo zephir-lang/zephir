@@ -21,7 +21,7 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -71,7 +71,7 @@ class UncamelizeOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        
+
         if (isset($resolvedParams[1])) {
             $delimiter = $resolvedParams[1];
         }

@@ -19,7 +19,6 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
 
 class Sitemap extends AbstractFile
