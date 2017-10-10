@@ -1,32 +1,29 @@
 <?php
 
 /*
- +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
- |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
- +--------------------------------------------------------------------------+
-*/
+ +------------------------------------------------------------------------+
+ | Zephir                                                                 |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)           |
+ |                                                                        |
+ | This source file is subject the MIT license, that is bundled with      |
+ | this package in the file LICENSE, and is available through the         |
+ | world-wide-web at the following url:                                   |
+ | http://zephir-lang.com/license.html                                    |
+ +------------------------------------------------------------------------+
+ */
 
 namespace Zephir;
 
 /**
  * Logger
  *
- * Entrypoint for warnings/notices/errors generated in compilation
+ * Entrypoint for warnings/notices/errors generated in compilation.
+ *
+ * @package Zephir
  */
 class Logger
 {
-    private static $files = array();
+    private static $files = [];
 
     /**
      * Stderr handler
@@ -46,17 +43,6 @@ class Logger
     public function __construct(Config $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * Changes a warning status on/off
-     *
-     * @param string $type
-     * @param boolean $value
-     */
-    public function set($type, $value)
-    {
-        $this->config->set($type, $value, 'warnings');
     }
 
     /**

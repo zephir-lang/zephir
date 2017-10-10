@@ -114,6 +114,75 @@ class Config implements \ArrayAccess, \JsonSerializable
     {
         $this->populate();
         $this->changed = false;
+
+        $this->registerShutdownFunction();
+    }
+
+    /**
+     * Factory method to create a Config instence from the $_SERVER['argv'].
+     *
+     * @return Config
+     */
+    public static function fromServer()
+    {
+        $config = new self();
+
+        /**
+         * Change configurations flags
+         */
+        if ($_SERVER['argc'] >= 2) {
+            for ($i = 2; $i < $_SERVER['argc']; $i++) {
+                $parameter = $_SERVER['argv'][$i];
+
+                if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    $config->set($matches[1], false, 'optimizations');
+                    continue;
+                }
+
+                if (preg_match('/^-f([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    $config->set($matches[1], true, 'optimizations');
+                }
+
+                if (preg_match('/^-W([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    $config->set($matches[1], false, 'warnings');
+                    continue;
+                }
+
+                if (preg_match('/^-w([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    $config->set($matches[1], true, 'warnings');
+                    continue;
+                }
+
+                if (preg_match('/^--([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    $config->set($matches[1], true, 'extra');
+                    continue;
+                }
+
+                if (preg_match('/^--([a-z0-9\-]+)=(.*)$/', $parameter, $matches)) {
+                    $config->set($matches[1], $matches[2], 'extra');
+                    continue;
+                }
+
+                switch ($parameter) {
+                    case '-w':
+                        $config->set('silent', true);
+                        break;
+
+                    case '-v':
+                        $config->set('verbose', true);
+                        break;
+
+                    case '-V':
+                        $config->set('verbose', false);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        return $config;
     }
 
     /**
@@ -242,6 +311,16 @@ class Config implements \ArrayAccess, \JsonSerializable
     public function jsonSerialize()
     {
         return $this->container;
+    }
+
+    /**
+     * Registers shutdown function.
+     *
+     * @return void
+     */
+    public function registerShutdownFunction()
+    {
+        register_shutdown_function([$this, 'dumpToFile']);
     }
 
     /**
