@@ -1,27 +1,57 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+ */
+
 namespace Zephir\Backends\ZendEngine2;
 
+use Zephir\Utils;
 use Zephir\Variable;
-use Zephir\CodePrinter;
-use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\Compiler\CompilerException;
-use Zephir\CompilationContext;
+use Zephir\CodePrinter;
 use Zephir\ClassMethod;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
-use Zephir\Utils;
+use Zephir\CompiledExpression;
+use Zephir\CompilationContext;
+use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
 
+/**
+ * Zephir\Backends\ZendEngine2\Backend
+ *
+ * @package Zephir\Backends\ZendEngine2
+ */
 class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
-
-    protected $fcallManager;
 
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return FcallManagerInterface
+     */
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->setFcallManager(new FcallManager());
+        }
+
+        return $this->fcallManager;
     }
 
     /**
@@ -61,14 +91,6 @@ class Backend extends BaseBackend
     public function getStringsManager()
     {
         return new StringsManager();
-    }
-
-    public function getFcallManager()
-    {
-        if (!$this->fcallManager) {
-            $this->fcallManager = new FcallManager();
-        }
-        return $this->fcallManager;
     }
 
     public function getTypeDefinition($type)

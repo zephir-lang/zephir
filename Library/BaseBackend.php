@@ -19,7 +19,10 @@
 
 namespace Zephir;
 
-abstract class BaseBackend
+use Zephir\Fcall\FcallAwareInterface;
+use Zephir\Fcall\FcallManagerInterface;
+
+abstract class BaseBackend implements FcallAwareInterface
 {
     /**
      * @var Config
@@ -33,6 +36,11 @@ abstract class BaseBackend
     protected $name;
 
     /**
+     * @var FcallManagerInterface
+     */
+    protected $fcallManager;
+
+    /**
      * BaseBackend constructor
      *
      * @param Config $config
@@ -41,6 +49,7 @@ abstract class BaseBackend
     public function __construct(Config $config)
     {
         $this->config = $config;
+
     }
 
     public function getName()
@@ -185,5 +194,15 @@ abstract class BaseBackend
         }
 
         return 'ZendEngine2';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param FcallManagerInterface $fcallManager
+     */
+    public function setFcallManager(FcallManagerInterface $fcallManager)
+    {
+        $this->fcallManager = $fcallManager;
     }
 }

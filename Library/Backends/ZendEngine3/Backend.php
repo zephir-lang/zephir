@@ -1,18 +1,36 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+ */
+
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\ClassDefinition;
-use Zephir\Variable;
-use Zephir\CompiledExpression;
-use Zephir\Compiler;
-use Zephir\Compiler\CompilerException;
-use Zephir\CompilationContext;
-use Zephir\ClassMethod;
-use Zephir\FunctionDefinition;
-use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
-use Zephir\GlobalConstant;
 use Zephir\Utils;
+use Zephir\Variable;
+use Zephir\Compiler;
+use Zephir\ClassMethod;
+use Zephir\GlobalConstant;
+use Zephir\ClassDefinition;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\FunctionDefinition;
+use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Compiler\CompilerException;
+use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 
+/**
+ * Zephir\Backends\ZendEngine3\Backend
+ *
+ * @package Zephir\Backends\ZendEngine3
+ */
 class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
@@ -21,6 +39,20 @@ class Backend extends BackendZendEngine2
     public function isZE3()
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return FcallManagerInterface
+     */
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->setFcallManager(new FcallManager());
+        }
+
+        return $this->fcallManager;
     }
 
     /**
@@ -62,14 +94,6 @@ class Backend extends BackendZendEngine2
     public function getStringsManager()
     {
         return new StringsManager();
-    }
-
-    public function getFcallManager()
-    {
-        if (!$this->fcallManager) {
-            $this->fcallManager = new FcallManager();
-        }
-        return $this->fcallManager;
     }
 
     public function getTypeDefinition($type)

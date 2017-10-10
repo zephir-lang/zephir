@@ -18,6 +18,7 @@ use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
 use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
@@ -96,7 +97,7 @@ class Compiler
     protected $stringManager;
 
     /**
-     * @var \Zephir\Backends\ZendEngine3\FcallManager|\Zephir\Backends\ZendEngine2\FcallManager
+     * @var FcallManagerInterface
      */
     protected $fcallManager;
 
@@ -135,6 +136,11 @@ class Compiler
      * @var Manager
      */
     protected $parserManager;
+
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
 
     /**
      * Compiler constructor
