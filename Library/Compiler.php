@@ -18,6 +18,7 @@ use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
+use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
 /**
@@ -193,13 +194,17 @@ class Compiler
      *
      * @param string $filePath
      * @throws CompilerException
-     * @throws Exception
+     * @throws IllegalStateException
      * @throws ParseException
      */
     protected function preCompile($filePath)
     {
         if (!$this->parserManager->isAvailable()) {
-            throw new Exception('The zephir parser extension is not loaded!');
+            throw new IllegalStateException(
+                'The zephir parser extension is not loaded! ' . PHP_EOL .
+                'Note: Zephir no longer distributed with internal Zephir Parser. ' . PHP_EOL .
+                'To install Zephir Parser please refer to: https://github.com/phalcon/php-zephir-parser'
+            );
         }
 
         if (preg_match('#\.zep$#', $filePath)) {
