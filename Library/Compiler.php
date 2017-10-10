@@ -14,15 +14,18 @@
 namespace Zephir;
 
 use Zephir\Parser\Manager;
+use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
-use Zephir\Parser\ParseException;
+use Zephir\Compiler\CompilerException;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
 /**
  * Zephir\Compiler
  *
  * The main compiler.
+ *
+ * @package Zephir
  */
 class Compiler
 {
@@ -186,33 +189,6 @@ class Compiler
     }
 
     /**
-     * Compile the parser PHP extension.
-     *
-     * Returns TRUE if parser is available or compiled extions file (string).
-     *
-     * @return bool|string
-     */
-    public function compileParser()
-    {
-        if ($this->parserManager->hasToRecompileParser()) {
-            $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-            return $this->parserManager->compileParser();
-        }
-
-        if ($this->parserManager->isAvailable()) {
-            return true;
-        }
-
-        if ($this->parserManager->isAlreadyCompiled()) {
-            return $this->parserManager->getParserFilePath();
-        }
-
-        $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-
-        return $this->parserManager->compileParser();
-    }
-
-    /**
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
@@ -222,21 +198,7 @@ class Compiler
      */
     protected function preCompile($filePath)
     {
-        $parserExt = $this->compileParser();
-
-        // Check if we need to load the parser extension and also allow users to manage the Zephir Parser extension
-        // on their own (Zephir won't handle updating)
-        if ($parserExt && $parserExt !== true) {
-            // exclude --parser-compiled argument, we'll specify it additionally
-            $args = array_filter($_SERVER['argv'], function ($arg) {
-                return 0 !== strpos($arg, "--parser-compiled");
-            });
-            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $args) . ' --parser-compiled';
-            passthru($cmd, $exitCode);
-            exit($exitCode);
-        }
-
-        if (!$parserExt) {
+        if (!$this->parserManager->isAvailable()) {
             throw new Exception('The zephir parser extension is not loaded!');
         }
 

@@ -14,8 +14,8 @@
 namespace Zephir\Commands;
 
 use Zephir\Config;
-use Zephir\Exception;
 use Zephir\Logger;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Zephir\Commands\CommandApi
@@ -51,7 +51,7 @@ class CommandApi extends CommandAbstract
      *
      * @param Config $config
      * @param Logger $logger
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function execute(Config $config, Logger $logger)
     {
@@ -70,15 +70,15 @@ class CommandApi extends CommandAbstract
         ];
 
         foreach ($params as $k => $p) {
-            if (isset($allowedArgs[$k])) {
-                if (preg_match($allowedArgs[$k], $p)) {
-                    $this->setParameter($k, $p);
-                } else {
-                    throw new Exception("Invalid value for argument '$k'");
-                }
-            } elseif (!in_array($k, ['parser-compiled'])) {
-                throw new Exception("Invalid argument '$k' for api command'");
+            if (!isset($allowedArgs[$k])) {
+                throw new InvalidArgumentException("Invalid argument '$k' for api command'");
             }
+
+            if (!preg_match($allowedArgs[$k], $p)) {
+                throw new InvalidArgumentException("Invalid value for argument '$k'");
+            }
+
+            $this->setParameter($k, $p);
         }
 
         parent::execute($config, $logger);
