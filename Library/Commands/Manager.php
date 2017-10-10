@@ -20,7 +20,6 @@ use RecursiveDirectoryIterator;
 use Zephir\Exception\ValidationException;
 use Zephir\Exception\OutOfBoundsException;
 use Zephir\Exception\BadMethodCallException;
-use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Zephir\Commands\Manager
@@ -65,7 +64,7 @@ class Manager extends SplObjectStorage
                 continue;
             }
 
-            $this->attach($command->newInstance());
+            $this->attach($command->newInstanceArgs([$this]));
             $iterator->next();
         }
     }
@@ -87,7 +86,7 @@ class Manager extends SplObjectStorage
     /**
      * {@inheritdoc}
      *
-     * @param CommandInterface $object The command to add.
+     * @param CommandInterface|object $object The command to add.
      * @param mixed $data
      * @throws ValidationException
      */
@@ -104,7 +103,7 @@ class Manager extends SplObjectStorage
     /**
      * {@inheritdoc}
      *
-     * @param CommandInterface $object The command to remove.
+     * @param CommandInterface|object $object The command to remove.
      * @return void
      * @throws ValidationException
      */
