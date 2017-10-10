@@ -13,19 +13,19 @@
 
 namespace Zephir\Commands;
 
-use Zephir\BaseBackend;
-use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Logger;
-use Zephir\Compiler;
 use Zephir\Parser;
-use Zephir\Parser\Manager;
-use Zephir\Commands\Manager as CommandsManager;
+use Zephir\Compiler;
+use Zephir\BaseBackend;
+use Zephir\CommandArgumentParser;
 
 /**
  * CommandAbstract
  *
- * Provides a superclass for commands
+ * Provides a superclass for any command.
+ *
+ * @package Zephir\Commands
  */
 abstract class CommandAbstract implements CommandInterface
 {
@@ -33,16 +33,16 @@ abstract class CommandAbstract implements CommandInterface
 
     /**
      * Currently initialized Command Manager.
-     * @var CommandsManager
+     * @var Manager
      */
     private $commandsManager;
 
     /**
      * CommandAbstract constructor.
      *
-     * @param CommandsManager $commandsManager
+     * @param Manager $commandsManager
      */
-    public function __construct(CommandsManager $commandsManager)
+    public function __construct(Manager $commandsManager)
     {
         $this->commandsManager = $commandsManager;
     }
@@ -58,8 +58,7 @@ abstract class CommandAbstract implements CommandInterface
     }
 
     /**
-     * Returns parameter named $name if specified
-     * on the command line else null
+     * Returns parameter named $name if specified on the command line else null.
      *
      * @param string $name
      * @param string $value
@@ -70,6 +69,7 @@ abstract class CommandAbstract implements CommandInterface
         if (!isset($this->_parameters)) {
             $this->_parameters = array();
         }
+
         $this->_parameters[$name] = $value;
     }
 
@@ -121,7 +121,7 @@ abstract class CommandAbstract implements CommandInterface
         }
         $backend = new $className($config);
 
-        $parserManager = new Manager(new Parser(), $logger, $params);
+        $parserManager = new Parser\Manager(new Parser(), $logger, $params);
         $compiler = new Compiler($config, $logger, $backend, $parserManager);
 
         $command = $this->getCommand();

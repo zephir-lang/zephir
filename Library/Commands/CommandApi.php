@@ -2,20 +2,14 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
@@ -24,16 +18,18 @@ use Zephir\Exception;
 use Zephir\Logger;
 
 /**
- * CommandApi
+ * Zephir\Commands\CommandApi
  *
- * Generates a HTML API based on the classes exposed in the extension
+ * Generates a HTML API based on the classes exposed in the extension.
+ *
+ * @package Zephir\Commands
  */
 class CommandApi extends CommandAbstract
 {
     /**
-     * Command provided by this command
+     * {@inheritdoc}
      *
-     * @return array|string
+     * @return string
      */
     public function getCommand()
     {
@@ -41,25 +37,35 @@ class CommandApi extends CommandAbstract
     }
 
     /**
-     * Command usage
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getUsage()
     {
-        return 'api [--theme-path=/path][--output-directory=/path][--theme-options={json}|/path]';
+        return sprintf(
+            '%s [--theme-path=/path][--output-directory=/path][--theme-options={json}|/path]',
+            $this->getCommand()
+        );
     }
 
     /**
-     * Returns the description of the command
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getDescription()
     {
-        return 'Generates a HTML API';
+        return 'Generates a HTML API based on the classes exposed in the extension';
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param Config $config
+     * @param Logger $logger
+     * @throws Exception
+     */
     public function execute(Config $config, Logger $logger)
     {
         $params = $this->parseArguments();

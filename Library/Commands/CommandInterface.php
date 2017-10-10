@@ -19,39 +19,44 @@ use Zephir\Logger;
 /**
  * CommandInterface
  *
- * Provides an interface to build commands
+ * Provides a common interface for any buil-in command.
+ *
+ * @package Zephir\Commands
  */
 interface CommandInterface
 {
     /**
-     * Command provided by this command
+     * Returns command provided by this command.
      *
      * @return string
      */
     public function getCommand();
 
     /**
-     * Command usage
+     * Returns command usage.
      *
      * @return string
      */
     public function getUsage();
 
     /**
+     * Returns the description of the command.
+     *
      * @return string
      */
     public function getDescription();
 
     /**
-     * Returns parameter named parameterName if specified
-     * on the command line else null
+     * Returns parameter named parameterName if specified on the command line else null.
+     *
      * @param string $parameterName
-     * @return string
+     * @return string|null
      */
     public function getParameter($parameterName);
 
     /**
-     * Executes the command
+     * Executes the command.
+     *
      * @param Config $config
      * @param Logger $logger
      */

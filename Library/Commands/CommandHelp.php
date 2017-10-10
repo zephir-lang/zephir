@@ -18,9 +18,11 @@ use Zephir\Logger;
 use Zephir\Compiler;
 
 /**
- * CommandHelp
+ * Zephir\Commands\CommandHelp
  *
  * Shows compiler help
+ *
+ * @package Zephir\Commands
  */
 class CommandHelp extends CommandAbstract
 {
@@ -34,7 +36,7 @@ class CommandHelp extends CommandAbstract
 ';
 
     /**
-     * Command provided by this command
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -44,17 +46,17 @@ class CommandHelp extends CommandAbstract
     }
 
     /**
-     * Command usage
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getUsage()
     {
-        return 'help';
+        return $this->getCommand();
     }
 
     /**
-     * Returns the description of the command
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -64,7 +66,7 @@ class CommandHelp extends CommandAbstract
     }
 
     /**
-     * Executes the command
+     * {@inheritdoc}
      *
      * @param Config $config
      * @param Logger $logger
