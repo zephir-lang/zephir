@@ -20,4 +20,5 @@ namespace Zephir\Exception;
  */
 class ValidationException extends InvalidArgumentException
 {
+    use ExceptionExtraAwareTrait;
 }

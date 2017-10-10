@@ -14,11 +14,26 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\BadMethodCallException
+ * Zephir\Exception\ExceptionInterface
  *
  * @package Zephir\Exception
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface
+trait ExceptionExtraAwareTrait
 {
-    use ExceptionExtraAwareTrait;
+    /**
+     * Extra info.
+     *
+     * @var array
+     */
+    protected $extra = [];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getExtra()
+    {
+        return $this->extra;
+    }
 }

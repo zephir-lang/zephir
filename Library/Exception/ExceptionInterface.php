@@ -20,4 +20,10 @@ namespace Zephir\Exception;
  */
 interface ExceptionInterface
 {
+    /**
+     * Gets extra info.
+     *
+     * @return array
+     */
+    public function getExtra();
 }

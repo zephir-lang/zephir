@@ -20,4 +20,5 @@ namespace Zephir\Exception;
  */
 class OutOfBoundsException extends \OutOfBoundsException implements ExceptionInterface
 {
+    use ExceptionExtraAwareTrait;
 }

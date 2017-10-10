@@ -14,11 +14,11 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\BadMethodCallException
+ * Zephir\Exception\RuntimeException
  *
  * @package Zephir\Exception
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
     use ExceptionExtraAwareTrait;
 }
