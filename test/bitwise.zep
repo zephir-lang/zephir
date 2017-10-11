@@ -948,4 +948,20 @@ class Bitwise
 	{
 		return a & ~b;
 	}
+
+	protected function getInt(int num) -> int
+	{
+		return num;
+	}
+
+	/**
+	 * @issue 1581
+	 */
+	public function testbitwiseXor()
+	{
+		var i = this->getInt(123),
+			j = this->getInt(321);
+
+		return i ^ j;
+	}
 }

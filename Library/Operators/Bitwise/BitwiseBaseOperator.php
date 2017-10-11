@@ -101,8 +101,11 @@ class BitwiseBaseOperator extends BaseOperator
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param array $expression
      * @param CompilationContext $compilationContext
+     * @return bool|CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

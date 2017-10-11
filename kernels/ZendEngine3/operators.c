@@ -507,6 +507,16 @@ int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2)
 }
 
 /**
+ * Do bitwise_xor function keeping ref_count and is_ref
+ */
+int zephir_bitwise_xor_function(zval *result, zval *op1, zval *op2)
+{
+	int status;
+	status = bitwise_xor_function(result, op1, op2);
+	return status;
+}
+
+/**
  * Check if a zval is less/equal than other
  */
 int zephir_less_equal(zval *op1, zval *op2)
