@@ -13,8 +13,8 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
 use Zephir\Variable\Globals;
+use Zephir\Compiler\CompilerException;
 
 /**
  * Variable
@@ -33,7 +33,7 @@ class Variable
      * Current dynamic type of the variable
      * @var array
      */
-    protected $dynamicTypes = array('unknown' => true);
+    protected $dynamicTypes = ['unknown' => true];
 
     /**
      * Variable's name
@@ -169,11 +169,9 @@ class Variable
      * @param string $type
      * @param string $name
      * @param Branch $branch
-     * @param mixed $defaultInitValue The default init value [optional].
      */
-    public function __construct($type, $name, $branch, $defaultInitValue = null)
+    public function __construct($type, $name, $branch)
     {
-
         $this->globalsManager = new Globals();
 
         switch ($type) {
@@ -187,8 +185,6 @@ class Variable
         $this->type = $type;
         $this->name = $name;
         $this->branch = $branch;
-
-        $this->setDefaultInitValue($defaultInitValue);
     }
 
     /**
@@ -695,7 +691,7 @@ class Variable
     }
 
     /**
-     * Sets the default init value
+     * Sets the default init value.
      *
      * @param mixed $value
      */

@@ -132,37 +132,36 @@ class SymbolTable
      * @param int $type
      * @param string $name
      * @param CompilationContext $compilationContext
-     * @param mixed $defaultValue
      * @return Variable
      */
-    public function addVariable($type, $name, CompilationContext $compilationContext, $defaultValue = null)
+    public function addVariable($type, $name, CompilationContext $compilationContext)
     {
         $currentBranch = $compilationContext->branchManager->getCurrentBranch();
         $branchId = $currentBranch->getUniqueId();
         if ($this->globalsManager->isSuperGlobal($name) || $type == 'zephir_fcall_cache_entry') {
             $branchId = 1;
         }
+
         $varName = $name;
         if ($branchId > 1 && $currentBranch->getType() != Branch::TYPE_ROOT) {
             $varName = $name . Variable::BRANCH_MAGIC . $branchId;
         }
 
-        $variable = new Variable($type, $varName, $compilationContext->currentBranch, $defaultValue);
-        if ($type == 'variable') {
-            if ($this->localContext) {
-                /**
-                 * Checks whether a variable can be optimized to be static or not
-                 */
-                if ($this->localContext->shouldBeLocal($name)) {
-                    $variable->setLocalOnly(true);
-                }
-            }
+        $variable = new Variable($type, $varName, $currentBranch);
+
+        /**
+         * Checks whether a variable can be optimized to be static or not
+         */
+        if ($type == 'variable' && $this->localContext && $this->localContext->shouldBeLocal($name)) {
+            $variable->setLocalOnly(true);
         }
 
         if (!isset($this->branchVariables[$branchId])) {
             $this->branchVariables[$branchId] = array();
         }
+
         $this->branchVariables[$branchId][$name] = $variable;
+
         return $variable;
     }
 
