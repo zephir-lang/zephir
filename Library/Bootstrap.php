@@ -154,7 +154,7 @@ class Bootstrap
         };
 
         $message .= sprintf("at %s(%s)\n\n", $preparePaths($e->getFile()), $e->getLine());
-        $message .= sprintf("Trace:\n%s\n", $preparePaths($e->getTraceAsString()));
+        $message .= sprintf("Stack trace:\n%s\n", $preparePaths($e->getTraceAsString()));
 
         return $message;
     }

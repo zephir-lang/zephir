@@ -81,11 +81,7 @@ class DeclareStatement extends StatementAbstract
             /**
              * Variables are added to the symbol table
              */
-            if (isset($variable['expr'])) {
-                $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext, $variable['expr']);
-            } else {
-                $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
-            }
+            $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
             $varName = $symbolVariable->getName();
 
             /**

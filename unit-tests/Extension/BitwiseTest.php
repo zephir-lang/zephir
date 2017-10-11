@@ -128,5 +128,11 @@ class BitwiseTest extends \PHPUnit_Framework_TestCase
         // Bitwise NOT
         $this->assertSame($t->testBitwiseNot(666), -667);
         $this->assertSame($t->testBitwiseAndNot(5, 4), 1);
+
+        /**
+         * Bitwise XOR
+         * @issue 1581
+         */
+        $this->assertSame(123 ^ 321, $t->testbitwiseXor());
     }
 }
