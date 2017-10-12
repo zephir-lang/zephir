@@ -37,6 +37,10 @@ Compiler design goals:
 
 ## Installation
 
+**NOTE:** The `development` branch will always contain the latest **unstable** version.
+If you wish to check older versions or formal, tagged release, please switch to the relevant
+[branch](https://github.com/phalcon/zephir/branches)/[tag](https://github.com/phalcon/zephir/tags).
+
 ### Windows
 
 To install Zephir on Windows [follow this guide](https://github.com/phalcon/zephir/blob/master/WINDOWS.md).
