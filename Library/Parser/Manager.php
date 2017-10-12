@@ -109,6 +109,6 @@ EOF;
             $add = "";
         }
 
-        return sprintf($temlate,$this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
+        return sprintf($temlate, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
     }
 }
