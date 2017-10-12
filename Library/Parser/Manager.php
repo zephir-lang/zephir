@@ -78,7 +78,7 @@ class Manager
     public function isAvailable()
     {
         return $this->parser->isAvailable() &&
-            version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<');
+            version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
     }
 
     /**
