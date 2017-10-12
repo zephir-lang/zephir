@@ -113,6 +113,9 @@ install:
 
     - echo Enable Zephir Parser
     - 'cd %APPVEYOR_BUILD_FOLDER%\..\php\ext'
+    # ==================================================
+    - echo Downloading Zephir Parser [%PARSER_DOWNLOAD_URL%]
+    # ==================================================
     - curl --location --silent --show-error %PARSER_DOWNLOAD_URL% --output zephir_parser.zip
     - 7z.exe x zephir_parser.zip | FIND /V "ing  "
 
