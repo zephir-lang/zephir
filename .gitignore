@@ -54,3 +54,4 @@ runtime/index.php
 runtime/parser.out
 
 coverage.xml
+clover.xml
