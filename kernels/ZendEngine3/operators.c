@@ -487,7 +487,7 @@ int zephir_is_identical(zval *op1, zval *op2)
 }
 
 /**
- * Do bitwise_and function keeping ref_count and is_ref
+ * Do bitwise_and function
  */
 int zephir_bitwise_and_function(zval *result, zval *op1, zval *op2)
 {
@@ -497,7 +497,7 @@ int zephir_bitwise_and_function(zval *result, zval *op1, zval *op2)
 }
 
 /**
- * Do bitwise_or function keeping ref_count and is_ref
+ * Do bitwise_or function
  */
 int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2)
 {
@@ -507,7 +507,7 @@ int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2)
 }
 
 /**
- * Do bitwise_xor function keeping ref_count and is_ref
+ * Do bitwise_xor function
  */
 int zephir_bitwise_xor_function(zval *result, zval *op1, zval *op2)
 {

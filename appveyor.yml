@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.10.2-{build}
+version: 0.10.3-{build}
 
 # branches to build
 branches:
@@ -34,8 +34,8 @@ clone_folder: c:\projects\zephir
 init:
     - SET ANSICON=121x90 (121x90)
     - SET COMPOSER_NO_INTERACTION=1
-    - SET PARSER_RELEASE=1.0.3
-    - SET PARSER_VERSION=1.0.3-258
+    - SET PARSER_VERSION=1.1.0
+    - SET PARSER_RELEASE=261
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "development") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
 
 # build cache to preserve files/folders between builds
@@ -71,7 +71,7 @@ install:
         $matched_versions = type sha1sum.txt | where { $_ -match "php-(${env:PHP_TARGET}\.\d+)-src" } | foreach { $matches[1] }
         $cleaned_version = $matched_versions.Split(' ')[-1]
         $env:PHP_VERSION=${cleaned_version}
-    - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_RELEASE}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_TARGET}_${env:PARSER_VERSION}.zip"
+    - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_VERSION}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_TARGET}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
 
     # ==================================================
     - echo Initializing Build...
@@ -95,13 +95,27 @@ install:
     - '7z.exe x ..\php-sdk.zip | FIND /V "ing  "'
     - cd ..
 
-    - echo Downloading PHP-Devel-Pack
-    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-Win32-VC' + ${env:PHP_VC} + '-' + ${env:PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
+    # ==================================================
+    - echo Install PHP Dev pack
+    # ==================================================
+    - ps: >-
+        If ($env:PHP_TYPE -Match "nts-Win32") {
+            $env:DEVEL_PACK_VERSION="${env:PHP_VERSION}-nts-Win32-VC${env:PHP_VC}-${env:PLATFORM}"
+        } Else {
+            $env:DEVEL_PACK_VERSION="${env:PHP_VERSION}-Win32-VC${env:PHP_VC}-${env:PLATFORM}"
+        }
+    # ==================================================
+    - echo Downloading PHP Dev pack source code [http://windows.php.net/downloads/releases/php-devel-pack-%DEVEL_PACK_VERSION%.zip]
+    # ==================================================
+    - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:DEVEL_PACK_VERSION} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
     - 7z.exe x php-dev.zip | FIND /V "ing  "
     - mv php-%PHP_VERSION%-devel-VC11-%PLATFORM% php-devpack
 
     - echo Enable Zephir Parser
     - 'cd %APPVEYOR_BUILD_FOLDER%\..\php\ext'
+    # ==================================================
+    - echo Downloading Zephir Parser [%PARSER_DOWNLOAD_URL%]
+    # ==================================================
     - curl --location --silent --show-error %PARSER_DOWNLOAD_URL% --output zephir_parser.zip
     - 7z.exe x zephir_parser.zip | FIND /V "ing  "
 

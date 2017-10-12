@@ -29,13 +29,17 @@ Compiler design goals:
 ## Requirements
 
 * [re2c](http://re2c.org/)
-* [Zephir Parser](https://github.com/phalcon/php-zephir-parser)
+* [Zephir Parser](https://github.com/phalcon/php-zephir-parser) >= 1.1.0
 * `g++` >= 4.4 | `clang++` >= 3.x | `vc++` >= 11
 * GNU `make` >= 3.81
 * `automake`
 * PHP development headers and tools
 
 ## Installation
+
+**NOTE:** The `development` branch will always contain the latest **unstable** version.
+If you wish to check older versions or formal, tagged release, please switch to the relevant
+[branch](https://github.com/phalcon/zephir/branches)/[tag](https://github.com/phalcon/zephir/tags).
 
 ### Windows
 

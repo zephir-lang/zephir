@@ -3,7 +3,7 @@
 /*
  +--------------------------------------------------------------------------+
  | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir (https://zephir-lang.com/)             |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
  | This source file is subject the MIT license, that is bundled with this   |
  | package in the file LICENSE, and is available through the world-wide-web |
@@ -31,7 +31,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.10.2';
+    const VERSION = '0.10.3';
 
     public $parserCompiled = false;
 
@@ -206,11 +206,7 @@ class Compiler
     protected function preCompile($filePath)
     {
         if (!$this->parserManager->isAvailable()) {
-            throw new IllegalStateException(
-                'The zephir parser extension is not loaded! ' . PHP_EOL .
-                'Note: Zephir no longer distributed with internal Zephir Parser. ' . PHP_EOL .
-                'To install Zephir Parser please refer to: https://github.com/phalcon/php-zephir-parser'
-            );
+            throw new IllegalStateException($this->parserManager->requirements());
         }
 
         if (preg_match('#\.zep$#', $filePath)) {

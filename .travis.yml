@@ -2,8 +2,6 @@ language: php
 sudo: false
 
 php:
-  # The PHP 5.4 is no longer supported
-  # - 5.4
   - 5.5
   - 5.6
   - 7.0
@@ -22,10 +20,11 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - ZEPHIR_PARSER_VERSION="v1.0.3"
+    - ZEPHIR_PARSER_VERSION="v1.1.0"
   matrix:
     - CC="ccache gcc"
     - CC="clang"
+    - CC="gcc" ZEPHIR_PARSER_VERSION="development"
 
 matrix:
   fast_finish: true
@@ -38,6 +37,9 @@ matrix:
     - env: CC="clang"
       php: nightly
       compiler: clang
+    - env: CC="gcc" ZEPHIR_PARSER_VERSION="development"
+      php: nightly
+      compiler: gcc
 
 cache:
   apt: true
