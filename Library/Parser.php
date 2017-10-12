@@ -35,6 +35,16 @@ class Parser
     }
 
     /**
+     * Gets Zephir Parser version.
+     *
+     * @return null|string
+     */
+    public function getVersion()
+    {
+        return extension_loaded('Zephir Parser') ? phpversion('Zephir Parser') : null;
+    }
+
+    /**
      * Parses a file and returning an intermediate representation (IR).
      *
      * @param string $filepath Absolute path to the *.zep file

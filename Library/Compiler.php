@@ -206,11 +206,7 @@ class Compiler
     protected function preCompile($filePath)
     {
         if (!$this->parserManager->isAvailable()) {
-            throw new IllegalStateException(
-                'The zephir parser extension is not loaded! ' . PHP_EOL .
-                'Note: Zephir no longer distributed with internal Zephir Parser. ' . PHP_EOL .
-                'To install Zephir Parser please refer to: https://github.com/phalcon/php-zephir-parser'
-            );
+            throw new IllegalStateException($this->parserManager->requirements());
         }
 
         if (preg_match('#\.zep$#', $filePath)) {
