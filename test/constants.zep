@@ -38,6 +38,16 @@ class Constants extends ConstantsParent
 	protected propertyC7 = self::ANNOTATION_REGEX {get};
 	protected propertyC8 = self::PARAMETER_REGEX {get};
 
+	// Do not modify annotation bellow
+	// See:
+	// https://github.com/phalcon/php-zephir-parser/issues/13
+	// https://github.com/phalcon/cphalcon/pull/11212/files
+
+	/**
+	 * @var \Phalcon\Cache\FrontendInterface
+	 */
+	protected propertyC9 = "some-value" {get};
+
 	public function testReadConstant()
 	{
 		return ENT_QUOTES;

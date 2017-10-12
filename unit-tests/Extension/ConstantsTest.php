@@ -41,6 +41,7 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($t->getPropertyC4(), 10);
         $this->assertSame($t->getPropertyC5(), 10.25);
         $this->assertSame($t->getPropertyC6(), "test");
+        $this->assertSame($t->getPropertyC9(), "some-value");
     }
 
     public function testConstantsRead()
