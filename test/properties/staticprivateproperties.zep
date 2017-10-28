@@ -6,12 +6,12 @@ class StaticPrivateProperties
 
 	public static function getInstance() -> <StaticPrivateProperties>
 	{
-		var instance;
-		let instance = self::instance;
+		var localInstance;
+		let localInstance = self::instance;
 
-		if typeof instance !== "object" {
-		   let instance = new self();
-		   let self::instance = instance;
+		if unlikely typeof localInstance !== "object" {
+			let localInstance = new self();
+			let self::instance = localInstance;
 		}
 
 		return self::instance;
