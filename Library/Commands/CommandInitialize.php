@@ -81,7 +81,8 @@ class CommandInitialize extends CommandAbstract
 Description:
     The options are as follows:
 
-    namespace        The extension namespace.
+    namespace                                The extension namespace.
+    --backend=ZendEngine2|ZendEngine3        Used backend to create extension.
 EOL;
 
         return sprintf($template, $this->getCommand());

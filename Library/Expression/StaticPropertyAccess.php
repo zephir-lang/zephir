@@ -30,6 +30,9 @@ class StaticPropertyAccess
 
     protected $_readOnly = false;
 
+    /**
+     * @var Variable|null
+     */
     protected $_expectingVariable;
 
     /**
@@ -37,7 +40,7 @@ class StaticPropertyAccess
      * create a temporary value or ignore the return value
      *
      * @param boolean $expecting
-     * @param Variable $expectingVariable
+     * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {

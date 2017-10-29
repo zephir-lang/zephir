@@ -660,7 +660,7 @@ class Call
     public function addCallStatusFlag(CompilationContext $compilationContext)
     {
         if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
-            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->branchManager->getCurrentBranch());
             $callStatus->setIsInitialized(true, $compilationContext);
             $callStatus->increaseUses();
             $callStatus->setReadOnly(true);

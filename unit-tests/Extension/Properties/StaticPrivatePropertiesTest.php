@@ -11,20 +11,23 @@
  +--------------------------------------------------------------------------+
 */
 
-if (extension_loaded('xdebug')) {
-    ini_set('xdebug.cli_color', 1);
-    ini_set('xdebug.collect_params', 0);
-    ini_set('xdebug.dump_globals', 'on');
-    ini_set('xdebug.show_local_vars', 'on');
-    ini_set('xdebug.max_nesting_level', 100);
-    ini_set('xdebug.var_display_max_depth', 4);
-}
+namespace Extension\Properties;
 
-define('TESTS_PATH', dirname(__FILE__));
-define('DATA_PATH', dirname(__FILE__) . '/Data');
+use Test\Properties\App;
+use Test\Properties\StaticPrivateProperties;
 
-defined('ZEPHIRPATH') || define('ZEPHIRPATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+class StaticPrivatePropertiesTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @test
+     * @issue #1530
+     */
+    public function shouldGetInstanceByUsingSingleton()
+    {
+        $t = new App();
 
-if (!extension_loaded('phalcon')) {
-    include_once ZEPHIRPATH . 'prototypes/phalcon.php';
+        $this->assertInstanceOf(StaticPrivateProperties::class, $t->getInstance());
+        $this->assertInstanceOf(StaticPrivateProperties::class, StaticPrivateProperties::getInstance());
+        $this->assertSame($t->getInstance(), StaticPrivateProperties::getInstance());
+    }
 }

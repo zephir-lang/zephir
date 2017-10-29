@@ -55,7 +55,7 @@ class CommandBuildDev extends CommandAbstract
 Description:
     The options are as follows:
 
-    --backend=ZendEngine2|ZendEngine3        The extension namespace.
+    --backend=ZendEngine2|ZendEngine3        Used backend to build extension.
 EOL;
 
         return sprintf($template, $this->getCommand());

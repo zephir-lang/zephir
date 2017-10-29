@@ -1512,6 +1512,20 @@ class ClassMethod
         $callGathererPass = $this->callGathererPass;
 
         /**
+         * Initialization of parameters happens in a fictitious external branch
+         */
+        $branch = new Branch();
+        $branch->setType(Branch::TYPE_EXTERNAL);
+
+        /**
+         * BranchManager helps to create graphs of conditional/loop/root/jump branches
+         */
+        $branchManager = new BranchManager();
+        $branchManager->addBranch($branch);
+
+        $compilationContext->branchManager = $branchManager;
+
+        /**
          * Every method has its own symbol table
          */
         $symbolTable = new SymbolTable($compilationContext);
@@ -1532,24 +1546,11 @@ class ClassMethod
         }
 
         /**
-         * Initialization of parameters happens in a fictitious external branch
-         */
-        $branch = new Branch();
-        $branch->setType(Branch::TYPE_EXTERNAL);
-
-        /**
-         * BranchManager helps to create graphs of conditional/loop/root/jump branches
-         */
-        $branchManager = new BranchManager();
-        $branchManager->addBranch($branch);
-
-        /**
          * Cache Manager manages function calls, method calls and class entries caches
          */
         $cacheManager = new CacheManager();
         $cacheManager->setGatherer($callGathererPass);
 
-        $compilationContext->branchManager = $branchManager;
         $compilationContext->cacheManager  = $cacheManager;
         $compilationContext->typeInference = $typeInference;
         $compilationContext->symbolTable   = $symbolTable;
