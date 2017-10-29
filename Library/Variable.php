@@ -42,7 +42,7 @@ class Variable
 
     /**
      * Branch where the variable was declared
-     * @var Branch
+     * @var Branch|null
      */
     protected $branch;
 
@@ -170,16 +170,12 @@ class Variable
      * @param string $name
      * @param Branch $branch
      */
-    public function __construct($type, $name, $branch)
+    public function __construct($type, $name, Branch $branch = null)
     {
         $this->globalsManager = new Globals();
 
-        switch ($type) {
-            case 'callable':
-            case 'object':
-            case 'resource':
-                $type = 'variable';
-                break;
+        if (in_array($type, ['callable', 'object', 'resource'], true)) {
+            $type = 'variable';
         }
 
         $this->type = $type;
@@ -429,7 +425,7 @@ class Variable
     /**
      * Get the branch where the variable was declared
      *
-     * @return Branch
+     * @return Branch|null
      */
     public function getBranch()
     {
@@ -952,12 +948,14 @@ class Variable
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
             $symbol = $compilationContext->backend->getVariableCode($this);
+
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $symbol . ');');
             } else {
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $symbol . ');');
             }
+
             $this->variantInits++;
         }
     }

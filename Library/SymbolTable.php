@@ -118,13 +118,11 @@ class SymbolTable
         return $this->getVariable($name, $compilationContext ?: $this->compilationContext) !== false;
     }
 
-    public function hasVariableInBranch($name, $compareBranch, $compilationContext = null)
+    public function hasVariableInBranch($name, Branch $compareBranch, CompilationContext $compilationContext = null)
     {
         $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
-        if (!$branch || $branch != $compareBranch) {
-            return false;
-        }
-        return true;
+
+        return ($branch instanceof Branch && $branch === $compareBranch);
     }
 
     /**
@@ -646,6 +644,7 @@ class SymbolTable
     public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced = false)
     {
         $variable = $this->reuseTempVariable($type, 'non-tracked');
+
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
