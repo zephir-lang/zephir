@@ -86,7 +86,7 @@ class Variable
      */
     protected $initialized = false;
 
-    protected $initBranches = array();
+    protected $initBranches = [];
 
     protected $isExternal = false;
 
@@ -196,7 +196,7 @@ class Variable
     /**
      * Get init marked branch
      *
-     * @return array
+     * @return Branch[]
      */
     public function getInitBranches()
     {
@@ -624,15 +624,17 @@ class Variable
      */
     public function setIsInitialized($initialized, CompilationContext $compilationContext)
     {
-        if ($initialized) {
-            if ($compilationContext->branchManager) {
-                $currentBranch = $compilationContext->branchManager->getCurrentBranch();
-                if ($currentBranch) {
-                    $this->initBranches[] = $currentBranch;
-                }
-            }
-        }
         $this->initialized = $initialized;
+
+        if (!$initialized || !$compilationContext->branchManager instanceof BranchManager) {
+            return;
+        }
+
+        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+
+        if ($currentBranch instanceof Branch) {
+            $this->initBranches[] = $currentBranch;
+        }
     }
 
     /**
