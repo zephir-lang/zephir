@@ -1,11 +1,14 @@
 language: php
-sudo: false
+
+dist: trusty
+sudo: true
 
 php:
   - 5.5
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 git:
   depth: 1
@@ -20,51 +23,73 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - ZEPHIR_PARSER_VERSION="v1.1.0"
-    - RE2C_VERSION="system"
+    - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
   matrix:
-    - CC="ccache gcc"
-    - CC="clang"
-    - CC="gcc" ZEPHIR_PARSER_VERSION="development"
+    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
+    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
+    - CC="gcc"   RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="v1.1.0"
+    - CC="clang" RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="v1.1.0"
+    - CC="gcc"   RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="development"
+    - CC="clang" RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="development"
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
-    - php: 7.1
-      env: CC="gcc" RE2C_VERSION="1.0.2"
+    - php: 7.2
+  exclude:
+    - env: CC="gcc"
+      compiler: clang
+    - env: CC="clang"
       compiler: gcc
   include:
-    - env: CC="ccache gcc"
+    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
       php: nightly
       compiler: gcc
-    - env: CC="clang"
+    - env: CC="gcc" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="v1.1.0"
+      php: nightly
+      compiler: gcc
+    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
+      php: nightly
+      compiler: gcc
+    - env: CC="gcc" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="development"
+      php: nightly
+      compiler: gcc
+    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
       php: nightly
       compiler: clang
-    - env: CC="gcc" ZEPHIR_PARSER_VERSION="development"
+    - env: CC="clang" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="v1.1.0"
       php: nightly
-      compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="1.0.2"
-      php: 7.1
-      compiler: gcc
+      compiler: clang
+    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
+      php: nightly
+      compiler: clang
+    - env: CC="clang" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="development"
+      php: nightly
+      compiler: clang
 
 cache:
   apt: true
   ccache: true
-  timeout: 691200
+  timeout: 604800
   directories:
     - vendor
     - $HOME/.ccache
     - $HOME/.composer/cache
+    - $HOME/.local/opt/re2c
+    - $HOME/.cache/re2c
 
 before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
+  - phpenv versions
 
 install:
   - composer --prefer-source install
-  - bash unit-tests/ci/install_re2c.sh
-  - bash unit-tests/ci/install_zephir_parser.sh
+  - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
+  - bash ./unit-tests/ci/install_zephir_parser.sh
   - ./install
 
 before_script:
@@ -75,11 +100,24 @@ before_script:
   - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
   - ulimit -c unlimited || true
   - $CC --version
+  - $(phpenv which php) -m
 
 script:
   - echo 'variables_order=EGPCS' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+  - |
+      valgrind \
+        --read-var-info=yes \
+        --error-exitcode=1 \
+        --fullpath-after= \
+        --track-origins=yes \
+        --leak-check=full \
+        --run-libc-freeres=no \
+        ./unit-tests/phpunit \
+          --not-exit \
+          -c phpunit.xml.dist \
+          --debug \
+          unit-tests/
   - $(phpenv which php) unit-tests/microbench.php
 
 after_success:
