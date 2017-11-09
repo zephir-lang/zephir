@@ -26,14 +26,14 @@ env:
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
   matrix:
-    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
-    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
+    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
     - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
     - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
-    - CC="gcc"   RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="v1.1.0"
-    - CC="clang" RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="v1.1.0"
-    - CC="gcc"   RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="development"
-    - CC="clang" RE2C_VERSION="1.0.2"  ZEPHIR_PARSER_VERSION="development"
+    - CC="gcc"   RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="v1.1.1"
+    - CC="clang" RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="v1.1.1"
+    - CC="gcc"   RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="development"
+    - CC="clang" RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="development"
 
 matrix:
   fast_finish: true
@@ -46,28 +46,28 @@ matrix:
     - env: CC="clang"
       compiler: gcc
   include:
-    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
       php: nightly
       compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - env: CC="gcc" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="v1.1.1"
       php: nightly
       compiler: gcc
     - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
       php: nightly
       compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="development"
+    - env: CC="gcc" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="development"
       php: nightly
       compiler: gcc
-    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
       php: nightly
       compiler: clang
-    - env: CC="clang" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="v1.1.0"
+    - env: CC="clang" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="v1.1.1"
       php: nightly
       compiler: clang
     - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
       php: nightly
       compiler: clang
-    - env: CC="clang" RE2C_VERSION="1.0.2" ZEPHIR_PARSER_VERSION="development"
+    - env: CC="clang" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="development"
       php: nightly
       compiler: clang
 
