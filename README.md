@@ -28,7 +28,7 @@ Compiler design goals:
 
 ## Requirements
 
-* [re2c](http://re2c.org/) >= 0.13.4
+* [re2c](http://re2c.org/) >= 0.13.6
 * [Zephir Parser](https://github.com/phalcon/php-zephir-parser) >= 1.1.0
 * `g++` >= 4.4 | `clang++` >= 3.x | `vc++` >= 11
 * GNU `make` >= 3.81
