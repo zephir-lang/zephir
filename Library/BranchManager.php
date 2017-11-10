@@ -20,13 +20,15 @@ namespace Zephir;
  */
 class BranchManager
 {
+    /** @var Branch|null */
     protected $currentBranch;
 
     protected $level = 0;
 
     protected $uniqueId = 1;
 
-    protected $rootBranch = null;
+    /** @var Branch|null */
+    protected $rootBranch;
 
     /**
      * Sets the current active branch in the manager
@@ -68,7 +70,7 @@ class BranchManager
     /**
      * Returns the active branch in the manager
      *
-     * @return Branch
+     * @return null|Branch
      */
     public function getCurrentBranch()
     {
@@ -85,6 +87,9 @@ class BranchManager
         $this->rootBranch = $branch;
     }
 
+    /**
+     * @return null|Branch
+     */
     public function getRootBranch()
     {
         return $this->rootBranch;

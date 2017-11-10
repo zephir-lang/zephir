@@ -23,6 +23,8 @@ if (extension_loaded('xdebug')) {
 define('TESTS_PATH', dirname(__FILE__));
 define('DATA_PATH', dirname(__FILE__) . '/Data');
 
+defined('ZEPHIRPATH') || define('ZEPHIRPATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+
 if (!extension_loaded('phalcon')) {
     include_once ZEPHIRPATH . 'prototypes/phalcon.php';
 }

@@ -11,21 +11,23 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Optimizers;
+namespace Extension\Properties;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
+use Test\Properties\App;
+use Test\Properties\StaticPrivateProperties;
 
-/**
- * Class OptimizerAbstract
- */
-abstract class OptimizerAbstract
+class StaticPrivatePropertiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
-     * @return mixed
+     * @test
+     * @issue #1530
      */
-    abstract public function optimize(array $expression, Call $call, CompilationContext $context);
+    public function shouldGetInstanceByUsingSingleton()
+    {
+        $t = new App();
+
+        $this->assertInstanceOf(StaticPrivateProperties::class, $t->getInstance());
+        $this->assertInstanceOf(StaticPrivateProperties::class, StaticPrivateProperties::getInstance());
+        $this->assertSame($t->getInstance(), StaticPrivateProperties::getInstance());
+    }
 }

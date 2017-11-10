@@ -14,7 +14,7 @@ LOCAL_LIBRARY=${LOCAL_LIB_DIR}/zephir-parser-${ZEPHIR_PARSER_VERSION}-${PHP_MAJO
 
 EXTENSION_DIR=`$(phpenv which php-config) --extension-dir`
 
-if [ ! -f ${LOCAL_LIBRARY} ]; then
+if [ ! -f ${LOCAL_LIBRARY} ] || [ "${ZEPHIR_PARSER_VERSION}" = "development" ]; then
     mkdir -p ${LOCAL_SRC_DIR}
     mkdir -p ${LOCAL_LIB_DIR}
 
@@ -31,7 +31,7 @@ if [ ! -f ${LOCAL_LIBRARY} ]; then
     cp "${EXTENSION_DIR}/zephir_parser.so" ${LOCAL_LIBRARY}
 fi
 
-echo "[Zephir Parser]" > ${HOME}/.phpenv/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
-echo "extension=${LOCAL_LIBRARY}" >> ${HOME}/.phpenv/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
+echo "[Zephir Parser]" > $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
+echo "extension=${LOCAL_LIBRARY}" >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
 
 php --ri 'Zephir Parser'

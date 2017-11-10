@@ -14,6 +14,3 @@ quit
 EOF
 	fi
 done
-
-$(phpenv which php) -m
-$(phpenv which php) -i
