@@ -366,6 +366,24 @@ class Assign
 		return num;
     }
 
+	public function testAssign43(int num) -> int
+	{
+		var a;
+		let a = 43;
+		let a %= num;
+
+		return a;
+	}
+
+    public function testAssign44(int num) -> int
+    {
+		var a;
+		let a = 2;
+		let num %= a;
+
+		return num;
+    }
+
 	public function testPropertyAssign1()
 	{
 		let this->testVar = 1;

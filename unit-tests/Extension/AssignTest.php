@@ -86,6 +86,8 @@ class AssignTest extends PHPUnit_Framework_TestCase
             [116,            'testAssign40'],
             [21,             'testAssign41', 2],
             [43,             'testAssign42', 86],
+            [1,              'testAssign43', 2],
+            [1,              'testAssign44', 41],
         ];
     }
 

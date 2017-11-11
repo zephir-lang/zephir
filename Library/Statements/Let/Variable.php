@@ -205,6 +205,10 @@ class Variable
                                 $codePrinter->output($variable . ' /= ' . $itemVariable->getName() . ';');
                                 break;
 
+                            case 'mod-assign':
+                                $codePrinter->output($variable . ' %= ' . $itemVariable->getName() . ';');
+                                break;
+
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
                         }
