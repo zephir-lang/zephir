@@ -33,6 +33,9 @@ class Concat
 		return url;
 	}
 
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1573
+	 */
 	public function testConcat3() -> string
 	{
 		var a, b;

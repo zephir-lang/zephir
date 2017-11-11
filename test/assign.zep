@@ -348,23 +348,29 @@ class Assign
 		return a - b;
 	}
 
-    public function testAssign41(int num) -> int
-    {
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1573
+	 */
+	public function testAssign41(int num) -> int
+	{
 		var a;
 		let a = 42;
 		let a /= num;
 
 		return a;
-    }
+	}
 
-    public function testAssign42(int num) -> int
-    {
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1573
+	 */
+	public function testAssign42(int num) -> int
+	{
 		var a;
 		let a = 2;
 		let num /= a;
 
 		return num;
-    }
+	}
 
 	public function testAssign43(int num) -> int
 	{
@@ -375,14 +381,14 @@ class Assign
 		return a;
 	}
 
-    public function testAssign44(int num) -> int
-    {
+	public function testAssign44(int num) -> int
+	{
 		var a;
 		let a = 2;
 		let num %= a;
 
 		return num;
-    }
+	}
 
 	public function testPropertyAssign1()
 	{
