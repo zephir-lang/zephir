@@ -331,12 +331,12 @@ class Variable implements TypeAwareInterface
      */
     public function setIdle($idle)
     {
+        $this->idle = false;
+
         if ($this->reusable) {
-            $this->classTypes = array();
-            $this->dynamicTypes = array('unknown' => true);
+            $this->classTypes = [];
+            $this->dynamicTypes = ['unknown' => true];
             $this->idle = $idle;
-        } else {
-            $this->idle = false;
         }
     }
 
@@ -437,7 +437,7 @@ class Variable implements TypeAwareInterface
      *
      * @param array $node
      */
-    public function setOriginal($node)
+    public function setOriginal(array $node)
     {
         $this->node = $node;
     }
@@ -450,10 +450,12 @@ class Variable implements TypeAwareInterface
     public function getOriginal()
     {
         $node = $this->node;
-        if ($node) {
-            return $node;
+
+        if (!$node) {
+            $node = ['file' => 'unknown', 'line' => 0, 'char' => 0];
         }
-        return array('file' => 'unknown', 'line' => 0, 'char' => 0);
+
+        return $node;
     }
 
     /**

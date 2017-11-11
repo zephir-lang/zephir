@@ -320,9 +320,9 @@ class Assign
 
 	public function testAssign39() -> int
 	{
-	    var a, b, c;
+		var a, b, c;
 
-        // Initialize variables
+		// Initialize variables
 		let a = "hello", b = false;
 
 		// Change their values

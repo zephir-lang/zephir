@@ -35,7 +35,6 @@ class Variable
      *
      * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
      * @param string             $variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
@@ -47,7 +46,6 @@ class Variable
     private function doNumericAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable $symbolVariable,
         $variable,
         array $statement,
         CompilationContext $compilationContext
@@ -267,7 +265,6 @@ class Variable
      *
      * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
      * @param string             $variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
@@ -279,7 +276,6 @@ class Variable
     private function doDoubleAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable $symbolVariable,
         $variable,
         array $statement,
         CompilationContext $compilationContext
@@ -692,7 +688,6 @@ class Variable
      *
      * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
      * @param string             $variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
@@ -704,7 +699,6 @@ class Variable
     private function doBoolAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable $symbolVariable,
         $variable,
         array $statement,
         CompilationContext $compilationContext
@@ -1276,11 +1270,11 @@ class Variable
             case 'ulong':
             case 'char':
             case 'uchar':
-                $this->doNumericAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
+                $this->doNumericAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
                 break;
 
             case 'double':
-                $this->doDoubleAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
+                $this->doDoubleAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
                 break;
 
             case 'array':
@@ -1292,7 +1286,7 @@ class Variable
                 break;
 
             case 'bool':
-                $this->doBoolAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
+                $this->doBoolAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
                 break;
 
             case 'variable':
