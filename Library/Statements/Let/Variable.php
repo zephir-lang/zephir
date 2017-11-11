@@ -201,6 +201,10 @@ class Variable
                                 $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
                                 break;
 
+                            case 'div-assign':
+                                $codePrinter->output($variable . ' /= ' . $itemVariable->getName() . ';');
+                                break;
+
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
                         }
