@@ -13,101 +13,131 @@
 
 namespace Extension;
 
-class AssignTest extends \PHPUnit_Framework_TestCase
+use Test\Assign;
+use PHPUnit_Framework_TestCase;
+
+class AssignTest extends PHPUnit_Framework_TestCase
 {
-    public function getComplexArrayTestValue1()
+    /**
+     * @dataProvider variableAssignProvider
+     * @test
+     * @param mixed $expected
+     * @param string $test
+     * @param mixed $testParams
+     */
+    public function shouldPerformAssignment($expected, $test, $testParams = null)
     {
-        return array(
-            'a' => array(
+        $t = new Assign();
+
+        $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+    }
+
+    public function variableAssignProvider()
+    {
+        $arry = [
+            'a' => [
                 'b_key' => 'b_val',
-                'b' => array('d_key' => 'd_val', 'c' => array('d' => array('e' => 'f')))
-            ),
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+            ],
             's' => 1,
-            1 => array(2 => array(3 => 4, 5 => 6, 'abc' => 'abc'))
-        );
+            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']]
+        ];
+
+        return [
+            [1,              'testAssign1'],
+            [1,              'testAssign2'],
+            [0,              'testAssign3'],
+            [0,              'testAssign4'],
+            [2,              'testAssign5'],
+            [true,           'testAssign6'],
+            [true,           'testAssign7'],
+            [true,           'testAssign8'],
+            [false,          'testAssign9'],
+            [false,          'testAssign10'],
+            [0.0,            'testAssign11'],
+            [4.0,            'testAssign12'],
+            [0.0,            'testAssign13'],
+            [1.0,            'testAssign14'],
+            [5.0,            'testAssign15'],
+            [1,              'testAssign16'],
+            [1.0,            'testAssign17'],
+            [false,          'testAssign18'],
+            [true,           'testAssign19'],
+            [null,           'testAssign20'],
+            [1,              'testAssign21'],
+            [1.0,            'testAssign22'],
+            [true,           'testAssign23'],
+            [1.0,            'testAssign24'],
+            [1.0,            'testAssign25'],
+            [1,              'testAssign26'],
+            [1.0,            'testAssign27'],
+            [true,           'testAssign28'],
+            [true,           'testAssign29'],
+            [0,              'testAssign30'],
+            [0.0,            'testAssign31'],
+            [false,          'testAssign32'],
+            [false,          'testAssign33'],
+            [false,          'testAssign34'],
+            [false,          'testAssign35'],
+            [false,          'testAssign36'],
+            [$arry,          'testAssign37'],
+            [['i' => 'val'], 'testAssign38', 'i'],
+            [150,            'testAssign39', null],
+        ];
     }
 
-    public function getComplexArrayTestValue2()
+    /**
+     * @dataProvider propertyAssignProvider
+     * @test
+     * @param mixed $expected
+     * @param string $test
+     * @param mixed $testParams
+     */
+    public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {
-        return array(
-            'a' => array(
+        $t = new Assign();
+
+        if (gettype($testParams) === "array") {
+            $this->assertSame($expected, call_user_func_array([$t, $test], $testParams));
+        } else {
+            $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+        }
+    }
+
+    public function propertyAssignProvider()
+    {
+        $arry = [
+            'a' => [
                 'b_key' => 'b_val',
-                'b' => array('d_key' => 'd_val', 'c' => array('d' => array('e' => 'f')))
-            ),
-            1 => array(2 => array(3 => 4, 5 => 6, 'abc' => 'abc')),
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+            ],
+            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']],
             's' => 1
-        );
-    }
+        ];
 
-    public function testAssign()
-    {
-        $t = new \Test\Assign();
-
-        $this->assertSame($t->testAssign1(), 1);
-        $this->assertSame($t->testAssign2(), 1);
-        $this->assertSame($t->testAssign3(), 0);
-        $this->assertSame($t->testAssign4(), 0);
-        $this->assertSame($t->testAssign5(), 2);
-        $this->assertTrue($t->testAssign6());
-        $this->assertTrue($t->testAssign7());
-        $this->assertTrue($t->testAssign8());
-        $this->assertFalse($t->testAssign9());
-        $this->assertFalse($t->testAssign10());
-        $this->assertSame($t->testAssign11(), 0.0);
-        $this->assertSame($t->testAssign12(), 4.0);
-        $this->assertSame($t->testAssign13(), 0.0);
-        $this->assertSame($t->testAssign14(), 1.0);
-        $this->assertSame($t->testAssign15(), 5.0);
-        $this->assertSame($t->testAssign16(), 1);
-        $this->assertSame($t->testAssign17(), 1.0);
-        $this->assertFalse($t->testAssign18());
-        $this->assertTrue($t->testAssign19());
-        $this->assertNull($t->testAssign20());
-        $this->assertSame($t->testAssign21(), 1);
-        $this->assertSame($t->testAssign22(), 1.0);
-        $this->assertTrue($t->testAssign23());
-        $this->assertSame($t->testAssign24(), 1.0);
-        $this->assertSame($t->testAssign25(), 1.0);
-        $this->assertSame($t->testAssign26(), 1);
-        $this->assertSame($t->testAssign27(), 1.0);
-        $this->assertTrue($t->testAssign28());
-        $this->assertTrue($t->testAssign29());
-        $this->assertSame($t->testAssign30(), 0);
-        $this->assertSame($t->testAssign31(), 0.0);
-        $this->assertFalse($t->testAssign32());
-        $this->assertFalse($t->testAssign33());
-        $this->assertFalse($t->testAssign34());
-        $this->assertFalse($t->testAssign35());
-        $this->assertFalse($t->testAssign36());
-        $this->assertSame($t->testAssign37(), $this->getComplexArrayTestValue1());
-        $this->assertSame($t->testAssign38('i'), array('i' => 'val'));
-    }
-
-    public function testPropertyAssign()
-    {
-        $t = new \Test\Assign();
-
-        $this->assertSame($t->testPropertyIncr1(), 2);
-        $this->assertSame($t->testPropertyAddAssign1(), 2);
-        $this->assertSame($t->testPropertyAddAssign2(), 3);
-        $this->assertSame($t->testPropertyAssignValuePlus1(), 2);
-        $this->assertSame($t->testPropertyDecr(), 1);
-        $this->assertSame($t->testPropertySubAssign1(), -2);
-        $this->assertSame($t->testPropertySubAssign2(), -1);
-        $this->assertSame($t->testPropertyMulAssign1(), 2);
-        $this->assertSame($t->testPropertyMulAssign2(), 3);
-        $this->assertSame($t->testPropertyAssignStringConcat(), 'test string');
-        $this->assertSame($t->testArrayVarAssign1('test_index', 'value'), array('test_index' => 'value'));
-        $this->assertSame($t->testArrayVarAssign2('test_index', 'value'), array('test_index' => 'value'));
-        $this->assertSame($t->testPropertyArray14(), $this->getComplexArrayTestValue2());
-        $this->assertSame($t->testStaticPropertyArrayMulti4(), $this->getComplexArrayTestValue2());
-        $this->assertSame($t->testStaticPropertyArrayAppend(), array("test", 1, 1.5, false, array()));
-        $this->assertSame($t->testArrayBoolExpressionAssign(), array("a" => true, "b" => false));
+        return [
+            [2,                           'testPropertyIncr1'],
+            [2,                           'testPropertyAddAssign1'],
+            [3,                           'testPropertyAddAssign2'],
+            [2,                           'testPropertyAssignValuePlus1'],
+            [1,                           'testPropertyDecr'],
+            [-2,                          'testPropertySubAssign1'],
+            [-1,                          'testPropertySubAssign2'],
+            [2,                           'testPropertyMulAssign1'],
+            [3,                           'testPropertyMulAssign2'],
+            ['test string',               'testPropertyAssignStringConcat'],
+            [['test_index' => 'value'],   'testArrayVarAssign1', ['test_index', 'value']],
+            [['test_index' => 'value'],   'testArrayVarAssign2', ['test_index', 'value']],
+            [$arry,                       'testPropertyArray14'],
+            [$arry,                       'testStaticPropertyArrayMulti4'],
+            [["test", 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
+            [["a" => true, "b" => false], 'testArrayBoolExpressionAssign'],
+        ];
     }
 
     public function testGlobalVarAssign()
     {
-        $t = new \Test\Assign();
+        $t = new Assign();
 
         /**
          * @see LetStatement::_assignArrayIndexSingle();
