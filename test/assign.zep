@@ -334,7 +334,21 @@ class Assign
 		return c;
 	}
 
-    public function testAssign40(int num) -> int
+	public function testAssign40() -> int
+	{
+		var a, b;
+
+		// Initialize variables
+		let b = new \stdClass(), a = [];
+
+		// Change their values
+		let a = "123", b = 7;
+
+		// Perform operations between them
+		return a - b;
+	}
+
+    public function testAssign41(int num) -> int
     {
 		var a;
 		let a = 42;
@@ -343,7 +357,7 @@ class Assign
 		return a;
     }
 
-    public function testAssign41(int num) -> int
+    public function testAssign42(int num) -> int
     {
 		var a;
 		let a = 2;
