@@ -13,6 +13,8 @@
 
 namespace Zephir;
 
+use Zephir\Statements\StatementAbstract;
+
 /**
  * Branch
  *
@@ -24,6 +26,7 @@ class Branch
 
     protected $level = -1;
 
+    /** @var  StatementAbstract|null */
     protected $relatedStatement;
 
     protected $type;
@@ -139,15 +142,16 @@ class Branch
     }
 
     /**
-     * @param $relatedStatement
+     * @param StatementAbstract $relatedStatement
+     * @return void
      */
-    public function setRelatedStatement($relatedStatement)
+    public function setRelatedStatement(StatementAbstract $relatedStatement)
     {
         $this->relatedStatement = $relatedStatement;
     }
 
     /**
-     * @return mixed
+     * @return StatementAbstract|null
      */
     public function getRelatedStatement()
     {

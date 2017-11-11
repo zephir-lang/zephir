@@ -285,14 +285,9 @@ class StaticTypeInference
             case 'null':
             case 'char':
             case 'uchar':
+            case 'string':
             case 'istring':
                 return $expression['type'];
-
-            case 'string':
-                if (ctype_digit($expression['value'])) {
-                    return 'long';
-                }
-                return 'string';
 
             case 'closure':
             case 'closure-arrow':
