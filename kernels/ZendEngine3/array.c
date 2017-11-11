@@ -656,7 +656,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_ADDREF(fetched);
+							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
@@ -692,7 +692,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_ADDREF(fetched);
+							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
@@ -728,7 +728,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_ADDREF(fetched);
+							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
