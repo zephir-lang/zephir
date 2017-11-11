@@ -13,6 +13,7 @@
 
 namespace Zephir\Statements\Let;
 
+use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\Variable as ZephirVariable;
@@ -20,14 +21,35 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\CompiledExpression;
 
 /**
- * Variable
+ * Zephir\Statements\Let\Variable
  *
- * Assign a value to a variable
+ * Assign a value to a variable.
+ *
+ * @package Zephir\Statements\Let
  */
 class Variable
 {
-    private function doNumericAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
-    {
+    /**
+     * Performs numeric assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doNumericAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -238,8 +260,27 @@ class Variable
         }
     }
 
-    private function doDoubleAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
-    {
+    /**
+     * Performs double assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doDoubleAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -407,8 +448,27 @@ class Variable
         }
     }
 
-    private function doStringAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
-    {
+    /**
+     * Performs string assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doStringAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -573,8 +633,27 @@ class Variable
         }
     }
 
-    private function doArrayAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
-    {
+    /**
+     * Performs array assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doArrayAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'variable':
             case 'array':
@@ -603,8 +682,27 @@ class Variable
         }
     }
 
-    private function doBoolAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
-    {
+    /**
+     * Performs boolean assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doBoolAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -720,8 +818,29 @@ class Variable
         }
     }
 
-    private function doVariableAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext, $readDetector)
-    {
+    /**
+     * Performs variable assignment.
+     *
+     * @param CodePrinter        $codePrinter
+     * @param CompiledExpression $resolvedExpr
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     * @param ReadDetector       $readDetector
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    private function doVariableAssignment(
+        CodePrinter $codePrinter,
+        CompiledExpression $resolvedExpr,
+        ZephirVariable $symbolVariable,
+        $variable,
+        array $statement,
+        CompilationContext $compilationContext,
+        ReadDetector $readDetector
+    ) {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -1101,16 +1220,24 @@ class Variable
      * Compiles foo = {expr}
      * Changes the value of a mutable variable
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param ReadDetector $readDetector
+     * @param ReadDetector       $readDetector
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
+     * @return void
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, ReadDetector $readDetector, CompilationContext $compilationContext, array $statement)
-    {
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        ReadDetector $readDetector,
+        CompilationContext $compilationContext,
+        array $statement
+    ) {
         if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
         }
