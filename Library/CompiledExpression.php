@@ -19,7 +19,7 @@ namespace Zephir;
  * This represent a compiled expression, the object can be used to check
  * if the expression type is able to be used in certain types of the application
  */
-class CompiledExpression
+class CompiledExpression implements TypeAwareInterface
 {
     protected $type;
 

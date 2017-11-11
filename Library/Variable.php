@@ -21,7 +21,7 @@ use Zephir\Compiler\CompilerException;
  *
  * This represents a variable in a symbol table
  */
-class Variable
+class Variable implements TypeAwareInterface
 {
     const BRANCH_MAGIC = '$$';
     /**

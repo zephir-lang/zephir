@@ -16,6 +16,7 @@ namespace Zephir\Statements\Let;
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
+use Zephir\Compiler\IllegalOperationException;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
 
@@ -36,6 +37,7 @@ class StaticProperty
      * @param array              $statement
      *
      * @throws CompilerException
+     * @throws IllegalOperationException
      * @internal param string $variable
      */
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
@@ -141,7 +143,7 @@ class StaticProperty
                         }
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
 
                 $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
@@ -261,7 +263,7 @@ class StaticProperty
                                 }
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                                throw new IllegalOperationException($statement, $variableVariable);
                         }
                         break;
                     case 'variable':

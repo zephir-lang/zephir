@@ -19,6 +19,7 @@ use Zephir\Compiler\CompilerException;
 use Zephir\Variable as ZephirVariable;
 use Zephir\Detectors\ReadDetector;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\IllegalOperationException;
 
 /**
  * Zephir\Statements\Let\Variable
@@ -41,6 +42,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doNumericAssignment(
         CodePrinter $codePrinter,
@@ -70,7 +72,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -104,7 +106,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -128,7 +130,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -151,7 +153,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -170,7 +172,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -202,7 +204,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -221,7 +223,7 @@ class Variable
                                 $codePrinter->output($variable . ' *= (long) ' . $itemVariable->getName() . ';');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -247,7 +249,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -272,6 +274,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doDoubleAssignment(
         CodePrinter $codePrinter,
@@ -297,7 +300,7 @@ class Variable
                         $codePrinter->output($variable . ' *= 0.0;');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -323,7 +326,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -346,7 +349,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -369,7 +372,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -395,7 +398,7 @@ class Variable
                                 $codePrinter->output($variable . ' *= (double) ' . $itemVariable->getName() . ';');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -414,28 +417,28 @@ class Variable
                                 $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $itemVariable = $compilationContext->backend->getVariableCode($itemVariable);
+                        $exprVariableCode = $compilationContext->backend->getVariableCode($itemVariable);
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $itemVariable . ');');
+                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $itemVariable . ');');
+                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $itemVariable . ');');
+                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $itemVariable . ');');
+                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -460,6 +463,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doStringAssignment(
         CodePrinter $codePrinter,
@@ -477,7 +481,7 @@ class Variable
                         $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -494,7 +498,7 @@ class Variable
                         $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -512,7 +516,7 @@ class Variable
                         $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -534,7 +538,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -559,7 +563,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -579,7 +583,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -600,7 +604,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -619,7 +623,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -645,6 +649,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doArrayAssignment(
         CodePrinter $codePrinter,
@@ -673,7 +678,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -694,6 +699,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doBoolAssignment(
         CodePrinter $codePrinter,
@@ -710,7 +716,7 @@ class Variable
                         $codePrinter->output($variable . ' = 0;');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: null", $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -723,7 +729,7 @@ class Variable
                         $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ') ? 1 : 0);');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -733,7 +739,7 @@ class Variable
                         $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ' != 0.0) ? 1 : 0);');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -744,7 +750,7 @@ class Variable
                         $codePrinter->output($variable . ' = ((\'' . $resolvedExpr->getCode() . '\') ? 1 : 0);');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -754,7 +760,7 @@ class Variable
                         $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+                        throw new IllegalOperationException($statement, $resolvedExpr);
                 }
                 break;
 
@@ -770,7 +776,7 @@ class Variable
                                 $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ') ? 1 : 0);');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -780,7 +786,7 @@ class Variable
                                 $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ' != 0.0) ? 1 : 0);');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -790,7 +796,7 @@ class Variable
                                 $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -804,7 +810,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -831,6 +837,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
+     * @throws IllegalOperationException
      */
     private function doVariableAssignment(
         CodePrinter $codePrinter,
@@ -913,7 +920,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -934,7 +941,7 @@ class Variable
 
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -980,7 +987,7 @@ class Variable
                         }
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -1009,7 +1016,7 @@ class Variable
                         }
                         break;
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -1027,7 +1034,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -1048,7 +1055,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -1086,7 +1093,7 @@ class Variable
                                 $compilationContext->backend->assignLong($symbolVariable, $tempVariable->getName() . ' - ' . $itemVariable->getName(), $compilationContext);
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -1098,7 +1105,7 @@ class Variable
                                 $compilationContext->backend->assignDouble($symbolVariable, $itemVariable, $compilationContext);
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -1110,7 +1117,7 @@ class Variable
                                 $compilationContext->backend->assignBool($symbolVariable, $itemVariable, $compilationContext);
                                 break;
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -1131,7 +1138,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                                throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
                         }
                         break;
 
@@ -1173,7 +1180,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
@@ -1202,7 +1209,7 @@ class Variable
                                 break;
 
                             default:
-                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                throw new IllegalOperationException($statement, $itemVariable);
                         }
                         break;
 
