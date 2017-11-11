@@ -31,7 +31,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.10.5';
+    const VERSION = '0.10.6';
 
     public $parserCompiled = false;
 
