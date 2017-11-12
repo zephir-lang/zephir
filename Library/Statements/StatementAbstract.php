@@ -14,6 +14,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
+use Zephir\Optimizers\EvalExpression;
 
 /**
  * Class StatementAbstract
@@ -24,6 +25,7 @@ abstract class StatementAbstract
 
     protected $_uniqueId;
 
+    /** @var EvalExpression|null */
     protected $_evalExpression;
 
     protected static $_uniqueGenerator;
@@ -51,6 +53,9 @@ abstract class StatementAbstract
         return $this->_uniqueId;
     }
 
+    /**
+     * @return null|EvalExpression
+     */
     public function getEvalExpression()
     {
         return $this->_evalExpression;

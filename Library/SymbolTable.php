@@ -28,10 +28,12 @@ class SymbolTable
 {
     protected $mustGrownStack = false;
 
+    /** @var Variable[][] */
     protected $branchVariables = [];
 
     protected $tempVarCount = 0;
 
+    /** @var Variable[][][][] */
     protected $branchTempVariables = [];
 
     /**
@@ -209,7 +211,7 @@ class SymbolTable
     /**
      * Returns all the variables defined in the symbol table
      *
-     * @return \Zephir\Variable[]
+     * @return Variable[]
      */
     public function getVariables()
     {
@@ -303,6 +305,7 @@ class SymbolTable
                     $initBranches = $variable->getInitBranches();
 
                     $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+                    /** @var Branch[] $branches */
                     $branches = array_reverse($initBranches);
 
                     if (count($branches) == 1) {
@@ -332,10 +335,10 @@ class SymbolTable
 
                     $found = false;
                     foreach ($branches as $branch) {
-                        /*+
+                        /**
                          * Variable was initialized in the same current branch
                          */
-                        if ($branch == $currentBranch) {
+                        if ($branch === $currentBranch) {
                             $found = true;
                             break;
                         }
@@ -577,7 +580,10 @@ class SymbolTable
         return null;
     }
 
-    public function getNextTempVar($compilationContext = null)
+    /**
+     * @return int
+     */
+    public function getNextTempVar()
     {
         return $this->tempVarCount++;
     }
@@ -604,6 +610,7 @@ class SymbolTable
      *
      * @param string $type
      * @param CompilationContext $context
+     * @param mixed $init
      * @return Variable
      */
     public function getTempVariableForWrite($type, CompilationContext $context, $init = true)

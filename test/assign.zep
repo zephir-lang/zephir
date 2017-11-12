@@ -13,147 +13,147 @@ class Assign
 
 	protected static testVarStatic;
 
-	public function testAssign1()
+	public function testAssign1() -> int
 	{
 		int a;
 		let a = 1;
 		return a;
 	}
 
-	public function testAssign2()
+	public function testAssign2() -> int
 	{
 		int a;
 		let a = true;
 		return a;
 	}
 
-	public function testAssign3()
+	public function testAssign3() -> int
 	{
 		int a;
 		let a = false;
 		return a;
 	}
 
-	public function testAssign4()
+	public function testAssign4() -> int
 	{
 		int a;
 		let a = null;
 		return a;
 	}
 
-	public function testAssign5()
+	public function testAssign5() -> int
 	{
 		int a;
 		let a = 2.0;
 		return a;
 	}
 
-	public function testAssign6()
+	public function testAssign6() -> bool
 	{
 		boolean a;
 		let a = 1;
 		return a;
 	}
 
-	public function testAssign7()
+	public function testAssign7() -> bool
 	{
 		boolean a;
 		let a = 1.0;
 		return a;
 	}
 
-	public function testAssign8()
+	public function testAssign8() -> bool
 	{
 		boolean a;
 		let a = true;
 		return a;
 	}
 
-	public function testAssign9()
+	public function testAssign9() -> bool
 	{
 		boolean a;
 		let a = false;
 		return a;
 	}
 
-	public function testAssign10()
+	public function testAssign10() -> bool
 	{
 		boolean a;
 		let a = null;
 		return a;
 	}
 
-	public function testAssign11()
+	public function testAssign11() -> double
 	{
 		double a;
 		let a = null;
 		return a;
 	}
 
-	public function testAssign12()
+	public function testAssign12() -> double
 	{
 		double a;
 		let a = 4;
 		return a;
 	}
 
-	public function testAssign13()
+	public function testAssign13() -> double
 	{
 		double a;
 		let a = false;
 		return a;
 	}
 
-	public function testAssign14()
+	public function testAssign14() -> double
 	{
 		double a;
 		let a = true;
 		return a;
 	}
 
-	public function testAssign15()
+	public function testAssign15() -> double
 	{
 		double a;
 		let a = 5.0;
 		return a;
 	}
 
-	public function testAssign16()
+	public function testAssign16() -> int
 	{
 		var a;
 		let a = 1;
 		return a;
 	}
 
-	public function testAssign17()
+	public function testAssign17() -> double
 	{
 		var a;
 		let a = 1.0;
 		return a;
 	}
 
-	public function testAssign18()
+	public function testAssign18() -> bool
 	{
 		var a;
 		let a = false;
 		return a;
 	}
 
-	public function testAssign19()
+	public function testAssign19() -> bool
 	{
 		var a;
 		let a = true;
 		return a;
 	}
 
-	public function testAssign20()
+	public function testAssign20() -> null
 	{
 		var a;
 		let a = null;
 		return a;
 	}
 
-	public function testAssign21()
+	public function testAssign21() -> int
 	{
 		int a, b;
 		let a = 1,
@@ -161,7 +161,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign22()
+	public function testAssign22() -> double
 	{
 		double a, b;
 		let a = 1.0,
@@ -169,7 +169,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign23()
+	public function testAssign23() -> bool
 	{
 		boolean a, b;
 		let a = true,
@@ -177,7 +177,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign24()
+	public function testAssign24() -> double
 	{
 		int a;
 		double b;
@@ -186,7 +186,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign25()
+	public function testAssign25() -> double
 	{
 		int a;
 		double b;
@@ -195,7 +195,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign26()
+	public function testAssign26() -> int
 	{
 		int b;
 		double a;
@@ -204,7 +204,7 @@ class Assign
 		return b;
 	}
 
-	public function testAssign27()
+	public function testAssign27() -> double
 	{
 		int b;
 		double a;
@@ -213,7 +213,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign28()
+	public function testAssign28() -> bool
 	{
 		int b;
 		boolean a;
@@ -222,7 +222,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign29()
+	public function testAssign29() -> bool
 	{
 		double b;
 		boolean a;
@@ -231,7 +231,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign30()
+	public function testAssign30() -> int
 	{
 		boolean b;
 		int a;
@@ -240,7 +240,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign31()
+	public function testAssign31() -> double
 	{
 		boolean b;
 		double a;
@@ -249,7 +249,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign32()
+	public function testAssign32() -> bool
 	{
 		boolean b;
 		var a;
@@ -258,7 +258,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign33()
+	public function testAssign33() -> bool
 	{
 		boolean b; var a;
 		let b = false,
@@ -266,7 +266,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign34()
+	public function testAssign34() -> bool
 	{
 		int b; var a;
 		let b = false,
@@ -274,7 +274,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign35()
+	public function testAssign35() -> bool
 	{
 		double b; var a;
 		let b = false,
@@ -282,7 +282,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign36()
+	public function testAssign36() -> bool
 	{
 		var b; var a;
 		let b = false,
@@ -290,7 +290,7 @@ class Assign
 		return a;
 	}
 
-	public function testAssign37()
+	public function testAssign37() -> array
 	{
 		var v = "abc";
 		var arr = [];
@@ -311,11 +311,83 @@ class Assign
 		return arr;
 	}
 
-	public function testAssign38(index)
+	public function testAssign38(index) -> array
 	{
 		var arr = [];
 		let arr[index] = "val";
 		return arr;
+	}
+
+	public function testAssign39() -> int
+	{
+		var a, b, c;
+
+		// Initialize variables
+		let a = "hello", b = false;
+
+		// Change their values
+		let a = 10, b = "140";
+
+		// Perform operations between them
+		let c = a + b;
+
+		return c;
+	}
+
+	public function testAssign40() -> int
+	{
+		var a, b;
+
+		// Initialize variables
+		let b = new \stdClass(), a = [];
+
+		// Change their values
+		let a = "123", b = 7;
+
+		// Perform operations between them
+		return a - b;
+	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1573
+	 */
+	public function testAssign41(int num) -> int
+	{
+		var a;
+		let a = 42;
+		let a /= num;
+
+		return a;
+	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1573
+	 */
+	public function testAssign42(int num) -> int
+	{
+		var a;
+		let a = 2;
+		let num /= a;
+
+		return num;
+	}
+
+	public function testAssign43(int num) -> int
+	{
+		var a;
+		let a = 43;
+		let a %= num;
+
+		return a;
+	}
+
+	public function testAssign44(int num) -> int
+	{
+		var a;
+		let a = 2;
+		let num %= a;
+
+		return num;
 	}
 
 	public function testPropertyAssign1()
