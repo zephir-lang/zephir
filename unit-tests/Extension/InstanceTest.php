@@ -13,7 +13,10 @@
 
 namespace Extension;
 
+use Error;
 use Test\Instance;
+
+require DATA_PATH . '/TestAbstractClass.php';
 
 class InstanceTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,5 +24,20 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $t = Instance::testIssue1339();
         $this->assertInstanceOf("Test\\Instance", $t);
+    }
+
+    public function testInstanceAbstract()
+    {
+        if (PHP_VERSION_ID < 70000) {
+            $this->markTestSkipped(
+                "We can't catch fatal errors on php 5.x"
+            );
+        }
+
+        try {
+            $t = Instance::testInstanceCreate(\TestAbstractClass::class);
+        } catch (Error $e) {
+            $this->assertEquals("Cannot instantiate abstract class TestAbstractClass", $e->getMessage());
+        }
     }
 }
