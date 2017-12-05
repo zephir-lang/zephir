@@ -1079,7 +1079,10 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 		return FAILURE;
 	}
 
-	object_init_ex(return_value, ce);
+	if(UNEXPECTED(object_init_ex(return_value, ce) != SUCCESS)) {
+    	return FAILURE;
+    }
+
 	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
 		zend_object* obj    = Z_OBJ_P(return_value);
 		zend_function* ctor = Z_OBJ_HT_P(return_value)->get_constructor(obj);
@@ -1137,7 +1140,9 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 		return FAILURE;
 	}
 
-	object_init_ex(return_value, ce);
+	if(UNEXPECTED(object_init_ex(return_value, ce) != SUCCESS)) {
+    	return FAILURE;
+    }
 
 	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
 		zend_object* obj    = Z_OBJ_P(return_value);
