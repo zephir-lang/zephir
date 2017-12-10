@@ -77,8 +77,6 @@ class NativeArray
      */
     public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         switch ($exprCompiled->getType()) {
             case 'int':
             case 'uint':
