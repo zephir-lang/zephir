@@ -81,6 +81,10 @@ class Expression
 
     protected $_noisy = true;
 
+    /**
+     * @deprecated
+     * @var bool
+     */
     protected $_stringOperation = false;
 
     /**
@@ -189,6 +193,7 @@ class Expression
      * Sets if current operation is a string operation like "concat"
      * thus avoiding promote numeric strings to longs
      *
+     * @deprecated
      * @param boolean $stringOperation
      */
     public function setStringOperation($stringOperation)
@@ -200,6 +205,7 @@ class Expression
      * Checks if the result of the evaluated expression is intended to be used
      * in a string operation like "concat"
      *
+     * @deprecated
      * @return boolean
      */
     public function isStringOperation()
@@ -261,8 +267,8 @@ class Expression
      * Resolves an expression
      *
      * @param CompilationContext $compilationContext
-     * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
+     * @return bool|CompiledExpression
+     * @throws CompilerException|Exception
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -284,13 +290,7 @@ class Expression
                 return new LiteralCompiledExpression($type, $expression['value'], $expression);
 
             case 'string':
-                $v = $expression['value'];
-                if (!$this->_stringOperation) {
-                    if (ctype_digit($v) && (strlen($v) == 1 || '0' != substr($v, 0, 1))) {
-                        return new CompiledExpression('int', $v, $expression);
-                    }
-                }
-                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $v), $expression);
+                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
             case 'istring':
                 return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 

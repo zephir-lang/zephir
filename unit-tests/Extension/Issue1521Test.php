@@ -19,7 +19,8 @@ class Issue1521Test extends \PHPUnit_Framework_TestCase
     {
         $t      = new \Test\Issue1521();
         $actual = $t->test();
-        $this->assertTrue(0 === $actual['zero']);
+
+        $this->assertTrue("0" === $actual['zero']);
         $this->assertTrue("0818217122" === $actual['merchantNumber']);
     }
 }
