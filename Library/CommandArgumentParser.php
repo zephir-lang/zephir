@@ -1,21 +1,15 @@
 <?php
 
 /*
- +----------------------------------------------------------------------+
- | Zephir Language                                                      |
- +----------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team                                  |
- +----------------------------------------------------------------------+
- | This source file is subject to version 1.0 of the MIT license,       |
- | that is bundled with this package in the file LICENSE, and is        |
- | available through the world-wide-web at the following url:           |
- | http://www.zephir-lang.com/license                                   |
- |                                                                      |
- | If you did not receive a copy of the MIT license and are unable      |
- | to obtain it through the world-wide-web, please send a note to       |
- | license@zephir-lang.com so we can mail you a copy immediately.       |
- +----------------------------------------------------------------------+
-*/
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+ */
 
 namespace Zephir;
 
@@ -76,7 +70,7 @@ class CommandArgumentParser
      *                      #78651 function getArgs($args) by B Crawford, 22-Oct-2007
      * @usage               $args = CommandLine::parseArgs($_SERVER['argv']);
      */
-    public static function parseArgs($argv = null)
+    public function parseArgs($argv = null)
     {
         $argv                           = $argv ? $argv : $_SERVER['argv'];
 
@@ -140,7 +134,7 @@ class CommandArgumentParser
     /**
      * GET BOOLEAN
      */
-    public static function getBoolean($key, $default = false)
+    public function getBoolean($key, $default = false)
     {
         if (!isset(self::$args[$key])) {
             return $default;
@@ -175,5 +169,16 @@ class CommandArgumentParser
         }
 
         return $default;
+    }
+
+    public function hasHelpOption(array $params)
+    {
+        foreach (['help', 'h'] as $word) {
+            if (isset($params[$word]) && $params[$word]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

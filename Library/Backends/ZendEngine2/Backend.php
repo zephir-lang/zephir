@@ -1,27 +1,57 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+ */
+
 namespace Zephir\Backends\ZendEngine2;
 
+use Zephir\Utils;
 use Zephir\Variable;
-use Zephir\CodePrinter;
-use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\CompilerException;
-use Zephir\CompilationContext;
+use Zephir\CodePrinter;
 use Zephir\ClassMethod;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
-use Zephir\Utils;
+use Zephir\CompiledExpression;
+use Zephir\CompilationContext;
+use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
 
+/**
+ * Zephir\Backends\ZendEngine2\Backend
+ *
+ * @package Zephir\Backends\ZendEngine2
+ */
 class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
-
-    protected $fcallManager;
 
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return FcallManagerInterface
+     */
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->setFcallManager(new FcallManager());
+        }
+
+        return $this->fcallManager;
     }
 
     /**
@@ -55,18 +85,12 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
-    }
-
-
-    public function getFcallManager()
-    {
-        if (!$this->fcallManager) {
-            $this->fcallManager = new FcallManager();
-        }
-        return $this->fcallManager;
     }
 
     public function getTypeDefinition($type)
@@ -175,6 +199,9 @@ class Backend extends BaseBackend
      * @param string $operator
      * @param string $value
      * @param CompilationContext $context
+     * @return string
+     *
+     * @throws CompilerException
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -356,7 +383,7 @@ class Backend extends BaseBackend
                     if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
-                            $symbolTable->mustGrownStack(true);
+                            $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->backend->initVar($variable, $compilationContext);
                             switch ($defaultValue['type']) {
                                 case 'int':
@@ -414,7 +441,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'string':
@@ -440,7 +467,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'null':

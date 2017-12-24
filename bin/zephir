@@ -20,7 +20,7 @@ if [ -z "$ZEPHIRDIR" ]; then
 fi
 
 if [ ! -z $1 ] && [ ! -z $2 ] && [ ! -z $3 ] && [ "$1" = "-c" ]; then
-    php -d safe_mode=Off -d enable_dl=On -c $2 $ZEPHIRDIR/compiler.php ${*:3}
+    php -d timecop.func_override=0 -c $2 $ZEPHIRDIR/compiler.php ${*:3}
 else
-    php -d safe_mode=Off -d enable_dl=On $ZEPHIRDIR/compiler.php $*
+    php -d timecop.func_override=0 $ZEPHIRDIR/compiler.php $*
 fi

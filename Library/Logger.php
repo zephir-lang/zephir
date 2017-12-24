@@ -2,36 +2,34 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
+
+use Zephir\Compiler\CompilerException;
 
 /**
  * Logger
  *
- * Entrypoint for warnings/notices/errors generated in compilation
+ * Entrypoint for warnings/notices/errors generated in compilation.
+ *
+ * @package Zephir
  */
 class Logger
 {
-    private static $files = array();
-
     /**
-     * Stderr handler
+     * The contents of the files that are involved in the log message.
+     *
+     * @var array
      */
-    protected $handler;
+    private $filesContent = [];
 
     /**
      * @var Config
@@ -46,17 +44,6 @@ class Logger
     public function __construct(Config $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * Changes a warning status on/off
-     *
-     * @param string $type
-     * @param boolean $value
-     */
-    public function set($type, $value)
-    {
-        $this->config->set($type, $value, 'warnings');
     }
 
     /**
@@ -81,19 +68,12 @@ class Logger
             } else {
                 $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
             }
+
             $warning .= ' [' . $type . ']' . PHP_EOL;
             $warning .= PHP_EOL;
             if (isset($node['file'])) {
-                if (!isset($_files[$node['file']])) {
-                    if (file_exists($node['file'])) {
-                        $lines = file($node['file']);
-                    } else {
-                        $lines = array();
-                    }
-                    $_files[$node['file']] = $lines;
-                } else {
-                    $lines = $_files[$node['file']];
-                }
+                $lines = $this->getFileContents($node['file']);
+
                 if (isset($lines[$node['line'] - 1])) {
                     $line = $lines[$node['line'] - 1];
                     $warning .= "\t" . str_replace("\t", " ", $line);
@@ -101,14 +81,11 @@ class Logger
                         $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
                     }
                 }
+
                 $warning .= PHP_EOL;
             }
 
-            if (!$this->handler) {
-                $this->handler = STDERR;
-            }
-
-            fprintf($this->handler, "%s", Color::warning($warning));
+            fprintf(STDERR, "%s", Color::warning($warning));
 
             return true;
         }
@@ -125,9 +102,24 @@ class Logger
     public function output($message)
     {
         if (!$this->config->get('silent')) {
-            echo $message . PHP_EOL;
+            fwrite(STDOUT, $message . PHP_EOL);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets the contents of the files that are involved in the log message.
+     *
+     * @param string $file File path
+     * @return array
+     */
+    protected function getFileContents($file)
+    {
+        if (!isset($this->filesContent[$file])) {
+            $this->filesContent[$file] = file_exists($file) ? file($file) : [];
+        }
+
+        return $this->filesContent[$file];
     }
 }

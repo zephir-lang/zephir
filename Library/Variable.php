@@ -2,31 +2,26 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
 use Zephir\Variable\Globals;
+use Zephir\Compiler\CompilerException;
 
 /**
  * Variable
  *
  * This represents a variable in a symbol table
  */
-class Variable
+class Variable implements TypeAwareInterface
 {
     const BRANCH_MAGIC = '$$';
     /**
@@ -38,7 +33,7 @@ class Variable
      * Current dynamic type of the variable
      * @var array
      */
-    protected $dynamicTypes = array('unknown' => true);
+    protected $dynamicTypes = ['unknown' => true];
 
     /**
      * Variable's name
@@ -47,7 +42,7 @@ class Variable
 
     /**
      * Branch where the variable was declared
-     * @var Branch
+     * @var Branch|null
      */
     protected $branch;
 
@@ -91,7 +86,7 @@ class Variable
      */
     protected $initialized = false;
 
-    protected $initBranches = array();
+    protected $initBranches = [];
 
     protected $isExternal = false;
 
@@ -174,18 +169,13 @@ class Variable
      * @param string $type
      * @param string $name
      * @param Branch $branch
-     * @param mixed $defaultInitValue
      */
-    public function __construct($type, $name, $branch, $defaultInitValue = null)
+    public function __construct($type, $name, Branch $branch = null)
     {
         $this->globalsManager = new Globals();
 
-        switch ($type) {
-            case 'callable':
-            case 'object':
-            case 'resource':
-                $type = 'variable';
-                break;
+        if (in_array($type, ['callable', 'object', 'resource'], true)) {
+            $type = 'variable';
         }
 
         $this->type = $type;
@@ -206,7 +196,7 @@ class Variable
     /**
      * Get init marked branch
      *
-     * @return array
+     * @return Branch[]
      */
     public function getInitBranches()
     {
@@ -341,12 +331,12 @@ class Variable
      */
     public function setIdle($idle)
     {
+        $this->idle = false;
+
         if ($this->reusable) {
-            $this->classTypes = array();
-            $this->dynamicTypes = array('unknown' => true);
+            $this->classTypes = [];
+            $this->dynamicTypes = ['unknown' => true];
             $this->idle = $idle;
-        } else {
-            $this->idle = false;
         }
     }
 
@@ -435,7 +425,7 @@ class Variable
     /**
      * Get the branch where the variable was declared
      *
-     * @return Branch
+     * @return Branch|null
      */
     public function getBranch()
     {
@@ -447,7 +437,7 @@ class Variable
      *
      * @param array $node
      */
-    public function setOriginal($node)
+    public function setOriginal(array $node)
     {
         $this->node = $node;
     }
@@ -460,10 +450,12 @@ class Variable
     public function getOriginal()
     {
         $node = $this->node;
-        if ($node) {
-            return $node;
+
+        if (!$node) {
+            $node = ['file' => 'unknown', 'line' => 0, 'char' => 0];
         }
-        return array('file' => 'unknown', 'line' => 0, 'char' => 0);
+
+        return $node;
     }
 
     /**
@@ -634,15 +626,17 @@ class Variable
      */
     public function setIsInitialized($initialized, CompilationContext $compilationContext)
     {
-        if ($initialized) {
-            if ($compilationContext->branchManager) {
-                $currentBranch = $compilationContext->branchManager->getCurrentBranch();
-                if ($currentBranch) {
-                    $this->initBranches[] = $currentBranch;
-                }
-            }
-        }
         $this->initialized = $initialized;
+
+        if (!$initialized || !$compilationContext->branchManager instanceof BranchManager) {
+            return;
+        }
+
+        $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+
+        if ($currentBranch instanceof Branch) {
+            $this->initBranches[] = $currentBranch;
+        }
     }
 
     /**
@@ -689,15 +683,15 @@ class Variable
     /**
      * Set if the variable must be initialized to null
      *
-     * @param boolean $mustInitNull
+     * @param mixed $mustInitNull
      */
     public function setMustInitNull($mustInitNull)
     {
-        $this->mustInitNull = (boolean) $mustInitNull;
+        $this->mustInitNull = (bool) $mustInitNull;
     }
 
     /**
-     * Sets the default init value
+     * Sets the default init value.
      *
      * @param mixed $value
      */
@@ -958,12 +952,14 @@ class Variable
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
             $symbol = $compilationContext->backend->getVariableCode($this);
+
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $symbol . ');');
             } else {
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $symbol . ');');
             }
+
             $this->variantInits++;
         }
     }

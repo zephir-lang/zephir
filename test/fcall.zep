@@ -1,9 +1,10 @@
 
 /**
  * Function calls
+ *
+ * Test global functions declaration.
  */
 
-/* Test global function declaration */
 function zephir_global_method_test(var str)
 {
 	/**
@@ -12,12 +13,24 @@ function zephir_global_method_test(var str)
 	return new Fcall()->testStrtokVarBySlash(str);
 }
 
+function zephir_global_method_with_type_casting(<\stdClass> variable)
+{
+	return variable;
+}
+
 namespace Test;
 
-/* Test function declaration in namespace */
+/**
+ * Test function declaration in namespace
+ */
 function zephir_namespaced_method_test(var str)
 {
 	return new Fcall()->testCall5(str, 5);
+}
+
+function zephir_namespaced_method_with_type_casting(<\stdClass> variable)
+{
+	return variable;
 }
 
 class Fcall

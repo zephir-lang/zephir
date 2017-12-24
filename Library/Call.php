@@ -2,23 +2,18 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**
@@ -44,13 +39,13 @@ class Call
 
     protected $_reflection;
 
-    protected $_resolvedTypes = array();
+    protected $_resolvedTypes = [];
 
-    protected $_resolvedDynamicTypes = array();
+    protected $_resolvedDynamicTypes = [];
 
-    protected $_temporalVariables = array();
+    protected $_temporalVariables = [];
 
-    protected $_mustCheckForCopy = array();
+    protected $_mustCheckForCopy = [];
 
     /**
      * Processes the symbol variable that will be used to return
@@ -72,7 +67,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                         'variable',
@@ -112,7 +107,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
                 } else {
@@ -148,7 +143,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
                 } else {
@@ -305,6 +300,8 @@ class Call
      * @param array $expression
      * @param array $calleeDefinition
      * @return array
+     *
+     * @throws CompilerException
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
@@ -663,8 +660,8 @@ class Call
     public function addCallStatusFlag(CompilationContext $compilationContext)
     {
         if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
-            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
-            $callStatus->setIsInitialized(true, $compilationContext, array());
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->branchManager->getCurrentBranch());
+            $callStatus->setIsInitialized(true, $compilationContext);
             $callStatus->increaseUses();
             $callStatus->setReadOnly(true);
             $compilationContext->symbolTable->addRawVariable($callStatus);

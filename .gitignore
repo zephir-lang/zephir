@@ -24,7 +24,6 @@ compile.log
 compile-errors.log
 
 # Runtime
-
 runtime/.deps
 runtime/Makefile
 runtime/Makefile.fragments
@@ -54,41 +53,5 @@ runtime/a.zep
 runtime/index.php
 runtime/parser.out
 
-# New Parser
-parser/.deps
-parser/Makefile
-parser/Makefile.fragments
-parser/Makefile.global
-parser/Makefile.objects
-parser/acinclude.m4
-parser/aclocal.m4
-parser/autom4te.cache/
-parser/config.guess
-parser/config.h
-parser/config.h.in
-parser/config.log
-parser/config.nice
-parser/config.status
-parser/config.sub
-parser/configure
-parser/configure.in
-parser/install-sh
-parser/libtool
-parser/ltmain.sh
-parser/missing
-parser/mkinstalldirs
-parser/modules/
-parser/parser/lemon
-parser/parser/parser.c
-parser/parser/parser.out
-parser/parser/scanner.c
-parser/parser/parser.php5.out
-parser/parser/parser.php7.out
-parser/run-tests.php
-parser/zephir_parser.so
-parser/parser.c
-parser/scanner.c
-parser/parser.out
-parser/Release
-parser/lemon
-parser/lemon.exe
+coverage.xml
+clover.xml

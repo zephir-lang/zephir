@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
+
 /**
  * ClassMethodParameters
  *

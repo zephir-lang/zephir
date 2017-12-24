@@ -2,46 +2,32 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
 use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Compiler;
-use Zephir\Bootstrap;
 
 /**
- * CommandHelp
+ * Zephir\Commands\CommandHelp
  *
- * Shows compiler help
+ * Shows Zephir help and exit
+ *
+ * @package Zephir\Commands
  */
 class CommandHelp extends CommandAbstract
 {
-    const LOGO ='
- _____              __    _
-/__  /  ___  ____  / /_  (_)____
-  / /  / _ \/ __ \/ __ \/ / ___/
- / /__/  __/ /_/ / / / / / /
-/____/\___/ .___/_/ /_/_/_/
-         /_/
-';
-
     /**
-     * Command provided by this command
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -51,48 +37,124 @@ class CommandHelp extends CommandAbstract
     }
 
     /**
-     * Command usage
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getUsage()
     {
-        return 'help';
+        return $this->getCommand();
     }
 
     /**
-     * Returns the description of the command
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getDescription()
     {
-        return 'Displays this help';
+        return 'Displays this help and exit';
     }
 
     /**
-     * Executes the command
+     * {@inheritdoc}
      *
      * @param Config $config
      * @param Logger $logger
+     * @return int
      */
     public function execute(Config $config, Logger $logger)
     {
-        echo self::LOGO, PHP_EOL;
-        echo "Zephir version " , Compiler::getCurrentVersion(),  PHP_EOL, PHP_EOL;
-        echo "Usage: ", PHP_EOL;
-        echo "\tcommand [options]", PHP_EOL;
-        echo PHP_EOL;
-        echo "Available commands:", PHP_EOL;
-        foreach (Bootstrap::getCommands() as $command) {
-            echo sprintf("\t%-20s%s\n", $command->getUsage(), $command->getDescription());
+        if ($this->hasHelpOption()) {
+            return fprintf(STDIN, $this->getSynopsis());
         }
-        echo PHP_EOL;
-        echo "Options:", PHP_EOL;
-        echo sprintf("\t%-20s%s\n", '-f([a-z0-9\-]+)', "Enables compiler optimizations");
-        echo sprintf("\t%-20s%s\n", '-fno-([a-z0-9\-]+)', "Disables compiler optimizations");
-        echo sprintf("\t%-20s%s\n", '-w([a-z0-9\-]+)', "Turns a warning on");
-        echo sprintf("\t%-20s%s\n", '-W([a-z0-9\-]+)', "Turns a warning off");
-        echo PHP_EOL;
+
+        return fprintf(
+            STDOUT,
+            "%s\nZephir version %s\n\n%s\nAvailable commands:\n%s\n%s",
+            $this->banner(),
+            Compiler::getCurrentVersion(),
+            $this->usage(),
+            $this->commands(),
+            $this->options()
+        );
+    }
+
+    /**
+     * Gets available commands.
+     *
+     * @return string
+     */
+    private function commands()
+    {
+        $template = '';
+
+        $commands = $this->getCommandsManager();
+        $commands->rewind();
+
+        while ($commands->valid()) {
+            $command = $commands->current();
+            $template .= sprintf("        %-20s%s\n", $command->getCommand(), $command->getDescription());
+
+            $commands->next();
+        }
+
+        return $template;
+    }
+
+    /**
+     * Gets commands usage.
+     *
+     * @return string
+     */
+    private function usage()
+    {
+        $template =<<<EOL
+Usage:
+        command [options]
+
+EOL;
+
+        return $template;
+    }
+
+    /**
+     * Gets Zephir banner.
+     *
+     * @return string
+     */
+    private function banner()
+    {
+        $template =<<<EOL
+ _____              __    _
+/__  /  ___  ____  / /_  (_)____
+  / /  / _ \/ __ \/ __ \/ / ___/
+ / /__/  __/ /_/ / / / / / /
+/____/\___/ .___/_/ /_/_/_/
+         /_/
+
+EOL;
+
+        return $template;
+    }
+
+    /**
+     * Gets commands options.
+     *
+     * @return string
+     */
+    private function options()
+    {
+        $template =<<<EOL
+Options:
+        --help|-h           Displays command help and exit
+        -f([a-z0-9\-]+)     Enables compiler optimizations
+        -fno-([a-z0-9\-]+)  Disables compiler optimizations
+        -w([a-z0-9\-]+)     Turns a warning on
+        -W([a-z0-9\-]+)     Turns a warning off
+
+EOL;
+
+        return sprintf($template);
     }
 }

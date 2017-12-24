@@ -603,19 +603,19 @@ class NativeArray
 	    return !isset(tokens[1]);
 	}
 
-	public function issue743a(array current)
+	public function issue743a(array current) -> array
 	{
 		let current[42]["str"] = "ok";
 		return current;
 	}
 
-	public function issue743b(array current)
+	public function issue743b(array current) -> array
 	{
 		let current["str"][42] = "ok";
 		return current;
 	}
 
-	public function issue743c(array current)
+	public function issue743c(array current) -> array
 	{
 		var key;
 		let key = "hey";

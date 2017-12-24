@@ -2,27 +2,22 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
 use Zephir\Parser\ParseException;
-use Zephir\Parser\SystemException;
 use Zephir\Compiler\FileInterface;
+use Zephir\Compiler\CompilerException;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception\IllegalStateException;
 
 /**
  * CompilerFile
@@ -161,7 +156,7 @@ class CompilerFile implements FileInterface
      * @param Compiler $compiler
      * @return array
      *
-     * @throws SystemException
+     * @throws IllegalStateException
      * @throws ParseException
      */
     public function genIR(Compiler $compiler)
@@ -598,7 +593,7 @@ class CompilerFile implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities
          */
-        $compilationContext = new CompilationContext;
+        $compilationContext = new CompilationContext();
 
         /**
          * Set global compiler in the compilation context
@@ -838,7 +833,7 @@ class CompilerFile implements FileInterface
         /**
          * Compilation context stores common objects required by compilation entities
          */
-        $compilationContext = new CompilationContext;
+        $compilationContext = new CompilationContext();
 
         /**
          * Set global compiler in the compilation context

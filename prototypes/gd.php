@@ -302,6 +302,33 @@ function imagecreate($width, $height)
 
 }
 
+/**
+ * http://php.net/manual/en/function.imagettfbbox.php
+ * @param float $size
+ * @param float $angle
+ * @param string $fontfile
+ * @param string $text
+ * @return array|bool
+ */
+function imagettfbbox($size, $angle, $fontfile, $text)
+{
+}
+
+/**
+ * @link http://php.net/manual/en/function.imagettftext.php
+ * @param resource $image
+ * @param float $size
+ * @param float $angle
+ * @param int $x
+ * @param int $y
+ * @param int $color
+ * @param string $fontfile
+ * @param string $text
+ * @return array|bool
+ */
+function imagettftext($image, $size, $angle , $x, $y, $color, $fontfile, $text)
+{
+}
 
 /**
  * @link http://php.net/manual/en/image.constants.php

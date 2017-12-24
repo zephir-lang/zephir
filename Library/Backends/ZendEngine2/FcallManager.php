@@ -2,34 +2,29 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Backends\ZendEngine2;
 
-use Zephir\CodePrinter;
 use Zephir\Utils;
+use Zephir\CodePrinter;
+use Zephir\Fcall\FcallManagerInterface;
 
 /**
- * Class FcallManager
+ * Zephir\Backends\ZendEngine2\FcallManager
  *
+ * @package Zephir\Backends\ZendEngine2
  */
-class FcallManager
+class FcallManager implements FcallManagerInterface
 {
-    protected $requiredMacros = array();
-
+    protected $requiredMacros = [];
 
     public function macroIsRequired($macro)
     {
@@ -37,11 +32,11 @@ class FcallManager
     }
 
     /**
-     * Resolve internal fcall attributes to a suitable macro and ensure that it's generated during compilation
+     * {@inheritdoc}
      *
-     * @param $static
+     * @param bool $static
      * @param int $doReturn tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
-     * @param $paramCount
+     * @param int $paramCount
      * @return string
      */
     public function getMacro($static, $doReturn, $paramCount)

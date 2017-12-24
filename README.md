@@ -28,12 +28,8 @@ Compiler design goals:
 
 ## Requirements
 
-To compile Zephir Parser:
-
-* [re2c](http://re2c.org/)
-
-To build the PHP extension:
-
+* [re2c](http://re2c.org/) >= 0.13.6
+* [Zephir Parser](https://github.com/phalcon/php-zephir-parser) >= 1.1.0
 * `g++` >= 4.4 | `clang++` >= 3.x | `vc++` >= 11
 * GNU `make` >= 3.81
 * `automake`
@@ -41,7 +37,9 @@ To build the PHP extension:
 
 ## Installation
 
-First, you have to get [Zephir Parser](https://github.com/phalcon/php-zephir-parser).
+**NOTE:** The `development` branch will always contain the latest **unstable** version.
+If you wish to check older versions or formal, tagged release, please switch to the relevant
+[branch](https://github.com/phalcon/zephir/branches)/[tag](https://github.com/phalcon/zephir/tags).
 
 ### Windows
 
@@ -61,7 +59,6 @@ For global installation add `-c` flag.
 You can install Zephir using composer.
 
 To get Zephir, run `composer require phalcon/zephir`.
-After getting Zephir follow the above guide to install Zephir Parser.
 
 ### Additional notes on Ubuntu
 

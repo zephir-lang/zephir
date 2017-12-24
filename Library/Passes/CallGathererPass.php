@@ -2,29 +2,23 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Passes;
 
-use Zephir\StatementsBlock;
 use Zephir\FunctionCall;
+use Zephir\StatementsBlock;
 use Zephir\CompilationContext;
 
 /**
- * CallGathererPass
+ * Zephir\Passes\CallGathererPass
  *
  * This pass counts how many times the same function is called inside a
  * statements block. It also count how many times a method is calling
@@ -32,12 +26,14 @@ use Zephir\CompilationContext;
  *
  * This pass is used by the function/method caches to explore possible
  * optimizations by implementing inline caches.
+ *
+ * @package Zephir\Passes
  */
 class CallGathererPass
 {
-    protected $functionCalls = array();
+    protected $functionCalls = [];
 
-    protected $methodCalls = array();
+    protected $methodCalls = [];
 
     protected $compilationContext;
 
@@ -49,6 +45,16 @@ class CallGathererPass
     public function __construct(CompilationContext $compilationContext)
     {
         $this->compilationContext = $compilationContext;
+    }
+
+    /**
+     * Gets current CompilationContext.
+     *
+     * @return CompilationContext
+     */
+    public function getCompilationContext()
+    {
+        return $this->compilationContext;
     }
 
     /**
@@ -83,7 +89,7 @@ class CallGathererPass
     /**
      * Returns all the method calls
      *
-     * @return int
+     * @return array
      */
     public function getAllMethodCalls()
     {

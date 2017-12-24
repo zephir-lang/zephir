@@ -44,4 +44,9 @@ class Instance
 
 		return create_instance_params("Test\\Instance", parameters);
 	}
+
+	public static function testInstanceCreate(string className)
+	{
+		return create_instance(className);
+	}
 }

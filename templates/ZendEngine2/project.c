@@ -7,6 +7,7 @@
 
 #include <php.h>
 
+// TODO: Deprecated. Will be removed in future
 #if PHP_VERSION_ID < 50500
 #include <locale.h>
 #endif
@@ -37,6 +38,7 @@ PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
+// TODO: Deprecated. Will be removed in future
 #if PHP_VERSION_ID < 50500
 	char* old_lc_all = setlocale(LC_ALL, NULL);
 	if (old_lc_all) {
@@ -55,6 +57,7 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 	REGISTER_INI_ENTRIES();
 	%CLASS_INITS%
 
+// TODO: Deprecated. Will be removed in future
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);
 	free(old_lc_all);
