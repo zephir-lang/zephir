@@ -2016,7 +2016,7 @@ class Compiler
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
-            if (count($parameters->getParameters())) {
+            if ($parameters != null && count($parameters->getParameters())) {
                 $headerPrinter->output(
                     'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
                     $func->getNumberOfRequiredParameters() . ')'
