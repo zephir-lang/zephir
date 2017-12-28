@@ -26,49 +26,26 @@ env:
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
+    - RE2C_VERSION="1.0.3"
+    - ZEPHIR_PARSER_VERSION="v1.1.1"
   matrix:
-    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
-    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
-    - CC="gcc"   RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
-    - CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
-    - CC="gcc"   RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="v1.1.1"
-    - CC="clang" RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="v1.1.1"
-    - CC="gcc"   RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="development"
-    - CC="clang" RE2C_VERSION="1.0.3"  ZEPHIR_PARSER_VERSION="development"
+    - CC="gcc"
+    - CC="clang"
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
-    - php: 7.2
   exclude:
     - env: CC="gcc"
       compiler: clang
     - env: CC="clang"
       compiler: gcc
   include:
-    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
+    - env: CC="gcc"
       php: nightly
       compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="v1.1.1"
-      php: nightly
-      compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
-      php: nightly
-      compiler: gcc
-    - env: CC="gcc" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="development"
-      php: nightly
-      compiler: gcc
-    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="v1.1.1"
-      php: nightly
-      compiler: clang
-    - env: CC="clang" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="v1.1.1"
-      php: nightly
-      compiler: clang
-    - env: CC="clang" RE2C_VERSION="0.13.6" ZEPHIR_PARSER_VERSION="development"
-      php: nightly
-      compiler: clang
-    - env: CC="clang" RE2C_VERSION="1.0.3" ZEPHIR_PARSER_VERSION="development"
+    - env: CC="clang"
       php: nightly
       compiler: clang
 
