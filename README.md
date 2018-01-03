@@ -80,6 +80,7 @@ zephir compile
 * [Official Blog][zep-blog-site]
 * [Forum][zep-forum]
 * [Twitter][zep-twitter]
+* [Facebook Group][zep-facebook]
 
 ## Contributing
 
@@ -103,6 +104,7 @@ See the LICENSE file for more information.
 [zep-blog-site]: https://blog.zephir-lang.com/
 [zep-forum]: https://forum.zephir-lang.com/
 [zep-twitter]: https://twitter.com/zephirlang
+[zep-facebook]: https://www.facebook.com/groups/zephir.language/
 [badge-zep-version]: https://poser.pugx.org/phalcon/zephir/v/stable.png
 [badge-zep-downloads]: https://poser.pugx.org/phalcon/zephir/downloads.png
 [badge-zep-license]: https://poser.pugx.org/phalcon/zephir/license.svg
