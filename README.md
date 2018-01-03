@@ -28,8 +28,8 @@ Compiler design goals:
 
 * [re2c][re2c] >= 0.13.6
 * [Zephir Parser][zephir-parser] >= 1.1.0
-* A C compiler such as `gcc` 4.4/later or an alternative such as `clang` 3.x/later,
-  `Visual C++` 11/later or `Intel C++`. It is recommended to use `gcc` 4.4 or later
+* A C compiler such as `gcc` >= 4.4 or an alternative such as `clang` >= 3.0,
+  `Visual C++` >= 11 or `Intel C++`. It is recommended to use `gcc` 4.4 or later
 * GNU `make` >= 3.81
 * `automake`
 * PHP development headers and tools
