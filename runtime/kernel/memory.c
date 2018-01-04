@@ -102,11 +102,16 @@ static void zephirt_memory_restore_stack_common(zend_zephir_globals *g TSRMLS_DC
         if (g->active_symbol_table) {
             active_symbol_table = g->active_symbol_table;
             if (active_symbol_table->scope == active_memory) {
-                zend_hash_destroy(EG(active_symbol_table));
-                FREE_HASHTABLE(EG(active_symbol_table));
-                EG(active_symbol_table) = active_symbol_table->symbol_table;
-                g->active_symbol_table = active_symbol_table->prev;
-                efree(active_symbol_table);
+              zend_execute_data *ex = EG(current_execute_data);
+
+              // This code was originaly ported from Zephir kernel, and it's commented
+              //zend_hash_destroy(EG(current_execute_data)->symbol_table);
+              //FREE_HASHTABLE(EG(current_execute_data)->symbol_table);
+              //EG(current_execute_data)->symbol_table = active_symbol_table->symbol_table;
+
+              ex->symbol_table = active_symbol_table->symbol_table;
+              g->active_symbol_table = active_symbol_table->prev;
+              efree(active_symbol_table);
             }
         }
 
@@ -483,7 +488,7 @@ void zephirt_copy_ctor(zval *destination, zval *origin) {
  */
 void zephirt_create_symbol_table(TSRMLS_D) {
 
-    zephir_symbol_table *entry;
+    /*zephir_symbol_table *entry;
     zend_zephir_globals *zephirt_globals_ptr = ZEPHIRT_VGLOBAL;
     HashTable *symbol_table;
 
@@ -503,7 +508,7 @@ void zephirt_create_symbol_table(TSRMLS_D) {
 
     ALLOC_HASHTABLE(symbol_table);
     zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
-    EG(active_symbol_table) = symbol_table;
+    EG(active_symbol_table) = symbol_table;*/
 }
 
 /**
@@ -525,92 +530,39 @@ void zephirt_clean_symbol_tables(TSRMLS_D) {
 /**
  * Exports symbols to the active symbol table
  */
-int zephirt_set_symbol(zval *key_name, zval *value TSRMLS_DC) {
+int zephirt_set_symbol(zval *key_name, zval *value TSRMLS_DC)
+{
+  	zend_array *symbol_table;
 
-    if (!EG(active_symbol_table)) {
-        zend_rebuild_symbol_table(TSRMLS_C);
-    }
+  	symbol_table = zend_rebuild_symbol_table();
+  	if (!symbol_table) {
+  		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
+  		return FAILURE;
+  	}
 
-    if (EG(active_symbol_table)) {
-        if (Z_TYPE_P(key_name) == IS_STRING) {
-            Z_ADDREF_P(value);
-            zend_hash_update(EG(active_symbol_table), Z_STRVAL_P(key_name), Z_STRLEN_P(key_name) + 1, &value, sizeof(zval *), NULL);
-            if (EG(exception)) {
-                return FAILURE;
-            }
-        }
-    }
+  	if (Z_TYPE_P(key_name) == IS_STRING) {
+  		Z_TRY_ADDREF_P(value);
+  		zend_hash_update(symbol_table, Z_STR_P(key_name), value);
+  	}
 
-    return SUCCESS;
+  	return SUCCESS;
 }
 
 /**
  * Exports a string symbol to the active symbol table
  */
-int zephirt_set_symbol_str(char *key_name, unsigned int key_length, zval *value TSRMLS_DC) {
-
-    if (!EG(active_symbol_table)) {
-        zend_rebuild_symbol_table(TSRMLS_C);
-    }
-
-    if (&EG(symbol_table)) {
-        Z_ADDREF_P(value);
-        zend_hash_update(&EG(symbol_table), key_name, key_length, &value, sizeof(zval *), NULL);
-        if (EG(exception)) {
-            return FAILURE;
-        }
-    }
-
-    return SUCCESS;
-}
-
-static inline void zephirt_dtor_func(zval *zvalue ZEND_FILE_LINE_DC)
+int zephirt_set_symbol_str(char *key_name, unsigned int key_length, zval *value TSRMLS_DC)
 {
-    switch (Z_TYPE_P(zvalue) & IS_CONSTANT_TYPE_MASK) {
-        case IS_STRING:
-        case IS_CONSTANT:
-            CHECK_ZVAL_STRING_REL(zvalue);
-            STR_FREE_REL(zvalue->value.str.val);
-            break;
-#if PHP_VERSION_ID < 50600
-		case IS_CONSTANT_ARRAY:
-#endif
-        case IS_ARRAY: {
-                TSRMLS_FETCH();
-                if (zvalue->value.ht && (zvalue->value.ht != &EG(symbol_table))) {
-                    /* break possible cycles */
-                    Z_TYPE_P(zvalue) = IS_NULL;
-                    zend_hash_destroy(zvalue->value.ht);
-                    FREE_HASHTABLE(zvalue->value.ht);
-                }
-            }
-            break;
-        case IS_OBJECT:
-            {
-                TSRMLS_FETCH();
-                Z_OBJ_HT_P(zvalue)->del_ref(zvalue TSRMLS_CC);
-            }
-            break;
-        case IS_RESOURCE:
-            {
-                TSRMLS_FETCH();
-                zend_list_delete(zvalue->value.lval);
-            }
-            break;
-        case IS_LONG:
-        case IS_DOUBLE:
-        case IS_BOOL:
-        case IS_NULL:
-        default:
-            return;
-            break;
-    }
-}
+  zend_array *symbol_table;
 
-void zephirt_value_dtor(zval *zvalue ZEND_FILE_LINE_DC)
-{
-    if (zvalue->type <= IS_BOOL) {
-        return;
-    }
-    zephirt_dtor_func(zvalue ZEND_FILE_LINE_RELAY_CC);
+  symbol_table = zend_rebuild_symbol_table();
+  if (!symbol_table) {
+    php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
+    return FAILURE;
+  }
+
+  Z_TRY_ADDREF_P(value);
+  zend_hash_str_update(symbol_table, key_name, key_length, value);
+
+  return SUCCESS;
 }

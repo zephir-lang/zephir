@@ -56,11 +56,11 @@
 
 /** Throw Exceptions */
 void zephirt_throw_exception(zval *object TSRMLS_DC);
-void zephirt_throw_exception_debug(zval *object, const char *file, zend_uint line TSRMLS_DC);
-void zephirt_throw_exception_string_debug(zend_class_entry *ce, const char *message, zend_uint message_len, const char *file, zend_uint line TSRMLS_DC);
-void zephirt_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len TSRMLS_DC);
+void zephirt_throw_exception_debug(zval *object, const char *file, uint line TSRMLS_DC);
+void zephirt_throw_exception_string_debug(zend_class_entry *ce, const char *message, uint message_len, const char *file, uint line TSRMLS_DC);
+void zephirt_throw_exception_string(zend_class_entry *ce, const char *message, uint message_len TSRMLS_DC);
 void zephirt_throw_exception_zval(zend_class_entry *ce, zval *message TSRMLS_DC);
-void zephirt_throw_exception_zval_debug(zend_class_entry *ce, zval *message, const char *file, zend_uint line TSRMLS_DC);
+void zephirt_throw_exception_zval_debug(zend_class_entry *ce, zval *message, const char *file, uint line TSRMLS_DC);
 void zephirt_throw_exception_internal(zval *exception TSRMLS_DC);
 
 #endif /* ZEPHIR_KERNEL_EXCEPTIONS_H */

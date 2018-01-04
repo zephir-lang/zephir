@@ -34,7 +34,7 @@
 int zephirt_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...)
 {
 	va_list va;
-	int arg_count = (int) (zend_uintptr_t) *(zend_vm_stack_top(TSRMLS_C) - 1);
+	int arg_count = ZEND_CALL_NUM_ARGS(EG(current_execute_data));
 	zval **arg, **p;
 	int i;
 
@@ -57,7 +57,7 @@ int zephirt_fetch_parameters(int num_args TSRMLS_DC, int required_args, int opti
 	i = 0;
 	while (num_args-- > 0) {
 
-		arg = (zval **) (zend_vm_stack_top(TSRMLS_C) - 1 - (arg_count - i));
+		arg = ZEND_CALL_ARG(EG(current_execute_data), i + 1);
 
 		p = va_arg(va, zval **);
 		*p = *arg;

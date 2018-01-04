@@ -42,7 +42,7 @@ void zephirt_throw_exception(zval *object TSRMLS_DC){
 /**
  * Throws a zval object as exception
  */
-void zephirt_throw_exception_debug(zval *object, const char *file, zend_uint line TSRMLS_DC){
+void zephirt_throw_exception_debug(zval *object, const char *file, uint line TSRMLS_DC){
 
 	zend_class_entry *default_exception_ce;
 
@@ -60,7 +60,7 @@ void zephirt_throw_exception_debug(zval *object, const char *file, zend_uint lin
 /**
  * Throws an exception with a single string parameter + debug info
  */
-void zephirt_throw_exception_string_debug(zend_class_entry *ce, const char *message, zend_uint message_len, const char *file, zend_uint line TSRMLS_DC) {
+void zephirt_throw_exception_string_debug(zend_class_entry *ce, const char *message, uint message_len, const char *file, uint line TSRMLS_DC) {
 
 	zval *object, *msg;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
@@ -89,7 +89,7 @@ void zephirt_throw_exception_string_debug(zend_class_entry *ce, const char *mess
 /**
  * Throws an exception with a single string parameter
  */
-void zephirt_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len TSRMLS_DC){
+void zephirt_throw_exception_string(zend_class_entry *ce, const char *message, uint message_len TSRMLS_DC){
 
 	zval *object, *msg;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
@@ -111,7 +111,7 @@ void zephirt_throw_exception_string(zend_class_entry *ce, const char *message, z
 /**
  * Throws an exception with a single zval parameter
  */
-void zephirt_throw_exception_zval_debug(zend_class_entry *ce, zval *message, const char *file, zend_uint line TSRMLS_DC){
+void zephirt_throw_exception_zval_debug(zend_class_entry *ce, zval *message, const char *file, uint line TSRMLS_DC){
 
 	zval *object;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
@@ -148,4 +148,3 @@ void zephirt_throw_exception_zval(zend_class_entry *ce, zval *message TSRMLS_DC)
 
 	zend_throw_exception_object(object TSRMLS_CC);
 }
-

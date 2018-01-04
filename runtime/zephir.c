@@ -102,7 +102,7 @@ static void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSR
 static void zephir_compile_program(zval *program TSRMLS_DC)
 {
 	HashTable           *ht = Z_ARRVAL_P(program);
-	HashPosition        pos = {0};
+	HashPosition        pos;
 	zval                **z, *type;
 	char                *msg;
 	zephir_context      *context;
@@ -133,7 +133,7 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
 
 	zend_hash_internal_pointer_reset_ex(ht, &pos);
 	for (
-	 ; zend_hash_get_current_data_ex(ht, (void**) &z, &pos) == SUCCESS
+	 ; z = zend_hash_get_current_data_ex(ht, &pos) != NULL
 	 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
 
@@ -155,10 +155,9 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
  */
 static void zephir_parse_file(const char *file_name TSRMLS_DC)
 {
-    char *file_name_pass = (char*) file_name;
-	char *contents;
+	char *file_name_pass = (char*) file_name;
+	zend_string *contents;
 	php_stream *stream;
-	int len;
 	long maxlen = PHP_STREAM_COPY_ALL;
 	zval *zcontext = NULL, *return_value = NULL;
 	php_stream_context *context = NULL;
@@ -170,9 +169,9 @@ static void zephir_parse_file(const char *file_name TSRMLS_DC)
 		return;
 	}
 
-	if ((len = php_stream_copy_to_mem(stream, &contents, maxlen, 0)) > 0) {
+	if (contents = php_stream_copy_to_mem(stream, PHP_STREAM_COPY_ALL, 0)) {
 
-		zephir_parse_program(&return_value, contents, len, file_name, NULL TSRMLS_CC);
+		zephir_parse_program(&return_value, contents, ZSTR_LEN(contents), file_name, NULL TSRMLS_CC);
 		efree(contents);
 
 		zephir_compile_program(return_value TSRMLS_CC);
