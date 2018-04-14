@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.10.7-{build}
+version: 0.10.8-{build}
 
 # branches to build
 branches:
@@ -66,11 +66,17 @@ install:
     # ==================================================
     - echo Setting PHP version...
     # ==================================================
-    - appveyor DownloadFile http://windows.php.net/downloads/releases/sha1sum.txt
-    - ps: |
-        $matched_versions = type sha1sum.txt | where { $_ -match "php-(${env:PHP_TARGET}\.\d+)-src" } | foreach { $matches[1] }
-        $cleaned_version = $matched_versions.Split(' ')[-1]
-        $env:PHP_VERSION=${cleaned_version}
+    - ps: Invoke-WebRequest http://windows.php.net/downloads/releases/sha1sum.txt -OutFile ${Env:Temp}\sha1sum.txt
+    - ps: >-
+        $VersionString = Get-Content ${Env:Temp}\sha1sum.txt | Where-Object {
+            $_ -match "php-($Env:PHP_TARGET\.\d+)-src"
+        } | ForEach-Object { $matches[1] }
+
+        If ($VersionString -NotMatch '\d+\.\d+\.\d+') {
+            Throw "Unable to obtain PHP version string using pattern 'php-($Env:PHP_TARGET\.\d+)-src'"
+        }
+
+        $Env:PHP_VERSION = ${VersionString}
     - ps: $env:PARSER_DOWNLOAD_URL="https://github.com/phalcon/php-zephir-parser/releases/download/v${env:PARSER_VERSION}/zephir_parser_${env:PLATFORM}_vc${env:PHP_VC}_php${env:PHP_TARGET}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
 
     # ==================================================
