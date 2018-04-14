@@ -214,19 +214,20 @@ class Backend extends BackendZendEngine2
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-
         $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
 
         if ($isComplex && !$variable->isDoublePointer() && !$variable->isSuperGlobal()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
-            if ($variable->getRealname() == '__$null') {
-                return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
-            } else if ($variable->getRealname() == '__$true') {
-                return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);';
-            } else if ($variable->getRealname() == '__$false') {
-                return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);';
+            switch ($variable->getRealname()) {
+                case '__$null':
+                    return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
+                case '__$true':
+                    return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);';
+                case '__$false':
+                    return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);';
+                default:
+                    return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
             }
-            return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
         }
 
         if ($variable->isLocalOnly()) {
@@ -528,19 +529,14 @@ class Backend extends BackendZendEngine2
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
-        $name    = $globalVar->getName();
-        $lines   = array();
-        $lines[] = 'zephir_get_global(&' . $name . ', SL("' . $name . '"));';
-        $lines[] = 'if (!' . $name . ') {';
-        $lines[] = "\t" . 'ZEPHIR_THROW_EXCEPTION_STR(zend_exception_get_default(), "Invalid superglobal");';
-        $lines[] = "\t" . 'return;';
-        $lines[] = '}';
+        $name  = $globalVar->getName();
+        $output = strtr('zephir_get_global(&:name, SL(":name"));', [':name' => $name]);
+
         if ($useCodePrinter) {
-            foreach ($lines as $line) {
-                $compilationContext->codePrinter->output($line);
-            }
+            $compilationContext->codePrinter->output($output);
         }
-        return join("\n\t", $lines);
+
+        return $output;
     }
 
     public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)
