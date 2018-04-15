@@ -568,7 +568,7 @@ class Compiler
      *
      * @param string $name
      *
-     * @return boolean
+     * @return array
      */
     public function getExtensionGlobal($name)
     {
@@ -1552,6 +1552,8 @@ class Compiler
 
                 $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
+                // @todo Add support for 'string', 'hash'
+                // @todo Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
@@ -1578,7 +1580,6 @@ class Compiler
                             = "\t" . $namespace . '_globals->' . $name . ' = \'' .
                             $global['default'] . '\';' . PHP_EOL;
                         break;
-                    // TODO: Add 'string', 'hash'
                     default:
                         throw new Exception(
                             "Unknown type '" . $global['type'] . "' for extension global '" . $name . "'"
