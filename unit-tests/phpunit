@@ -14,6 +14,11 @@
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
+if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('PHPUnit_Framework_TestCase')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+
 $exit = true;
 if ($index = array_search('--not-exit', $_SERVER['argv'])) {
     $exit = false;
