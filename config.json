@@ -79,6 +79,10 @@
             "type": "double",
             "default": 15.2
         },
+        "my_setting_4": {
+            "type": "char",
+            "default": "A"
+        },
         "test.my_setting_1": {
             "type": "bool",
             "default": true
