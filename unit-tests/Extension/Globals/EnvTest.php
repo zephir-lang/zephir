@@ -12,9 +12,11 @@
 
 namespace Extension\Globals;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals\Env;
+use Zephir\Utils;
 
-class EnvTest extends \PHPUnit_Framework_TestCase
+class EnvTest extends TestCase
 {
     /**
      * This method is called before a test is executed.
@@ -40,8 +42,14 @@ class EnvTest extends \PHPUnit_Framework_TestCase
     {
         $tester = new Env();
 
-        $this->assertSame($_ENV['USER'], $tester->read('USER'));
-        $this->assertSame($_ENV['USER'], getenv('USER'));
+        if (Utils::isWindows()) {
+            $var = 'USERNAME';
+        } else {
+            $var = 'USER';
+        }
+
+        $this->assertSame($_ENV[$var], $tester->read($var));
+        $this->assertSame($_ENV[$var], getenv($var));
     }
 
     /** @test */

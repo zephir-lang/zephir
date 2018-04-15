@@ -461,11 +461,9 @@ class Compiler
                     }
                     $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
                 }
-            } else {
-                if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-                    $path = $dest . DIRECTORY_SEPARATOR . $fileName;
-                    $success = $success && call_user_func($callback, $pathName, $path);
-                }
+            } elseif (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+                $path = $dest . DIRECTORY_SEPARATOR . $fileName;
+                $success = $success && call_user_func($callback, $pathName, $path);
             }
         }
 
@@ -475,15 +473,23 @@ class Compiler
     /**
      * Recursively deletes files in a specified location
      *
-     * @param string $path
-     * @param string $mask
+     * @param string $path Directory to deletes files
+     * @param string $mask Regular expression to deletes files
+     *
+     * @return void
      */
     protected function recursiveDeletePath($path, $mask)
     {
+        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
+            $this->logger->output("Directory {$path} does not exist or it is not readble. Skip...");
+            return;
+        }
+
         $objects = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
         );
+
         foreach ($objects as $name => $object) {
             if (preg_match($mask, $name)) {
                 @unlink($name);
@@ -1008,9 +1014,9 @@ class Compiler
      * Compiles the extension without installing it
      *
      * @param CommandInterface $command
-     * @param boolean $development
+     * @param bool             $development
      *
-     * @throws CompilerException
+     * @throws Exception|CompilerException
      */
     public function compile(CommandInterface $command, $development = false)
     {
@@ -1023,20 +1029,25 @@ class Compiler
             $extensionName = $namespace;
         }
         $needConfigure = $this->generate($command);
+
         if ($needConfigure) {
             if (Utils::isWindows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
-                if (file_exists('ext/Release')) {
-                    exec('rd /s /q ext/Release', $output, $exit);
+
+                $releaseFolder = Utils::resolveWindowsReleaseFolder();
+                if (file_exists($releaseFolder)) {
+                    exec('rd /s /q ' . $releaseFolder, $output, $exit);
                 }
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
                 /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
                 $fixMarker = "/* zephir_phpize_fix */";
-                $configureFile = file_get_contents("ext/configure.js");
-                $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
+
+                $configureFile = file_get_contents('ext\\configure.js');
+                $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
                 $hasChanged = false;
+
                 if (strpos($configureFile, $fixMarker) === false) {
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
@@ -1056,7 +1067,7 @@ class Compiler
                 }
 
                 if ($hasChanged) {
-                    file_put_contents("ext/configure.js", $configureFile);
+                    file_put_contents('ext\\configure.js', $configureFile);
                 }
 
                 $this->logger->output('Preparing configuration file...');
@@ -2266,15 +2277,15 @@ class Compiler
      * Checks which files in the base kernel must be copied
      *
      * @return boolean
+     * @throws Exception
      */
     protected function checkKernelFiles()
     {
-        $kernelPath = "ext/kernel";
+        $kernelPath = 'ext' . DIRECTORY_SEPARATOR . 'kernel';
 
         if (!file_exists($kernelPath)) {
-            $kernelDone = mkdir($kernelPath, 0775, true);
-            if (!$kernelDone) {
-                throw new Exception("Cannot create kernel directory");
+            if (!mkdir($kernelPath, 0775, true)) {
+                throw new Exception("Cannot create kernel directory: {$kernelPath}");
             }
         }
 
@@ -2285,13 +2296,16 @@ class Compiler
             $sourceKernelPath,
             $kernelPath,
             '@.*\.[ch]$@',
-            array($this, 'checkKernelFile')
+            [$this, 'checkKernelFile']
         );
 
         if (!$configured) {
-            $this->logger->output('Copying new kernel files...');
+            $this->logger->output('Cleaning old kernel files...');
             $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
+
             @mkdir($kernelPath);
+
+            $this->logger->output('Copying new kernel files...');
             $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
         }
 
