@@ -31,11 +31,11 @@ class GlobalsTest extends TestCase
         $this->assertTrue($t->getDefaultGlobals1());
         $this->assertTrue($t->getDefaultGlobals4());
 
-        $this->assertSame(100,  $t->getDefaultGlobals2());
-        $this->assertSame(7.5,  $t->getDefaultGlobals3());
-        $this->assertSame(10,   $t->getDefaultGlobals5());
+        $this->assertSame(100, $t->getDefaultGlobals2());
+        $this->assertSame(7.5, $t->getDefaultGlobals3());
+        $this->assertSame(10, $t->getDefaultGlobals5());
         $this->assertSame(15.2, $t->getDefaultGlobals6());
-        $this->assertSame(65,   $t->getDefaultGlobals7());
+        $this->assertSame(65, $t->getDefaultGlobals7());
     }
 
     /** @test */
