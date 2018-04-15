@@ -31,7 +31,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.10.7';
+    const VERSION = '0.10.8';
 
     public $parserCompiled = false;
 
@@ -1576,9 +1576,9 @@ class Compiler
                     case 'uchar':
                         $globalsDefault[$isModuleGlobal][]
                             = "\t" . $namespace . '_globals->' . $name . ' = \'' .
-                            $global['default'] . '\'";' . PHP_EOL;
+                            $global['default'] . '\';' . PHP_EOL;
                         break;
-
+                    // TODO: Add 'string', 'hash'
                     default:
                         throw new Exception(
                             "Unknown type '" . $global['type'] . "' for extension global '" . $name . "'"
