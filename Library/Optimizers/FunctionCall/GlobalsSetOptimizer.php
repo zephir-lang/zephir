@@ -54,7 +54,8 @@ class GlobalsSetOptimizer extends OptimizerAbstract
 
         if (!$context->compiler->isExtensionGlobal($globalName)) {
             throw new CompilerException(
-                "Global '{$globalName}' cannot be written because it wasn't defined", $expression
+                "Global variable '{$globalName}' cannot be written because it wasn't defined",
+                $expression
             );
         }
 
