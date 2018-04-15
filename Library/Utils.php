@@ -172,7 +172,7 @@ class Utils
     }
 
     /**
-     * Check if the host OS is windows
+     * Check if the host OS is Windows
      *
      * @return boolean
      */
@@ -229,5 +229,53 @@ class Utils
         } catch (\UnexpectedValueException $e) {
             // Ignore
         }
+    }
+
+    /**
+     * Resolves Windows release folder.
+     *
+     * @return string
+     */
+    public static function resolveWindowsReleaseFolder()
+    {
+        if (self::isThreadSafe()) {
+            if (PHP_INT_SIZE === 4) {
+                // 32-bit version of PHP
+                return "ext\\Release_TS";
+            } elseif (PHP_INT_SIZE === 8) {
+                // 64-bit version of PHP
+                return "ext\\x64\\Release_TS";
+            } else {
+                // fallback
+                return "ext\\Release_TS";
+            }
+        } else {
+            if (PHP_INT_SIZE === 4) {
+                // 32-bit version of PHP
+                return "ext\\Release";
+            } elseif (PHP_INT_SIZE === 8) {
+                // 64-bit version of PHP
+                return "ext\\x64\\Release";
+            } else {
+                // fallback
+                return "ext\\Release";
+            }
+        }
+    }
+
+    /**
+     * Checks if current PHP is thread safe.
+     *
+     * @return boolean true
+     */
+    public static function isThreadSafe()
+    {
+        if (defined('PHP_ZTS') && PHP_ZTS == 1) {
+            return true;
+        }
+
+        ob_start();
+        phpinfo(INFO_GENERAL);
+        return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
     }
 }
