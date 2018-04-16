@@ -7,7 +7,7 @@
  |                                                                          |
  | This source file is subject the MIT license, that is bundled with this   |
  | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
+ | at the following url: https://zephir-lang.com/license.html               |
  +--------------------------------------------------------------------------+
 */
 
@@ -15,6 +15,7 @@ namespace Zephir;
 
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression\Constants;
+use Zephir\Expression\StaticConstantAccess;
 
 /**
  * ClassConstant
@@ -23,23 +24,29 @@ use Zephir\Expression\Constants;
  */
 class ClassConstant
 {
+    /**
+     * @var string
+     */
     protected $name;
 
     /**
      * @var array
      */
-    protected $value;
+    protected $value = [];
 
+    /**
+     * @var string
+     */
     protected $docblock;
 
     /**
      * ClassConstant constructor
      *
-     * @param $name
-     * @param $value
-     * @param $docBlock
+     * @param string $name
+     * @param array  $value
+     * @param string $docBlock
      */
-    public function __construct($name, $value, $docBlock)
+    public function __construct($name, array $value, $docBlock)
     {
         $this->name = $name;
         $this->value = $value;
@@ -115,29 +122,33 @@ class ClassConstant
     /**
      * Process the value of the class constant if needed
      *
-     * @param compilationContext $compilationContext
+     * @param CompilationContext $compilationContext
+     *
+     * @return void
+     *
+     * @throws Exception
      */
-    public function processValue($compilationContext)
+    public function processValue(CompilationContext $compilationContext)
     {
         if ($this->value['type'] == 'constant') {
             $constant = new Constants();
             $compiledExpression = $constant->compile($this->value, $compilationContext);
 
-            $this->value = array(
+            $this->value = [
                 'type' => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode()
-            );
+            ];
             return;
         }
 
         if ($this->value['type'] == 'static-constant-access') {
-            $expression = new Expression($this->value);
-            $compiledExpression = $expression->compile($compilationContext);
+            $staticConstantAccess = new StaticConstantAccess();
+            $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
 
-            $this->value = array(
+            $this->value = [
                 'type' => $compiledExpression->getType(),
-                'value' => $compiledExpression->getCode()
-            );
+                'value' => $compiledExpression->getCode(),
+            ];
             return;
         }
     }
@@ -146,6 +157,9 @@ class ClassConstant
      * Produce the code to register a class constant
      *
      * @param CompilationContext $compilationContext
+     *
+     * @return void
+     *
      * @throws CompilerException
      * @throws Exception
      */
@@ -153,6 +167,13 @@ class ClassConstant
     {
         $this->processValue($compilationContext);
 
-        $compilationContext->backend->declareConstant($this->value['type'], $this->getName(), isset($this->value['value']) ? $this->value['value'] : null, $compilationContext);
+        $constanValue = isset($this->value['value']) ? $this->value['value'] : null;
+
+        $compilationContext->backend->declareConstant(
+            $this->value['type'],
+            $this->getName(),
+            $constanValue,
+            $compilationContext
+        );
     }
 }
