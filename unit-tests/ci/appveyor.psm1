@@ -304,7 +304,7 @@ Function EnableExtension {
 	}
 }
 
-Function PrintReleaseNotes {
+Function PrintBuildDetails {
 	$BuildDate = Get-Date -Format g
 
 	Write-Host "Release date: ${BuildDate}"
@@ -317,18 +317,16 @@ Function PrintReleaseNotes {
 }
 
 Function PrintLogs {
-	Param([Parameter(Mandatory=$true)][System.String] $BasePath)
-
-	If (Test-Path -Path "${Env:BasePath}\compile-errors.log") {
-		Get-Content -Path "${Env:BasePath}\compile-errors.log"
+	If (Test-Path -Path "${Env:APPVEYOR_BUILD_FOLDER}\compile-errors.log") {
+		Get-Content -Path "${Env:APPVEYOR_BUILD_FOLDER}\compile-errors.log"
 	}
 
-	If (Test-Path -Path "${Env:BasePath}\compile.log") {
-		Get-Content -Path "${Env:BasePath}\compile.log"
+	If (Test-Path -Path "${Env:APPVEYOR_BUILD_FOLDER}\compile.log") {
+		Get-Content -Path "${Env:APPVEYOR_BUILD_FOLDER}\compile.log"
 	}
 
-	If (Test-Path -Path "${Env:BasePath}\configure.js") {
-		Get-Content -Path "${Env:BasePath}\configure.js"
+	If (Test-Path -Path "${Env:APPVEYOR_BUILD_FOLDER}\ext\configure.js") {
+		Get-Content -Path "${Env:APPVEYOR_BUILD_FOLDER}\ext\configure.js"
 	}
 }
 
