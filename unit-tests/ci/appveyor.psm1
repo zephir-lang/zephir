@@ -91,20 +91,6 @@ Function EnsureChocolateyIsInstalled {
 	}
 }
 
-Function EnsurePandocIsInstalled {
-	If (-not (Get-Command "pandoc" -ErrorAction SilentlyContinue)) {
-		$PandocInstallationDirectory = "${Env:ProgramData}\chocolatey\bin"
-
-		If (-not (Test-Path "$PandocInstallationDirectory")) {
-			Throw "The pandoc is needed to use this module"
-		}
-
-		$Env:Path += ";$PandocInstallationDirectory"
-	}
-
-	& "pandoc" -v
-}
-
 Function InstallSdk {
 	Write-Host "Install PHP SDK binary tools: ${Env:PHP_SDK_VERSION}" -foregroundcolor Cyan
 
@@ -318,62 +304,16 @@ Function EnableExtension {
 	}
 }
 
-Function PrepareReleasePackage {
-	PrepareReleaseNote
+Function PrintReleaseNotes {
+	$BuildDate = Get-Date -Format g
 
-	$CurrentPath = (Get-Item -Path ".\" -Verbose).FullName
-	$PackagePath = "${Env:APPVEYOR_BUILD_FOLDER}\package"
-
-	FormatReleaseFiles
-
-	Copy-Item -Path (Join-Path -Path $Env:APPVEYOR_BUILD_FOLDER -ChildPath '\*') -Filter '*.txt' -Destination "${PackagePath}" -Force
-	Copy-Item "${Env:RELEASE_DLL_PATH}" "${PackagePath}"
-
-	Set-Location "${PackagePath}"
-	$result = (& 7z a "${Env:RELEASE_ZIPBALL}.zip" *.*)
-
-	$7zipExitCode = $LASTEXITCODE
-	If ($7zipExitCode -ne 0) {
-		Set-Location "${CurrentPath}"
-		Throw "An error occurred while creating release zippbal to [${Env:RELEASE_ZIPBALL}.zip]. 7Zip Exit Code was [${7zipExitCode}]"
-	}
-
-	Move-Item "${Env:RELEASE_ZIPBALL}.zip" -Destination "${Env:APPVEYOR_BUILD_FOLDER}"
-
-	Set-Location "${CurrentPath}"
-}
-
-Function PrepareReleaseNote {
-	$ReleaseFile = "${Env:APPVEYOR_BUILD_FOLDER}\package\RELEASE.txt"
-	$ReleaseDate = Get-Date -Format g
-
-	Write-Output "Release date: ${ReleaseDate}"                           | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Release version: ${Env:APPVEYOR_BUILD_VERSION}"         | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"                | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Build type: ${Env:BUILD_TYPE}"                          | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Platform: ${Env:PLATFORM}"                              | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Target PHP version: ${Env:PHP_MINOR}"                   | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-	Write-Output "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}" | Out-File -Encoding "ASCII" -Append "${ReleaseFile}"
-}
-
-Function FormatReleaseFiles {
-	EnsurePandocIsInstalled
-
-	$CurrentPath = (Get-Item -Path ".\" -Verbose).FullName
-
-	Set-Location "${Env:APPVEYOR_BUILD_FOLDER}"
-
-	Get-ChildItem (Get-Item -Path ".\" -Verbose).FullName *.md |
-	ForEach-Object{
-		$BaseName = $_.BaseName
-		pandoc -f markdown -t html5 "${BaseName}.md" > "package/${BaseName}.html"
-	}
-
-	If (Test-Path -Path "package/CHANGELOG.html") {
-		(Get-Content "package/CHANGELOG.html") | ForEach-Object { $_ -replace ".md", ".html" } | Set-Content "package/CHANGELOG.html"
-	}
-
-	Set-Location "${CurrentPath}"
+	Write-Host "Release date: ${BuildDate}"
+	Write-Host "Release version: ${Env:APPVEYOR_BUILD_VERSION}"
+	Write-Host "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"
+	Write-Host "Build type: ${Env:BUILD_TYPE}"
+	Write-Host "Platform: ${Env:PLATFORM}"
+	Write-Host "Target PHP version: ${Env:PHP_MINOR}"
+	Write-Host "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}"
 }
 
 Function PrintLogs {

@@ -102,7 +102,7 @@ test_script:
     - 'php unit-tests/microbench.php'
 
 after_test:
-    - ps: PrepareReleasePackage
+    - ps: PrintReleaseNotes
 
 artifacts:
     - path: '.\$(RELEASE_ZIPBALL).zip'
@@ -114,6 +114,7 @@ on_failure:
     - ps: PrintVars
     - ps: PrintDirectoriesContent
     - ps: PrintPhpInfo
+    - ps: PrintReleaseNotes
 
 notifications:
     - provider: Email
