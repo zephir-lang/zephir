@@ -2,25 +2,25 @@ version: 0.10.8-{build}
 
 environment:
     matrix:
-        # - PHP_MINOR: 7.0
-        #   VC_VERSION: 14
-        #   BUILD_TYPE: Win32
-        #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+        - PHP_MINOR: 7.0
+          VC_VERSION: 14
+          BUILD_TYPE: Win32
+          APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
 
-        # - PHP_MINOR: 7.0
-        #   VC_VERSION: 14
-        #   BUILD_TYPE: nts-Win32
-        #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+        - PHP_MINOR: 7.0
+          VC_VERSION: 14
+          BUILD_TYPE: nts-Win32
+          APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
 
-        # - PHP_MINOR: 7.1
-        #   VC_VERSION: 14
-        #   BUILD_TYPE: Win32
-        #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+        - PHP_MINOR: 7.1
+          VC_VERSION: 14
+          BUILD_TYPE: Win32
+          APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
 
-        # - PHP_MINOR: 7.1
-        #   VC_VERSION: 14
-        #   BUILD_TYPE: nts-Win32
-        #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+        - PHP_MINOR: 7.1
+          VC_VERSION: 14
+          BUILD_TYPE: nts-Win32
+          APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
 
         - PHP_MINOR: 7.2
           VC_VERSION: 15
