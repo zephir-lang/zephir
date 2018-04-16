@@ -101,20 +101,15 @@ test_script:
     - 'php unit-tests/phpunit -c phpunit.xml.dist --not-exit --debug unit-tests/'
     - 'php unit-tests/microbench.php'
 
-after_test:
-    - ps: PrintReleaseNotes
-
-artifacts:
-    - path: '.\$(RELEASE_ZIPBALL).zip'
-      type: zip
-      name: Zephir
+on_success:
+    - ps: PrintBuildDetails
 
 on_failure:
-    - ps: PrintLogs "${Env:APPVEYOR_BUILD_FOLDER}\ext"
+    - ps: PrintBuildDetails
+    - ps: PrintLogs
     - ps: PrintVars
     - ps: PrintDirectoriesContent
     - ps: PrintPhpInfo
-    - ps: PrintReleaseNotes
 
 notifications:
     - provider: Email
