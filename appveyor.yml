@@ -105,7 +105,6 @@ on_success:
     - ps: PrintBuildDetails
 
 on_failure:
-    - ps: PrintBuildDetails
     - ps: PrintLogs
     - ps: PrintVars
     - ps: PrintDirectoriesContent
