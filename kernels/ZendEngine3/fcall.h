@@ -417,4 +417,22 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 
 void zephir_eval_php(zval *str, zval *retval_ptr, char *context);
 
+static inline void zephir_set_called_scope(zend_execute_data *ex, zend_class_entry *called_scope)
+{
+	while (ex) {
+		if (Z_TYPE(ex->This) == IS_OBJECT) {
+			Z_OBJCE(ex->This) = called_scope;
+			return;
+		} else if (Z_CE(ex->This)) {
+			Z_CE(ex->This) = called_scope;
+			return;
+		} else if (ex->func) {
+			if (ex->func->type != ZEND_INTERNAL_FUNCTION || ex->func->common.scope) {
+				return;
+			}
+		}
+		ex = ex->prev_execute_data;
+	}
+}
+
 #endif /* ZEPHIR_KERNEL_FCALL_H */
