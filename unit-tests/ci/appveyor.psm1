@@ -307,13 +307,13 @@ Function EnableExtension {
 Function PrintBuildDetails {
 	$BuildDate = Get-Date -Format g
 
-	Write-Host "Release date: ${BuildDate}"
-	Write-Host "Release version: ${Env:APPVEYOR_BUILD_VERSION}"
-	Write-Host "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"
+	Write-Host "Build date: ${BuildDate}"
+	Write-Host "Build version: ${Env:APPVEYOR_BUILD_VERSION}"
 	Write-Host "Build type: ${Env:BUILD_TYPE}"
+	Write-Host "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}"
+	Write-Host "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"
 	Write-Host "Platform: ${Env:PLATFORM}"
 	Write-Host "Target PHP version: ${Env:PHP_MINOR}"
-	Write-Host "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}"
 }
 
 Function PrintLogs {
