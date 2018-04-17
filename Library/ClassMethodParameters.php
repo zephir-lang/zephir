@@ -20,7 +20,7 @@ use Zephir\Compiler\CompilerException;
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements \Countable, \Iterator , \ArrayAccess
+class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
 {
     private $parameters = [];
 

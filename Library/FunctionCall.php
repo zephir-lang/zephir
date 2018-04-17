@@ -18,7 +18,6 @@ use Zephir\Optimizers\OptimizerAbstract;
 
 /**
  * FunctionCall
- *
  * Call functions. By default functions are called in the PHP userland if an optimizer
  * was not found or there is not a user-handler for it
  */
@@ -39,11 +38,11 @@ class FunctionCall extends Call
      */
     const CALL_DYNAMIC_STRING = 3;
 
-    protected static $_optimizers = array();
+    protected static $_optimizers = [];
 
-    protected static $_functionReflection = array();
+    protected static $_functionReflection = [];
 
-    protected static $_optimizerDirectories = array();
+    protected static $_optimizerDirectories = [];
 
     private static $_functionCache = null;
 
@@ -51,6 +50,7 @@ class FunctionCall extends Call
      * Process the ReflectionFunction for the specified function name
      *
      * @param string $funcName
+     *
      * @return \ReflectionFunction
      */
     public function getReflector($funcName)
@@ -66,10 +66,12 @@ class FunctionCall extends Call
             }
             self::$_functionReflection[$funcName] = $reflectionFunction;
             $this->_reflection = $reflectionFunction;
+
             return $reflectionFunction;
         }
         $reflectionFunction = self::$_functionReflection[$funcName];
         $this->_reflection = $reflectionFunction;
+
         return $reflectionFunction;
     }
 
@@ -79,7 +81,7 @@ class FunctionCall extends Call
      * Built-in functions rarely change the parameters if they aren't passed by reference
      *
      * @param string $funcName
-     * @param array $expression
+     * @param array  $expression
      *
      * @return bool
      * @throws CompilerException
@@ -104,42 +106,44 @@ class FunctionCall extends Call
         }
 
         $reflector = $this->getReflector($funcName);
-        if ($reflector) {
-            if (isset($expression['parameters'])) {
-                /**
-                 * Check if the number of parameters
-                 */
-                $numberParameters = count($expression['parameters']);
-                if ($funcName == "unpack" && (version_compare(PHP_VERSION, '7.1.0') == 0 || version_compare(PHP_VERSION, '7.1.1') == 0)) {
-                    if ($numberParameters < 2) {
-                        throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
-                    }
-                } else {
-                    if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
-                        throw new CompilerException(
-                            "The number of parameters passed is lesser than the number of required parameters by '".$funcName."'",
-                            $expression
-                        );
-                    }
-                }
-            } else {
-                $numberParameters = 0;
-                if ($reflector->getNumberOfRequiredParameters() > 0) {
-                    throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
-                }
-            }
-
-            if ($reflector->getNumberOfParameters() > 0) {
-                foreach ($reflector->getParameters() as $parameter) {
-                    if ($parameter->isPassedByReference()) {
-                        return false;
-                    }
-                }
-            }
-            return true;
+        if (!$reflector instanceof \ReflectionFunction) {
+            return false;
         }
 
-        return false;
+        $messageFormat = "The number of parameters passed is lesser than the number of required parameters by '%s'";
+
+        if (isset($expression['parameters'])) {
+            /**
+             * Check if the number of parameters
+             */
+            $numberParameters = count($expression['parameters']);
+            if ($funcName == "unpack" &&
+                (version_compare(PHP_VERSION, '7.1.0') == 0 ||
+                    version_compare(PHP_VERSION, '7.1.1') == 0)
+            ) {
+                if ($numberParameters < 2) {
+                    throw new CompilerException(sprintf($messageFormat, $funcName), $expression);
+                }
+            } else {
+                if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
+                    throw new CompilerException(sprintf($messageFormat, $funcName), $expression);
+                }
+            }
+        } else {
+            if ($reflector->getNumberOfRequiredParameters() > 0) {
+                throw new CompilerException(sprintf($messageFormat, $funcName), $expression);
+            }
+        }
+
+        if ($reflector->getNumberOfParameters() > 0) {
+            foreach ($reflector->getParameters() as $parameter) {
+                if ($parameter->isPassedByReference()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -154,8 +158,13 @@ class FunctionCall extends Call
      *
      * @return void
      */
-    protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references, $expression)
-    {
+    protected function markReferences(
+        $funcName,
+        $parameters,
+        CompilationContext $compilationContext,
+        &$references,
+        $expression
+    ) {
         if ($this->isBuiltInFunction($funcName)) {
             return;
         }
@@ -189,7 +198,7 @@ class FunctionCall extends Call
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
                                 $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
-                                $references[] = $parameters[$n - 1] ;
+                                $references[] = $parameters[$n - 1];
                             }
                         }
                     }
@@ -202,12 +211,12 @@ class FunctionCall extends Call
     /**
      * Tries to find specific an specialized optimizer for function calls
      *
-     * @param string $funcName
-     * @param array $expression
-     * @param Call $call
+     * @param string             $funcName
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $compilationContext
-     * @return bool|mixed
      *
+     * @return bool|mixed
      * @throws Exception
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
@@ -224,7 +233,7 @@ class FunctionCall extends Call
              * Check every optimizer directory for an optimizer
              */
             foreach (self::$_optimizerDirectories as $directory) {
-                $path =  $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
+                $path = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
                 if (file_exists($path)) {
                     require_once $path;
 
@@ -259,6 +268,7 @@ class FunctionCall extends Call
      * Checks if the function is a built-in provided by Zephir
      *
      * @param string $functionName
+     *
      * @return bool
      */
     public function isBuiltInFunction($functionName)
@@ -281,16 +291,17 @@ class FunctionCall extends Call
             case 'get_class_lower':
                 return true;
         }
+
         return false;
     }
 
     /**
      * Checks if a function exists or is a built-in Zephir function
      *
-     * @param string $functionName
+     * @param string             $functionName
      * @param CompilationContext $context
      *
-     * @return boolean
+     * @return bool
      */
     public function functionExists($functionName, CompilationContext $context)
     {
@@ -301,13 +312,10 @@ class FunctionCall extends Call
             return true;
         }
 
-        $internalName = ['f__'.$functionName];
+        $internalName = ['f__' . $functionName];
         if (isset($context->classDefinition)) {
-            $prefix = 'f_' . str_replace(
-                    '\\',
-                    '_',
-                    strtolower($context->classDefinition->getNamespace())
-                );
+            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
+            $prefix = 'f_' . str_replace('\\', '_', $lowerNamespace);
 
             $internalName[] = $prefix . '_' . $functionName;
         }
@@ -326,7 +334,6 @@ class FunctionCall extends Call
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
-     *
      * @throws Exception|CompilerException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
@@ -396,7 +403,10 @@ class FunctionCall extends Call
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException(
+                    "Returned values by functions can only be assigned to variant variables",
+                    $expression
+                );
             }
 
             /**
@@ -430,13 +440,17 @@ class FunctionCall extends Call
         if (!count($params)) {
             if ($this->isExpectingReturn()) {
                 if ($symbolVariable->getName() == 'return_value') {
-                    $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');');
+                    $codePrinter->output(
+                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');'
+                    );
                 } else {
                     if ($this->mustInitSymbolVariable()) {
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');');
+                    $codePrinter->output(
+                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');'
+                    );
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
@@ -444,16 +458,36 @@ class FunctionCall extends Call
         } else {
             if ($this->isExpectingReturn()) {
                 if ($symbolVariable->getName() == 'return_value') {
-                    $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output(
+                        strtr('ZEPHIR_RETURN_CALL_FUNCTION(":func", :pointer, :params);', [
+                            ':func'    => $funcName,
+                            ':pointer' => $cachePointer,
+                            ':params'  => implode(', ', $params),
+                        ])
+                    );
                 } else {
                     if ($this->mustInitSymbolVariable()) {
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+
+                    $codePrinter->output(
+                        strtr('ZEPHIR_CALL_FUNCTION(:symbol, ":func", :pointer, :params);', [
+                            ':symbol'  => $symbol,
+                            ':func'    => $funcName,
+                            ':pointer' => $cachePointer,
+                            ':params'  => implode(', ', $params),
+                        ])
+                    );
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                $codePrinter->output(
+                    strtr('ZEPHIR_CALL_FUNCTION(NULL, ":func", :pointer, :params);', [
+                        ':func'    => $funcName,
+                        ':pointer' => $cachePointer,
+                        ':params'  => implode(', ', $params),
+                    ])
+                );
             }
         }
 
@@ -488,8 +522,7 @@ class FunctionCall extends Call
     }
 
     /**
-     *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
@@ -497,14 +530,22 @@ class FunctionCall extends Call
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {
-        $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
+        $variable = $compilationContext->symbolTable->getVariableForRead(
+            $expression['name'],
+            $compilationContext,
+            $expression
+        );
+
         switch ($variable->getType()) {
             case 'variable':
             case 'string':
                 break;
 
             default:
-                throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $expression['left']);
+                throw new CompilerException(
+                    "Variable type: " . $variable->getType() . " cannot be used as dynamic caller",
+                    $expression['left']
+                );
         }
 
         /**
@@ -513,7 +554,7 @@ class FunctionCall extends Call
         if (isset($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -530,7 +571,10 @@ class FunctionCall extends Call
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException(
+                    "Returned values by functions can only be assigned to variant variables",
+                    $expression
+                );
             }
 
             /**
@@ -575,7 +619,12 @@ class FunctionCall extends Call
                             $symbolVariable->trackVariant($compilationContext);
                         }
                     }
-                    $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext, $params);
+                    $compilationContext->backend->callDynamicFunction(
+                        $symbolVariable,
+                        $variable,
+                        $compilationContext,
+                        $params
+                    );
                 } else {
                     $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext, $params);
                 }
