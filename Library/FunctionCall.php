@@ -146,17 +146,18 @@ class FunctionCall extends Call
      * Once the function processes the parameters we should mark
      * specific parameters to be passed by reference
      *
-     * @param string $funcName
-     * @param array $parameters
+     * @param string             $funcName
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $references
-     * @param array $expression
-     * @return boolean
+     * @param array              $references
+     * @param array              $expression
+     *
+     * @return void
      */
     protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references, $expression)
     {
         if ($this->isBuiltInFunction($funcName)) {
-            return false;
+            return;
         }
 
         $reflector = $this->getReflector($funcName);
@@ -175,7 +176,11 @@ class FunctionCall extends Call
                             }
 
                             if (!preg_match('/^[a-zA-Z0-9$\_]+$/', $parameters[$n - 1])) {
-                                $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
+                                $compilationContext->logger->warning(
+                                    "Cannot mark complex expression as reference",
+                                    "invalid-reference",
+                                    $expression
+                                );
                                 continue;
                             }
 
@@ -203,7 +208,7 @@ class FunctionCall extends Call
      * @param CompilationContext $compilationContext
      * @return bool|mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
@@ -215,7 +220,6 @@ class FunctionCall extends Call
         if (!isset(self::$_optimizers[$funcName])) {
             $camelizeFunctionName = Utils::camelize($funcName);
 
-
             /**
              * Check every optimizer directory for an optimizer
              */
@@ -226,13 +230,13 @@ class FunctionCall extends Call
 
                     $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
                     if (!class_exists($className, false)) {
-                        throw new \Exception('Class ' . $className . ' cannot be loaded');
+                        throw new Exception("Class {$className} cannot be loaded");
                     }
 
                     $optimizer = new $className();
 
                     if (!($optimizer instanceof OptimizerAbstract)) {
-                        throw new \Exception('Class ' . $className . ' must be instance of OptimizerAbstract');
+                        throw new Exception("Class {$className} must be instance of OptimizerAbstract");
                     }
 
                     break;
@@ -284,6 +288,8 @@ class FunctionCall extends Call
      * Checks if a function exists or is a built-in Zephir function
      *
      * @param string $functionName
+     * @param CompilationContext $context
+     *
      * @return boolean
      */
     public function functionExists($functionName, CompilationContext $context)
@@ -295,24 +301,33 @@ class FunctionCall extends Call
             return true;
         }
 
-        $internalName = array('f__'.$functionName);
+        $internalName = ['f__'.$functionName];
         if (isset($context->classDefinition)) {
-            $internalName[] = 'f_'.str_replace('\\', '_', strtolower($context->classDefinition->getNamespace())).'_'.$functionName;
+            $prefix = 'f_' . str_replace(
+                    '\\',
+                    '_',
+                    strtolower($context->classDefinition->getNamespace())
+                );
+
+            $internalName[] = $prefix . '_' . $functionName;
         }
+
         foreach ($internalName as $name) {
             if (isset($context->compiler->functionDefinitions[$name])) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      *
-     * @throws CompilerException
+     * @throws Exception|CompilerException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
@@ -330,10 +345,14 @@ class FunctionCall extends Call
             return $compiledExpr;
         }
 
-        $exists = true;
-        if (!$this->functionExists($funcName, $compilationContext)) {
-            $compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistent-function", $expression);
-            $exists = false;
+        $exists = $this->functionExists($funcName, $compilationContext);
+
+        if (!$exists) {
+            $compilationContext->logger->warning(
+                sprintf('Function "%s" does not exist at compile time', $funcName),
+                'nonexistent-function',
+                $expression
+            );
         }
 
         /**
@@ -355,7 +374,7 @@ class FunctionCall extends Call
                 $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         /**
@@ -599,12 +618,13 @@ class FunctionCall extends Call
     }
 
     /**
-     * Compiles a function
+     * Compiles a function.
      *
-     * @param Expression $expr
+     * @param Expression         $expr
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws Exception|CompilerException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
