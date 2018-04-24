@@ -564,12 +564,13 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	//	fcic.function_handler->op_array.line_end = 0;
 	//}
 
-	/* fcic.initialized = 0; */
-#if PHP_VERSION_ID >= 50600
-	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic, info TSRMLS_CC);
-#else
-	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic TSRMLS_CC);
-#endif
+	fcic.initialized = 0;
+	status = zend_call_function(&fci, &fcic TSRMLS_CC);
+//#if PHP_VERSION_ID >= 50600
+//	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic, info TSRMLS_CC);
+//#else
+//	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic TSRMLS_CC);
+//#endif
 
 /*
 	if (fcic.initialized && cache_entry) {
