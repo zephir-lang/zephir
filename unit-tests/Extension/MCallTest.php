@@ -15,6 +15,8 @@ namespace Extension;
 
 use Test\Mcall;
 use stdClass;
+use Throwable;
+use Exception;
 
 class MCallTest extends \PHPUnit_Framework_TestCase
 {
@@ -200,5 +202,21 @@ class MCallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
+
+    public function testCallProtected()
+    {
+        $t = new Mcall();
+        $errorHappened = false;
+
+        try {
+            $t->callProtectedFromOther();
+        } catch (Throwable $t) {
+            $errorHappened = true;
+        } catch (Exception $e) {
+            $errorHappened = true;
+        }
+
+        $this->assertSame(true, $errorHappened);
     }
 }
