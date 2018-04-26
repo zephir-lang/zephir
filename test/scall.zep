@@ -7,17 +7,17 @@ namespace Test;
 class Scall extends ScallParent
 {
 
-	static public function testMethod1()
+	static public function testMethod1() -> string
 	{
 		return "hello public";
 	}
 
-	static protected function testMethod2()
+	static protected function testMethod2() -> string
 	{
 		return "hello protected";
 	}
 
-	static private function testMethod3()
+	static private function testMethod3() -> string
 	{
 		return "hello private";
 	}
@@ -117,7 +117,7 @@ class Scall extends ScallParent
 		return self::testMethod7();
 	}
 
-	public static function testMethod16(long a, long b)
+	public static function testMethod16(long a, long b) -> long
 	{
 		return a + b;
 	}
@@ -140,8 +140,24 @@ class Scall extends ScallParent
 		return j;
 	}
 
-	static protected function testMethodStatic()
+	static protected function testMethodStatic() -> string
 	{
 		return "hello Scall";
+	}
+
+	public function interpolatedStaticReturn() -> string
+	{
+		string className = "Test\\Scall";
+		string methodName = "testMethodStatic";
+
+		return {className}::{methodName}();
+	}
+
+	public function interpolatedStaticEcho() -> void
+	{
+		string className = "Test\\Scall";
+		string methodName = "testMethodStatic";
+
+		echo {className}::{methodName}();
 	}
 }

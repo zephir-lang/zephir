@@ -7,42 +7,71 @@
  |                                                                          |
  | This source file is subject the MIT license, that is bundled with this   |
  | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
+ | at the following url: https://zephir-lang.com/license.html               |
  +--------------------------------------------------------------------------+
 */
 
 namespace Extension;
 
-class ScallTest extends \PHPUnit_Framework_TestCase
+use Test\Scall;
+use Test\Scallparent;
+use PHPUnit\Framework\TestCase;
+
+class ScallTest extends TestCase
 {
     public function testScall()
     {
-        $t = new \Test\Scall();
+        $t = new Scall();
 
-        $this->assertSame($t->testMethod1(), 'hello public');
-        $this->assertSame($t::testMethod1(), 'hello public');
-        $this->assertSame(\Test\Scall::testMethod1(), 'hello public');
+        $this->assertSame('hello public', $t->testMethod1());
+        $this->assertSame('hello public', $t::testMethod1());
+        $this->assertSame('hello public', Scall::testMethod1());
 
-        $this->assertSame($t->testCall1(), 'hello public');
-        $this->assertSame($t->testCall2(), 'hello protected');
-        $this->assertSame($t->testCall3(), 'hello private');
+        $this->assertSame('hello public', $t->testCall1());
+        $this->assertSame('hello protected', $t->testCall2());
+        $this->assertSame('hello private', $t->testCall3());
 
-        $this->assertSame($t->testCall4(2, 3), 5);
-        $this->assertSame($t->testCall5(6, 7), 13);
-        $this->assertSame($t->testCall6(4, 5), 9);
+        $this->assertSame(5, $t->testCall4(2, 3));
+        $this->assertSame(13, $t->testCall5(6, 7));
+        $this->assertSame(9, $t->testCall6(4, 5));
 
-        $this->assertSame($t->testCall7(), 'hello public');
-        $this->assertSame($t->testCall8(), 'hello protected');
-        $this->assertSame($t->testCall9(), 'hello private');
+        $this->assertSame('hello public', $t->testCall7());
+        $this->assertSame('hello protected', $t->testCall8());
+        $this->assertSame('hello private', $t->testCall9());
 
-        $this->assertSame($t->testCall10(2, 3), 5);
-        $this->assertSame($t->testCall11(6, 7), 13);
-        $this->assertSame($t->testCall12(4, 5), 9);
+        $this->assertSame(5, $t->testCall10(2, 3));
+        $this->assertSame(13, $t->testCall11(6, 7));
+        $this->assertSame(9, $t->testCall12(4, 5));
 
-        $this->assertSame($t->testCall13(), 'hello parent public');
-        $this->assertSame($t->testCall14(), 'hello parent protected');
+        $this->assertSame('hello parent public', $t->testCall13());
+        $this->assertSame('hello parent protected', $t->testCall14());
 
-        $this->assertSame('hello ScallParent', \Test\Scallparent::testCallStatic());
+        $this->assertSame('hello ScallParent', Scallparent::testCallStatic());
         $this->assertSame('hello Scall', $t::testCallStatic());
+    }
+
+    /**
+     * @test
+     * @issue 1622
+     */
+    public function shouldReturnInterpolatedMethodFromZephir()
+    {
+        $t = new Scall();
+        $this->assertSame('hello Scall', $t->interpolatedStaticReturn());
+    }
+
+    /**
+     * @test
+     * @issue 1622
+     */
+    public function shouldEchoInterpolatedMethodFromZephir()
+    {
+        $t = new Scall();
+
+        ob_start();
+        $t->interpolatedStaticEcho();
+        $content = ob_get_clean();
+
+        $this->assertSame('hello Scall', $content);
     }
 }
