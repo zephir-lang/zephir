@@ -232,6 +232,23 @@ typedef enum _zephir_call_type {
 		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, class_entry, zephir_fcall_ce, NULL, method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
+#define ZEPHIR_CALL_CE_STATIC_ZVAL(return_value_ptr, class_entry, method, cache, cache_slot, ...) \
+	do { \
+		char *method_name; \
+		int method_len; \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		if (Z_TYPE(method) == IS_STRING) { \
+			method_len = Z_STRLEN(method); \
+			method_name = zend_str_tolower_dup(Z_STRVAL(method), method_len); \
+		} else { \
+			method_len = 0; \
+			method_name = zend_str_tolower_dup("", 0); \
+		} \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_aparams(return_value_ptr, class_entry, zephir_fcall_ce, NULL, method_name, method_len, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+		efree(method_name); \
+	} while (0)
+
 #define ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(class_entry, method, cache, cache_slot, ...) \
 	do { \
 		char *method_name; \
