@@ -18,7 +18,7 @@ class ArraySearchTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @issue 1609
+     * @issue https://github.com/phalcon/zephir/issues/1609
      */
     public function shouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {
@@ -32,7 +32,7 @@ class ArraySearchTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1609
+     * @issue https://github.com/phalcon/zephir/issues/1609
      */
     public function shouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {

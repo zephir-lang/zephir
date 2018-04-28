@@ -58,7 +58,7 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1392
+     * @issue https://github.com/phalcon/zephir/issues/1392
      */
     public function shouldCorrectWorkWithLateStaticBinding()
     {
@@ -67,7 +67,7 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1372
+     * @issue https://github.com/phalcon/zephir/issues/1372
      */
     public function shouldCallParentMethodFromStaticByUsingSelf()
     {

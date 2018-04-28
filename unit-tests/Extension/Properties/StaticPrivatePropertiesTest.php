@@ -20,7 +20,7 @@ class StaticPrivatePropertiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @issue #1530
+     * @issue https://github.com/phalcon/zephir/issues/1530
      */
     public function shouldGetInstanceByUsingSingleton()
     {
