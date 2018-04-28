@@ -48,7 +48,7 @@ class ConcatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1573
+     * @issue https://github.com/phalcon/zephir/issues/1573
      */
     public function shouldConcatenateStringsSimilarToIntegersNumbers()
     {

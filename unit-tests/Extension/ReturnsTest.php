@@ -19,7 +19,7 @@ class ReturnsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @issue 1534
+     * @issue https://github.com/phalcon/zephir/issues/1534
      */
     public function shouldReturnWithParameter()
     {
@@ -29,7 +29,7 @@ class ReturnsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1534
+     * @issue https://github.com/phalcon/zephir/issues/1534
      */
     public function shouldReturnWithParameterStaticVersion()
     {
@@ -38,7 +38,7 @@ class ReturnsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1534
+     * @issue https://github.com/phalcon/zephir/issues/1534
      */
     public function shouldReturnWithoutParameter()
     {
@@ -48,7 +48,7 @@ class ReturnsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1534
+     * @issue https://github.com/phalcon/zephir/issues/1534
      */
     public function shouldReturnWithoutParameterStaticVersion()
     {

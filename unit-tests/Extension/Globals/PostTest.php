@@ -9,7 +9,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @issue 1623
+     * @issue https://github.com/phalcon/zephir/issues/1623
      */
     public function shouldNotTriggerAnyErrorIfPostIsUndefined()
     {
@@ -23,7 +23,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1623
+     * @issue https://github.com/phalcon/zephir/issues/1623
      */
     public function shouldReturnFalseIfVariableIsUndefined()
     {
@@ -37,7 +37,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1623
+     * @issue https://github.com/phalcon/zephir/issues/1623
      */
     public function shouldReturnTrueIfVariableIsDefined()
     {

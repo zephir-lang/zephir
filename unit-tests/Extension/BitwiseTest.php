@@ -125,7 +125,7 @@ class BitwiseTest extends \PHPUnit_Framework_TestCase
 
         /**
          * Bitwise XOR
-         * @issue 1581
+         * @issue https://github.com/phalcon/zephir/issues/1581
          */
         $this->assertSame(123 ^ 321, $t->testbitwiseXor());
     }

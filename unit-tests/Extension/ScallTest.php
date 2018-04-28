@@ -52,7 +52,7 @@ class ScallTest extends TestCase
 
     /**
      * @test
-     * @issue 1622
+     * @link https://github.com/phalcon/zephir/issues/1622
      */
     public function shouldReturnInterpolatedMethodFromZephir()
     {
@@ -62,7 +62,7 @@ class ScallTest extends TestCase
 
     /**
      * @test
-     * @issue 1622
+     * @link https://github.com/phalcon/zephir/issues/1622
      */
     public function shouldEchoInterpolatedMethodFromZephir()
     {
