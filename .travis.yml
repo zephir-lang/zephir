@@ -24,6 +24,8 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
+    - USE_ZEND_ALLOC=0
+    - ZEND_DONT_UNLOAD_MODULES=1
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
     - RE2C_VERSION="1.0.3"
@@ -70,7 +72,7 @@ install:
   - ./install
 
 before_script:
-  #- $CC --version
+  - $CC --version
   - $(phpenv which php) compiler.php help
   - $(phpenv which php) compiler.php generate
   - $(phpenv which php) compiler.php stubs
@@ -94,6 +96,7 @@ script:
         --fullpath-after= \
         --track-origins=yes \
         --leak-check=full \
+        --num-callers=20 \
         --run-libc-freeres=no \
         ./unit-tests/phpunit \
           --not-exit \
