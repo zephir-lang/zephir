@@ -1,16 +1,30 @@
 #!/usr/bin/env bash
 
+# Exit the script if any statement returns a non-true return value
+set -e
+
 # Ensure that this is being run inside a CI container
 if [ "${CI}" != "true" ]; then
     echo "This script is designed to run inside a CI container only. Exiting"
     exit 1
 fi
 
-PHP_MAJOR=`$(phpenv which php-config) --version | cut -d '.' -f 1,2`
+required_vars=(ZEPHIR_PARSER_VERSION PHP_MAJOR PHP_MINOR)
+missing_vars=()
+
+for i in "${required_vars[@]}"; do
+    test -n "${!i:+y}" || missing_vars+=("$i")
+done
+
+if [ ${#missing_vars[@]} -ne 0 ]; then
+    echo "Variables aren't set: " >&2
+    printf ' %q\n' "${missing_vars[@]}" >&2
+    exit 1
+fi
 
 LOCAL_SRC_DIR=${HOME}/.cache/zephir-parser/src
 LOCAL_LIB_DIR=${HOME}/.local/lib
-LOCAL_LIBRARY=${LOCAL_LIB_DIR}/zephir-parser-${ZEPHIR_PARSER_VERSION}-${PHP_MAJOR}.so
+LOCAL_LIBRARY=${LOCAL_LIB_DIR}/zephir-parser-${ZEPHIR_PARSER_VERSION}-${PHP_MAJOR}.${PHP_MINOR}.so
 
 EXTENSION_DIR=`$(phpenv which php-config) --extension-dir`
 

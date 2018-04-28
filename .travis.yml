@@ -56,7 +56,7 @@ cache:
   ccache: true
   timeout: 604800
   directories:
-    - vendor
+    - $HOME/.composer/cache
     - $HOME/.ccache
     - $HOME/.composer/cache
     - $HOME/.local/opt/re2c
@@ -65,11 +65,16 @@ cache:
 before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
   - $CC --version
-  - $(phpenv which php) -v
-  - $(phpenv which php) -m
+  - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
+  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
 install:
-  - composer --prefer-source install
+  - composer install --prefer-source --no-suggest
+  - |
+        if [ "${PHP_MAJOR}.${PHP_MINOR}" != "5.5" ]; then
+            composer remove --dev phpunit/phpunit
+            composer require -q -n --dev --no-progress --prefer-dist --no-suggest "phpunit/phpunit:5.7.*"
+        fi
   - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
   - bash ./unit-tests/ci/install_zephir_parser.sh
   - ./install
