@@ -64,7 +64,6 @@ cache:
   ccache: true
   timeout: 604800
   directories:
-    - $HOME/.composer/cache
     - $HOME/.ccache
     - $HOME/.composer/cache
     - $HOME/.local/opt/re2c
