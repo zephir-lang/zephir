@@ -632,7 +632,6 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 			ZVAL_DUP(&new_zv, &tmp);
 			ZVAL_COPY_VALUE(&tmp, &new_zv);
 			Z_TRY_DELREF(new_zv);
-			Z_ADDREF(tmp);
 			separated = 1;
 		}
 
