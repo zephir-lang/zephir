@@ -50,6 +50,14 @@ matrix:
     - env: CC="clang"
       php: nightly
       compiler: clang
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: 7.1
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
+      php: 7.1
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: 7.2
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
+      php: 7.2
 
 cache:
   apt: true
