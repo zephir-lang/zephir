@@ -29,7 +29,7 @@ env:
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
     - RE2C_VERSION="1.0.3"
-    - ZEPHIR_PARSER_VERSION="v1.1.1"
+    - ZEPHIR_PARSER_VERSION="v1.1.2"
   matrix:
     - CC="gcc"
     - CC="clang"
