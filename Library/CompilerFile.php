@@ -714,7 +714,7 @@ class CompilerFile implements FileInterface
         if (!$this->_external) {
             $expectedPath = strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $name) . '.zep';
             if (strtolower($this->_filePath) != $expectedPath) {
-                $className = str_replace('\\', '/', $namespace) . '\\' . $name;
+                $className = $namespace . '\\' . $name;
                 $message = 'Unexpected class name ' . $className . ' in file: ' . $this->_filePath . ', expected: ' . $expectedPath;
                 throw new CompilerException($message);
             }

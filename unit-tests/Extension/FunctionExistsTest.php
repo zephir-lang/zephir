@@ -20,7 +20,7 @@ class FunctionExistsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider providerInternalFunctions
-     * @issue 1547
+     * @issue https://github.com/phalcon/zephir/issues/1547
      * @param string $func The internal (built-in) function name
      */
     public function shouldCorrectDetectestExistenceWithPassedName($func)
@@ -31,7 +31,7 @@ class FunctionExistsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1547
+     * @issue https://github.com/phalcon/zephir/issues/1547
      */
     public function shouldCorrectDetectestExistenceInsideTheZephirCode()
     {
@@ -52,7 +52,7 @@ class FunctionExistsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @issue 1547
+     * @issue https://github.com/phalcon/zephir/issues/1547
      */
     public function shouldCorrectDetectestExistenceByUsingString()
     {

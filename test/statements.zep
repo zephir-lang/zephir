@@ -6,7 +6,7 @@ class Statements
     public tmp2 = "test string";
 
     /**
-     * Vars for 544 Issue test
+     * @issue https://github.com/phalcon/zephir/issues/544
      */
     private totalSteps = 100;
 

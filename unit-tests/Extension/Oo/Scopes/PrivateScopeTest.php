@@ -11,23 +11,22 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension\Properties;
+namespace Extension\Oo\Scope;
 
-use Test\Properties\App;
-use Test\Properties\StaticPrivateProperties;
+use PHPUnit\Framework\TestCase;
+use Test\Oo\Scopes\PrivateScopeTester;
 
-class StaticPrivatePropertiesTest extends \PHPUnit_Framework_TestCase
+class PrivateScopeTest extends TestCase
 {
-    /**
-     * @test
-     * @issue https://github.com/phalcon/zephir/issues/1530
-     */
-    public function shouldGetInstanceByUsingSingleton()
+    /** @test */
+    public function shouldCallPrivateMethod()
     {
-        $t = new App();
+        if (PHP_VERSION_ID < 50600) {
+            $this->markTestSkipped(
+                "Calling parent's private methods from the child's public ones doesn't provided for PHP < 5.6"
+            );
+        }
 
-        $this->assertInstanceOf(StaticPrivateProperties::class, $t->getInstance());
-        $this->assertInstanceOf(StaticPrivateProperties::class, StaticPrivateProperties::getInstance());
-        $this->assertSame($t->getInstance(), StaticPrivateProperties::getInstance());
+        $this->assertSame('isPrivate', (new PrivateScopeTester())->run());
     }
 }

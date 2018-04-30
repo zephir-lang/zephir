@@ -75,9 +75,9 @@ class CompilationContext
     public $classDefinition;
 
     /**
-     * Current method being compiled
+     * Current method or function that being compiled
      *
-     * @var ClassMethod
+     * @var ClassMethod|FunctionDefinition
      */
     public $currentMethod;
 
@@ -128,7 +128,7 @@ class CompilationContext
      *
      * @var array
      */
-    public $cycleBlocks = array();
+    public $cycleBlocks = [];
 
     /**
      * The current branch, variables declared in conditional branches
@@ -201,9 +201,8 @@ class CompilationContext
      */
     public function getFullName($className)
     {
-        $namespace = (isset($this->currentMethod) && $this->currentMethod instanceof FunctionDefinition) ?
-            $this->currentMethod->getNamespace() :
-            $this->classDefinition->getNamespace();
+        $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
+        $namespace  = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
         return Utils::getFullName($className, $namespace, $this->aliasManager);
     }

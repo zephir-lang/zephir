@@ -7,51 +7,72 @@
  |                                                                          |
  | This source file is subject the MIT license, that is bundled with this   |
  | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
+ | at the following url: https://zephir-lang.com/license.html               |
  +--------------------------------------------------------------------------+
 */
 
 namespace Extension;
 
-class FcallTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use Test\Fcall;
+use Test\Oo\PropertyAccess;
+
+class FcallTest extends TestCase
 {
     public function testCall()
     {
-        $t = new \Test\Fcall();
-        $this->assertSame($t->testCall1(), 0);
-        $this->assertLessThan($t->testCall2(), -1);
-        $this->assertSame($t->testCall1FromVar(), 2);
+        $t = new Fcall();
+        $this->assertSame(0, $t->testCall1());
+        $this->assertGreaterThan(-1, $t->testCall2());
+        $this->assertSame(2, $t->testCall1FromVar());
     }
 
     public function testStrtok()
     {
-        $t = new \Test\Fcall();
+        $t = new Fcall();
         $this->assertFalse($t->testStrtokFalse());
-        $this->assertSame($t->testStrtokVarBySlash('test'), 'test');
+        $this->assertSame('test', $t->testStrtokVarBySlash('test'));
     }
 
-    public function testFunctionGetArgs()
+    /**
+     * @dataProvider getArgsDataProvider
+     * @param mixed $param1
+     * @param mixed $param2
+     */
+    public function testFunctionGetArgs($param1, $param2)
     {
-        $t = new \Test\Fcall();
-        $this->assertSame($t->testFunctionGetArgs(true, false), array(true, false));
-        $this->assertSame($t->testFunctionGetArgs(1025, false), array(1025, false));
-        $this->assertSame($t->testFunctionGetArgs(false, 1234), array(false, 1234));
-        $this->assertSame($t->testFunctionGetArgs(array(1, 2, 3), false), array(array(1, 2, 3), false));
+        $t = new Fcall();
+        $this->assertSame([$param1, $param2], $t->testFunctionGetArgs($param1, $param2));
+    }
 
-        $this->assertSame($t->testFunctionGetArg(true, false), array(true, false));
-        $this->assertSame($t->testFunctionGetArg(1025, false), array(1025, false));
-        $this->assertSame($t->testFunctionGetArg(false, 1234), array(false, 1234));
+    public function getArgsDataProvider()
+    {
+        return [
+            [true, false],
+            [1025, false],
+            [false, 1234],
+            [[1, 2, 3], false],
+            [true, false],
+            [1025, false],
+            [false, 1234],
+        ];
     }
 
     public function testArrayFill()
     {
-        $t = new \Test\Fcall();
-        $this->assertSame($t->testArrayFill(), array(array_fill(0, 5, '?'), array_fill(0, 6, '?')));
+        $t = new Fcall();
+        $this->assertSame(
+            [array_fill(0, 5, '?'), array_fill(0, 6, '?')],
+            $t->testArrayFill()
+        );
     }
 
     public function testFunctionDeclaration()
     {
         $this->assertSame("aaaaa", \Test\zephir_namespaced_method_test("a"));
+        $this->assertTrue(\Test\test_call_relative_object_hint(new PropertyAccess()));
+        $this->assertTrue(\Test\test_call_object_hint(new PropertyAccess()));
+
         $this->assertSame("ab", zephir_global_method_test("ab/c"));
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));

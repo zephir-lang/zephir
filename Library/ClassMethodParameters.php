@@ -1,20 +1,14 @@
 <?php
 
 /*
- +----------------------------------------------------------------------+
- | Zephir Language                                                      |
- +----------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team                                  |
- +----------------------------------------------------------------------+
- | This source file is subject to version 1.0 of the MIT license,       |
- | that is bundled with this package in the file LICENSE, and is        |
- | available through the world-wide-web at the following url:           |
- | http://www.zephir-lang.com/license                                   |
- |                                                                      |
- | If you did not receive a copy of the MIT license and are unable      |
- | to obtain it through the world-wide-web, please send a note to       |
- | license@zephir-lang.com so we can mail you a copy immediately.       |
- +----------------------------------------------------------------------+
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: https://zephir-lang.com/license.html               |
+ +--------------------------------------------------------------------------+
 */
 
 namespace Zephir;
@@ -22,15 +16,15 @@ namespace Zephir;
 use Zephir\Compiler\CompilerException;
 
 /**
- * ClassMethodParameters
+ * Zephir\ClassMethodParameters
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements \Countable, \Iterator
+class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
 {
-    private $_parameters = array();
+    private $parameters = [];
 
-    private $_position = 0;
+    private $position = 0;
 
     /**
      * ClassMethodParameters constructor.
@@ -50,7 +44,7 @@ class ClassMethodParameters implements \Countable, \Iterator
             }
         }
 
-        $this->_parameters = $parameters;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -60,7 +54,7 @@ class ClassMethodParameters implements \Countable, \Iterator
      */
     public function getParameters()
     {
-        return $this->_parameters;
+        return $this->parameters;
     }
 
     /**
@@ -68,31 +62,51 @@ class ClassMethodParameters implements \Countable, \Iterator
      */
     public function count()
     {
-        return count($this->_parameters);
+        return count($this->parameters);
     }
 
     public function rewind()
     {
-        $this->_position = 0;
+        $this->position = 0;
     }
 
     public function key()
     {
-        return $this->_position;
+        return $this->position;
     }
 
     public function valid()
     {
-        return isset($this->_parameters[$this->_position]);
+        return isset($this->parameters[$this->position]);
     }
 
     public function current()
     {
-        return $this->_parameters[$this->_position];
+        return $this->parameters[$this->position];
     }
 
     public function next()
     {
-        $this->_position++;
+        $this->position++;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->parameters[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->parameters[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->parameters[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->parameters[$offset]);
     }
 }
