@@ -457,6 +457,33 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 	return zephir_declare_class_constant_stringl(ce, name, name_length, value, strlen(value));
 }
 
+/**
+ * Check is PHP Version equals to Runtime PHP Version
+ */
+int zephir_is_php_version(int id)
+{
+	int php_major   = PHP_VERSION_ID / 10000;
+    int php_minor   = PHP_VERSION_ID / 100 - php_major * 100;
+    int php_release = PHP_VERSION_ID - (php_major * 10000 + php_minor * 100);
+
+    int zep_major   = id / 10000;
+    int zep_minor   = id / 100 - zep_major * 100;
+    int zep_release = id - (zep_major * 10000 + zep_minor * 100);
+
+    if (zep_minor == 0) {
+        php_minor = 0;
+    }
+
+    if (zep_release == 0) {
+        php_release = 0;
+    }
+
+    int php_version_id = php_major + php_minor + php_release;
+    int zep_version_id = zep_major + zep_minor + zep_release;
+
+	return (php_version_id == zep_version_id ? 1 : 0);
+}
+
 void zephir_get_args(zval *return_value)
 {
 	zend_execute_data *ex = EG(current_execute_data);

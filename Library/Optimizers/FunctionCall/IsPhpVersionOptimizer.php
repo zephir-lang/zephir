@@ -43,8 +43,19 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException("This function only requires one parameter", $expression);
         }
 
-        if ($expression['parameters'][0]['parameter']['type'] != 'string') {
-            throw new CompilerException("This function requires a constant string parameter", $expression);
+        $variableType = $expression['parameters'][0]['parameter']['type'];
+        $allowedTypes = [
+            'string' => true,
+            'int' => true,
+            'long' => true,
+            'double' => true,
+            'uint' => true,
+            'ulong' => true,
+            'istring' => true
+        ];
+
+        if (!isset($allowedTypes[$variableType])) {
+            throw new CompilerException("This function requires a scalar types parameter, $variableType given", $expression);
         }
 
         preg_match('/^([0-9]+)\.?([0-9]+)?\.?([0-9]+)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
@@ -52,15 +63,21 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException("Could not parse PHP version", $expression);
         }
 
-        $major = $matches[1] * 10000;
+        $minor_version      = 0;
+        $release_version    = 0;
+
+        $major_version = $matches[1] * 10000;
+        
         if (isset($matches[2])) {
-            $minor = $matches[2] * 100;
-        } else {
-            $minor = 0;
+            $minor_version = $matches[2] * 100;
         }
 
-        $version = $major + $minor;
+        if (isset($matches[3])) {
+            $release_version = $matches[3];
+        }
 
-        return new CompiledExpression('bool', 'zephir_is_php_version(' . $version . ')', $expression);
+        $version_id = $major_version + $minor_version + $release_version;
+        
+        return new CompiledExpression('bool', 'zephir_is_php_version(' . $version_id . ')', $expression);
     }
 }
