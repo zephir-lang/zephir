@@ -109,6 +109,17 @@ class Utils
     }
 
     /**
+     * Uncamelize a string
+     *
+     * @param       string $str
+     * @return      string
+     */
+    public static function uncamelize($str)
+    {
+        return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $str)), '_');
+    }
+
+    /**
      * Checks if the content of the file on the disk is the same as the content.
      *
      * @param $content
