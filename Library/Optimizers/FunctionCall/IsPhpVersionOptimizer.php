@@ -26,6 +26,16 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class IsPhpVersionOptimizer extends OptimizerAbstract
 {
+    protected $allowedTypes = [
+        'string'    => true,
+        'int'       => true,
+        'long'      => true,
+        'double'    => true,
+        'uint'      => true,
+        'ulong'     => true,
+        'istring'   => true
+    ];
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -44,40 +54,35 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
         }
 
         $variableType = $expression['parameters'][0]['parameter']['type'];
-        $allowedTypes = [
-            'string' => true,
-            'int' => true,
-            'long' => true,
-            'double' => true,
-            'uint' => true,
-            'ulong' => true,
-            'istring' => true
-        ];
 
-        if (!isset($allowedTypes[$variableType])) {
+        if (!isset($this->allowedTypes[$variableType])) {
             throw new CompilerException("This function requires a scalar types parameter, $variableType given", $expression);
         }
 
-        preg_match('/^([0-9]+)\.?([0-9]+)?\.?([0-9]+)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?$/', $expression['parameters'][0]['parameter']['value'], $matches);
         if (!count($matches)) {
             throw new CompilerException("Could not parse PHP version", $expression);
         }
 
-        $minor_version      = 0;
-        $release_version    = 0;
+        $minorVersion   = 0;
+        $releaseVersion = 0;
 
-        $major_version = $matches[1] * 10000;
-        
-        if (isset($matches[2])) {
-            $minor_version = $matches[2] * 100;
+        $majorVersion = $matches['major'] * 10000;
+
+        if (isset($matches['minor'])) {
+            $minorVersion = $matches['minor'] * 100;
         }
 
-        if (isset($matches[3])) {
-            $release_version = $matches[3];
+        if (isset($matches['patch'])) {
+            $releaseVersion = $matches['patch'];
         }
 
-        $version_id = $major_version + $minor_version + $release_version;
-        
-        return new CompiledExpression('bool', 'zephir_is_php_version(' . $version_id . ')', $expression);
+        $versionId = $majorVersion + $minorVersion + $releaseVersion;
+
+        if (!is_int($versionId)) {
+            throw new CompilerException("Incorrect PHP version ID", $versionId);
+        }
+
+        return new CompiledExpression('bool', 'zephir_is_php_version(' . $versionId . ')', $expression);
     }
 }

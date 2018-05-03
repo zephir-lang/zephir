@@ -17,7 +17,7 @@ use \Test\Issue1404;
 
 /**
  * Tests for Zephir function is_php_version(id)
- * 
+ *
  * @category BugFix
  * @package  Extension
  * @author   AlexNDRmac <AlexNDR@phalconphp.com>
@@ -53,6 +53,8 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
             [(PHP_MAJOR_VERSION + 1) . '.' . PHP_MINOR_VERSION, false],
             [(PHP_MAJOR_VERSION + 1) . '.' . (PHP_MINOR_VERSION + 1), false],
             [PHP_MAJOR_VERSION . '.1.90009', false],
+            [0.1, false],
+            [0, false],
         ];
     }
 
@@ -67,41 +69,84 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not parse PHP version
+     */
+    public function testOptimizerExceptionLLU()
+    {
+        $this->is_php_version(92233720368547758079);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not parse PHP version
+     */
+    public function testOptimizerExceptionNegativeNumber()
+    {
+        $this->is_php_version(-7);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not parse PHP version
+     */
+    public function testOptimizerExceptionNull()
+    {
+        $this->is_php_version(null);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Incorrect PHP version ID
+     */
+    public function testOptimizerExceptionBigInteger()
+    {
+        $this->is_php_version(9223372036854775807);
+    }
+
+    /**
      * Optimizer: is_php_version
      * Compare user entered PHP version with Environment and return Boolean
      * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
-     * 
+     *
      * @param  int|double|string $version - PHP version in any format: 7, 7.1, "7.1.1"
      * @return boolean
      */
     private function is_php_version($version)
     {
-        preg_match('/^([0-9]+)\.?([0-9]+)?\.?([0-9]+)?$/', $version, $matches);
-
-        $major_version   = 0;
-        $minor_version   = 0;
-        $release_version = 0;
-        
-        $php_minor_version   = 0;
-        $php_release_version = 0;
-
-        $major_version      = $matches[1] * 10000;
-        $php_major_version  = PHP_MAJOR_VERSION * 10000;
-        
-        if (isset($matches[2])) {
-            $minor_version       = $matches[2] * 100;
-            $php_minor_version   = PHP_MINOR_VERSION * 100;
-        }
-        
-        if (isset($matches[3])) {
-            $release_version     = $matches[3];
-            $php_release_version = PHP_RELEASE_VERSION;
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?$/', $version, $matches);
+        if (!count($matches)) {
+            throw new \Exception("Could not parse PHP version");
         }
 
-        $version_id     = $major_version + $minor_version + $release_version;
-        $php_version_id = $php_major_version + $php_minor_version + $php_release_version;
-        
-        return ($php_version_id == $version_id ? 1 : 0);
+        $majorVersion   = 0;
+        $minorVersion   = 0;
+        $releaseVersion = 0;
+
+        $phpMinorVersion   = 0;
+        $phpReleaseVersion = 0;
+
+        $majorVersion      = $matches['major'] * 10000;
+        $phpMajorVersion   = PHP_MAJOR_VERSION * 10000;
+
+        if (isset($matches['minor'])) {
+            $minorVersion       = $matches['minor'] * 100;
+            $phpMinorVersion    = PHP_MINOR_VERSION * 100;
+        }
+
+        if (isset($matches['patch'])) {
+            $releaseVersion     = $matches['patch'];
+            $phpReleaseVersion  = PHP_RELEASE_VERSION;
+        }
+
+        $versionId    = $majorVersion + $minorVersion + $releaseVersion;
+        $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
+
+        if (!is_int($versionId)) {
+            throw new \Exception("Incorrect PHP version ID");
+        }
+
+        return ($phpVersionId == $versionId ? 1 : 0);
     }
 
     /* -------------- Zephir Tests -------------- */
@@ -127,6 +172,11 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         $expected = $this->is_php_version(2147483647);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testZephirUsingZeroFalse()
+    {
+        $this->assertFalse($this->test->testIsPhpVersionUsingZero());
     }
 
     public function testZephirUsingString70000()
@@ -157,5 +207,29 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
 
             $this->assertEquals($expected, $actual);
         }
+    }
+
+    public function testZephirUsingString50000()
+    {
+        $actual   = $this->test->testIsPhpVersionUsing50000();
+        $expected = $this->is_php_version("5");
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testZephirUsingString50500()
+    {
+        $actual   = $this->test->testIsPhpVersionUsing50500();
+        $expected = $this->is_php_version("5.5");
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testZephirUsingString50600()
+    {
+        $actual   = $this->test->testIsPhpVersionUsing50600();
+        $expected = $this->is_php_version("5.6");
+
+        $this->assertEquals($expected, $actual);
     }
 }
