@@ -16,9 +16,8 @@ namespace Extension;
 use \Test\Issue1404;
 
 /**
- * Tests for Zephir function isPhpVersion(id)
+ * Tests for Zephir function is_php_version(id)
  *
- * @category BugFix
  * @package  Extension
  * @author   AlexNDRmac <AlexNDR@phalconphp.com>
  * @license  MIT http://zephir-lang.com/license.html
@@ -96,15 +95,6 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Incorrect PHP version ID
-     */
-    public function testOptimizerExceptionBigInteger()
-    {
-        $this->isPhpVersion(9223372036854775807);
-    }
-
-    /**
      * Optimizer: isPhpVersion
      * Compare user entered PHP version with Environment and return Boolean
      * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
@@ -139,12 +129,8 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
             $phpReleaseVersion  = PHP_RELEASE_VERSION;
         }
 
-        $versionId    = $majorVersion + $minorVersion + $releaseVersion;
+        $versionId    = intval($majorVersion + $minorVersion + $releaseVersion);
         $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
-
-        if (!is_int($versionId)) {
-            throw new \Exception("Incorrect PHP version ID");
-        }
 
         return ($phpVersionId == $versionId ? 1 : 0);
     }
@@ -187,26 +173,48 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIsPhpVersionVersionUsing701XX()
+    public function releaseVersionProvider()
     {
-        for ($i = 1, $id = 70101; $i < Issue1404Test::PHP_RELEASES_LIMIT; $i++, $id++) {
-            $testName = 'testIsPhpVersionUsing'. $id;
-            $actual   = $this->test->$testName();
-            $expected = $this->isPhpVersion("7.1.$i");
+        $versionProvider = [];
 
-            $this->assertEquals($expected, $actual);
+        for ($i = 1, $id = 70101; $i <= Issue1404Test::PHP_RELEASES_LIMIT; $i++, $id++) {
+            $versionProvider[] = ['testIsPhpVersionUsing'.$id, "7.1.$i"];
         }
+
+        return $versionProvider;
     }
 
-    public function testIsPhpVersionVersionUsing70X00()
+    /**
+     * @dataProvider releaseVersionProvider
+     */
+    public function testIsPhpVersionVersionUsing701XX($testName, $version)
     {
-        for ($i = 1, $id = 70100; $i < Issue1404Test::PHP_MINOR_LIMIT; $i++, $id += 100) {
-            $testName = 'testIsPhpVersionUsing'. $id;
-            $actual   = $this->test->$testName();
-            $expected = $this->isPhpVersion("7.$i");
+        $actual = $this->test->$testName();
+        $expected = $this->isPhpVersion($version);
 
-            $this->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function minorVersionProvider()
+    {
+        $versionProvider = [];
+
+        for ($i = 1, $id = 70100; $i <= Issue1404Test::PHP_MINOR_LIMIT; $i++, $id += 100) {
+            $versionProvider[] = ['testIsPhpVersionUsing'.$id, "7.$i"];
         }
+
+        return $versionProvider;
+    }
+
+    /**
+     * @dataProvider minorVersionProvider
+     */
+    public function testIsPhpVersionVersionUsing70X00($testName, $version)
+    {
+        $actual   = $this->test->$testName();
+        $expected = $this->isPhpVersion($version);
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testZephirUsingString50000()

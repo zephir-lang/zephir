@@ -77,11 +77,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             $releaseVersion = $matches['patch'];
         }
 
-        $versionId = $majorVersion + $minorVersion + $releaseVersion;
-
-        if (!is_int($versionId)) {
-            throw new CompilerException("Incorrect PHP version ID", $versionId);
-        }
+        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
 
         return new CompiledExpression('bool', 'zephir_is_php_version('.$versionId.')', $expression);
     }
