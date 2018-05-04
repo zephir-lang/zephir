@@ -460,7 +460,7 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 /**
  * Check is PHP Version equals to Runtime PHP Version
  */
-int zephir_is_php_version(int id)
+int zephir_is_php_version(unsigned int id)
 {
 	int php_major = PHP_MAJOR_VERSION;
 	int php_minor = PHP_MINOR_VERSION;

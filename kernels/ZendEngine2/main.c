@@ -443,7 +443,7 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
 /**
  * Check is PHP Version equals to Runtime PHP Version
  */
-int zephir_is_php_version(int id)
+int zephir_is_php_version(unsigned int id)
 {
 	int php_major = PHP_VERSION_ID / 10000;
 	int php_minor = PHP_VERSION_ID / 100 - php_major * 100;

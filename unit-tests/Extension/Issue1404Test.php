@@ -16,7 +16,7 @@ namespace Extension;
 use \Test\Issue1404;
 
 /**
- * Tests for Zephir function is_php_version(id)
+ * Tests for Zephir function isPhpVersion(id)
  *
  * @category BugFix
  * @package  Extension
@@ -63,9 +63,9 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     public function testOptimizer($version, $expected)
     {
-        $is_php_version = (bool)$this->is_php_version($version);
+        $isPhpVersion = (bool)$this->isPhpVersion($version);
 
-        $this->assertEquals($expected, $is_php_version);
+        $this->assertEquals($expected, $isPhpVersion);
     }
 
     /**
@@ -74,7 +74,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     public function testOptimizerExceptionLLU()
     {
-        $this->is_php_version(92233720368547758079);
+        $this->isPhpVersion(92233720368547758079);
     }
 
     /**
@@ -83,7 +83,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     public function testOptimizerExceptionNegativeNumber()
     {
-        $this->is_php_version(-7);
+        $this->isPhpVersion(-7);
     }
 
     /**
@@ -92,7 +92,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     public function testOptimizerExceptionNull()
     {
-        $this->is_php_version(null);
+        $this->isPhpVersion(null);
     }
 
     /**
@@ -101,18 +101,18 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     public function testOptimizerExceptionBigInteger()
     {
-        $this->is_php_version(9223372036854775807);
+        $this->isPhpVersion(9223372036854775807);
     }
 
     /**
-     * Optimizer: is_php_version
+     * Optimizer: isPhpVersion
      * Compare user entered PHP version with Environment and return Boolean
      * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
      *
      * @param  int|double|string $version - PHP version in any format: 7, 7.1, "7.1.1"
      * @return boolean
      */
-    private function is_php_version($version)
+    private function isPhpVersion($version)
     {
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?$/', $version, $matches);
         if (!count($matches)) {
@@ -153,7 +153,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingInteger70000()
     {
         $actual   = $this->test->testIsPhpVersionUsingInteger70000();
-        $expected = $this->is_php_version(7);
+        $expected = $this->isPhpVersion(7);
 
         $this->assertEquals($expected, $actual);
     }
@@ -161,7 +161,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingDouble70100()
     {
         $actual   = $this->test->testIsPhpVersionUsingDouble70100();
-        $expected = $this->is_php_version(7.1);
+        $expected = $this->isPhpVersion(7.1);
 
         $this->assertEquals($expected, $actual);
     }
@@ -169,7 +169,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingLong70000()
     {
         $actual   = $this->test->testIsPhpVersionUsingLong70000();
-        $expected = $this->is_php_version(2147483647);
+        $expected = $this->isPhpVersion(2147483647);
 
         $this->assertEquals($expected, $actual);
     }
@@ -182,7 +182,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingString70000()
     {
         $actual   = $this->test->testIsPhpVersionUsingString70000();
-        $expected = $this->is_php_version("7");
+        $expected = $this->isPhpVersion("7");
 
         $this->assertEquals($expected, $actual);
     }
@@ -192,7 +192,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         for ($i = 1, $id = 70101; $i < Issue1404Test::PHP_RELEASES_LIMIT; $i++, $id++) {
             $testName = 'testIsPhpVersionUsing'. $id;
             $actual   = $this->test->$testName();
-            $expected = $this->is_php_version("7.1.$i");
+            $expected = $this->isPhpVersion("7.1.$i");
 
             $this->assertEquals($expected, $actual);
         }
@@ -203,7 +203,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         for ($i = 1, $id = 70100; $i < Issue1404Test::PHP_MINOR_LIMIT; $i++, $id += 100) {
             $testName = 'testIsPhpVersionUsing'. $id;
             $actual   = $this->test->$testName();
-            $expected = $this->is_php_version("7.$i");
+            $expected = $this->isPhpVersion("7.$i");
 
             $this->assertEquals($expected, $actual);
         }
@@ -212,7 +212,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingString50000()
     {
         $actual   = $this->test->testIsPhpVersionUsing50000();
-        $expected = $this->is_php_version("5");
+        $expected = $this->isPhpVersion("5");
 
         $this->assertEquals($expected, $actual);
     }
@@ -220,7 +220,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingString50500()
     {
         $actual   = $this->test->testIsPhpVersionUsing50500();
-        $expected = $this->is_php_version("5.5");
+        $expected = $this->isPhpVersion("5.5");
 
         $this->assertEquals($expected, $actual);
     }
@@ -228,7 +228,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function testZephirUsingString50600()
     {
         $actual   = $this->test->testIsPhpVersionUsing50600();
-        $expected = $this->is_php_version("5.6");
+        $expected = $this->isPhpVersion("5.6");
 
         $this->assertEquals($expected, $actual);
     }

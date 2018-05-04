@@ -83,6 +83,6 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException("Incorrect PHP version ID", $versionId);
         }
 
-        return new CompiledExpression('bool', 'zephir_is_php_version(' . $versionId . ')', $expression);
+        return new CompiledExpression('bool', 'zephir_is_php_version('.$versionId.')', $expression);
     }
 }
