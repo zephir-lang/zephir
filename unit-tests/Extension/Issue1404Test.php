@@ -40,6 +40,13 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         $this->test = null;
     }
 
+    protected function onNotSuccessfulTest(\Exception $error)
+    {
+        $phpVer = "PHP_VERSION_ID:" . PHP_VERSION_ID . " (".PHP_MAJOR_VERSION .'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION.')';
+        fwrite(STDOUT,  $phpVer . "\nError: $error");
+        throw $error;
+    }
+
     public function phpVersionProvider()
     {
         return [
@@ -132,7 +139,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
         $versionId    = intval($majorVersion + $minorVersion + $releaseVersion);
         $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
 
-        return ($phpVersionId == $versionId ? 1 : 0);
+        return (bool)($phpVersionId == $versionId ? 1 : 0);
     }
 
     /* -------------- Zephir Tests -------------- */
