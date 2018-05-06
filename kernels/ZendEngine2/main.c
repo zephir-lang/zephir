@@ -445,9 +445,9 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
  */
 int zephir_is_php_version(unsigned int id)
 {
-	int php_major = PHP_VERSION_ID / 10000;
-	int php_minor = PHP_VERSION_ID / 100 - php_major * 100;
-	int php_release = PHP_VERSION_ID - (php_major * 10000 + php_minor * 100);
+	int php_major = PHP_MAJOR_VERSION * 10000;
+	int php_minor = PHP_MINOR_VERSION * 100;
+	int php_release = PHP_RELEASE_VERSION;
 
 	int zep_major = id / 10000;
 	int zep_minor = id / 100 - zep_major * 100;
@@ -463,10 +463,7 @@ int zephir_is_php_version(unsigned int id)
 		php_release = 0;
 	}
 
-	int php_version_id = php_major + php_minor + php_release;
-	int zep_version_id = zep_major + zep_minor + zep_release;
-
-	return (php_version_id == zep_version_id ? 1 : 0);
+	return ((php_major + php_minor + php_release) == id ? 1 : 0);
 }
 
 void zephir_get_args(zval *return_value TSRMLS_DC)

@@ -462,8 +462,8 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
  */
 int zephir_is_php_version(unsigned int id)
 {
-	int php_major = PHP_MAJOR_VERSION;
-	int php_minor = PHP_MINOR_VERSION;
+	int php_major = PHP_MAJOR_VERSION * 10000;
+	int php_minor = PHP_MINOR_VERSION * 100;
 	int php_release = PHP_RELEASE_VERSION;
 
 	int zep_major = id / 10000;
@@ -480,10 +480,7 @@ int zephir_is_php_version(unsigned int id)
 		php_release = 0;
 	}
 
-	int php_version_id = php_major + php_minor + php_release;
-	int zep_version_id = zep_major + zep_minor + zep_release;
-
-	return (php_version_id == zep_version_id ? 1 : 0);
+	return ((php_major + php_minor + php_release) == id ? 1 : 0);
 }
 
 void zephir_get_args(zval *return_value)
