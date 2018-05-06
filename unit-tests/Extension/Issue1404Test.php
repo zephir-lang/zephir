@@ -43,7 +43,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     protected function onNotSuccessfulTest(\Exception $error)
     {
         $phpVer = "PHP_VERSION_ID:" . PHP_VERSION_ID . " (".PHP_MAJOR_VERSION .'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION.')';
-        fwrite(STDOUT,  $phpVer . "\nError: $error");
+        fwrite(STDOUT, $phpVer . "\nError: $error");
         throw $error;
     }
 
