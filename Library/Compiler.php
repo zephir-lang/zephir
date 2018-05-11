@@ -773,11 +773,24 @@ class Compiler
         /**
          * Check if there are module/request/global destructors
          */
+        $includes = '';
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processCodeInjection($destructors);
-            $includes = $invokeDestructors[0];
-            $destructors = $invokeDestructors[1];
+            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
+            $includes .= PHP_EOL . $invokeRequestDestructors[0];
+            $reqDestructors = $invokeRequestDestructors[1];
+
+            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
+            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
+            $prqDestructors = $invokePostRequestDestructors[1];
+
+            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
+            $includes .= PHP_EOL . $invokeModuleDestructors[0];
+            $modDestructors = $invokeModuleDestructors[1];
+
+            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
+            $glbDestructors = $invokeGlobalsDestructors[1];
         }
 
         /**
@@ -785,9 +798,17 @@ class Compiler
          */
         $initializers = $this->config->get('initializers');
         if (is_array($initializers)) {
-            $invokeInitializers = $this->processCodeInjection($initializers);
-            $includes = $invokeInitializers[0];
-            $initializers = $invokeInitializers[1];
+            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
+            $includes .= PHP_EOL . $invokeRequestInitializers[0];
+            $reqInitializers = $invokeRequestInitializers[1];
+
+            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
+            $includes .= PHP_EOL . $invokeModuleInitializers[0];
+            $modInitializers = $invokeModuleInitializers[1];
+
+            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
+            $glbInitializers = $invokeGlobalsInitializers[1];
         }
 
         /**
@@ -1687,13 +1708,13 @@ class Compiler
      * @param array $entries
      * @return array
      */
-    public function processCodeInjection(array $entries)
+    public function processCodeInjection(array $entries, $section = 'request')
     {
         $codes = array();
         $includes = array();
 
-        if (isset($entries['request'])) {
-            foreach ($entries['request'] as $entry) {
+        if (isset($entries[$section])) {
+            foreach ($entries[$section] as $entry) {
                 $codes[] = $entry['code'] . ';';
                 $includes[] = "#include \"" . $entry['include'] . "\"";
             }
@@ -1770,7 +1791,13 @@ class Compiler
         }
 
         $includes = '';
-        $destructors = '';
+        $reqInitializers = '';
+        $reqDestructors = '';
+        $prqDestructors = '';
+        $modInitializers = '';
+        $modDestructors = '';
+        $glbInitializers = '';
+        $glbDestructors = '';
         $files = array_merge($this->files, $this->anonymousFiles);
 
         /**
@@ -1872,9 +1899,21 @@ class Compiler
          */
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processCodeInjection($destructors);
-            $includes = $invokeDestructors[0];
-            $destructors = $invokeDestructors[1];
+            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
+            $includes .= PHP_EOL . $invokeRequestDestructors[0];
+            $reqDestructors = $invokeRequestDestructors[1];
+
+            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
+            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
+            $prqDestructors = $invokePostRequestDestructors[1];
+
+            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
+            $includes .= PHP_EOL . $invokeModuleDestructors[0];
+            $modDestructors = $invokeModuleDestructors[1];
+
+            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
+            $glbDestructors = $invokeGlobalsDestructors[1];
         }
 
         /**
@@ -1882,9 +1921,17 @@ class Compiler
          */
         $initializers = $this->config->get('initializers');
         if (is_array($initializers)) {
-            $invokeInitializers = $this->processCodeInjection($initializers);
-            $includes = $invokeInitializers[0];
-            $initializers = $invokeInitializers[1];
+            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
+            $includes .= PHP_EOL . $invokeRequestInitializers[0];
+            $reqInitializers = $invokeRequestInitializers[1];
+
+            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
+            $includes .= PHP_EOL . $invokeModuleInitializers[0];
+            $modInitializers = $invokeModuleInitializers[1];
+
+            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
+            $glbInitializers = $invokeGlobalsInitializers[1];
         }
 
         /**
@@ -1916,14 +1963,36 @@ class Compiler
                 PHP_EOL . "\t",
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
-            '%INIT_GLOBALS%'        => $globalsDefault[0],
-            '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
-            '%EXTENSION_INFO%'      => $phpInfo,
-            '%EXTRA_INCLUDES%'      => $includes,
-            '%DESTRUCTORS%'         => $destructors,
-            '%INITIALIZERS%'        => implode(
+            '%INIT_GLOBALS%'        => implode(
                 PHP_EOL,
-                array_merge($this->internalInitializers, array($initializers))
+                array_merge((array)$globalsDefault[0], array($glbInitializers))
+            ),
+            '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
+            '%DESTROY_GLOBALS%'     => $glbDestructors,
+            '%EXTENSION_INFO%'      => $phpInfo,
+            '%EXTRA_INCLUDES%'      => implode(
+                PHP_EOL,
+                array_unique(explode(PHP_EOL, $includes))
+            ),
+            '%MOD_INITIALIZERS%'    => $modInitializers,
+            '%MOD_DESTRUCTORS%'     => $modDestructors,
+            '%REQ_INITIALIZERS%'    => implode(
+                PHP_EOL . "\t",
+                array_merge($this->internalInitializers, array($reqInitializers))
+            ),
+            '%REQ_DESTRUCTORS%'     => $reqDestructors,
+            '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
+                PHP_EOL,
+                array(
+                    '#define ZEPHIR_POST_REQUEST 1',
+                    'static PHP_PRSHUTDOWN_FUNCTION(' . strtolower($project) . ')',
+                    '{',
+                    "\t" . implode(
+                        PHP_EOL . "\t",
+                        explode(PHP_EOL, $prqDestructors)
+                    ),
+                    '}'
+                )
             ),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries,
@@ -2235,8 +2304,7 @@ class Compiler
      */
     protected function checkRequires()
     {
-        $extensionRequires = $this->config->get("requires");
-        $extensionRequires = $extensionRequires["extensions"];
+        $extensionRequires = $this->config->get("extensions", "requires");
         if ($extensionRequires) {
             $collectionError = PHP_EOL . "\tCould not load extension : ";
             foreach ($extensionRequires as $key => $value) {
