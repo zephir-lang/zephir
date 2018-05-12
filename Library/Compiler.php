@@ -1715,8 +1715,12 @@ class Compiler
 
         if (isset($entries[$section])) {
             foreach ($entries[$section] as $entry) {
-                $codes[] = $entry['code'] . ';';
-                $includes[] = "#include \"" . $entry['include'] . "\"";
+                if (isset($entry['code']) && !empty($entry['code'])) {
+                    $codes[] = $entry['code'] . ';';
+                }
+                if (isset($entry['include']) && !empty($entry['include'])) {
+                    $includes[] = "#include \"" . $entry['include'] . "\"";
+                }
             }
         }
 
@@ -1964,7 +1968,7 @@ class Compiler
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
             '%INIT_GLOBALS%'        => implode(
-                PHP_EOL,
+                PHP_EOL . "\t",
                 array_merge((array)$globalsDefault[0], array($glbInitializers))
             ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
