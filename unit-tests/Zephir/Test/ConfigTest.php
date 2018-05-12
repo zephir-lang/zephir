@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructWithBadConfigFile()
     {
-        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
+        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files/badconfig');
         $config = new Config();
     }
 

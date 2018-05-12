@@ -1,0 +1,63 @@
+{
+    "namespace": "lifecycle",
+    "name": "Life Cycle Test",
+    "description": "Description: Life Cycle Test 'Extension'",
+    "author": "Zephir Team",
+    "version": "1.0.0",
+    "verbose": false,
+    "silent": true,
+    "initializers": {
+        "globals": [
+            {
+                "include": "setup_funcs.h",
+                "code": "ext_setup_globals()"
+            }
+        ],
+        "module": [
+            {
+                "include": "setup_funcs.h",
+                "code": "ext_setup_module()"
+            },
+            {
+                "include": "prep_funcs.h",
+                "code": "ext_prep_module()"
+            }
+        ],
+        "request": [
+            {
+                "include": "setup_funcs.h",
+                "code": "ext_setup_request()"
+            }
+        ]
+    },
+    "destructors": {
+        "request": [
+            {
+                "include": "takedown_funcs.h",
+                "code": "ext_takedown_request()"
+            }
+        ],
+        "post-request": [
+            {
+                "include": "takedown_funcs.h",
+                "code": "ext_takedown_request()"
+            }
+        ],
+        "module": [
+            {
+                "include": "takedown_funcs.h",
+                "code": "ext_takedown_module()"
+            },
+            {
+                "include": "",
+                "code": "ext_kill_module()"
+            }
+        ],
+        "globals": [
+            {
+                "include": "takedown_funcs.h",
+                "code": "ext_takedown_globals()"
+            }
+        ]
+    }
+}
