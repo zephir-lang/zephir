@@ -281,7 +281,7 @@ EOF;
 
             case 'string':
             case 'char':
-                return '"' . addslashes($parameter['default']['value']) . '"';
+                return '\'' . addslashes($parameter['default']['value']) . '\'';
                 break;
 
             case 'empty-array':
