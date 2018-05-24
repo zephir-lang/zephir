@@ -52,6 +52,7 @@ class DocBlock
             }
 
             $cleaned = trim($line, "\t*\0 ");
+            $cleaned = str_replace('$$', '$', $cleaned);
 
             if (strpos($cleaned, '@') === 0) {
                 $this->lines[] = $line = $cleaned;

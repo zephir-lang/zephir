@@ -117,4 +117,113 @@ DOC;
 
         $this->assertSame($expected, (string)$docBlock);
     }
+
+    public function testPhpDocWithScalarParams()
+    {
+        $doc = <<<DOC
+    /**
+     * Method with various input params
+     *
+     * @param int \$valueInteger
+     * @param double \$valueDouble
+     * @param float \$valueFloat
+     * @param string \$valueString
+     * @param bool \$valueBoolean
+     * @param array \$valueArray
+     * @param object \$valueObject
+     * @param resource \$valueResource
+     * @param null \$valueNull
+     *
+     * @param int|double \$valueIntOrDouble
+     * @param int|string \$intOrString
+     * @param array|object \$arrayOrObject
+     *
+     * @throws \Zephir\Compiler\CompilerException
+     * @return int|null - Return Some Result
+     */
+DOC;
+
+        $expected = <<<DOC
+    /**
+     * Method with various input params
+     *
+     * @param int \$valueInteger
+     * @param double \$valueDouble
+     * @param float \$valueFloat
+     * @param string \$valueString
+     * @param bool \$valueBoolean
+     * @param array \$valueArray
+     * @param object \$valueObject
+     * @param resource \$valueResource
+     * @param null \$valueNull
+     *
+     * @param int|double \$valueIntOrDouble
+     * @param int|string \$intOrString
+     * @param array|object \$arrayOrObject
+     *
+     * @throws \Zephir\Compiler\CompilerException
+     * @return int|null - Return Some Result
+     */
+DOC;
+        $docBlock = new DocBlock($doc);
+
+        $this->assertSame($expected, (string)$docBlock);
+    }
+
+    public function testPhpDocWithVariousDocBlockTags()
+    {
+        $doc = <<<DOC
+    /**
+     * Method with various tags
+     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
+     * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
+     * @license MIT http://zephir-lang.com/license.html
+     * @link https://github.com/phalcon/zephir
+     * @since 1.0.0
+     * @todo Something
+     * @uses MyClass::function doSmthName
+     * @version 1.0.0
+     * @api Some Api Description
+     * @wrongTag - \$somethingStrange
+     */
+DOC;
+
+        $expected = <<<DOC
+    /**
+     * Method with various tags
+     *
+     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
+     * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
+     * @license MIT http://zephir-lang.com/license.html
+     * @link https://github.com/phalcon/zephir
+     * @since 1.0.0
+     * @todo Something
+     * @uses MyClass::function doSmthName
+     * @version 1.0.0
+     * @api Some Api Description
+     * @wrongTag - \$somethingStrange
+     */
+DOC;
+        $docBlock = new DocBlock($doc);
+
+        $this->assertSame($expected, (string)$docBlock);
+    }
+
+    public function testPhpDocWithDoubleDollarSymbols()
+    {
+        $doc = <<<DOC
+    /**
+     * @param integer \$\$dollars - var description
+     */
+DOC;
+
+        $expected = <<<DOC
+    /**
+     * @param integer \$dollars - var description
+     */
+DOC;
+        $docBlock = new DocBlock($doc);
+
+        $this->assertSame($expected, (string)$docBlock);
+    }
 }
