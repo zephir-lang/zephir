@@ -1,4 +1,4 @@
-version: 0.10.9-{build}
+version: 0.10.10-{build}
 
 environment:
     matrix:
