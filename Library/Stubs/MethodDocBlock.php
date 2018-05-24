@@ -123,7 +123,7 @@ class MethodDocBlock extends DocBlock
                 } elseif ($docType == 'var' && $this->shortcutName == 'get') {
                     $docType = 'return';
                 } else {
-                    $name = isset($tokens[1]) ? '$' . $tokens[1] : '';
+                    $name = isset($tokens[1]) ? '$' . trim($tokens[1], '$') : '';
                 }
 
                 // TODO: there must be a better way
@@ -180,7 +180,7 @@ class MethodDocBlock extends DocBlock
             } else {
                 $type = 'mixed';
             }
-            $this->parameters['$' . $parameter['name']] = array($type, '');
+            $this->parameters['$' . trim($parameter['name'], '$')] = array($type, '');
         }
     }
 
