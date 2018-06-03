@@ -38,7 +38,7 @@
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "squizlabs/php_codesniffer": "^3.2",
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^4.8|^5.7"
     },
     "autoload": {
         "psr-4": {
