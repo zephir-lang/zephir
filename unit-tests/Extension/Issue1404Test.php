@@ -15,6 +15,12 @@ namespace Extension;
 
 use \Test\Issue1404;
 
+if (version_compare(PHP_VERSION, '5.6', '<')) {
+    require_once('Issue1404TestTrait55.php');
+} else {
+    require_once('Issue1404TestTrait56.php');
+}
+
 /**
  * Tests for Zephir function is_php_version(id)
  *
@@ -25,6 +31,8 @@ use \Test\Issue1404;
  */
 class Issue1404Test extends \PHPUnit_Framework_TestCase
 {
+    use Issue1404TestTrait;
+
     const PHP_RELEASES_LIMIT = 17;
     const PHP_MINOR_LIMIT = 3;
 
@@ -38,13 +46,6 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->test = null;
-    }
-
-    protected function onNotSuccessfulTest(\Exception $error)
-    {
-        $phpVer = "PHP_VERSION_ID:" . PHP_VERSION_ID . " (".PHP_MAJOR_VERSION .'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION.')';
-        fwrite(STDOUT, $phpVer . "\nError: $error");
-        throw $error;
     }
 
     public function phpVersionProvider()
@@ -111,7 +112,7 @@ class Issue1404Test extends \PHPUnit_Framework_TestCase
      */
     private function isPhpVersion($version)
     {
-        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?$/', $version, $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
         if (!count($matches)) {
             throw new \Exception("Could not parse PHP version");
         }

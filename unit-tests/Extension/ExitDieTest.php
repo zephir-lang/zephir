@@ -23,6 +23,8 @@ class ExitDieTest extends \PHPUnit_Framework_TestCase
             $phpBinary .= ' -qrr';
         }
 
+        $phpBinary .= " -d 'enable_dl=true'";
+
         $testfile1 = __DIR__ .'/fixtures/exit.php';
         $return1 = `$phpBinary $testfile1`;
         $this->assertSame('', trim($return1));

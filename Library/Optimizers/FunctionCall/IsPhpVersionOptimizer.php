@@ -59,7 +59,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException("This function requires a scalar types parameter, $variableType given", $expression);
         }
 
-        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?$/', $expression['parameters'][0]['parameter']['value'], $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
         if (!count($matches)) {
             throw new CompilerException("Could not parse PHP version", $expression);
         }

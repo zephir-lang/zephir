@@ -42,3 +42,7 @@ end_of_line              = lf
 indent_style             = space
 trim_trailing_whitespace = false
 insert_final_newline     = true
+
+[*.yml]
+indent_size              = 2
+indent_style             = space
