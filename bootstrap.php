@@ -37,3 +37,7 @@ if (file_exists(ZEPHIRPATH . 'vendor/autoload.php')) {
     require ZEPHIRPATH . 'Library/Loader.php';
     Zephir\Loader::register();
 }
+
+function unlink_recursive($path) {
+    exec(sprintf((PHP_OS === 'Windows') ? "rd /s /q %s" : "rm -rf %s", escapeshellarg($path)));
+}

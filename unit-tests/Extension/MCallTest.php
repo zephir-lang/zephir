@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  +--------------------------------------------------------------------------+
@@ -119,11 +119,19 @@ class MCallTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Mcall();
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $except = '\InvalidArgumentException';
+        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
+            $except = '\TypeError';
+        }
+
+        if (isset($except)) {
+            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
+                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
+                $this->setExpectedException($except);
+            } else {
+                $this->expectException($except);
+            }
         }
 
         $t->optionalParameterBoolean('test');

@@ -74,7 +74,7 @@ class LifeCycleTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         if (file_exists('ext')) {
-            exec('rm -rf ext/');
+            unlink_recursive('ext/');
         }
 
         if (getcwd() != $this->pwd) {
