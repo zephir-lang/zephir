@@ -441,13 +441,15 @@ void zephir_cast(zval *result, zval *var, zend_uint type){
 long zephir_get_intval_ex(const zval *op) {
 
 	switch (Z_TYPE_P(op)) {
-        case IS_ARRAY:
-            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
+		case IS_ARRAY:
+			return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
 
-	    case IS_CALLABLE:
-	    case IS_RESOURCE:
-	    case IS_OBJECT:
-	        return 1;
+		case IS_RESOURCE:
+			return zval_get_long(op);
+
+		case IS_CALLABLE:
+		case IS_OBJECT:
+			return 1;
 
 		case IS_LONG:
 			return Z_LVAL_P(op);

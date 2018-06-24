@@ -289,4 +289,26 @@ class Cast
 	{
 		return (object) "test string";
 	}
+
+	public function testCastStdinToInteger()
+	{
+		var handle;
+		let handle = STDIN;
+
+		return (int) handle;
+	}
+
+	public function testCastStdoutToInteger()
+	{
+		return (int) STDOUT;
+	}
+
+	public function testCastFileResourceToInteger(var fileName)
+	{
+		var id;
+
+		let id = (int) fileName;
+
+		return id;
+	}
 }
