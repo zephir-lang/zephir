@@ -445,7 +445,7 @@ long zephir_get_intval_ex(const zval *op) {
 			return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
 
 		case IS_RESOURCE:
-			return zval_get_long(op);
+			return (zend_long)Z_RES_HANDLE_P(op);
 
 		case IS_CALLABLE:
 		case IS_OBJECT:
