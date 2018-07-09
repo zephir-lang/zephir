@@ -34,7 +34,6 @@ class CastTest extends \PHPUnit_Framework_TestCase
         /**
          * Value
          */
-
         $this->assertSame(5, $this->test->testIntCastFromFloat());
         $this->assertSame(1, $this->test->testIntCastFromBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromBooleanFalse());
@@ -44,11 +43,9 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, $this->test->testIntCastFromArray());
         $this->assertSame(1, $this->test->testIntCastFromStdClass());
 
-
         /**
          * Variable types
          */
-
         $this->assertSame(5, $this->test->testIntCastFromVariableFloat());
         $this->assertSame(1, $this->test->testIntCastFromVariableBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromVariableBooleanFalse());
@@ -118,6 +115,12 @@ class CastTest extends \PHPUnit_Framework_TestCase
      */
     public function testResourceCast()
     {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped(
+                "Cast Resource to integer not implemented for ZendEngine 2."
+            );
+        }
+
         $file = fopen(__DIR__ . '/php/exists.php', 'r');
 
         $this->assertEquals((int) STDIN, $this->test->testCastStdinToInteger());
