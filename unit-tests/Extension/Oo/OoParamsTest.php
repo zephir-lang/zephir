@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -49,89 +43,6 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($t->setList(array(1, 2, 3, 4, 5)), array(1, 2, 3, 4, 5));
         $this->assertSame($t->setList(array()), array());
-    }
-
-    public function testSetStrictAgeException1()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
-        }
-
-        $t->setStrictAge(17.0);
-    }
-
-    public function testSetStrictAgeException2()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
-        }
-
-        $t->setStrictAge('17');
-    }
-
-    public function testSetStrictAgeSuccess()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        $this->assertSame($t->setStrictAverage(17.1), 17.1);
-    }
-
-    public function testSetStrictAverageException1()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
-        }
-
-        $t->setStrictAverage(17);
-    }
-
-    public function testSetStrictAverageException2()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
-        }
-
-        $t->setStrictAverage('17');
-    }
-
-    public function testSetStrictNameSuccess()
-    {
-        $t = new \Test\Oo\OoParams();
-        $this->assertSame($t->setStrictName('peter'), 'peter');
-    }
-
-    public function testSetStrickNameException()
-    {
-        $t = new \Test\Oo\OoParams();
-
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\InvalidArgumentException');
-        } else {
-            $this->expectException('\InvalidArgumentException');
-        }
-
-        $t->setStrictName(1234);
     }
 
     public function setObjectClassCast()

@@ -2,37 +2,30 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
-use Zephir\Config;
-use Zephir\Logger;
-
 /**
- * CommandGenerate
+ * Zephir\Commands\CommandGenerate
  *
- * Generate the code without compiling it
+ * Generates C code from the Zephir code without compiling it
+ *
+ * @package Zephir\Commands
  */
 class CommandGenerate extends CommandAbstract
 {
     /**
-     * Command provided by this command
+     * {@inheritdoc}
      *
-     * @return array|string
+     * @return string
      */
     public function getCommand()
     {
@@ -40,22 +33,31 @@ class CommandGenerate extends CommandAbstract
     }
 
     /**
-     * Command usage
-     *
-     * @return string
-     */
-    public function getUsage()
-    {
-        return 'generate';
-    }
-
-    /**
-     * Returns the description of the command
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getDescription()
     {
-        return 'Generates C code from the Zephir code';
+        return 'Generates C code from the Zephir code without compiling it';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --backend=ZendEngine2|ZendEngine3        Used backend to generate extension.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

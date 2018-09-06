@@ -2,43 +2,63 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
-use Zephir\BaseBackend;
-use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Logger;
-use Zephir\Compiler;
 use Zephir\Parser;
-use Zephir\Parser\Manager;
+use Zephir\Compiler;
+use Zephir\BaseBackend;
+use Zephir\Exception\IllegalStateException;
 
 /**
  * CommandAbstract
  *
- * Provides a superclass for commands
+ * Provides a superclass for any command.
+ *
+ * @package Zephir\Commands
  */
 abstract class CommandAbstract implements CommandInterface
 {
-    private $_parameters = null;
+    private $parameters = [];
 
     /**
-     * Returns parameter named $name if specified
-     * on the command line else null
+     * Currently initialized Command Manager.
+     * @var Manager
+     */
+    private $commandsManager;
+
+    /**
+     * CommandAbstract constructor.
+     *
+     * @param Manager $commandsManager
+     */
+    public function __construct(Manager $commandsManager)
+    {
+        $this->commandsManager = $commandsManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Manager
+     */
+    public function getCommandsManager()
+    {
+        return $this->commandsManager;
+    }
+
+    /**
+     * Sets named parameter.
      *
      * @param string $name
      * @param string $value
@@ -46,43 +66,55 @@ abstract class CommandAbstract implements CommandInterface
      */
     protected function setParameter($name, $value)
     {
-        if (!isset($this->_parameters)) {
-            $this->_parameters = array();
-        }
-        $this->_parameters[$name] = $value;
+        $this->parameters[$name] = $value;
     }
 
     /**
-     * Returns parameter named $name if specified
-     * on the command line else null
+     * Gets named parameter.
+     *
+     * Returns parameter named $name if specified on the command line otherwise returns NULL.
+     *
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function getParameter($name)
     {
-        return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
     }
 
-
     /**
-     * Parse the input arguments for the command and returns theme as an associative array
+     * Parse the input arguments for the command and returns theme as an associative array.
+     *
      * @return array the list of the parameters
      */
     public function parseArguments()
     {
+        $params = [];
+
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
-            $parser = new CommandArgumentParser();
-            $params = $parser->parseArgs(array_merge(array("command"), $commandArgs));
-        } else {
-            $params = array();
+            $parser = $this->getCommandsManager()->getCommandArgumentParser();
+            $params = $parser->parseArgs(array_merge(['command'], $commandArgs));
         }
 
         return $params;
     }
 
     /**
-     * Executes the command.
+     * Whether the current command called with help option.
+     *
+     * @return bool
+     */
+    public function hasHelpOption()
+    {
+        $params = $this->parseArguments();
+        $parser = $this->getCommandsManager()->getCommandArgumentParser();
+
+        return $parser->hasHelpOption($params);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @param Config $config
      * @param Logger $logger
@@ -90,20 +122,50 @@ abstract class CommandAbstract implements CommandInterface
     public function execute(Config $config, Logger $logger)
     {
         $params = $this->parseArguments();
-        $backend = null;
-        if (!isset($params['backend'])) {
-            $params['backend'] = BaseBackend::getActiveBackend();
+
+        if ($this->hasHelpOption()) {
+            echo $this->getSynopsis();
+            return;
         }
-        $className = 'Zephir\\Backends\\'.$params['backend'].'\\Backend';
+
+        $backend = empty($params['backend']) ? BaseBackend::getActiveBackend() : $params['backend'];
+        $className = "Zephir\\Backends\\{$backend}\\Backend";
+
         if (!class_exists($className)) {
-            throw new \InvalidArgumentException('Backend '.$params['backend'].' does not exist');
+            throw new IllegalStateException("Backend {$backend} doesn't exist.");
         }
+
         $backend = new $className($config);
 
-        $parserManager = new Manager(new Parser(), $logger, $params);
+        $parserManager = new Parser\Manager(new Parser(), $logger, $params);
         $compiler = new Compiler($config, $logger, $backend, $parserManager);
 
         $command = $this->getCommand();
         $compiler->$command($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getSynopsis()
+    {
+        $template =<<<EOF
+
+Name:
+    %s -- %s
+
+Synopsis:
+    zephir %s
+
+
+EOF;
+        return sprintf(
+            $template,
+            $this->getCommand(),
+            rtrim($this->getDescription(), '.') . '.',
+            $this->getUsage()
+        );
     }
 }

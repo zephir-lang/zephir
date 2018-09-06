@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -39,11 +39,6 @@ static zephir_debug_entry *active = NULL;
  */
 int zephir_start_debug(){
 	if(!zephir_log){
-		/*//zephir_log = fopen("/home/gutierrezandresfelipe/phalcon-debug.a", "w");
-		zephir_log = fopen("/tmp/phalcon-debug.a", "w");
-		if(!zephir_log){
-			fprintf(stderr, "Can't open debug log\n");
-		}*/
 		zephir_log = stderr;
 	}
 	return SUCCESS;
@@ -60,7 +55,7 @@ int zephir_stop_debug(){
 		ptr = ptr->prev;
 		efree(this_entry);
 	}
-	//fclose(zephir_log);
+
 	zephir_log = NULL;
 	return SUCCESS;
 }

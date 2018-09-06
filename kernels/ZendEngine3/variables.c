@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -61,4 +61,14 @@ void zephir_var_export_ex(zval *return_value, zval *var)
     php_var_export_ex(var, 1, &buf);
     zephir_smart_str_0(&buf);
     ZVAL_STR(return_value, buf.s);
+}
+
+void zephir_get_defined_vars(zval *return_value)
+{
+	zend_array *symtable = zend_rebuild_symbol_table();
+	if (EXPECTED(symtable != NULL)) {
+		RETURN_ARR(zend_array_dup(symtable));
+	}
+
+	RETURN_NULL();
 }

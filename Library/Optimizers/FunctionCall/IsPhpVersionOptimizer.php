@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -21,7 +15,7 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -32,11 +26,22 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class IsPhpVersionOptimizer extends OptimizerAbstract
 {
+    protected $allowedTypes = [
+        'string'    => true,
+        'int'       => true,
+        'long'      => true,
+        'double'    => true,
+        'uint'      => true,
+        'ulong'     => true,
+        'istring'   => true
+    ];
+
     /**
-     *
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @return CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -48,24 +53,32 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException("This function only requires one parameter", $expression);
         }
 
-        if ($expression['parameters'][0]['parameter']['type'] != 'string') {
-            throw new CompilerException("This function requires a constant string parameter", $expression);
+        $variableType = $expression['parameters'][0]['parameter']['type'];
+
+        if (!isset($this->allowedTypes[$variableType])) {
+            throw new CompilerException("This function requires a scalar types parameter, $variableType given", $expression);
         }
 
-        preg_match('/^([0-9]+)\.?([0-9]+)?\.?([0-9]+)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
         if (!count($matches)) {
             throw new CompilerException("Could not parse PHP version", $expression);
         }
 
-        $major = $matches[1] * 10000;
-        if (isset($matches[2])) {
-            $minor = $matches[2] * 100;
-        } else {
-            $minor = 0;
+        $minorVersion   = 0;
+        $releaseVersion = 0;
+
+        $majorVersion = $matches['major'] * 10000;
+
+        if (isset($matches['minor'])) {
+            $minorVersion = $matches['minor'] * 100;
         }
 
-        $version = $major + $minor;
+        if (isset($matches['patch'])) {
+            $releaseVersion = $matches['patch'];
+        }
 
-        return new CompiledExpression('bool', 'zephir_is_php_version(' . $version . ')', $expression);
+        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
+
+        return new CompiledExpression('bool', 'zephir_is_php_version('.$versionId.')', $expression);
     }
 }

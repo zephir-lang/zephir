@@ -59,7 +59,7 @@ class OoNativeImplements implements
 
 	/* SeekableIterator */
 
-	public function seek (int position)
+	public function seek (position)
 	{
 	}
 

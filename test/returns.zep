@@ -1,8 +1,4 @@
 
-/**
- * X
- */
-
 namespace Test;
 
 class Returns
@@ -29,5 +25,15 @@ class Returns
 		} else {
 			return (int)0;
 		}
+	}
+
+	public static function returnWithParameter(string parameter)
+	{
+		return "Return back";
+	}
+
+	public static function returnWithoutParameter()
+	{
+		return "Return back";
 	}
 }

@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -81,9 +75,9 @@ class CompilationContext
     public $classDefinition;
 
     /**
-     * Current method being compiled
+     * Current method or function that being compiled
      *
-     * @var ClassMethod
+     * @var ClassMethod|FunctionDefinition
      */
     public $currentMethod;
 
@@ -134,7 +128,7 @@ class CompilationContext
      *
      * @var array
      */
-    public $cycleBlocks = array();
+    public $cycleBlocks = [];
 
     /**
      * The current branch, variables declared in conditional branches
@@ -207,9 +201,8 @@ class CompilationContext
      */
     public function getFullName($className)
     {
-        $namespace = (isset($this->currentMethod) && $this->currentMethod instanceof FunctionDefinition) ?
-            $this->currentMethod->getNamespace() :
-            $this->classDefinition->getNamespace();
+        $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
+        $namespace  = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
         return Utils::getFullName($className, $namespace, $this->aliasManager);
     }

@@ -1,12 +1,15 @@
 language: php
+
+dist: trusty
+# Change to `true' to enable debug mode
 sudo: false
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
 
 git:
   depth: 1
@@ -20,81 +23,122 @@ env:
     - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
-    - secure: lRYAjibgHrvbte19lJCP2AhoGCR1asJlSNeF+QAn/ZYdd+J+StqK7DybaBbgk6cs7uodJ34OuGlOsAmE3B/EG4Qb/r+nbjEt7cA0+6+YyUs0sBpHoQ3XeFbZSSRsYvY0jKVn5/yl24GTobTTejc6MOW5N1/KErJynmylyW6q+Z4=
+    - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
+    - USE_ZEND_ALLOC=0
+    - ZEND_DONT_UNLOAD_MODULES=1
+    - REPORT_EXIT_STATUS=1
+    - PATH="${HOME}/bin:${PATH}"
+    - RE2C_VERSION="1.0.3"
+    - ZEPHIR_PARSER_VERSION="v1.1.2"
   matrix:
-    - CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
-    - CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
+    - CC="gcc"
+    - CC="clang"
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
+  exclude:
+    - env: CC="gcc"
+      compiler: clang
+    - env: CC="clang"
+      compiler: gcc
   include:
-    - env: CC="ccache gcc" CFLAGS="-g3 -O0 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
+    - env: CC="gcc"
       php: nightly
       compiler: gcc
-    - env: CC="clang" CFLAGS="-g3 -O0 -DZEPHIR_RELEASE=1"
+    - env: CC="clang"
       php: nightly
       compiler: clang
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: '7.1'
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
+      php: '7.1'
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+      php: '7.2'
+    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
+      php: '7.2'
 
 cache:
   apt: true
   ccache: true
-  timeout: 691200
+  timeout: 604800
   directories:
-    - vendor
     - $HOME/.ccache
     - $HOME/.composer/cache
+    - $HOME/.local/opt/re2c
+    - $HOME/.cache/re2c
 
 before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
-  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then openssl aes-256-cbc -k "$encryption_key" -in id_rsa.enc -out ~/.ssh/id_rsa -d; chmod 600 ~/.ssh/id_rsa; fi
-  - git config push.default simple
-  - git config --global user.email "travis@zephir-lang.com"
-  - git config --global user.name "TravisCI"
-  - git submodule --quiet update --init --recursive
-  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then git remote set-url origin git@github.com:phalcon/zephir.git; fi
+  - $CC --version
+  - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
+  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
 install:
-  - composer --prefer-source install
-  - (cd modules/php-zephir-parser; TRAVIS_BUILD_DIR=$(pwd) bash ./tests/ci/install-travis)
-  - php --ri "Zephir Parser"
+  - composer install --prefer-source --no-suggest
+  - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
+  - bash ./unit-tests/ci/install_zephir_parser.sh
   - ./install
 
 before_script:
-  - $(phpenv which php) -d safe_mode=Off -d enable_dl=On compiler.php generate
+  - $(phpenv which php) compiler.php help
+  - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
   - $(phpenv which php) compiler.php stubs
   - $(phpenv which php) compiler.php api
-  - (cd ext; $(phpenv which phpize) && ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test && make -j"$(getconf _NPROCESSORS_ONLN)" && make --silent install && phpenv config-add ../unit-tests/ci/test.ini)
+  - |
+    (
+      set -e
+      cd ext
+      $(phpenv which phpize)
+      ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test
+      make -j"$(getconf _NPROCESSORS_ONLN)"
+      make --silent install
+    )
+  #- ls -1 `$(phpenv which php-config) --extension-dir`
+  #- phpenv versions
   - ulimit -c unlimited || true
-  - $CC --version
+  # Uncomment to setting core dump
+  #- echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
+  #- sudo chmod +s $(which gdb)
 
 script:
+  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes --leak-check=full ./vendor/bin/phpunit -c phpunit.xml.dist --debug unit-tests/
+  - | # Tests and coverage
+      ./unit-tests/phpunit \
+        --not-exit \
+        -c phpunit.xml.dist \
+        --debug \
+        unit-tests/
+  - | # Check for memory leaks
+      valgrind \
+        --read-var-info=yes \
+        --error-exitcode=1 \
+        --fullpath-after= \
+        --track-origins=yes \
+        --leak-check=full \
+        --num-callers=20 \
+        --run-libc-freeres=no \
+        ./unit-tests/phpunit \
+          --not-exit \
+          -c phpunit.xml.dist \
+          --no-coverage \
+          unit-tests/
+  - $(phpenv which php) unit-tests/microbench.php
 
 after_success:
-  - export ZEPHIR_TARGET="legacy"
-  - if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then export ZEPHIR_TARGET="ZendEngine_2"; fi
-  - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then export ZEPHIR_TARGET="ZendEngine_3"; fi
-  - git checkout $TRAVIS_BRANCH
-  - rm -rf generated/$ZEPHIR_TARGET/{*,.*}
-  - cp -a ext/test/. generated/$ZEPHIR_TARGET
-  - git add -A generated/$ZEPHIR_TARGET
-  - 'git commit -m "chore($ZEPHIR_TARGET): $TRAVIS_COMMIT: regenerate test sources [ci skip]" generated/$ZEPHIR_TARGET'
-  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$ZEPHIR_TARGET" != "legacy" ]]; then git fetch && git rebase --autostash FETCH_HEAD && git push; fi
-  - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then git log -1 -p; fi
+  - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
 
 after_failure:
-  - ./unit-tests/ci/after_failure.sh
-
-notifications:
-  email:
-    - build@phalconphp.com
+  #  Uncomment to debug core dump
+  # - ./unit-tests/ci/after_failure.sh
+  - $(phpenv which php) -v
+  - $(phpenv which php) -m
+  - $(phpenv which php) -i
 
 addons:
   apt:
     packages:
-      - re2c
       - valgrind
       - gdb

@@ -48,11 +48,13 @@ class Vars
         var_export(param2);
     }
 
-    public function testVarDump2param(var p1, var p2) {
+    public function testVarDump2param(var p1, var p2)
+    {
         var_dump(p1, p2);
     }
 
-    public function testVarDump3param(var p1, var p2, var p3) {
+    public function testVarDump3param(var p1, var p2, var p3)
+    {
         var_dump(p1, p2, p3);
     }
 
@@ -62,39 +64,46 @@ class Vars
         var_export(count(testVar));
     }
 
-	public function testArrayTypeVarDumpAndExport(array testVar = [])
-	{
-		var_dump(testVar);
-		var_export(testVar);
-	}
+    public function testArrayTypeVarDumpAndExport(array testVar = [])
+    {
+        var_dump(testVar);
+        var_export(testVar);
+    }
 
     /**
      * @link https://github.com/phalcon/zephir/issues/681
      */
-	public function testIntVarDump()
-	{
-	    int a;
-	    let a = 1;
+    public function testIntVarDump()
+    {
+        int a;
+        let a = 1;
 
-	    var_dump(a);
-	    var_export(a);
-	}
+        var_dump(a);
+        var_export(a);
+    }
 
-	public function testDoubleVarDump()
-	{
-	    double a;
-	    let a = 1;
+    public function testDoubleVarDump()
+    {
+        double a;
+        let a = 1;
 
-	    var_dump(a);
-	    var_export(a);
-	}
+        var_dump(a);
+        var_export(a);
+    }
 
-	public function testBoolVarDump()
-	{
-	    bool a;
-	    let a = true;
+    public function testBoolVarDump()
+    {
+        bool a;
+        let a = true;
 
-	    var_dump(a);
-	    var_export(a);
-	}
+        var_dump(a);
+        var_export(a);
+    }
+
+    public function testGetDefinedVars()
+    {
+        int a = 1;
+        double pi = 3.14;
+        return get_defined_vars();
+    }
 }

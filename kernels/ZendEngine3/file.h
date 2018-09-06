@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -30,9 +30,9 @@ int zephir_fclose(zval *stream_zval);
 void zephir_file_get_contents(zval *return_value, zval *filename);
 void zephir_file_put_contents(zval *return_value, zval *filename, zval *data);
 
-void zephir_basename(zval *return_value, zval *path TSRMLS_DC);
+void zephir_basename(zval *return_value, zval *path);
 void zephir_filemtime(zval *return_value, zval *path);
-int zephir_compare_mtime(zval *filename1, zval *filename2 TSRMLS_DC);
+int zephir_compare_mtime(zval *filename1, zval *filename2);
 void zephir_prepare_virtual_path(zval *return_value, zval *path, zval *virtual_separator);
 void zephir_unique_path_key(zval *return_value, zval *path);
 

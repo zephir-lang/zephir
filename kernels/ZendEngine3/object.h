@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -28,23 +28,23 @@
 #include "kernel/main.h"
 
 /** Class Retrieving/Checking */
-int zephir_class_exists(const zval *class_name, int autoload);
-int zephir_interface_exists(const zval *interface_name, int autoload);
+int zephir_class_exists(zval *class_name, int autoload);
+int zephir_interface_exists(zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
-zend_class_entry *zephir_fetch_class(const zval *class_name);
+zend_class_entry *zephir_fetch_class(zval *class_name);
 zend_class_entry *zephir_fetch_class_str_ex(const char *class_name, size_t length, int fetch_type);
 void zephir_get_class(zval *result, zval *object, int lower);
-void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
-void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
+void zephir_get_class_ns(zval *result, zval *object, int lower);
+void zephir_get_ns_class(zval *result, zval *object, int lower);
 
 /** Cloning/Instance of */
 int zephir_clone(zval *destination, zval *obj);
 int zephir_is_instance_of(zval *object, const char *class_name, unsigned int class_length);
-int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce);
+int zephir_instance_of_ev(zval *object, const zend_class_entry *ce);
 int zephir_zval_is_traversable(zval *object);
 
 /** Method exists */
-int zephir_method_exists(const zval *object, const zval *method_name);
+int zephir_method_exists(zval *object, const zval *method_name);
 
 /** Isset properties */
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length);
@@ -73,7 +73,6 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 
 /** Static properties */
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags);
-int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value);
 int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const char *property, zend_uint property_length, zval *value, const char *types, int types_length, int types_count, ...);
 
 /** Create closures */
@@ -81,7 +80,7 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 
 /** Create instances */
 int zephir_create_instance(zval *return_value, const zval *class_name);
-int zephir_create_instance_params(zval *return_value, const zval *class_name, const zval *params TSRMLS_DC);
+int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params);
 
 /** Increment/Decrement properties */
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
@@ -98,6 +97,6 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 	}
 
 /** Methods */
-int zephir_method_exists_ex(const zval *object, const char *method_name, unsigned int method_len);
+int zephir_method_exists_ex(zval *object, const char *method_name, unsigned int method_len);
 
 #endif

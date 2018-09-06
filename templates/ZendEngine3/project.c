@@ -34,13 +34,16 @@ PHP_INI_END()
 static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	REGISTER_INI_ENTRIES();
+	zephir_module_init();
 	%CLASS_INITS%
+	%MOD_INITIALIZERS%
 	return SUCCESS;
 }
 
 #ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
+	%MOD_DESTRUCTORS%
 	zephir_deinitialize_memory(TSRMLS_C);
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
@@ -69,7 +72,7 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
 	/* Static cache */
 	memset(%PROJECT_LOWER%_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
-%INIT_GLOBALS%
+	%INIT_GLOBALS%
 }
 
 /**
@@ -77,12 +80,11 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
  */
 static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
 {
-%INIT_MODULE_GLOBALS%
+	%INIT_MODULE_GLOBALS%
 }
 
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
-
 	zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals_ptr;
 #ifdef ZTS
 	tsrm_ls = ts_resource(0);
@@ -92,16 +94,18 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
 	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
 
-%INITIALIZERS%
+	%REQ_INITIALIZERS%
 	return SUCCESS;
 }
 
 static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
-	%DESTRUCTORS%
+	%REQ_DESTRUCTORS%
 	zephir_deinitialize_memory(TSRMLS_C);
 	return SUCCESS;
 }
+
+%POSTREQ_DESTRUCTORS%
 
 static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 {
@@ -116,7 +120,7 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_%PROJECT_UPPER%_ZEPVERSION);
 	php_info_print_table_end();
-%EXTENSION_INFO%
+	%EXTENSION_INFO%
 	DISPLAY_INI_ENTRIES();
 }
 
@@ -128,12 +132,12 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
-
+	%DESTROY_GLOBALS%
 }
 
 %FE_HEADER%
 zend_function_entry php_%PROJECT_LOWER_SAFE%_functions[] = {
-%FE_ENTRIES%
+	%FE_ENTRIES%
 };
 
 zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
@@ -155,7 +159,11 @@ zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
 	ZEND_MODULE_GLOBALS(%PROJECT_LOWER%),
 	PHP_GINIT(%PROJECT_LOWER%),
 	PHP_GSHUTDOWN(%PROJECT_LOWER%),
+#ifdef ZEPHIR_POST_REQUEST
+	PHP_PRSHUTDOWN(%PROJECT_LOWER%),
+#else
 	NULL,
+#endif
 	STANDARD_MODULE_PROPERTIES_EX
 };
 

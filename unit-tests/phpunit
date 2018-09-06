@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+*/
+
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('PHPUnit_Framework_TestCase')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+
+$exit = true;
+if ($index = array_search('--not-exit', $_SERVER['argv'])) {
+    $exit = false;
+    unset($_SERVER['argv'][$index]);
+}
+
+if (!class_exists('PHPUnit_TextUI_Command')) {
+    fwrite(STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+    );
+
+    die(1);
+}
+
+$res = PHPUnit_TextUI_Command::main($exit);
+if ($res) {
+    exit($res);
+}

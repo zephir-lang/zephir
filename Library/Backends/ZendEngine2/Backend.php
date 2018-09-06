@@ -1,27 +1,57 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+ */
+
 namespace Zephir\Backends\ZendEngine2;
 
+use Zephir\Utils;
 use Zephir\Variable;
-use Zephir\CodePrinter;
-use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\CompilerException;
-use Zephir\CompilationContext;
+use Zephir\CodePrinter;
 use Zephir\ClassMethod;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
-use Zephir\Utils;
+use Zephir\CompiledExpression;
+use Zephir\CompilationContext;
+use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
 
+/**
+ * Zephir\Backends\ZendEngine2\Backend
+ *
+ * @package Zephir\Backends\ZendEngine2
+ */
 class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
-
-    protected $fcallManager;
 
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return FcallManagerInterface
+     */
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->setFcallManager(new FcallManager());
+        }
+
+        return $this->fcallManager;
     }
 
     /**
@@ -55,18 +85,12 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStringsManager()
     {
         return new StringsManager();
-    }
-
-
-    public function getFcallManager()
-    {
-        if (!$this->fcallManager) {
-            $this->fcallManager = new FcallManager();
-        }
-        return $this->fcallManager;
     }
 
     public function getTypeDefinition($type)
@@ -75,11 +99,11 @@ class Backend extends BaseBackend
         $pointer = null;
         switch ($type) {
             case 'int':
-                $code = 'int';
+                $code = 'zend_long';
                 break;
 
             case 'uint':
-                $code = 'unsigned int';
+                $code = 'zend_ulong';
                 break;
 
             case 'char':
@@ -150,16 +174,16 @@ class Backend extends BaseBackend
 
             case 'static_zephir_fcall_cache_entry':
                 $pointer = '*';
-                $code = 'zephir_nts_static zephir_fcall_cache_entry';
+                $code = 'zephir_fcall_cache_entry';
                 break;
 
             case 'static_zend_class_entry':
                 $pointer = '*';
-                $code = 'zephir_nts_static zend_class_entry';
+                $code = 'zend_class_entry';
                 break;
 
             case 'zephir_ce_guard':
-                $code = 'zephir_nts_static zend_bool';
+                $code = 'zend_bool';
                 break;
 
             default:
@@ -175,6 +199,9 @@ class Backend extends BaseBackend
      * @param string $operator
      * @param string $value
      * @param CompilationContext $context
+     * @return string
+     *
+     * @throws CompilerException
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -242,8 +269,19 @@ class Backend extends BaseBackend
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
             $codePrinter->increaseLevel();
-            $codePrinter->output('zval *this_ptr = NULL;');
-            $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
+            $codePrinter->output('zval zthis       = zval_used_for_init;');
+            $codePrinter->output('zval *this_ptr   = &zthis;');
+            $codePrinter->output('zend_object* obj = ecalloc(1, sizeof(zend_object));');
+            $codePrinter->output('zend_object_value retval;');
+            $codePrinter->outputBlankLine();
+            $codePrinter->output('zend_object_std_init(obj, class_type TSRMLS_CC);');
+            $codePrinter->output('object_properties_init(obj, class_type);');
+            $codePrinter->output('retval.handle   = zend_objects_store_put(obj, (zend_objects_store_dtor_t)zend_objects_destroy_object, zephir_free_object_storage, NULL TSRMLS_CC);');
+            $codePrinter->output('retval.handlers = zend_get_std_object_handlers();');
+            $codePrinter->outputBlankLine();
+            $codePrinter->output('Z_TYPE(zthis)   = IS_OBJECT;');
+            $codePrinter->output('Z_OBJVAL(zthis) = retval;');
+            $codePrinter->outputBlankLine();
             $codePrinter->decreaseLevel();
         }
     }
@@ -253,7 +291,7 @@ class Backend extends BaseBackend
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
             $codePrinter->increaseLevel();
-            $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
+            $codePrinter->output('return retval;');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
             $codePrinter->decreaseLevel();
@@ -345,7 +383,7 @@ class Backend extends BaseBackend
                     if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
-                            $symbolTable->mustGrownStack(true);
+                            $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->backend->initVar($variable, $compilationContext);
                             switch ($defaultValue['type']) {
                                 case 'int':
@@ -403,7 +441,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'string':
@@ -429,7 +467,7 @@ class Backend extends BaseBackend
                 if ($variable->getNumberUses() > 0) {
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
-                        $symbolTable->mustGrownStack(true);
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'null':
@@ -1122,9 +1160,9 @@ class Backend extends BaseBackend
         $value = $this->resolveValue($value, $context);
         if ($symbolVariable->getName() == 'this_ptr') {
             if ($propertyName instanceof Variable) {
-                $context->codePrinter->output('zephir_update_property_zval_zval(this_ptr, ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
+                $context->codePrinter->output('zephir_update_property_zval_zval(getThis(), ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
             } else {
-                $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+                $context->codePrinter->output('zephir_update_property_this(getThis(), SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
             }
         } else {
             if ($propertyName instanceof Variable) {
@@ -1235,11 +1273,11 @@ class Backend extends BaseBackend
         $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $reverse . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
 
         $codePrinter->output('for (');
-        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
+        $codePrinter->output('  ; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
         if ($reverse) {
-            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         } else {
-            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         }
         $codePrinter->output(') {');
 
@@ -1351,7 +1389,7 @@ class Backend extends BaseBackend
 
         /* Generate verification code */
         if (count($conditions)) {
-            $codePrinter->output('if (unlikely(' . implode(' && ', $conditions) . ')) {');
+            $codePrinter->output('if (UNEXPECTED(' . implode(' && ', $conditions) . ')) {');
             $codePrinter->increaseLevel();
             $codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $var['name'] . '\' must be a ' . $type . '") TSRMLS_CC);');
             $codePrinter->output('RETURN_MM_NULL();');
@@ -1376,7 +1414,7 @@ class Backend extends BaseBackend
             case 'ulong':
                 $context->headersManager->add('kernel/operators');
                 $context->symbolTable->mustGrownStack(true);
-                $codePrinter->output('if (likely(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
+                $codePrinter->output('if (EXPECTED(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
                 $codePrinter->increaseLevel();
                 $targetVar = $var['name'];
                 if ($this->isZE3()) {

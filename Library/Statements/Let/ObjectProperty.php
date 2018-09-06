@@ -2,32 +2,21 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Variable as ZephirVariable;
-use Zephir\Detectors\ReadDetector;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Compiler;
-use Zephir\Utils;
-use Zephir\GlobalConstant;
 
 /**
  * ObjectProperty
@@ -117,6 +106,7 @@ class ObjectProperty
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignLong($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
+                        $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
                         $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
                         break;
 
@@ -169,6 +159,7 @@ class ObjectProperty
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignDouble($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
+                        $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
                         $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
                         break;
 

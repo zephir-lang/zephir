@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -53,7 +53,7 @@
 
 void zephir_basename(zval *return_value, zval *path)
 {
-	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+	if (EXPECTED(Z_TYPE_P(path) == IS_STRING)) {
 		zend_string *ret;
 		ret = php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0);
 		ZVAL_STR(return_value, ret);
@@ -86,23 +86,23 @@ int zephir_file_exists(zval *filename)
 /**
  * Compares two file paths returning 1 if the first mtime is greater or equal than the second
  */
-int zephir_compare_mtime(zval *filename1, zval *filename2 TSRMLS_DC)
+int zephir_compare_mtime(zval *filename1, zval *filename2)
 {
 
 	php_stream_statbuf statbuffer1, statbuffer2;
 
 	if (Z_TYPE_P(filename1) != IS_STRING || Z_TYPE_P(filename2) != IS_STRING) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for compare_mtime()");
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for compare_mtime()");
 		return 0;
 	}
 
 	if (php_stream_stat_path_ex(Z_STRVAL_P(filename1), 0, &statbuffer1, NULL)) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename1));
+		php_error_docref(NULL, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename1));
 		return 0;
 	}
 
 	if (php_stream_stat_path_ex(Z_STRVAL_P(filename2), 0, &statbuffer2, NULL)) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename2));
+		php_error_docref(NULL, E_WARNING, "mstat failed for %s", Z_STRVAL_P(filename2));
 		return 0;
 	}
 
@@ -200,7 +200,7 @@ void zephir_file_get_contents(zval *return_value, zval *filename)
 	php_stream_context *context = NULL;
 
 	if (Z_TYPE_P(filename) != IS_STRING) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_file_get_contents()");
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_file_get_contents()");
 		RETVAL_FALSE;
 		return;
 	}
@@ -300,7 +300,7 @@ void zephir_file_put_contents(zval *return_value, zval *filename, zval *data)
 
 void zephir_filemtime(zval *return_value, zval *path)
 {
-	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+	if (EXPECTED(Z_TYPE_P(path) == IS_STRING)) {
 		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value);
 	} else {
 		ZVAL_FALSE(return_value);

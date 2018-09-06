@@ -796,7 +796,7 @@ int zephirt_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache
 
 	#ifndef ZEPHIR_RELEASE
 	if (EX(function_state).function->common.fn_flags & ZEND_ACC_ABSTRACT) {
-		zend_error_noreturn(E_ERROR, "Cannot call abstract method %s::%s()", EX(function_state).function->common.scope->name, EX(function_state).function->common.function_name);
+		zend_error(E_ERROR, "Cannot call abstract method %s::%s()", EX(function_state).function->common.scope->name, EX(function_state).function->common.function_name);
 		return FAILURE;
 	}
 	#endif
@@ -962,7 +962,7 @@ int zephirt_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache
 		if (fci->object_ptr) {
 			Z_OBJ_HT_P(fci->object_ptr)->call_method(EX(function_state).function->common.function_name, fci->param_count, *fci->retval_ptr_ptr, fci->retval_ptr_ptr, fci->object_ptr, 1 TSRMLS_CC);
 		} else {
-			zend_error_noreturn(E_ERROR, "Cannot call overloaded function for non-object");
+			zend_error(E_ERROR, "Cannot call overloaded function for non-object");
 			return FAILURE;
 		}
 

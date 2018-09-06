@@ -7,7 +7,7 @@ class Foo
 	public b = 0;
 	const TEST = 0;
 
-	public static function empty_for_in_range(var n)
+	public static function emptyForInRange(var n)
 	{
 		var i;
 		for i in range(1, n) {
@@ -15,7 +15,7 @@ class Foo
 		}
 	}
 
-	public static function read_static(var n)
+	public static function readStatic(var n)
 	{
 		var x, i;
 		for i in range(1, n) {
@@ -23,7 +23,7 @@ class Foo
 		}
 	}
 
-	public static function write_static(var n)
+	public static function writeStatic(var n)
 	{
 		var i;
 		for i in range(1, n) {
@@ -31,7 +31,7 @@ class Foo
 		}
 	}
 
-	public static function isset_static(var n)
+	public static function issetStatic(var n)
 	{
 		var x, i;
 		for i in range(1, n) {
@@ -39,7 +39,7 @@ class Foo
 		}
 	}
 
-	public static function empty_static(var n)
+	public static function emptyStatic(var n)
 	{
 		var x, i;
 		for i in range(1, n) {
@@ -47,19 +47,7 @@ class Foo
 		}
 	}
 
-	public static function f()
-	{
-	}
-
-	public static function call_static(var n)
-	{
-		var i;
-		for i in range(1, n) {
-			self::f();
-		}
-	}
-
-	public function read_prop(var n)
+	public function readProp(var n)
 	{
 		var x, i;
 		for i in range(1, n) {
@@ -67,7 +55,7 @@ class Foo
 		}
 	}
 
-	public function write_prop(var n)
+	public function writeProp(var n)
 	{
 		var i;
 
@@ -76,7 +64,7 @@ class Foo
 		}
 	}
 
-	public function assign_add_prop(var n)
+	public function assignAddProp(var n)
 	{
 		var i;
 		for i in range(1, n) {
@@ -101,7 +89,7 @@ class Foo
 		}
 	}*/
 
-	public function post_inc_prop(n)
+	public function postIncProp(n)
 	{
 		var i;
 
@@ -110,7 +98,7 @@ class Foo
 		}
 	}
 
-	public function post_dec_prop(n)
+	public function postDecProp(n)
 	{
 		var i;
 
@@ -119,7 +107,7 @@ class Foo
 		}
 	}
 
-	public function isset_prop(n)
+	public function issetProp(n)
 	{
 		var i, x;
 
@@ -128,7 +116,7 @@ class Foo
 		}
 	}
 
-	public function empty_prop($n)
+	public function emptyProp($n)
 	{
 		var i, x;
 
@@ -150,7 +138,34 @@ class Foo
 		}
 	}
 
-	public function read_const($n)
+	static public function staticMethod() -> void
+	{
+	}
+
+	static public function staticMethod1() -> boolean
+	{
+		return true;
+	}
+
+	public function scall(var n)
+	{
+		var i;
+
+		for i in range(1, n) {
+			self::staticMethod();
+		}
+	}
+
+	public function scallWithReturnTrue(var n)
+	{
+		var i;
+
+		for i in range(1, n) {
+			self::staticMethod1();
+		}
+	}
+
+	public function readConst(var n)
 	{
 		var i, x;
 		for i in range(1, n) {

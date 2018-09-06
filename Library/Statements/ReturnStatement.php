@@ -2,28 +2,21 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
+use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 use Zephir\Utils;
-use Zephir\Types;
 
 /**
  * ReturnStatement
@@ -70,7 +63,7 @@ class ReturnStatement extends StatementAbstract
                             }
 
                             $compilationContext->headersManager->add('kernel/object');
-                            $codePrinter->output('RETURN_MM_MEMBER(this_ptr, "' . $property . '");');
+                            $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
                             return;
                         }
                     }
@@ -218,7 +211,7 @@ class ReturnStatement extends StatementAbstract
 
                         case 'string':
                         case 'array':
-                            $codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
+                            $codePrinter->output('RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                             break;
 
                         case 'bool':
@@ -232,12 +225,12 @@ class ReturnStatement extends StatementAbstract
                                 if ($symbolVariable->getName() != 'return_value') {
                                     if (!$symbolVariable->isExternal()) {
                                         if ($symbolVariable->isLocalOnly()) {
-                                            $codePrinter->output('RETURN_LCTOR(' . $symbolVariable->getName() . ');');
+                                            $codePrinter->output('RETURN_LCTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                         } else {
                                             if (!$symbolVariable->isMemoryTracked()) {
-                                                $codePrinter->output('RETURN_CTOR(' . $symbolVariable->getName() . ');');
+                                                $codePrinter->output('RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                             } else {
-                                                $codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+                                                $codePrinter->output('RETURN_CCTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                                             }
                                         }
                                     } else {

@@ -2,23 +2,18 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
 namespace Zephir;
 
+use Zephir\Compiler\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**
@@ -44,13 +39,13 @@ class Call
 
     protected $_reflection;
 
-    protected $_resolvedTypes = array();
+    protected $_resolvedTypes = [];
 
-    protected $_resolvedDynamicTypes = array();
+    protected $_resolvedDynamicTypes = [];
 
-    protected $_temporalVariables = array();
+    protected $_temporalVariables = [];
 
-    protected $_mustCheckForCopy = array();
+    protected $_mustCheckForCopy = [];
 
     /**
      * Processes the symbol variable that will be used to return
@@ -72,7 +67,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                         'variable',
@@ -112,7 +107,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
                 } else {
@@ -148,7 +143,7 @@ class Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
                 } else {
@@ -305,6 +300,8 @@ class Call
      * @param array $expression
      * @param array $calleeDefinition
      * @return array
+     *
+     * @throws CompilerException
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
@@ -526,8 +523,13 @@ class Call
 
                 case 'char':
                 case 'uchar':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
-                    $compilationContext->backend->assignLong($parameterVariable, '\'' . $compiledExpression->getCode() . '\'', $compilationContext);
+                    if ($compilationContext->backend->getName() == 'ZendEngine2') {
+                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                    } else {
+                        $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    }
+                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, false);
+
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
@@ -596,12 +598,17 @@ class Call
 
                         case 'char':
                         case 'uchar':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
-                            $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
-                            $params[] = '&' . $parameterTempVariable->getName();
-                            $types[] = $parameterTempVariable->getType();
-                            $dynamicTypes[] = $parameterTempVariable->getType();
-                            $this->_temporalVariables[] = $parameterTempVariable;
+                            if ($compilationContext->backend->getName() == 'ZendEngine2') {
+                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_STRINGL(&' . $parameterVariable->getName() . ', &' . $compiledExpression->getCode() . ', 1, 1);');
+                            } else {
+                                $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_STRINGL(&' . $parameterVariable->getName() . ', &' . $compiledExpression->getCode() . ', 1);');
+                            }
+                            $this->_temporalVariables[] = $parameterVariable;
+                            $params[] = '&' . $parameterVariable->getName();
+                            $types[] = $parameterVariable->getType();
+                            $dynamicTypes[] = $parameterVariable->getType();
                             break;
 
                         case 'double':
@@ -653,8 +660,8 @@ class Call
     public function addCallStatusFlag(CompilationContext $compilationContext)
     {
         if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
-            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
-            $callStatus->setIsInitialized(true, $compilationContext, array());
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->branchManager->getCurrentBranch());
+            $callStatus->setIsInitialized(true, $compilationContext);
             $callStatus->increaseUses();
             $callStatus->setReadOnly(true);
             $compilationContext->symbolTable->addRawVariable($callStatus);
@@ -675,7 +682,7 @@ class Call
             );
             return;
         }
-        
+
         $compilationContext->codePrinter->output('zephir_check_call_status();');
     }
 

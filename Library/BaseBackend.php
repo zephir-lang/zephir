@@ -1,9 +1,22 @@
 <?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
+ |                                                                          |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
+ +--------------------------------------------------------------------------+
+*/
+
 namespace Zephir;
 
-use Zephir\Config;
+use Zephir\Fcall\FcallAwareInterface;
+use Zephir\Fcall\FcallManagerInterface;
 
-abstract class BaseBackend
+abstract class BaseBackend implements FcallAwareInterface
 {
     /**
      * @var Config
@@ -15,6 +28,11 @@ abstract class BaseBackend
      * @var string
      */
     protected $name;
+
+    /**
+     * @var FcallManagerInterface
+     */
+    protected $fcallManager;
 
     /**
      * BaseBackend constructor
@@ -52,6 +70,8 @@ abstract class BaseBackend
 
     /**
      * Resolves the path to the source template file of the backend
+     *
+     * @param string $filename
      * @return string Absolute path to template file
      */
     public function getTemplateFileContents($filename)
@@ -63,7 +83,11 @@ abstract class BaseBackend
         return file_get_contents($filepath);
     }
 
+    /**
+     * @return StringsManager
+     */
     abstract public function getStringsManager();
+
     abstract public function getTypeDefinition($type);
     abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
@@ -154,11 +178,24 @@ abstract class BaseBackend
      */
     abstract public function getVariableCodePointer(Variable $variable);
 
+    abstract public function resolveValue($value, CompilationContext $context, $usePointer = false);
+
     public static function getActiveBackend()
     {
         if (version_compare(phpversion(), '7.0', '>=')) {
             return 'ZendEngine3';
         }
+
         return 'ZendEngine2';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param FcallManagerInterface $fcallManager
+     */
+    public function setFcallManager(FcallManagerInterface $fcallManager)
+    {
+        $this->fcallManager = $fcallManager;
     }
 }

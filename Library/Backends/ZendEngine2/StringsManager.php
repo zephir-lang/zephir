@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -191,10 +185,36 @@ class StringsManager extends BaseStringsManager
             $code .= "}" . PHP_EOL . PHP_EOL;
         }
 
-        $codeh .= "#define zephir_concat_function(result, op1, op2) concat_function(result, op1, op2 TSRMLS_CC)
+        $codeh .= "#define zephir_concat_function(d, l, r) _zephir_concat_function(d, l, r TSRMLS_CC)
+void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
+";
 
+        $code .= "void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC)
+{
+	zval *tmp;
+
+	/*
+		res == op1 == op2: won't leak
+		res == op1 != op2: won't leak
+		res == op2 != op1: will leak
+	 */
+	if (result == op2 && result != op1) {
+		ALLOC_INIT_ZVAL(tmp);
+		ZVAL_ZVAL(tmp, result, 1, 0);
+		if (1 == Z_REFCOUNT_P(result)) {
+			zval_dtor(result);
+		}
+
+		op2 = tmp;
+	}
+
+	concat_function(result, op1, op2 TSRMLS_CC);
+	if (tmp) {
+		zval_ptr_dtor(&tmp);
+	}
+}
 ";
         Utils::checkAndWriteIfNeeded($pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
         Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');

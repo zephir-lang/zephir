@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: https://zephir-lang.com/license.html               |
  +--------------------------------------------------------------------------+
 */
 
@@ -21,22 +15,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\CompilerException;
+use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * GlobalsSetOptimizer
+ * Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
  *
  * Writes values from extensions globals
  */
 class GlobalsSetOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     * @param  array              $expression
+     * @param  Call               $call
+     * @param  CompilationContext $context
+     *
+     * @return CompiledExpression
+     *
      * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -56,20 +53,99 @@ class GlobalsSetOptimizer extends OptimizerAbstract
         $globalName = $expression['parameters'][0]['parameter']['value'];
 
         if (!$context->compiler->isExtensionGlobal($globalName)) {
-            throw new CompilerException("Global '" . $globalName . "' cannot be written because it wasn't defined", $expression);
+            throw new CompilerException(
+                "Global variable '{$globalName}' cannot be written because it wasn't defined",
+                $expression
+            );
         }
 
         unset($expression['parameters'][0]);
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        try {
+            $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
+            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
+            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !is_string($resolvedParams[0])) {
+                throw new CompilerException(
+                    "Unable to reslove value for '{$globalName}' global variable.",
+                    $expression
+                );
+            }
 
-        if (strpos($globalName, '.') !== false) {
-            $parts = explode('.', $globalName);
-            $context->codePrinter->output('ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1] . ' = zend_is_true(' . $resolvedParams[0] . ');');
+            if (!isset($globalDefinition['type'])) {
+                throw new CompilerException(
+                    "Unable to determine type for '{$globalName}' global variable.",
+                    $expression
+                );
+            }
+
+            $internalAccessor = $this->resolveInternalAccessor($globalName);
+            $internalValue = $this->resolveInternalValue($globalDefinition, $expression, $globalName, $resolvedParams[0]);
+
+            $context->codePrinter->output("{$internalAccessor} = {$internalValue};");
+
+            return new CompiledExpression('null', null, $expression);
+        } catch (Exception $e) {
+            throw new CompilerException($e->getMessage(), $expression);
+        }
+    }
+
+    private function resolveInternalAccessor($globalName)
+    {
+        $parts = explode('.', $globalName);
+
+        if (isset($parts[1])) {
+            return strtr('ZEPHIR_GLOBAL(:v).:parts', [':v' => $parts[0], ':parts' => $parts[1]]);
         }
 
-        return new CompiledExpression('null', null, $expression);
+        return strtr('ZEPHIR_GLOBAL(:v)', [':v' => $parts[0]]);
+    }
+
+    /**
+     * @todo  Add 'hash' support
+     * @todo  Use zval_get_string, zval_get_long, zval_get_double for ZE3
+     *
+     * @param array  $definition
+     * @param array  $expression
+     * @param string $name
+     * @param string $value
+     *
+     * @return string
+     */
+    private function resolveInternalValue(array $definition, array $expression, $name, $value)
+    {
+        $type = $definition['type'];
+
+        switch ($type) {
+            case 'boolean':
+            case 'bool':
+                return strtr('zend_is_true(:v)', [':v' => $value]);
+            case 'int':
+            case 'uint':
+            case 'integer':
+            case 'long':
+            case 'ulong':
+                // TODO: Use zval_get_long when we'll drop Zend Engine 2
+                return strtr('Z_LVAL_P(:v)', [':v' => $value]);
+            case 'string':
+                // TODO: Use zval_get_string when we'll drop Zend Engine 2
+                return strtr('Z_STRVAL_P(:v)', [':v' => $value]);
+            case 'char':
+            case 'uchar':
+                // TODO: Use zval_get_string and zval_get_long when we'll drop Zend Engine 2
+                return strtr(
+                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : Z_LVAL_P(:v))',
+                    [':v' => $value]
+                );
+            case 'double':
+            case 'float':
+                // TODO: Use zval_get_double when we'll drop Zend Engine 2
+                return strtr('Z_DVAL_P(:v)', [':v' => $value]);
+            default:
+                throw new CompilerException(
+                    "Unknown type '{$type}' to setting global variable '{$name}'.",
+                    $expression
+                );
+        }
     }
 }

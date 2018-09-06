@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (https://www.zephir-lang.com)      |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -21,22 +21,26 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_ext.h"
-#include "php_main.h"
-#include "ext/spl/spl_exceptions.h"
+#include <php.h>
+#include <php_ext.h>
+#include <php_main.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
+#include <ext/spl/spl_exceptions.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/exception.h"
 
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+
+zend_string* i_parent = NULL;
+zend_string* i_static = NULL;
+zend_string* i_self   = NULL;
 
 int zephir_is_iterable_ex(zval *arr, int duplicate)
 {
-	if (unlikely(Z_TYPE_P(arr) != IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
     //TODO: duplicate
@@ -86,7 +90,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 /**
  * Gets the global zval into PG macro
  */
-int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
+int zephir_get_global(zval **arr, const char *global, unsigned int global_length)
 {
 	zval *gv;
 	zend_bool jit_initialization = PG(auto_globals_jit);
@@ -96,25 +100,20 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 		zend_is_auto_global(str);
 	}
 
-	zval_ptr_dtor(arr);
-	ZVAL_UNDEF(arr);
-
 	if (&EG(symbol_table)) {
-		if ((gv = zend_hash_find(&EG(symbol_table), str)) != NULL) {
+		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
-				ZVAL_COPY_VALUE(arr, gv);
-				zend_string_free(str);
+				*arr = gv;
+				zend_string_release(str);
 				return SUCCESS;
 			}
 		}
 	}
 
-	array_init(arr);
-	zend_hash_update(&EG(symbol_table), str, arr);
-	//zend_string_free(str);
-
-	return SUCCESS;
+	*arr = NULL;
+	zend_string_release(str);
+	return FAILURE;
 }
 
 /**
@@ -182,7 +181,7 @@ int zephir_fast_count_ev(zval *value)
 		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
-			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count > 0;
 		}
 
@@ -227,7 +226,7 @@ int zephir_fast_count_int(zval *value)
 		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
-			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count;
 		}
 
@@ -255,11 +254,13 @@ int zephir_fast_count_int(zval *value)
 }
 
 /**
- * Check if a function exists using explicit char param (using precomputed hash key)
+ * Check if a function exists using explicit function length
+ *
+ * TODO: Deprecated. Will be removed in future
  */
-int zephir_function_quick_exists_ex(const char *method_name, unsigned int method_len)
+int zephir_function_quick_exists_ex(const char *function_name, size_t function_len)
 {
-	if (zend_hash_str_exists(CG(function_table), method_name, method_len)) {
+	if (zend_hash_str_exists(CG(function_table), function_name, function_len)) {
 		return SUCCESS;
 	}
 
@@ -268,19 +269,23 @@ int zephir_function_quick_exists_ex(const char *method_name, unsigned int method
 
 /**
  * Check if a function exists
+ *
+ * @param function_name
+ * @return
  */
 int zephir_function_exists(const zval *function_name)
 {
+	if (zend_hash_str_exists(CG(function_table), Z_STRVAL_P(function_name), Z_STRLEN_P(function_name))) {
+		return SUCCESS;
+	}
 
-	return zephir_function_quick_exists_ex(
-		Z_STRVAL_P(function_name),
-		Z_STRLEN_P(function_name) + 1
-	);
+	return FAILURE;
 }
 
 /**
- * Check if a function exists using explicit char param
+ * Check if a function exists using explicit function length
  *
+ * TODO: Deprecated. Will be removed in future
  * @param function_name
  * @param function_len strlen(function_name) + 1
  */
@@ -392,7 +397,7 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 {
 #if PHP_VERSION_ID >= 70100
 	int ret;
- 
+
 	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
 	ret = zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
 	zend_string_release(key);
@@ -452,11 +457,36 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 	return zephir_declare_class_constant_stringl(ce, name, name_length, value, strlen(value));
 }
 
+/**
+ * Check is PHP Version equals to Runtime PHP Version
+ */
+int zephir_is_php_version(unsigned int id)
+{
+	int php_major = PHP_MAJOR_VERSION * 10000;
+	int php_minor = PHP_MINOR_VERSION * 100;
+	int php_release = PHP_RELEASE_VERSION;
+
+	int zep_major = id / 10000;
+	int zep_minor = id / 100 - zep_major * 100;
+	int zep_release = id - (zep_major * 10000 + zep_minor * 100);
+
+	if (zep_minor == 0)
+	{
+		php_minor = 0;
+	}
+
+	if (zep_release == 0)
+	{
+		php_release = 0;
+	}
+
+	return ((php_major + php_minor + php_release) == id ? 1 : 0);
+}
+
 void zephir_get_args(zval *return_value)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
-	zval *param_ptr       = ZEND_CALL_ARG(ex, 1);
 
 	array_init_size(return_value, arg_count);
 	if (arg_count) {
@@ -500,7 +530,6 @@ void zephir_get_arg(zval *return_value, zend_long idx)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
-	zval *param_ptr       = ZEND_CALL_ARG(ex, 1);
 	zval *arg;
 	uint32_t first_extra_arg;
 
@@ -529,4 +558,15 @@ void zephir_get_arg(zval *return_value, zend_long idx)
 	}
 
 	RETURN_NULL();
+}
+
+void zephir_module_init()
+{
+	/* Though these strings won't be interned in ZTS,
+	 * we still benefit from using zend_string* instead of char*
+	 * in hash tables
+	 */
+	i_parent = zend_new_interned_string(zend_string_init(ZEND_STRL("parent"), 1));
+	i_static = zend_new_interned_string(zend_string_init(ZEND_STRL("static"), 1));
+	i_self   = zend_new_interned_string(zend_string_init(ZEND_STRL("self"), 1));
 }

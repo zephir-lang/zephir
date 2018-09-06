@@ -1,6 +1,0 @@
-ARG_ENABLE("zephir_parser", "enable zephir_parser", "no");
-
-if (PHP_ZEPHIR_PARSER != "no") {
-  EXTENSION("zephir_parser", "zephir_parser.c", null, "-I"+configure_module_dirname);
-  ADD_SOURCES(configure_module_dirname + "/parser", "parser.c scanner.c", "zephir_parser");
-}

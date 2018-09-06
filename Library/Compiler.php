@@ -2,20 +2,14 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | https://zephir-lang.com/license.html                                     |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
@@ -23,16 +17,21 @@ use Zephir\Parser\Manager;
 use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
+use Zephir\Compiler\CompilerException;
+use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Exception\IllegalStateException;
 use Zephir\FileSystem\HardDisk as FileSystem;
 
 /**
  * Zephir\Compiler
  *
  * The main compiler.
+ *
+ * @package Zephir
  */
 class Compiler
 {
-    const VERSION = '0.9.6a-dev';
+    const VERSION = '0.11.0';
 
     public $parserCompiled = false;
 
@@ -98,7 +97,7 @@ class Compiler
     protected $stringManager;
 
     /**
-     * @var \Zephir\Backends\ZendEngine3\FcallManager|\Zephir\Backends\ZendEngine2\FcallManager
+     * @var FcallManagerInterface
      */
     protected $fcallManager;
 
@@ -137,6 +136,11 @@ class Compiler
      * @var Manager
      */
     protected $parserManager;
+
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
 
     /**
      * Compiler constructor
@@ -192,58 +196,17 @@ class Compiler
     }
 
     /**
-     * Compile the parser PHP extension.
-     *
-     * Returns TRUE if parser is available or compiled extions file (string).
-     *
-     * @return bool|string
-     */
-    public function compileParser()
-    {
-        if ($this->parserManager->hasToRecompileParser()) {
-            $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-            return $this->parserManager->compileParser();
-        }
-
-        if ($this->parserManager->isAvailable()) {
-            return true;
-        }
-
-        if ($this->parserManager->isAlreadyCompiled()) {
-            return $this->parserManager->getParserFilePath();
-        }
-
-        $this->logger->output('The Zephir Parser is loaded but will be recompiled');
-
-        return $this->parserManager->compileParser();
-    }
-
-    /**
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
      * @throws CompilerException
-     * @throws Exception
+     * @throws IllegalStateException
      * @throws ParseException
      */
     protected function preCompile($filePath)
     {
-        $parserExt = $this->compileParser();
-
-        // Check if we need to load the parser extension and also allow users to manage the Zephir Parser extension
-        // on their own (Zephir won't handle updating)
-        if ($parserExt && $parserExt !== true) {
-            // exclude --parser-compiled argument, we'll specify it additionally
-            $args = array_filter($_SERVER['argv'], function ($arg) {
-                return 0 !== strpos($arg, "--parser-compiled");
-            });
-            $cmd = PHP_BINARY . ' -dextension="' . $parserExt . '" ' . implode(' ', $args) . ' --parser-compiled';
-            passthru($cmd, $exitCode);
-            exit($exitCode);
-        }
-
-        if (!$parserExt) {
-            throw new Exception('The zephir parser extension is not loaded!');
+        if (!$this->parserManager->isAvailable()) {
+            throw new IllegalStateException($this->parserManager->requirements());
         }
 
         if (preg_match('#\.zep$#', $filePath)) {
@@ -498,11 +461,9 @@ class Compiler
                     }
                     $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
                 }
-            } else {
-                if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-                    $path = $dest . DIRECTORY_SEPARATOR . $fileName;
-                    $success = $success && call_user_func($callback, $pathName, $path);
-                }
+            } elseif (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+                $path = $dest . DIRECTORY_SEPARATOR . $fileName;
+                $success = $success && call_user_func($callback, $pathName, $path);
             }
         }
 
@@ -512,15 +473,23 @@ class Compiler
     /**
      * Recursively deletes files in a specified location
      *
-     * @param string $path
-     * @param string $mask
+     * @param string $path Directory to deletes files
+     * @param string $mask Regular expression to deletes files
+     *
+     * @return void
      */
     protected function recursiveDeletePath($path, $mask)
     {
+        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
+            $this->logger->output("Directory {$path} does not exist or it is not readble. Skip...");
+            return;
+        }
+
         $objects = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
         );
+
         foreach ($objects as $name => $object) {
             if (preg_match($mask, $name)) {
                 @unlink($name);
@@ -605,7 +574,7 @@ class Compiler
      *
      * @param string $name
      *
-     * @return boolean
+     * @return array
      */
     public function getExtensionGlobal($name)
     {
@@ -804,11 +773,24 @@ class Compiler
         /**
          * Check if there are module/request/global destructors
          */
+        $includes = '';
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processCodeInjection($destructors);
-            $includes = $invokeDestructors[0];
-            $destructors = $invokeDestructors[1];
+            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
+            $includes .= PHP_EOL . $invokeRequestDestructors[0];
+            $reqDestructors = $invokeRequestDestructors[1];
+
+            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
+            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
+            $prqDestructors = $invokePostRequestDestructors[1];
+
+            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
+            $includes .= PHP_EOL . $invokeModuleDestructors[0];
+            $modDestructors = $invokeModuleDestructors[1];
+
+            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
+            $glbDestructors = $invokeGlobalsDestructors[1];
         }
 
         /**
@@ -816,9 +798,17 @@ class Compiler
          */
         $initializers = $this->config->get('initializers');
         if (is_array($initializers)) {
-            $invokeInitializers = $this->processCodeInjection($initializers);
-            $includes = $invokeInitializers[0];
-            $initializers = $invokeInitializers[1];
+            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
+            $includes .= PHP_EOL . $invokeRequestInitializers[0];
+            $reqInitializers = $invokeRequestInitializers[1];
+
+            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
+            $includes .= PHP_EOL . $invokeModuleInitializers[0];
+            $modInitializers = $invokeModuleInitializers[1];
+
+            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
+            $glbInitializers = $invokeGlobalsInitializers[1];
         }
 
         /**
@@ -894,7 +884,7 @@ class Compiler
                     if (!$file->isDir()) {
                         $extension = str_replace('.php', '', $file);
                         if (!extension_loaded($extension)) {
-                            require $file->getRealPath();
+                            require_once $file->getRealPath();
                         }
                     }
                 }
@@ -1045,9 +1035,9 @@ class Compiler
      * Compiles the extension without installing it
      *
      * @param CommandInterface $command
-     * @param boolean $development
+     * @param bool             $development
      *
-     * @throws CompilerException
+     * @throws Exception|CompilerException
      */
     public function compile(CommandInterface $command, $development = false)
     {
@@ -1060,20 +1050,25 @@ class Compiler
             $extensionName = $namespace;
         }
         $needConfigure = $this->generate($command);
+
         if ($needConfigure) {
             if (Utils::isWindows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
-                if (file_exists('ext/Release')) {
-                    exec('rd /s /q ext/Release', $output, $exit);
+
+                $releaseFolder = Utils::resolveWindowsReleaseFolder();
+                if (file_exists($releaseFolder)) {
+                    exec('rd /s /q ' . $releaseFolder, $output, $exit);
                 }
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
                 /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
                 $fixMarker = "/* zephir_phpize_fix */";
-                $configureFile = file_get_contents("ext/configure.js");
-                $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
+
+                $configureFile = file_get_contents('ext\\configure.js');
+                $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
                 $hasChanged = false;
+
                 if (strpos($configureFile, $fixMarker) === false) {
                     $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
                     $hasChanged = true;
@@ -1093,7 +1088,7 @@ class Compiler
                 }
 
                 if ($hasChanged) {
-                    file_put_contents("ext/configure.js", $configureFile);
+                    file_put_contents('ext\\configure.js', $configureFile);
                 }
 
                 $this->logger->output('Preparing configuration file...');
@@ -1184,7 +1179,7 @@ class Compiler
      * @param CommandInterface $command
      * @param boolean $development
      *
-     * @throws Exception
+     * @throws CompilerException
      */
     public function install(CommandInterface $command, $development = false)
     {
@@ -1209,9 +1204,9 @@ class Compiler
 
         $currentDir = getcwd();
         exec(
-            '(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' .
-            $currentDir . '/compile-errors.log 1>>' .
-            $currentDir . '/compile.log)',
+            '(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ' .
+            'make 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log" && ' .
+            'sudo make install 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log")',
             $output,
             $exit
         );
@@ -1260,7 +1255,12 @@ class Compiler
      */
     public function clean(CommandInterface $command)
     {
-        system('cd ext && make clean 1> /dev/null');
+        $this->fileSystem->clean();
+        if (Utils::isWindows()) {
+            system('cd ext && nmake clean-all');
+        } else {
+            system('cd ext && make clean > /dev/null');
+        }
     }
 
     /**
@@ -1271,9 +1271,15 @@ class Compiler
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        system('cd ext && sudo make clean 1> /dev/null');
-        system('cd ext && sudo phpize --clean 1> /dev/null');
-        system('cd ext && sudo ./clean 1> /dev/null');
+        if (Utils::isWindows()) {
+            system('cd ext && nmake clean-all');
+            system('cd ext && phpize --clean');
+            system('cd ext && ./clean');
+        } else {
+            system('cd ext && make clean > /dev/null');
+            system('cd ext && phpize --clean > /dev/null');
+            system('cd ext && ./clean > /dev/null');
+        }
     }
 
     /**
@@ -1578,6 +1584,8 @@ class Compiler
 
                 $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
+                // @todo Add support for 'string', 'hash'
+                // @todo Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
@@ -1602,9 +1610,8 @@ class Compiler
                     case 'uchar':
                         $globalsDefault[$isModuleGlobal][]
                             = "\t" . $namespace . '_globals->' . $name . ' = \'' .
-                            $global['default'] . '\'";' . PHP_EOL;
+                            $global['default'] . '\';' . PHP_EOL;
                         break;
-
                     default:
                         throw new Exception(
                             "Unknown type '" . $global['type'] . "' for extension global '" . $name . "'"
@@ -1701,15 +1708,19 @@ class Compiler
      * @param array $entries
      * @return array
      */
-    public function processCodeInjection(array $entries)
+    public function processCodeInjection(array $entries, $section = 'request')
     {
         $codes = array();
         $includes = array();
 
-        if (isset($entries['request'])) {
-            foreach ($entries['request'] as $entry) {
-                $codes[] = $entry['code'] . ';';
-                $includes[] = "#include \"" . $entry['include'] . "\"";
+        if (isset($entries[$section])) {
+            foreach ($entries[$section] as $entry) {
+                if (isset($entry['code']) && !empty($entry['code'])) {
+                    $codes[] = $entry['code'] . ';';
+                }
+                if (isset($entry['include']) && !empty($entry['include'])) {
+                    $includes[] = "#include \"" . $entry['include'] . "\"";
+                }
             }
         }
 
@@ -1784,7 +1795,13 @@ class Compiler
         }
 
         $includes = '';
-        $destructors = '';
+        $reqInitializers = '';
+        $reqDestructors = '';
+        $prqDestructors = '';
+        $modInitializers = '';
+        $modDestructors = '';
+        $glbInitializers = '';
+        $glbDestructors = '';
         $files = array_merge($this->files, $this->anonymousFiles);
 
         /**
@@ -1886,9 +1903,21 @@ class Compiler
          */
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processCodeInjection($destructors);
-            $includes = $invokeDestructors[0];
-            $destructors = $invokeDestructors[1];
+            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
+            $includes .= PHP_EOL . $invokeRequestDestructors[0];
+            $reqDestructors = $invokeRequestDestructors[1];
+
+            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
+            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
+            $prqDestructors = $invokePostRequestDestructors[1];
+
+            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
+            $includes .= PHP_EOL . $invokeModuleDestructors[0];
+            $modDestructors = $invokeModuleDestructors[1];
+
+            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
+            $glbDestructors = $invokeGlobalsDestructors[1];
         }
 
         /**
@@ -1896,9 +1925,17 @@ class Compiler
          */
         $initializers = $this->config->get('initializers');
         if (is_array($initializers)) {
-            $invokeInitializers = $this->processCodeInjection($initializers);
-            $includes = $invokeInitializers[0];
-            $initializers = $invokeInitializers[1];
+            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
+            $includes .= PHP_EOL . $invokeRequestInitializers[0];
+            $reqInitializers = $invokeRequestInitializers[1];
+
+            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
+            $includes .= PHP_EOL . $invokeModuleInitializers[0];
+            $modInitializers = $invokeModuleInitializers[1];
+
+            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
+            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
+            $glbInitializers = $invokeGlobalsInitializers[1];
         }
 
         /**
@@ -1930,14 +1967,36 @@ class Compiler
                 PHP_EOL . "\t",
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
-            '%INIT_GLOBALS%'        => $globalsDefault[0],
+            '%INIT_GLOBALS%'        => implode(
+                PHP_EOL . "\t",
+                array_merge((array)$globalsDefault[0], array($glbInitializers))
+            ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
+            '%DESTROY_GLOBALS%'     => $glbDestructors,
             '%EXTENSION_INFO%'      => $phpInfo,
-            '%EXTRA_INCLUDES%'      => $includes,
-            '%DESTRUCTORS%'         => $destructors,
-            '%INITIALIZERS%'        => implode(
+            '%EXTRA_INCLUDES%'      => implode(
                 PHP_EOL,
-                array_merge($this->internalInitializers, array($initializers))
+                array_unique(explode(PHP_EOL, $includes))
+            ),
+            '%MOD_INITIALIZERS%'    => $modInitializers,
+            '%MOD_DESTRUCTORS%'     => $modDestructors,
+            '%REQ_INITIALIZERS%'    => implode(
+                PHP_EOL . "\t",
+                array_merge($this->internalInitializers, array($reqInitializers))
+            ),
+            '%REQ_DESTRUCTORS%'     => $reqDestructors,
+            '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
+                PHP_EOL,
+                array(
+                    '#define ZEPHIR_POST_REQUEST 1',
+                    'static PHP_PRSHUTDOWN_FUNCTION(' . strtolower($project) . ')',
+                    '{',
+                    "\t" . implode(
+                        PHP_EOL . "\t",
+                        explode(PHP_EOL, $prqDestructors)
+                    ),
+                    '}'
+                )
             ),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries,
@@ -2036,35 +2095,101 @@ class Compiler
         /**
          * Create argument info
          */
-
         foreach ($this->functionDefinitions as $func) {
             $funcName = $func->getInternalName();
             $argInfoName = 'arginfo_' . strtolower($funcName);
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
-            if (count($parameters)) {
+
+            if ($this->backend->isZE3() && $func->hasReturnTypes()) {
+                if (array_key_exists('object', $func->getReturnTypes())) {
+                    $class = 'NULL';
+
+                    if (count($func->getReturnClassTypes()) == 1) {
+                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
+                        $class = Utils::escapeClassName($compilationContext->getFullName(key($func->getReturnClassTypes())));
+                    }
+
+                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
+                    $headerPrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $func->getNumberOfRequiredParameters() . ', ' .
+                        $class . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $headerPrinter->output('#else');
+                    $headerPrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $func->getNumberOfRequiredParameters() . ', ' .
+                        'NULL, "' . $class . '", ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $headerPrinter->output('#endif');
+                } else {
+                    $type = 'IS_NULL';
+
+                    if ($func->areReturnTypesIntCompatible()) {
+                        $type = 'IS_LONG';
+                    }
+                    if ($func->areReturnTypesDoubleCompatible()) {
+                        $type = 'IS_DOUBLE';
+                    }
+                    if ($func->areReturnTypesBoolCompatible()) {
+                        $type = '_IS_BOOL';
+                    }
+                    if ($func->areReturnTypesStringCompatible()) {
+                        $type = 'IS_STRING';
+                    }
+
+                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
+                    $headerPrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $func->getNumberOfRequiredParameters() . ', ' .
+                        $type . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $headerPrinter->output('#else');
+                    $headerPrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $func->getNumberOfRequiredParameters() . ', ' .
+                        $type . ', NULL, ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $headerPrinter->output('#endif');
+                }
+
+                if ($parameters == null || !count($parameters->getParameters())) {
+                    $headerPrinter->output('ZEND_END_ARG_INFO()');
+                    $headerPrinter->outputBlankLine();
+                }
+            } elseif ($parameters != null && count($parameters->getParameters())) {
                 $headerPrinter->output(
                     'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
                     $func->getNumberOfRequiredParameters() . ')'
                 );
+            }
 
+            if ($parameters != null && count($parameters->getParameters())) {
                 foreach ($parameters->getParameters() as $parameter) {
-                    switch ($parameter['data-type']) {
-                        case 'array':
+                    switch (($this->backend->isZE3() ? '3:' : '2:') . $parameter['data-type']) {
+                        case '2:array':
+                        case '3:array':
                             $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' .
+                                "\t" . 'ZEND_ARG_ARRAY_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ', ' .
                                 (isset($parameter['default']) ? 1 : 0) . ')'
                             );
                             break;
 
-                        case 'variable':
+                        case '2:variable':
+                        case '3:variable':
                             if (isset($parameter['cast'])) {
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
+                                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
                                         $value = $parameter['cast']['value'];
+
                                         $headerPrinter->output(
-                                            "\t" . 'ZEND_ARG_OBJ_INFO(0, ' .
+                                            "\t" . 'ZEND_ARG_OBJ_INFO(' .
+                                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
                                             $parameter['name'] . ', ' .
                                             Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' .
                                             (isset($parameter['default']) ? 1 : 0) . ')'
@@ -2075,12 +2200,59 @@ class Compiler
                                         throw new Exception('Unexpected exception');
                                 }
                             } else {
-                                $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                                $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ')');
                             }
                             break;
 
+                        case '3:bool':
+                        case '3:boolean':
+                            $headerPrinter->output(
+                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ', ' .
+                                ($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL') . ', ' .
+                                (isset($parameter['default']) ? 1 : 0) . ')'
+                            );
+                            break;
+
+                        case '3:uchar':
+                        case '3:int':
+                        case '3:uint':
+                        case '3:long':
+                        case '3:ulong':
+                            $headerPrinter->output(
+                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ', IS_LONG, ' .
+                                (isset($parameter['default']) ? 1 : 0) . ')'
+                            );
+                            break;
+
+                        case '3:double':
+                            $headerPrinter->output(
+                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ', IS_DOUBLE, ' .
+                                (isset($parameter['default']) ? 1 : 0) . ')'
+                            );
+                            break;
+
+                        case '3:char':
+                        case '3:string':
+                            $headerPrinter->output(
+                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
+                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                                $parameter['name'] . ', IS_STRING, ' .
+                                (isset($parameter['default']) ? 1 : 0) . ')'
+                            );
+                            break;
+
                         default:
-                            $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
+                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
+                            $parameter['name'] . ')');
                             break;
                     }
                 }
@@ -2088,7 +2260,7 @@ class Compiler
                 $headerPrinter->outputBlankLine();
             }
             /** Generate FE's */
-            $paramData = (count($parameters) ? $argInfoName : 'NULL');
+            $paramData = ((($this->backend->isZE3() && $func->hasReturnTypes()) || $func->hasParameters()) ? $argInfoName : 'NULL');
 
             if ($func->isGlobal()) {
                 $entryPrinter->output(
@@ -2248,8 +2420,7 @@ class Compiler
      */
     protected function checkRequires()
     {
-        $extensionRequires = $this->config->get("requires");
-        $extensionRequires = $extensionRequires["extensions"];
+        $extensionRequires = $this->config->get("extensions", "requires");
         if ($extensionRequires) {
             $collectionError = PHP_EOL . "\tCould not load extension : ";
             foreach ($extensionRequires as $key => $value) {
@@ -2290,15 +2461,15 @@ class Compiler
      * Checks which files in the base kernel must be copied
      *
      * @return boolean
+     * @throws Exception
      */
     protected function checkKernelFiles()
     {
-        $kernelPath = "ext/kernel";
+        $kernelPath = 'ext' . DIRECTORY_SEPARATOR . 'kernel';
 
         if (!file_exists($kernelPath)) {
-            $kernelDone = mkdir($kernelPath, 0775, true);
-            if (!$kernelDone) {
-                throw new Exception("Cannot create kernel directory");
+            if (!mkdir($kernelPath, 0775, true)) {
+                throw new Exception("Cannot create kernel directory: {$kernelPath}");
             }
         }
 
@@ -2309,13 +2480,16 @@ class Compiler
             $sourceKernelPath,
             $kernelPath,
             '@.*\.[ch]$@',
-            array($this, 'checkKernelFile')
+            [$this, 'checkKernelFile']
         );
 
         if (!$configured) {
-            $this->logger->output('Copying new kernel files...');
+            $this->logger->output('Cleaning old kernel files...');
             $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
+
             @mkdir($kernelPath);
+
+            $this->logger->output('Copying new kernel files...');
             $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
         }
 

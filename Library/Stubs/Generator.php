@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -133,12 +127,12 @@ EOF;
                 throw new \RuntimeException('Class "' . $class->getName() . '" does not have a extendsClassDefinition');
             }
 
-            $source .= ' extends ' . ($extendsClassDefinition->isBundled() ? '' : '\\') . $extendsClassDefinition->getCompleteName();
+            $source .= ' extends ' . ($extendsClassDefinition->isBundled() ? '' : '\\') . trim($extendsClassDefinition->getCompleteName(), '\\');
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
             $interfaces = array_map(function ($val) {
-                return '\\' . $val;
+                return '\\' . trim($val, '\\');
             }, $implementedInterfaces);
 
             $keyword = $class->getType() == 'interface' ? ' extends ' : ' implements ';
@@ -247,6 +241,16 @@ EOF;
                     $paramStr .= $cast . ' ';
                 } elseif (isset($parameter['data-type']) && $parameter['data-type'] == 'array') {
                     $paramStr .= 'array ';
+                } elseif (isset($parameter['data-type']) && version_compare(PHP_VERSION, '7.0.0', '>=')) {
+                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                        $paramStr .= 'bool ';
+                    } elseif ($parameter['data-type'] == 'double') {
+                        $paramStr .= 'float ';
+                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                        $paramStr .= 'int ';
+                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
+                        $paramStr .= 'string ';
+                    }
                 }
 
                 $paramStr .= '$' . $parameter['name'];
@@ -259,8 +263,51 @@ EOF;
             }
         }
 
+        $return = '';
+        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
+            $supported = 0;
+
+            if (array_key_exists('object', $method->getReturnTypes()) && count($method->getReturnClassTypes()) == 1) {
+                $return = key($method->getReturnClassTypes());
+                $supported++;
+            }
+
+            if ($method->areReturnTypesIntCompatible()) {
+                $return = 'int';
+                $supported++;
+            }
+            if ($method->areReturnTypesDoubleCompatible()) {
+                $return = 'float';
+                $supported++;
+            }
+            if ($method->areReturnTypesBoolCompatible()) {
+                $return = 'bool';
+                $supported++;
+            }
+            if ($method->areReturnTypesStringCompatible()) {
+                $return = 'string';
+                $supported++;
+            }
+
+            if ($method->areReturnTypesNullCompatible()) {
+                if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                    $return = '?' . $return;
+                } else {
+                    $return = '';
+                }
+            }
+
+            // PHP doesn't support multiple return types (yet?)
+            if ($supported > 1) {
+                $return = '';
+            }
+        }
+        if (!empty($return)) {
+            $return = ': ' . $return;
+        }
+
         $function = trim($modifier . ' function', ' ') . ' ';
-        $methodBody = $indent . $function . $method->getName() . '(' . implode(', ', $parameters) . ')';
+        $methodBody = $indent . $function . $method->getName() . '(' . implode(', ', $parameters) . ')' . $return;
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
@@ -287,7 +334,7 @@ EOF;
 
             case 'string':
             case 'char':
-                return '"' . addslashes($parameter['default']['value']) . '"';
+                return '\'' . addslashes($parameter['default']['value']) . '\'';
                 break;
 
             case 'empty-array':

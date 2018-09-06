@@ -2,34 +2,30 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir\Commands;
 
 /**
- * BuildCommand
+ * Zephir\Commands\BuildCommand
  *
- * Generates/Builds/Install the extension
+ * Generates/Builds/Installs a Zephir extension
+ *
+ * @package Zephir\Commands
  */
 class CommandBuild extends CommandAbstract
 {
     /**
-     * Commands provided by this command
+     * {@inheritdoc}
      *
-     * @return array|string
+     * @return string
      */
     public function getCommand()
     {
@@ -37,22 +33,31 @@ class CommandBuild extends CommandAbstract
     }
 
     /**
-     * Command usage
-     *
-     * @return string
-     */
-    public function getUsage()
-    {
-        return 'build';
-    }
-
-    /**
-     * Returns the description of the command
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getDescription()
     {
-        return 'Generate/Compile/Install a Zephir extension';
+        return 'Generates/Builds/Installs a Zephir extension';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        $template =<<<EOL
+%s [options]
+
+Description:
+    The options are as follows:
+
+    --backend=ZendEngine2|ZendEngine3        Used backend to build extension.
+EOL;
+
+        return sprintf($template, $this->getCommand());
     }
 }

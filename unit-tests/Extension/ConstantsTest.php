@@ -2,18 +2,12 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
 */
 
@@ -22,12 +16,32 @@ namespace Extension;
 use Test\Constants;
 use Test\Oo\ConstantsInterface;
 
+/**
+ * Tests the Constants definitions
+ *
+ * @author  Alexander Andriiako <AlexNDR@phalconphp.com>
+ * @license MIT http://zephir-lang.com/license.html
+ * @link    https://github.com/phalcon/zephir
+ */
 class ConstantsTest extends \PHPUnit_Framework_TestCase
 {
+    const EXPECTED_DOUBLE_DELIMITER = '.';
+    const EXPECTED_CONST_VARS = '$SOME/CSRF/KEY$';
+
+    protected $test;
+
+    public function setUp()
+    {
+        $this->test = new Constants();
+    }
+
+    public function tearDown()
+    {
+        $this->test = null;
+    }
+
     public function testConstantsDeclaration()
     {
-        $t = new Constants();
-
         $this->assertNull(Constants::C1);
         $this->assertFalse(Constants::C2);
         $this->assertTrue(Constants::C3);
@@ -40,47 +54,68 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
 
     public function testConstantGetters()
     {
-        $t = new Constants();
-        $this->assertNull($t->getPropertyC1());
-        $this->assertFalse($t->getPropertyC2());
-        $this->assertTrue($t->getPropertyC3());
-        $this->assertSame($t->getPropertyC4(), 10);
-        $this->assertSame($t->getPropertyC5(), 10.25);
-        $this->assertSame($t->getPropertyC6(), "test");
+        $this->assertNull($this->test->getPropertyC1());
+        $this->assertFalse($this->test->getPropertyC2());
+        $this->assertTrue($this->test->getPropertyC3());
+        $this->assertSame($this->test->getPropertyC4(), 10);
+        $this->assertSame($this->test->getPropertyC5(), 10.25);
+        $this->assertSame($this->test->getPropertyC6(), "test");
+        $this->assertSame($this->test->getPropertyC9(), "some-value");
     }
 
     public function testConstantsRead()
     {
-        $t = new Constants();
-        $this->assertSame($t->testReadConstant(), ENT_QUOTES);
-        $this->assertSame($t->testReadClassConstant1(), Constants::C4);
-        $this->assertSame($t->testReadClassConstant2(), Constants::C4);
-        $this->assertSame($t->testReadClassConstant3(), \Test\ConstantsParent::P4);
+        $this->assertSame($this->test->testReadConstant(), ENT_QUOTES);
+        $this->assertSame($this->test->testReadClassConstant1(), Constants::C4);
+        $this->assertSame($this->test->testReadClassConstant2(), Constants::C4);
+        $this->assertSame($this->test->testReadClassConstant3(), \Test\ConstantsParent::P4);
     }
 
     public function testEnvConstants()
     {
-        $t = new Constants();
-
-        $phpVersion = $t->testPHPVersionEnvConstant();
+        $phpVersion = $this->test->testPHPVersionEnvConstant();
         $this->assertTrue(is_string($phpVersion) && !empty($phpVersion));
 
-        $phpVersion = $t->testPHPVersionEnvConstantInExpValue();
+        $phpVersion = $this->test->testPHPVersionEnvConstantInExpValue();
         $this->assertTrue(is_string($phpVersion) && !empty($phpVersion));
     }
 
     public function testMagickConstants()
     {
-        $t = new Constants();
+        $this->assertSame($this->test->testNamespaceMagicConstant(), 'Test');
+        $this->assertSame($this->test->testClassMagicConstant(), 'Test\Constants');
 
-        $this->assertSame($t->testNamespaceMagicConstant(), 'Test');
-        $this->assertSame($t->testClassMagicConstant(), 'Test\Constants');
-
-        $this->assertSame($t->testMethodMagicConstant(), 'Constants:testMethodMagicConstant');
-        $this->assertSame($t->testFunctionMagicConstant(), 'testFunctionMagicConstant');
-
+        $this->assertSame($this->test->testMethodMagicConstant(), 'Constants:testMethodMagicConstant');
+        $this->assertSame($this->test->testFunctionMagicConstant(), 'testFunctionMagicConstant');
 
         $this->assertSame(ConstantsInterface::CLASSNAME, 'Test\Oo\ConstantsInterface');
         $this->assertSame(ConstantsInterface::NAMESPACENAME, 'Test\Oo');
+    }
+
+    /**
+     * Test Constant declaration as String
+     *
+     * @author Alexnder Andriiako <AlexNDR@phalconphp.com>
+     * @since 2017-08-09
+     * @link https://github.com/phalcon/zephir/issues/1571
+     */
+    public function testStringDelimiterAsConstDoubleQuoted()
+    {
+        $this->assertSame($this->test->testStringDelimiterConstantDoubleQuoted(), self::EXPECTED_DOUBLE_DELIMITER);
+    }
+
+    public function testStringConstWithPhpVars()
+    {
+        $this->assertSame($this->test->testStringConstantWithVars(), self::EXPECTED_CONST_VARS);
+    }
+
+    public function testStringConstWithPhpVarsAssigned()
+    {
+        $this->assertSame($this->test->testStringPropertyWithVarsAssigned(), self::EXPECTED_CONST_VARS);
+    }
+
+    public function testStringConstWithPhpVarsGet()
+    {
+        $this->assertSame($this->test->testStringPropertyWithVarsGet(), self::EXPECTED_CONST_VARS);
     }
 }

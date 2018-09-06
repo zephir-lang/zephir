@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -59,12 +59,12 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack();
 void ZEPHIR_FASTCALL zephir_memory_observe(zval *var);
 void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var);
 
-int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
+int ZEPHIR_FASTCALL zephir_clean_restore_stack();
 
 #define zephir_safe_zval_ptr_dtor(pzval)
 
-void zephir_create_symbol_table(TSRMLS_D);
-int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC);
+void zephir_create_symbol_table();
+int zephir_set_symbol(zval *key_name, zval *value);
 int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 
 #define ZEPHIR_INIT_VAR(z) zephir_memory_alloc(z);
@@ -77,16 +77,18 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	ZVAL_UNDEF(&z); \
 
 #define ZEPHIR_INIT_NVAR(z) \
-	if (Z_TYPE_P(z) == IS_UNDEF) { \
-		zephir_memory_observe(z); \
-	} else if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
-		if (Z_REFCOUNT_P(z) > 1) { \
-			Z_DELREF_P(z); \
-		} else { \
-			zephir_dtor(z); \
+	do { \
+		if (Z_TYPE_P(z) == IS_UNDEF) { \
+			zephir_memory_observe(z); \
+		} else if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
+			if (Z_REFCOUNT_P(z) > 1) { \
+				Z_DELREF_P(z); \
+			} else { \
+				zephir_dtor(z); \
+			} \
 		} \
-	} \
-	ZVAL_NULL(z); \
+		ZVAL_NULL(z); \
+	} while (0)
 
 /* only removes the value body of the zval */
 #define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(&z)
@@ -141,14 +143,14 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
  */
 #define ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(ppzv) \
 	do { \
-		zval * restrict tmp_ = (ppzv); \
+		zval *tmp_ = (ppzv); \
 		if (tmp_ != NULL) { \
 			if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
 				zephir_ptr_dtor(tmp_); \
-				ZVAL_UNDEF(tmp_); \
 			} else { \
 				zephir_memory_observe(tmp_); \
 			} \
+			ZVAL_NULL(tmp_); \
 		} \
 	} while (0)
 

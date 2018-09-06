@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | Zephir Language                                                        |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2016 Zephir Team (http://www.zephir-lang.com)       |
+  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file docs/LICENSE.txt.                        |
@@ -101,14 +101,18 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 		/* Clean active symbol table */
 		if (g->active_symbol_table) {
 			active_symbol_table = g->active_symbol_table;
-			if (active_symbol_table->scope == active_memory) {
+			while (active_symbol_table && active_symbol_table->scope == active_memory) {
 				zend_execute_data *ex = EG(current_execute_data);
-				//zend_hash_destroy(EG(current_execute_data)->symbol_table);
-				//FREE_HASHTABLE(EG(current_execute_data)->symbol_table);
-				//EG(current_execute_data)->symbol_table = active_symbol_table->symbol_table;
+
+				zend_hash_destroy(ex->symbol_table);
+				efree(ex->symbol_table);
 				ex->symbol_table = active_symbol_table->symbol_table;
+				zend_attach_symbol_table(ex);
+				zend_rebuild_symbol_table();
+
 				g->active_symbol_table = active_symbol_table->prev;
 				efree(active_symbol_table);
+				active_symbol_table = g->active_symbol_table;
 			}
 		}
 
@@ -144,12 +148,6 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u), type=%d  [%s]\n", __func__, (int)i, var, Z_REFCOUNT_P(var), Z_TYPE_P(var), active_memory->func);
 					show_backtrace = 1;
 				}
-#if 0
-				/* Skip this check, PDO does return variables with is_ref = 1 and refcount = 1*/
-				else if (Z_REFCOUNT_PP(var) == 1 && Z_ISREF_PP(var)) {
-					fprintf(stderr, "%s: observed variable #%d (%p) is a reference with reference count = 1, type=%d  [%s]\n", __func__, (int)i, *var, Z_TYPE_PP(var), active_memory->func);
-				}
-#endif
 			}
 		}
 #endif
@@ -224,7 +222,7 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g)
 /**
  * Finishes the current memory stack by releasing allocated memory
  */
-int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func)
 {
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
@@ -253,7 +251,7 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func)
 	zephir_memory_entry *entry;
 	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
 	if (g->start_memory == NULL) {
-		zephir_initialize_memory(g TSRMLS_CC);
+		zephir_initialize_memory(g);
 	}
 	entry = zephir_memory_grow_stack_common(g);
 	entry->func = func;
@@ -344,14 +342,19 @@ void zephir_deinitialize_memory()
 		zephir_clean_restore_stack();
 	}
 
-#ifndef ZEPHIR_RELEASE
-	{
-		zephir_fcall_cache_entry *cache_entry_temp = NULL;
-		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
-			free(cache_entry_temp);
-		} ZEND_HASH_FOREACH_END();
-	}
-#endif
+//	{
+//		size_t i;
+//		for (i=0; i<ZEPHIR_MAX_CACHE_SLOTS; ++i) {
+//			zephir_fcall_cache_entry* e = zephir_globals_ptr->scache[i];
+//			if (e) {
+//				free(e);
+//			}
+//		}
+//		zephir_fcall_cache_entry *cache_entry_temp = NULL;
+//		ZEND_HASH_FOREACH_PTR(zephir_globals_ptr->fcache, cache_entry_temp) {
+//			free(cache_entry_temp);
+//		} ZEND_HASH_FOREACH_END();
+//	}
 
 #if 0
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache, zephir_cleanup_fcache, 0);
@@ -377,39 +380,43 @@ void zephir_deinitialize_memory()
 }
 
 /**
- * Creates virtual symbol tables dynamically
+ * Creates a virtual symbol tables dynamically
  */
-void zephir_create_symbol_table(TSRMLS_D)
+void zephir_create_symbol_table()
 {
-	/*zephir_symbol_table *entry;
-	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zephir_symbol_table *entry;
+	zend_zephir_globals_def *gptr = ZEPHIR_VGLOBAL;
 	zend_execute_data *ex = EG(current_execute_data);
 	zend_array *symbol_table;
 
 #ifndef ZEPHIR_RELEASE
-	if (!zephir_globals_ptr->active_memory) {
+	if (!gptr->active_memory) {
 		fprintf(stderr, "ERROR: Trying to create a virtual symbol table without a memory frame");
 		zephir_print_backtrace();
 		return;
 	}
 #endif
 
-	entry = (zephir_symbol_table *) emalloc(sizeof(zephir_symbol_table));
-	entry->scope = zephir_globals_ptr->active_memory;
-	entry->symbol_table = ex->symbol_table;
-	entry->prev = zephir_globals_ptr->active_symbol_table;
-	zephir_globals_ptr->active_symbol_table = entry;
+	zend_rebuild_symbol_table();
+	zend_detach_symbol_table(ex);
 
-	symbol_table = (zend_array *) emalloc(sizeof(zend_array *));
+	entry               = (zephir_symbol_table*)emalloc(sizeof(zephir_symbol_table));
+	entry->scope        = gptr->active_memory;
+	entry->symbol_table = ex->symbol_table;
+	entry->prev         = gptr->active_symbol_table;
+
+	symbol_table = (zend_array*)emalloc(sizeof(zend_array));
 	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
 	zend_hash_real_init(symbol_table, 0);
-	ex->symbol_table = symbol_table;*/
+
+	ex->symbol_table          = symbol_table;
+	gptr->active_symbol_table = entry;
 }
 
 /**
  * Exports symbols to the active symbol table
  */
-int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
+int zephir_set_symbol(zval *key_name, zval *value)
 {
 	zend_array *symbol_table;
 
@@ -432,9 +439,8 @@ int zephir_set_symbol(zval *key_name, zval *value TSRMLS_DC)
  */
 int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
 {
-	zend_array *symbol_table;
+	zend_array *symbol_table = zend_rebuild_symbol_table();
 
-	symbol_table = zend_rebuild_symbol_table();
 	if (!symbol_table) {
 		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
 		return FAILURE;
@@ -471,15 +477,9 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 #endif
 */
 
-#ifndef ZEPHIR_RELEASE
-	if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-#else
 	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
 		return ZEND_HASH_APPLY_REMOVE;
 	}
-#endif
 
 	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
 		return ZEND_HASH_APPLY_REMOVE;

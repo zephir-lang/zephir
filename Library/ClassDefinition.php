@@ -4,7 +4,7 @@
  +----------------------------------------------------------------------+
  | Zephir Language                                                      |
  +----------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team                                  |
+ | Copyright (c) 2013-2017 Zephir Team                                  |
  +----------------------------------------------------------------------+
  | This source file is subject to version 1.0 of the MIT license,       |
  | that is bundled with this package in the file LICENSE, and is        |
@@ -19,9 +19,9 @@
 
 namespace Zephir;
 
-use Zephir\HeadersManager;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Compiler\CompilerException;
 
 /**
  * ClassDefinition
@@ -101,7 +101,7 @@ class ClassDefinition
     protected $methods = array();
 
     /**
-     * @var array
+     * @var string
      */
     protected $docBlock;
 
@@ -492,7 +492,7 @@ class ClassDefinition
     /**
      * Sets the class/interface docBlock
      *
-     * @param array $docBlock
+     * @param string $docBlock
      */
     public function setDocBlock($docBlock)
     {
@@ -502,7 +502,7 @@ class ClassDefinition
     /**
      * Returns the class/interface docBlock
      *
-     * @return array
+     * @return string
      */
     public function getDocBlock()
     {
@@ -512,18 +512,19 @@ class ClassDefinition
     /**
      * Returns the parsed docBlock
      *
-     * @return DocBlock
+     * @return DocBlock|null
      */
     public function getParsedDocBlock()
     {
         if (!$this->parsedDocblock) {
             if (strlen($this->docBlock) > 0) {
-                $parser = new DocblockParser("/" . $this->docBlock ."/");
+                $parser = new DocblockParser("/" . $this->docBlock . "/");
                 $this->parsedDocblock = $parser->parse();
             } else {
                 return null;
             }
         }
+
         return $this->parsedDocblock;
     }
 
@@ -1293,32 +1294,120 @@ class ClassDefinition
          */
         foreach ($methods as $method) {
             $parameters = $method->getParameters();
-            if ($method->hasParameters()) {
-                $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
+            $argInfoName = 'arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName());
+
+            if ($this->compiler->backend->isZE3() && $method->hasReturnTypes()) {
+                if (array_key_exists('object', $method->getReturnTypes())) {
+                    $class = 'NULL';
+
+                    if (count($method->getReturnClassTypes()) == 1) {
+                        $class = Utils::escapeClassName($compilationContext->getFullName(key($method->getReturnClassTypes())));
+                    }
+
+                    $codePrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
+                    $codePrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $method->getNumberOfRequiredParameters() . ', ' .
+                        $class . ', ' . ($method->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $codePrinter->output('#else');
+                    $codePrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $method->getNumberOfRequiredParameters() . ', ' .
+                        'NULL, "' . $class . '", ' . ($method->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $codePrinter->output('#endif');
+                } else {
+                    $type = 'IS_NULL';
+
+                    if ($method->areReturnTypesIntCompatible()) {
+                        $type = 'IS_LONG';
+                    }
+                    if ($method->areReturnTypesDoubleCompatible()) {
+                        $type = 'IS_DOUBLE';
+                    }
+                    if ($method->areReturnTypesBoolCompatible()) {
+                        $type = '_IS_BOOL';
+                    }
+                    if ($method->areReturnTypesStringCompatible()) {
+                        $type = 'IS_STRING';
+                    }
+
+                    $codePrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
+                    $codePrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $method->getNumberOfRequiredParameters() . ', ' .
+                        $type . ', ' . ($method->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $codePrinter->output('#else');
+                    $codePrinter->output(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
+                        $method->getNumberOfRequiredParameters() . ', ' .
+                        $type . ', NULL, ' . ($method->areReturnTypesNullCompatible() ? 1 : 0) . ')'
+                    );
+                    $codePrinter->output('#endif');
+                }
+
+                if ($parameters == null || !count($parameters->getParameters())) {
+                    $codePrinter->output('ZEND_END_ARG_INFO()');
+                    $codePrinter->outputBlankLine();
+                }
+            } elseif ($parameters != null && count($parameters->getParameters())) {
+                $codePrinter->output(
+                    'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
+                    $method->getNumberOfRequiredParameters() . ')'
+                );
+            }
+
+            if ($parameters != null && count($parameters->getParameters())) {
                 foreach ($parameters->getParameters() as $parameter) {
-                    switch ($parameter['data-type']) {
-                        case 'array':
-                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                    switch (($this->compiler->backend->isZE3() ? '3:' : '2:') . $parameter['data-type']) {
+                        case '2:array':
+                        case '3:array':
+                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
 
-                        case 'variable':
+                        case '2:variable':
+                        case '3:variable':
                             if (isset($parameter['cast'])) {
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
-                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                                         break;
 
                                     default:
                                         throw new Exception('Unexpected exception');
                                 }
                             } else {
-                                $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                                $codePrinter->output("\t" . 'ZEND_ARG_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ')');
                             }
                             break;
 
+                        case '3:bool':
+                        case '3:boolean':
+                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . ($this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL') . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
+
+                        case '3:uchar':
+                        case '3:int':
+                        case '3:uint':
+                        case '3:long':
+                        case '3:ulong':
+                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_LONG, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
+
+                        case '3:double':
+                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_DOUBLE, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
+
+                        case '3:char':
+                        case '3:string':
+                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_STRING, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
+
                         default:
-                            $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            $codePrinter->output("\t" . 'ZEND_ARG_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ')');
                             break;
                     }
                 }
@@ -1332,7 +1421,7 @@ class ClassDefinition
             foreach ($methods as $method) {
                 if ($this->getType() == 'class') {
                     if (!$method->isInternal()) {
-                        if ($method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
@@ -1340,13 +1429,13 @@ class ClassDefinition
                     }
                 } else {
                     if ($method->isStatic()) {
-                        if ($method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         } else {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         }
                     } else {
-                        if ($method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');

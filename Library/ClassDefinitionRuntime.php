@@ -4,7 +4,7 @@
  +----------------------------------------------------------------------+
  | Zephir Language                                                      |
  +----------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team                                  |
+ | Copyright (c) 2013-2017 Zephir Team                                  |
  +----------------------------------------------------------------------+
  | This source file is subject to version 1.0 of the MIT license,       |
  | that is bundled with this package in the file LICENSE, and is        |
@@ -18,8 +18,6 @@
 */
 
 namespace Zephir;
-
-use Zephir\HeadersManager;
 
 /**
  * ClassDefinitionRuntime

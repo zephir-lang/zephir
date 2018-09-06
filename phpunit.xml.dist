@@ -3,32 +3,42 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
          backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="./unit-tests/Bootstrap.php"
+         bootstrap="./unit-tests/bootstrap.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
          verbose="true"
 >
+
     <testsuites>
         <testsuite name="Extension Test Suite">
-            <directory suffix=".php">./unit-tests/Extension/</directory>
+            <directory suffix=".php">./unit-tests/Extension</directory>
         </testsuite>
         <testsuite name="Zephir Test Suite">
-            <directory suffix=".php">./unit-tests/Zephir/</directory>
+            <directory suffix=".php">./unit-tests/Zephir</directory>
         </testsuite>
     </testsuites>
+
     <filter>
         <whitelist>
             <directory suffix=".php">./Library</directory>
         </whitelist>
     </filter>
+
     <php>
         <ini name="date.timezone" value="UTC"/>
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
     </php>
+
+    <logging>
+        <log
+            type="coverage-text"
+            target="php://stdout"
+            lowUpperBound="60"
+            highLowerBound="90"/>
+
+        <log
+            type="coverage-clover"
+            target="./unit-tests/output/clover.xml"/>
+    </logging>
+
 </phpunit>

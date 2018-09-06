@@ -2,29 +2,23 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: https://zephir-lang.com/license.html               |
  +--------------------------------------------------------------------------+
 */
 
 namespace Zephir\Expression;
 
-use Zephir\Variable;
+use Zephir\ClassConstant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\CompilerException;
-use Zephir\Expression;
-use Zephir\ClassConstant;
+use Zephir\Compiler\CompilerException;
+use Zephir\Exception;
+use Zephir\Variable;
 
 /**
  * StaticConstantAccess
@@ -33,23 +27,26 @@ use Zephir\ClassConstant;
  */
 class StaticConstantAccess
 {
-    protected $_expecting = true;
+    /** @var bool */
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    /** @var bool */
+    protected $readOnly = false;
 
-    protected $_expectingVariable;
+    /** @var Variable|null */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean $expecting
-     * @param Variable $expectingVariable
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -59,27 +56,29 @@ class StaticConstantAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = (bool) $readOnly;
     }
 
     /**
      * Access a static constant class
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
+     * @throws Exception|CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
         $compiler = &$compilationContext->compiler;
         $className = $expression['left']['value'];
-        $constant = $expression['right']['value'];
+        $constant  = $expression['right']['value'];
 
         /**
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, array('this', 'self', 'static', 'parent'))) {
+        if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -91,7 +90,7 @@ class StaticConstantAccess
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static', 'this'))) {
+            if (in_array($className, ['self', 'static', 'this'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {
@@ -111,7 +110,14 @@ class StaticConstantAccess
          * so we need to check that they effectively do exist
          */
         if (!$classDefinition->hasConstant($constant)) {
-            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
+            throw new CompilerException(
+                sprintf(
+                    "Class '%s' does not have a constant called: '%s'",
+                    $classDefinition->getCompleteName(),
+                    $constant
+                ),
+                $expression
+            );
         }
 
         /**
@@ -121,9 +127,9 @@ class StaticConstantAccess
             /**
              * Resolves the symbol that expects the value
              */
-            if ($this->_expecting) {
-                if ($this->_expectingVariable) {
-                    $symbolVariable = $this->_expectingVariable;
+            if ($this->expecting) {
+                if ($this->expectingVariable) {
+                    $symbolVariable = $this->expectingVariable;
                     $symbolVariable->initVariant($compilationContext);
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -168,7 +174,6 @@ class StaticConstantAccess
             case 'bool':
             case 'null':
                 break;
-
             default:
                 $compilationContext->logger->warning($constantDefinition->getName(), 'nonexistent-constant', $expression);
                 return new CompiledExpression('null', null, $expression);

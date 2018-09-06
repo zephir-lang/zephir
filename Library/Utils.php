@@ -2,27 +2,25 @@
 
 /*
  +--------------------------------------------------------------------------+
- | Zephir Language                                                          |
- +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2016 Zephir Team and contributors                     |
- +--------------------------------------------------------------------------+
- | This source file is subject the MIT license, that is bundled with        |
- | this package in the file LICENSE, and is available through the           |
- | world-wide-web at the following url:                                     |
- | http://zephir-lang.com/license.html                                      |
+ | Zephir                                                                   |
+ | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
  |                                                                          |
- | If you did not receive a copy of the MIT license and are unable          |
- | to obtain it through the world-wide-web, please send a note to           |
- | license@zephir-lang.com so we can mail you a copy immediately.           |
+ | This source file is subject the MIT license, that is bundled with this   |
+ | package in the file LICENSE, and is available through the world-wide-web |
+ | at the following url: http://zephir-lang.com/license.html                |
  +--------------------------------------------------------------------------+
-*/
+ */
 
 namespace Zephir;
 
+use Zephir\Exception\InvalidArgumentException;
+
 /**
- * Utils
+ * Zephir\Utils
  *
- * Utility functions
+ * Utility functions.
+ *
+ * @package Zephir
  */
 class Utils
 {
@@ -146,37 +144,35 @@ class Utils
     public static function getFullName($className, $currentNamespace, AliasManager $aliasManager = null)
     {
         if (!is_string($className)) {
-            throw new \InvalidArgumentException('Class name must be a string ' . print_r($className, true));
-        }
-
-        if ($className[0] !== '\\') {
-            // If class/interface name not begin with \ maybe a alias or a sub-namespace
-            $firstSepPos = strpos($className, '\\');
-            if (false !== $firstSepPos) {
-                $baseName = substr($className, 0, $firstSepPos);
-                if ($aliasManager->isAlias($baseName)) {
-                    return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
-                }
-            } else {
-                if ($aliasManager->isAlias($className)) {
-                    return $aliasManager->getAlias($className);
-                }
-            }
-
-            // Relative class/interface name
-            if ($currentNamespace) {
-                return $currentNamespace . '\\' . $className;
-            } else {
-                return $className;
-            }
+            throw new InvalidArgumentException('Class name must be a string ' . print_r($className, true));
         }
 
         // Absolute class/interface name
-        return substr($className, 1);
+        if ($className[0] === '\\') {
+            return substr($className, 1);
+        }
+
+        // If class/interface name not begin with \ maybe a alias or a sub-namespace
+        $firstSepPos = strpos($className, '\\');
+        if (false !== $firstSepPos) {
+            $baseName = substr($className, 0, $firstSepPos);
+            if ($aliasManager && $aliasManager->isAlias($baseName)) {
+                return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
+            }
+        } elseif ($aliasManager && $aliasManager->isAlias($className)) {
+            return $aliasManager->getAlias($className);
+        }
+
+        // Relative class/interface name
+        if ($currentNamespace) {
+            return $currentNamespace . '\\' . $className;
+        }
+
+        return $className;
     }
 
     /**
-     * Check if the host OS is windows
+     * Check if the host OS is Windows
      *
      * @return boolean
      */
@@ -204,5 +200,82 @@ class Utils
     public static function isMacOs()
     {
         return 'darwin' === strtolower(substr(PHP_OS, 0, 6));
+    }
+
+    /**
+     * Remove $dir recursively
+     *
+     * @param string $dir
+     */
+    public static function recursiveRmDir($dir)
+    {
+        try {
+            $it = new \RecursiveDirectoryIterator(
+                $dir,
+                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS
+            );
+
+            $items = iterator_to_array(
+                new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST)
+            );
+
+            foreach ($items as $item) {
+                if ($item->isFile()) {
+                    unlink($item->getRealPath());
+                } elseif ($item->isDir()) {
+                    rmdir($item->getRealPath());
+                }
+            }
+        } catch (\UnexpectedValueException $e) {
+            // Ignore
+        }
+    }
+
+    /**
+     * Resolves Windows release folder.
+     *
+     * @return string
+     */
+    public static function resolveWindowsReleaseFolder()
+    {
+        if (self::isThreadSafe()) {
+            if (PHP_INT_SIZE === 4) {
+                // 32-bit version of PHP
+                return "ext\\Release_TS";
+            } elseif (PHP_INT_SIZE === 8) {
+                // 64-bit version of PHP
+                return "ext\\x64\\Release_TS";
+            } else {
+                // fallback
+                return "ext\\Release_TS";
+            }
+        } else {
+            if (PHP_INT_SIZE === 4) {
+                // 32-bit version of PHP
+                return "ext\\Release";
+            } elseif (PHP_INT_SIZE === 8) {
+                // 64-bit version of PHP
+                return "ext\\x64\\Release";
+            } else {
+                // fallback
+                return "ext\\Release";
+            }
+        }
+    }
+
+    /**
+     * Checks if current PHP is thread safe.
+     *
+     * @return boolean true
+     */
+    public static function isThreadSafe()
+    {
+        if (defined('PHP_ZTS') && PHP_ZTS == 1) {
+            return true;
+        }
+
+        ob_start();
+        phpinfo(INFO_GENERAL);
+        return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
     }
 }

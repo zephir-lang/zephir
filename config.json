@@ -59,7 +59,7 @@
     "namespace": "test",
     "name": "Test Extension",
     "description": "Description test for<br\/>Test Extension",
-    "author": "Zephir Team and contributors",
+    "author": "Zephir Team",
     "version": "1.0.0",
     "verbose": true,
     "globals": {
@@ -78,6 +78,10 @@
         "my_setting_3": {
             "type": "double",
             "default": 15.2
+        },
+        "my_setting_4": {
+            "type": "char",
+            "default": "A"
         },
         "test.my_setting_1": {
             "type": "bool",
