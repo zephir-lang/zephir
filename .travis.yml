@@ -75,27 +75,8 @@ before_script:
   - bash ./unit-tests/ci/install-test-ext.sh
 
 script:
-  - | # Tests and coverage
-      ./unit-tests/phpunit \
-        --not-exit \
-        -c phpunit.xml.dist \
-        --debug \
-        unit-tests/
-  - | # Check for memory leaks
-      valgrind \
-        --read-var-info=yes \
-        --error-exitcode=1 \
-        --fullpath-after= \
-        --track-origins=yes \
-        --leak-check=full \
-        --num-callers=20 \
-        --run-libc-freeres=no \
-        ./unit-tests/phpunit \
-          --not-exit \
-          -c phpunit.xml.dist \
-          --no-coverage \
-          unit-tests/
-  - $(phpenv which php) unit-tests/microbench.php
+  - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+  - if [ "${PHP_MAJOR}.${PHP_MINOR}" != "7.3" ]; then bash ./unit-tests/ci/memcheck.sh; fi
 
 jobs:
   include:
@@ -110,26 +91,15 @@ jobs:
         - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
         - bash ./unit-tests/ci/install-test-ext.sh
       script:
-        - |
-          ./unit-tests/phpunit \
-            --not-exit \
-            -c phpunit.xml.dist \
-            --debug \
-            unit-tests/
-        - |
-          valgrind \
-            --read-var-info=yes \
-            --error-exitcode=1 \
-            --fullpath-after= \
-            --track-origins=yes \
-            --leak-check=full \
-            --num-callers=20 \
-            --run-libc-freeres=no \
-            ./unit-tests/phpunit \
-              --not-exit \
-              -c phpunit.xml.dist \
-              --no-coverage \
-              unit-tests/
+        - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+        - bash ./unit-tests/ci/memcheck.sh
+    - stage: Benchmark
+      php: 7.2
+      before_script:
+        - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
+        - bash ./unit-tests/ci/install-test-ext.sh
+      script:
+        - phpenv config-rm xdebug.ini || true
         - $(phpenv which php) unit-tests/microbench.php
 
 after_success:
