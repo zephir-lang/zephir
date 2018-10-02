@@ -17,6 +17,10 @@ class ExitDieTest extends \PHPUnit_Framework_TestCase
 {
     public function testExitDie()
     {
+        if (PHP_VERSION_ID >= 70300) {
+            $this->markTestSkipped("Skipped due to PHP 7.3 stable is not released yet");
+        }
+
         $phpBinary = constant('PHP_BINARY');
         /* If we use phpdbg, you need to add options -qrr */
         if (defined('PHP_SAPI') && constant('PHP_SAPI') == 'phpdbg') {

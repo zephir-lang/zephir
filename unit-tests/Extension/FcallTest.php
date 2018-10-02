@@ -19,6 +19,16 @@ use Test\Oo\PropertyAccess;
 
 class FcallTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (PHP_VERSION_ID >= 70300) {
+            $this->markTestSkipped("Skipped due to PHP 7.3 stable is not released yet");
+        }
+    }
+
+
     public function testCall()
     {
         $t = new Fcall();
