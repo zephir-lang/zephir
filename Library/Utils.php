@@ -46,7 +46,6 @@ class Utils
     {
         $newstr = "";
         $after = null;
-        $before = null;
         $length = strlen($str);
         for ($i = 0; $i < $length; $i++) {
             $ch = substr($str, $i, 1);
@@ -82,8 +81,7 @@ class Utils
                         case "\\":
                             $newstr .= $ch . $after;
                             $i++;
-                            $before = null;
-                            continue;
+                            break;
                         default:
                             $newstr .= "\\\\";
                             break;
@@ -92,7 +90,6 @@ class Utils
                 default:
                     $newstr .= $ch;
             }
-            $before = $ch;
         }
         return $newstr;
     }

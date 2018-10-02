@@ -398,7 +398,7 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 			return SUCCESS;
 		}
 		if ((flags & PH_NOISY) == PH_NOISY) {
-			zend_error(E_NOTICE, "Undefined index: %s", index);
+			zend_error(E_NOTICE, "Undefined index: %lu", index);
 		}
 	} else {
 		if ((flags & PH_NOISY) == PH_NOISY) {
