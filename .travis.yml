@@ -1,15 +1,13 @@
+dist: xenial
+sudo: required
+
 language: php
-
-dist: trusty
-# Change to `true' to enable debug mode
-sudo: false
-
 php:
-  - '5.5'
-  - '5.6'
-  - '7.0'
-  - '7.1'
+  - '7.3.0RC1'
   - '7.2'
+  - '7.1'
+  - '7.0'
+  - '5.6'
 
 git:
   depth: 1
@@ -17,6 +15,14 @@ git:
 compiler:
   - gcc
   - clang
+
+addons:
+  apt:
+    packages:
+    - valgrind
+    - gdb
+    # See: https://github.com/travis-ci/travis-ci/issues/9717
+    - libzip4
 
 env:
   global:
@@ -28,8 +34,9 @@ env:
     - ZEND_DONT_UNLOAD_MODULES=1
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
-    - RE2C_VERSION="1.0.3"
+    - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
+    - DEFAULT_MAKE_FLAGS="--silent"
   matrix:
     - CC="gcc"
     - CC="clang"
@@ -37,7 +44,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: nightly
+    - php: '7.3.0RC1'
   exclude:
     - env: CC="gcc"
       compiler: clang
@@ -74,6 +81,8 @@ before_install:
   - $CC --version
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+  # Remove all `--silent' for debug purposes
+  - if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then export DEFAULT_MAKE_FLAGS="--debug"; fi
 
 install:
   - composer install --prefer-source --no-suggest
@@ -92,8 +101,8 @@ before_script:
       cd ext
       $(phpenv which phpize)
       ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test
-      make -j"$(getconf _NPROCESSORS_ONLN)"
-      make --silent install
+      make $DEFAULT_MAKE_FLAGS -j"$(getconf _NPROCESSORS_ONLN)"
+      make $DEFAULT_MAKE_FLAGS install
     )
   #- ls -1 `$(phpenv which php-config) --extension-dir`
   #- phpenv versions
@@ -137,8 +146,6 @@ after_failure:
   - $(phpenv which php) -m
   - $(phpenv which php) -i
 
-addons:
-  apt:
-    packages:
-      - valgrind
-      - gdb
+notifications:
+  # Stop spam me. I already live on Travis CI and GitHub
+  email: false
