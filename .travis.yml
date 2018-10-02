@@ -12,10 +12,6 @@ php:
 git:
   depth: 1
 
-compiler:
-  - gcc
-  - clang
-
 addons:
   apt:
     packages:
@@ -37,33 +33,15 @@ env:
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
     - DEFAULT_MAKE_FLAGS="--silent"
-  matrix:
-    - CC="gcc"
-    - CC="clang"
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: '7.3.0RC1'
-  exclude:
-    - env: CC="gcc"
-      compiler: clang
-    - env: CC="clang"
-      compiler: gcc
   include:
-    - env: CC="gcc"
-      php: nightly
-      compiler: gcc
-    - env: CC="clang"
-      php: nightly
-      compiler: clang
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
+    - env: CPPFLAGS=-DZEPHIR_RELEASE
       php: '7.1'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
-      php: '7.1'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
-      php: '7.2'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
+    - env: CPPFLAGS=-DZEPHIR_RELEASE
       php: '7.2'
 
 cache:
@@ -89,6 +67,7 @@ install:
   - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
   - bash ./unit-tests/ci/install_zephir_parser.sh
   - ./install
+  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
 
 before_script:
   - $(phpenv which php) compiler.php help
@@ -112,7 +91,6 @@ before_script:
   #- sudo chmod +s $(which gdb)
 
 script:
-  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
   - | # Tests and coverage
       ./unit-tests/phpunit \
@@ -135,6 +113,47 @@ script:
           --no-coverage \
           unit-tests/
   - $(phpenv which php) unit-tests/microbench.php
+
+jobs:
+  include:
+    - stage: Compiller testing
+      php: 7.2
+      compiler: clang
+      env: CC="clang"
+      before_script:
+        - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
+        - |
+          (
+            set -e
+            cd ext
+            $(phpenv which phpize)
+            ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test
+            make $DEFAULT_MAKE_FLAGS -j"$(getconf _NPROCESSORS_ONLN)"
+            make $DEFAULT_MAKE_FLAGS install
+          )
+        - ulimit -c unlimited || true
+      script:
+        - |
+          ./unit-tests/phpunit \
+            --not-exit \
+            -c phpunit.xml.dist \
+            --debug \
+            unit-tests/
+        - |
+          valgrind \
+            --read-var-info=yes \
+            --error-exitcode=1 \
+            --fullpath-after= \
+            --track-origins=yes \
+            --leak-check=full \
+            --num-callers=20 \
+            --run-libc-freeres=no \
+            ./unit-tests/phpunit \
+              --not-exit \
+              -c phpunit.xml.dist \
+              --no-coverage \
+              unit-tests/
+        - $(phpenv which php) unit-tests/microbench.php
 
 after_success:
   - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
