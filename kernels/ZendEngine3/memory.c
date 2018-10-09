@@ -237,6 +237,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func)
 		fprintf(stderr, "The frame was created by %s\n", zephir_globals_ptr->active_memory->func);
 		fprintf(stderr, "Calling function: %s\n", func);
 		zephir_print_backtrace();
+		return FAILURE;
 	}
 
 	zephir_memory_restore_stack_common(zephir_globals_ptr);
