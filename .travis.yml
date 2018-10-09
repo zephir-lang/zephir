@@ -106,11 +106,9 @@ after_success:
   - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
 
 after_failure:
-  #  Uncomment to debug core dump
-  # - ./unit-tests/ci/after_failure.sh
+  - ./unit-tests/ci/after_failure.sh
   - $(phpenv which php) -v
   - $(phpenv which php) -m
-  - $(phpenv which php) -i
 
 notifications:
   # Stop spam me. I already live on Travis CI and GitHub
