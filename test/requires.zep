@@ -18,11 +18,14 @@ class Requires
 		return true;
 	}
 
-	public function requireExternal3(var path)
+	public function requireExternal3(var path) -> var
 	{
 		var external3;
 
-		create_symbol_table();
+		if PHP_MAJOR_VERSION == 5 {
+			create_symbol_table();
+		}
+
 		let external3 = new External3();
 		external3->req(path, this);
 		return this->content;

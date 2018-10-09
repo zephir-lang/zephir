@@ -26,10 +26,6 @@ class RequiresTest extends \PHPUnit_Framework_TestCase
 
     public function testRequireExternal3()
     {
-        if (PHP_VERSION_ID >= 70300) {
-            $this->markTestSkipped("Skipped due to PHP 7.3 stable is not released yet");
-        }
-
         $r = new Requires();
         $output = $r->requireExternal3(__DIR__ . '/php/require-me-3.php');
         $this->assertSame("test", $output);
