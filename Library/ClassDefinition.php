@@ -1326,6 +1326,9 @@ class ClassDefinition
                     if ($method->areReturnTypesStringCompatible()) {
                         $type = 'IS_STRING';
                     }
+                    if (array_key_exists('array', $method->getReturnTypes())) {
+                        $type = 'IS_ARRAY';
+                    }
 
                     $codePrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
                     $codePrinter->output(

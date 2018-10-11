@@ -287,6 +287,11 @@ EOF;
                 $supported++;
             }
 
+            if (array_key_exists('array', $method->getReturnTypes())) {
+                $return = 'array';
+                $supported++;
+            }
+
             if ($method->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
                     $return = '?' . $return;
