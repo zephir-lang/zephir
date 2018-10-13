@@ -58,7 +58,7 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	HashTable *h;
 	zval *result;
 
-	if (Z_TYPE_P(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		ZVAL_NULL(fetched);
 
 		return 0;
@@ -94,11 +94,26 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	}
 
 	if (result != NULL) {
+		/**
+		 * It's a bit strange but the refcount for an empty array is always zero somehow.
+		 * There is another strange phenomenon: these zvals does not have any type_flag value.
+		 * Thus we should recreate a new empty array so that it has correct refcount
+		 * value and type_flag. This magic behavior was introduced since PHP 7.3.
+		 */
+		if (
+			Z_TYPE_P(result) == IS_ARRAY &&
+			zend_hash_num_elements(Z_ARRVAL_P(result)) == 0 &&
+			(!Z_REFCOUNTED_P(result) || Z_REFCOUNT_P(result) < 1)
+		) {
+			zephir_create_array(result, 0, 0);
+		}
+
 		if (!readonly) {
 			ZVAL_COPY(fetched, result);
 		} else {
 			ZVAL_COPY_VALUE(fetched, result);
 		}
+
 		return 1;
 	}
 
@@ -107,12 +122,26 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	return 0;
 }
 
-int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint index_length, int readonly)
+int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index, uint index_length, int readonly)
 {
 	zval *zv;
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
+			/**
+			 * It's a bit strange but the refcount for an empty array is always zero somehow.
+			 * There is another strange phenomenon: these zvals does not have any type_flag value.
+			 * Thus we should recreate a new empty array so that it has correct refcount
+			 * value and type_flag. This magic behavior was introduced since PHP 7.3.
+			 */
+			if (
+				Z_TYPE_P(zv) == IS_ARRAY &&
+				zend_hash_num_elements(Z_ARRVAL_P(zv)) == 0 &&
+				(!Z_REFCOUNTED_P(zv) || Z_REFCOUNT_P(zv) < 1)
+			) {
+				zephir_create_array(zv, 0, 0);
+			}
+
 			if (!readonly) {
 				ZVAL_COPY(fetched, zv);
 			} else {
@@ -127,12 +156,26 @@ int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint 
 	return 0;
 }
 
-int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index, int readonly)
+int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long index, int readonly)
 {
 	zval *zv;
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
+			/**
+			 * It's a bit strange but the refcount for an empty array is always zero somehow.
+			 * There is another strange phenomenon: these zvals does not have any type_flag value.
+			 * Thus we should recreate a new empty array so that it has correct refcount
+			 * value and type_flag. This magic behavior was introduced since PHP 7.3.
+			 */
+			if (
+				Z_TYPE_P(zv) == IS_ARRAY &&
+				zend_hash_num_elements(Z_ARRVAL_P(zv)) == 0 &&
+				(!Z_REFCOUNTED_P(zv) || Z_REFCOUNT_P(zv) < 1)
+			) {
+				zephir_create_array(zv, 0, 0);
+			}
+
 			if (!readonly) {
 				ZVAL_COPY(fetched, zv);
 			} else {
@@ -161,7 +204,7 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 			return zend_hash_str_exists(h, SL(""));
 
 		case IS_DOUBLE:
-			return zend_hash_index_exists(h, (ulong)Z_DVAL_P(index));;
+			return zend_hash_index_exists(h, (ulong)Z_DVAL_P(index));
 
 		case IS_TRUE:
 		case IS_FALSE:
@@ -503,7 +546,6 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 
 int zephir_array_update_string(zval *arr, const char *index, uint index_length, zval *value, int flags)
 {
-	zval *zv;
 
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (3)");
@@ -511,50 +553,42 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 	}
 
 	if ((flags & PH_CTOR) == PH_CTOR) {
-		zval new_zv;
-		//Z_TRY_DELREF_P(value); //?
-		ZVAL_DUP(&new_zv, value);
-		value = &new_zv;
+		zval new_value = {};
+
+		ZVAL_DUP(&new_value, value);
+		value = &new_value;
+	} else if ((flags & PH_COPY) == PH_COPY) {
+		Z_TRY_ADDREF_P(value);
 	}
 
 	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
 		SEPARATE_ZVAL_IF_NOT_REF(arr);
 	}
 
-	if ((flags & PH_COPY) == PH_COPY) {
-		Z_TRY_ADDREF_P(value);
-	}
-
-	zv = zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value);
-	return zv != NULL ? SUCCESS : FAILURE;
+	return zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value) ? SUCCESS : FAILURE;
 }
 
 int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
 {
-	zval *zv;
-
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
 	}
 
 	if ((flags & PH_CTOR) == PH_CTOR) {
-		zval new_zv;
-		//Z_TRY_DELREF_P(value); //?
-		ZVAL_DUP(&new_zv, value);
-		value = &new_zv;
+		zval new_value = {};
+
+		ZVAL_DUP(&new_value, value);
+		value = &new_value;
+	} else if ((flags & PH_COPY) == PH_COPY) {
+		Z_TRY_ADDREF_P(value);
 	}
 
 	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
 		SEPARATE_ZVAL_IF_NOT_REF(arr);
 	}
 
-	if ((flags & PH_COPY) == PH_COPY) {
-		Z_TRY_ADDREF_P(value);
-	}
-
-	zv = zend_hash_index_update(Z_ARRVAL_P(arr), index, value);
-	return zv != NULL ? SUCCESS : FAILURE;
+	return zend_hash_index_update(Z_ARRVAL_P(arr), index, value) ? SUCCESS : FAILURE;
 }
 
 void zephir_array_keys(zval *return_value, zval *input)
