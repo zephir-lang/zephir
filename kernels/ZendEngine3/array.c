@@ -53,6 +53,38 @@ void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int init
 	}
 }
 
+/**
+ * Simple convenience function which ensures that you are dealing with an array and you can
+ * eliminate noise from your code.
+ *
+ * It's a bit strange but the refcount for an empty array is always zero somehow.
+ * There is another strange phenomenon: these zvals does not have any type_flag value.
+ * Thus we should recreate a new empty array so that it has correct refcount
+ * value and type_flag. This magic behavior was introduced since PHP 7.3.
+ *
+ * Steps to reproduce:
+ *
+ * Userland:
+ *    $object->method([10 => []]);
+ *
+ * Zephir:
+ *    public function method(array p)
+ *    {
+ *        let p[10]["str"] = "foo";
+ *    }
+ */
+void
+ZEPHIR_FASTCALL zephir_ensure_array(zval *zv)
+{
+	if (
+		Z_TYPE_P(zv) == IS_ARRAY &&
+		zend_hash_num_elements(Z_ARRVAL_P(zv)) == 0 &&
+		(!Z_REFCOUNTED_P(zv) || Z_REFCOUNT_P(zv) < 1)
+	) {
+		zephir_create_array(zv, 0, 0);
+	}
+}
+
 int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int readonly)
 {
 	HashTable *h;
@@ -94,19 +126,7 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	}
 
 	if (result != NULL) {
-		/**
-		 * It's a bit strange but the refcount for an empty array is always zero somehow.
-		 * There is another strange phenomenon: these zvals does not have any type_flag value.
-		 * Thus we should recreate a new empty array so that it has correct refcount
-		 * value and type_flag. This magic behavior was introduced since PHP 7.3.
-		 */
-		if (
-			Z_TYPE_P(result) == IS_ARRAY &&
-			zend_hash_num_elements(Z_ARRVAL_P(result)) == 0 &&
-			(!Z_REFCOUNTED_P(result) || Z_REFCOUNT_P(result) < 1)
-		) {
-			zephir_create_array(result, 0, 0);
-		}
+		zephir_ensure_array(result);
 
 		if (!readonly) {
 			ZVAL_COPY(fetched, result);
@@ -128,19 +148,7 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
-			/**
-			 * It's a bit strange but the refcount for an empty array is always zero somehow.
-			 * There is another strange phenomenon: these zvals does not have any type_flag value.
-			 * Thus we should recreate a new empty array so that it has correct refcount
-			 * value and type_flag. This magic behavior was introduced since PHP 7.3.
-			 */
-			if (
-				Z_TYPE_P(zv) == IS_ARRAY &&
-				zend_hash_num_elements(Z_ARRVAL_P(zv)) == 0 &&
-				(!Z_REFCOUNTED_P(zv) || Z_REFCOUNT_P(zv) < 1)
-			) {
-				zephir_create_array(zv, 0, 0);
-			}
+			zephir_ensure_array(zv);
 
 			if (!readonly) {
 				ZVAL_COPY(fetched, zv);
@@ -156,25 +164,15 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 	return 0;
 }
 
+
+
 int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long index, int readonly)
 {
 	zval *zv;
 
 	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
-			/**
-			 * It's a bit strange but the refcount for an empty array is always zero somehow.
-			 * There is another strange phenomenon: these zvals does not have any type_flag value.
-			 * Thus we should recreate a new empty array so that it has correct refcount
-			 * value and type_flag. This magic behavior was introduced since PHP 7.3.
-			 */
-			if (
-				Z_TYPE_P(zv) == IS_ARRAY &&
-				zend_hash_num_elements(Z_ARRVAL_P(zv)) == 0 &&
-				(!Z_REFCOUNTED_P(zv) || Z_REFCOUNT_P(zv) < 1)
-			) {
-				zephir_create_array(zv, 0, 0);
-			}
+			zephir_ensure_array(zv);
 
 			if (!readonly) {
 				ZVAL_COPY(fetched, zv);
@@ -463,8 +461,7 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
  */
 void zephir_merge_append(zval *left, zval *values)
 {
-
-	zval           *tmp;
+	zval *tmp;
 
 	if (Z_TYPE_P(left) != IS_ARRAY) {
 		zend_error(E_NOTICE, "First parameter of zephir_merge_append must be an array");
