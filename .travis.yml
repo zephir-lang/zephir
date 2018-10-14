@@ -3,6 +3,7 @@ sudo: required
 
 language: php
 php:
+  - 'master'
   - '7.3.0RC1'
   - '7.2'
   - '7.1'
@@ -37,7 +38,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: '7.3.0RC1'
+    - php: 'master'
 
 cache:
   apt: true
@@ -74,12 +75,13 @@ before_script:
   # To turn them on, an appropriate ulimit value must be set.
   - sudo chmod +s $(which gdb)
   - ulimit -c unlimited -S
-  # Temporary. We'll enable a default system allocators a bit more
-  - if [ "${PHP_MAJOR}.${PHP_MINOR}" == "7.3" ]; then export USE_ZEND_ALLOC=1; fi
+  # FIXME: We'll enable a default system allocators a bit more
+  - '[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] || [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || export USE_ZEND_ALLOC=1'
 
 script:
   - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
-  - if [ "${PHP_MAJOR}.${PHP_MINOR}" != "7.3" ]; then bash ./unit-tests/ci/memcheck.sh; fi
+  # FIXME: We'll enable memory check a bit more
+  - '[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] || [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || bash ./unit-tests/ci/memcheck.sh'
 
 jobs:
   include:

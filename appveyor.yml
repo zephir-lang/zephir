@@ -1,4 +1,4 @@
-version: 0.10.11-{build}
+version: 0.10.12-{build}
 
 environment:
     matrix:
@@ -66,6 +66,7 @@ branches:
   only:
     - master
     - development
+    - 0.10.x
 
 init:
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "development") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
