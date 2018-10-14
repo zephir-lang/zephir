@@ -7,7 +7,7 @@ class Requires
 {
 	protected content;
 
-	public function requireExternal1(var path)
+	public function requireExternal1(var path) -> var
 	{
 		return require path;
 	}
@@ -31,7 +31,7 @@ class Requires
 		return this->content;
 	}
 
-	public function setContent(var content)
+	public function setContent(var content) -> void
 	{
 		let this->content = content;
 	}

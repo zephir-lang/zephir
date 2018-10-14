@@ -38,7 +38,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthoutAnyMessage()
     {
-        $testfile = __DIR__ .'/fixtures/exit.php';
+        $testfile = __DIR__ . '/fixtures/exit.php';
         $command = "$this->phpBinary $testfile";
         $output = [];
 
@@ -60,7 +60,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthProvidedStatusMessage()
     {
-        $testfile = __DIR__ .'/fixtures/exit_string.php';
+        $testfile = __DIR__ . '/fixtures/exit_string.php';
         $statusMessage = 'Hello World';
         $command = "$this->phpBinary $testfile \"$statusMessage\"";
         $output = [];
@@ -83,7 +83,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthProvidedStatusCode()
     {
-        $testfile = __DIR__ .'/fixtures/exit_int.php';
+        $testfile = __DIR__ . '/fixtures/exit_int.php';
         $statusCode = 220;
         $command = "$this->phpBinary $testfile $statusCode";
         $output = [];

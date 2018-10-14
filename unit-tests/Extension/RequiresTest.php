@@ -1,33 +1,42 @@
 <?php
 
 /*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
 use Test\Requires;
+use PHPUnit\Framework\TestCase;
 
-class RequiresTest extends \PHPUnit_Framework_TestCase
+class RequiresTest extends TestCase
 {
     public function testRequireExternal1()
     {
         $r = new Requires();
-        $this->assertSame($r->requireExternal1(__DIR__ . '/php/require-me-1.php'), array(1, 2, 3));
-        $this->assertTrue($r->requireExternal1(__DIR__ . '/php/require-me-2.php') && defined('REQUIRE_ME'));
+
+        $this->assertSame(
+            [1, 2, 3],
+            $r->requireExternal1(__DIR__ . '/fixtures/require-me-1.php')
+        );
+
+        $this->assertFalse(defined('REQUIRE_ME'));
+        $r->requireExternal1(__DIR__ . '/fixtures/require-me-2.php');
+        $this->assertTrue(defined('REQUIRE_ME'));
     }
 
     public function testRequireExternal3()
     {
         $r = new Requires();
-        $output = $r->requireExternal3(__DIR__ . '/php/require-me-3.php');
-        $this->assertSame("test", $output);
+
+        $this->assertSame(
+            'test',
+            $r->requireExternal3(__DIR__ . '/fixtures/require-me-3.php')
+        );
     }
 }
