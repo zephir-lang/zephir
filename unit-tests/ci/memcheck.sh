@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+export ZEND_DONT_UNLOAD_MODULES=1
+export USE_ZEND_ALLOC=0
+
 cd ${TRAVIS_BUILD_DIR}
 
 valgrind \

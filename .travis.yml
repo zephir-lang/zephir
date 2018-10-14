@@ -27,8 +27,6 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - USE_ZEND_ALLOC=0
-    - ZEND_DONT_UNLOAD_MODULES=1
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
     - RE2C_VERSION="1.1.1"
@@ -55,7 +53,7 @@ before_install:
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
   # Remove all `--silent' for debug purposes
-  - if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then export DEFAULT_MAKE_FLAGS="--debug"; fi
+  - '[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] || [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || export DEFAULT_MAKE_FLAGS="--debug"'
 
 install:
   - composer install --prefer-source --no-suggest
@@ -63,7 +61,8 @@ install:
   - bash ./unit-tests/ci/install_zephir_parser.sh
   - ./install
   - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then echo opcache.enable=0 >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"; fi
+  - echo opcache.enable=0 >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
+  - echo opcache.enable_cli=0 >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
 
 before_script:
   - $(phpenv which php) compiler.php help
@@ -75,8 +74,6 @@ before_script:
   # To turn them on, an appropriate ulimit value must be set.
   - sudo chmod +s $(which gdb)
   - ulimit -c unlimited -S
-  # FIXME: We'll enable a default system allocators a bit more
-  - '[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] || [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || export USE_ZEND_ALLOC=1'
 
 script:
   - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
