@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export PHPUNIT_DONT_EXIT=1
 export ZEND_DONT_UNLOAD_MODULES=1
 export USE_ZEND_ALLOC=0
 
@@ -14,7 +15,6 @@ valgrind \
     --num-callers=20 \
     --run-libc-freeres=no \
     ./unit-tests/phpunit \
-      --not-exit \
       -c phpunit.xml.dist \
       --no-coverage \
       --testsuite "Extension Test Suite"

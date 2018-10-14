@@ -4,7 +4,6 @@ shopt -s nullglob
 export LC_ALL=C
 
 for i in core*; do
-    echo "file ${i}"
 	if [ -f "$i" -a "$(file "$i" | grep -o 'core file')" ]; then
 		gdb -q $(phpenv which php) "$i" <<EOF
 set pagination 0

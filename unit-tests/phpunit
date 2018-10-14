@@ -11,6 +11,7 @@
  */
 
 use PHPUnit\TextUI\Command;
+use Zephir\Support\PhpUnitCommand;
 
 require dirname(__DIR__) . '/bootstrap.php';
 
@@ -34,13 +35,7 @@ if (!class_exists('\PHPUnit\TextUI\Command') and class_exists('PHPUnit_TextUI_Co
     class_alias('PHPUnit_TextUI_Command', '\PHPUnit\TextUI\Command');
 }
 
-$exit = true;
-if ($index = array_search('--not-exit', $_SERVER['argv'])) {
-    $exit = false;
-    unset($_SERVER['argv'][$index]);
-}
-
-if (!class_exists('PHPUnit_TextUI_Command')) {
+if (!class_exists(Command::class)) {
     fwrite(
         STDERR,
         'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
@@ -51,8 +46,4 @@ if (!class_exists('PHPUnit_TextUI_Command')) {
     die(1);
 }
 
-$res = Command::main($exit);
-
-if ($res) {
-    exit($res);
-}
+PhpUnitCommand::main();

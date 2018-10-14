@@ -81,7 +81,7 @@ before_script:
   - ulimit -c unlimited -S
 
 script:
-  - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+  - ./unit-tests/phpunit --debug unit-tests/
   # FIXME: We'll enable memory check a bit more
   - '[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] || [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || bash ./unit-tests/ci/memcheck.sh'
 
@@ -98,7 +98,7 @@ jobs:
         - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
         - bash ./unit-tests/ci/install-test-ext.sh
       script:
-        - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
+        - ./unit-tests/phpunit --debug unit-tests/
         - bash ./unit-tests/ci/memcheck.sh
     - stage: Benchmark
       php: 7.2
