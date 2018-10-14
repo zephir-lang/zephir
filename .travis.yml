@@ -63,9 +63,6 @@ install:
   - ./install
   - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then echo opcache.enable=0 >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"; fi
-  - sudo ulimit -c unlimited || true
-  - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
-  - sudo chmod +s $(which gdb)
 
 before_script:
   - $(phpenv which php) compiler.php help
@@ -73,6 +70,11 @@ before_script:
   - $(phpenv which php) compiler.php stubs
   - $(phpenv which php) compiler.php api
   - bash ./unit-tests/ci/install-test-ext.sh
+  # By default, no core dumps will be produced on Travis CI.
+  # To turn them on, an appropriate ulimit value must be set.
+  - sudo chmod +s $(which gdb)
+  - ulimit -c unlimited -S
+  # - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
 
 script:
   - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
