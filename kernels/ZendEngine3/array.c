@@ -164,8 +164,6 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 	return 0;
 }
 
-
-
 int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long index, int readonly)
 {
 	zval *zv;
