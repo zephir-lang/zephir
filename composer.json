@@ -44,6 +44,7 @@
         "psr-4": {
             "Zephir\\Stubs\\": "unit-tests/Zephir/Stubs/",
             "Zephir\\Test\\": "unit-tests/Zephir/Test/",
+            "Zephir\\Support\\": "unit-tests/Zephir/Support/",
             "Extension\\": "unit-tests/Extension/"
         },
         "classmap": [
