@@ -548,7 +548,7 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 	}
 
 	if ((flags & PH_CTOR) == PH_CTOR) {
-		zval new_value = {};
+		zval new_value;
 
 		ZVAL_DUP(&new_value, value);
 		value = &new_value;
@@ -571,7 +571,7 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 	}
 
 	if ((flags & PH_CTOR) == PH_CTOR) {
-		zval new_value = {};
+		zval new_value;
 
 		ZVAL_DUP(&new_value, value);
 		value = &new_value;

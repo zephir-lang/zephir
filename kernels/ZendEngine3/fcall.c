@@ -302,7 +302,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	int key_ok = FAILURE;
 	zephir_fcall_cache_entry *temp_cache_entry = NULL;
 	zval callable;
-	int i;
 	zend_class_entry* called_scope = zend_get_called_scope(EG(current_execute_data));
 
 	assert(obj_ce || !object_pp);
@@ -382,7 +381,8 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #else
 	zval p[fci.param_count];
 #endif
-	for (i=0; i<fci.param_count; ++i) {
+	uint32_t i;
+	for (i = 0; i < fci.param_count; ++i) {
 		ZVAL_COPY_VALUE(&p[i], params[i]);
 	}
 
