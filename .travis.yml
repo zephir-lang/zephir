@@ -74,7 +74,6 @@ before_script:
   # To turn them on, an appropriate ulimit value must be set.
   - sudo chmod +s $(which gdb)
   - ulimit -c unlimited -S
-  # - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
 
 script:
   - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/

@@ -14,8 +14,9 @@
 namespace Extension;
 
 use Test\NativeArray;
+use PHPUnit\Framework\TestCase;
 
-class NativeArrayTest extends \PHPUnit_Framework_TestCase
+class NativeArrayTest extends TestCase
 {
     public function testArray()
     {

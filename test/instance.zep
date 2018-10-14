@@ -24,7 +24,7 @@ class Instance
 
 	}
 
-	public static function testIssue1339()
+	public static function testIssue1339() -> <Instance>
 	{
 		var parameters;
 
@@ -45,7 +45,7 @@ class Instance
 		return create_instance_params("Test\\Instance", parameters);
 	}
 
-	public static function testInstanceCreate(string className)
+	public static function testInstanceCreate(string className) -> <Instance>
 	{
 		return create_instance(className);
 	}

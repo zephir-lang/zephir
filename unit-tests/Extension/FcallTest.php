@@ -22,12 +22,7 @@ class FcallTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        if (PHP_VERSION_ID >= 70300) {
-            $this->markTestSkipped("Skipped due to PHP 7.3 stable is not released yet");
-        }
     }
-
 
     public function testCall()
     {
@@ -86,6 +81,6 @@ class FcallTest extends TestCase
         $this->assertSame("ab", zephir_global_method_test("ab/c"));
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));
-        $this->assertInstanceOf(\stdClass::class, zephir_global_method_with_type_casting(new \stdClass()));
+        $this->assertInstanceOf(\stdClass::class, \zephir_global_method_with_type_casting(new \stdClass()));
     }
 }

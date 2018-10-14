@@ -1,15 +1,13 @@
 <?php
 
 /*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
@@ -39,9 +37,15 @@ class ExitDieTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($arg, trim($return2));
 
         $testfile3 = __DIR__ .'/fixtures/exit_int.php';
-        $intArg = 128;
+        $intArg = 220;
         $cmd3 = "$phpBinary $testfile3 $intArg";
+        $out3 = [];
+
         exec($cmd3, $out3, $return3);
-        $this->assertSame($return3, $intArg);
+        if (isset($out3[0]) && !empty($out3[0])) {
+            $this->fail(sprintf('Failed executing command: %s: %s', $cmd3, $out3[0]));
+        }
+
+        $this->assertSame($intArg, $return3);
     }
 }
