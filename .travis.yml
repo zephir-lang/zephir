@@ -74,6 +74,8 @@ before_script:
   # To turn them on, an appropriate ulimit value must be set.
   - sudo chmod +s $(which gdb)
   - ulimit -c unlimited -S
+  # Temporary. We'll enable a default system allocators a bit more
+  - if [ "${PHP_MAJOR}.${PHP_MINOR}" == "7.3" ]; then export USE_ZEND_ALLOC=1; fi
 
 script:
   - ./unit-tests/phpunit --not-exit -c phpunit.xml.dist --debug unit-tests/
