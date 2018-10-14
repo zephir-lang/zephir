@@ -19,11 +19,6 @@ use Test\Oo\PropertyAccess;
 
 class FcallTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testCall()
     {
         $t = new Fcall();

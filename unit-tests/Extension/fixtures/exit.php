@@ -1,5 +1,5 @@
 <?php
-// unit-tests/Extension/fixtures/exit.php
+
 if (!extension_loaded('test')) {
     if (ini_get('enable_dl') == '1') {
         $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';

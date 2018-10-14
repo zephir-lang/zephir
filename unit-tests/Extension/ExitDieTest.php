@@ -11,41 +11,108 @@
 
 namespace Extension;
 
-class ExitDieTest extends \PHPUnit_Framework_TestCase
-{
-    public function testExitDie()
-    {
-        if (PHP_VERSION_ID >= 70300) {
-            $this->markTestSkipped("Skipped due to PHP 7.3 stable is not released yet");
-        }
+use Zephir\Support\TestCase;
 
-        $phpBinary = constant('PHP_BINARY');
+class ExitDieTest extends TestCase
+{
+    private $phpBinary;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->phpBinary = constant('PHP_BINARY');
         /* If we use phpdbg, you need to add options -qrr */
         if (defined('PHP_SAPI') && constant('PHP_SAPI') == 'phpdbg') {
-            $phpBinary .= ' -qrr';
+            $this->phpBinary .= ' -qrr';
         }
 
-        $phpBinary .= " -d 'enable_dl=true'";
+        $this->phpBinary .= " -d 'enable_dl=true'";
 
-        $testfile1 = __DIR__ .'/fixtures/exit.php';
-        $return1 = `$phpBinary $testfile1`;
-        $this->assertSame('', trim($return1));
+        parent::setUp();
+    }
 
-        $arg = 'Hello World';
-        $testfile2 = __DIR__ .'/fixtures/exit_string.php';
-        $return2 = `$phpBinary $testfile2 "$arg"`;
-        $this->assertSame($arg, trim($return2));
+    /** @test */
+    public function shouldExitWthoutAnyMessage()
+    {
+        $testfile = __DIR__ .'/fixtures/exit.php';
+        $command = "$this->phpBinary $testfile";
+        $output = [];
 
-        $testfile3 = __DIR__ .'/fixtures/exit_int.php';
-        $intArg = 220;
-        $cmd3 = "$phpBinary $testfile3 $intArg";
-        $out3 = [];
+        exec($command, $output, $exitStatus);
 
-        exec($cmd3, $out3, $return3);
-        if (isset($out3[0]) && !empty($out3[0])) {
-            $this->fail(sprintf('Failed executing command: %s: %s', $cmd3, $out3[0]));
+        $this->assertEmpty($output, sprintf(
+            'Exit message does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+
+        $this->assertSame(0, $exitStatus, sprintf(
+            'Exit code does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+    }
+
+    /** @test */
+    public function shouldExitWthProvidedStatusMessage()
+    {
+        $testfile = __DIR__ .'/fixtures/exit_string.php';
+        $statusMessage = 'Hello World';
+        $command = "$this->phpBinary $testfile \"$statusMessage\"";
+        $output = [];
+
+        exec($command, $output, $exitStatus);
+
+        $this->assertSame($statusMessage, $output[0], sprintf(
+            'Exit message does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+
+        $this->assertSame(0, $exitStatus, sprintf(
+            'Exit code does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+    }
+
+    /** @test */
+    public function shouldExitWthProvidedStatusCode()
+    {
+        $testfile = __DIR__ .'/fixtures/exit_int.php';
+        $statusCode = 220;
+        $command = "$this->phpBinary $testfile $statusCode";
+        $output = [];
+
+        exec($command, $output, $exitStatus);
+
+        $this->assertEmpty($output, sprintf(
+            'Exit message does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+
+        $this->assertSame($statusCode, $exitStatus, sprintf(
+            'Exit code does not match with expected value. Output was: %s. Executed command: %s',
+            $this->prepareOutput($output),
+            $command
+        ));
+    }
+
+    private function prepareOutput($output)
+    {
+        if (empty($output)) {
+            return '(empty output)';
         }
 
-        $this->assertSame($intArg, $return3);
+        if (isset($output[0]) && !empty($output[0])) {
+            return $output[0];
+        }
+
+        return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

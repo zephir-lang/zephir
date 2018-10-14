@@ -2,22 +2,21 @@ namespace Test;
 
 class ExitDie
 {
-
-	public function testExit(param = "")
+	public function testExit(var param = null) -> void
 	{
-		if typeof param == "string" && param == "" {
+		if empty(param) {
 			exit();
-		} else {
-			exit(param);
 		}
+
+		exit(param);
 	}
 
-	public function testDie(param = "")
+	public function testDie(var param = null) -> void
 	{
-		if typeof param == "string" && param == "" {
+		if empty(param) {
 			die();
-		} else {
-			die(param);
 		}
+
+		die(param);
 	}
 }
