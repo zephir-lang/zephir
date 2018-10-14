@@ -14,4 +14,4 @@ valgrind \
       --not-exit \
       -c phpunit.xml.dist \
       --no-coverage \
-      unit-tests/
+      --testsuite "Extension Test Suite"
