@@ -11,17 +11,18 @@ PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
 
 shopt -s nullglob
 
+pushd ${PROJECT_ROOT}
+
 export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
 export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+export PHPUNIT_DONT_EXIT=1
 
 if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
     export USE_ZEND_ALLOC=1
-
-    composer remove --dev phpunit/phpunit
-    composer require --dev ${DEFAULT_COMPOSER_FLAGS} "phpunit/phpunit:^7.4"
-
-    ${PROJECT_ROOT}/unit-tests/phpunit ${PROJECT_ROOT}/unit-tests
-else
-    ${PROJECT_ROOT}/unit-tests/phpunit ${PROJECT_ROOT}/unit-tests
-    ${PROJECT_ROOT}/unit-tests/ci/memcheck.sh
 fi
+
+$(phpenv which php) -d extension=ext/modules/test.so unit-tests/phpunit -c phpunit.xml.dist
+
+popd
+
+exit $?
