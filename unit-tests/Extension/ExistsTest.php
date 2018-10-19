@@ -1,43 +1,40 @@
 <?php
 
 /*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
 use Test\Exists;
 
-require DATA_PATH . '/TestExClass.php';
-require DATA_PATH . '/TestExInterface.php';
+use PHPUnit\Framework\TestCase;
 
-class ExistsTest extends \PHPUnit_Framework_TestCase
+class ExistsTest extends TestCase
 {
     public function testAssertations()
     {
         $t = new Exists();
 
-        $this->assertTrue($t->testClassExists('TestExClass'));
+        $this->assertTrue($t->testClassExists(\TestExClass::class));
         $this->assertFalse($t->testClassExists('TestExClassx'));
-        $this->assertFalse($t->testClassExists('TestExInterface'));
+        $this->assertFalse($t->testClassExists(\TestExInterface::class));
         // with namespace
-        $this->assertTrue($t->testClassExists('\\Test\\Exists'));
+        $this->assertTrue($t->testClassExists(Exists::class));
 
         // class not interface
-        $this->assertFalse($t->testInterfaceExists('TestExClass'));
-        $this->assertTrue($t->testInterfaceExists('TestExInterface'));
+        $this->assertFalse($t->testInterfaceExists(\TestExClass::class));
+        $this->assertTrue($t->testInterfaceExists(\TestExInterface::class));
         $this->assertFalse($t->testInterfaceExists('TestExInterfacex'));
 
         $this->assertTrue($t->testMethodExists($t, 'testMethodExists'));
 
-        $this->assertTrue($t->testFileExists(__DIR__ . '/php/exists.php'));
+        $this->assertTrue($t->testFileExists(__DIR__ . '/../fixtures/exists.php'));
         $this->assertFalse($t->testFileExists(__DIR__ . '/php/existsxxxx.php'));
     }
 }

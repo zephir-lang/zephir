@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+    name="PHPCS Coding Standards for Zephir"
+>
+
+    <!--
+        The name attribute of the ruleset tag is displayed
+        when running PHP_CodeSniffer with the -v command line
+        argument. The description tag below is not displayed anywhere
+        except in this file, so it can contain information for
+        developers who may change this file in the future.
+    -->
+    <description>Check the code of the sniffs in Zephir.</description>
+
+    <!-- Show sniff codes in all reports -->
+    <arg value="s"/>
+
+    <!-- Use PSR-2 as a base -->
+    <rule ref="PSR2"/>
+
+    <!-- Uncomment to use colors in progress or report -->
+    <arg name="colors" />
+
+    <!-- Show progress of the run -->
+    <arg value="p"/>
+
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+    </rule>
+
+    <!--
+        If no files or directories are specified on the command line
+        your custom standard can specify what files should be checked
+        instead.
+        Note that specifying any file or directory path
+        on the command line will ignore all file tags.
+    -->
+    <file>Library</file>
+    <!-- file>unit-tests/Extension</file -->
+    <!-- file>unit-tests/Zephir</file -->
+</ruleset>

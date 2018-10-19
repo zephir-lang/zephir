@@ -195,19 +195,25 @@ class ArrayIndex
     /**
      * Compiles foo[y][x] = {expr} (multiple offset)
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param  string             $variable
+     * @param  ZephirVariable     $symbolVariable
+     * @param  CompiledExpression $resolvedExpr
+     * @param  CompilationContext $compilationContext
+     * @param  array              $statement
+     * @return void
      *
      * @throws CompilerException
+     * @throws \Zephir\Exception
      */
-    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-        $codePrinter = $compilationContext->codePrinter;
+    protected function _assignArrayIndexMultiple(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ) {
+        $offsetExprs = [];
 
-        $offsetExprs = array();
         foreach ($statement['index-expr'] as $indexExpr) {
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
@@ -222,7 +228,13 @@ class ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assignment without cast", $indexExpr);
+                    throw new CompilerException(
+                        sprintf(
+                            'Index: %s cannot be used as array index in assignment without cast',
+                            $exprIndex->getType()
+                        ),
+                        $indexExpr
+                    );
             }
 
             $offsetExprs[] = $exprIndex;
@@ -234,9 +246,19 @@ class ArrayIndex
          * Create a temporal zval (if needed)
          */
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
-        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
 
-        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
+        $targetVariable = $compilationContext->symbolTable->getVariableForWrite(
+            $variable,
+            $compilationContext,
+            $statement
+        );
+
+        $compilationContext->backend->assignArrayMulti(
+            $targetVariable,
+            $symbolVariable,
+            $offsetExprs,
+            $compilationContext
+        );
 
         if ($symbolVariable->isTemporal()) {
             $symbolVariable->setIdle(true);

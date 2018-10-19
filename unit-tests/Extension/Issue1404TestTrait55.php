@@ -21,7 +21,7 @@ namespace Extension;
  * @license  MIT http://zephir-lang.com/license.html
  * @link     https://github.com/phalcon/zephir/issues/1404
  */
-trait Issue1404TestTrait
+trait Issue1404TestTrait55
 {
     protected function onNotSuccessfulTest(\Exception $error)
     {

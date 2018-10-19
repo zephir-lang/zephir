@@ -95,7 +95,7 @@ class ObjectDynamicStringProperty
             case 'bool':
                 if ($resolvedExpr->getBooleanCode() == '1') {
                     $value = 'true';
-                } else if ($resolvedExpr->getBooleanCode() == '0') {
+                } elseif ($resolvedExpr->getBooleanCode() == '0') {
                     $value = 'false';
                 } else {
                     throw new \Exception("?");

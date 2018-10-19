@@ -25,7 +25,8 @@
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "ext-gmp": "*",
@@ -38,6 +39,17 @@
         "psr-4": {
             "Zephir\\": "Library"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Zephir\\Stubs\\": "unit-tests/Zephir/Stubs/",
+            "Zephir\\Test\\": "unit-tests/Zephir/Test/",
+            "Zephir\\Support\\": "unit-tests/Zephir/Support/",
+            "Extension\\": "unit-tests/Extension/"
+        },
+        "classmap": [
+            "unit-tests/Data/"
+        ]
     },
     "bin": [
         "bin/zephir"

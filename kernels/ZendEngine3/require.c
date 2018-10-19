@@ -40,9 +40,18 @@
 int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 {
 	zend_file_handle file_handle;
-	int ret;
 	zend_op_array *new_op_array;
 	zval dummy, local_retval;
+	char realpath[MAXPATHLEN];
+	int ret;
+
+	if (UNEXPECTED(!VCWD_REALPATH(require_path, realpath))) {
+#ifndef ZEPHIR_RELEASE
+		fprintf(stderr, "%s: Failed opening file %s", __func__, require_path);
+		zephir_print_backtrace();
+#endif
+		return FAILURE;
+	}
 
 	ZVAL_UNDEF(&local_retval);
 
@@ -53,11 +62,6 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 		abort();
 	}
 #endif
-
-	/* if (!memcmp(require_path, "", 0)) {
-		@TODO, throw an exception here
-		return FAILURE;
-	} */
 
 	file_handle.filename = require_path;
 	file_handle.free_filename = 0;

@@ -4,8 +4,6 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
          backupGlobals="false"
          bootstrap="./unit-tests/bootstrap.php"
-         colors="true"
-         verbose="true"
 >
 
     <testsuites>
@@ -29,9 +27,5 @@
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
     </php>
-
-    <logging>
-        <log type="coverage-clover" target="./unit-tests/output/clover.xml"/>
-    </logging>
 
 </phpunit>
