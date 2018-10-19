@@ -1,10 +1,9 @@
-dist: trusty
-sudo: required
+sudo: false
 
 language: php
 php:
-#  - 'master'
-  - '7.3.0RC3'
+  # - master
+  - '7.3'
   - '7.2'
   - '7.1'
   - '7.0'
@@ -18,9 +17,6 @@ addons:
     packages:
     - valgrind
     - gdb
-    # To use with `dist: xenial` uncomment this.
-    # - libzip4
-    # For more see: https://github.com/travis-ci/travis-ci/issues/9717
 
 env:
   global:
@@ -36,8 +32,8 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-#    - php: 'master'
-    - php: '7.3.0RC3'
+    - php: '7.3'
+    # - php: 'master'
 
 cache:
   apt: true
@@ -53,18 +49,13 @@ before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
-  # Disable by default.
-  # See unit-tests/ci/memcheck.sh for more
-  - export ZEND_DONT_UNLOAD_MODULES=0
-  - export USE_ZEND_ALLOC=1
-  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - echo -e 'opcache.enable=0\nopcache.enable_cli=0' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - echo pcre.jit=0 >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
+  - ulimit -c unlimited -S
+  - phpenv config-add ./unit-tests/ci/999-default.ini
 
 install:
   - composer install --prefer-source --no-suggest
-  - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
-  - bash ./unit-tests/ci/install_zephir_parser.sh
+  - ./unit-tests/ci/install-re2c $RE2C_VERSION
+  - ./unit-tests/ci/install_zephir_parser.sh
   - ./install
 
 before_script:
@@ -72,11 +63,8 @@ before_script:
   - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
   - $(phpenv which php) compiler.php stubs
   - $(phpenv which php) compiler.php api
-  - bash ./unit-tests/ci/install-test-ext.sh
-  # By default, no core dumps will be produced on Travis CI.
-  # To turn them on, an appropriate ulimit value must be set.
-  - sudo chmod +s $(which gdb)
-  - ulimit -c unlimited -S
+  - ./unit-tests/ci/install-test-ext.sh
+  - phpenv config-rm zephir-parser.ini
 
 script:
   - ./unit-tests/phpunit --debug unit-tests/
@@ -91,12 +79,15 @@ jobs:
     - stage: Compiller testing
       php: 7.2
       compiler: clang
+      env:
+        - CC=clang
       before_script:
         - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
-        - bash ./unit-tests/ci/install-test-ext.sh
+        - ./unit-tests/ci/install-test-ext.sh
       script:
+        - phpenv config-rm xdebug.ini || true
+        - phpenv config-rm zephir-parser.ini || true
         - ./unit-tests/phpunit --debug unit-tests/
-        - bash ./unit-tests/ci/memcheck.sh
     - stage: Benchmark
       php: 7.2
       before_script:
@@ -104,16 +95,14 @@ jobs:
         - bash ./unit-tests/ci/install-test-ext.sh
       script:
         - phpenv config-rm xdebug.ini || true
+        - phpenv config-rm zephir-parser.ini || true
         - $(phpenv which php) unit-tests/microbench.php
 
 after_success:
   - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
 
 after_failure:
-  - $(phpenv which php) -v
-  - $(phpenv which php) -m
   - ./unit-tests/ci/after_failure.sh
 
 notifications:
-  # Stop spam me. I already live on Travis CI and GitHub
   email: false
