@@ -16,14 +16,13 @@ use PHPUnit\TextUI\Command;
 class PhpUnitCommand extends Command
 {
     /**
-     * {@inheritdoc}
+     * Start testing.
      *
-     * @param  bool $exit
      * @return int
      */
-    public static function main($exit = true)
+    public static function start()
     {
-        $command = new static;
+        $exit = true;
 
         if (\getenv('PHPUNIT_DONT_EXIT')) {
             $exit = false;
@@ -31,6 +30,6 @@ class PhpUnitCommand extends Command
             $exit = (bool) constant('PHPUNIT_DONT_EXIT');
         }
 
-        return $command->run($_SERVER['argv'], $exit);
+        return parent::main($exit);
     }
 }

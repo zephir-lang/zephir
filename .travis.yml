@@ -28,6 +28,8 @@ env:
     - PATH="${HOME}/bin:${PATH}"
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
+    - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
 
 matrix:
   fast_finish: true
@@ -53,30 +55,20 @@ before_install:
   - phpenv config-add ./unit-tests/ci/999-default.ini
 
 install:
-  - composer install --prefer-source --no-suggest
+  - composer install $DEFAULT_COMPOSER_FLAGS
   - ./unit-tests/ci/install-re2c $RE2C_VERSION
   - ./unit-tests/ci/install_zephir_parser.sh
   - ./install
 
 before_script:
   - $(phpenv which php) compiler.php help
-  - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
+  - $(phpenv which php) compiler.php generate $DEFAULT_ZFLAGS
   - $(phpenv which php) compiler.php stubs
   - $(phpenv which php) compiler.php api
   - ./unit-tests/ci/install-test-ext.sh
-  - phpenv config-rm zephir-parser.ini
 
 script:
-  - |
-    if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
-      composer remove phpunit/phpunit
-      composer require "phpunit/phpunit:^7.4"
-      export USE_ZEND_ALLOC=1
-      ./unit-tests/phpunit unit-mock/
-    else
-      ./unit-tests/phpunit unit-tests/
-      ./unit-tests/ci/memcheck.sh
-    fi
+  - ./unit-tests/ci/run-unit-tests.sh
 
 jobs:
   include:
@@ -90,22 +82,18 @@ jobs:
       env:
         - CC=clang
       before_script:
-        - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
+        - $(phpenv which php) compiler.php generate DEFAULT_ZFLAGS
         - ./unit-tests/ci/install-test-ext.sh
       script:
-        - phpenv config-rm xdebug.ini || true
-        - phpenv config-rm zephir-parser.ini || true
-        - ./unit-tests/phpunit unit-tests/
+        - ./unit-tests/ci/run-unit-tests.sh
     - stage: Benchmark
       php: 7.2
       before_script:
         - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
-        - bash ./unit-tests/ci/install-test-ext.sh
+        - ./unit-tests/ci/install-test-ext.sh
       script:
         - phpenv config-rm xdebug.ini || true
-        - phpenv config-rm zephir-parser.ini || true
         - $(phpenv which php) unit-tests/microbench.php
-
 after_success:
   - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
 
