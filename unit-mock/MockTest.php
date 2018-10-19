@@ -1,6 +1,6 @@
 <?php
 
-class MockTest extends \PHPUnit_Framework_TestCase
+class MockTest extends \PHPUnit\Framework\TestCase
 {
     public function testMe()
     {
