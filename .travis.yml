@@ -69,6 +69,7 @@ before_script:
 
 script:
   - ./unit-tests/ci/run-unit-tests.sh
+  - ./unit-tests/ci/memcheck.sh
 
 jobs:
   include:
@@ -82,18 +83,19 @@ jobs:
       env:
         - CC=clang
       before_script:
-        - $(phpenv which php) compiler.php generate DEFAULT_ZFLAGS
+        - $(phpenv which php) compiler.php generate $DEFAULT_ZFLAGS
         - ./unit-tests/ci/install-test-ext.sh
       script:
-        - ./unit-tests/ci/run-unit-tests.sh
+        - ./unit-tests/ci/memcheck.sh
     - stage: Benchmark
       php: 7.2
       before_script:
-        - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
+        - $(phpenv which php) compiler.php generate $DEFAULT_ZFLAGS
         - ./unit-tests/ci/install-test-ext.sh
       script:
         - phpenv config-rm xdebug.ini || true
         - $(phpenv which php) unit-tests/microbench.php
+
 after_success:
   - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
 
