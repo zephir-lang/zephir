@@ -620,9 +620,9 @@ class Backend extends BaseBackend
         $copyStr = '';
         if ($doCopy === true) {
             $copyStr = ', 1';
-        } else if ($doCopy === false) {
+        } elseif ($doCopy === false) {
             $copyStr = ', 0';
-        } else if (isset($doCopy)) {
+        } elseif (isset($doCopy)) {
             $copyStr = ', ' . $doCopy;
         }
 
@@ -644,9 +644,9 @@ class Backend extends BaseBackend
         $copyStr = '';
         if ($doCopy === true) {
             $copyStr = ', 1';
-        } else if ($doCopy === false) {
+        } elseif ($doCopy === false) {
             $copyStr = ', 0';
-        } else if (isset($doCopy)) {
+        } elseif (isset($doCopy)) {
             $copyStr = ', ' . $doCopy;
         }
 
@@ -736,7 +736,7 @@ class Backend extends BaseBackend
         $keyType = 'assoc';
         if (!isset($key)) {
             $keyType = 'append';
-        } else if ($key instanceof CompiledExpression) {
+        } elseif ($key instanceof CompiledExpression) {
             $typeKey = $key->getType();
             if ($typeKey == 'variable') {
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
@@ -788,7 +788,7 @@ class Backend extends BaseBackend
             } else {
                 $valueStr = 'SL("' . $value->getCode()  . '")';
             }
-        } else if ($type == 'zval') {
+        } elseif ($type == 'zval') {
             $valueStr = $this->getVariableCode($value);
         } else {
             $valueStr = $value->getCode();
@@ -797,7 +797,7 @@ class Backend extends BaseBackend
 
         if ($keyType == 'assoc') {
             $output = 'add_assoc_' . $type . '_ex(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', ' . $valueStr . $doCopy . ');';
-        } else if ($keyType == 'append') {
+        } elseif ($keyType == 'append') {
             $output = 'zephir_array_append(' . $this->getVariableCodePointer($variable) . ', ' . $this->resolveValue($value, $context) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
         } else {
             $output = 'add_index_' . $type . '(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', '. $valueStr . $doCopy . ');';
@@ -832,7 +832,7 @@ class Backend extends BaseBackend
                 default:
                     throw new CompilerException('updateArray: Found a variable with unsupported type ' . $key->getType());
             }
-        } else if ($key instanceof CompiledExpression) {
+        } elseif ($key instanceof CompiledExpression) {
             switch ($key->getType()) {
                 case 'string':
                     $compilationContext->codePrinter->output('zephir_array_update_string(' . $this->getVariableCodePointer($symbolVariable) . ', SL("' . $key->getCode() . '"), ' . $value . ', ' . $flags . ');');
@@ -924,7 +924,7 @@ class Backend extends BaseBackend
 
         if ($resolvedExpr->getType() == 'int' || $resolvedExpr->getType() == 'long') {
             return new CompiledExpression('bool', 'zephir_array_isset_long(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
-        } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
+        } elseif ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
             return new CompiledExpression('bool', 'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
         }
 
@@ -938,7 +938,7 @@ class Backend extends BaseBackend
         if (!($resolvedExpr instanceof Variable)) {
             if ($resolvedExpr->getType() == 'string') {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode() . '"), '. $flags . ' TSRMLS_CC)', $expression);
-            } else if (in_array($resolvedExpr->getType(), array('int', 'uint', 'long'))) {
+            } elseif (in_array($resolvedExpr->getType(), array('int', 'uint', 'long'))) {
                 return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
@@ -947,7 +947,7 @@ class Backend extends BaseBackend
 
         if ($resolvedExpr->getType() == 'int' || $resolvedExpr->getType() == 'long') {
             return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $this->getVariableCode($resolvedExpr) . ', ' . $flags . ' TSRMLS_CC)', $expression);
-        } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
+        } elseif ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
             return new CompiledExpression('bool', 'zephir_array_isset_fetch(' . $code . ', ' . $this->getVariableCode($resolvedExpr) . ', ' . $flags . ' TSRMLS_CC)', $expression);
         }
         throw new CompilerException('arrayIssetFetch [' . $resolvedExpr->getType() . ']', $expression);
@@ -1133,17 +1133,17 @@ class Backend extends BaseBackend
     {
         if ($value == 'null') {
             $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_null)';
-        } else if ($value == 'true') {
+        } elseif ($value == 'true') {
             $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_true)';
-        } else if ($value == 'false') {
+        } elseif ($value == 'false') {
             $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_false)';
-        } else if ($value instanceof GlobalConstant) {
+        } elseif ($value instanceof GlobalConstant) {
             return ($usePointer ? '&' : '') . $value->getName();
-        } else if ($value instanceof CompiledExpression) {
+        } elseif ($value instanceof CompiledExpression) {
             if ($value->getType() == 'array') {
                 $var = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
                 $value = $usePointer ? $this->getVariableCodePointer($var) : $this->getVariableCode($var);
-            } else if ($value->getType() == 'variable') {
+            } elseif ($value->getType() == 'variable') {
                 $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
             } else {
                 return $value->getCode();
@@ -1206,7 +1206,7 @@ class Backend extends BaseBackend
         }
         if (!isset($symbolVariable)) {
             $context->codePrinter->output('ZEPHIR_' . $macro . '(NULL, ' . $variable->getName() . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
-        } else if ($symbolVariable->getName() == 'return_value') {
+        } elseif ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $variable->getName() . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
         } else {
             $context->codePrinter->output('ZEPHIR_' . $macro . '(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
@@ -1218,7 +1218,7 @@ class Backend extends BaseBackend
         $paramStr = $params != null ? ', ' . join(', ', $params) : '';
         if (!isset($symbolVariable)) {
             $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
-        } else if ($symbolVariable->getName() == 'return_value') {
+        } elseif ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
         } else {
             $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');

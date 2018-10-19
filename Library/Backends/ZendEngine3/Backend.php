@@ -409,7 +409,7 @@ class Backend extends BackendZendEngine2
 
         if (!isset($key)) {
             $keyType = 'append';
-        } else if ($key instanceof CompiledExpression) {
+        } elseif ($key instanceof CompiledExpression) {
             $typeKey = $key->getType();
             if ($typeKey == 'variable') {
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
@@ -468,7 +468,7 @@ class Backend extends BackendZendEngine2
             } else {
                 $valueStr = 'SL("' . $value->getCode()  . '")';
             }
-        } else if ($type == 'zval') {
+        } elseif ($type == 'zval') {
             $valueStr = $this->getVariableCode($value);
         } else {
             $valueStr = $value->getCode();
@@ -476,7 +476,7 @@ class Backend extends BackendZendEngine2
 
         if ($keyType == 'assoc') {
             $output = 'add_assoc_' . $type . '_ex(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', ' . $valueStr . ');';
-        } else if ($keyType == 'append') {
+        } elseif ($keyType == 'append') {
             $output = 'zephir_array_append(' . $this->getVariableCode($variable) . ', ' . $this->resolveValue($value, $context) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
         } else {
             $output = 'add_index_' . $type . '(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', '. $valueStr . ');';
@@ -635,7 +635,7 @@ class Backend extends BackendZendEngine2
             if ($value instanceof CompiledExpression) {
                 if ($value->getType() == 'array') {
                     $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
-                } else if ($value->getType() == 'variable') {
+                } elseif ($value->getType() == 'variable') {
                     $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
                 } else {
                     return $value->getCode();
@@ -679,7 +679,7 @@ class Backend extends BackendZendEngine2
         }
         if (!isset($symbolVariable)) {
             $context->codePrinter->output('ZEPHIR_' . $macro . '(NULL, ' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
-        } else if ($symbolVariable->getName() == 'return_value') {
+        } elseif ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
         } else {
             $symbol = $this->getVariableCode($symbolVariable);
@@ -731,7 +731,7 @@ class Backend extends BackendZendEngine2
         if (isset($keyVariable) && isset($variable)) {
             $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY_VAL';
             $codePrinter->output($macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName() . ', ' . $arrayStrKey->getName() . ', ' . $tempVariable->getName() . ')');
-        } else if (isset($keyVariable)) {
+        } elseif (isset($keyVariable)) {
             $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY';
             $codePrinter->output($macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName() . ', ' . $arrayStrKey->getName() . ')');
         } else {
