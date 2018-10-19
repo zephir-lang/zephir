@@ -67,8 +67,13 @@ before_script:
   - phpenv config-rm zephir-parser.ini
 
 script:
-  - ./unit-tests/phpunit --debug unit-tests/
-  - ./unit-tests/ci/memcheck.sh
+  - |
+    if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
+      ./unit-tests/phpunit unit-mock/
+    else
+      ./unit-tests/phpunit unit-tests/
+      ./unit-tests/ci/memcheck.sh
+    fi
 
 jobs:
   include:
@@ -87,7 +92,7 @@ jobs:
       script:
         - phpenv config-rm xdebug.ini || true
         - phpenv config-rm zephir-parser.ini || true
-        - ./unit-tests/phpunit --debug unit-tests/
+        - ./unit-tests/phpunit unit-tests/
     - stage: Benchmark
       php: 7.2
       before_script:
