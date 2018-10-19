@@ -25,7 +25,8 @@ if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7
 fi
 
 $(phpenv which php) -d extension=ext/modules/test.so unit-tests/phpunit -c ${confing_file}
+status=$?
 
 popd
 
-exit $?
+exit ${status}
