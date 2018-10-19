@@ -31,6 +31,8 @@ env:
     - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
     - REPORT_COVERAGE=1
+    - PHPUNIT_DONT_EXIT=1
+    - PHPUNIT_CONF=phpunit.xml.dist
 
 matrix:
   fast_finish: true
@@ -62,12 +64,17 @@ install:
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
-
-before_script:
   - ./unit-tests/ci/install-test-ext.sh
 
+before_script:
+  - |
+      if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
+        export USE_ZEND_ALLOC=1
+        export PHPUNIT_CONF=phpunit-php-73.xml.dist
+      fi
+
 script:
-  - ./unit-tests/ci/run-unit-tests.sh
+  - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/phpunit -c ${PHPUNIT_CONF}
 
 jobs:
   include:
@@ -81,14 +88,10 @@ jobs:
       env:
         - CC=clang
         - REPORT_COVERAGE=0
-      before_script:
-        - ./unit-tests/ci/install-test-ext.sh
       script:
-        - ./unit-tests/ci/run-unit-tests.sh
+        - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/phpunit -c ${PHPUNIT_CONF}
     - stage: Benchmark
       php: 7.2
-      before_script:
-        - ./unit-tests/ci/install-test-ext.sh
       script:
         - phpenv config-rm xdebug.ini || true
         - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
