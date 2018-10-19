@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir package.
  *
  * (c) Zephir Team <team@zephir-lang.com>
