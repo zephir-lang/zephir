@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
+         backupGlobals="false"
+         bootstrap="./unit-tests/bootstrap.php"
+>
+
+    <testsuites>
+        <testsuite name="Extension Test Suite">
+            <directory suffix=".php">./unit-tests/Extension</directory>
+        </testsuite>
+        <testsuite name="Zephir Test Suite">
+            <directory suffix=".php">./unit-tests/Zephir</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./Library</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="default_charset" value="UTF-8"/>
+        <ini name="date.timezone" value="UTC"/>
+        <ini name="display_errors" value="on"/>
+        <ini name="display_startup_errors" value="on"/>
+    </php>
+
+</phpunit>

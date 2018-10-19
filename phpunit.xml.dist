@@ -24,21 +24,14 @@
     </filter>
 
     <php>
+        <ini name="default_charset" value="UTF-8"/>
         <ini name="date.timezone" value="UTC"/>
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
     </php>
 
     <logging>
-        <log
-            type="coverage-text"
-            target="php://stdout"
-            lowUpperBound="60"
-            highLowerBound="90"/>
-
-        <log
-            type="coverage-clover"
-            target="./unit-tests/output/clover.xml"/>
+        <log type="coverage-clover" target="./unit-tests/output/clover.xml"/>
     </logging>
 
 </phpunit>

@@ -9,7 +9,9 @@
 composer.lock
 vendor/
 build/
+
 phpunit.xml
+phpcs.xml
 
 # Ignore for all projects based on Zephir
 .temp/
@@ -52,6 +54,3 @@ runtime/run-tests.php
 runtime/a.zep
 runtime/index.php
 runtime/parser.out
-
-coverage.xml
-clover.xml

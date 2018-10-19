@@ -1,43 +1,37 @@
 <?php
 
 /*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
-use Error;
 use Test\Instance;
+use PHPUnit\Framework\TestCase;
 
-require DATA_PATH . '/TestAbstractClass.php';
-
-class InstanceTest extends \PHPUnit_Framework_TestCase
+class InstanceTest extends TestCase
 {
     public function testIssue1339()
     {
-        $t = Instance::testIssue1339();
-        $this->assertInstanceOf("Test\\Instance", $t);
+        $this->assertInstanceOf(Instance::class, Instance::testIssue1339());
     }
 
-    public function testInstanceAbstract()
+    /**
+     * @test
+     * @expectedException \Error
+     * @expectedExceptionMessage Cannot instantiate abstract class TestAbstractClass
+     */
+    public function shouldThrowErrorOnInstantiateAbstractClass()
     {
         if (PHP_VERSION_ID < 70000) {
-            $this->markTestSkipped(
-                "We can't catch fatal errors on php 5.x"
-            );
+            $this->markTestSkipped("We can't catch fatal errors on php 5.x");
         }
 
-        try {
-            $t = Instance::testInstanceCreate(\TestAbstractClass::class);
-        } catch (Error $e) {
-            $this->assertEquals("Cannot instantiate abstract class TestAbstractClass", $e->getMessage());
-        }
+        Instance::testInstanceCreate(\TestAbstractClass::class);
     }
 }

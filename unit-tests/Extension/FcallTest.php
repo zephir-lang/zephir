@@ -76,6 +76,6 @@ class FcallTest extends TestCase
         $this->assertSame("ab", zephir_global_method_test("ab/c"));
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));
-        $this->assertInstanceOf(\stdClass::class, zephir_global_method_with_type_casting(new \stdClass()));
+        $this->assertInstanceOf(\stdClass::class, \zephir_global_method_with_type_casting(new \stdClass()));
     }
 }

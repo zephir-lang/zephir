@@ -31,10 +31,10 @@ define('ZEPHIRPATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('T', "\t");
 define('2T', "\t\t");
 
-if (file_exists(ZEPHIRPATH . 'vendor/autoload.php')) {
-    require ZEPHIRPATH . 'vendor/autoload.php';
+if (file_exists(ZEPHIRPATH . '/vendor/autoload.php')) {
+    require ZEPHIRPATH . '/vendor/autoload.php';
 } else {
-    require ZEPHIRPATH . 'Library/Loader.php';
+    require ZEPHIRPATH . '/Library/Loader.php';
     Zephir\Loader::register();
 }
 

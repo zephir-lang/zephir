@@ -1,22 +1,22 @@
-language: php
-
-dist: trusty
-# Change to `true' to enable debug mode
 sudo: false
 
+language: php
 php:
-  - '5.5'
-  - '5.6'
-  - '7.0'
-  - '7.1'
+  - master
+  - '7.3'
   - '7.2'
+  - '7.1'
+  - '7.0'
+  - '5.6'
 
 git:
   depth: 1
 
-compiler:
-  - gcc
-  - clang
+addons:
+  apt:
+    packages:
+    - gdb
+    - lcov
 
 env:
   global:
@@ -24,40 +24,20 @@ env:
     - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
     - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - USE_ZEND_ALLOC=0
-    - ZEND_DONT_UNLOAD_MODULES=1
     - REPORT_EXIT_STATUS=1
     - PATH="${HOME}/bin:${PATH}"
-    - RE2C_VERSION="1.0.3"
+    - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
-  matrix:
-    - CC="gcc"
-    - CC="clang"
+    - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+    - REPORT_COVERAGE=1
 
 matrix:
   fast_finish: true
   allow_failures:
-    - php: nightly
-  exclude:
-    - env: CC="gcc"
-      compiler: clang
-    - env: CC="clang"
-      compiler: gcc
-  include:
-    - env: CC="gcc"
-      php: nightly
-      compiler: gcc
-    - env: CC="clang"
-      php: nightly
-      compiler: clang
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
-      php: '7.1'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
-      php: '7.1'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=gcc
-      php: '7.2'
-    - env: CPPFLAGS=-DZEPHIR_RELEASE CC=clang
-      php: '7.2'
+    # There is still memory leaks
+    # and other issues like https://github.com/sebastianbergmann/phpunit/pull/3359
+    - php: 'master'
 
 cache:
   apt: true
@@ -71,74 +51,53 @@ cache:
 
 before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
-  - $CC --version
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+  - ulimit -c unlimited -S
+  - phpenv config-add ./unit-tests/ci/999-default.ini
 
 install:
-  - composer install --prefer-source --no-suggest
-  - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
-  - bash ./unit-tests/ci/install_zephir_parser.sh
+  - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
+  - travis_retry gem install coveralls-lcov
+  - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
+  - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
 
 before_script:
-  - $(phpenv which php) compiler.php help
-  - $(phpenv which php) compiler.php generate -Wnonexistent-function -Wnonexistent-class -Wunused-variable
-  - $(phpenv which php) compiler.php stubs
-  - $(phpenv which php) compiler.php api
-  - |
-    (
-      set -e
-      cd ext
-      $(phpenv which phpize)
-      ./configure --silent --with-php-config=$(phpenv which php-config) --enable-test
-      make -j"$(getconf _NPROCESSORS_ONLN)"
-      make --silent install
-    )
-  #- ls -1 `$(phpenv which php-config) --extension-dir`
-  #- phpenv versions
-  - ulimit -c unlimited || true
-  # Uncomment to setting core dump
-  #- echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
-  #- sudo chmod +s $(which gdb)
+  - ./unit-tests/ci/install-test-ext.sh
 
 script:
-  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
-  - | # Tests and coverage
-      ./unit-tests/phpunit \
-        --not-exit \
-        -c phpunit.xml.dist \
-        --debug \
-        unit-tests/
-  - | # Check for memory leaks
-      valgrind \
-        --read-var-info=yes \
-        --error-exitcode=1 \
-        --fullpath-after= \
-        --track-origins=yes \
-        --leak-check=full \
-        --num-callers=20 \
-        --run-libc-freeres=no \
-        ./unit-tests/phpunit \
-          --not-exit \
-          -c phpunit.xml.dist \
-          --no-coverage \
-          unit-tests/
-  - $(phpenv which php) unit-tests/microbench.php
+  - ./unit-tests/ci/run-unit-tests.sh
+
+jobs:
+  include:
+    - stage: Static Code Analysis
+      php: 7.2
+      script:
+        - vendor/bin/phpcs
+    - stage: Compiller testing
+      php: 7.2
+      compiler: clang
+      env:
+        - CC=clang
+        - REPORT_COVERAGE=0
+      before_script:
+        - ./unit-tests/ci/install-test-ext.sh
+      script:
+        - ./unit-tests/ci/run-unit-tests.sh
+    - stage: Benchmark
+      php: 7.2
+      before_script:
+        - ./unit-tests/ci/install-test-ext.sh
+      script:
+        - phpenv config-rm xdebug.ini || true
+        - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
 
 after_success:
-  - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
+  - ./unit-tests/ci/after-success.sh
 
 after_failure:
-  #  Uncomment to debug core dump
-  # - ./unit-tests/ci/after_failure.sh
-  - $(phpenv which php) -v
-  - $(phpenv which php) -m
-  - $(phpenv which php) -i
+  - ./unit-tests/ci/after-failure.sh
 
-addons:
-  apt:
-    packages:
-      - valgrind
-      - gdb
+notifications:
+  email: false

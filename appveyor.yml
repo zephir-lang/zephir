@@ -1,4 +1,4 @@
-version: 0.11.0-{build}
+version: 0.11.1-{build}
 
 environment:
     matrix:
@@ -98,8 +98,7 @@ build_script:
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'php unit-tests/phpunit -c phpunit.xml.dist --not-exit --debug unit-tests/'
-    - 'php unit-tests/microbench.php'
+    - 'php unit-tests/phpunit -c phpunit.xml.dist unit-tests/'
 
 on_success:
     - ps: PrintBuildDetails
