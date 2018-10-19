@@ -71,6 +71,7 @@ script:
     if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
       composer remove phpunit/phpunit
       composer require "phpunit/phpunit:^7.4"
+      export USE_ZEND_ALLOC=1
       ./unit-tests/phpunit unit-mock/
     else
       ./unit-tests/phpunit unit-tests/
