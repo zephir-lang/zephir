@@ -6,8 +6,9 @@ use Zephir\ClassMethod;
 use Zephir\ClassDefinition;
 use Zephir\StatementsBlock;
 use Zephir\AliasManager;
+use PHPUnit\Framework\TestCase;
 
-class MethodDocBlockTest extends \PHPUnit_Framework_TestCase
+class MethodDocBlockTest extends TestCase
 {
     public function prepareMethod($params)
     {

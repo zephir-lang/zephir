@@ -13,12 +13,12 @@
 
 namespace Extension;
 
-use \Test\Issue1404;
-
 if (version_compare(PHP_VERSION, '5.6', '<')) {
     require_once('Issue1404TestTrait55.php');
+    class_alias('\Extension\Issue1404TestTrait55', '\Extension\Issue1404TestTrait');
 } else {
     require_once('Issue1404TestTrait56.php');
+    class_alias('\Extension\Issue1404TestTrait56', '\Extension\Issue1404TestTrait');
 }
 
 /**

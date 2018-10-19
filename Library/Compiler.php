@@ -31,7 +31,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.10.11';
+    const VERSION = '0.10.12';
 
     public $parserCompiled = false;
 
@@ -866,7 +866,7 @@ class Compiler
          * Load function optimizers
          */
         if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
+            FunctionCall::addOptimizerDir(ZEPHIRPATH . '/Library/Optimizers/FunctionCall');
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {
@@ -875,12 +875,12 @@ class Compiler
                 }
             }
 
-            if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
+            if (is_dir(ZEPHIRPATH . '/prototypes') && is_readable(ZEPHIRPATH . '/prototypes')) {
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
                  */
-                foreach (new \DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
+                foreach (new \DirectoryIterator(ZEPHIRPATH . '/prototypes') as $file) {
                     if (!$file->isDir()) {
                         $extension = str_replace('.php', '', $file);
                         if (!extension_loaded($extension)) {

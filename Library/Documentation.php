@@ -237,7 +237,7 @@ class Documentation
         } else {
             $themesDirectories = array();
         }
-        $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
+        $themesDirectories[] = ZEPHIRPATH . "/templates/Api/themes";
         $this->themesDirectories = $themesDirectories;
 
 

@@ -9,6 +9,5 @@
  * file that was distributed with this source code.
  */
 
-interface TestExInterface
-{
-}
+$this->someVariable["test"] = "test";
+echo $this->someVariable["test"];

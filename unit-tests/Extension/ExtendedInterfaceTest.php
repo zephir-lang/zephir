@@ -13,13 +13,23 @@
 
 namespace Extension;
 
-class ExtendedInterfaceTest extends \PHPUnit_Framework_TestCase
+use Test\ExtendedInterface;
+use PHPUnit\Framework\TestCase;
+
+class ExtendedInterfaceTest extends TestCase
 {
-    public function testCheckInterfaceExtending()
+    /** @test */
+    public function shouldExtendsInterfaces()
     {
-        $refl = new \ReflectionClass('Test\\ExtendedInterface');
-        $this->assertTrue($refl->isInterface());
-        $this->assertContains('IteratorAggregate', $refl->getInterfaceNames());
-        $this->assertContains('Countable', $refl->getInterfaceNames());
+        try {
+            $reflection = new \ReflectionClass(ExtendedInterface::class);
+        } catch (\ReflectionException $e) {
+            $this->fail($e->getMessage());
+            return;
+        }
+
+        $this->assertTrue($reflection->isInterface());
+        $this->assertContains('IteratorAggregate', $reflection->getInterfaceNames());
+        $this->assertContains('Countable', $reflection->getInterfaceNames());
     }
 }

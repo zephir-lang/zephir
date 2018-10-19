@@ -29,8 +29,4 @@ Zephir Kernel provides you:
 
 License
 -------
-Zephir is open-sourced software licensed under the New BSD License. See the LICENSE file for more information.
-
-Related Documentation
----------------------
-* http://internals.phalconphp.com/en/latest/index.html
+Zephir is open-sourced software licensed under the New MIT License. See the LICENSE file for more information.

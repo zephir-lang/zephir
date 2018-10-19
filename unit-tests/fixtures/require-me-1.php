@@ -9,6 +9,4 @@
  * file that was distributed with this source code.
  */
 
-interface TestExInterface
-{
-}
+return [1, 2, 3];

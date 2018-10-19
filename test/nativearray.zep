@@ -1,55 +1,50 @@
-
-/**
- * Control Flow
- */
-
 namespace Test;
 
 class NativeArray
 {
-	public function testArray1()
+	public function testArray1() -> array
 	{
 		var a;
 		let a = [];
 		return a;
 	}
 
-	public function testArray2()
+	public function testArray2() -> array
 	{
 		var a;
 		let a = [1, 2, 3];
 		return a;
 	}
 
-	public function testArray3()
+	public function testArray3() -> array
 	{
 		var a;
 		let a = [1.1, 2.2, 3.3];
 		return a;
 	}
 
-	public function testArray4()
+	public function testArray4() -> array
 	{
 		var a;
 		let a = [false, true, false];
 		return a;
 	}
 
-	public function testArray5()
+	public function testArray5() -> array
 	{
 		var a;
 		let a = [null, null, null];
 		return a;
 	}
 
-	public function testArray6()
+	public function testArray6() -> array
 	{
 		var a;
 		let a = ["x", "y", "z"];
 		return a;
 	}
 
-	public function testArray7()
+	public function testArray7() -> array
 	{
 		var d; int a, b, c;
 		let a = 1, b = 2, c = 3;
@@ -57,7 +52,7 @@ class NativeArray
 		return d;
 	}
 
-	public function testArray8()
+	public function testArray8() -> array
 	{
 		var d; double a, b, c;
 		let a = 1, b = 2, c = 3;
@@ -65,7 +60,7 @@ class NativeArray
 		return d;
 	}
 
-	public function testArray9()
+	public function testArray9() -> array
 	{
 		var d; boolean a, b, c;
 		let a = true, b = false, c = true;
@@ -73,7 +68,7 @@ class NativeArray
 		return d;
 	}
 
-	public function testArray10()
+	public function testArray10() -> array
 	{
 		var d; string a, b, c;
 		let a = "hello1", b = "hello2", c = "hello3";
@@ -81,7 +76,7 @@ class NativeArray
 		return d;
 	}
 
-	public function testArray11()
+	public function testArray11() -> array
 	{
 		var a, b, c;
 		let a = [1, 2, 3];
@@ -90,7 +85,7 @@ class NativeArray
 		return c;
 	}
 
-	public function testArray12()
+	public function testArray12() -> array
 	{
 		var a, b, c;
 		let a = [1, 2, 3];
@@ -99,77 +94,77 @@ class NativeArray
 		return c;
 	}
 
-	public function testArray13()
+	public function testArray13() -> array
 	{
 		var a;
 		let a = [1: "hello1", 2: "hello2", 3: "hello3"];
 		return a;
 	}
 
-	public function testArray14()
+	public function testArray14() -> array
 	{
 		var a;
 		let a = ["hello1": 1, "hello2": 2, "hello3": 3];
 		return a;
 	}
 
-	public function testArray15()
+	public function testArray15() -> array
 	{
 		var a;
 		let a = ["hello1": true, "hello2": false, "hello3": true];
 		return a;
 	}
 
-	public function testArray16()
+	public function testArray16() -> array
 	{
 		var a;
 		let a = ["hello1": 1.0, "hello2": 2.0, "hello3": 3.0];
 		return a;
 	}
 
-	public function testArray17()
+	public function testArray17() -> array
 	{
 		var a;
 		let a = ["hello1": null, "hello2": null, "hello3": null];
 		return a;
 	}
 
-	public function testArray18()
+	public function testArray18() -> array
 	{
 		var a;
 		let a = ["hello1": "a", "hello2": "b", "hello3": "c"];
 		return a;
 	}
 
-	public function testArray19()
+	public function testArray19() -> array
 	{
 		var a;
 		let a = [0: true, 1: false, 2: true];
 		return a;
 	}
 
-	public function testArray20()
+	public function testArray20() -> array
 	{
 		var a;
 		let a = [0: 1.0, 1: 2.0, 2: 3.0];
 		return a;
 	}
 
-	public function testArray21()
+	public function testArray21() -> array
 	{
 		var a;
 		let a = [0: null, 1: null, 2: null];
 		return a;
 	}
 
-	public function testArray22()
+	public function testArray22() -> array
 	{
 		var a;
 		let a = [0: 4, 1: 5, 2: 6];
 		return a;
 	}
 
-	public function testArray23()
+	public function testArray23() -> array
 	{
 		var a; int b;
 
@@ -178,7 +173,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray24()
+	public function testArray24() -> array
 	{
 		var a; double b;
 
@@ -187,7 +182,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray25()
+	public function testArray25() -> array
 	{
 		var a; boolean b;
 
@@ -196,7 +191,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray26()
+	public function testArray26() -> array
 	{
 		var a; var b;
 
@@ -205,7 +200,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray27()
+	public function testArray27() -> array
 	{
 		var a; string b;
 
@@ -214,7 +209,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray28()
+	public function testArray28() -> array
 	{
 		var a; string b;
 
@@ -223,7 +218,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray29()
+	public function testArray29() -> array
 	{
 		var a; long b;
 
@@ -232,7 +227,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArray30()
+	public function testArray30() -> array
 	{
 		var a; string b;
 
@@ -241,7 +236,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayAccess1()
+	public function testArrayAccess1() -> array
 	{
 		var a, b;
 
@@ -250,7 +245,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess2()
+	public function testArrayAccess2() -> array
 	{
 		var a, b;
 
@@ -260,7 +255,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess3()
+	public function testArrayAccess3() -> array
 	{
 		var a, b;
 		long c;
@@ -272,7 +267,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess4()
+	public function testArrayAccess4() -> array
 	{
 		var a, b;
 		string c;
@@ -284,7 +279,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess5()
+	public function testArrayAccess5() -> array
 	{
 		var a, b, c;
 
@@ -295,7 +290,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess6()
+	public function testArrayAccess6() -> array
 	{
 		var a, b;
 
@@ -305,7 +300,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess1()
+	public function testArrayMultipleAccess1() -> array
 	{
 		var a, b;
 
@@ -315,7 +310,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess2()
+	public function testArrayMultipleAccess2() -> array
 	{
 		var a, b;
 
@@ -325,7 +320,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess3()
+	public function testArrayMultipleAccess3() -> array
 	{
 		var a, b;
 
@@ -335,7 +330,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess4()
+	public function testArrayMultipleAccess4() -> array
 	{
 		var a, b;
 
@@ -345,7 +340,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess5()
+	public function testArrayMultipleAccess5() -> array
 	{
 		var a, b;
 
@@ -355,14 +350,14 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayUpdate1()
+	public function testArrayUpdate1() -> array
 	{
 		var a;
 		let a = [1, 2, 3], a[0] = 4;
 		return a;
 	}
 
-	public function testArrayUpdate2()
+	public function testArrayUpdate2() -> array
 	{
 		var a; int b;
 		let a = [1, 2, 3],
@@ -371,7 +366,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayUpdate3()
+	public function testArrayUpdate3() -> array
 	{
 		var a; int b;
 		let a = [1, 2, 3],
@@ -382,14 +377,14 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayUpdate4()
+	public function testArrayUpdate4() -> array
 	{
 		var a;
 		let a = ["a": 1, "b": 2, "c": 3], a["a"] = 4;
 		return a;
 	}
 
-	public function testArrayUpdate5()
+	public function testArrayUpdate5() -> array
 	{
 		var a;
 		let a = [1, 2, 3],
@@ -399,21 +394,21 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayAppend1()
+	public function testArrayAppend1() -> array
 	{
 		var a;
 		let a = [], a[] = "hello", a[] = null, a[] = false, a[] = 1.10, a[] = 5, a[] = [1, 2, 3];
 		return a;
 	}
 
-	public function testArrayAppend2()
+	public function testArrayAppend2() -> array
 	{
 		var a; string b = "hello"; var c = null; boolean d = false; double e = 1.10; int f = 5; var g = [1, 2, 3];
 		let a = [], a[] = b, a[] = c, a[] = d, a[] = e, a[] = f, a[] = g;
 		return a;
 	}
 
-	public function testMultipleArrayUpdate1()
+	public function testMultipleArrayUpdate1() -> array
 	{
 		var a;
 
@@ -422,7 +417,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate2()
+	public function testMultipleArrayUpdate2() -> array
 	{
 		var a;
 
@@ -431,7 +426,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate3()
+	public function testMultipleArrayUpdate3() -> array
 	{
 		var a;
 
@@ -440,7 +435,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate4()
+	public function testMultipleArrayUpdate4() -> array
 	{
 		var a;
 
@@ -449,7 +444,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate5()
+	public function testMultipleArrayUpdate5() -> array
 	{
 		var a;
 
@@ -458,7 +453,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate6()
+	public function testMultipleArrayUpdate6() -> array
 	{
 		var a;
 
@@ -467,7 +462,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate7()
+	public function testMultipleArrayUpdate7() -> array
 	{
 		var a;
 
@@ -478,7 +473,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate8()
+	public function testMultipleArrayUpdate8() -> array
 	{
 		var a;
 
@@ -490,7 +485,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate9()
+	public function testMultipleArrayUpdate9() -> array
 	{
 		var a;
 
@@ -502,7 +497,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate10()
+	public function testMultipleArrayUpdate10() -> array
 	{
 		var a;
 
@@ -514,7 +509,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate11()
+	public function testMultipleArrayUpdate11() -> array
 	{
 		var a, b = "y", c = "x";
 
@@ -523,7 +518,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate12()
+	public function testMultipleArrayUpdate12() -> array
 	{
 		var a, b = "y", c = "x", d = "z";
 
@@ -532,7 +527,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayUpdate13()
+	public function testMultipleArrayUpdate13() -> array
 	{
 		var a; array b, c, d;
 
@@ -546,21 +541,21 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArrayAppend1()
+	public function testMultipleArrayAppend1() -> array
 	{
 		var a = []; var b = "y";
 		let a[0]["hello"][b][] = null;
 		return a;
 	}
 
-	public function testMultipleArrayAppend2()
+	public function testMultipleArrayAppend2() -> array
 	{
 		var a = []; int b = 100; string x = "hello";
 		let a[0]["hello"][b][x][] = null;
 		return a;
 	}
 
-	public function testMultipleArrayAppend3()
+	public function testMultipleArrayAppend3() -> array
 	{
 		var a = []; var b = "y";
 		let a[0]["hello"][b] = null;
@@ -571,19 +566,12 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayWrongUpdate1()
-	{
-		var x, y;
-		let x = [], y = "hello";
-		let x[y] = new \stdClass;
-	}
-
-	public function testArrayKeys(var param)
+	public function testArrayKeys(var param) -> array
 	{
 		return array_keys(param);
 	}
 
-	public function testImplodeArray(var param)
+	public function testImplodeArray(var param) -> string
 	{
 		return implode("|", array_keys(param));
 	}
@@ -591,22 +579,22 @@ class NativeArray
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/110
 	 */
-	public function issue110()
+	public function issue110()-> string
 	{
 		var byteUnits;
 		let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
 		return implode("|", array_keys(byteUnits));
 	}
 
-	public function issue264(array tokens)
+	public function issue264(array tokens) -> bool
 	{
 	    return !isset(tokens[1]);
 	}
 
-	public function issue743a(array current) -> array
+	public function issue743a(array current743a) -> array
 	{
-		let current[42]["str"] = "ok";
-		return current;
+		let current743a[42]["str"] = "ok";
+		return current743a;
 	}
 
 	public function issue743b(array current) -> array
@@ -626,7 +614,7 @@ class NativeArray
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/709
 	 */
-	public function issue709()
+	public function issue709() -> bool
 	{
 		var c, arr;
 		var works = true;

@@ -121,7 +121,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $file = fopen(__DIR__ . '/php/exists.php', 'r');
+        $file = fopen(__DIR__ . '/../fixtures/exists.php', 'r');
 
         $this->assertEquals((int) STDIN, $this->test->testCastStdinToInteger());
         $this->assertEquals((int) STDOUT, $this->test->testCastStdoutToInteger());

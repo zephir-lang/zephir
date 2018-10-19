@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+#
+# This file is part of the Zephir.
+#
+# (c) Zephir Team <team@zephir-lang.com>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
 
 # Exit the script if any statement returns a non-true return value
 set -e
@@ -9,16 +16,11 @@ if [ "${CI}" != "true" ]; then
     exit 1
 fi
 
-required_vars=(ZEPHIR_PARSER_VERSION PHP_MAJOR PHP_MINOR)
-missing_vars=()
+export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
+export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
-for i in "${required_vars[@]}"; do
-    test -n "${!i:+y}" || missing_vars+=("$i")
-done
-
-if [ ${#missing_vars[@]} -ne 0 ]; then
-    echo "Variables aren't set: " >&2
-    printf ' %q\n' "${missing_vars[@]}" >&2
+if [ -z ${ZEPHIR_PARSER_VERSION+x} ]; then
+    echo "The ZEPHIR_PARSER_VERSION is unset. Stop."
     exit 1
 fi
 
@@ -48,4 +50,4 @@ fi
 echo "[Zephir Parser]" > $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
 echo "extension=${LOCAL_LIBRARY}" >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
 
-php --ri 'Zephir Parser'
+$(phpenv which php) --ri 'Zephir Parser'

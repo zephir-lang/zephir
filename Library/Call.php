@@ -377,7 +377,7 @@ class Call
                     $value = $compiledExpression->getCode();
                     if ($value == 'true') {
                         $value = '1';
-                    } else if ($value == 'false') {
+                    } elseif ($value == 'false') {
                         $value = '0';
                     }
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
