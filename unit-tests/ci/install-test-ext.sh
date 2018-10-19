@@ -36,10 +36,39 @@ phpenv config-rm zephir-parser.ini || true
 
 $(phpenv which phpize)
 
-./configure --with-php-config=$(phpenv which php-config) --enable-test
+# However, the version of libtool that claims to no longer remove .gcno profiler information is libtool 2.2.6.
+# The fix is probably in later libtool versions as well.
+if [ -f /etc/gentoo-release ]; then
+    # Gentoo Linux
+    LIBTOOLIZE_BIN=$(command -v libtoolize 2>/dev/null)
+    aclocal && ${LIBTOOLIZE_BIN} --copy --force && autoheader && autoconf
+elif [ "$(uname -s 2>/dev/null)" = "Darwin" ]; then
+    # macOS
+    LIBTOOLIZE_BIN=$(command -v glibtoolize 2>/dev/null)
+    aclocal && ${LIBTOOLIZE_BIN} --copy --force && autoheader && autoconf
+else
+    # Linux
+    aclocal && libtoolize --copy --force && autoheader && autoconf
+fi
+
+CFLAGS="${CFLAGS}"
+LDFLAGS="${LDFLAGS}"
+
+if [ "${REPORT_COVERAGE}" = "1" ]; then
+    CFLAGS="--coverage -fprofile-arcs -ftest-coverage $CFLAGS"
+    LDFLAGS="--coverage ${LDFLAGS}"
+fi
+
+./configure --with-php-config=$(phpenv which php-config) --enable-test CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 
 make -j"$(getconf _NPROCESSORS_ONLN)"
-make install
+
+if [ "x${REPORT_COVERAGE}" = "x1" ]; then
+    output=${PROJECT_ROOT}/unit-tests/output/coverage.info
+
+    lcov --directory ${PROJECT_ROOT}/ext --zerocounters
+    lcov --directory ${PROJECT_ROOT}/ext --capture --compat-libtool --initial --output-file ${output}
+fi
 
 popd
 
