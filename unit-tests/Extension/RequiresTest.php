@@ -22,11 +22,11 @@ class RequiresTest extends TestCase
 
         $this->assertSame(
             [1, 2, 3],
-            $r->requireExternal1(__DIR__ . '/fixtures/require-me-1.php')
+            $r->requireExternal1(__DIR__ . '/../fixtures/require-me-1.php')
         );
 
         $this->assertFalse(defined('REQUIRE_ME'));
-        $r->requireExternal1(__DIR__ . '/fixtures/require-me-2.php');
+        $r->requireExternal1(__DIR__ . '/../fixtures/require-me-2.php');
         $this->assertTrue(defined('REQUIRE_ME'));
     }
 
@@ -36,7 +36,7 @@ class RequiresTest extends TestCase
 
         $this->assertSame(
             'test',
-            $r->requireExternal3(__DIR__ . '/fixtures/require-me-3.php')
+            $r->requireExternal3(__DIR__ . '/../fixtures/require-me-3.php')
         );
     }
 }
