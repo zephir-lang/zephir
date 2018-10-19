@@ -14,16 +14,27 @@ fi
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
 
+c_output=${PROJECT_ROOT}/unit-tests/output/coverage.info
+
 if [ "x${REPORT_COVERAGE}" = "x1" ]; then
-    output=${PROJECT_ROOT}/unit-tests/output/coverage.info
-
-    lcov --no-checksum --directory ${PROJECT_ROOT}/ext --capture --compat-libtool --output-file ${output}
+    lcov --no-checksum --directory ${PROJECT_ROOT}/ext --capture --compat-libtool --output-file ${c_output}
     lcov \
-        --remove ${output} "/usr*" \
-        --remove ${output} "*/.phpenv/*" \
-        --remove ${output} "${HOME}/build/include/*" \
+        --remove ${c_output} "/usr*" \
+        --remove ${c_output} "*/.phpenv/*" \
+        --remove ${c_output} "${HOME}/build/include/*" \
         --compat-libtool \
-        --output-file ${output}
+        --output-file ${c_output}
 
-    coveralls-lcov ${output}
+    # coveralls-lcov ${c_output}
+fi
+
+if [ ! -z "${CODECOV_TOKEN}" ]; then
+    curl -sSL https://codecov.io/bash -o ./codecov
+    chmod +x ./codecov
+
+    if [ -f ${c_output} ]; then
+        cat ${c_output} | ./codecov
+    fi
+else
+    echo "Skip uploading code coverage..."
 fi
