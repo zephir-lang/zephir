@@ -23,7 +23,6 @@ shopt -s nullglob
 pushd "${PROJECT_ROOT}/ext"
 pushd "${PROJECT_ROOT}"
 
-$(phpenv which php) compiler.php help
 $(phpenv which php) compiler.php clean
 $(phpenv which php) compiler.php fullclean
 $(phpenv which php) compiler.php generate ${DEFAULT_ZFLAGS}
@@ -31,8 +30,6 @@ $(phpenv which php) compiler.php stubs >/dev/null 2>&1
 $(phpenv which php) compiler.php api >/dev/null 2>&1
 
 popd
-
-phpenv config-rm zephir-parser.ini || true
 
 $(phpenv which phpize)
 

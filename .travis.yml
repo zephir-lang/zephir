@@ -20,12 +20,7 @@ addons:
 
 env:
   global:
-    - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
-    - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
-    - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - REPORT_EXIT_STATUS=1
-    - PATH="${HOME}/bin:${PATH}"
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
     - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
