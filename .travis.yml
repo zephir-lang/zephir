@@ -16,6 +16,7 @@ addons:
   apt:
     packages:
     - gdb
+    - lcov
 
 env:
   global:
@@ -29,6 +30,7 @@ env:
     - ZEPHIR_PARSER_VERSION="v1.1.2"
     - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+    - REPORT_COVERAGE=1
 
 matrix:
   fast_finish: true
@@ -55,8 +57,9 @@ before_install:
   - phpenv config-add ./unit-tests/ci/999-default.ini
 
 install:
-  - composer install $DEFAULT_COMPOSER_FLAGS
-  - ./unit-tests/ci/install-re2c $RE2C_VERSION
+  - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
+  - travis_retry gem install coveralls-lcov
+  - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
 
@@ -77,22 +80,21 @@ jobs:
       compiler: clang
       env:
         - CC=clang
+        - REPORT_COVERAGE=0
       before_script:
-        - $(phpenv which php) compiler.php generate $DEFAULT_ZFLAGS
         - ./unit-tests/ci/install-test-ext.sh
       script:
         - ./unit-tests/ci/run-unit-tests.sh
     - stage: Benchmark
       php: 7.2
       before_script:
-        - $(phpenv which php) compiler.php generate $DEFAULT_ZFLAGS
         - ./unit-tests/ci/install-test-ext.sh
       script:
         - phpenv config-rm xdebug.ini || true
-        - $(phpenv which php) unit-tests/microbench.php
+        - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
 
 after_success:
-  - if [[ ! -z "${CODECOV_TOKEN}" ]]; then bash <(curl -s https://codecov.io/bash); fi;
+  - ./unit-tests/ci/after-success.sh
 
 after_failure:
   - ./unit-tests/ci/after-failure.sh

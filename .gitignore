@@ -12,8 +12,6 @@ build/
 
 phpunit.xml
 phpcs.xml
-coverage.xml
-clover.xml
 
 # Ignore for all projects based on Zephir
 .temp/
