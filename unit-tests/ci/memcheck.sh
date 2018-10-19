@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
+if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then
+    echo "Skip test on unstable PHP versions"
+    exit 0
+fi
+
+shopt -s nullglob
+
+pushd ${TRAVIS_BUILD_DIR}
+
 export PHPUNIT_DONT_EXIT=1
 export ZEND_DONT_UNLOAD_MODULES=1
 export USE_ZEND_ALLOC=0
-
-cd ${TRAVIS_BUILD_DIR}
 
 valgrind \
     --read-var-info=yes \
@@ -18,3 +25,7 @@ valgrind \
       -c phpunit.xml.dist \
       --no-coverage \
       --testsuite "Extension Test Suite"
+
+popd
+
+exit $?

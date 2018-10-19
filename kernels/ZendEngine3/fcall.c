@@ -323,12 +323,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 			if (SUCCESS == key_ok) {
 				zend_string* zs  = (zend_string*)fcall_key;
 
-
-#if PHP_VERSION_ID < 70300
-				GC_REFCOUNT(zs)  = 1;
-#else
 				GC_SET_REFCOUNT(zs, 1);
-#endif
 				GC_TYPE_INFO(zs) = IS_STRING;
 
 				temp_cache_entry = zend_hash_find_ptr(zephir_globals_ptr->fcache, zs);

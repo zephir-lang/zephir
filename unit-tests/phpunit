@@ -35,6 +35,11 @@ if (!class_exists('\PHPUnit\TextUI\Command') and class_exists('PHPUnit_TextUI_Co
     class_alias('PHPUnit_TextUI_Command', '\PHPUnit\TextUI\Command');
 }
 
+if (!class_exists('\PHPUnit\Framework\SkippedTestError') and class_exists('PHPUnit_Framework_SkippedTestError')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_SkippedTestError', '\PHPUnit\Framework\SkippedTestError');
+}
+
 if (!class_exists(Command::class)) {
     fwrite(
         STDERR,
