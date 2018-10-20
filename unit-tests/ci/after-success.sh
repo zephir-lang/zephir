@@ -26,18 +26,13 @@ if [ "x${REPORT_COVERAGE}" = "x1" ]; then
         --compat-libtool \
         --output-file ${c_output}
 
-    # FIXME: Remove me
-    # coveralls-lcov ${c_output}
+    coveralls-lcov ${c_output}
 fi
 
 if [ ! -z "${CODECOV_TOKEN}" ]; then
-    echo "curl -sSL https://codecov.io/bash -o ./codecov"
     curl -sSL https://codecov.io/bash -o ./codecov
-
-    echo "chmod +x ./codecov"
     chmod +x ./codecov
 
-    echo "./codecov -s ${PROJECT_ROOT}/unit-tests/output"
     ./codecov -s ${PROJECT_ROOT}/unit-tests/output
 else
     echo "Skip uploading code coverage..."
