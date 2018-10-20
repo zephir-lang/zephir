@@ -2091,22 +2091,24 @@ class Compiler
         $entryPrinter = new CodePrinter();
 
         /**
-         * Create argument info
+         * Specifying Argument Information
          */
         foreach ($this->functionDefinitions as $func) {
             $funcName = $func->getInternalName();
-            $argInfoName = 'arginfo_' . strtolower($funcName);
+            $argInfoName = $func->getArgInfoName();
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
 
-            if ($this->backend->isZE3() && $func->hasReturnTypes()) {
+            if ($this->backend->isZE3() && $func->isReturnTypesHintDetermined()) {
                 if (array_key_exists('object', $func->getReturnTypes())) {
                     $class = 'NULL';
 
                     if (count($func->getReturnClassTypes()) == 1) {
                         $compilationContext = $func->getCallGathererPass()->getCompilationContext();
-                        $class = Utils::escapeClassName($compilationContext->getFullName(key($func->getReturnClassTypes())));
+                        $class = Utils::escapeClassName(
+                            $compilationContext->getFullName(key($func->getReturnClassTypes()))
+                        );
                     }
 
                     $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
@@ -2258,7 +2260,10 @@ class Compiler
                 $headerPrinter->outputBlankLine();
             }
             /** Generate FE's */
-            $paramData = ((($this->backend->isZE3() && $func->hasReturnTypes()) || $func->hasParameters()) ? $argInfoName : 'NULL');
+            $paramData = 'NULL';
+            if (($this->backend->isZE3() && $func->isReturnTypesHintDetermined()) || $func->hasParameters()) {
+                $paramData = $argInfoName;
+            }
 
             if ($func->isGlobal()) {
                 $entryPrinter->output(

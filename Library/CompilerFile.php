@@ -311,10 +311,12 @@ class CompilerFile implements FileInterface
     }
 
     /**
-     * Creates the property shortcuts
+     * Creates the property shortcuts.
      *
-     * @param array $property
-     * @param ClassDefinition $classDefinition
+     * @param  array           $property
+     * @param  ClassDefinition $classDefinition
+     * @return void
+     *
      * @throws CompilerException
      */
     protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
@@ -327,7 +329,7 @@ class CompilerFile implements FileInterface
             }
 
             $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
-            $returnsType = array();
+            $returnsType =[];
 
             if ($docBlock) {
                 $docBlockParser = new DocblockParser('/' . $docBlock .'/');
@@ -368,7 +370,7 @@ class CompilerFile implements FileInterface
                             )
                         )),
                         $docBlock,
-                        $this->createReturnsType($returnsType),
+                        $this->createReturnsType($returnsType, true),
                         $shortcut
                     ), $shortcut);
                     break;
@@ -1036,29 +1038,32 @@ class CompilerFile implements FileInterface
     }
 
     /**
-     * @param array $types
-     * @return array|null
+     * Create returns type list.
+     *
+     * @param  array $types
+     * @param  bool  $annotated
+     * @return array
      */
-    protected function createReturnsType(array $types)
+    protected function createReturnsType(array $types, $annotated = false)
     {
         if (!$types) {
             return null;
         }
 
-        $list = array();
+        $list = [];
 
         foreach ($types as $type) {
-            $list[] = array(
-                'type' => 'return-type-parameter',
+            $list[] = [
+                'type' => $annotated ? 'return-type-annotation' : 'return-type-paramater',
                 'data-type' => $type == 'mixed' ? 'variable' : $type,
-                'mandatory' => false
-            );
+                'mandatory' => false,
+            ];
         }
 
-        return array(
+        return [
             'type' => 'return-type',
             'list' => $list,
             'void' => empty($list),
-        );
+        ];
     }
 }
