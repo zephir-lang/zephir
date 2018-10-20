@@ -329,7 +329,7 @@ class CompilerFile implements FileInterface
             }
 
             $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
-            $returnsType =[];
+            $returnsType = [];
 
             if ($docBlock) {
                 $docBlockParser = new DocblockParser('/' . $docBlock .'/');

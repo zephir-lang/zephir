@@ -2280,7 +2280,7 @@ class Compiler
         }
         $entryPrinter->output('ZEND_FE_END');
 
-        return array($headerPrinter->getOutput(), $entryPrinter->getOutput());
+        return [$headerPrinter->getOutput(), $entryPrinter->getOutput()];
     }
 
     /**
@@ -2491,7 +2491,7 @@ class Compiler
         );
 
         if (!$configured) {
-            $this->logger->output('Cleaning old kernel files...');
+            $this->logger->output("\nCleaning old kernel files...");
             $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
 
             @mkdir($kernelPath);
