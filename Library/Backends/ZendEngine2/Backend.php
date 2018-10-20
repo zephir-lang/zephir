@@ -34,7 +34,11 @@ class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
 
-    /* TODO: This should not be used, temporary (until its completely refactored) */
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
     public function isZE3()
     {
         return false;
