@@ -142,9 +142,9 @@ class ClassDefinition
     /**
      * ClassDefinition
      *
-     * @param string $namespace
-     * @param string $name
-     * @param string $shortName
+     * @param string      $namespace
+     * @param string      $name
+     * @param string|null $shortName
      */
     public function __construct($namespace, $name, $shortName = null)
     {
@@ -1358,50 +1358,101 @@ class ClassDefinition
                     switch (($this->compiler->backend->isZE3() ? '3:' : '2:') . $parameter['data-type']) {
                         case '2:array':
                         case '3:array':
-                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name'],
+                                    isset($parameter['default']) ? 1 : 0
+                                )
+                            );
                             break;
-
                         case '2:variable':
                         case '3:variable':
                             if (isset($parameter['cast'])) {
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
-                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $codePrinter->output(
+                                            sprintf(
+                                                "\tZEND_ARG_OBJ_INFO(%d, %s, %s, %d)",
+                                                isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                                $parameter['name'],
+                                                Utils::escapeClassName($compilationContext->getFullName($value)),
+                                                isset($parameter['default']) ? 1 : 0
+                                            )
+                                        );
                                         break;
 
                                     default:
                                         throw new Exception('Unexpected exception');
                                 }
                             } else {
-                                $codePrinter->output("\t" . 'ZEND_ARG_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ')');
+                                $codePrinter->output(
+                                    sprintf(
+                                        "\tZEND_ARG_INFO(%d, %s)",
+                                        isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                        $parameter['name']
+                                    )
+                                );
                             }
                             break;
 
                         case '3:bool':
                         case '3:boolean':
-                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', ' . ($this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL') . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_TYPE_INFO(%d, %s, %s, %d)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name'],
+                                    $this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL',
+                                    isset($parameter['default']) ? 1 : 0
+                                )
+                            );
                             break;
-
                         case '3:uchar':
                         case '3:int':
                         case '3:uint':
                         case '3:long':
                         case '3:ulong':
-                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_LONG, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name'],
+                                    isset($parameter['default']) ? 1 : 0
+                                )
+                            );
                             break;
-
                         case '3:double':
-                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_DOUBLE, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name'],
+                                    isset($parameter['default']) ? 1 : 0
+                                )
+                            );
                             break;
-
                         case '3:char':
                         case '3:string':
-                            $codePrinter->output("\t" . 'ZEND_ARG_TYPE_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ', IS_STRING, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name'],
+                                    isset($parameter['default']) ? 1 : 0
+                                )
+                            );
                             break;
-
                         default:
-                            $codePrinter->output("\t" . 'ZEND_ARG_INFO(' . (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' . $parameter['name'] . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_INFO(%d, %s)",
+                                    isset($parameter['reference']) ? $parameter['reference'] : 0,
+                                    $parameter['name']
+                                )
+                            );
                             break;
                     }
                 }
