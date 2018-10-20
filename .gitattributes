@@ -1,1 +1,7 @@
-*.html ident
+*.html                  ident
+
+prototypes/*            linguist-vendored
+
+tests/*                 linguist-vendored
+unit-tests/*            linguist-vendored
+unit-tests/fixtures/*   linguist-vendored
