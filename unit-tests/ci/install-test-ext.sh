@@ -21,8 +21,7 @@ DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
 
-pushd "${PROJECT_ROOT}/ext"
-pushd "${PROJECT_ROOT}"
+cd "${PROJECT_ROOT}"
 
 $(phpenv which php) compiler.php clean 2>/dev/null || true
 $(phpenv which php) compiler.php fullclean 2>/dev/null || true
@@ -30,7 +29,7 @@ $(phpenv which php) compiler.php generate ${DEFAULT_ZFLAGS}
 $(phpenv which php) compiler.php stubs >/dev/null 2>&1
 $(phpenv which php) compiler.php api >/dev/null 2>&1
 
-popd
+cd "${PROJECT_ROOT}/ext"
 
 $(phpenv which phpize)
 
@@ -67,7 +66,5 @@ if [ "x${REPORT_COVERAGE}" = "x1" ]; then
     lcov --directory ${PROJECT_ROOT}/ext --zerocounters
     lcov --directory ${PROJECT_ROOT}/ext --capture --compat-libtool --initial --output-file ${output}
 fi
-
-popd
 
 exit $?
