@@ -179,6 +179,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_both, 0, 0, 1)
 	ZEND_ARG_INFO(0, _string)
 ZEND_END_ARG_INFO()
 
+PHP_FUNCTION(f_TypeHints_retval_var_var_builit_1);
+PHP_FUNCTION(f_TypeHints_retval_var_var_builit_2);
 PHP_FUNCTION(f_TypeHints_retval_var);
 PHP_FUNCTION(f_TypeHints_retval_string);
 PHP_FUNCTION(f_TypeHints_retval_boolean);
@@ -190,6 +192,8 @@ PHP_FUNCTION(f_TypeHints_retval_retval);
 zend_function_entry php_typehints_functions[] = {
 	ZEND_NS_NAMED_FE("TypeHints", args, ZEND_FN(f_TypeHints_args), arginfo_f_typehints_args)
 ZEND_NS_NAMED_FE("TypeHints", both, ZEND_FN(f_TypeHints_both), arginfo_f_typehints_both)
+ZEND_NS_NAMED_FE("TypeHints", retval_var_var_builit_1, ZEND_FN(f_TypeHints_retval_var_var_builit_1), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_var_var_builit_2, ZEND_FN(f_TypeHints_retval_var_var_builit_2), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_var, ZEND_FN(f_TypeHints_retval_var), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_string, ZEND_FN(f_TypeHints_retval_string), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_boolean, ZEND_FN(f_TypeHints_retval_boolean), NULL)

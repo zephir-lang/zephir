@@ -78,6 +78,7 @@ class TypeHintsTest extends TestCase
         }
     }
 
+    /** @test */
     public function shouldSpecifyCorrectArgumentInformationForZendEngine2()
     {
         $this->generate(Zend2::class);
