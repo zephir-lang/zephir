@@ -1,12 +1,23 @@
 <?php
 
-namespace Zephir\Stubs;
+/**
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Zephir\ClassMethod;
-use Zephir\ClassDefinition;
-use Zephir\StatementsBlock;
+namespace Zephir\Test\Stubs;
+
 use Zephir\AliasManager;
-use PHPUnit\Framework\TestCase;
+use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
+use Zephir\StatementsBlock;
+use Zephir\Stubs\MethodDocBlock;
+use Zephir\Support\TestCase;
 
 class MethodDocBlockTest extends TestCase
 {
@@ -14,11 +25,11 @@ class MethodDocBlockTest extends TestCase
     {
         /**
          * ClassDefinition for Class creation
-         * @var string $classNamespace - namespace ex: \Zephir\Stubs
-         * @var string $className - Class name, ex: Stubs
-         * @var string $classShortName - {get, set}
+         *
+         * @param string      $namespace  Namespace ex: \Zephir\Stubs
+         * @param string      $name       Class name, ex: Stubs
+         * @param string|null $shortName  {get, set}
          */
-
         $classNamespace = $params['class']['namespace'];
         $className      = $params['class']['className'];
         $classShortName = $params['class']['classShortName'];
@@ -32,14 +43,14 @@ class MethodDocBlockTest extends TestCase
         /**
          * ClassMethod constructor
          *
-         * @param ClassDefinition $classDefinition
-         * @param array $visibility
-         * @param $name
-         * @param $parameters
-         * @param StatementsBlock $statements
-         * @param null $docblock
-         * @param null $returnType
-         * @param array $original
+         * @param ClassDefinition            $classDefinition
+         * @param array                      $visibility
+         * @param string                     $name
+         * @param ClassMethodParameters|null $parameters
+         * @param StatementsBlock|null       $statements
+         * @param string|null                $docblock
+         * @param array|null                 $returnType
+         * @param array|null                 $original
          */
         $methodVisibility = $params['method']['visibility'];
         $methodName       = $params['method']['name'];
@@ -53,7 +64,7 @@ class MethodDocBlockTest extends TestCase
             $classDefinition,
             $methodVisibility,
             $methodName,
-            $methodParams,
+            $methodParams ? new ClassMethodParameters($methodParams) : null,
             new StatementsBlock($methodStBlock),
             $methodDocBlock,
             $methodReturnType,
@@ -67,22 +78,7 @@ class MethodDocBlockTest extends TestCase
 
     public function testMethodWithoutInputArgs()
     {
-        $classDefinition = [
-            'class' => [
-                'namespace' => 'Zephir\Stubs',
-                'className' => 'Stubs',
-                'classShortName' => 'get'
-            ],
-            'method' => [
-                'visibility' => ['public', 'final'],
-                'name'       => 'fooTest',
-                'parameters' => null,
-                'statements' => [],
-                'docblock'   => 'Zephir',
-                'returnType' => null,
-                'expression' => null
-            ]
-        ];
+        $classDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-2.php';
         $testDocBlock = $this->prepareMethod($classDefinition);
         $expected = <<<DOC
     /**
@@ -95,27 +91,8 @@ DOC;
 
     public function testMethodWithInputArgs()
     {
-        $classDefinition = [
-            'class' => [
-                'namespace' => 'Zephir\Stubs',
-                'className' => 'Stubs',
-                'classShortName' => 'get'
-            ],
-            'method' => [
-                'visibility' => ['public', 'final'],
-                'name'       => 'scalarInputAgrs',
-                'parameters' => [
-                    ['data-type' => 'int', 'name' => 'val1'],
-                    ['data-type' => 'bool', 'name' => 'val2'],
-                    ['data-type' => 'string', 'name' => 'val3'],
-                    ['data-type' => 'double', 'name' => 'val4'],
-                ],
-                'statements' => [],
-                'docblock'   => "Test function scalarInputArgs(int val1, bool val2, string val3, double val4)\n with return Integer\n @return int",
-                'returnType' => null,
-                'expression' => null
-            ]
-        ];
+        $classDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-1.php';
+
         $testDocBlock = $this->prepareMethod($classDefinition);
         $expected = <<<DOC
     /**
@@ -181,26 +158,14 @@ DOC;
 
     /**
      * @dataProvider getDocBlock()
+     *
+     * @param array  $parameters
+     * @param string $expected
      */
-    public function testMethodsWithDataSet($classDefinition, $expected)
+    public function testMethodsWithDataSet(array $parameters, $expected)
     {
-        $baseDefinition = [
-            'class' => [
-                'namespace' => 'Zephir\Stubs',
-                'className' => 'Stubs',
-                'classShortName' => 'get'
-            ],
-            'method' => [
-                'visibility' => ['public'],
-                'name'       => 'testMethodDatSet',
-                'parameters' => [],
-                'statements' => [],
-                'docblock'   => null,
-                'returnType' => null,
-                'expression' => null
-            ]
-        ];
-        $baseDefinition['method']['parameters'][] = $classDefinition;
+        $baseDefinition = require ZEPHIRPATH . '/unit-tests/fixtures/base-definition.php';
+        $baseDefinition['method']['parameters'][] = $parameters;
 
         $this->assertSame($expected, (string)$this->prepareMethod($baseDefinition));
     }
@@ -214,26 +179,8 @@ DOC;
                     "@param string \$val2 - with additional descrription\n" .
                     "@throws \Zephir\Compiler\CompilerException \n";
 
-        $testDefinition = [
-            'class' => [
-                'namespace' => 'Zephir\Stubs',
-                'className' => 'Stubs',
-                'classShortName' => 'get'
-            ],
-            'method' => [
-                'visibility' => ['public'],
-                'name'       => 'testMethodWithFullDocBlock',
-                'parameters' => [
-                    ['data-type' => 'int', 'name' => 'val1'],
-                    ['data-type' => 'string', 'name' => 'val2'],
-                    ['data-type' => 'array', 'name' => '$val3'],
-                ],
-                'statements' => [],
-                'docblock'   => $docblock,
-                'returnType' => null,
-                'expression' => null
-            ]
-        ];
+        $testDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-3.php';
+        $testDefinition['method']['docblock'] = $docblock;
 
         $expected = <<<DOC
     /**

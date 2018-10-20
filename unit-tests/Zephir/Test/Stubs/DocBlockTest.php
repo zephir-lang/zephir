@@ -1,8 +1,20 @@
 <?php
 
-namespace Zephir\Stubs;
+/**
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-class DocBlockTest extends \PHPUnit_Framework_TestCase
+namespace Zephir\Test\Stubs;
+
+use Zephir\Stubs\DocBlock;
+use Zephir\Support\TestCase;
+
+class DocBlockTest extends TestCase
 {
     public function testInitialState()
     {

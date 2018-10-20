@@ -1,21 +1,20 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Test;
 
 use Zephir\Config;
+use Zephir\Support\TestCase;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     /**
      * Common directory.
@@ -33,14 +32,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * Test when we have a bad config.json file.
      *
-     * @expectedException Exception
+     * @expectedException \Zephir\Exception
      * @expectedExceptionMessage The config.json file is not valid or there is
      * no Zephir extension initialized in this directory.
      */
     public function testConstructWithBadConfigFile()
     {
-        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files/badconfig');
-        $config = new Config();
+        chdir(ZEPHIRPATH . '/unit-tests/fixtures/badconfig');
+        new Config();
     }
 
     public function testGetWithoutNamespace()

@@ -1,27 +1,26 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Test;
 
-use Zephir\Config;
+use Zephir\Backends\ZendEngine2\Backend as Zend2;
+use Zephir\Backends\ZendEngine3\Backend as Zend3;
 use Zephir\Compiler;
+use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Parser\Manager;
-use Zephir\Backends\ZendEngine2\Backend as Zend2;
-use Zephir\Backends\ZendEngine3\Backend as Zend3;
+use Zephir\Support\TestCase;
 
-class LifeCycleTest extends \PHPUnit_Framework_TestCase
+class LifeCycleTest extends TestCase
 {
     /**
      * Common directory.
@@ -30,55 +29,68 @@ class LifeCycleTest extends \PHPUnit_Framework_TestCase
      */
     private $pwd;
 
+    /**
+     * Store the current directory before to be change.
+     *
+     * @return void
+     */
     public function setUp()
     {
-        /* Store the current directory before to be change */
         $this->pwd = getcwd();
-    }
-
-    public function testLifeCycleInjectionZend2()
-    {
-        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files/lifecycle');
-        $config = new Config();
-        $logger = new Logger($config);
-        $backend = new Zend2($config);
-        $parser = new Parser();
-        $manager = new Manager($parser, $logger);
-        $compiler = new Compiler($config, $logger, $backend, $manager);
-        $compiler->createProjectFiles('lifecycle');
-        $this->assertSame(
-            implode(PHP_EOL, file('ext/lifecycle.c', FILE_IGNORE_NEW_LINES)),
-            implode(PHP_EOL, file('expected2.c', FILE_IGNORE_NEW_LINES))
-        );
-    }
-
-    public function testLifeCycleInjectionZend3()
-    {
-        chdir(__DIR__ . DIRECTORY_SEPARATOR . '_files/lifecycle');
-        $config = new Config();
-        $logger = new Logger($config);
-        $backend = new Zend3($config);
-        $parser = new Parser();
-        $manager = new Manager($parser, $logger);
-        $compiler = new Compiler($config, $logger, $backend, $manager);
-        $compiler->createProjectFiles('lifecycle');
-        $this->assertSame(
-            implode(PHP_EOL, file('ext/lifecycle.c', FILE_IGNORE_NEW_LINES)),
-            implode(PHP_EOL, file('expected3.c', FILE_IGNORE_NEW_LINES))
-        );
     }
 
     /**
      * Restore current directory, and clean config.json.
+     *
+     * @return void
      */
     public function tearDown()
     {
-        if (file_exists('ext')) {
-            unlink_recursive('ext/');
-        }
-
         if (getcwd() != $this->pwd) {
+            if (file_exists('ext')) {
+                unlink_recursive('ext/');
+            }
+
             chdir($this->pwd);
         }
+    }
+
+    protected function createProject($backend)
+    {
+        chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
+
+        try {
+            $config = new Config();
+            $logger = new Logger($config);
+            $backend = new $backend($config);
+            $parser = new Parser();
+            $manager = new Manager($parser, $logger);
+            $compiler = new Compiler($config, $logger, $backend, $manager);
+            $compiler->createProjectFiles('lifecycle');
+        } catch (\Exception $e) {
+            $this->fail($e->getMessage());
+        }
+    }
+
+    /** @test */
+    public function shouldCreateProjectFilesUsingZendEngine2()
+    {
+        $this->createProject(Zend2::class);
+
+        $this->assertSame(
+            implode(PHP_EOL, file('expected2.c', FILE_IGNORE_NEW_LINES)),
+            implode(PHP_EOL, file('ext/lifecycle.c', FILE_IGNORE_NEW_LINES))
+        );
+    }
+
+    /** @test */
+    public function shouldCreateProjectFilesUsingZendEngine3()
+    {
+        $this->createProject(Zend3::class);
+
+        $this->assertSame(
+            implode(PHP_EOL, file('expected3.c', FILE_IGNORE_NEW_LINES)),
+            implode(PHP_EOL, file('ext/lifecycle.c', FILE_IGNORE_NEW_LINES))
+        );
     }
 }

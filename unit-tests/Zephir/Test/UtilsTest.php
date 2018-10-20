@@ -1,26 +1,23 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir package.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Test;
 
+use Zephir\Support\TestCase;
 use Zephir\Utils;
 
-class UtilsTest extends \PHPUnit_Framework_TestCase
+class UtilsTest extends TestCase
 {
-    /**
-     * Test escapeClassName method.
-     */
-    public function testEscapeClassName()
+    /** @test */
+    public function shouldEscapeClassName()
     {
         $classname = '\Bar\Foo';
         $this->assertSame(
@@ -29,10 +26,8 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * Test camelize method.
-     */
-    public function testCamelize()
+    /** @test */
+    public function shouldCamelizeClassName()
     {
         $name = 'foo_Bar_Foo_bar';
         $this->assertSame(
