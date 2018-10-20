@@ -1,0 +1,4 @@
+ignore:
+  - "/usr*"
+  - "*/.phpenv/*"
+  - "/home/travis/build/include/*"

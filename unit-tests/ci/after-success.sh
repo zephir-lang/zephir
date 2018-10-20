@@ -31,21 +31,14 @@ if [ "x${REPORT_COVERAGE}" = "x1" ]; then
 fi
 
 if [ ! -z "${CODECOV_TOKEN}" ]; then
+    echo "curl -sSL https://codecov.io/bash -o ./codecov"
     curl -sSL https://codecov.io/bash -o ./codecov
+
+    echo "chmod +x ./codecov"
     chmod +x ./codecov
 
-    # FIXME: Remove me
-    if [ -f ${c_output} ]; then
-        cat ${c_output} | ./codecov
-    fi
-
-    # FIXME: Remove me
-    if [ -f ${p_output} ]; then
-        cat ${p_output} | ./codecov
-    fi
-
-    # FIXME: Uncomment me
-    # ./codecov -s ${PROJECT_ROOT}/unit-tests/output
+    echo "./codecov -s ${PROJECT_ROOT}/unit-tests/output"
+    ./codecov -s ${PROJECT_ROOT}/unit-tests/output
 else
     echo "Skip uploading code coverage..."
 fi

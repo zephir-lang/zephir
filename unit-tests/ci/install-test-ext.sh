@@ -17,14 +17,15 @@ if [ "${CI}" != "true" ]; then
 fi
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
+DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
 
 pushd "${PROJECT_ROOT}/ext"
 pushd "${PROJECT_ROOT}"
 
-$(phpenv which php) compiler.php clean
-$(phpenv which php) compiler.php fullclean
+$(phpenv which php) compiler.php clean 2>/dev/null || true
+$(phpenv which php) compiler.php fullclean 2>/dev/null || true
 $(phpenv which php) compiler.php generate ${DEFAULT_ZFLAGS}
 $(phpenv which php) compiler.php stubs >/dev/null 2>&1
 $(phpenv which php) compiler.php api >/dev/null 2>&1
@@ -51,7 +52,7 @@ fi
 CFLAGS="${CFLAGS}"
 LDFLAGS="${LDFLAGS}"
 
-if [ "${REPORT_COVERAGE}" = "1" ]; then
+if [ "x${REPORT_COVERAGE}" = "x1" ]; then
     CFLAGS="--coverage -fprofile-arcs -ftest-coverage $CFLAGS"
     LDFLAGS="--coverage ${LDFLAGS}"
 fi

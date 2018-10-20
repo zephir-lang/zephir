@@ -12,6 +12,11 @@ php:
 git:
   depth: 1
 
+branches:
+  only:
+    - master
+    - development
+
 addons:
   apt:
     packages:
@@ -23,7 +28,6 @@ env:
     - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
-    - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
     - REPORT_COVERAGE=1
     - PHPUNIT_DONT_EXIT=1
@@ -32,8 +36,6 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    # There is still memory leaks
-    # and other issues like https://github.com/sebastianbergmann/phpunit/pull/3359
     - php: 'master'
 
 cache:
@@ -62,6 +64,7 @@ install:
   - ./unit-tests/ci/install-test-ext.sh
 
 before_script:
+  # see: https://github.com/sebastianbergmann/phpunit/pull/3359
   - |
       if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
         export USE_ZEND_ALLOC=1
