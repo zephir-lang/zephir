@@ -183,19 +183,19 @@ class ClassMethod
         $this->setReturnTypes($returnType);
     }
 
-    public function setReturnTypes($returnType)
+    public function setReturnTypes(array $returnType = null)
     {
         $this->returnTypesRaw = $returnType;
         if ($returnType === null) {
             return;
         }
 
-        if (array_key_exists('void', $returnType)) {
-            $this->void = (bool) $returnType['void'];
+        if (isset($returnType['void']) && $returnType['void']) {
+            $this->void = true;
             return;
         }
 
-        if (isset($returnType['list']) == false) {
+        if (!isset($returnType['list'])) {
             return;
         }
 
@@ -2188,7 +2188,7 @@ class ClassMethod
      */
     public function isReturnTypesHintDetermined()
     {
-        if ($this->hasReturnTypes() == false || $this->isVoid()) {
+        if (!$this->hasReturnTypes() || $this->isVoid()) {
             return false;
         }
 
