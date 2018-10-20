@@ -30,7 +30,7 @@ env:
     - ZEPHIR_PARSER_VERSION="v1.1.2"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
     - REPORT_COVERAGE=1
-    - PHPUNIT_DONT_EXIT=1
+    - PHPUNIT_DONT_EXIT=0
     - PHPUNIT_CONF=phpunit.xml.dist
 
 matrix:
