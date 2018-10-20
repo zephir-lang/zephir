@@ -26,31 +26,22 @@ use Zephir\Documentation\DocblockParser;
  */
 class ClassMethod
 {
-    /**
-     * @var ClassDefinition
-     */
+    /** @var ClassDefinition */
     protected $classDefinition;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $visibility;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var ClassMethodParameters
-     */
+    /** @var ClassMethodParameters|null */
     protected $parameters;
 
+    /** @var StatementsBlock|null */
     protected $statements;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     protected $docblock;
 
     /**
@@ -63,14 +54,14 @@ class ClassMethod
      *
      * @var array
      */
-    protected $returnTypes = array();
+    protected $returnTypes = [];
 
     /**
      * Raw-types returned by the method
      *
      * @var array
      */
-    protected $returnTypesRaw = array();
+    protected $returnTypesRaw = [];
 
     /**
      * Class type hints returned by the method
@@ -133,11 +124,7 @@ class ClassMethod
      */
     protected $isInitializer = false;
 
-    /**
-     * @var array|null
-     *
-     * @var boolean
-     */
+    /** @var array|null */
     protected $expression;
 
     /**
@@ -164,17 +151,25 @@ class ClassMethod
     /**
      * ClassMethod constructor
      *
-     * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param $name
-     * @param $parameters
-     * @param StatementsBlock $statements
-     * @param null $docblock
-     * @param null $returnType
-     * @param array $original
+     * @param ClassDefinition            $classDefinition
+     * @param array                      $visibility
+     * @param string                     $name
+     * @param ClassMethodParameters|null $parameters
+     * @param StatementsBlock|null       $statements
+     * @param string|null                $docblock
+     * @param array|null                 $returnType
+     * @param array|null                 $original
      */
-    public function __construct(ClassDefinition $classDefinition, array $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
-    {
+    public function __construct(
+        ClassDefinition $classDefinition,
+        array $visibility,
+        $name,
+        ClassMethodParameters $parameters = null,
+        StatementsBlock $statements = null,
+        $docblock = null,
+        array $returnType = null,
+        array $original = null
+    ) {
         $this->checkVisibility($visibility, $name, $original);
 
         $this->classDefinition = $classDefinition;
@@ -191,32 +186,40 @@ class ClassMethod
     public function setReturnTypes($returnType)
     {
         $this->returnTypesRaw = $returnType;
-
-        if (isset($returnType['void']) && $returnType['void']) {
-            $this->void = true;
+        if ($returnType === null) {
             return;
         }
 
-        if (isset($returnType['list'])) {
-            $types = array();
-            $castTypes = array();
-            foreach ($returnType['list'] as $returnTypeItem) {
-                if (isset($returnTypeItem['cast'])) {
-                    if (isset($returnTypeItem['cast']['collection'])) {
-                        continue;
-                    }
-                    $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-                } else {
-                    $types[$returnTypeItem['data-type']] = $returnTypeItem;
+        if (array_key_exists('void', $returnType)) {
+            $this->void = (bool) $returnType['void'];
+            return;
+        }
+
+        if (isset($returnType['list']) == false) {
+            return;
+        }
+
+        $types = [];
+        $castTypes = [];
+
+        foreach ($returnType['list'] as $returnTypeItem) {
+            if (isset($returnTypeItem['cast'])) {
+                if (isset($returnTypeItem['cast']['collection'])) {
+                    continue;
                 }
+                $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
+            } else {
+                $types[$returnTypeItem['data-type']] = $returnTypeItem;
             }
-            if (count($castTypes)) {
-                $types['object'] = array();
-                $this->returnClassTypes = $castTypes;
-            }
-            if (count($types)) {
-                $this->returnTypes = $types;
-            }
+        }
+
+        if (count($castTypes)) {
+            $types['object'] = [];
+            $this->returnClassTypes = $castTypes;
+        }
+
+        if (count($types)) {
+            $this->returnTypes = $types;
         }
     }
 
@@ -2141,5 +2144,81 @@ class ClassMethod
     {
         $classDefinition = $this->getClassDefinition();
         return 'zep_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '_' . $this->getName();
+    }
+
+    /**
+     * Returns arginfo name for current method.
+     *
+     * @param  ClassDefinition|null $classDefinition
+     * @return string
+     */
+    public function getArgInfoName(ClassDefinition $classDefinition = null)
+    {
+        if ($classDefinition != null) {
+            return sprintf(
+                'arginfo_%s_%s_%s',
+                strtolower($classDefinition->getCNamespace()),
+                strtolower($classDefinition->getName()),
+                strtolower($this->getName())
+            );
+        }
+
+        return sprintf('arginfo_%s', strtolower($this->getInternalName()));
+    }
+
+    /**
+     * Is method have determined return type hint.
+     *
+     * This method is used to generate:
+     *
+     * - ZEND_BEGIN_ARG_INFO_EX
+     * - ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
+     *
+     * Examples:
+     *
+     * - FALSE: function foo() -> void;
+     * - TRUE: function foo() -> null;
+     * - TRUE: function foo() -> bool|string|..;
+     * - TRUE: function foo() -> <\stdClass>;
+     * - FALSE: function foo();
+     * - FALSE: function foo() -> var;
+     * - FALSE: function foo() -> resource|callable;
+     *
+     * @return bool
+     */
+    public function isReturnTypesHintDetermined()
+    {
+        if ($this->hasReturnTypes() == false || $this->isVoid()) {
+            return false;
+        }
+
+        foreach ($this->returnTypes as $returnType => $definition) {
+            switch ($returnType) {
+                case 'variable':
+                case 'callable':
+                case 'resource':
+                    return false;
+            }
+
+            if (isset($definition['type']) && $definition['type'] === 'return-type-annotation') {
+                if ($this->areReturnTypesBoolCompatible() ||
+                    $this->areReturnTypesDoubleCompatible() ||
+                    $this->areReturnTypesIntCompatible() ||
+                    $this->areReturnTypesNullCompatible() ||
+                    $this->areReturnTypesStringCompatible()
+                ) {
+                    continue;
+                }
+
+                /**
+                 * @todo Probable we should detect return type more more carefully.
+                 * It is hard to process return type from the annotations at this time.
+                 * Thus we just return false here.
+                 */
+                return false;
+            }
+        }
+
+        return true;
     }
 }

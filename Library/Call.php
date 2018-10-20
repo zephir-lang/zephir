@@ -180,16 +180,18 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call
      *
-     * @param boolean $useTemp
-     * @param CompilationContext $compilationContext
+     * @param  bool                    $useTemp
+     * @param  CompilationContext|null $compilationContext
      * @return Variable
      */
     public function getSymbolVariable($useTemp = false, CompilationContext $compilationContext = null)
     {
         $symbolVariable = $this->_symbolVariable;
+
         if ($useTemp && !is_object($symbolVariable)) {
             return $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
         }
+
         return $symbolVariable;
     }
 

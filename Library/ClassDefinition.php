@@ -982,7 +982,7 @@ class ClassDefinition
 
             $classMethod = new ClassMethod(
                 $this,
-                array('internal'),
+                ['internal'],
                 'zephir_init_properties_' . $initClassName,
                 null,
                 $statementsBlock
@@ -1282,18 +1282,20 @@ class ClassDefinition
         }
 
         /**
-         * Create argument info
+         * Specifying Argument Information
          */
         foreach ($methods as $method) {
             $parameters = $method->getParameters();
-            $argInfoName = 'arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName());
+            $argInfoName = $method->getArgInfoName($this);
 
-            if ($this->compiler->backend->isZE3() && $method->hasReturnTypes()) {
+            if ($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) {
                 if (array_key_exists('object', $method->getReturnTypes())) {
                     $class = 'NULL';
 
                     if (count($method->getReturnClassTypes()) == 1) {
-                        $class = Utils::escapeClassName($compilationContext->getFullName(key($method->getReturnClassTypes())));
+                        $class = Utils::escapeClassName(
+                            $compilationContext->getFullName(key($method->getReturnClassTypes()))
+                        );
                     }
 
                     $codePrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
@@ -1413,7 +1415,7 @@ class ClassDefinition
             foreach ($methods as $method) {
                 if ($this->getType() == 'class') {
                     if (!$method->isInternal()) {
-                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
@@ -1421,13 +1423,13 @@ class ClassDefinition
                     }
                 } else {
                     if ($method->isStatic()) {
-                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         } else {
                             $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
                         }
                     } else {
-                        if (($this->compiler->backend->isZE3() && $method->hasReturnTypes()) || $method->hasParameters()) {
+                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
                         } else {
                             $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');
@@ -1884,9 +1886,12 @@ class ClassDefinition
                     $parameters[] = $params;
                 }
 
-                $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
-                    $parameters
-                ));
+                $classMethod = new ClassMethod(
+                    $classDefinition,
+                    [],
+                    $method->getName(),
+                    new ClassMethodParameters($parameters)
+                );
                 $classMethod->setIsStatic($method->isStatic());
                 $classMethod->setIsBundled(true);
                 $classDefinition->addMethod($classMethod);
