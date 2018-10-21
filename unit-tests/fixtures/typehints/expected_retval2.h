@@ -5,6 +5,7 @@ ZEPHIR_INIT_CLASS(TypeHints_RetVal);
 
 PHP_METHOD(TypeHints_RetVal, getMyVar);
 PHP_METHOD(TypeHints_RetVal, getMyString);
+PHP_METHOD(TypeHints_RetVal, getMyArray);
 PHP_METHOD(TypeHints_RetVal, retval_var_var);
 PHP_METHOD(TypeHints_RetVal, retval_var_var_builit_1);
 PHP_METHOD(TypeHints_RetVal, retval_var_var_builit_2);
@@ -19,6 +20,7 @@ PHP_METHOD(TypeHints_RetVal, retval_retval);
 ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, getMyVar, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, getMyString, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, getMyArray, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_var_var, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_var_var_builit_1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_var_var_builit_2, NULL, ZEND_ACC_PUBLIC)
