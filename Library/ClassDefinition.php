@@ -1251,7 +1251,7 @@ class ClassDefinition
             );
 
             $argInfo->setBooleanDefinition($this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
-            $argInfo->setRightFormat($this->compiler->backend->isZE3());
+            $argInfo->setRichFormat($this->compiler->backend->isZE3());
 
             $argInfo->render();
         }

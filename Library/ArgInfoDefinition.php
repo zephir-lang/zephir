@@ -38,7 +38,7 @@ class ArgInfoDefinition
     private $booleanDefinition = '_IS_BOOL';
 
     /** @var bool */
-    private $rightFormat = true;
+    private $richFormat = true;
 
     public function __construct(
         $name,
@@ -62,9 +62,9 @@ class ArgInfoDefinition
         $this->booleanDefinition = (string)$definition;
     }
 
-    public function setRightFormat($flag)
+    public function setRichFormat($flag)
     {
-        $this->rightFormat = (bool)$flag;
+        $this->richFormat = (bool)$flag;
     }
 
     /**
@@ -74,8 +74,8 @@ class ArgInfoDefinition
      */
     public function render()
     {
-        if ($this->rightFormat && $this->method->isReturnTypesHintDetermined()) {
-            $this->rightRenderStart();
+        if ($this->richFormat && $this->method->isReturnTypesHintDetermined()) {
+            $this->richRenderStart();
 
             if ($this->hasParameters() == false) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
@@ -100,7 +100,7 @@ class ArgInfoDefinition
         }
     }
 
-    private function rightRenderStart()
+    private function richRenderStart()
     {
         if (array_key_exists('object', $this->method->getReturnTypes())) {
             $class = 'NULL';
@@ -167,7 +167,7 @@ class ArgInfoDefinition
 
     private function renderEnd()
     {
-        $flag = $this->rightFormat ? '1' : '0';
+        $flag = $this->richFormat ? '1' : '0';
 
         foreach ($this->parameters->getParameters() as $parameter) {
             switch ("{$flag}:" . $parameter['data-type']) {
@@ -178,7 +178,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            $this->hasDefaultValue($parameter)
+                            (int)$this->allowNull($parameter)
                         )
                     );
                     break;
@@ -194,7 +194,7 @@ class ArgInfoDefinition
                                         $this->passByReference($parameter),
                                         $parameter['name'],
                                         Utils::escapeClassName($this->compilationContext->getFullName($value)),
-                                        $this->hasDefaultValue($parameter)
+                                        (int)$this->allowNull($parameter)
                                     )
                                 );
                                 break;
@@ -221,7 +221,7 @@ class ArgInfoDefinition
                             $this->passByReference($parameter),
                             $parameter['name'],
                             $this->booleanDefinition,
-                            $this->hasDefaultValue($parameter)
+                            (int)$this->allowNull($parameter)
                         )
                     );
                     break;
@@ -235,7 +235,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            $this->hasDefaultValue($parameter)
+                            (int)$this->allowNull($parameter)
                         )
                     );
                     break;
@@ -245,7 +245,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            $this->hasDefaultValue($parameter)
+                            (int)$this->allowNull($parameter)
                         )
                     );
                     break;
@@ -256,7 +256,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            $this->hasDefaultValue($parameter)
+                            (int)$this->allowNull($parameter)
                         )
                     );
                     break;
@@ -278,9 +278,17 @@ class ArgInfoDefinition
         return $this->parameters !== null && count($this->parameters->getParameters()) > 0;
     }
 
-    private function hasDefaultValue($parameter)
+    private function allowNull($parameter)
     {
-        return isset($parameter['default']) ? 1 : 0;
+        if (!isset($parameter['default']) || !is_array(isset($parameter['default']))) {
+            return false;
+        }
+
+        if ($parameter['default']['type'] == 'null') {
+            return true;
+        }
+
+        return false;
     }
 
     private function passByReference($parameter)
