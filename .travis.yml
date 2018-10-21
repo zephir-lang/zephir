@@ -25,7 +25,7 @@ addons:
 
 env:
   global:
-    - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
+    - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.2"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
@@ -57,7 +57,6 @@ before_install:
 
 install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-  - travis_retry gem install coveralls-lcov
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
