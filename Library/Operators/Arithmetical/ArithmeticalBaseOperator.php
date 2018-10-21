@@ -16,6 +16,7 @@ use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 
 /**
  * BaseOperator
@@ -28,12 +29,14 @@ class ArithmeticalBaseOperator extends BaseOperator
     protected $_literalOnly = true;
 
     /**
-     * This tries to perform arithmetical operations
+     * This tries to perform arithmetical operations.
+     *
      * Probably gcc/clang will optimize them without this optimization
      *
-     * @see http://en.wikipedia.org/wiki/Constant_folding
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @link http://en.wikipedia.org/wiki/Constant_folding
+     *
+     * @param  array $expression
+     * @param  CompilationContext $compilationContext
      * @return bool|CompiledExpression
      */
     public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
@@ -107,24 +110,25 @@ class ArithmeticalBaseOperator extends BaseOperator
     /**
      * Compiles the arithmetical operation
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
+     * @return CompiledExpression
+     *
+     * @throws Exception
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new \Exception("Missing left part of the expression");
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception("Missing right part of the expression");
+            throw new CompilerException('Missing right part of the expression', $expression);
         }
 
-        /**
-         * Check for constant folding optimizations
-         */
-        $optimized = $this->optimizeConstantFolding($expression, $compilationContext);
-        if ($optimized) {
+        // Check for constant folding optimizations
+        if ($optimized = $this->optimizeConstantFolding($expression, $compilationContext)) {
             return $optimized;
         }
 
