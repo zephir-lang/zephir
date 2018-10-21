@@ -67,6 +67,7 @@ class TypeHintsTest extends TestCase
 
         try {
             $config = new Config();
+            $config->set('silent', true);
             $logger = new Logger($config);
             $backend = new $backend($config);
             $parser = new ParserManager(new Parser(), $logger);
