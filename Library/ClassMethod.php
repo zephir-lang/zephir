@@ -2205,7 +2205,8 @@ class ClassMethod
                     $this->areReturnTypesDoubleCompatible() ||
                     $this->areReturnTypesIntCompatible() ||
                     $this->areReturnTypesNullCompatible() ||
-                    $this->areReturnTypesStringCompatible()
+                    $this->areReturnTypesStringCompatible() ||
+                    array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
                 }
