@@ -25,8 +25,6 @@ if [ "x${REPORT_COVERAGE}" = "x1" ]; then
         --remove ${c_output} "${HOME}/build/include/*" \
         --compat-libtool \
         --output-file ${c_output}
-
-    coveralls-lcov ${c_output}
 fi
 
 if [ ! -z "${CODECOV_TOKEN}" ]; then
