@@ -12,24 +12,11 @@
 namespace Extension;
 
 use Zephir\Support\TestCase;
-use PHPUnit\Framework\SkippedTestError;
 
 class ExitDieTest extends TestCase
 {
     /** @var string */
     private $phpBinary;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        if (PHP_VERSION_ID >= 70300) {
-            throw new SkippedTestError("Skip test on unstable PHP versions");
-        }
-    }
 
     /**
      * {@inheritdoc}
