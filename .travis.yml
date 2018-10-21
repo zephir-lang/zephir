@@ -77,6 +77,8 @@ jobs:
   include:
     - stage: Static Code Analysis
       php: 7.2
+      env:
+        - REPORT_COVERAGE=0
       script:
         - vendor/bin/phpcs
     - stage: Compiller testing
@@ -94,6 +96,8 @@ jobs:
               --testsuite "Extension Test Suite"
     - stage: Benchmark
       php: 7.2
+      env:
+        - REPORT_COVERAGE=0
       script:
         - phpenv config-rm xdebug.ini || true
         - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
