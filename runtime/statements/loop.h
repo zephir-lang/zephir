@@ -1,1 +1,0 @@
-int zephir_statement_loop(zephir_context *context, zval *statement TSRMLS_DC);

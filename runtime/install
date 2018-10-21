@@ -1,9 +1,0 @@
-
-if [ -f Makefile ]; then
-	sudo make clean
-	sudo phpize --clean
-fi
-
-phpize
-./configure --enable-zephir
-sudo make install
