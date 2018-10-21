@@ -8,7 +8,6 @@
 *.dSYM/
 composer.lock
 vendor/
-build/
 
 phpunit.xml
 phpcs.xml
@@ -24,33 +23,3 @@ ide/
 doc/
 compile.log
 compile-errors.log
-
-# Runtime
-runtime/.deps
-runtime/Makefile
-runtime/Makefile.fragments
-runtime/Makefile.global
-runtime/Makefile.objects
-runtime/acinclude.m4
-runtime/aclocal.m4
-runtime/autom4te.cache/
-runtime/config.guess
-runtime/config.h
-runtime/config.h.in
-runtime/config.h.in~
-runtime/config.log
-runtime/config.nice
-runtime/config.status
-runtime/config.sub
-runtime/configure
-runtime/configure.in
-runtime/install-sh
-runtime/libtool
-runtime/ltmain.sh
-runtime/missing
-runtime/mkinstalldirs
-runtime/modules/
-runtime/run-tests.php
-runtime/a.zep
-runtime/index.php
-runtime/parser.out
