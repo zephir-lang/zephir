@@ -10,18 +10,18 @@
 echo -e "Install a tool for writing fast and flexible scanners in C from regular expressions"
 
 if [ "${CI}" != "true" ]; then
-    echo "This script is designed to run inside a CI container only. Stop."
-    exit 1
+	echo "This script is designed to run inside a CI container only. Stop."
+	exit 1
 fi
 
 if [ -z ${RE2C_VERSION+x} ]; then
-    echo "The RE2C_VERSION is unset. Stop."
-    exit 1
+	echo "The RE2C_VERSION is unset. Stop."
+	exit 1
 fi
 
 if [ "${RE2C_VERSION}" == "system" ]; then
-    echo "Use system re2c. Skip."
-    exit 0
+	echo "Use system re2c. Skip."
+	exit 0
 fi
 
 pkgname=re2c
@@ -31,45 +31,45 @@ prefix="${HOME}/.local/opt/${pkgname}/${pkgname}-${RE2C_VERSION}"
 bindir="${prefix}/bin"
 
 if [ ! -f "${bindir}/re2c" ]; then
-    if [ ! -d `dirname ${downloaddir}` ]; then
-        mkdir -p `dirname ${downloaddir}`
-    fi
+	if [ ! -d `dirname ${downloaddir}` ]; then
+		mkdir -p `dirname ${downloaddir}`
+	fi
 
-    cd `dirname ${downloaddir}`
+	cd `dirname ${downloaddir}`
 
-    if [ ! -f "${pkgname}-${RE2C_VERSION}.tar.gz" ]; then
-        curl -sSL "$source" -o "${pkgname}-${RE2C_VERSION}.tar.gz"
-    fi
+	if [ ! -f "${pkgname}-${RE2C_VERSION}.tar.gz" ]; then
+		curl -sSL "$source" -o "${pkgname}-${RE2C_VERSION}.tar.gz"
+	fi
 
-    if [ ! -f "${pkgname}-${RE2C_VERSION}.tar.gz" ]; then
-        echo "Unable to locate ${pkgname}-${RE2C_VERSION}.tar.gz file. Stop."
-        exit 1
-    fi
+	if [ ! -f "${pkgname}-${RE2C_VERSION}.tar.gz" ]; then
+		echo "Unable to locate ${pkgname}-${RE2C_VERSION}.tar.gz file. Stop."
+		exit 1
+	fi
 
-    if [ ! -d "${downloaddir}" ]; then
-        mkdir -p "${downloaddir}"
-        tar -zxf "${pkgname}-${RE2C_VERSION}.tar.gz"
-    fi
+	if [ ! -d "${downloaddir}" ]; then
+		mkdir -p "${downloaddir}"
+		tar -zxf "${pkgname}-${RE2C_VERSION}.tar.gz"
+	fi
 
-    if [ ! -d "${downloaddir}" ]; then
-        echo "Unable to locate re2c source. Stop."
-        exit 1
-    fi
+	if [ ! -d "${downloaddir}" ]; then
+		echo "Unable to locate re2c source. Stop."
+		exit 1
+	fi
 
-    if [ ! -d "${prefix}" ]; then
-        mkdir -p "${prefix}"
-    fi
+	if [ ! -d "${prefix}" ]; then
+		mkdir -p "${prefix}"
+	fi
 
-    cd "${downloaddir}"
-    ./configure --prefix="${prefix}"
+	cd "${downloaddir}"
+	./configure --prefix="${prefix}"
 
-    make -j"$(getconf _NPROCESSORS_ONLN)"
-    make install
+	make -j"$(getconf _NPROCESSORS_ONLN)"
+	make install
 fi
 
 if [ ! -x "${bindir}/re2c" ]; then
-    echo "Unable to locate re2c executable. Stop."
-    exit 1
+	echo "Unable to locate re2c executable. Stop."
+	exit 1
 fi
 
 mkdir -p ${HOME}/bin
