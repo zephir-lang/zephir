@@ -2094,171 +2094,23 @@ class Compiler
          * Specifying Argument Information
          */
         foreach ($this->functionDefinitions as $func) {
+            $argInfo = new ArgInfoDefinition(
+                $func->getArgInfoName(),
+                $func,
+                $headerPrinter,
+                $func->getCallGathererPass()->getCompilationContext()
+            );
+
             $funcName = $func->getInternalName();
             $argInfoName = $func->getArgInfoName();
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
-            $parameters = $func->getParameters();
 
-            if ($this->backend->isZE3() && $func->isReturnTypesHintDetermined()) {
-                if (array_key_exists('object', $func->getReturnTypes())) {
-                    $class = 'NULL';
+            $argInfo->setBooleanDefinition($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
+            $argInfo->setRightFormat($this->backend->isZE3());
 
-                    if (count($func->getReturnClassTypes()) == 1) {
-                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
-                        $class = Utils::escapeClassName(
-                            $compilationContext->getFullName(key($func->getReturnClassTypes()))
-                        );
-                    }
+            $argInfo->render();
 
-                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $class . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#else');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        'NULL, "' . $class . '", ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#endif');
-                } else {
-                    $type = 'IS_NULL';
-
-                    if ($func->areReturnTypesIntCompatible()) {
-                        $type = 'IS_LONG';
-                    }
-                    if ($func->areReturnTypesDoubleCompatible()) {
-                        $type = 'IS_DOUBLE';
-                    }
-                    if ($func->areReturnTypesBoolCompatible()) {
-                        $type = '_IS_BOOL';
-                    }
-                    if ($func->areReturnTypesStringCompatible()) {
-                        $type = 'IS_STRING';
-                    }
-
-                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $type . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#else');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $type . ', NULL, ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#endif');
-                }
-
-                if ($parameters == null || !count($parameters->getParameters())) {
-                    $headerPrinter->output('ZEND_END_ARG_INFO()');
-                    $headerPrinter->outputBlankLine();
-                }
-            } elseif ($parameters != null && count($parameters->getParameters())) {
-                $headerPrinter->output(
-                    'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
-                    $func->getNumberOfRequiredParameters() . ')'
-                );
-            }
-
-            if ($parameters != null && count($parameters->getParameters())) {
-                foreach ($parameters->getParameters() as $parameter) {
-                    switch (($this->backend->isZE3() ? '3:' : '2:') . $parameter['data-type']) {
-                        case '2:array':
-                        case '3:array':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_ARRAY_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '2:variable':
-                        case '3:variable':
-                            if (isset($parameter['cast'])) {
-                                switch ($parameter['cast']['type']) {
-                                    case 'variable':
-                                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
-                                        $value = $parameter['cast']['value'];
-
-                                        $headerPrinter->output(
-                                            "\t" . 'ZEND_ARG_OBJ_INFO(' .
-                                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                            $parameter['name'] . ', ' .
-                                            Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' .
-                                            (isset($parameter['default']) ? 1 : 0) . ')'
-                                        );
-                                        break;
-
-                                    default:
-                                        throw new Exception('Unexpected exception');
-                                }
-                            } else {
-                                $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ')');
-                            }
-                            break;
-
-                        case '3:bool':
-                        case '3:boolean':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', ' .
-                                ($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL') . ', ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:uchar':
-                        case '3:int':
-                        case '3:uint':
-                        case '3:long':
-                        case '3:ulong':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_LONG, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:double':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_DOUBLE, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:char':
-                        case '3:string':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_STRING, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        default:
-                            $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
-                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                            $parameter['name'] . ')');
-                            break;
-                    }
-                }
-                $headerPrinter->output('ZEND_END_ARG_INFO()');
-                $headerPrinter->outputBlankLine();
-            }
             /** Generate FE's */
             $paramData = 'NULL';
             if (($this->backend->isZE3() && $func->isReturnTypesHintDetermined()) || $func->hasParameters()) {

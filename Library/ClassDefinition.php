@@ -1247,8 +1247,7 @@ class ClassDefinition
                 $method->getArgInfoName($this),
                 $method,
                 $codePrinter,
-                $compilationContext,
-                false // todo: always?
+                $compilationContext
             );
 
             $argInfo->setBooleanDefinition($this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');

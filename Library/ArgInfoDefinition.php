@@ -37,6 +37,7 @@ class ArgInfoDefinition
     /** @var string */
     private $booleanDefinition = '_IS_BOOL';
 
+    /** @var bool */
     private $rightFormat = true;
 
     public function __construct(
@@ -52,6 +53,7 @@ class ArgInfoDefinition
 
         $this->name = $name;
         $this->parameters = $this->method->getParameters();
+
         $this->returnByRef = $returnByRef;
     }
 
