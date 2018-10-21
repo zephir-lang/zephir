@@ -2107,7 +2107,7 @@ class Compiler
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
 
             $argInfo->setBooleanDefinition($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
-            $argInfo->setRightFormat($this->backend->isZE3());
+            $argInfo->setRichFormat($this->backend->isZE3());
 
             $argInfo->render();
 
