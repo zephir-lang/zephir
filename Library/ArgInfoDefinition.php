@@ -2,7 +2,9 @@
 
 /**
  * This file is part of the Zephir.
+ *
  * (c) Zephir Team <team@zephir-lang.com>
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -280,7 +282,7 @@ class ArgInfoDefinition
 
     private function allowNull($parameter)
     {
-        if (!isset($parameter['default']) || !is_array(isset($parameter['default']))) {
+        if (!isset($parameter['default']) || !is_array($parameter['default'])) {
             return false;
         }
 
