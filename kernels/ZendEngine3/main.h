@@ -24,6 +24,7 @@
 #include <ext/spl/spl_exceptions.h>
 #include <ext/spl/spl_iterators.h>
 #include <Zend/zend_string.h>
+#include <Zend/zend.h>
 
 extern zend_string* i_parent;
 extern zend_string* i_static;
@@ -59,14 +60,20 @@ extern zend_string* i_self;
 #include <Zend/zend_constants.h>
 #include "kernel/exception.h"
 
-/** class/interface registering */
-#define ZEPHIR_REGISTER_CLASS(ns, class_name, lower_ns, name, methods, flags) \
-	{ \
-		zend_class_entry ce; \
-		memset(&ce, 0, sizeof(zend_class_entry)); \
-		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce); \
-		lower_ns## _ ##name## _ce->ce_flags |= flags;  \
+/* class/interface registering */
+#define ZEPHIR_REGISTER_CLASS(ns, class_name, lower_ns, name, methods, flags)		\
+	{																				\
+		zend_class_entry ce;														\
+		memset(&ce, 0, sizeof(zend_class_entry));									\
+		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods);							\
+		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce);				\
+		if (UNEXPECTED(!lower_ns## _ ##name## _ce)) {								\
+			const char *_n = (#ns);													\
+			const char *_c = (#class_name);											\
+			zend_error(E_ERROR, "%s\\%s: class registration has failed.", _n, _c);	\
+			return FAILURE;															\
+		}																			\
+		lower_ns## _ ##name## _ce->ce_flags |= flags;								\
 	}
 
 #define ZEPHIR_REGISTER_CLASS_EX(ns, class_name, lower_ns, lcname, parent_ce, methods, flags) \

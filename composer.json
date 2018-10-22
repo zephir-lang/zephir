@@ -25,8 +25,8 @@
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
-        "ext-xml": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-xml": "*"
     },
     "require-dev": {
         "ext-gmp": "*",
@@ -47,7 +47,7 @@
             "Extension\\": "unit-tests/Extension/"
         },
         "classmap": [
-            "unit-tests/Data/"
+            "unit-tests/fixtures/mocks/"
         ]
     },
     "bin": [

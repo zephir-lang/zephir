@@ -17,6 +17,12 @@ class RetVal {
 	 */
 	protected my_string = "some-value" {get};
 
+	/**
+	 * @link https://github.com/phalcon/zephir/pull/1685
+	 * @var array
+	 */
+	protected my_array {get};
+
 	/** @link https://github.com/phalcon/zephir/pull/1681 */
 	public function retval_var_var() -> var {
 		var _var;

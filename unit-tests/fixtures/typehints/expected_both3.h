@@ -5,7 +5,7 @@ ZEPHIR_INIT_CLASS(TypeHints_Both);
 
 PHP_METHOD(TypeHints_Both, both);
 
-#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_both_both, 0, 1, IS_STRING, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_both_both, 0, 1, IS_STRING, NULL, 0)

@@ -5,21 +5,23 @@
 #
 # https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
 
-*.dSYM/
-composer.lock
-vendor/
-
-phpunit.xml
-phpcs.xml
-
-# Ignore for all projects based on Zephir
 .temp/
 .libs/
+ext/
+ide/
+doc/
+vendor/
+
 *.gch
 *.lo
 *.la
 *.loT
-ide/
-doc/
+*.dSYM
+
 compile.log
 compile-errors.log
+
+composer.lock
+
+phpunit.xml
+phpcs.xml
