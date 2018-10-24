@@ -1193,7 +1193,7 @@ class Compiler
         /**
          * Get global namespace
          */
-        $namespace = $this->checkDirectory();
+        $this->checkDirectory();
 
         $this->logger->output('Running tests...');
 

@@ -308,7 +308,6 @@ class ClassProperty
                 break;
 
             case 'array':
-            /** @noinspection PhpMissingBreakStatementInspection */
             case 'empty-array':
                 $this->initializeArray($compilationContext);
                 //continue
@@ -331,6 +330,8 @@ class ClassProperty
 
     /**
      * Removes all initialization statements related to this property
+     *
+     * @param array $statements
      */
     protected function removeInitializationStatements(&$statements)
     {

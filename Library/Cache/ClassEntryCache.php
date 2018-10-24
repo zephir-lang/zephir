@@ -28,6 +28,7 @@ class ClassEntryCache
      * @param string $className
      * @param boolean $dynamic
      * @param CompilationContext $compilationContext
+     * @return \Zephir\Variable
      */
     public function get($className, $dynamic, CompilationContext $compilationContext)
     {
