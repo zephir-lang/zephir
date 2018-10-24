@@ -36,8 +36,6 @@ class ArrayIndex
      */
     protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         switch ($resolvedExpr->getType()) {
             case 'null':
                 $symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
@@ -148,8 +146,6 @@ class ArrayIndex
             default:
                 throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array offset in assignment without cast", $statement['index-expr'][0]);
         }
-
-        $codePrinter = $compilationContext->codePrinter;
 
         /**
          * Create a temporal zval (if needed)

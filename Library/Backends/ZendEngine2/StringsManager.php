@@ -114,7 +114,6 @@ class StringsManager extends BaseStringsManager
             $macros[] = '';
 
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
-            $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
 
             $codeh .= '' . $proto . ';' . PHP_EOL;
 

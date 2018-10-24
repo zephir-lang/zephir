@@ -32,7 +32,6 @@ class ReadDetector
         /* Remove branch from variable name */
         $pos = strpos($variable, Variable::BRANCH_MAGIC);
         if ($pos > -1) {
-            $branchId = intval(substr($variable, $pos + strlen(Variable::BRANCH_MAGIC)));
             $variable = substr($variable, 0, $pos);
         }
 

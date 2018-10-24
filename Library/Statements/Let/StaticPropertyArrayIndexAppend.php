@@ -34,8 +34,6 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
      */
     protected function _assignStaticPropertyArrayMultipleIndex($classEntry, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 

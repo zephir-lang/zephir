@@ -37,7 +37,6 @@ class RequireOperator extends BaseOperator
         $expr->setExpectReturn(true);
 
         $exprPath = $expr->compile($compilationContext);
-        $exprVar = $exprPath->getCode();
         if ($exprPath->getType() == 'variable') {
             $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
             $exprVar = $compilationContext->backend->getVariableCode($exprVariable);

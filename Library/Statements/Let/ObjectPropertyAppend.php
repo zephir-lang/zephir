@@ -57,8 +57,6 @@ class ObjectPropertyAppend
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
             }
-
-            $propertyDefinition = $classDefinition->getProperty($property);
         } else {
             /**
              * If we know the class related to a variable we could check if the property

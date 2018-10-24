@@ -77,8 +77,6 @@ class PropertyAccess
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $propertyAccess = $expression;
 
         $expr = new Expression($propertyAccess['left']);

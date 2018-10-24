@@ -645,8 +645,6 @@ class ForStatement extends StatementAbstract
      */
     public function compileHashTraverse($expression, CompilationContext $compilationContext, Variable $exprVariable)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         /**
          * Initialize 'key' variable
          */
@@ -716,9 +714,6 @@ class ForStatement extends StatementAbstract
                 if (!$keyVariable->isTemporal()) {
                     $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
                     if ($detector->detect($keyVariable->getName(), $this->_statement['statements'])) {
-                        $loopContext = $compilationContext->currentMethod->getLocalContextPass();
-                        //echo $st->getLastLine();
-                        //echo $loopContext->getLastVariableUseLine($keyVariable->getName());
                         $duplicateKey = true;
                     }
                 }

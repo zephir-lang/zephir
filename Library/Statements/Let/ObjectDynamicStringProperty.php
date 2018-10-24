@@ -69,7 +69,6 @@ class ObjectDynamicStringProperty
             $compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
         }
 
-        $codePrinter = $compilationContext->codePrinter;
         $compilationContext->headersManager->add('kernel/object');
 
         switch ($resolvedExpr->getType()) {

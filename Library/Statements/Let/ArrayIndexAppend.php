@@ -35,8 +35,6 @@ class ArrayIndexAppend extends ArrayIndex
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $offsetExprs = array();
         foreach ($statement['index-expr'] as $indexExpr) {
             $expression = new Expression($indexExpr);

@@ -158,8 +158,6 @@ class NativeArrayAccess
             }
         }
 
-        $codePrinter = $compilationContext->codePrinter;
-
         /**
          * Resolves the symbol that expects the value
          */

@@ -61,7 +61,6 @@ class NamespaceAccessor
                     $isRoot = false;
                 } else {
                     $previous = null;
-                    $isRoot = false;
                     $isRoot = true;
                 }
                 $actualStr.= $n;

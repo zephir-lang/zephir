@@ -294,7 +294,6 @@ class SymbolTable
                             case 'array':
                                 if (!$variable->isLocalOnly()) {
                                     $variable->setMustInitNull(true);
-                                    $compilationContext->codePrinter->output('ZEPHIR_CHECK_POINTER(' . $variable->getName() . ');');
                                 }
                                 break;
                         }

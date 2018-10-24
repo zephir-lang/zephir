@@ -148,6 +148,8 @@ class ClassMethod
      */
     protected $callGathererPass;
 
+    public $optimizable = true;
+
     /**
      * ClassMethod constructor
      *
@@ -422,8 +424,9 @@ class ClassMethod
             $optimizedMethod->setReturnTypes($this->returnTypes);
             $classDefinition->addMethod($optimizedMethod);
         }
+
+        return $this;
     }
-    public $optimizable = true;
 
     public function getOptimizedMethod()
     {
