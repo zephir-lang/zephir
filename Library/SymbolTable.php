@@ -287,18 +287,6 @@ class SymbolTable
         if (!$variable->isTemporal() && !$variable->getSkipVariant()) {
             if ($name != 'return_value' && $name != 'this') {
                 if (is_object($compilationContext) && is_object($compilationContext->branchManager)) {
-                    if ($compilationContext->config->get('check-invalid-reads', 'optimizations')) {
-                        switch ($variable->getType()) {
-                            case 'variable':
-                            case 'string':
-                            case 'array':
-                                if (!$variable->isLocalOnly()) {
-                                    $variable->setMustInitNull(true);
-                                    $compilationContext->codePrinter->output('ZEPHIR_CHECK_POINTER(' . $variable->getName() . ');');
-                                }
-                                break;
-                        }
-                    }
 
                     $initBranches = $variable->getInitBranches();
 

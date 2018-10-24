@@ -548,8 +548,6 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0
 #endif
 
-#define ZEPHIR_CHECK_POINTER(v) if (!v) fprintf(stderr, "%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-
 int zephir_is_php_version(unsigned int id);
 
 void zephir_get_args(zval* return_value TSRMLS_DC);
