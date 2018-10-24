@@ -578,7 +578,7 @@ class StaticCall extends Call
             } else {
                 $method = $classDefinition->getMethod($methodName);
 
-                if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+                if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
                     throw new CompilerException("Cannot call private method '" . $methodName . "' out of its scope", $expression);
                 }
 
@@ -616,7 +616,7 @@ class StaticCall extends Call
                 } else {
                     if (!isset($method)) {
                         $method = $classDefinition->getMethod("__callStatic");
-                        if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+                        if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
                             throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
                         }
                     }

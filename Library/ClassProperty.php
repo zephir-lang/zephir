@@ -308,6 +308,7 @@ class ClassProperty
                 break;
 
             case 'array':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'empty-array':
                 $this->initializeArray($compilationContext);
                 //continue

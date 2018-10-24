@@ -769,47 +769,6 @@ class Compiler
         }
 
         /**
-         * Check if there are module/request/global destructors
-         */
-        $includes = '';
-        $destructors = $this->config->get('destructors');
-        if (is_array($destructors)) {
-            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
-            $includes .= PHP_EOL . $invokeRequestDestructors[0];
-            $reqDestructors = $invokeRequestDestructors[1];
-
-            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
-            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
-            $prqDestructors = $invokePostRequestDestructors[1];
-
-            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
-            $includes .= PHP_EOL . $invokeModuleDestructors[0];
-            $modDestructors = $invokeModuleDestructors[1];
-
-            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
-            $glbDestructors = $invokeGlobalsDestructors[1];
-        }
-
-        /**
-         * Check if there are module/request/global initializers
-         */
-        $initializers = $this->config->get('initializers');
-        if (is_array($initializers)) {
-            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
-            $includes .= PHP_EOL . $invokeRequestInitializers[0];
-            $reqInitializers = $invokeRequestInitializers[1];
-
-            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
-            $includes .= PHP_EOL . $invokeModuleInitializers[0];
-            $modInitializers = $invokeModuleInitializers[1];
-
-            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
-            $glbInitializers = $invokeGlobalsInitializers[1];
-        }
-
-        /**
          * Round 1. pre-compile all files in memory
          */
         $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));

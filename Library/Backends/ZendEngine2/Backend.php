@@ -342,6 +342,7 @@ class Backend extends BaseBackend
                     $groupVariables[] = $pointer . $variable->getName();
                     break;
 
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case 'char':
                     if (strlen($defaultValue) > 4) {
                         if (strlen($defaultValue) > 10) {
