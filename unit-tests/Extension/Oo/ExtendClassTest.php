@@ -16,6 +16,7 @@ namespace Extension\Oo;
 use PDO;
 use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
+use Test\Oo\Extend\MiddlewareInterfaceEx;
 
 class ExtendClassTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,6 +35,23 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
         $this->assertInstanceof('Test\\PdoStatement', $stmt);
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1686
+     */
+    public function shouldExtendMiddlewareInterface()
+    {
+        if (!extension_loaded('psr')) {
+            $this->markTestSkipped(
+                "The psr extension is not loaded"
+            );
+        }
+
+        $this->assertTrue(
+            is_subclass_of(MiddlewareInterfaceEx::class, 'Psr\Http\Server\MiddlewareInterface')
+        );
     }
 
     // FIXME
