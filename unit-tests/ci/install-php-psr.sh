@@ -17,13 +17,6 @@ fi
 PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
 
-if [ "${PHP_MAJOR}" = "5" ]; then
-	exit 0
-fi
-
-# We need this because there is no PHP 5 compatible PSR extension
-cp ${PROJECT_ROOT}/unit-tests/3rdparty/oo/extend/middlewareinterfaceex.zep ${PROJECT_ROOT}/test/oo/extend/middlewareinterfaceex.zep
-
 if [ ! -f "$HOME/.cache/php-psr/php_psr.c" ]; then
 	rm -rf "$HOME/.cache/php-psr"
 	mkdir "$HOME/.cache/php-psr"

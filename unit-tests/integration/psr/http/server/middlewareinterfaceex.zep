@@ -1,4 +1,4 @@
-namespace Test\Oo\Extend;
+namespace Test\Integration\Psr\Http\Server;
 
 use Psr\Http\Server\MiddlewareInterface;
 

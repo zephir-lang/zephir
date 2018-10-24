@@ -51,6 +51,7 @@ before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+  - export PHP_VERNUM="$(`phpenv php-config` --vernum)"
   - ulimit -c unlimited -S
   - phpenv config-add ./unit-tests/ci/999-default.ini
 
@@ -59,16 +60,14 @@ install:
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
-  - ./unit-tests/ci/install-php-psr.sh
+  # We need this because there is no PHP 5 compatible PSR extension
+  - '[[ "$PHP_MAJOR" == "5" ]] || ./unit-tests/ci/install-php-psr.sh'
+  - '[[ "$PHP_MAJOR" == "5" ]] || cp -R ./unit-tests/integration ./test'
   - ./unit-tests/ci/install-test-ext.sh
 
 before_script:
   # see: https://github.com/sebastianbergmann/phpunit/pull/3359
-  - |
-      if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]; then
-        export USE_ZEND_ALLOC=1
-        export PHPUNIT_CONF=phpunit-no-coverage.xml.dist
-      fi
+  - '[[ "$PHP_VERNUM" -ge "70300" ]] || export USE_ZEND_ALLOC=1 PHPUNIT_CONF=phpunit-no-coverage.xml.dist'
 
 script:
   - |
