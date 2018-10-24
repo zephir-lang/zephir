@@ -40,13 +40,12 @@ matrix:
 
 cache:
   apt: true
-  ccache: true
   timeout: 604800
   directories:
-    - $HOME/.ccache
     - $HOME/.composer/cache
     - $HOME/.local/opt/re2c
     - $HOME/.cache/re2c
+    - $HOME/.cache/php-psr
 
 before_install:
   - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
@@ -60,6 +59,7 @@ install:
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install
+  - ./unit-tests/ci/install-php-psr.sh
   - ./unit-tests/ci/install-test-ext.sh
 
 before_script:
@@ -71,7 +71,18 @@ before_script:
       fi
 
 script:
-  - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/phpunit -c ${PHPUNIT_CONF}
+  - |
+      $(phpenv which php) \
+        -d extension=ext/modules/test.so \
+        unit-tests/phpunit \
+        -c ${PHPUNIT_CONF} \
+        --testsuite "Extension Test Suite"
+  - |
+      $(phpenv which php) \
+        unit-tests/phpunit \
+        -c ${PHPUNIT_CONF} \
+        --testsuite "Zephir Test Suite"
+
 
 jobs:
   include:
