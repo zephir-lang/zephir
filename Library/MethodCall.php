@@ -255,7 +255,7 @@ class MethodCall extends Call
                      * Private methods must be called in their declaration scope
                      */
                     if ($classMethod->isPrivate()) {
-                        if ($classMethod->getClassDefinition() != $classDefinition) {
+                        if ($classMethod->getClassDefinition() !== $classDefinition) {
                             throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
                         }
                     }

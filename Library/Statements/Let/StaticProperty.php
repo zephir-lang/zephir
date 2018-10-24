@@ -231,6 +231,7 @@ class StaticProperty
 
                     case 'string':
                         switch ($statement['operator']) {
+                            /** @noinspection PhpMissingBreakStatementInspection */
                             case 'concat-assign':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, true);
                                 $expression = new Expression(array(

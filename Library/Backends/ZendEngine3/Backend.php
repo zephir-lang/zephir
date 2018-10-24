@@ -260,6 +260,7 @@ class Backend extends BackendZendEngine2
                     $groupVariables[] = $pointer . $variable->getName();
                     break;
 
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case 'char':
                     if (strlen($defaultValue) > 4) {
                         if (strlen($defaultValue) > 10) {
