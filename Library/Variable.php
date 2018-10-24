@@ -670,7 +670,7 @@ class Variable implements TypeAwareInterface
     }
 
     /**
-     * Set if the variable must be initialized to null
+     * Get if the variable must be initialized to null
      *
      * @return boolean
      */

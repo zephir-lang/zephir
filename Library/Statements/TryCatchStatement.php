@@ -96,8 +96,6 @@ class TryCatchStatement extends StatementAbstract
                         $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
                     ));
 
-                    $assignExceptVarStmt = new \Zephir\Expression\Builder\Statements\LetStatement($assignExceptVar->build());
-
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(
                             $exprBuilder->operators()->binary(

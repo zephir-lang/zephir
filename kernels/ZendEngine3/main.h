@@ -304,8 +304,6 @@ int zephir_declare_class_constant_double(zend_class_entry *ce, const char *name,
 int zephir_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length);
 int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value);
 
-#define ZEPHIR_CHECK_POINTER(v)
-
 int zephir_is_php_version(unsigned int id);
 
 /** Method declaration for API generation */

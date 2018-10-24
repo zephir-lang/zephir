@@ -312,12 +312,10 @@ class Call
          * Static typed parameters in final/private methods are promotable to read only parameters
          * Recursive calls with static typed methods also also promotable
          */
-        $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod == $calleeDefinition) {
-                    $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         if (isset($parameter['data-type'])) {
                             switch ($parameter['data-type']) {

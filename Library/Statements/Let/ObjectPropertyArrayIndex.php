@@ -36,8 +36,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      */
     protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 
@@ -114,8 +112,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
             }
-
-            $propertyDefinition = $classDefinition->getProperty($property);
         } else {
             /**
              * If we know the class related to a variable we could check if the property
@@ -242,8 +238,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 

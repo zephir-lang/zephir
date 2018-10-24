@@ -17,6 +17,7 @@ use Zephir\Expression;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
+use Zephir\Variable;
 
 /**
  * BaseOperator
@@ -83,7 +84,7 @@ class ArithmeticalBaseOperator extends BaseOperator
      * @param Variable $right
      * @return string
      */
-    private function getDynamicTypes($left, $right)
+    private function getDynamicTypes(Variable $left, Variable $right)
     {
         if ($this->_operator == '/') {
             return 'double';

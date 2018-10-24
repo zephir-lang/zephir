@@ -187,10 +187,7 @@ class Theme
             }
         }
 
-
-        $tree = $nsA->getNamespaceTree();
         $namespaces = $nsA->getByNamespace();
-
 
         foreach ($namespaces as $ns) {
             $subclasses     = array();
