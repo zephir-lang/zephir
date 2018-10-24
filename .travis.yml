@@ -79,6 +79,7 @@ script:
         --testsuite "Extension Test Suite"
   - |
       $(phpenv which php) \
+        -d extension=ext/modules/test.so \
         unit-tests/phpunit \
         -c ${PHPUNIT_CONF} \
         --testsuite "Zephir Test Suite"
