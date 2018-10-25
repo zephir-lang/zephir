@@ -250,18 +250,18 @@ class Backend extends BaseBackend
                 break;
 
             default:
-                throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
+                throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value));
         }
 
         return $condition;
     }
 
-    public function onPreInitVar($method, CompilationContext $context)
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
     {
         return '';
     }
 
-    public function onPreCompile($method, CompilationContext $context)
+    public function onPreCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -288,7 +288,7 @@ class Backend extends BaseBackend
         }
     }
 
-    public function onPostCompile($method, CompilationContext $context)
+    public function onPostCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
@@ -1001,7 +1001,16 @@ class Backend extends BaseBackend
         }
     }
 
-    private function resolveOffsetExprs($offsetExprs, $compilationContext)
+    /**
+     * Resolve expressions.
+     *
+     * @param  CompiledExpression[]|string[] $offsetExprs
+     * @param  CompilationContext            $compilationContext
+     * @return array
+     *
+     * @throws CompilerException
+     */
+    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {
         $keys = '';
         $offsetItems = array();
@@ -1030,7 +1039,12 @@ class Backend extends BaseBackend
                     break;
 
                 case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, null);
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                        $offsetExpr->getCode(),
+                        $compilationContext,
+                        null
+                    );
+
                     switch ($variableIndex->getType()) {
                         case 'int':
                         case 'uint':
@@ -1047,12 +1061,18 @@ class Backend extends BaseBackend
                             $numberParams++;
                             break;
                         default:
-                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                            throw new CompilerException(
+                                sprintf('Variable: %s cannot be used as array index', $variableIndex->getType()),
+                                $offsetExpr->getOriginal()
+                            );
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
+                    throw new CompilerException(
+                        sprintf('Value: %s cannot be used as array index', $offsetExpr->getType()),
+                        $offsetExpr->getOriginal()
+                    );
             }
         }
         return array($keys, $offsetItems, $numberParams);
