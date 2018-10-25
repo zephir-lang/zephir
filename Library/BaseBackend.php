@@ -164,9 +164,9 @@ abstract class BaseBackend implements FcallAwareInterface
     abstract public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext);
     abstract public function destroyIterator(Variable $iteratorVariable, CompilationContext $context);
 
-    abstract public function onPreInitVar($method, CompilationContext $context);
-    abstract public function onPreCompile($method, CompilationContext $context);
-    abstract public function onPostCompile($method, CompilationContext $context);
+    abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
+    abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);
+    abstract public function onPostCompile(ClassMethod $method, CompilationContext $context);
 
     /**
      * @param Variable $variable

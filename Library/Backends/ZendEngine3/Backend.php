@@ -176,7 +176,7 @@ class Backend extends BackendZendEngine2
         return $condition;
     }
 
-    public function onPreInitVar($method, CompilationContext $context)
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
     {
         if ($method instanceof FunctionDefinition) {
             return;
@@ -186,7 +186,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function onPreCompile($method, CompilationContext $context)
+    public function onPreCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -202,7 +202,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function onPostCompile($method, CompilationContext $context)
+    public function onPostCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
