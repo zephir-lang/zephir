@@ -23,11 +23,11 @@ shopt -s nullglob
 
 cd "${PROJECT_ROOT}"
 
-$(phpenv which php) compiler.php clean 2>/dev/null || true
-$(phpenv which php) compiler.php fullclean 2>/dev/null || true
-$(phpenv which php) compiler.php generate ${DEFAULT_ZFLAGS}
-$(phpenv which php) compiler.php stubs >/dev/null 2>&1
-$(phpenv which php) compiler.php api >/dev/null 2>&1
+zephir clean 2>/dev/null || true
+zephir fullclean 2>/dev/null || true
+zephir generate ${DEFAULT_ZFLAGS}
+zephir stubs >/dev/null 2>&1
+zephir api >/dev/null 2>&1
 
 cd "${PROJECT_ROOT}/ext"
 
