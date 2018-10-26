@@ -59,7 +59,7 @@ install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
-  - ./install
+  - ./install-nosudo
   # We need this because there is no PHP 5 compatible PSR extension
   - '[[ "$PHP_MAJOR" == "5" ]] || ./unit-tests/ci/install-php-psr.sh'
   - '[[ "$PHP_MAJOR" == "5" ]] || cp -R ./unit-tests/integration ./test'
