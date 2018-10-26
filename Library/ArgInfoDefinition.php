@@ -76,7 +76,10 @@ class ArgInfoDefinition
      */
     public function render()
     {
-        if ($this->richFormat && $this->method->isReturnTypesHintDetermined()) {
+        if ($this->richFormat &&
+            $this->method->isReturnTypesHintDetermined() &&
+            $this->method->areReturnTypesCompatible()
+        ) {
             $this->richRenderStart();
 
             if ($this->hasParameters() == false) {

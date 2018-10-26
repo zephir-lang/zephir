@@ -2191,7 +2191,7 @@ class ClassMethod
      */
     public function isReturnTypesHintDetermined()
     {
-        if (!$this->hasReturnTypes() || $this->isVoid()) {
+        if (count($this->returnTypes) == 0 || $this->isVoid()) {
             return false;
         }
 
@@ -2221,6 +2221,26 @@ class ClassMethod
                  */
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the method have compatible return types.
+     *
+     * @return bool
+     */
+    public function areReturnTypesCompatible()
+    {
+        // null | T1 | T2
+        if (count($this->returnTypes) > 2) {
+            return false;
+        }
+
+        // T1 | T2
+        if (count($this->returnTypes) == 2 && !isset($this->returnTypes['null'])) {
+            return false;
         }
 
         return true;

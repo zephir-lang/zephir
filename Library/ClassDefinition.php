@@ -1261,10 +1261,33 @@ class ClassDefinition
             foreach ($methods as $method) {
                 if ($this->getType() == 'class') {
                     if (!$method->isInternal()) {
-                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
-                            $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
+                        $richFormat = $this->compiler->backend->isZE3() &&
+                            $method->isReturnTypesHintDetermined() &&
+                            $method->areReturnTypesCompatible();
+
+                        if ($richFormat || $method->hasParameters()) {
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tPHP_ME(%s_%s, %s, arginfo_%s_%s_%s, %s)",
+                                    $this->getCNamespace(),
+                                    $this->getName(),
+                                    $method->getName(),
+                                    strtolower($this->getCNamespace()),
+                                    strtolower($this->getName()),
+                                    strtolower($method->getName()),
+                                    $method->getModifiers()
+                                )
+                            );
                         } else {
-                            $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tPHP_ME(%s_%s, %s, NULL, %s)",
+                                    $this->getCNamespace(),
+                                    $this->getName(),
+                                    $method->getName(),
+                                    $method->getModifiers()
+                                )
+                            );
                         }
                     }
                 } else {
