@@ -76,6 +76,38 @@ class RetVal {
 		let _var = new RetVal;
 		return _var;
 	}
+
+	public function retval_nullable_int() -> int | null {
+		return null;
+	}
+
+	public function retval_nullable_uint() -> uint | null {
+		return null;
+	}
+
+	public function retval_nullable_long() -> long | null {
+		return null;
+	}
+
+	public function retval_nullable_float() -> float | null {
+		return null;
+	}
+
+	public function retval_nullable_double() -> double | null {
+		return null;
+	}
+
+	public function retval_nullable_string() -> string | null {
+		return null;
+	}
+
+	public function retval_nullable_boolean() -> boolean | null {
+		return null;
+	}
+
+	public function retval_nullable_char() -> char | null {
+		return null;
+	}
 }
 
 /** @link https://github.com/phalcon/zephir/pull/1681 */
@@ -124,4 +156,36 @@ function retval_retval() -> <RetVal> {
 	var _var;
 	let _var = new RetVal;
 	return _var;
+}
+
+function retval_nullable_int() -> int | null {
+    return null;
+}
+
+function retval_nullable_uint() -> uint | null {
+    return null;
+}
+
+function retval_nullable_long() -> long | null {
+    return null;
+}
+
+function retval_nullable_float() -> float | null {
+    return null;
+}
+
+function retval_nullable_double() -> double | null {
+    return null;
+}
+
+function retval_nullable_string() -> string | null {
+    return null;
+}
+
+function retval_nullable_boolean() -> boolean | null {
+    return null;
+}
+
+function retval_nullable_char() -> char | null {
+    return null;
 }

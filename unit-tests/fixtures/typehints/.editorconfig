@@ -4,3 +4,4 @@ root = false
 
 [*.{c,h}]
 trim_trailing_whitespace = false
+indent_style             = tab

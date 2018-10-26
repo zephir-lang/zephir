@@ -16,6 +16,14 @@ PHP_METHOD(TypeHints_RetVal, retval_int);
 PHP_METHOD(TypeHints_RetVal, retval_long);
 PHP_METHOD(TypeHints_RetVal, retval_double);
 PHP_METHOD(TypeHints_RetVal, retval_retval);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_int);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_uint);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_long);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_float);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_double);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_string);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_boolean);
+PHP_METHOD(TypeHints_RetVal, retval_nullable_char);
 
 ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, getMyVar, NULL, ZEND_ACC_PUBLIC)
@@ -31,5 +39,13 @@ ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, retval_long, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_double, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_retval, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_int, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_uint, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_long, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_float, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_double, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_string, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_boolean, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_nullable_char, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

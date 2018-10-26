@@ -55,8 +55,7 @@ class AbstractTest extends TestCase
     public function shouldCreateCompatibleChildClassWithMultipleReturnTypesHint()
     {
         $childClass = new TestConcreteClass();
-        $this->assertEquals('TestConcreteClass::returnOneOfScalar', $childClass->returnOneOfScalar()
-        );
+        $this->assertEquals('TestConcreteClass::returnOneOfScalar', $childClass->returnOneOfScalar());
     }
 
     /**
