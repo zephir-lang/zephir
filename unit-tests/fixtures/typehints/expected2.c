@@ -188,6 +188,14 @@ PHP_FUNCTION(f_TypeHints_retval_int);
 PHP_FUNCTION(f_TypeHints_retval_long);
 PHP_FUNCTION(f_TypeHints_retval_double);
 PHP_FUNCTION(f_TypeHints_retval_retval);
+PHP_FUNCTION(f_TypeHints_retval_nullable_int);
+PHP_FUNCTION(f_TypeHints_retval_nullable_uint);
+PHP_FUNCTION(f_TypeHints_retval_nullable_long);
+PHP_FUNCTION(f_TypeHints_retval_nullable_float);
+PHP_FUNCTION(f_TypeHints_retval_nullable_double);
+PHP_FUNCTION(f_TypeHints_retval_nullable_string);
+PHP_FUNCTION(f_TypeHints_retval_nullable_boolean);
+PHP_FUNCTION(f_TypeHints_retval_nullable_char);
 
 zend_function_entry php_typehints_functions[] = {
 	ZEND_NS_NAMED_FE("TypeHints", args, ZEND_FN(f_TypeHints_args), arginfo_f_typehints_args)
@@ -201,6 +209,14 @@ ZEND_NS_NAMED_FE("TypeHints", retval_int, ZEND_FN(f_TypeHints_retval_int), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_long, ZEND_FN(f_TypeHints_retval_long), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_double, ZEND_FN(f_TypeHints_retval_double), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_retval, ZEND_FN(f_TypeHints_retval_retval), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_int, ZEND_FN(f_TypeHints_retval_nullable_int), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_uint, ZEND_FN(f_TypeHints_retval_nullable_uint), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_long, ZEND_FN(f_TypeHints_retval_nullable_long), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_float, ZEND_FN(f_TypeHints_retval_nullable_float), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_double, ZEND_FN(f_TypeHints_retval_nullable_double), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_string, ZEND_FN(f_TypeHints_retval_nullable_string), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_boolean, ZEND_FN(f_TypeHints_retval_nullable_boolean), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_nullable_char, ZEND_FN(f_TypeHints_retval_nullable_char), NULL)
 ZEND_FE_END
 
 };
