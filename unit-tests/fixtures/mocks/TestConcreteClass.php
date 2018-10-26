@@ -17,4 +17,49 @@ class TestConcreteClass extends TestAbstract
     {
         return func_get_args();
     }
+
+    public function returnOneOfScalar()
+    {
+        return __METHOD__;
+    }
+
+    public function returnInt(): int
+    {
+        return 1;
+    }
+
+    public function returnUint(): int
+    {
+        return 1;
+    }
+
+    public function returnLong(): int
+    {
+        return 1;
+    }
+
+    public function returnFloat(): float
+    {
+        return 1.0;
+    }
+
+    public function returnDouble(): float
+    {
+        return 1.0;
+    }
+
+    public function returnString(): string
+    {
+        return __METHOD__;
+    }
+
+    public function returnBoolean(): bool
+    {
+        return true;
+    }
+
+    public function returnChar(): int
+    {
+        return 1;
+    }
 }
