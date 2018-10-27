@@ -1,4 +1,4 @@
-<p align="center"><img src="https://zephir-lang.com/images/banner-232x80.png" alt="Zephir"/></p>
+<p align="center"><img src="https://zephir-lang.com/images/logo-105x36.svg" alt="Zephir"/></p>
 
 <p align="center">
 <a href="https://travis-ci.org/phalcon/zephir"><img src="https://travis-ci.org/phalcon/zephir.svg" alt="Build on Linux"></a>
