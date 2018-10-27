@@ -92,7 +92,7 @@ class Utils
      */
     public static function resolveWindowsReleaseFolder()
     {
-        if (self::isThreadSafe()) {
+        if (is_zts()) {
             if (PHP_INT_SIZE === 4) {
                 // 32-bit version of PHP
                 return "ext\\Release_TS";
@@ -115,21 +115,5 @@ class Utils
                 return "ext\\Release";
             }
         }
-    }
-
-    /**
-     * Checks if current PHP is thread safe.
-     *
-     * @return boolean true
-     */
-    public static function isThreadSafe()
-    {
-        if (defined('PHP_ZTS') && PHP_ZTS == 1) {
-            return true;
-        }
-
-        ob_start();
-        phpinfo(INFO_GENERAL);
-        return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
     }
 }
