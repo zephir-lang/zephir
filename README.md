@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://zephir-lang.com/images/banner-232x80.png" alt="Zephir"/></h1>
+<p align="center"><img src="https://zephir-lang.com/images/banner-232x80.png" alt="Zephir"/></p>
 
 <p align="center">
 <a href="https://travis-ci.org/phalcon/zephir"><img src="https://travis-ci.org/phalcon/zephir.svg" alt="Build on Linux"></a>
@@ -13,20 +13,6 @@
 **Zephir** - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
 of extensions for PHP. Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
 such as gcc/clang/vc++. Functionality is exposed to the PHP language.
-
-Main features:
-
-* Both dynamic/static typing
-* Reduced execution overhead compared with full interpretation
-* Restricted procedural programming, promoting OOP
-* Memory safety
-* Ahead-of-time (AOT) compiler to provide predictable performance
-
-Compiler design goals:
-
-* Multi-pass compilation
-* Type speculation/inference
-* Allow runtime profile-guided optimizations, pseudo-constant propagation and indirect/virtual function inlining
 
 Official documentation [is located here](https://docs.zephir-lang.com).
 
