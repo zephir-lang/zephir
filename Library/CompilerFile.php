@@ -1026,7 +1026,7 @@ class CompilerFile implements FileInterface
      */
     protected function getFullName($name)
     {
-        return Utils::getFullName($name, $this->_namespace, $this->_aliasManager);
+        return fqcn($name, $this->_namespace, $this->_aliasManager);
     }
 
     /**

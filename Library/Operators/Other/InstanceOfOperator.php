@@ -16,8 +16,8 @@ use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
-use Zephir\Utils;
 use function Zephir\escape_class;
+use function Zephir\fqcn;
 
 /**
  * InstanceOf
@@ -53,7 +53,7 @@ class InstanceOfOperator extends BaseOperator
 
         switch ($resolved->getType()) {
             case 'string':
-                $className = Utils::getFullName($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
+                $className = fqcn($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
 
                 if ($context->compiler->isClass($className)) {
                     $classDefinition = $context->compiler->getClassDefinition($className);

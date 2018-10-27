@@ -11,8 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Exception\InvalidArgumentException;
-
 /**
  * Zephir\Utils
  *
@@ -45,43 +43,5 @@ class Utils
         }
 
         return false;
-    }
-
-    /**
-     * Transform class/interface name to FQN format
-     *
-     * @param string $className
-     * @param string $currentNamespace
-     * @param AliasManager $aliasManager
-     * @return string
-     */
-    public static function getFullName($className, $currentNamespace, AliasManager $aliasManager = null)
-    {
-        if (!is_string($className)) {
-            throw new InvalidArgumentException('Class name must be a string ' . print_r($className, true));
-        }
-
-        // Absolute class/interface name
-        if ($className[0] === '\\') {
-            return substr($className, 1);
-        }
-
-        // If class/interface name not begin with \ maybe a alias or a sub-namespace
-        $firstSepPos = strpos($className, '\\');
-        if (false !== $firstSepPos) {
-            $baseName = substr($className, 0, $firstSepPos);
-            if ($aliasManager && $aliasManager->isAlias($baseName)) {
-                return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
-            }
-        } elseif ($aliasManager && $aliasManager->isAlias($className)) {
-            return $aliasManager->getAlias($className);
-        }
-
-        // Relative class/interface name
-        if ($currentNamespace) {
-            return $currentNamespace . '\\' . $className;
-        }
-
-        return $className;
     }
 }

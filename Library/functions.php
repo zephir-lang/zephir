@@ -11,6 +11,8 @@
 
 namespace Zephir;
 
+use Zephir\Exception\InvalidArgumentException;
+
 /**
  * Checks if currently running under MS Windows.
  *
@@ -196,4 +198,42 @@ function windows_release_dir()
             return "ext\\Release";
         }
     }
+}
+
+/**
+ * Transform class/interface name to FQN format
+ *
+ * @param string       $className
+ * @param string       $currentNamespace
+ * @param AliasManager $aliasManager
+ * @return string
+ */
+function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
+{
+    if (\is_string($className) == false) {
+        throw new InvalidArgumentException('Class name must be a string, got ' . \gettype($className));
+    }
+
+    // Absolute class/interface name
+    if ($className[0] === '\\') {
+        return \substr($className, 1);
+    }
+
+    // If class/interface name not begin with \ maybe a alias or a sub-namespace
+    $firstSepPos = \strpos($className, '\\');
+    if (false !== $firstSepPos) {
+        $baseName = \substr($className, 0, $firstSepPos);
+        if ($aliasManager && $aliasManager->isAlias($baseName)) {
+            return $aliasManager->getAlias($baseName) . '\\' . \substr($className, $firstSepPos + 1);
+        }
+    } elseif ($aliasManager && $aliasManager->isAlias($className)) {
+        return $aliasManager->getAlias($className);
+    }
+
+    // Relative class/interface name
+    if ($currentNamespace) {
+        return $currentNamespace . '\\' . $className;
+    }
+
+    return $className;
 }

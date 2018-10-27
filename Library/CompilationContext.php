@@ -202,6 +202,6 @@ class CompilationContext
         $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
         $namespace  = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
-        return Utils::getFullName($className, $namespace, $this->aliasManager);
+        return fqcn($className, $namespace, $this->aliasManager);
     }
 }
