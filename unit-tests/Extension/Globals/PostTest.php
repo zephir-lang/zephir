@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Extension\Globals;
 
 use Test\Globals\Post;
-use PHPUnit_Framework_TestCase;
+use Zephir\Support\TestCase;
 
-class PostTest extends PHPUnit_Framework_TestCase
+class PostTest extends TestCase
 {
     /**
      * @test

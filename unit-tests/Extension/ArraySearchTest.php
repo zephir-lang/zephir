@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Zephir package.
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -12,8 +12,9 @@
 namespace Extension;
 
 use Test\ArraySearch;
+use Zephir\Support\TestCase;
 
-class ArraySearchTest extends \PHPUnit_Framework_TestCase
+class ArraySearchTest extends TestCase
 {
     /**
      * @test

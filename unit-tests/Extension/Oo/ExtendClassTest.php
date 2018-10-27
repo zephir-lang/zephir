@@ -12,11 +12,12 @@
 namespace Extension\Oo;
 
 use PDO;
+use Test\Integration\Psr\Http\Server\MiddlewareInterfaceEx;
 use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
-use Test\Integration\Psr\Http\Server\MiddlewareInterfaceEx;
+use Zephir\Support\TestCase;
 
-class ExtendClassTest extends \PHPUnit_Framework_TestCase
+class ExtendClassTest extends TestCase
 {
     public function testPDOExtending()
     {
@@ -46,6 +47,16 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
                 "The psr extension is not loaded"
             );
         }
+
+        if (!class_exists(MiddlewareInterfaceEx::class)) {
+            $this->markTestSkipped(
+                sprintf(
+                    "You need to compile test extension with %s to perform this test",
+                    MiddlewareInterfaceEx::class
+                )
+            );
+        }
+
 
         $this->assertTrue(
             is_subclass_of(MiddlewareInterfaceEx::class, 'Psr\Http\Server\MiddlewareInterface')
