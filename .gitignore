@@ -25,3 +25,5 @@ composer.lock
 
 phpunit.xml
 phpcs.xml
+
+zephir.phar

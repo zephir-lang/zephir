@@ -1,0 +1,39 @@
+{
+    "main": "compiler.php",
+    "output": "zephir.phar",
+    "chmod": "0755",
+    "directories": [
+       "kernels",
+       "Library",
+       "prototypes",
+       "templates"
+    ],
+    "files": [
+        "LICENSE"
+    ],
+    "finder": [
+        {
+            "in": "kernels",
+            "name": "*.*"
+        },
+        {
+            "in": "Library",
+            "name": "*.*"
+        },
+        {
+            "in": "prototypes",
+            "name": "*.*"
+        },
+        {
+            "in": "templates",
+            "name": "*.*"
+        },
+        {
+            "name": "*.php",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ],
+    "git-version": "git_tag",
+    "stub": true
+}
