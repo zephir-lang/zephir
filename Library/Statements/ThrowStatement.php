@@ -16,8 +16,8 @@ use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
 use function Zephir\add_slashes;
+use function Zephir\fqcn;
 
 /**
  * ThrowStatement
@@ -47,7 +47,12 @@ class ThrowStatement extends StatementAbstract
                 count($expr['parameters']) == 1 &&
                 $expr['parameters'][0]['parameter']['type'] == 'string'
             ) {
-                $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                $className = fqcn(
+                    $expr['class'],
+                    $compilationContext->classDefinition->getNamespace(),
+                    $compilationContext->aliasManager
+                );
+
                 if ($compilationContext->compiler->isClass($className)) {
                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                     $message = $expr['parameters'][0]['parameter']['value'];
@@ -56,7 +61,11 @@ class ThrowStatement extends StatementAbstract
                     return;
                 } else {
                     if ($compilationContext->compiler->isBundledClass($className)) {
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName(
+                            $className,
+                            $compilationContext,
+                            true
+                        );
                         if ($classEntry) {
                             $message = $expr['parameters'][0]['parameter']['value'];
                             $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
@@ -113,7 +122,13 @@ class ThrowStatement extends StatementAbstract
         $message = add_slashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
         $printer->output(
-            sprintf('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);', $class, $message, $path, $expression['line'])
+            sprintf(
+                'ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);',
+                $class,
+                $message,
+                $path,
+                $expression['line']
+            )
         );
         $printer->output('return;');
     }
