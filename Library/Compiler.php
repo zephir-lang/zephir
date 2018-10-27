@@ -141,16 +141,23 @@ class Compiler
     protected $fileSystem;
 
     /**
+     * The Zephir base direcrory.
+     * @var string
+     */
+    private $baseDir;
+
+    /**
      * Compiler constructor
      *
-     * @param Config $config
-     * @param Logger $logger
+     * @param Config      $config
+     * @param Logger      $logger
      * @param BaseBackend $backend
-     * @param Manager $manager
+     * @param Manager     $manager
+     * @param string      $baseDir
      *
      * @throws Exception
      */
-    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager)
+    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager, $baseDir)
     {
         $this->config = $config;
         $this->logger = $logger;
@@ -161,6 +168,17 @@ class Compiler
         $this->checkRequires();
 
         $this->parserManager = $manager;
+        $this->baseDir = $baseDir;
+    }
+
+    /**
+     * Get rhe Zephir base direcrory.
+     *
+     * @return string
+     */
+    public function getBaseDir()
+    {
+        return $this->baseDir;
     }
 
     /**
@@ -823,7 +841,7 @@ class Compiler
          * Load function optimizers
          */
         if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir(ZEPHIRPATH . '/Library/Optimizers/FunctionCall');
+            FunctionCall::addOptimizerDir($this->baseDir . '/Library/Optimizers/FunctionCall');
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {
@@ -832,12 +850,12 @@ class Compiler
                 }
             }
 
-            if (is_dir(ZEPHIRPATH . '/prototypes') && is_readable(ZEPHIRPATH . '/prototypes')) {
+            if (is_dir($this->baseDir . '/prototypes') && is_readable($this->baseDir . '/prototypes')) {
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
                  */
-                foreach (new \DirectoryIterator(ZEPHIRPATH . '/prototypes') as $file) {
+                foreach (new \DirectoryIterator($this->baseDir . '/prototypes') as $file) {
                     if (!$file->isDir()) {
                         $extension = str_replace('.php', '', $file);
                         if (!extension_loaded($extension)) {
@@ -1102,7 +1120,7 @@ class Compiler
             $this->generate($command);
         }
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $documentator = new Documentation($this->files, $this->config, $this->logger, $command, $this->baseDir);
         $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
         $documentator->build();
     }
@@ -2137,18 +2155,6 @@ class Compiler
     public function getFileSystem()
     {
         return $this->fileSystem;
-    }
-
-    /**
-     * Returns a short path
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public static function getShortPath($path)
-    {
-        return str_replace(ZEPHIRPATH . DIRECTORY_SEPARATOR, '', $path);
     }
 
     /**

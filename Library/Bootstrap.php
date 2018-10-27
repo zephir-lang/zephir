@@ -104,7 +104,7 @@ class Bootstrap
             }
 
             $manager = new Manager();
-            $manager->registerBuiltinCommands();
+            $manager->registerBuiltinCommands($this->baseDir);
 
             $command = $manager->resolveByActionName($action);
 

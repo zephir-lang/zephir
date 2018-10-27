@@ -30,7 +30,7 @@ class CheckDependenciesTest extends TestCase
         $manager = $this->getMockBuilder(Manager::class)->disableOriginalConstructor()->getMock();
 
         $config = new Config();
-        $compiler = new Compiler($config, $logger, new Backend($config), $manager);
+        $compiler = new Compiler($config, $logger, new Backend($config), $manager, ZEPHIRPATH);
         $compilerFile = new CompilerFile('myClass', 'myClass.zep', $config, $logger);
 
         $compilerFile->preCompileInterface(

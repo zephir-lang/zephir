@@ -163,7 +163,7 @@ class Struct
         $code = 'typedef struct '. $this->_name .' { '.PHP_EOL;
 
         foreach ($this->_properties as $name => $type) {
-            $code .= T . $type . ' ' . $name . ';' . PHP_EOL;
+            $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
         }
 
         return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;

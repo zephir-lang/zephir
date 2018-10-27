@@ -66,7 +66,7 @@ class LifeCycleTest extends TestCase
             $backend = new $backend($config);
             $parser = new Parser();
             $manager = new Manager($parser, $logger);
-            $compiler = new Compiler($config, $logger, $backend, $manager);
+            $compiler = new Compiler($config, $logger, $backend, $manager, ZEPHIRPATH);
             $compiler->createProjectFiles('lifecycle');
         } catch (\Exception $e) {
             $this->fail($e->getMessage());

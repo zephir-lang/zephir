@@ -32,8 +32,6 @@ class Template
 
     public function __construct(Theme $theme, $data, $template, $nestedLevel = 0)
     {
-
-
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception("Recursive inclusion detected in theme creation");

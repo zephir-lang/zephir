@@ -72,8 +72,8 @@ class TypeHintsTest extends TestCase
             $logger = new Logger($config);
             $backend = new $backend($config);
             $parser = new ParserManager(new Parser(), $logger);
-            $compiler = new Compiler($config, $logger, $backend, $parser);
-            $command = new CommandGenerate(new CommandsManager);
+            $compiler = new Compiler($config, $logger, $backend, $parser, ZEPHIRPATH);
+            $command = new CommandGenerate(new CommandsManager(), ZEPHIRPATH);
             $compiler->generate($command);
         } catch (\Exception $e) {
             $this->fail($e->getMessage());
