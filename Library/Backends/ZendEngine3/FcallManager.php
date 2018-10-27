@@ -11,10 +11,10 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Utils;
+use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
-use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
+use function Zephir\file_put_contents_ex;
 
 /**
  * Zephir\Backends\ZendEngine3\FcallManager
@@ -114,6 +114,6 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
 
         $codePrinter->decreaseLevel();
         $codePrinter->output("#endif");
-        Utils::checkAndWriteIfNeeded($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
+        file_put_contents_ex($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
     }
 }

@@ -1353,7 +1353,7 @@ class Compiler
             $contentM4 = str_replace($mark, $replace, $contentM4);
         }
 
-        $needConfigure = Utils::checkAndWriteIfNeeded($contentM4, 'ext/config.m4');
+        file_put_contents_ex($contentM4, 'ext/config.m4');
 
         /**
          * Generate config.w32
@@ -1376,7 +1376,7 @@ class Compiler
             $contentW32 = str_replace($mark, $replace, $contentW32);
         }
 
-        $needConfigure = Utils::checkAndWriteIfNeeded($contentW32, 'ext/config.w32');
+        $needConfigure = file_put_contents_ex($contentW32, 'ext/config.w32');
 
         /**
          * php_ext.h
@@ -1394,7 +1394,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/php_ext.h');
+        file_put_contents_ex($content, 'ext/php_ext.h');
 
         /**
          * ext.h
@@ -1412,7 +1412,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/ext.h');
+        file_put_contents_ex($content, 'ext/ext.h');
 
         /**
          * ext_config.h
@@ -1430,7 +1430,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/ext_config.h');
+        file_put_contents_ex($content, 'ext/ext_config.h');
 
         /**
          * ext_clean
@@ -1440,7 +1440,7 @@ class Compiler
             throw new Exception("Clean file doesn't exist");
         }
 
-        if (Utils::checkAndWriteIfNeeded($content, 'ext/clean')) {
+        if (file_put_contents_ex($content, 'ext/clean')) {
             chmod('ext/clean', 0755);
         }
 
@@ -1460,7 +1460,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        if (Utils::checkAndWriteIfNeeded($content, 'ext/install')) {
+        if (file_put_contents_ex($content, 'ext/install')) {
             chmod('ext/install', 0755);
         }
 
@@ -1966,7 +1966,7 @@ class Compiler
         /**
          * Round 5. Generate and place the entry point of the project
          */
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.c');
+        file_put_contents_ex($content, 'ext/' . $safeProject . '.c');
         unset($content);
 
         /**
@@ -2007,7 +2007,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/' . $safeProject . '.h');
         unset($content);
 
         /**
@@ -2038,7 +2038,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/php_' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/php_' . $safeProject . '.h');
         unset($content);
 
         return $needConfigure;
