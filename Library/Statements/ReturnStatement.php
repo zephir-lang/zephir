@@ -14,7 +14,7 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * ReturnStatement
@@ -178,7 +178,10 @@ class ReturnStatement extends StatementAbstract
 
                 case 'string':
                 case 'istring':
-                    $compilationContext->backend->returnString(Utils::addSlashes($resolvedExpr->getCode()), $compilationContext);
+                    $compilationContext->backend->returnString(
+                        add_slashes($resolvedExpr->getCode()),
+                        $compilationContext
+                    );
                     break;
 
                 case 'array':

@@ -391,7 +391,15 @@ class Call
                 case 'string':
                 case 'istring':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, 'ZEPHIR_TEMP_PARAM_COPY');
+
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        'ZEPHIR_TEMP_PARAM_COPY'
+                    );
+
                     $this->_temporalVariables[] = $parameterVariable;
                     /* ZE3 copies strings */
                     if ($compilationContext->backend->getName() == 'ZendEngine2') {
@@ -526,7 +534,13 @@ class Call
                     } else {
                         $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     }
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, false);
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        false
+                    );
 
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
@@ -565,7 +579,15 @@ class Call
                     } else {
                         $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     }
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, false);
+
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        false
+                    );
+
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();

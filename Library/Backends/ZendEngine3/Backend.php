@@ -11,18 +11,18 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Utils;
-use Zephir\Variable;
-use Zephir\Compiler;
-use Zephir\ClassMethod;
-use Zephir\GlobalConstant;
+use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\FunctionDefinition;
-use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
-use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
+use Zephir\Fcall\FcallManagerInterface;
+use Zephir\FunctionDefinition;
+use Zephir\GlobalConstant;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend
@@ -308,7 +308,7 @@ class Backend extends BackendZendEngine2
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                    $value = "\"" . add_slashes($value) . "\"";
                 }
                 $dType = 'string';
                 break;

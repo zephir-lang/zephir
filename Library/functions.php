@@ -75,7 +75,7 @@ function unlink_recursive($path)
  */
 function camelize($string)
 {
-    return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+    return \str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string)));
 }
 
 
@@ -87,5 +87,64 @@ function camelize($string)
  */
 function escape_class($className)
 {
-    return str_replace('\\', '\\\\', $className);
+    return \str_replace('\\', '\\\\', $className);
+}
+
+/**
+ * Prepares a string to be used as a C-string.
+ *
+ * @param  string $string
+ * @return string
+ */
+function add_slashes($string)
+{
+    $newstr = "";
+    $after = null;
+    $length = \strlen($string);
+
+    for ($i = 0; $i < $length; $i++) {
+        $ch = \substr($string, $i, 1);
+        if ($i != ($length -1)) {
+            $after = \substr($string, $i + 1, 1);
+        } else {
+            $after = null;
+        }
+
+        switch ($ch) {
+            case '"':
+                $newstr .= "\\" . '"';
+                break;
+            case "\n":
+                $newstr .= "\\" . 'n';
+                break;
+            case "\t":
+                $newstr .= "\\" . 't';
+                break;
+            case "\r":
+                $newstr .= "\\" . 'r';
+                break;
+            case "\v":
+                $newstr .= "\\" . 'v';
+                break;
+            case '\\':
+                switch ($after) {
+                    case "n":
+                    case "v":
+                    case "t":
+                    case "r":
+                    case '"':
+                    case "\\":
+                        $newstr .= $ch . $after;
+                        $i++;
+                        break;
+                    default:
+                        $newstr .= "\\\\";
+                        break;
+                }
+                break;
+            default:
+                $newstr .= $ch;
+        }
+    }
+    return $newstr;
 }
