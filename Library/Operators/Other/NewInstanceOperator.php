@@ -11,13 +11,13 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\MethodCall;
-use Zephir\Utils;
 use Zephir\Compiler\CompilerException;
+use Zephir\Expression;
+use Zephir\MethodCall;
+use Zephir\Operators\BaseOperator;
+use function Zephir\escape_class;
 
 /**
  * NewInstance
@@ -133,7 +133,7 @@ class NewInstanceOperator extends BaseOperator
                 } else {
                     if (!class_exists($className, false)) {
                         $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', "nonexistent-class", $expression);
-                        $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
+                        $classNameToFetch = 'SL("' . escape_class($className) . '")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
@@ -151,7 +151,7 @@ class NewInstanceOperator extends BaseOperator
 
                         $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if (!$classEntry) {
-                            $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
+                            $classNameToFetch = 'SL("' . escape_class($className) . '")';
                             $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                             $classEntry = $zendClassEntry->getName();
                         } else {

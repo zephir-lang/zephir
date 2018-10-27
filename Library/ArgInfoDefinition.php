@@ -112,7 +112,7 @@ class ArgInfoDefinition
 
             if (count($this->method->getReturnClassTypes()) == 1) {
                 $class = key($this->method->getReturnClassTypes());
-                $class = Utils::escapeClassName($this->compilationContext->getFullName($class));
+                $class = escape_class($this->compilationContext->getFullName($class));
             }
 
             $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
@@ -198,7 +198,7 @@ class ArgInfoDefinition
                                         "\tZEND_ARG_OBJ_INFO(%d, %s, %s, %d)",
                                         $this->passByReference($parameter),
                                         $parameter['name'],
-                                        Utils::escapeClassName($this->compilationContext->getFullName($value)),
+                                        escape_class($this->compilationContext->getFullName($value)),
                                         (int)$this->allowNull($parameter)
                                     )
                                 );

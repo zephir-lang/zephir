@@ -20,8 +20,10 @@ use Zephir\Exception\IllegalStateException;
 /**
  * CompilerFile
  *
- * This class represents every file compiled in a project
- * Every file may contain a class or an interface
+ * This class represents every file compiled in a project.
+ * Every file may contain a class or an interface.
+ *
+ * @package Zephir
  */
 class CompilerFile implements FileInterface
 {
@@ -351,7 +353,7 @@ class CompilerFile implements FileInterface
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'get' . Utils::camelize($name),
+                        'get' . camelize($name),
                         null,
                         new StatementsBlock(array(
                             array(
@@ -379,7 +381,7 @@ class CompilerFile implements FileInterface
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
-                        'set' . Utils::camelize($name),
+                        'set' . camelize($name),
                         new ClassMethodParameters(array(
                             array(
                                 'type' => 'parameter',

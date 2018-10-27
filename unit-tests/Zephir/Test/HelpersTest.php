@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Zephir package.
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -12,16 +12,17 @@
 namespace Zephir\Test;
 
 use Zephir\Support\TestCase;
-use Zephir\Utils;
+use function Zephir\camelize;
+use function Zephir\escape_class;
 
-class UtilsTest extends TestCase
+class HelpersTest extends TestCase
 {
     /** @test */
     public function shouldEscapeClassName()
     {
         $classname = '\Bar\Foo';
         $this->assertSame(
-            Utils::escapeClassName($classname),
+            escape_class($classname),
             '\\\\Bar\\\\Foo'
         );
     }
@@ -31,7 +32,7 @@ class UtilsTest extends TestCase
     {
         $name = 'foo_Bar_Foo_bar';
         $this->assertSame(
-            Utils::camelize($name),
+            camelize($name),
             'FooBarFooBar'
         );
     }

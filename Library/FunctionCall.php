@@ -225,7 +225,7 @@ class FunctionCall extends Call
          * Check if the optimizer is already cached
          */
         if (!isset(self::$_optimizers[$funcName])) {
-            $camelizeFunctionName = Utils::camelize($funcName);
+            $camelizeFunctionName = camelize($funcName);
 
             /**
              * Check every optimizer directory for an optimizer

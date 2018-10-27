@@ -11,12 +11,13 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Utils;
 use Zephir\Compiler\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
+use Zephir\Utils;
+use function Zephir\escape_class;
 
 /**
  * InstanceOf
@@ -93,11 +94,11 @@ class InstanceOfOperator extends BaseOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
+                                        $code = 'SL("' . trim(escape_class($className), "\\") . '")';
                                     } else {
                                         $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                                         if (!$classEntry) {
-                                            $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
+                                            $code = 'SL("' . trim(escape_class($className), "\\") . '")';
                                         }
                                     }
                                 }
