@@ -15,7 +15,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * FunctionExistsOptimizer
@@ -37,7 +37,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
         }
 
         if ($expression['parameters'][0]['parameter']['type'] == 'string') {
-            $str = Utils::addSlashes($expression['parameters'][0]['parameter']['value']);
+            $str = add_slashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
 

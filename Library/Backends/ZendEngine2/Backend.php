@@ -11,17 +11,17 @@
 
 namespace Zephir\Backends\ZendEngine2;
 
-use Zephir\Utils;
-use Zephir\Variable;
-use Zephir\Compiler;
-use Zephir\CodePrinter;
-use Zephir\ClassMethod;
 use Zephir\BaseBackend;
-use Zephir\GlobalConstant;
-use Zephir\CompiledExpression;
+use Zephir\ClassMethod;
+use Zephir\CodePrinter;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
+use Zephir\GlobalConstant;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine2\Backend
@@ -420,7 +420,11 @@ class Backend extends BaseBackend
                                     break;
 
                                 case 'string':
-                                    $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                    $compilationContext->backend->assignString(
+                                        $variable,
+                                        add_slashes($defaultValue['value']),
+                                        $compilationContext
+                                    );
                                     break;
 
                                 case 'array':
@@ -448,7 +452,11 @@ class Backend extends BaseBackend
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'string':
-                                $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                $compilationContext->backend->assignString(
+                                    $variable,
+                                    add_slashes($defaultValue['value']),
+                                    $compilationContext
+                                );
                                 break;
 
                             case 'null':
@@ -596,7 +604,7 @@ class Backend extends BaseBackend
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                    $value = "\"" . add_slashes($value) . "\"";
                 }
                 $dType = 'string';
                 break;

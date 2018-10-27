@@ -1224,11 +1224,21 @@ class ClassMethod
 
                     case 'string':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
-                        $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
+                        $compilationContext->backend->assignString(
+                            $paramVariable,
+                            add_slashes($parameter['default']['value']),
+                            $compilationContext
+                        );
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                        throw new CompilerException(
+                            sprintf(
+                                'Default parameter value type: %s cannot be assigned to variable(string)',
+                                $parameter['default']['type']
+                            ),
+                            $parameter
+                        );
                 }
                 break;
 
@@ -1292,7 +1302,11 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
-                        $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
+                        $compilationContext->backend->assignString(
+                            $paramVariable,
+                            add_slashes($parameter['default']['value']),
+                            $compilationContext
+                        );
                         break;
 
                     case 'bool':

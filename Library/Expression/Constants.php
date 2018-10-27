@@ -11,13 +11,12 @@
 
 namespace Zephir\Expression;
 
-use Zephir\Types;
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Utils;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * Constants
@@ -159,7 +158,7 @@ class Constants
                     return new LiteralCompiledExpression('double', $constantName, $expression);
 
                 case 'string':
-                    return new LiteralCompiledExpression('string', Utils::addSlashes($constantName, true, Types::STRING), $expression);
+                    return new LiteralCompiledExpression('string', add_slashes($constantName), $expression);
 
                 case 'object':
                     throw new CompilerException('?');
@@ -174,14 +173,14 @@ class Constants
                 case '__CLASS__':
                     return new CompiledExpression(
                         'string',
-                        Utils::addSlashes($compilationContext->classDefinition->getCompleteName(), true, Types::STRING),
+                        add_slashes($compilationContext->classDefinition->getCompleteName()),
                         $expression
                     );
                     //no break
                 case '__NAMESPACE__':
                     return new CompiledExpression(
                         'string',
-                        Utils::addSlashes($compilationContext->classDefinition->getNamespace(), true, Types::STRING),
+                        add_slashes($compilationContext->classDefinition->getNamespace()),
                         $expression
                     );
                     //no break

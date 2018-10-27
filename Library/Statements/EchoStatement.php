@@ -14,7 +14,7 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * EchoStatement
@@ -57,7 +57,9 @@ class EchoStatement extends StatementAbstract
                     break;
 
                 case 'string':
-                    $compilationContext->codePrinter->output('php_printf("%s", "' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
+                    $compilationContext->codePrinter->output(
+                        sprintf('php_printf("%s", "%s");', add_slashes($resolvedExpr->getCode()))
+                    );
                     break;
 
                 case 'null':

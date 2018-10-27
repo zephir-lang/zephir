@@ -17,6 +17,7 @@ use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * ThrowStatement
@@ -109,7 +110,7 @@ class ThrowStatement extends StatementAbstract
      */
     private function throwStringException(CodePrinter $printer, $class, $message, $expression)
     {
-        $message = Utils::addSlashes($message);
+        $message = add_slashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
         $printer->output(
             sprintf('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);', $class, $message, $path, $expression['line'])

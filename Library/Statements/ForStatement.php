@@ -13,14 +13,14 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
+use Zephir\Detectors\ForValueUseDetector;
+use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
-use Zephir\Expression;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Variable;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * ForStatement
@@ -589,7 +589,15 @@ class ForStatement extends StatementAbstract
          */
         if ($expression->getType() == 'string') {
             $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->_statement);
-            $compilationContext->backend->assignString($constantVariable, Utils::addSlashes($expression->getCode()), $compilationContext, true, false);
+
+            $compilationContext->backend->assignString(
+                $constantVariable,
+                add_slashes($expression->getCode()),
+                $compilationContext,
+                true,
+                false
+            );
+
             $stringVariable = $constantVariable;
         } else {
             $stringVariable = $exprVariable;

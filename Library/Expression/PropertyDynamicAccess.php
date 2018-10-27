@@ -11,12 +11,12 @@
 
 namespace Zephir\Expression;
 
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * PropertyDynamicAccess
@@ -138,7 +138,7 @@ class PropertyDynamicAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $property = $propertyVariable ? $propertyVariable : Utils::addSlashes($expression['right']['value']);
+        $property = $propertyVariable ? $propertyVariable : add_slashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext, false);
 
 

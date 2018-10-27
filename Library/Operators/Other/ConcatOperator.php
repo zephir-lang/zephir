@@ -11,12 +11,12 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
-use Zephir\Utils;
+use Zephir\Compiler\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
+use function Zephir\add_slashes;
 
 /**
  * ConcatOperator
@@ -100,7 +100,7 @@ class ConcatOperator extends BaseOperator
 
                 case 'string':
                     $key .= 's';
-                    $concatParts[] = '"' . Utils::addSlashes($compiledExpr->getCode()) . '"';
+                    $concatParts[] = '"' . add_slashes($compiledExpr->getCode()) . '"';
                     break;
 
                 case 'int':

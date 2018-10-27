@@ -441,7 +441,15 @@ class ClassProperty
 
             case Types::CHAR:
             case Types::STRING:
-                $codePrinter->output("zend_declare_property_string(" . $classEntry . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',
+                        $classEntry,
+                        $this->getName(),
+                        add_slashes($value),
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
             case 'array':
