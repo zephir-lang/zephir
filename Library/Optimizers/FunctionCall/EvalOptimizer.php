@@ -64,8 +64,8 @@ class EvalOptimizer extends OptimizerAbstract
 
         $evalContext = str_replace(
             [
-                ZEPHIRPATH . '\\',
-                ZEPHIRPATH . '/',
+                $context->compiler->getBaseDir() . '\\',
+                $context->compiler->getBaseDir() . '/',
             ],
             '',
             $expression['file'] . ':' . $expression['line']

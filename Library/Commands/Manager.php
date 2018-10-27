@@ -47,9 +47,12 @@ class Manager extends SplObjectStorage
     /**
      * Registers builtin commands.
      *
+     * @param  string $baseDir The Zephir base direcrory.
      * @return void
+     *
+     * @throws \ReflectionException
      */
-    public function registerBuiltinCommands()
+    public function registerBuiltinCommands($baseDir)
     {
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__)));
         $iterator->rewind();
@@ -78,7 +81,7 @@ class Manager extends SplObjectStorage
                 continue;
             }
 
-            $command = $command->newInstanceArgs([$this]);
+            $command = $command->newInstanceArgs([$this, $baseDir]);
             $data = [
                 'usage'       => $command->getUsage(),
                 'description' => $command->getDescription(),
@@ -151,8 +154,9 @@ class Manager extends SplObjectStorage
     /**
      * Resolves and returns a compiller command.
      *
-     * @param string $action Action name
+     * @param  string $action  Action name.
      * @return CommandInterface
+     *
      * @throws OutOfBoundsException
      * @throws BadMethodCallException
      */

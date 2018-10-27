@@ -18,26 +18,28 @@ class Sitemap extends AbstractFile
     protected $classes;
     protected $namespaces;
     protected $baseUrl;
+    private $baseDir;
 
-    public function __construct($baseUrl, $classList, $namespaceList)
+    public function __construct($baseDir, $baseUrl, $classList, $namespaceList)
     {
         $this->classes = $classList;
         $this->namespaces = $namespaceList;
         $this->baseUrl = rtrim($baseUrl, "/") . "/";
+        $this->baseDir = $baseDir;
     }
 
     public function getTemplateName()
     {
-        return ZEPHIRPATH . "/templates/Api/sitemap.php";
+        return $this->baseDir . "/templates/Api/sitemap.php";
     }
 
     public function getData()
     {
-        return array(
+        return [
             "classes"    => $this->classes,
             "namespaces" => $this->namespaces,
             "baseUrl"    => $this->baseUrl,
-        );
+        ];
     }
 
     public function getOutputFile()

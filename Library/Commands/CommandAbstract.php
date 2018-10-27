@@ -35,13 +35,21 @@ abstract class CommandAbstract implements CommandInterface
     private $commandsManager;
 
     /**
+     * The Zephir base direcrory.
+     * @var string
+     */
+    private $baseDir;
+
+    /**
      * CommandAbstract constructor.
      *
      * @param Manager $commandsManager
+     * @param string  $baseDir
      */
-    public function __construct(Manager $commandsManager)
+    public function __construct(Manager $commandsManager, $baseDir)
     {
         $this->commandsManager = $commandsManager;
+        $this->baseDir = $baseDir;
     }
 
     /**
@@ -113,8 +121,11 @@ abstract class CommandAbstract implements CommandInterface
     /**
      * {@inheritdoc}
      *
-     * @param Config $config
-     * @param Logger $logger
+     * @param  Config $config
+     * @param  Logger $logger
+     * @return void
+     *
+     * @throws \Zephir\Exception
      */
     public function execute(Config $config, Logger $logger)
     {
@@ -135,7 +146,7 @@ abstract class CommandAbstract implements CommandInterface
         $backend = new $className($config);
 
         $parserManager = new Parser\Manager(new Parser(), $logger, $params);
-        $compiler = new Compiler($config, $logger, $backend, $parserManager);
+        $compiler = new Compiler($config, $logger, $backend, $parserManager, $this->baseDir);
 
         $command = $this->getCommand();
         $compiler->$command($this);

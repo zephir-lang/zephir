@@ -53,14 +53,24 @@ class Documentation
     protected $themesDirectories;
 
     /**
-     * @param CompilerFile[] $classes
-     * @param Config $config
-     * @param Logger $logger
+     * The Zephir base direcrory.
+     * @var string
+     */
+    private $baseDir;
+
+    /**
+     * Documentation constructor.
+     *
+     * @param CompilerFile[]   $classes
+     * @param Config           $config
+     * @param Logger           $logger
      * @param CommandInterface $command
+     * @param string           $baseDir
+     *
      * @throws ConfigException
      * @throws Exception
      */
-    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command)
+    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command, $baseDir)
     {
         ksort($classes);
 
@@ -68,6 +78,7 @@ class Documentation
         $this->classes = $classes;
         $this->logger  = $logger;
         $this->command = $command;
+        $this->baseDir = $baseDir;
 
         $themeConfig = $config->get("theme", "api");
 
@@ -235,7 +246,7 @@ class Documentation
         } else {
             $themesDirectories = array();
         }
-        $themesDirectories[] = ZEPHIRPATH . "/templates/Api/themes";
+        $themesDirectories[] = $this->baseDir . "/templates/Api/themes";
         $this->themesDirectories = $themesDirectories;
 
 
@@ -306,7 +317,7 @@ class Documentation
 
 
         if ($this->baseUrl) {
-            $sitemapFile = new File\Sitemap($this->baseUrl, $this->classes, $byNamespace);
+            $sitemapFile = new File\Sitemap($this->baseDir, $this->baseUrl, $this->classes, $byNamespace);
             $this->theme->drawFile($sitemapFile);
         }
 
