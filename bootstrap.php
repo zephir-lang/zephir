@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 error_reporting(-1);
 
@@ -31,13 +29,9 @@ define('ZEPHIRPATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('T', "\t");
 define('2T', "\t\t");
 
-if (file_exists(ZEPHIRPATH . '/vendor/autoload.php')) {
-    require ZEPHIRPATH . '/vendor/autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
 } else {
-    require ZEPHIRPATH . '/Library/Loader.php';
+    require __DIR__ . '/Library/Loader.php';
     Zephir\Loader::register();
-}
-
-function unlink_recursive($path) {
-    exec(sprintf((PHP_OS === 'Windows') ? "rd /s /q %s" : "rm -rf %s", escapeshellarg($path)));
 }
