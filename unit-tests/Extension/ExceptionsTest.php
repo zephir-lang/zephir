@@ -1,25 +1,24 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
-use Test\Exceptions;
 use Test\Exception;
+use Test\Exceptions;
+use Zephir\Support\TestCase;
 
-class ExceptionsTest extends \PHPUnit_Framework_TestCase
+class ExceptionsTest extends TestCase
 {
     /**
-     * @expectedException Test\Exception
+     * @expectedException \Test\Exception
      * @expectedExceptionMessage hello1
      */
     public function testException1()
@@ -29,7 +28,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Test\Exception
+     * @expectedException \Test\Exception
      * @expectedExceptionMessage hello2
      */
     public function testException2()
@@ -39,7 +38,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Test\Exception
+     * @expectedException \Test\Exception
      * @expectedExceptionMessage hello3
      */
     public function testException3()
@@ -49,7 +48,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Test\Exception
+     * @expectedException \Test\Exception
      * @expectedExceptionMessage hello4
      */
     public function testException4()
@@ -59,7 +58,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Test\Exception
+     * @expectedException \Test\Exception
      * @expectedExceptionMessage hello5
      */
     public function testException5()

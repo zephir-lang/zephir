@@ -1,17 +1,17 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
+
+use Zephir\Support\TestCase;
 
 if (version_compare(PHP_VERSION, '5.6', '<')) {
     require_once('Issue1404TestTrait55.php');
@@ -21,15 +21,7 @@ if (version_compare(PHP_VERSION, '5.6', '<')) {
     class_alias('\Extension\Issue1404TestTrait56', '\Extension\Issue1404TestTrait');
 }
 
-/**
- * Tests for Zephir function is_php_version(id)
- *
- * @package  Extension
- * @author   AlexNDRmac <AlexNDR@phalconphp.com>
- * @license  MIT http://zephir-lang.com/license.html
- * @link     https://github.com/phalcon/zephir/issues/1404
- */
-class Issue1404Test extends \PHPUnit_Framework_TestCase
+class Issue1404Test extends TestCase
 {
     use Issue1404TestTrait;
 

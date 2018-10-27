@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Zephir package.
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -12,7 +12,7 @@
 namespace Extension;
 
 use Test\Instance;
-use PHPUnit\Framework\TestCase;
+use Zephir\Support\TestCase;
 
 class InstanceTest extends TestCase
 {
