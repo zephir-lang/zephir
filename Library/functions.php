@@ -237,3 +237,28 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 
     return $className;
 }
+
+/**
+ * Checks if the content of the file on the disk is the same as the content.
+ *
+ * @param  string $content
+ * @param  string $path
+ * @return bool
+ */
+function file_put_contents_ex($content, $path)
+{
+    if (\file_exists($path)) {
+        $contentMd5 = \md5($content);
+        $existingMd5 = \md5_file($path);
+
+        if ($contentMd5 != $existingMd5) {
+            \file_put_contents($path, $content);
+            return true;
+        }
+    } else {
+        \file_put_contents($path, $content);
+        return true;
+    }
+
+    return false;
+}

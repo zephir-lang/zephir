@@ -58,7 +58,7 @@ class EchoStatement extends StatementAbstract
 
                 case 'string':
                     $compilationContext->codePrinter->output(
-                        sprintf('php_printf("%s", "%s");', add_slashes($resolvedExpr->getCode()))
+                        'php_printf("%s", "' . add_slashes($resolvedExpr->getCode()) . '");'
                     );
                     break;
 

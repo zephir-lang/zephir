@@ -11,8 +11,8 @@
 
 namespace Zephir\Backends\ZendEngine2;
 
-use Zephir\Utils;
 use Zephir\StringsManager as BaseStringsManager;
+use function Zephir\file_put_contents_ex;
 
 /**
  * Class StringsManager
@@ -25,11 +25,11 @@ class StringsManager extends BaseStringsManager
      * List of headers
      * @var array
      */
-    protected $concatKeys = array(
+    protected $concatKeys = [
         'vv' => true,
         'vs' => true,
         'sv' => true
-    );
+    ];
 
     /**
      * Adds a concatenation combination to the manager
@@ -213,8 +213,9 @@ void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 	}
 }
 ";
-        Utils::checkAndWriteIfNeeded($pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
-        Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
+        $contents = $pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh;
+        file_put_contents_ex($contents, 'ext/kernel/concat.h');
+        file_put_contents_ex($code, 'ext/kernel/concat.c');
     }
 
     /**
