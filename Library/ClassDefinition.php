@@ -1713,7 +1713,7 @@ class ClassDefinition
                 if (!$check) {
                     throw new CompilerException('Unknown class entry for "' . $className . '"');
                 } else {
-                    $classEntry = $compilationContext->backend->fetchClassEntry(Utils::escapeClassName(strtolower($className)));
+                    $classEntry = $compilationContext->backend->fetchClassEntry(escape_class(strtolower($className)));
                 }
         }
 

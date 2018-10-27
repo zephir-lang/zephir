@@ -93,17 +93,6 @@ class Utils
     }
 
     /**
-     * Camelize a string
-     *
-     * @param       string $str
-     * @return      string
-     */
-    public static function camelize($str)
-    {
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $str)));
-    }
-
-    /**
      * Checks if the content of the file on the disk is the same as the content.
      *
      * @param $content

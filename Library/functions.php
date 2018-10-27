@@ -22,7 +22,7 @@ function is_windows()
 }
 
 /**
- * Check if the host OS is macOs.
+ * Checks if currently running under macOs.
  *
  * @return bool
  */
@@ -32,7 +32,7 @@ function is_macos()
 }
 
 /**
- * Check if the host OS is BSD based.
+ * Checks if currently running under BSD based OS.
  *
  * @link   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
  * @return bool
@@ -65,4 +65,27 @@ function unlink_recursive($path)
 
         \rmdir($path);
     }
+}
+
+/**
+ * Camelize a string.
+ *
+ * @param  string $string
+ * @return string
+ */
+function camelize($string)
+{
+    return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+}
+
+
+/**
+ * Prepares a class name to be used as a C-string.
+ *
+ * @param  string $className
+ * @return string
+ */
+function escape_class($className)
+{
+    return str_replace('\\', '\\\\', $className);
 }
