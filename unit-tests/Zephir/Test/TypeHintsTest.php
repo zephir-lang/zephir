@@ -21,6 +21,7 @@ use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Parser\Manager as ParserManager;
 use Zephir\Support\TestCase;
+use function Zephir\unlink_recursive;
 
 class TypeHintsTest extends TestCase
 {

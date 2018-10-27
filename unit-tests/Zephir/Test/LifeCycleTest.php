@@ -19,6 +19,7 @@ use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Parser\Manager;
 use Zephir\Support\TestCase;
+use function Zephir\unlink_recursive;
 
 class LifeCycleTest extends TestCase
 {
