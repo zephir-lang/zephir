@@ -167,16 +167,6 @@ class Utils
     }
 
     /**
-     * Check if the host OS is Windows
-     *
-     * @return boolean
-     */
-    public static function isWindows()
-    {
-        return strncasecmp(PHP_OS, 'WIN', 3) == 0;
-    }
-
-    /**
      * Check if the host OS is BSD based
      *
      * @link https://en.wikipedia.org/wiki/List_of_BSD_operating_systems

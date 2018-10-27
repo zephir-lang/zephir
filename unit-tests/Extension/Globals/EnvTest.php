@@ -13,7 +13,7 @@ namespace Extension\Globals;
 
 use Test\Globals\Env;
 use Zephir\Support\TestCase;
-use Zephir\Utils;
+use function Zephir\is_windows;
 
 class EnvTest extends TestCase
 {
@@ -41,7 +41,7 @@ class EnvTest extends TestCase
     {
         $tester = new Env();
 
-        if (Utils::isWindows()) {
+        if (is_windows()) {
             $var = 'USERNAME';
         } else {
             $var = 'USER';
