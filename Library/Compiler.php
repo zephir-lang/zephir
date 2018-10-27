@@ -1012,7 +1012,7 @@ class Compiler
             if (is_windows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-                $releaseFolder = Utils::resolveWindowsReleaseFolder();
+                $releaseFolder = windows_release_dir();
                 if (file_exists($releaseFolder)) {
                     exec('rd /s /q ' . $releaseFolder, $output, $exit);
                 }

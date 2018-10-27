@@ -156,11 +156,44 @@ function add_slashes($string)
  */
 function is_zts()
 {
-    if (defined('PHP_ZTS') && PHP_ZTS == 1) {
+    if (\defined('PHP_ZTS') && PHP_ZTS == 1) {
         return true;
     }
 
-    ob_start();
-    phpinfo(INFO_GENERAL);
-    return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
+    \ob_start();
+    \phpinfo(INFO_GENERAL);
+
+    return (bool) \preg_match('/Thread\s*Safety\s*enabled/i', \strip_tags(\ob_get_clean()));
+}
+
+/**
+ * Resolves Windows release folder.
+ *
+ * @return string
+ */
+function windows_release_dir()
+{
+    if (is_zts()) {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return "ext\\Release_TS";
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return "ext\\x64\\Release_TS";
+        } else {
+            // fallback
+            return "ext\\Release_TS";
+        }
+    } else {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return "ext\\Release";
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return "ext\\x64\\Release";
+        } else {
+            // fallback
+            return "ext\\Release";
+        }
+    }
 }

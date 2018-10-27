@@ -84,36 +84,4 @@ class Utils
 
         return $className;
     }
-
-    /**
-     * Resolves Windows release folder.
-     *
-     * @return string
-     */
-    public static function resolveWindowsReleaseFolder()
-    {
-        if (is_zts()) {
-            if (PHP_INT_SIZE === 4) {
-                // 32-bit version of PHP
-                return "ext\\Release_TS";
-            } elseif (PHP_INT_SIZE === 8) {
-                // 64-bit version of PHP
-                return "ext\\x64\\Release_TS";
-            } else {
-                // fallback
-                return "ext\\Release_TS";
-            }
-        } else {
-            if (PHP_INT_SIZE === 4) {
-                // 32-bit version of PHP
-                return "ext\\Release";
-            } elseif (PHP_INT_SIZE === 8) {
-                // 64-bit version of PHP
-                return "ext\\x64\\Release";
-            } else {
-                // fallback
-                return "ext\\Release";
-            }
-        }
-    }
 }
