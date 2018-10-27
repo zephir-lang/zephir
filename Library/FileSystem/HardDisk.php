@@ -12,7 +12,7 @@
 namespace Zephir\FileSystem;
 
 use Zephir\Compiler;
-use Zephir\Utils;
+use function Zephir\unlink_recursive;
 
 /**
  * HardDisk
@@ -154,14 +154,13 @@ class HardDisk
     }
 
     /**
-     * Deletes the temporary directory
+     * Deletes the temporary directory.
+     *
+     * @return void
      */
     public function clean()
     {
-        if (is_dir($this->basePath)) {
-            Utils::recursiveRmDir($this->basePath);
-            rmdir($this->basePath);
-        }
+        unlink_recursive($this->basePath);
     }
 
     /**

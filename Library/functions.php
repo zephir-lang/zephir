@@ -22,6 +22,27 @@ function is_windows()
 }
 
 /**
+ * Check if the host OS is macOs.
+ *
+ * @return bool
+ */
+function is_macos()
+{
+    return 'DARWIN' === \strtoupper(\substr(PHP_OS, 0, 6));
+}
+
+/**
+ * Check if the host OS is BSD based.
+ *
+ * @link   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+ * @return bool
+ */
+function is_bsd()
+{
+    return false !== \stristr(\strtolower(PHP_OS), 'bsd');
+}
+
+/**
  * Attempts to remove recursively the directory with all subdirectories and files.
  *
  * A E_WARNING level error will be generated on failure.
@@ -32,7 +53,7 @@ function is_windows()
 function unlink_recursive($path)
 {
     if (\is_dir($path)) {
-        $objects = \array_diff(\scandir($path), ['.','..']);
+        $objects = \array_diff(\scandir($path), ['.', '..']);
 
         foreach ($objects as $object) {
             if (\is_dir("{$path}/{$object}")) {
