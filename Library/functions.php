@@ -148,3 +148,19 @@ function add_slashes($string)
     }
     return $newstr;
 }
+
+/**
+ * Checks if current PHP is thread safe.
+ *
+ * @return bool
+ */
+function is_zts()
+{
+    if (defined('PHP_ZTS') && PHP_ZTS == 1) {
+        return true;
+    }
+
+    ob_start();
+    phpinfo(INFO_GENERAL);
+    return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
+}
