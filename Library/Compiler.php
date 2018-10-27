@@ -591,7 +591,7 @@ class Compiler
             return self::VERSION . '-' . substr($version, 0, 10);
         }
 
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             if (self::$currentVersion === null) {
                 if (file_exists(__DIR__ . '/../.git')) {
                     exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
@@ -619,7 +619,7 @@ class Compiler
      */
     public function getGccFlags($development = false)
     {
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             $gccFlags = getenv('CFLAGS');
             if (!is_string($gccFlags)) {
                 if (!$development) {
@@ -646,7 +646,7 @@ class Compiler
     {
         $version = self::getCurrentVersion();
 
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
         }
 
@@ -658,7 +658,7 @@ class Compiler
      */
     public function preCompileHeaders()
     {
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             $version = self::getCurrentVersion();
             $phpIncludes = $this->getPhpIncludeDirs();
 
@@ -1009,7 +1009,7 @@ class Compiler
         $needConfigure = $this->generate($command);
 
         if ($needConfigure) {
-            if (Utils::isWindows()) {
+            if (is_windows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
                 $releaseFolder = Utils::resolveWindowsReleaseFolder();
@@ -1071,7 +1071,7 @@ class Compiler
 
         $currentDir = getcwd();
         $this->logger->output('Compiling...');
-        if (Utils::isWindows()) {
+        if (is_windows()) {
             exec(
                 'cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' .
                 $currentDir . '\compile.log',
@@ -1150,7 +1150,7 @@ class Compiler
         @unlink("ext/modules/" . $namespace . ".so");
 
         $this->compile($command, $development);
-        if (Utils::isWindows()) {
+        if (is_windows()) {
             $this->logger->output("Installation is not implemented for windows yet! Aborting!");
             exit();
         }
@@ -1197,7 +1197,7 @@ class Compiler
 
         $this->logger->output('Running tests...');
 
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             system(
                 'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
                 $exit
@@ -1213,7 +1213,7 @@ class Compiler
     public function clean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (Utils::isWindows()) {
+        if (is_windows()) {
             system('cd ext && nmake clean-all');
         } else {
             system('cd ext && make clean > /dev/null');
@@ -1228,7 +1228,7 @@ class Compiler
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (Utils::isWindows()) {
+        if (is_windows()) {
             system('cd ext && nmake clean-all');
             system('cd ext && phpize --clean');
             system('cd ext && ./clean');
@@ -2363,7 +2363,7 @@ class Compiler
     {
         $version = self::getCurrentVersion();
 
-        if (!Utils::isWindows()) {
+        if (!is_windows()) {
             if ($this->fileSystem->exists($version . '/gcc-version')) {
                 return $this->fileSystem->read($version . '/gcc-version');
             }
