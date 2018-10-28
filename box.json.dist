@@ -13,7 +13,8 @@
        "kernels",
        "Library",
        "prototypes",
-       "templates"
+       "templates",
+       "vendor"
     ],
     "files": [
         "LICENSE"
