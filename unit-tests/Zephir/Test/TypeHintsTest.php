@@ -11,15 +11,11 @@
 
 namespace Zephir\Test;
 
-use Zephir\Backends\ZendEngine2\Backend as Zend2;
-use Zephir\Backends\ZendEngine3\Backend as Zend3;
+use Zephir\Bootstrap;
 use Zephir\Commands\CommandGenerate;
-use Zephir\Commands\Manager as CommandsManager;
+use Zephir\Commands\Manager;
 use Zephir\Compiler;
-use Zephir\Config;
-use Zephir\Logger;
-use Zephir\Parser;
-use Zephir\Parser\Manager as ParserManager;
+use Zephir\Di\Singleton;
 use Zephir\Support\TestCase;
 use function Zephir\unlink_recursive;
 
@@ -40,6 +36,7 @@ class TypeHintsTest extends TestCase
     public function setUp()
     {
         $this->pwd = getcwd();
+        Singleton::reset();
     }
 
     /**
@@ -67,14 +64,15 @@ class TypeHintsTest extends TestCase
         chdir(ZEPHIRPATH . '/unit-tests/fixtures/typehints');
 
         try {
-            $config = new Config();
-            $config->set('silent', true);
-            $logger = new Logger($config);
-            $backend = new $backend($config);
-            $parser = new ParserManager(new Parser(), $logger);
-            $compiler = new Compiler($config, $logger, $backend, $parser, ZEPHIRPATH);
-            $command = new CommandGenerate(new CommandsManager(), ZEPHIRPATH);
-            $compiler->generate($command);
+            putenv('ZEPHIR_BACKEND=' . $backend);
+            new Bootstrap(ZEPHIRPATH);
+
+            $container = Singleton::getDefault();
+
+            /** @var Compiler $compiler */
+            $compiler = $container->get(Compiler::class);
+
+            $compiler->generate(new CommandGenerate($container->get(Manager::class)));
         } catch (\Exception $e) {
             $this->fail($e->getMessage());
         }
@@ -83,7 +81,7 @@ class TypeHintsTest extends TestCase
     /** @test */
     public function shouldSpecifyCorrectArgumentInformationForZendEngine2()
     {
-        $this->generate(Zend2::class);
+        $this->generate('ZendEngine2');
 
         $this->assertSame(
             implode(PHP_EOL, file('expected2.c', FILE_IGNORE_NEW_LINES)),
@@ -109,7 +107,7 @@ class TypeHintsTest extends TestCase
     /** @test */
     public function shouldSpecifyCorrectArgumentInformationForZendEngine3()
     {
-        $this->generate(Zend3::class);
+        $this->generate('ZendEngine3');
 
         $this->assertSame(
             implode(PHP_EOL, file('expected3.c', FILE_IGNORE_NEW_LINES)),

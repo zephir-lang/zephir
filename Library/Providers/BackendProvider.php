@@ -61,6 +61,11 @@ final class BackendProvider implements ServiceProviderInterface
             /** @var CommandArgumentParser $parser */
             $parser = $container->get(CommandArgumentParser::class);
             $params = $parser->parseArgs(array_merge(['command'], $args));
+        } elseif ($backend = getenv('ZEPHIR_BACKEND')) {
+            // Do not use this feature for typical use case.
+            // Overriding backend using env var provided only for
+            // testing purposes and may be removed in future.
+            $params['backend'] = $backend;
         }
 
         if (isset($params['backend'])) {

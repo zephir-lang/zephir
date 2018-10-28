@@ -48,4 +48,14 @@ final class Singleton
     {
         return self::$default;
     }
+
+    /**
+     * Resets the internal default container.
+     *
+     * @return void
+     */
+    public static function reset()
+    {
+        self::$default = null;
+    }
 }
