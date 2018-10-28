@@ -810,7 +810,7 @@ class Compiler implements InjectionAwareInterface
                 }
             }
 
-            $prototypes = $environment->getPath('prototypes');
+            $prototypes = $environment->getPrototypesPath();
 
             if (is_dir($prototypes) && is_readable($prototypes)) {
                 /**
@@ -818,11 +818,16 @@ class Compiler implements InjectionAwareInterface
                  * @var $file \DirectoryIterator
                  */
                 foreach (new \DirectoryIterator($prototypes) as $file) {
-                    if (!$file->isDir()) {
-                        $extension = str_replace('.php', '', $file);
-                        if (!extension_loaded($extension)) {
-                            require_once $file->getRealPath();
-                        }
+                    if ($file->isDir() || $file->isDot()) {
+                        continue;
+                    }
+
+                    // Do not use $file->getRealPath() because it does not work inside phar
+                    $realPath =  $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
+
+                    $extension = $file->getBasename(".{$file->getExtension()}");
+                    if (!extension_loaded($extension)) {
+                        require_once $realPath;
                     }
                 }
             }

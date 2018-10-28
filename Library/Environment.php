@@ -83,9 +83,10 @@ final class Environment implements InjectionAwareInterface
     protected function registerPaths()
     {
         $this->getContainer()->share('paths', (object) [
-            'base'      => $this->getPath(),
-            'templates' => $this->getPath('templates'),
-            'kernels'   => $this->getPath('kernels'),
+            'base'       => $this->getPath(),
+            'templates'  => $this->getPath('templates'),
+            'kernels'    => $this->getPath('kernels'),
+            'prototypes' => $this->getPath('prototypes'),
         ]);
     }
 
@@ -122,6 +123,19 @@ final class Environment implements InjectionAwareInterface
     public function getKernelsPath($path = '')
     {
         $basePath = $this->getContainer()->get('paths')->kernels;
+
+        return $basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * Get the path to the prototypes.
+     *
+     * @param  string $path
+     * @return string
+     */
+    public function getPrototypesPath($path = '')
+    {
+        $basePath = $this->getContainer()->get('paths')->prototypes;
 
         return $basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
