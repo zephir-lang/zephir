@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use Zephir\Di\Singleton;
 use Zephir\Fcall\FcallAwareInterface;
 use Zephir\Fcall\FcallManagerInterface;
 
@@ -55,35 +56,40 @@ abstract class BaseBackend implements FcallAwareInterface
     }
 
     /**
-     * Resolves the path to the source kernel files of the backend
-     * @return string Absolute path to kernel files
+     * Resolves the path to the source kernel files of the backend.
+     *
+     * @return string
      */
     public function getInternalKernelPath()
     {
-        return realpath(__DIR__ . '/../kernels/' . $this->name);
+        return Singleton::getDefault()->get(Environment::class)->getKernelsPath($this->name);
     }
 
     /**
-     * Resolves the path to the source template files of the backend
-     * @return string Absolute path to template files
+     * Resolves the path to the source template files of the backend.
+     *
+     * @return string
      */
     public function getInternalTemplatePath()
     {
-        return realpath(__DIR__ . '/../templates/' . $this->name);
+        return Singleton::getDefault()->get(Environment::class)->getTemplatesPath($this->name);
     }
 
     /**
-     * Resolves the path to the source template file of the backend
+     * Resolves the path to the source template file of the backend.
      *
-     * @param string $filename
-     * @return string Absolute path to template file
+     * @param  string $filename
+     * @return string
      */
     public function getTemplateFileContents($filename)
     {
-        $filepath = realpath(rtrim($this->config->get('templatepath', 'backend'), '/').'/'.$this->name.'/'.$filename);
-        if (!file_exists($filepath)) {
-            $filepath = realpath(__DIR__ . '/../templates/'.$this->name.'/'.$filename);
+        $templatepath = rtrim($this->config->get('templatepath', 'backend'), '\\/');
+        if (empty($templatepath)) {
+            $templatepath = Singleton::getDefault()->get(Environment::class)->getTemplatesPath();
         }
+
+        $filepath = $templatepath . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . $filename;
+
         return file_get_contents($filepath);
     }
 
