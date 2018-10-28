@@ -11,22 +11,28 @@
 
 namespace Zephir;
 
-use Zephir\Parser\ParseException;
-use Zephir\Compiler\FileInterface;
 use Zephir\Compiler\CompilerException;
+use Zephir\Compiler\FileInterface;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Parser\ParseException;
 
 /**
- * CompilerFile
+ * Zephir\CompilerFile
  *
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
  *
  * @package Zephir
  */
-class CompilerFile implements FileInterface
+class CompilerFile implements FileInterface, InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     /**
      * Namespace of the
      */
@@ -87,6 +93,8 @@ class CompilerFile implements FileInterface
      */
     public function __construct($className, $filePath, Config $config, Logger $logger)
     {
+        $this->__DiInject();
+
         $this->_className = $className;
         $this->_filePath = $filePath;
         $this->_headerCBlocks = array();
@@ -161,8 +169,10 @@ class CompilerFile implements FileInterface
      */
     public function genIR(Compiler $compiler)
     {
+        $version = $this->container->get(Version::class);
         $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->_filePath));
-        $compilePath = DIRECTORY_SEPARATOR . Compiler::getCurrentVersion() . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
+
+        $compilePath = DIRECTORY_SEPARATOR . $version . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
 
         $changed = false;

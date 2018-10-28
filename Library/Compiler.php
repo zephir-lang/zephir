@@ -11,14 +11,16 @@
 
 namespace Zephir;
 
-use Zephir\Parser\Manager;
-use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
-use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\HardDisk as FileSystem;
+use Zephir\Parser\Manager;
+use Zephir\Parser\ParseException;
 
 /**
  * Zephir\Compiler
@@ -27,9 +29,11 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  *
  * @package Zephir
  */
-class Compiler
+class Compiler implements InjectionAwareInterface
 {
-    const VERSION = '0.11.2';
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
 
     public $parserCompiled = false;
 
@@ -120,11 +124,6 @@ class Compiler
     protected static $loadedPrototypes = false;
 
     /**
-     * @var string
-     */
-    protected static $currentVersion;
-
-    /**
      * @var array
      */
     protected $extraFiles = array();
@@ -153,12 +152,13 @@ class Compiler
      * @param Logger      $logger
      * @param BaseBackend $backend
      * @param Manager     $manager
-     * @param string      $baseDir
      *
      * @throws Exception
      */
-    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager, $baseDir)
+    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager)
     {
+        $this->__DiInject();
+
         $this->config = $config;
         $this->logger = $logger;
         $this->fileSystem = new FileSystem();
@@ -168,17 +168,6 @@ class Compiler
         $this->checkRequires();
 
         $this->parserManager = $manager;
-        $this->baseDir = $baseDir;
-    }
-
-    /**
-     * Get rhe Zephir base direcrory.
-     *
-     * @return string
-     */
-    public function getBaseDir()
-    {
-        return $this->baseDir;
     }
 
     /**
@@ -598,40 +587,6 @@ class Compiler
     }
 
     /**
-     * Returns the current version + the ident if available
-     *
-     * @return string
-     */
-    public static function getCurrentVersion()
-    {
-        $version = '$Id$';
-        if (strlen($version) !== 4) {
-            return self::VERSION . '-' . substr($version, 0, 10);
-        }
-
-        if (is_windows()) {
-            return self::VERSION;
-        }
-
-        if (self::$currentVersion === null) {
-            if (file_exists(__DIR__ . '/../.git')) {
-                exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
-                if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
-                    self::$currentVersion = substr($xversion[0], 0, 10);
-                } else {
-                    self::$currentVersion = false;
-                }
-            }
-        }
-
-        if (self::$currentVersion) {
-            return self::VERSION . '-' . self::$currentVersion;
-        }
-
-        return self::VERSION;
-    }
-
-    /**
      * Returns GCC flags for current compilation
      *
      * @param boolean $development
@@ -664,7 +619,7 @@ class Compiler
      */
     public function getPhpIncludeDirs()
     {
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
         if (!is_windows()) {
             $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
@@ -679,7 +634,7 @@ class Compiler
     public function preCompileHeaders()
     {
         if (!is_windows()) {
-            $version = self::getCurrentVersion();
+            $version = $this->container->get(Version::class);
             $phpIncludes = $this->getPhpIncludeDirs();
 
             foreach (new \DirectoryIterator('ext/kernel') as $file) {
@@ -839,11 +794,14 @@ class Compiler
             $this->setExtensionGlobals($globals);
         }
 
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+
         /**
          * Load function optimizers
          */
         if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir($this->baseDir . '/Library/Optimizers/FunctionCall');
+            FunctionCall::addOptimizerDir($environment->getPath('Library/Optimizers/FunctionCall'));
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {
@@ -852,12 +810,14 @@ class Compiler
                 }
             }
 
-            if (is_dir($this->baseDir . '/prototypes') && is_readable($this->baseDir . '/prototypes')) {
+            $prototypes = $environment->getPath('prototypes');
+
+            if (is_dir($prototypes) && is_readable($prototypes)) {
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
                  */
-                foreach (new \DirectoryIterator($this->baseDir . '/prototypes') as $file) {
+                foreach (new \DirectoryIterator($prototypes) as $file) {
                     if (!$file->isDir()) {
                         $extension = str_replace('.php', '', $file);
                         if (!extension_loaded($extension)) {
@@ -978,7 +938,7 @@ class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
         /**
          * When a new file is added or removed we need to run configure again
@@ -1122,7 +1082,9 @@ class Compiler
             $this->generate($command);
         }
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger, $command, $this->baseDir);
+        $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $documentator->setContainer($this->container);
+
         $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
         $documentator->build();
     }
@@ -2038,7 +2000,7 @@ class Compiler
             throw new Exception("Template php_project.h doesn't exist");
         }
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
@@ -2049,7 +2011,7 @@ class Compiler
             '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
             '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
             '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => $version,
+            '%PROJECT_ZEPVERSION%'       => (string) $version,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         );
@@ -2348,15 +2310,15 @@ class Compiler
             $this->fileSystem->initialize();
         }
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
-        if (!$this->fileSystem->exists($version)) {
+        if (!$this->fileSystem->exists((string) $version)) {
             if (!$this->checkIfPhpized()) {
                 $this->logger->output(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
-            $this->fileSystem->makeDirectory($version);
+            $this->fileSystem->makeDirectory((string) $version);
         }
 
         return $namespace;
@@ -2369,7 +2331,7 @@ class Compiler
      */
     protected function getGccVersion()
     {
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
         if (!is_windows()) {
             if ($this->fileSystem->exists($version . '/gcc-version')) {

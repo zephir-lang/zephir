@@ -11,16 +11,24 @@
 
 namespace Zephir\FileSystem;
 
-use Zephir\Compiler;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
+use Zephir\Version;
 use function Zephir\unlink_recursive;
 
 /**
- * HardDisk
+ * Zephir\FileSystem\HardDisk
  *
- * Uses the standard hard-disk as filesystem for temporary operations
+ * Uses the standard hard-disk as filesystem for temporary operations.
+ *
+ * @package Zephir\FileSystem
  */
-class HardDisk
+class HardDisk implements InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     protected $basePath;
 
     protected $initialized = false;
@@ -32,6 +40,8 @@ class HardDisk
      */
     public function __construct($basePath = '.temp/')
     {
+        $this->__DiInject();
+
         $this->basePath = $basePath;
     }
 
@@ -178,7 +188,9 @@ class HardDisk
             return hash_file($algorithm, $path);
         } else {
             $changed = false;
-            $cacheFile = $this->basePath . Compiler::getCurrentVersion() . DIRECTORY_SEPARATOR . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
+            $version = $this->container->get(Version::class);
+
+            $cacheFile = $this->basePath . $version . DIRECTORY_SEPARATOR . str_replace([DIRECTORY_SEPARATOR, ':', '/'], '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 file_put_contents($cacheFile, $hash);
