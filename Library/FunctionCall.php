@@ -12,6 +12,7 @@
 namespace Zephir;
 
 use Zephir\Compiler\CompilerException;
+use Zephir\Di\Singleton;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
@@ -232,10 +233,13 @@ class FunctionCall extends Call
              */
             foreach (self::$_optimizerDirectories as $directory) {
                 $path = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
-                if (file_exists($path)) {
-                    require_once $path;
+                $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
 
-                    $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+                if (file_exists($path)) {
+                    if (!class_exists($className, false)) {
+                        require_once $path;
+                    }
+
                     if (!class_exists($className, false)) {
                         throw new Exception("Class {$className} cannot be loaded");
                     }
@@ -245,6 +249,8 @@ class FunctionCall extends Call
                     if (!($optimizer instanceof OptimizerAbstract)) {
                         throw new Exception("Class {$className} must be instance of OptimizerAbstract");
                     }
+
+                    $optimizer->setContainer(Singleton::getDefault());
 
                     break;
                 }
