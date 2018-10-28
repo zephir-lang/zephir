@@ -37,15 +37,15 @@ final class Bootstrap
     public function __construct($basePath)
     {
         $this->serviceRegistrator = new ServiceRegistrator($basePath);
-        $this->registerInternalApplication();
+        $this->registerCompiller();
     }
 
     /**
-     * Register internal application.
+     * Register Zephir compiller.
      *
      * @return void
      */
-    protected function registerInternalApplication()
+    protected function registerCompiller()
     {
         $this->serviceRegistrator->registerService(
             new CompillerProvider()

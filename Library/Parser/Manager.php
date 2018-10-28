@@ -48,11 +48,10 @@ class Manager
     /**
      * Manager constructor.
      *
-     * @param Parser $parser     The Zephir Parser
-     * @param Logger $logger     The Zephir Logger
-     * @param array  $parameters Additional parameters [Optional]
+     * @param Parser $parser The Zephir Parser
+     * @param Logger $logger The Zephir Logger
      */
-    public function __construct(Parser $parser, Logger $logger, array $parameters = [])
+    public function __construct(Parser $parser, Logger $logger)
     {
         $this->parser = $parser;
         $this->logger = $logger;
