@@ -11,13 +11,9 @@
 
 namespace Zephir\Test;
 
-use Zephir\Backends\ZendEngine2\Backend as Zend2;
-use Zephir\Backends\ZendEngine3\Backend as Zend3;
+use Zephir\Bootstrap;
 use Zephir\Compiler;
-use Zephir\Config;
-use Zephir\Logger;
-use Zephir\Parser;
-use Zephir\Parser\Manager;
+use Zephir\Di\Singleton;
 use Zephir\Support\TestCase;
 use function Zephir\unlink_recursive;
 
@@ -38,6 +34,7 @@ class LifeCycleTest extends TestCase
     public function setUp()
     {
         $this->pwd = getcwd();
+        Singleton::reset();
     }
 
     /**
@@ -61,12 +58,14 @@ class LifeCycleTest extends TestCase
         chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
 
         try {
-            $config = new Config();
-            $logger = new Logger($config);
-            $backend = new $backend($config);
-            $parser = new Parser();
-            $manager = new Manager($parser, $logger);
-            $compiler = new Compiler($config, $logger, $backend, $manager, ZEPHIRPATH);
+            putenv('ZEPHIR_BACKEND=' . $backend);
+            new Bootstrap(ZEPHIRPATH);
+
+            $container = Singleton::getDefault();
+
+            /** @var Compiler $compiler */
+            $compiler = $container->get(Compiler::class);
+
             $compiler->createProjectFiles('lifecycle');
         } catch (\Exception $e) {
             $this->fail($e->getMessage());
@@ -76,7 +75,7 @@ class LifeCycleTest extends TestCase
     /** @test */
     public function shouldCreateProjectFilesUsingZendEngine2()
     {
-        $this->createProject(Zend2::class);
+        $this->createProject('ZendEngine2');
 
         $this->assertSame(
             implode(PHP_EOL, file('expected2.c', FILE_IGNORE_NEW_LINES)),
@@ -87,7 +86,7 @@ class LifeCycleTest extends TestCase
     /** @test */
     public function shouldCreateProjectFilesUsingZendEngine3()
     {
-        $this->createProject(Zend3::class);
+        $this->createProject('ZendEngine3');
 
         $this->assertSame(
             implode(PHP_EOL, file('expected3.c', FILE_IGNORE_NEW_LINES)),

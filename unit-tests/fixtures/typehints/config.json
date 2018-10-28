@@ -42,5 +42,6 @@
     "description": "Description test for<br\/>TypeHints Test Extension",
     "author": "Zephir Team",
     "version": "1.0.0",
-    "verbose": true
+    "verbose": false,
+    "silent": true
 }
