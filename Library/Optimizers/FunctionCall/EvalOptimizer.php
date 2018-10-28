@@ -15,7 +15,6 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
-use Zephir\Environment;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
@@ -63,14 +62,8 @@ class EvalOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        /** @var Environment $environment */
-        $environment = $this->getContainer()->get(Environment::class);
-
         $evalContext = str_replace(
-            [
-                $environment->getPath() . '\\',
-                $environment->getPath() . '/',
-            ],
+            [getcwd() . '\\', getcwd() . '/'],
             '',
             $expression['file'] . ':' . $expression['line']
         );
