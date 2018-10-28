@@ -11,54 +11,52 @@
 
 namespace Zephir\Commands;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
 use SplObjectStorage;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use Zephir\CommandArgumentParser;
-use Zephir\Exception\ValidationException;
-use Zephir\Exception\OutOfBoundsException;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
+use Zephir\Environment;
 use Zephir\Exception\BadMethodCallException;
+use Zephir\Exception\OutOfBoundsException;
+use Zephir\Exception\ValidationException;
 
 /**
  * Zephir\Commands\Manager
  *
  * @package Zephir\Commands
  */
-class Manager extends SplObjectStorage
+class Manager extends SplObjectStorage implements InjectionAwareInterface
 {
-    private $similarSounds = [];
-
-    /**
-     * Command argument parser
-     *
-     * @var CommandArgumentParser
-     */
-    private $argumentParser;
-
-    /**
-     * Manager constructor.
-     */
-    public function __construct()
-    {
-        $this->argumentParser = new CommandArgumentParser();
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
     }
+
+    private $similarSounds = [];
 
     /**
      * Registers builtin commands.
      *
-     * @param  string $baseDir The Zephir base direcrory.
      * @return void
      *
      * @throws \ReflectionException
      */
-    public function registerBuiltinCommands($baseDir)
+    public function registerBuiltinCommands()
     {
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__)));
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+        $environment->getPath();
+
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+            $this->container->get(Environment::class)->getPath('Library/Commands')
+        ));
+
         $iterator->rewind();
 
         while ($iterator->valid()) {
             $fileInfo = $iterator->current();
+
             if ($fileInfo->isDir() || $fileInfo->getExtension() !== 'php') {
                 $iterator->next();
                 continue;
@@ -81,7 +79,9 @@ class Manager extends SplObjectStorage
                 continue;
             }
 
-            $command = $command->newInstanceArgs([$this, $baseDir]);
+            $command = $command->newInstanceArgs([$this, $this->container]);
+
+            /** @var CommandAbstract $command */
             $data = [
                 'usage'       => $command->getUsage(),
                 'description' => $command->getDescription(),
@@ -105,16 +105,6 @@ class Manager extends SplObjectStorage
         $this->validate($object);
 
         return $object->getCommand();
-    }
-
-    /**
-     * Gets Command argument parser
-     *
-     * @return CommandArgumentParser
-     */
-    public function getCommandArgumentParser()
-    {
-        return $this->argumentParser;
     }
 
     /**

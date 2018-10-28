@@ -10,22 +10,27 @@
  */
 namespace Zephir\Commands;
 
-use Zephir\Config;
-use Zephir\Logger;
-use Zephir\Parser;
+use Psr\Container\ContainerInterface;
+use Zephir\CommandArgumentParser;
 use Zephir\Compiler;
-use Zephir\BaseBackend;
-use Zephir\Exception\IllegalStateException;
+use Zephir\Config;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
+use Zephir\Logger;
 
 /**
- * CommandAbstract
+ * Zephir\Commands\CommandAbstract
  *
  * Provides a superclass for any command.
  *
  * @package Zephir\Commands
  */
-abstract class CommandAbstract implements CommandInterface
+abstract class CommandAbstract implements CommandInterface, InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     private $parameters = [];
 
     /**
@@ -43,13 +48,14 @@ abstract class CommandAbstract implements CommandInterface
     /**
      * CommandAbstract constructor.
      *
-     * @param Manager $commandsManager
-     * @param string  $baseDir
+     * @param Manager                 $commandsManager
+     * @param ContainerInterface|null $container
      */
-    public function __construct(Manager $commandsManager, $baseDir)
+    public function __construct(Manager $commandsManager, ContainerInterface $container = null)
     {
+        $this->__DiInject($container);
+
         $this->commandsManager = $commandsManager;
-        $this->baseDir = $baseDir;
     }
 
     /**
@@ -98,7 +104,8 @@ abstract class CommandAbstract implements CommandInterface
 
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
-            $parser = $this->getCommandsManager()->getCommandArgumentParser();
+            /** @var CommandArgumentParser $parser */
+            $parser = $this->getContainer()->get(CommandArgumentParser::class);
             $params = $parser->parseArgs(array_merge(['command'], $commandArgs));
         }
 
@@ -113,7 +120,9 @@ abstract class CommandAbstract implements CommandInterface
     public function hasHelpOption()
     {
         $params = $this->parseArguments();
-        $parser = $this->getCommandsManager()->getCommandArgumentParser();
+
+        /** @var CommandArgumentParser $parser */
+        $parser = $this->getContainer()->get(CommandArgumentParser::class);
 
         return $parser->hasHelpOption($params);
     }
@@ -124,29 +133,15 @@ abstract class CommandAbstract implements CommandInterface
      * @param  Config $config
      * @param  Logger $logger
      * @return void
-     *
-     * @throws \Zephir\Exception
      */
     public function execute(Config $config, Logger $logger)
     {
-        $params = $this->parseArguments();
-
         if ($this->hasHelpOption()) {
             echo $this->getSynopsis();
             return;
         }
 
-        $backend = empty($params['backend']) ? BaseBackend::getActiveBackend() : $params['backend'];
-        $className = "Zephir\\Backends\\{$backend}\\Backend";
-
-        if (!class_exists($className)) {
-            throw new IllegalStateException("Backend {$backend} doesn't exist.");
-        }
-
-        $backend = new $className($config);
-
-        $parserManager = new Parser\Manager(new Parser(), $logger, $params);
-        $compiler = new Compiler($config, $logger, $backend, $parserManager, $this->baseDir);
+        $compiler = $this->container->get(Compiler::class);
 
         $command = $this->getCommand();
         $compiler->$command($this);
