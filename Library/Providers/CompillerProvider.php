@@ -13,7 +13,12 @@ namespace Zephir\Providers;
 
 use League\Container\Container;
 use Psr\Container\ContainerInterface;
+use Zephir\BaseBackend;
+use Zephir\Compiler;
+use Zephir\Config;
 use Zephir\Di\ServiceProviderInterface;
+use Zephir\Logger;
+use Zephir\Parser\Manager;
 
 /**
  * Zephir\Providers\CompillerProvider
@@ -30,6 +35,20 @@ final class CompillerProvider implements ServiceProviderInterface
      */
     public function register(ContainerInterface $container)
     {
+        $container->add(
+            Compiler::class,
+            function () use ($container) {
+                $compiller = new Compiler(
+                    $container->get(Config::class),
+                    $container->get(Logger::class),
+                    $container->get(BaseBackend::class),
+                    $container->get(Manager::class)
+                );
 
+                $compiller->setContainer($container);
+
+                return $compiller;
+            }
+        );
     }
 }
