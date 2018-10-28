@@ -16,8 +16,10 @@ use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Di\ServiceProviderInterface;
 use Zephir\Exception\InvalidArgumentException;
+use Zephir\Providers\BackendProvider;
 use Zephir\Providers\CommandsManagerProvider;
 use Zephir\Providers\ConfigProvider;
+use Zephir\Providers\ParserManagerProvider;
 
 /**
  * Zephir\ServiceRegistrator
@@ -67,6 +69,11 @@ final class ServiceRegistrator implements InjectionAwareInterface
     protected function registerBaseBindings()
     {
         $container = $this->getContainer();
+
+        $container->share(Version::class, Version::class);
+        $container->share(Parser::class, Parser::class);
+        $container->share(CommandArgumentParser::class, CommandArgumentParser::class);
+
         $container->share(Logger::class, function () use ($container) {
             return new Logger($container->get(Config::class));
         });
@@ -80,6 +87,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
     protected function registerBaseServices()
     {
         $this->registerService(new ConfigProvider());
+        $this->registerService(new ParserManagerProvider());
+        $this->registerService(new BackendProvider());
         $this->registerService(new CommandsManagerProvider());
     }
 
