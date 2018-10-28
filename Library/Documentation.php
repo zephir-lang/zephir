@@ -17,6 +17,7 @@ use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\File;
 use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Documentation Generator
@@ -215,54 +216,67 @@ class Documentation implements InjectionAwareInterface
      *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
-     * @param $themeConfig
-     * @param Config $config
-     * @param CommandInterface $command
+     * @param  array            $themeConfig
+     * @param  Config           $config
+     * @param  CommandInterface $command
      * @return null|string
+     *
+     * @throws InvalidArgumentException
      * @throws ConfigException
-     * @throws Exception
      */
     private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
     {
-
         // check if there are additional theme paths in the config
         $themeDirectoriesConfig = $config->get("theme-directories", "api");
         if ($themeDirectoriesConfig) {
             if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
             } else {
-                throw new ConfigException("invalid value for theme config 'theme-directories'");
+                throw new InvalidArgumentException("Invalid value for theme config 'theme-directories'");
             }
         } else {
-            $themesDirectories = array();
+            $themesDirectories = [];
         }
 
         /** @var Environment $environment */
         $environment = $this->container->get(Environment::class);
 
+        echo "Add: ", $environment->getPath('templates/Api/themes'), PHP_EOL;
         $themesDirectories[] = $environment->getPath('templates/Api/themes');
         $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command
         $themePath = $command->getParameter("theme-path");
-        if (null!==$themePath) {
+        if (null !== $themePath) {
+            echo $themePath, PHP_EOL;
             if (file_exists($themePath) && is_dir($themePath)) {
                 return $themePath;
             } else {
-                throw new Exception("Invalid value for option 'theme-path' : the theme '$themePath' was not found or is not a valid theme.");
+                throw new InvalidArgumentException(
+                    sprintf(
+                        "Invalid value for option 'theme-path': the theme '%s' was not found or is not a valid theme.",
+                        $themePath
+                    )
+                );
             }
         }
 
         if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
-            throw new ConfigException("There is no theme neither in the the theme config nor as a command line argument");
+            throw new ConfigException(
+                'There is no theme neither in the the theme config nor as a command line argument'
+            );
         }
 
         return $this->findThemePathByName($themeConfig["name"]);
     }
 
     /**
-     * search if a theme by its name, return the absolute path to it if it exists
-     * @param $name
+     * Search a theme by its name.
+     *
+     * Return the path to it if it exists. Otherwise NULL.
+     *
+     * @param  string $name
+     * @return string|null
      */
     public function findThemePathByName($name)
     {
@@ -270,9 +284,12 @@ class Documentation implements InjectionAwareInterface
         $path = null;
 
         foreach ($this->themesDirectories as $themeDir) {
-            $dir = rtrim($themeDir, "/") . "/";
-            $path = realpath($dir . $name);
-            if ($path) {
+            $path = rtrim($themeDir, '\\/') . DIRECTORY_SEPARATOR . $name;
+            if (strpos($path, 'phar://') !== 0) {
+                $path = realpath($path);
+            }
+
+            if (is_dir($path)) {
                 break;
             }
         }
