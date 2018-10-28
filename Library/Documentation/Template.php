@@ -183,7 +183,7 @@ class Template
 
     private function __getTemplatePath($fileName)
     {
-        if ("/" == $fileName{0}) {
+        if ("/" == $fileName{0} || strpos($fileName, 'phar://') === 0) {
             return $fileName;
         }
 
