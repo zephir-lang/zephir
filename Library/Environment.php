@@ -58,17 +58,12 @@ final class Environment implements InjectionAwareInterface
      */
     public function setBasePath($basePath)
     {
-        $message=<<<MSG
-Unable to locate Zephir installation path.
-
-Double check the Zephir installation. When installing from sources,
-it is enough to specify ZEPHIRDIR environment variable to the proper
-Zephir installation path.
-
-Current ZEPHIRDIR value: "%s"
-The base path used by the application is: "%s"
-
-MSG;
+        $message = 'Unable to locate Zephir installation path.' . PHP_EOL . PHP_EOL .
+            'Double check the Zephir installation. When installing from sources,' . PHP_EOL .
+            'it is enough to specify ZEPHIRDIR environment variable to the proper' . PHP_EOL .
+            'Zephir installation path.' . PHP_EOL . PHP_EOL .
+            'Current ZEPHIRDIR value is: "%s"' . PHP_EOL .
+            'The base path used by the Zephir compiler is: "%s"';
 
         if (!is_string($basePath) || !is_dir($basePath) || !file_exists($basePath)) {
             throw new InvalidArgumentException(
@@ -88,7 +83,9 @@ MSG;
     protected function registerPaths()
     {
         $this->getContainer()->share('paths', (object) [
-            'base' => $this->getPath(),
+            'base'      => $this->getPath(),
+            'templates' => $this->getPath('templates'),
+            'kernels'   => $this->getPath('kernels'),
         ]);
     }
 
@@ -101,5 +98,31 @@ MSG;
     public function getPath($path = '')
     {
         return $this->basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * Get the path to the templates.
+     *
+     * @param  string $path
+     * @return string
+     */
+    public function getTemplatesPath($path = '')
+    {
+        $basePath = $this->getContainer()->get('paths')->templates;
+
+        return $basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * Get the path to the kernels.
+     *
+     * @param  string $path
+     * @return string
+     */
+    public function getKernelsPath($path = '')
+    {
+        $basePath = $this->getContainer()->get('paths')->kernels;
+
+        return $basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
