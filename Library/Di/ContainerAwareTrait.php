@@ -14,6 +14,7 @@ namespace Zephir\Di;
 use League\Container\Container;
 use Psr\Container\ContainerInterface;
 use Zephir\Exception\ContainerException;
+use League\Container\ReflectionContainer;
 
 /**
  * Zephir\Di\ContainerAwareTrait
@@ -44,10 +45,10 @@ trait ContainerAwareTrait
     public function __construct(ContainerInterface $container = null)
     {
         if ($container == null) {
-            $container = self::getDefaultContainer() ?: new Container();
+            $container = Singleton::getDefault() ?: $this->createContainer();
         }
 
-        self::setDefault($container);
+        Singleton::setDefault($container);
         $this->setContainer($container);
     }
 
@@ -80,24 +81,13 @@ trait ContainerAwareTrait
         $this->container = $container;
     }
 
-    /**
-     * Return the latest container created.
-     *
-     * @return ContainerInterface|Container|null
-     */
-    public function getDefaultContainer()
+    protected function createContainer(Container $container = null)
     {
-        return self::$default;
-    }
+        $container = $container ?: new Container();
 
-    /**
-     * Set a default dependency injection container to be obtained into static methods.
-     *
-     * @param  ContainerInterface|Container $container
-     * @return void
-     */
-    public static function setDefault(ContainerInterface $container)
-    {
-        self::$default = $container;
+        // Required to enable auto wiring
+        $container->delegate(new ReflectionContainer());
+
+        return $container;
     }
 }
