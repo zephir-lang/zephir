@@ -605,25 +605,27 @@ class Compiler
     public static function getCurrentVersion()
     {
         $version = '$Id$';
-        if (strlen($version) != 4) {
+        if (strlen($version) !== 4) {
             return self::VERSION . '-' . substr($version, 0, 10);
         }
 
-        if (!is_windows()) {
-            if (self::$currentVersion === null) {
-                if (file_exists(__DIR__ . '/../.git')) {
-                    exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
-                    if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
-                        self::$currentVersion = substr($xversion[0], 0, 10);
-                    } else {
-                        self::$currentVersion = false;
-                    }
+        if (is_windows()) {
+            return self::VERSION;
+        }
+
+        if (self::$currentVersion === null) {
+            if (file_exists(__DIR__ . '/../.git')) {
+                exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
+                if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
+                    self::$currentVersion = substr($xversion[0], 0, 10);
+                } else {
+                    self::$currentVersion = false;
                 }
             }
+        }
 
-            if (self::$currentVersion) {
-                return self::VERSION . '-' . self::$currentVersion;
-            }
+        if (self::$currentVersion) {
+            return self::VERSION . '-' . self::$currentVersion;
         }
 
         return self::VERSION;

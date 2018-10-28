@@ -27,3 +27,4 @@ phpunit.xml
 phpcs.xml
 
 zephir.phar
+box.json

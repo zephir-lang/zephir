@@ -1,7 +1,14 @@
 {
     "main": "compiler.php",
     "output": "zephir.phar",
-    "chmod": "0755",
+    "banner": [
+        "This file is part of the Zephir.",
+        "",
+        "(c) Zephir Team <team@zephir-lang.com>",
+        "",
+        "For the full copyright and license information, please view the LICENSE",
+        "file that was distributed with this source code."
+    ],
     "directories": [
        "kernels",
        "Library",
@@ -30,10 +37,15 @@
         },
         {
             "name": "*.php",
-            "exclude": ["Tests"],
+            "exclude": [
+                "doc",
+                "test",
+                "Tests",
+                "tests"
+            ],
             "in": "vendor"
         }
     ],
-    "git-version": "git_tag",
-    "stub": true
+    "replacement-sigil": "$",
+    "git-commit-short": "Id"
 }

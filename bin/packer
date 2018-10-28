@@ -50,14 +50,14 @@ if (empty($box)) {
     fwrite(
         STDERR,
         'To use this script you need to install kherge/box.' . PHP_EOL . PHP_EOL .
-        'You can learn all about kherge/box on https://github.com/box-project/box2/.' . PHP_EOL
+        'You can learn all about kherge/box on https://github.com/humbug/box/.' . PHP_EOL
     );
 
     chdir($cwd);
     exit(1);
 }
 
-passthru("php -d phar.readonly=0 {$box} build", $status);
+passthru("php -d phar.readonly=0 {$box} compile", $status);
 
 chdir($cwd);
 exit($status);

@@ -32,6 +32,8 @@ env:
     - REPORT_COVERAGE=1
     - PHPUNIT_DONT_EXIT=0
     - PHPUNIT_CONF=phpunit.xml.dist
+    - BOX_VERSION=3.1.2
+    - PATH="${HOME}/bin:${PATH}"
 
 matrix:
   fast_finish: true
@@ -105,6 +107,17 @@ jobs:
               unit-tests/phpunit \
               -c ${PHPUNIT_CONF} \
               --testsuite "Extension Test Suite"
+    - stage: Packaging Test
+      php: 7.2
+      env:
+        - REPORT_COVERAGE=0
+      script:
+        - mkdir -p ${HOME}/bin
+        - wget "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" -O "${HOME}/bin/box"
+        - chmod +x "${HOME}/bin/box"
+        - ./bin/packer
+        - ./zephir.phar version
+        - ./zephir.phar help
     - stage: Benchmark
       php: 7.2
       env:
