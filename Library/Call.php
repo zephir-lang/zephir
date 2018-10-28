@@ -15,9 +15,11 @@ use Zephir\Compiler\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**
- * Call
+ * Zephir\Call
  *
  * Base class for common functionality in functions/calls
+ *
+ * @package Zephir
  */
 class Call
 {

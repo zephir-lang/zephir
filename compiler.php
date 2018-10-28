@@ -15,8 +15,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $bootstrap = new Bootstrap(
     strpos(__DIR__, 'phar://') === 0 ?
-        (getenv('ZEPHIRDIR') ?: __DIR__) :
-        __DIR__
+    (getenv('ZEPHIRDIR') ?: __DIR__) :
+    __DIR__
 );
 
 $bootstrap->execute();
