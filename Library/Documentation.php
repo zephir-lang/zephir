@@ -12,51 +12,41 @@
 namespace Zephir;
 
 use Zephir\Commands\CommandInterface;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\File;
-use Zephir\Documentation\Theme;
 use Zephir\Documentation\NamespaceAccessor;
+use Zephir\Documentation\Theme;
 
 /**
  * Documentation Generator
  */
-class Documentation
+class Documentation implements InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     protected $outputDirectory;
 
-    /**
-     * @var Config
-     */
+    /** @var Config */
     protected $config;
 
-    /**
-     * @var CompilerFile[]
-     */
+    /** @var CompilerFile[] */
     protected $classes;
 
-    /**
-     * @var Theme
-     */
+    /** @var Theme */
     protected $theme;
 
-    /**
-     * @var Logger
-     */
+    /** @var Logger */
     protected $logger;
 
-    /**
-     * @var CommandInterface
-     */
+    /** @var CommandInterface */
     protected $command;
 
     protected $baseUrl;
 
     protected $themesDirectories;
-
-    /**
-     * The Zephir base direcrory.
-     * @var string
-     */
-    private $baseDir;
 
     /**
      * Documentation constructor.
@@ -65,20 +55,20 @@ class Documentation
      * @param Config           $config
      * @param Logger           $logger
      * @param CommandInterface $command
-     * @param string           $baseDir
      *
      * @throws ConfigException
      * @throws Exception
      */
-    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command, $baseDir)
+    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command)
     {
+        $this->__DiInject();
+
         ksort($classes);
 
         $this->config = $config;
         $this->classes = $classes;
         $this->logger  = $logger;
         $this->command = $command;
-        $this->baseDir = $baseDir;
 
         $themeConfig = $config->get("theme", "api");
 
@@ -246,9 +236,12 @@ class Documentation
         } else {
             $themesDirectories = array();
         }
-        $themesDirectories[] = $this->baseDir . "/templates/Api/themes";
-        $this->themesDirectories = $themesDirectories;
 
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+
+        $themesDirectories[] = $environment->getPath('templates/Api/themes');
+        $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command
         $themePath = $command->getParameter("theme-path");
@@ -316,10 +309,11 @@ class Documentation
         }
 
 
-        if ($this->baseUrl) {
-            $sitemapFile = new File\Sitemap($this->baseDir, $this->baseUrl, $this->classes, $byNamespace);
-            $this->theme->drawFile($sitemapFile);
-        }
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+
+        $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
+        $this->theme->drawFile($sitemapFile);
 
         // namespaces files (namespaces.html)
         $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
