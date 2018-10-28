@@ -14,6 +14,7 @@ namespace Zephir\Commands;
 use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Compiler;
+use Zephir\Version;
 
 /**
  * Zephir\Commands\CommandVersion
@@ -67,6 +68,8 @@ class CommandVersion extends CommandAbstract
             return;
         }
 
-        echo Compiler::getCurrentVersion(), PHP_EOL;
+        $version = $this->getContainer()->get(Version::class);
+
+        echo $version, PHP_EOL;
     }
 }

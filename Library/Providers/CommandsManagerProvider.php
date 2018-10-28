@@ -15,7 +15,6 @@ use League\Container\Container;
 use Psr\Container\ContainerInterface;
 use Zephir\Commands\Manager;
 use Zephir\Di\ServiceProviderInterface;
-use Zephir\Environment;
 
 /**
  * Zephir\Providers\CommandsManagerProvider
@@ -33,11 +32,8 @@ final class CommandsManagerProvider implements ServiceProviderInterface
     public function register(ContainerInterface $container)
     {
         $container->share(Manager::class, function () use ($container) {
-            /** @var Environment $environment */
-            $environment = $container->get(Environment::class);
-
-            $manager = new Manager();
-            $manager->registerBuiltinCommands($environment->getPath());
+            $manager = new Manager($container);
+            $manager->registerBuiltinCommands();
 
             return $manager;
         });

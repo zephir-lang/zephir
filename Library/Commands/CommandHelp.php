@@ -14,6 +14,7 @@ namespace Zephir\Commands;
 use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Compiler;
+use Zephir\Version;
 
 /**
  * Zephir\Commands\CommandHelp
@@ -67,11 +68,13 @@ class CommandHelp extends CommandAbstract
             return fprintf(STDIN, $this->getSynopsis());
         }
 
+        $version = $this->getContainer()->get(Version::class);
+
         return fprintf(
             STDOUT,
             "%s\nZephir version %s\n\n%s\nAvailable commands:\n%s\n%s",
             $this->banner(),
-            Compiler::getCurrentVersion(),
+            $version,
             $this->usage(),
             $this->commands(),
             $this->options()
