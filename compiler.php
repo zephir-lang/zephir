@@ -9,7 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use Zephir\Bootstrap;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-$bootstrap = new Zephir\Bootstrap(getenv('ZEPHIRDIR') ?: __DIR__);
-$bootstrap->boot();
+$bootstrap = new Bootstrap(
+    strpos(__DIR__, 'phar://') === 0 ?
+        (getenv('ZEPHIRDIR') ?: __DIR__) :
+        __DIR__
+);
+
+$bootstrap->execute();

@@ -13,74 +13,43 @@ namespace Zephir;
 
 use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
+use Zephir\Providers\CompillerProvider;
 
 /**
  * Zephir\Bootstrap
  *
- * Main compiler bootstrap
- *
  * @package Zephir
  */
-class Bootstrap
+final class Bootstrap
 {
     /**
-     * The Zephir base direcrory.
-     * @var string
+     * The Service Registrator instance.
+     *
+     * @var ServiceRegistrator
      */
-    private $baseDir;
-
-    /**
-     * Commands manager.
-     * @var Manager
-     */
-    private $commandsManager;
+    protected $serviceRegistrator;
 
     /**
      * Bootstrap constructor.
      *
-     * @param string $baseDir The base Zephir direcrory.
+     * @param string $basePath The Zephir compiller base direcrory.
      */
-    public function __construct($baseDir = null)
+    public function __construct($basePath)
     {
-        $baseDir = realpath($baseDir ?: dirname(__DIR__));
-
-        if (!is_string($baseDir) || !is_dir($baseDir)) {
-            fwrite(
-                STDERR,
-                sprintf(
-                    "Unable to locate Zephir installation path.\n\nDouble check Zephir installation " .
-                    "and/or try to setup ZEPHIRDIR variable to the proper Zephir installation path.\n\n" .
-                    "Current ZEPHIRDIR value: %s\nThe base path passed to the Bootstrap: %s\n",
-                    getenv('ZEPHIRDIR'),
-                    is_string($baseDir) ? $baseDir : gettype($baseDir)
-                )
-            );
-
-            exit(1);
-        }
-
-        $this->baseDir = rtrim($baseDir, '\\/');
-        $this->commandsManager = new Manager();
+        $this->serviceRegistrator = new ServiceRegistrator($basePath);
+        $this->registerInternalApplication();
     }
 
     /**
-     * Gets the Zephir base direcrory.
+     * Register internal application.
      *
-     * @return string
+     * @return void
      */
-    public function getBaseDir()
+    protected function registerInternalApplication()
     {
-        return $this->baseDir;
-    }
-
-    /**
-     * Gets currently initialized Command Manager.
-     *
-     * @return Manager
-     */
-    public function getCommandsManager()
-    {
-        return $this->commandsManager;
+        $this->serviceRegistrator->registerService(
+            new CompillerProvider()
+        );
     }
 
     /**
@@ -88,30 +57,29 @@ class Bootstrap
      *
      * @return void
      */
-    public function boot()
+    public function execute()
     {
+        $container = $this->serviceRegistrator->getContainer();
+
+        if (isset($_SERVER['argv'][1])) {
+            $action = $_SERVER['argv'][1];
+        } else {
+            $action = 'help';
+        }
+
         try {
-            // Global Config
-            $config = Config::fromServer();
-
-            // Global Logger
-            $logger = new Logger($config);
-
-            if (isset($_SERVER['argv'][1])) {
-                $action = $_SERVER['argv'][1];
-            } else {
-                $action = 'help';
-            }
-
-            $manager = new Manager();
-            $manager->registerBuiltinCommands($this->baseDir);
-
+            /** @var Manager $manager */
+            $manager = $container->get(Manager::class);
             $command = $manager->resolveByActionName($action);
 
             // Execute the command
-            $command->execute($config, $logger);
+            $command->execute($container->get(Config::class), $container->get(Logger::class));
         } catch (\Exception $e) {
-            fwrite(STDERR, $this->formatErrorMessage($e, isset($config) ? $config : null));
+            fwrite(
+                STDERR,
+                $this->formatErrorMessage($e, $container->has(Config::class) ? $container->get(Config::class) : null)
+            );
+
             exit(1);
         }
     }
@@ -119,21 +87,21 @@ class Bootstrap
     /**
      * Formats error message to show an exception opening the file and highlighting the wrong part.
      *
-     * @param \Exception $e
-     * @param Config $config Current config object [optional].
+     * @param  \Exception $exception
+     * @param  Config     $config Current config object [optional].
      * @return string
      */
-    protected function formatErrorMessage(\Exception $e, Config $config = null)
+    protected function formatErrorMessage(\Exception $exception, Config $config = null)
     {
         $message = '';
 
         if ($config && $config->get('verbose')) {
-            $message .= sprintf('[%s]: ', get_class($e));
+            $message .= sprintf('[%s]: ', get_class($exception));
         }
 
-        $message .= $e->getMessage() . PHP_EOL;
+        $message .= $exception->getMessage() . PHP_EOL;
 
-        if ($e instanceof ExceptionInterface && $extraInfo = $e->getErrorRegion()) {
+        if ($exception instanceof ExceptionInterface && $extraInfo = $exception->getErrorRegion()) {
             $message .= sprintf("\n%s", $extraInfo);
         }
 
@@ -142,17 +110,21 @@ class Bootstrap
             return $message;
         }
 
-        $base = $this->baseDir;
-        $preparePaths = function ($path) use ($base) {
-            if (is_string($base)) {
-                $path = str_replace(rtrim($base, '\\/') . DIRECTORY_SEPARATOR, '', $path);
+        $container = $this->serviceRegistrator->getContainer();
+
+        /** @var Environment $environment */
+        $environment = $container->has(Environment::class) ? $container->get(Environment::class) : null;
+
+        $preparePaths = function ($path) use ($environment) {
+            if ($environment) {
+                $path = str_replace($environment->getPath() . DIRECTORY_SEPARATOR, '', $path);
             }
 
             return $path;
         };
 
-        $message .= sprintf("at %s(%s)\n\n", $preparePaths($e->getFile()), $e->getLine());
-        $message .= sprintf("Stack trace:\n%s\n", $preparePaths($e->getTraceAsString()));
+        $message .= sprintf("at %s(%s)\n\n", $preparePaths($exception->getFile()), $exception->getLine());
+        $message .= sprintf("Stack trace:\n%s\n", $preparePaths($exception->getTraceAsString()));
 
         return $message;
     }

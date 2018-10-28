@@ -113,7 +113,11 @@ jobs:
         - REPORT_COVERAGE=0
       script:
         - mkdir -p ${HOME}/bin
-        - wget "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" -O "${HOME}/bin/box"
+        - |
+            wget \
+              "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+              --quiet \
+              -O "${HOME}/bin/box"
         - chmod +x "${HOME}/bin/box"
         - ./bin/packer
         - ./zephir.phar version

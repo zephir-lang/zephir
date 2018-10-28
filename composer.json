@@ -26,7 +26,8 @@
         "ext-hash": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "league/container": "^2.4 || ^3.2"
     },
     "require-dev": {
         "ext-gmp": "*",
