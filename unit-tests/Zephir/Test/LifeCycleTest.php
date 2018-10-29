@@ -11,6 +11,8 @@
 
 namespace Zephir\Test;
 
+use League\Container\Container;
+use League\Container\ReflectionContainer;
 use Zephir\Bootstrap;
 use Zephir\Compiler;
 use Zephir\Di\Singleton;
@@ -58,8 +60,11 @@ class LifeCycleTest extends TestCase
         chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
 
         try {
-            putenv('ZEPHIR_BACKEND=' . $backend);
-            new Bootstrap(ZEPHIRPATH);
+            $container = new Container();
+            $container->delegate(new ReflectionContainer());
+            $container->add('ZEPHIR_BACKEND', $backend);
+
+            new Bootstrap(ZEPHIRPATH, $container);
 
             $container = Singleton::getDefault();
 
