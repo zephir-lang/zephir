@@ -441,7 +441,7 @@ class ForStatement extends StatementAbstract
             }
 
             $keyVariable->setMustInitNull(true);
-            $keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $keyVariable->setIsInitialized(true, $compilationContext);
             $keyVariable->setDynamicTypes('undefined');
         }
 
@@ -463,7 +463,7 @@ class ForStatement extends StatementAbstract
             }
 
             $variable->setMustInitNull(true);
-            $variable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $variable->setIsInitialized(true, $compilationContext);
             $variable->setDynamicTypes('undefined');
         }
 
@@ -553,7 +553,7 @@ class ForStatement extends StatementAbstract
             }
 
             $keyVariable->setMustInitNull(true);
-            $keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $keyVariable->setIsInitialized(true, $compilationContext);
         }
 
         /**
@@ -579,7 +579,7 @@ class ForStatement extends StatementAbstract
             }
 
             $variable->setMustInitNull(true);
-            $variable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $variable->setIsInitialized(true, $compilationContext);
         }
 
         $tempVariable = $compilationContext->symbolTable->addTemp('long', $compilationContext);
@@ -667,7 +667,7 @@ class ForStatement extends StatementAbstract
             }
 
             $keyVariable->setMustInitNull(true);
-            $keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $keyVariable->setIsInitialized(true, $compilationContext);
             $keyVariable->setDynamicTypes('undefined');
         }
 
@@ -685,7 +685,7 @@ class ForStatement extends StatementAbstract
             }
 
             $variable->setMustInitNull(true);
-            $variable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $variable->setIsInitialized(true, $compilationContext);
             $variable->increaseVariantIfNull();
             $variable->setDynamicTypes('undefined');
         }

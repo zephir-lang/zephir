@@ -59,7 +59,7 @@ class CloneOperator extends BaseOperator
 
         $symbolVariable->setDynamicTypes('object');
 
-        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+        $symbolVariable->setIsInitialized(true, $compilationContext);
 
         /* Inherit the dynamic type data from the cloned object */
         $symbolVariable->setDynamicTypes($clonedVariable->getDynamicTypes());
