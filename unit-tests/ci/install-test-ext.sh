@@ -23,11 +23,11 @@ shopt -s nullglob
 
 cd "${PROJECT_ROOT}"
 
-zephir clean 2>/dev/null || true
-zephir fullclean 2>/dev/null || true
-zephir generate ${DEFAULT_ZFLAGS}
-zephir stubs >/dev/null 2>&1
-zephir api >/dev/null 2>&1
+zephir clean 2>&1
+zephir fullclean 2>&1
+zephir generate ${DEFAULT_ZFLAGS} 2>&1
+zephir stubs 2>&1
+zephir api 2>&1
 
 cd "${PROJECT_ROOT}/ext"
 

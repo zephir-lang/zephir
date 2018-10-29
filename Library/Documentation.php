@@ -77,13 +77,13 @@ class Documentation implements InjectionAwareInterface
             throw new ConfigException("Theme configuration is not present");
         }
 
-        $themeDir = $this->__findThemeDirectory($themeConfig, $config, $command);
+        $themeDir = $this->findThemeDirectory($themeConfig, $command);
 
         if (!file_exists($themeDir)) {
             throw new ConfigException("There is no theme named " . $themeConfig["name"]);
         }
 
-        $outputDir = $this->__findOutputDirectory($themeConfig, $config, $command);
+        $outputDir = $this->findOutputDirectory($command);
 
         if (!$outputDir) {
             throw new ConfigException("Api path (output directory) is not configured");
@@ -101,11 +101,11 @@ class Documentation implements InjectionAwareInterface
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
+        $themeConfig["options"] = $this->prepareThemeOptions($themeConfig, $command);
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
 
-        $this->baseUrl = $this->__parseBaseUrl($config, $command);
+        $this->baseUrl = $this->parseBaseUrl($command);
     }
 
     /**
@@ -119,7 +119,7 @@ class Documentation implements InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    private function __prepareThemeOptions($themeConfig, CommandInterface $command)
+    private function prepareThemeOptions($themeConfig, CommandInterface $command)
     {
         $optionsFromCommand = $command->getParameter("theme-options");
 
@@ -161,14 +161,11 @@ class Documentation implements InjectionAwareInterface
      *  => if not ; check if config config[api][path] was given
      *
      *
-     * @param $themeConfig
-     * @param Config $config
      * @param CommandInterface $command
+     *
      * @return null|string
-     * @throws ConfigException
-     * @throws Exception
      */
-    private function __findOutputDirectory($themeConfig, Config $config, CommandInterface $command)
+    private function findOutputDirectory(CommandInterface $command)
     {
         $outputDir = $command->getParameter("output-directory");
 
@@ -192,16 +189,15 @@ class Documentation implements InjectionAwareInterface
      * - the command line argument base-url
      * - or the config config["api"]["base-url"]
      *
-     * @param Config $config
-     * @param CommandInterface $command
+     * @param  CommandInterface $command
      * @return mixed|string
      */
-    private function __parseBaseUrl(Config $config, CommandInterface $command)
+    private function parseBaseUrl(CommandInterface $command)
     {
         $baseUrl = $command->getParameter("base-url");
 
         if (!$baseUrl) {
-            $baseUrl = $config->get("base-url", "api");
+            $baseUrl = $this->config->get("base-url", "api");
         }
 
         return $baseUrl;
@@ -217,17 +213,16 @@ class Documentation implements InjectionAwareInterface
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
      * @param  array            $themeConfig
-     * @param  Config           $config
      * @param  CommandInterface $command
      * @return null|string
      *
      * @throws InvalidArgumentException
      * @throws ConfigException
      */
-    private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
+    private function findThemeDirectory($themeConfig, CommandInterface $command)
     {
         // check if there are additional theme paths in the config
-        $themeDirectoriesConfig = $config->get("theme-directories", "api");
+        $themeDirectoriesConfig = $this->config->get("theme-directories", "api");
         if ($themeDirectoriesConfig) {
             if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
@@ -241,7 +236,6 @@ class Documentation implements InjectionAwareInterface
         /** @var Environment $environment */
         $environment = $this->container->get(Environment::class);
 
-        echo "Add: ", $environment->getPath('templates/Api/themes'), PHP_EOL;
         $themesDirectories[] = $environment->getPath('templates/Api/themes');
         $this->themesDirectories = $themesDirectories;
 
