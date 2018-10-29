@@ -14,6 +14,7 @@ namespace Zephir;
 use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompillerProvider;
+use Psr\Container\ContainerInterface;
 
 /**
  * Zephir\Bootstrap
@@ -32,11 +33,12 @@ final class Bootstrap
     /**
      * Bootstrap constructor.
      *
-     * @param string $basePath The Zephir compiller base direcrory.
+     * @param string             $basePath  The Zephir compiller base direcrory.
+     * @param ContainerInterface $container The DI container (if any).
      */
-    public function __construct($basePath)
+    public function __construct($basePath, ContainerInterface $container = null)
     {
-        $this->serviceRegistrator = new ServiceRegistrator($basePath);
+        $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
         $this->registerCompiller();
     }
 
