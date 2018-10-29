@@ -85,7 +85,7 @@ class TryCatchStatement extends StatementAbstract
                 /**
                  * @TODO, use a builder here
                  */
-                $variable->setIsInitialized(true, $compilationContext, $catch);
+                $variable->setIsInitialized(true, $compilationContext);
                 $variable->setMustInitNull(true);
 
                 /**

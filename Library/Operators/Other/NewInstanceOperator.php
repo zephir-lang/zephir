@@ -119,9 +119,9 @@ class NewInstanceOperator extends BaseOperator
                      * Use a safe string version of the variable to avoid segfaults
                      */
                     $compilationContext->headersManager->add('kernel/object');
-                    $safeSymbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $expression);
+                    $safeSymbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
                     $safeSymbolVariable->setMustInitNull(true);
-                    $safeSymbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                    $safeSymbolVariable->setIsInitialized(true, $compilationContext);
                     $safeSymbolVariable->increaseUses();
                     $safeSymbol = $compilationContext->backend->getVariableCode($safeSymbolVariable);
                     $classNameSymbol = $compilationContext->backend->getVariableCode($classNameVariable);
@@ -168,7 +168,7 @@ class NewInstanceOperator extends BaseOperator
         /**
          * Mark variable initialized
          */
-        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+        $symbolVariable->setIsInitialized(true, $compilationContext);
 
         /**
          * Don't check the constructor for stdclass instances

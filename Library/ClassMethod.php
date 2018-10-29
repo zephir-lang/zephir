@@ -1670,7 +1670,7 @@ class ClassMethod
                     /**
                      * Assuming they're initialized
                      */
-                    $symbolParam->setIsInitialized(true, $compilationContext, $parameter);
+                    $symbolParam->setIsInitialized(true, $compilationContext);
 
                     /**
                      * Initialize auxiliary parameter zvals to null

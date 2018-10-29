@@ -140,7 +140,7 @@ class CompiledExpression implements TypeAwareInterface
                     $compilationContext
                 );
                 $compilationContext->codePrinter->output($code($tempVariable->getName()));
-                $tempVariable->setIsInitialized(true, $compilationContext, array());
+                $tempVariable->setIsInitialized(true, $compilationContext);
                 return $tempVariable->getName();
             }
             return $code($result);

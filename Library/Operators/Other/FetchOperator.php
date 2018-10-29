@@ -53,7 +53,7 @@ class FetchOperator extends BaseOperator
                 $numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
                 if ($numberMutations == 1) {
                     if ($variable->getNumberMutations() == 1) {
-                        $variable->setIsInitialized(true, $compilationContext, $expression);
+                        $variable->setIsInitialized(true, $compilationContext);
                         $variable->setMemoryTracked(false);
                         $variable->setDynamicTypes('undefined');
                         $readOnly = true;
@@ -62,13 +62,13 @@ class FetchOperator extends BaseOperator
             }
 
             if (!$readOnly || $expression['right']['type'] != 'array-access') {
-                $variable->setIsInitialized(true, $compilationContext, $expression);
+                $variable->setIsInitialized(true, $compilationContext);
                 $variable->observeVariant($compilationContext);
                 $variable->setDynamicTypes('undefined');
                 $variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
             }
         } else {
-            $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+            $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
         }
 
         if ($readOnly) {

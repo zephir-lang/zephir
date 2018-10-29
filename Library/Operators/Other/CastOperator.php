@@ -257,9 +257,9 @@ class CastOperator extends BaseOperator
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext);
                         $symbolVariable->setMustInitNull(true);
-                        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                        $symbolVariable->setIsInitialized(true, $compilationContext);
                         $symbolVariable->increaseUses();
                         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                         $resolvedVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext);
