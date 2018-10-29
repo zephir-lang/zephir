@@ -33,3 +33,8 @@ if (!class_exists('\PHPUnit\Framework\SkippedTestError') and class_exists('PHPUn
     /** @noinspection PhpIgnoredClassAliasDeclaration */
     class_alias('PHPUnit_Framework_SkippedTestError', '\PHPUnit\Framework\SkippedTestError');
 }
+
+if (!class_exists('\PHPUnit\Framework\MockObject\MockObject') and class_exists('PHPUnit_Framework_MockObject_MockObject')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_MockObject_MockObject', '\PHPUnit\Framework\MockObject\MockObject');
+}
