@@ -189,7 +189,7 @@ class PregMatchOptimizer extends OptimizerAbstract
 
             if (!$variable = $context->symbolTable->getVariable($name)) {
                 throw new CompilerException(
-                    sprintf('The "%s" variable should be declared before first usage', $name),
+                    sprintf("Cannot mutate variable '%s' because it wasn't defined", $name),
                     $expression
                 );
             }
@@ -197,7 +197,7 @@ class PregMatchOptimizer extends OptimizerAbstract
             if (!in_array($variable->getType(), ['variable', 'array'], true)) {
                 throw new CompilerException(
                     sprintf(
-                        'The "%s" variable must be either a variable or an array, got %s',
+                        "The '%s' variable must be either a variable or an array, got %s",
                         $name,
                         $variable->getType()
                     ),
