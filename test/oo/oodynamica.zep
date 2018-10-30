@@ -23,4 +23,11 @@ class OoDynamicA
 		return \Test\Oo\OoDynamicA::call2();
 	}
 
+	public function execute() {
+		return "A";
+	}
+
+	public function execute2() {
+		return "AA";
+	}
 }

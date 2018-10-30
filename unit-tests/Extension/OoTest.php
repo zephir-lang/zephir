@@ -11,6 +11,7 @@
 
 namespace Extension;
 
+use Test\Oo;
 use Zephir\Support\TestCase;
 
 class OoTest extends TestCase
@@ -63,5 +64,19 @@ class OoTest extends TestCase
         $obj12 = $t->testInstance12();
         $this->assertTrue(is_object($obj12));
         $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj12);
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1673
+     */
+    public function shouldDinamicalyCreateInstancesInLoop()
+    {
+        $test = new Oo();
+
+        $this->assertEquals(
+            ["A", "AA", "B", "BB"],
+            $test->createInstancesInLoop()
+        );
     }
 }
