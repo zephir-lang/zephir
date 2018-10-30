@@ -120,7 +120,7 @@ class PregMatchOptimizerTest extends TestCase
     /**
      * @test
      * @expectedException \Zephir\Compiler\CompilerException
-     * @expectedExceptionMessage The "matches" variable should be declared before first usage
+     * @expectedExceptionMessage Cannot mutate variable 'matches' because it wasn't defined
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -157,7 +157,7 @@ class PregMatchOptimizerTest extends TestCase
     /**
      * @test
      * @expectedException \Zephir\Compiler\CompilerException
-     * @expectedExceptionMessage The "matches" variable must be either a variable or an array, got Ooops
+     * @expectedExceptionMessage The 'matches' variable must be either a variable or an array, got Ooops
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
