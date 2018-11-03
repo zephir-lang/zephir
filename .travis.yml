@@ -2,7 +2,7 @@ sudo: false
 
 language: php
 php:
-  - master
+  - 'master'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -20,20 +20,9 @@ branches:
 addons:
   apt:
     packages:
-    - gdb
-    - lcov
+      - gdb
+      - lcov
 
-env:
-  global:
-    - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
-    - RE2C_VERSION="1.1.1"
-    - ZEPHIR_PARSER_VERSION="v1.1.2"
-    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
-    - REPORT_COVERAGE=1
-    - PHPUNIT_DONT_EXIT=0
-    - PHPUNIT_CONF=phpunit.xml.dist
-    - BOX_VERSION=3.1.2
-    - PATH="${HOME}/bin:${PATH}"
 
 matrix:
   fast_finish: true
@@ -49,11 +38,23 @@ cache:
     - $HOME/.cache/re2c
     - $HOME/.cache/php-psr
 
+env:
+  global:
+    - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
+    - RE2C_VERSION="1.1.1"
+    - ZEPHIR_PARSER_VERSION="v1.1.2"
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+    - REPORT_COVERAGE=1
+    - PHPUNIT_DONT_EXIT=0
+    - PHPUNIT_CONF=phpunit.xml.dist
+    - BOX_VERSION=3.1.2
+    - PATH="${HOME}/bin:${PATH}"
+
 before_install:
-  - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
+  - '[[ -z "${GH_TOKEN}" ]] || composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"'
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
-  - export PHP_VERNUM="$(`phpenv php-config` --vernum)"
+  - export PHP_VERNUM="$(`phpenv which php-config` --vernum)"
   - ulimit -c unlimited -S
   - phpenv config-add ./unit-tests/ci/999-default.ini
 
@@ -63,13 +64,12 @@ install:
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./install-nosudo
   # We need this because there is no PHP 5 compatible PSR extension
-  - '[[ "$PHP_MAJOR" == "5" ]] || ./unit-tests/ci/install-php-psr.sh'
-  - '[[ "$PHP_MAJOR" == "5" ]] || cp -R ./unit-tests/integration ./test'
+  - '[[ "${PHP_VERNUM}" -lt 70000 ]] || (./unit-tests/ci/install-php-psr.sh && cp -R ./unit-tests/integration ./test)'
   - ./unit-tests/ci/install-test-ext.sh
 
 before_script:
   # see: https://github.com/sebastianbergmann/phpunit/pull/3359
-  - '[[ "$PHP_VERNUM" -ge "70300" ]] || export USE_ZEND_ALLOC=1 PHPUNIT_CONF=phpunit-no-coverage.xml.dist'
+  - '[[ "${PHP_VERNUM}" -lt 70300 ]] || export USE_ZEND_ALLOC=1 PHPUNIT_CONF=phpunit-no-coverage.xml.dist'
 
 script:
   - |
@@ -84,8 +84,6 @@ script:
         unit-tests/phpunit \
         -c ${PHPUNIT_CONF} \
         --testsuite "Zephir Test Suite"
-
-
 jobs:
   include:
     - stage: Static Code Analysis
