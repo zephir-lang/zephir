@@ -45,53 +45,53 @@ class Compiler implements InjectionAwareInterface
     /**
      * @var FunctionDefinition[]
      */
-    public $functionDefinitions = array();
+    public $functionDefinitions = [];
 
     /**
      * @var CompilerFile[]
      */
-    protected $files = array();
+    protected $files = [];
 
     /**
      * @var array|string[]
      */
-    protected $anonymousFiles = array();
+    protected $anonymousFiles = [];
 
     /**
      * Additional initializer code
      * used for static property initialization
      * @var array
      */
-    protected $internalInitializers = array();
+    protected $internalInitializers = [];
 
     /**
      * @var ClassDefinition[]
      */
-    protected $definitions = array();
+    protected $definitions = [];
 
     /**
      * @var array|string[]
      */
-    protected $compiledFiles = array();
+    protected $compiledFiles = [];
 
     /**
      *
      */
-    protected $constants = array();
+    protected $constants = [];
 
     /**
      * Extension globals
      *
      * @var array
      */
-    protected $globals = array();
+    protected $globals = [];
 
     /**
      * External dependencies
      *
      * @var array
      */
-    protected $externalDependencies = array();
+    protected $externalDependencies = [];
 
     /**
      * @var StringsManager
@@ -116,7 +116,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * @var \ReflectionClass[]
      */
-    protected static $internalDefinitions = array();
+    protected static $internalDefinitions = [];
 
     /**
      * @var boolean
@@ -126,7 +126,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * @var array
      */
-    protected $extraFiles = array();
+    protected $extraFiles = [];
 
     /**
      * The Zephir Parser Manager
@@ -181,16 +181,19 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Adds a function to the function definitions
+     * Adds a function to the function definitions.
      *
-     * @param FunctionDefinition $func
-     * @param array $statement
+     * @param  FunctionDefinition $func
+     * @param  array $statement
+     * @return void
+     *
      * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
+            // @todo Cover by test
             throw new CompilerException(
                 "Function '" . $func->getCompleteName() . "' was defined more than one time",
                 $statement
@@ -204,6 +207,7 @@ class Compiler implements InjectionAwareInterface
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
+     *
      * @throws CompilerException
      * @throws IllegalStateException
      * @throws ParseException
@@ -222,7 +226,7 @@ class Compiler implements InjectionAwareInterface
                 return ucfirst($i);
             }, explode('\\', $className)));
 
-            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger, $this->backend);
+            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
             $this->files[$className]->preCompile($this);
 
             $this->definitions[$className] = $this->files[$className]->getClassDefinition();
@@ -245,7 +249,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Pre compile all files
          */
-        $files = array();
+        $files = [];
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
@@ -518,11 +522,11 @@ class Compiler implements InjectionAwareInterface
 
             foreach (file($constantsSource) as $line) {
                 if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
-                    $this->constants[$matches[1]] = array('int', $matches[2]);
+                    $this->constants[$matches[1]] = ['int', $matches[2]];
                     continue;
                 }
                 if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
-                    $this->constants[$matches[1]] = array('char', $matches[3]);
+                    $this->constants[$matches[1]] = ['char', $matches[3]];
                 }
             }
         }
@@ -763,8 +767,8 @@ class Compiler implements InjectionAwareInterface
         /**
          * Sort the files by dependency ranking
          */
-        $files = array();
-        $rankedFiles = array();
+        $files = [];
+        $rankedFiles = [];
         $this->calculateDependencies($this->files);
 
         foreach ($this->files as $rankFile) {
@@ -860,7 +864,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Round 3. Compile all files to C sources
          */
-        $files = array();
+        $files = [];
 
         $hash = "";
         foreach ($this->files as $compileFile) {
@@ -871,7 +875,7 @@ class Compiler implements InjectionAwareInterface
                 $compileFile->compile($this, $this->stringManager);
                 $compiledFile = $compileFile->getCompiledFile();
 
-                $methods = array();
+                $methods = [];
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
@@ -894,7 +898,7 @@ class Compiler implements InjectionAwareInterface
             $compileFile->compile($this, $this->stringManager);
             $compiledFile = $compileFile->getCompiledFile();
 
-            $methods = array();
+            $methods = [];
             $classDefinition = $compileFile->getClassDefinition();
             foreach ($classDefinition->getMethods() as $method) {
                 $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
@@ -915,7 +919,7 @@ class Compiler implements InjectionAwareInterface
         if (is_array($extraSources)) {
             $this->extraFiles = $extraSources;
         } else {
-            $this->extraFiles = array();
+            $this->extraFiles = [];
         }
 
         /**
@@ -1255,15 +1259,15 @@ class Compiler implements InjectionAwareInterface
      */
     protected function processAddSources($sources, $project)
     {
-        $groupSources = array();
+        $groupSources = [];
         foreach ($sources as $source) {
             $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
             if (!isset($groupSources[$dirName])) {
-                $groupSources[$dirName] = array();
+                $groupSources[$dirName] = [];
             }
             $groupSources[$dirName][] = basename($source);
         }
-        $groups = array();
+        $groups = [];
         foreach ($groupSources as $dirname => $files) {
             $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
                         join(' ', $files) . '", "' . $project . '");';
@@ -1311,7 +1315,7 @@ class Compiler implements InjectionAwareInterface
                 return str_replace('.c', '.zep.h', $file);
             }, $this->compiledFiles);
         } else {
-            $compiledHeaders = array('php_' . strtoupper($project) . '.h');
+            $compiledHeaders = ['php_' . strtoupper($project) . '.h'];
         }
 
         /*
@@ -1324,7 +1328,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Generate config.m4
          */
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
@@ -1334,7 +1338,7 @@ class Compiler implements InjectionAwareInterface
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $contentM4 = str_replace($mark, $replace, $contentM4);
@@ -1345,7 +1349,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Generate config.w32
          */
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
@@ -1357,7 +1361,7 @@ class Compiler implements InjectionAwareInterface
                 "\r\n\t",
                 $this->processAddSources($this->extraFiles, strtolower($project))
             ),
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $contentW32 = str_replace($mark, $replace, $contentW32);
@@ -1373,9 +1377,9 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template php_ext.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1391,9 +1395,9 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template ext.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1409,9 +1413,9 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template ext_config.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER%' => strtolower($project)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1439,9 +1443,9 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Install file doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER%' => strtolower($project)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1466,16 +1470,16 @@ class Compiler implements InjectionAwareInterface
     {
         $globalCode = '';
         $globalStruct = '';
-        $globalsDefault = array(array(), array());
-        $initEntries = array();
+        $globalsDefault = [[], []];
+        $initEntries = [];
 
         /**
          * Generate the extensions globals declaration
          */
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
-            $structures = array();
-            $variables = array();
+            $structures = [];
+            $variables = [];
             foreach ($globals as $name => $global) {
                 $parts = explode('.', $name);
                 if (isset($parts[1])) {
@@ -1563,7 +1567,7 @@ class Compiler implements InjectionAwareInterface
                 }
 
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
-                $iniEntry = array();
+                $iniEntry = [];
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
                 }
@@ -1603,7 +1607,7 @@ class Compiler implements InjectionAwareInterface
         $globalsDefault[0] = implode('', $globalsDefault[0]);
         $globalsDefault[1] = implode('', $globalsDefault[1]);
 
-        return array($globalCode, $globalStruct, $globalsDefault, $initEntries);
+        return [$globalCode, $globalStruct, $globalsDefault, $initEntries];
     }
 
     /**
@@ -1620,7 +1624,7 @@ class Compiler implements InjectionAwareInterface
             foreach ($info as $table) {
                 $phpinfo .= "\t" . 'php_info_print_table_start();' . PHP_EOL;
                 if (isset($table['header'])) {
-                    $headerArray = array();
+                    $headerArray = [];
                     foreach ($table['header'] as $header) {
                         $headerArray[] = '"' . htmlentities($header) . '"';
                     }
@@ -1630,7 +1634,7 @@ class Compiler implements InjectionAwareInterface
                 }
                 if (isset($table['rows'])) {
                     foreach ($table['rows'] as $row) {
-                        $rowArray = array();
+                        $rowArray = [];
                         foreach ($row as $field) {
                             $rowArray[] = '"' . htmlentities($field) . '"';
                         }
@@ -1647,15 +1651,16 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Process extension code injection
+     * Process extension code injection.
      *
-     * @param array $entries
+     * @param  array  $entries
+     * @param  string $section
      * @return array
      */
     public function processCodeInjection(array $entries, $section = 'request')
     {
-        $codes = array();
-        $includes = array();
+        $codes = [];
+        $includes = [];
 
         if (isset($entries[$section])) {
             foreach ($entries[$section] as $entry) {
@@ -1668,7 +1673,7 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
-        return array(join(PHP_EOL, $includes), join("\n\t", $codes));
+        return [implode(PHP_EOL, $includes), implode("\n\t", $codes)];
     }
 
     /**
@@ -1690,7 +1695,7 @@ class Compiler implements InjectionAwareInterface
          * We first build a dependency tree and then set the rank accordingly
          */
         if ($_dependency == null) {
-            $dependencyTree = array();
+            $dependencyTree = [];
             foreach ($files as $file) {
                 if (!$file->isExternal()) {
                     $classDefinition = $file->getClassDefinition();
@@ -1753,11 +1758,11 @@ class Compiler implements InjectionAwareInterface
          */
         $this->calculateDependencies($files);
 
-        $classEntries = array();
-        $classInits = array();
+        $classEntries = [];
+        $classInits = [];
 
-        $interfaceEntries = array();
-        $interfaceInits = array();
+        $interfaceEntries = [];
+        $interfaceInits = [];
 
         /**
          * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
@@ -1770,8 +1775,8 @@ class Compiler implements InjectionAwareInterface
                     $dependencyRank = $classDefinition->getDependencyRank();
                     if ($classDefinition->getType() == 'class') {
                         if (!isset($classInits[$dependencyRank])) {
-                            $classEntries[$dependencyRank] = array();
-                            $classInits[$dependencyRank] = array();
+                            $classEntries[$dependencyRank] = [];
+                            $classInits[$dependencyRank] = [];
                         }
                         $classEntries[$dependencyRank][] =
                             'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
@@ -1780,8 +1785,8 @@ class Compiler implements InjectionAwareInterface
                              $classDefinition->getName() . ');';
                     } else {
                         if (!isset($interfaceInits[$dependencyRank])) {
-                            $interfaceEntries[$dependencyRank] = array();
-                            $interfaceInits[$dependencyRank] = array();
+                            $interfaceEntries[$dependencyRank] = [];
+                            $interfaceInits[$dependencyRank] = [];
                         }
                         $interfaceEntries[$dependencyRank][] =
                             'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
@@ -1798,25 +1803,25 @@ class Compiler implements InjectionAwareInterface
         krsort($interfaceInits);
         krsort($interfaceEntries);
 
-        $completeInterfaceInits = array();
+        $completeInterfaceInits = [];
         foreach ($interfaceInits as $rankInterfaceInits) {
             asort($rankInterfaceInits, SORT_STRING);
             $completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
         }
 
-        $completeInterfaceEntries = array();
+        $completeInterfaceEntries = [];
         foreach ($interfaceEntries as $rankInterfaceEntries) {
             asort($rankInterfaceEntries, SORT_STRING);
             $completeInterfaceEntries = array_merge($completeInterfaceEntries, $rankInterfaceEntries);
         }
 
-        $completeClassInits = array();
+        $completeClassInits = [];
         foreach ($classInits as $rankClassInits) {
             asort($rankClassInits, SORT_STRING);
             $completeClassInits = array_merge($completeClassInits, $rankClassInits);
         }
 
-        $completeClassEntries = array();
+        $completeClassEntries = [];
         foreach ($classEntries as $rankClassEntries) {
             asort($rankClassEntries, SORT_STRING);
             $completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
@@ -1898,7 +1903,7 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
             '%PROJECT_LOWER%'       => strtolower($project),
             '%PROJECT_UPPER%'       => strtoupper($project),
@@ -1913,7 +1918,7 @@ class Compiler implements InjectionAwareInterface
             ),
             '%INIT_GLOBALS%'        => implode(
                 PHP_EOL . "\t",
-                array_merge((array)$globalsDefault[0], array($glbInitializers))
+                array_merge((array)$globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
             '%DESTROY_GLOBALS%'     => $glbDestructors,
@@ -1926,12 +1931,12 @@ class Compiler implements InjectionAwareInterface
             '%MOD_DESTRUCTORS%'     => $modDestructors,
             '%REQ_INITIALIZERS%'    => implode(
                 PHP_EOL . "\t",
-                array_merge($this->internalInitializers, array($reqInitializers))
+                array_merge($this->internalInitializers, [$reqInitializers])
             ),
             '%REQ_DESTRUCTORS%'     => $reqDestructors,
             '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
-                array(
+                [
                     '#define ZEPHIR_POST_REQUEST 1',
                     'static PHP_PRSHUTDOWN_FUNCTION(' . strtolower($project) . ')',
                     '{',
@@ -1940,12 +1945,12 @@ class Compiler implements InjectionAwareInterface
                         explode(PHP_EOL, $prqDestructors)
                     ),
                     '}'
-                )
+                ]
             ),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries,
             '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
-        );
+        ];
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
@@ -1964,7 +1969,7 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template project.h doesn't exists");
         }
 
-        $includeHeaders = array();
+        $includeHeaders = [];
         foreach ($this->compiledFiles as $file) {
             if ($file) {
                 $fileH = str_replace(".c", ".zep.h", $file);
@@ -1986,9 +1991,9 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -2007,7 +2012,7 @@ class Compiler implements InjectionAwareInterface
 
         $version = $this->container->get(Version::class);
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
             '%PROJECT_UPPER%'            => strtoupper($project),
@@ -2019,7 +2024,7 @@ class Compiler implements InjectionAwareInterface
             '%PROJECT_ZEPVERSION%'       => (string) $version,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -2184,12 +2189,12 @@ class Compiler implements InjectionAwareInterface
                     }
                 }
 
-                $toReplace = array(
+                $toReplace = [
                     '%PACKAGE_LOWER%'        => strtolower($pkg),
                     '%PACKAGE_UPPER%'        => strtoupper($pkg),
                     '%PACKAGE_REQUESTED_VERSION%'        => $operator . ' ' . $version,
                     '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd . '=' . $version,
-                );
+                ];
 
                 foreach ($toReplace as $mark => $replace) {
                     $pkgM4Buf = str_replace($mark, $replace, $pkgM4Buf);
