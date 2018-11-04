@@ -108,6 +108,14 @@ class RetVal {
 	public function retval_nullable_char() -> char | null {
 		return null;
 	}
+
+	public function retval_object_or_scalar() -> <\stdClass> | bool {
+		return false;
+	}
+
+	public static function retval_static_object_or_scalar() -> <\stdClass> | bool {
+		return new stdClass();
+	}
 }
 
 /** @link https://github.com/phalcon/zephir/pull/1681 */
@@ -188,4 +196,8 @@ function retval_nullable_boolean() -> boolean | null {
 
 function retval_nullable_char() -> char | null {
     return null;
+}
+
+function retval_object_or_scalar() -> <\stdClass> | bool {
+    return false;
 }
