@@ -24,6 +24,8 @@ PHP_METHOD(TypeHints_RetVal, retval_nullable_double);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_string);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_boolean);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_char);
+PHP_METHOD(TypeHints_RetVal, retval_object_or_scalar);
+PHP_METHOD(TypeHints_RetVal, retval_static_object_or_scalar);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_getmystring, 0, 0, IS_STRING, 0)
@@ -159,5 +161,7 @@ ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, retval_nullable_string, arginfo_typehints_retval_retval_nullable_string, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_boolean, arginfo_typehints_retval_retval_nullable_boolean, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_char, arginfo_typehints_retval_retval_nullable_char, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_object_or_scalar, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_static_object_or_scalar, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END
 };
