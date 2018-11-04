@@ -1257,7 +1257,14 @@ class ClassDefinition
         }
 
         if (count($methods)) {
-            $codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
+            $codePrinter->output(
+                sprintf(
+                    'ZEPHIR_INIT_FUNCS(%s_%s_method_entry) {',
+                    strtolower($this->getCNamespace()),
+                    strtolower($this->getName())
+                )
+            );
+
             foreach ($methods as $method) {
                 if ($this->getType() == 'class') {
                     if (!$method->isInternal()) {
@@ -1268,13 +1275,11 @@ class ClassDefinition
                         if ($richFormat || $method->hasParameters()) {
                             $codePrinter->output(
                                 sprintf(
-                                    "\tPHP_ME(%s_%s, %s, arginfo_%s_%s_%s, %s)",
+                                    "\tPHP_ME(%s_%s, %s, %s, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
                                     $method->getName(),
-                                    strtolower($this->getCNamespace()),
-                                    strtolower($this->getName()),
-                                    strtolower($method->getName()),
+                                    $method->getArgInfoName($this),
                                     $method->getModifiers()
                                 )
                             );
@@ -1291,23 +1296,53 @@ class ClassDefinition
                         }
                     }
                 } else {
+                    $richFormat = $this->compiler->backend->isZE3() &&
+                            $method->isReturnTypesHintDetermined() &&
+                            $method->areReturnTypesCompatible();
+
                     if ($method->isStatic()) {
-                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
-                            $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
+                        if ($richFormat || $method->hasParameters()) {
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_FENTRY(%s, NULL, %s, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)",
+                                    $method->getName(),
+                                    $method->getArgInfoName($this)
+                                )
+                            );
                         } else {
-                            $codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_FENTRY(%s, NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)",
+                                    $method->getName()
+                                )
+                            );
                         }
                     } else {
-                        if (($this->compiler->backend->isZE3() && $method->isReturnTypesHintDetermined()) || $method->hasParameters()) {
-                            $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
+                        if ($richFormat || $method->hasParameters()) {
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tPHP_ABSTRACT_ME(%s_%s, %s, %s)",
+                                    $this->getCNamespace(),
+                                    $this->getName(),
+                                    $method->getName(),
+                                    $method->getArgInfoName($this)
+                                )
+                            );
                         } else {
-                            $codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tPHP_ABSTRACT_ME(%s_%s, %s, NULL)",
+                                    $this->getCNamespace(),
+                                    $this->getName(),
+                                    $method->getName()
+                                )
+                            );
                         }
                     }
                 }
             }
             $codePrinter->output("\t" . 'PHP_FE_END');
-            $codePrinter->output('};');
+            $codePrinter->output('};'); // ZEPHIR_INIT_FUNCS
         }
 
         $compilationContext->headerPrinter = $codePrinter;
