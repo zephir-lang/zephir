@@ -42,7 +42,7 @@ env:
   global:
     - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
     - RE2C_VERSION="1.1.1"
-    - ZEPHIR_PARSER_VERSION="v1.1.2"
+    - ZEPHIR_PARSER_VERSION="v1.1.3"
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
     - REPORT_COVERAGE=1
     - PHPUNIT_DONT_EXIT=0
