@@ -115,23 +115,4 @@ class FlowTest extends TestCase
         $this->assertSame($t->testFor22(), 0);
         $this->assertSame($t->testFor23(), 'zxvtrpnljhfdb');
     }
-
-    public function testSwitch()
-    {
-        $t = new \Test\Flow();
-        $this->assertSame($t->testSwitch1(), 10);
-        $this->assertTrue($t->testSwitch2());
-        $this->assertFalse($t->testSwitch3());
-        $this->assertSame($t->testSwitch4(), 2);
-        $this->assertSame($t->testSwitch5(), 1);
-        $this->assertSame($t->testSwitch6(), 1);
-        $this->assertSame($t->testSwitch7(), 1);
-        $this->assertSame($t->testSwitch8(), 2);
-        $this->assertSame($t->testSwitch9(), 2);
-        $this->assertSame($t->testSwitch10(), 2);
-        $this->assertSame($t->testSwitch11(), 1);
-        $this->assertSame($t->testSwitch12(10, 6), 1);
-        $this->assertSame($t->testSwitch12(6, 10), 0);
-        $this->assertSame($t->testSwitch12(2, 3), 2);
-    }
 }
