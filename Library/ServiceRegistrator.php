@@ -100,7 +100,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
      */
     protected function createEnvironment($basePath)
     {
-        $this->container->share(Environment::class, new Environment($basePath, $this->getContainer()));
+        $this->container->share('environment', new Environment($basePath, $this->getContainer()));
     }
 
     /**

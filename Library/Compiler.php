@@ -598,7 +598,7 @@ class Compiler implements InjectionAwareInterface
      */
     public function getGccFlags($development = false)
     {
-        if (!is_windows()) {
+        if (!$this->environment->isWindows()) {
             $gccFlags = getenv('CFLAGS');
             if (!is_string($gccFlags)) {
                 if (!$development) {
@@ -625,7 +625,7 @@ class Compiler implements InjectionAwareInterface
     {
         $version = $this->container->get(Version::class);
 
-        if (!is_windows()) {
+        if (!$this->environment->isWindows()) {
             $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
         }
 
@@ -637,7 +637,7 @@ class Compiler implements InjectionAwareInterface
      */
     public function preCompileHeaders()
     {
-        if (!is_windows()) {
+        if (!$this->environment->isWindows()) {
             $version = $this->container->get(Version::class);
             $phpIncludes = $this->getPhpIncludeDirs();
 
@@ -798,14 +798,11 @@ class Compiler implements InjectionAwareInterface
             $this->setExtensionGlobals($globals);
         }
 
-        /** @var Environment $environment */
-        $environment = $this->container->get(Environment::class);
-
         /**
          * Load function optimizers
          */
         if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir($environment->getPath('Library/Optimizers/FunctionCall'));
+            FunctionCall::addOptimizerDir($this->environment->getPath('Library/Optimizers/FunctionCall'));
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {
@@ -814,7 +811,7 @@ class Compiler implements InjectionAwareInterface
                 }
             }
 
-            $prototypes = $environment->getPrototypesPath();
+            $prototypes = $this->environment->getPrototypesPath();
 
             if (is_dir($prototypes) && is_readable($prototypes)) {
                 /**
@@ -998,10 +995,10 @@ class Compiler implements InjectionAwareInterface
         $needConfigure = $this->generate($command);
 
         if ($needConfigure) {
-            if (is_windows()) {
+            if ($this->environment->isWindows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-                $releaseFolder = windows_release_dir();
+                $releaseFolder = $this->environment->getWindowsReleaseDir();
                 if (file_exists($releaseFolder)) {
                     exec('rd /s /q ' . $releaseFolder, $output, $exit);
                 }
@@ -1060,7 +1057,7 @@ class Compiler implements InjectionAwareInterface
 
         $currentDir = getcwd();
         $this->logger->output('Compiling...');
-        if (is_windows()) {
+        if ($this->environment->isWindows()) {
             exec(
                 'cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' .
                 $currentDir . '\compile.log',
@@ -1141,7 +1138,7 @@ class Compiler implements InjectionAwareInterface
         @unlink("ext/modules/" . $namespace . ".so");
 
         $this->compile($command, $development);
-        if (is_windows()) {
+        if ($this->environment->isWindows()) {
             $this->logger->output("Installation is not implemented for windows yet! Aborting!");
             exit();
         }
@@ -1188,7 +1185,7 @@ class Compiler implements InjectionAwareInterface
 
         $this->logger->output('Running tests...');
 
-        if (!is_windows()) {
+        if (!$this->environment->isWindows()) {
             system(
                 'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
                 $exit
@@ -1204,7 +1201,8 @@ class Compiler implements InjectionAwareInterface
     public function clean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (is_windows()) {
+
+        if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
         } else {
             system('cd ext && make clean > /dev/null');
@@ -1219,7 +1217,7 @@ class Compiler implements InjectionAwareInterface
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (is_windows()) {
+        if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
             system('cd ext && phpize --clean');
             system('cd ext && ./clean');
@@ -2343,7 +2341,7 @@ class Compiler implements InjectionAwareInterface
     {
         $version = $this->container->get(Version::class);
 
-        if (!is_windows()) {
+        if (!$this->environment->isWindows()) {
             if ($this->fileSystem->exists($version . '/gcc-version')) {
                 return $this->fileSystem->read($version . '/gcc-version');
             }

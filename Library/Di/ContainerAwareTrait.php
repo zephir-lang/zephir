@@ -12,17 +12,26 @@
 namespace Zephir\Di;
 
 use League\Container\Container;
+use League\Container\ReflectionContainer;
 use Psr\Container\ContainerInterface;
 use Zephir\Exception\ContainerException;
-use League\Container\ReflectionContainer;
+use Zephir\Exception\InvalidCallException;
+use Zephir\Exception\UnknownPropertyException;
+use Zephir\Support\PropertyAccessor;
 
 /**
  * Zephir\Di\ContainerAwareTrait
  *
  * @package Zephir\Di
+ *
+ * @property-read \Zephir\Environment $environment
  */
 trait ContainerAwareTrait
 {
+    use PropertyAccessor {
+        PropertyAccessor::__get as protected missingMethod;
+    }
+
     /**
      * The Dependency Injection container.
      *
@@ -56,7 +65,7 @@ trait ContainerAwareTrait
      * {@inheritdoc}
      *
      * @see    InjectionAwareInterface
-     * @return ContainerInterface|Container
+     * @return Container
      *
      * @throws ContainerException
      */
@@ -89,5 +98,26 @@ trait ContainerAwareTrait
         $container->delegate(new ReflectionContainer());
 
         return $container;
+    }
+
+    /**
+     * Magic method to get services using internal container.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     *
+     * @throws InvalidCallException
+     * @throws UnknownPropertyException
+     */
+    public function __get($name)
+    {
+        $container = $this->getContainer();
+
+        if ($container && $container->has($name)) {
+            return $container->get($name);
+        }
+
+        return $this->missingMethod($name);
     }
 }

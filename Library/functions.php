@@ -14,37 +14,6 @@ namespace Zephir;
 use Zephir\Exception\InvalidArgumentException;
 
 /**
- * Checks if currently running under MS Windows.
- *
- * @return bool
- */
-function is_windows()
-{
-    return 'WIN' === \strtoupper(\substr(PHP_OS, 0, 3));
-}
-
-/**
- * Checks if currently running under macOs.
- *
- * @return bool
- */
-function is_macos()
-{
-    return 'DARWIN' === \strtoupper(\substr(PHP_OS, 0, 6));
-}
-
-/**
- * Checks if currently running under BSD based OS.
- *
- * @link   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
- * @return bool
- */
-function is_bsd()
-{
-    return false !== \stristr(\strtolower(PHP_OS), 'bsd');
-}
-
-/**
  * Attempts to remove recursively the directory with all subdirectories and files.
  *
  * A E_WARNING level error will be generated on failure.
@@ -149,55 +118,6 @@ function add_slashes($string)
         }
     }
     return $newstr;
-}
-
-/**
- * Checks if current PHP is thread safe.
- *
- * @return bool
- */
-function is_zts()
-{
-    if (\defined('PHP_ZTS') && PHP_ZTS == 1) {
-        return true;
-    }
-
-    \ob_start();
-    \phpinfo(INFO_GENERAL);
-
-    return (bool) \preg_match('/Thread\s*Safety\s*enabled/i', \strip_tags(\ob_get_clean()));
-}
-
-/**
- * Resolves Windows release folder.
- *
- * @return string
- */
-function windows_release_dir()
-{
-    if (is_zts()) {
-        if (PHP_INT_SIZE === 4) {
-            // 32-bit version of PHP
-            return "ext\\Release_TS";
-        } elseif (PHP_INT_SIZE === 8) {
-            // 64-bit version of PHP
-            return "ext\\x64\\Release_TS";
-        } else {
-            // fallback
-            return "ext\\Release_TS";
-        }
-    } else {
-        if (PHP_INT_SIZE === 4) {
-            // 32-bit version of PHP
-            return "ext\\Release";
-        } elseif (PHP_INT_SIZE === 8) {
-            // 64-bit version of PHP
-            return "ext\\x64\\Release";
-        } else {
-            // fallback
-            return "ext\\Release";
-        }
-    }
 }
 
 /**

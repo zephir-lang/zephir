@@ -13,7 +13,6 @@ namespace Zephir\Commands;
 
 use Zephir\Config;
 use Zephir\Logger;
-use Zephir\Compiler;
 use Zephir\Version;
 
 /**
