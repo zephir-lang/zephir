@@ -219,5 +219,4 @@ final class Environment implements InjectionAwareInterface
             }
         }
     }
-
 }

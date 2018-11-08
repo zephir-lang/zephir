@@ -19,9 +19,9 @@ use Zephir\Statements\LetStatement;
 
 class AndOperator extends LogicalBaseOperator
 {
-    protected $_operator = '&&';
+    protected $operator = '&&';
 
-    protected $_bitOperator = '&&';
+    protected $bitOperator = '&&';
 
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -34,7 +34,7 @@ class AndOperator extends LogicalBaseOperator
         }
 
         $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly($this->_readOnly);
+        $leftExpr->setReadOnly($this->readOnly);
         $left = $leftExpr->compile($compilationContext);
 
         /**
@@ -96,7 +96,7 @@ class AndOperator extends LogicalBaseOperator
         $compilationContext->codePrinter->increaseLevel();
 
         $rightExpr = new Expression($expression['right']);
-        $rightExpr->setReadOnly($this->_readOnly);
+        $rightExpr->setReadOnly($this->readOnly);
         $right = $rightExpr->compile($compilationContext);
 
         switch ($right->getType()) {

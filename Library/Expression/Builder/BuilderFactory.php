@@ -15,36 +15,31 @@ use Zephir\Expression\Builder\Factory\OperatorsFactory;
 use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 /**
- * Class BuilderFactory
+ * Zephir\Expression\Builder\BuilderFactory
+ *
  * @package Zephir\Expression\Builder
  */
 class BuilderFactory
 {
-    /**
-     * @var OperatorsFactory
-     */
+    /** @var OperatorsFactory */
     protected $operatorsFactory;
 
-    /**
-     * @var StatementsFactory
-     */
+    /** @var StatementsFactory */
     protected $statementsFactory;
 
-    /**
-     * @var self
-     */
-    protected static $_instance;
+    /** @var self */
+    protected static $instance;
 
     /**
      * @return self
      */
     public static function getInstance()
     {
-        if (!static::$_instance) {
-            static::$_instance = new static();
+        if (!static::$instance) {
+            static::$instance = new static();
         }
 
-        return static::$_instance;
+        return static::$instance;
     }
 
     /**

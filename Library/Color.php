@@ -12,11 +12,13 @@
 namespace Zephir;
 
 /**
- * Color
+ * Zephir\Color
  *
  * Allows to generate messages using colors on xterm, ddterm, linux, etc.
  * This class is based on Phalcon\Script available in Phalcon DevTools
  * licensed under New BSD license
+ *
+ * @package Zephir
  */
 class Color
 {
@@ -59,7 +61,7 @@ class Color
     /**
      * @var array Map of supported foreground colors
      */
-    private static $_fg = array(
+    private static $fg = [
         self::FG_BLACK        => '0;30',
         self::FG_DARK_GRAY    => '1;30',
         self::FG_RED          => '0;31',
@@ -76,12 +78,12 @@ class Color
         self::FG_LIGHT_CYAN   => '1;36',
         self::FG_LIGHT_GRAY   => '0;37',
         self::FG_WHITE        => '1;37',
-    );
+    ];
 
     /**
      * @var array Map of supported background colors
      */
-    private static $_bg = array(
+    private static $bg = [
         self::BG_BLACK      => '40',
         self::BG_RED        => '41',
         self::BG_GREEN      => '42',
@@ -90,12 +92,12 @@ class Color
         self::BG_MAGENTA    => '45',
         self::BG_CYAN       => '46',
         self::BG_LIGHT_GRAY => '47',
-    );
+    ];
 
     /**
      * @var array Map of supported attributes
      */
-    private static $_at = array(
+    private static $at = [
         self::AT_NORMAL    => '0',
         self::AT_BOLD      => '1',
         self::AT_ITALIC    => '3',
@@ -105,18 +107,18 @@ class Color
         self::AT_REVERSE   => '7',
         self::AT_NONDISP   => '8',
         self::AT_STRIKE    => '9',
-    );
+    ];
 
     /**
      * Supported terminals
      *
      * @var string
      */
-    private static $_supportedShells = array(
+    private static $supportedShells = [
         'xterm' => true,
         'xterm-256color' => true,
         'xterm-color' => true,
-    );
+    ];
 
     /**
      * Identify if console supports colors
@@ -128,12 +130,12 @@ class Color
         $flag = false;
 
         if (isset($_ENV['TERM'])) {
-            if (isset(self::$_supportedShells[$_ENV['TERM']])) {
+            if (isset(self::$supportedShells[$_ENV['TERM']])) {
                 $flag = true;
             }
         } else {
             if (isset($_SERVER['TERM'])) {
-                if (isset(self::$_supportedShells[$_SERVER['TERM']])) {
+                if (isset(self::$supportedShells[$_SERVER['TERM']])) {
                     $flag = true;
                 }
             }
@@ -163,18 +165,18 @@ class Color
         $colored = '';
 
         // Check if given foreground color is supported
-        if (isset(static::$_fg[$fg])) {
-            $colored .= "\033[" . static::$_fg[$fg] . "m";
+        if (isset(static::$fg[$fg])) {
+            $colored .= "\033[" . static::$fg[$fg] . "m";
         }
 
         // Check if given background color is supported
-        if (isset(static::$_bg[$bg])) {
-            $colored .= "\033[" . static::$_bg[$bg] . "m";
+        if (isset(static::$bg[$bg])) {
+            $colored .= "\033[" . static::$bg[$bg] . "m";
         }
 
         // Check if given attribute is supported
-        if (isset(static::$_at[$at])) {
-            $colored .= "\033[" . static::$_at[$at] . "m";
+        if (isset(static::$at[$at])) {
+            $colored .= "\033[" . static::$at[$at] . "m";
         }
 
         // Add string and end coloring

@@ -20,17 +20,19 @@ use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 
 /**
- * Reference
+ * Zephir\Expression\Reference
  *
  * Resolves expressions that create arrays
+ *
+ * @package Zephir\Expression
  */
 class Reference
 {
-    protected $_expecting = true;
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -41,8 +43,8 @@ class Reference
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -52,7 +54,7 @@ class Reference
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -158,9 +160,9 @@ class Reference
         /**
          * Resolves the symbol that expects the value
          */
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
                 if ($symbolVariable->getType() != 'variable') {
                     throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " to store a reference", $expression);
                 }
@@ -172,7 +174,7 @@ class Reference
         }
 
         $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly($this->_readOnly);
+        $leftExpr->setReadOnly($this->readOnly);
         $left = $leftExpr->compile($compilationContext);
 
         switch ($left->getType()) {

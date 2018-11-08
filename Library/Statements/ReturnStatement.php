@@ -29,7 +29,7 @@ class ReturnStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $statement = $this->_statement;
+        $statement = $this->statement;
 
         $codePrinter = $compilationContext->codePrinter;
 

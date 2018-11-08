@@ -35,7 +35,7 @@ class ThrowStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/exception');
 
         $codePrinter = $compilationContext->codePrinter;
-        $statement = $this->_statement;
+        $statement = $this->statement;
         $expr = $statement['expr'];
 
         /**

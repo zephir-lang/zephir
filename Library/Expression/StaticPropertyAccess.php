@@ -12,26 +12,26 @@
 namespace Zephir\Expression;
 
 use Zephir\ClassProperty;
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
+use Zephir\Variable;
 
 /**
- * StaticPropertyAccess
+ * Zephir\Expression\StaticPropertyAccess
  *
  * Resolves class static properties
+ *
+ * @package Zephir\Expression
  */
 class StaticPropertyAccess
 {
-    protected $_expecting = true;
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    /**
-     * @var Variable|null
-     */
-    protected $_expectingVariable;
+    /** @var Variable|null */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -42,8 +42,8 @@ class StaticPropertyAccess
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -53,7 +53,7 @@ class StaticPropertyAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -125,9 +125,9 @@ class StaticPropertyAccess
         /**
          * Resolves the symbol that expects the value
          */
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
                 if ($symbolVariable->getName() == 'return_value') {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
                 }
@@ -149,13 +149,13 @@ class StaticPropertyAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $readOnly = $this->_readOnly;
+        $readOnly = $this->readOnly;
         if (!$readOnly) {
             if ($symbolVariable->getName() != 'return_value') {
                 $symbolVariable->observeVariant($compilationContext);
             }
         }
-        $compilationContext->backend->fetchStaticProperty($symbolVariable, $classDefinition, $property, $this->_readOnly, $compilationContext);
+        $compilationContext->backend->fetchStaticProperty($symbolVariable, $classDefinition, $property, $this->readOnly, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

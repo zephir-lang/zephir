@@ -23,11 +23,11 @@ use Zephir\CompiledExpression;
  */
 class ModOperator extends ArithmeticalBaseOperator
 {
-    protected $_operator = '%';
+    protected $operator = '%';
 
-    protected $_bitOperator = '-';
+    protected $bitOperator = '-';
 
-    protected $_zvalOperator = 'mod_function';
+    protected $zvalOperator = 'mod_function';
 
     /**
      * Compiles the arithmetical modulus operation
@@ -114,7 +114,7 @@ class ModOperator extends ArithmeticalBaseOperator
                         return new CompiledExpression('long', '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                     default:
                         throw new CompilerException("Cannot operate 'bool' with '" . $right->getType() . "'", $expression);
@@ -231,7 +231,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('bool', '(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -246,7 +246,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_mod_long_double(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('double', 'zephir_safe_mod_long_long(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        return new CompiledExpression('double', 'zephir_safe_mod_long_long(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -277,7 +277,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_mod_double_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -292,7 +292,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_mod_double_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -358,7 +358,7 @@ class ModOperator extends ArithmeticalBaseOperator
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         $symbol = $compilationContext->backend->getVariableCode($expected);
-                                        $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $symbol . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+                                        $compilationContext->codePrinter->output($this->zvalOperator . '(' . $symbol . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
 
                                         if ($variableLeft->isTemporal()) {
                                             $variableLeft->setIdle(true);
@@ -415,14 +415,14 @@ class ModOperator extends ArithmeticalBaseOperator
                                                 return new CompiledExpression('double', 'zephir_safe_mod_zval_double(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                             case 'bool':
-                                                return new CompiledExpression('bool', $op1 . ' ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
+                                                return new CompiledExpression('bool', $op1 . ' ' . $this->bitOperator . ' ' . $variableRight->getName(), $expression);
 
                                             case 'variable':
                                                 $op2 = $compilationContext->backend->getVariableCode($variableRight);
 
                                                 $expected = $this->getExpected($compilationContext, $expression);
                                                 $symbol = $compilationContext->backend->getVariableCode($expected);
-                                                $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $symbol . ', ' . $op1 . ', ' . $op2 . ');');
+                                                $compilationContext->codePrinter->output($this->zvalOperator . '(' . $symbol . ', ' . $op1 . ', ' . $op2 . ');');
                                                 return new CompiledExpression('variable', $expected->getName(), $expression);
 
                                             default:

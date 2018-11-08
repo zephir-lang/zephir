@@ -11,29 +11,31 @@
 
 namespace Zephir\Expression;
 
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
+use Zephir\Variable;
 
 /**
- * PropertyAccess
+ * Zephir\Expression\PropertyAccess
  *
  * Resolves expressions that read properties
+ *
+ * @package Zephir\Expression
  */
 class PropertyAccess
 {
-    protected $_expecting = true;
+    /** @var boolean */
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    /** @var boolean */
+    protected $readOnly = false;
 
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
-    /**
-     * @var boolean
-     */
-    protected $_noisy = true;
+    /** @var boolean */
+    protected $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -44,8 +46,8 @@ class PropertyAccess
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -55,7 +57,7 @@ class PropertyAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -65,7 +67,7 @@ class PropertyAccess
      */
     public function setNoisy($noisy)
     {
-        $this->_noisy = $noisy;
+        $this->noisy = $noisy;
     }
 
     /**
@@ -179,9 +181,9 @@ class PropertyAccess
          */
         $readOnly = false;
         $makeSymbolVariable = false;
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
 
                 /**
                  * If a variable is assigned once in the method, we try to promote it
@@ -206,13 +208,13 @@ class PropertyAccess
                 if (!$readOnly) {
                     if ($symbolVariable->getName() != 'return_value') {
                         $symbolVariable->observeVariant($compilationContext);
-                        $this->_readOnly = false;
+                        $this->readOnly = false;
                     } else {
                         $makeSymbolVariable = true;
                     }
                 }
 
-                $this->_readOnly = false;
+                $this->readOnly = false;
             } else {
                 $makeSymbolVariable = true;
             }
@@ -220,7 +222,7 @@ class PropertyAccess
             $makeSymbolVariable = true;
         }
 
-        $readOnly = $this->_readOnly || $readOnly;
+        $readOnly = $this->readOnly || $readOnly;
         $useOptimized = $classDefinition == $currentClassDefinition;
         if (!$compilationContext->backend->isZE3()) {
             $readOnly = $useOptimized && $readOnly;

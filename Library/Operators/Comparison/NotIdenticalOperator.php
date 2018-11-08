@@ -13,25 +13,25 @@ namespace Zephir\Operators\Comparison;
 
 class NotIdenticalOperator extends ComparisonBaseOperator
 {
-    protected $_commutative = true;
+    protected $commutative = true;
 
-    protected $_inverse = true;
+    protected $inverse = true;
 
-    protected $_operator = '!=';
+    protected $operator = '!=';
 
-    protected $_bitOperator = '!=';
+    protected $bitOperator = '!=';
 
-    protected $_zvalOperator = '!ZEPHIR_IS_IDENTICAL';
+    protected $zvalOperator = '!ZEPHIR_IS_IDENTICAL';
 
-    protected $_zvalLongOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
+    protected $zvalLongOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
 
-    protected $_zvalLongNegOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
+    protected $zvalLongNegOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
 
-    protected $_zvalStringOperator = '!ZEPHIR_IS_STRING_IDENTICAL';
+    protected $zvalStringOperator = '!ZEPHIR_IS_STRING_IDENTICAL';
 
-    protected $_zvalBoolOperator = '!ZEPHIR_IS_BOOL_IDENTICAL';
+    protected $zvalBoolOperator = '!ZEPHIR_IS_BOOL_IDENTICAL';
 
-    protected $_zvalBoolTrueOperator = '!ZEPHIR_IS_TRUE_IDENTICAL';
+    protected $zvalBoolTrueOperator = '!ZEPHIR_IS_TRUE_IDENTICAL';
 
-    protected $_zvalBoolFalseOperator = '!ZEPHIR_IS_FALSE_IDENTICAL';
+    protected $zvalBoolFalseOperator = '!ZEPHIR_IS_FALSE_IDENTICAL';
 }

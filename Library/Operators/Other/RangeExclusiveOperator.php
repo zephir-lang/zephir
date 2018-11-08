@@ -50,7 +50,7 @@ class RangeExclusiveOperator extends BaseOperator
             ->functionCall('range', array($expression['left'], $expression['right'])));
 
         $expression = new Expression($castBuilder->build());
-        $expression->setReadOnly($this->_readOnly);
+        $expression->setReadOnly($this->readOnly);
         return $expression->compile($compilationContext);
     }
 }
