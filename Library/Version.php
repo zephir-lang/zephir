@@ -35,13 +35,10 @@ final class Version
             return self::VERSION . '-' . substr($version, 0, 10);
         }
 
-        if (is_windows()) {
-            return self::VERSION;
-        }
-
         if ($this->currentVersion === null) {
             if (file_exists(__DIR__ . '/../.git')) {
-                exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
+                $command = sprintf('git --git-dir=%s/../.git log --format="%%H" -n 1', __DIR__);
+                exec($command, $xversion);
                 if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
                     $this->currentVersion = substr($xversion[0], 0, 10);
                 } else {
