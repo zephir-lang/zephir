@@ -27,7 +27,7 @@ class UnsetStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/array');
-        $expression = $this->_statement['expr'];
+        $expression = $this->statement['expr'];
 
         $flags = 'PH_SEPARATE';
 
@@ -40,7 +40,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
 
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
@@ -51,7 +51,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 $compilationContext->headersManager->add('kernel/object');

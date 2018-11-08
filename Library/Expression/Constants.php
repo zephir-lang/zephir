@@ -19,26 +19,22 @@ use Zephir\Variable;
 use function Zephir\add_slashes;
 
 /**
- * Constants
+ * Zephir\Expression\Constants
  *
  * Resolves PHP or Zephir constants into C-Code
+ *
+ * @package Zephir\Expression
  */
 class Constants
 {
-    /**
-     * @var bool
-     */
-    protected $_expecting = true;
+    /** @var bool */
+    protected $expecting = true;
 
-    /**
-     * @var bool
-     */
-    protected $_readOnly = false;
+    /** @var bool */
+    protected $readOnly = false;
 
-    /**
-     * @var Variable
-     */
-    protected $_expectingVariable;
+    /** @var Variable */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -49,8 +45,8 @@ class Constants
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -60,7 +56,7 @@ class Constants
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -204,8 +200,8 @@ class Constants
             return new LiteralCompiledExpression('null', null, $expression);
         }
 
-        if ($this->_expecting && $this->_expectingVariable) {
-            $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting && $this->expectingVariable) {
+            $symbolVariable = $this->expectingVariable;
 
             $symbolVariable->setLocalOnly(false);
             $symbolVariable->setMustInitNull(true);

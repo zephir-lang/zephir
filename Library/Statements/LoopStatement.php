@@ -40,11 +40,11 @@ class LoopStatement extends StatementAbstract
         /**
          * Compile statements in the 'loop' block
          */
-        if (!isset($this->_statement['statements'])) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->_statement);
+        if (!isset($this->statement['statements'])) {
+            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
         }
 
-        $st = new StatementsBlock($this->_statement['statements']);
+        $st = new StatementsBlock($this->statement['statements']);
 
         /**
          * Check if the block contain at least a break statement
@@ -52,7 +52,7 @@ class LoopStatement extends StatementAbstract
         $loopBreakPass = new LoopBreakPass();
         $loopBreakPass->pass($st);
         if (!$loopBreakPass->hasBreak()) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->_statement);
+            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
         }
 
         $st->isLoop(true);

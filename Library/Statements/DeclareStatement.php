@@ -28,10 +28,10 @@ class DeclareStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $statement = $this->_statement;
+        $statement = $this->statement;
 
         if (!isset($statement['data-type'])) {
-            throw new CompilerException("Data type is required", $this->_statement);
+            throw new CompilerException("Data type is required", $this->statement);
         }
 
         $typeInference = $compilationContext->typeInference;

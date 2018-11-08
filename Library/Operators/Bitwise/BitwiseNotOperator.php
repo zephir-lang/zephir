@@ -32,7 +32,7 @@ class BitwiseNotOperator extends BaseOperator
         }
 
         $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly($this->_readOnly);
+        $leftExpr->setReadOnly($this->readOnly);
         $left = $leftExpr->compile($compilationContext);
 
         switch ($left->getType()) {

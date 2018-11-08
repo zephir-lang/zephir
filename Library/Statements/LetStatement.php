@@ -51,7 +51,7 @@ class LetStatement extends StatementAbstract
     {
         $readDetector = new ReadDetector();
 
-        $statement = $this->_statement;
+        $statement = $this->statement;
         foreach ($statement['assignments'] as $assignment) {
             $variable = $assignment['variable'];
 

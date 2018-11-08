@@ -65,7 +65,7 @@ class ConcatOperator extends BaseOperator
                     break;
 
                 default:
-                    $expr->setReadOnly($this->_readOnly);
+                    $expr->setReadOnly($this->readOnly);
                     break;
             }
 
@@ -167,7 +167,7 @@ class ConcatOperator extends BaseOperator
                 break;
 
             default:
-                $leftExpr->setReadOnly($this->_readOnly);
+                $leftExpr->setReadOnly($this->readOnly);
                 break;
         }
         $left = $leftExpr->compile($compilationContext);
@@ -185,7 +185,7 @@ class ConcatOperator extends BaseOperator
                 break;
 
             default:
-                $rightExpr->setReadOnly($this->_readOnly);
+                $rightExpr->setReadOnly($this->readOnly);
                 break;
         }
         $right = $rightExpr->compile($compilationContext);

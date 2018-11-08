@@ -30,10 +30,10 @@ class RequireStatement extends StatementAbstract
     {
         $expression = array(
             'type' => 'require',
-            'left' => $this->_statement['expr'],
-            'file' => $this->_statement['file'],
-            'line' => $this->_statement['line'],
-            'char' => $this->_statement['char']
+            'left' => $this->statement['expr'],
+            'file' => $this->statement['file'],
+            'line' => $this->statement['line'],
+            'char' => $this->statement['char']
         );
 
         $expr = new Expression($expression);

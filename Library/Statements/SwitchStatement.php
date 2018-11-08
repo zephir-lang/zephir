@@ -29,7 +29,7 @@ class SwitchStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
 
         $codePrinter = $compilationContext->codePrinter;
 
@@ -39,7 +39,7 @@ class SwitchStatement extends StatementAbstract
         $exprEval->setReadOnly(true);
         $resolvedExpr = $exprEval->compile($compilationContext);
 
-        if (isset($this->_statement['clauses'])) {
+        if (isset($this->statement['clauses'])) {
             $evalExpr = new EvalExpression();
 
             $codePrinter->output('do {');
@@ -79,7 +79,7 @@ class SwitchStatement extends StatementAbstract
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
 
-            $clauses = $this->normalizeClauses($this->_statement['clauses']);
+            $clauses = $this->normalizeClauses($this->statement['clauses']);
             $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
 
             /**

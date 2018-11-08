@@ -38,8 +38,8 @@ class TryCatchStatement extends StatementAbstract
         $codePrinter->output('/* try_start_' . $currentTryCatch . ': */');
         $codePrinter->outputBlankLine();
 
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->compile($compilationContext);
         }
 
@@ -53,7 +53,7 @@ class TryCatchStatement extends StatementAbstract
 
         $compilationContext->insideTryCatch--;
 
-        if (isset($this->_statement['catches'])) {
+        if (isset($this->statement['catches'])) {
             /**
              * Check if there was an exception
              */
@@ -66,7 +66,7 @@ class TryCatchStatement extends StatementAbstract
             $exprBuilder = BuilderFactory::getInstance();
             $ifs         = array();
 
-            foreach ($this->_statement['catches'] as $catch) {
+            foreach ($this->statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
                     if ($variable->getType() != 'variable') {

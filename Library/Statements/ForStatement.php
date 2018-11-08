@@ -50,7 +50,7 @@ class ForStatement extends StatementAbstract
         $parameters = $functionCall->getResolvedParamsAsExpr($exprRaw['parameters'], $compilationContext, $exprRaw);
 
         if (count($parameters) != 2 && count($parameters) != 3) {
-            throw new CompilerException("Wrong number of parameters", $this->_statement['expr']);
+            throw new CompilerException("Wrong number of parameters", $this->statement['expr']);
         }
 
         if ($parameters[0]->getType() != 'variable') {
@@ -71,23 +71,23 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             /**
              * This variable is used to check if the loop is in its first iteration
              */
-            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext, $this->_statement);
+            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext, $this->statement);
             $keyVariable->increaseUses();
         }
 
         /**
          * This variable is used to check if the loop is in its first iteration
          */
-        $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext, $this->_statement);
+        $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext, $this->statement);
 
         if ($parameters[0]->getType() != 'variable') {
             $tempVariable = $compilationContext->symbolTable->addTemp($parameters[0]->getType(), $compilationContext);
         } else {
-            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode(), $compilationContext, $this->_statement['expr']);
+            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode(), $compilationContext, $this->statement['expr']);
             $tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
         }
 
@@ -98,7 +98,7 @@ class ForStatement extends StatementAbstract
         if ($parameters[1]->getType() != 'variable') {
             $upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
         } else {
-            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode(), $compilationContext, $this->_statement['expr']);
+            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode(), $compilationContext, $this->statement['expr']);
             $upperBoundVariable = $compilationContext->symbolTable->getTempVariable($rangeVariable->getType(), $compilationContext);
         }
 
@@ -108,29 +108,29 @@ class ForStatement extends StatementAbstract
         $builderLet = $exprBuilder->statements()->let();
         $builderLet->setAssignments(array($exprBuilder->operators()
             ->assignVariable($upperBoundVariable->getName(), $exprBuilder->literal($parameters[1]->getType(), $parameters[1]->getCode())
-                ->setFile($this->_statement['file'])
-                ->setLine($this->_statement['line'])
-                ->setChar($this->_statement['char']))
-            ->setFile($this->_statement['file'])
-            ->setLine($this->_statement['line'])
-            ->setChar($this->_statement['char'])
+                ->setFile($this->statement['file'])
+                ->setLine($this->statement['line'])
+                ->setChar($this->statement['char']))
+            ->setFile($this->statement['file'])
+            ->setLine($this->statement['line'])
+            ->setChar($this->statement['char'])
         ));
 
         $statement = new LetStatement($builderLet->build());
         $statement->compile($compilationContext);
 
-        if ($this->_statement['reverse']) {
+        if ($this->statement['reverse']) {
             /**
              * Create an implicit 'let' operation for the initialize expression
              */
             $builderLet->setAssignments(array($exprBuilder->operators()
                 ->assignVariable($tempVariable->getName(), $exprBuilder->variable($upperBoundVariable->getName())
-                    ->setFile($this->_statement['file'])
-                    ->setLine($this->_statement['line'])
-                    ->setChar($this->_statement['char']))
-                ->setFile($this->_statement['file'])
-                ->setLine($this->_statement['line'])
-                ->setChar($this->_statement['char'])
+                    ->setFile($this->statement['file'])
+                    ->setLine($this->statement['line'])
+                    ->setChar($this->statement['char']))
+                ->setFile($this->statement['file'])
+                ->setLine($this->statement['line'])
+                ->setChar($this->statement['char'])
             ));
             $statement = new LetStatement($builderLet->build());
         } else {
@@ -139,12 +139,12 @@ class ForStatement extends StatementAbstract
              */
             $builderLet->setAssignments(array($exprBuilder->operators()
                 ->assignVariable($tempVariable->getName(), $exprBuilder->literal($parameters[0]->getType(), $parameters[0]->getCode())
-                    ->setFile($this->_statement['file'])
-                    ->setLine($this->_statement['line'])
-                    ->setChar($this->_statement['char']))
-                ->setFile($this->_statement['file'])
-                ->setLine($this->_statement['line'])
-                ->setChar($this->_statement['char'])
+                    ->setFile($this->statement['file'])
+                    ->setLine($this->statement['line'])
+                    ->setChar($this->statement['char']))
+                ->setFile($this->statement['file'])
+                ->setLine($this->statement['line'])
+                ->setChar($this->statement['char'])
             ));
             $statement = new LetStatement($builderLet->build());
         }
@@ -154,12 +154,12 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             $codePrinter->output($keyVariable->getName() . ' = 0;');
         }
         $codePrinter->output($flagVariable->getName() . ' = 0;');
 
-        if ($this->_statement['reverse']) {
+        if ($this->statement['reverse']) {
             $conditionExpr = array(
                 'type' => 'greater-equal',
                 'left' => array('type' => 'variable', 'value' => $tempVariable->getName()),
@@ -191,11 +191,11 @@ class ForStatement extends StatementAbstract
 
         $codePrinter->increaseLevel();
 
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             $codePrinter->output($keyVariable->getName() . '++;');
         }
 
-        if ($this->_statement['reverse']) {
+        if ($this->statement['reverse']) {
             if (!isset($parameters[2])) {
                 $statement = new LetStatement(array(
                     'type' => 'let',
@@ -203,9 +203,9 @@ class ForStatement extends StatementAbstract
                         array(
                             'assign-type' => 'decr',
                             'variable' => $tempVariable->getName(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         )
                     )
                 ));
@@ -220,13 +220,13 @@ class ForStatement extends StatementAbstract
                             'expr' => array(
                                 'type' => $parameters[2]->getType(),
                                 'value' => $parameters[2]->getCode(),
-                                'file' => $this->_statement['file'],
-                                'line' => $this->_statement['line'],
-                                'char' => $this->_statement['char']
+                                'file' => $this->statement['file'],
+                                'line' => $this->statement['line'],
+                                'char' => $this->statement['char']
                             ),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         )
                     )
                 ));
@@ -239,9 +239,9 @@ class ForStatement extends StatementAbstract
                         array(
                             'assign-type' => 'incr',
                             'variable' => $tempVariable->getName(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         )
                     )
                 ));
@@ -256,13 +256,13 @@ class ForStatement extends StatementAbstract
                             'expr' => array(
                                 'type' => $parameters[2]->getType(),
                                 'value' => $parameters[2]->getCode(),
-                                'file' => $this->_statement['file'],
-                                'line' => $this->_statement['line'],
-                                'char' => $this->_statement['char']
+                                'file' => $this->statement['file'],
+                                'line' => $this->statement['line'],
+                                'char' => $this->statement['char']
                             ),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         )
                     )
                 ));
@@ -287,12 +287,12 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             /**
              * Check for anonymous variables
              */
-            if ($this->_statement['key'] != '_') {
-                $keyVariableName = $this->_statement['key'];
+            if ($this->statement['key'] != '_') {
+                $keyVariableName = $this->statement['key'];
             } else {
                 $keyVariableName = $keyVariable->getName();
             }
@@ -310,13 +310,13 @@ class ForStatement extends StatementAbstract
                         'expr' => array(
                             'type' => 'variable',
                             'value' => $keyVariable->getName(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         ),
-                        'file' => $this->_statement['file'],
-                        'line' => $this->_statement['line'],
-                        'char' => $this->_statement['char']
+                        'file' => $this->statement['file'],
+                        'line' => $this->statement['line'],
+                        'char' => $this->statement['char']
                     )
                 )
             ));
@@ -327,12 +327,12 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'value' variable
          */
-        if (isset($this->_statement['value'])) {
+        if (isset($this->statement['value'])) {
             /**
              * Check for anonymous variables
              */
-            if ($this->_statement['value'] != '_') {
-                $valueVariable = $this->_statement['value'];
+            if ($this->statement['value'] != '_') {
+                $valueVariable = $this->statement['value'];
             } else {
                 $valueVariable = $tempVariable->getName();
             }
@@ -350,13 +350,13 @@ class ForStatement extends StatementAbstract
                         'expr' => array(
                             'type'  => 'variable',
                             'value' => $tempVariable->getName(),
-                            'file'  => $this->_statement['file'],
-                            'line'  => $this->_statement['line'],
-                            'char'  => $this->_statement['char']
+                            'file'  => $this->statement['file'],
+                            'line'  => $this->statement['line'],
+                            'char'  => $this->statement['char']
                         ),
-                        'file' => $this->_statement['file'],
-                        'line' => $this->_statement['line'],
-                        'char' => $this->_statement['char']
+                        'file' => $this->statement['file'],
+                        'line' => $this->statement['line'],
+                        'char' => $this->statement['char']
                     )
                 )
             ));
@@ -369,13 +369,13 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->isLoop(true);
-            if (isset($this->_statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            if (isset($this->statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->statement['key']);
             }
-            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
+            $st->getMutateGatherer()->increaseMutations($this->statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -417,7 +417,7 @@ class ForStatement extends StatementAbstract
             throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
         }
 
-        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
+        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
         switch ($exprVariable->getType()) {
             case 'variable':
                 break;
@@ -426,11 +426,11 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
-            if ($this->_statement['key'] != '_') {
-                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['key'])) {
+            if ($this->statement['key'] != '_') {
+                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->statement['key'], $compilationContext, $this->statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
+                    throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->statement['expr']);
                 }
             } else {
                 /**
@@ -448,11 +448,11 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'value' variable
          */
-        if (isset($this->_statement['value'])) {
-            if ($this->_statement['value'] != '_') {
-                $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['value'])) {
+            if ($this->statement['value'] != '_') {
+                $variable = $compilationContext->symbolTable->getVariableForWrite($this->statement['value'], $compilationContext, $this->statement['expr']);
                 if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
+                    throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->statement['expr']);
                 }
             } else {
                 /**
@@ -477,12 +477,12 @@ class ForStatement extends StatementAbstract
         $codePrinter->output($iteratorVariable ->getName() . '->funcs->rewind(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
         $codePrinter->output('for (;' . $iteratorVariable->getName() . '->funcs->valid(' . $iteratorVariable->getName() . ' TSRMLS_CC) == SUCCESS && !EG(exception); ' . $iteratorVariable ->getName() . '->funcs->move_forward(' . $iteratorVariable ->getName() . ' TSRMLS_CC)) {');
 
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_IMKEY(' . $this->_statement['key'] . ', ' . $iteratorVariable->getName() . ');');
+            $codePrinter->output("\t" . 'ZEPHIR_GET_IMKEY(' . $this->statement['key'] . ', ' . $iteratorVariable->getName() . ');');
         }
 
-        if (isset($this->_statement['value'])) {
+        if (isset($this->statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
@@ -496,13 +496,13 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->isLoop(true);
-            if (isset($this->_statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            if (isset($this->statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->statement['key']);
             }
-            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
+            $st->getMutateGatherer()->increaseMutations($this->statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -533,9 +533,9 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
-            if ($this->_statement['key'] != '_') {
-                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['key'])) {
+            if ($this->statement['key'] != '_') {
+                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->statement['key'], $compilationContext, $this->statement['expr']);
                 switch ($keyVariable->getType()) {
                     case 'int':
                     case 'uint':
@@ -545,7 +545,7 @@ class ForStatement extends StatementAbstract
                     case 'uchar':
                         break;
                     default:
-                        throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->_statement['expr']);
+                        throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->statement['expr']);
                 }
             } else {
                 $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
@@ -559,9 +559,9 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'value' variable
          */
-        if (isset($this->_statement['value'])) {
-            if ($this->_statement['value'] != '_') {
-                $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['value'])) {
+            if ($this->statement['value'] != '_') {
+                $variable = $compilationContext->symbolTable->getVariableForWrite($this->statement['value'], $compilationContext, $this->statement['expr']);
                 switch ($variable->getType()) {
                     case 'int':
                     case 'uint':
@@ -571,7 +571,7 @@ class ForStatement extends StatementAbstract
                     case 'uchar':
                         break;
                     default:
-                        throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->_statement['expr']);
+                        throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->statement['expr']);
                 }
             } else {
                 $variable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
@@ -588,7 +588,7 @@ class ForStatement extends StatementAbstract
          * Create a temporary value to store the constant string
          */
         if ($expression->getType() == 'string') {
-            $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->_statement);
+            $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->statement);
 
             $compilationContext->backend->assignString(
                 $constantVariable,
@@ -604,13 +604,13 @@ class ForStatement extends StatementAbstract
         }
 
         $stringVariableCode = $compilationContext->backend->getVariableCode($stringVariable);
-        if ($this->_statement['reverse']) {
+        if ($this->statement['reverse']) {
             $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $stringVariableCode . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');
         } else {
             $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' . $tempVariable->getName() . ' < Z_STRLEN_P(' . $stringVariableCode . '); ' . $tempVariable->getName() . '++) {');
         }
 
-        if (isset($this->_statement['key'])) {
+        if (isset($this->statement['key'])) {
             $codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
         }
 
@@ -625,13 +625,13 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->isLoop(true);
-            if (isset($this->_statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            if (isset($this->statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->statement['key']);
             }
-            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
+            $st->getMutateGatherer()->increaseMutations($this->statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -656,11 +656,11 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'key' variable
          */
-        if (isset($this->_statement['key'])) {
-            if ($this->_statement['key'] != '_') {
-                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['key'])) {
+            if ($this->statement['key'] != '_') {
+                $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->statement['key'], $compilationContext, $this->statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
+                    throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->statement['expr']);
                 }
             } else {
                 $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -674,11 +674,11 @@ class ForStatement extends StatementAbstract
         /**
          * Initialize 'value' variable
          */
-        if (isset($this->_statement['value'])) {
-            if ($this->_statement['value'] != '_') {
-                $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
+        if (isset($this->statement['value'])) {
+            if ($this->statement['value'] != '_') {
+                $variable = $compilationContext->symbolTable->getVariableForWrite($this->statement['value'], $compilationContext, $this->statement['expr']);
                 if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
+                    throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->statement['expr']);
                 }
             } else {
                 $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -704,24 +704,24 @@ class ForStatement extends StatementAbstract
          * We have to check if hashes are modified within the for's block
          */
         $st = null;
-        if (isset($this->_statement['statements'])) {
+        if (isset($this->statement['statements'])) {
             /**
              * Create the statements block here to obtain the last use line
              */
-            $st = new StatementsBlock($this->_statement['statements']);
+            $st = new StatementsBlock($this->statement['statements']);
 
             $detector = new ForValueUseDetector();
-            if ($detector->detect($exprVariable->getName(), $this->_statement['statements'])) {
+            if ($detector->detect($exprVariable->getName(), $this->statement['statements'])) {
                 $duplicateHash = '1';
             }
 
             /**
              * Detect if the key is modified or passed to an external scope
              */
-            if (isset($this->_statement['key'])) {
+            if (isset($this->statement['key'])) {
                 if (!$keyVariable->isTemporal()) {
                     $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
-                    if ($detector->detect($keyVariable->getName(), $this->_statement['statements'])) {
+                    if ($detector->detect($keyVariable->getName(), $this->statement['statements'])) {
                         $duplicateKey = true;
                     }
                 }
@@ -730,11 +730,11 @@ class ForStatement extends StatementAbstract
 
         $compilationContext->backend->forStatement(
             $exprVariable,
-            isset($this->_statement['key']) ? $keyVariable : null,
-            isset($this->_statement['value']) ? $variable : null,
+            isset($this->statement['key']) ? $keyVariable : null,
+            isset($this->statement['value']) ? $variable : null,
             $duplicateKey,
             $duplicateHash,
-            $this->_statement,
+            $this->statement,
             $st,
             $compilationContext
         );
@@ -751,7 +751,7 @@ class ForStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
 
         /**
          * @TODO implement optimizers here
@@ -788,7 +788,7 @@ class ForStatement extends StatementAbstract
             throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
         }
 
-        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
+        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
         switch ($exprVariable->getType()) {
             case 'variable':
             case 'array':

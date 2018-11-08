@@ -18,9 +18,9 @@ namespace Zephir\Operators\Arithmetical;
  */
 class MulOperator extends ArithmeticalBaseOperator
 {
-    protected $_operator = '*';
+    protected $operator = '*';
 
-    protected $_bitOperator = '+';
+    protected $bitOperator = '+';
 
-    protected $_zvalOperator = 'mul_function';
+    protected $zvalOperator = 'mul_function';
 }

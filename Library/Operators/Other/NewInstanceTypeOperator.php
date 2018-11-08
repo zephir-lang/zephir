@@ -14,6 +14,7 @@ namespace Zephir\Operators\Other;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Exception;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
@@ -26,7 +27,7 @@ use Zephir\Builder\Operators\CastOperatorBuilder;
  */
 class NewInstanceTypeOperator extends BaseOperator
 {
-    protected $_literalOnly = false;
+    protected $literalOnly = false;
 
     /**
      * Executes the operator
@@ -72,8 +73,12 @@ class NewInstanceTypeOperator extends BaseOperator
         $castBuilder = new CastOperatorBuilder($expression['internal-type'], $builder);
 
         $expression = new Expression($castBuilder->get());
-        $expression->setReadOnly($this->_readOnly);
+        $expression->setReadOnly($this->readOnly);
 
-        return $expression->compile($compilationContext);
+        try {
+            return $expression->compile($compilationContext);
+        } catch (Exception $e) {
+            throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
+        }
     }
 }

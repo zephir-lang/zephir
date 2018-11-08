@@ -12,7 +12,7 @@
 namespace Zephir\Code\Builder;
 
 /**
- * Class Struct
+ * Zephir\Code\Builder\Struct
  *
  * Represents an internal extension global structure
  *
@@ -20,24 +20,19 @@ namespace Zephir\Code\Builder;
  */
 class Struct
 {
-    /**
-     * @var string
-     */
-    protected $_name;
+    /** @var string */
+    protected $name;
 
-    /**
-     * @var string
-     */
-    protected $_simpleName;
+    /** @var string */
+    protected $simpleName;
 
-    /**
-     * @var array
-     */
-    protected $_properties = array();
+    /** @var array */
+    protected $properties = [];
 
     /**
      * @param string $name
      * @param string $simpleName
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct($name, $simpleName)
@@ -54,8 +49,8 @@ class Struct
             throw new \InvalidArgumentException('Struct name must not be empty');
         }
 
-        $this->_name = $name;
-        $this->_simpleName = $simpleName;
+        $this->name = $name;
+        $this->simpleName = $simpleName;
     }
 
     /**
@@ -77,11 +72,11 @@ class Struct
             throw new \InvalidArgumentException('Property name must be string');
         }
 
-        if (isset($this->_properties[$field])) {
+        if (isset($this->properties[$field])) {
             throw new \InvalidArgumentException('Property was defined more than once');
         }
 
-        $this->_properties[$field] = $this->convertToCType($global['type']);
+        $this->properties[$field] = $this->convertToCType($global['type']);
     }
 
     /**
@@ -132,10 +127,10 @@ class Struct
                 return '';
                 /*
                 if ($global['default'] === true) {
-                    return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = 1;';
+                    return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = 1;';
                 } else {
                     if ($global['default'] === false) {
-                        return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = 0;';
+                        return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = 0;';
                     } else {
                         throw new \Exception('Invalid default type for boolean field "' . $name . '", it must be false/true');
                     }
@@ -148,7 +143,7 @@ class Struct
             case 'long':
             case 'double':
             case 'hash':
-                return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
+                return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
             default:
                 throw new \Exception('Unknown global type: ' . $global['type']);
@@ -160,13 +155,13 @@ class Struct
      */
     public function __toString()
     {
-        $code = 'typedef struct '. $this->_name .' { '.PHP_EOL;
+        $code = 'typedef struct '. $this->name .' { '.PHP_EOL;
 
-        foreach ($this->_properties as $name => $type) {
+        foreach ($this->properties as $name => $type) {
             $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
         }
 
-        return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;
+        return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
     }
 
     /**
@@ -178,7 +173,7 @@ class Struct
         if (isset($global['ini-entry'])) {
             $iniEntry = $global['ini-entry'];
         }
-        $structName = $this->_simpleName . '.' . $name;
+        $structName = $this->simpleName . '.' . $name;
         if (!isset($iniEntry['name'])) {
             $iniName = $namespace . '.' . $structName;
         } else {

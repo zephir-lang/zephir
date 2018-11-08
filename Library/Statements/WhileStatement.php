@@ -27,7 +27,7 @@ class WhileStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
         /**
@@ -44,7 +44,7 @@ class WhileStatement extends StatementAbstract
 
         $expr = new EvalExpression();
         $condition = $expr->optimize($exprRaw, $compilationContext);
-        $this->_evalExpression = $expr;
+        $this->evalExpression = $expr;
 
         $codePrinter->output('if (!(' . $condition . ')) {');
         $codePrinter->output("\t" . 'break;');
@@ -55,8 +55,8 @@ class WhileStatement extends StatementAbstract
         /**
          * Compile statements in the 'while' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->isLoop(true);
             $st->compile($compilationContext);
         }

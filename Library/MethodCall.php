@@ -391,7 +391,7 @@ class MethodCall extends Call
         }
 
         if (isset($method)) {
-            $this->_reflection = $method;
+            $this->reflection = $method;
         }
 
         /**

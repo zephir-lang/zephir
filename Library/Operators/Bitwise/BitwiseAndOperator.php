@@ -13,9 +13,9 @@ namespace Zephir\Operators\Bitwise;
 
 class BitwiseAndOperator extends BitwiseBaseOperator
 {
-    protected $_operator = '&';
+    protected $operator = '&';
 
-    protected $_bitOperator = '&';
+    protected $bitOperator = '&';
 
-    protected $_zvalOperator = 'zephir_bitwise_and_function';
+    protected $zvalOperator = 'zephir_bitwise_and_function';
 }

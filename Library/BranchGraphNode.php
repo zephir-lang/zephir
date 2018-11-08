@@ -12,24 +12,31 @@
 namespace Zephir;
 
 /**
- * BranchGraphNode
+ * Branch\BranchGraphNode
  *
  * Allows to visualize assignments for a specific variable in every branch used
+ *
+ * @package Zephir
  */
 class BranchGraphNode
 {
-    protected $_increase = 0;
+    /** @var int */
+    protected $increase = 0;
 
-    protected $_branches = array();
+    /** @var Branch[] */
+    protected $branches = [];
+
+    /** @var Branch */
+    protected $branch;
 
     /**
      * BranchGraphNode
      *
      * @param Branch $branch
      */
-    public function __construct($branch)
+    public function __construct(Branch $branch)
     {
-        $this->_branch = $branch;
+        $this->branch = $branch;
     }
 
     /**
@@ -39,8 +46,8 @@ class BranchGraphNode
      */
     public function insert(BranchGraphNode $branch)
     {
-        if (!in_array($branch, $this->_branches)) {
-            $this->_branches[] = $branch;
+        if (!in_array($branch, $this->branches)) {
+            $this->branches[] = $branch;
         }
     }
 
@@ -49,7 +56,7 @@ class BranchGraphNode
      */
     public function increase()
     {
-        $this->_increase++;
+        $this->increase++;
     }
 
     /**
@@ -59,10 +66,10 @@ class BranchGraphNode
      */
     public function show($padding = 0)
     {
-        echo str_repeat("    ", $padding), $this->_branch->getUniqueId(), ':' , $this->_increase;
-        if (count($this->_branches)) {
+        echo str_repeat("    ", $padding), $this->branch->getUniqueId(), ':' , $this->increase;
+        if (count($this->branches)) {
             echo ':', PHP_EOL;
-            foreach ($this->_branches as $node) {
+            foreach ($this->branches as $node) {
                 $node->show($padding + 1);
             }
         } else {

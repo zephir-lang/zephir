@@ -19,22 +19,22 @@ use Zephir\Variable;
 use function Zephir\add_slashes;
 
 /**
- * PropertyDynamicAccess
+ * Zephir\Expression\PropertyDynamicAccess
  *
  * Resolves expressions that read properties with a dynamic variable as property
+ *
+ * @package Zephir\Expression
  */
 class PropertyDynamicAccess
 {
-    protected $_expecting = true;
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
-    /**
-     * @var boolean
-     */
-    protected $_noisy = true;
+    /**@var boolean */
+    protected $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -45,8 +45,8 @@ class PropertyDynamicAccess
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -56,7 +56,7 @@ class PropertyDynamicAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -66,7 +66,7 @@ class PropertyDynamicAccess
      */
     public function setNoisy($noisy)
     {
-        $this->_noisy = $noisy;
+        $this->noisy = $noisy;
     }
 
     /**
@@ -111,9 +111,9 @@ class PropertyDynamicAccess
         /**
          * Resolves the symbol that expects the value
          */
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
                 if ($symbolVariable->getName() != 'return_value') {
                     $symbolVariable->observeVariant($compilationContext);
                 } else {

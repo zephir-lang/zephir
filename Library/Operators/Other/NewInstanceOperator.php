@@ -26,7 +26,7 @@ use function Zephir\escape_class;
  */
 class NewInstanceOperator extends BaseOperator
 {
-    protected $_literalOnly = false;
+    protected $literalOnly = false;
 
     /**
      * Creates a new instance
@@ -43,7 +43,7 @@ class NewInstanceOperator extends BaseOperator
         /**
          * Resolves the symbol that expects the value
          */
-        $this->_literalOnly = false;
+        $this->literalOnly = false;
         $symbolVariable = $this->getExpectedNonLiteral($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Objects can only be instantiated into dynamic variables", $expression);

@@ -15,18 +15,20 @@ use Zephir\CompilationContext;
 use Zephir\Optimizers\EvalExpression;
 
 /**
- * Class StatementAbstract
+ * Zephir\Statements\StatementAbstract
+ *
+ * @package Zephir\Statements
  */
 abstract class StatementAbstract
 {
-    protected $_statement;
+    protected $statement;
 
-    protected $_uniqueId;
+    protected $uniqueId;
 
     /** @var EvalExpression|null */
-    protected $_evalExpression;
+    protected $evalExpression;
 
-    protected static $_uniqueGenerator;
+    protected static $uniqueGenerator;
 
     /**
      * StatementAbstract construct
@@ -35,7 +37,7 @@ abstract class StatementAbstract
      */
     public function __construct(array $statement)
     {
-        $this->_statement = $statement;
+        $this->statement = $statement;
     }
 
     /**
@@ -45,10 +47,10 @@ abstract class StatementAbstract
      */
     public function getUniqueId()
     {
-        if (!$this->_uniqueId) {
-            $this->_uniqueId = self::$_uniqueGenerator++;
+        if (!$this->uniqueId) {
+            $this->uniqueId = self::$uniqueGenerator++;
         }
-        return $this->_uniqueId;
+        return $this->uniqueId;
     }
 
     /**
@@ -56,7 +58,7 @@ abstract class StatementAbstract
      */
     public function getEvalExpression()
     {
-        return $this->_evalExpression;
+        return $this->evalExpression;
     }
 
     /**

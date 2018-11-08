@@ -27,7 +27,7 @@ class DoWhileStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('do {');
@@ -40,8 +40,8 @@ class DoWhileStatement extends StatementAbstract
         /**
          * Compile statements in the 'while' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->compile($compilationContext);
         }
 
