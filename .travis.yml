@@ -127,7 +127,7 @@ jobs:
       script:
         - ./zephir.phar generate
         - |
-            ./zephir.phar \
+            php \
               -d extension=ext/modules/test.so \
               unit-tests/phpunit \
               -c ${PHPUNIT_CONF} \
