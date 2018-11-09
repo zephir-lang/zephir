@@ -19,6 +19,10 @@
     "files": [
         "LICENSE"
     ],
+    "blacklist": [
+        "unit-tests",
+        "test"
+    ],
     "finder": [
         {
             "in": "kernels",
