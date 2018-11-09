@@ -52,11 +52,12 @@ env:
 
 before_install:
   - '[[ -z "${GH_TOKEN}" ]] || composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"'
-  - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
-  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
-  - export PHP_VERNUM="$(`phpenv which php-config` --vernum)"
+  - export PHP_MAJOR="$(php -r 'echo phpversion();' | cut -d '.' -f 1)"
+  - export PHP_MINOR="$(php -r 'echo phpversion();' | cut -d '.' -f 2)"
+  - export PHP_VERNUM="$(php-config --vernum)"
   - ulimit -c unlimited -S
   - phpenv config-add ./unit-tests/ci/999-default.ini
+  - echo "$TRAVIS_PHP_VERSION"
 
 install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
@@ -73,13 +74,13 @@ before_script:
 
 script:
   - |
-      $(phpenv which php) \
+      php \
         -d extension=ext/modules/test.so \
         unit-tests/phpunit \
         -c ${PHPUNIT_CONF} \
         --testsuite "Extension Test Suite"
   - |
-      $(phpenv which php) \
+      php \
         -d extension=ext/modules/test.so \
         unit-tests/phpunit \
         -c ${PHPUNIT_CONF} \
@@ -100,7 +101,7 @@ jobs:
         - REPORT_COVERAGE=0
       script:
         - |
-            $(phpenv which php) \
+            php \
               -d extension=ext/modules/test.so \
               unit-tests/phpunit \
               -c ${PHPUNIT_CONF} \
@@ -109,7 +110,10 @@ jobs:
       php: 7.2
       env:
         - REPORT_COVERAGE=0
-      script:
+      install:
+        - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
+        - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
+        - ./unit-tests/ci/install-zephir-parser.sh
         - mkdir -p ${HOME}/bin
         - |
             wget \
@@ -118,15 +122,24 @@ jobs:
               -O "${HOME}/bin/box"
         - chmod +x "${HOME}/bin/box"
         - ./bin/packer
-        - ./zephir.phar version
-        - ./zephir.phar help
+      before_script:
+        - phpenv config-rm xdebug.ini || true
+      script:
+        - ./zephir.phar generate
+        - |
+            ./zephir.phar \
+              -d extension=ext/modules/test.so \
+              unit-tests/phpunit \
+              -c ${PHPUNIT_CONF} \
+              --testsuite "Extension Test Suite"
     - stage: Benchmark
       php: 7.2
       env:
         - REPORT_COVERAGE=0
-      script:
+      before_script:
         - phpenv config-rm xdebug.ini || true
-        - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
+      script:
+        - php -d extension=ext/modules/test.so unit-tests/microbench.php
 
 after_success:
   - ./unit-tests/ci/after-success.sh
