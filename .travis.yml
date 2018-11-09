@@ -125,7 +125,7 @@ jobs:
       before_script:
         - phpenv config-rm xdebug.ini || true
       script:
-        - ./zephir.phar generate
+        - ./zephir.phar compile
         - |
             php \
               -d extension=ext/modules/test.so \
