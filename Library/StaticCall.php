@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
@@ -580,7 +578,7 @@ class StaticCall extends Call
             } else {
                 $method = $classDefinition->getMethod($methodName);
 
-                if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+                if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
                     throw new CompilerException("Cannot call private method '" . $methodName . "' out of its scope", $expression);
                 }
 
@@ -618,7 +616,7 @@ class StaticCall extends Call
                 } else {
                     if (!isset($method)) {
                         $method = $classDefinition->getMethod("__callStatic");
-                        if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+                        if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
                             throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
                         }
                     }

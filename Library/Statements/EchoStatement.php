@@ -1,22 +1,20 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * EchoStatement
@@ -31,7 +29,7 @@ class EchoStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        foreach ($this->_statement['expressions'] as $echoExpr) {
+        foreach ($this->statement['expressions'] as $echoExpr) {
             $expr = new Expression($echoExpr);
             $expr->setReadOnly(true);
             $resolvedExpr = $expr->compile($compilationContext);
@@ -59,7 +57,9 @@ class EchoStatement extends StatementAbstract
                     break;
 
                 case 'string':
-                    $compilationContext->codePrinter->output('php_printf("%s", "' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
+                    $compilationContext->codePrinter->output(
+                        'php_printf("%s", "' . add_slashes($resolvedExpr->getCode()) . '");'
+                    );
                     break;
 
                 case 'null':

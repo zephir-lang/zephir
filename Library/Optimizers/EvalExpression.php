@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Optimizers;
 
@@ -27,11 +25,11 @@ use Zephir\Variable;
  */
 class EvalExpression
 {
-    protected $_unreachable = null;
+    protected $unreachable = null;
 
-    protected $_unreachableElse = null;
+    protected $unreachableElse = null;
 
-    protected $_usedVariables = array();
+    protected $usedVariables = array();
 
     /**
      * Skips the not operator by recursively optimizing the expression at its right
@@ -49,11 +47,11 @@ class EvalExpression
         if ($expr['type'] == 'not') {
             $conditions = $this->optimize($expr['left'], $compilationContext);
             if ($conditions !== false) {
-                if ($this->_unreachable !== null) {
-                    $this->_unreachable = !$this->_unreachable;
+                if ($this->unreachable !== null) {
+                    $this->unreachable = !$this->unreachable;
                 }
-                if ($this->_unreachableElse !== null) {
-                    $this->_unreachableElse = !$this->_unreachableElse;
+                if ($this->unreachableElse !== null) {
+                    $this->unreachableElse = !$this->unreachableElse;
                 }
                 return '!(' . $conditions . ')';
             }
@@ -102,7 +100,7 @@ class EvalExpression
          */
         switch ($compiledExpression->getType()) {
             case 'null':
-                $this->_unreachable = true;
+                $this->unreachable = true;
                 return '0';
 
             case 'int':
@@ -113,9 +111,9 @@ class EvalExpression
                 $code = $compiledExpression->getCode();
                 if (is_numeric($code)) {
                     if ($code == '1') {
-                        $this->_unreachableElse = true;
+                        $this->unreachableElse = true;
                     } else {
-                        $this->_unreachable = true;
+                        $this->unreachable = true;
                     }
                 }
                 return $code;
@@ -127,10 +125,10 @@ class EvalExpression
             case 'bool':
                 $code = $compiledExpression->getBooleanCode();
                 if ($code == '1') {
-                    $this->_unreachableElse = true;
+                    $this->unreachableElse = true;
                 } else {
                     if ($code == '0') {
-                        $this->_unreachable = true;
+                        $this->unreachable = true;
                     }
                 }
                 return $code;
@@ -148,30 +146,30 @@ class EvalExpression
                             if ($possibleValue instanceof LiteralCompiledExpression) {
                                 switch ($possibleValue->getType()) {
                                     case 'null':
-                                        $this->_unreachable = true;
+                                        $this->unreachable = true;
                                         break;
 
                                     case 'bool':
                                         if ($possibleValue->getBooleanCode() == '0') {
-                                            $this->_unreachable = true;
+                                            $this->unreachable = true;
                                         } else {
-                                            $this->_unreachableElse = true;
+                                            $this->unreachableElse = true;
                                         }
                                         break;
 
                                     case 'int':
                                         if (!intval($possibleValue->getCode())) {
-                                            $this->_unreachable = true;
+                                            $this->unreachable = true;
                                         } else {
-                                            $this->_unreachableElse = true;
+                                            $this->unreachableElse = true;
                                         }
                                         break;
 
                                     case 'double':
                                         if (!floatval($possibleValue->getCode())) {
-                                            $this->_unreachable = true;
+                                            $this->unreachable = true;
                                         } else {
-                                            $this->_unreachableElse = true;
+                                            $this->unreachableElse = true;
                                         }
                                         break;
 
@@ -183,7 +181,7 @@ class EvalExpression
                     }
                 }
 
-                $this->_usedVariables[] = $variableRight->getName();
+                $this->usedVariables[] = $variableRight->getName();
 
                 /**
                  * Evaluate the variable
@@ -229,7 +227,7 @@ class EvalExpression
      */
     public function isUnreachable()
     {
-        return $this->_unreachable;
+        return $this->unreachable;
     }
 
     /**
@@ -239,7 +237,7 @@ class EvalExpression
      */
     public function isUnreachableElse()
     {
-        return $this->_unreachableElse;
+        return $this->unreachableElse;
     }
 
     /**
@@ -249,7 +247,7 @@ class EvalExpression
      */
     public function getEvalVariable()
     {
-        return end($this->_usedVariables);
+        return end($this->usedVariables);
     }
 
     /**
@@ -257,6 +255,6 @@ class EvalExpression
      */
     public function getUsedVariables()
     {
-        return $this->_usedVariables;
+        return $this->usedVariables;
     }
 }

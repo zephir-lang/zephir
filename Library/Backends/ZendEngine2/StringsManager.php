@@ -1,20 +1,18 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Backends\ZendEngine2;
 
-use Zephir\Utils;
 use Zephir\StringsManager as BaseStringsManager;
+use function Zephir\file_put_contents_ex;
 
 /**
  * Class StringsManager
@@ -27,11 +25,11 @@ class StringsManager extends BaseStringsManager
      * List of headers
      * @var array
      */
-    protected $concatKeys = array(
+    protected $concatKeys = [
         'vv' => true,
         'vs' => true,
         'sv' => true
-    );
+    ];
 
     /**
      * Adds a concatenation combination to the manager
@@ -115,7 +113,6 @@ class StringsManager extends BaseStringsManager
             $macros[] = '#define ZEPHIR_SCONCAT_' . strtoupper($key) . '(result, ' . join(', ', $sparams) . ') \\' . PHP_EOL . "\t" . ' zephir_concat_' . $key . '(&result, ' . join(', ', $lparams) . ', 1 TSRMLS_CC);';
             $macros[] = '';
 
-            $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
 
             $codeh .= '' . $proto . ';' . PHP_EOL;
@@ -216,8 +213,9 @@ void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 	}
 }
 ";
-        Utils::checkAndWriteIfNeeded($pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
-        Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
+        $contents = $pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh;
+        file_put_contents_ex($contents, 'ext/kernel/concat.h');
+        file_put_contents_ex($code, 'ext/kernel/concat.c');
     }
 
     /**

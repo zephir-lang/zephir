@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
@@ -17,9 +15,11 @@ use Zephir\Compiler\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**
- * Call
+ * Zephir\Call
  *
  * Base class for common functionality in functions/calls
+ *
+ * @package Zephir
  */
 class Call
 {
@@ -27,25 +27,25 @@ class Call
      * Call expression
      * @var Expression
      */
-    protected $_expression;
+    protected $expression;
 
-    protected $_mustInit;
+    protected $mustInit;
 
-    protected $_symbolVariable;
+    protected $symbolVariable;
 
-    protected $_isExpecting = false;
+    protected $isExpecting = false;
 
-    protected $_resolvedParams;
+    protected $resolvedParams;
 
-    protected $_reflection;
+    protected $reflection;
 
-    protected $_resolvedTypes = [];
+    protected $resolvedTypes = [];
 
-    protected $_resolvedDynamicTypes = [];
+    protected $resolvedDynamicTypes = [];
 
-    protected $_temporalVariables = [];
+    protected $temporalVariables = [];
 
-    protected $_mustCheckForCopy = [];
+    protected $mustCheckForCopy = [];
 
     /**
      * Processes the symbol variable that will be used to return
@@ -55,7 +55,7 @@ class Call
      */
     public function processExpectedReturn(CompilationContext $compilationContext)
     {
-        $expr = $this->_expression;
+        $expr = $this->expression;
         $expression = $expr->getExpression();
 
         /**
@@ -82,9 +82,9 @@ class Call
             }
         }
 
-        $this->_mustInit = $mustInit;
-        $this->_symbolVariable = $symbolVariable;
-        $this->_isExpecting = $isExpecting;
+        $this->mustInit = $mustInit;
+        $this->symbolVariable = $symbolVariable;
+        $this->isExpecting = $isExpecting;
     }
 
     /**
@@ -95,7 +95,7 @@ class Call
      */
     public function processExpectedObservedReturn(CompilationContext $compilationContext)
     {
-        $expr = $this->_expression;
+        $expr = $this->expression;
         $expression = $expr->getExpression();
 
         /**
@@ -118,9 +118,9 @@ class Call
             }
         }
 
-        $this->_mustInit = $mustInit;
-        $this->_symbolVariable = $symbolVariable;
-        $this->_isExpecting = $isExpecting;
+        $this->mustInit = $mustInit;
+        $this->symbolVariable = $symbolVariable;
+        $this->isExpecting = $isExpecting;
     }
 
     /**
@@ -132,7 +132,7 @@ class Call
      */
     public function processExpectedComplexLiteralReturn(CompilationContext $compilationContext)
     {
-        $expr = $this->_expression;
+        $expr = $this->expression;
         $expression = $expr->getExpression();
 
         /**
@@ -154,9 +154,9 @@ class Call
             }
         }
 
-        $this->_mustInit = $mustInit;
-        $this->_symbolVariable = $symbolVariable;
-        $this->_isExpecting = $isExpecting;
+        $this->mustInit = $mustInit;
+        $this->symbolVariable = $symbolVariable;
+        $this->isExpecting = $isExpecting;
     }
 
     /**
@@ -166,7 +166,7 @@ class Call
      */
     public function isExpectingReturn()
     {
-        return $this->_isExpecting;
+        return $this->isExpecting;
     }
 
     /**
@@ -176,22 +176,24 @@ class Call
      */
     public function mustInitSymbolVariable()
     {
-        return $this->_mustInit;
+        return $this->mustInit;
     }
 
     /**
      * Returns the symbol variable that must be returned by the call
      *
-     * @param boolean $useTemp
-     * @param CompilationContext $compilationContext
+     * @param  bool                    $useTemp
+     * @param  CompilationContext|null $compilationContext
      * @return Variable
      */
     public function getSymbolVariable($useTemp = false, CompilationContext $compilationContext = null)
     {
-        $symbolVariable = $this->_symbolVariable;
+        $symbolVariable = $this->symbolVariable;
+
         if ($useTemp && !is_object($symbolVariable)) {
             return $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
         }
+
         return $symbolVariable;
     }
 
@@ -209,7 +211,7 @@ class Call
      */
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
-        if (!$this->_resolvedParams) {
+        if (!$this->resolvedParams) {
             $hasParametersByName = false;
             foreach ($parameters as $parameter) {
                 if (isset($parameter['name'])) {
@@ -230,9 +232,9 @@ class Call
             }
 
             if ($hasParametersByName) {
-                if ($this->_reflection) {
+                if ($this->reflection) {
                     $positionalParameters = array();
-                    foreach ($this->_reflection->getParameters() as $position => $reflectionParameter) {
+                    foreach ($this->reflection->getParameters() as $position => $reflectionParameter) {
                         if (is_object($reflectionParameter)) {
                             $positionalParameters[$reflectionParameter->getName()] = $position;
                         } else {
@@ -285,10 +287,10 @@ class Call
 
                 throw new CompilerException("Invalid expression ", $expression);
             }
-            $this->_resolvedParams = $params;
+            $this->resolvedParams = $params;
         }
 
-        return $this->_resolvedParams;
+        return $this->resolvedParams;
     }
 
     /**
@@ -312,12 +314,10 @@ class Call
          * Static typed parameters in final/private methods are promotable to read only parameters
          * Recursive calls with static typed methods also also promotable
          */
-        $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod == $calleeDefinition) {
-                    $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         if (isset($parameter['data-type'])) {
                             switch ($parameter['data-type']) {
@@ -349,7 +349,7 @@ class Call
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignNull($parameterVariable, $compilationContext);
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -360,7 +360,7 @@ class Call
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignLong($parameterVariable, $compiledExpression->getCode(), $compilationContext);
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -369,7 +369,7 @@ class Call
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignDouble($parameterVariable, $compiledExpression->getCode(), $compilationContext);
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     break;
 
@@ -384,7 +384,7 @@ class Call
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignBool($parameterVariable, $value, $compilationContext);
 
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -393,8 +393,16 @@ class Call
                 case 'string':
                 case 'istring':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, 'ZEPHIR_TEMP_PARAM_COPY');
-                    $this->_temporalVariables[] = $parameterVariable;
+
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        'ZEPHIR_TEMP_PARAM_COPY'
+                    );
+
+                    $this->temporalVariables[] = $parameterVariable;
                     /* ZE3 copies strings */
                     if ($compilationContext->backend->getName() == 'ZendEngine2') {
                         $mustCheck[] = $parameterVariable->getName();
@@ -422,7 +430,7 @@ class Call
                             $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
                             $compilationContext->backend->assignLong($parameterTempVariable, $parameterVariable, $compilationContext);
-                            $this->_temporalVariables[] = $parameterTempVariable;
+                            $this->temporalVariables[] = $parameterTempVariable;
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
                             break;
@@ -431,7 +439,7 @@ class Call
                             $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $compilationContext->backend->assignDouble($parameterTempVariable, $parameterVariable, $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
-                            $this->_temporalVariables[] = $parameterTempVariable;
+                            $this->temporalVariables[] = $parameterTempVariable;
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
                             break;
@@ -475,9 +483,9 @@ class Call
             }
         }
 
-        $this->_resolvedTypes = $types;
-        $this->_resolvedDynamicTypes = $dynamicTypes;
-        $this->_mustCheckForCopy = $mustCheck;
+        $this->resolvedTypes = $types;
+        $this->resolvedDynamicTypes = $dynamicTypes;
+        $this->mustCheckForCopy = $mustCheck;
         return $params;
     }
 
@@ -515,7 +523,7 @@ class Call
                 case 'long':
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                     $compilationContext->backend->assignLong($parameterVariable, $compiledExpression->getCode(), $compilationContext);
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
                     $dynamicTypes[] = $parameterVariable->getType();
@@ -528,9 +536,15 @@ class Call
                     } else {
                         $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     }
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, false);
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        false
+                    );
 
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
                     $dynamicTypes[] = $parameterVariable->getType();
@@ -539,7 +553,7 @@ class Call
                 case 'double':
                     $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                     $codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
-                    $this->_temporalVariables[] = $parameterVariable;
+                    $this->temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
                     $dynamicTypes[] = $parameterVariable->getType();
@@ -567,8 +581,16 @@ class Call
                     } else {
                         $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     }
-                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, false);
-                    $this->_temporalVariables[] = $parameterVariable;
+
+                    $compilationContext->backend->assignString(
+                        $parameterVariable,
+                        add_slashes($compiledExpression->getCode()),
+                        $compilationContext,
+                        true,
+                        false
+                    );
+
+                    $this->temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
                     $dynamicTypes[] = $parameterVariable->getType();
@@ -593,7 +615,7 @@ class Call
                             $params[] = '&' . $parameterTempVariable->getName();
                             $types[] = $parameterTempVariable->getType();
                             $dynamicTypes[] = $parameterTempVariable->getType();
-                            $this->_temporalVariables[] = $parameterTempVariable;
+                            $this->temporalVariables[] = $parameterTempVariable;
                             break;
 
                         case 'char':
@@ -605,7 +627,7 @@ class Call
                                 $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_STRINGL(&' . $parameterVariable->getName() . ', &' . $compiledExpression->getCode() . ', 1);');
                             }
-                            $this->_temporalVariables[] = $parameterVariable;
+                            $this->temporalVariables[] = $parameterVariable;
                             $params[] = '&' . $parameterVariable->getName();
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
@@ -617,7 +639,7 @@ class Call
                             $params[] = '&' . $parameterTempVariable->getName();
                             $types[] = $parameterTempVariable->getType();
                             $dynamicTypes[] = $parameterTempVariable->getType();
-                            $this->_temporalVariables[] = $parameterTempVariable;
+                            $this->temporalVariables[] = $parameterTempVariable;
                             break;
 
                         case 'bool':
@@ -646,8 +668,8 @@ class Call
             }
         }
 
-        $this->_resolvedTypes = $types;
-        $this->_resolvedDynamicTypes = $dynamicTypes;
+        $this->resolvedTypes = $types;
+        $this->resolvedDynamicTypes = $dynamicTypes;
 
         return $params;
     }
@@ -706,7 +728,7 @@ class Call
      */
     public function getResolvedTypes()
     {
-        return $this->_resolvedTypes;
+        return $this->resolvedTypes;
     }
 
     /**
@@ -716,7 +738,7 @@ class Call
      */
     public function getResolvedDynamicTypes()
     {
-        return $this->_resolvedDynamicTypes;
+        return $this->resolvedDynamicTypes;
     }
 
     /**
@@ -726,7 +748,7 @@ class Call
      */
     public function getTemporalVariables()
     {
-        return $this->_temporalVariables;
+        return $this->temporalVariables;
     }
 
     /**
@@ -736,6 +758,6 @@ class Call
      */
     public function getMustCheckForCopyVariables()
     {
-        return $this->_mustCheckForCopy;
+        return $this->mustCheckForCopy;
     }
 }

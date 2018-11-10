@@ -1,50 +1,45 @@
 <?php
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Zephir\Expression\Builder;
 
 use Zephir\Expression\Builder\Factory\OperatorsFactory;
 use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 /**
- * Class BuilderFactory
+ * Zephir\Expression\Builder\BuilderFactory
+ *
  * @package Zephir\Expression\Builder
  */
 class BuilderFactory
 {
-    /**
-     * @var OperatorsFactory
-     */
+    /** @var OperatorsFactory */
     protected $operatorsFactory;
 
-    /**
-     * @var StatementsFactory
-     */
+    /** @var StatementsFactory */
     protected $statementsFactory;
 
-    /**
-     * @var self
-     */
-    protected static $_instance;
+    /** @var self */
+    protected static $instance;
 
     /**
      * @return self
      */
     public static function getInstance()
     {
-        if (!static::$_instance) {
-            static::$_instance = new static();
+        if (!static::$instance) {
+            static::$instance = new static();
         }
 
-        return static::$_instance;
+        return static::$instance;
     }
 
     /**

@@ -271,7 +271,7 @@ void zephir_file_put_contents(zval *return_value, zval *filename, zval *data)
 			if (Z_STRLEN_P(data)) {
 				numbytes = php_stream_write(stream, Z_STRVAL_P(data), Z_STRLEN_P(data));
 				if (numbytes != Z_STRLEN_P(data)) {
-					php_error_docref(NULL, E_WARNING, "Only %d of %d bytes written, possibly out of free disk space", numbytes, Z_STRLEN_P(data));
+					php_error_docref(NULL, E_WARNING, "Only %d of %zu bytes written, possibly out of free disk space", numbytes, Z_STRLEN_P(data));
 					numbytes = -1;
 				}
 			}

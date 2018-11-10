@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Other;
 
@@ -55,7 +53,7 @@ class FetchOperator extends BaseOperator
                 $numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
                 if ($numberMutations == 1) {
                     if ($variable->getNumberMutations() == 1) {
-                        $variable->setIsInitialized(true, $compilationContext, $expression);
+                        $variable->setIsInitialized(true, $compilationContext);
                         $variable->setMemoryTracked(false);
                         $variable->setDynamicTypes('undefined');
                         $readOnly = true;
@@ -64,13 +62,13 @@ class FetchOperator extends BaseOperator
             }
 
             if (!$readOnly || $expression['right']['type'] != 'array-access') {
-                $variable->setIsInitialized(true, $compilationContext, $expression);
+                $variable->setIsInitialized(true, $compilationContext);
                 $variable->observeVariant($compilationContext);
                 $variable->setDynamicTypes('undefined');
                 $variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
             }
         } else {
-            $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+            $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
         }
 
         if ($readOnly) {

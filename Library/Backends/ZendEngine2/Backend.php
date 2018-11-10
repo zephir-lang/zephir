@@ -1,29 +1,27 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Zephir\Backends\ZendEngine2;
 
-use Zephir\Utils;
-use Zephir\Variable;
-use Zephir\Compiler;
-use Zephir\CodePrinter;
-use Zephir\ClassMethod;
 use Zephir\BaseBackend;
-use Zephir\GlobalConstant;
-use Zephir\CompiledExpression;
+use Zephir\ClassMethod;
+use Zephir\CodePrinter;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
+use Zephir\GlobalConstant;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine2\Backend
@@ -34,7 +32,11 @@ class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
 
-    /* TODO: This should not be used, temporary (until its completely refactored) */
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
     public function isZE3()
     {
         return false;
@@ -248,18 +250,18 @@ class Backend extends BaseBackend
                 break;
 
             default:
-                throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
+                throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value));
         }
 
         return $condition;
     }
 
-    public function onPreInitVar($method, CompilationContext $context)
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
     {
         return '';
     }
 
-    public function onPreCompile($method, CompilationContext $context)
+    public function onPreCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -286,7 +288,7 @@ class Backend extends BaseBackend
         }
     }
 
-    public function onPostCompile($method, CompilationContext $context)
+    public function onPostCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
@@ -340,6 +342,7 @@ class Backend extends BaseBackend
                     $groupVariables[] = $pointer . $variable->getName();
                     break;
 
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case 'char':
                     if (strlen($defaultValue) > 4) {
                         if (strlen($defaultValue) > 10) {
@@ -417,7 +420,11 @@ class Backend extends BaseBackend
                                     break;
 
                                 case 'string':
-                                    $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                    $compilationContext->backend->assignString(
+                                        $variable,
+                                        add_slashes($defaultValue['value']),
+                                        $compilationContext
+                                    );
                                     break;
 
                                 case 'array':
@@ -445,7 +452,11 @@ class Backend extends BaseBackend
                         $compilationContext->backend->initVar($variable, $compilationContext);
                         switch ($defaultValue['type']) {
                             case 'string':
-                                $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext);
+                                $compilationContext->backend->assignString(
+                                    $variable,
+                                    add_slashes($defaultValue['value']),
+                                    $compilationContext
+                                );
                                 break;
 
                             case 'null':
@@ -593,7 +604,7 @@ class Backend extends BaseBackend
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                    $value = "\"" . add_slashes($value) . "\"";
                 }
                 $dType = 'string';
                 break;
@@ -998,7 +1009,16 @@ class Backend extends BaseBackend
         }
     }
 
-    private function resolveOffsetExprs($offsetExprs, $compilationContext)
+    /**
+     * Resolve expressions.
+     *
+     * @param  CompiledExpression[]|string[] $offsetExprs
+     * @param  CompilationContext            $compilationContext
+     * @return array
+     *
+     * @throws CompilerException
+     */
+    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {
         $keys = '';
         $offsetItems = array();
@@ -1027,7 +1047,12 @@ class Backend extends BaseBackend
                     break;
 
                 case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, null);
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                        $offsetExpr->getCode(),
+                        $compilationContext,
+                        null
+                    );
+
                     switch ($variableIndex->getType()) {
                         case 'int':
                         case 'uint':
@@ -1044,12 +1069,18 @@ class Backend extends BaseBackend
                             $numberParams++;
                             break;
                         default:
-                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                            throw new CompilerException(
+                                sprintf('Variable: %s cannot be used as array index', $variableIndex->getType()),
+                                $offsetExpr->getOriginal()
+                            );
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
+                    throw new CompilerException(
+                        sprintf('Value: %s cannot be used as array index', $offsetExpr->getType()),
+                        $offsetExpr->getOriginal()
+                    );
             }
         }
         return array($keys, $offsetItems, $numberParams);

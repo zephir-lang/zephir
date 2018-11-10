@@ -1,39 +1,39 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Expression;
 
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
+use Zephir\Variable;
 
 /**
- * NativeArray
+ * Zephir\Expression\NativeArray
  *
  * Resolves expressions that create arrays
+ *
+ * @package Zephir\Expression
  */
 class NativeArray
 {
-    protected $_expecting = true;
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    protected $_noisy = true;
+    protected $noisy = true;
 
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -44,8 +44,8 @@ class NativeArray
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -55,7 +55,7 @@ class NativeArray
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -65,7 +65,7 @@ class NativeArray
      */
     public function setNoisy($noisy)
     {
-        $this->_noisy = $noisy;
+        $this->noisy = $noisy;
     }
 
     /**
@@ -170,9 +170,9 @@ class NativeArray
         /**
          * Resolves the symbol that expects the value
          */
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
                 $symbolVariable->initVariant($compilationContext);
                 if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'array') {
                     throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an array", $expression);

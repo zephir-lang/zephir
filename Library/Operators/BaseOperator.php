@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators;
 
@@ -18,16 +16,16 @@ use Zephir\CompilationContext;
 
 class BaseOperator
 {
-    protected $_expecting = true;
+    protected $operator;
 
-    protected $_readOnly = false;
+    protected $expecting = true;
 
-    protected $_literalOnly = true;
+    protected $readOnly = false;
 
-    /**
-     * @var Variable|null
-     */
-    protected $_expectingVariable;
+    protected $literalOnly = true;
+
+    /** @var Variable|null */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -38,8 +36,8 @@ class BaseOperator
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -53,8 +51,8 @@ class BaseOperator
      */
     public function getExpectedNonLiteral(CompilationContext $compilationContext, $expression, $init = true)
     {
-        $isExpecting = $this->_expecting;
-        $symbolVariable = $this->_expectingVariable;
+        $isExpecting = $this->expecting;
+        $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
             if (is_object($symbolVariable)) {
@@ -84,8 +82,8 @@ class BaseOperator
      */
     public function getExpected(CompilationContext $compilationContext, $expression, $init = true)
     {
-        $isExpecting = $this->_expecting;
-        $symbolVariable = $this->_expectingVariable;
+        $isExpecting = $this->expecting;
+        $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
             if (is_object($symbolVariable)) {
@@ -95,8 +93,8 @@ class BaseOperator
                     }
                     $symbolVariable->initVariant($compilationContext);
                 } else {
-                    if (!$this->_readOnly) {
-                        if (!$this->_literalOnly) {
+                    if (!$this->readOnly) {
+                        if (!$this->literalOnly) {
                             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                         } else {
                             $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
@@ -106,8 +104,8 @@ class BaseOperator
                     }
                 }
             } else {
-                if (!$this->_readOnly) {
-                    if (!$this->_literalOnly) {
+                if (!$this->readOnly) {
+                    if (!$this->literalOnly) {
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
@@ -132,22 +130,22 @@ class BaseOperator
      */
     public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression, $type = 'variable')
     {
-        $isExpecting = $this->_expecting;
-        $symbolVariable = $this->_expectingVariable;
+        $isExpecting = $this->expecting;
+        $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
             if (is_object($symbolVariable)) {
                 if ($symbolVariable->getType() == $type || $symbolVariable->getName() == 'return_value') {
                     $symbolVariable->initVariant($compilationContext);
                 } else {
-                    if (!$this->_readOnly) {
+                    if (!$this->readOnly) {
                         $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
                     }
                 }
             } else {
-                if (!$this->_readOnly) {
+                if (!$this->readOnly) {
                     $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
@@ -165,7 +163,7 @@ class BaseOperator
      */
     public function isExpecting()
     {
-        return $this->_expecting;
+        return $this->expecting;
     }
 
     /**
@@ -175,7 +173,7 @@ class BaseOperator
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -185,6 +183,6 @@ class BaseOperator
      */
     public function isReadOnly()
     {
-        return $this->_readOnly;
+        return $this->readOnly;
     }
 }

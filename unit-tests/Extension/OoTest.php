@@ -1,19 +1,20 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
-class OoTest extends \PHPUnit_Framework_TestCase
+use Test\Oo;
+use Zephir\Support\TestCase;
+
+class OoTest extends TestCase
 {
     public function testAssertations()
     {
@@ -63,5 +64,19 @@ class OoTest extends \PHPUnit_Framework_TestCase
         $obj12 = $t->testInstance12();
         $this->assertTrue(is_object($obj12));
         $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj12);
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1673
+     */
+    public function shouldDinamicalyCreateInstancesInLoop()
+    {
+        $test = new Oo();
+
+        $this->assertEquals(
+            ["A", "AA", "B", "BB"],
+            $test->createInstancesInLoop()
+        );
     }
 }

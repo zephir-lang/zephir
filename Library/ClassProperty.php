@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
@@ -332,6 +330,8 @@ class ClassProperty
 
     /**
      * Removes all initialization statements related to this property
+     *
+     * @param array $statements
      */
     protected function removeInitializationStatements(&$statements)
     {
@@ -441,7 +441,15 @@ class ClassProperty
 
             case Types::CHAR:
             case Types::STRING:
-                $codePrinter->output("zend_declare_property_string(" . $classEntry . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',
+                        $classEntry,
+                        $this->getName(),
+                        add_slashes($value),
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
             case 'array':

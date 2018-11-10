@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -29,7 +27,7 @@ class UnsetStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/array');
-        $expression = $this->_statement['expr'];
+        $expression = $this->statement['expr'];
 
         $flags = 'PH_SEPARATE';
 
@@ -42,7 +40,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
 
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
@@ -53,7 +51,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
-                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 $compilationContext->headersManager->add('kernel/object');

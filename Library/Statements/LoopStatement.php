@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -42,11 +40,11 @@ class LoopStatement extends StatementAbstract
         /**
          * Compile statements in the 'loop' block
          */
-        if (!isset($this->_statement['statements'])) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->_statement);
+        if (!isset($this->statement['statements'])) {
+            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
         }
 
-        $st = new StatementsBlock($this->_statement['statements']);
+        $st = new StatementsBlock($this->statement['statements']);
 
         /**
          * Check if the block contain at least a break statement
@@ -54,7 +52,7 @@ class LoopStatement extends StatementAbstract
         $loopBreakPass = new LoopBreakPass();
         $loopBreakPass->pass($st);
         if (!$loopBreakPass->hasBreak()) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->_statement);
+            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
         }
 
         $st->isLoop(true);

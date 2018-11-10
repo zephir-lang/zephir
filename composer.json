@@ -21,12 +21,13 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
+        "ext-mbstring": "*",
         "ext-xml": "*",
-        "ext-mbstring": "*"
+        "league/container": "^2.4 || ^3.2"
     },
     "require-dev": {
         "ext-gmp": "*",
@@ -38,17 +39,19 @@
     "autoload": {
         "psr-4": {
             "Zephir\\": "Library"
-        }
+        },
+        "files": [
+            "Library/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Zephir\\Stubs\\": "unit-tests/Zephir/Stubs/",
             "Zephir\\Test\\": "unit-tests/Zephir/Test/",
             "Zephir\\Support\\": "unit-tests/Zephir/Support/",
             "Extension\\": "unit-tests/Extension/"
         },
         "classmap": [
-            "unit-tests/Data/"
+            "unit-tests/fixtures/mocks/"
         ]
     },
     "bin": [

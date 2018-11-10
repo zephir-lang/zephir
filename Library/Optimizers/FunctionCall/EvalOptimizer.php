@@ -1,7 +1,7 @@
 <?php
 
-/*
- * This file is part of the Zephir package.
+/**
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -63,10 +63,7 @@ class EvalOptimizer extends OptimizerAbstract
         }
 
         $evalContext = str_replace(
-            [
-                ZEPHIRPATH . '\\',
-                ZEPHIRPATH . '/',
-            ],
+            [getcwd() . '\\', getcwd() . '/'],
             '',
             $expression['file'] . ':' . $expression['line']
         );

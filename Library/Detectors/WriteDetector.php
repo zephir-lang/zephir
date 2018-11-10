@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Detectors;
 
@@ -24,9 +22,9 @@ namespace Zephir\Detectors;
  */
 class WriteDetector
 {
-    protected $_detectionFlags = 0;
+    protected $detectionFlags = 0;
 
-    protected $_mutations = array();
+    protected $mutations = array();
 
     const DETECT_NONE = 0;
 
@@ -58,7 +56,7 @@ class WriteDetector
      */
     public function setDetectionFlags($flags)
     {
-        $this->_detectionFlags = $flags;
+        $this->detectionFlags = $flags;
     }
 
     /**
@@ -69,10 +67,10 @@ class WriteDetector
      */
     public function increaseMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            $this->_mutations[$variable]++;
+        if (isset($this->mutations[$variable])) {
+            $this->mutations[$variable]++;
         } else {
-            $this->_mutations[$variable] = 1;
+            $this->mutations[$variable] = 1;
         }
         return $this;
     }
@@ -85,8 +83,8 @@ class WriteDetector
      */
     public function getNumberOfMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            return $this->_mutations[$variable];
+        if (isset($this->mutations[$variable])) {
+            return $this->mutations[$variable];
         }
         return 0;
     }
@@ -103,7 +101,7 @@ class WriteDetector
                 $this->passExpression($assignment['expr']);
             }
             $this->increaseMutations($assignment['variable']);
-            if (($this->_detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT) == self::DETECT_VALUE_IN_ASSIGNMENT) {
+            if (($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT) == self::DETECT_VALUE_IN_ASSIGNMENT) {
                 if (isset($assignment['expr'])) {
                     if ($assignment['expr']['type'] == 'variable') {
                         $this->increaseMutations($assignment['expr']['value']);
@@ -123,7 +121,7 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                $usePass = ($this->_detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
+                $usePass = ($this->detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
                 if ($usePass && $parameter['parameter']['type'] == 'variable') {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {
@@ -141,7 +139,7 @@ class WriteDetector
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            $usePass = ($this->_detectionFlags & self::DETECT_ARRAY_USE) == self::DETECT_ARRAY_USE;
+            $usePass = ($this->detectionFlags & self::DETECT_ARRAY_USE) == self::DETECT_ARRAY_USE;
             if ($usePass && $item['value']['type'] == 'variable') {
                 $this->increaseMutations($item['value']['value']);
             } else {
@@ -159,7 +157,7 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                $usePass = ($this->_detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
+                $usePass = ($this->detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
                 if ($usePass && $parameter['parameter']['type'] == 'variable') {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {

@@ -1,98 +1,96 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
 use Zephir\Compiler\CompilerException;
-use Zephir\Operators\Arithmetical\AddOperator;
-use Zephir\Operators\Arithmetical\SubOperator;
-use Zephir\Operators\Arithmetical\MulOperator;
-use Zephir\Operators\Arithmetical\DivOperator;
-use Zephir\Operators\Arithmetical\ModOperator;
-use Zephir\Operators\Other\ShortTernaryOperator;
-use Zephir\Operators\Unary\MinusOperator;
-use Zephir\Operators\Unary\NotOperator;
-use Zephir\Operators\Logical\AndOperator;
-use Zephir\Operators\Logical\OrOperator;
-use Zephir\Operators\Comparison\EqualsOperator;
-use Zephir\Operators\Comparison\NotEqualsOperator;
-use Zephir\Operators\Comparison\IdenticalOperator;
-use Zephir\Operators\Comparison\NotIdenticalOperator;
-use Zephir\Operators\Comparison\LessEqualOperator;
-use Zephir\Operators\Comparison\LessOperator;
-use Zephir\Operators\Comparison\GreaterOperator;
-use Zephir\Operators\Comparison\GreaterEqualOperator;
-use Zephir\Operators\Bitwise\BitwiseNotOperator;
-use Zephir\Operators\Bitwise\BitwiseAndOperator;
-use Zephir\Operators\Bitwise\BitwiseOrOperator;
-use Zephir\Operators\Bitwise\BitwiseXorOperator;
-use Zephir\Operators\Bitwise\ShiftLeftOperator;
-use Zephir\Operators\Bitwise\ShiftRightOperator;
-use Zephir\Operators\Other\NewInstanceOperator;
-use Zephir\Operators\Other\NewInstanceTypeOperator;
-use Zephir\Operators\Other\CloneOperator;
-use Zephir\Operators\Other\ConcatOperator;
-use Zephir\Operators\Other\EmptyOperator;
-use Zephir\Operators\Other\IssetOperator;
-use Zephir\Operators\Other\FetchOperator;
-use Zephir\Operators\Other\LikelyOperator;
-use Zephir\Operators\Other\UnlikelyOperator;
-use Zephir\Operators\Other\TernaryOperator;
-use Zephir\Operators\Other\InstanceOfOperator;
-use Zephir\Operators\Other\RequireOperator;
-use Zephir\Operators\Other\TypeOfOperator;
-use Zephir\Operators\Other\CastOperator;
-use Zephir\Operators\Other\RangeInclusiveOperator;
-use Zephir\Operators\Other\RangeExclusiveOperator;
-use Zephir\Operators\Other\TypeHintOperator;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
 use Zephir\Expression\Constants;
-use Zephir\Expression\Reference;
 use Zephir\Expression\NativeArray;
 use Zephir\Expression\NativeArrayAccess;
 use Zephir\Expression\PropertyAccess;
 use Zephir\Expression\PropertyDynamicAccess;
+use Zephir\Expression\Reference;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Expression\StaticPropertyAccess;
+use Zephir\Operators\Arithmetical\AddOperator;
+use Zephir\Operators\Arithmetical\DivOperator;
+use Zephir\Operators\Arithmetical\ModOperator;
+use Zephir\Operators\Arithmetical\MulOperator;
+use Zephir\Operators\Arithmetical\SubOperator;
+use Zephir\Operators\Bitwise\BitwiseAndOperator;
+use Zephir\Operators\Bitwise\BitwiseNotOperator;
+use Zephir\Operators\Bitwise\BitwiseOrOperator;
+use Zephir\Operators\Bitwise\BitwiseXorOperator;
+use Zephir\Operators\Bitwise\ShiftLeftOperator;
+use Zephir\Operators\Bitwise\ShiftRightOperator;
+use Zephir\Operators\Comparison\EqualsOperator;
+use Zephir\Operators\Comparison\GreaterEqualOperator;
+use Zephir\Operators\Comparison\GreaterOperator;
+use Zephir\Operators\Comparison\IdenticalOperator;
+use Zephir\Operators\Comparison\LessEqualOperator;
+use Zephir\Operators\Comparison\LessOperator;
+use Zephir\Operators\Comparison\NotEqualsOperator;
+use Zephir\Operators\Comparison\NotIdenticalOperator;
+use Zephir\Operators\Logical\AndOperator;
+use Zephir\Operators\Logical\OrOperator;
+use Zephir\Operators\Other\CastOperator;
+use Zephir\Operators\Other\CloneOperator;
+use Zephir\Operators\Other\ConcatOperator;
+use Zephir\Operators\Other\EmptyOperator;
+use Zephir\Operators\Other\FetchOperator;
+use Zephir\Operators\Other\InstanceOfOperator;
+use Zephir\Operators\Other\IssetOperator;
+use Zephir\Operators\Other\LikelyOperator;
+use Zephir\Operators\Other\NewInstanceOperator;
+use Zephir\Operators\Other\NewInstanceTypeOperator;
+use Zephir\Operators\Other\RangeExclusiveOperator;
+use Zephir\Operators\Other\RangeInclusiveOperator;
+use Zephir\Operators\Other\RequireOperator;
+use Zephir\Operators\Other\ShortTernaryOperator;
+use Zephir\Operators\Other\TernaryOperator;
+use Zephir\Operators\Other\TypeHintOperator;
+use Zephir\Operators\Other\TypeOfOperator;
+use Zephir\Operators\Other\UnlikelyOperator;
+use Zephir\Operators\Unary\MinusOperator;
+use Zephir\Operators\Unary\NotOperator;
 
 /**
- * Expressions
+ * Zephir\Expressions
  *
  * Represents an expression. Most language constructs in a language are expressions
+ *
+ * @package Zephir
  */
 class Expression
 {
-    protected $_expression;
+    protected $expression;
 
-    protected $_expecting = true;
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    protected $_noisy = true;
+    protected $noisy = true;
 
     /**
      * @deprecated
      * @var bool
      */
-    protected $_stringOperation = false;
+    protected $stringOperation = false;
 
-    /**
-     * @var Variable
-     */
-    protected $_expectingVariable;
+    /** @var Variable */
+    protected $expectingVariable;
 
-    protected $_evalMode = false;
+    protected $evalMode = false;
 
     /**
      * Expression constructor
@@ -101,7 +99,7 @@ class Expression
      */
     public function __construct(array $expression)
     {
-        $this->_expression = $expression;
+        $this->expression = $expression;
     }
 
     /**
@@ -111,7 +109,7 @@ class Expression
      */
     public function getExpression()
     {
-        return $this->_expression;
+        return $this->expression;
     }
 
     /**
@@ -123,8 +121,8 @@ class Expression
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -134,7 +132,7 @@ class Expression
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -144,7 +142,7 @@ class Expression
      */
     public function isReadOnly()
     {
-        return $this->_readOnly;
+        return $this->readOnly;
     }
 
     /**
@@ -155,7 +153,7 @@ class Expression
      */
     public function isExpectingReturn()
     {
-        return $this->_expecting;
+        return $this->expecting;
     }
 
     /**
@@ -166,7 +164,7 @@ class Expression
      */
     public function getExpectingVariable()
     {
-        return $this->_expectingVariable;
+        return $this->expectingVariable;
     }
 
     /**
@@ -176,7 +174,7 @@ class Expression
      */
     public function setNoisy($noisy)
     {
-        $this->_noisy = $noisy;
+        $this->noisy = $noisy;
     }
 
     /**
@@ -186,7 +184,7 @@ class Expression
      */
     public function isNoisy()
     {
-        return $this->_noisy;
+        return $this->noisy;
     }
 
     /**
@@ -198,7 +196,7 @@ class Expression
      */
     public function setStringOperation($stringOperation)
     {
-        $this->_stringOperation = $stringOperation;
+        $this->stringOperation = $stringOperation;
     }
 
     /**
@@ -210,7 +208,7 @@ class Expression
      */
     public function isStringOperation()
     {
-        return $this->_stringOperation;
+        return $this->stringOperation;
     }
 
     /**
@@ -220,7 +218,7 @@ class Expression
      */
     public function setEvalMode($evalMode)
     {
-        $this->_evalMode = $evalMode;
+        $this->evalMode = $evalMode;
     }
 
     /**
@@ -235,9 +233,9 @@ class Expression
         /**
          * Resolves the symbol that expects the value
          */
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = & $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = & $this->expectingVariable;
                 $symbolVariable->initVariant($compilationContext);
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -272,7 +270,7 @@ class Expression
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $expression = $this->_expression;
+        $expression = $this->expression;
         $type = $expression['type'];
         $compilableExpression = null;
 
@@ -481,7 +479,7 @@ class Expression
 
             case 'concat':
                 $expr = new ConcatOperator();
-                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 return $expr->compile($expression, $compilationContext);
 
             case 'irange':
@@ -498,7 +496,7 @@ class Expression
                 }
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
                 $expr = new Expression($expression['left']);
-                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
                 if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
                     if (strpos($resolved->getCode(), ' ') !== false) {
@@ -514,7 +512,7 @@ class Expression
             case 'type-hint':
                 $expr = new TypeHintOperator();
                 $expr->setReadOnly($this->isReadOnly());
-                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 return $expr->compile($expression, $compilationContext);
 
             case 'instanceof':
@@ -532,11 +530,11 @@ class Expression
             case 'short-ternary':
                 $expr = new ShortTernaryOperator();
                 $expr->setReadOnly($this->isReadOnly());
-                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 return $expr->compile($expression, $compilationContext);
 
             case 'likely':
-                if (!$this->_evalMode) {
+                if (!$this->evalMode) {
                     throw new CompilerException("'likely' operator can only be used in evaluation expressions", $expression);
                 }
                 $expr = new LikelyOperator();
@@ -544,7 +542,7 @@ class Expression
                 return $expr->compile($expression, $compilationContext);
 
             case 'unlikely':
-                if (!$this->_evalMode) {
+                if (!$this->evalMode) {
                     throw new CompilerException("'unlikely' operator can only be used in evaluation expressions", $expression);
                 }
                 $expr = new UnlikelyOperator();
@@ -579,7 +577,7 @@ class Expression
             throw new CompilerException("Unknown expression passed as compilableExpression", $expression);
         }
         $compilableExpression->setReadOnly($this->isReadOnly());
-        $compilableExpression->setExpectReturn($this->_expecting, $this->_expectingVariable);
+        $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);
         return $compilableExpression->compile($expression, $compilationContext);
     }
 }

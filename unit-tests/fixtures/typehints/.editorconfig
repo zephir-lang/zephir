@@ -1,0 +1,7 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+root = false
+
+[*.{c,h}]
+trim_trailing_whitespace = false
+indent_style             = tab

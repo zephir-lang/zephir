@@ -1,7 +1,7 @@
 <?php
 
-/*
- * This file is part of the Zephir package.
+/**
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 if (!extension_loaded('test')) {
     if (ini_get('enable_dl') == '1') {
@@ -60,7 +60,7 @@ function total()
 
 const N = 5000000;
 
-echo "Benchmark Zephir ".\Zephir\Compiler::getCurrentVersion()." \n";
+echo "Benchmark Zephir ". (new \Zephir\Version())->get() . " \n";
 
 $x = new \Test\Bench\Foo();
 

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Phalcon.
+ *
+ * (c) Phalcon Team <team@phalconphp.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('PHPUnit_Framework_TestCase')) {
     /** @noinspection PhpIgnoredClassAliasDeclaration */
     class_alias('PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
@@ -23,4 +32,9 @@ if (!class_exists('\PHPUnit\TextUI\Command') and class_exists('PHPUnit_TextUI_Co
 if (!class_exists('\PHPUnit\Framework\SkippedTestError') and class_exists('PHPUnit_Framework_SkippedTestError')) {
     /** @noinspection PhpIgnoredClassAliasDeclaration */
     class_alias('PHPUnit_Framework_SkippedTestError', '\PHPUnit\Framework\SkippedTestError');
+}
+
+if (!class_exists('\PHPUnit\Framework\MockObject\MockObject') and class_exists('PHPUnit_Framework_MockObject_MockObject')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_MockObject_MockObject', '\PHPUnit\Framework\MockObject\MockObject');
 }

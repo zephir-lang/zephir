@@ -1,4 +1,4 @@
-version: 0.11.1-{build}
+version: 0.11.2-{build}
 
 environment:
     matrix:
@@ -43,8 +43,8 @@ environment:
     NO_INTERACTION: 1
     REPORT_EXIT_STATUS: 1
     COMPOSER_NO_INTERACTION: 1
-    PARSER_VERSION: 1.1.2
-    PARSER_RELEASE: 290
+    PARSER_VERSION: 1.1.3
+    PARSER_RELEASE: 401
     ZEPHIRDIR: c:\projects\zephir
 
 matrix:
@@ -108,10 +108,3 @@ on_failure:
     - ps: PrintVars
     - ps: PrintDirectoriesContent
     - ps: PrintPhpInfo
-
-notifications:
-    - provider: Email
-      to:
-        - build@phalconphp.com
-      subject: "Build Zephir [{{status}}]"
-      on_build_status_changed: true

@@ -1,0 +1,63 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+if (PHP_SAPI !== 'cli') {
+    fprintf(
+        STDERR,
+        'Error: This script should be invoked via the CLI version of PHP, not the %s SAPI' . PHP_EOL,
+        PHP_SAPI
+    );
+
+    exit(1);
+}
+
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    fwrite(
+        STDERR,
+        'This script is designed to run inside a Linux/Unix terminals only.' . PHP_EOL
+    );
+
+    exit(1);
+}
+
+$cwd = getcwd();
+chdir(dirname(__DIR__));
+
+require_once 'vendor/autoload.php';
+if (!class_exists('Composer\Autoload\ClassLoader')) {
+    fwrite(
+        STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+    );
+
+    chdir($cwd);
+    exit(1);
+}
+
+$box = rtrim(shell_exec('command -v box 2>/dev/null'));
+if (empty($box)) {
+    fwrite(
+        STDERR,
+        'To use this script you need to install kherge/box.' . PHP_EOL . PHP_EOL .
+        'You can learn all about kherge/box on https://github.com/humbug/box/.' . PHP_EOL
+    );
+
+    chdir($cwd);
+    exit(1);
+}
+
+passthru("php -d phar.readonly=0 {$box} compile", $status);
+
+chdir($cwd);
+exit($status);

@@ -1,25 +1,27 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
 use Zephir\Compiler\CompilerException;
+use Zephir\Di\Singleton;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FunctionCall
+ * Zephir\FunctionCall
+ *
  * Call functions. By default functions are called in the PHP userland if an optimizer
  * was not found or there is not a user-handler for it
+ *
+ * @package Zephir
  */
 class FunctionCall extends Call
 {
@@ -38,39 +40,37 @@ class FunctionCall extends Call
      */
     const CALL_DYNAMIC_STRING = 3;
 
-    protected static $_optimizers = [];
+    protected static $optimizers = [];
 
-    protected static $_functionReflection = [];
+    protected static $functionReflection = [];
 
-    protected static $_optimizerDirectories = [];
-
-    private static $_functionCache = null;
+    protected static $optimizerDirectories = [];
 
     /**
      * Process the ReflectionFunction for the specified function name
      *
      * @param string $funcName
      *
-     * @return \ReflectionFunction
+     * @return \ReflectionFunction|null
      */
     public function getReflector($funcName)
     {
         /**
          * Check if the optimizer is already cached
          */
-        if (!isset(self::$_functionReflection[$funcName])) {
+        if (!isset(self::$functionReflection[$funcName])) {
             try {
                 $reflectionFunction = new \ReflectionFunction($funcName);
-            } catch (\Exception $e) {
+            } catch (\ReflectionException $e) {
                 $reflectionFunction = null;
             }
-            self::$_functionReflection[$funcName] = $reflectionFunction;
-            $this->_reflection = $reflectionFunction;
+            self::$functionReflection[$funcName] = $reflectionFunction;
+            $this->reflection = $reflectionFunction;
 
             return $reflectionFunction;
         }
-        $reflectionFunction = self::$_functionReflection[$funcName];
-        $this->_reflection = $reflectionFunction;
+        $reflectionFunction = self::$functionReflection[$funcName];
+        $this->reflection = $reflectionFunction;
 
         return $reflectionFunction;
     }
@@ -226,18 +226,21 @@ class FunctionCall extends Call
         /**
          * Check if the optimizer is already cached
          */
-        if (!isset(self::$_optimizers[$funcName])) {
-            $camelizeFunctionName = Utils::camelize($funcName);
+        if (!isset(self::$optimizers[$funcName])) {
+            $camelizeFunctionName = camelize($funcName);
 
             /**
              * Check every optimizer directory for an optimizer
              */
-            foreach (self::$_optimizerDirectories as $directory) {
+            foreach (self::$optimizerDirectories as $directory) {
                 $path = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
-                if (file_exists($path)) {
-                    require_once $path;
+                $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
 
-                    $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+                if (file_exists($path)) {
+                    if (!class_exists($className, false)) {
+                        require_once $path;
+                    }
+
                     if (!class_exists($className, false)) {
                         throw new Exception("Class {$className} cannot be loaded");
                     }
@@ -248,13 +251,15 @@ class FunctionCall extends Call
                         throw new Exception("Class {$className} must be instance of OptimizerAbstract");
                     }
 
+                    $optimizer->setContainer(Singleton::getDefault());
+
                     break;
                 }
             }
 
-            self::$_optimizers[$funcName] = $optimizer;
+            self::$optimizers[$funcName] = $optimizer;
         } else {
-            $optimizer = self::$_optimizers[$funcName];
+            $optimizer = self::$optimizers[$funcName];
         }
 
         if ($optimizer) {
@@ -677,7 +682,7 @@ class FunctionCall extends Call
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
-        $this->_expression = $expr;
+        $this->expression = $expr;
         $expression = $expr->getExpression();
 
         switch ($expression['call-type']) {
@@ -697,6 +702,6 @@ class FunctionCall extends Call
      */
     public static function addOptimizerDir($directory)
     {
-        self::$_optimizerDirectories[] = $directory;
+        self::$optimizerDirectories[] = $directory;
     }
 }

@@ -1,26 +1,26 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Zephir;
 
-use Zephir\Parser\Manager;
-use Zephir\Parser\ParseException;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
-use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\HardDisk as FileSystem;
+use Zephir\Parser\Manager;
+use Zephir\Parser\ParseException;
 
 /**
  * Zephir\Compiler
@@ -29,9 +29,11 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  *
  * @package Zephir
  */
-class Compiler
+class Compiler implements InjectionAwareInterface
 {
-    const VERSION = '0.11.1';
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
 
     public $parserCompiled = false;
 
@@ -43,53 +45,53 @@ class Compiler
     /**
      * @var FunctionDefinition[]
      */
-    public $functionDefinitions = array();
+    public $functionDefinitions = [];
 
     /**
      * @var CompilerFile[]
      */
-    protected $files = array();
+    protected $files = [];
 
     /**
      * @var array|string[]
      */
-    protected $anonymousFiles = array();
+    protected $anonymousFiles = [];
 
     /**
      * Additional initializer code
      * used for static property initialization
      * @var array
      */
-    protected $internalInitializers = array();
+    protected $internalInitializers = [];
 
     /**
      * @var ClassDefinition[]
      */
-    protected $definitions = array();
+    protected $definitions = [];
 
     /**
      * @var array|string[]
      */
-    protected $compiledFiles = array();
+    protected $compiledFiles = [];
 
     /**
      *
      */
-    protected $constants = array();
+    protected $constants = [];
 
     /**
      * Extension globals
      *
      * @var array
      */
-    protected $globals = array();
+    protected $globals = [];
 
     /**
      * External dependencies
      *
      * @var array
      */
-    protected $externalDependencies = array();
+    protected $externalDependencies = [];
 
     /**
      * @var StringsManager
@@ -114,7 +116,7 @@ class Compiler
     /**
      * @var \ReflectionClass[]
      */
-    protected static $internalDefinitions = array();
+    protected static $internalDefinitions = [];
 
     /**
      * @var boolean
@@ -122,14 +124,9 @@ class Compiler
     protected static $loadedPrototypes = false;
 
     /**
-     * @var string
-     */
-    protected static $currentVersion;
-
-    /**
      * @var array
      */
-    protected $extraFiles = array();
+    protected $extraFiles = [];
 
     /**
      * The Zephir Parser Manager
@@ -143,17 +140,25 @@ class Compiler
     protected $fileSystem;
 
     /**
+     * The Zephir base direcrory.
+     * @var string
+     */
+    private $baseDir;
+
+    /**
      * Compiler constructor
      *
-     * @param Config $config
-     * @param Logger $logger
+     * @param Config      $config
+     * @param Logger      $logger
      * @param BaseBackend $backend
-     * @param Manager $manager
+     * @param Manager     $manager
      *
      * @throws Exception
      */
     public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager)
     {
+        $this->__DiInject();
+
         $this->config = $config;
         $this->logger = $logger;
         $this->fileSystem = new FileSystem();
@@ -176,16 +181,19 @@ class Compiler
     }
 
     /**
-     * Adds a function to the function definitions
+     * Adds a function to the function definitions.
      *
-     * @param FunctionDefinition $func
-     * @param array $statement
+     * @param  FunctionDefinition $func
+     * @param  array $statement
+     * @return void
+     *
      * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
+            // @todo Cover by test
             throw new CompilerException(
                 "Function '" . $func->getCompleteName() . "' was defined more than one time",
                 $statement
@@ -199,6 +207,7 @@ class Compiler
      * Pre-compiles classes creating a CompilerFile definition
      *
      * @param string $filePath
+     *
      * @throws CompilerException
      * @throws IllegalStateException
      * @throws ParseException
@@ -217,7 +226,7 @@ class Compiler
                 return ucfirst($i);
             }, explode('\\', $className)));
 
-            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger, $this->backend);
+            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
             $this->files[$className]->preCompile($this);
 
             $this->definitions[$className] = $this->files[$className]->getClassDefinition();
@@ -240,7 +249,7 @@ class Compiler
         /**
          * Pre compile all files
          */
-        $files = array();
+        $files = [];
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
@@ -513,11 +522,11 @@ class Compiler
 
             foreach (file($constantsSource) as $line) {
                 if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
-                    $this->constants[$matches[1]] = array('int', $matches[2]);
+                    $this->constants[$matches[1]] = ['int', $matches[2]];
                     continue;
                 }
                 if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
-                    $this->constants[$matches[1]] = array('char', $matches[3]);
+                    $this->constants[$matches[1]] = ['char', $matches[3]];
                 }
             }
         }
@@ -582,38 +591,6 @@ class Compiler
     }
 
     /**
-     * Returns the current version + the ident if available
-     *
-     * @return string
-     */
-    public static function getCurrentVersion()
-    {
-        $version = '$Id$';
-        if (strlen($version) != 4) {
-            return self::VERSION . '-' . substr($version, 0, 10);
-        }
-
-        if (!Utils::isWindows()) {
-            if (self::$currentVersion === null) {
-                if (file_exists(__DIR__ . '/../.git')) {
-                    exec('cd ' . __DIR__ . '/.. && git log --format="%H" -n 1', $xversion);
-                    if (isset($xversion[0]) && strlen($xversion[0]) > 10) {
-                        self::$currentVersion = substr($xversion[0], 0, 10);
-                    } else {
-                        self::$currentVersion = false;
-                    }
-                }
-            }
-
-            if (self::$currentVersion) {
-                return self::VERSION . '-' . self::$currentVersion;
-            }
-        }
-
-        return self::VERSION;
-    }
-
-    /**
      * Returns GCC flags for current compilation
      *
      * @param boolean $development
@@ -621,7 +598,7 @@ class Compiler
      */
     public function getGccFlags($development = false)
     {
-        if (!Utils::isWindows()) {
+        if (!$this->environment->isWindows()) {
             $gccFlags = getenv('CFLAGS');
             if (!is_string($gccFlags)) {
                 if (!$development) {
@@ -646,9 +623,9 @@ class Compiler
      */
     public function getPhpIncludeDirs()
     {
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
-        if (!Utils::isWindows()) {
+        if (!$this->environment->isWindows()) {
             $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
         }
 
@@ -660,8 +637,8 @@ class Compiler
      */
     public function preCompileHeaders()
     {
-        if (!Utils::isWindows()) {
-            $version = self::getCurrentVersion();
+        if (!$this->environment->isWindows()) {
+            $version = $this->container->get(Version::class);
             $phpIncludes = $this->getPhpIncludeDirs();
 
             foreach (new \DirectoryIterator('ext/kernel') as $file) {
@@ -771,47 +748,6 @@ class Compiler
         }
 
         /**
-         * Check if there are module/request/global destructors
-         */
-        $includes = '';
-        $destructors = $this->config->get('destructors');
-        if (is_array($destructors)) {
-            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
-            $includes .= PHP_EOL . $invokeRequestDestructors[0];
-            $reqDestructors = $invokeRequestDestructors[1];
-
-            $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
-            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
-            $prqDestructors = $invokePostRequestDestructors[1];
-
-            $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
-            $includes .= PHP_EOL . $invokeModuleDestructors[0];
-            $modDestructors = $invokeModuleDestructors[1];
-
-            $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
-            $glbDestructors = $invokeGlobalsDestructors[1];
-        }
-
-        /**
-         * Check if there are module/request/global initializers
-         */
-        $initializers = $this->config->get('initializers');
-        if (is_array($initializers)) {
-            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
-            $includes .= PHP_EOL . $invokeRequestInitializers[0];
-            $reqInitializers = $invokeRequestInitializers[1];
-
-            $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
-            $includes .= PHP_EOL . $invokeModuleInitializers[0];
-            $modInitializers = $invokeModuleInitializers[1];
-
-            $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
-            $glbInitializers = $invokeGlobalsInitializers[1];
-        }
-
-        /**
          * Round 1. pre-compile all files in memory
          */
         $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
@@ -831,8 +767,8 @@ class Compiler
         /**
          * Sort the files by dependency ranking
          */
-        $files = array();
-        $rankedFiles = array();
+        $files = [];
+        $rankedFiles = [];
         $this->calculateDependencies($this->files);
 
         foreach ($this->files as $rankFile) {
@@ -866,7 +802,7 @@ class Compiler
          * Load function optimizers
          */
         if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir(ZEPHIRPATH . '/Library/Optimizers/FunctionCall');
+            FunctionCall::addOptimizerDir($this->environment->getPath('Library/Optimizers/FunctionCall'));
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {
@@ -875,17 +811,24 @@ class Compiler
                 }
             }
 
-            if (is_dir(ZEPHIRPATH . '/prototypes') && is_readable(ZEPHIRPATH . '/prototypes')) {
+            $prototypes = $this->environment->getPrototypesPath();
+
+            if (is_dir($prototypes) && is_readable($prototypes)) {
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
                  */
-                foreach (new \DirectoryIterator(ZEPHIRPATH . '/prototypes') as $file) {
-                    if (!$file->isDir()) {
-                        $extension = str_replace('.php', '', $file);
-                        if (!extension_loaded($extension)) {
-                            require_once $file->getRealPath();
-                        }
+                foreach (new \DirectoryIterator($prototypes) as $file) {
+                    if ($file->isDir() || $file->isDot()) {
+                        continue;
+                    }
+
+                    // Do not use $file->getRealPath() because it does not work inside phar
+                    $realPath =  $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
+
+                    $extension = $file->getBasename(".{$file->getExtension()}");
+                    if (!extension_loaded($extension)) {
+                        require_once $realPath;
                     }
                 }
             }
@@ -918,7 +861,7 @@ class Compiler
         /**
          * Round 3. Compile all files to C sources
          */
-        $files = array();
+        $files = [];
 
         $hash = "";
         foreach ($this->files as $compileFile) {
@@ -929,7 +872,7 @@ class Compiler
                 $compileFile->compile($this, $this->stringManager);
                 $compiledFile = $compileFile->getCompiledFile();
 
-                $methods = array();
+                $methods = [];
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
@@ -952,7 +895,7 @@ class Compiler
             $compileFile->compile($this, $this->stringManager);
             $compiledFile = $compileFile->getCompiledFile();
 
-            $methods = array();
+            $methods = [];
             $classDefinition = $compileFile->getClassDefinition();
             foreach ($classDefinition->getMethods() as $method) {
                 $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
@@ -973,7 +916,7 @@ class Compiler
         if (is_array($extraSources)) {
             $this->extraFiles = $extraSources;
         } else {
-            $this->extraFiles = array();
+            $this->extraFiles = [];
         }
 
         /**
@@ -1001,7 +944,7 @@ class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
         /**
          * When a new file is added or removed we need to run configure again
@@ -1052,10 +995,10 @@ class Compiler
         $needConfigure = $this->generate($command);
 
         if ($needConfigure) {
-            if (Utils::isWindows()) {
+            if ($this->environment->isWindows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-                $releaseFolder = Utils::resolveWindowsReleaseFolder();
+                $releaseFolder = $this->environment->getWindowsReleaseDir();
                 if (file_exists($releaseFolder)) {
                     exec('rd /s /q ' . $releaseFolder, $output, $exit);
                 }
@@ -1114,7 +1057,7 @@ class Compiler
 
         $currentDir = getcwd();
         $this->logger->output('Compiling...');
-        if (Utils::isWindows()) {
+        if ($this->environment->isWindows()) {
             exec(
                 'cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' .
                 $currentDir . '\compile.log',
@@ -1146,6 +1089,8 @@ class Compiler
         }
 
         $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $documentator->setContainer($this->container);
+
         $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
         $documentator->build();
     }
@@ -1193,7 +1138,7 @@ class Compiler
         @unlink("ext/modules/" . $namespace . ".so");
 
         $this->compile($command, $development);
-        if (Utils::isWindows()) {
+        if ($this->environment->isWindows()) {
             $this->logger->output("Installation is not implemented for windows yet! Aborting!");
             exit();
         }
@@ -1236,11 +1181,11 @@ class Compiler
         /**
          * Get global namespace
          */
-        $namespace = $this->checkDirectory();
+        $this->checkDirectory();
 
         $this->logger->output('Running tests...');
 
-        if (!Utils::isWindows()) {
+        if (!$this->environment->isWindows()) {
             system(
                 'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
                 $exit
@@ -1256,7 +1201,8 @@ class Compiler
     public function clean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (Utils::isWindows()) {
+
+        if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
         } else {
             system('cd ext && make clean > /dev/null');
@@ -1271,7 +1217,7 @@ class Compiler
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        if (Utils::isWindows()) {
+        if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
             system('cd ext && phpize --clean');
             system('cd ext && ./clean');
@@ -1311,15 +1257,15 @@ class Compiler
      */
     protected function processAddSources($sources, $project)
     {
-        $groupSources = array();
+        $groupSources = [];
         foreach ($sources as $source) {
             $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
             if (!isset($groupSources[$dirName])) {
-                $groupSources[$dirName] = array();
+                $groupSources[$dirName] = [];
             }
             $groupSources[$dirName][] = basename($source);
         }
-        $groups = array();
+        $groups = [];
         foreach ($groupSources as $dirname => $files) {
             $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
                         join(' ', $files) . '", "' . $project . '");';
@@ -1367,7 +1313,7 @@ class Compiler
                 return str_replace('.c', '.zep.h', $file);
             }, $this->compiledFiles);
         } else {
-            $compiledHeaders = array('php_' . strtoupper($project) . '.h');
+            $compiledHeaders = ['php_' . strtoupper($project) . '.h'];
         }
 
         /*
@@ -1380,7 +1326,7 @@ class Compiler
         /**
          * Generate config.m4
          */
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
@@ -1390,18 +1336,18 @@ class Compiler
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $contentM4 = str_replace($mark, $replace, $contentM4);
         }
 
-        $needConfigure = Utils::checkAndWriteIfNeeded($contentM4, 'ext/config.m4');
+        file_put_contents_ex($contentM4, 'ext/config.m4');
 
         /**
          * Generate config.w32
          */
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
@@ -1413,13 +1359,13 @@ class Compiler
                 "\r\n\t",
                 $this->processAddSources($this->extraFiles, strtolower($project))
             ),
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $contentW32 = str_replace($mark, $replace, $contentW32);
         }
 
-        $needConfigure = Utils::checkAndWriteIfNeeded($contentW32, 'ext/config.w32');
+        $needConfigure = file_put_contents_ex($contentW32, 'ext/config.w32');
 
         /**
          * php_ext.h
@@ -1429,15 +1375,15 @@ class Compiler
             throw new Exception("Template php_ext.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/php_ext.h');
+        file_put_contents_ex($content, 'ext/php_ext.h');
 
         /**
          * ext.h
@@ -1447,15 +1393,15 @@ class Compiler
             throw new Exception("Template ext.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/ext.h');
+        file_put_contents_ex($content, 'ext/ext.h');
 
         /**
          * ext_config.h
@@ -1465,15 +1411,15 @@ class Compiler
             throw new Exception("Template ext_config.h doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER%' => strtolower($project)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/ext_config.h');
+        file_put_contents_ex($content, 'ext/ext_config.h');
 
         /**
          * ext_clean
@@ -1483,7 +1429,7 @@ class Compiler
             throw new Exception("Clean file doesn't exist");
         }
 
-        if (Utils::checkAndWriteIfNeeded($content, 'ext/clean')) {
+        if (file_put_contents_ex($content, 'ext/clean')) {
             chmod('ext/clean', 0755);
         }
 
@@ -1495,15 +1441,15 @@ class Compiler
             throw new Exception("Install file doesn't exist");
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER%' => strtolower($project)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        if (Utils::checkAndWriteIfNeeded($content, 'ext/install')) {
+        if (file_put_contents_ex($content, 'ext/install')) {
             chmod('ext/install', 0755);
         }
 
@@ -1522,16 +1468,16 @@ class Compiler
     {
         $globalCode = '';
         $globalStruct = '';
-        $globalsDefault = array(array(), array());
-        $initEntries = array();
+        $globalsDefault = [[], []];
+        $initEntries = [];
 
         /**
          * Generate the extensions globals declaration
          */
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
-            $structures = array();
-            $variables = array();
+            $structures = [];
+            $variables = [];
             foreach ($globals as $name => $global) {
                 $parts = explode('.', $name);
                 if (isset($parts[1])) {
@@ -1619,7 +1565,7 @@ class Compiler
                 }
 
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
-                $iniEntry = array();
+                $iniEntry = [];
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
                 }
@@ -1659,7 +1605,7 @@ class Compiler
         $globalsDefault[0] = implode('', $globalsDefault[0]);
         $globalsDefault[1] = implode('', $globalsDefault[1]);
 
-        return array($globalCode, $globalStruct, $globalsDefault, $initEntries);
+        return [$globalCode, $globalStruct, $globalsDefault, $initEntries];
     }
 
     /**
@@ -1676,7 +1622,7 @@ class Compiler
             foreach ($info as $table) {
                 $phpinfo .= "\t" . 'php_info_print_table_start();' . PHP_EOL;
                 if (isset($table['header'])) {
-                    $headerArray = array();
+                    $headerArray = [];
                     foreach ($table['header'] as $header) {
                         $headerArray[] = '"' . htmlentities($header) . '"';
                     }
@@ -1686,7 +1632,7 @@ class Compiler
                 }
                 if (isset($table['rows'])) {
                     foreach ($table['rows'] as $row) {
-                        $rowArray = array();
+                        $rowArray = [];
                         foreach ($row as $field) {
                             $rowArray[] = '"' . htmlentities($field) . '"';
                         }
@@ -1703,15 +1649,16 @@ class Compiler
     }
 
     /**
-     * Process extension code injection
+     * Process extension code injection.
      *
-     * @param array $entries
+     * @param  array  $entries
+     * @param  string $section
      * @return array
      */
     public function processCodeInjection(array $entries, $section = 'request')
     {
-        $codes = array();
-        $includes = array();
+        $codes = [];
+        $includes = [];
 
         if (isset($entries[$section])) {
             foreach ($entries[$section] as $entry) {
@@ -1724,7 +1671,7 @@ class Compiler
             }
         }
 
-        return array(join(PHP_EOL, $includes), join("\n\t", $codes));
+        return [implode(PHP_EOL, $includes), implode("\n\t", $codes)];
     }
 
     /**
@@ -1746,7 +1693,7 @@ class Compiler
          * We first build a dependency tree and then set the rank accordingly
          */
         if ($_dependency == null) {
-            $dependencyTree = array();
+            $dependencyTree = [];
             foreach ($files as $file) {
                 if (!$file->isExternal()) {
                     $classDefinition = $file->getClassDefinition();
@@ -1809,11 +1756,11 @@ class Compiler
          */
         $this->calculateDependencies($files);
 
-        $classEntries = array();
-        $classInits = array();
+        $classEntries = [];
+        $classInits = [];
 
-        $interfaceEntries = array();
-        $interfaceInits = array();
+        $interfaceEntries = [];
+        $interfaceInits = [];
 
         /**
          * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
@@ -1826,8 +1773,8 @@ class Compiler
                     $dependencyRank = $classDefinition->getDependencyRank();
                     if ($classDefinition->getType() == 'class') {
                         if (!isset($classInits[$dependencyRank])) {
-                            $classEntries[$dependencyRank] = array();
-                            $classInits[$dependencyRank] = array();
+                            $classEntries[$dependencyRank] = [];
+                            $classInits[$dependencyRank] = [];
                         }
                         $classEntries[$dependencyRank][] =
                             'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
@@ -1836,8 +1783,8 @@ class Compiler
                              $classDefinition->getName() . ');';
                     } else {
                         if (!isset($interfaceInits[$dependencyRank])) {
-                            $interfaceEntries[$dependencyRank] = array();
-                            $interfaceInits[$dependencyRank] = array();
+                            $interfaceEntries[$dependencyRank] = [];
+                            $interfaceInits[$dependencyRank] = [];
                         }
                         $interfaceEntries[$dependencyRank][] =
                             'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
@@ -1854,25 +1801,25 @@ class Compiler
         krsort($interfaceInits);
         krsort($interfaceEntries);
 
-        $completeInterfaceInits = array();
+        $completeInterfaceInits = [];
         foreach ($interfaceInits as $rankInterfaceInits) {
             asort($rankInterfaceInits, SORT_STRING);
             $completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
         }
 
-        $completeInterfaceEntries = array();
+        $completeInterfaceEntries = [];
         foreach ($interfaceEntries as $rankInterfaceEntries) {
             asort($rankInterfaceEntries, SORT_STRING);
             $completeInterfaceEntries = array_merge($completeInterfaceEntries, $rankInterfaceEntries);
         }
 
-        $completeClassInits = array();
+        $completeClassInits = [];
         foreach ($classInits as $rankClassInits) {
             asort($rankClassInits, SORT_STRING);
             $completeClassInits = array_merge($completeClassInits, $rankClassInits);
         }
 
-        $completeClassEntries = array();
+        $completeClassEntries = [];
         foreach ($classEntries as $rankClassEntries) {
             asort($rankClassEntries, SORT_STRING);
             $completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
@@ -1954,7 +1901,7 @@ class Compiler
             }
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
             '%PROJECT_LOWER%'       => strtolower($project),
             '%PROJECT_UPPER%'       => strtoupper($project),
@@ -1969,7 +1916,7 @@ class Compiler
             ),
             '%INIT_GLOBALS%'        => implode(
                 PHP_EOL . "\t",
-                array_merge((array)$globalsDefault[0], array($glbInitializers))
+                array_merge((array)$globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
             '%DESTROY_GLOBALS%'     => $glbDestructors,
@@ -1982,12 +1929,12 @@ class Compiler
             '%MOD_DESTRUCTORS%'     => $modDestructors,
             '%REQ_INITIALIZERS%'    => implode(
                 PHP_EOL . "\t",
-                array_merge($this->internalInitializers, array($reqInitializers))
+                array_merge($this->internalInitializers, [$reqInitializers])
             ),
             '%REQ_DESTRUCTORS%'     => $reqDestructors,
             '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
-                array(
+                [
                     '#define ZEPHIR_POST_REQUEST 1',
                     'static PHP_PRSHUTDOWN_FUNCTION(' . strtolower($project) . ')',
                     '{',
@@ -1996,12 +1943,12 @@ class Compiler
                         explode(PHP_EOL, $prqDestructors)
                     ),
                     '}'
-                )
+                ]
             ),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries,
             '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
-        );
+        ];
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
@@ -2009,7 +1956,7 @@ class Compiler
         /**
          * Round 5. Generate and place the entry point of the project
          */
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.c');
+        file_put_contents_ex($content, 'ext/' . $safeProject . '.c');
         unset($content);
 
         /**
@@ -2020,7 +1967,7 @@ class Compiler
             throw new Exception("Template project.h doesn't exists");
         }
 
-        $includeHeaders = array();
+        $includeHeaders = [];
         foreach ($this->compiledFiles as $file) {
             if ($file) {
                 $fileH = str_replace(".c", ".zep.h", $file);
@@ -2042,15 +1989,15 @@ class Compiler
             }
         }
 
-        $toReplace = array(
+        $toReplace = [
             '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders)
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/' . $safeProject . '.h');
         unset($content);
 
         /**
@@ -2061,9 +2008,9 @@ class Compiler
             throw new Exception("Template php_project.h doesn't exist");
         }
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
-        $toReplace = array(
+        $toReplace = [
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
             '%PROJECT_UPPER%'            => strtoupper($project),
@@ -2072,16 +2019,16 @@ class Compiler
             '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
             '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
             '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => $version,
+            '%PROJECT_ZEPVERSION%'       => (string) $version,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
-        );
+        ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/php_' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/php_' . $safeProject . '.h');
         unset($content);
 
         return $needConfigure;
@@ -2093,174 +2040,36 @@ class Compiler
         $entryPrinter = new CodePrinter();
 
         /**
-         * Create argument info
+         * Specifying Argument Information
          */
         foreach ($this->functionDefinitions as $func) {
+            $argInfo = new ArgInfoDefinition(
+                $func->getArgInfoName(),
+                $func,
+                $headerPrinter,
+                $func->getCallGathererPass()->getCompilationContext()
+            );
+
             $funcName = $func->getInternalName();
-            $argInfoName = 'arginfo_' . strtolower($funcName);
+            $argInfoName = $func->getArgInfoName();
 
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
-            $parameters = $func->getParameters();
 
-            if ($this->backend->isZE3() && $func->hasReturnTypes()) {
-                if (array_key_exists('object', $func->getReturnTypes())) {
-                    $class = 'NULL';
+            $argInfo->setBooleanDefinition($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
+            $argInfo->setRichFormat($this->backend->isZE3());
 
-                    if (count($func->getReturnClassTypes()) == 1) {
-                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
-                        $class = Utils::escapeClassName($compilationContext->getFullName(key($func->getReturnClassTypes())));
-                    }
+            $argInfo->render();
 
-                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $class . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#else');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        'NULL, "' . $class . '", ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#endif');
-                } else {
-                    $type = 'IS_NULL';
-
-                    if ($func->areReturnTypesIntCompatible()) {
-                        $type = 'IS_LONG';
-                    }
-                    if ($func->areReturnTypesDoubleCompatible()) {
-                        $type = 'IS_DOUBLE';
-                    }
-                    if ($func->areReturnTypesBoolCompatible()) {
-                        $type = '_IS_BOOL';
-                    }
-                    if ($func->areReturnTypesStringCompatible()) {
-                        $type = 'IS_STRING';
-                    }
-
-                    $headerPrinter->output('#ifdef ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $type . ', ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#else');
-                    $headerPrinter->output(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(' . $argInfoName . ', 0, ' .
-                        $func->getNumberOfRequiredParameters() . ', ' .
-                        $type . ', NULL, ' . ($func->areReturnTypesNullCompatible() ? 1 : 0) . ')'
-                    );
-                    $headerPrinter->output('#endif');
-                }
-
-                if ($parameters == null || !count($parameters->getParameters())) {
-                    $headerPrinter->output('ZEND_END_ARG_INFO()');
-                    $headerPrinter->outputBlankLine();
-                }
-            } elseif ($parameters != null && count($parameters->getParameters())) {
-                $headerPrinter->output(
-                    'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
-                    $func->getNumberOfRequiredParameters() . ')'
-                );
-            }
-
-            if ($parameters != null && count($parameters->getParameters())) {
-                foreach ($parameters->getParameters() as $parameter) {
-                    switch (($this->backend->isZE3() ? '3:' : '2:') . $parameter['data-type']) {
-                        case '2:array':
-                        case '3:array':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_ARRAY_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '2:variable':
-                        case '3:variable':
-                            if (isset($parameter['cast'])) {
-                                switch ($parameter['cast']['type']) {
-                                    case 'variable':
-                                        $compilationContext = $func->getCallGathererPass()->getCompilationContext();
-                                        $value = $parameter['cast']['value'];
-
-                                        $headerPrinter->output(
-                                            "\t" . 'ZEND_ARG_OBJ_INFO(' .
-                                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                            $parameter['name'] . ', ' .
-                                            Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' .
-                                            (isset($parameter['default']) ? 1 : 0) . ')'
-                                        );
-                                        break;
-
-                                    default:
-                                        throw new Exception('Unexpected exception');
-                                }
-                            } else {
-                                $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ')');
-                            }
-                            break;
-
-                        case '3:bool':
-                        case '3:boolean':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', ' .
-                                ($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL') . ', ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:uchar':
-                        case '3:int':
-                        case '3:uint':
-                        case '3:long':
-                        case '3:ulong':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_LONG, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:double':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_DOUBLE, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        case '3:char':
-                        case '3:string':
-                            $headerPrinter->output(
-                                "\t" . 'ZEND_ARG_TYPE_INFO(' .
-                                (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                                $parameter['name'] . ', IS_STRING, ' .
-                                (isset($parameter['default']) ? 1 : 0) . ')'
-                            );
-                            break;
-
-                        default:
-                            $headerPrinter->output("\t" . 'ZEND_ARG_INFO(' .
-                            (isset($parameter['reference']) ? $parameter['reference'] : 0) . ', ' .
-                            $parameter['name'] . ')');
-                            break;
-                    }
-                }
-                $headerPrinter->output('ZEND_END_ARG_INFO()');
-                $headerPrinter->outputBlankLine();
-            }
             /** Generate FE's */
-            $paramData = ((($this->backend->isZE3() && $func->hasReturnTypes()) || $func->hasParameters()) ? $argInfoName : 'NULL');
+            $paramData = 'NULL';
+
+            $richFormat = $this->backend->isZE3() &&
+                $func->isReturnTypesHintDetermined() &&
+                $func->areReturnTypesCompatible();
+
+            if ($richFormat || $func->hasParameters()) {
+                $paramData = $argInfoName;
+            }
 
             if ($func->isGlobal()) {
                 $entryPrinter->output(
@@ -2277,7 +2086,7 @@ class Compiler
         }
         $entryPrinter->output('ZEND_FE_END');
 
-        return array($headerPrinter->getOutput(), $entryPrinter->getOutput());
+        return [$headerPrinter->getOutput(), $entryPrinter->getOutput()];
     }
 
     /**
@@ -2318,18 +2127,6 @@ class Compiler
     public function getFileSystem()
     {
         return $this->fileSystem;
-    }
-
-    /**
-     * Returns a short path
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public static function getShortPath($path)
-    {
-        return str_replace(ZEPHIRPATH . DIRECTORY_SEPARATOR, '', $path);
     }
 
     /**
@@ -2390,12 +2187,12 @@ class Compiler
                     }
                 }
 
-                $toReplace = array(
+                $toReplace = [
                     '%PACKAGE_LOWER%'        => strtolower($pkg),
                     '%PACKAGE_UPPER%'        => strtoupper($pkg),
                     '%PACKAGE_REQUESTED_VERSION%'        => $operator . ' ' . $version,
                     '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd . '=' . $version,
-                );
+                ];
 
                 foreach ($toReplace as $mark => $replace) {
                     $pkgM4Buf = str_replace($mark, $replace, $pkgM4Buf);
@@ -2416,7 +2213,11 @@ class Compiler
     }
 
     /**
-     * Check require extensions orther when build your extension
+     * Check require extensions orther when build your extension.
+     *
+     * @return void
+     *
+     * @throws Exception
      */
     protected function checkRequires()
     {
@@ -2484,7 +2285,7 @@ class Compiler
         );
 
         if (!$configured) {
-            $this->logger->output('Cleaning old kernel files...');
+            $this->logger->output("\nCleaning old kernel files...");
             $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
 
             @mkdir($kernelPath);
@@ -2517,15 +2318,15 @@ class Compiler
             $this->fileSystem->initialize();
         }
 
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
-        if (!$this->fileSystem->exists($version)) {
+        if (!$this->fileSystem->exists((string) $version)) {
             if (!$this->checkIfPhpized()) {
                 $this->logger->output(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
-            $this->fileSystem->makeDirectory($version);
+            $this->fileSystem->makeDirectory((string) $version);
         }
 
         return $namespace;
@@ -2538,9 +2339,9 @@ class Compiler
      */
     protected function getGccVersion()
     {
-        $version = self::getCurrentVersion();
+        $version = $this->container->get(Version::class);
 
-        if (!Utils::isWindows()) {
+        if (!$this->environment->isWindows()) {
             if ($this->fileSystem->exists($version . '/gcc-version')) {
                 return $this->fileSystem->read($version . '/gcc-version');
             }

@@ -95,4 +95,20 @@ class Oo
 		let o = Oo\OoDynamicA::call1();
 		return o;
 	}
+
+	public function createInstancesInLoop() -> array
+	{
+		var className, instance, fqcn;
+		array result = [];
+
+		for className in ["OoDynamicA", "OoDynamicB"] {
+			let fqcn = "Test\\Oo\\" . className;
+			let instance = new {fqcn}();
+
+			let result[] = instance->execute();
+			let result[] = instance->execute2();
+		}
+
+		return result;
+	}
 }

@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements\Let;
 
@@ -38,8 +36,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      */
     protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 
@@ -116,8 +112,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
             }
-
-            $propertyDefinition = $classDefinition->getProperty($property);
         } else {
             /**
              * If we know the class related to a variable we could check if the property
@@ -244,8 +238,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
-        $codePrinter = $compilationContext->codePrinter;
-
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 

@@ -1,24 +1,23 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Utils;
 use Zephir\Compiler\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
+use function Zephir\escape_class;
+use function Zephir\fqcn;
 
 /**
  * InstanceOf
@@ -54,7 +53,7 @@ class InstanceOfOperator extends BaseOperator
 
         switch ($resolved->getType()) {
             case 'string':
-                $className = Utils::getFullName($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
+                $className = fqcn($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
 
                 if ($context->compiler->isClass($className)) {
                     $classDefinition = $context->compiler->getClassDefinition($className);
@@ -95,11 +94,11 @@ class InstanceOfOperator extends BaseOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
+                                        $code = 'SL("' . trim(escape_class($className), "\\") . '")';
                                     } else {
                                         $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                                         if (!$classEntry) {
-                                            $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
+                                            $code = 'SL("' . trim(escape_class($className), "\\") . '")';
                                         }
                                     }
                                 }

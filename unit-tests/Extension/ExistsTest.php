@@ -1,7 +1,7 @@
 <?php
 
-/*
- * This file is part of the Zephir package.
+/**
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -12,8 +12,7 @@
 namespace Extension;
 
 use Test\Exists;
-
-use PHPUnit\Framework\TestCase;
+use Zephir\Support\TestCase;
 
 class ExistsTest extends TestCase
 {

@@ -1,21 +1,13 @@
 <?php
 
-/*
- +----------------------------------------------------------------------+
- | Zephir Language                                                      |
- +----------------------------------------------------------------------+
- | Copyright (c) 2013-2017 Zephir Team                                  |
- +----------------------------------------------------------------------+
- | This source file is subject to version 1.0 of the MIT license,       |
- | that is bundled with this package in the file LICENSE, and is        |
- | available through the world-wide-web at the following url:           |
- | http://www.zephir-lang.com/license                                   |
- |                                                                      |
- | If you did not receive a copy of the MIT license and are unable      |
- | to obtain it through the world-wide-web, please send a note to       |
- | license@zephir-lang.com so we can mail you a copy immediately.       |
- +----------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
@@ -34,31 +26,22 @@ use Zephir\Documentation\DocblockParser;
  */
 class ClassMethod
 {
-    /**
-     * @var ClassDefinition
-     */
+    /** @var ClassDefinition */
     protected $classDefinition;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $visibility;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var ClassMethodParameters
-     */
+    /** @var ClassMethodParameters|null */
     protected $parameters;
 
+    /** @var StatementsBlock|null */
     protected $statements;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     protected $docblock;
 
     /**
@@ -71,14 +54,14 @@ class ClassMethod
      *
      * @var array
      */
-    protected $returnTypes = array();
+    protected $returnTypes = [];
 
     /**
      * Raw-types returned by the method
      *
      * @var array
      */
-    protected $returnTypesRaw = array();
+    protected $returnTypesRaw = [];
 
     /**
      * Class type hints returned by the method
@@ -141,11 +124,7 @@ class ClassMethod
      */
     protected $isInitializer = false;
 
-    /**
-     * @var array|null
-     *
-     * @var boolean
-     */
+    /** @var array|null */
     protected $expression;
 
     /**
@@ -169,20 +148,30 @@ class ClassMethod
      */
     protected $callGathererPass;
 
+    public $optimizable = true;
+
     /**
      * ClassMethod constructor
      *
-     * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param $name
-     * @param $parameters
-     * @param StatementsBlock $statements
-     * @param null $docblock
-     * @param null $returnType
-     * @param array $original
+     * @param ClassDefinition            $classDefinition
+     * @param array                      $visibility
+     * @param string                     $name
+     * @param ClassMethodParameters|null $parameters
+     * @param StatementsBlock|null       $statements
+     * @param string|null                $docblock
+     * @param array|null                 $returnType
+     * @param array|null                 $original
      */
-    public function __construct(ClassDefinition $classDefinition, array $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
-    {
+    public function __construct(
+        ClassDefinition $classDefinition,
+        array $visibility,
+        $name,
+        ClassMethodParameters $parameters = null,
+        StatementsBlock $statements = null,
+        $docblock = null,
+        array $returnType = null,
+        array $original = null
+    ) {
         $this->checkVisibility($visibility, $name, $original);
 
         $this->classDefinition = $classDefinition;
@@ -196,35 +185,43 @@ class ClassMethod
         $this->setReturnTypes($returnType);
     }
 
-    public function setReturnTypes($returnType)
+    public function setReturnTypes(array $returnType = null)
     {
         $this->returnTypesRaw = $returnType;
+        if ($returnType === null) {
+            return;
+        }
 
         if (isset($returnType['void']) && $returnType['void']) {
             $this->void = true;
             return;
         }
 
-        if (isset($returnType['list'])) {
-            $types = array();
-            $castTypes = array();
-            foreach ($returnType['list'] as $returnTypeItem) {
-                if (isset($returnTypeItem['cast'])) {
-                    if (isset($returnTypeItem['cast']['collection'])) {
-                        continue;
-                    }
-                    $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-                } else {
-                    $types[$returnTypeItem['data-type']] = $returnTypeItem;
+        if (!isset($returnType['list'])) {
+            return;
+        }
+
+        $types = [];
+        $castTypes = [];
+
+        foreach ($returnType['list'] as $returnTypeItem) {
+            if (isset($returnTypeItem['cast'])) {
+                if (isset($returnTypeItem['cast']['collection'])) {
+                    continue;
                 }
+                $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
+            } else {
+                $types[$returnTypeItem['data-type']] = $returnTypeItem;
             }
-            if (count($castTypes)) {
-                $types['object'] = array();
-                $this->returnClassTypes = $castTypes;
-            }
-            if (count($types)) {
-                $this->returnTypes = $types;
-            }
+        }
+
+        if (count($castTypes)) {
+            $types['object'] = [];
+            $this->returnClassTypes = $castTypes;
+        }
+
+        if (count($types)) {
+            $this->returnTypes = $types;
         }
     }
 
@@ -427,8 +424,9 @@ class ClassMethod
             $optimizedMethod->setReturnTypes($this->returnTypes);
             $classDefinition->addMethod($optimizedMethod);
         }
+
+        return $this;
     }
-    public $optimizable = true;
 
     public function getOptimizedMethod()
     {
@@ -1226,11 +1224,21 @@ class ClassMethod
 
                     case 'string':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
-                        $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
+                        $compilationContext->backend->assignString(
+                            $paramVariable,
+                            add_slashes($parameter['default']['value']),
+                            $compilationContext
+                        );
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                        throw new CompilerException(
+                            sprintf(
+                                'Default parameter value type: %s cannot be assigned to variable(string)',
+                                $parameter['default']['type']
+                            ),
+                            $parameter
+                        );
                 }
                 break;
 
@@ -1294,7 +1302,11 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
-                        $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
+                        $compilationContext->backend->assignString(
+                            $paramVariable,
+                            add_slashes($parameter['default']['value']),
+                            $compilationContext
+                        );
                         break;
 
                     case 'bool':
@@ -1658,7 +1670,7 @@ class ClassMethod
                     /**
                      * Assuming they're initialized
                      */
-                    $symbolParam->setIsInitialized(true, $compilationContext, $parameter);
+                    $symbolParam->setIsInitialized(true, $compilationContext);
 
                     /**
                      * Initialize auxiliary parameter zvals to null
@@ -2062,7 +2074,10 @@ class ClassMethod
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
                  */
                 if ($this->hasReturnTypes()) {
-                    throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $this->expression['return-type']);
+                    throw new CompilerException(
+                        'Reached end of the method without returning a valid type specified in the return-type hints',
+                        $this->expression['return-type']
+                    );
                 }
             }
         }
@@ -2149,5 +2164,102 @@ class ClassMethod
     {
         $classDefinition = $this->getClassDefinition();
         return 'zep_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '_' . $this->getName();
+    }
+
+    /**
+     * Returns arginfo name for current method.
+     *
+     * @param  ClassDefinition|null $classDefinition
+     * @return string
+     */
+    public function getArgInfoName(ClassDefinition $classDefinition = null)
+    {
+        if ($classDefinition != null) {
+            return sprintf(
+                'arginfo_%s_%s_%s',
+                strtolower($classDefinition->getCNamespace()),
+                strtolower($classDefinition->getName()),
+                strtolower($this->getName())
+            );
+        }
+
+        return sprintf('arginfo_%s', strtolower($this->getInternalName()));
+    }
+
+    /**
+     * Is method have determined return type hint.
+     *
+     * This method is used to generate:
+     *
+     * - ZEND_BEGIN_ARG_INFO_EX
+     * - ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
+     *
+     * Examples:
+     *
+     * - FALSE: function foo() -> void;
+     * - TRUE: function foo() -> null;
+     * - TRUE: function foo() -> bool|string|..;
+     * - TRUE: function foo() -> <\stdClass>;
+     * - FALSE: function foo();
+     * - FALSE: function foo() -> var;
+     * - FALSE: function foo() -> resource|callable;
+     *
+     * @return bool
+     */
+    public function isReturnTypesHintDetermined()
+    {
+        if (count($this->returnTypes) == 0 || $this->isVoid()) {
+            return false;
+        }
+
+        foreach ($this->returnTypes as $returnType => $definition) {
+            switch ($returnType) {
+                case 'variable':
+                case 'callable':
+                case 'resource':
+                    return false;
+            }
+
+            if (isset($definition['type']) && $definition['type'] === 'return-type-annotation') {
+                if ($this->areReturnTypesBoolCompatible() ||
+                    $this->areReturnTypesDoubleCompatible() ||
+                    $this->areReturnTypesIntCompatible() ||
+                    $this->areReturnTypesNullCompatible() ||
+                    $this->areReturnTypesStringCompatible() ||
+                    array_key_exists('array', $this->getReturnTypes())
+                ) {
+                    continue;
+                }
+
+                /**
+                 * @todo Probable we should detect return type more more carefully.
+                 * It is hard to process return type from the annotations at this time.
+                 * Thus we just return false here.
+                 */
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the method have compatible return types.
+     *
+     * @return bool
+     */
+    public function areReturnTypesCompatible()
+    {
+        // null | T1 | T2
+        if (count($this->returnTypes) > 2) {
+            return false;
+        }
+
+        // T1 | T2
+        if (count($this->returnTypes) == 2 && !isset($this->returnTypes['null'])) {
+            return false;
+        }
+
+        return true;
     }
 }

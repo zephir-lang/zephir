@@ -1,21 +1,20 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Other;
 
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Exception;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
@@ -28,7 +27,7 @@ use Zephir\Builder\Operators\CastOperatorBuilder;
  */
 class NewInstanceTypeOperator extends BaseOperator
 {
-    protected $_literalOnly = false;
+    protected $literalOnly = false;
 
     /**
      * Executes the operator
@@ -74,8 +73,12 @@ class NewInstanceTypeOperator extends BaseOperator
         $castBuilder = new CastOperatorBuilder($expression['internal-type'], $builder);
 
         $expression = new Expression($castBuilder->get());
-        $expression->setReadOnly($this->_readOnly);
+        $expression->setReadOnly($this->readOnly);
 
-        return $expression->compile($compilationContext);
+        try {
+            return $expression->compile($compilationContext);
+        } catch (Exception $e) {
+            throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
+        }
     }
 }

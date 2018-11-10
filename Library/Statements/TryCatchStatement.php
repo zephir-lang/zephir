@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -40,8 +38,8 @@ class TryCatchStatement extends StatementAbstract
         $codePrinter->output('/* try_start_' . $currentTryCatch . ': */');
         $codePrinter->outputBlankLine();
 
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $st->compile($compilationContext);
         }
 
@@ -55,7 +53,7 @@ class TryCatchStatement extends StatementAbstract
 
         $compilationContext->insideTryCatch--;
 
-        if (isset($this->_statement['catches'])) {
+        if (isset($this->statement['catches'])) {
             /**
              * Check if there was an exception
              */
@@ -68,7 +66,7 @@ class TryCatchStatement extends StatementAbstract
             $exprBuilder = BuilderFactory::getInstance();
             $ifs         = array();
 
-            foreach ($this->_statement['catches'] as $catch) {
+            foreach ($this->statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
                     if ($variable->getType() != 'variable') {
@@ -87,7 +85,7 @@ class TryCatchStatement extends StatementAbstract
                 /**
                  * @TODO, use a builder here
                  */
-                $variable->setIsInitialized(true, $compilationContext, $catch);
+                $variable->setIsInitialized(true, $compilationContext);
                 $variable->setMustInitNull(true);
 
                 /**
@@ -97,8 +95,6 @@ class TryCatchStatement extends StatementAbstract
                     $assignExceptVar = $exprBuilder->statements()->let(array(
                         $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
                     ));
-
-                    $assignExceptVarStmt = new \Zephir\Expression\Builder\Statements\LetStatement($assignExceptVar->build());
 
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(

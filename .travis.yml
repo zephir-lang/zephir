@@ -2,7 +2,7 @@ sudo: false
 
 language: php
 php:
-  - master
+  - 'master'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -12,67 +12,85 @@ php:
 git:
   depth: 1
 
+branches:
+  only:
+    - master
+    - development
+
 addons:
   apt:
     packages:
-    - gdb
-    - lcov
+      - gdb
+      - lcov
 
-env:
-  global:
-    - LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
-    - LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
-    - C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
-    - CFLAGS="-g3 -O0 -Wall -fvisibility=hidden"
-    - REPORT_EXIT_STATUS=1
-    - PATH="${HOME}/bin:${PATH}"
-    - RE2C_VERSION="1.1.1"
-    - ZEPHIR_PARSER_VERSION="v1.1.2"
-    - DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
-    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
-    - REPORT_COVERAGE=1
 
 matrix:
   fast_finish: true
   allow_failures:
-    # There is still memory leaks
-    # and other issues like https://github.com/sebastianbergmann/phpunit/pull/3359
     - php: 'master'
 
 cache:
   apt: true
-  ccache: true
   timeout: 604800
   directories:
-    - $HOME/.ccache
     - $HOME/.composer/cache
     - $HOME/.local/opt/re2c
     - $HOME/.cache/re2c
+    - $HOME/.cache/php-psr
+
+env:
+  global:
+    - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
+    - RE2C_VERSION="1.1.1"
+    - ZEPHIR_PARSER_VERSION="v1.1.3"
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+    - REPORT_COVERAGE=1
+    - PHPUNIT_DONT_EXIT=0
+    - PHPUNIT_CONF=phpunit.xml.dist
+    - BOX_VERSION=3.1.2
+    - PATH="${HOME}/bin:${PATH}"
 
 before_install:
-  - if [[ ! -z "${GH_TOKEN}" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"; fi;
-  - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
-  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+  - '[[ -z "${GH_TOKEN}" ]] || composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"'
+  - export PHP_MAJOR="$(php -r 'echo phpversion();' | cut -d '.' -f 1)"
+  - export PHP_MINOR="$(php -r 'echo phpversion();' | cut -d '.' -f 2)"
+  - export PHP_VERNUM="$(php-config --vernum)"
   - ulimit -c unlimited -S
   - phpenv config-add ./unit-tests/ci/999-default.ini
+  - echo "$TRAVIS_PHP_VERSION"
 
 install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-  - travis_retry gem install coveralls-lcov
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-zephir-parser.sh
-  - ./install
-
-before_script:
+  - ./install-nosudo
+  # We need this because there is no PHP 5 compatible PSR extension
+  - '[[ "${PHP_VERNUM}" -lt 70000 ]] || (./unit-tests/ci/install-php-psr.sh && cp -R ./unit-tests/integration ./test)'
   - ./unit-tests/ci/install-test-ext.sh
 
-script:
-  - ./unit-tests/ci/run-unit-tests.sh
+before_script:
+  # see: https://github.com/sebastianbergmann/phpunit/pull/3359
+  - '[[ "${PHP_VERNUM}" -lt 70300 ]] || export USE_ZEND_ALLOC=1 PHPUNIT_CONF=phpunit-no-coverage.xml.dist'
 
+script:
+  - |
+      php \
+        -d extension=ext/modules/test.so \
+        unit-tests/phpunit \
+        -c ${PHPUNIT_CONF} \
+        --testsuite "Extension Test Suite"
+  - |
+      php \
+        -d extension=ext/modules/test.so \
+        unit-tests/phpunit \
+        -c ${PHPUNIT_CONF} \
+        --testsuite "Zephir Test Suite"
 jobs:
   include:
     - stage: Static Code Analysis
       php: 7.2
+      env:
+        - REPORT_COVERAGE=0
       script:
         - vendor/bin/phpcs
     - stage: Compiller testing
@@ -81,17 +99,47 @@ jobs:
       env:
         - CC=clang
         - REPORT_COVERAGE=0
-      before_script:
-        - ./unit-tests/ci/install-test-ext.sh
       script:
-        - ./unit-tests/ci/run-unit-tests.sh
+        - |
+            php \
+              -d extension=ext/modules/test.so \
+              unit-tests/phpunit \
+              -c ${PHPUNIT_CONF} \
+              --testsuite "Extension Test Suite"
+    - stage: Packaging Test
+      php: 7.2
+      env:
+        - REPORT_COVERAGE=0
+      install:
+        - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
+        - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
+        - ./unit-tests/ci/install-zephir-parser.sh
+        - mkdir -p ${HOME}/bin
+        - |
+            wget \
+              "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+              --quiet \
+              -O "${HOME}/bin/box"
+        - chmod +x "${HOME}/bin/box"
+        - ./bin/packer
+      before_script:
+        - phpenv config-rm xdebug.ini || true
+      script:
+        - ./zephir.phar compile
+        - |
+            php \
+              -d extension=ext/modules/test.so \
+              unit-tests/phpunit \
+              -c ${PHPUNIT_CONF} \
+              --testsuite "Extension Test Suite"
     - stage: Benchmark
       php: 7.2
+      env:
+        - REPORT_COVERAGE=0
       before_script:
-        - ./unit-tests/ci/install-test-ext.sh
-      script:
         - phpenv config-rm xdebug.ini || true
-        - $(phpenv which php) -d extension=ext/modules/test.so unit-tests/microbench.php
+      script:
+        - php -d extension=ext/modules/test.so unit-tests/microbench.php
 
 after_success:
   - ./unit-tests/ci/after-success.sh

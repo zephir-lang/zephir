@@ -1,50 +1,42 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Expression;
 
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
+use Zephir\Variable;
 
 /**
- * NativeArrayAccess
+ * Zephir\Expression\NativeArrayAccess
  *
  * Resolves expressions that read array indexes
+ *
+ * @package Zephir\Expression
  */
 class NativeArrayAccess
 {
-    /**
-     * @var bool
-     */
-    protected $_expecting = true;
+    /** @var bool */
+    protected $expecting = true;
 
-    /**
-     * @var bool
-     */
-    protected $_readOnly = false;
+    /** @var bool */
+    protected $readOnly = false;
 
-    /**
-     * @var Variable|null
-     */
-    protected $_expectingVariable;
+    /** @var Variable|null */
+    protected $expectingVariable;
 
-    /**
-     * @var boolean
-     */
-    protected $_noisy = true;
+    /** @var boolean */
+    protected $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -55,8 +47,8 @@ class NativeArrayAccess
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -66,7 +58,7 @@ class NativeArrayAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -76,7 +68,7 @@ class NativeArrayAccess
      */
     public function setNoisy($noisy)
     {
-        $this->_noisy = $noisy;
+        $this->noisy = $noisy;
     }
 
     /**
@@ -86,9 +78,9 @@ class NativeArrayAccess
      */
     protected function _accessStringOffset($expression, Variable $variableVariable, CompilationContext $compilationContext)
     {
-        if ($this->_expecting) {
-            if ($this->_expectingVariable) {
-                $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
                 if ($symbolVariable->getType() != 'char' && $symbolVariable->getType() != 'uchar') {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('uchar', $compilationContext);
                 }
@@ -160,16 +152,14 @@ class NativeArrayAccess
             }
         }
 
-        $codePrinter = $compilationContext->codePrinter;
-
         /**
          * Resolves the symbol that expects the value
          */
         $readOnly = false;
-        $symbolVariable = $this->_expectingVariable;
+        $symbolVariable = $this->expectingVariable;
 
-        if ($this->_readOnly) {
-            if ($this->_expecting && $this->_expectingVariable) {
+        if ($this->readOnly) {
+            if ($this->expecting && $this->expectingVariable) {
                 /**
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
@@ -193,7 +183,7 @@ class NativeArrayAccess
                 if (!$readOnly) {
                     if ($symbolVariable->getName() != 'return_value') {
                         $symbolVariable->observeVariant($compilationContext);
-                        $this->_readOnly = false;
+                        $this->readOnly = false;
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
                     }
@@ -202,7 +192,7 @@ class NativeArrayAccess
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
             }
         } else {
-            if ($this->_expecting && $this->_expectingVariable) {
+            if ($this->expecting && $this->expectingVariable) {
                 /**
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
@@ -226,7 +216,7 @@ class NativeArrayAccess
                 if (!$readOnly) {
                     if ($symbolVariable->getName() != 'return_value') {
                         $symbolVariable->observeVariant($compilationContext);
-                        $this->_readOnly = false;
+                        $this->readOnly = false;
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
                     }
@@ -248,14 +238,14 @@ class NativeArrayAccess
          */
         $symbolVariable->setDynamicTypes('undefined');
 
-        if ($this->_readOnly || $readOnly) {
-            if ($this->_noisy) {
+        if ($this->readOnly || $readOnly) {
+            if ($this->noisy) {
                 $flags = 'PH_NOISY | PH_READONLY';
             } else {
                 $flags = 'PH_READONLY';
             }
         } else {
-            if ($this->_noisy) {
+            if ($this->noisy) {
                 $flags = 'PH_NOISY';
             } else {
                 $flags = '0';

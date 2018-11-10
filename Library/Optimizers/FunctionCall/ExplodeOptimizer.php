@@ -1,24 +1,22 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Compiler\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
-use Zephir\Utils;
+use function Zephir\add_slashes;
 
 /**
  * ExplodeOptimizer
@@ -64,7 +62,7 @@ class ExplodeOptimizer extends OptimizerAbstract
         }
 
         if ($expression['parameters'][0]['parameter']['type'] == 'string') {
-            $str = Utils::addSlashes($expression['parameters'][0]['parameter']['value']);
+            $str = add_slashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
             if (count($expression['parameters']) == 2) {
                 $limitOffset = 1;

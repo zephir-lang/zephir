@@ -1,7 +1,7 @@
 <?php
 
-/*
- * This file is part of the Zephir package.
+/**
+ * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+error_reporting(-1);
+set_time_limit(-1);
+setlocale(LC_ALL, 'en_US.utf-8');
+
 define('TESTS_PATH', dirname(__FILE__));
 define('DATA_PATH', dirname(__FILE__) . '/Data');
-
 defined('ZEPHIRPATH') || define('ZEPHIRPATH', dirname(__DIR__));
 
 if (!extension_loaded('phalcon')) {

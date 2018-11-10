@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -31,7 +29,7 @@ class SwitchStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
 
         $codePrinter = $compilationContext->codePrinter;
 
@@ -41,7 +39,7 @@ class SwitchStatement extends StatementAbstract
         $exprEval->setReadOnly(true);
         $resolvedExpr = $exprEval->compile($compilationContext);
 
-        if (isset($this->_statement['clauses'])) {
+        if (isset($this->statement['clauses'])) {
             $evalExpr = new EvalExpression();
 
             $codePrinter->output('do {');
@@ -81,7 +79,7 @@ class SwitchStatement extends StatementAbstract
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
 
-            $clauses = $this->normalizeClauses($this->_statement['clauses']);
+            $clauses = $this->normalizeClauses($this->statement['clauses']);
             $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
 
             /**

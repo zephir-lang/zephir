@@ -1,47 +1,40 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Expression;
 
-use Zephir\Types;
-use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler\CompilerException;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Utils;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
- * Constants
+ * Zephir\Expression\Constants
  *
  * Resolves PHP or Zephir constants into C-Code
+ *
+ * @package Zephir\Expression
  */
 class Constants
 {
-    /**
-     * @var bool
-     */
-    protected $_expecting = true;
+    /** @var bool */
+    protected $expecting = true;
 
-    /**
-     * @var bool
-     */
-    protected $_readOnly = false;
+    /** @var bool */
+    protected $readOnly = false;
 
-    /**
-     * @var Variable
-     */
-    protected $_expectingVariable;
+    /** @var Variable */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -52,8 +45,8 @@ class Constants
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -63,7 +56,7 @@ class Constants
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -161,7 +154,7 @@ class Constants
                     return new LiteralCompiledExpression('double', $constantName, $expression);
 
                 case 'string':
-                    return new LiteralCompiledExpression('string', Utils::addSlashes($constantName, true, Types::STRING), $expression);
+                    return new LiteralCompiledExpression('string', add_slashes($constantName), $expression);
 
                 case 'object':
                     throw new CompilerException('?');
@@ -176,14 +169,14 @@ class Constants
                 case '__CLASS__':
                     return new CompiledExpression(
                         'string',
-                        Utils::addSlashes($compilationContext->classDefinition->getCompleteName(), true, Types::STRING),
+                        add_slashes($compilationContext->classDefinition->getCompleteName()),
                         $expression
                     );
                     //no break
                 case '__NAMESPACE__':
                     return new CompiledExpression(
                         'string',
-                        Utils::addSlashes($compilationContext->classDefinition->getNamespace(), true, Types::STRING),
+                        add_slashes($compilationContext->classDefinition->getNamespace()),
                         $expression
                     );
                     //no break
@@ -207,8 +200,8 @@ class Constants
             return new LiteralCompiledExpression('null', null, $expression);
         }
 
-        if ($this->_expecting && $this->_expectingVariable) {
-            $symbolVariable = $this->_expectingVariable;
+        if ($this->expecting && $this->expectingVariable) {
+            $symbolVariable = $this->expectingVariable;
 
             $symbolVariable->setLocalOnly(false);
             $symbolVariable->setMustInitNull(true);

@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Arithmetical;
 
@@ -25,11 +23,11 @@ use Zephir\CompiledExpression;
  */
 class DivOperator extends ArithmeticalBaseOperator
 {
-    protected $_operator = '/';
+    protected $operator = '/';
 
-    protected $_bitOperator = '-';
+    protected $bitOperator = '-';
 
-    protected $_zvalOperator = 'div_function';
+    protected $zvalOperator = 'div_function';
 
     /**
      * Compiles the arithmetical division operation
@@ -112,7 +110,7 @@ class DivOperator extends ArithmeticalBaseOperator
                         return new CompiledExpression('long', '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                     default:
                         throw new CompilerException("Cannot operate 'bool' with '" . $right->getType() . "'", $expression);
@@ -228,7 +226,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('bool', '(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -243,7 +241,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_div_long_double(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -275,7 +273,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -290,7 +288,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -352,7 +350,7 @@ class DivOperator extends ArithmeticalBaseOperator
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         $expectedCode = $compilationContext->backend->getVariableCode($expected);
-                                        $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+                                        $compilationContext->codePrinter->output($this->zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
 
                                         if ($variableLeft->isTemporal()) {
                                             $variableLeft->setIdle(true);
@@ -411,12 +409,12 @@ class DivOperator extends ArithmeticalBaseOperator
                                                 return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                                             case 'bool':
-                                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
+                                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName(), $expression);
 
                                             case 'variable':
                                                 $expected = $this->getExpected($compilationContext, $expression);
                                                 $expectedCode = $compilationContext->backend->getVariableCode($expected);
-                                                $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ');');
+                                                $compilationContext->codePrinter->output($this->zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ');');
                                                 return new CompiledExpression('variable', $expected->getName(), $expression);
 
                                             default:

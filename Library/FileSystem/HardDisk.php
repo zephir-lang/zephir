@@ -1,28 +1,34 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\FileSystem;
 
-use Zephir\Compiler;
-use Zephir\Utils;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
+use Zephir\Version;
+use function Zephir\unlink_recursive;
 
 /**
- * HardDisk
+ * Zephir\FileSystem\HardDisk
  *
- * Uses the standard hard-disk as filesystem for temporary operations
+ * Uses the standard hard-disk as filesystem for temporary operations.
+ *
+ * @package Zephir\FileSystem
  */
-class HardDisk
+class HardDisk implements InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     protected $basePath;
 
     protected $initialized = false;
@@ -34,6 +40,8 @@ class HardDisk
      */
     public function __construct($basePath = '.temp/')
     {
+        $this->__DiInject();
+
         $this->basePath = $basePath;
     }
 
@@ -156,14 +164,13 @@ class HardDisk
     }
 
     /**
-     * Deletes the temporary directory
+     * Deletes the temporary directory.
+     *
+     * @return void
      */
     public function clean()
     {
-        if (is_dir($this->basePath)) {
-            Utils::recursiveRmDir($this->basePath);
-            rmdir($this->basePath);
-        }
+        unlink_recursive($this->basePath);
     }
 
     /**
@@ -181,7 +188,9 @@ class HardDisk
             return hash_file($algorithm, $path);
         } else {
             $changed = false;
-            $cacheFile = $this->basePath . Compiler::getCurrentVersion() . DIRECTORY_SEPARATOR . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
+            $version = $this->container->get(Version::class);
+
+            $cacheFile = $this->basePath . $version . DIRECTORY_SEPARATOR . str_replace([DIRECTORY_SEPARATOR, ':', '/'], '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 file_put_contents($cacheFile, $hash);

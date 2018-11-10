@@ -236,7 +236,7 @@ class NativeArray
 		return a;
 	}
 
-	public function testArrayAccess1() -> array
+	public function testArrayAccess1() -> long
 	{
 		var a, b;
 
@@ -245,7 +245,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess2() -> array
+	public function testArrayAccess2() -> long
 	{
 		var a, b;
 
@@ -255,7 +255,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess3() -> array
+	public function testArrayAccess3() -> long
 	{
 		var a, b;
 		long c;
@@ -267,7 +267,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess4() -> array
+	public function testArrayAccess4() -> long
 	{
 		var a, b;
 		string c;
@@ -279,7 +279,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess5() -> array
+	public function testArrayAccess5() -> long
 	{
 		var a, b, c;
 
@@ -290,7 +290,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayAccess6() -> array
+	public function testArrayAccess6() -> long
 	{
 		var a, b;
 
@@ -300,7 +300,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess1() -> array
+	public function testArrayMultipleAccess1() -> string
 	{
 		var a, b;
 
@@ -310,7 +310,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess2() -> array
+	public function testArrayMultipleAccess2() -> string
 	{
 		var a, b;
 
@@ -320,7 +320,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess3() -> array
+	public function testArrayMultipleAccess3() -> string
 	{
 		var a, b;
 
@@ -330,7 +330,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess4() -> array
+	public function testArrayMultipleAccess4() -> string
 	{
 		var a, b;
 
@@ -340,7 +340,7 @@ class NativeArray
 		return b;
 	}
 
-	public function testArrayMultipleAccess5() -> array
+	public function testArrayMultipleAccess5() -> int
 	{
 		var a, b;
 

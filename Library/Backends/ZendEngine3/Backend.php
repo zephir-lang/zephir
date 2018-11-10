@@ -1,30 +1,28 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Utils;
-use Zephir\Variable;
-use Zephir\Compiler;
-use Zephir\ClassMethod;
-use Zephir\GlobalConstant;
+use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\FunctionDefinition;
-use Zephir\Fcall\FcallManagerInterface;
+use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
-use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
+use Zephir\Fcall\FcallManagerInterface;
+use Zephir\FunctionDefinition;
+use Zephir\GlobalConstant;
+use Zephir\Variable;
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend
@@ -35,7 +33,11 @@ class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
 
-    /* TODO: This should not be used, temporary (until its completely refactored) */
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
     public function isZE3()
     {
         return true;
@@ -174,7 +176,7 @@ class Backend extends BackendZendEngine2
         return $condition;
     }
 
-    public function onPreInitVar($method, CompilationContext $context)
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
     {
         if ($method instanceof FunctionDefinition) {
             return;
@@ -184,7 +186,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function onPreCompile($method, CompilationContext $context)
+    public function onPreCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -200,7 +202,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function onPostCompile($method, CompilationContext $context)
+    public function onPostCompile(ClassMethod $method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
@@ -258,6 +260,7 @@ class Backend extends BackendZendEngine2
                     $groupVariables[] = $pointer . $variable->getName();
                     break;
 
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case 'char':
                     if (strlen($defaultValue) > 4) {
                         if (strlen($defaultValue) > 10) {
@@ -305,7 +308,7 @@ class Backend extends BackendZendEngine2
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                    $value = "\"" . add_slashes($value) . "\"";
                 }
                 $dType = 'string';
                 break;

@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -32,7 +30,7 @@ class IfStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = $this->_statement['expr'];
+        $exprRaw = $this->statement['expr'];
 
         $expr = new EvalExpression();
         $condition = $expr->optimize($exprRaw, $compilationContext);
@@ -40,25 +38,25 @@ class IfStatement extends StatementAbstract
         /**
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
-        if (isset($this->_statement['statements']) && (isset($this->_statement['else_statements']) || isset($this->_statement['elseif_statements']))) {
+        if (isset($this->statement['statements']) && (isset($this->statement['else_statements']) || isset($this->statement['elseif_statements']))) {
             $readDetector = new ReadDetector();
 
             $skipVariantInit = new SkipVariantInit();
 
             $skipVariantInit->setVariablesToSkip(0, $expr->getUsedVariables());
-            $skipVariantInit->pass(0, new StatementsBlock($this->_statement['statements']));
+            $skipVariantInit->pass(0, new StatementsBlock($this->statement['statements']));
 
             $lastBranchId = 0;
 
-            if (isset($this->_statement['else_statements'])) {
+            if (isset($this->statement['else_statements'])) {
                 ++$lastBranchId;
                 $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
-                $skipVariantInit->pass($lastBranchId, new StatementsBlock($this->_statement['else_statements']));
+                $skipVariantInit->pass($lastBranchId, new StatementsBlock($this->statement['else_statements']));
             }
 
-            if (isset($this->_statement['elseif_statements'])) {
-                foreach ($this->_statement['elseif_statements'] as $key => $statement) {
-                    $this->_statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
+            if (isset($this->statement['elseif_statements'])) {
+                foreach ($this->statement['elseif_statements'] as $key => $statement) {
+                    $this->statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
 
                     $lastBranchId++;
                     $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
@@ -86,7 +84,7 @@ class IfStatement extends StatementAbstract
         }
 
         $compilationContext->codePrinter->output('if (' . $condition . ') {');
-        $this->_evalExpression = $expr;
+        $this->evalExpression = $expr;
 
         /**
          * Try to mark latest temporary variable used as idle
@@ -101,8 +99,8 @@ class IfStatement extends StatementAbstract
         /**
          * Compile statements in the 'if' block
          */
-        if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
+        if (isset($this->statement['statements'])) {
+            $st = new StatementsBlock($this->statement['statements']);
             $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
             $branch->setRelatedStatement($this);
         }
@@ -110,8 +108,8 @@ class IfStatement extends StatementAbstract
         /**
          * Compile statements in the 'elseif' block
          */
-        if (isset($this->_statement['elseif_statements'])) {
-            foreach ($this->_statement['elseif_statements'] as $key => $statement) {
+        if (isset($this->statement['elseif_statements'])) {
+            foreach ($this->statement['elseif_statements'] as $key => $statement) {
                 if (!isset($statement['statements'])) {
                     continue;
                 }
@@ -126,9 +124,9 @@ class IfStatement extends StatementAbstract
         /**
          * Compile statements in the 'else' block
          */
-        if (isset($this->_statement['else_statements'])) {
+        if (isset($this->statement['else_statements'])) {
             $compilationContext->codePrinter->output('} else {');
-            $st = new StatementsBlock($this->_statement['else_statements']);
+            $st = new StatementsBlock($this->statement['else_statements']);
             $branch = $st->compile($compilationContext, $expr->isUnreachableElse(), Branch::TYPE_CONDITIONAL_FALSE);
             $branch->setRelatedStatement($this);
         }

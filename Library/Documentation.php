@@ -1,53 +1,48 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
 use Zephir\Commands\CommandInterface;
+use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\File;
-use Zephir\Documentation\Theme;
 use Zephir\Documentation\NamespaceAccessor;
+use Zephir\Documentation\Theme;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Documentation Generator
  */
-class Documentation
+class Documentation implements InjectionAwareInterface
 {
+    use ContainerAwareTrait {
+        ContainerAwareTrait::__construct as protected __DiInject;
+    }
+
     protected $outputDirectory;
 
-    /**
-     * @var Config
-     */
+    /** @var Config */
     protected $config;
 
-    /**
-     * @var CompilerFile[]
-     */
+    /** @var CompilerFile[] */
     protected $classes;
 
-    /**
-     * @var Theme
-     */
+    /** @var Theme */
     protected $theme;
 
-    /**
-     * @var Logger
-     */
+    /** @var Logger */
     protected $logger;
 
-    /**
-     * @var CommandInterface
-     */
+    /** @var CommandInterface */
     protected $command;
 
     protected $baseUrl;
@@ -55,15 +50,20 @@ class Documentation
     protected $themesDirectories;
 
     /**
-     * @param CompilerFile[] $classes
-     * @param Config $config
-     * @param Logger $logger
+     * Documentation constructor.
+     *
+     * @param CompilerFile[]   $classes
+     * @param Config           $config
+     * @param Logger           $logger
      * @param CommandInterface $command
+     *
      * @throws ConfigException
      * @throws Exception
      */
     public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command)
     {
+        $this->__DiInject();
+
         ksort($classes);
 
         $this->config = $config;
@@ -77,13 +77,13 @@ class Documentation
             throw new ConfigException("Theme configuration is not present");
         }
 
-        $themeDir = $this->__findThemeDirectory($themeConfig, $config, $command);
+        $themeDir = $this->findThemeDirectory($themeConfig, $command);
 
         if (!file_exists($themeDir)) {
             throw new ConfigException("There is no theme named " . $themeConfig["name"]);
         }
 
-        $outputDir = $this->__findOutputDirectory($themeConfig, $config, $command);
+        $outputDir = $this->findOutputDirectory($command);
 
         if (!$outputDir) {
             throw new ConfigException("Api path (output directory) is not configured");
@@ -101,11 +101,11 @@ class Documentation
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
+        $themeConfig["options"] = $this->prepareThemeOptions($themeConfig, $command);
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
 
-        $this->baseUrl = $this->__parseBaseUrl($config, $command);
+        $this->baseUrl = $this->parseBaseUrl($command);
     }
 
     /**
@@ -119,7 +119,7 @@ class Documentation
      * @return array
      * @throws Exception
      */
-    private function __prepareThemeOptions($themeConfig, CommandInterface $command)
+    private function prepareThemeOptions($themeConfig, CommandInterface $command)
     {
         $optionsFromCommand = $command->getParameter("theme-options");
 
@@ -161,14 +161,11 @@ class Documentation
      *  => if not ; check if config config[api][path] was given
      *
      *
-     * @param $themeConfig
-     * @param Config $config
      * @param CommandInterface $command
+     *
      * @return null|string
-     * @throws ConfigException
-     * @throws Exception
      */
-    private function __findOutputDirectory($themeConfig, Config $config, CommandInterface $command)
+    private function findOutputDirectory(CommandInterface $command)
     {
         $outputDir = $command->getParameter("output-directory");
 
@@ -192,16 +189,15 @@ class Documentation
      * - the command line argument base-url
      * - or the config config["api"]["base-url"]
      *
-     * @param Config $config
-     * @param CommandInterface $command
+     * @param  CommandInterface $command
      * @return mixed|string
      */
-    private function __parseBaseUrl(Config $config, CommandInterface $command)
+    private function parseBaseUrl(CommandInterface $command)
     {
         $baseUrl = $command->getParameter("base-url");
 
         if (!$baseUrl) {
-            $baseUrl = $config->get("base-url", "api");
+            $baseUrl = $this->config->get("base-url", "api");
         }
 
         return $baseUrl;
@@ -216,51 +212,65 @@ class Documentation
      *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
-     * @param $themeConfig
-     * @param Config $config
-     * @param CommandInterface $command
+     * @param  array            $themeConfig
+     * @param  CommandInterface $command
      * @return null|string
+     *
+     * @throws InvalidArgumentException
      * @throws ConfigException
-     * @throws Exception
      */
-    private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
+    private function findThemeDirectory($themeConfig, CommandInterface $command)
     {
-
         // check if there are additional theme paths in the config
-        $themeDirectoriesConfig = $config->get("theme-directories", "api");
+        $themeDirectoriesConfig = $this->config->get("theme-directories", "api");
         if ($themeDirectoriesConfig) {
             if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
             } else {
-                throw new ConfigException("invalid value for theme config 'theme-directories'");
+                throw new InvalidArgumentException("Invalid value for theme config 'theme-directories'");
             }
         } else {
-            $themesDirectories = array();
+            $themesDirectories = [];
         }
-        $themesDirectories[] = ZEPHIRPATH . "/templates/Api/themes";
-        $this->themesDirectories = $themesDirectories;
 
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+
+        $themesDirectories[] = $environment->getPath('templates/Api/themes');
+        $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command
         $themePath = $command->getParameter("theme-path");
-        if (null!==$themePath) {
+        if (null !== $themePath) {
+            echo $themePath, PHP_EOL;
             if (file_exists($themePath) && is_dir($themePath)) {
                 return $themePath;
             } else {
-                throw new Exception("Invalid value for option 'theme-path' : the theme '$themePath' was not found or is not a valid theme.");
+                throw new InvalidArgumentException(
+                    sprintf(
+                        "Invalid value for option 'theme-path': the theme '%s' was not found or is not a valid theme.",
+                        $themePath
+                    )
+                );
             }
         }
 
         if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
-            throw new ConfigException("There is no theme neither in the the theme config nor as a command line argument");
+            throw new ConfigException(
+                'There is no theme neither in the the theme config nor as a command line argument'
+            );
         }
 
         return $this->findThemePathByName($themeConfig["name"]);
     }
 
     /**
-     * search if a theme by its name, return the absolute path to it if it exists
-     * @param $name
+     * Search a theme by its name.
+     *
+     * Return the path to it if it exists. Otherwise NULL.
+     *
+     * @param  string $name
+     * @return string|null
      */
     public function findThemePathByName($name)
     {
@@ -268,9 +278,12 @@ class Documentation
         $path = null;
 
         foreach ($this->themesDirectories as $themeDir) {
-            $dir = rtrim($themeDir, "/") . "/";
-            $path = realpath($dir . $name);
-            if ($path) {
+            $path = rtrim($themeDir, '\\/') . DIRECTORY_SEPARATOR . $name;
+            if (strpos($path, 'phar://') !== 0) {
+                $path = realpath($path);
+            }
+
+            if (is_dir($path)) {
                 break;
             }
         }
@@ -307,10 +320,11 @@ class Documentation
         }
 
 
-        if ($this->baseUrl) {
-            $sitemapFile = new File\Sitemap($this->baseUrl, $this->classes, $byNamespace);
-            $this->theme->drawFile($sitemapFile);
-        }
+        /** @var Environment $environment */
+        $environment = $this->container->get(Environment::class);
+
+        $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
+        $this->theme->drawFile($sitemapFile);
 
         // namespaces files (namespaces.html)
         $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);

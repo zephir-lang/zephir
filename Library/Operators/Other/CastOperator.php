@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Other;
 
@@ -259,9 +257,9 @@ class CastOperator extends BaseOperator
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext);
                         $symbolVariable->setMustInitNull(true);
-                        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                        $symbolVariable->setIsInitialized(true, $compilationContext);
                         $symbolVariable->increaseUses();
                         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                         $resolvedVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext);

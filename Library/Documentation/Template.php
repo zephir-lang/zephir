@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Zephir\Documentation;
 
 use Zephir\Config;
@@ -23,8 +32,6 @@ class Template
 
     public function __construct(Theme $theme, $data, $template, $nestedLevel = 0)
     {
-
-
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception("Recursive inclusion detected in theme creation");
@@ -176,7 +183,7 @@ class Template
 
     private function __getTemplatePath($fileName)
     {
-        if ("/" == $fileName{0}) {
+        if ("/" == $fileName{0} || strpos($fileName, 'phar://') === 0) {
             return $fileName;
         }
 

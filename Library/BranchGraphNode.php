@@ -1,37 +1,42 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir;
 
 /**
- * BranchGraphNode
+ * Branch\BranchGraphNode
  *
  * Allows to visualize assignments for a specific variable in every branch used
+ *
+ * @package Zephir
  */
 class BranchGraphNode
 {
-    protected $_increase = 0;
+    /** @var int */
+    protected $increase = 0;
 
-    protected $_branches = array();
+    /** @var Branch[] */
+    protected $branches = [];
+
+    /** @var Branch */
+    protected $branch;
 
     /**
      * BranchGraphNode
      *
      * @param Branch $branch
      */
-    public function __construct($branch)
+    public function __construct(Branch $branch)
     {
-        $this->_branch = $branch;
+        $this->branch = $branch;
     }
 
     /**
@@ -41,8 +46,8 @@ class BranchGraphNode
      */
     public function insert(BranchGraphNode $branch)
     {
-        if (!in_array($branch, $this->_branches)) {
-            $this->_branches[] = $branch;
+        if (!in_array($branch, $this->branches)) {
+            $this->branches[] = $branch;
         }
     }
 
@@ -51,7 +56,7 @@ class BranchGraphNode
      */
     public function increase()
     {
-        $this->_increase++;
+        $this->increase++;
     }
 
     /**
@@ -61,10 +66,10 @@ class BranchGraphNode
      */
     public function show($padding = 0)
     {
-        echo str_repeat("    ", $padding), $this->_branch->getUniqueId(), ':' , $this->_increase;
-        if (count($this->_branches)) {
+        echo str_repeat("    ", $padding), $this->branch->getUniqueId(), ':' , $this->increase;
+        if (count($this->branches)) {
             echo ':', PHP_EOL;
-            foreach ($this->_branches as $node) {
+            foreach ($this->branches as $node) {
                 $node->show($padding + 1);
             }
         } else {

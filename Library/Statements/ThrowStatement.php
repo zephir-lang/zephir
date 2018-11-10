@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Statements;
 
@@ -18,7 +16,8 @@ use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Compiler\CompilerException;
 use Zephir\Expression;
-use Zephir\Utils;
+use function Zephir\add_slashes;
+use function Zephir\fqcn;
 
 /**
  * ThrowStatement
@@ -36,7 +35,7 @@ class ThrowStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/exception');
 
         $codePrinter = $compilationContext->codePrinter;
-        $statement = $this->_statement;
+        $statement = $this->statement;
         $expr = $statement['expr'];
 
         /**
@@ -48,7 +47,12 @@ class ThrowStatement extends StatementAbstract
                 count($expr['parameters']) == 1 &&
                 $expr['parameters'][0]['parameter']['type'] == 'string'
             ) {
-                $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                $className = fqcn(
+                    $expr['class'],
+                    $compilationContext->classDefinition->getNamespace(),
+                    $compilationContext->aliasManager
+                );
+
                 if ($compilationContext->compiler->isClass($className)) {
                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                     $message = $expr['parameters'][0]['parameter']['value'];
@@ -57,7 +61,11 @@ class ThrowStatement extends StatementAbstract
                     return;
                 } else {
                     if ($compilationContext->compiler->isBundledClass($className)) {
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName(
+                            $className,
+                            $compilationContext,
+                            true
+                        );
                         if ($classEntry) {
                             $message = $expr['parameters'][0]['parameter']['value'];
                             $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
@@ -111,10 +119,16 @@ class ThrowStatement extends StatementAbstract
      */
     private function throwStringException(CodePrinter $printer, $class, $message, $expression)
     {
-        $message = Utils::addSlashes($message);
+        $message = add_slashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
         $printer->output(
-            sprintf('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);', $class, $message, $path, $expression['line'])
+            sprintf(
+                'ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);',
+                $class,
+                $message,
+                $path,
+                $expression['line']
+            )
         );
         $printer->output('return;');
     }

@@ -1,0 +1,56 @@
+{
+    "main": "compiler.php",
+    "output": "zephir.phar",
+    "banner": [
+        "This file is part of the Zephir.",
+        "",
+        "(c) Zephir Team <team@zephir-lang.com>",
+        "",
+        "For the full copyright and license information, please view the LICENSE",
+        "file that was distributed with this source code."
+    ],
+    "directories": [
+       "kernels",
+       "Library",
+       "prototypes",
+       "templates",
+       "vendor"
+    ],
+    "files": [
+        "LICENSE"
+    ],
+    "blacklist": [
+        "unit-tests",
+        "test"
+    ],
+    "finder": [
+        {
+            "in": "kernels",
+            "name": "*.*"
+        },
+        {
+            "in": "Library",
+            "name": "*.*"
+        },
+        {
+            "in": "prototypes",
+            "name": "*.*"
+        },
+        {
+            "in": "templates",
+            "name": "*.*"
+        },
+        {
+            "name": "*.php",
+            "exclude": [
+                "doc",
+                "test",
+                "Tests",
+                "tests"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "replacement-sigil": "$",
+    "git-commit-short": "Id"
+}

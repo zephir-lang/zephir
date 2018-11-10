@@ -1,15 +1,13 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Zephir\Operators\Other;
 
@@ -61,7 +59,7 @@ class CloneOperator extends BaseOperator
 
         $symbolVariable->setDynamicTypes('object');
 
-        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+        $symbolVariable->setIsInitialized(true, $compilationContext);
 
         /* Inherit the dynamic type data from the cloned object */
         $symbolVariable->setDynamicTypes($clonedVariable->getDynamicTypes());

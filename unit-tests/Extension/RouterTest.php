@@ -1,177 +1,177 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+use Zephir\Support\TestCase;
+
+class RouterTest extends TestCase
 {
     public function testRouter()
     {
-        $tests = array(
-            array(
+        $tests = [
+            [
                 'uri' => '',
                 'controller' => 'index',
                 'action' => 'index',
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/',
                 'controller' => 'index',
                 'action' => 'index',
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/documentation/index/hellao/aaadpqñda/bbbAdld/cc-ccc',
                 'controller' => 'documentation',
                 'action' => 'index',
-                'params' => array('hellao', 'aaadpqñda', 'bbbAdld', 'cc-ccc')
-            ),
-            array(
+                'params' => ['hellao', 'aaadpqñda', 'bbbAdld', 'cc-ccc']
+            ],
+            [
                 'uri' => '/documentation/index/',
                 'controller' => 'documentation',
                 'action' => 'index',
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/documentation/index',
                 'controller' => 'documentation',
                 'action' => 'index',
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/documentation/',
                 'controller' => 'documentation',
                 'action' => null,
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/documentation',
                 'controller' => 'documentation',
                 'action' => null,
-                'params' => array()
-            ),
-            array(
+                'params' => []
+            ],
+            [
                 'uri' => '/system/admin/a/edit/hellao/aaadp',
                 'controller' => 'admin',
                 'action' => 'edit',
-                'params' => array('hellao', 'aaadp')
-            ),
-            array(
+                'params' => ['hellao', 'aaadp']
+            ],
+            [
                 'uri' => '/es/news',
                 'controller' => 'news',
                 'action' => 'index',
-                'params' => array('language' => 'es')
-            ),
-            array(
+                'params' => ['language' => 'es']
+            ],
+            [
                 'uri' => '/admin/posts/edit/100',
                 'controller' => 'posts',
                 'action' => 'edit',
-                'params' => array('id' => 100)
-            ),
-            array(
+                'params' => ['id' => 100]
+            ],
+            [
                 'uri' => '/posts/2010/02/10/title/content',
                 'controller' => 'posts',
                 'action' => 'show',
-                'params' => array('year' => '2010', 'month' => '02', 'day' => '10', 0 => 'title', 1 => 'content')
-            ),
-            array(
+                'params' => ['year' => '2010', 'month' => '02', 'day' => '10', 0 => 'title', 1 => 'content']
+            ],
+            [
                 'uri' => '/manual/en/translate.adapter.html',
                 'controller' => 'manual',
                 'action' => 'show',
-                'params' => array('language' => 'en', 'file' => 'translate.adapter')
-            ),
-            array(
+                'params' => ['language' => 'en', 'file' => 'translate.adapter']
+            ],
+            [
                 'uri' => '/named-manual/en/translate.adapter.html',
                 'controller' => 'manual',
                 'action' => 'show',
-                'params' => array('language' => 'en', 'file' => 'translate.adapter')
-            ),
-            array(
+                'params' => ['language' => 'en', 'file' => 'translate.adapter']
+            ],
+            [
                 'uri' => '/posts/1999/s/le-nice-title',
                 'controller' => 'posts',
                 'action' => 'show',
-                'params' => array('year' => '1999', 'title' => 'le-nice-title')
-            ),
-            array(
+                'params' => ['year' => '1999', 'title' => 'le-nice-title']
+            ],
+            [
                 'uri' => '/feed/fr/blog/diaporema.json',
                 'controller' => 'feed',
                 'action' => 'get',
-                'params' => array('lang' => 'fr', 'blog' => 'diaporema', 'type' => 'json')
-            ),
-            array(
+                'params' => ['lang' => 'fr', 'blog' => 'diaporema', 'type' => 'json']
+            ],
+            [
                 'uri' => '/posts/delete/150',
                 'controller' => 'posts',
                 'action' => 'delete',
-                'params' => array('id' => '150')
-            ),
-            array(
+                'params' => ['id' => '150']
+            ],
+            [
                 'uri' => '/very/static/route',
                 'controller' => 'static',
                 'action' => 'route',
-                'params' => array()
-            )
-        );
+                'params' => []
+            ]
+        ];
 
         $router = new \Test\Router();
 
-        $router->add('/', array(
+        $router->add('/', [
             'controller' => 'index',
             'action' => 'index'
-        ));
+        ]);
 
-        $router->add('/system/:controller/a/:action/:params', array(
+        $router->add('/system/:controller/a/:action/:params', [
             'controller' => 1,
             'action' => 2,
             'params' => 3,
-        ));
+        ]);
 
-        $router->add('/([a-z]{2})/:controller', array(
+        $router->add('/([a-z]{2})/:controller', [
             'controller' => 2,
             'action' => 'index',
             'language' => 1
-        ));
+        ]);
 
-        $router->add('/admin/:controller/:action/:int', array(
+        $router->add('/admin/:controller/:action/:int', [
             'controller' => 1,
             'action' => 2,
             'id' => 3
-        ));
+        ]);
 
-        $router->add('/posts/([0-9]{4})/([0-9]{2})/([0-9]{2})/:params', array(
+        $router->add('/posts/([0-9]{4})/([0-9]{2})/([0-9]{2})/:params', [
             'controller' => 'posts',
             'action' => 'show',
             'year' => 1,
             'month' => 2,
             'day' => 3,
             'params' => 4,
-        ));
+        ]);
 
-        $router->add('/manual/([a-z]{2})/([a-z\.]+)\.html', array(
+        $router->add('/manual/([a-z]{2})/([a-z\.]+)\.html', [
             'controller' => 'manual',
             'action' => 'show',
             'language' => 1,
             'file' => 2
-        ));
+        ]);
 
-        $router->add('/named-manual/{language:([a-z]{2})}/{file:[a-z\.]+}\.html', array(
+        $router->add('/named-manual/{language:([a-z]{2})}/{file:[a-z\.]+}\.html', [
             'controller' => 'manual',
             'action' => 'show',
-        ));
+        ]);
 
-        $router->add('/very/static/route', array(
+        $router->add('/very/static/route', [
             'controller' => 'static',
             'action' => 'route'
-        ));
+        ]);
 
         $router->add("/feed/{lang:[a-z]+}/blog/{blog:[a-z\-]+}\.{type:[a-z\-]+}", "Feed::get");
 

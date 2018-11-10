@@ -1,22 +1,20 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Utils;
+use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
-use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
+use function Zephir\file_put_contents_ex;
 
 /**
  * Zephir\Backends\ZendEngine3\FcallManager
@@ -116,6 +114,6 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
 
         $codePrinter->decreaseLevel();
         $codePrinter->output("#endif");
-        Utils::checkAndWriteIfNeeded($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
+        file_put_contents_ex($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
     }
 }

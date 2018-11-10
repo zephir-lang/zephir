@@ -1,23 +1,23 @@
 <?php
 
-/*
- +--------------------------------------------------------------------------+
- | Zephir                                                                   |
- | Copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)        |
- |                                                                          |
- | This source file is subject the MIT license, that is bundled with this   |
- | package in the file LICENSE, and is available through the world-wide-web |
- | at the following url: http://zephir-lang.com/license.html                |
- +--------------------------------------------------------------------------+
-*/
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Extension\Oo;
 
 use PDO;
+use Test\Integration\Psr\Http\Server\MiddlewareInterfaceEx;
 use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
+use Zephir\Support\TestCase;
 
-class ExtendClassTest extends \PHPUnit_Framework_TestCase
+class ExtendClassTest extends TestCase
 {
     public function testPDOExtending()
     {
@@ -34,6 +34,33 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
         $this->assertInstanceof('Test\\PdoStatement', $stmt);
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1686
+     */
+    public function shouldExtendMiddlewareInterface()
+    {
+        if (!extension_loaded('psr')) {
+            $this->markTestSkipped(
+                "The psr extension is not loaded"
+            );
+        }
+
+        if (!class_exists(MiddlewareInterfaceEx::class)) {
+            $this->markTestSkipped(
+                sprintf(
+                    "You need to compile test extension with %s to perform this test",
+                    MiddlewareInterfaceEx::class
+                )
+            );
+        }
+
+
+        $this->assertTrue(
+            is_subclass_of(MiddlewareInterfaceEx::class, 'Psr\Http\Server\MiddlewareInterface')
+        );
     }
 
     // FIXME
