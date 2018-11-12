@@ -63,8 +63,8 @@ install:
   - ./unit-tests/ci/install-zephir-parser.sh
   - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
   - ./unit-tests/ci/install-php-psr.sh
-  - ./unit-tests/ci/install-test-ext.sh
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
+  - ./unit-tests/ci/install-test-ext.sh
 
 before_script:
   # see: https://github.com/sebastianbergmann/phpunit/pull/3359
