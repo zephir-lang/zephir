@@ -1,5 +1,5 @@
 {
-    "main": "compiler.php",
+    "main": "zephir",
     "output": "zephir.phar",
     "banner": [
         "This file is part of the Zephir.",

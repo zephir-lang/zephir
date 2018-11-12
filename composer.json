@@ -54,9 +54,7 @@
             "unit-tests/fixtures/mocks/"
         ]
     },
-    "bin": [
-        "bin/zephir"
-    ],
+    "bin": ["zephir"],
     "support": {
         "issues": "https://github.com/phalcon/zephir/issues?state=open",
         "forum": "https://forum.zephir-lang.com",
