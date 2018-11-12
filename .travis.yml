@@ -108,9 +108,10 @@ jobs:
       env:
         - REPORT_COVERAGE=0
       install:
-        - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-        - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
         - ./unit-tests/ci/install-zephir-parser.sh
+        - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
+        - ./unit-tests/ci/install-php-psr.sh
+        - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
         - mkdir -p ${HOME}/bin
         - |
             wget \
@@ -118,7 +119,7 @@ jobs:
               --quiet \
               -O "${HOME}/bin/box"
         - chmod +x "${HOME}/bin/box"
-        - ./bin/packer
+        - ./package/packer
       before_script:
         - phpenv config-rm xdebug.ini || true
       script:

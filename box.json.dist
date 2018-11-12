@@ -13,6 +13,7 @@
        "kernels",
        "Library",
        "prototypes",
+       "package",
        "templates",
        "vendor"
     ],
@@ -37,18 +38,22 @@
             "name": "*.*"
         },
         {
+            "in": "package",
+            "notName": "packer"
+        },
+        {
             "in": "templates",
             "name": "*.*"
         },
         {
+            "in": "vendor",
             "name": "*.php",
             "exclude": [
                 "doc",
                 "test",
                 "Tests",
                 "tests"
-            ],
-            "in": "vendor"
+            ]
         }
     ],
     "replacement-sigil": "$",
