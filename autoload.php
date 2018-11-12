@@ -44,11 +44,11 @@ if (version_compare('5.6.0', PHP_VERSION, '>')) {
 }
 
 if (class_exists(ClassLoader::class, false) == false) {
-    fprintf(
+    fwrite(
         STDERR,
-        'You need to install the Zephir dependencies using the following commands:' . PHP_EOL .
-        'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
-        'php composer.phar install' . PHP_EOL
+        'You need to install the Zephir dependencies using Composer:' . PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
     );
 
     exit(1);
