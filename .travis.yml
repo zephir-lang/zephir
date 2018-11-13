@@ -20,6 +20,7 @@ branches:
 addons:
   apt:
     packages:
+      - valgrind
       - gdb
       - lcov
 
@@ -55,15 +56,14 @@ before_install:
   - export PHP_MINOR="$(php -r 'echo phpversion();' | cut -d '.' -f 2)"
   - export PHP_VERNUM="$(php-config --vernum)"
   - ulimit -c unlimited -S
-  - phpenv config-add ./unit-tests/ci/999-default.ini
-  - echo "$TRAVIS_PHP_VERSION"
+  - phpenv config-add ./ci/999-default.ini
 
 install:
-  - ./unit-tests/ci/install-zephir-parser.sh
-  - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
-  - ./unit-tests/ci/install-php-psr.sh
+  - .ci/install-zephir-parser.sh
+  - .ci/install-re2c.sh $RE2C_VERSION
+  - .ci/install-php-psr.sh
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-  - ./unit-tests/ci/install-test-ext.sh
+  - .ci/build-test-ext.sh
 
 before_script:
   # see: https://github.com/sebastianbergmann/phpunit/pull/3359
@@ -108,9 +108,9 @@ jobs:
       env:
         - REPORT_COVERAGE=0
       install:
-        - ./unit-tests/ci/install-zephir-parser.sh
-        - ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
-        - ./unit-tests/ci/install-php-psr.sh
+        - .ci/install-zephir-parser.sh
+        - .ci/install-re2c.sh $RE2C_VERSION
+        - .ci/install-php-psr.sh
         - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
         - mkdir -p ${HOME}/bin
         - |
@@ -140,10 +140,10 @@ jobs:
         - php -d extension=ext/modules/test.so unit-tests/microbench.php
 
 after_success:
-  - ./unit-tests/ci/after-success.sh
+  - .ci/after-success.sh
 
 after_failure:
-  - ./unit-tests/ci/after-failure.sh
+  - .ci/after-failure.sh
 
 notifications:
   email: false

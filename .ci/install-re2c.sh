@@ -7,8 +7,6 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-echo -e "Install a tool for writing fast and flexible scanners in C from regular expressions"
-
 if [ "${CI}" != "true" ]; then
 	echo "This script is designed to run inside a CI container only. Stop."
 	exit 1
@@ -71,6 +69,8 @@ if [ ! -x "${bindir}/re2c" ]; then
 	echo "Unable to locate re2c executable. Stop."
 	exit 1
 fi
+
+cd ${TRAVIS_BUILD_DIR}
 
 mkdir -p ${HOME}/bin
 ln -s "${bindir}/re2c" ${HOME}/bin/re2c

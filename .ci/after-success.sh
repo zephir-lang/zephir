@@ -7,12 +7,7 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [ "${CI}" != "true" ]; then
-	echo "This script is designed to run inside a CI container only. Stop."
-	exit 1
-fi
-
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
+PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 
 c_output=${PROJECT_ROOT}/unit-tests/output/coverage.info
 p_output=${PROJECT_ROOT}/unit-tests/output/clover.xml

@@ -24,5 +24,4 @@ make install
 popd
 
 echo "extension=zephir_parser.so" >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir-parser.ini
-
 php --ri 'Zephir Parser'

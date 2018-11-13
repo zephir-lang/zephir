@@ -9,7 +9,6 @@
 
 shopt -s nullglob
 
-$(phpenv which php) -v
 $(phpenv which php) -m
 
 export LC_ALL=C
