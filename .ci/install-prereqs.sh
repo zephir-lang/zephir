@@ -30,11 +30,11 @@ install_ext_from_src () {
 		cd `dirname ${downloaddir}`
 
 		if [ ! -d "${pkgname}-${PHP_VERNUM}" ]; then
-			git clone --depth=1 -v "${source}" "${pkgname}-${PHP_VERNUM}"
+			git clone --depth=1 -v -b master "${source}" "${pkgname}-${PHP_VERNUM}"
 		fi
 
-		if [ ! -f "${pkgname}-${PHP_VERNUM}/LICENSE" ]; then
-			echo "Unable to locate ${pkgname}-${PHP_VERNUM}/LICENSE file. Stop."
+		if [ ! -f "${pkgname}-${PHP_VERNUM}/config.m4" ]; then
+			echo "Unable to locate ${pkgname}-${PHP_VERNUM}/config.m4 file. Stop."
 			exit 1
 		fi
 
@@ -70,9 +70,3 @@ install_ext_from_src () {
 }
 
 install_ext_from_src "zephir_parser" "https://github.com/phalcon/php-zephir-parser" ""
-
-if [ "${PHP_VERNUM}" -ge 70300 ]; then
-	install_ext_from_src "memcached" "https://github.com/php-memcached-dev/php-memcached" "--disable-memcached-sasl"
-else
-	echo 'extension="memcached.so"' > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/memcached.ini"
-fi

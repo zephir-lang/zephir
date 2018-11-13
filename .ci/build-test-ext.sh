@@ -15,22 +15,20 @@ DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
 
-cd "${PROJECT_ROOT}"
+./zephir clean 2>&1
+./zephir fullclean 2>&1
+./zephir generate ${DEFAULT_ZFLAGS} 2>&1
+./zephir stubs 2>&1
+./zephir api 2>&1
 
-${PROJECT_ROOT}/zephir clean 2>&1
-${PROJECT_ROOT}/zephir fullclean 2>&1
-${PROJECT_ROOT}/zephir generate ${DEFAULT_ZFLAGS} 2>&1
-${PROJECT_ROOT}/zephir stubs 2>&1
-${PROJECT_ROOT}/zephir api 2>&1
-
-cd "${PROJECT_ROOT}/ext"
+cd ext
 
 phpize
 
 CFLAGS="${CFLAGS}"
 LDFLAGS="${LDFLAGS}"
 
-if [ "x${REPORT_COVERAGE}" = "x1" ]; then
+if [ "${REPORT_COVERAGE}" = "1" ]; then
 	# The ltmain.sh which bundled with PHP it's from libtool 1.5.26.
 	# However, the version of libtool that claims to no longer remove
 	# ".gcno" profiler information is libtool 2.2.6. The fix is probably
@@ -53,11 +51,11 @@ fi
 
 make -j"$(getconf _NPROCESSORS_ONLN)"
 
-if [ "x${REPORT_COVERAGE}" = "x1" ]; then
-	output=${PROJECT_ROOT}/unit-tests/output/coverage.info
+cd ..
 
-	lcov --directory ${PROJECT_ROOT}/ext --zerocounters
-	lcov --directory ${PROJECT_ROOT}/ext --capture --compat-libtool --initial --output-file ${output}
+if [ "${REPORT_COVERAGE}" = "1" ]; then
+	lcov --directory ./ext --zerocounters
+	lcov --directory ./ext --capture --compat-libtool --initial --output-file ./unit-tests/output/coverage.info
 fi
 
 exit $?
