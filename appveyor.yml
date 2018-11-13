@@ -46,7 +46,7 @@ environment:
     PARSER_VERSION: 1.1.3
     PARSER_RELEASE: 401
     ZEPHIRDIR: c:\projects\zephir
-    PSR_VERSION: 0.6.0
+    PSR_VERSION: 0.6.1
 
 matrix:
     fast_finish: true
@@ -74,7 +74,7 @@ init:
 
 install:
     - git submodule update --init --recursive
-    - ps: Import-Module .\unit-tests\ci\appveyor.psm1
+    - ps: Import-Module .\.ci\appveyor.psm1
     - ps: AppendSessionPath
     - ps: SetupPhpVersionString
     - ps: EnsureRequiredDirectoriesPresent
