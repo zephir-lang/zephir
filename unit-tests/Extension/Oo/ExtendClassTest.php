@@ -52,26 +52,6 @@ class ExtendClassTest extends TestCase
         );
     }
 
-    // FIXME
-    public function testInstanceOfPhalconMvcApplication()
-    {
-        /*if (!extension_loaded('phalcon')) {
-            $this->markTestSkipped('No phalcon ext loaded');
-        }
-        $class = new \Test\Oo\Extend\Application();
-        $this->assertInstanceOf('Phalcon\Mvc\Application', $class);*/
-    }
-
-    // FIXME
-    public function testInstanceOfMemcache()
-    {
-        /*if (!extension_loaded('memcache')) {
-            $this->markTestSkipped('No memcache ext loaded');
-        }
-        $class = new \Test\Oo\Extend\Memcache();
-        $this->assertInstanceOf('Memcache', $class);*/
-    }
-
     /**
      * @test
      * @issue https://github.com/phalcon/zephir/issues/1392

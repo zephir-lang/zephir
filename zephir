@@ -14,8 +14,6 @@ use Zephir\Bootstrap;
 
 require_once __DIR__ . '/autoload.php';
 
-$bootstrap = new Bootstrap(
-    ('phar:' === substr(__FILE__, 0, 5)) ? __DIR__ : (getenv('ZEPHIRDIR') ?: __DIR__)
-);
+$bootstrap = new Bootstrap(__DIR__);
 
 $bootstrap->execute();
