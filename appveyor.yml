@@ -94,7 +94,7 @@ build_script:
     - '"%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %ARCH%'
     - '%PHP_SDK_PATH%\bin\phpsdk_setvars'
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'php zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable'
+    - 'zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable'
     - cd %APPVEYOR_BUILD_FOLDER%\ext
     - nmake 2> compile-errors.log 1> compile.log
     - ps: EnableExtension
