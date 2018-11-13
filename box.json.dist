@@ -1,6 +1,4 @@
 {
-    "main": "compiler.php",
-    "output": "zephir.phar",
     "banner": [
         "This file is part of the Zephir.",
         "",
@@ -17,7 +15,8 @@
        "vendor"
     ],
     "files": [
-        "LICENSE"
+        "LICENSE",
+        "autoload.php"
     ],
     "blacklist": [
         "unit-tests",
@@ -41,14 +40,14 @@
             "name": "*.*"
         },
         {
+            "in": "vendor",
             "name": "*.php",
             "exclude": [
                 "doc",
                 "test",
                 "Tests",
                 "tests"
-            ],
-            "in": "vendor"
+            ]
         }
     ],
     "replacement-sigil": "$",

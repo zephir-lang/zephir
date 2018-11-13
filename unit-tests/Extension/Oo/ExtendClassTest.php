@@ -12,7 +12,7 @@
 namespace Extension\Oo;
 
 use PDO;
-use Test\Integration\Psr\Http\Server\MiddlewareInterfaceEx;
+use Test\Integration\Psr\Http\Message\MessageInterfaceEx;
 use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
 use Zephir\Support\TestCase;
@@ -24,13 +24,14 @@ class ExtendClassTest extends TestCase
         if (!extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extendsion is not loaded');
         }
+
         $this->assertSame(PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
         $this->assertSame(PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
     public function testPDOStatementExtending()
     {
-        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
         $this->assertInstanceof('Test\\PdoStatement', $stmt);
@@ -43,23 +44,11 @@ class ExtendClassTest extends TestCase
     public function shouldExtendMiddlewareInterface()
     {
         if (!extension_loaded('psr')) {
-            $this->markTestSkipped(
-                "The psr extension is not loaded"
-            );
+            $this->markTestSkipped("The psr extension is not loaded");
         }
-
-        if (!class_exists(MiddlewareInterfaceEx::class)) {
-            $this->markTestSkipped(
-                sprintf(
-                    "You need to compile test extension with %s to perform this test",
-                    MiddlewareInterfaceEx::class
-                )
-            );
-        }
-
 
         $this->assertTrue(
-            is_subclass_of(MiddlewareInterfaceEx::class, 'Psr\Http\Server\MiddlewareInterface')
+            is_subclass_of(MessageInterfaceEx::class, 'Psr\Http\Message\MessageInterface')
         );
     }
 

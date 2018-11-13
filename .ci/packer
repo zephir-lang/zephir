@@ -32,7 +32,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 $cwd = getcwd();
 chdir(dirname(__DIR__));
 
-require_once 'vendor/autoload.php';
+require_once 'autoload.php';
 if (!class_exists('Composer\Autoload\ClassLoader')) {
     fwrite(
         STDERR,
