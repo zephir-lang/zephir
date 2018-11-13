@@ -56,7 +56,7 @@ before_install:
   - export PHP_MINOR="$(php -r 'echo phpversion();' | cut -d '.' -f 2)"
   - export PHP_VERNUM="$(php-config --vernum)"
   - ulimit -c unlimited -S
-  - phpenv config-add ./ci/999-default.ini
+  - phpenv config-add .ci/999-default.ini
 
 install:
   - .ci/install-zephir-parser.sh
