@@ -34,9 +34,7 @@ cache:
   timeout: 604800
   directories:
     - $HOME/.composer/cache
-    - $HOME/.local/opt/re2c
-    - $HOME/.cache/re2c
-    - $HOME/.cache/php-psr
+    - $HOME/.local/opt
 
 env:
   global:
@@ -59,9 +57,8 @@ before_install:
   - phpenv config-add .ci/999-default.ini
 
 install:
-  - .ci/install-zephir-parser.sh
+  - .ci/install-prereqs.sh
   - .ci/install-re2c.sh $RE2C_VERSION
-  - .ci/install-php-psr.sh
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
   - .ci/build-test-ext.sh
 
@@ -108,9 +105,8 @@ jobs:
       env:
         - REPORT_COVERAGE=0
       install:
-        - .ci/install-zephir-parser.sh
+        - .ci/install-prereqs.sh
         - .ci/install-re2c.sh $RE2C_VERSION
-        - .ci/install-php-psr.sh
         - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
         - mkdir -p ${HOME}/bin
         - |
