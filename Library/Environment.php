@@ -58,17 +58,13 @@ final class Environment implements InjectionAwareInterface
      */
     public function setBasePath($basePath)
     {
-        $message = 'Unable to locate Zephir installation path.' . PHP_EOL . PHP_EOL .
-            'Double check the Zephir installation. When installing from sources,' . PHP_EOL .
-            'it is enough to specify ZEPHIRDIR environment variable to the proper' . PHP_EOL .
-            'Zephir installation path.' . PHP_EOL . PHP_EOL .
-            'Current ZEPHIRDIR value is: "%s"' . PHP_EOL .
-            'The base path used by the Zephir compiler is: "%s"';
+        $message = 'Unable to locate Zephir base directory. ' .
+            'Try to reinstall Zephir to solve this problem. ' .
+            'If the problem remains, ask for help on the forum ' .
+            '(https://forum.zephir-lang.com) or file an issue at GitHub (https://github.com/phalcon/zephir).';
 
         if (!\is_string($basePath) || !\is_dir($basePath) || !\file_exists($basePath)) {
-            throw new InvalidArgumentException(
-                sprintf($message, \getenv('ZEPHIRDIR'), \is_scalar($basePath) ? $basePath : \gettype($basePath))
-            );
+            throw new InvalidArgumentException($message);
         }
 
         $this->basePath = rtrim($basePath, '\\/');
