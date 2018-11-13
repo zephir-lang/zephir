@@ -9,8 +9,6 @@
 
 shopt -s nullglob
 
-$(phpenv which php) -m
-
 export LC_ALL=C
 
 for i in core core*; do
