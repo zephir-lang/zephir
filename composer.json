@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
+        "php": "^5.6|^7.0",
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
@@ -54,9 +54,7 @@
             "unit-tests/fixtures/mocks/"
         ]
     },
-    "bin": [
-        "bin/zephir"
-    ],
+    "bin": ["zephir"],
     "support": {
         "issues": "https://github.com/phalcon/zephir/issues?state=open",
         "forum": "https://forum.zephir-lang.com",

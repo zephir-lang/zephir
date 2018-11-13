@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -11,12 +12,10 @@
 
 use Zephir\Bootstrap;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/autoload.php';
 
 $bootstrap = new Bootstrap(
-    strpos(__DIR__, 'phar://') === 0 ?
-    (getenv('ZEPHIRDIR') ?: __DIR__) :
-    __DIR__
+    ('phar:' === substr(__FILE__, 0, 5)) ? __DIR__ : (getenv('ZEPHIRDIR') ?: __DIR__)
 );
 
 $bootstrap->execute();

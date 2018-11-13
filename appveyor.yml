@@ -1,4 +1,4 @@
-version: 0.11.2-{build}
+version: 0.11.3-{build}
 
 environment:
     matrix:
@@ -46,6 +46,7 @@ environment:
     PARSER_VERSION: 1.1.3
     PARSER_RELEASE: 401
     ZEPHIRDIR: c:\projects\zephir
+    PSR_VERSION: 0.6.0
 
 matrix:
     fast_finish: true
@@ -54,6 +55,7 @@ cache:
     - 'C:\Downloads -> appveyor.yml'
     - 'vendor -> composer.json'
     - 'composer.phar -> composer.json'
+    - '%LOCALAPPDATA%\Composer\files'
 
 clone_depth: 1
 clone_folder: c:\projects\zephir
@@ -81,6 +83,7 @@ install:
     - ps: InstallPhp
     - ps: InstallPhpDevPack
     - ps: InstallParser
+    - ps: InstallPsrExtension
     - ps: TuneUpPhp
 
 build_script:
@@ -91,7 +94,7 @@ build_script:
     - '"%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %ARCH%'
     - '%PHP_SDK_PATH%\bin\phpsdk_setvars'
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'bin\zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable'
+    - 'php zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable'
     - cd %APPVEYOR_BUILD_FOLDER%\ext
     - nmake 2> compile-errors.log 1> compile.log
     - ps: EnableExtension

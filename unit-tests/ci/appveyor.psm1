@@ -178,6 +178,29 @@ Function InstallParser {
 	}
 }
 
+Function InstallPsrExtension {
+	$BaseUri = "https://windows.php.net/downloads/pecl/releases/psr/${Env:PSR_VERSION}"
+	$LocalPart = "php_psr-${Env:PSR_VERSION}-${Env:PHP_MINOR}"
+
+	If ($Env:BUILD_TYPE -Match "nts-Win32") {
+		$TS = "nts"
+	} Else {
+		$TS = "ts"
+	}
+
+	$RemoteUrl = "${BaseUri}/${LocalPart}-${TS}-vc${Env:VC_VERSION}-${Env:PLATFORM}.zip"
+	$DestinationPath = "C:\Downloads\${LocalPart}-${TS}-vc${Env:VC_VERSION}-${Env:PLATFORM}.zip"
+
+	If (-not (Test-Path "${Env:PHP_PATH}\ext\php_psr.dll")) {
+		If (-not [System.IO.File]::Exists($DestinationPath)) {
+			Write-Host "Downloading PHP PSR: ${RemoteUrl} ..."
+			DownloadFile $RemoteUrl $DestinationPath
+		}
+
+		Expand-Item7zip $DestinationPath "${Env:PHP_PATH}\ext"
+	}
+}
+
 Function TuneUpPhp {
 	$IniFile = "${Env:PHP_PATH}\php.ini"
 	$ExtPath = "${Env:PHP_PATH}\ext"
@@ -200,6 +223,7 @@ Function TuneUpPhp {
 	Write-Output "extension = php_gd2.dll"           | Out-File -Encoding "ASCII" -Append $IniFile
 	Write-Output "extension = php_gmp.dll"           | Out-File -Encoding "ASCII" -Append $IniFile
 	Write-Output "extension = php_zephir_parser.dll" | Out-File -Encoding "ASCII" -Append $IniFile
+	Write-Output "extension = php_psr.dll"           | Out-File -Encoding "ASCII" -Append $IniFile
 }
 
 Function InitializeBuildVars {
