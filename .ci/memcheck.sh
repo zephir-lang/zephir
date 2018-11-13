@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+#
+# This file is part of the Zephir.
+#
+# (c) Zephir Team <team@zephir-lang.com>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
 
 if [ $(valgrind -v glibtoolize 2>/dev/null) = "" ]; then
 	echo "Skip check for memory leaks. Valgring does not exist"
@@ -14,7 +21,7 @@ export USE_ZEND_ALLOC=0
 # Do not stop testing on failures
 export PHPUNIT_DONT_EXIT=1
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
+PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 
 valgrind
 	--read-var-info=yes \
@@ -24,7 +31,8 @@ valgrind
 	--leak-check=full \
 	--num-callers=20 \
 	--run-libc-freeres=no \
-	$(phpenv which php) -d "extension=${PROJECT_ROOT}/ext/modules/test.so" \
+	$(phpenv which php)
+		-d "extension=${PROJECT_ROOT}/ext/modules/test.so" \
 		"${PROJECT_ROOT}/unit-tests/phpunit" \
 			-c "${PROJECT_ROOT}/phpunit.xml.dist" \
 			--no-coverage \

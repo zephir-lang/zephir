@@ -10,7 +10,7 @@
 # Exit the script if any statement returns a non-true return value
 set -e
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../../")
+PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
