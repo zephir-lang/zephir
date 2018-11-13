@@ -119,7 +119,7 @@ jobs:
               --quiet \
               -O "${HOME}/bin/box"
         - chmod +x "${HOME}/bin/box"
-        - ./package/packer
+        - .ci/packer
       before_script:
         - phpenv config-rm xdebug.ini || true
       script:

@@ -11,7 +11,6 @@
        "kernels",
        "Library",
        "prototypes",
-       "package",
        "templates",
        "vendor"
     ],
@@ -35,10 +34,6 @@
         {
             "in": "prototypes",
             "name": "*.*"
-        },
-        {
-            "in": "package",
-            "notName": "packer"
         },
         {
             "in": "templates",

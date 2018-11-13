@@ -9,28 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use Composer\Autoload\ClassLoader;
-
-$autoloadFile = './vendor/phalcon/zephir/autoload.php';
-
-if (file_exists('./vendor/autoload.php') && file_exists($autoloadFile) && __FILE__ != realpath($autoloadFile)) {
-    // The global installation or phar file
-    require $autoloadFile;
-
-    // Require 'package/bin' instead of 'zephir' to avoid printing hashbang line
-    require './vendor/phalcon/zephir/package/bin';
-
-    die;
-} elseif (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    // PHAR
-    require_once(__DIR__ . '/vendor/autoload.php');
-} elseif (file_exists(__DIR__ . '/../../autoload.php')) {
-    // Composer
-    require_once __DIR__ . '/../../autoload.php';
-}
-
-unset($autoloadFile);
-
 if (version_compare('5.6.0', PHP_VERSION, '>')) {
     fprintf(
         STDERR,
@@ -43,7 +21,21 @@ if (version_compare('5.6.0', PHP_VERSION, '>')) {
     exit(1);
 }
 
-if (class_exists(ClassLoader::class, false) == false) {
+$autoloaders = [
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../../autoload.php',
+];
+
+foreach ($autoloaders as $file) {
+    if (file_exists($file)) {
+        define('ZEPHIR_COMPOSER_INSTALL', $file);
+        break;
+    }
+}
+
+unset($file);
+
+if (!defined('ZEPHIR_COMPOSER_INSTALL')) {
     fwrite(
         STDERR,
         'You need to install the Zephir dependencies using Composer:' . PHP_EOL . PHP_EOL .
@@ -53,3 +45,5 @@ if (class_exists(ClassLoader::class, false) == false) {
 
     exit(1);
 }
+
+require ZEPHIR_COMPOSER_INSTALL;
