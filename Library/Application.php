@@ -15,6 +15,7 @@ use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompillerProvider;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Application as BaseApplication;
 
 /**
  * Zephir\Bootstrap
