@@ -66,7 +66,6 @@ EOT
         -W([a-z0-9\-]+)     Turns a warning off
          */
 
-        // TODO: Move all the stuff from the compiler
         $command = $this->getApplication()->find('install');
 
         $arguments = [

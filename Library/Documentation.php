@@ -42,8 +42,8 @@ class Documentation implements InjectionAwareInterface
     /** @var Logger */
     protected $logger;
 
-    /** @var CommandInterface */
-    protected $command;
+    /** @var array */
+    protected $options;
 
     protected $baseUrl;
 
@@ -52,24 +52,26 @@ class Documentation implements InjectionAwareInterface
     /**
      * Documentation constructor.
      *
-     * @param CompilerFile[]   $classes
-     * @param Config           $config
-     * @param Logger           $logger
-     * @param CommandInterface $command
+     * @param CompilerFile[] $classes
+     * @param Config         $config
+     * @param Logger         $logger
+     * @param array          $options
      *
      * @throws ConfigException
      * @throws Exception
      */
-    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command)
+    public function __construct(array $classes, Config $config, Logger $logger, array $options)
     {
         $this->__DiInject();
 
+        // TODO: options => to ApiOptions object
+        // TODO: Validate options
         ksort($classes);
 
-        $this->config = $config;
+        $this->config  = $config;
         $this->classes = $classes;
         $this->logger  = $logger;
-        $this->command = $command;
+        $this->options = $options;
 
         $themeConfig = $config->get("theme", "api");
 
@@ -77,13 +79,13 @@ class Documentation implements InjectionAwareInterface
             throw new ConfigException("Theme configuration is not present");
         }
 
-        $themeDir = $this->findThemeDirectory($themeConfig, $command);
+        $themeDir = $this->findThemeDirectory($themeConfig, $options['path']);
 
         if (!file_exists($themeDir)) {
-            throw new ConfigException("There is no theme named " . $themeConfig["name"]);
+            throw new ConfigException("There is no theme named " . $themeConfig['name']);
         }
 
-        $outputDir = $this->findOutputDirectory($command);
+        $outputDir = $this->findOutputDirectory($options['output']);
 
         if (!$outputDir) {
             throw new ConfigException("Api path (output directory) is not configured");
@@ -101,11 +103,11 @@ class Documentation implements InjectionAwareInterface
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $themeConfig["options"] = $this->prepareThemeOptions($themeConfig, $command);
+        $themeConfig["options"] = $this->prepareThemeOptions($themeConfig, $options['options']);
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
 
-        $this->baseUrl = $this->parseBaseUrl($command);
+        $this->baseUrl = $options['url'];
     }
 
     /**
@@ -114,37 +116,38 @@ class Documentation implements InjectionAwareInterface
      *
      * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
      *
-     * @param $themeConfig
-     * @param CommandInterface $command
+     * @param  array       $themeConfig
+     * @param  string|null $options
      * @return array
+     *
      * @throws Exception
      */
-    private function prepareThemeOptions($themeConfig, CommandInterface $command)
+    private function prepareThemeOptions($themeConfig, $options = null)
     {
-        $optionsFromCommand = $command->getParameter("theme-options");
-
         $parsedOptions = null;
-        if ($optionsFromCommand) {
-            if ("{" == $optionsFromCommand{0}) {
-                $parsedOptions = json_decode(trim($optionsFromCommand), true);
+        if (!empty($options)) {
+            if ("{" == $options{0}) {
+                $parsedOptions = json_decode(trim($options), true);
                 if (!$parsedOptions || !is_array($parsedOptions)) {
                     throw new Exception("Unable to parse json from 'theme-options' argument");
                 }
             } else {
-                if (file_exists($optionsFromCommand)) {
-                    $unparsed = file_get_contents($optionsFromCommand);
+                if (file_exists($options)) {
+                    $unparsed = file_get_contents($options);
                     $parsedOptions = json_decode($unparsed, true);
                     if (!$parsedOptions || !is_array($parsedOptions)) {
-                        throw new Exception("Unable to parse json from the file '$optionsFromCommand'");
+                        throw new Exception(
+                            sprintf("Unable to parse json from the file '%s'", $options)
+                        );
                     }
                 } else {
-                    throw new Exception("Unable to find file '$optionsFromCommand'");
+                    throw new Exception(sprintf("Unable to find file '%s'", $options));
                 }
             }
         }
 
 
-        if ($parsedOptions) {
+        if (is_array($parsedOptions)) {
             $options = array_merge($themeConfig["options"], $parsedOptions);
         } else {
             $options = $themeConfig["options"];
@@ -161,18 +164,11 @@ class Documentation implements InjectionAwareInterface
      *  => if not ; check if config config[api][path] was given
      *
      *
-     * @param CommandInterface $command
-     *
+     * @param  string $outputDir
      * @return null|string
      */
-    private function findOutputDirectory(CommandInterface $command)
+    private function findOutputDirectory($outputDir)
     {
-        $outputDir = $command->getParameter("output-directory");
-
-        if (!$outputDir) {
-            $outputDir = $this->config->get('path', 'api');
-        }
-
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
         if ("/" !== $outputDir{0}) {
@@ -180,27 +176,6 @@ class Documentation implements InjectionAwareInterface
         }
 
         return $outputDir;
-    }
-
-    /**
-     *
-     * Find the base url (useful for sitemap.xml) for either
-     *
-     * - the command line argument base-url
-     * - or the config config["api"]["base-url"]
-     *
-     * @param  CommandInterface $command
-     * @return mixed|string
-     */
-    private function parseBaseUrl(CommandInterface $command)
-    {
-        $baseUrl = $command->getParameter("base-url");
-
-        if (!$baseUrl) {
-            $baseUrl = $this->config->get("base-url", "api");
-        }
-
-        return $baseUrl;
     }
 
     /**
@@ -212,14 +187,14 @@ class Documentation implements InjectionAwareInterface
      *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
-     * @param  array            $themeConfig
-     * @param  CommandInterface $command
+     * @param  array       $themeConfig
+     * @param  string|null $path
      * @return null|string
      *
      * @throws InvalidArgumentException
      * @throws ConfigException
      */
-    private function findThemeDirectory($themeConfig, CommandInterface $command)
+    private function findThemeDirectory($themeConfig, $path = null)
     {
         // check if there are additional theme paths in the config
         $themeDirectoriesConfig = $this->config->get("theme-directories", "api");
@@ -240,16 +215,14 @@ class Documentation implements InjectionAwareInterface
         $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command
-        $themePath = $command->getParameter("theme-path");
-        if (null !== $themePath) {
-            echo $themePath, PHP_EOL;
-            if (file_exists($themePath) && is_dir($themePath)) {
-                return $themePath;
+        if (!empty($path)) {
+            if (file_exists($path) && is_dir($path)) {
+                return $path;
             } else {
                 throw new InvalidArgumentException(
                     sprintf(
                         "Invalid value for option 'theme-path': the theme '%s' was not found or is not a valid theme.",
-                        $themePath
+                        $path
                     )
                 );
             }

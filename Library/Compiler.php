@@ -1034,18 +1034,22 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generate a HTML API
+     * Generate a HTML API.
      *
-     * @param CommandInterface $command
-     * @param bool             $fromGenerate
+     * @param  array $options
+     * @param  bool  $fromGenerate
+     * @return void
+     *
+     * @throws ConfigException
+     * @throws Exception
      */
-    public function api(CommandInterface $command, $fromGenerate = false)
+    public function api(array $options = [], $fromGenerate = false)
     {
         if (!$fromGenerate) {
-            $this->generate($command);
+            $this->generate();
         }
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $documentator = new Documentation($this->files, $this->config, $this->logger, $options);
         $documentator->setContainer($this->container);
 
         $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
@@ -1060,7 +1064,7 @@ class Compiler implements InjectionAwareInterface
     public function stubs($fromGenerate = false)
     {
         if (!$fromGenerate) {
-            $this->generate($fromGenerate);
+            $this->generate();
         }
 
         $this->logger->output('Generating stubs...');
