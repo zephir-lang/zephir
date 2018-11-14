@@ -140,7 +140,7 @@ class Compiler implements InjectionAwareInterface
     protected $fileSystem;
 
     /**
-     * The Zephir base direcrory.
+     * The Zephir base directory.
      * @var string
      */
     private $baseDir;

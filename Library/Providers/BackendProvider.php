@@ -37,10 +37,13 @@ final class BackendProvider implements ServiceProviderInterface
     public function register(ContainerInterface $container)
     {
         $backendClassName = $this->resolveBackendClass($container);
-
-        $container->add(BaseBackend::class, function () use ($container, $backendClassName) {
+        $service = function () use ($container, $backendClassName) {
             return new $backendClassName($container->get(Config::class));
-        });
+        };
+
+        $container
+            ->add(BaseBackend::class, $service)
+            ->setAlias('backend');
     }
 
     /**

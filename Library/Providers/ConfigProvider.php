@@ -28,9 +28,13 @@ final class ConfigProvider implements ServiceProviderInterface
      *
      * @param  ContainerInterface|Container $container
      * @return void
+     *
+     * @throws \Zephir\Exception
      */
     public function register(ContainerInterface $container)
     {
-        $container->share(Config::class, Config::fromServer());
+        $container
+            ->share(Config::class, Config::fromServer())
+            ->setAlias('config');
     }
 }
