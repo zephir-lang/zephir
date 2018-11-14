@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
@@ -674,11 +673,11 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generates the C sources from Zephir without compiling them
      *
-     * @param CommandInterface $command
+     * @param  bool $fromGenerate
      * @return bool
      * @throws Exception
      */
-    public function generate(CommandInterface $command)
+    public function generate($fromGenerate = false)
     {
         /**
          * Get global namespace
@@ -905,7 +904,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * When a new file is added or removed we need to run configure again
          */
-        if (!($command instanceof CommandGenerate)) {
+        if (!$fromGenerate) {
             if (!$this->fileSystem->exists($version . '/compiled-files-sum')) {
                 $needConfigure = true;
                 $this->fileSystem->write($version . '/compiled-files-sum', $hash);
@@ -924,7 +923,7 @@ class Compiler implements InjectionAwareInterface
         $this->fcallManager->genFcallCode();
 
         if ($this->config->get('stubs-run-after-generate', 'stubs')) {
-            $this->stubs($command, true);
+            $this->stubs($fromGenerate);
         }
 
         return $needConfigure;
@@ -1054,13 +1053,12 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate IDE stubs
      *
-     * @param CommandInterface $command
-     * @param bool             $fromGenerate
+     * @param bool $fromGenerate
      */
-    public function stubs(CommandInterface $command, $fromGenerate = false)
+    public function stubs($fromGenerate = false)
     {
         if (!$fromGenerate) {
-            $this->generate($command);
+            $this->generate($fromGenerate);
         }
 
         $this->logger->output('Generating stubs...');

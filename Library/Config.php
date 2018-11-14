@@ -111,7 +111,7 @@ class Config implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Factory method to create a Config instence from the $_SERVER['argv'].
+     * Factory method to create a Config instance from the $_SERVER['argv'].
      *
      * @return Config
      * @throws Exception

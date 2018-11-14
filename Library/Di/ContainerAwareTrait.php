@@ -27,7 +27,7 @@ use Zephir\Support\PropertyAccessor;
  * @property-read \Zephir\Environment $environment
  * @property-read \Zephir\Logger $logger
  * @property-read \Zephir\Config $config
- * @property-read \Zephir\BaseBackend $backend
+ * @property-read \Zephir\Compiler $compiler
  */
 trait ContainerAwareTrait
 {

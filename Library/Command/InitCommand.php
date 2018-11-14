@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\BaseBackend;
 
 /**
  * Zephir\Command\InitCommand
@@ -45,7 +46,7 @@ class InitCommand extends ContainerAwareCommand
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $namespace = $this->sanitizeNamespace($input->getArgument('namespace'));
 
@@ -73,7 +74,7 @@ class InitCommand extends ContainerAwareCommand
         }
 
         // Copy the latest kernel files
-        $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
+        $this->recursiveProcess($this->getContainer()->get(BaseBackend::class)->getInternalKernelPath(), 'ext/kernel');
     }
 
     private function sanitizeNamespace($namespace)

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Zephir\Command\ContainerAwareCommand;
 use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
-use Zephir\Providers\CompillerProvider;
+use Zephir\Providers\CompilerProvider;
 
 /**
  * Zephir\Bootstrap
@@ -57,7 +57,7 @@ final class Application extends BaseApplication
     protected function registerCompiler()
     {
         $this->serviceRegistrator->registerService(
-            new CompillerProvider()
+            new CompilerProvider()
         );
     }
 

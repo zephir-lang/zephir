@@ -15,6 +15,8 @@ use Zephir\Application;
 require_once __DIR__ . '/autoload.php';
 
 $app = new Application(__DIR__);
+
 $app->add(new Zephir\Command\InitCommand());
+$app->add(new Zephir\Command\GenerateCommand());
 
 $app->run();
