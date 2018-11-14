@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
@@ -1057,9 +1056,12 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generate IDE stubs
+     * Generate IDE stubs.
      *
-     * @param bool $fromGenerate
+     * @param  bool $fromGenerate
+     * @return void
+     *
+     * @throws Exception
      */
     public function stubs($fromGenerate = false)
     {
@@ -1077,14 +1079,13 @@ class Compiler implements InjectionAwareInterface
         $stubsGenerator->generate($path);
     }
 
-
     /**
-     * Compiles and installs the extension
+     * Compiles and installs the extension.
      *
-     * @param CommandInterface $command
-     * @param boolean $development
+     * @param  bool $development
+     * @return void
      *
-     * @throws CompilerException
+     * @throws Exception
      */
     public function install($development = false)
     {
@@ -1131,27 +1132,28 @@ class Compiler implements InjectionAwareInterface
         $this->logger->output('Don\'t forget to restart your web server');
     }
 
-    /**
-     * Run tests
-     *
-     * @param CommandInterface $command
-     */
-    public function test(CommandInterface $command)
-    {
-        /**
-         * Get global namespace
-         */
-        $this->checkDirectory();
-
-        $this->logger->output('Running tests...');
-
-        if (!$this->environment->isWindows()) {
-            system(
-                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
-                $exit
-            );
-        }
-    }
+// TODO
+//    /**
+//     * Run tests
+//     *
+//     * @param CommandInterface $command
+//     */
+//    public function test()
+//    {
+//        /**
+//         * Get global namespace
+//         */
+//        $this->checkDirectory();
+//
+//        $this->logger->output('Running tests...');
+//
+//        if (!$this->environment->isWindows()) {
+//            system(
+//                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
+//                $exit
+//            );
+//        }
+//    }
 
     /**
      * Process config.w32 sections

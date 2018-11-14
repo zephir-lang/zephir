@@ -31,6 +31,13 @@ class ApiCommand extends ContainerAwareCommand
             ->setName('api')
             ->setDescription('Generates a HTML API based on the classes exposed in the extension')
             ->addOption(
+                'backend',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Used backend to generate HTML API for the extension',
+                'ZendEngine3'
+            )
+            ->addOption(
                 'path',
                 'p',
                 InputOption::VALUE_REQUIRED,

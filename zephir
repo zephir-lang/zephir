@@ -24,6 +24,7 @@ $app->add(new Zephir\Command\BuildCommand());
 $app->add(new Zephir\Command\CleanCommand());
 $app->add(new Zephir\Command\FullCLeanCommand());
 $app->add(new Zephir\Command\ApiCommand());
+$app->add(new Zephir\Command\StubsCommand());
 
 // TODO
 // if (\substr(__FILE__, 0, 5) === 'phar:') {
