@@ -1082,7 +1082,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @throws CompilerException
      */
-    public function install(CommandInterface $command, $development = false)
+    public function install($development = false)
     {
         /**
          * Get global namespace

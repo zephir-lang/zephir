@@ -18,9 +18,10 @@ $app = new Application(__DIR__);
 
 $app->add(new Zephir\Command\InitCommand());
 $app->add(new Zephir\Command\GenerateCommand());
+$app->add(new Zephir\Command\CompileCommand());
+$app->add(new Zephir\Command\InstallCommand());
 $app->add(new Zephir\Command\CleanCommand());
 $app->add(new Zephir\Command\FullCLeanCommand());
-$app->add(new Zephir\Command\CompileCommand());
 
 // TODO
 // if (\substr(__FILE__, 0, 5) === 'phar:') {
