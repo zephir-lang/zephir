@@ -1148,25 +1148,6 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Clean the extension directory
-     *
-     * @param CommandInterface $command
-     */
-    public function fullClean(CommandInterface $command)
-    {
-        $this->fileSystem->clean();
-        if ($this->environment->isWindows()) {
-            system('cd ext && nmake clean-all');
-            system('cd ext && phpize --clean');
-            system('cd ext && ./clean');
-        } else {
-            system('cd ext && make clean > /dev/null');
-            system('cd ext && phpize --clean > /dev/null');
-            system('cd ext && ./clean > /dev/null');
-        }
-    }
-
-    /**
      * Compiles and installs the extension
      *
      * @param CommandInterface $command
