@@ -932,12 +932,11 @@ class Compiler implements InjectionAwareInterface
     /**
      * Compiles the extension without installing it
      *
-     * @param CommandInterface $command
-     * @param bool             $development
+     * @param bool $development
      *
      * @throws Exception|CompilerException
      */
-    public function compile(CommandInterface $command, $development = false)
+    public function compile($development = false)
     {
         /**
          * Get global namespace
@@ -947,7 +946,7 @@ class Compiler implements InjectionAwareInterface
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
-        $needConfigure = $this->generate($command);
+        $needConfigure = $this->generate(false);
 
         if ($needConfigure) {
             if ($this->environment->isWindows()) {
@@ -960,7 +959,10 @@ class Compiler implements InjectionAwareInterface
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
-                /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
+                /**
+                 * fix until patch hits all supported PHP builds
+                 * @link https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
+                 */
                 $fixMarker = "/* zephir_phpize_fix */";
 
                 $configureFile = file_get_contents('ext\\configure.js');
@@ -1091,7 +1093,7 @@ class Compiler implements InjectionAwareInterface
         @unlink("compile-errors.log");
         @unlink("ext/modules/" . $namespace . ".so");
 
-        $this->compile($command, $development);
+        $this->compile($development);
         if ($this->environment->isWindows()) {
             $this->logger->output("Installation is not implemented for windows yet! Aborting!");
             exit();

@@ -16,19 +16,19 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Zephir\Command\GenerateCommand
+ * Zephir\Command\CompileCommand
  *
- * Generates C code from the Zephir code without compiling it.
+ * Compile a Zephir extension.
  *
  * @package Zephir\Command
  */
-class GenerateCommand extends ContainerAwareCommand
+class CompileCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('generate')
-            ->setDescription('Generates C code from the Zephir code without compiling it')
+            ->setName('compile')
+            ->setDescription('Compile a Zephir extension')
             ->addOption(
                 'backend',
                 null,
@@ -48,6 +48,6 @@ class GenerateCommand extends ContainerAwareCommand
          */
 
         // TODO: Move all the stuff from the compiler
-        $this->compiler->generate(true);
+        $this->compiler->compile();
     }
 }
