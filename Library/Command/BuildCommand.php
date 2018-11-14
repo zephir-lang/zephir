@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Zephir\Command\BuildCommand
  *
- * Generates/Builds/Installs a Zephir extension.
+ * Generates/Compiles/Installs a Zephir extension.
  *
  * @package Zephir\Command
  */
@@ -29,13 +29,31 @@ class BuildCommand extends ContainerAwareCommand
     {
         $this
             ->setName('build')
-            ->setDescription('Generates/Builds/Installs a Zephir extension')
+            ->setDescription('Generates/Compiles/Installs a Zephir extension')
             ->addOption(
                 'backend',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Used backend to build extension',
                 'ZendEngine3'
+            )
+            ->addOption(
+                'dev',
+                null,
+                InputOption::VALUE_NONE,
+                'Build the extension in development mode'
+            )
+            ->setHelp(
+                <<<EOT
+Generates/Compiles/Installs a Zephir extension.
+Just a meta command that just calls "generate", "compile" and "install" commands.
+
+Using "--dev" option will force compile and install the extension in development mode
+(debug symbols and no optimizations). An extension compiled with debugging symbols means
+you can run a program or library through a debugger and the debugger's output will be user
+friendlier. These debugging symbols also enlarge the program or library significantly. 
+EOT
+
             );
     }
 
@@ -54,6 +72,7 @@ class BuildCommand extends ContainerAwareCommand
         $arguments = [
             'command'   => 'install',
             '--backend' => $input->getOption('backend'),
+            '--dev'     => $input->getOption('dev'),
         ];
 
         return $command->run(new ArrayInput($arguments), $output);

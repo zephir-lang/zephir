@@ -12,6 +12,7 @@
 namespace Zephir\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -27,13 +28,19 @@ class InstallCommand extends ContainerAwareCommand
     {
         $this
             ->setName('install')
-            ->setDescription('Installs the extension in the extension directory (may require root password)');
+            ->setDescription('Installs the extension in the extension directory (may require root password)')
+            ->addOption(
+                'dev',
+                null,
+                InputOption::VALUE_NONE,
+                'Install the extension in development mode'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: Move all the stuff from the compiler
-        $this->compiler->install();
+        $this->compiler->install($input->getOption('dev'));
 
         return 0;
     }

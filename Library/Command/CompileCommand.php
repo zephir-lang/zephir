@@ -35,6 +35,12 @@ class CompileCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Used backend to compile extension',
                 'ZendEngine3'
+            )
+            ->addOption(
+                'dev',
+                null,
+                InputOption::VALUE_NONE,
+                'Compile the extension in development mode'
             );
     }
 
@@ -48,7 +54,7 @@ class CompileCommand extends ContainerAwareCommand
          */
 
         // TODO: Move all the stuff from the compiler
-        $this->compiler->compile();
+        $this->compiler->compile($input->getOption('dev'));
 
         return 0;
     }
