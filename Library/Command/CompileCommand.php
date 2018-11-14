@@ -33,7 +33,7 @@ class CompileCommand extends ContainerAwareCommand
                 'backend',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Used backend to generate extension',
+                'Used backend to compile extension',
                 'ZendEngine3'
             );
     }
@@ -49,5 +49,7 @@ class CompileCommand extends ContainerAwareCommand
 
         // TODO: Move all the stuff from the compiler
         $this->compiler->compile();
+
+        return 0;
     }
 }

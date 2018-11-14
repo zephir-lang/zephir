@@ -20,6 +20,7 @@ $app->add(new Zephir\Command\InitCommand());
 $app->add(new Zephir\Command\GenerateCommand());
 $app->add(new Zephir\Command\CompileCommand());
 $app->add(new Zephir\Command\InstallCommand());
+$app->add(new Zephir\Command\BuildCommand());
 $app->add(new Zephir\Command\CleanCommand());
 $app->add(new Zephir\Command\FullCLeanCommand());
 

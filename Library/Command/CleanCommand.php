@@ -42,5 +42,7 @@ class CleanCommand extends ContainerAwareCommand
         } else {
             system('cd ext && pwd && make clean > /dev/null');
         }
+
+        return 0;
     }
 }

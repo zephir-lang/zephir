@@ -1150,16 +1150,6 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Compiles and installs the extension
-     *
-     * @param CommandInterface $command
-     */
-    public function build(CommandInterface $command)
-    {
-        $this->install($command, false);
-    }
-
-    /**
      * Compiles and installs the extension in development mode (debug symbols and no optimizations)
      *
      * @param CommandInterface $command

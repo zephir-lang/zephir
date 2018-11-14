@@ -49,5 +49,7 @@ class FullCLeanCommand extends ContainerAwareCommand
             // TODO: This file contains duplicated commands
             system('cd ext && ./clean > /dev/null');
         }
+
+        return 0;
     }
 }

@@ -75,6 +75,8 @@ class InitCommand extends ContainerAwareCommand
 
         // Copy the latest kernel files
         $this->recursiveProcess($this->getContainer()->get(BaseBackend::class)->getInternalKernelPath(), 'ext/kernel');
+
+        return 0;
     }
 
     private function sanitizeNamespace($namespace)

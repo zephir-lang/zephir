@@ -11,29 +11,30 @@
 
 namespace Zephir\Command;
 
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Zephir\Command\GenerateCommand
+ * Zephir\Command\BuildCommand
  *
- * Generates C code from the Zephir code without compiling it.
+ * Generates/Builds/Installs a Zephir extension.
  *
  * @package Zephir\Command
  */
-class GenerateCommand extends ContainerAwareCommand
+class BuildCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('generate')
-            ->setDescription('Generates C code from the Zephir code without compiling it')
+            ->setName('build')
+            ->setDescription('Generates/Builds/Installs a Zephir extension')
             ->addOption(
                 'backend',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Used backend to generate extension',
+                'Used backend to build extension',
                 'ZendEngine3'
             );
     }
@@ -48,8 +49,13 @@ class GenerateCommand extends ContainerAwareCommand
          */
 
         // TODO: Move all the stuff from the compiler
-        $this->compiler->generate(true);
+        $command = $this->getApplication()->find('install');
 
-        return 0;
+        $arguments = [
+            'command'   => 'install',
+            '--backend' => $input->getOption('backend'),
+        ];
+
+        return $command->run(new ArrayInput($arguments), $output);
     }
 }
