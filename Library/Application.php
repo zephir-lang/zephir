@@ -14,6 +14,10 @@ namespace Zephir;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Command\ContainerAwareCommand;
 use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
@@ -53,9 +57,9 @@ final class Application extends BaseApplication
         $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
         $this->registerCompiler();
 
-        $container = $this->serviceRegistrator->getContainer();
-
-        parent::__construct('Zephir', (string) $container->get(Version::class));
+        parent::__construct(
+            'Zephir', (string) $this->serviceRegistrator->getContainer()->get(Version::class)
+        );
     }
 
     /**
@@ -85,9 +89,55 @@ final class Application extends BaseApplication
         return parent::add($command);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
     public function getHelp()
     {
         return $this->logo . PHP_EOL . parent::getHelp();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return InputDefinition
+     */
+    protected function getDefaultInputDefinition()
+    {
+        $definition = parent::getDefaultInputDefinition();
+
+        $definition->addOption(
+            new InputOption(
+                'dumpversion',
+                null,
+                InputOption::VALUE_NONE,
+                "Print the Zephir version — and don't do anything else"
+            )
+        );
+
+        return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  InputInterface $input
+     * @param  OutputInterface $output
+     * @return int
+     *
+     * @throws \Throwable|\Exception
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        if (true === $input->hasParameterOption(['--dumpversion'], true)) {
+            $output->writeln($this->getVersion());
+
+            return 0;
+        }
+
+        return parent::doRun($input, $output);
     }
 
     /**
