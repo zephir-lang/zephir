@@ -443,6 +443,9 @@ class Compiler implements InjectionAwareInterface
     /**
      * Copies the base kernel to the extension destination
      *
+     * @todo
+     * @deprecated
+     *
      * @param        $src
      * @param        $dest
      * @param string $pattern
@@ -666,53 +669,6 @@ class Compiler implements InjectionAwareInterface
                 }
             }
         }
-    }
-
-    /**
-     * Initializes a Zephir extension
-     *
-     * @param CommandInterface $command
-     *
-     * @throws Exception
-     */
-    public function init(CommandInterface $command)
-    {
-        /**
-         * If init namespace is specified
-         */
-        $namespace = $command->getParameter('namespace');
-        if (!$namespace) {
-            throw new Exception("Cannot obtain a valid initial namespace for the project");
-        }
-
-        /**
-         * Tell the user the name could be reserved by another extension
-         */
-        if (extension_loaded($namespace)) {
-            $this->logger->output('This extension can have conflicts with an existing loaded extension');
-        }
-
-        $this->config->set('namespace', $namespace);
-        $this->config->set('name', $namespace);
-
-        if (!is_dir($namespace)) {
-            mkdir($namespace);
-        }
-
-        chdir($namespace);
-        if (!is_dir($namespace)) {
-            mkdir($namespace);
-        }
-
-        /**
-         * Create 'kernel'
-         */
-        if (!is_dir('ext/kernel')) {
-            mkdir('ext/kernel', 0755, true);
-        }
-
-        // Copy the latest kernel files
-        $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
     }
 
     /**

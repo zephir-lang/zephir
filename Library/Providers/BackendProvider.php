@@ -13,8 +13,8 @@ namespace Zephir\Providers;
 
 use League\Container\Container;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Input\ArgvInput;
 use Zephir\BaseBackend;
-use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Di\ServiceProviderInterface;
 use Zephir\Exception\IllegalStateException;
@@ -56,28 +56,20 @@ final class BackendProvider implements ServiceProviderInterface
      */
     private function resolveBackendClass(ContainerInterface $container)
     {
-        $params = [];
-
-        if (count($_SERVER['argv']) > 2) {
-            $args = array_slice($_SERVER['argv'], 2);
-
-            /** @var CommandArgumentParser $parser */
-            $parser = $container->get(CommandArgumentParser::class);
-            $params = $parser->parseArgs(array_merge(['command'], $args));
-        }
+        $parser = new ArgvInput();
+        $backend = $backend = $parser->getParameterOption('--backend', null);
 
         // Do not use this feature for typical use case.
         // Overriding backend using env var provided only for
-        // testing purposes and may be removed in future.
-        if ($backend = getenv('ZEPHIR_BACKEND')) {
-            $params['backend'] = $backend;
+        // testing purposes and may be removed in the future.
+        // You SHOULD NOT rely on this possibility.
+        if (getenv('ZEPHIR_BACKEND')) {
+            $backend = $backend = getenv('ZEPHIR_BACKEND');
         } elseif ($container->has('ZEPHIR_BACKEND')) {
-            $params['backend'] = $container->get('ZEPHIR_BACKEND');
+            $backend = $container->get('ZEPHIR_BACKEND');
         }
 
-        if (isset($params['backend'])) {
-            $backend = $params['backend'];
-        } else {
+        if ($backend == null) {
             $backend = BaseBackend::getActiveBackend();
         }
 

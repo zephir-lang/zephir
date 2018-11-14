@@ -72,11 +72,17 @@ final class ServiceRegistrator implements InjectionAwareInterface
 
         $container->share(Version::class, Version::class);
         $container->share(Parser::class, Parser::class);
+
+        // TODO: deprecated
         $container->share(CommandArgumentParser::class, CommandArgumentParser::class);
 
-        $container->share(Logger::class, function () use ($container) {
+        $logger = function () use ($container) {
             return new Logger($container->get(Config::class));
-        });
+        };
+
+        $container
+            ->share(Logger::class, $logger)
+            ->setAlias('logger');
     }
 
     /**

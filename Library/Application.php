@@ -11,11 +11,13 @@
 
 namespace Zephir;
 
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Command\Command;
+use Zephir\Command\ContainerAwareCommand;
 use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompillerProvider;
-use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Application as BaseApplication;
 
 /**
  * Zephir\Bootstrap
@@ -60,8 +62,25 @@ final class Application extends BaseApplication
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @param  Command $command
+     * @return Command|null
+     */
+    public function add(Command $command)
+    {
+        if ($command instanceof ContainerAwareCommand) {
+            $command->setContainer($this->serviceRegistrator->getContainer());
+        }
+
+        return parent::add($command);
+    }
+
+    /**
      * Boots the compiler executing the specified action.
      *
+     * @todo
+     * @deprecated
      * @return void
      */
     public function execute()
@@ -93,6 +112,9 @@ final class Application extends BaseApplication
 
     /**
      * Formats error message to show an exception opening the file and highlighting the wrong part.
+     *
+     * @todo
+     * @deprecated
      *
      * @param  \Exception $exception
      * @param  Config     $config Current config object [optional].
