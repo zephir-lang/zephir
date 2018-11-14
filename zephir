@@ -18,5 +18,6 @@ $app = new Application(__DIR__);
 
 $app->add(new Zephir\Command\InitCommand());
 $app->add(new Zephir\Command\GenerateCommand());
+$app->add(new Zephir\Command\CleanCommand());
 
 $app->run();

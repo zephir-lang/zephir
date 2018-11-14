@@ -1152,22 +1152,6 @@ class Compiler implements InjectionAwareInterface
      *
      * @param CommandInterface $command
      */
-    public function clean(CommandInterface $command)
-    {
-        $this->fileSystem->clean();
-
-        if ($this->environment->isWindows()) {
-            system('cd ext && nmake clean-all');
-        } else {
-            system('cd ext && make clean > /dev/null');
-        }
-    }
-
-    /**
-     * Clean the extension directory
-     *
-     * @param CommandInterface $command
-     */
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
@@ -2261,6 +2245,8 @@ class Compiler implements InjectionAwareInterface
     {
         $namespace = $this->config->get('namespace');
         if (!$namespace) {
+            // TODO: Add more user friendly message.
+            // For example assume if the user call the command from the wrong dir
             throw new Exception("Extension namespace cannot be loaded");
         }
 
