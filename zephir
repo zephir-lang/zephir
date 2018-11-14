@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-use Zephir\Bootstrap;
+use Zephir\Application;
 
 require_once __DIR__ . '/autoload.php';
 
-$bootstrap = new Bootstrap(__DIR__);
+$app = new Application(__DIR__);
 
-$bootstrap->execute();
+$app->run();

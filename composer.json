@@ -27,7 +27,8 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-xml": "*",
-        "league/container": "^2.4 || ^3.2"
+        "league/container": "^2.4 || ^3.2",
+        "symfony/console": "3.4.*"
     },
     "require-dev": {
         "ext-gmp": "*",

@@ -22,7 +22,7 @@ use Symfony\Component\Console\Application as BaseApplication;
  *
  * @package Zephir
  */
-final class Bootstrap
+final class Application extends BaseApplication
 {
     /**
      * The Service Registrator instance.
@@ -34,21 +34,25 @@ final class Bootstrap
     /**
      * Bootstrap constructor.
      *
-     * @param string             $basePath  The Zephir compiller base direcrory.
+     * @param string             $basePath  The Zephir compiler base directory.
      * @param ContainerInterface $container The DI container (if any).
      */
     public function __construct($basePath, ContainerInterface $container = null)
     {
         $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
-        $this->registerCompiller();
+        $this->registerCompiler();
+
+        $container = $this->serviceRegistrator->getContainer();
+
+        parent::__construct('Zephir', (string) $container->get(Version::class));
     }
 
     /**
-     * Register Zephir compiller.
+     * Register Zephir compiler.
      *
      * @return void
      */
-    protected function registerCompiller()
+    protected function registerCompiler()
     {
         $this->serviceRegistrator->registerService(
             new CompillerProvider()

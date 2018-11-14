@@ -11,7 +11,7 @@
 
 namespace Zephir\Test;
 
-use Zephir\Bootstrap;
+use Zephir\Application;
 use Zephir\Commands\CommandGenerate;
 use Zephir\Commands\Manager;
 use Zephir\Compiler;
@@ -65,7 +65,7 @@ class TypeHintsTest extends TestCase
 
         try {
             putenv('ZEPHIR_BACKEND=' . $backend);
-            new Bootstrap(ZEPHIRPATH);
+            new Application(ZEPHIRPATH);
 
             $container = Singleton::getDefault();
 
