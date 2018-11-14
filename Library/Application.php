@@ -26,6 +26,15 @@ use Zephir\Providers\CompilerProvider;
  */
 final class Application extends BaseApplication
 {
+    private $logo = '
+ _____              __    _
+/__  /  ___  ____  / /_  (_)____
+  / /  / _ \/ __ \/ __ \/ / ___/
+ / /__/  __/ /_/ / / / / / /
+/____/\___/ .___/_/ /_/_/_/
+         /_/
+';
+
     /**
      * The Service Registrator instance.
      *
@@ -74,6 +83,11 @@ final class Application extends BaseApplication
         }
 
         return parent::add($command);
+    }
+
+    public function getHelp()
+    {
+        return $this->logo . PHP_EOL . parent::getHelp();
     }
 
     /**
