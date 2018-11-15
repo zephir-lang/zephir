@@ -99,14 +99,10 @@ class CompileCommandTest extends TestCase
         $command = $application->find('compile');
         $commandTester = new CommandTester($command);
 
-        ob_start();
-
         $commandTester->execute(
             ['command'  => $command->getName()] + $mode,
             ['verbosity' => OutputInterface::VERBOSITY_QUIET]
         );
-
-        ob_get_clean();
 
         $this->assertRegexp("/CFLAGS='{$cflags}'/", file_get_contents('ext/config.nice'));
     }
