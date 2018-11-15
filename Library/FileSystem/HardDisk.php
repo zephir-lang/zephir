@@ -13,8 +13,8 @@ namespace Zephir\FileSystem;
 
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
-use Zephir\Version;
 use function Zephir\unlink_recursive;
+use Zephir\Zephir;
 
 /**
  * Zephir\FileSystem\HardDisk
@@ -188,9 +188,8 @@ class HardDisk implements InjectionAwareInterface
             return hash_file($algorithm, $path);
         } else {
             $changed = false;
-            $version = $this->container->get(Version::class);
 
-            $cacheFile = $this->basePath . $version . DIRECTORY_SEPARATOR . str_replace([DIRECTORY_SEPARATOR, ':', '/'], '_', $path) . '.md5';
+            $cacheFile = $this->basePath . Zephir::VERSION . DIRECTORY_SEPARATOR . str_replace([DIRECTORY_SEPARATOR, ':', '/'], '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 file_put_contents($cacheFile, $hash);

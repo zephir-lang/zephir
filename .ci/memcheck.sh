@@ -34,6 +34,5 @@ valgrind
 	$(phpenv which php)
 		-d "extension=${PROJECT_ROOT}/ext/modules/test.so" \
 		"${PROJECT_ROOT}/unit-tests/phpunit" \
-			-c "${PROJECT_ROOT}/phpunit.xml.dist" \
 			--no-coverage \
 			--testsuite "Extension Test Suite"

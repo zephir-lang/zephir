@@ -15,17 +15,15 @@ use League\Container\Container;
 use Psr\Container\ContainerInterface;
 use Zephir\BaseBackend;
 use Zephir\Compiler;
-use Zephir\Config;
 use Zephir\Di\ServiceProviderInterface;
-use Zephir\Logger;
 use Zephir\Parser\Manager;
 
 /**
- * Zephir\Providers\CompillerProvider
+ * Zephir\Providers\CompilerProvider
  *
  * @package Zephir\Providers
  */
-final class CompillerProvider implements ServiceProviderInterface
+final class CompilerProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
@@ -35,20 +33,19 @@ final class CompillerProvider implements ServiceProviderInterface
      */
     public function register(ContainerInterface $container)
     {
-        $container->add(
-            Compiler::class,
-            function () use ($container) {
-                $compiller = new Compiler(
-                    $container->get(Config::class),
-                    $container->get(Logger::class),
-                    $container->get(BaseBackend::class),
-                    $container->get(Manager::class)
-                );
+        $service = function () use ($container) {
+            $compiler = new Compiler(
+                $container->get('config'),
+                $container->get('logger'),
+                $container->get(BaseBackend::class),
+                $container->get(Manager::class)
+            );
 
-                $compiller->setContainer($container);
+            $compiler->setContainer($container);
 
-                return $compiller;
-            }
-        );
+            return $compiler;
+        };
+
+        $container->share('compiler', $service);
     }
 }
