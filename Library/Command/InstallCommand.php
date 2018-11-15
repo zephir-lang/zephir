@@ -22,9 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface
+class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {
     use DevelopmentModeAwareTrait;
+    use ZflagsAwareTrait;
 
     protected function configure()
     {
@@ -33,7 +34,7 @@ class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwa
             ->setDescription('Installs the extension in the extension directory (may require root password)')
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Install the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp());
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . PHP_EOL . $this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
