@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Command\ContainerAwareCommand;
-use Zephir\Commands\Manager;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompilerProvider;
 
@@ -54,11 +53,24 @@ final class Application extends BaseApplication
      */
     public function __construct($basePath, ContainerInterface $container = null)
     {
-        $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
-        $this->registerCompiler();
+        try {
+            $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
+            $this->registerCompiler();
+
+            $container = $this->serviceRegistrator->getContainer();
+        } catch (\Exception $e) {
+            // TODO: Handle it better by ErrorHandler
+            $config = (isset($container) && $container->has(Config::class)) ? $container->get(Config::class) : null;
+            fwrite(
+                STDERR,
+                $this->formatErrorMessage($e, $config)
+            );
+
+            exit(1);
+        }
 
         parent::__construct(
-            'Zephir', (string) $this->serviceRegistrator->getContainer()->get(Version::class)
+            'Zephir', (string) $container->get(Version::class)
         );
     }
 
@@ -138,40 +150,6 @@ final class Application extends BaseApplication
         }
 
         return parent::doRun($input, $output);
-    }
-
-    /**
-     * Boots the compiler executing the specified action.
-     *
-     * @todo
-     * @deprecated
-     * @return void
-     */
-    public function execute()
-    {
-        $container = $this->serviceRegistrator->getContainer();
-
-        if (isset($_SERVER['argv'][1])) {
-            $action = $_SERVER['argv'][1];
-        } else {
-            $action = 'help';
-        }
-
-        try {
-            /** @var Manager $manager */
-            $manager = $container->get(Manager::class);
-            $command = $manager->resolveByActionName($action);
-
-            // Execute the command
-            $command->execute($container->get(Config::class), $container->get(Logger::class));
-        } catch (\Exception $e) {
-            fwrite(
-                STDERR,
-                $this->formatErrorMessage($e, $container->has(Config::class) ? $container->get(Config::class) : null)
-            );
-
-            exit(1);
-        }
     }
 
     /**

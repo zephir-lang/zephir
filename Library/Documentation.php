@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandInterface;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\File;

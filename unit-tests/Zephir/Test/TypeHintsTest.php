@@ -13,7 +13,6 @@ namespace Zephir\Test;
 
 use Zephir\Application;
 use Zephir\Commands\CommandGenerate;
-use Zephir\Commands\Manager;
 use Zephir\Compiler;
 use Zephir\Di\Singleton;
 use Zephir\Support\TestCase;
