@@ -18,5 +18,5 @@ namespace Zephir;
  */
 final class Zephir
 {
-    const VERSION = '$Id$';
+    const VERSION = '0.11.4-$Id$';
 }

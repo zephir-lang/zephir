@@ -15,13 +15,13 @@ DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
 
-./zephir clean 2>&1
-./zephir fullclean 2>&1
+zephir clean 2>&1
+zephir fullclean 2>&1
 # TODO
-#./zephir generate ${DEFAULT_ZFLAGS} 2>&1
-./zephir generate 2>&1
-./zephir stubs 2>&1
-./zephir api 2>&1
+#zephir generate ${DEFAULT_ZFLAGS} 2>&1
+zephir generate 2>&1
+zephir stubs 2>&1
+zephir api 2>&1
 
 cd ext
 
@@ -55,9 +55,9 @@ make -j"$(getconf _NPROCESSORS_ONLN)"
 
 cd ..
 
-if [ "${REPORT_COVERAGE}" = "1" ]; then
-	lcov --directory ./ext --zerocounters
-	lcov --directory ./ext --capture --compat-libtool --initial --output-file ./unit-tests/output/coverage.info
-fi
+#if [ "${REPORT_COVERAGE}" = "1" ]; then
+#	lcov --directory ./ext --zerocounters
+#	lcov --directory ./ext --capture --compat-libtool --initial --output-file ./coverage.info
+#fi
 
 exit $?

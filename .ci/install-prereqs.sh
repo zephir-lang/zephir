@@ -12,7 +12,9 @@ if [ "${CI}" != "true" ]; then
 	exit 1
 fi
 
-printf "\n" | pecl install --force psr &> /dev/null
+printf "\n" | pecl install --force psr
+
+PHP_VERNUM="$(php-config --vernum)"
 
 install_ext_from_src () {
 	pkgname=$1
@@ -22,7 +24,7 @@ install_ext_from_src () {
 	prefix="${HOME}/.local/opt/${pkgname}/${pkgname}-${PHP_VERNUM}"
 	libdir="${prefix}/lib"
 
-	if [ ! -f "${libdir}/pkgname.so" ]; then
+	if [ ! -f "${libdir}/${pkgname}.so" ]; then
 		if [ ! -d `dirname ${downloaddir}` ]; then
 			mkdir -p `dirname ${downloaddir}`
 		fi
@@ -70,3 +72,12 @@ install_ext_from_src () {
 }
 
 install_ext_from_src "zephir_parser" "https://github.com/phalcon/php-zephir-parser" ""
+
+if [ "${PHP_VERNUM}" -gt 70000 ]; then
+	wget \
+	  "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+	  --quiet \
+	  -O "${HOME}/bin/box"
+
+	chmod +x "${HOME}/bin/box"
+fi
