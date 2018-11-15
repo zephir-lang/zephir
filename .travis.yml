@@ -59,7 +59,7 @@ before_script:
   - .ci/build-test-ext.sh
 
 script:
-  - zephir
+  - zephir --ansi
   - ./vendor/bin/phpcs
   - php -d extension=ext/modules/test.so unit-tests/phpunit
 

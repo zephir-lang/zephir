@@ -25,7 +25,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @var array
      */
-    public $container = [
+    private $container = [
         'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
@@ -78,6 +78,10 @@ class Config implements \ArrayAccess, \JsonSerializable
             'call-gatherer-pass'                 => true,
             'check-invalid-reads'                => false,
             'internal-call-transformation'       => false
+        ],
+        'extra' => [
+            'indent'         => 'spaces',
+            'export-classes' => false,
         ],
         'namespace'   => '',
         'name'        => '',
@@ -143,7 +147,6 @@ class Config implements \ArrayAccess, \JsonSerializable
                 }
 
                 if (preg_match('/^-W([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    //echo "{$i}: ${matches[1]}", PHP_EOL;
                     $config->set($matches[1], false, 'warnings');
                     unset($argv[$i]);
                     continue;
@@ -152,6 +155,26 @@ class Config implements \ArrayAccess, \JsonSerializable
                 if (preg_match('/^-w([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->set($matches[1], true, 'warnings');
                     unset($argv[$i]);
+                    continue;
+                }
+
+                if (preg_match('/^--([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    // Only known options
+                    if ($config->get($matches[1], 'extra') !== null) {
+                        $config->set($matches[1], true, 'extra');
+                        unset($argv[$i]);
+                    }
+
+                    continue;
+                }
+
+                if (preg_match('/^--([a-z0-9\-]+)=(.*)$/', $parameter, $matches)) {
+                    // Only known options
+                    if ($config->get($matches[1], 'extra') !== null) {
+                        $config->set($matches[1], $matches[2], 'extra');
+                        unset($argv[$i]);
+                    }
+
                     continue;
                 }
 
