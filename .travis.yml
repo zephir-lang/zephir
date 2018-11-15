@@ -12,11 +12,6 @@ php:
 git:
   depth: 1
 
-branches:
-  only:
-    - master
-    - development
-
 addons:
   apt:
     packages:
