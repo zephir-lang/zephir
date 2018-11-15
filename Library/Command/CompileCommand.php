@@ -36,12 +36,8 @@ class CompileCommand extends ContainerAwareCommand
                 'Used backend to compile extension',
                 'ZendEngine3'
             )
-            ->addOption(
-                'dev',
-                null,
-                InputOption::VALUE_NONE,
-                'Compile the extension in development mode'
-            );
+            ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
+            ->setHelp($this->getCompileDevHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -54,8 +50,23 @@ class CompileCommand extends ContainerAwareCommand
          */
 
         // TODO: Move all the stuff from the compiler
-        $this->compiler->compile($input->getOption('dev'));
+        $this->compiler->compile($input->getOption('dev') || PHP_DEBUG);
 
         return 0;
+    }
+
+    private function getCompileDevHelp()
+    {
+        return <<<EOT
+Compile a Zephir extension.
+
+Using "--dev" option will force compiling the extension in development mode
+(debug symbols and no optimizations). An extension compiled with debugging symbols means
+you can run a program or library through a debugger and the debugger's output will be user
+friendlier. These debugging symbols also enlarge the program or library significantly.
+
+Note: Zephir development mode will be enabled silently if your PHP binary was compiled in
+a debug configuration.
+EOT;
     }
 }
