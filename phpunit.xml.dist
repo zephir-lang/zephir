@@ -29,4 +29,9 @@
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
     </php>
+
+    <!-- logging>
+        <log type="coverage-clover" target="./unit-tests/output/clover.xml"/>
+        <log type="coverage-html" target="./unit-tests/output"/>
+    </logging -->
 </phpunit>
