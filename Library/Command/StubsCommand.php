@@ -37,7 +37,8 @@ class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
                 InputOption::VALUE_REQUIRED,
                 'Used backend to generate stubs for the extension',
                 'ZendEngine3'
-            );
+            )
+            ->setHelp($this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

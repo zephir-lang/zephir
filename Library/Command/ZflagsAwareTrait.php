@@ -32,6 +32,7 @@ Common flags are:
     <info>-fno-([a-z0-9\-]+)</info> Disables compiler optimizations
     <info>-w([a-z0-9\-]+)</info>    Turns a warning on
     <info>-W([a-z0-9\-]+)</info>    Turns a warning off
+
 EOT;
     }
 }
