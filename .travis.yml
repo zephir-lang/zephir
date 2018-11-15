@@ -65,7 +65,7 @@ script:
 
 after_success:
   - .ci/after-success.sh
-  - if [ ! -z "${CODECOV_TOKEN}" ]; then bash <(curl -s https://codecov.io/bash); fi
+  - if [ ! -z "${CODECOV_TOKEN}" ] && [ "$TRAVIS_PHP_VERSION" != "5.6" ]; then bash <(curl -s https://codecov.io/bash); fi
 
 notifications:
   email: false
