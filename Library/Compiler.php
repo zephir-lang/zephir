@@ -613,8 +613,12 @@ class Compiler implements InjectionAwareInterface
                     $gccFlags = '-O0 -g3';
                 }
             }
+
             return $gccFlags;
         }
+
+        // TODO
+        return '';
     }
 
     /**
@@ -624,8 +628,13 @@ class Compiler implements InjectionAwareInterface
      */
     public function getPhpIncludeDirs()
     {
+        // TODO: Add Windows support
         if (!$this->environment->isWindows()) {
-            $this->fileSystem->system('php-config --includes', 'stdout', Zephir::VERSION . '/php-includes');
+            $this->fileSystem->system(
+                'php-config --includes',
+                'stdout',
+                escapeshellcmd(Zephir::VERSION) . '/php-includes'
+            );
         }
 
         return trim($this->fileSystem->read(Zephir::VERSION . '/php-includes'));
@@ -656,14 +665,14 @@ class Compiler implements InjectionAwareInterface
                         'cd ext && gcc -c kernel/' . $file->getBaseName() .
                         ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
                         'stdout',
-                        Zephir::VERSION . '/compile-header'
+                        escapeshellcmd(Zephir::VERSION) . '/compile-header'
                     );
                 } elseif (filemtime($path) > filemtime($path . '.gch')) {
                     $this->fileSystem->system(
                         'cd ext && gcc -c kernel/' . $file->getBaseName() .
                         ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
                         'stdout',
-                        Zephir::VERSION . '/compile-header'
+                        escapeshellcmd(Zephir::VERSION) . '/compile-header'
                     );
                 }
             }
@@ -2249,7 +2258,7 @@ class Compiler implements InjectionAwareInterface
                 return $this->fileSystem->read(Zephir::VERSION . '/gcc-version');
             }
 
-            $this->fileSystem->system('gcc -v', 'stderr', Zephir::VERSION . '/gcc-version-temp');
+            $this->fileSystem->system('gcc -v', 'stderr', escapeshellcmd(Zephir::VERSION) . '/gcc-version-temp');
             $lines = $this->fileSystem->file(Zephir::VERSION . '/gcc-version-temp');
 
             foreach ($lines as $line) {
