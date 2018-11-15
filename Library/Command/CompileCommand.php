@@ -37,6 +37,7 @@ class CompileCommand extends ContainerAwareCommand
                 'ZendEngine3'
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
             ->setHelp($this->getCompileDevHelp());
     }
 
@@ -49,8 +50,13 @@ class CompileCommand extends ContainerAwareCommand
         -W([a-z0-9\-]+)     Turns a warning off
          */
 
+        $devMode = (bool) $input->getOption('no-dev');
+        if ($devMode == false) {
+            $devMode = $input->getOption('dev') || PHP_DEBUG;
+        }
+
         // TODO: Move all the stuff from the compiler
-        $this->compiler->compile($input->getOption('dev') || PHP_DEBUG);
+        $this->compiler->compile($devMode);
 
         return 0;
     }
@@ -67,6 +73,9 @@ friendlier. These debugging symbols also enlarge the program or library signific
 
 Note: Zephir development mode will be enabled silently if your PHP binary was compiled in
 a debug configuration.
+
+In some cases, we would like to get production ready extension even if the PHP binary was
+compiled in a debug configuration. Use "--no-dev" option to achieve this behavior.
 EOT;
     }
 }
