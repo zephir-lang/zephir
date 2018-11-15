@@ -41,7 +41,7 @@ class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwa
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . PHP_EOL . $this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -62,18 +62,17 @@ class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwa
     public function getDevelopmentModeHelp()
     {
         return <<<EOT
-Compile a Zephir extension.
-
-Using "--dev" option will force compiling the extension in development mode
+Using <comment>--dev</comment> option will force compiling the extension in development mode
 (debug symbols and no optimizations). An extension compiled with debugging symbols means
 you can run a program or library through a debugger and the debugger's output will be user
 friendlier. These debugging symbols also enlarge the program or library significantly.
 
-Note: Zephir development mode will be enabled silently if your PHP binary was compiled in
+NOTE: Zephir development mode will be enabled silently if your PHP binary was compiled in
 a debug configuration.
 
 In some cases, we would like to get production ready extension even if the PHP binary was
-compiled in a debug configuration. Use "--no-dev" option to achieve this behavior.
+compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
+
 EOT;
     }
 }

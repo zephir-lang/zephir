@@ -28,7 +28,7 @@ class CompileCommandTest extends TestCase
 {
     /**
      * Common directory.
-     * unit-tests/Zephir/Test/Command/CompileCommandTest.php
+     *
      * @var string
      */
     private $pwd;
