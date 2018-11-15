@@ -11,14 +11,14 @@
 set -e
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
-DEFAULT_ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
+ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
 
 shopt -s nullglob
 
 zephir clean 2>&1
 zephir fullclean 2>&1
 # TODO
-#zephir generate ${DEFAULT_ZFLAGS} 2>&1
+#zephir generate ${ZFLAGS} 2>&1
 zephir generate 2>&1
 zephir stubs 2>&1
 zephir api 2>&1
@@ -26,9 +26,6 @@ zephir api 2>&1
 cd ext
 
 phpize
-
-CFLAGS="${CFLAGS}"
-LDFLAGS="${LDFLAGS}"
 
 if [ "${REPORT_COVERAGE}" = "1" ]; then
 	# The ltmain.sh which bundled with PHP it's from libtool 1.5.26.
@@ -45,8 +42,13 @@ if [ "${REPORT_COVERAGE}" = "1" ]; then
 
 	aclocal && ${LIBTOOLIZE_BIN} --copy --force && autoheader && autoconf
 
-	CFLAGS="--coverage -fprofile-arcs -ftest-coverage $CFLAGS"
-	LDFLAGS="--coverage ${LDFLAGS}"
+	CFLAGS=`echo "${CFLAGS}" | sed -e 's/-O[0-9s]*//g'`
+	CXXFLAGS=`echo "${CXXFLAGS}" | sed -e 's/-O[0-9s]*//g'`
+	LDFLAGS=`echo "${LDFLAGS}" | sed -e 's/--coverage//g'`
+
+    LDFLAGS="${LDFLAGS} --coverage"
+    CFLAGS="${CFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
+    CXXFLAGS="${CXXFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
 fi
 
 ./configure --enable-test CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
@@ -54,10 +56,5 @@ fi
 make -j"$(getconf _NPROCESSORS_ONLN)"
 
 cd ..
-
-#if [ "${REPORT_COVERAGE}" = "1" ]; then
-#	lcov --directory ./ext --zerocounters
-#	lcov --directory ./ext --capture --compat-libtool --initial --output-file ./coverage.info
-#fi
 
 exit $?
