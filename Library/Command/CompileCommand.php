@@ -22,9 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface
+class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {
     use DevelopmentModeAwareTrait;
+    use ZflagsAwareTrait;
 
     protected function configure()
     {
@@ -40,18 +41,11 @@ class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwa
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp());
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . PHP_EOL . $this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** TODO: Process flags
-        -f([a-z0-9\-]+)     Enables compiler optimizations
-        -fno-([a-z0-9\-]+)  Disables compiler optimizations
-        -w([a-z0-9\-]+)     Turns a warning on
-        -W([a-z0-9\-]+)     Turns a warning off
-         */
-
         // TODO: Move all the stuff from the compiler
         $this->compiler->compile(
             $this->isDevelopmentModeEnabled($input)

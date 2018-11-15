@@ -22,8 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class GenerateCommand extends ContainerAwareCommand
+class GenerateCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {
+    use ZflagsAwareTrait;
+
     protected function configure()
     {
         $this
@@ -35,18 +37,12 @@ class GenerateCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Used backend to generate extension',
                 'ZendEngine3'
-            );
+            )
+            ->setHelp($this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** TODO: Process flags
-        -f([a-z0-9\-]+)     Enables compiler optimizations
-        -fno-([a-z0-9\-]+)  Disables compiler optimizations
-        -w([a-z0-9\-]+)     Turns a warning on
-        -W([a-z0-9\-]+)     Turns a warning off
-         */
-
         // TODO: Move all the stuff from the compiler
         $this->compiler->generate(true);
 
