@@ -38,6 +38,7 @@ class BuildCommand extends ContainerAwareCommand
                 'ZendEngine3'
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Build the extension in development mode')
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Build the extension in production mode')
             ->setHelp($this->getBuildDevHelp());
     }
 
@@ -52,10 +53,15 @@ class BuildCommand extends ContainerAwareCommand
 
         $command = $this->getApplication()->find('install');
 
+        $devMode = (bool) $input->getOption('no-dev');
+        if ($devMode == false) {
+            $devMode = $input->getOption('dev') || PHP_DEBUG;
+        }
+
         $arguments = [
             'command'   => 'install',
             '--backend' => $input->getOption('backend'),
-            '--dev'     => $input->getOption('dev') || PHP_DEBUG,
+            '--dev'     => $devMode,
         ];
 
         return $command->run(new ArrayInput($arguments), $output);
@@ -67,13 +73,16 @@ class BuildCommand extends ContainerAwareCommand
 Generates/Compiles/Installs a Zephir extension.
 Just a meta command that just calls "generate", "compile" and "install" commands.
 
-Using "--dev" option will force building and install the extension in development mode
+Using "--dev" option will force building and installing the extension in development mode
 (debug symbols and no optimizations). An extension compiled with debugging symbols means
 you can run a program or library through a debugger and the debugger's output will be user
 friendlier. These debugging symbols also enlarge the program or library significantly.
 
 Note: Zephir development mode will be enabled silently if your PHP binary was compiled in
 a debug configuration.
+
+In some cases, we would like to get production ready extension even if the PHP binary was
+compiled in a debug configuration. Use "--no-dev" option to achieve this behavior.
 EOT;
     }
 }

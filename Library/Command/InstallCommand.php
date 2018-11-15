@@ -30,13 +30,19 @@ class InstallCommand extends ContainerAwareCommand
             ->setName('install')
             ->setDescription('Installs the extension in the extension directory (may require root password)')
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the extension in development mode')
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Install the extension in production mode')
             ->setHelp($this->getInstallDevHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $devMode = (bool) $input->getOption('no-dev');
+        if ($devMode == false) {
+            $devMode = $input->getOption('dev') || PHP_DEBUG;
+        }
+
         // TODO: Move all the stuff from the compiler
-        $this->compiler->install($input->getOption('dev') || PHP_DEBUG);
+        $this->compiler->install($devMode);
 
         return 0;
     }
@@ -54,6 +60,9 @@ friendlier. These debugging symbols also enlarge the program or library signific
 
 Note: Zephir development mode will be enabled silently if your PHP binary was compiled in
 a debug configuration.
+
+In some cases, we would like to get production ready extension even if the PHP binary was
+compiled in a debug configuration. Use "--no-dev" option to achieve this behavior.
 EOT;
     }
 }
