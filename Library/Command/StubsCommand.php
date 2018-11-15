@@ -22,8 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class StubsCommand extends ContainerAwareCommand
+class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {
+    use ZflagsAwareTrait;
+
     protected function configure()
     {
         $this

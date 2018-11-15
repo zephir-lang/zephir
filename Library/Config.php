@@ -25,7 +25,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @var array
      */
-    private $container = [
+    public $container = [
         'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
@@ -114,6 +114,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * Factory method to create a Config instance from the $_SERVER['argv'].
      *
      * @return Config
+     *
      * @throws Exception
      */
     public static function fromServer()
@@ -124,55 +125,51 @@ class Config implements \ArrayAccess, \JsonSerializable
          * Change configurations flags
          */
         if ($_SERVER['argc'] >= 2) {
-            for ($i = 2; $i < $_SERVER['argc']; $i++) {
-                $parameter = $_SERVER['argv'][$i];
+            $argv = $_SERVER['argv'];
+
+            for ($i = 1; $i < $_SERVER['argc']; $i++) {
+                $parameter = $argv[$i];
 
                 if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->set($matches[1], false, 'optimizations');
+                    unset($argv[$i]);
                     continue;
                 }
 
                 if (preg_match('/^-f([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->set($matches[1], true, 'optimizations');
+                    unset($argv[$i]);
+                    continue;
                 }
 
                 if (preg_match('/^-W([a-z0-9\-]+)$/', $parameter, $matches)) {
+                    //echo "{$i}: ${matches[1]}", PHP_EOL;
                     $config->set($matches[1], false, 'warnings');
+                    unset($argv[$i]);
                     continue;
                 }
 
                 if (preg_match('/^-w([a-z0-9\-]+)$/', $parameter, $matches)) {
                     $config->set($matches[1], true, 'warnings');
-                    continue;
-                }
-
-                if (preg_match('/^--([a-z0-9\-]+)$/', $parameter, $matches)) {
-                    $config->set($matches[1], true, 'extra');
-                    continue;
-                }
-
-                if (preg_match('/^--([a-z0-9\-]+)=(.*)$/', $parameter, $matches)) {
-                    $config->set($matches[1], $matches[2], 'extra');
+                    unset($argv[$i]);
                     continue;
                 }
 
                 switch ($parameter) {
-                    case '-w':
+                    case '-q':
+                    case '--quiet':
                         $config->set('silent', true);
                         break;
-
                     case '-v':
                         $config->set('verbose', true);
                         break;
-
-                    case '-V':
-                        $config->set('verbose', false);
-                        break;
-
                     default:
                         break;
                 }
             }
+
+            $_SERVER['argv'] = $argv = array_values($argv);
+            $_SERVER['argc'] = $argc = count($argv);
         }
 
         return $config;

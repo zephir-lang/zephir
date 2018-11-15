@@ -23,8 +23,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class ApiCommand extends ContainerAwareCommand
+class ApiCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {
+    use ZflagsAwareTrait;
+
     protected function configure()
     {
         $this
@@ -60,7 +62,8 @@ class ApiCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The base URL to be used when generating links'
-            );
+            )
+            ->setHelp($this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
