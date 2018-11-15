@@ -10,10 +10,25 @@
  * file that was distributed with this source code.
  */
 
-use Zephir\Bootstrap;
+use Zephir\Application;
 
 require_once __DIR__ . '/autoload.php';
 
-$bootstrap = new Bootstrap(__DIR__);
+$app = new Application(__DIR__);
 
-$bootstrap->execute();
+$app->add(new Zephir\Command\InitCommand());
+$app->add(new Zephir\Command\GenerateCommand());
+$app->add(new Zephir\Command\CompileCommand());
+$app->add(new Zephir\Command\InstallCommand());
+$app->add(new Zephir\Command\BuildCommand());
+$app->add(new Zephir\Command\CleanCommand());
+$app->add(new Zephir\Command\FullCLeanCommand());
+$app->add(new Zephir\Command\ApiCommand());
+$app->add(new Zephir\Command\StubsCommand());
+
+// TODO
+// if (\substr(__FILE__, 0, 5) === 'phar:') {
+//   $app->add(new Zephir\Command\SelfUpdateCommand());
+// }
+
+$app->run();

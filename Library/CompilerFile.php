@@ -157,10 +157,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      */
     public function genIR(Compiler $compiler)
     {
-        $version = $this->container->get(Version::class);
         $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->filePath));
 
-        $compilePath = DIRECTORY_SEPARATOR . $version . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
+        // TODO: JS => JSON
+        $compilePath = DIRECTORY_SEPARATOR . Zephir::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->filePath);
 
         $changed = false;

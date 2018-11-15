@@ -13,7 +13,7 @@ namespace Zephir\Test;
 
 use League\Container\Container;
 use League\Container\ReflectionContainer;
-use Zephir\Bootstrap;
+use Zephir\Application;
 use Zephir\Compiler;
 use Zephir\Di\Singleton;
 use Zephir\Support\TestCase;
@@ -64,7 +64,7 @@ class LifeCycleTest extends TestCase
             $container->delegate(new ReflectionContainer());
             $container->add('ZEPHIR_BACKEND', $backend);
 
-            new Bootstrap(ZEPHIRPATH, $container);
+            new Application(ZEPHIRPATH, $container);
 
             $container = Singleton::getDefault();
 
