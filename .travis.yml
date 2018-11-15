@@ -20,7 +20,6 @@ branches:
 addons:
   apt:
     packages:
-      - valgrind
       - gdb
       - lcov
 
@@ -41,105 +40,54 @@ env:
     - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.3"
-    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
     - REPORT_COVERAGE=1
-    - PHPUNIT_DONT_EXIT=0
-    - PHPUNIT_CONF=phpunit.xml.dist
     - BOX_VERSION=3.1.2
     - PATH="${HOME}/bin:${PATH}"
 
 before_install:
-  - '[[ -z "${GH_TOKEN}" ]] || composer config github-oauth.github.com ${GH_TOKEN}; echo "Configured Github token"'
-  - export PHP_MAJOR="$(php -r 'echo phpversion();' | cut -d '.' -f 1)"
-  - export PHP_MINOR="$(php -r 'echo phpversion();' | cut -d '.' -f 2)"
-  - export PHP_VERNUM="$(php-config --vernum)"
+  - if [ ! -z "${GITHUB_TOKEN}" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; echo "Add Github token"; fi
   - ulimit -c unlimited -S
+  - mkdir -p ${HOME}/bin
   - phpenv config-add .ci/999-default.ini
+  - phpenv config-rm xdebug.ini || echo "xdebug not available"
 
 install:
   - .ci/install-prereqs.sh
   - .ci/install-re2c.sh $RE2C_VERSION
-  - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-  - .ci/build-test-ext.sh
+  - flags="--ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
+  - if [ "$TRAVIS_PHP_VERSION" -eq "7.2" ]; then composer config platform.php 5.6.33; echo "Preparing to deploy"; fi
+  - travis_retry composer install $flags
+  - if [ "$(php-config --vernum)" -ge 70100 ]; then .ci/packer; echo "Build PHAR"; fi
+  - if [ "$(php-config --vernum)" -ge 70100 ]; then ln -s $(pwd)/zephir.phar ${HOME}/bin/zephir; echo "Build PHAR"; fi
+  - if [ "$(php-config --vernum)" -lt 70100 ]; then ln -s $(pwd)/zephir ${HOME}/bin/zephir; echo "Use source"; fi
 
 before_script:
-  # see: https://github.com/sebastianbergmann/phpunit/pull/3359
-  - '[[ "${PHP_VERNUM}" -lt 70300 ]] || export USE_ZEND_ALLOC=1 PHPUNIT_CONF=phpunit-no-coverage.xml.dist'
+  - .ci/build-test-ext.sh
 
 script:
-  - |
-      php \
-        -d extension=ext/modules/test.so \
-        unit-tests/phpunit \
-        -c ${PHPUNIT_CONF} \
-        --testsuite "Extension Test Suite"
-  - |
-      php \
-        -d extension=ext/modules/test.so \
-        unit-tests/phpunit \
-        -c ${PHPUNIT_CONF} \
-        --testsuite "Zephir Test Suite"
-jobs:
-  include:
-    - stage: Static Code Analysis
-      php: 7.2
-      env:
-        - REPORT_COVERAGE=0
-      script:
-        - vendor/bin/phpcs
-    - stage: Compiller testing
-      php: 7.2
-      compiler: clang
-      env:
-        - CC=clang
-        - REPORT_COVERAGE=0
-      script:
-        - |
-            php \
-              -d extension=ext/modules/test.so \
-              unit-tests/phpunit \
-              -c ${PHPUNIT_CONF} \
-              --testsuite "Extension Test Suite"
-    - stage: Packaging Test
-      php: 7.2
-      env:
-        - REPORT_COVERAGE=0
-      install:
-        - .ci/install-prereqs.sh
-        - .ci/install-re2c.sh $RE2C_VERSION
-        - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
-        - mkdir -p ${HOME}/bin
-        - |
-            wget \
-              "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
-              --quiet \
-              -O "${HOME}/bin/box"
-        - chmod +x "${HOME}/bin/box"
-        - .ci/packer
-      before_script:
-        - phpenv config-rm xdebug.ini || true
-      script:
-        - ./zephir.phar compile
-        - |
-            php \
-              -d extension=ext/modules/test.so \
-              unit-tests/phpunit \
-              -c ${PHPUNIT_CONF} \
-              --testsuite "Extension Test Suite"
-    - stage: Benchmark
-      php: 7.2
-      env:
-        - REPORT_COVERAGE=0
-      before_script:
-        - phpenv config-rm xdebug.ini || true
-      script:
-        - php -d extension=ext/modules/test.so unit-tests/microbench.php
+  - zephir
+  - ./vendor/bin/phpcs
+  - php -d extension=ext/modules/test.so unit-tests/phpunit
 
 after_success:
   - .ci/after-success.sh
-
-after_failure:
-  - .ci/after-failure.sh
+  - if [ ! -z "${CODECOV_TOKEN}" ]; then bash <(curl -s https://codecov.io/bash); fi
 
 notifications:
   email: false
+
+before_deploy:
+  - git config --global user.name cicdbot
+  - git config --global user.email team@zephir-lang.com
+  - git tag "$(zephir --dumpversion | cut -d '-' -f 1)-$(git log --format=%h -1)"
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: zephir.phar
+  skip_cleanup: true
+  on:
+    # tags: true
+    draft: true
+    repo: phalcon/zephir
+    php: '7.2'

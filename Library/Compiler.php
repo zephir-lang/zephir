@@ -11,8 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Commands\CommandGenerate;
-use Zephir\Commands\CommandInterface;
 use Zephir\Compiler\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
@@ -140,7 +138,7 @@ class Compiler implements InjectionAwareInterface
     protected $fileSystem;
 
     /**
-     * The Zephir base direcrory.
+     * The Zephir base directory.
      * @var string
      */
     private $baseDir;
@@ -443,6 +441,9 @@ class Compiler implements InjectionAwareInterface
     /**
      * Copies the base kernel to the extension destination
      *
+     * @todo
+     * @deprecated
+     *
      * @param        $src
      * @param        $dest
      * @param string $pattern
@@ -623,106 +624,60 @@ class Compiler implements InjectionAwareInterface
      */
     public function getPhpIncludeDirs()
     {
-        $version = $this->container->get(Version::class);
-
         if (!$this->environment->isWindows()) {
-            $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
+            $this->fileSystem->system('php-config --includes', 'stdout', Zephir::VERSION . '/php-includes');
         }
 
-        return trim($this->fileSystem->read($version . '/php-includes'));
+        return trim($this->fileSystem->read(Zephir::VERSION . '/php-includes'));
     }
 
     /**
-     * Pre-compile headers to speed up compilation
+     * Pre-compile headers to speed up compilation.
+     *
+     * @return void
      */
     public function preCompileHeaders()
     {
-        if (!$this->environment->isWindows()) {
-            $version = $this->container->get(Version::class);
-            $phpIncludes = $this->getPhpIncludeDirs();
+        if ($this->environment->isWindows()) {
+            return;
+        }
 
-            foreach (new \DirectoryIterator('ext/kernel') as $file) {
-                if (!$file->isDir()) {
-                    if (preg_match('/\.h$/', $file)) {
-                        $path = $file->getRealPath();
-                        if (!file_exists($path . '.gch')) {
-                            $this->fileSystem->system(
-                                'cd ext && gcc -c kernel/' . $file->getBaseName() .
-                                ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
-                                'stdout',
-                                $version . '/compile-header'
-                            );
-                        } else {
-                            if (filemtime($path) > filemtime($path . '.gch')) {
-                                $this->fileSystem->system(
-                                    'cd ext && gcc -c kernel/' . $file->getBaseName() .
-                                    ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
-                                    'stdout',
-                                    $version . '/compile-header'
-                                );
-                            }
-                        }
-                    }
+        $phpIncludes = $this->getPhpIncludeDirs();
+
+        foreach (new \DirectoryIterator('ext/kernel') as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            if (preg_match('/\.h$/', $file)) {
+                $path = $file->getRealPath();
+                if (!file_exists($path . '.gch')) {
+                    $this->fileSystem->system(
+                        'cd ext && gcc -c kernel/' . $file->getBaseName() .
+                        ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
+                        'stdout',
+                        Zephir::VERSION . '/compile-header'
+                    );
+                } elseif (filemtime($path) > filemtime($path . '.gch')) {
+                    $this->fileSystem->system(
+                        'cd ext && gcc -c kernel/' . $file->getBaseName() .
+                        ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
+                        'stdout',
+                        Zephir::VERSION . '/compile-header'
+                    );
                 }
             }
         }
     }
 
     /**
-     * Initializes a Zephir extension
-     *
-     * @param CommandInterface $command
-     *
-     * @throws Exception
-     */
-    public function init(CommandInterface $command)
-    {
-        /**
-         * If init namespace is specified
-         */
-        $namespace = $command->getParameter('namespace');
-        if (!$namespace) {
-            throw new Exception("Cannot obtain a valid initial namespace for the project");
-        }
-
-        /**
-         * Tell the user the name could be reserved by another extension
-         */
-        if (extension_loaded($namespace)) {
-            $this->logger->output('This extension can have conflicts with an existing loaded extension');
-        }
-
-        $this->config->set('namespace', $namespace);
-        $this->config->set('name', $namespace);
-
-        if (!is_dir($namespace)) {
-            mkdir($namespace);
-        }
-
-        chdir($namespace);
-        if (!is_dir($namespace)) {
-            mkdir($namespace);
-        }
-
-        /**
-         * Create 'kernel'
-         */
-        if (!is_dir('ext/kernel')) {
-            mkdir('ext/kernel', 0755, true);
-        }
-
-        // Copy the latest kernel files
-        $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
-    }
-
-    /**
      * Generates the C sources from Zephir without compiling them
      *
-     * @param CommandInterface $command
+     * @param  bool $fromGenerate
      * @return bool
      * @throws Exception
      */
-    public function generate(CommandInterface $command)
+    public function generate($fromGenerate = false)
     {
         /**
          * Get global namespace
@@ -944,19 +899,17 @@ class Compiler implements InjectionAwareInterface
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        $version = $this->container->get(Version::class);
-
         /**
          * When a new file is added or removed we need to run configure again
          */
-        if (!($command instanceof CommandGenerate)) {
-            if (!$this->fileSystem->exists($version . '/compiled-files-sum')) {
+        if (!$fromGenerate) {
+            if (!$this->fileSystem->exists(Zephir::VERSION . '/compiled-files-sum')) {
                 $needConfigure = true;
-                $this->fileSystem->write($version . '/compiled-files-sum', $hash);
+                $this->fileSystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
             } else {
-                if ($this->fileSystem->read($version . '/compiled-files-sum') != $hash) {
+                if ($this->fileSystem->read(Zephir::VERSION . '/compiled-files-sum') != $hash) {
                     $needConfigure = true;
-                    $this->fileSystem->write($version . '/compiled-files-sum', $hash);
+                    $this->fileSystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
                 }
             }
         }
@@ -968,7 +921,7 @@ class Compiler implements InjectionAwareInterface
         $this->fcallManager->genFcallCode();
 
         if ($this->config->get('stubs-run-after-generate', 'stubs')) {
-            $this->stubs($command, true);
+            $this->stubs($fromGenerate);
         }
 
         return $needConfigure;
@@ -977,12 +930,11 @@ class Compiler implements InjectionAwareInterface
     /**
      * Compiles the extension without installing it
      *
-     * @param CommandInterface $command
-     * @param bool             $development
+     * @param bool $development
      *
      * @throws Exception|CompilerException
      */
-    public function compile(CommandInterface $command, $development = false)
+    public function compile($development = false)
     {
         /**
          * Get global namespace
@@ -992,7 +944,7 @@ class Compiler implements InjectionAwareInterface
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
-        $needConfigure = $this->generate($command);
+        $needConfigure = $this->generate(false);
 
         if ($needConfigure) {
             if ($this->environment->isWindows()) {
@@ -1005,7 +957,10 @@ class Compiler implements InjectionAwareInterface
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
-                /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
+                /**
+                 * fix until patch hits all supported PHP builds
+                 * @link https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
+                 */
                 $fixMarker = "/* zephir_phpize_fix */";
 
                 $configureFile = file_get_contents('ext\\configure.js');
@@ -1077,18 +1032,22 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generate a HTML API
+     * Generate a HTML API.
      *
-     * @param CommandInterface $command
-     * @param bool             $fromGenerate
+     * @param  array $options
+     * @param  bool  $fromGenerate
+     * @return void
+     *
+     * @throws ConfigException
+     * @throws Exception
      */
-    public function api(CommandInterface $command, $fromGenerate = false)
+    public function api(array $options = [], $fromGenerate = false)
     {
         if (!$fromGenerate) {
-            $this->generate($command);
+            $this->generate();
         }
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $documentator = new Documentation($this->files, $this->config, $this->logger, $options);
         $documentator->setContainer($this->container);
 
         $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
@@ -1096,15 +1055,17 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generate IDE stubs
+     * Generate IDE stubs.
      *
-     * @param CommandInterface $command
-     * @param bool             $fromGenerate
+     * @param  bool $fromGenerate
+     * @return void
+     *
+     * @throws Exception
      */
-    public function stubs(CommandInterface $command, $fromGenerate = false)
+    public function stubs($fromGenerate = false)
     {
         if (!$fromGenerate) {
-            $this->generate($command);
+            $this->generate();
         }
 
         $this->logger->output('Generating stubs...');
@@ -1117,16 +1078,15 @@ class Compiler implements InjectionAwareInterface
         $stubsGenerator->generate($path);
     }
 
-
     /**
-     * Compiles and installs the extension
+     * Compiles and installs the extension.
      *
-     * @param CommandInterface $command
-     * @param boolean $development
+     * @param  bool $development
+     * @return void
      *
-     * @throws CompilerException
+     * @throws Exception
      */
-    public function install(CommandInterface $command, $development = false)
+    public function install($development = false)
     {
         /**
          * Get global namespace
@@ -1137,7 +1097,7 @@ class Compiler implements InjectionAwareInterface
         @unlink("compile-errors.log");
         @unlink("ext/modules/" . $namespace . ".so");
 
-        $this->compile($command, $development);
+        $this->compile($development);
         if ($this->environment->isWindows()) {
             $this->logger->output("Installation is not implemented for windows yet! Aborting!");
             exit();
@@ -1171,82 +1131,28 @@ class Compiler implements InjectionAwareInterface
         $this->logger->output('Don\'t forget to restart your web server');
     }
 
-    /**
-     * Run tests
-     *
-     * @param CommandInterface $command
-     */
-    public function test(CommandInterface $command)
-    {
-        /**
-         * Get global namespace
-         */
-        $this->checkDirectory();
-
-        $this->logger->output('Running tests...');
-
-        if (!$this->environment->isWindows()) {
-            system(
-                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
-                $exit
-            );
-        }
-    }
-
-    /**
-     * Clean the extension directory
-     *
-     * @param CommandInterface $command
-     */
-    public function clean(CommandInterface $command)
-    {
-        $this->fileSystem->clean();
-
-        if ($this->environment->isWindows()) {
-            system('cd ext && nmake clean-all');
-        } else {
-            system('cd ext && make clean > /dev/null');
-        }
-    }
-
-    /**
-     * Clean the extension directory
-     *
-     * @param CommandInterface $command
-     */
-    public function fullClean(CommandInterface $command)
-    {
-        $this->fileSystem->clean();
-        if ($this->environment->isWindows()) {
-            system('cd ext && nmake clean-all');
-            system('cd ext && phpize --clean');
-            system('cd ext && ./clean');
-        } else {
-            system('cd ext && make clean > /dev/null');
-            system('cd ext && phpize --clean > /dev/null');
-            system('cd ext && ./clean > /dev/null');
-        }
-    }
-
-    /**
-     * Compiles and installs the extension
-     *
-     * @param CommandInterface $command
-     */
-    public function build(CommandInterface $command)
-    {
-        $this->install($command, false);
-    }
-
-    /**
-     * Compiles and installs the extension in development mode (debug symbols and no optimizations)
-     *
-     * @param CommandInterface $command
-     */
-    public function buildDev(CommandInterface $command)
-    {
-        $this->install($command, true);
-    }
+// TODO
+//    /**
+//     * Run tests
+//     *
+//     * @param CommandInterface $command
+//     */
+//    public function test()
+//    {
+//        /**
+//         * Get global namespace
+//         */
+//        $this->checkDirectory();
+//
+//        $this->logger->output('Running tests...');
+//
+//        if (!$this->environment->isWindows()) {
+//            system(
+//                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
+//                $exit
+//            );
+//        }
+//    }
 
     /**
      * Process config.w32 sections
@@ -2008,8 +1914,6 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template php_project.h doesn't exist");
         }
 
-        $version = $this->container->get(Version::class);
-
         $toReplace = [
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
@@ -2019,7 +1923,7 @@ class Compiler implements InjectionAwareInterface
             '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
             '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
             '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => (string) $version,
+            '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         ];
@@ -2307,6 +2211,8 @@ class Compiler implements InjectionAwareInterface
     {
         $namespace = $this->config->get('namespace');
         if (!$namespace) {
+            // TODO: Add more user friendly message.
+            // For example assume if the user call the command from the wrong dir
             throw new Exception("Extension namespace cannot be loaded");
         }
 
@@ -2318,15 +2224,14 @@ class Compiler implements InjectionAwareInterface
             $this->fileSystem->initialize();
         }
 
-        $version = $this->container->get(Version::class);
-
-        if (!$this->fileSystem->exists((string) $version)) {
+        if (!$this->fileSystem->exists(Zephir::VERSION)) {
             if (!$this->checkIfPhpized()) {
                 $this->logger->output(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
-            $this->fileSystem->makeDirectory((string) $version);
+
+            $this->fileSystem->makeDirectory(Zephir::VERSION);
         }
 
         return $namespace;
@@ -2339,26 +2244,25 @@ class Compiler implements InjectionAwareInterface
      */
     protected function getGccVersion()
     {
-        $version = $this->container->get(Version::class);
-
         if (!$this->environment->isWindows()) {
-            if ($this->fileSystem->exists($version . '/gcc-version')) {
-                return $this->fileSystem->read($version . '/gcc-version');
+            if ($this->fileSystem->exists(Zephir::VERSION . '/gcc-version')) {
+                return $this->fileSystem->read(Zephir::VERSION . '/gcc-version');
             }
 
-            $this->fileSystem->system('gcc -v', 'stderr', $version . '/gcc-version-temp');
-            $lines = $this->fileSystem->file($version . '/gcc-version-temp');
+            $this->fileSystem->system('gcc -v', 'stderr', Zephir::VERSION . '/gcc-version-temp');
+            $lines = $this->fileSystem->file(Zephir::VERSION . '/gcc-version-temp');
 
             foreach ($lines as $line) {
                 if (strpos($line, 'LLVM') !== false) {
-                    $this->fileSystem->write($version . '/gcc-version', '4.8.0');
+                    // TODO: Get real version
+                    $this->fileSystem->write(Zephir::VERSION . '/gcc-version', '4.8.0');
                     return '4.8.0';
                 }
             }
 
             $lastLine = $lines[count($lines) - 1];
             if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
-                $this->fileSystem->write($version . '/gcc-version', $matches[0]);
+                $this->fileSystem->write(Zephir::VERSION . '/gcc-version', $matches[0]);
                 return $matches[0];
             }
         }
