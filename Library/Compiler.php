@@ -624,46 +624,47 @@ class Compiler implements InjectionAwareInterface
      */
     public function getPhpIncludeDirs()
     {
-        $version = $this->container->get(Version::class);
-
         if (!$this->environment->isWindows()) {
-            $this->fileSystem->system('php-config --includes', 'stdout', $version . '/php-includes');
+            $this->fileSystem->system('php-config --includes', 'stdout', Zephir::VERSION . '/php-includes');
         }
 
-        return trim($this->fileSystem->read($version . '/php-includes'));
+        return trim($this->fileSystem->read(Zephir::VERSION . '/php-includes'));
     }
 
     /**
-     * Pre-compile headers to speed up compilation
+     * Pre-compile headers to speed up compilation.
+     *
+     * @return void
      */
     public function preCompileHeaders()
     {
-        if (!$this->environment->isWindows()) {
-            $version = $this->container->get(Version::class);
-            $phpIncludes = $this->getPhpIncludeDirs();
+        if ($this->environment->isWindows()) {
+            return;
+        }
 
-            foreach (new \DirectoryIterator('ext/kernel') as $file) {
-                if (!$file->isDir()) {
-                    if (preg_match('/\.h$/', $file)) {
-                        $path = $file->getRealPath();
-                        if (!file_exists($path . '.gch')) {
-                            $this->fileSystem->system(
-                                'cd ext && gcc -c kernel/' . $file->getBaseName() .
-                                ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
-                                'stdout',
-                                $version . '/compile-header'
-                            );
-                        } else {
-                            if (filemtime($path) > filemtime($path . '.gch')) {
-                                $this->fileSystem->system(
-                                    'cd ext && gcc -c kernel/' . $file->getBaseName() .
-                                    ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
-                                    'stdout',
-                                    $version . '/compile-header'
-                                );
-                            }
-                        }
-                    }
+        $phpIncludes = $this->getPhpIncludeDirs();
+
+        foreach (new \DirectoryIterator('ext/kernel') as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            if (preg_match('/\.h$/', $file)) {
+                $path = $file->getRealPath();
+                if (!file_exists($path . '.gch')) {
+                    $this->fileSystem->system(
+                        'cd ext && gcc -c kernel/' . $file->getBaseName() .
+                        ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
+                        'stdout',
+                        Zephir::VERSION . '/compile-header'
+                    );
+                } elseif (filemtime($path) > filemtime($path . '.gch')) {
+                    $this->fileSystem->system(
+                        'cd ext && gcc -c kernel/' . $file->getBaseName() .
+                        ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch',
+                        'stdout',
+                        Zephir::VERSION . '/compile-header'
+                    );
                 }
             }
         }
@@ -898,19 +899,17 @@ class Compiler implements InjectionAwareInterface
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        $version = $this->container->get(Version::class);
-
         /**
          * When a new file is added or removed we need to run configure again
          */
         if (!$fromGenerate) {
-            if (!$this->fileSystem->exists($version . '/compiled-files-sum')) {
+            if (!$this->fileSystem->exists(Zephir::VERSION . '/compiled-files-sum')) {
                 $needConfigure = true;
-                $this->fileSystem->write($version . '/compiled-files-sum', $hash);
+                $this->fileSystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
             } else {
-                if ($this->fileSystem->read($version . '/compiled-files-sum') != $hash) {
+                if ($this->fileSystem->read(Zephir::VERSION . '/compiled-files-sum') != $hash) {
                     $needConfigure = true;
-                    $this->fileSystem->write($version . '/compiled-files-sum', $hash);
+                    $this->fileSystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
                 }
             }
         }
@@ -1915,8 +1914,6 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template php_project.h doesn't exist");
         }
 
-        $version = $this->container->get(Version::class);
-
         $toReplace = [
             '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
@@ -1926,7 +1923,7 @@ class Compiler implements InjectionAwareInterface
             '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
             '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
             '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => (string) $version,
+            '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         ];
@@ -2227,15 +2224,14 @@ class Compiler implements InjectionAwareInterface
             $this->fileSystem->initialize();
         }
 
-        $version = $this->container->get(Version::class);
-
-        if (!$this->fileSystem->exists((string) $version)) {
+        if (!$this->fileSystem->exists(Zephir::VERSION)) {
             if (!$this->checkIfPhpized()) {
                 $this->logger->output(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
-            $this->fileSystem->makeDirectory((string) $version);
+
+            $this->fileSystem->makeDirectory(Zephir::VERSION);
         }
 
         return $namespace;
@@ -2248,26 +2244,25 @@ class Compiler implements InjectionAwareInterface
      */
     protected function getGccVersion()
     {
-        $version = $this->container->get(Version::class);
-
         if (!$this->environment->isWindows()) {
-            if ($this->fileSystem->exists($version . '/gcc-version')) {
-                return $this->fileSystem->read($version . '/gcc-version');
+            if ($this->fileSystem->exists(Zephir::VERSION . '/gcc-version')) {
+                return $this->fileSystem->read(Zephir::VERSION . '/gcc-version');
             }
 
-            $this->fileSystem->system('gcc -v', 'stderr', $version . '/gcc-version-temp');
-            $lines = $this->fileSystem->file($version . '/gcc-version-temp');
+            $this->fileSystem->system('gcc -v', 'stderr', Zephir::VERSION . '/gcc-version-temp');
+            $lines = $this->fileSystem->file(Zephir::VERSION . '/gcc-version-temp');
 
             foreach ($lines as $line) {
                 if (strpos($line, 'LLVM') !== false) {
-                    $this->fileSystem->write($version . '/gcc-version', '4.8.0');
+                    // TODO: Get real version
+                    $this->fileSystem->write(Zephir::VERSION . '/gcc-version', '4.8.0');
                     return '4.8.0';
                 }
             }
 
             $lastLine = $lines[count($lines) - 1];
             if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
-                $this->fileSystem->write($version . '/gcc-version', $matches[0]);
+                $this->fileSystem->write(Zephir::VERSION . '/gcc-version', $matches[0]);
                 return $matches[0];
             }
         }

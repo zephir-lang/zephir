@@ -69,7 +69,6 @@ final class ServiceRegistrator implements InjectionAwareInterface
     {
         $container = $this->getContainer();
 
-        $container->share(Version::class, Version::class);
         $container->share(Parser::class, Parser::class);
     }
 

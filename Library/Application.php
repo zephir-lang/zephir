@@ -69,10 +69,7 @@ final class Application extends BaseApplication
             exit(1);
         }
 
-        parent::__construct(
-            'Zephir',
-            (string) $container->get(Version::class)
-        );
+        parent::__construct('Zephir', Zephir::VERSION);
     }
 
     /**

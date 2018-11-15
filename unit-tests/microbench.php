@@ -60,7 +60,7 @@ function total()
 
 const N = 5000000;
 
-echo "Benchmark Zephir ". (new \Zephir\Version())->get() . " \n";
+echo "Benchmark Zephir ". Zephir\Zephir::VERSION . " \n";
 
 $x = new \Test\Bench\Foo();
 
