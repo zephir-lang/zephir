@@ -11,17 +11,18 @@
 set -e
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
-ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable"
+
+# TODO: Export ZFLAGS and process by Config class
+ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
+ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
 
 shopt -s nullglob
 
 zephir clean 2>&1
 zephir fullclean 2>&1
-# TODO
-#zephir generate ${ZFLAGS} 2>&1
-zephir generate 2>&1
-zephir stubs 2>&1
-zephir api 2>&1
+zephir generate ${ZFLAGS} 2>&1
+zephir stubs ${ZFLAGS} 2>&1
+zephir api ${ZFLAGS} 2>&1
 
 cd ext
 
