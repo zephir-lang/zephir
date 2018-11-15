@@ -71,7 +71,6 @@ script:
 after_success:
   - .ci/after-success.sh
   - if [ ! -z "${CODECOV_TOKEN}" ]; then bash <(curl -s https://codecov.io/bash); fi
-  - export TRAVIS_TAG="$(zephir --dumpversion | cut -d '-' -f 1)-$(git log --format=%h -1)"
 
 notifications:
   email: false
@@ -86,10 +85,8 @@ deploy:
   file: zephir.phar
   skip_cleanup: true
   draft: true
-  name: "$(zephir --dumpversion) $(date +'%Y.%m.%d %H:%M:%S')"
+  name: "$(zephir --dumpversion)"
   on:
-    # all_branches: true
-    # condition: $TRAVIS_BRANCH =~ ^development|master$
     tags: true
     php: '7.2'
   repo: phalcon/zephir
