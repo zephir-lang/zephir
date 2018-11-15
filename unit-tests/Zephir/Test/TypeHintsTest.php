@@ -12,7 +12,6 @@
 namespace Zephir\Test;
 
 use Zephir\Application;
-use Zephir\Commands\CommandGenerate;
 use Zephir\Compiler;
 use Zephir\Di\Singleton;
 use Zephir\Support\TestCase;
@@ -60,7 +59,6 @@ class TypeHintsTest extends TestCase
 
     protected function generate($backend)
     {
-        $this->markTestSkipped();
         chdir(ZEPHIRPATH . '/unit-tests/fixtures/typehints');
 
         try {
@@ -72,7 +70,7 @@ class TypeHintsTest extends TestCase
             /** @var Compiler $compiler */
             $compiler = $container->get(Compiler::class);
 
-            // $compiler->generate(new CommandGenerate($container->get(Manager::class)));
+            $compiler->generate(true);
         } catch (\Exception $e) {
             $this->fail($e->getMessage());
         }
