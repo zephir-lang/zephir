@@ -71,6 +71,7 @@ script:
 after_success:
   - .ci/after-success.sh
   - if [ ! -z "${CODECOV_TOKEN}" ]; then bash <(curl -s https://codecov.io/bash); fi
+  - export TRAVIS_TAG="$(zephir --dumpversion | cut -d '-' -f 1)-$(git log --format=%h -1)"
 
 notifications:
   email: false
@@ -78,7 +79,6 @@ notifications:
 before_deploy:
   - git config --global user.name cicdbot
   - git config --global user.email team@zephir-lang.com
-  - export TRAVIS_TAG="$(zephir --dumpversion | cut -d '-' -f 1)-$(git log --format=%h -1)"
 
 deploy:
   provider: releases
@@ -87,7 +87,7 @@ deploy:
   skip_cleanup: true
   draft: true
   name: "$(zephir --dumpversion) $(date +'%Y.%m.%d %H:%M:%S')"
-  body: "$(git log -1)"
+  body: "'$(git log -1)'"
   on:
     # all_branches: true
     # condition: $TRAVIS_BRANCH =~ ^development|master$
