@@ -17,7 +17,9 @@ shopt -s nullglob
 
 ./zephir clean 2>&1
 ./zephir fullclean 2>&1
-./zephir generate ${DEFAULT_ZFLAGS} 2>&1
+# TODO
+#./zephir generate ${DEFAULT_ZFLAGS} 2>&1
+./zephir generate 2>&1
 ./zephir stubs 2>&1
 ./zephir api 2>&1
 

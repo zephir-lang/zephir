@@ -41,7 +41,7 @@ class StubsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: Move all the stuff from the compiler
-        $this->compiler->stubs($input->getOption('dev'));
+        $this->compiler->stubs();
 
         return 0;
     }
