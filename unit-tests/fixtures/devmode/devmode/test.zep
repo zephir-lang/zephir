@@ -1,0 +1,5 @@
+namespace Devmode;
+
+class Test
+{
+}
