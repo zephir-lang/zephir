@@ -87,7 +87,6 @@ deploy:
   skip_cleanup: true
   draft: true
   name: "$(zephir --dumpversion) $(date +'%Y.%m.%d %H:%M:%S')"
-  body: "'$(git log -1)'"
   on:
     # all_branches: true
     # condition: $TRAVIS_BRANCH =~ ^development|master$
