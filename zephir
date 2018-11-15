@@ -14,6 +14,39 @@ use Zephir\Application;
 
 require_once __DIR__ . '/autoload.php';
 
+if (PHP_SAPI !== 'cli') {
+    fprintf(
+        STDERR,
+        'Warning: Composer should be invoked via the CLI version of PHP, not the %s SAPI.' . PHP_EOL,
+        PHP_SAPI
+    );
+}
+
+if (class_exists('Composer\Autoload\ClassLoader', false) == false) {
+    if (\substr(__FILE__, 0, 5) === 'phar:') {
+        $solution = 'Try to reinstall Zephir to solve this problem.' . PHP_EOL;
+    } else {
+        $solution =
+            'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+            '    composer install' . PHP_EOL . PHP_EOL .
+            'You can learn all about Composer:' . PHP_EOL .
+            ' - https://getcomposer.org'  . PHP_EOL;
+    }
+
+    fprintf(
+        STDERR,
+        'Unable to locate system dependencies.' . PHP_EOL .
+        '%s' . PHP_EOL .
+        'If the problem remains, ask for help on the forum:' . PHP_EOL .
+        ' - https://forum.zephir-lang.com ' . PHP_EOL . PHP_EOL .
+        'Or file an issue  at GitHub:' . PHP_EOL .
+        ' - https://github.com/phalcon/zephir' . PHP_EOL . PHP_EOL,
+        $solution
+    );
+
+    exit(1);
+}
+
 $app = new Application(__DIR__);
 
 $app->add(new Zephir\Command\InitCommand());
