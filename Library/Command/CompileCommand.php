@@ -22,8 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class CompileCommand extends ContainerAwareCommand
+class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface
 {
+    use DevelopmentModeAwareTrait;
+
     protected function configure()
     {
         $this
@@ -38,7 +40,7 @@ class CompileCommand extends ContainerAwareCommand
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
-            ->setHelp($this->getCompileDevHelp());
+            ->setHelp($this->getDevelopmentModeHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -50,18 +52,20 @@ class CompileCommand extends ContainerAwareCommand
         -W([a-z0-9\-]+)     Turns a warning off
          */
 
-        $devMode = (bool) $input->getOption('no-dev');
-        if ($devMode == false) {
-            $devMode = $input->getOption('dev') || PHP_DEBUG;
-        }
-
         // TODO: Move all the stuff from the compiler
-        $this->compiler->compile($devMode);
+        $this->compiler->compile(
+            $this->isDevelopmentModeEnabled($input)
+        );
 
         return 0;
     }
 
-    private function getCompileDevHelp()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getDevelopmentModeHelp()
     {
         return <<<EOT
 Compile a Zephir extension.
