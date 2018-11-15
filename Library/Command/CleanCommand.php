@@ -40,7 +40,7 @@ class CleanCommand extends ContainerAwareCommand
         if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
         } else {
-            system('cd ext && pwd && make clean > /dev/null');
+            system('cd ext && make clean > /dev/null');
         }
 
         return 0;
