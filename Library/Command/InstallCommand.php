@@ -22,8 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class InstallCommand extends ContainerAwareCommand
+class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface
 {
+    use DevelopmentModeAwareTrait;
+
     protected function configure()
     {
         $this
@@ -31,23 +33,25 @@ class InstallCommand extends ContainerAwareCommand
             ->setDescription('Installs the extension in the extension directory (may require root password)')
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Install the extension in production mode')
-            ->setHelp($this->getInstallDevHelp());
+            ->setHelp($this->getDevelopmentModeHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $devMode = (bool) $input->getOption('no-dev');
-        if ($devMode == false) {
-            $devMode = $input->getOption('dev') || PHP_DEBUG;
-        }
-
         // TODO: Move all the stuff from the compiler
-        $this->compiler->install($devMode);
+        $this->compiler->install(
+            $this->isDevelopmentModeEnabled($input)
+        );
 
         return 0;
     }
 
-    private function getInstallDevHelp()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getDevelopmentModeHelp()
     {
         return <<<EOT
 Installs the extension in the extension directory.
