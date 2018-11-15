@@ -208,7 +208,7 @@ class Documentation implements InjectionAwareInterface
         }
 
         /** @var Environment $environment */
-        $environment = $this->container->get(Environment::class);
+        $environment = $this->container->get('environment');
 
         $themesDirectories[] = $environment->getPath('templates/Api/themes');
         $this->themesDirectories = $themesDirectories;
@@ -293,7 +293,7 @@ class Documentation implements InjectionAwareInterface
 
 
         /** @var Environment $environment */
-        $environment = $this->container->get(Environment::class);
+        $environment = $this->container->get('environment');
 
         $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
         $this->theme->drawFile($sitemapFile);

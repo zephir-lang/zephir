@@ -60,7 +60,7 @@ final class Application extends BaseApplication
             $container = $this->serviceRegistrator->getContainer();
         } catch (\Exception $e) {
             // TODO: Handle it better by ErrorHandler
-            $config = (isset($container) && $container->has(Config::class)) ? $container->get(Config::class) : null;
+            $config = (isset($container) && $container->has('config')) ? $container->get('config') : null;
             fwrite(
                 STDERR,
                 $this->formatErrorMessage($e, $config)
@@ -70,7 +70,8 @@ final class Application extends BaseApplication
         }
 
         parent::__construct(
-            'Zephir', (string) $container->get(Version::class)
+            'Zephir',
+            (string) $container->get(Version::class)
         );
     }
 
@@ -184,7 +185,7 @@ final class Application extends BaseApplication
         $container = $this->serviceRegistrator->getContainer();
 
         /** @var Environment $environment */
-        $environment = $container->has(Environment::class) ? $container->get(Environment::class) : null;
+        $environment = $container->has('environment') ? $container->get('environment') : null;
 
         $preparePaths = function ($path) use ($environment) {
             if ($environment) {

@@ -62,7 +62,7 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getInternalKernelPath()
     {
-        return Singleton::getDefault()->get(Environment::class)->getKernelsPath($this->name);
+        return Singleton::getDefault()->get('environment')->getKernelsPath($this->name);
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getInternalTemplatePath()
     {
-        return Singleton::getDefault()->get(Environment::class)->getTemplatesPath($this->name);
+        return Singleton::getDefault()->get('environment')->getTemplatesPath($this->name);
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class BaseBackend implements FcallAwareInterface
     {
         $templatepath = rtrim($this->config->get('templatepath', 'backend'), '\\/');
         if (empty($templatepath)) {
-            $templatepath = Singleton::getDefault()->get(Environment::class)->getTemplatesPath();
+            $templatepath = Singleton::getDefault()->get('environment')->getTemplatesPath();
         }
 
         $filepath = $templatepath . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . $filename;

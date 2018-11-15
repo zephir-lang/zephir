@@ -71,15 +71,6 @@ final class ServiceRegistrator implements InjectionAwareInterface
 
         $container->share(Version::class, Version::class);
         $container->share(Parser::class, Parser::class);
-
-        // TODO: Move to the service
-        $logger = function () use ($container) {
-            return new Logger($container->get(Config::class));
-        };
-
-        $container
-            ->share(Logger::class, $logger)
-            ->setAlias('logger');
     }
 
     /**
@@ -89,6 +80,12 @@ final class ServiceRegistrator implements InjectionAwareInterface
      */
     protected function registerBaseServices()
     {
+        $container = $this->getContainer();
+
+        $container->share('logger', function () use ($container) {
+            return new Logger($container->get('config'));
+        });
+
         $this->registerService(new ConfigProvider());
         $this->registerService(new ParserManagerProvider());
         $this->registerService(new BackendProvider());

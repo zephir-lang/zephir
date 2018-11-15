@@ -53,7 +53,6 @@ Using "--dev" option will force compile and install the extension in development
 you can run a program or library through a debugger and the debugger's output will be user
 friendlier. These debugging symbols also enlarge the program or library significantly. 
 EOT
-
             );
     }
 

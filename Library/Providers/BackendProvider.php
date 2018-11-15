@@ -15,7 +15,6 @@ use League\Container\Container;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zephir\BaseBackend;
-use Zephir\Config;
 use Zephir\Di\ServiceProviderInterface;
 use Zephir\Exception\IllegalStateException;
 
@@ -38,7 +37,7 @@ final class BackendProvider implements ServiceProviderInterface
     {
         $backendClassName = $this->resolveBackendClass($container);
         $service = function () use ($container, $backendClassName) {
-            return new $backendClassName($container->get(Config::class));
+            return new $backendClassName($container->get('config'));
         };
 
          $container

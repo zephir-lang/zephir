@@ -34,7 +34,6 @@ final class ConfigProvider implements ServiceProviderInterface
     public function register(ContainerInterface $container)
     {
         $container
-            ->share(Config::class, Config::fromServer())
-            ->setAlias('config');
+            ->share('config', Config::fromServer());
     }
 }

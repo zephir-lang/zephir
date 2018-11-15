@@ -34,7 +34,7 @@ final class ParserManagerProvider implements ServiceProviderInterface
     public function register(ContainerInterface $container)
     {
         $container->share(Manager::class, function () use ($container) {
-            return new Manager($container->get(Parser::class), $container->get(Logger::class));
+            return new Manager($container->get(Parser::class), $container->get('logger'));
         });
     }
 }
