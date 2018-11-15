@@ -23,8 +23,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Zephir\Command
  */
-class BuildCommand extends ContainerAwareCommand
+class BuildCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface
 {
+    use DevelopmentModeAwareTrait;
+
     protected function configure()
     {
         $this
@@ -39,7 +41,7 @@ class BuildCommand extends ContainerAwareCommand
             )
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Build the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Build the extension in production mode')
-            ->setHelp($this->getBuildDevHelp());
+            ->setHelp($this->getDevelopmentModeHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -53,21 +55,21 @@ class BuildCommand extends ContainerAwareCommand
 
         $command = $this->getApplication()->find('install');
 
-        $devMode = (bool) $input->getOption('no-dev');
-        if ($devMode == false) {
-            $devMode = $input->getOption('dev') || PHP_DEBUG;
-        }
-
         $arguments = [
             'command'   => 'install',
             '--backend' => $input->getOption('backend'),
-            '--dev'     => $devMode,
+            '--dev'     => $this->isDevelopmentModeEnabled($input),
         ];
 
         return $command->run(new ArrayInput($arguments), $output);
     }
 
-    private function getBuildDevHelp()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getDevelopmentModeHelp()
     {
         return <<<EOT
 Generates/Compiles/Installs a Zephir extension.
