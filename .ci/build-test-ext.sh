@@ -28,12 +28,12 @@ cd ext
 
 phpize
 
-if [ "${REPORT_COVERAGE}" = "1" ]; then
+if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 	# The ltmain.sh which bundled with PHP it's from libtool 1.5.26.
 	# However, the version of libtool that claims to no longer remove
 	# ".gcno" profiler information is libtool 2.2.6. The fix is probably
 	# in later libtool versions as well.
-	if [ "$(uname -s 2>/dev/null)" = "Darwin" ]; then
+	if [[ "$(uname -s 2>/dev/null)" = "Darwin" ]]; then
 		# macOS
 		LIBTOOLIZE_BIN=$(command -v glibtoolize 2>/dev/null)
 	else
@@ -47,14 +47,34 @@ if [ "${REPORT_COVERAGE}" = "1" ]; then
 	CXXFLAGS=`echo "${CXXFLAGS}" | sed -e 's/-O[0-9s]*//g'`
 	LDFLAGS=`echo "${LDFLAGS}" | sed -e 's/--coverage//g'`
 
-    LDFLAGS="${LDFLAGS} --coverage"
-    CFLAGS="${CFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
-    CXXFLAGS="${CXXFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
+	LDFLAGS="${LDFLAGS} --coverage"
+	CFLAGS="${CFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
+	CXXFLAGS="${CXXFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
 fi
 
 ./configure --enable-test CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 
 make -j"$(getconf _NPROCESSORS_ONLN)"
+
+if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
+	if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
+		echo -e "lcov does not exist.\nSkip capturing coverage data."
+	else
+		output=${PROJECT_ROOT}/unit-tests/output/lcov.info
+
+		# Reset all execution counts to zero
+		lcov --directory ${PROJECT_ROOT} --zerocounters
+
+		# Capture coverage data
+		lcov \
+			--directory ${PROJECT_ROOT} \
+			--capture \
+			--compat-libtool \
+			--initial \
+			--base-directory=${PROJECT_ROOT} \
+			--output-file ${output}
+	fi
+fi
 
 cd ..
 
