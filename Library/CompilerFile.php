@@ -147,9 +147,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Compiles the file generating a JSON intermediate representation
+     * Compiles the file generating a JSON intermediate representation.
      *
-     * @param Compiler $compiler
+     * @param  Compiler $compiler
      * @return array
      *
      * @throws IllegalStateException
@@ -157,40 +157,48 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      */
     public function genIR(Compiler $compiler)
     {
-        $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->filePath));
+        $normalizedPath = $this->filesystem->normalizePath($this->filePath);
 
         // TODO: JS => JSON
-        $compilePath = DIRECTORY_SEPARATOR . Zephir::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
+        $compilePath = Zephir::VERSION . "/{$normalizedPath}.js";
         $zepRealPath = realpath($this->filePath);
 
-        $changed = false;
-
-        $fileSystem = $compiler->getFileSystem();
-        if ($fileSystem->exists($compilePath)) {
-            $modificationTime = $fileSystem->modificationTime($compilePath);
+        if ($this->filesystem->exists($compilePath)) {
+            $modificationTime = $this->filesystem->modificationTime($compilePath);
             if ($modificationTime < filemtime($zepRealPath)) {
-                $changed = true;
+                $this->filesystem->delete($compilePath);
+                if ($this->filesystem->exists($compilePath . '.php') != false) {
+                    $this->filesystem->delete($compilePath . '.php');
+                }
             }
-        } else {
-            $changed = true;
         }
 
         $ir = null;
-        if ($changed) {
+        if ($this->filesystem->exists($compilePath) == false) {
             $parser = $compiler->getParserManager()->getParser();
             $ir = $parser->parse($zepRealPath);
-            $fileSystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
+            $this->filesystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
         }
 
-        if ($changed || !$fileSystem->exists($compilePath . '.php')) {
-            if (!isset($ir)) {
-                $ir = json_decode($fileSystem->read($compilePath), true);
+        if ($this->filesystem->exists($compilePath . '.php') == false) {
+            if (empty($ir)) {
+                $ir = json_decode($this->filesystem->read($compilePath), true);
             }
+
+            if (is_array($ir) == false) {
+                throw new IllegalStateException(
+                    sprintf(
+                        'Generating the intermediate representation for the file "%s" was failed.',
+                        realpath($this->filePath)
+                    )
+                );
+            }
+
             $data = '<?php return ' . var_export($ir, true) . ';';
-            $fileSystem->write($compilePath . '.php', $data);
+            $this->filesystem->write($compilePath . '.php', $data);
         }
 
-        return $fileSystem->requireFile($compilePath . '.php');
+        return $this->filesystem->requireFile($compilePath . '.php');
     }
 
     /**
@@ -943,21 +951,20 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
                 }
             } else {
-                $fileSystem = $compiler->getFileSystem();
 
                 /**
                  * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
                  * thus avoiding unnecessary recompilations
                  */
                 $output = $codePrinter->getOutput();
-                $hash = $fileSystem->getHashFile('md5', $filePath, true);
+                $hash = $this->filesystem->getHashFile('md5', $filePath, true);
                 if (md5($output) != $hash) {
                     file_put_contents($filePath, $output);
                 }
 
                 if ($compilationContext->headerPrinter) {
                     $output = $compilationContext->headerPrinter->getOutput();
-                    $hash = $fileSystem->getHashFile('md5', $filePathHeader, true);
+                    $hash = $this->filesystem->getHashFile('md5', $filePathHeader, true);
                     if (md5($output) != $hash) {
                         file_put_contents($filePathHeader, $output);
                     }

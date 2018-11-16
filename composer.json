@@ -27,7 +27,9 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-xml": "*",
+        "ext-SPL": "*",
         "league/container": "^2.4 || ^3.2",
+        "league/flysystem": "1.0.*",
         "symfony/console": "3.4.*"
     },
     "require-dev": {
