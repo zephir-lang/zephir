@@ -7,7 +7,6 @@
 
 .temp/
 .libs/
-ext/
 ide/
 doc/
 vendor/

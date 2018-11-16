@@ -13,6 +13,18 @@ PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 PHPUNIT_REPORT=${PROJECT_ROOT}/unit-tests/output/clover.xml
 
+if [[ -z ${REPORT_COVERAGE+x} ]] || [[ "$REPORT_COVERAGE" != "true" ]]; then
+	echo -e "\nUploading reports is not enabled.\nSkip uploading reports to Codecov.\n"
+	exit 0
+fi
+
+if [[ "${CI}" = "true" ]]; then
+	if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then
+		echo -e "\nUploading reports is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
+		exit 0
+	fi
+fi
+
 if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 	echo -e "lcov does not exist.\nSkip capturing coverage data."
 else
