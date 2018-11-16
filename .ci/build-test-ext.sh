@@ -65,12 +65,14 @@ if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 	else
 		# Reset all execution counts to zero
 		lcov \
+			--quiet \
 			--directory ext \
 			--base-directory=${PROJECT_ROOT} \
 			--zerocounters
 
 		# Capture coverage data
 		lcov \
+			--quiet \
 			--directory ext \
 			--base-directory=${PROJECT_ROOT} \
 			--capture \
