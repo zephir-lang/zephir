@@ -11,9 +11,9 @@
 
 namespace Zephir\FileSystem;
 
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
-use function Zephir\unlink_recursive;
+use League\Flysystem;
+use Zephir\Exception\RuntimeException;
+use Zephir\Exception\InvalidArgumentException;
 use Zephir\Zephir;
 
 /**
@@ -23,32 +23,39 @@ use Zephir\Zephir;
  *
  * @package Zephir\FileSystem
  */
-class HardDisk implements InjectionAwareInterface
+final class HardDisk implements FileSystemInterface
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
+    /** @var Flysystem\FilesystemInterface */
+    private $filesystem;
 
-    protected $basePath;
+    /** @var string */
+    private $localPath;
 
-    protected $initialized = false;
+    /** @var bool */
+    private $initialized = false;
 
     /**
      * HardDisk constructor
      *
-     * @param string $basePath
+     * @param  Flysystem\FilesystemInterface $filesystem
+     * @param  string                        $localPath
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($basePath = '.temp/')
+    public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = '.temp')
     {
-        $this->__DiInject();
+        $this->filesystem = $filesystem;
+        $this->localPath = trim($localPath, '\\/');
 
-        $this->basePath = $basePath;
+        if (empty($this->localPath)) {
+            throw new InvalidArgumentException('The temporary container can not be empty.');
+        }
     }
 
     /**
-     * Checks if the filesystem is initialized
+     * {@inheritdoc}
      *
-     * @return boolean
+     * @return bool
      */
     public function isInitialized()
     {
@@ -56,157 +63,207 @@ class HardDisk implements InjectionAwareInterface
     }
 
     /**
-     * Initialize the filesystem
+     * {@inheritdoc}
+     *
+     * @return void
+     *
+     * @throws RuntimeException
      */
     public function initialize()
     {
-        if (!is_dir($this->basePath)) {
-            mkdir($this->basePath);
+        if ($this->exists($this->localPath) == false) {
+            if ($this->filesystem->createDir($this->localPath) == false) {
+                throw new RuntimeException(
+                    'Unable to create a local storage for temporary filesystem operations'
+                );
+            }
         }
-        $this->basePath = realpath($this->basePath) . DIRECTORY_SEPARATOR;
+
         $this->initialized = true;
     }
 
     /**
-     * Checks whether a temporary entry does exist
+     * {@inheritdoc}
      *
-     * @param string $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function exists($path)
     {
-        return file_exists($this->basePath . $path);
+        return $this->filesystem->has($this->localPath . "/{$path}");
     }
 
     /**
-     * Creates a directory inside the temporary container
+     * {@inheritdoc}
      *
-     * @param string $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function makeDirectory($path)
     {
-        return mkdir($this->basePath . $path);
+        return $this->filesystem->createDir($this->localPath . "/{$path}");
     }
 
     /**
-     * Returns a temporary entry as an array
+     * {@inheritdoc}
      *
-     * @param string $path
+     * @param  string $path
      * @return array
+     *
+     * @throws Flysystem\FileNotFoundException
      */
     public function file($path)
     {
-        return file($this->basePath . $path);
+        $contents = $this->filesystem->read($this->localPath . "/{$path}");
+
+        return preg_split("/\r\n|\n|\r/", $contents);
     }
 
     /**
-     * Returns the modification time of a temporary  entry
+     * {@inheritdoc}
      *
-     * @param string $path
-     * @return boolean
+     * @param  string $path
+     *
+     * @throws Flysystem\FileNotFoundException
      */
     public function modificationTime($path)
     {
-        return filemtime($this->basePath . $path);
+        return (int) $this->filesystem->getTimestamp($this->localPath . "/{$path}");
     }
 
     /**
-     * Writes data from a temporary entry
+     * Writes data from a temporary entry.
      *
-     * @param string $path
+     * @param  string $path
+     * @return string
+     *
+     * @throws Flysystem\FileNotFoundException
      */
     public function read($path)
     {
-        return file_get_contents($this->basePath . $path);
+        return (string) $this->filesystem->read($this->localPath . "/{$path}");
     }
 
     /**
-     * Writes data into a temporary entry
+     * {@inheritdoc}
      *
-     * @param string $path
-     * @param string $data
+     * @param  string $path
+     * @return void
+     *
+     * @throws Flysystem\FileNotFoundException
      */
-    public function write($path, $data)
+    public function delete($path)
     {
-        return file_put_contents($this->basePath . $path, $data);
+        $this->filesystem->delete($this->localPath . "/{$path}");
     }
 
     /**
-     * Executes a command and saves the result into a temporary entry
+     * {@inheritdoc}
      *
-     * @param string $command
-     * @param string $descriptor
-     * @param string $destination
+     * @param  string $path
+     * @param  string $contents
+     * @return void
+     *
+     * @throws Flysystem\FileExistsException
+     */
+    public function write($path, $contents)
+    {
+        $this->filesystem->write($this->localPath . "/{$path}", $contents);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $command
+     * @param  string $descriptor
+     * @param  string $destination
+     *
+     * @return void
      */
     public function system($command, $descriptor, $destination)
     {
         switch ($descriptor) {
+            default:
             case 'stdout':
-                system($command . ' > ' . $this->basePath . $destination);
+                system($command . ' > ' . realpath($this->localPath) . "/{$destination}");
                 break;
-
             case 'stderr':
-                system($command . ' 2> ' . $this->basePath . $destination);
+                system($command . ' 2> ' . realpath($this->localPath) . "/{$destination}");
                 break;
         }
     }
 
     /**
-     * Requires a file from the temporary directory
+     * {@inheritdoc}
      *
-     * @param string $path
+     * @param  string $path
      * @return mixed
      */
     public function requireFile($path)
     {
-        return require $this->basePath . $path;
+        // Another possible approach:
+        //
+        // $code = $this->filesystem->read($this->localPath . "/{$path}");
+        // return eval(str_replace('<?php ', '', $code));
+
+        return require realpath($this->localPath) . "/{$path}";
     }
 
     /**
-     * Deletes the temporary directory.
+     * {@inheritdoc}
      *
      * @return void
+     *
+     * @throws Flysystem\RootViolationException
      */
     public function clean()
     {
-        unlink_recursive($this->basePath);
+        $this->filesystem->deleteDir($this->localPath);
     }
 
     /**
-     * This function does not perform operations in the temporary
-     * directory but it caches the results to avoid reprocessing
+     * {@inheritdoc}
      *
-     * @param string $algorithm
-     * @param string $path
-     * @param boolean $cache
+     * This function does not perform operations in the temporary
+     * directory but it caches the results to avoid reprocessing.
+     *
+     * @param  string  $algorithm
+     * @param  string  $sourceFile
+     * @param  boolean $useCache
      * @return string
+     *
+     * @throws Flysystem\FileExistsException
+     * @throws Flysystem\FileNotFoundException
      */
-    public function getHashFile($algorithm, $path, $cache = false)
+    public function getHashFile($algorithm, $sourceFile, $useCache = false)
     {
-        if ($cache == false) {
-            return hash_file($algorithm, $path);
-        } else {
-            $changed = false;
-
-            $cacheFile = $this->basePath . Zephir::VERSION . DIRECTORY_SEPARATOR . str_replace([DIRECTORY_SEPARATOR, ':', '/'], '_', $path) . '.md5';
-            if (!file_exists($cacheFile)) {
-                $hash = hash_file($algorithm, $path);
-                file_put_contents($cacheFile, $hash);
-                $changed = true;
-            } else {
-                if (filemtime($path) > filemtime($cacheFile)) {
-                    $hash = hash_file($algorithm, $path);
-                    file_put_contents($cacheFile, $hash);
-                    $changed = true;
-                }
-            }
-
-            if (!$changed) {
-                return file_get_contents($cacheFile);
-            }
-
-            return $hash;
+        if ($useCache == false) {
+            return hash_file($algorithm, $sourceFile);
         }
+
+        $cacheFile = sprintf(
+            '%s/%s/%s.%s',
+            $this->localPath,
+            Zephir::VERSION,
+            $this->normalizePath($sourceFile),
+            $algorithm
+        );
+
+        if ($this->filesystem->has($cacheFile) == false) {
+            $contents = hash_file($algorithm, $sourceFile);
+            $this->filesystem->write($cacheFile, $contents);
+            return $contents;
+        } elseif ($this->filesystem->getTimestamp($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
+            $contents = hash_file($algorithm, $sourceFile);
+            $this->filesystem->update($cacheFile, $contents);
+            return $contents;
+        } else {
+            return $this->filesystem->read($cacheFile);
+        }
+    }
+
+    public function normalizePath($path)
+    {
+        return str_replace(['\\', ':', '/'], '_', $path);
     }
 }

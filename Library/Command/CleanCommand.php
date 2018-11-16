@@ -13,7 +13,6 @@ namespace Zephir\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zephir\FileSystem\HardDisk;
 
 /**
  * Zephir\Command\CleanCommand
@@ -33,9 +32,7 @@ class CleanCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: Replace by service
-        $fileSystem = new HardDisk();
-        $fileSystem->clean();
+        $this->filesystem->clean();
 
         if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
