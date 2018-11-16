@@ -9,18 +9,39 @@
 
 set -e +o pipefail
 
-say() {
-  echo -e "$1"
-}
+PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
+C_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
+
+if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
+	echo -e "lcov does not exist.\nSkip capturing coverage data."
+else
+	# Capture coverage data
+	lcov \
+		--no-checksum \
+		--directory ${PROJECT_ROOT} \
+		--capture \
+		--compat-libtool \
+		--output-file ${C_REPORT}
+
+	# Remove files matching non-project patterns
+	lcov \
+		--remove coverage.info "/usr*" \
+		--remove coverage.info "${HOME}/.phpenv/*" \
+		--compat-libtool \
+		--output-file ${C_REPORT}
+fi
+
+# Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
+#    export CODECOV_TOKEN=<codecov token>
 
 if [[ -z ${CODECOV_TOKEN+x} ]]; then
-	say "\nThe CODECOV_TOKEN variable is absent or empty.\nSkip uploading reports to Codecov.\n"
+	echo -e "\nThe CODECOV_TOKEN variable is absent or empty.\nSkip uploading reports to Codecov.\n"
 	exit 0;
 fi
 
-if [[ "${CI}" = "true" ]]; then
-	if [[ ! -z ${TRAVIS_PHP_VERSION+x} ]] && [[ "${TRAVIS_PHP_VERSION}" = "5.6" ]]; then
-		say "\nUploading reports is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
+if [[ "${CI}" = "true" ]] && [[ "$TRAVIS" = "true" ]]; then
+	if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then
+		echo -e "\nUploading reports is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
 		exit 0;
 	fi
 fi
@@ -28,4 +49,6 @@ fi
 curl -sSl https://codecov.io/bash -o codecov.sh
 chmod +x codecov.sh
 
-./codecov.sh -v
+if [[ -f "${C_REPORT}" ]]; then
+	./codecov.sh -f "${C_REPORT}"
+fi
