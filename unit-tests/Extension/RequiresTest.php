@@ -39,4 +39,18 @@ class RequiresTest extends TestCase
             $r->requireExternal3(__DIR__ . '/../fixtures/require-me-3.php')
         );
     }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1713
+     */
+    public function shouldRequirePhar()
+    {
+        $r = new Requires();
+
+        $this->assertEquals(
+            "I'm in",
+            $r->requireExternal1('phar://' . __DIR__ . '/../fixtures/requires/myapp.phar/index.php')
+        );
+    }
 }
