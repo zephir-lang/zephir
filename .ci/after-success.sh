@@ -18,7 +18,8 @@ else
 	# Capture coverage data
 	lcov \
 		--no-checksum \
-		--directory ${PROJECT_ROOT} \
+		--directory ext \
+		--base-directory=${PROJECT_ROOT} \
 		--capture \
 		--compat-libtool \
 		--output-file ${LCOV_REPORT}
@@ -29,6 +30,10 @@ else
 		--remove ${LCOV_REPORT} "${HOME}/.phpenv/*" \
 		--compat-libtool \
 		--output-file ${LCOV_REPORT}
+
+	# FIXME: Fix the report
+	# 	Cannot open source file ${PROJECT_ROOT}/kernel/fcall.h
+	sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${LCOV_REPORT}
 fi
 
 # Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
