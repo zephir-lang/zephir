@@ -28,6 +28,7 @@ use Zephir\Support\PropertyAccessor;
  * @property-read \Zephir\Logger $logger
  * @property-read \Zephir\Config $config
  * @property-read \Zephir\Compiler $compiler
+ * @property-read \Zephir\FileSystem\FileSystemInterface $filesystem
  */
 trait ContainerAwareTrait
 {
