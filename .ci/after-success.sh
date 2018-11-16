@@ -40,14 +40,9 @@ else
 fi
 
 # Don't install this unless we're actually on travis
-if [[ "${TRAVIS}" = "true" ]]; then
-	gem install coveralls-lcov
-fi
-
-if [[ -f "${LCOV_REPORT}" ]]; then
-	echo -e "Uploading coverage report: ${LCOV_REPORT}...\n"
-	coveralls-lcov "${LCOV_REPORT}"
-fi
+#if [[ "${TRAVIS}" = "true" ]]; then
+#	gem install coveralls-lcov
+#fi
 
 # Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
 #    export CODECOV_TOKEN=<codecov token>
@@ -59,6 +54,11 @@ fi
 
 curl -sSl https://codecov.io/bash -o codecov.sh
 chmod +x codecov.sh
+
+if [[ -f "${LCOV_REPORT}" ]]; then
+	echo -e "Uploading coverage report: ${LCOV_REPORT}...\n"
+	./codecov.sh -f "${LCOV_REPORT}"
+fi
 
 if [[ -f "${PHPUNIT_REPORT}" ]]; then
 	echo -e "Uploading coverage report: ${PHPUNIT_REPORT}...\n"
