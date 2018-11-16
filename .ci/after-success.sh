@@ -10,7 +10,7 @@
 set -e +o pipefail
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
-C_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
+LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
 if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 	echo -e "lcov does not exist.\nSkip capturing coverage data."
@@ -21,14 +21,14 @@ else
 		--directory ${PROJECT_ROOT} \
 		--capture \
 		--compat-libtool \
-		--output-file ${C_REPORT}
+		--output-file ${LCOV_REPORT}
 
 	# Remove files matching non-project patterns
 	lcov \
-		--remove coverage.info "/usr*" \
-		--remove coverage.info "${HOME}/.phpenv/*" \
+		--remove ${LCOV_REPORT} "/usr*" \
+		--remove ${LCOV_REPORT} "${HOME}/.phpenv/*" \
 		--compat-libtool \
-		--output-file ${C_REPORT}
+		--output-file ${LCOV_REPORT}
 fi
 
 # Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
@@ -49,6 +49,6 @@ fi
 curl -sSl https://codecov.io/bash -o codecov.sh
 chmod +x codecov.sh
 
-if [[ -f "${C_REPORT}" ]]; then
-	./codecov.sh -f "${C_REPORT}"
+if [[ -f "${LCOV_REPORT}" ]]; then
+	./codecov.sh -f "${LCOV_REPORT}"
 fi
