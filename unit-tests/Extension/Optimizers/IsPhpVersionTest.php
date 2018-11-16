@@ -9,22 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Extension;
+namespace Extension\Optimizers;
 
+use Test\Issue1404;
 use Zephir\Support\TestCase;
 
-if (version_compare(PHP_VERSION, '5.6', '<')) {
-    require_once('Issue1404TestTrait55.php');
-    class_alias('\Extension\Issue1404TestTrait55', '\Extension\Issue1404TestTrait');
-} else {
-    require_once('Issue1404TestTrait56.php');
-    class_alias('\Extension\Issue1404TestTrait56', '\Extension\Issue1404TestTrait');
-}
-
-class Issue1404Test extends TestCase
+/**
+ * Extension\Optimizers\IsPhpVersionTest
+ *
+ * @issue https://github.com/phalcon/zephir/issues/1404
+ * @package Extension\Optimizers
+ */
+class IsPhpVersionTest extends TestCase
 {
-    use Issue1404TestTrait;
-
     const PHP_RELEASES_LIMIT = 17;
     const PHP_MINOR_LIMIT = 3;
 
@@ -32,12 +29,34 @@ class Issue1404Test extends TestCase
 
     public function setUp()
     {
-        $this->test = new \Test\Issue1404();
+        $this->test = new Issue1404();
     }
 
     public function tearDown()
     {
         $this->test = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  \Exception|\Throwable $error
+     *
+     * @throws \Exception|\Throwable
+     */
+    protected function onNotSuccessfulTest($error)
+    {
+        $phpVer = sprintf(
+            'PHP_VERSION_ID:%d(%d.%d.%d)',
+            PHP_VERSION_ID,
+            PHP_MAJOR_VERSION,
+            PHP_MINOR_VERSION,
+            PHP_RELEASE_VERSION
+        );
+
+        fwrite(STDOUT, "{$phpVer}\nError: {$error}");
+
+        throw $error;
     }
 
     public function phpVersionProvider()
@@ -177,7 +196,7 @@ class Issue1404Test extends TestCase
     {
         $versionProvider = [];
 
-        for ($i = 1, $id = 70101; $i <= Issue1404Test::PHP_RELEASES_LIMIT; $i++, $id++) {
+        for ($i = 1, $id = 70101; $i <= self::PHP_RELEASES_LIMIT; $i++, $id++) {
             $versionProvider[] = ['testIsPhpVersionUsing'.$id, "7.1.$i"];
         }
 
@@ -199,7 +218,7 @@ class Issue1404Test extends TestCase
     {
         $versionProvider = [];
 
-        for ($i = 1, $id = 70100; $i <= Issue1404Test::PHP_MINOR_LIMIT; $i++, $id += 100) {
+        for ($i = 1, $id = 70100; $i <= self::PHP_MINOR_LIMIT; $i++, $id += 100) {
             $versionProvider[] = ['testIsPhpVersionUsing'.$id, "7.$i"];
         }
 
