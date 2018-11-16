@@ -30,8 +30,8 @@
         <ini name="display_startup_errors" value="on"/>
     </php>
 
-    <!-- logging>
+    <logging>
         <log type="coverage-clover" target="./unit-tests/output/clover.xml"/>
-        <log type="coverage-html" target="./unit-tests/output"/>
-    </logging -->
+        <!-- log type="coverage-html" target="./unit-tests/output/html"/-->
+    </logging>
 </phpunit>

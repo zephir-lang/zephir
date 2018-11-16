@@ -43,7 +43,6 @@ before_install:
   - ulimit -c unlimited -S
   - mkdir -p ${HOME}/bin
   - phpenv config-add .ci/999-default.ini
-  - phpenv config-rm xdebug.ini || echo "xdebug not available"
 
 install:
   - .ci/install-prereqs.sh
@@ -60,7 +59,7 @@ before_script:
 
 script:
   - zephir --ansi
-  - ./vendor/bin/phpcs
+  - vendor/bin/phpcs
   - php -d extension=ext/modules/test.so unit-tests/phpunit
 
 after_success:
