@@ -16,4 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added missed CLI option `--export-classes` to flag whether classes must be exported.
   If export-classes is enabled all headers are copied to `include/php/ext`.
 
+### Fixed
+- Fixed regression introduced in the 0.10.12 related to `require` file using protocols
+  [#1713](https://github.com/phalcon/zephir/issues/1713)
+
 [Unreleased]: https://github.com/phalcon/zephir/compare/0.11.3...HEAD
