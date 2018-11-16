@@ -11,12 +11,14 @@ set -e +o pipefail
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
+PHPUNIT_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
 if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 	echo -e "lcov does not exist.\nSkip capturing coverage data."
 else
 	# Capture coverage data
 	lcov \
+		--quiet \
 		--no-checksum \
 		--directory ext \
 		--base-directory=${PROJECT_ROOT} \
@@ -26,6 +28,7 @@ else
 
 	# Remove files matching non-project patterns
 	lcov \
+		--quiet \
 		--remove ${LCOV_REPORT} "/usr*" \
 		--remove ${LCOV_REPORT} "${HOME}/.phpenv/*" \
 		--compat-libtool \
@@ -42,12 +45,10 @@ fi
 if [[ -z ${CODECOV_TOKEN+x} ]]; then
 	echo -e "\nThe CODECOV_TOKEN variable is absent or empty.\nSkip uploading reports to Codecov.\n"
 	exit 0;
-fi
-
-if [[ "${CI}" = "true" ]] && [[ "$TRAVIS" = "true" ]]; then
-	if [[ "$TRAVIS_PHP_VERSION" = "5.6" ]]; then
-		echo -e "\nUploading reports is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
-		exit 0;
+else
+	# Don't install this unless we're actually on travis
+	if [[ "${TRAVIS}" = "true" ]]; then
+		gem install coveralls-lcov
 	fi
 fi
 
@@ -55,5 +56,11 @@ curl -sSl https://codecov.io/bash -o codecov.sh
 chmod +x codecov.sh
 
 if [[ -f "${LCOV_REPORT}" ]]; then
-	./codecov.sh -f "${LCOV_REPORT}"
+	echo -e "Uploading coverage...\n"
+	coveralls-lcov "${LCOV_REPORT}"
+	#./codecov.sh -f "${LCOV_REPORT}"
 fi
+
+#if [[ -f "${PHPUNIT_REPORT}" ]]; then
+#	./codecov.sh -f "${PHPUNIT_REPORT}"
+#fi
