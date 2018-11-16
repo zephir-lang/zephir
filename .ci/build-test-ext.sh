@@ -57,24 +57,32 @@ fi
 
 make -j"$(getconf _NPROCESSORS_ONLN)"
 
+cd ..
+
 if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 	if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 		echo -e "lcov does not exist.\nSkip capturing coverage data."
 	else
 		# Reset all execution counts to zero
-		lcov --directory ${PROJECT_ROOT} --zerocounters
+		lcov \
+			--directory ext \
+			--base-directory=${PROJECT_ROOT} \
+			--zerocounters
 
 		# Capture coverage data
 		lcov \
-			--directory ${PROJECT_ROOT} \
+			--directory ext \
+			--base-directory=${PROJECT_ROOT} \
 			--capture \
 			--compat-libtool \
 			--initial \
-			--base-directory=${PROJECT_ROOT} \
 			--output-file ${LCOV_REPORT}
+
+		# FIXME: Fix the report
+		# 	geninfo: WARNING: could not open ${PROJECT_ROOT}/kernel/fcall.h
+		# 	geninfo: WARNING: some exclusion markers may be ignored
+		sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${LCOV_REPORT}
 	fi
 fi
-
-cd ..
 
 exit $?
