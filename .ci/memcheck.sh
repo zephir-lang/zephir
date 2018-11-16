@@ -7,8 +7,8 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [ $(valgrind -v glibtoolize 2>/dev/null) = "" ]; then
-	echo "Skip check for memory leaks. Valgring does not exist"
+if [[ $(command -v valgrind 2>/dev/null) = "" ]]; then
+	echo -e "Valgring does not exist.\Can not check for memory leaks."
 	exit 1
 fi
 
