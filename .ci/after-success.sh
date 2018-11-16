@@ -39,17 +39,12 @@ else
 	sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${LCOV_REPORT}
 fi
 
-# Don't install this unless we're actually on travis
-#if [[ "${TRAVIS}" = "true" ]]; then
-#	gem install coveralls-lcov
-#fi
-
 # Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
 #    export CODECOV_TOKEN=<codecov token>
 
 if [[ -z ${CODECOV_TOKEN+x} ]]; then
 	echo -e "\nThe CODECOV_TOKEN variable is absent or empty.\nSkip uploading reports to Codecov.\n"
-	exit 0;
+	exit 0
 fi
 
 curl -sSl https://codecov.io/bash -o codecov.sh
