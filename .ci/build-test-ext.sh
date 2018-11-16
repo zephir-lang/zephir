@@ -11,6 +11,7 @@
 set -e
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
+LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
 # TODO: Export ZFLAGS and process by Config class
 ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
@@ -60,8 +61,6 @@ if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 	if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 		echo -e "lcov does not exist.\nSkip capturing coverage data."
 	else
-		output=${PROJECT_ROOT}/unit-tests/output/lcov.info
-
 		# Reset all execution counts to zero
 		lcov --directory ${PROJECT_ROOT} --zerocounters
 
@@ -72,7 +71,7 @@ if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 			--compat-libtool \
 			--initial \
 			--base-directory=${PROJECT_ROOT} \
-			--output-file ${output}
+			--output-file ${LCOV_REPORT}
 	fi
 fi
 
