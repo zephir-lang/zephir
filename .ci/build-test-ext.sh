@@ -19,11 +19,11 @@ ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-
 
 shopt -s nullglob
 
-zephir clean 2>&1
-zephir fullclean 2>&1
-zephir generate ${ZFLAGS} 2>&1
-zephir stubs ${ZFLAGS} 2>&1
-zephir api ${ZFLAGS} 2>&1
+zephir clean 2>&1 || exit 1
+zephir fullclean 2>&1 || exit 1
+zephir generate ${ZFLAGS} 2>&1 || exit 1
+zephir stubs ${ZFLAGS} 2>&1 || exit 1
+zephir api ${ZFLAGS} 2>&1 || exit 1
 
 cd ext
 
@@ -68,7 +68,7 @@ if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 			--quiet \
 			--directory ext \
 			--base-directory=${PROJECT_ROOT} \
-			--zerocounters
+			--zerocounters 2>/dev/null
 
 		# Capture coverage data
 		lcov \
@@ -78,7 +78,7 @@ if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
 			--capture \
 			--compat-libtool \
 			--initial \
-			--output-file ${LCOV_REPORT}
+			--output-file ${LCOV_REPORT} 2>/dev/null
 
 		# FIXME: Fix the report
 		# 	geninfo: WARNING: could not open ${PROJECT_ROOT}/kernel/fcall.h
