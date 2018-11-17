@@ -7,7 +7,7 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [ "${CI}" != "true" ]; then
+if [[ -z ${CI+x} ]] || [[ "$CI" != "true" ]]; then
 	echo "This script is designed to run inside a CI container only. Stop."
 	exit 1
 fi

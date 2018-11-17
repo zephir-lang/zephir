@@ -34,7 +34,7 @@ env:
   global:
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.1.3"
-    - REPORT_COVERAGE=true
+    - COLLECT_COVERAGE=true
     - BOX_VERSION=3.1.2
     - PATH="${HOME}/bin:${PATH}"
 
@@ -42,7 +42,6 @@ before_install:
   - if [ ! -z "${GITHUB_TOKEN}" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; echo "Add Github token"; fi
   - ulimit -c unlimited -S
   - mkdir -p ${HOME}/bin
-  - phpenv config-add .ci/999-default.ini
 
 install:
   - .ci/install-prereqs.sh
@@ -56,6 +55,13 @@ install:
 
 before_script:
   - .ci/build-test-ext.sh
+  # https://github.com/phalcon/zephir/pull/1537
+  - echo 'variables_order=EGPCS' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # https://github.com/phalcon/zephir/pull/1654
+  - echo 'enable_dl=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # https://github.com/phalcon/zephir/issues/1713
+  - echo 'allow_url_include=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo 'allow_url_fopen=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
   - zephir --ansi

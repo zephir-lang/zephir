@@ -13,14 +13,15 @@ set -e
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
-# TODO: Export ZFLAGS and process by Config class
-ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
-ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
-
 shopt -s nullglob
 
 zephir clean 2>&1 || exit 1
 zephir fullclean 2>&1 || exit 1
+
+# TODO: Export ZFLAGS and process by Config class
+ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
+ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
+
 zephir generate ${ZFLAGS} 2>&1 || exit 1
 zephir stubs ${ZFLAGS} 2>&1 || exit 1
 zephir api ${ZFLAGS} 2>&1 || exit 1
@@ -29,7 +30,7 @@ cd ext
 
 phpize
 
-if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
+if [[ ! -z ${COLLECT_COVERAGE+x} ]] && [[ "$COLLECT_COVERAGE" = "true" ]]; then
 	# The ltmain.sh which bundled with PHP it's from libtool 1.5.26.
 	# However, the version of libtool that claims to no longer remove
 	# ".gcno" profiler information is libtool 2.2.6. The fix is probably
@@ -59,7 +60,7 @@ make -j"$(getconf _NPROCESSORS_ONLN)"
 
 cd ..
 
-if [[ ! -z ${REPORT_COVERAGE+x} ]] && [[ "$REPORT_COVERAGE" = "true" ]]; then
+if [[ ! -z ${COLLECT_COVERAGE+x} ]] && [[ "$COLLECT_COVERAGE" = "true" ]]; then
 	if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
 		echo -e "lcov does not exist.\nSkip capturing coverage data."
 	else
