@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Compiler;
+namespace Zephir\Exception;
 
 use Zephir\TypeAwareInterface;
 
 /**
- * Zephir\Compiler\IllegalOperationException
+ * Zephir\Exception\IllegalOperationException
  *
  * @package Zephir\Compiler
  */
@@ -24,7 +24,7 @@ class IllegalOperationException extends CompilerException
      * IllegalOperationException constructor.
      *
      * @param array              $statement The statement
-     * @param TypeAwareInterface $type      Oprator type
+     * @param TypeAwareInterface $type      Operator type
      * @param array|null         $extra     Extra info [optional].
      */
     public function __construct(array $statement, TypeAwareInterface $type, array $extra = null)

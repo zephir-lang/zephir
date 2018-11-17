@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;

@@ -13,7 +13,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
 
@@ -82,7 +82,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @internal param string $variable
      */
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

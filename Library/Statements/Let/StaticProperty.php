@@ -13,8 +13,8 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
-use Zephir\Compiler\IllegalOperationException;
+use Zephir\Exception\CompilerException;
+use Zephir\Exception\IllegalOperationException;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
 
@@ -34,8 +34,8 @@ class StaticProperty
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
-     * @throws IllegalOperationException
+     * @throws \Zephir\Exception\CompilerException
+     * @throws \Zephir\Exception\IllegalOperationException
      * @internal param string $variable
      */
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

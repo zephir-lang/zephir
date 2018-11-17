@@ -15,7 +15,7 @@ use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\CompilationContext;
 use Zephir\Operators\BaseOperator;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * Zephir\Operators\Other\TypeHintOperator
@@ -42,7 +42,7 @@ class TypeHintOperator extends BaseOperator
      * @param array              $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

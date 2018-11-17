@@ -13,7 +13,7 @@ namespace Zephir;
 
 use Zephir\Variable\Globals;
 use Zephir\Passes\LocalContextPass;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * Zephir\SymbolTable
@@ -236,7 +236,7 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array $statement
      * @return Variable
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -470,7 +470,7 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array $statement
      * @return Variable
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function getVariableForUpdate($name, CompilationContext $compilationContext, array $statement = null)
     {

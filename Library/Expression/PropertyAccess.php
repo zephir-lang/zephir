@@ -13,7 +13,7 @@ namespace Zephir\Expression;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable;
 

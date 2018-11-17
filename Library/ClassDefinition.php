@@ -13,7 +13,7 @@ namespace Zephir;
 
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * Zephir\ClassDefinition
@@ -483,7 +483,7 @@ class ClassDefinition
      * Adds a property to the definition
      *
      * @param ClassProperty $property
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function addProperty(ClassProperty $property)
     {
@@ -498,7 +498,7 @@ class ClassDefinition
      * Adds a constant to the definition
      *
      * @param ClassConstant $constant
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function addConstant(ClassConstant $constant)
     {
@@ -616,7 +616,7 @@ class ClassDefinition
      * @param array $statement
      *
      * @return void
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function addMethod(ClassMethod $method, $statement = null)
     {
@@ -635,7 +635,7 @@ class ClassDefinition
      * @param array $statement
      *
      * @return void
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function updateMethod(ClassMethod $method, $statement = null)
     {
@@ -848,7 +848,7 @@ class ClassDefinition
      *
      * @param ClassDefinition $classDefinition
      * @param ClassDefinition $interfaceDefinition
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function checkInterfaceImplements(ClassDefinition $classDefinition, ClassDefinition $interfaceDefinition)
     {
@@ -870,7 +870,7 @@ class ClassDefinition
      * Pre-compiles a class/interface gathering method information required by other methods
      *
      * @param CompilationContext $compilationContext
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function preCompile(CompilationContext $compilationContext)
     {

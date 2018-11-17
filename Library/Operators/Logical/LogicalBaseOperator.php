@@ -13,7 +13,7 @@ namespace Zephir\Operators\Logical;
 
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
 

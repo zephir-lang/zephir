@@ -17,7 +17,7 @@ use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
@@ -1016,7 +1016,7 @@ class Backend extends BaseBackend
      * @param  CompilationContext            $compilationContext
      * @return array
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {

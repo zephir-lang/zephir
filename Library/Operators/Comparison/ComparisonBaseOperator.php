@@ -15,7 +15,7 @@ use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * BaseOperator
@@ -34,7 +34,7 @@ class ComparisonBaseOperator extends BaseOperator
      * @param $expr
      * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function optimizeTypeOf($expr, CompilationContext $compilationContext)
     {

@@ -13,11 +13,11 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 use Zephir\Detectors\ReadDetector;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\IllegalOperationException;
+use Zephir\Exception\IllegalOperationException;
 
 /**
  * Zephir\Statements\Let\Variable
@@ -39,7 +39,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
-     * @throws IllegalOperationException
+     * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doNumericAssignment(
         CodePrinter $codePrinter,
@@ -276,7 +276,7 @@ class Variable
      * @param CompilationContext $compilationContext
      *
      * @return void
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @throws IllegalOperationException
      */
     private function doDoubleAssignment(
@@ -465,7 +465,7 @@ class Variable
      *
      * @return void
      * @throws CompilerException
-     * @throws IllegalOperationException
+     * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doStringAssignment(
         CodePrinter $codePrinter,

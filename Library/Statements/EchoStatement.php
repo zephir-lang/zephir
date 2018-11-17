@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use function Zephir\add_slashes;
 
@@ -25,7 +25,7 @@ class EchoStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {

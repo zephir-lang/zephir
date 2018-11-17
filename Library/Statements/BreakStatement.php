@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * BreakStatement
@@ -23,7 +23,7 @@ class BreakStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
