@@ -81,10 +81,10 @@ class CompileCommandTest extends TestCase
      * @dataProvider devModeProvider
      * @issue https://github.com/phalcon/zephir/issues/1520
      *
-     * @param array  $mode
+     * @param string $flag
      * @param string $cflags
      */
-    public function shouldDetermineDevOption(array $mode, $cflags)
+    public function shouldDetermineDevOption($flag, $cflags)
     {
         // TODO: Create a test for Windows
         if (\strtoupper(\substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -106,7 +106,10 @@ class CompileCommandTest extends TestCase
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(
-            ['command'  => $command->getName()] + $mode,
+            [
+                'command' => $command->getName(),
+                $flag     => true,
+            ],
             ['verbosity' => OutputInterface::VERBOSITY_QUIET]
         );
 
@@ -116,8 +119,8 @@ class CompileCommandTest extends TestCase
     public function devModeProvider()
     {
         return [
-            [['--no-dev' => true], '-O2 -fvisibility=hidden -Wparentheses( -flto)? -DZEPHIR_RELEASE=1'],
-            [['--dev' => true], '-O0 -g3'],
+            ['--no-dev', '-O2 -fvisibility=hidden -Wparentheses( -flto)? -DZEPHIR_RELEASE=1'],
+            ['--dev', '-O0 -g3'],
         ];
     }
 
