@@ -7,17 +7,17 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [ "${CI}" != "true" ]; then
+if [[ -z ${CI+x} ]] || [[ "$CI" != "true" ]]; then
 	echo "This script is designed to run inside a CI container only. Stop."
 	exit 1
 fi
 
-if [ -z ${RE2C_VERSION+x} ]; then
+if [[ -z ${RE2C_VERSION+x} ]]; then
 	echo "The RE2C_VERSION is unset. Stop."
 	exit 1
 fi
 
-if [ "${RE2C_VERSION}" == "system" ]; then
+if [[ "${RE2C_VERSION}" == "system" ]]; then
 	echo "Use system re2c. Skip."
 	exit 0
 fi
