@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 

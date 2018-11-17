@@ -29,7 +29,7 @@ class FetchOperator extends BaseOperator
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

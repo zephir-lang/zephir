@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\IllegalStateException;
@@ -179,7 +179,7 @@ class Compiler implements InjectionAwareInterface
      * @param  array $statement
      * @return void
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
@@ -200,7 +200,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $filePath
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @throws IllegalStateException
      * @throws ParseException
      */
@@ -268,7 +268,7 @@ class Compiler implements InjectionAwareInterface
      * @param string $className
      * @param string $location
      * @return boolean
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @throws Exception
      * @throws ParseException
      */
@@ -601,7 +601,7 @@ class Compiler implements InjectionAwareInterface
         $gccFlags = getenv('CFLAGS');
 
         if (!is_string($gccFlags)) {
-            if (!$development) {
+            if ($development == false) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
                     $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
@@ -614,9 +614,6 @@ class Compiler implements InjectionAwareInterface
         }
 
         return $gccFlags;
-
-        // TODO
-        return '';
     }
 
     /**
@@ -976,7 +973,7 @@ class Compiler implements InjectionAwareInterface
                     $hasChanged = true;
                 }
 
-                /* fix php's broken phpize pathing ... */
+                /* fix php's broken phpize patching ... */
                 $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
                 $pos = strpos($configureFile, $marker);
                 if ($pos !== false) {

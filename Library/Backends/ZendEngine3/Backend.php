@@ -17,7 +17,7 @@ use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;

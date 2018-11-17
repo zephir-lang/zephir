@@ -13,7 +13,7 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -29,7 +29,7 @@ class FwriteOptimizer extends OptimizerAbstract
      * @param Call $call
      * @param CompilationContext $context
      * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

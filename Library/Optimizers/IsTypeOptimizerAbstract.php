@@ -14,7 +14,7 @@ namespace Zephir\Optimizers;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
@@ -23,7 +23,7 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
      * @param Call $call
      * @param CompilationContext $context
      * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

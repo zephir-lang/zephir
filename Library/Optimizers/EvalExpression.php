@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Branch;
@@ -65,7 +65,7 @@ class EvalExpression
      * @param $exprRaw
      * @param CompilationContext $compilationContext
      * @return bool|string
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize($exprRaw, CompilationContext $compilationContext)
     {

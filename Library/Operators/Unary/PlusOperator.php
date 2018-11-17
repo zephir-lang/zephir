@@ -15,7 +15,7 @@ use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 class PlusOperator extends BaseOperator
 {
@@ -25,7 +25,7 @@ class PlusOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

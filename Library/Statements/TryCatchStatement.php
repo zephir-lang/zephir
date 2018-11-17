@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;

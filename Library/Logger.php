@@ -12,7 +12,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 
 /**
  * Logger
@@ -52,7 +52,7 @@ class Logger
      * @param $type
      * @param $node
      * @return bool
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function warning($message, $type, $node)
     {

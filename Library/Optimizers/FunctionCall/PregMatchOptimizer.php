@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Variable;
@@ -38,7 +38,7 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param  CompilationContext $context
      * @return CompiledExpression
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -120,7 +120,7 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param  CompilationContext $context
      * @return array
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     private function processOptionals(array &$expression, Call $call, CompilationContext $context)
     {

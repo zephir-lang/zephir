@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
