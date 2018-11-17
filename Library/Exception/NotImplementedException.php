@@ -12,13 +12,14 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\RuntimeException
+ * Zephir\Exception\NotImplementedException
  *
- * Exception thrown if an error which can only be found on runtime occurs.
+ * Thrown to indicate that a block of code has not been implemented.
+ * Represents the case where the author has yet to implement
+ * the logic at this point in the program.
  *
  * @package Zephir\Exception
  */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+class NotImplementedException extends RuntimeException
 {
-    use ExceptionExtraAwareTrait;
 }
