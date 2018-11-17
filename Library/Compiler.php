@@ -15,8 +15,8 @@ use Zephir\Compiler\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Exception\NotImplementedException;
 use Zephir\Fcall\FcallManagerInterface;
-use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Parser\Manager;
 use Zephir\Parser\ParseException;
 
@@ -485,7 +485,7 @@ class Compiler implements InjectionAwareInterface
     protected function recursiveDeletePath($path, $mask)
     {
         if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
-            $this->logger->output("Directory {$path} does not exist or it is not readble. Skip...");
+            $this->logger->output("Directory {$path} does not exist or it is not readable. Skip...");
             return;
         }
 
@@ -947,6 +947,7 @@ class Compiler implements InjectionAwareInterface
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
+
         $needConfigure = $this->generate(false);
 
         if ($needConfigure) {
@@ -1084,78 +1085,66 @@ class Compiler implements InjectionAwareInterface
     /**
      * Compiles and installs the extension.
      *
+     * TODO: Move to the separated installer
+     *
      * @param  bool $development
      * @return void
      *
      * @throws Exception
+     * @throws NotImplementedException
+     * @throws CompilerException
      */
     public function install($development = false)
     {
-        /**
-         * Get global namespace
-         */
+        // Get global namespace
         $namespace = str_replace('\\', '_', $this->checkDirectory());
+        $currentDir = getcwd();
 
-        @unlink("compile.log");
-        @unlink("compile-errors.log");
-        @unlink("ext/modules/" . $namespace . ".so");
+        if ($this->environment->isWindows()) {
+            throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
+        }
+
+        if (file_exists("{$currentDir}/compile.log")) {
+            unlink("{$currentDir}/compile.log");
+        }
+
+        if (file_exists("{$currentDir}/compile-errors.log")) {
+            unlink("{$currentDir}/compile-errors.log");
+        }
+
+        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
+            unlink("{$currentDir}/ext/modules/{$namespace}.so");
+        }
 
         $this->compile($development);
-        if ($this->environment->isWindows()) {
-            $this->logger->output("Installation is not implemented for windows yet! Aborting!");
-            exit();
-        }
 
         $this->logger->output('Installing...');
 
         $gccFlags = $this->getGccFlags($development);
 
-        $currentDir = getcwd();
-        exec(
-            '(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ' .
-            'make 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log" && ' .
-            'sudo make install 2>>"' . $currentDir . '/compile-errors.log" 1>>"' . $currentDir . '/compile.log")',
-            $output,
-            $exit
+        $command = strtr(
+            // TODO: Sort out with sudo
+            'cd ext && export CC="gcc" && export CFLAGS=":cflags" && ' .
+            'make 2>> ":stderr" 1>> ":stdout" && ' .
+            'sudo make install 2>> ":stderr" 1>> ":stdout"',
+            [
+                ':cflags' => $gccFlags,
+                ':stderr' => "{$currentDir}/compile-errors.log",
+                ':stdout' => "{$currentDir}/compile.log",
+            ]
         );
+
+        $this->logger->output($command);
+        exec($command, $output, $exit);
 
         $fileName = $this->getConfig()->get('extension-name') ?: $namespace;
 
-        if (!file_exists("ext/modules/" . $fileName . ".so")) {
+        if (file_exists("{$currentDir}/ext/modules/{$fileName}.so") == false) {
             throw new CompilerException(
-                "Internal extension compilation failed. Check compile-errors.log for more information"
+                "Internal extension compilation failed. Check compile-errors.log for more information."
             );
         }
-
-        $this->logger->output('Extension installed!');
-        if (!extension_loaded($namespace)) {
-            $this->logger->output('Add extension=' . $namespace . '.so to your php.ini');
-        }
-        $this->logger->output('Don\'t forget to restart your web server');
     }
-
-// TODO
-//    /**
-//     * Run tests
-//     *
-//     * @param CommandInterface $command
-//     */
-//    public function test()
-//    {
-//        /**
-//         * Get global namespace
-//         */
-//        $this->checkDirectory();
-//
-//        $this->logger->output('Running tests...');
-//
-//        if (!$this->environment->isWindows()) {
-//            system(
-//                'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
-//                $exit
-//            );
-//        }
-//    }
 
     /**
      * Process config.w32 sections
