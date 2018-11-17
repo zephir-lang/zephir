@@ -13,7 +13,7 @@ namespace Zephir\Expression;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Variable;
 use function Zephir\add_slashes;
@@ -113,7 +113,7 @@ class Constants
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\Compiler\CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

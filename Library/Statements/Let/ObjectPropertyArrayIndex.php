@@ -12,7 +12,7 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
@@ -32,7 +32,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
@@ -234,7 +234,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {

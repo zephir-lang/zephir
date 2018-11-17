@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
@@ -110,7 +110,7 @@ class DeclareStatement extends StatementAbstract
      * @param $defaultType
      * @param $dateType
      * @param $variable
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public static function invalidDefaultTypeException($defaultType, $dateType, $variable)
     {

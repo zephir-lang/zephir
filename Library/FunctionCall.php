@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Di\Singleton;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -339,7 +339,7 @@ class FunctionCall extends Call
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
-     * @throws Exception|CompilerException
+     * @throws Exception|\Zephir\Exception\CompilerException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
@@ -531,7 +531,7 @@ class FunctionCall extends Call
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {

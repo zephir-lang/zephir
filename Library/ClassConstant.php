@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
@@ -158,7 +158,7 @@ class ClassConstant
      *
      * @return void
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext)

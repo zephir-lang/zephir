@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\StatementsBlock;
 use Zephir\Passes\LoopBreakPass;
 use Zephir\Branch;
@@ -26,7 +26,7 @@ class LoopStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {

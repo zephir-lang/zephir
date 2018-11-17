@@ -15,7 +15,7 @@ use Zephir\Expression;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Operators\BaseOperator;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
@@ -29,7 +29,7 @@ class TypeOfOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

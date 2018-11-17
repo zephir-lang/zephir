@@ -12,7 +12,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**

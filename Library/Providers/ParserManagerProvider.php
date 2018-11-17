@@ -14,7 +14,6 @@ namespace Zephir\Providers;
 use League\Container\Container;
 use Psr\Container\ContainerInterface;
 use Zephir\Di\ServiceProviderInterface;
-use Zephir\Logger;
 use Zephir\Parser;
 use Zephir\Parser\Manager;
 

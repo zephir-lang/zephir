@@ -16,7 +16,7 @@ use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Exception;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
 
@@ -35,7 +35,7 @@ class NewInstanceTypeOperator extends BaseOperator
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

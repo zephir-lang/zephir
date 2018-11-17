@@ -14,7 +14,7 @@ namespace Zephir\Operators\Arithmetical;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Variable;

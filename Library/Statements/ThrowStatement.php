@@ -14,7 +14,7 @@ namespace Zephir\Statements;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use function Zephir\add_slashes;
 use function Zephir\fqcn;

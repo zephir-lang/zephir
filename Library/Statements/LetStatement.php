@@ -12,7 +12,7 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Expression;
 use Zephir\Statements\Let\Variable as LetVariable;
@@ -45,7 +45,7 @@ class LetStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {

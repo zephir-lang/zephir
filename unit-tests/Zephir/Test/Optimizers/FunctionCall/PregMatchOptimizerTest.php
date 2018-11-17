@@ -43,7 +43,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at least 2 parameters, 0 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -60,7 +60,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at least 2 parameters, 0 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -77,7 +77,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at most 5 parameters, 7 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -94,7 +94,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage Only variables can be passed by reference
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -119,7 +119,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage Cannot mutate variable 'matches' because it wasn't defined
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
@@ -156,7 +156,7 @@ class PregMatchOptimizerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Zephir\Compiler\CompilerException
+     * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage The 'matches' variable must be either a variable or an array, got Ooops
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697

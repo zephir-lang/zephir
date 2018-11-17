@@ -13,7 +13,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\CompiledExpression;
 

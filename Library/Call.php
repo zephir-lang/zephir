@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
 
 /**
@@ -207,7 +207,7 @@ class Call
      * @return array|null|CompiledExpression[]
      *
      * @return array
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
@@ -303,7 +303,7 @@ class Call
      * @param array $calleeDefinition
      * @return array
      *
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
@@ -497,7 +497,7 @@ class Call
      * @param array $expression
      *
      * @return array
-     * @throws CompilerException
+     * @throws \Zephir\Exception\CompilerException
      * @throws Exception
      */
     public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, array $expression)
