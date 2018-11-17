@@ -13,7 +13,7 @@ PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 PHPUNIT_REPORT=${PROJECT_ROOT}/unit-tests/output/clover.xml
 
-if [[ -z ${REPORT_COVERAGE+x} ]] || [[ "$REPORT_COVERAGE" != "true" ]]; then
+if [[ -z ${COLLECT_COVERAGE+x} ]] || [[ "$COLLECT_COVERAGE" != "true" ]]; then
 	echo -e "\nUploading reports is not enabled.\nSkip uploading reports to Codecov.\n"
 	exit 0
 fi
@@ -36,7 +36,7 @@ else
 		--base-directory=${PROJECT_ROOT} \
 		--capture \
 		--compat-libtool \
-		--output-file ${LCOV_REPORT}
+		--output-file ${LCOV_REPORT} 2>/dev/null
 
 	# Remove files matching non-project patterns
 	lcov \
@@ -44,7 +44,7 @@ else
 		--remove ${LCOV_REPORT} "/usr*" \
 		--remove ${LCOV_REPORT} "${HOME}/.phpenv/*" \
 		--compat-libtool \
-		--output-file ${LCOV_REPORT}
+		--output-file ${LCOV_REPORT} 2>/dev/null
 
 	# FIXME: Fix the report
 	# 	Cannot open source file ${PROJECT_ROOT}/kernel/fcall.h
