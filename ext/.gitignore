@@ -24,5 +24,6 @@ configure.in
 install-sh
 libtool
 ltmain.sh
+missing
 mkinstalldirs
 run-tests.php

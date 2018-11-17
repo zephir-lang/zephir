@@ -14,6 +14,10 @@ namespace Zephir\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\Compiler\CompilerException;
+use Zephir\Exception;
+use Zephir\Exception\NotImplementedException;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Zephir\Command\InstallCommand
@@ -39,10 +43,33 @@ class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwa
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->install(
-            $this->isDevelopmentModeEnabled($input)
-        );
+
+        $io = new SymfonyStyle($input, $output);
+
+        try {
+            $this->compiler->install(
+                $this->isDevelopmentModeEnabled($input)
+            );
+        } catch (NotImplementedException $e) {
+            $io->note($e->getMessage());
+            return 0;
+        } catch (CompilerException $e) {
+            $io->error($e->getMessage());
+            return 1;
+        } catch (Exception $e) {
+            $io->error($e->getMessage());
+            return 1;
+        }
+
+        $success = ['Extension installed.'];
+
+        $namespace = $this->config->get('namespace');
+        if (!extension_loaded($namespace)) {
+            $success[] = sprintf('Add "extension=%s.so" to your php.ini', $namespace);
+        }
+
+        $io->text($success);
+        $io->note("Don't forget to restart your web server");
 
         return 0;
     }

@@ -50,12 +50,16 @@ class BuildCommand extends ContainerAwareCommand implements DevelopmentModeAware
         $command = $this->getApplication()->find('install');
 
         $arguments = [
-            'command'   => 'install',
-            '--backend' => $input->getOption('backend'),
-            '--dev'     => $this->isDevelopmentModeEnabled($input),
+            'command' => 'install',
+            '--dev'   => $this->isDevelopmentModeEnabled($input),
         ];
 
-        return $command->run(new ArrayInput($arguments), $output);
+        try {
+            return $command->run(new ArrayInput($arguments), $output);
+        } catch (\Exception $e) {
+            $output->writeln("<error>{$e->getMessage()}</error>");
+            return 1;
+        }
     }
 
     /**
@@ -66,7 +70,7 @@ class BuildCommand extends ContainerAwareCommand implements DevelopmentModeAware
     public function getDevelopmentModeHelp()
     {
         return <<<EOT
-A meta command that just calls <info>generate<info>, </info>compile</info> and <info>install</info> commands.
+A meta command that just calls <info>generate</info>, <info>compile</info> and <info>install</info> commands.
 
 Using <comment>--dev</comment> option will force building and installing the extension in development mode
 (debug symbols and no optimizations). An extension compiled with debugging symbols means
