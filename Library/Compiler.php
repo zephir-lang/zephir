@@ -593,23 +593,27 @@ class Compiler implements InjectionAwareInterface
      */
     public function getGccFlags($development = false)
     {
-        if (!$this->environment->isWindows()) {
-            $gccFlags = getenv('CFLAGS');
-            if (!is_string($gccFlags)) {
-                if (!$development) {
-                    $gccVersion = $this->getGccVersion();
-                    if (version_compare($gccVersion, '4.6.0', '>=')) {
-                        $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
-                    } else {
-                        $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
-                    }
-                } else {
-                    $gccFlags = '-O0 -g3';
-                }
-            }
-
-            return $gccFlags;
+        if ($this->environment->isWindows()) {
+            // TODO
+            return '';
         }
+
+        $gccFlags = getenv('CFLAGS');
+
+        if (!is_string($gccFlags)) {
+            if (!$development) {
+                $gccVersion = $this->getGccVersion();
+                if (version_compare($gccVersion, '4.6.0', '>=')) {
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
+                } else {
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
+                }
+            } else {
+                $gccFlags = '-O0 -g3';
+            }
+        }
+
+        return $gccFlags;
 
         // TODO
         return '';
