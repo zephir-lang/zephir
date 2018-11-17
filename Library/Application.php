@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Command\ContainerAwareCommand;
+use Zephir\Di\Singleton;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompilerProvider;
 
@@ -53,14 +54,16 @@ final class Application extends BaseApplication
      */
     public function __construct($basePath, ContainerInterface $container = null)
     {
+        parent::__construct('Zephir', Zephir::VERSION);
+
         try {
             $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
             $this->registerCompiler();
-
-            $container = $this->serviceRegistrator->getContainer();
         } catch (\Exception $e) {
+            $container = Singleton::getDefault();
+
             // TODO: Handle it better by ErrorHandler
-            $config = (isset($container) && $container->has('config')) ? $container->get('config') : null;
+            $config = $container && $container->has('config') ? $container->get('config') : null;
             fwrite(
                 STDERR,
                 $this->formatErrorMessage($e, $config)
@@ -68,8 +71,6 @@ final class Application extends BaseApplication
 
             exit(1);
         }
-
-        parent::__construct('Zephir', Zephir::VERSION);
     }
 
     /**

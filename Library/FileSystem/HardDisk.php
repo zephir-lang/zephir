@@ -74,7 +74,7 @@ final class HardDisk implements FileSystemInterface
         if ($this->exists($this->localPath) == false) {
             if ($this->filesystem->createDir($this->localPath) == false) {
                 throw new RuntimeException(
-                    'Unable to create a local storage for temporary filesystem operations'
+                    'Unable to create a local storage for temporary filesystem operations.'
                 );
             }
         }
@@ -206,7 +206,7 @@ final class HardDisk implements FileSystemInterface
         // $code = $this->filesystem->read($this->localPath . "/{$path}");
         // return eval(str_replace('<?php ', '', $code));
 
-        return require realpath($this->localPath) . "/{$path}";
+        return require $this->localPath . "/{$path}";
     }
 
     /**
@@ -262,6 +262,12 @@ final class HardDisk implements FileSystemInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $path
+     * @return string
+     */
     public function normalizePath($path)
     {
         return str_replace(['\\', ':', '/'], '_', $path);

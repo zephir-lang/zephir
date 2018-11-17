@@ -107,7 +107,7 @@ interface FileSystemInterface
     public function getHashFile($algorithm, $sourceFile, $useCache = false);
 
     /**
-     * Returns the modification time of a temporary  entry.
+     * Returns the modification time of a temporary entry.
      *
      * @param  string $path
      * @return int

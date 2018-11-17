@@ -16,7 +16,6 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Container\ContainerInterface;
 use Zephir\Di\ServiceProviderInterface;
-use Zephir\Environment;
 use Zephir\FileSystem\HardDisk;
 
 /**
@@ -43,7 +42,7 @@ final class FileSystemProvider implements ServiceProviderInterface
     protected function createService(ContainerInterface $container)
     {
         return function () use ($container) {
-            $adapter = new Local($container->get(Environment::class)->getPath());
+            $adapter = new Local(getcwd());
             return new HardDisk(
                 new Filesystem($adapter, ['visibility' => 'public'])
             );

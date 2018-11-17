@@ -11,11 +11,15 @@
 
 namespace Zephir\Test\Command;
 
+use League\Container\Container;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Application;
 use Zephir\Command\CompileCommand;
 use Zephir\Di\Singleton;
+use Zephir\FileSystem\HardDisk;
 use Zephir\Support\TestCase;
 use function Zephir\unlink_recursive;
 
@@ -52,20 +56,20 @@ class CompileCommandTest extends TestCase
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            if (file_exists('.temp')) {
-                unlink_recursive('.temp/');
+            if (file_exists(getcwd() . '/.temp')) {
+                unlink_recursive(getcwd() . '/.temp');
             }
 
-            if (file_exists('ext')) {
-                unlink_recursive('ext/');
+            if (file_exists(getcwd() . '/ext')) {
+                unlink_recursive(getcwd() . '/ext');
             }
 
-            if (file_exists('compile.log')) {
-                unlink('compile.log');
+            if (file_exists(getcwd() . '/compile.log')) {
+                unlink(getcwd() . '/compile.log');
             }
 
-            if (file_exists('compile-errors.log')) {
-                unlink('compile-errors.log');
+            if (file_exists(getcwd() . '/compile-errors.log')) {
+                unlink(getcwd() . '/compile-errors.log');
             }
 
             chdir($this->pwd);
@@ -91,10 +95,12 @@ class CompileCommandTest extends TestCase
 
         chdir(ZEPHIRPATH . '/unit-tests/fixtures/devmode');
 
-        $application = new Application(ZEPHIRPATH);
+        $container = $this->createContainer(getcwd());
+
+        $application = new Application(ZEPHIRPATH, $container);
         $application->add(new CompileCommand());
 
-        Singleton::getDefault()->get('config')->set('silent', true);
+        $this->muteOutput($container);
 
         $command = $application->find('compile');
         $commandTester = new CommandTester($command);
@@ -110,8 +116,39 @@ class CompileCommandTest extends TestCase
     public function devModeProvider()
     {
         return [
-            [['--no-dev' => true], '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1'],
+            [['--no-dev' => true], '-O2 -fvisibility=hidden -Wparentheses( -flto)? -DZEPHIR_RELEASE=1'],
             [['--dev' => true], '-O0 -g3'],
         ];
+    }
+
+    /**
+     * @param  Container $container
+     * @return void
+     */
+    protected function muteOutput(Container $container)
+    {
+        $container->get('config')->set('silent', true);
+    }
+
+    /**
+     * Create internal Zephir's container.
+     *
+     * @param  $basePath
+     * @return Container
+     */
+    protected function createContainer($basePath)
+    {
+        $container = new Container();
+
+        $filesystem = function () use ($basePath) {
+            $adapter = new Local($basePath);
+            return new HardDisk(
+                new Filesystem($adapter, ['visibility' => 'public'])
+            );
+        };
+
+        $container->share('filesystem', $filesystem);
+
+        return $container;
     }
 }
