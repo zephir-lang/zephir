@@ -21,7 +21,7 @@ export USE_ZEND_ALLOC=0
 # Do not stop testing on failures
 export PHPUNIT_DONT_EXIT=1
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
+project_root=$(readlink -enq "$(dirname $0)/../")
 
 valgrind
 	--read-var-info=yes \
@@ -32,7 +32,7 @@ valgrind
 	--num-callers=20 \
 	--run-libc-freeres=no \
 	$(phpenv which php)
-		-d "extension=${PROJECT_ROOT}/ext/modules/test.so" \
-		"${PROJECT_ROOT}/unit-tests/phpunit" \
+		-d "extension=${project_root}/ext/modules/test.so" \
+		"${project_root}/unit-tests/phpunit" \
 			--no-coverage \
 			--testsuite "Extension Test Suite"

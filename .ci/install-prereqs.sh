@@ -77,11 +77,14 @@ install_ext_from_src () {
 
 install_ext_from_src "zephir_parser" "https://github.com/phalcon/php-zephir-parser" ""
 
-if [ "${php_vernum}" -gt 70000 ]; then
+if [ "${php_vernum}" -ge "70100" ]; then
+	printf "PHP version number is ${php_vernum}\nDownloading humbug/box...\n"
 	wget \
 		"https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
 		--quiet \
 		-O "${HOME}/bin/box"
 
 	chmod +x "${HOME}/bin/box"
+
+	box --version
 fi
