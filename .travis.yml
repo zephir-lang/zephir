@@ -84,8 +84,9 @@ deploy:
   file: zephir.phar
   skip_cleanup: true
   draft: true
-  name: "$(zephir --dumpversion)"
+  name: "$(zephir --dumpversion) $(date +'%Y.%m.%d %H:%M:%S')"
   on:
-    tags: true
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^master$
     php: '7.2'
   repo: phalcon/zephir
