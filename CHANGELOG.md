@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.11.4] - 2018-11-18
 ### Added
 - Introduced a brand new CLI interface
 - The preferred method of installation is to use the Zephir PHAR
@@ -20,4 +22,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed regression introduced in the 0.10.12 related to `require` file using protocols
   [#1713](https://github.com/phalcon/zephir/issues/1713)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.3...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.4...HEAD
+[0.11.4]: https://github.com/phalcon/zephir/compare/0.11.3...0.11.4
