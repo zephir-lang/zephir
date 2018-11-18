@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # This file is part of the Zephir.
 #
@@ -7,8 +7,8 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [[ $(command -v valgrind 2>/dev/null) = "" ]]; then
-	echo -e "Valgring does not exist.\Can not check for memory leaks."
+if [ $(which valgrind 2>/dev/null) = "" ]; then
+	printf "Valgring does not exist. Can not check for memory leaks.\nAborting.\n"
 	exit 1
 fi
 

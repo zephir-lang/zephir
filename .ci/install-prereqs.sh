@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # This file is part of the Zephir.
 #
@@ -7,21 +7,25 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [[ -z ${CI+x} ]] || [[ "$CI" != "true" ]]; then
-	echo "This script is designed to run inside a CI container only. Stop."
+# -e	Exit immediately if a command exits with a non-zero status.
+# -u	Treat unset variables as an error when substituting.
+set -eu
+
+if [ -z ${CI+x} ] || [ "$CI" != "true" ]; then
+	printf "This script is designed to run inside a CI container only.\nAborting.\n"
 	exit 1
 fi
 
 printf "\n" | pecl install --force psr
 
-PHP_VERNUM="$(php-config --vernum)"
+php_vernum="$(php-config --vernum)"
 
 install_ext_from_src () {
 	pkgname=$1
 	source=$2
 	cfgflags=$3
-	downloaddir="${HOME}/.cache/${pkgname}/${pkgname}-${PHP_VERNUM}"
-	prefix="${HOME}/.local/opt/${pkgname}/${pkgname}-${PHP_VERNUM}"
+	downloaddir="${HOME}/.cache/${pkgname}/${pkgname}-${php_vernum}"
+	prefix="${HOME}/.local/opt/${pkgname}/${pkgname}-${php_vernum}"
 	libdir="${prefix}/lib"
 
 	if [ ! -f "${libdir}/${pkgname}.so" ]; then
@@ -31,17 +35,17 @@ install_ext_from_src () {
 
 		cd `dirname ${downloaddir}`
 
-		if [ ! -d "${pkgname}-${PHP_VERNUM}" ]; then
-			git clone --depth=1 -v -b master "${source}" "${pkgname}-${PHP_VERNUM}"
+		if [ ! -d "${pkgname}-${php_vernum}" ]; then
+			git clone --depth=1 -v -b master "${source}" "${pkgname}-${php_vernum}"
 		fi
 
-		if [ ! -f "${pkgname}-${PHP_VERNUM}/config.m4" ]; then
-			echo "Unable to locate ${pkgname}-${PHP_VERNUM}/config.m4 file. Stop."
+		if [ ! -f "${pkgname}-${php_vernum}/config.m4" ]; then
+			printf "Unable to locate ${pkgname}-${php_vernum}/config.m4 file.\nAborting.\n"
 			exit 1
 		fi
 
 		if [ ! -d "${downloaddir}" ]; then
-			echo "Unable to locate ${pkgname} source. Stop."
+			printf "Unable to locate ${pkgname} source.\nAborting.\n"
 			exit 1
 		fi
 
@@ -64,7 +68,7 @@ install_ext_from_src () {
 	fi
 
 	if [ ! -x "${libdir}/${pkgname}.so" ]; then
-		echo "Unable to locate ${libdir}/${pkgname}.so. Stop."
+		printf "Unable to locate ${libdir}/${pkgname}.so.\nAborting.\n"
 		exit 1
 	fi
 
@@ -73,11 +77,11 @@ install_ext_from_src () {
 
 install_ext_from_src "zephir_parser" "https://github.com/phalcon/php-zephir-parser" ""
 
-if [ "${PHP_VERNUM}" -gt 70000 ]; then
+if [ "${php_vernum}" -gt 70000 ]; then
 	wget \
-	  "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
-	  --quiet \
-	  -O "${HOME}/bin/box"
+		"https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+		--quiet \
+		-O "${HOME}/bin/box"
 
 	chmod +x "${HOME}/bin/box"
 fi
