@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed incorrect behavior of `require` statement for ZendEngine3
+  [#1621](https://github.com/phalcon/zephir/issues/1621)
+  [#1403](https://github.com/phalcon/zephir/issues/1403)
+  [#1428](https://github.com/phalcon/zephir/pull/1428)
 
 ## [0.11.4] - 2018-11-18
 ### Added
