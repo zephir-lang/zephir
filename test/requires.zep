@@ -22,9 +22,7 @@ class Requires
 	{
 		var external3;
 
-		if PHP_MAJOR_VERSION == 5 {
-			create_symbol_table();
-		}
+		create_symbol_table();
 
 		let external3 = new External3();
 		external3->req(path, this);
@@ -34,5 +32,20 @@ class Requires
 	public function setContent(var content) -> void
 	{
 		let this->content = content;
+	}
+
+	public function renderTemplate(string! templatePath, var params) -> var
+	{
+		create_symbol_table();
+
+		var key, value;
+
+		if typeof params == "array" {
+			for key, value in params {
+				let {key} = value;
+			}
+		}
+
+		return require templatePath;
 	}
 }

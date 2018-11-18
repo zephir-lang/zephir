@@ -22,7 +22,7 @@ class ExtendClassTest extends TestCase
     public function testPDOExtending()
     {
         if (!extension_loaded('pdo')) {
-            $this->markTestSkipped('The PDO extendsion is not loaded');
+            $this->markTestSkipped('The PDO extension is not loaded');
         }
 
         $this->assertSame(PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
