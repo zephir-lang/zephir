@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # This file is part of the Zephir.
 #
@@ -7,18 +7,22 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-if [[ -z ${CI+x} ]] || [[ "$CI" != "true" ]]; then
-	echo "This script is designed to run inside a CI container only. Stop."
+# -e	Exit immediately if a command exits with a non-zero status.
+# -u	Treat unset variables as an error when substituting.
+set -eu
+
+if [ -z ${CI+x} ] || [ "$CI" != "true" ]; then
+	printf "This script is designed to run inside a CI container only.\nAborting.\n"
 	exit 1
 fi
 
-if [[ -z ${RE2C_VERSION+x} ]]; then
-	echo "The RE2C_VERSION is unset. Stop."
+if [ -z ${RE2C_VERSION+x} ]; then
+	printf "The RE2C_VERSION is unset.\nAborting.\n"
 	exit 1
 fi
 
-if [[ "${RE2C_VERSION}" == "system" ]]; then
-	echo "Use system re2c. Skip."
+if [ "${RE2C_VERSION}" = "system" ]; then
+	printf "Use system re2c.\nSkip.\n"
 	exit 0
 fi
 
@@ -40,7 +44,7 @@ if [ ! -f "${bindir}/re2c" ]; then
 	fi
 
 	if [ ! -f "${pkgname}-${RE2C_VERSION}.tar.gz" ]; then
-		echo "Unable to locate ${pkgname}-${RE2C_VERSION}.tar.gz file. Stop."
+		printf "Unable to locate ${pkgname}-${RE2C_VERSION}.tar.gz file.\nAborting.\n"
 		exit 1
 	fi
 
@@ -50,7 +54,7 @@ if [ ! -f "${bindir}/re2c" ]; then
 	fi
 
 	if [ ! -d "${downloaddir}" ]; then
-		echo "Unable to locate re2c source. Stop."
+		printf "Unable to locate re2c source.\nAborting.\n"
 		exit 1
 	fi
 
@@ -66,7 +70,7 @@ if [ ! -f "${bindir}/re2c" ]; then
 fi
 
 if [ ! -x "${bindir}/re2c" ]; then
-	echo "Unable to locate re2c executable. Stop."
+	printf "Unable to locate re2c executable.\nAborting.\n"
 	exit 1
 fi
 

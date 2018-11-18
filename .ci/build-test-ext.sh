@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # This file is part of the Zephir.
 #
@@ -7,13 +7,13 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-# Exit the script if any statement returns a non-true return value
-set -e
+# -e	Exit immediately if a command exits with a non-zero status.
+# -u	Treat unset variables as an error when substituting.
+set -eu
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
-LCOV_REPORT=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
-shopt -s nullglob
+gcov_report=${PROJECT_ROOT}/unit-tests/output/lcov.info
 
 zephir clean 2>&1 || exit 1
 zephir fullclean 2>&1 || exit 1
@@ -30,20 +30,20 @@ cd ext
 
 phpize
 
-if [[ ! -z ${COLLECT_COVERAGE+x} ]] && [[ "$COLLECT_COVERAGE" = "true" ]]; then
+if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
 	# The ltmain.sh which bundled with PHP it's from libtool 1.5.26.
 	# However, the version of libtool that claims to no longer remove
 	# ".gcno" profiler information is libtool 2.2.6. The fix is probably
 	# in later libtool versions as well.
-	if [[ "$(uname -s 2>/dev/null)" = "Darwin" ]]; then
+	if [ "$(uname -s 2>/dev/null)" = "Darwin" ]; then
 		# macOS
-		LIBTOOLIZE_BIN=$(command -v glibtoolize 2>/dev/null)
+		libtoolize_bin=$(which glibtoolize 2>/dev/null)
 	else
 		# Linux, Gentoo, etc
-		LIBTOOLIZE_BIN=$(command -v libtoolize 2>/dev/null)
+		libtoolize_bin=$(which libtoolize 2>/dev/null)
 	fi
 
-	aclocal && ${LIBTOOLIZE_BIN} --copy --force && autoheader && autoconf
+	aclocal && ${libtoolize_bin} --copy --force && autoheader && autoconf
 
 	CFLAGS=`echo "${CFLAGS}" | sed -e 's/-O[0-9s]*//g'`
 	CXXFLAGS=`echo "${CXXFLAGS}" | sed -e 's/-O[0-9s]*//g'`
@@ -60,9 +60,16 @@ make -j"$(getconf _NPROCESSORS_ONLN)"
 
 cd ..
 
-if [[ ! -z ${COLLECT_COVERAGE+x} ]] && [[ "$COLLECT_COVERAGE" = "true" ]]; then
-	if [[ $(command -v lcov 2>/dev/null) = "" ]]; then
-		echo -e "lcov does not exist.\nSkip capturing coverage data."
+if [ ! -z ${TRAVIS+x} ] && [ "$TRAVIS" = "true" ]; then
+	if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
+		printf "\nCollecting coverage date is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
+		exit $?
+	fi
+fi
+
+if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
+	if [  $(which lcov 2>/dev/null) = ""  ]; then
+		printf "lcov does not exist.\nSkip capturing coverage data.\n"
 	else
 		# Reset all execution counts to zero
 		lcov \
@@ -79,12 +86,12 @@ if [[ ! -z ${COLLECT_COVERAGE+x} ]] && [[ "$COLLECT_COVERAGE" = "true" ]]; then
 			--capture \
 			--compat-libtool \
 			--initial \
-			--output-file ${LCOV_REPORT} 2>/dev/null
+			--output-file ${gcov_report} 2>/dev/null
 
 		# FIXME: Fix the report
 		# 	geninfo: WARNING: could not open ${PROJECT_ROOT}/kernel/fcall.h
 		# 	geninfo: WARNING: some exclusion markers may be ignored
-		sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${LCOV_REPORT}
+		sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${gcov_report}
 	fi
 fi
 
