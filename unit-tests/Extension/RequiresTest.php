@@ -30,7 +30,11 @@ class RequiresTest extends TestCase
         $this->assertTrue(defined('REQUIRE_ME'));
     }
 
-    public function testRequireExternal3()
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/pull/1428
+     */
+    public function shouldRequireUsingNewSymbolTable()
     {
         $r = new Requires();
 
@@ -38,6 +42,23 @@ class RequiresTest extends TestCase
             'test',
             $r->requireExternal3(__DIR__ . '/../fixtures/require-me-3.php')
         );
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1621
+     */
+    public function shouldRenderTemplate()
+    {
+        $r = new Requires();
+        $a = 1;
+
+        $this->assertEquals(
+            2,
+            $r->renderTemplate(__DIR__ . '/../fixtures/template.php', ['a' => 2])
+        );
+
+        $this->assertEquals(1, $a);
     }
 
     /**
