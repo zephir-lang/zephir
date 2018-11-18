@@ -11,9 +11,9 @@
 # -u	Treat unset variables as an error when substituting.
 set -eu
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
+project_root=$(readlink -enq "$(dirname $0)/../")
 
-gcov_report=${PROJECT_ROOT}/unit-tests/output/lcov.info
+gcov_report=${project_root}/unit-tests/output/lcov.info
 
 zephir clean 2>&1 || exit 1
 zephir fullclean 2>&1 || exit 1
@@ -75,14 +75,14 @@ if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
 		lcov \
 			--quiet \
 			--directory ext \
-			--base-directory=${PROJECT_ROOT} \
+			--base-directory=${project_root} \
 			--zerocounters 2>/dev/null
 
 		# Capture coverage data
 		lcov \
 			--quiet \
 			--directory ext \
-			--base-directory=${PROJECT_ROOT} \
+			--base-directory=${project_root} \
 			--capture \
 			--compat-libtool \
 			--initial \
@@ -91,7 +91,7 @@ if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
 		# FIXME: Fix the report
 		# 	geninfo: WARNING: could not open ${PROJECT_ROOT}/kernel/fcall.h
 		# 	geninfo: WARNING: some exclusion markers may be ignored
-		sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${gcov_report}
+		sed -i.bak s_${project_root}/kernel_${project_root}/ext/kernel_g ${gcov_report}
 	fi
 fi
 

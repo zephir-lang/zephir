@@ -11,10 +11,10 @@
 # -u	Treat unset variables as an error when substituting.
 set -eu
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
+project_root=$(readlink -enq "$(dirname $0)/../")
 
-gcov_report=${PROJECT_ROOT}/unit-tests/output/lcov.info
-phpunit_report=${PROJECT_ROOT}/unit-tests/output/clover.xml
+gcov_report=${project_root}/unit-tests/output/lcov.info
+phpunit_report=${project_root}/unit-tests/output/clover.xml
 
 if [ -z ${COLLECT_COVERAGE+x} ] || [ "$COLLECT_COVERAGE" != "true" ]; then
 	printf "Uploading reports is not enabled.\nSkip uploading reports to Codecov.\n"
@@ -36,7 +36,7 @@ else
 		--quiet \
 		--no-checksum \
 		--directory ext \
-		--base-directory=${PROJECT_ROOT} \
+		--base-directory=${project_root} \
 		--capture \
 		--compat-libtool \
 		--output-file ${gcov_report} 2>/dev/null
@@ -51,7 +51,7 @@ else
 
 	# FIXME: Fix the report
 	# 	Cannot open source file ${PROJECT_ROOT}/kernel/fcall.h
-	sed -i.bak s_${PROJECT_ROOT}/kernel_${PROJECT_ROOT}/ext/kernel_g ${gcov_report}
+	sed -i.bak s_${project_root}/kernel_${project_root}/ext/kernel_g ${gcov_report}
 fi
 
 # Note: to upload a coverage report, set the CODECOV_TOKEN environment variable
