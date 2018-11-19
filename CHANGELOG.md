@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.11.5] - 2018-11-19
 ### Fixed
 - Fixed incorrect behavior of `require` statement for ZendEngine3
   [#1621](https://github.com/phalcon/zephir/issues/1621)
@@ -27,5 +29,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed regression introduced in the 0.10.12 related to `require` file using protocols
   [#1713](https://github.com/phalcon/zephir/issues/1713)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.4...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.5...HEAD
+[0.11.5]: https://github.com/phalcon/zephir/compare/0.11.4...0.11.5
 [0.11.4]: https://github.com/phalcon/zephir/compare/0.11.3...0.11.4
