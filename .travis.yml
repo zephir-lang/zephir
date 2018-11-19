@@ -95,10 +95,7 @@ deploy:
   api_key: $GITHUB_TOKEN
   file: zephir.phar
   skip_cleanup: true
-  draft: true
-  name: "$(zephir --dumpversion)"
   on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^master$
+    tags: true
     php: '7.2'
   repo: phalcon/zephir
