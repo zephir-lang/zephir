@@ -11,11 +11,11 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\StatementsBlock;
 use Zephir\Optimizers\EvalExpression;
-use Zephir\Branch;
+use Zephir\StatementsBlock;
 
 /**
  * SwitchStatement

@@ -12,10 +12,10 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
-use Zephir\Variable as ZephirVariable;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Variable as ZephirVariable;
 
 /**
  * ObjectPropertyArrayIndexAppend

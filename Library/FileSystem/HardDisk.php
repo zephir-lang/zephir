@@ -12,8 +12,8 @@
 namespace Zephir\FileSystem;
 
 use League\Flysystem;
-use Zephir\Exception\RuntimeException;
 use Zephir\Exception\InvalidArgumentException;
+use Zephir\Exception\RuntimeException;
 use Zephir\Zephir;
 
 /**

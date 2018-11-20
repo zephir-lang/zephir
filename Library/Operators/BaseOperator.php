@@ -11,8 +11,8 @@
 
 namespace Zephir\Operators;
 
-use Zephir\Variable;
 use Zephir\CompilationContext;
+use Zephir\Variable;
 
 class BaseOperator
 {

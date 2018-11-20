@@ -11,12 +11,12 @@
 
 namespace Zephir\Cache;
 
-use Zephir\ClassMethod;
-use Zephir\Variable;
 use Zephir\ClassDefinition;
-use Zephir\MethodCallWarmUp;
+use Zephir\ClassMethod;
 use Zephir\CompilationContext;
+use Zephir\MethodCallWarmUp;
 use Zephir\Passes\CallGathererPass;
+use Zephir\Variable;
 
 /**
  * MethodCache

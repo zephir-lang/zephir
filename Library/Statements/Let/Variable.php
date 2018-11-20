@@ -13,11 +13,11 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
-use Zephir\Variable as ZephirVariable;
-use Zephir\Detectors\ReadDetector;
 use Zephir\CompiledExpression;
+use Zephir\Detectors\ReadDetector;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
+use Zephir\Variable as ZephirVariable;
 
 /**
  * Zephir\Statements\Let\Variable

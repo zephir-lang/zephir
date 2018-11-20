@@ -11,10 +11,10 @@
 
 namespace Zephir;
 
+use Zephir\Cache\ClassEntryCache;
 use Zephir\Cache\FunctionCache;
 use Zephir\Cache\MethodCache;
 use Zephir\Cache\StaticMethodCache;
-use Zephir\Cache\ClassEntryCache;
 use Zephir\Passes\CallGathererPass;
 
 /**

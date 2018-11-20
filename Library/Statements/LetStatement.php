@@ -12,29 +12,29 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Statements\Let\Variable as LetVariable;
-use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 use Zephir\Statements\Let\ArrayIndex as LetArrayIndex;
 use Zephir\Statements\Let\ArrayIndexAppend as LetArrayIndexAppend;
-use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
+use Zephir\Statements\Let\Decr as LetDecr;
+use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
+use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
+use Zephir\Statements\Let\Incr as LetIncr;
 use Zephir\Statements\Let\ObjectDynamicProperty as LetObjectDynamicProperty;
 use Zephir\Statements\Let\ObjectDynamicStringProperty as LetObjectDynamicStringProperty;
+use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
 use Zephir\Statements\Let\ObjectPropertyAppend as LetObjectPropertyAppend;
 use Zephir\Statements\Let\ObjectPropertyArrayIndex as LetObjectPropertyArrayIndex;
 use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArrayIndexAppend;
-use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\ObjectPropertyDecr as LetObjectPropertyDecr;
+use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\StaticProperty as LetStaticProperty;
 use Zephir\Statements\Let\StaticPropertyAppend as LetStaticPropertyAppend;
 use Zephir\Statements\Let\StaticPropertyArrayIndex as LetStaticPropertyArrayIndex;
 use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArrayIndexAppend;
-use Zephir\Statements\Let\Decr as LetDecr;
-use Zephir\Statements\Let\Incr as LetIncr;
-use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
-use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
+use Zephir\Statements\Let\Variable as LetVariable;
+use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 
 /**
  * LetStatement

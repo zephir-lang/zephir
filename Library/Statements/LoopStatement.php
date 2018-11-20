@@ -11,11 +11,11 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
-use Zephir\StatementsBlock;
 use Zephir\Passes\LoopBreakPass;
-use Zephir\Branch;
+use Zephir\StatementsBlock;
 
 /**
  * LoopStatement

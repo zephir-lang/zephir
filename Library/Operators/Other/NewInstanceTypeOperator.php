@@ -11,14 +11,14 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Exception;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 /**
  * NewTypeInstance

@@ -11,8 +11,8 @@
 
 namespace Zephir;
 
-use Zephir\Variable\Globals;
 use Zephir\Exception\CompilerException;
+use Zephir\Variable\Globals;
 
 /**
  * Variable

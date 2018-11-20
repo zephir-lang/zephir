@@ -15,9 +15,9 @@ use Zephir\Builder\Operators\UnaryOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
 use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 use Zephir\Statements\IfStatement;
 
 /**

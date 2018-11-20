@@ -11,9 +11,9 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\NotImplementedException;
 use Zephir\Fcall\FcallManagerInterface;

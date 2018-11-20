@@ -12,9 +12,9 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
-use Zephir\Variable as ZephirVariable;
 use Zephir\CompiledExpression;
 use Zephir\Statements\LetStatement;
+use Zephir\Variable as ZephirVariable;
 
 /**
  * ExportSymbol

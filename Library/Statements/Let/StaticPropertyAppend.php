@@ -13,8 +13,8 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 
 /**
  * StaticPropertyAppend

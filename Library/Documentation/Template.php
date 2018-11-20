@@ -11,11 +11,11 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Config;
-use Zephir\Exception;
-use Zephir\CompilerFile;
 use Zephir\ClassDefinition;
+use Zephir\CompilerFile;
+use Zephir\Config;
 use Zephir\Documentation;
+use Zephir\Exception;
 
 class Template
 {

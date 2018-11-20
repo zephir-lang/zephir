@@ -11,24 +11,24 @@
 
 namespace Zephir;
 
-use Zephir\Statements\DeclareStatement;
-use Zephir\Statements\IfStatement;
-use Zephir\Statements\ForStatement;
-use Zephir\Statements\WhileStatement;
-use Zephir\Statements\EchoStatement;
-use Zephir\Statements\LetStatement;
-use Zephir\Statements\RequireStatement;
-use Zephir\Statements\ReturnStatement;
-use Zephir\Statements\FetchStatement;
-use Zephir\Statements\ThrowStatement;
-use Zephir\Statements\LoopStatement;
+use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
+use Zephir\Statements\DeclareStatement;
 use Zephir\Statements\DoWhileStatement;
+use Zephir\Statements\EchoStatement;
+use Zephir\Statements\FetchStatement;
+use Zephir\Statements\ForStatement;
+use Zephir\Statements\IfStatement;
+use Zephir\Statements\LetStatement;
+use Zephir\Statements\LoopStatement;
+use Zephir\Statements\RequireStatement;
+use Zephir\Statements\ReturnStatement;
 use Zephir\Statements\SwitchStatement;
+use Zephir\Statements\ThrowStatement;
 use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
-use Zephir\Passes\MutateGathererPass;
+use Zephir\Statements\WhileStatement;
 
 /**
  * StatementsBlock

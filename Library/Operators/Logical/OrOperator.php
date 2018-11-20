@@ -12,10 +12,10 @@
 namespace Zephir\Operators\Logical;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Statements\LetStatement;
-use Zephir\Exception\CompilerException;
-use Zephir\CompiledExpression;
 
 class OrOperator extends LogicalBaseOperator
 {

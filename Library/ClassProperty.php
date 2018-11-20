@@ -12,9 +12,9 @@
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
-use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 
 /**
  * ClassProperty

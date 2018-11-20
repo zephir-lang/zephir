@@ -11,9 +11,9 @@
 
 namespace Zephir\Passes;
 
+use Zephir\CompilationContext;
 use Zephir\FunctionCall;
 use Zephir\StatementsBlock;
-use Zephir\CompilationContext;
 
 /**
  * Zephir\Passes\CallGathererPass

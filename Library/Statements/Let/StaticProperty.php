@@ -13,10 +13,10 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Expression;
-use Zephir\CompiledExpression;
 
 /**
  * StaticProperty

@@ -12,8 +12,8 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ForValueUseDetector;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;

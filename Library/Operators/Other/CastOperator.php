@@ -11,12 +11,12 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Detectors\ReadDetector;
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Detectors\ReadDetector;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 use Zephir\Statements\Let\Variable as LetVariable;
 
 /**

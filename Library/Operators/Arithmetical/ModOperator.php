@@ -12,9 +12,9 @@
 namespace Zephir\Operators\Arithmetical;
 
 use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 
 /**
  * ModOperator

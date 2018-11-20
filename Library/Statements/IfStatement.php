@@ -11,12 +11,12 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
+use Zephir\Detectors\ReadDetector;
+use Zephir\Optimizers\EvalExpression;
 use Zephir\Passes\SkipVariantInit;
 use Zephir\StatementsBlock;
-use Zephir\Optimizers\EvalExpression;
-use Zephir\Detectors\ReadDetector;
-use Zephir\Branch;
 
 /**
  * IfStatement

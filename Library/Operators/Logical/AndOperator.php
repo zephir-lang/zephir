@@ -11,10 +11,10 @@
 
 namespace Zephir\Operators\Logical;
 
-use Zephir\Expression;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Statements\LetStatement;
 
 class AndOperator extends LogicalBaseOperator

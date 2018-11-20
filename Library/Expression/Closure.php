@@ -11,14 +11,14 @@
 
 namespace Zephir\Expression;
 
-use Zephir\ClassMethod;
-use Zephir\Variable;
-use Zephir\ClassMethodParameters;
-use Zephir\CompiledExpression;
-use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
+use Zephir\StatementsBlock;
+use Zephir\Variable;
 
 /**
  * Closure

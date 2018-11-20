@@ -11,12 +11,12 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Expression;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Operators\BaseOperator;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Operators\BaseOperator;
 
 /**
  * TypeOf

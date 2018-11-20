@@ -11,9 +11,9 @@
 
 namespace Zephir;
 
-use Zephir\Variable\Globals;
-use Zephir\Passes\LocalContextPass;
 use Zephir\Exception\CompilerException;
+use Zephir\Passes\LocalContextPass;
+use Zephir\Variable\Globals;
 
 /**
  * Zephir\SymbolTable
