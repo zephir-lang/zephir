@@ -330,6 +330,26 @@ PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 
 }
 
+PHP_METHOD(Test_Fcall, testFunctionGetArgsAllExtra) {
+
+	zval *this_ptr = getThis();
+
+
+	zephir_get_args(return_value);
+	return;
+
+}
+
+PHP_METHOD(Test_Fcall, testStaticFunctionGetArgsAllExtra) {
+
+	zval *this_ptr = getThis();
+
+
+	zephir_get_args(return_value);
+	return;
+
+}
+
 PHP_METHOD(Test_Fcall, testFunctionGetArg) {
 
 	zval *param1, param1_sub, *param2, param2_sub, _0, _1, _2;
@@ -345,6 +365,54 @@ PHP_METHOD(Test_Fcall, testFunctionGetArg) {
 	zephir_fetch_params(1, 2, 0, &param1, &param2);
 
 
+
+	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_1, 0);
+	zephir_get_arg(&_0, zephir_get_intval(&_1));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_2, 1);
+	zephir_get_arg(&_0, zephir_get_intval(&_2));
+	zephir_array_fast_append(return_value, &_0);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Fcall, testFunctionGetArgAllExtra) {
+
+	zval _0, _1, _2;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+
+	ZEPHIR_MM_GROW();
+
+	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_1, 0);
+	zephir_get_arg(&_0, zephir_get_intval(&_1));
+	zephir_array_fast_append(return_value, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_2, 1);
+	zephir_get_arg(&_0, zephir_get_intval(&_2));
+	zephir_array_fast_append(return_value, &_0);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Fcall, testStaticFunctionGetArgAllExtra) {
+
+	zval _0, _1, _2;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+
+	ZEPHIR_MM_GROW();
 
 	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_0);

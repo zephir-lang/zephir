@@ -38,7 +38,7 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param  CompilationContext $context
      * @return CompiledExpression
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -71,7 +71,6 @@ class PregMatchOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException(
                 'Returned values by functions can only be assigned to variant variables',
@@ -79,6 +78,7 @@ class PregMatchOptimizer extends OptimizerAbstract
             );
         }
 
+        // zephir_preg_match
         $context->headersManager->add('kernel/string');
 
         try {
