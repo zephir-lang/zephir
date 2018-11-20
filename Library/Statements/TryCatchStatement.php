@@ -107,7 +107,7 @@ class TryCatchStatement extends StatementAbstract
                         ->setStatements($exprBuilder->statements()->block(array_merge(
                             [
                                 $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
-                                 $assignExceptionVarStmt
+                                $assignExceptionVarStmt
                             ],
                             isset($catch['statements']) ? $catch['statements'] : []
                         )));

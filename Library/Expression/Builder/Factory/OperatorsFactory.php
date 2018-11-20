@@ -103,9 +103,9 @@ class OperatorsFactory
     public function cast($type, AbstractBuilder $expression)
     {
         return $this->raw([
-           'type'   => BinaryOperator::OPERATOR_CAST,
-           'left'   => $type,
-           'right'  => $expression
+            'type'   => BinaryOperator::OPERATOR_CAST,
+            'left'   => $type,
+            'right'  => $expression
         ]);
     }
 
