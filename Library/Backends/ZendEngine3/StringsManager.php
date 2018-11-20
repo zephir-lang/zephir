@@ -48,7 +48,7 @@ class StringsManager extends BaseStringsManager
      */
     public function genConcatCode()
     {
-         $code = '
+        $code = '
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

@@ -60,12 +60,21 @@ class ArrayMergeOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $resolveParam = !$context->backend->isZE3() ? function ($str) {
-            return '&(' . $str . ')';
-        } : function ($str) {
-            return $str;
-        };
+        $resolveParam = $this->createParamResolver($context);
         $context->codePrinter->output('zephir_fast_array_merge(' . $symbol . ', ' . $resolveParam($resolvedParams[0]) . ', ' . $resolveParam($resolvedParams[1]) . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    private function createParamResolver(CompilationContext $context)
+    {
+        if ($context->backend->isZE3() == false) {
+            return function ($str) {
+                return '&(' . $str . ')';
+            };
+        }
+
+        return function ($str) {
+            return $str;
+        };
     }
 }

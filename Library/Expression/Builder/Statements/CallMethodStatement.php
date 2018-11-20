@@ -18,7 +18,6 @@ namespace Zephir\Expression\Builder\Statements;
  */
 class CallMethodStatement extends CallFunctionStatement
 {
-
     private $variable;
 
 

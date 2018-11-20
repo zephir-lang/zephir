@@ -40,10 +40,11 @@ final class BackendProvider implements ServiceProviderInterface
             return new $backendClassName($container->get('config'));
         };
 
-         $container
-            ->add(BaseBackend::class, $service);
-            // TODO: Does not work. Why???
-            // ->setAlias('backend');
+        /**
+         * TODO: Does not work. Why???
+         * ->setAlias('backend');
+         */
+        $container->add(BaseBackend::class, $service);
     }
 
     /**
