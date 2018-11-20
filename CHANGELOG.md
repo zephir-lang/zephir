@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
 
 ## [0.11.6] - 2018-11-19
 ### Fixed
