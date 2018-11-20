@@ -116,7 +116,6 @@ class BinaryOperator extends AbstractOperator
     // x [{expr}]
     const OPERATOR_ACCESS_ARRAY = 'array-access';
 
-
     private $operator;
     private $leftExpression;
     private $rightExpression;

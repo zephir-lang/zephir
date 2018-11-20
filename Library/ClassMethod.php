@@ -1119,7 +1119,6 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-
                         if ($compiledExpression->getType() != 'double') {
                             throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(double)", $parameter);
                         }
@@ -1161,7 +1160,6 @@ class ClassMethod
                         $expression = new Expression($parameter['default']);
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
-
 
                         if ($compiledExpression->getType() != 'bool') {
                             throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(bool)", $parameter);

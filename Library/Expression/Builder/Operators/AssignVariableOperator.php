@@ -40,7 +40,6 @@ class AssignVariableOperator extends AbstractOperator
     // %=
     const OPERATOR_MOD = 'mod-assign';
 
-
     private $variable;
     private $operator = self::OPERATOR_ASSIGN;
     private $expression;

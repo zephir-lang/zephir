@@ -249,7 +249,6 @@ class PropertyAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, $readOnly, $compilationContext, $useOptimized);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

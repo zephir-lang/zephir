@@ -141,7 +141,6 @@ class PropertyDynamicAccess
         $property = $propertyVariable ? $propertyVariable : add_slashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext, false);
 
-
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

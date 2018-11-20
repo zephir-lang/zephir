@@ -423,7 +423,6 @@ class StaticCall extends Call
             throw new CompilerException("Only dynamic/string variables can be used in dynamic methods", $expression);
         }
 
-
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
