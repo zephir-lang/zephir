@@ -19,9 +19,6 @@ namespace Zephir;
  */
 class MethodCallWarmUp
 {
-    /**
-     *
-     */
     private $warmUps = [];
 
     /**
