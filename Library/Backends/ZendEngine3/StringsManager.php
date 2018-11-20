@@ -25,11 +25,11 @@ class StringsManager extends BaseStringsManager
      * List of headers
      * @var array
      */
-    protected $concatKeys = array(
+    protected $concatKeys = [
         'vv' => true,
         'vs' => true,
         'sv' => true
-    );
+    ];
 
     /**
      * Adds a concatenation combination to the manager
@@ -68,19 +68,19 @@ class StringsManager extends BaseStringsManager
 ';
         $codeh = '';
 
-        $macros = array();
+        $macros = [];
         ksort($this->concatKeys, SORT_STRING);
         foreach ($this->concatKeys as $key => $one) {
             $len = strlen($key);
-            $params = array();
-            $zvalCopy = array();
-            $useCopy = array();
-            $avars = array();
-            $zvars = array();
-            $svars = array();
-            $lengths = array();
-            $sparams = array();
-            $lparams = array();
+            $params = [];
+            $zvalCopy = [];
+            $useCopy = [];
+            $avars = [];
+            $zvars = [];
+            $svars = [];
+            $lengths = [];
+            $sparams = [];
+            $lparams = [];
             for ($i = 0; $i < $len; $i++) {
                 $n = $i + 1;
                 $t = substr($key, $i, 1);

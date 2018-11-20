@@ -73,7 +73,7 @@ class StaticPropertyAccess
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, array('self', 'static', 'parent'))) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -85,7 +85,7 @@ class StaticPropertyAccess
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static'))) {
+            if (in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {

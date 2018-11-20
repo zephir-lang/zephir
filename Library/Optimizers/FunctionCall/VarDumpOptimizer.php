@@ -57,26 +57,26 @@ class VarDumpOptimizer extends OptimizerAbstract
                 $variable = $context->symbolTable->addTemp($type, $context);
                 $variable->initVariant($context);
 
-                $statement = new LetStatement(array(
+                $statement = new LetStatement([
                     'type' => 'let',
-                    'assignments' => array(
-                        array(
+                    'assignments' => [
+                        [
                             'assign-type' => $type,
                             'variable' => $variable->getName(),
                             'operator' => 'assign',
-                            'expr' => array(
+                            'expr' => [
                                 'type'  => $resolvedParam->getType(),
                                 'value' => $resolvedParam->getCode(),
                                 'file'  => $expression['file'],
                                 'line'  => $expression['line'],
                                 'char'  => $expression['char'],
-                            ),
+                            ],
                             'file'  => $expression['file'],
                             'line'  => $expression['line'],
                             'char'  => $expression['char'],
-                        )
-                    )
-                ));
+                        ]
+                    ]
+                ]);
                 $statement->compile($context);
             } else {
                 /**

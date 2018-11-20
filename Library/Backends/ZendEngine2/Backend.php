@@ -72,7 +72,7 @@ class Backend extends BaseBackend
      */
     public function getVariableCode(Variable $variable)
     {
-        if ($variable->isLocalOnly() && !in_array($variable->getType(), array('int'))) {
+        if ($variable->isLocalOnly() && !in_array($variable->getType(), ['int'])) {
             return '&' . $variable->getName();
         }
         return $variable->getName();
@@ -191,7 +191,7 @@ class Backend extends BaseBackend
             default:
                 throw new CompilerException("Unsupported type in declare: " . $type);
         }
-        return array($pointer, $code);
+        return [$pointer, $code];
     }
 
     /**
@@ -503,13 +503,13 @@ class Backend extends BaseBackend
 
     public function declareVariables($method, $typeToVariables, CompilationContext $compilationContext)
     {
-        $varInitCode = array();
+        $varInitCode = [];
         $additionalCode = $method ? $this->onPreInitVar($method, $compilationContext) : '';
 
         foreach ($typeToVariables as $type => $variables) {
             list ($pointer, $code) = $this->getTypeDefinition($type);
             $code .= ' ';
-            $groupVariables = array();
+            $groupVariables = [];
 
             /**
              * @var $variables Variable[]
@@ -556,7 +556,7 @@ class Backend extends BaseBackend
             return 'void ' . $method->getName() . '(TSRMLS_D)';
         }
 
-        $signatureParameters = array();
+        $signatureParameters = [];
         $parameters = $method->getParameters();
         if (is_object($parameters)) {
             foreach ($parameters->getParameters() as $parameter) {
@@ -753,7 +753,7 @@ class Backend extends BaseBackend
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (in_array($typeKey, array('int', 'uint', 'long', 'ulong'))) {
+            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }
@@ -902,7 +902,7 @@ class Backend extends BaseBackend
             default:
                 throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
-        if ($isVariable && in_array($index->getType(), array('variable', 'string'))) {
+        if ($isVariable && in_array($index->getType(), ['variable', 'string'])) {
             $output = 'zephir_array_fetch(' . $this->getVariableCodePointer($var) . ', ' . $this->getVariableCode($src) . ', ' . $this->getVariableCode($index) . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
         } else {
             if ($isVariable) {
@@ -949,7 +949,7 @@ class Backend extends BaseBackend
         if (!($resolvedExpr instanceof Variable)) {
             if ($resolvedExpr->getType() == 'string') {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode() . '"), '. $flags . ' TSRMLS_CC)', $expression);
-            } elseif (in_array($resolvedExpr->getType(), array('int', 'uint', 'long'))) {
+            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
                 return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
@@ -1021,7 +1021,7 @@ class Backend extends BaseBackend
     private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {
         $keys = '';
-        $offsetItems = array();
+        $offsetItems = [];
         $numberParams = 0;
 
         foreach ($offsetExprs as $offsetExpr) {
@@ -1083,7 +1083,7 @@ class Backend extends BaseBackend
                     );
             }
         }
-        return array($keys, $offsetItems, $numberParams);
+        return [$keys, $offsetItems, $numberParams];
     }
 
     public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
@@ -1244,7 +1244,7 @@ class Backend extends BaseBackend
         }
     }
 
-    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = array(), $cache = 'NULL', $cacheSlot = 0)
+    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = [], $cache = 'NULL', $cacheSlot = 0)
     {
         $paramStr = $params != null ? ', ' . join(', ', $params) : '';
         if (!isset($symbolVariable)) {
@@ -1371,7 +1371,7 @@ class Backend extends BaseBackend
     public function checkStrictType($type, $var, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
-        $conditions = array();
+        $conditions = [];
 
         $inputParamVariable = $context->symbolTable->getVariableForWrite($var['name'], $context);
         $inputParamCode = $this->getVariableCode($inputParamVariable);

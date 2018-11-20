@@ -21,7 +21,7 @@ class EventsManager
     /**
      * @var array
      */
-    private $listeners = array();
+    private $listeners = [];
 
     /**
      * Attaches a listener to a specific event type
@@ -32,7 +32,7 @@ class EventsManager
     public function listen($event, $callback)
     {
         if (!isset($this->listeners[$event])) {
-            $this->listeners[$event] = array();
+            $this->listeners[$event] = [];
         }
 
         $this->listeners[$event][] = $callback;
@@ -44,7 +44,7 @@ class EventsManager
      * @param $event
      * @param array $param
      */
-    public function dispatch($event, array $param = array())
+    public function dispatch($event, array $param = [])
     {
         foreach ($this->listeners[$event] as $listener) {
             call_user_func_array($listener, $param);

@@ -35,9 +35,9 @@ class ThrowStatementBuilder extends AbstractStatementBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'throw',
             'expr' => $this->expr->get()
-        );
+        ];
     }
 }

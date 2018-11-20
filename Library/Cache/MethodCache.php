@@ -39,7 +39,7 @@ use Zephir\Passes\CallGathererPass;
  */
 class MethodCache
 {
-    protected $cache = array();
+    protected $cache = [];
 
     protected $gatherer;
 

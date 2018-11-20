@@ -321,7 +321,7 @@ class ClassDefinition
      */
     public function setImplementsInterfaces(array $implementedInterfaces)
     {
-        $interfaces = array();
+        $interfaces = [];
         foreach ($implementedInterfaces as $implementedInterface) {
             $interfaces[] = $implementedInterface['value'];
         }
@@ -401,7 +401,7 @@ class ClassDefinition
      */
     public function getDependencies()
     {
-        $dependencies = array();
+        $dependencies = [];
         if ($this->extendsClassDefinition) {
             $classDefinition = $this->extendsClassDefinition;
             if (method_exists($classDefinition, 'increaseDependencyRank')) {
@@ -962,7 +962,7 @@ class ClassDefinition
 
         $classMethod = new ClassMethod(
             $this,
-            array('internal'),
+            ['internal'],
             'zephir_init_static_properties_' . $initClassName,
             null,
             $statementsBlock
@@ -1769,16 +1769,16 @@ class ClassDefinition
         $methods = $class->getMethods();
         if (count($methods) > 0) {
             foreach ($methods as $method) {
-                $parameters = array();
+                $parameters = [];
 
                 foreach ($method->getParameters() as $row) {
-                    $params = array(
+                    $params = [
                         'type' => 'parameter',
                         'name' => $row->getName(),
                         'const' => 0,
                         'data-type' => 'variable',
                         'mandatory' => !$row->isOptional()
-                    );
+                    ];
                     if (!$params['mandatory']) {
                         try {
                             $params['default'] = $row->getDefaultValue();
@@ -1806,7 +1806,7 @@ class ClassDefinition
         if (count($constants) > 0) {
             foreach ($constants as $constantName => $constantValue) {
                 $type = self::_convertPhpConstantType(gettype($constantValue));
-                $classConstant = new ClassConstant($constantName, array('value' => $constantValue, 'type' => $type), null);
+                $classConstant = new ClassConstant($constantName, ['value' => $constantValue, 'type' => $type], null);
                 $classDefinition->addConstant($classConstant);
             }
         }
@@ -1814,7 +1814,7 @@ class ClassDefinition
         $properties = $class->getProperties();
         if (count($properties) > 0) {
             foreach ($properties as $property) {
-                $visibility = array();
+                $visibility = [];
 
                 if ($property->isPublic()) {
                     $visibility[] = 'public';
@@ -1851,13 +1851,13 @@ class ClassDefinition
 
     private static function _convertPhpConstantType($phpType)
     {
-        $map = array(
+        $map = [
             'boolean' => 'bool',
             'integer' => 'int',
             'double' => 'double',
             'string' => 'string',
             'NULL' => 'null',
-        );
+        ];
 
         if (!isset($map[$phpType])) {
             throw new CompilerException("Cannot parse constant type '$phpType'");

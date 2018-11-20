@@ -20,8 +20,8 @@ class NamespaceHelper
     protected $endNamespace;
     protected $parentName;
 
-    protected $classes = array();
-    protected $namespaces = array();
+    protected $classes = [];
+    protected $namespaces = [];
 
     public function __construct($fullNamespace)
     {

@@ -55,7 +55,7 @@ class FunctionCallBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type'       => 'fcall',
             'name'       => $this->name,
             'call-type'  => $this->type,
@@ -63,6 +63,6 @@ class FunctionCallBuilder
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

@@ -65,7 +65,7 @@ class IssetOperator extends BaseOperator
                 }
 
                 if ($variable->getType() == 'variable') {
-                    if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                    if ($variable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
                         $compilationContext->logger->warning('Possible attempt to use non array in isset operator', 'non-valid-isset', $expression);
                     }
                 }
@@ -109,7 +109,7 @@ class IssetOperator extends BaseOperator
                     throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $left['left']);
                 }
 
-                if ($variable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+                if ($variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
                     $compilationContext->logger->warning('Possible attempt to use non object in isset operator', 'non-valid-isset', $expression);
                 }
                 $variableCode = $compilationContext->backend->getVariableCode($variable);

@@ -65,11 +65,11 @@ class UnsetStatement extends StatementAbstract
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }
 
-        if (!in_array($variable->getType(), array('variable', 'array'))) {
+        if (!in_array($variable->getType(), ['variable', 'array'])) {
             throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression['left']);
         }
 
-        if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
+        if ($variable->hasDifferentDynamicType(['undefined', 'array', 'object', 'null'])) {
             $compilationContext->logger->warning('Possible attempt to use non array/object in unset operator', 'non-valid-unset', $expression['left']);
         }
 

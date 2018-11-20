@@ -36,7 +36,7 @@ use Zephir\Passes\CallGathererPass;
  */
 class FunctionCache
 {
-    protected $cache = array();
+    protected $cache = [];
 
     protected $gatherer;
 

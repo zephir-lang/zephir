@@ -60,7 +60,7 @@ class SymbolTable
 
         /* The variables are registered in branch 1, which is the external branch */
         $this->compilationContext = $compilationContext;
-        $this->branchVariables[1] = array();
+        $this->branchVariables[1] = [];
         /* this_ptr */
         $thisVar = new Variable('variable', 'this', $compilationContext->branchManager->getCurrentBranch());
         $thisVar->setIsInitialized(true, $compilationContext);
@@ -156,7 +156,7 @@ class SymbolTable
         }
 
         if (!isset($this->branchVariables[$branchId])) {
-            $this->branchVariables[$branchId] = array();
+            $this->branchVariables[$branchId] = [];
         }
 
         $this->branchVariables[$branchId][$name] = $variable;
@@ -173,7 +173,7 @@ class SymbolTable
     public function addRawVariable(Variable $variable)
     {
         if (!isset($this->branchVariables[1])) {
-            $this->branchVariables[1] = array();
+            $this->branchVariables[1] = [];
         }
         $this->branchVariables[1][$variable->getName()] = $variable;
         return $variable;
@@ -546,7 +546,7 @@ class SymbolTable
         $branchId = $compilationContext->branchManager->getCurrentBranchId();
 
         if (!isset($this->branchTempVariables[$branchId][$location][$type])) {
-            $this->branchTempVariables[$branchId][$location][$type] = array();
+            $this->branchTempVariables[$branchId][$location][$type] = [];
         }
         $this->branchTempVariables[$branchId][$location][$type][] = $variable;
     }

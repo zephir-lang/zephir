@@ -47,7 +47,7 @@ class RangeInclusiveOperator extends BaseOperator
          * Implicit type coercing
          */
         $castBuilder = $exprBuilder->operators()->cast(Types::ARRAY_, $exprBuilder->statements()
-            ->functionCall('range', array($expression['left'], $expression['right'])));
+            ->functionCall('range', [$expression['left'], $expression['right']]));
 
         $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->readOnly);

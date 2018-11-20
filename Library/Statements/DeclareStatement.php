@@ -92,10 +92,10 @@ class DeclareStatement extends StatementAbstract
 
             if (isset($variable['expr'])) {
                 $builder = BuilderFactory::getInstance();
-                $letBuilder = $builder->statements()->let(array(
+                $letBuilder = $builder->statements()->let([
                     $builder->operators()
                         ->assignVariable($varName, $builder->raw($variable['expr']))
-                ));
+                ]);
 
                 $letStatement = new LetStatement($letBuilder->build());
                 $letStatement->compile($compilationContext);

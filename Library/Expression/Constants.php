@@ -64,7 +64,7 @@ class Constants
      * @link http://www.php.net/manual/ru/reserved.constants.php
      * @var array
      */
-    protected $envConstants = array(
+    protected $envConstants = [
         'PHP_VERSION',
         'PHP_MAJOR_VERSION',
         'PHP_MINOR_VERSION',
@@ -83,14 +83,14 @@ class Constants
         'PHP_BINDIR',
         'PHP_LIBDIR',
         'PHP_DATADIR',
-    );
+    ];
 
     /**
      * Magic constants
      * @link http://php.net/manual/en/language.constants.predefined.php
      * @var array
      */
-    protected $magicConstants = array(
+    protected $magicConstants = [
         '__LINE__',
         '__FILE__',
         '__DIR__',
@@ -99,13 +99,13 @@ class Constants
         '__TRAIT__',
         '__METHOD__',
         '__NAMESPACE__'
-    );
+    ];
 
-    protected $resources = array(
+    protected $resources = [
         'STDIN',
         'STDOUT',
         'STDERR'
-    );
+    ];
 
     /**
      * Resolves a PHP constant value into C-code

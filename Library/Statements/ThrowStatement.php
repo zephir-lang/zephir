@@ -74,7 +74,7 @@ class ThrowStatement extends StatementAbstract
                     }
                 }
             } else {
-                if (in_array($expr['type'], array('string', 'char', 'int', 'double'))) {
+                if (in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
                     $class = $compilationContext->classDefinition->getClassEntryByClassName('Exception', $compilationContext);
                     $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
                     return;
@@ -85,12 +85,12 @@ class ThrowStatement extends StatementAbstract
         $throwExpr = new Expression($expr);
         $resolvedExpr = $throwExpr->compile($compilationContext);
 
-        if (!in_array($resolvedExpr->getType(), array('variable', 'string'))) {
+        if (!in_array($resolvedExpr->getType(), ['variable', 'string'])) {
             throw new CompilerException("Expression '" . $resolvedExpr->getType() . '" cannot be used as exception', $expr);
         }
 
         $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
-        if (!in_array($variableVariable->getType(), array('variable', 'string'))) {
+        if (!in_array($variableVariable->getType(), ['variable', 'string'])) {
             throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
         }
 

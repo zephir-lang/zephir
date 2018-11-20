@@ -21,9 +21,9 @@ use Zephir\StatementsBlock;
  */
 class MutateGathererPass
 {
-    protected $variables = array();
+    protected $variables = [];
 
-    protected $mutations = array();
+    protected $mutations = [];
 
     /**
      * Do the compilation pass

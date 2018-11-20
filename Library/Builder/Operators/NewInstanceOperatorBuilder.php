@@ -47,11 +47,11 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
      */
     public function get()
     {
-        $parameters = array();
+        $parameters = [];
         foreach ($this->parameters as $parameter) {
             $parameters[] = $parameter->get();
         }
-        return array(
+        return [
             'type'       => 'new',
             'class'      => $this->className,
             'parameters' => $parameters,
@@ -59,6 +59,6 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

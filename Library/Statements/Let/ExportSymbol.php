@@ -39,26 +39,26 @@ class ExportSymbol
         $variable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $statement);
         $variable->setMustInitNull(true);
 
-        $letStatement = new LetStatement(array(
+        $letStatement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable' => $variable->getName(),
                     'operator' => 'assign',
-                    'expr' => array(
+                    'expr' => [
                         'type'  => $resolvedExpr->getType(),
                         'value' => $resolvedExpr->getCode(),
                         'file'  => $statement['file'],
                         'line'  => $statement['line'],
                         'char'  => $statement['char'],
-                    ),
+                    ],
                     'file'  => $statement['file'],
                     'line'  => $statement['line'],
                     'char'  => $statement['char'],
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $letStatement->compile($compilationContext);
 
         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);

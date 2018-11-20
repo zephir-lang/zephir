@@ -107,10 +107,10 @@ class StatementsFactory
      */
     public function returnX(AbstractBuilder $expression)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type' => 'return',
             'expr' => $expression
-        ));
+        ]);
     }
 
     /**
@@ -119,10 +119,10 @@ class StatementsFactory
      */
     public function throwX(AbstractBuilder $expression)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type' => 'throw',
             'expr' => $expression
-        ));
+        ]);
     }
 
     /**
@@ -131,10 +131,10 @@ class StatementsFactory
      */
     public function rawC($value)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type'  => 'cblock',
             'value' => $value
-        ));
+        ]);
     }
 
     /**

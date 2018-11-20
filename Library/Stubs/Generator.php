@@ -183,9 +183,9 @@ EOF;
         $original = $property->getOriginal();
 
         if (isset($original['default'])) {
-            $source .= ' = ' . $this->wrapPHPValue(array(
+            $source .= ' = ' . $this->wrapPHPValue([
                 'default' => $original['default']
-            ));
+            ]);
         }
 
         $docBlock = new DocBlock($property->getDocBlock(), $indent);
@@ -202,9 +202,9 @@ EOF;
     {
         $source = 'const ' . $constant->getName();
 
-        $value = $this->wrapPHPValue(array(
+        $value = $this->wrapPHPValue([
             'default' => $constant->getValue()
-        ));
+        ]);
 
         $docBlock = new DocBlock($constant->getDocBlock(), $indent);
         return $docBlock . "\n" . $indent . $source . ' = ' . $value . ';';
@@ -225,7 +225,7 @@ EOF;
         $aliasManager = $method->getClassDefinition()->getAliasManager();
         $docBlock = new MethodDocBlock($method, $aliasManager, $indent);
 
-        $parameters = array();
+        $parameters = [];
 
         if ($methodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
@@ -344,22 +344,22 @@ EOF;
                 break;
 
             case 'array':
-                $parameters = array();
+                $parameters = [];
 
                 foreach ($parameter['default']['left'] as $value) {
                     $source = '';
 
                     if (isset($value['key'])) {
-                        $source .= $this->wrapPHPValue(array(
+                        $source .= $this->wrapPHPValue([
                             'default' => $value['key'],
                             'type' => $value['key']['type']
-                        )) . ' => ';
+                        ]) . ' => ';
                     }
 
-                    $parameters[] = $source . $this->wrapPHPValue(array(
+                    $parameters[] = $source . $this->wrapPHPValue([
                         'default' => $value['value'],
                         'type' => $value['value']['type']
-                    ));
+                    ]);
                 }
 
                 return 'array(' . implode(', ', $parameters) . ')';

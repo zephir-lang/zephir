@@ -53,13 +53,13 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type'       => $this->operator,
             'left'       => $this->leftExpression->get(),
             'right'      => $this->rightExpression->get(),
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

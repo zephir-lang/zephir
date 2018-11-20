@@ -59,7 +59,7 @@ class CompilerFileAnonymous implements FileInterface
         $this->classDefinition = $classDefinition;
         $this->config = $config;
         $this->logger = $logger;
-        $this->headerCBlocks = array();
+        $this->headerCBlocks = [];
     }
 
     /**

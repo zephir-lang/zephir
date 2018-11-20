@@ -22,7 +22,7 @@ class DocblockParser
     protected $currentChar = null;
     protected $currentCharIndex = null;
     protected $currentLine = null;
-    protected $lines = array();
+    protected $lines = [];
 
     // Parsing helpers
     protected $ignoreSpaces;

@@ -45,7 +45,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         /**
          * Only string/variable/int
          */
-        $offsetExprs = array();
+        $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
 
@@ -88,7 +88,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = $compilationContext->compiler;
-        if (!in_array($className, array('self', 'static', 'parent'))) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -100,7 +100,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static'))) {
+            if (in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {

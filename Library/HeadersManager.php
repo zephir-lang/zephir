@@ -32,19 +32,19 @@ class HeadersManager
      * List of headers
      * @var array
      */
-    protected $headers = array();
+    protected $headers = [];
 
     /**
      * List of headers
      * @var array
      */
-    protected $headersFirst = array();
+    protected $headersFirst = [];
 
     /**
      * List of headers
      * @var array
      */
-    protected $headersLast = array();
+    protected $headersLast = [];
 
     /**
      * Adds a header path to the manager

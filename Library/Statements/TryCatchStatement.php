@@ -64,7 +64,7 @@ class TryCatchStatement extends StatementAbstract
             $compilationContext->backend->copyOnWrite($exc_var, 'EG(exception)', $compilationContext);
 
             $exprBuilder = BuilderFactory::getInstance();
-            $ifs         = array();
+            $ifs         = [];
 
             foreach ($this->statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
@@ -92,9 +92,9 @@ class TryCatchStatement extends StatementAbstract
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
-                    $assignExceptVar = $exprBuilder->statements()->let(array(
+                    $assignExceptVar = $exprBuilder->statements()->let([
                         $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
-                    ));
+                    ]);
 
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(
@@ -105,11 +105,11 @@ class TryCatchStatement extends StatementAbstract
                             )
                         )
                         ->setStatements($exprBuilder->statements()->block(array_merge(
-                            array(
+                            [
                                 $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
                                  $assignExceptionVarStmt
-                            ),
-                            isset($catch['statements']) ? $catch['statements'] : array()
+                            ],
+                            isset($catch['statements']) ? $catch['statements'] : []
                         )));
                 }
             }
@@ -117,7 +117,7 @@ class TryCatchStatement extends StatementAbstract
             $primaryIf = $ifs[0];
             $lastIf    = $ifs[0];
             for ($i=1; $i<count($ifs); ++$i) {
-                $lastIf->setElseStatements($exprBuilder->statements()->block(array($ifs[$i])));
+                $lastIf->setElseStatements($exprBuilder->statements()->block([$ifs[$i]]));
                 $lastIf = $ifs[$i];
             }
 

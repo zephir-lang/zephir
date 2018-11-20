@@ -118,9 +118,9 @@ class UnaryOperator extends AbstractOperator
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'type' => $this->getOperator(),
             'left' => $this->getExpression(),
-        );
+        ];
     }
 }

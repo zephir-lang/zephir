@@ -58,10 +58,10 @@ class TernaryOperator extends BaseOperator
         /**
          * Create an implicit 'let' operation to update the evaluated left operator
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
@@ -69,9 +69,9 @@ class TernaryOperator extends BaseOperator
                     'file'        => $expression['file'],
                     'line'        => $expression['line'],
                     'char'        => $expression['char'],
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();
@@ -81,10 +81,10 @@ class TernaryOperator extends BaseOperator
         /**
          * Create an implicit 'let' operation to update the evaluated left operator
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
@@ -92,9 +92,9 @@ class TernaryOperator extends BaseOperator
                     'file'        => $expression['file'],
                     'line'        => $expression['line'],
                     'char'        => $expression['char'],
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();

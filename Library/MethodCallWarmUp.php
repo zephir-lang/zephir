@@ -22,7 +22,7 @@ class MethodCallWarmUp
     /**
      *
      */
-    private $warmUps = array();
+    private $warmUps = [];
 
     /**
      *
@@ -32,10 +32,10 @@ class MethodCallWarmUp
      */
     public function add(ClassDefinition $classDefinition, ClassMethod $method)
     {
-        $this->warmUps[] = array(
+        $this->warmUps[] = [
             $classDefinition,
             $method
-        );
+        ];
     }
 
     public function get()

@@ -32,9 +32,9 @@ class VariableBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'variable',
             'value' => $this->name
-        );
+        ];
     }
 }

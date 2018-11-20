@@ -111,10 +111,10 @@ class Template
         $css = $this->theme->getThemeInfoExtendAware("css");
         $js = $this->theme->getThemeInfoExtendAware("javascript");
 
-        return array(
+        return [
             "css" => $css,
             "javascript"  => $js
-        );
+        ];
     }
 
     /**
@@ -196,7 +196,7 @@ class Template
         return $inputFilename;
     }
 
-    public function partial($fileName, array $data = array())
+    public function partial($fileName, array $data = [])
     {
         $newLevel = $this->nestedLevel+1;
 

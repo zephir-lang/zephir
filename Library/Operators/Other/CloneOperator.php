@@ -48,7 +48,7 @@ class CloneOperator extends BaseOperator
             throw new CompilerException("Variable type: " . $exprVariable->getType() . " cannot be cloned");
         }
 
-        if ($clonedVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+        if ($clonedVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
             $compilationContext->logger->warning('Possible attempt to use non array in "clone" operator', 'non-valid-clone', $expression);
         }
 

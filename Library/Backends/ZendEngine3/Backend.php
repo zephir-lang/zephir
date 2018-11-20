@@ -64,8 +64,8 @@ class Backend extends BackendZendEngine2
     {
         if ($variable->isDoublePointer() ||
             $variable->isSuperGlobal() ||
-            in_array($variable->getName(), array('this_ptr', 'return_value')) ||
-            in_array($variable->getType(), array('int', 'long'))) {
+            in_array($variable->getName(), ['this_ptr', 'return_value']) ||
+            in_array($variable->getType(), ['int', 'long'])) {
             return $variable->getName();
         }
 
@@ -102,15 +102,15 @@ class Backend extends BackendZendEngine2
     {
         switch ($type) {
             case 'zend_ulong':
-                return array('', 'zend_ulong');
+                return ['', 'zend_ulong'];
 
             case 'zend_string':
-                return array('*', 'zend_string');
+                return ['*', 'zend_string'];
         }
 
         list ($pointer, $code) = parent::getTypeDefinition($type);
 
-        return array($pointer, $code);
+        return [$pointer, $code];
     }
 
     /**
@@ -338,7 +338,7 @@ class Backend extends BackendZendEngine2
             return 'void ' . $method->getName() . '(TSRMLS_D)';
         }
 
-        $signatureParameters = array();
+        $signatureParameters = [];
         $parameters = $method->getParameters();
         if (is_object($parameters)) {
             foreach ($parameters->getParameters() as $parameter) {
@@ -418,7 +418,7 @@ class Backend extends BackendZendEngine2
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (in_array($typeKey, array('int', 'uint', 'long', 'ulong'))) {
+            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }

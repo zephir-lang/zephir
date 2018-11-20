@@ -20,7 +20,7 @@ use Zephir\CompilationContext;
  */
 class ClassEntryCache
 {
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * Retrieves/Creates a class entry cache

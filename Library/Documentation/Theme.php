@@ -31,7 +31,7 @@ class Theme
      */
     protected $extendedTheme;
 
-    protected $themeInfos = array();
+    protected $themeInfos = [];
 
     public function __construct($themeDir, $outputDir, $themeConfig, $config, Documentation $documentation)
     {
@@ -118,7 +118,7 @@ class Theme
         if ($this->extendedTheme) {
             $data = $this->extendedTheme->getThemeInfoExtendAware($name);
         } else {
-            $data = array();
+            $data = [];
         }
         $info = $this->getThemeInfo($name);
         array_unshift($data, $info);
@@ -144,7 +144,7 @@ class Theme
         $themeStt = $this->getThemePath("static");
 
         if ($themeStt) {
-            $files = array();
+            $files = [];
 
             $this->__copyDir($themeStt, $outputStt . "/static", $files);
 
@@ -163,24 +163,24 @@ class Theme
 
     public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
     {
-        $output = array(
+        $output = [
 
-            "allClasses" => array(),
-            "allNamespaces" => array(),
-            "classes" => array(),
-            "namespaces" => array()
+            "allClasses" => [],
+            "allNamespaces" => [],
+            "classes" => [],
+            "namespaces" => []
 
-        );
+        ];
 
         foreach ($classList as $class) {
             $cDef = $class->getClassDefinition();
             $cName = $cDef->getCompleteName();
 
-            $output["allClasses"][$cName] = array(
+            $output["allClasses"][$cName] = [
                 "type" => $cDef->getType(),
                 "name" => $cName,
                 "shortname" => $cDef->getName()
-            );
+            ];
 
             if (!strpos($cName, "\\") > 0) {
                 $output["classes"][] = $cName;
@@ -190,8 +190,8 @@ class Theme
         $namespaces = $nsA->getByNamespace();
 
         foreach ($namespaces as $ns) {
-            $subclasses     = array();
-            $subnamespaces  = array();
+            $subclasses     = [];
+            $subnamespaces  = [];
 
             foreach ($ns->getClasses() as $scs) {
                 $subclasses[] = $scs->getClassDefinition()->getCompleteName();
@@ -201,7 +201,7 @@ class Theme
                 $subnamespaces[] = $sns->getFullNamespace();
             }
 
-            $output["allNamespaces"][$ns->getFullNamespace()] = array(
+            $output["allNamespaces"][$ns->getFullNamespace()] = [
 
                 "name"       => $ns->getFullNamespace(),
                 "shortName"  => $ns->getShortName(),
@@ -209,7 +209,7 @@ class Theme
                 "classes"    => $subclasses,
                 "namespaces" => $subnamespaces
 
-            );
+            ];
 
             if (!strpos($ns->getFullNamespace(), "\\") > 0) {
                 $output["namespaces"][] = $ns->getFullNamespace();
@@ -227,10 +227,10 @@ class Theme
 
     private function __namespaceTreeHelper(NamespaceHelper $ns)
     {
-        $output = array(
-            "classes"    => array(),
-            "namespaces" => array()
-        );
+        $output = [
+            "classes"    => [],
+            "namespaces" => []
+        ];
 
         $subNs = $ns->getNamespaces();
         $subCs = $ns->getClasses();

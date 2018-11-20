@@ -33,9 +33,9 @@ class ClassesFile extends AbstractFile
 
     public function getData()
     {
-        return array(
+        return [
             "classes" => $this->classes,
-        );
+        ];
     }
 
     public function getOutputFile()

@@ -102,11 +102,11 @@ class OperatorsFactory
      */
     public function cast($type, AbstractBuilder $expression)
     {
-        return $this->raw(array(
+        return $this->raw([
            'type'   => BinaryOperator::OPERATOR_CAST,
            'left'   => $type,
            'right'  => $expression
-        ));
+        ]);
     }
 
     /**
@@ -116,11 +116,11 @@ class OperatorsFactory
      */
     public function hint($type, AbstractBuilder $expression)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type'   => BinaryOperator::OPERATOR_TYPE_HINT,
             'left'   => $type,
             'right'  => $expression
-        ));
+        ]);
     }
 
     /**

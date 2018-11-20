@@ -21,7 +21,7 @@ class IntType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public $methodMap = array(
+    public $methodMap = [
         'abs' => 'abs',
         'tobinary' => 'decbin',
         'tohex' => 'dechex',
@@ -36,7 +36,7 @@ class IntType extends AbstractType
         'acos' => 'acos',
         'atan' => 'atan',
         'log' => 'log'
-    );
+    ];
 
     /**
      * {@inheritdoc}

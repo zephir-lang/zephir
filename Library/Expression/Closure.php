@@ -104,12 +104,12 @@ class Closure
         if (isset($expression['right'])) {
             $block = $expression['right'];
         } else {
-            $block = array();
+            $block = [];
         }
 
         $classMethod = new ClassMethod(
             $classDefinition,
-            array('public', 'final'),
+            ['public', 'final'],
             '__invoke',
             $parameters,
             new StatementsBlock($block),

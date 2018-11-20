@@ -21,9 +21,9 @@ use Zephir\StatementsBlock;
  */
 class StaticTypeInference
 {
-    protected $variables = array();
+    protected $variables = [];
 
-    protected $infered = array();
+    protected $infered = [];
 
     /**
      * Do the compilation pass

@@ -21,9 +21,9 @@ use Zephir\StatementsBlock;
  */
 class SkipVariantInit
 {
-    protected $branches = array();
+    protected $branches = [];
 
-    protected $variablesToSkip = array();
+    protected $variablesToSkip = [];
 
     protected $ignoredVariables;
 
@@ -90,7 +90,7 @@ class SkipVariantInit
      */
     public function getVariables()
     {
-        $variableStats = array();
+        $variableStats = [];
 
         foreach ($this->variablesToSkip as $branchNumber => $variables) {
             foreach ($variables as $variable => $one) {
@@ -102,7 +102,7 @@ class SkipVariantInit
             }
         }
 
-        $variables = array();
+        $variables = [];
         $numberBranches = count($this->branches);
         foreach ($variableStats as $variable => $number) {
             if ($number == $numberBranches) {

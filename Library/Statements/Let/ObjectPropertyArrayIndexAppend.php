@@ -51,7 +51,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         /**
          * Only string/variable/int
          */
-        $offsetExprs = array();
+        $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
 

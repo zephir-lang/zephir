@@ -48,8 +48,8 @@ class NamespaceAccessor
 
     public function build()
     {
-        $byNamespace = array();
-        $tree = array();
+        $byNamespace = [];
+        $tree = [];
 
         foreach ($this->classes as $className => $class) {
             $ns = explode("\\", $class->getClassDefinition()->getNamespace());

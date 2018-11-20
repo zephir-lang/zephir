@@ -26,7 +26,7 @@ class Docblock
     /**
      * @var Annotation[]
      */
-    protected $annotations = array();
+    protected $annotations = [];
 
     /**
      * @var string
@@ -63,7 +63,7 @@ class Docblock
      */
     public function getAnnotationsByType($type)
     {
-        $annotations = array();
+        $annotations = [];
         foreach ($this->annotations as $an) {
             if ($an->getName() == $type) {
                 $annotations[] = $an;

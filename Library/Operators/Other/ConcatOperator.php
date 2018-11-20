@@ -37,7 +37,7 @@ class ConcatOperator extends BaseOperator
 
         $isFullString = true;
 
-        $parts = array();
+        $parts = [];
         while ($expression && isset($expression['left'])) {
             $parts[] = $expression['right'];
             if ($expression['left']['type'] == 'concat') {
@@ -53,7 +53,7 @@ class ConcatOperator extends BaseOperator
         }
 
         $key = '';
-        $concatParts = array();
+        $concatParts = [];
         $parts = array_reverse($parts);
         foreach ($parts as $part) {
             $expr = new Expression($part);
@@ -117,7 +117,7 @@ class ConcatOperator extends BaseOperator
         }
 
         $compilationContext->stringsManager->addConcatKey($key);
-        return array($key, join(', ', $concatParts));
+        return [$key, join(', ', $concatParts)];
     }
 
     /**

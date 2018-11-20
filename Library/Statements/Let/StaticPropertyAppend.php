@@ -64,7 +64,7 @@ class StaticPropertyAppend extends ArrayIndex
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = $compilationContext->compiler;
-        if (!in_array($className, array('self', 'static', 'parent'))) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -76,7 +76,7 @@ class StaticPropertyAppend extends ArrayIndex
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static'))) {
+            if (in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {
