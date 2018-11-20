@@ -72,9 +72,7 @@ class Compiler implements InjectionAwareInterface
      */
     protected $compiledFiles = [];
 
-    /**
-     *
-     */
+    
     protected $constants = [];
 
     /**
