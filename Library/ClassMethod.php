@@ -11,13 +11,13 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
-use Zephir\Passes\LocalContextPass;
-use Zephir\Passes\StaticTypeInference;
-use Zephir\Passes\CallGathererPass;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception\CompilerException;
+use Zephir\Passes\CallGathererPass;
+use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\StaticTypeInference;
 
 /**
  * ClassMethod

@@ -11,8 +11,8 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
+use Zephir\Documentation\AbstractFile;
 use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceFile extends AbstractFile

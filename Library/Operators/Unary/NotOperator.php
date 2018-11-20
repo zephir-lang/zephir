@@ -11,11 +11,11 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 class NotOperator extends BaseOperator
 {

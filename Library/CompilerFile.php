@@ -11,11 +11,11 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Parser\ParseException;
 

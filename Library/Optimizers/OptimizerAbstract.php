@@ -13,8 +13,8 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Di\InjectionAwareInterface;
 use Zephir\Di\ContainerAwareTrait;
+use Zephir\Di\InjectionAwareInterface;
 
 /**
  * Class OptimizerAbstract

@@ -11,11 +11,11 @@
 
 namespace Zephir\Optimizers;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Branch;
 use Zephir\Variable;
 
 /**

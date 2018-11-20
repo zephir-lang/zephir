@@ -11,8 +11,8 @@
 
 namespace Zephir;
 
-use Zephir\Parser\ParseException;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Parser\ParseException;
 
 /**
  * Zephir\Parser

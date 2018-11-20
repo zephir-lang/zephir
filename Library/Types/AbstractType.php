@@ -13,9 +13,9 @@ namespace Zephir\Types;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Exception\CompilerException;
 
 abstract class AbstractType
 {

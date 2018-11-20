@@ -11,8 +11,8 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
 use Zephir\Di\Singleton;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**

@@ -13,9 +13,9 @@ namespace Zephir\Statements\Let;
 
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\CompiledExpression;
 
 /**
  * StaticPropertyArrayIndex

@@ -11,8 +11,8 @@
 
 namespace Zephir\Cache;
 
-use Zephir\CompilationContext;
 use Zephir\ClassMethod;
+use Zephir\CompilationContext;
 
 /**
  * StaticMethodCache

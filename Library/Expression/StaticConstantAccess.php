@@ -14,8 +14,8 @@ namespace Zephir\Expression;
 use Zephir\ClassConstant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
 /**

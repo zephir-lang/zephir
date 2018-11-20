@@ -11,8 +11,8 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception\CompilerException;
 
 /**
  * StaticCall

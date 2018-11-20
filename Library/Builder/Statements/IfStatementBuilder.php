@@ -11,8 +11,8 @@
 
 namespace Zephir\Builder\Statements;
 
-use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Operators\AbstractOperatorBuilder;
+use Zephir\Builder\StatementsBlockBuilder;
 
 /**
  * IfStatementBuilder

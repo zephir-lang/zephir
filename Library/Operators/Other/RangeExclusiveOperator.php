@@ -11,12 +11,12 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Exception\CompilerException;
-use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 
 /**
  * RangeExclusive

@@ -12,9 +12,9 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
-use Zephir\CompiledExpression;
 
 /**
  * ObjectDynamicProperty

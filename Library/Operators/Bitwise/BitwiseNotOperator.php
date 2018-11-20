@@ -11,11 +11,11 @@
 
 namespace Zephir\Operators\Bitwise;
 
-use Zephir\Exception\CompilerException;
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 class BitwiseNotOperator extends BaseOperator
 {
