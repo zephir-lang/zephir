@@ -22,7 +22,6 @@ class See extends Annotation
     protected $resource;
     protected $text;
 
-
     protected function parseContent()
     {
         $spaceIndex = strpos($this->string, " ");
@@ -36,7 +35,6 @@ class See extends Annotation
 
         $this->contentParsed = true;
     }
-
 
     public function getResource()
     {

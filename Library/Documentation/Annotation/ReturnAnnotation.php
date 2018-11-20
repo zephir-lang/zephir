@@ -21,7 +21,6 @@ class ReturnAnnotation extends Annotation
     protected $returnType;
     protected $description;
 
-
     protected function parseContent()
     {
         $spaceIndex = strpos($this->string, " ");

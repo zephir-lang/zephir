@@ -159,8 +159,6 @@ class Theme
         }
     }
 
-
-
     public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
     {
         $output = [

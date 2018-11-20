@@ -20,7 +20,6 @@ class CallMethodStatement extends CallFunctionStatement
 {
     private $variable;
 
-
     /**
      * @param null $variable
      * @param null $name

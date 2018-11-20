@@ -191,7 +191,6 @@ class WriteDetector
         }
     }
 
-
     /**
      * Pass expressions
      *
