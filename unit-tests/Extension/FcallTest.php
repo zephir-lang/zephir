@@ -45,6 +45,29 @@ class FcallTest extends TestCase
         $this->assertSame([$param1, $param2], $t->testFunctionGetArgs($param1, $param2));
     }
 
+    /**
+     * @test
+     * @dataProvider getArgsDataProvider
+     * @param mixed $param1
+     * @param mixed $param2
+     */
+    public function shouldGetArgsUsingAllExtraParams($param1, $param2)
+    {
+        $t = new Fcall();
+        $this->assertSame([$param1, $param2], $t->testFunctionGetArgsAllExtra($param1, $param2));
+    }
+
+    /**
+     * @test
+     * @dataProvider getArgsDataProvider
+     * @param mixed $param1
+     * @param mixed $param2
+     */
+    public function shouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2)
+    {
+        $this->assertSame([$param1, $param2], Fcall::testStaticFunctionGetArgsAllExtra($param1, $param2));
+    }
+
     public function getArgsDataProvider()
     {
         return [
@@ -56,6 +79,19 @@ class FcallTest extends TestCase
             [1025, false],
             [false, 1234],
         ];
+    }
+
+    /** @test */
+    public function shouldGedDesiredArgUsingAllExtraParams()
+    {
+        $t = new Fcall();
+        $this->assertSame([true, false], $t->testFunctionGetArgAllExtra(true, false));
+    }
+
+    /** @test */
+    public function shouldGedDesiredArgUsingAllExtraParamsAndStaticFunction()
+    {
+        $this->assertSame([true, false], Fcall::testStaticFunctionGetArgAllExtra(true, false));
     }
 
     public function testArrayFill()
