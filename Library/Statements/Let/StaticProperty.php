@@ -197,7 +197,7 @@ class StaticProperty
                             $propertyCache->setReusable(false);
                             $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), &' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
                         } else {
-                             $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                            $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                         }
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);

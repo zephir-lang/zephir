@@ -65,7 +65,8 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-         /**
+
+        /**
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);

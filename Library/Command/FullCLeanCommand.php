@@ -34,12 +34,13 @@ class FullCLeanCommand extends ContainerAwareCommand
     {
         $this->filesystem->clean();
 
-        // TODO: Consider replace clean script by php iterator
+        /**
+         * TODO: Consider replace clean script by php iterator
+         * TODO: Do we need a batch file for Windows like "clean"?
+         */
         if ($this->environment->isWindows()) {
             system('cd ext && nmake clean-all');
             system('cd ext && phpize --clean');
-            // TODO: Do we need a batch file?
-            // system('cd ext && ./clean');
         } else {
             system('cd ext && make clean > /dev/null');
             system('cd ext && phpize --clean > /dev/null');

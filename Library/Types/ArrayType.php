@@ -103,7 +103,6 @@ class ArrayType extends AbstractType
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-
         $functionCall = BuilderFactory::getInstance()->statements()
             ->functionCall('join', $expression['parameters'])
             ->addArgument($caller)

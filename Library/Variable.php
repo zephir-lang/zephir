@@ -983,12 +983,17 @@ class Variable implements TypeAwareInterface
 
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
+            /**
+             * TODO: Do we need this?
+             * $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
+             *
+             * TODO: What about else?
+             * $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
+             */
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
-                //$compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
-            } else {
-                //$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
             }
+
             $this->variantInits++;
 
             $this->setMustInitNull(true);
