@@ -114,11 +114,11 @@ class IfStatement extends AbstractStatement
      */
     protected function preBuild()
     {
-        $expression = array(
+        $expression = [
             'type' => 'if',
             'expr' => $this->getCondition(),
             'statements' => $this->getStatements()
-        );
+        ];
 
         if ($statements = $this->getElseStatements()) {
             $expression['else_statements'] = $statements;

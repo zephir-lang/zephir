@@ -35,7 +35,7 @@ use Zephir\ClassMethod;
  */
 class StaticMethodCache
 {
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * MethodCache

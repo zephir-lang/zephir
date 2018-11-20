@@ -307,7 +307,7 @@ class ArrayIndex
             /**
              * Trying to use a non-object dynamic variable as object
              */
-            if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+            if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
                 $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
             }
         }

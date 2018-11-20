@@ -169,7 +169,7 @@ class Struct
      */
     public function getInitEntry($name, $global, $namespace)
     {
-        $iniEntry = array();
+        $iniEntry = [];
         if (isset($global['ini-entry'])) {
             $iniEntry = $global['ini-entry'];
         }

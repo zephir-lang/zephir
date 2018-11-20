@@ -32,8 +32,8 @@ class ParameterBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'parameter' => $this->value->get()
-        );
+        ];
     }
 }

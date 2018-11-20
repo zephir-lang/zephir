@@ -55,8 +55,8 @@ class ClosureArrow extends Closure
         /**
          * Builds parameters using the only parameter available
          */
-        $parameters = new ClassMethodParameters(array(
-            array(
+        $parameters = new ClassMethodParameters([
+            [
                 'type' => 'parameter',
                 'name' => $expression['left']['value'],
                 'const' => 0,
@@ -66,20 +66,20 @@ class ClosureArrow extends Closure
                 'file' => $expression['left']['file'],
                 'line' => $expression['left']['line'],
                 'char' => $expression['left']['char'],
-            ),
-        ));
+            ],
+        ]);
 
         $exprBuilder = BuilderFactory::getInstance();
-        $statementBlockBuilder = $exprBuilder->statements()->block(array(
+        $statementBlockBuilder = $exprBuilder->statements()->block([
             $exprBuilder->statements()
                 ->returnX($exprBuilder->raw($expression['right']))
-        ));
+        ]);
 
         $block = $statementBlockBuilder->build();
 
         $classMethod = new ClassMethod(
             $classDefinition,
-            array('public', 'final'),
+            ['public', 'final'],
             '__invoke',
             $parameters,
             new StatementsBlock($block),

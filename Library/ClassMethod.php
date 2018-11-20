@@ -66,7 +66,7 @@ class ClassMethod
     /**
      * Class type hints returned by the method
      */
-    protected $returnClassTypes = array();
+    protected $returnClassTypes = [];
 
     /**
      * Whether the variable is void
@@ -403,7 +403,7 @@ class ClassMethod
             }
             $optimizedName = $this->getName() . '_zephir_internal_call';
 
-            $visibility = array('internal');
+            $visibility = ['internal'];
 
             $statements = null;
             if ($this->statements) {
@@ -755,7 +755,7 @@ class ClassMethod
      */
     public function getModifiers()
     {
-        $modifiers = array();
+        $modifiers = [];
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
                 case 'public':
@@ -1406,7 +1406,7 @@ class ClassMethod
             $dataType = 'variable';
         }
 
-        if (in_array($dataType, array('variable', 'callable', 'object', 'resource'))) {
+        if (in_array($dataType, ['variable', 'callable', 'object', 'resource'])) {
             return;
         }
 
@@ -1591,8 +1591,8 @@ class ClassMethod
             /**
              * Round 1. Create variables in parameters in the symbol table
              */
-            $classCastChecks = array();
-            $substituteVars = array();
+            $classCastChecks = [];
+            $substituteVars = [];
             foreach ($parameters->getParameters() as $parameter) {
                 /**
                  * Change dynamic variables to low level types
@@ -1714,7 +1714,7 @@ class ClassMethod
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                    $classCastChecks[] = array($symbol, $parameter);
+                    $classCastChecks[] = [$symbol, $parameter];
                 } else {
                     if (isset($parameter['data-type'])) {
                         if ($parameter['data-type'] == 'variable') {
@@ -1759,9 +1759,9 @@ class ClassMethod
             /**
              * Round 2. Fetch the parameters in the method
              */
-            $params = array();
-            $requiredParams = array();
-            $optionalParams = array();
+            $params = [];
+            $requiredParams = [];
+            $optionalParams = [];
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
@@ -1805,7 +1805,7 @@ class ClassMethod
              * Pass the write detector to the method statement block to check if the parameter
              * variable is modified so as do the proper separation
              */
-            $parametersToSeparate = array();
+            $parametersToSeparate = [];
             if (is_object($this->statements)) {
                 /**
                  * If local context is not available
@@ -1993,7 +1993,7 @@ class ClassMethod
         /**
          * Check if there are unused variables
          */
-        $usedVariables = array();
+        $usedVariables = [];
         $classDefinition = $this->getClassDefinition();
         if ($classDefinition) {
             $completeName = $classDefinition->getCompleteName();
@@ -2013,7 +2013,7 @@ class ClassMethod
             if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                 $type = $variable->getType();
                 if (!isset($usedVariables[$type])) {
-                    $usedVariables[$type] = array();
+                    $usedVariables[$type] = [];
                 }
                 $usedVariables[$type][] = $variable;
             }

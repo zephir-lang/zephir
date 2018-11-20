@@ -40,13 +40,13 @@ class NamespaceFile extends AbstractFile
 
     public function getData()
     {
-        return array(
+        return [
 
             "namespaceHelper" => $this->namespaceHelper,
             "subNamespaces" => $this->namespaceHelper->getNamespaces(),
             "subClasses" => $this->namespaceHelper->getClasses(),
 
-        );
+        ];
     }
 
     public function getOutputFile()

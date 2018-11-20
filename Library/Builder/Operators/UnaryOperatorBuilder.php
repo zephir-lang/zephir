@@ -50,12 +50,12 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
             $expr = $this->leftExpression;
         }
 
-        return array(
+        return [
             'type'       => $this->operator,
             'left'       => $expr,
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

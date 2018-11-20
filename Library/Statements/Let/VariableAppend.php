@@ -55,7 +55,7 @@ class VariableAppend
         }
 
         if ($symbolVariable->getType() == 'variable') {
-            if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array'))) {
+            if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array'])) {
                 $compilationContext->logger->warning('Possible attempt to append elements on a non-array dynamic variable', 'non-array-append', $statement);
             }
         }

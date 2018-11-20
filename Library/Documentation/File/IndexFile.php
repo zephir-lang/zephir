@@ -33,11 +33,11 @@ class IndexFile extends AbstractFile
 
     public function getData()
     {
-        return array(
+        return [
             "namespaceAccessor" => $this->namespaceAccessor,
             "namespacesTree" => $this->namespaceAccessor->getNamespaceTree(),
             "namespaces" => $this->namespaceAccessor->getByNamespace()
-        );
+        ];
     }
 
     public function getOutputFile()

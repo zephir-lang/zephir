@@ -36,7 +36,7 @@ class StatementsBlockBuilder
     public function get()
     {
         if (!$this->raw) {
-            $statements = array();
+            $statements = [];
 
             foreach ($this->statements as $statement) {
                 $statements[] = $statement->get();

@@ -22,7 +22,7 @@ class StringType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public $methodMap = array(
+    public $methodMap = [
         'index' => 'strpos',
         'trim' => 'trim',
         'trimleft' => 'ltrim',
@@ -49,7 +49,7 @@ class StringType extends AbstractType
         'htmlspecialchars' => 'htmlspecialchars',
         'camelize' => 'camelize',
         'uncamelize' => 'uncamelize',
-    );
+    ];
 
     /**
      * {@inheritdoc}

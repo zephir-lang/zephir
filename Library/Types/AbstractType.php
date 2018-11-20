@@ -24,7 +24,7 @@ abstract class AbstractType
      *
      * @var array
      */
-    protected $methodMap = array();
+    protected $methodMap = [];
 
     /**
      * Intercepts calls to built-in methods
@@ -55,22 +55,22 @@ abstract class AbstractType
             if ($paramNumber == 0) {
                 if (isset($expression['parameters'])) {
                     $parameters = $expression['parameters'];
-                    array_unshift($parameters, array('parameter' => $caller));
+                    array_unshift($parameters, ['parameter' => $caller]);
                 } else {
-                    $parameters = array(array('parameter' => $caller));
+                    $parameters = [['parameter' => $caller]];
                 }
             } else {
                 if (isset($expression['parameters'])) {
-                    $parameters = array();
+                    $parameters = [];
                     foreach ($expression['parameters'] as $number => $parameter) {
                         if ($number == $paramNumber) {
                             $parameters[] = null;
                         }
                         $parameters[] = $parameter;
                     }
-                    $parameters[$paramNumber] = array('parameter' => $caller);
+                    $parameters[$paramNumber] = ['parameter' => $caller];
                 } else {
-                    $parameters = array(array('parameter' => $caller));
+                    $parameters = [['parameter' => $caller]];
                 }
             }
 

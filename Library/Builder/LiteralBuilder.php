@@ -30,9 +30,9 @@ class LiteralBuilder
 
     public function get()
     {
-        return array(
+        return [
             'type'  => $this->type,
             'value' => $this->value
-        );
+        ];
     }
 }

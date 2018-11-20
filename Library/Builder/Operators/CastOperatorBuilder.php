@@ -45,13 +45,13 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type'       => 'cast',
             'left'       => $this->leftOperand,
             'right'      => $this->rightOperand->get(),
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

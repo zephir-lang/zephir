@@ -54,57 +54,57 @@ class SwitchStatement extends StatementAbstract
                 /**
                  * Simulate an assignment to the temporary variable
                  */
-                $statement = new LetStatement(array(
+                $statement = new LetStatement([
                     'type' => 'let',
-                    'assignments' => array(
-                        array(
+                    'assignments' => [
+                        [
                             'assign-type' => 'variable',
                             'operator' => 'assign',
                             'variable' => $tempVariable->getName(),
-                            'expr' => array(
+                            'expr' => [
                                 'type' => $resolvedExpr->getType(),
                                 'value' => $resolvedExpr->getCode(),
                                 'file' => $exprRaw['file'],
                                 'line' => $exprRaw['line'],
                                 'char' => $exprRaw['char']
-                            ),
+                            ],
                             'file' => $exprRaw['file'],
                             'line' => $exprRaw['line'],
                             'char' => $exprRaw['char']
-                        )
-                    )
-                ));
+                        ]
+                    ]
+                ]);
                 $statement->compile($compilationContext);
             } else {
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
 
             $clauses = $this->normalizeClauses($this->statement['clauses']);
-            $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
+            $tempLeft = ['type' => 'variable', 'value' => $tempVariable->getRealName()];
 
             /**
              * In the first round we group case clauses that have block statements
              * with the ones that does not have one
              */
-            $blocks = array();
-            $exprStack = array();
+            $blocks = [];
+            $exprStack = [];
             $defaultBlock = null;
             foreach ($clauses as $clause) {
                 if ($clause['type'] == 'case') {
-                    $expr = array(
+                    $expr = [
                         'type' => 'equals',
                         'left' => $tempLeft,
                         'right' => $clause['expr']
-                    );
+                    ];
                     if (!isset($clause['statements'])) {
                         $exprStack[] = $expr;
                     } else {
                         $exprStack[] = $expr;
-                        $blocks[] = array(
+                        $blocks[] = [
                             'expr' => $exprStack,
                             'block' => $clause['statements']
-                        );
-                        $exprStack = array();
+                        ];
+                        $exprStack = [];
                     }
                 } else {
                     if ($clause['type'] == 'default') {
@@ -124,7 +124,7 @@ class SwitchStatement extends StatementAbstract
                     $condition = $evalExpr->optimize($expressions[0], $compilationContext);
                     $codePrinter->output('if (' . $condition . ') {');
                 } else {
-                    $orConditions = array();
+                    $orConditions = [];
                     foreach ($expressions as $expression) {
                         $orConditions[] = $evalExpr->optimize($expression, $compilationContext);
                     }
@@ -169,7 +169,7 @@ class SwitchStatement extends StatementAbstract
             return $clauses;
         }
 
-        $emptyClausesBeforeDefault = array();
+        $emptyClausesBeforeDefault = [];
         for ($i = $defaultIndex - 1; $i >= 0; $i--) {
             $clause = $clauses[$i];
             if (isset($clause['statements'])) {

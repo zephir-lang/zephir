@@ -46,7 +46,7 @@ class SubstrOptimizer extends OptimizerAbstract
          */
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $params = array();
+        $params = [];
         $flags = '0';
 
         for ($param = 1; $param <= 2; ++$param) {

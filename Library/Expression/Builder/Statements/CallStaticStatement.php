@@ -142,12 +142,12 @@ class CallStaticStatement extends AbstractStatement
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
                 if (!is_array($argument) || !isset($argument['parameter'])) {
-                    $argument = array('parameter' => $argument);
+                    $argument = ['parameter' => $argument];
                 }
             }
         }
 
-        return array(
+        return [
             'type'           => 'scall',
             'class'          => $this->getClass(),
             'name'           => $this->getMethod(),
@@ -155,6 +155,6 @@ class CallStaticStatement extends AbstractStatement
             'dynamic-class'  => $this->isDynamicClass(),
             'dynamic'        => $this->isDynamicMethod(),
 
-        );
+        ];
     }
 }

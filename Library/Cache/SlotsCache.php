@@ -22,9 +22,9 @@ class SlotsCache
 {
     private static $slot = 1;
 
-    private static $cacheMethodSlots = array();
+    private static $cacheMethodSlots = [];
 
-    private static $cacheFunctionSlots = array();
+    private static $cacheFunctionSlots = [];
 
     const MAX_SLOTS_NUMBER = 512;
 

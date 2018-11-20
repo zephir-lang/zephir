@@ -94,7 +94,7 @@ class FetchOperator extends BaseOperator
                 }
 
                 if ($evalVariable->getType() == 'variable') {
-                    if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                    if ($evalVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
                         $compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-fetch', $expression['right']);
                     }
                 }
@@ -122,7 +122,7 @@ class FetchOperator extends BaseOperator
                     throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $expression['right']['left']);
                 }
 
-                if ($evalVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+                if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
                     $compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
                 }
 
@@ -148,7 +148,7 @@ class FetchOperator extends BaseOperator
                     throw new CompilerException("Variable type: " . $evalVariable->getType() . " cannot be used as object", $expression['right']['left']);
                 }
 
-                if ($evalVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+                if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
                     $compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
                 }
 

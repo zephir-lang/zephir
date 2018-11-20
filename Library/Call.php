@@ -233,7 +233,7 @@ class Call
 
             if ($hasParametersByName) {
                 if ($this->reflection) {
-                    $positionalParameters = array();
+                    $positionalParameters = [];
                     foreach ($this->reflection->getParameters() as $position => $reflectionParameter) {
                         if (is_object($reflectionParameter)) {
                             $positionalParameters[$reflectionParameter->getName()] = $position;
@@ -241,7 +241,7 @@ class Call
                             $positionalParameters[$reflectionParameter['name']] = $position;
                         }
                     }
-                    $orderedParameters = array();
+                    $orderedParameters = [];
                     foreach ($parameters as $parameter) {
                         if (isset($positionalParameters[$parameter['name']])) {
                             $orderedParameters[$positionalParameters[$parameter['name']]] = $parameter;
@@ -252,14 +252,14 @@ class Call
                     $parameters_count = count($parameters);
                     for ($i = 0; $i < $parameters_count; $i++) {
                         if (!isset($orderedParameters[$i])) {
-                            $orderedParameters[$i] = array('parameter' => array('type' => 'null'));
+                            $orderedParameters[$i] = ['parameter' => ['type' => 'null']];
                         }
                     }
                     $parameters = $orderedParameters;
                 }
             }
 
-            $params = array();
+            $params = [];
             foreach ($parameters as $parameter) {
                 if (is_array($parameter['parameter'])) {
                     $paramExpr = new Expression($parameter['parameter']);
@@ -314,7 +314,7 @@ class Call
          * Static typed parameters in final/private methods are promotable to read only parameters
          * Recursive calls with static typed methods also also promotable
          */
-        $readOnlyParameters = array();
+        $readOnlyParameters = [];
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod == $calleeDefinition) {
@@ -338,10 +338,10 @@ class Call
             }
         }
 
-        $params = array();
-        $types = array();
-        $dynamicTypes = array();
-        $mustCheck = array();
+        $params = [];
+        $types = [];
+        $dynamicTypes = [];
+        $mustCheck = [];
         foreach ($exprParams as $position => $compiledExpression) {
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
@@ -505,9 +505,9 @@ class Call
         $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
-        $params = array();
-        $types = array();
-        $dynamicTypes = array();
+        $params = [];
+        $types = [];
+        $dynamicTypes = [];
 
         foreach ($exprParams as $compiledExpression) {
             $expression = $compiledExpression->getOriginal();

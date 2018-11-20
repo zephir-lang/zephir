@@ -72,7 +72,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             }
 
             if ($indexVariable->getType() == 'variable') {
-                if ($indexVariable->hasDifferentDynamicType(array('undefined', 'int', 'string'))) {
+                if ($indexVariable->hasDifferentDynamicType(['undefined', 'int', 'string'])) {
                     $compilationContext->logger->warning('Possible attempt to use non string/long dynamic variable as array index', 'invalid-array-offset', $statement);
                 }
             }
@@ -249,7 +249,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         /**
          * Only string/variable/int
          */
-        $offsetExprs = array();
+        $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
 

@@ -105,7 +105,7 @@ class Variable implements TypeAwareInterface
     /**
      * Class types
      */
-    protected $classTypes = array();
+    protected $classTypes = [];
 
     /**
      * Associated class

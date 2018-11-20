@@ -84,7 +84,7 @@ class MethodCall extends Call
             }
         }
 
-        return array($numberPoly, $method);
+        return [$numberPoly, $method];
     }
 
     /**
@@ -428,7 +428,7 @@ class MethodCall extends Call
          * Some parameters in internal methods receive parameters as references
          */
         if (isset($expression['parameters'])) {
-            $references = array();
+            $references = [];
             if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
                 if (isset($method)) {
                     if ($method instanceof \ReflectionMethod) {
@@ -566,7 +566,7 @@ class MethodCall extends Call
                 }
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         // Add the last call status to the current symbol table

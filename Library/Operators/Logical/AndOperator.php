@@ -49,22 +49,22 @@ class AndOperator extends LogicalBaseOperator
             case 'double':
             case 'uint':
             case 'uchar':
-                $assignExprLeft = array(
+                $assignExprLeft = [
                     'type'  => $left->getType(),
                     'value' => $left->getCode(),
-                );
+                ];
                 break;
             case 'variable':
-                $assignExprLeft = array(
+                $assignExprLeft = [
                     'type'  => 'variable',
                     'value' => $left->getCode(),
-                );
+                ];
                 break;
             case 'null':
-                $assignExprLeft = array(
+                $assignExprLeft = [
                     'type'  => 'null',
                     'value' => null
-                );
+                ];
                 break;
         }
 
@@ -75,10 +75,10 @@ class AndOperator extends LogicalBaseOperator
         /**
          * Create an implicit 'let' operation to update the evaluated left operator
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
@@ -86,9 +86,9 @@ class AndOperator extends LogicalBaseOperator
                     'file' => $expression['left']['file'],
                     'line' => $expression['left']['line'],
                     'char' => $expression['left']['char']
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->output('if (' . $flagVariable->getName() . ') {');
@@ -106,22 +106,22 @@ class AndOperator extends LogicalBaseOperator
             case 'double':
             case 'uint':
             case 'uchar':
-                $assignExprRight = array(
+                $assignExprRight = [
                     'type'  => $right->getType(),
                     'value' => $right->getCode(),
-                );
+                ];
                 break;
             case 'variable':
-                $assignExprRight = array(
+                $assignExprRight = [
                     'type'  => 'variable',
                     'value' => $right->getCode(),
-                );
+                ];
                 break;
             case 'null':
-                $assignExprRight = array(
+                $assignExprRight = [
                     'type'  => 'null',
                     'value' => null
-                );
+                ];
                 break;
         }
 
@@ -132,10 +132,10 @@ class AndOperator extends LogicalBaseOperator
         /**
          * Create an implicit 'let' operation to update the evaluated right operator
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
@@ -143,9 +143,9 @@ class AndOperator extends LogicalBaseOperator
                     'file' => $expression['right']['file'],
                     'line' => $expression['right']['line'],
                     'char' => $expression['right']['char']
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();

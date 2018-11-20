@@ -36,7 +36,7 @@ class StaticCall extends Call
      */
     protected function call($context, $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
     {
-        if (!in_array($context, array('SELF', 'STATIC'))) {
+        if (!in_array($context, ['SELF', 'STATIC'])) {
             $context = 'SELF';
         }
 
@@ -66,7 +66,7 @@ class StaticCall extends Call
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         $isInternal = false;
@@ -153,7 +153,7 @@ class StaticCall extends Call
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         if (!count($params)) {
@@ -240,7 +240,7 @@ class StaticCall extends Call
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         if ($symbolVariable) {
@@ -315,7 +315,7 @@ class StaticCall extends Call
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         /**
@@ -396,7 +396,7 @@ class StaticCall extends Call
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         } else {
-            $params = array();
+            $params = [];
         }
 
         /**
@@ -527,7 +527,7 @@ class StaticCall extends Call
             $className = $expression['class'];
             $classDefinition = false;
 
-            if (!in_array($className, array('self', 'static', 'parent'))) {
+            if (!in_array($className, ['self', 'static', 'parent'])) {
                 if (is_string($className)) {
                     $className = $compilationContext->getFullName($className);
                     if ($compiler->isClass($className)) {
@@ -582,7 +582,7 @@ class StaticCall extends Call
                     throw new CompilerException("Cannot call private method '" . $methodName . "' out of its scope", $expression);
                 }
 
-                if (!in_array($className, array('self', 'static', 'parent'))) {
+                if (!in_array($className, ['self', 'static', 'parent'])) {
                     if (!$method->isStatic()) {
                         throw new CompilerException("Cannot call non-static method '" . $methodName . "' in a static way", $expression);
                     }
@@ -632,7 +632,7 @@ class StaticCall extends Call
             if ($dynamicClass) {
                 $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
             } else {
-                if (in_array($className, array('self', 'static')) || $classDefinition == $compilationContext->classDefinition) {
+                if (in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
                     $this->call(strtoupper($className), $methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
                 } else {
                     if ($className == 'parent') {

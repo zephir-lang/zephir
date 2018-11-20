@@ -63,9 +63,9 @@ class LetStatement extends AbstractStatement
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'type' => 'let',
             'assignments' => $this->getAssignments()
-        );
+        ];
     }
 }

@@ -59,11 +59,11 @@ class ShortTernaryOperator extends BaseOperator
                 'not',
                 $expression['left']
             ),
-            new StatementsBlockBuilder(array(
+            new StatementsBlockBuilder([
                 /**
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
-                new LetStatementBuilder(array(
+                new LetStatementBuilder([
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
@@ -71,13 +71,13 @@ class ShortTernaryOperator extends BaseOperator
                     'file'        => $expression['file'],
                     'line'        => $expression['line'],
                     'char'        => $expression['char']
-                ), $expression['extra'])
-            )),
-            new StatementsBlockBuilder(array(
+                ], $expression['extra'])
+            ]),
+            new StatementsBlockBuilder([
                 /**
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
-                new LetStatementBuilder(array(
+                new LetStatementBuilder([
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
@@ -85,8 +85,8 @@ class ShortTernaryOperator extends BaseOperator
                     'file'        => $expression['file'],
                     'line'        => $expression['line'],
                     'char'        => $expression['char']
-                ), $expression['extra'])
-            ))
+                ], $expression['extra'])
+            ])
         );
 
         $ifStatement = new IfStatement($ifBuilder->get());

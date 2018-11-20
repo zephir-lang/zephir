@@ -36,10 +36,10 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
             $paramsStr = '';
             $retParam = '';
             $retValueUsed = '0';
-            $params = array();
-            $zvals = array();
-            $initStatements = array();
-            $postStatements = array();
+            $params = [];
+            $zvals = [];
+            $initStatements = [];
+            $postStatements = [];
 
             for ($i = 0; $i < $paramCount; ++$i) {
                 $params[] = 'p' . $i;

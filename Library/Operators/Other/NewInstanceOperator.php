@@ -54,7 +54,7 @@ class NewInstanceOperator extends BaseOperator
         }
 
         if ($symbolVariable->getName() != 'return_value') {
-            if ($symbolVariable->hasDifferentDynamicType(array('unknown', 'undefined', 'object', 'null'))) {
+            if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
                 $compilationContext->logger->warning('Possible attempt to use non-object in "new" operator', 'non-valid-new', $expression);
             }
         }
@@ -200,8 +200,8 @@ class NewInstanceOperator extends BaseOperator
 
         /* @TODO use the MethodBuilder here */
         if (isset($expression['parameters'])) {
-            $callExpr = new Expression(array(
-                'variable'   => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
+            $callExpr = new Expression([
+                'variable'   => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
                 'name'       => '__construct',
                 'parameters' => $expression['parameters'],
                 'call-type'  => MethodCall::CALL_NORMAL,
@@ -209,17 +209,17 @@ class NewInstanceOperator extends BaseOperator
                 'line'       => $expression['line'],
                 'char'       => $expression['char'],
                 'check'      => $callConstructor
-            ));
+            ]);
         } else {
-            $callExpr = new Expression(array(
-                'variable'  => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
+            $callExpr = new Expression([
+                'variable'  => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
                 'name'      => '__construct',
                 'call-type' => MethodCall::CALL_NORMAL,
                 'file'      => $expression['file'],
                 'line'      => $expression['line'],
                 'char'      => $expression['char'],
                 'check'     => $callConstructor
-            ));
+            ]);
         }
 
         /**

@@ -358,25 +358,25 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 case 'get':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
-                        array('public'),
+                        ['public'],
                         'get' . camelize($name),
                         null,
-                        new StatementsBlock(array(
-                            array(
+                        new StatementsBlock([
+                            [
                                 'type' => 'return',
-                                'expr' => array(
+                                'expr' => [
                                     'type' => 'property-access',
-                                    'left' => array(
+                                    'left' => [
                                         'type' => 'variable',
                                         'value' => 'this'
-                                    ),
-                                    'right' => array(
+                                    ],
+                                    'right' => [
                                         'type' => 'variable',
                                         'value' => $property['name']
-                                    )
-                                )
-                            )
-                        )),
+                                    ]
+                                ]
+                            ]
+                        ]),
                         $docBlock,
                         $this->createReturnsType($returnsType, true),
                         $shortcut
@@ -386,50 +386,50 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 case 'set':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
-                        array('public'),
+                        ['public'],
                         'set' . camelize($name),
-                        new ClassMethodParameters(array(
-                            array(
+                        new ClassMethodParameters([
+                            [
                                 'type' => 'parameter',
                                 'name' => $name,
                                 'const' => 0,
                                 'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
                                 'mandatory' => 0
-                            )
-                        )),
-                        new StatementsBlock(array(
-                            array(
+                            ]
+                        ]),
+                        new StatementsBlock([
+                            [
                                 'type' => 'let',
-                                'assignments' => array(
-                                    array(
+                                'assignments' => [
+                                    [
                                         'assign-type' => 'object-property',
                                         'operator' => 'assign',
                                         'variable' => 'this',
                                         'property' => $property['name'],
-                                        'expr' => array(
+                                        'expr' => [
                                             'type' => 'variable',
                                             'value' => $name,
                                             'file'  => $property['file'],
                                             'line'  => $property['line'],
                                             'char'  => $property['char']
-                                        ),
+                                        ],
                                         'file'  => $property['file'],
                                         'line'  => $property['line'],
                                         'char'  => $property['char']
-                                    )
-                                )
-                            ),
-                            array(
+                                    ]
+                                ]
+                            ],
+                            [
                                 'type' => 'return',
-                                'expr' => array(
+                                'expr' => [
                                     'type'  => 'variable',
                                     'value' => 'this',
                                     'file'  => $property['file'],
                                     'line'  => $property['line'],
                                     'char'  => $property['char']
-                                )
-                            )
-                        )),
+                                ]
+                            ]
+                        ]),
                         $docBlock,
                         null,
                         $shortcut
@@ -440,27 +440,27 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 case '__toString':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
-                        array('public'),
+                        ['public'],
                         '__toString',
                         null,
-                        new StatementsBlock(array(
-                            array(
+                        new StatementsBlock([
+                            [
                                 'type' => 'return',
-                                'expr' => array(
+                                'expr' => [
                                     'type' => 'property-access',
-                                    'left' => array(
+                                    'left' => [
                                         'type' => 'variable',
                                         'value' => 'this'
-                                    ),
-                                    'right' => array(
+                                    ],
+                                    'right' => [
                                         'type' => 'variable',
                                         'value' => $property['name']
-                                    )
-                                )
-                            )
-                        )),
+                                    ]
+                                ]
+                            ]
+                        ]),
                         $docBlock,
-                        $this->createReturnsType(array('string')),
+                        $this->createReturnsType(['string']),
                         $shortcut
                     ), $shortcut);
                     break;

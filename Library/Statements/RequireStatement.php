@@ -28,13 +28,13 @@ class RequireStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $expression = array(
+        $expression = [
             'type' => 'require',
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
             'char' => $this->statement['char']
-        );
+        ];
 
         $expr = new Expression($expression);
         $expr->setExpectReturn(false, null);

@@ -120,11 +120,11 @@ class AssignVariableOperator extends AbstractOperator
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'assign-type' => 'variable',
             'variable'    => $this->getVariable(),
             'operator'    => $this->getOperator(),
             'expr'        => $this->getExpression()
-        );
+        ];
     }
 }

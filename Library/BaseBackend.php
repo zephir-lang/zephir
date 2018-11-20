@@ -139,7 +139,7 @@ abstract class BaseBackend implements FcallAwareInterface
     abstract public function checkConstructor(Variable $var, CompilationContext $context);
 
     /* Method calling */
-    abstract public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $compilationContext, $params = array(), $cache = 'NULL', $cacheSlot = 0);
+    abstract public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $compilationContext, $params = [], $cache = 'NULL', $cacheSlot = 0);
     abstract public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context);
 
     /* Read from array */

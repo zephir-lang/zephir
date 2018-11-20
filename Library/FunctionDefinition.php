@@ -45,8 +45,8 @@ class FunctionDefinition extends ClassMethod
         }
 
         if (isset($returnType['list'])) {
-            $types = array();
-            $castTypes = array();
+            $types = [];
+            $castTypes = [];
             foreach ($returnType['list'] as $returnTypeItem) {
                 if (isset($returnTypeItem['cast'])) {
                     if (isset($returnTypeItem['cast']['collection'])) {
@@ -58,7 +58,7 @@ class FunctionDefinition extends ClassMethod
                 }
             }
             if (count($castTypes)) {
-                $types['object'] = array();
+                $types['object'] = [];
                 $this->returnClassTypes = $castTypes;
             }
             if (count($types)) {
@@ -102,6 +102,6 @@ class FunctionDefinition extends ClassMethod
 
     public function getVisibility()
     {
-        return array();
+        return [];
     }
 }

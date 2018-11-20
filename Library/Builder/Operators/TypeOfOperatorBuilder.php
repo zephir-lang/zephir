@@ -41,12 +41,12 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type'       => 'typeof',
             'left'       => $this->leftOperand->get(),
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char
-        );
+        ];
     }
 }

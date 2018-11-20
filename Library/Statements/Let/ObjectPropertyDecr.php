@@ -61,7 +61,7 @@ class ObjectPropertyDecr
         /**
          * Trying to use a non-object dynamic variable as object
          */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
             $compilationContext->logger->warning('Possible attempt to increment non-object dynamic variable', 'non-object-update', $statement);
         }
 

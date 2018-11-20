@@ -131,16 +131,16 @@ class CallFunctionStatement extends AbstractStatement
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
                 if (!is_array($argument) || !isset($argument['parameter'])) {
-                    $argument = array('parameter' => $argument);
+                    $argument = ['parameter' => $argument];
                 }
             }
         }
 
-        return array(
+        return [
             'type'       => 'fcall',
             'name'       => $this->getName(),
             'call-type'  => $this->getTypeCall(),
             'parameters' => $arguments,
-        );
+        ];
     }
 }

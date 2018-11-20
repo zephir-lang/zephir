@@ -53,7 +53,7 @@ class FcallManager implements FcallManagerInterface
         }
         $macroName = 'ZEPHIR_' . ($scope ? $scope . '_' : '') . $mode . $paramCount;
         if (!$this->macroIsRequired($macroName)) {
-            $this->requiredMacros[$macroName] = array($scope, $mode, $paramCount);
+            $this->requiredMacros[$macroName] = [$scope, $mode, $paramCount];
         }
         return $macroName;
     }
@@ -71,10 +71,10 @@ class FcallManager implements FcallManagerInterface
             $paramsStr = '';
             $retParam = '';
             $retValueUsed = '0';
-            $params = array();
-            $zvals = array();
-            $initStatements = array();
-            $postStatements = array();
+            $params = [];
+            $zvals = [];
+            $initStatements = [];
+            $postStatements = [];
 
             for ($i = 0; $i < $paramCount; ++$i) {
                 $params[] = 'p' . $i;

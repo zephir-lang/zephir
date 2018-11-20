@@ -29,7 +29,7 @@ class EvalExpression
 
     protected $unreachableElse = null;
 
-    protected $usedVariables = array();
+    protected $usedVariables = [];
 
     /**
      * Skips the not operator by recursively optimizing the expression at its right

@@ -65,7 +65,7 @@ class ObjectDynamicStringProperty
         /**
          * Trying to use a non-object dynamic variable as object
          */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
             $compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
         }
 

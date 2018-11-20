@@ -28,11 +28,11 @@ use Zephir\StatementsBlock;
  */
 class LocalContextPass
 {
-    protected $variables = array();
+    protected $variables = [];
 
-    protected $mutations = array();
+    protected $mutations = [];
 
-    protected $uses = array();
+    protected $uses = [];
 
     protected $lastCallLine = false;
 

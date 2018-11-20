@@ -59,7 +59,7 @@ class ClassProperty
         $this->original = $original;
 
         if (!is_array($this->defaultValue)) {
-            $this->defaultValue = array();
+            $this->defaultValue = [];
             $this->defaultValue['type'] = 'null';
             $this->defaultValue['value'] = null;
         }
@@ -91,7 +91,7 @@ class ClassProperty
     public function getValue()
     {
         if ($this->defaultValue['type'] == 'array') {
-            $result = array();
+            $result = [];
 
             foreach ($this->original['default']['left'] as $key) {
                 $result[] = $key['value']['value'];
@@ -146,7 +146,7 @@ class ClassProperty
      */
     public function getVisibilityAccessor()
     {
-        $modifiers = array();
+        $modifiers = [];
 
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
@@ -252,7 +252,7 @@ class ClassProperty
 
                 $this->removeInitializationStatements($statements);
                 if ($needLetStatementAdded) {
-                    $newStatements = array();
+                    $newStatements = [];
 
                     /**
                      * Start from let statement
@@ -269,12 +269,12 @@ class ClassProperty
                 }
             } else {
                 $statementsBlockBuilder = BuilderFactory::getInstance()->statements()
-                    ->block(array($this->getLetStatement()));
+                    ->block([$this->getLetStatement()]);
                 $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->build()));
                 $classDefinition->updateMethod($constructMethod);
             }
         } else {
-            $statements = array();
+            $statements = [];
             if ($constructParentMethod) {
                 $statements = $constructParentMethod->getStatementsBlock()->getStatements();
             }
@@ -358,22 +358,22 @@ class ClassProperty
         if ($this->isStatic()) {
             $className = '\\' . $this->classDefinition->getCompleteName();
             $expr      = $exprBuilder->raw($this->original['default']);
-            return $exprBuilder->statements()->let(array(
+            return $exprBuilder->statements()->let([
                 $exprBuilder->operators()
                     ->assignStaticProperty($className, $this->name, $expr)
                     ->setFile($this->original['default']['file'])
                     ->setLine($this->original['default']['line'])
                     ->setChar($this->original['default']['char'])
-            ));
+            ]);
         }
 
-        $lsb = $exprBuilder->statements()->let(array(
+        $lsb = $exprBuilder->statements()->let([
             $exprBuilder->operators()
                 ->assignProperty('this', $this->name, $exprBuilder->raw($this->original['default']))
                 ->setFile($this->original['default']['file'])
                 ->setLine($this->original['default']['line'])
                 ->setChar($this->original['default']['char'])
-        ));
+        ]);
 
         return $exprBuilder->statements()->ifX()
             ->setCondition(
@@ -387,7 +387,7 @@ class ClassProperty
                     $exprBuilder->literal(Types::NULL_)
                 )
             )
-            ->setStatements($exprBuilder->statements()->block(array($lsb)));
+            ->setStatements($exprBuilder->statements()->block([$lsb]));
     }
 
     /**

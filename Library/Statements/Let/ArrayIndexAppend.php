@@ -35,7 +35,7 @@ class ArrayIndexAppend extends ArrayIndex
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-        $offsetExprs = array();
+        $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
@@ -114,7 +114,7 @@ class ArrayIndexAppend extends ArrayIndex
         /**
          * Trying to use a non-object dynamic variable as object
          */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
             $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
         }
 

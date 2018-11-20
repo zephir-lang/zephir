@@ -26,7 +26,7 @@ class ArrayType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public $methodMap = array(
+    public $methodMap = [
         'join' => 'join',
         'reversed' => 'array_reverse',
         'rev' => 'array_reverse',
@@ -70,7 +70,7 @@ class ArrayType extends AbstractType
         'shuffle' => 'shuffle',
         'tojson' => 'json_encode',
         'reduce' => 'array_reduce',
-    );
+    ];
 
     /**
      * {@inheritdoc}

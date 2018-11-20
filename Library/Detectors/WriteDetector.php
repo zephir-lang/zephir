@@ -24,7 +24,7 @@ class WriteDetector
 {
     protected $detectionFlags = 0;
 
-    protected $mutations = array();
+    protected $mutations = [];
 
     const DETECT_NONE = 0;
 

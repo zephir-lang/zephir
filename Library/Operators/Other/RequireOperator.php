@@ -41,7 +41,7 @@ class RequireOperator extends BaseOperator
             $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
             $exprVar = $compilationContext->backend->getVariableCode($exprVariable);
             if ($exprVariable->getType() == 'variable') {
-                if ($exprVariable->hasDifferentDynamicType(array('undefined', 'string'))) {
+                if ($exprVariable->hasDifferentDynamicType(['undefined', 'string'])) {
                     $compilationContext->logger->warning('Possible attempt to use invalid type as path in "require" operator', 'non-valid-require', $expression);
                 }
             }

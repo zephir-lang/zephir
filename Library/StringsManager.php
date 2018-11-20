@@ -23,11 +23,11 @@ abstract class StringsManager
      * List of headers
      * @var array
      */
-    protected $concatKeys = array(
+    protected $concatKeys = [
         'vv' => true,
         'vs' => true,
         'sv' => true
-    );
+    ];
 
     /**
      * Adds a concatenation combination to the manager

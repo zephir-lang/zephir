@@ -18,7 +18,7 @@ namespace Zephir;
  */
 class AliasManager
 {
-    protected $aliases = array();
+    protected $aliases = [];
 
     /**
      * Adds a renaming in a "use" to the alias manager

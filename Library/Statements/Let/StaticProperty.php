@@ -41,7 +41,7 @@ class StaticProperty
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = $compilationContext->compiler;
-        if (!in_array($className, array('self', 'static', 'parent'))) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -53,7 +53,7 @@ class StaticProperty
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static'))) {
+            if (in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {
@@ -234,15 +234,15 @@ class StaticProperty
                             /** @noinspection PhpMissingBreakStatementInspection */
                             case 'concat-assign':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, true);
-                                $expression = new Expression(array(
+                                $expression = new Expression([
                                     'type' => 'static-property-access',
-                                    'left' => array(
+                                    'left' => [
                                         'value' => $statement['variable']
-                                    ),
-                                    'right' => array(
+                                    ],
+                                    'right' => [
                                         'value' => $statement['property']
-                                    )
-                                ));
+                                    ]
+                                ]);
                                 $expression->setExpectReturn(true, $tempVariable);
                                 $expression->compile($compilationContext);
                                 $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);

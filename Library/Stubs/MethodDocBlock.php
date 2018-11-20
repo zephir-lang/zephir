@@ -133,10 +133,10 @@ class MethodDocBlock extends DocBlock
 
                 switch ($docType) {
                     case 'param':
-                        $this->parameters[$name] = array($type, $description);
+                        $this->parameters[$name] = [$type, $description];
                         break;
                     case 'return':
-                        $this->return = array($type, $description);
+                        $this->return = [$type, $description];
                         break;
                 }
             }
@@ -178,7 +178,7 @@ class MethodDocBlock extends DocBlock
             } else {
                 $type = 'mixed';
             }
-            $this->parameters['$' . trim($parameter['name'], '$')] = array($type, '');
+            $this->parameters['$' . trim($parameter['name'], '$')] = [$type, ''];
         }
     }
 

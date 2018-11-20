@@ -72,10 +72,10 @@ class BuilderFactory
      */
     public function variable($name)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type'  => 'variable',
             'value' => $name
-        ));
+        ]);
     }
 
     /**
@@ -85,10 +85,10 @@ class BuilderFactory
      */
     public function literal($type, $value = null)
     {
-        return $this->raw(array(
+        return $this->raw([
             'type'  => $type,
             'value' => $value
-        ));
+        ]);
     }
 
     /**
