@@ -145,7 +145,6 @@ class Documentation implements InjectionAwareInterface
             }
         }
 
-
         if (is_array($parsedOptions)) {
             $options = array_merge($themeConfig["options"], $parsedOptions);
         } else {
@@ -279,7 +278,6 @@ class Documentation implements InjectionAwareInterface
         $file = new File\ClassesFile($this->config, $this->classes);
         $this->theme->drawFile($file);
 
-
         $namespaceAccessor = new NamespaceAccessor($this->classes);
         $namespaceAccessor->build();
 
@@ -291,7 +289,6 @@ class Documentation implements InjectionAwareInterface
             $this->theme->drawFile($nfile);
         }
 
-
         /** @var Environment $environment */
         $environment = $this->container->get('environment');
 
@@ -301,7 +298,6 @@ class Documentation implements InjectionAwareInterface
         // namespaces files (namespaces.html)
         $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
         $this->theme->drawFile($nsfile);
-
 
         // index (index.html)
         $indexfile = new File\IndexFile($this->config, $namespaceAccessor);

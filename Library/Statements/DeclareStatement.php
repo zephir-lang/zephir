@@ -69,7 +69,6 @@ class DeclareStatement extends StatementAbstract
                     break;
             }
 
-
             /**
              * Variables are added to the symbol table
              */

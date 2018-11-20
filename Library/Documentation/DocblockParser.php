@@ -161,7 +161,6 @@ class DocblockParser
             $this->nextCharacter();
         }
 
-
         $this->docblockObj->setSummary(trim($this->summaryStr));
         $this->docblockObj->setDescription(trim($this->descriptionStr));
 

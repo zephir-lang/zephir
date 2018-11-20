@@ -1382,7 +1382,6 @@ class Backend extends BaseBackend
             $cond = 'Z_TYPE_P(' . $parameterCode . ') != ';
         }
 
-
         switch ($type) {
             case 'int':
             case 'uint':

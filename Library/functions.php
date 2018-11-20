@@ -49,7 +49,6 @@ function camelize($string)
     return \str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string)));
 }
 
-
 /**
  * Prepares a class name to be used as a C-string.
  *

@@ -884,7 +884,6 @@ class Variable
                                 break;
                         }
 
-
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getCode(), $compilationContext);
 
@@ -963,7 +962,6 @@ class Variable
                                 $functionName = 'ZEPHIR_ADD_ASSIGN';
                                 break;
                         }
-
 
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $tempVariable->setDynamicTypes('double');

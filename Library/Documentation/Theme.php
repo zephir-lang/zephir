@@ -42,7 +42,6 @@ class Theme
         $this->projectConfig= $config;
         $this->documentation = $documentation;
 
-
         $themeInfosPath = $this->getThemePath("theme.json");
         if ($themeInfosPath) {
             $themeInfos = json_decode(file_get_contents($themeInfosPath), true);
@@ -92,7 +91,6 @@ class Theme
         $template->setPathToRoot($pathToRoot);
         $template->setThemeOptions($this->options);
         $template->setProjectConfig($this->projectConfig);
-
 
         touch($outputFilename);
         $template->write($outputFilename);

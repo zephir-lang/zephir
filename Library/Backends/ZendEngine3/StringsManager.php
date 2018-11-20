@@ -200,7 +200,6 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2)
 }
 EOF;
 
-
         $codeh .= "void zephir_concat_function(zval *result, zval *op1, zval *op2);
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
 ";

@@ -843,7 +843,6 @@ class SymbolTable
             return $variable;
         }
 
-
         $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context);
