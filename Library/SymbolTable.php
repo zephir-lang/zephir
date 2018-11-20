@@ -229,6 +229,7 @@ class SymbolTable
         }
         return null;
     }
+
     /**
      * Return a variable in the symbol table, it will be used for a read operation
      *

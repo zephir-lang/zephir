@@ -22,7 +22,6 @@ class Link extends Annotation
     protected $uri;
     protected $linkText;
 
-
     protected function parseContent()
     {
         $spaceIndex = strpos($this->string, " ");

@@ -60,7 +60,6 @@ class AssignVariableOperator extends AbstractOperator
         }
     }
 
-
     /**
      * @return string
      */
