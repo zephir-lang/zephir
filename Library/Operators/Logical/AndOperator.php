@@ -63,7 +63,7 @@ class AndOperator extends LogicalBaseOperator
             case 'null':
                 $assignExprLeft = [
                     'type' => 'null',
-                    'value' => null
+                    'value' => null,
                 ];
                 break;
         }
@@ -85,9 +85,9 @@ class AndOperator extends LogicalBaseOperator
                     'expr' => $assignExprLeft,
                     'file' => $expression['left']['file'],
                     'line' => $expression['left']['line'],
-                    'char' => $expression['left']['char']
-                ]
-            ]
+                    'char' => $expression['left']['char'],
+                ],
+            ],
         ]);
         $statement->compile($compilationContext);
 
@@ -120,7 +120,7 @@ class AndOperator extends LogicalBaseOperator
             case 'null':
                 $assignExprRight = [
                     'type' => 'null',
-                    'value' => null
+                    'value' => null,
                 ];
                 break;
         }
@@ -142,9 +142,9 @@ class AndOperator extends LogicalBaseOperator
                     'expr' => $assignExprRight,
                     'file' => $expression['right']['file'],
                     'line' => $expression['right']['line'],
-                    'char' => $expression['right']['char']
-                ]
-            ]
+                    'char' => $expression['right']['char'],
+                ],
+            ],
         ]);
         $statement->compile($compilationContext);
 

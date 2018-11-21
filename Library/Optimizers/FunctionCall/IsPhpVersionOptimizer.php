@@ -31,7 +31,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
         'double' => true,
         'uint' => true,
         'ulong' => true,
-        'istring' => true
+        'istring' => true,
     ];
 
     /**

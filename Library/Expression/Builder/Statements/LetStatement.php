@@ -65,7 +65,7 @@ class LetStatement extends AbstractStatement
     {
         return [
             'type' => 'let',
-            'assignments' => $this->getAssignments()
+            'assignments' => $this->getAssignments(),
         ];
     }
 }

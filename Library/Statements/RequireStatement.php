@@ -33,7 +33,7 @@ class RequireStatement extends StatementAbstract
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
-            'char' => $this->statement['char']
+            'char' => $this->statement['char'],
         ];
 
         $expr = new Expression($expression);

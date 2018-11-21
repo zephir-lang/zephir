@@ -208,7 +208,7 @@ class NewInstanceOperator extends BaseOperator
                 'file' => $expression['file'],
                 'line' => $expression['line'],
                 'char' => $expression['char'],
-                'check' => $callConstructor
+                'check' => $callConstructor,
             ]);
         } else {
             $callExpr = new Expression([
@@ -218,7 +218,7 @@ class NewInstanceOperator extends BaseOperator
                 'file' => $expression['file'],
                 'line' => $expression['line'],
                 'char' => $expression['char'],
-                'check' => $callConstructor
+                'check' => $callConstructor,
             ]);
         }
 

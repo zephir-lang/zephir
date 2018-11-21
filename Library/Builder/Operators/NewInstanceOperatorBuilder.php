@@ -58,7 +58,7 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
             'dynamic' => $this->dynamic,
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

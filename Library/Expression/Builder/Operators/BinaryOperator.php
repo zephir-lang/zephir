@@ -202,7 +202,7 @@ class BinaryOperator extends AbstractOperator
         return [
             'type' => $this->getOperator(),
             'left' => $this->getLeftExpression(),
-            'right' => $this->getRightExpression()
+            'right' => $this->getRightExpression(),
         ];
     }
 }

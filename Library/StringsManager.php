@@ -25,7 +25,7 @@ abstract class StringsManager
     protected $concatKeys = [
         'vv' => true,
         'vs' => true,
-        'sv' => true
+        'sv' => true,
     ];
 
     /**

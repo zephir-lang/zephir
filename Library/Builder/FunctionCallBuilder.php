@@ -62,7 +62,7 @@ class FunctionCallBuilder
             'parameters' => $this->parameters,
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

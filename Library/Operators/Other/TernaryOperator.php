@@ -69,8 +69,8 @@ class TernaryOperator extends BaseOperator
                     'file' => $expression['file'],
                     'line' => $expression['line'],
                     'char' => $expression['char'],
-                ]
-            ]
+                ],
+            ],
         ]);
         $statement->compile($compilationContext);
 
@@ -92,8 +92,8 @@ class TernaryOperator extends BaseOperator
                     'file' => $expression['file'],
                     'line' => $expression['line'],
                     'char' => $expression['char'],
-                ]
-            ]
+                ],
+            ],
         ]);
         $statement->compile($compilationContext);
 

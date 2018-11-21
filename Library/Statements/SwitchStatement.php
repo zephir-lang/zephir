@@ -66,13 +66,13 @@ class SwitchStatement extends StatementAbstract
                                 'value' => $resolvedExpr->getCode(),
                                 'file' => $exprRaw['file'],
                                 'line' => $exprRaw['line'],
-                                'char' => $exprRaw['char']
+                                'char' => $exprRaw['char'],
                             ],
                             'file' => $exprRaw['file'],
                             'line' => $exprRaw['line'],
-                            'char' => $exprRaw['char']
-                        ]
-                    ]
+                            'char' => $exprRaw['char'],
+                        ],
+                    ],
                 ]);
                 $statement->compile($compilationContext);
             } else {
@@ -94,7 +94,7 @@ class SwitchStatement extends StatementAbstract
                     $expr = [
                         'type' => 'equals',
                         'left' => $tempLeft,
-                        'right' => $clause['expr']
+                        'right' => $clause['expr'],
                     ];
                     if (!isset($clause['statements'])) {
                         $exprStack[] = $expr;
@@ -102,7 +102,7 @@ class SwitchStatement extends StatementAbstract
                         $exprStack[] = $expr;
                         $blocks[] = [
                             'expr' => $exprStack,
-                            'block' => $clause['statements']
+                            'block' => $clause['statements'],
                         ];
                         $exprStack = [];
                     }

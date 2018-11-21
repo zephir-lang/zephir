@@ -133,7 +133,7 @@ class ClassConstant
 
             $this->value = [
                 'type' => $compiledExpression->getType(),
-                'value' => $compiledExpression->getCode()
+                'value' => $compiledExpression->getCode(),
             ];
             return;
         }

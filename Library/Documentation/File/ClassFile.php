@@ -61,7 +61,7 @@ class ClassFile extends AbstractFile
             'classNamespace' => $this->class->getNamespace(),
             'fullName' => $this->class->getCompleteName(),
             'methods' => $this->class->getMethods(),
-            'namespacePieces' => $nsPatches
+            'namespacePieces' => $nsPatches,
 
         ];
     }

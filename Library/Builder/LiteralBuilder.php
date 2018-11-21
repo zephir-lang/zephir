@@ -32,7 +32,7 @@ class LiteralBuilder
     {
         return [
             'type' => $this->type,
-            'value' => $this->value
+            'value' => $this->value,
         ];
     }
 }

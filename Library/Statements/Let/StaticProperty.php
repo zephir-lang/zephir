@@ -237,11 +237,11 @@ class StaticProperty
                                 $expression = new Expression([
                                     'type' => 'static-property-access',
                                     'left' => [
-                                        'value' => $statement['variable']
+                                        'value' => $statement['variable'],
                                     ],
                                     'right' => [
-                                        'value' => $statement['property']
-                                    ]
+                                        'value' => $statement['property'],
+                                    ],
                                 ]);
                                 $expression->setExpectReturn(true, $tempVariable);
                                 $expression->compile($compilationContext);

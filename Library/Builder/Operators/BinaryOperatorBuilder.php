@@ -59,7 +59,7 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
             'right' => $this->rightExpression->get(),
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

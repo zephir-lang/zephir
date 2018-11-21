@@ -74,8 +74,8 @@ class VarDumpOptimizer extends OptimizerAbstract
                             'file' => $expression['file'],
                             'line' => $expression['line'],
                             'char' => $expression['char'],
-                        ]
-                    ]
+                        ],
+                    ],
                 ]);
                 $statement->compile($context);
             } else {

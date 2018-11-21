@@ -104,7 +104,7 @@ class OperatorsFactory
         return $this->raw([
             'type' => BinaryOperator::OPERATOR_CAST,
             'left' => $type,
-            'right' => $expression
+            'right' => $expression,
         ]);
     }
 
@@ -118,7 +118,7 @@ class OperatorsFactory
         return $this->raw([
             'type' => BinaryOperator::OPERATOR_TYPE_HINT,
             'left' => $type,
-            'right' => $expression
+            'right' => $expression,
         ]);
     }
 

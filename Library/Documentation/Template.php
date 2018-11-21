@@ -128,7 +128,7 @@ class Template
 
         return [
             'css' => $css,
-            'javascript' => $js
+            'javascript' => $js,
         ];
     }
 
