@@ -31,7 +31,7 @@ class MethodDocBlockTest extends TestCase
          * @param string|null $shortName {get, set}
          */
         $classNamespace = $params['class']['namespace'];
-        $className      = $params['class']['className'];
+        $className = $params['class']['className'];
         $classShortName = $params['class']['classShortName'];
 
         $classDefinition = new ClassDefinition(
@@ -53,10 +53,10 @@ class MethodDocBlockTest extends TestCase
          * @param array|null                 $original
          */
         $methodVisibility = $params['method']['visibility'];
-        $methodName       = $params['method']['name'];
-        $methodParams     = $params['method']['parameters'];
-        $methodStBlock    = $params['method']['statements'];
-        $methodDocBlock   = $params['method']['docblock'];
+        $methodName = $params['method']['name'];
+        $methodParams = $params['method']['parameters'];
+        $methodStBlock = $params['method']['statements'];
+        $methodDocBlock = $params['method']['docblock'];
         $methodReturnType = $params['method']['returnType'];
         $methodExpression = $params['method']['expression'];
 

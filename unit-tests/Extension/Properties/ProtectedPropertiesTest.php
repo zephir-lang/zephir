@@ -27,7 +27,7 @@ class ProtectedPropertiesTEst extends TestCase
         $this->assertSame($t->getSomeDouble(), 10.25);
         $this->assertSame($t->getSomeString(), 'test');
 
-        $t->setSomeVar(($rand = rand(1, 1000)*100));
+        $t->setSomeVar(($rand = rand(1, 1000) * 100));
         $this->assertSame($t->getSomeVar(), $rand);
     }
 }

@@ -108,7 +108,7 @@ class Backend extends BackendZendEngine2
                 return ['*', 'zend_string'];
         }
 
-        list ($pointer, $code) = parent::getTypeDefinition($type);
+        list($pointer, $code) = parent::getTypeDefinition($type);
 
         return [$pointer, $code];
     }

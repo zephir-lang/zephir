@@ -507,7 +507,7 @@ class Backend extends BaseBackend
         $additionalCode = $method ? $this->onPreInitVar($method, $compilationContext) : '';
 
         foreach ($typeToVariables as $type => $variables) {
-            list ($pointer, $code) = $this->getTypeDefinition($type);
+            list($pointer, $code) = $this->getTypeDefinition($type);
             $code .= ' ';
             $groupVariables = [];
 
@@ -1091,7 +1091,7 @@ class Backend extends BaseBackend
 
     public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
     {
-        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
         $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
         $varCode = $this->getVariableCodePointer($variable);
@@ -1100,7 +1100,7 @@ class Backend extends BaseBackend
 
     public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
     {
-        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
 
         $compilationContext->codePrinter->output('zephir_update_property_array_multi(' . $variable->getName() . ', SL("' . $propertyName . '"), ' . $valueVariable . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
@@ -1108,7 +1108,7 @@ class Backend extends BaseBackend
 
     public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
     {
-        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
 
         $offsetStr = $offsetItems ? ', ' . join(', ', $offsetItems) : '';

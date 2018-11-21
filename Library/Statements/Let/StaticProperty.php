@@ -253,8 +253,7 @@ class StaticProperty
                                     $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF(&' . $variableVariableCode . ');');
                                 }
                                 $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode .');');
-                                //continue
-
+                                // no break
                             case 'assign':
                                 $compilationContext->backend->updateStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
                                 if ($variableVariable->isTemporal()) {
