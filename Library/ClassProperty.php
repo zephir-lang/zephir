@@ -39,7 +39,6 @@ class ClassProperty
     protected $original;
 
     /**
-     *
      * @param ClassDefinition $classDefinition
      * @param array           $visibility
      * @param string          $name

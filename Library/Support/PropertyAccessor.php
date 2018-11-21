@@ -16,7 +16,6 @@ use Zephir\Exception\UnknownPropertyException;
 
 /**
  * Zephir\Support\PropertyAccessor
- *
  */
 trait PropertyAccessor
 {

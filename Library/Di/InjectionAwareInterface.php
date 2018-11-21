@@ -15,7 +15,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Zephir\Di\InjectionAwareInterface
- *
  */
 interface InjectionAwareInterface
 {

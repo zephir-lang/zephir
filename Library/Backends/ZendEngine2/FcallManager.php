@@ -17,7 +17,6 @@ use function Zephir\file_put_contents_ex;
 
 /**
  * Zephir\Backends\ZendEngine2\FcallManager
- *
  */
 class FcallManager implements FcallManagerInterface
 {

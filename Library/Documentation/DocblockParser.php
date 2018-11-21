@@ -40,13 +40,11 @@ class DocblockParser
     protected $descriptionStr;
 
     /**
-     *
      * @var Docblock
      */
     protected $docblockObj;
 
     /**
-     *
      * @param string $annotation a row annotation string begining with /**
      */
     public function __construct($annotation)

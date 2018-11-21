@@ -16,7 +16,6 @@ use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 /**
  * Zephir\Expression\Builder\BuilderFactory
- *
  */
 class BuilderFactory
 {

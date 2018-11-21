@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Zephir\Command\BuildCommand
  *
  * Generates/Compiles/Installs a Zephir extension.
- *
  */
 class BuildCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {

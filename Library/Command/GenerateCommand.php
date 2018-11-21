@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Zephir\Command\GenerateCommand
  *
  * Generates C code from the Zephir code without compiling it.
- *
  */
 class GenerateCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {

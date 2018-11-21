@@ -23,7 +23,6 @@ use Zephir\Variable as ZephirVariable;
  * Zephir\Statements\Let\Variable
  *
  * Assign a value to a variable.
- *
  */
 class Variable
 {

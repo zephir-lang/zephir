@@ -23,7 +23,6 @@ use Zephir\Exception\NotImplementedException;
  * Zephir\Command\InstallCommand
  *
  * Installs the extension in the extension directory.
- *
  */
 class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {

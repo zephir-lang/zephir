@@ -13,7 +13,6 @@ namespace Zephir;
 
 /**
  * Class EventsManager
- *
  */
 class EventsManager
 {

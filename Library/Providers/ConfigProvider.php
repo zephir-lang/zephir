@@ -18,7 +18,6 @@ use Zephir\Di\ServiceProviderInterface;
 
 /**
  * Zephir\Providers\ConfigProvider
- *
  */
 final class ConfigProvider implements ServiceProviderInterface
 {

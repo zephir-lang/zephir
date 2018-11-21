@@ -15,7 +15,6 @@ use Zephir\Documentation\Annotation;
 
 /**
  * A link annotation that looks like  `(@)link uri text`
- *
  */
 class See extends Annotation
 {

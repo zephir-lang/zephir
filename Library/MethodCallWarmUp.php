@@ -21,8 +21,6 @@ class MethodCallWarmUp
     private $warmUps = [];
 
     /**
-     *
-     *
      * @param ClassDefinition $classDefinition
      * @param ClassMethod     $method
      */

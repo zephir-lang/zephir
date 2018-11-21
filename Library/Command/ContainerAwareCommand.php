@@ -19,7 +19,6 @@ use Zephir\Di\InjectionAwareInterface;
 
 /**
  * Zephir\Command\ContainerAwareCommand
- *
  */
 abstract class ContainerAwareCommand extends Command implements InjectionAwareInterface
 {

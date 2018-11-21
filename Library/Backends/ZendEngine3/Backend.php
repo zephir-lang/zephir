@@ -26,7 +26,6 @@ use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend
- *
  */
 class Backend extends BackendZendEngine2
 {

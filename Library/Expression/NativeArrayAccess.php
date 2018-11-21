@@ -21,7 +21,6 @@ use Zephir\Variable;
  * Zephir\Expression\NativeArrayAccess
  *
  * Resolves expressions that read array indexes
- *
  */
 class NativeArrayAccess
 {

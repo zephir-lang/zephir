@@ -23,7 +23,6 @@ class ClassFile extends AbstractFile
     protected $class;
 
     /**
-     *
      * @var CompilerFile
      */
     protected $compilerFile;

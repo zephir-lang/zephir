@@ -22,7 +22,6 @@ use function Zephir\add_slashes;
  * Zephir\Expression\Constants
  *
  * Resolves PHP or Zephir constants into C-Code
- *
  */
 class Constants
 {

@@ -13,7 +13,6 @@ namespace Zephir;
 
 /**
  * Zephir\ArgInfoDefinition
- *
  */
 class ArgInfoDefinition
 {

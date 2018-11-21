@@ -214,7 +214,6 @@ class Documentation implements InjectionAwareInterface
     }
 
     /**
-     *
      * Prepare the options by merging the one in the project config with the one in the command line arg "theme-options"
      *
      * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string

@@ -18,7 +18,6 @@ use Zephir\Exception\CompilerException;
  * Zephir\Call
  *
  * Base class for common functionality in functions/calls
- *
  */
 class Call
 {

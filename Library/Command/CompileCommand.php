@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Zephir\Command\CompileCommand
  *
  * Compile a Zephir extension.
- *
  */
 class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {

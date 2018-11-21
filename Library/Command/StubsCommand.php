@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Zephir\Command\StubsCommand
  *
  * Generates stubs that can be used in a PHP IDE.
- *
  */
 class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {

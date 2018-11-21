@@ -24,7 +24,6 @@ use Zephir\Parser\ParseException;
  *
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
- *
  */
 class CompilerFile implements FileInterface, InjectionAwareInterface
 {

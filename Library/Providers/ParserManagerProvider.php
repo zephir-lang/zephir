@@ -19,7 +19,6 @@ use Zephir\Parser\Manager;
 
 /**
  * Zephir\Providers\ParserManagerProvider
- *
  */
 final class ParserManagerProvider implements ServiceProviderInterface
 {

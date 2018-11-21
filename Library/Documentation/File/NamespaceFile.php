@@ -23,7 +23,6 @@ class NamespaceFile extends AbstractFile
     protected $namespaceHelper;
 
     /**
-     *
      * @var CompilerFile
      */
     protected $compilerFile;

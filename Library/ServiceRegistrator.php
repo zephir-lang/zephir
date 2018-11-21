@@ -19,7 +19,6 @@ use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Zephir\ServiceRegistrator
- *
  */
 final class ServiceRegistrator implements InjectionAwareInterface
 {
