@@ -20,7 +20,6 @@ use Zephir\Exception\CompilerException;
  */
 class Logger
 {
-
     /**
      * @var Config
      */

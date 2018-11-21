@@ -28,7 +28,6 @@ use Zephir\Providers\CompilerProvider;
  */
 final class Application extends BaseApplication
 {
-
     /**
      * The Service Registrator instance.
      *
