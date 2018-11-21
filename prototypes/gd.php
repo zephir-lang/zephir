@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 if (function_exists('gd_info')) {
     return false;
 }
@@ -12,19 +21,23 @@ if (function_exists('gd_info')) {
 /**
  * @link http://www.php.net/manual/ru/function.gd-info.php
  */
-function gd_info() {}
+function gd_info()
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.getimagesize.php
  * @param string $filename
- * @param array $imageinfo
+ * @param array  $imageinfo
+ * @param mixed  $image
+ * @param mixed  $threshold
  */
 //function getimagesize($filename, array &$imageinfo) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.getimagesizefromstring.php
  * @param string $imagedata
- * @param array $imageinfo
+ * @param array  $imageinfo
  */
 //function getimagesizefromstring($imagedata, array &$imageinfo) {}
 
@@ -37,19 +50,21 @@ function gd_info() {}
 
 /**
  * @link http://www.php.net/manual/ru/function.image-type-to-mime-type.php
- * @param int $imagetype
+ * @param  int    $imagetype
  * @return string
  */
 //function image_type_to_mime_type($imagetype) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.image2wbmp.php
- * @param resource $image
- * @param string $filename
- * @param int $threshold
+ * @param  resource $image
+ * @param  string   $filename
+ * @param  int      $threshold
  * @return boolean
  */
-function image2wbmp($image, $filename, $threshold) {}
+function image2wbmp($image, $filename, $threshold)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imageaffine.php
@@ -57,238 +72,258 @@ function image2wbmp($image, $filename, $threshold) {}
  * @param array $affline
  * @param array $clip
  */
-function imageaffine($image, array $affline, array $clip) {}
+function imageaffine($image, array $affline, array $clip)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imageaffinematrixconcat.php
- * @param array $m1
- * @param array $m2
+ * @param  array $m1
+ * @param  array $m2
  * @return array
  */
-function imageaffinematrixconcat(array $m1, array $m2) {}
+function imageaffinematrixconcat(array $m1, array $m2)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imageaffinematrixget.php
- * @param int $type
- * @param mixed $options
+ * @param  int   $type
+ * @param  mixed $options
  * @return array
  */
-function imageaffinematrixget($type, $options) {}
+function imageaffinematrixget($type, $options)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagealphablending.php
- * @param resource $image
- * @param bool $blendmode
+ * @param  resource $image
+ * @param  bool     $blendmode
  * @return boolean
  */
-function imagealphablending($image, $blendmode) {}
+function imagealphablending($image, $blendmode)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imageantialias.php
- * @param resource $image
- * @param boolean $enabled
+ * @param  resource $image
+ * @param  boolean  $enabled
  * @return boolean
  */
-function imageantialias($image, $enabled) {}
+function imageantialias($image, $enabled)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagearc.php
- * @param resource $image
- * @param int $cx
- * @param int $cy
- * @param int $width
- * @param int $height
- * @param int $start
- * @param int $end
- * @param int $color
+ * @param  resource $image
+ * @param  int      $cx
+ * @param  int      $cy
+ * @param  int      $width
+ * @param  int      $height
+ * @param  int      $start
+ * @param  int      $end
+ * @param  int      $color
  * @return boolean
  */
-function imagearc($image, $cx, $cy, $width, $height, $start, $end, $color) {}
+function imagearc($image, $cx, $cy, $width, $height, $start, $end, $color)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagechar.php
- * @param resource $image
- * @param int $font
- * @param int $x
- * @param int $y
- * @param string $c
- * @param int $color
+ * @param  resource $image
+ * @param  int      $font
+ * @param  int      $x
+ * @param  int      $y
+ * @param  string   $c
+ * @param  int      $color
  * @return boolean
  */
-function imagechar($image, $font, $x, $y, $c, $color) {}
+function imagechar($image, $font, $x, $y, $c, $color)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecharup.php
- * @param resource $image
- * @param int $font
- * @param int $x
- * @param int $y
- * @param string $c
- * @param int $color
+ * @param  resource $image
+ * @param  int      $font
+ * @param  int      $x
+ * @param  int      $y
+ * @param  string   $c
+ * @param  int      $color
  * @return boolean
  */
-function imagecharup($image, $font, $x, $y, $c, $color) {}
+function imagecharup($image, $font, $x, $y, $c, $color)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorallocate.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
  * @return int
  */
-function imagecolorallocate($image, $red, $green, $blue) {}
+function imagecolorallocate($image, $red, $green, $blue)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorallocatealpha.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
- * @param int $alpha
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
+ * @param  int      $alpha
  * @return int
  */
-function imagecolorallocatealpha($image, $red, $green, $blue, $alpha) {}
+function imagecolorallocatealpha($image, $red, $green, $blue, $alpha)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorat.php
- * @param resource $image
- * @param int $x
- * @param int $y
+ * @param  resource $image
+ * @param  int      $x
+ * @param  int      $y
  * @return int
  */
-function imagecolorat($image, $x, $y) {}
+function imagecolorat($image, $x, $y)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorclosest.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
  * @return int
  */
-function imagecolorclosest($image, $red, $green, $blue) {}
+function imagecolorclosest($image, $red, $green, $blue)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorclosestalpha.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
- * @param int $alpha
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
+ * @param  int      $alpha
  * @return int
  */
-function imagecolorclosestalpha($image, $red, $green, $blue, $alpha) {}
+function imagecolorclosestalpha($image, $red, $green, $blue, $alpha)
+{
+}
 
 /**
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
  * @return int
  */
-function imagecolorclosesthwb($image, $red, $green, $blue) {}
+function imagecolorclosesthwb($image, $red, $green, $blue)
+{
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolordeallocate.php
- * @param resource $image
- * @param int $color
+ * @param  resource $image
+ * @param  int      $color
  * @return boolean
  */
 function imagecolordeallocate($image, $color)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorexact.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
  * @return int
  */
 function imagecolorexact($image, $red, $green, $blue)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorexactalpha.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
- * @param int $alpha
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
+ * @param  int      $alpha
  * @return int
  */
 function imagecolorexactalpha($image, $red, $green, $blue, $alpha)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolormatch.php
- * @param resource $image1
- * @param resource $image2
+ * @param  resource $image1
+ * @param  resource $image2
  * @return boolean
  */
 function imagecolormatch($image1, $image2)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorresolve.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
  * @return int
  */
 function imagecolorresolve($image, $red, $green, $blue)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorresolvealpha.php
- * @param resource $image
- * @param int $red
- * @param int $green
- * @param int $blue
- * @param int $alpha
+ * @param  resource $image
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
+ * @param  int      $alpha
  * @return int
  */
 function imagecolorresolvealpha($image, $red, $green, $blue, $alpha)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorset.php
- * @param resource $image
- * @param int $index
- * @param int $red
- * @param int $green
- * @param int $blue
- * @param int $alpha
+ * @param  resource $image
+ * @param  int      $index
+ * @param  int      $red
+ * @param  int      $green
+ * @param  int      $blue
+ * @param  int      $alpha
  * @return void
  */
 function imagecolorset($image, $index, $red, $green, $blue, $alpha = 0)
 {
-
 }
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorsforindex.php
- * @param resource $image
- * @param int $index
+ * @param  resource $image
+ * @param  int      $index
  * @return array
  */
 function imagecolorsforindex($image, $index)
 {
-
 }
 
 /**
@@ -299,15 +334,14 @@ function imagecolorsforindex($image, $index)
  */
 function imagecreate($width, $height)
 {
-
 }
 
 /**
  * http://php.net/manual/en/function.imagettfbbox.php
- * @param float $size
- * @param float $angle
- * @param string $fontfile
- * @param string $text
+ * @param  float      $size
+ * @param  float      $angle
+ * @param  string     $fontfile
+ * @param  string     $text
  * @return array|bool
  */
 function imagettfbbox($size, $angle, $fontfile, $text)
@@ -316,17 +350,17 @@ function imagettfbbox($size, $angle, $fontfile, $text)
 
 /**
  * @link http://php.net/manual/en/function.imagettftext.php
- * @param resource $image
- * @param float $size
- * @param float $angle
- * @param int $x
- * @param int $y
- * @param int $color
- * @param string $fontfile
- * @param string $text
+ * @param  resource   $image
+ * @param  float      $size
+ * @param  float      $angle
+ * @param  int        $x
+ * @param  int        $y
+ * @param  int        $color
+ * @param  string     $fontfile
+ * @param  string     $text
  * @return array|bool
  */
-function imagettftext($image, $size, $angle , $x, $y, $color, $fontfile, $text)
+function imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text)
 {
 }
 
@@ -368,11 +402,11 @@ define('IMG_FILTER_EMBOSS', 6);
 define('IMG_FILTER_MEAN_REMOVAL', 9);
 define('IMG_FILTER_SMOOTH', 10);
 define('IMG_FILTER_PIXELATE', 11);
-define('GD_VERSION', "2.0.35");
+define('GD_VERSION', '2.0.35');
 define('GD_MAJOR_VERSION', 2);
 define('GD_MINOR_VERSION', 0);
 define('GD_RELEASE_VERSION', 35);
-define('GD_EXTRA_VERSION', "");
+define('GD_EXTRA_VERSION', '');
 define('PNG_NO_FILTER', 0);
 define('PNG_FILTER_NONE', 8);
 define('PNG_FILTER_SUB', 16);

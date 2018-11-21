@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 class Redis
 {
     /**
@@ -42,41 +51,33 @@ class Redis
 
     public function connect($host, $port = 6379, $timeout = 0.0)
     {
-
     }
 
     public function pconnect($host, $port = 6379, $timeout = 0.0)
     {
-
     }
 
     public function auth($auth)
     {
-
     }
 
     public function select($db)
     {
-
     }
 
     public function get($key)
     {
-
     }
 
     public function flushDB()
     {
-
     }
 
     public function set($key, $value, $timeout = 0)
     {
-
     }
 
     public function delete($key1, $key2 = null, $key3 = null)
     {
-
     }
 }

@@ -1,9 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Phalcon {
     class Di
     {
-        static protected $di;
+        protected static $di;
 
         public static function setDi($di)
         {
@@ -20,14 +29,12 @@ namespace Phalcon {
 namespace Phalcon\Mvc {
     class Application
     {
-
     }
 }
 
 namespace Phalcon\Mvc\Model {
     class Query
     {
-
         const TYPE_SELECT = 309;
 
         const TYPE_INSERT = 306;
