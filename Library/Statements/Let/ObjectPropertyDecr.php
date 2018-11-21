@@ -29,6 +29,7 @@ class ObjectPropertyDecr
      * @param ZephirVariable $symbolVariable
      * @param CompilationContext $compilationContext
      * @param array $statement
+     * @param mixed $property
      */
     public function assign($variable, $property, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
     {

@@ -12,7 +12,6 @@
 namespace Zephir\Cache;
 
 use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 use Zephir\MethodCallWarmUp;
 use Zephir\Passes\CallGathererPass;
@@ -79,11 +78,12 @@ class MethodCache
     }
 
     /**
-     * Retrieves/Creates a function cache for a method call
+     * Retrieves/Creates a function cache for a method call.
      *
-     * @param CompilationContext $compilationContext
-     * @param ClassMethod $method
-     * @param Variable $caller
+     * @param  CompilationContext $compilationContext
+     * @param  string             $methodName
+     * @param  Variable           $caller
+     * @return string
      */
     public function get(CompilationContext $compilationContext, $methodName, Variable $caller)
     {
