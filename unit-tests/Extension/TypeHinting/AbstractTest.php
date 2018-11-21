@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -25,7 +25,7 @@ class AbstractTest extends TestCase
     public static function setUpBeforeClass()
     {
         if (PHP_VERSION_ID < 70000) {
-            throw new SkippedTestError("Scalar type hint are avalibale in PHP 7 only");
+            throw new SkippedTestError('Scalar type hint are avalibale in PHP 7 only');
         }
     }
 

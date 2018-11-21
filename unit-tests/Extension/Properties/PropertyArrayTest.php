@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -19,6 +19,6 @@ class PropertyArrayTest extends TestCase
     public function testAssertations()
     {
         $t = new PropertyArray();
-        $this->assertSame(array(1), $t->someArray);
+        $this->assertSame([1], $t->someArray);
     }
 }

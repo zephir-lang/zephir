@@ -9,18 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Extension\Integral;
+namespace Zephir\Test\Command;
 
 use Zephir\Support\TestCase;
 
-class SortTest extends TestCase
+class BuildCommandTest extends TestCase
 {
-    public function testSort()
-    {
-        $data = $original = range(1, 50);
-        shuffle($data);
-
-        $t = new \Test\Sort();
-        $this->assertSame($t->quick($data), $original);
-    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -19,14 +19,14 @@ class SPropertyAccessTest extends TestCase
     public function testStaticPropertyAccess()
     {
         $spa = new SPropertyAccess();
-        $this->assertSame($spa->testArgument(","), ",");
-        $this->assertSame($spa->testArgument(), ".");
+        $this->assertSame($spa->testArgument(','), ',');
+        $this->assertSame($spa->testArgument(), '.');
     }
 
     public function testStaticPropertyAccessWithUnderscore()
     {
         $spa = new SPropertyAccess();
-        $this->assertSame($spa->testArgumentWithUnderscore(","), ",");
-        $this->assertSame($spa->testArgumentWithUnderscore(), ".");
+        $this->assertSame($spa->testArgumentWithUnderscore(','), ',');
+        $this->assertSame($spa->testArgumentWithUnderscore(), '.');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -23,24 +23,24 @@ class TernaryTest extends TestCase
         $this->assertSame('bar', $t->testTernary2(false));
 
         $this->assertSame(3, $t->testTernaryAfterLetVariable());
-        $this->assertSame(array('', 'c', ''), $t->testTernaryWithPromotedTemporaryVariable());
+        $this->assertSame(['', 'c', ''], $t->testTernaryWithPromotedTemporaryVariable());
 
         $this->assertSame(true, $t->testShortTernary(true));
-        $this->assertSame(false, $t->testShortTernary(array()));
-        $this->assertSame(array(1,2,3), $t->testShortTernary(array(1,2,3)));
+        $this->assertSame(false, $t->testShortTernary([]));
+        $this->assertSame([1,2,3], $t->testShortTernary([1,2,3]));
         $this->assertSame(false, $t->testShortTernary(false));
         $this->assertSame(false, $t->testShortTernary(0));
 
         $this->assertSame(1, $t->testShortTernaryComplex(false, 1));
-        $this->assertSame("test string", $t->testShortTernaryComplex(false, "test string"));
-        $this->assertSame(array(), $t->testShortTernaryComplex(false, array()));
+        $this->assertSame('test string', $t->testShortTernaryComplex(false, 'test string'));
+        $this->assertSame([], $t->testShortTernaryComplex(false, []));
     }
 
     public function testComplex()
     {
         $t = new \Test\Ternary();
-        $this->assertSame(101, $t->testTernaryComplex1(array(), ""));
-        $this->assertSame(106, $t->testTernaryComplex2(array(), ""));
-        $this->assertSame("boolean", $t->testTernaryComplex3(""));
+        $this->assertSame(101, $t->testTernaryComplex1([], ''));
+        $this->assertSame(106, $t->testTernaryComplex2([], ''));
+        $this->assertSame('boolean', $t->testTernaryComplex3(''));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -36,14 +36,14 @@ class FunctionExistsTest extends TestCase
     {
         $t = new FunctionExists();
         $expected = [
-            "substr"  => true,
-            "cubstr"  => false,
-            "ucfirst" => true,
-            "bcfirst" => false,
-            "stripos" => true,
-            "ktripos" => false,
-            "trim"    => true,
-            "prim"    => false,
+            'substr'  => true,
+            'cubstr'  => false,
+            'ucfirst' => true,
+            'bcfirst' => false,
+            'stripos' => true,
+            'ktripos' => false,
+            'trim'    => true,
+            'prim'    => false,
         ];
 
         $this->assertSame($expected, $t->testBuiltInFunctions());

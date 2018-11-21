@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -26,9 +26,9 @@ class MethodDocBlockTest extends TestCase
         /**
          * ClassDefinition for Class creation
          *
-         * @param string      $namespace  Namespace ex: \Zephir\Stubs
-         * @param string      $name       Class name, ex: Stubs
-         * @param string|null $shortName  {get, set}
+         * @param string      $namespace Namespace ex: \Zephir\Stubs
+         * @param string      $name      Class name, ex: Stubs
+         * @param string|null $shortName {get, set}
          */
         $classNamespace = $params['class']['namespace'];
         $className      = $params['class']['className'];

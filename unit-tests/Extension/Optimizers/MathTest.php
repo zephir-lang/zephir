@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -140,6 +140,6 @@ class MathTest extends TestCase
         $this->assertSame(tan(2), $t->testVarParameter(2));
         $this->assertSame(tan(3), $t->testVarParameter(3));
         $this->assertSame(tan(4), $t->testVarParameter(4));
-        $this->assertSame(tan(0), $t->testVarParameter("0"));
+        $this->assertSame(tan(0), $t->testVarParameter('0'));
     }
 }

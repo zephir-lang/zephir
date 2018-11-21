@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -23,7 +23,7 @@ class VarsTest extends TestCase
         $this->setOutputCallback(
             function ($output) {
                 /* To prevent differences between PHP version */
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
@@ -62,7 +62,7 @@ class VarsTest extends TestCase
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
@@ -74,14 +74,14 @@ class VarsTest extends TestCase
 
         $t = new \Test\Vars();
 
-        $t->testVarDump3param(3.1, true, array(1, 2, 3));
+        $t->testVarDump3param(3.1, true, [1, 2, 3]);
     }
 
     public function testVarExport()
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
@@ -118,14 +118,14 @@ class VarsTest extends TestCase
         );
 
         $t = new \Test\Vars();
-        $t->testCountOptimizerVarDumpAndExport(array(1, 2, 3, 4, 5));
+        $t->testCountOptimizerVarDumpAndExport([1, 2, 3, 4, 5]);
     }
 
     public function testArrayTypeVarDumpAndExport()
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
@@ -135,7 +135,7 @@ class VarsTest extends TestCase
         );
 
         $t = new \Test\Vars();
-        $t->testArrayTypeVarDumpAndExport(array(1, 2, 3));
+        $t->testArrayTypeVarDumpAndExport([1, 2, 3]);
     }
 
     public function testIntVarDump()

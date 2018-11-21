@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,13 +11,13 @@
 
 namespace Zephir\Test\CompilerFile;
 
-use Zephir\Config;
+use Zephir\Backends\ZendEngine2\Backend;
 use Zephir\Compiler;
 use Zephir\CompilerFile;
-use Zephir\Backends\ZendEngine2\Backend;
-use Zephir\Support\TestCase;
-use Zephir\Parser\Manager;
+use Zephir\Config;
 use Zephir\Logger;
+use Zephir\Parser\Manager;
+use Zephir\Support\TestCase;
 
 class CheckDependenciesTest extends TestCase
 {

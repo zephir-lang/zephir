@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -19,9 +19,9 @@ class AssignTest extends TestCase
     /**
      * @dataProvider variableAssignProvider
      * @test
-     * @param mixed $expected
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignment($expected, $test, $testParams = null)
     {
@@ -92,15 +92,15 @@ class AssignTest extends TestCase
     /**
      * @dataProvider propertyAssignProvider
      * @test
-     * @param mixed $expected
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {
         $t = new Assign();
 
-        if (gettype($testParams) === "array") {
+        if (gettype($testParams) === 'array') {
             $this->assertSame($expected, call_user_func_array([$t, $test], $testParams));
         } else {
             $this->assertSame($expected, call_user_func([$t, $test], $testParams));
@@ -133,8 +133,8 @@ class AssignTest extends TestCase
             [['test_index' => 'value'],   'testArrayVarAssign2', ['test_index', 'value']],
             [$arry,                       'testPropertyArray14'],
             [$arry,                       'testStaticPropertyArrayMulti4'],
-            [["test", 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
-            [["a" => true, "b" => false], 'testArrayBoolExpressionAssign'],
+            [['test', 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
+            [['a' => true, 'b' => false], 'testArrayBoolExpressionAssign'],
         ];
     }
 

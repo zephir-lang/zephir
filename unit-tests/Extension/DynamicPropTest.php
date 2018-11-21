@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -41,12 +41,11 @@ class DynamicPropTest extends TestCase
         $class->setPropertyNull('test');
         $this->assertSame(null, $class->test);
 
-
         $class->setPropertyVariableInt('test');
         $this->assertSame(10, $class->test);
 
         $class->setPropertyVariableString('test');
-        $this->assertSame("test", $class->test);
+        $this->assertSame('test', $class->test);
 
         $class->setPropertyVariableBoolTrue('test');
         $this->assertSame(true, $class->test);
@@ -54,16 +53,16 @@ class DynamicPropTest extends TestCase
         $class->setPropertyVariableBoolFalse('test');
         $this->assertSame(false, $class->test);
 
-        $class->setPropertyInt("property");
+        $class->setPropertyInt('property');
         $this->assertSame(10, $class->property);
 
         $class->setExistingStringProperty();
-        $this->assertSame("works", $class->test);
+        $this->assertSame('works', $class->test);
 
-        $class->setExistingStringPropertyString("test");
-        $this->assertSame("test", $class->eproperty);
+        $class->setExistingStringPropertyString('test');
+        $this->assertSame('test', $class->eproperty);
 
         $class->setNonExistingStringProperty();
-        $this->assertSame("works", $class->property);
+        $this->assertSame('works', $class->property);
     }
 }
