@@ -13,7 +13,6 @@ namespace Zephir\Exception;
 
 /**
  * Zephir\Exception\ValidationException
- *
  */
 class ValidationException extends InvalidArgumentException
 {

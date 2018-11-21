@@ -700,7 +700,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets an automatic safe default init value according to its type
-     *
      */
     public function enableDefaultAutoInitValue()
     {

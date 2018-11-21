@@ -13,7 +13,6 @@ namespace Zephir;
 
 /**
  * Zephir\Zephir
- *
  */
 final class Zephir
 {

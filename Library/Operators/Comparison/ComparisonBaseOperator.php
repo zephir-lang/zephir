@@ -29,8 +29,6 @@ class ComparisonBaseOperator extends BaseOperator
     protected $commutative = false;
 
     /**
-     *
-     *
      * @param $expr
      * @param  CompilationContext      $compilationContext
      * @return bool|CompiledExpression

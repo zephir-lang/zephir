@@ -26,7 +26,6 @@ class CompiledExpression implements TypeAwareInterface
     protected $originalExpr;
 
     /**
-     *
      * @param string $type
      * @param string $code
      * @param array  $originalExpr

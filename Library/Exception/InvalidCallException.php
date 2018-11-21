@@ -13,7 +13,6 @@ namespace Zephir\Exception;
 
 /**
  * Zephir\Exception\InvalidCallException
- *
  */
 class InvalidCallException extends LogicException
 {

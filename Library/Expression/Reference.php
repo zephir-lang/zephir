@@ -23,7 +23,6 @@ use Zephir\Variable;
  * Zephir\Expression\Reference
  *
  * Resolves expressions that create arrays
- *
  */
 class Reference
 {

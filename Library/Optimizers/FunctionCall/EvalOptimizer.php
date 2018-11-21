@@ -19,7 +19,6 @@ use Zephir\Optimizers\OptimizerAbstract;
 
 /**
  * Zephir\Optimizers\FunctionCall\EvalOptimizer
- *
  */
 class EvalOptimizer extends OptimizerAbstract
 {

@@ -13,7 +13,6 @@ namespace Zephir\Command;
 
 /**
  * Zephir\Command\ZflagsAwareTrait
- *
  */
 trait ZflagsAwareTrait
 {

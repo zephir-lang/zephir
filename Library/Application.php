@@ -25,7 +25,6 @@ use Zephir\Providers\CompilerProvider;
 
 /**
  * Zephir\Bootstrap
- *
  */
 final class Application extends BaseApplication
 {

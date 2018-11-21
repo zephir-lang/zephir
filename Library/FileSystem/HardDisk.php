@@ -20,7 +20,6 @@ use Zephir\Zephir;
  * Zephir\FileSystem\HardDisk
  *
  * Uses the standard hard-disk as filesystem for temporary operations.
- *
  */
 final class HardDisk implements FileSystemInterface
 {

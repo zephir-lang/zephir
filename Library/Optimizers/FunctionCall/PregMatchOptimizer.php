@@ -23,7 +23,6 @@ use Zephir\Variable;
  * Zephir\Optimizers\FunctionCall\PregMatchOptimizer
  *
  * Optimizes calls to 'preg_match' using internal function.
- *
  */
 class PregMatchOptimizer extends OptimizerAbstract
 {

@@ -22,7 +22,6 @@ use Zephir\Variable;
  * Zephir\Expression\NativeArray
  *
  * Resolves expressions that create arrays
- *
  */
 class NativeArray
 {

@@ -19,7 +19,6 @@ use Zephir\Exception\CompilerException;
  * Zephir\ClassDefinition
  *
  * Represents a class/interface and their properties and methods.
- *
  */
 class ClassDefinition
 {
@@ -395,7 +394,6 @@ class ClassDefinition
 
     /**
      * Calculate the dependency rank of the class based on its dependencies
-     *
      */
     public function getDependencies()
     {

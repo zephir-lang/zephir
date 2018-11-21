@@ -20,7 +20,6 @@ use Zephir\Exception\IllegalStateException;
 
 /**
  * Zephir\Providers\BackendProvider
- *
  */
 final class BackendProvider implements ServiceProviderInterface
 {

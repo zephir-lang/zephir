@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Zephir\Command\DevelopmentModeAwareTrait
- *
  */
 trait DevelopmentModeAwareTrait
 {

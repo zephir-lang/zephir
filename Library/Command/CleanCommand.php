@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Zephir\Command\CleanCommand
  *
  * Cleans any object files created by the extension.
- *
  */
 class CleanCommand extends ContainerAwareCommand
 {

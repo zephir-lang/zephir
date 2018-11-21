@@ -16,7 +16,6 @@ use Zephir\Optimizers\EvalExpression;
 
 /**
  * Zephir\Statements\StatementAbstract
- *
  */
 abstract class StatementAbstract
 {

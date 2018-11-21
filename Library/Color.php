@@ -17,7 +17,6 @@ namespace Zephir;
  * Allows to generate messages using colors on xterm, ddterm, linux, etc.
  * This class is based on Phalcon\Script available in Phalcon DevTools
  * licensed under New BSD license
- *
  */
 class Color
 {

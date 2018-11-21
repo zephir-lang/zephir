@@ -13,7 +13,6 @@ namespace Zephir\Fcall;
 
 /**
  * Zephir\Fcall\FcallManagerInterface
- *
  */
 interface FcallManagerInterface
 {

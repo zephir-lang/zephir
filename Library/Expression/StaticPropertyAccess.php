@@ -21,7 +21,6 @@ use Zephir\Variable;
  * Zephir\Expression\StaticPropertyAccess
  *
  * Resolves class static properties
- *
  */
 class StaticPropertyAccess
 {

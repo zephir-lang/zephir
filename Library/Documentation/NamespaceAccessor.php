@@ -14,7 +14,6 @@ namespace Zephir\Documentation;
 class NamespaceAccessor
 {
     /**
-     *
      * @var \Zephir\CompilerFile[]
      */
     protected $classes;
@@ -24,7 +23,6 @@ class NamespaceAccessor
     protected $byNamespace;
 
     /**
-     *
      * @param \Zephir\CompilerFile[] $files
      */
     public function __construct($files)
@@ -33,7 +31,6 @@ class NamespaceAccessor
     }
 
     /**
-     *
      * @return NamespaceHelper[]
      */
     public function getByNamespace()

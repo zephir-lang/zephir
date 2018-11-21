@@ -18,7 +18,6 @@ use function Zephir\file_put_contents_ex;
 
 /**
  * Zephir\Backends\ZendEngine3\FcallManager
- *
  */
 class FcallManager extends ZE2FcallManager implements FcallManagerInterface
 {

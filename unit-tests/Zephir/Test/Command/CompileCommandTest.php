@@ -25,7 +25,6 @@ use function Zephir\unlink_recursive;
 
 /**
  * Zephir\Test\Command\CompileCommandTest
- *
  */
 class CompileCommandTest extends TestCase
 {
