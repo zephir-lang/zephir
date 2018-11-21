@@ -34,7 +34,7 @@ class ComparisonBaseOperator extends BaseOperator
      * @param $expr
      * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function optimizeTypeOf($expr, CompilationContext $compilationContext)
     {

@@ -25,7 +25,7 @@ class EchoStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {

@@ -113,7 +113,7 @@ class Constants
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

@@ -615,7 +615,7 @@ class ClassDefinition
      * @param array $statement
      *
      * @return void
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function addMethod(ClassMethod $method, $statement = null)
     {
@@ -634,7 +634,7 @@ class ClassDefinition
      * @param array $statement
      *
      * @return void
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function updateMethod(ClassMethod $method, $statement = null)
     {
@@ -846,7 +846,7 @@ class ClassDefinition
      *
      * @param ClassDefinition $classDefinition
      * @param ClassDefinition $interfaceDefinition
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function checkInterfaceImplements(ClassDefinition $classDefinition, ClassDefinition $interfaceDefinition)
     {
@@ -868,7 +868,7 @@ class ClassDefinition
      * Pre-compiles a class/interface gathering method information required by other methods
      *
      * @param CompilationContext $compilationContext
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext)
     {

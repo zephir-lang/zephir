@@ -531,7 +531,7 @@ class FunctionCall extends Call
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {

@@ -32,7 +32,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
@@ -234,7 +234,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {

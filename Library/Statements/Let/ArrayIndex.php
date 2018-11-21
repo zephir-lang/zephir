@@ -32,7 +32,7 @@ class ArrayIndex
      * @param CompilationContext $compilationContext
      *
      * @return GlobalConstant|ZephirVariable
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {
@@ -128,7 +128,7 @@ class ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array $statement
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     protected function _assignArrayIndexSingle($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
