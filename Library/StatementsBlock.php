@@ -17,7 +17,6 @@ use Zephir\Statements\ContinueStatement;
 use Zephir\Statements\DeclareStatement;
 use Zephir\Statements\DoWhileStatement;
 use Zephir\Statements\EchoStatement;
-use Zephir\Statements\FetchStatement;
 use Zephir\Statements\ForStatement;
 use Zephir\Statements\IfStatement;
 use Zephir\Statements\LetStatement;
