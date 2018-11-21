@@ -32,7 +32,7 @@ class ModOperator extends ArithmeticalBaseOperator
     /**
      * Compiles the arithmetical modulus operation
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      */
     public function compile($expression, CompilationContext $compilationContext)

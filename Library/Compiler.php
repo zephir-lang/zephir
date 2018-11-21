@@ -173,7 +173,7 @@ class Compiler implements InjectionAwareInterface
      * Adds a function to the function definitions.
      *
      * @param  FunctionDefinition $func
-     * @param  array $statement
+     * @param  array              $statement
      * @return void
      *
      * @throws CompilerException
@@ -262,8 +262,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Loads a class definition in an external dependency
      *
-     * @param string $className
-     * @param string $location
+     * @param  string            $className
+     * @param  string            $location
      * @return boolean
      * @throws CompilerException
      * @throws Exception
@@ -300,7 +300,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Allows to check if a class is part of the compiled extension
      *
-     * @param string $className
+     * @param  string  $className
      * @return boolean
      */
     public function isClass($className)
@@ -404,7 +404,7 @@ class Compiler implements InjectionAwareInterface
      * Inserts an anonymous class definition in the compiler
      *
      * @param CompilerFileAnonymous $file
-     * @param ClassDefinition $classDefinition
+     * @param ClassDefinition       $classDefinition
      */
     public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition)
     {
@@ -435,8 +435,8 @@ class Compiler implements InjectionAwareInterface
      * @todo
      * @deprecated
      *
-     * @param        $src
-     * @param        $dest
+     * @param $src
+     * @param $dest
      * @param string $pattern
      * @param mixed  $callback
      *
@@ -585,7 +585,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Returns GCC flags for current compilation
      *
-     * @param boolean $development
+     * @param  boolean $development
      * @return string
      */
     public function getGccFlags($development = false)
@@ -670,7 +670,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generates the C sources from Zephir without compiling them
      *
-     * @param  bool $fromGenerate
+     * @param  bool      $fromGenerate
      * @return bool
      * @throws Exception
      */
@@ -1143,8 +1143,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Process config.w32 sections
      *
-     * @param array $sources
-     * @param string $project
+     * @param  array  $sources
+     * @param  string $project
      * @return array
      */
     protected function processAddSources($sources, $project)
@@ -1171,8 +1171,8 @@ class Compiler implements InjectionAwareInterface
      * @param string $project
      *
      * @throws Exception
-     * @return bool true if need to run configure
-     * TODO: move this to backend?
+     * @return bool      true if need to run configure
+     *                   TODO: move this to backend?
      */
     public function createConfigFiles($project)
     {
@@ -1619,7 +1619,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @throws Exception
      * @return boolean
-     * TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
+     *                   TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
      */
     public function createProjectFiles($project)
     {
@@ -2027,7 +2027,7 @@ class Compiler implements InjectionAwareInterface
      * @param $contentM4
      * @throws Exception
      * @return string
-     * TODO: Move the template depending part to backend?
+     *                   TODO: Move the template depending part to backend?
      */
     public function generatePackageDependenciesM4($contentM4)
     {

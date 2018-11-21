@@ -190,7 +190,7 @@ class StaticTypeInference
     /**
      * Asks the local context information whether a variable can be stored in the stack instead of the heap
      *
-     * @param string $variable
+     * @param  string  $variable
      * @return boolean
      */
     public function getInferedType($variable)

@@ -32,8 +32,8 @@ class NewInstanceTypeOperator extends BaseOperator
     /**
      * Executes the operator
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
      */

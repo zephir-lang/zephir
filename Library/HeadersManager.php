@@ -49,8 +49,8 @@ class HeadersManager
     /**
      * Adds a header path to the manager
      *
-     * @param string $path
-     * @param int $position
+     * @param  string                    $path
+     * @param  int                       $position
      * @throws \InvalidArgumentException
      */
     public function add($path, $position = 0)

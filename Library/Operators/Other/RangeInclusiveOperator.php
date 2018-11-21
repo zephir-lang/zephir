@@ -26,8 +26,8 @@ use Zephir\Types;
 class RangeInclusiveOperator extends BaseOperator
 {
     /**
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
      */

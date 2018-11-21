@@ -63,7 +63,7 @@ class UnaryOperator extends AbstractOperator
     private $expression;
 
     /**
-     * @param null $operator
+     * @param null                 $operator
      * @param AbstractBuilder|null $expression
      */
     public function __construct($operator = null, AbstractBuilder $expression = null)
@@ -104,7 +104,7 @@ class UnaryOperator extends AbstractOperator
     }
 
     /**
-     * @param AbstractBuilder $expression
+     * @param  AbstractBuilder $expression
      * @return $this
      */
     public function setExpression(AbstractBuilder $expression)

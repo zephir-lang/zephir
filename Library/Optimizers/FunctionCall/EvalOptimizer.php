@@ -27,9 +27,9 @@ class EvalOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
+     * @param  array                         $expression
+     * @param  Call                          $call
+     * @param  CompilationContext            $context
      * @return bool|CompiledExpression|mixed
      *
      * @throws CompilerException

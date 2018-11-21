@@ -27,7 +27,7 @@ class TypeOfOperator extends BaseOperator
 {
     /**
      * @param $expression
-     * @param CompilationContext $compilationContext
+     * @param  CompilationContext      $compilationContext
      * @return bool|CompiledExpression
      * @throws CompilerException
      */

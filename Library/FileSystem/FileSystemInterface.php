@@ -43,7 +43,7 @@ interface FileSystemInterface
     /**
      * Creates a directory inside the temporary container.
      *
-     * @param  string $path
+     * @param  string  $path
      * @return boolean
      */
     public function makeDirectory($path);
@@ -117,9 +117,9 @@ interface FileSystemInterface
     /**
      * Executes a command and saves the result into a temporary entry.
      *
-     * @param  string $command
-     * @param  string $descriptor
-     * @param  string $destination
+     * @param string $command
+     * @param string $descriptor
+     * @param string $destination
      *
      * @return void
      */

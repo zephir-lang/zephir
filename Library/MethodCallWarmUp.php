@@ -24,7 +24,7 @@ class MethodCallWarmUp
      *
      *
      * @param ClassDefinition $classDefinition
-     * @param ClassMethod $method
+     * @param ClassMethod     $method
      */
     public function add(ClassDefinition $classDefinition, ClassMethod $method)
     {

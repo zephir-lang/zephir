@@ -31,8 +31,8 @@ class BitwiseBaseOperator extends BaseOperator
      * This tries to perform arithmetical operations
      * Probably gcc/clang will optimize them without this optimization
      * @see http://en.wikipedia.org/wiki/Constant_folding
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array                   $expression
+     * @param  CompilationContext      $compilationContext
      * @return bool|CompiledExpression
      */
     public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
@@ -93,8 +93,8 @@ class BitwiseBaseOperator extends BaseOperator
     /**
      * {@inheritdoc}
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array                   $expression
+     * @param  CompilationContext      $compilationContext
      * @return bool|CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

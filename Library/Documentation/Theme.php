@@ -103,7 +103,7 @@ class Theme
     /**
      * Get assets from the theme info (theme.json file placed inside the theme directory).
      *
-     * @param  string $name
+     * @param  string     $name
      * @return mixed|null
      */
     public function getThemeInfo($name)

@@ -209,7 +209,7 @@ abstract class BaseBackend implements FcallAwareInterface
     abstract public function onPostCompile(ClassMethod $method, CompilationContext $context);
 
     /**
-     * @param Variable $variable
+     * @param  Variable $variable
      * @return string
      */
     abstract public function getVariableCode(Variable $variable);
@@ -217,7 +217,7 @@ abstract class BaseBackend implements FcallAwareInterface
     /**
      * Get a double pointer to the variable
      *
-     * @param Variable $variable
+     * @param  Variable $variable
      * @return string
      */
     abstract public function getVariableCodePointer(Variable $variable);

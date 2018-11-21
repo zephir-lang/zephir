@@ -129,7 +129,7 @@ class Template
     /**
      * Generate an url relative to the current directory
      *
-     * @param string $url the url we want to reach
+     * @param  string $url the url we want to reach
      * @return string the relative path to the url
      */
     public function url($url)

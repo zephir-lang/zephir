@@ -29,9 +29,9 @@ abstract class MathOptimizer extends OptimizerAbstract
     abstract public function getFunctionName();
 
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
+     * @param  array                         $expression
+     * @param  Call                          $call
+     * @param  CompilationContext            $context
      * @return bool|CompiledExpression|mixed
      * @throws CompilerException
      */
@@ -91,8 +91,8 @@ abstract class MathOptimizer extends OptimizerAbstract
     }
 
     /**
-     * @param CompiledExpression $compiledExpression
-     * @param array $expression
+     * @param  CompiledExpression $compiledExpression
+     * @param  array              $expression
      * @return CompiledExpression
      */
     protected function passNativeFCall($compiledExpression, $expression)

@@ -130,9 +130,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Adds a function to the function definitions
      *
-     * @param Compiler $compiler
+     * @param Compiler           $compiler
      * @param FunctionDefinition $func
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -205,8 +205,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Compiles the class/interface contained in the file
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $classStatement
+     * @param string             $namespace
+     * @param array              $classStatement
      */
     public function compileClass(CompilationContext $compilationContext, $namespace, $classStatement)
     {
@@ -246,7 +246,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Compiles a comment as a top-level statement
      *
      * @param CompilationContext $compilationContext
-     * @param array $topStatement
+     * @param array              $topStatement
      */
     public function compileComment(CompilationContext $compilationContext, $topStatement)
     {
@@ -257,8 +257,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Creates a definition for an interface
      *
      * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param array  $topStatement
+     * @param array  $docblock
      */
     public function preCompileInterface($namespace, $topStatement, $docblock)
     {
@@ -475,9 +475,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Creates a definition for a class
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param string             $namespace
+     * @param array              $topStatement
+     * @param array              $docblock
      */
     public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
     {
@@ -581,7 +581,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Pre-compiles a Zephir file. Generates the IR and perform basic validations
      *
-     * @param Compiler $compiler
+     * @param  Compiler          $compiler
      * @throws ParseException
      * @throws CompilerException
      * @throws Exception
@@ -821,8 +821,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Compiles the file
      *
-     * @param Compiler $compiler
-     * @param StringsManager $stringsManager
+     * @param  Compiler          $compiler
+     * @param  StringsManager    $stringsManager
      * @throws CompilerException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
@@ -1026,7 +1026,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Transform class/interface name to FQN format
      *
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     protected function getFullName($name)

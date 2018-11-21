@@ -37,7 +37,7 @@ class StaticPropertyAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean $expecting
+     * @param boolean       $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -59,8 +59,8 @@ class StaticPropertyAccess
     /**
      * Access a static property
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

@@ -80,7 +80,7 @@ class BuilderFactory
 
     /**
      * @param $type
-     * @param null $value
+     * @param  null          $value
      * @return RawExpression
      */
     public function literal($type, $value = null)

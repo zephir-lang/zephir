@@ -41,7 +41,7 @@ class StatementsBlock extends AbstractBuilder
     }
 
     /**
-     * @param array $statements
+     * @param  array $statements
      * @return $this
      */
     public function setStatements($statements)

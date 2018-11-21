@@ -53,10 +53,10 @@ class FunctionCache
     /**
      * Retrieves/Creates a function cache for a function call
      *
-     * @param string $functionName
-     * @param Call $call
+     * @param string             $functionName
+     * @param Call               $call
      * @param CompilationContext $compilationContext
-     * @param boolean $exists
+     * @param boolean            $exists
      *
      * @return string
      */

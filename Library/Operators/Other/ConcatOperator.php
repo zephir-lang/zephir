@@ -26,9 +26,9 @@ use function Zephir\add_slashes;
 class ConcatOperator extends BaseOperator
 {
     /**
-     * @param array $expression
-     * @param CompilationContext $compilationContext
-     * @param boolean $isFullString
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
+     * @param  boolean            $isFullString
      * @return array
      */
     private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)
@@ -123,8 +123,8 @@ class ConcatOperator extends BaseOperator
     /**
      * Performs concat compilation.
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

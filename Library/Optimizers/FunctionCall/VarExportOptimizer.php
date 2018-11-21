@@ -26,9 +26,9 @@ use Zephir\Statements\LetStatement;
 class VarExportOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
+     * @param  array                    $expression
+     * @param  Call                     $call
+     * @param  CompilationContext       $context
      * @return mixed|CompiledExpression
      * @throws CompilerException
      */

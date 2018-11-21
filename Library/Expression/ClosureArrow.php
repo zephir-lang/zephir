@@ -31,8 +31,8 @@ class ClosureArrow extends Closure
     /**
      * Creates a closure
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
      */

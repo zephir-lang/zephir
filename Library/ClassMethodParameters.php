@@ -27,7 +27,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
     /**
      * ClassMethodParameters constructor.
      *
-     * @param  array $parameters
+     * @param  array             $parameters
      * @throws CompilerException
      */
     public function __construct(array $parameters)

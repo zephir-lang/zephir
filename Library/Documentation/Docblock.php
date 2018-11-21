@@ -58,7 +58,7 @@ class Docblock
     }
 
     /**
-     * @param string $type the annotation name you want to get
+     * @param  string       $type the annotation name you want to get
      * @return Annotation[] an array containing the annotations matching the name
      */
     public function getAnnotationsByType($type)

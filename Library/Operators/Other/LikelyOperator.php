@@ -25,8 +25,8 @@ use Zephir\Operators\BaseOperator;
 class LikelyOperator extends BaseOperator
 {
     /**
-     * @param array $expression
-     * @param CompilationContext $compilationContext
+     * @param  array              $expression
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
      */

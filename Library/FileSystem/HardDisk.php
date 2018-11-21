@@ -37,8 +37,8 @@ final class HardDisk implements FileSystemInterface
     /**
      * HardDisk constructor
      *
-     * @param  Flysystem\FilesystemInterface $filesystem
-     * @param  string                        $localPath
+     * @param Flysystem\FilesystemInterface $filesystem
+     * @param string                        $localPath
      *
      * @throws InvalidArgumentException
      */
@@ -122,7 +122,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      *
      * @throws Flysystem\FileNotFoundException
      */
@@ -174,9 +174,9 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $command
-     * @param  string $descriptor
-     * @param  string $destination
+     * @param string $command
+     * @param string $descriptor
+     * @param string $destination
      *
      * @return void
      */
