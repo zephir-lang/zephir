@@ -16,7 +16,6 @@ use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 use Zephir\Di\ServiceProviderInterface;
 use Zephir\Exception\InvalidArgumentException;
-use Zephir\Providers;
 
 /**
  * Zephir\ServiceRegistrator
