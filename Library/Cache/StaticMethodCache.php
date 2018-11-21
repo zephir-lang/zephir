@@ -42,7 +42,7 @@ class StaticMethodCache
      *
      * @param CompilationContext            $compilationContext
      * @param ClassMethod|\ReflectionMethod $method
-     * @param boolean                       $allowNtsCache
+     * @param bool                          $allowNtsCache
      *
      * @return string
      */

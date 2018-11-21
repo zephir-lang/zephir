@@ -37,7 +37,7 @@ class NativeArray
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean  $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -49,7 +49,7 @@ class NativeArray
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -59,7 +59,7 @@ class NativeArray
     /**
      * Sets whether the expression must be resolved in "noisy" mode
      *
-     * @param boolean $noisy
+     * @param bool $noisy
      */
     public function setNoisy($noisy)
     {

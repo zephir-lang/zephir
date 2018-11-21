@@ -171,7 +171,7 @@ class StaticTypeInference
     /**
      * Process the found infered types and schedule a new pass
      *
-     * @return boolean
+     * @return bool
      */
     public function reduce()
     {
@@ -190,8 +190,8 @@ class StaticTypeInference
     /**
      * Asks the local context information whether a variable can be stored in the stack instead of the heap
      *
-     * @param  string  $variable
-     * @return boolean
+     * @param  string $variable
+     * @return bool
      */
     public function getInferedType($variable)
     {

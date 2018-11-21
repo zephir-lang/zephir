@@ -185,7 +185,7 @@ class MethodCache
      * Checks if the class is suitable for caching
      *
      * @param  ClassDefinition $classDefinition
-     * @return boolean
+     * @return bool
      */
     private function isClassCacheable($classDefinition)
     {

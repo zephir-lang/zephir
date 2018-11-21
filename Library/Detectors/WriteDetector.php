@@ -38,9 +38,9 @@ class WriteDetector
     /**
      * Do the detection pass on a single variable
      *
-     * @param  string  $variable
-     * @param  array   $statements
-     * @return boolean
+     * @param  string $variable
+     * @param  array  $statements
+     * @return bool
      */
     public function detect($variable, array $statements)
     {

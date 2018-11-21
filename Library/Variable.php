@@ -214,7 +214,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets if the variable is local-only scoped
      *
-     * @param boolean $localOnly
+     * @param bool $localOnly
      */
     public function setLocalOnly($localOnly)
     {
@@ -224,7 +224,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable is local-only scoped
      *
-     * @return boolean
+     * @return bool
      */
     public function isLocalOnly()
     {
@@ -234,7 +234,7 @@ class Variable implements TypeAwareInterface
     /**
      * Marks the variable to be defined as a double pointer
      *
-     * @param boolean $doublePointer
+     * @param bool $doublePointer
      */
     public function setIsDoublePointer($doublePointer)
     {
@@ -285,7 +285,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets if the variable is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -295,7 +295,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns if the variable is read only
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadOnly()
     {
@@ -305,7 +305,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets whether the variable is temporal or not
      *
-     * @param boolean $temporal
+     * @param bool $temporal
      */
     public function setTemporal($temporal)
     {
@@ -315,7 +315,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns whether the variable is temporal or not
      *
-     * @return boolean
+     * @return bool
      */
     public function isTemporal()
     {
@@ -325,7 +325,7 @@ class Variable implements TypeAwareInterface
     /**
      * Once a temporal variable is unused in a specific branch it is marked as idle
      *
-     * @param boolean $idle
+     * @param bool $idle
      */
     public function setIdle($idle)
     {
@@ -341,7 +341,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable is idle
      *
-     * @return boolean
+     * @return bool
      */
     public function isIdle()
     {
@@ -351,7 +351,7 @@ class Variable implements TypeAwareInterface
     /**
      * Some temporary variables can't be reused
      *
-     * @param boolean $reusable
+     * @param bool $reusable
      */
     public function setReusable($reusable)
     {
@@ -361,7 +361,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the temporary variable is reusable
      *
-     * @return boolean
+     * @return bool
      */
     public function isReusable()
     {
@@ -371,8 +371,8 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the latest node where a variable was used
      *
-     * @param boolean $used
-     * @param array   $node
+     * @param bool  $used
+     * @param array $node
      */
     public function setUsed($used, $node)
     {
@@ -383,7 +383,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks whether the last value assigned was used
      *
-     * @return boolean
+     * @return bool
      */
     public function isUsed()
     {
@@ -403,7 +403,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets if the variable is not tracked by the memory manager
      *
-     * @param boolean $memoryTracked
+     * @param bool $memoryTracked
      */
     public function setMemoryTracked($memoryTracked)
     {
@@ -413,7 +413,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable is tracked by the memory manager
      *
-     * @return boolean
+     * @return bool
      */
     public function isMemoryTracked()
     {
@@ -619,7 +619,7 @@ class Variable implements TypeAwareInterface
      * Sets if the variable is initialized
      * This allow to throw an exception if the variable is being read without prior initialization
      *
-     * @param boolean            $initialized
+     * @param bool               $initialized
      * @param CompilationContext $compilationContext
      */
     public function setIsInitialized($initialized, CompilationContext $compilationContext)
@@ -640,7 +640,7 @@ class Variable implements TypeAwareInterface
     /**
      * Check if the variable is initialized or not
      *
-     * @return boolean
+     * @return bool
      */
     public function isInitialized()
     {
@@ -650,7 +650,7 @@ class Variable implements TypeAwareInterface
     /**
      * Set if the symbol is a parameter of the method or not
      *
-     * @param boolean $isExternal
+     * @param bool $isExternal
      */
     public function setIsExternal($isExternal)
     {
@@ -661,7 +661,7 @@ class Variable implements TypeAwareInterface
     /**
      * Check if the variable is a parameter
      *
-     * @return boolean
+     * @return bool
      */
     public function isExternal()
     {
@@ -671,7 +671,7 @@ class Variable implements TypeAwareInterface
     /**
      * Get if the variable must be initialized to null
      *
-     * @return boolean
+     * @return bool
      */
     public function mustInitNull()
     {
@@ -1002,7 +1002,7 @@ class Variable implements TypeAwareInterface
     /**
      * Whether the variable is of a complex type
      *
-     * @return boolean
+     * @return bool
      */
     public function isComplex()
     {
@@ -1012,7 +1012,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if a variable is a superglobal
      *
-     * @return boolean
+     * @return bool
      */
     public function isSuperGlobal()
     {

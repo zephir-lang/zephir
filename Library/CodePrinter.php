@@ -137,7 +137,7 @@ class CodePrinter
      * Optionally controlling if the blank link must be added if the
      * previous line added isn't one blank line too
      *
-     * @param boolean $ifPrevNotBlank
+     * @param bool $ifPrevNotBlank
      */
     public function preOutputBlankLine($ifPrevNotBlank = false)
     {
@@ -159,7 +159,7 @@ class CodePrinter
      * Optionally controlling if the blank link must be added if the
      * previous line added isn't one blank line too
      *
-     * @param boolean $ifPrevNotBlank
+     * @param bool $ifPrevNotBlank
      */
     public function outputBlankLine($ifPrevNotBlank = false)
     {

@@ -99,7 +99,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDynamicClass()
     {
@@ -107,7 +107,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  boolean             $dynamicClass
+     * @param  bool                $dynamicClass
      * @return CallStaticStatement
      */
     public function setDynamicClass($dynamicClass)
@@ -117,7 +117,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDynamicMethod()
     {
@@ -125,7 +125,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  boolean             $dynamicMethod
+     * @param  bool                $dynamicMethod
      * @return CallStaticStatement
      */
     public function setDynamicMethod($dynamicMethod)

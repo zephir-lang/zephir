@@ -108,7 +108,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Sets if the class belongs to an external dependency or not
      *
-     * @param boolean $external
+     * @param bool $external
      */
     public function setIsExternal($external)
     {

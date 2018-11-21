@@ -50,7 +50,7 @@ class StaticConstantAccess
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {

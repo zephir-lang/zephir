@@ -122,7 +122,7 @@ class ConcatOperator extends BaseOperator
     /**
      * @param  array              $expression
      * @param  CompilationContext $compilationContext
-     * @param  boolean            $isFullString
+     * @param  bool               $isFullString
      * @return array
      */
     private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)

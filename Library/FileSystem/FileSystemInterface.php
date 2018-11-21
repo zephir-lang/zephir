@@ -41,8 +41,8 @@ interface FileSystemInterface
     /**
      * Creates a directory inside the temporary container.
      *
-     * @param  string  $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function makeDirectory($path);
 
@@ -97,9 +97,9 @@ interface FileSystemInterface
     /**
      * Generate a hash value using the contents of a given file.
      *
-     * @param  string  $algorithm
-     * @param  string  $sourceFile
-     * @param  boolean $useCache
+     * @param  string $algorithm
+     * @param  string $sourceFile
+     * @param  bool   $useCache
      * @return string
      */
     public function getHashFile($algorithm, $sourceFile, $useCache = false);

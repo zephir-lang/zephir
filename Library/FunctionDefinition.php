@@ -26,7 +26,7 @@ class FunctionDefinition extends ClassMethod
     /**
      * Whether the function is declared in a global or namespaced scope
      *
-     * @var boolean
+     * @var bool
      */
     private $isGlobal;
 

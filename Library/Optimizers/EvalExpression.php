@@ -223,7 +223,7 @@ class EvalExpression
     /**
      * Checks if the evaluation produce unreachable code
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnreachable()
     {
@@ -233,7 +233,7 @@ class EvalExpression
     /**
      * Checks if the evaluation not produce unreachable code
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnreachableElse()
     {

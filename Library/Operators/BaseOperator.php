@@ -31,7 +31,7 @@ class BaseOperator
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean  $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -46,7 +46,7 @@ class BaseOperator
      *
      * @param  CompilationContext $compilationContext
      * @param  array              $expression
-     * @param  boolean            $init
+     * @param  bool               $init
      * @return Variable
      */
     public function getExpectedNonLiteral(CompilationContext $compilationContext, $expression, $init = true)
@@ -77,7 +77,7 @@ class BaseOperator
      *
      * @param  CompilationContext $compilationContext
      * @param  array              $expression
-     * @param  boolean            $init
+     * @param  bool               $init
      * @return Variable
      */
     public function getExpected(CompilationContext $compilationContext, $expression, $init = true)
@@ -159,7 +159,7 @@ class BaseOperator
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpecting()
     {
@@ -169,7 +169,7 @@ class BaseOperator
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -179,7 +179,7 @@ class BaseOperator
     /**
      * Checks if the result of the evaluated expression is read only
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadOnly()
     {

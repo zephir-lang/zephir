@@ -185,7 +185,7 @@ class ClassProperty
     /**
      * Checks whether the variable is static
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -195,7 +195,7 @@ class ClassProperty
     /**
      * Checks whether the variable is public
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -205,7 +205,7 @@ class ClassProperty
     /**
      * Checks whether the variable is protected
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -215,7 +215,7 @@ class ClassProperty
     /**
      * Checks whether the variable is private
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {

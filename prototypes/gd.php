@@ -60,7 +60,7 @@ function gd_info()
  * @param  resource $image
  * @param  string   $filename
  * @param  int      $threshold
- * @return boolean
+ * @return bool
  */
 function image2wbmp($image, $filename, $threshold)
 {
@@ -100,7 +100,7 @@ function imageaffinematrixget($type, $options)
  * @link http://www.php.net/manual/ru/function.imagealphablending.php
  * @param  resource $image
  * @param  bool     $blendmode
- * @return boolean
+ * @return bool
  */
 function imagealphablending($image, $blendmode)
 {
@@ -109,8 +109,8 @@ function imagealphablending($image, $blendmode)
 /**
  * @link http://www.php.net/manual/ru/function.imageantialias.php
  * @param  resource $image
- * @param  boolean  $enabled
- * @return boolean
+ * @param  bool     $enabled
+ * @return bool
  */
 function imageantialias($image, $enabled)
 {
@@ -126,7 +126,7 @@ function imageantialias($image, $enabled)
  * @param  int      $start
  * @param  int      $end
  * @param  int      $color
- * @return boolean
+ * @return bool
  */
 function imagearc($image, $cx, $cy, $width, $height, $start, $end, $color)
 {
@@ -140,7 +140,7 @@ function imagearc($image, $cx, $cy, $width, $height, $start, $end, $color)
  * @param  int      $y
  * @param  string   $c
  * @param  int      $color
- * @return boolean
+ * @return bool
  */
 function imagechar($image, $font, $x, $y, $c, $color)
 {
@@ -154,7 +154,7 @@ function imagechar($image, $font, $x, $y, $c, $color)
  * @param  int      $y
  * @param  string   $c
  * @param  int      $color
- * @return boolean
+ * @return bool
  */
 function imagecharup($image, $font, $x, $y, $c, $color)
 {
@@ -236,7 +236,7 @@ function imagecolorclosesthwb($image, $red, $green, $blue)
  * @link http://www.php.net/manual/ru/function.imagecolordeallocate.php
  * @param  resource $image
  * @param  int      $color
- * @return boolean
+ * @return bool
  */
 function imagecolordeallocate($image, $color)
 {
@@ -271,7 +271,7 @@ function imagecolorexactalpha($image, $red, $green, $blue, $alpha)
  * @link http://www.php.net/manual/ru/function.imagecolormatch.php
  * @param  resource $image1
  * @param  resource $image2
- * @return boolean
+ * @return bool
  */
 function imagecolormatch($image1, $image2)
 {
