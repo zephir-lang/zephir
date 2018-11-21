@@ -147,11 +147,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Compiles the file generating a JSON intermediate representation.
      *
-     * @param  Compiler $compiler
-     * @return array
-     *
+     * @param  Compiler              $compiler
      * @throws IllegalStateException
      * @throws ParseException
+     * @return array
      */
     public function genIR(Compiler $compiler)
     {
@@ -881,11 +880,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Creates the property shortcuts.
      *
-     * @param  array           $property
-     * @param  ClassDefinition $classDefinition
-     * @return void
-     *
+     * @param  array             $property
+     * @param  ClassDefinition   $classDefinition
      * @throws CompilerException
+     * @return void
      */
     protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
     {

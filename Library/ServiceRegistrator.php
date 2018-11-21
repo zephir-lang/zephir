@@ -60,9 +60,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      *
      * @param  ServiceProviderInterface|string $provider
      * @param  bool                            $force
-     * @return ServiceProviderInterface
-     *
      * @throws InvalidArgumentException
+     * @return ServiceProviderInterface
      */
     public function registerService($provider, $force = false)
     {
@@ -87,9 +86,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * Gets a Service Provider matched by provided instance (if any).
      *
      * @param  ServiceProviderInterface|string $serviceProvider
-     * @return ServiceProviderInterface|null
-     *
      * @throws InvalidArgumentException
+     * @return ServiceProviderInterface|null
      */
     public function getServiceProviderByInstanceOf($serviceProvider)
     {
@@ -102,9 +100,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
      * Gets Service Providers matched by provided instance.
      *
      * @param  ServiceProviderInterface|string $serviceProvider
-     * @return ServiceProviderInterface[]
-     *
      * @throws InvalidArgumentException
+     * @return ServiceProviderInterface[]
      */
     public function getServiceProvidersByInstanceOf($serviceProvider)
     {
@@ -173,10 +170,9 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Validates $serviceProvider parameter.
      *
-     * @param  string|object $serviceProvider
-     * @return void
-     *
+     * @param  string|object            $serviceProvider
      * @throws InvalidArgumentException
+     * @return void
      */
     protected function assertIsStringOrInstanceOfObject($serviceProvider)
     {

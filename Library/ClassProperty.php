@@ -140,8 +140,8 @@ class ClassProperty
     /**
      * Returns the C-visibility accessors for the model
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public function getVisibilityAccessor()
     {

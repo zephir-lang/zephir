@@ -32,10 +32,9 @@ class StaticPropertyAppend extends ArrayIndex
      * @param  CompiledExpression $resolvedExpr
      * @param  CompilationContext $compilationContext
      * @param  array              $statement
-     * @return void
-     *
      * @throws Exception
      * @throws CompilerException
+     * @return void
      */
     public function assignStatic(
         $className,

@@ -64,8 +64,8 @@ class EvalExpression
      *
      * @param $exprRaw
      * @param  CompilationContext $compilationContext
-     * @return bool|string
      * @throws CompilerException
+     * @return bool|string
      */
     public function optimize($exprRaw, CompilationContext $compilationContext)
     {

@@ -99,11 +99,10 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
-     * @return int
-     *
+     * @param  InputInterface        $input
+     * @param  OutputInterface       $output
      * @throws \Throwable|\Exception
+     * @return int
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {

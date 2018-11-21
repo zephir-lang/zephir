@@ -220,9 +220,8 @@ class Documentation implements InjectionAwareInterface
      *
      * @param  array       $themeConfig
      * @param  string|null $options
-     * @return array
-     *
      * @throws Exception
+     * @return array
      */
     private function prepareThemeOptions($themeConfig, $options = null)
     {
@@ -288,12 +287,11 @@ class Documentation implements InjectionAwareInterface
      *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
-     * @param  array       $themeConfig
-     * @param  string|null $path
-     * @return null|string
-     *
+     * @param  array                    $themeConfig
+     * @param  string|null              $path
      * @throws InvalidArgumentException
      * @throws ConfigException
+     * @return null|string
      */
     private function findThemeDirectory($themeConfig, $path = null)
     {

@@ -22,8 +22,8 @@ class BitwiseNotOperator extends BaseOperator
     /**
      * @param $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

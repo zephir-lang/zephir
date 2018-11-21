@@ -33,10 +33,9 @@ class StaticPropertyArrayIndex extends ArrayIndex
      * @param  CompiledExpression $resolvedExpr
      * @param  CompilationContext $compilationContext
      * @param  array              $statement
-     * @return void
-     *
      * @throws Exception
      * @throws CompilerException
+     * @return void
      */
     public function assignStatic(
         $className,
@@ -102,10 +101,9 @@ class StaticPropertyArrayIndex extends ArrayIndex
      * @param  CompiledExpression $resolvedExpr
      * @param  CompilationContext $compilationContext,
      * @param  array              $statement
-     * @return void
-     *
      * @throws Exception
      * @throws CompilerException
+     * @return void
      */
     protected function _assignStaticPropertyArrayMultipleIndex(
         $classEntry,

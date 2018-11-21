@@ -74,8 +74,8 @@ class NativeArrayAccess
      *
      * @param $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -183,9 +183,8 @@ class NativeArrayAccess
      * @param  array              $expression
      * @param  Variable           $variableVariable
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
-     *
      * @throws CompilerException
+     * @return CompiledExpression
      */
     protected function _accessDimensionArray($expression, Variable $variableVariable, CompilationContext $compilationContext)
     {

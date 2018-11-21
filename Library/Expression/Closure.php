@@ -76,8 +76,8 @@ class Closure
      *
      * @param  array              $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

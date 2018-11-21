@@ -69,11 +69,10 @@ class Struct
     }
 
     /**
-     * @param  string $field
-     * @param  array  $global
-     * @return void
-     *
+     * @param  string                   $field
+     * @param  array                    $global
      * @throws InvalidArgumentException
+     * @return void
      */
     public function addProperty($field, $global)
     {
@@ -99,13 +98,12 @@ class Struct
     /**
      * Returns the C code that initializes the extension global.
      *
-     * @param  string $name
-     * @param  array  $global
-     * @param  mixed  $namespace
-     * @return string
-     *
+     * @param  string                   $name
+     * @param  array                    $global
+     * @param  mixed                    $namespace
      * @throws RuntimeException
      * @throws InvalidArgumentException
+     * @return string
      */
     public function getCDefault($name, $global, $namespace)
     {
@@ -143,10 +141,10 @@ class Struct
     }
 
     /**
-     * @return string
      * @param  mixed  $name
      * @param  mixed  $global
      * @param  mixed  $namespace
+     * @return string
      */
     public function getInitEntry($name, $global, $namespace)
     {
@@ -191,8 +189,8 @@ class Struct
      * Generates the internal c-type according to the php's type
      *
      * @param  string                   $type
-     * @return string
      * @throws InvalidArgumentException
+     * @return string
      */
     protected function convertToCType($type)
     {

@@ -27,8 +27,8 @@ class EmptyOperator extends BaseOperator
     /**
      * @param $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

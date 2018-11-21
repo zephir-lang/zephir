@@ -29,8 +29,8 @@ class VarExportOptimizer extends OptimizerAbstract
      * @param  array                    $expression
      * @param  Call                     $call
      * @param  CompilationContext       $context
-     * @return mixed|CompiledExpression
      * @throws CompilerException
+     * @return mixed|CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

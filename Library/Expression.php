@@ -263,8 +263,8 @@ class Expression
      * Resolves an expression
      *
      * @param  CompilationContext          $compilationContext
-     * @return bool|CompiledExpression
      * @throws CompilerException|Exception
+     * @return bool|CompiledExpression
      */
     public function compile(CompilationContext $compilationContext)
     {

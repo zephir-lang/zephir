@@ -49,10 +49,9 @@ final class Environment implements InjectionAwareInterface
     /**
      * Set the base path for the Zephir installation.
      *
-     * @param  string $basePath
-     * @return void
-     *
+     * @param  string                   $basePath
      * @throws InvalidArgumentException
+     * @return void
      */
     public function setBasePath($basePath)
     {

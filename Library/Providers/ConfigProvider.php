@@ -25,9 +25,8 @@ final class ConfigProvider implements ServiceProviderInterface
      * {@inheritdoc}
      *
      * @param  ContainerInterface|Container $container
-     * @return void
-     *
      * @throws \Zephir\Exception
+     * @return void
      */
     public function register(ContainerInterface $container)
     {

@@ -172,9 +172,8 @@ class Compiler implements InjectionAwareInterface
      *
      * @param  FunctionDefinition $func
      * @param  array              $statement
-     * @return void
-     *
      * @throws CompilerException
+     * @return void
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
@@ -195,10 +194,10 @@ class Compiler implements InjectionAwareInterface
      *
      * @param  string            $className
      * @param  string            $location
-     * @return bool
      * @throws CompilerException
      * @throws Exception
      * @throws ParseException
+     * @return bool
      */
     public function loadExternalClass($className, $location)
     {
@@ -507,8 +506,8 @@ class Compiler implements InjectionAwareInterface
      * Generates the C sources from Zephir without compiling them
      *
      * @param  bool      $fromGenerate
-     * @return bool
      * @throws Exception
+     * @return bool
      */
     public function generate($fromGenerate = false)
     {
@@ -868,12 +867,11 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate a HTML API.
      *
-     * @param  array $options
-     * @param  bool  $fromGenerate
-     * @return void
-     *
+     * @param  array           $options
+     * @param  bool            $fromGenerate
      * @throws ConfigException
      * @throws Exception
+     * @return void
      */
     public function api(array $options = [], $fromGenerate = false)
     {
@@ -891,10 +889,9 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate IDE stubs.
      *
-     * @param  bool $fromGenerate
-     * @return void
-     *
+     * @param  bool      $fromGenerate
      * @throws Exception
+     * @return void
      */
     public function stubs($fromGenerate = false)
     {
@@ -917,12 +914,11 @@ class Compiler implements InjectionAwareInterface
      *
      * TODO: Move to the separated installer
      *
-     * @param  bool $development
-     * @return void
-     *
+     * @param  bool                    $development
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
+     * @return void
      */
     public function install($development = false)
     {
@@ -2093,9 +2089,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Check require extensions orther when build your extension.
      *
-     * @return void
-     *
      * @throws Exception
+     * @return void
      */
     protected function checkRequires()
     {
@@ -2139,8 +2134,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Checks which files in the base kernel must be copied
      *
-     * @return bool
      * @throws Exception
+     * @return bool
      */
     protected function checkKernelFiles()
     {
@@ -2178,8 +2173,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Checks if the current directory is a valid Zephir project
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     protected function checkDirectory()
     {

@@ -63,8 +63,8 @@ class StaticConstantAccess
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @return CompiledExpression
      * @throws Exception|CompilerException
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

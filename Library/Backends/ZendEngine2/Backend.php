@@ -199,9 +199,8 @@ class Backend extends BaseBackend
      * @param  string             $operator
      * @param  string             $value
      * @param  CompilationContext $context
-     * @return string
-     *
      * @throws CompilerException
+     * @return string
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -1413,9 +1412,8 @@ class Backend extends BaseBackend
      *
      * @param  CompiledExpression[]|string[] $offsetExprs
      * @param  CompilationContext            $compilationContext
-     * @return array
-     *
      * @throws CompilerException
+     * @return array
      */
     private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {

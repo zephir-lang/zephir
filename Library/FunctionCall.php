@@ -144,8 +144,8 @@ class FunctionCall extends Call
      * @param Expression         $expr
      * @param CompilationContext $compilationContext
      *
-     * @return CompiledExpression
      * @throws Exception|CompilerException
+     * @return CompiledExpression
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
@@ -180,8 +180,8 @@ class FunctionCall extends Call
      * @param string $funcName
      * @param array  $expression
      *
-     * @return bool
      * @throws CompilerException
+     * @return bool
      */
     protected function isReadOnly($funcName, array $expression)
     {
@@ -313,8 +313,8 @@ class FunctionCall extends Call
      * @param Call               $call
      * @param CompilationContext $compilationContext
      *
-     * @return bool|mixed
      * @throws Exception
+     * @return bool|mixed
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
@@ -370,8 +370,8 @@ class FunctionCall extends Call
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @return CompiledExpression
      * @throws Exception|\Zephir\Exception\CompilerException
+     * @return CompiledExpression
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
@@ -562,8 +562,8 @@ class FunctionCall extends Call
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {

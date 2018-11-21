@@ -234,8 +234,8 @@ class SymbolTable
      * @param  string             $name
      * @param  CompilationContext $compilationContext
      * @param  array              $statement
-     * @return Variable
      * @throws CompilerException
+     * @return Variable
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -414,8 +414,8 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @return bool|\Zephir\Variable
      * @throws CompilerException
+     * @return bool|\Zephir\Variable
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {
@@ -468,8 +468,8 @@ class SymbolTable
      * @param  string             $name
      * @param  CompilationContext $compilationContext
      * @param  array              $statement
-     * @return Variable
      * @throws CompilerException
+     * @return Variable
      */
     public function getVariableForUpdate($name, CompilationContext $compilationContext, array $statement = null)
     {

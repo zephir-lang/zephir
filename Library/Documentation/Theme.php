@@ -111,9 +111,8 @@ class Theme
      * Parse and draw the specified file.
      *
      * @param  AbstractFile $file
-     * @return void
-     *
      * @throws Exception
+     * @return void
      */
     public function drawFile(AbstractFile $file)
     {

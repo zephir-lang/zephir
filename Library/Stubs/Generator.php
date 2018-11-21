@@ -324,8 +324,8 @@ EOF;
      * Prepare AST default value to PHP code print
      *
      * @param $parameter
-     * @return string
      * @throws Exception
+     * @return string
      */
     protected function wrapPHPValue($parameter)
     {

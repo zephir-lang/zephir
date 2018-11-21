@@ -119,8 +119,8 @@ class Backend extends BackendZendEngine2
      * @param string             $value
      * @param CompilationContext $context
      *
-     * @return string
      * @throws CompilerException
+     * @return string
      */
     public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
     {
@@ -594,8 +594,8 @@ class Backend extends BackendZendEngine2
      * @param $value
      * @param  CompilationContext   $context
      * @param  bool                 $usePointer
-     * @return bool|string|Variable
      * @throws CompilerException
+     * @return bool|string|Variable
      */
     public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
