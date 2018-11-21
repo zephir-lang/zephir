@@ -189,7 +189,7 @@ class StringMethodTest extends TestCase
             [
                 function () {
                     return '-';
-                }
+                },
             ],
             [new \stdClass              ],
         ];

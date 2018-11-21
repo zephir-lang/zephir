@@ -34,7 +34,7 @@ class VariableBuilder
     {
         return [
             'type' => 'variable',
-            'value' => $this->name
+            'value' => $this->name,
         ];
     }
 }

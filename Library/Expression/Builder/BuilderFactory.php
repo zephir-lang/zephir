@@ -72,7 +72,7 @@ class BuilderFactory
     {
         return $this->raw([
             'type' => 'variable',
-            'value' => $name
+            'value' => $name,
         ]);
     }
 
@@ -85,7 +85,7 @@ class BuilderFactory
     {
         return $this->raw([
             'type' => $type,
-            'value' => $value
+            'value' => $value,
         ]);
     }
 

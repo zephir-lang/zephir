@@ -55,7 +55,7 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
             'left' => $expr,
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

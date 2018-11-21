@@ -35,10 +35,10 @@ class AssignTest extends TestCase
         $arry = [
             'a' => [
                 'b_key' => 'b_val',
-                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]],
             ],
             's' => 1,
-            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']]
+            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']],
         ];
 
         return [
@@ -112,10 +112,10 @@ class AssignTest extends TestCase
         $arry = [
             'a' => [
                 'b_key' => 'b_val',
-                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]],
             ],
             1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']],
-            's' => 1
+            's' => 1,
         ];
 
         return [

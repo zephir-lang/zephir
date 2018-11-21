@@ -51,7 +51,7 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
             'right' => $this->rightOperand->get(),
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

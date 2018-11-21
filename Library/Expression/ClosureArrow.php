@@ -73,7 +73,7 @@ class ClosureArrow extends Closure
         $exprBuilder = BuilderFactory::getInstance();
         $statementBlockBuilder = $exprBuilder->statements()->block([
             $exprBuilder->statements()
-                ->returnX($exprBuilder->raw($expression['right']))
+                ->returnX($exprBuilder->raw($expression['right'])),
         ]);
 
         $block = $statementBlockBuilder->build();

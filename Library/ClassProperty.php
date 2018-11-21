@@ -294,7 +294,7 @@ class ClassProperty
                     ->assignStaticProperty($className, $this->name, $expr)
                     ->setFile($this->original['default']['file'])
                     ->setLine($this->original['default']['line'])
-                    ->setChar($this->original['default']['char'])
+                    ->setChar($this->original['default']['char']),
             ]);
         }
 
@@ -303,7 +303,7 @@ class ClassProperty
                 ->assignProperty('this', $this->name, $exprBuilder->raw($this->original['default']))
                 ->setFile($this->original['default']['file'])
                 ->setLine($this->original['default']['line'])
-                ->setChar($this->original['default']['char'])
+                ->setChar($this->original['default']['char']),
         ]);
 
         return $exprBuilder->statements()->ifX()

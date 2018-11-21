@@ -46,7 +46,7 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
             'left' => $this->leftOperand->get(),
             'file' => $this->file,
             'line' => $this->line,
-            'char' => $this->char
+            'char' => $this->char,
         ];
     }
 }

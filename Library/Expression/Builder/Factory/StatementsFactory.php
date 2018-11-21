@@ -108,7 +108,7 @@ class StatementsFactory
     {
         return $this->raw([
             'type' => 'return',
-            'expr' => $expression
+            'expr' => $expression,
         ]);
     }
 
@@ -120,7 +120,7 @@ class StatementsFactory
     {
         return $this->raw([
             'type' => 'throw',
-            'expr' => $expression
+            'expr' => $expression,
         ]);
     }
 
@@ -132,7 +132,7 @@ class StatementsFactory
     {
         return $this->raw([
             'type' => 'cblock',
-            'value' => $value
+            'value' => $value,
         ]);
     }
 

@@ -184,7 +184,7 @@ EOF;
 
         if (isset($original['default'])) {
             $source .= ' = ' . $this->wrapPHPValue([
-                'default' => $original['default']
+                'default' => $original['default'],
             ]);
         }
 
@@ -203,7 +203,7 @@ EOF;
         $source = 'const ' . $constant->getName();
 
         $value = $this->wrapPHPValue([
-            'default' => $constant->getValue()
+            'default' => $constant->getValue(),
         ]);
 
         $docBlock = new DocBlock($constant->getDocBlock(), $indent);
@@ -352,13 +352,13 @@ EOF;
                     if (isset($value['key'])) {
                         $source .= $this->wrapPHPValue([
                             'default' => $value['key'],
-                            'type' => $value['key']['type']
+                            'type' => $value['key']['type'],
                         ]) . ' => ';
                     }
 
                     $parameters[] = $source . $this->wrapPHPValue([
                         'default' => $value['value'],
-                        'type' => $value['value']['type']
+                        'type' => $value['value']['type'],
                     ]);
                 }
 

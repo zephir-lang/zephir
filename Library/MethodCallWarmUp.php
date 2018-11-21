@@ -28,7 +28,7 @@ class MethodCallWarmUp
     {
         $this->warmUps[] = [
             $classDefinition,
-            $method
+            $method,
         ];
     }
 

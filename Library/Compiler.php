@@ -1075,7 +1075,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1093,7 +1093,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1111,7 +1111,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1141,7 +1141,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1641,12 +1641,12 @@ class Compiler implements InjectionAwareInterface
                         PHP_EOL . "\t",
                         explode(PHP_EOL, $prqDestructors)
                     ),
-                    '}'
+                    '}',
                 ]
             ),
             '%FE_HEADER%' => $feHeader,
             '%FE_ENTRIES%' => $feEntries,
-            '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
+            '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries),
         ];
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1689,7 +1689,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders)
+            '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1718,7 +1718,7 @@ class Compiler implements InjectionAwareInterface
             '%PROJECT_DESCRIPTION%' => utf8_decode($this->config->get('description')),
             '%PROJECT_ZEPVERSION%' => Zephir::VERSION,
             '%EXTENSION_GLOBALS%' => $globalCode,
-            '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
+            '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct,
         ];
 
         foreach ($toReplace as $mark => $replace) {

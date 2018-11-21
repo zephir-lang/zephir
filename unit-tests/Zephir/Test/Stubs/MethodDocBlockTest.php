@@ -115,43 +115,43 @@ DOC;
         return [
             [
                 ['data-type' => 'int', 'name' => 'value'],
-                "    /**\n     * @param int \$value\n     */"
+                "    /**\n     * @param int \$value\n     */",
             ],
             [
                 ['data-type' => 'double', 'name' => 'value'],
-                "    /**\n     * @param double \$value\n     */"
+                "    /**\n     * @param double \$value\n     */",
             ],
             [
                 ['data-type' => 'float', 'name' => 'value'],
-                "    /**\n     * @param float \$value\n     */"
+                "    /**\n     * @param float \$value\n     */",
             ],
             [
                 ['data-type' => 'string', 'name' => 'value'],
-                "    /**\n     * @param string \$value\n     */"
+                "    /**\n     * @param string \$value\n     */",
             ],
             [
                 ['data-type' => 'array', 'name' => 'value'],
-                "    /**\n     * @param array \$value\n     */"
+                "    /**\n     * @param array \$value\n     */",
             ],
             [
                 ['data-type' => 'object', 'name' => 'value'],
-                "    /**\n     * @param object \$value\n     */"
+                "    /**\n     * @param object \$value\n     */",
             ],
             [
                 ['data-type' => 'int|string', 'name' => 'value'],
-                "    /**\n     * @param int|string \$value\n     */"
+                "    /**\n     * @param int|string \$value\n     */",
             ],
             [
                 ['data-type' => 'int|null', 'name' => 'value'],
-                "    /**\n     * @param int|null \$value\n     */"
+                "    /**\n     * @param int|null \$value\n     */",
             ],
             [
                 ['data-type' => 'array|object', 'name' => '$value'],
-                "    /**\n     * @param array|object \$value\n     */"
+                "    /**\n     * @param array|object \$value\n     */",
             ],
             [
                 ['data-type' => '\FrontendInterface', 'name' => '$value'],
-                "    /**\n     * @param \FrontendInterface \$value\n     */"
+                "    /**\n     * @param \FrontendInterface \$value\n     */",
             ],
         ];
     }

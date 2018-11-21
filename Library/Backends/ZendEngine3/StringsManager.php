@@ -28,7 +28,7 @@ class StringsManager extends BaseStringsManager
     protected $concatKeys = [
         'vv' => true,
         'vs' => true,
-        'sv' => true
+        'sv' => true,
     ];
 
     /**

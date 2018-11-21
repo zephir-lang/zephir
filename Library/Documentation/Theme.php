@@ -65,7 +65,7 @@ class Theme
     {
         $output = [
             'classes' => [],
-            'namespaces' => []
+            'namespaces' => [],
         ];
 
         $subNs = $ns->getNamespaces();
@@ -219,7 +219,7 @@ class Theme
             'allClasses' => [],
             'allNamespaces' => [],
             'classes' => [],
-            'namespaces' => []
+            'namespaces' => [],
 
         ];
 
@@ -230,7 +230,7 @@ class Theme
             $output['allClasses'][$cName] = [
                 'type' => $cDef->getType(),
                 'name' => $cName,
-                'shortname' => $cDef->getName()
+                'shortname' => $cDef->getName(),
             ];
 
             if (!strpos($cName, '\\') > 0) {
@@ -258,7 +258,7 @@ class Theme
                 'shortName' => $ns->getShortName(),
                 'parentName' => $ns->getParentName(),
                 'classes' => $subclasses,
-                'namespaces' => $subnamespaces
+                'namespaces' => $subnamespaces,
 
             ];
 

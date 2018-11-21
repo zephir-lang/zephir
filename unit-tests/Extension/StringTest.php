@@ -313,7 +313,7 @@ class StringTest extends TestCase
             [
                 function () {
                     return '-';
-                }
+                },
             ],
             [new \stdClass              ],
         ];

@@ -117,7 +117,7 @@ class IfStatement extends AbstractStatement
         $expression = [
             'type' => 'if',
             'expr' => $this->getCondition(),
-            'statements' => $this->getStatements()
+            'statements' => $this->getStatements(),
         ];
 
         if ($statements = $this->getElseStatements()) {

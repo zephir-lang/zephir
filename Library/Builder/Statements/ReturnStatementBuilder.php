@@ -37,7 +37,7 @@ class ReturnStatementBuilder extends AbstractStatementBuilder
     {
         return [
             'type' => 'return',
-            'expr' => $this->expr->get()
+            'expr' => $this->expr->get(),
         ];
     }
 }

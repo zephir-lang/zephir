@@ -70,8 +70,8 @@ class ShortTernaryOperator extends BaseOperator
                     'expr' => $expression['extra'],
                     'file' => $expression['file'],
                     'line' => $expression['line'],
-                    'char' => $expression['char']
-                ], $expression['extra'])
+                    'char' => $expression['char'],
+                ], $expression['extra']),
             ]),
             new StatementsBlockBuilder([
                 /**
@@ -84,8 +84,8 @@ class ShortTernaryOperator extends BaseOperator
                     'expr' => $expression['left'],
                     'file' => $expression['file'],
                     'line' => $expression['line'],
-                    'char' => $expression['char']
-                ], $expression['extra'])
+                    'char' => $expression['char'],
+                ], $expression['extra']),
             ])
         );
 

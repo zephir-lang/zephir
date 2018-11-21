@@ -56,8 +56,8 @@ class ExportSymbol
                     'file' => $statement['file'],
                     'line' => $statement['line'],
                     'char' => $statement['char'],
-                ]
-            ]
+                ],
+            ],
         ]);
         $letStatement->compile($compilationContext);
 

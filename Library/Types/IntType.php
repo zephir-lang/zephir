@@ -35,7 +35,7 @@ class IntType extends AbstractType
         'asin' => 'asin',
         'acos' => 'acos',
         'atan' => 'atan',
-        'log' => 'log'
+        'log' => 'log',
     ];
 
     /**

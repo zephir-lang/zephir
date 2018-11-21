@@ -44,9 +44,9 @@ class Config implements \ArrayAccess, \JsonSerializable
                     'analytics' => null,
                     'main_color' => '#3E6496',
                     'link_color' => '#3E6496',
-                    'link_hover_color' => '#5F9AE7'
-                ]
-            ]
+                    'link_hover_color' => '#5F9AE7',
+                ],
+            ],
         ],
         'warnings' => [
             'unused-variable' => true,
@@ -72,7 +72,7 @@ class Config implements \ArrayAccess, \JsonSerializable
             'non-array-access' => true,
             'invalid-reference' => true,
             'invalid-typeof-comparison' => true,
-            'conditional-initialization' => true
+            'conditional-initialization' => true,
         ],
         'optimizations' => [
             'static-type-inference' => true,
@@ -82,7 +82,7 @@ class Config implements \ArrayAccess, \JsonSerializable
             'static-constant-class-folding' => true,
             'call-gatherer-pass' => true,
             'check-invalid-reads' => false,
-            'internal-call-transformation' => false
+            'internal-call-transformation' => false,
         ],
         'extra' => [
             'indent' => 'spaces',
@@ -95,8 +95,8 @@ class Config implements \ArrayAccess, \JsonSerializable
         'version' => '0.0.1',
         'verbose' => false,
         'requires' => [
-            'extensions' => []
-        ]
+            'extensions' => [],
+        ],
     ];
 
     /**

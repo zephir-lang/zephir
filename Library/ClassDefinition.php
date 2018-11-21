@@ -1772,7 +1772,7 @@ class ClassDefinition
                         'name' => $row->getName(),
                         'const' => 0,
                         'data-type' => 'variable',
-                        'mandatory' => !$row->isOptional()
+                        'mandatory' => !$row->isOptional(),
                     ];
                     if (!$params['mandatory']) {
                         try {

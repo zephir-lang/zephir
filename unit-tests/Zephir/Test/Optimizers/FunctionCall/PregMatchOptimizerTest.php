@@ -106,7 +106,7 @@ class PregMatchOptimizerTest extends TestCase
             'parameters' => [
                 0 => [ /* skip */ ],
                 1 => [ /* skip */ ],
-                2 => ['parameter' => ['type' => 'int']]
+                2 => ['parameter' => ['type' => 'int']],
             ],
         ];
 
@@ -132,7 +132,7 @@ class PregMatchOptimizerTest extends TestCase
             'parameters' => [
                 0 => [ /* skip */ ],
                 1 => [ /* skip */ ],
-                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']]
+                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']],
             ],
         ];
 
@@ -169,7 +169,7 @@ class PregMatchOptimizerTest extends TestCase
             'parameters' => [
                 0 => [ /* skip */ ],
                 1 => [ /* skip */ ],
-                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']]
+                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']],
             ],
         ];
 

@@ -926,14 +926,14 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                     'type' => 'property-access',
                                     'left' => [
                                         'type' => 'variable',
-                                        'value' => 'this'
+                                        'value' => 'this',
                                     ],
                                     'right' => [
                                         'type' => 'variable',
-                                        'value' => $property['name']
-                                    ]
-                                ]
-                            ]
+                                        'value' => $property['name'],
+                                    ],
+                                ],
+                            ],
                         ]),
                         $docBlock,
                         $this->createReturnsType($returnsType, true),
@@ -952,8 +952,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                 'name' => $name,
                                 'const' => 0,
                                 'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
-                                'mandatory' => 0
-                            ]
+                                'mandatory' => 0,
+                            ],
                         ]),
                         new StatementsBlock([
                             [
@@ -969,13 +969,13 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                             'value' => $name,
                                             'file' => $property['file'],
                                             'line' => $property['line'],
-                                            'char' => $property['char']
+                                            'char' => $property['char'],
                                         ],
                                         'file' => $property['file'],
                                         'line' => $property['line'],
-                                        'char' => $property['char']
-                                    ]
-                                ]
+                                        'char' => $property['char'],
+                                    ],
+                                ],
                             ],
                             [
                                 'type' => 'return',
@@ -984,9 +984,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                     'value' => 'this',
                                     'file' => $property['file'],
                                     'line' => $property['line'],
-                                    'char' => $property['char']
-                                ]
-                            ]
+                                    'char' => $property['char'],
+                                ],
+                            ],
                         ]),
                         $docBlock,
                         null,
@@ -1008,14 +1008,14 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                     'type' => 'property-access',
                                     'left' => [
                                         'type' => 'variable',
-                                        'value' => 'this'
+                                        'value' => 'this',
                                     ],
                                     'right' => [
                                         'type' => 'variable',
-                                        'value' => $property['name']
-                                    ]
-                                ]
-                            ]
+                                        'value' => $property['name'],
+                                    ],
+                                ],
+                            ],
                         ]),
                         $docBlock,
                         $this->createReturnsType(['string']),

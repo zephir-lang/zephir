@@ -36,7 +36,7 @@ class IndexFile extends AbstractFile
         return [
             'namespaceAccessor' => $this->namespaceAccessor,
             'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
-            'namespaces' => $this->namespaceAccessor->getByNamespace()
+            'namespaces' => $this->namespaceAccessor->getByNamespace(),
         ];
     }
 

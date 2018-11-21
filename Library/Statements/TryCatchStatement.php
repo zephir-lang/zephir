@@ -93,7 +93,7 @@ class TryCatchStatement extends StatementAbstract
                  */
                 foreach ($catch['classes'] as $class) {
                     $assignExceptVar = $exprBuilder->statements()->let([
-                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
+                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName())),
                     ]);
 
                     $ifs[] = $exprBuilder->statements()->ifX()
@@ -107,7 +107,7 @@ class TryCatchStatement extends StatementAbstract
                         ->setStatements($exprBuilder->statements()->block(array_merge(
                             [
                                 $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
-                                $assignExceptionVarStmt
+                                $assignExceptionVarStmt,
                             ],
                             isset($catch['statements']) ? $catch['statements'] : []
                         )));

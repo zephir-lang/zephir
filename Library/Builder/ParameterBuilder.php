@@ -33,7 +33,7 @@ class ParameterBuilder
     public function get()
     {
         return [
-            'parameter' => $this->value->get()
+            'parameter' => $this->value->get(),
         ];
     }
 }

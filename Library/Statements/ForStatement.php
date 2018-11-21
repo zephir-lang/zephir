@@ -113,7 +113,7 @@ class ForStatement extends StatementAbstract
                 ->setChar($this->statement['char']))
             ->setFile($this->statement['file'])
             ->setLine($this->statement['line'])
-            ->setChar($this->statement['char'])
+            ->setChar($this->statement['char']),
         ]);
 
         $statement = new LetStatement($builderLet->build());
@@ -130,7 +130,7 @@ class ForStatement extends StatementAbstract
                     ->setChar($this->statement['char']))
                 ->setFile($this->statement['file'])
                 ->setLine($this->statement['line'])
-                ->setChar($this->statement['char'])
+                ->setChar($this->statement['char']),
             ]);
             $statement = new LetStatement($builderLet->build());
         } else {
@@ -144,7 +144,7 @@ class ForStatement extends StatementAbstract
                     ->setChar($this->statement['char']))
                 ->setFile($this->statement['file'])
                 ->setLine($this->statement['line'])
-                ->setChar($this->statement['char'])
+                ->setChar($this->statement['char']),
             ]);
             $statement = new LetStatement($builderLet->build());
         }
@@ -163,13 +163,13 @@ class ForStatement extends StatementAbstract
             $conditionExpr = [
                 'type' => 'greater-equal',
                 'left' => ['type' => 'variable', 'value' => $tempVariable->getName()],
-                'right' => ['type' => $parameters[0]->getType(), 'value' => $parameters[0]->getCode()]
+                'right' => ['type' => $parameters[0]->getType(), 'value' => $parameters[0]->getCode()],
             ];
         } else {
             $conditionExpr = [
                 'type' => 'less-equal',
                 'left' => ['type' => 'variable', 'value' => $tempVariable->getName()],
-                'right' => ['type' => 'variable', 'value' => $upperBoundVariable->getName()]
+                'right' => ['type' => 'variable', 'value' => $upperBoundVariable->getName()],
             ];
         }
 
@@ -205,9 +205,9 @@ class ForStatement extends StatementAbstract
                             'variable' => $tempVariable->getName(),
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
-                        ]
-                    ]
+                            'char' => $this->statement['char'],
+                        ],
+                    ],
                 ]);
             } else {
                 $statement = new LetStatement([
@@ -222,13 +222,13 @@ class ForStatement extends StatementAbstract
                                 'value' => $parameters[2]->getCode(),
                                 'file' => $this->statement['file'],
                                 'line' => $this->statement['line'],
-                                'char' => $this->statement['char']
+                                'char' => $this->statement['char'],
                             ],
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
-                        ]
-                    ]
+                            'char' => $this->statement['char'],
+                        ],
+                    ],
                 ]);
             }
         } else {
@@ -241,9 +241,9 @@ class ForStatement extends StatementAbstract
                             'variable' => $tempVariable->getName(),
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
-                        ]
-                    ]
+                            'char' => $this->statement['char'],
+                        ],
+                    ],
                 ]);
             } else {
                 $statement = new LetStatement([
@@ -258,13 +258,13 @@ class ForStatement extends StatementAbstract
                                 'value' => $parameters[2]->getCode(),
                                 'file' => $this->statement['file'],
                                 'line' => $this->statement['line'],
-                                'char' => $this->statement['char']
+                                'char' => $this->statement['char'],
                             ],
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
-                        ]
-                    ]
+                            'char' => $this->statement['char'],
+                        ],
+                    ],
                 ]);
             }
         }
@@ -312,13 +312,13 @@ class ForStatement extends StatementAbstract
                             'value' => $keyVariable->getName(),
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
+                            'char' => $this->statement['char'],
                         ],
                         'file' => $this->statement['file'],
                         'line' => $this->statement['line'],
-                        'char' => $this->statement['char']
-                    ]
-                ]
+                        'char' => $this->statement['char'],
+                    ],
+                ],
             ]);
 
             $statement->compile($compilationContext);
@@ -352,13 +352,13 @@ class ForStatement extends StatementAbstract
                             'value' => $tempVariable->getName(),
                             'file' => $this->statement['file'],
                             'line' => $this->statement['line'],
-                            'char' => $this->statement['char']
+                            'char' => $this->statement['char'],
                         ],
                         'file' => $this->statement['file'],
                         'line' => $this->statement['line'],
-                        'char' => $this->statement['char']
-                    ]
-                ]
+                        'char' => $this->statement['char'],
+                    ],
+                ],
             ]);
 
             $statement->compile($compilationContext);

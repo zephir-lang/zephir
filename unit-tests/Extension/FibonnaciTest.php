@@ -22,10 +22,10 @@ class FibonnaciTest extends TestCase
         $this->assertSame($t->fibInt(), 13);
         $this->assertSame($t->fibDouble(), 13.0);
         $this->assertSame($t->fibArray(), [
-            0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+            0, 1, 1, 2, 3, 5, 8, 13, 21, 34,
         ]);
         $this->assertSame($t->fibArray2(), [
-            0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+            0, 1, 1, 2, 3, 5, 8, 13, 21, 34,
         ]);
     }
 }

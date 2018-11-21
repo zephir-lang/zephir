@@ -73,13 +73,13 @@ class Constants
         '__CLASS__',
         '__TRAIT__',
         '__METHOD__',
-        '__NAMESPACE__'
+        '__NAMESPACE__',
     ];
 
     protected $resources = [
         'STDIN',
         'STDOUT',
-        'STDERR'
+        'STDERR',
     ];
 
     /**
