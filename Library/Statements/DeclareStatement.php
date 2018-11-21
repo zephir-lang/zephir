@@ -31,7 +31,7 @@ class DeclareStatement extends StatementAbstract
         $statement = $this->statement;
 
         if (!isset($statement['data-type'])) {
-            throw new CompilerException("Data type is required", $this->statement);
+            throw new CompilerException('Data type is required', $this->statement);
         }
 
         $typeInference = $compilationContext->typeInference;

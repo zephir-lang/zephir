@@ -35,16 +35,16 @@ class NamespaceFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "namespace.phtml";
+        return 'namespace.phtml';
     }
 
     public function getData()
     {
         return [
 
-            "namespaceHelper" => $this->namespaceHelper,
-            "subNamespaces" => $this->namespaceHelper->getNamespaces(),
-            "subClasses" => $this->namespaceHelper->getClasses(),
+            'namespaceHelper' => $this->namespaceHelper,
+            'subNamespaces' => $this->namespaceHelper->getNamespaces(),
+            'subClasses' => $this->namespaceHelper->getClasses(),
 
         ];
     }

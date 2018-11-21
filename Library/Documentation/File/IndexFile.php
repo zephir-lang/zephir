@@ -28,20 +28,20 @@ class IndexFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "index.phtml";
+        return 'index.phtml';
     }
 
     public function getData()
     {
         return [
-            "namespaceAccessor" => $this->namespaceAccessor,
-            "namespacesTree" => $this->namespaceAccessor->getNamespaceTree(),
-            "namespaces" => $this->namespaceAccessor->getByNamespace()
+            'namespaceAccessor' => $this->namespaceAccessor,
+            'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
+            'namespaces' => $this->namespaceAccessor->getByNamespace()
         ];
     }
 
     public function getOutputFile()
     {
-        return "index.html" ;
+        return 'index.html' ;
     }
 }

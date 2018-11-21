@@ -189,7 +189,7 @@ class Backend extends BaseBackend
                 break;
 
             default:
-                throw new CompilerException("Unsupported type in declare: " . $type);
+                throw new CompilerException('Unsupported type in declare: ' . $type);
         }
         return [$pointer, $code];
     }
@@ -604,7 +604,7 @@ class Backend extends BaseBackend
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . add_slashes($value) . "\"";
+                    $value = '"' . add_slashes($value) . '"';
                 }
                 $dType = 'string';
                 break;
@@ -783,7 +783,7 @@ class Backend extends BaseBackend
                 break;
         }
         if (!$type) {
-            throw new CompilerException("Unknown type mapping: " . $value->getType());
+            throw new CompilerException('Unknown type mapping: ' . $value->getType());
         }
 
         if (isset($key)) {
@@ -861,7 +861,7 @@ class Backend extends BaseBackend
                     throw new CompilerException('updateArray: Found an expression with unsupported type ' . $key->getType());
             }
         } else {
-            throw new CompilerException("?");
+            throw new CompilerException('?');
         }
     }
 
@@ -1003,12 +1003,12 @@ class Backend extends BaseBackend
                         break;
 
                     default:
-                        throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
+                        throw new CompilerException('Variable type: ' . $variableIndex->getType() . ' cannot be used as array index without cast', $expression['right']);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $expression['right']);
+                throw new CompilerException('Cannot use expression: ' . $exprIndex->getType() . ' as array index without cast', $expression['right']);
         }
     }
 

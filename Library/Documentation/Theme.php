@@ -38,21 +38,21 @@ class Theme
         $this->outputDir   = $outputDir;
         $this->themeConfig = $themeConfig;
         $this->themeDir    = $themeDir;
-        $this->options     = $themeConfig["options"];
+        $this->options     = $themeConfig['options'];
         $this->projectConfig= $config;
         $this->documentation = $documentation;
 
-        $themeInfosPath = $this->getThemePath("theme.json");
+        $themeInfosPath = $this->getThemePath('theme.json');
         if ($themeInfosPath) {
             $themeInfos = json_decode(file_get_contents($themeInfosPath), true);
             if (!$themeInfos) {
                 throw new Exception("Cant parse file $themeInfosPath");
             } else {
                 $this->themeInfos = $themeInfos;
-                if (isset($themeInfos["extends"])) {
-                    $extThemePath = $documentation->findThemePathByName($themeInfos["extends"]);
+                if (isset($themeInfos['extends'])) {
+                    $extThemePath = $documentation->findThemePathByName($themeInfos['extends']);
                     if (!$extThemePath) {
-                        throw new Exception("Unable to find extended theme " . $themeInfos["extends"]);
+                        throw new Exception('Unable to find extended theme ' . $themeInfos['extends']);
                     }
 
                     $this->extendedTheme = new Theme($extThemePath, $outputDir, $themeConfig, $config, $documentation);
@@ -71,24 +71,24 @@ class Theme
      */
     public function drawFile(AbstractFile $file)
     {
-        $outputFile = ltrim($file->getOutputFile(), "/");
+        $outputFile = ltrim($file->getOutputFile(), '/');
 
-        $output   = pathinfo($this->outputDir . "/" . $outputFile);
-        $outputDirname  = $output["dirname"];
-        $outputBasename = $output["basename"];
-        $outputFilename = $outputDirname . "/" . $outputBasename;
+        $output   = pathinfo($this->outputDir . '/' . $outputFile);
+        $outputDirname  = $output['dirname'];
+        $outputBasename = $output['basename'];
+        $outputFilename = $outputDirname . '/' . $outputBasename;
 
         // todo : check if writable
         if (!file_exists($outputDirname)) {
             mkdir($outputDirname, 0777, true);
         }
 
-        $subDirNumber= count(explode("/", $outputFile))-1;
+        $subDirNumber= count(explode('/', $outputFile))-1;
 
         if ($subDirNumber > 0) {
-            $pathToRoot = str_repeat("../", $subDirNumber);
+            $pathToRoot = str_repeat('../', $subDirNumber);
         } else {
-            $pathToRoot = "./";
+            $pathToRoot = './';
         }
 
         $template = new Template($this, $file->getData(), $file->getTemplateName());
@@ -139,7 +139,7 @@ class Theme
      */
     public function buildStaticDirectory()
     {
-        $outputStt = $this->getOutputPath("asset");
+        $outputStt = $this->getOutputPath('asset');
 
         if (!file_exists($outputStt)) {
             mkdir($outputStt, 0777, true);
@@ -149,17 +149,17 @@ class Theme
             $this->extendedTheme->buildStaticDirectory();
         }
 
-        $themeStt = $this->getThemePath("static");
+        $themeStt = $this->getThemePath('static');
 
         if ($themeStt) {
             $files = [];
 
-            $this->__copyDir($themeStt, $outputStt . "/static", $files);
+            $this->__copyDir($themeStt, $outputStt . '/static', $files);
 
             foreach ($files as $f) {
                 foreach ($this->options as $optName => $opt) {
                     $fcontent = file_get_contents($f);
-                    $fcontent = str_replace("%_" . $optName . "_%", $opt, $fcontent);
+                    $fcontent = str_replace('%_' . $optName . '_%', $opt, $fcontent);
 
                     file_put_contents($f, $fcontent);
                 }
@@ -171,10 +171,10 @@ class Theme
     {
         $output = [
 
-            "allClasses" => [],
-            "allNamespaces" => [],
-            "classes" => [],
-            "namespaces" => []
+            'allClasses' => [],
+            'allNamespaces' => [],
+            'classes' => [],
+            'namespaces' => []
 
         ];
 
@@ -182,14 +182,14 @@ class Theme
             $cDef = $class->getClassDefinition();
             $cName = $cDef->getCompleteName();
 
-            $output["allClasses"][$cName] = [
-                "type" => $cDef->getType(),
-                "name" => $cName,
-                "shortname" => $cDef->getName()
+            $output['allClasses'][$cName] = [
+                'type' => $cDef->getType(),
+                'name' => $cName,
+                'shortname' => $cDef->getName()
             ];
 
-            if (!strpos($cName, "\\") > 0) {
-                $output["classes"][] = $cName;
+            if (!strpos($cName, '\\') > 0) {
+                $output['classes'][] = $cName;
             }
         }
 
@@ -207,18 +207,18 @@ class Theme
                 $subnamespaces[] = $sns->getFullNamespace();
             }
 
-            $output["allNamespaces"][$ns->getFullNamespace()] = [
+            $output['allNamespaces'][$ns->getFullNamespace()] = [
 
-                "name"       => $ns->getFullNamespace(),
-                "shortName"  => $ns->getShortName(),
-                "parentName" => $ns->getParentName(),
-                "classes"    => $subclasses,
-                "namespaces" => $subnamespaces
+                'name'       => $ns->getFullNamespace(),
+                'shortName'  => $ns->getShortName(),
+                'parentName' => $ns->getParentName(),
+                'classes'    => $subclasses,
+                'namespaces' => $subnamespaces
 
             ];
 
-            if (!strpos($ns->getFullNamespace(), "\\") > 0) {
-                $output["namespaces"][] = $ns->getFullNamespace();
+            if (!strpos($ns->getFullNamespace(), '\\') > 0) {
+                $output['namespaces'][] = $ns->getFullNamespace();
             }
         }
         return json_encode($output);
@@ -234,19 +234,19 @@ class Theme
     private function __namespaceTreeHelper(NamespaceHelper $ns)
     {
         $output = [
-            "classes"    => [],
-            "namespaces" => []
+            'classes'    => [],
+            'namespaces' => []
         ];
 
         $subNs = $ns->getNamespaces();
         $subCs = $ns->getClasses();
 
         foreach ($subCs as $c) {
-            $output["classes"][] = $c->getClassDefinition()->getCompleteName();
+            $output['classes'][] = $c->getClassDefinition()->getCompleteName();
         }
 
         foreach ($subNs as $sns) {
-            $output["namespaces"][$sns->getFullNamespace()] = $this->__namespaceTreeHelper($sns);
+            $output['namespaces'][$sns->getFullNamespace()] = $this->__namespaceTreeHelper($sns);
         }
 
         return $output;
@@ -300,10 +300,10 @@ class Theme
      */
     public function getThemePath($path)
     {
-        $path   = pathinfo($this->themeDir . "/" . $path);
-        $pathDirname  = $path["dirname"];
-        $pathBasename = $path["basename"];
-        $pathFilename = $pathDirname . "/" . $pathBasename;
+        $path   = pathinfo($this->themeDir . '/' . $path);
+        $pathDirname  = $path['dirname'];
+        $pathBasename = $path['basename'];
+        $pathFilename = $pathDirname . '/' . $pathBasename;
 
         if (!file_exists($pathFilename)) {
             return null;
@@ -314,10 +314,10 @@ class Theme
 
     public function getOutputPath($path)
     {
-        $path   = pathinfo($this->outputDir . "/" . $path);
-        $pathDirname  = $path["dirname"];
-        $pathBasename = $path["basename"];
-        $pathFilename = $pathDirname . "/" . $pathBasename;
+        $path   = pathinfo($this->outputDir . '/' . $path);
+        $pathDirname  = $path['dirname'];
+        $pathBasename = $path['basename'];
+        $pathFilename = $pathDirname . '/' . $pathBasename;
 
         return $pathFilename;
     }

@@ -40,7 +40,7 @@ class ObjectPropertyAppend
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -69,7 +69,7 @@ class ObjectPropertyAppend
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
@@ -184,12 +184,12 @@ class ObjectPropertyAppend
                         break;
 
                     default:
-                        throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to array property", $statement);
+                        throw new CompilerException('Variable: ' . $variableExpr->getType() . ' cannot be appended to array property', $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to array property", $statement);
+                throw new CompilerException('Expression: ' . $resolvedExpr->getType() . ' cannot be appended to array property', $statement);
         }
     }
 }

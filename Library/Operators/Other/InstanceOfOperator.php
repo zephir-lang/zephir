@@ -94,11 +94,11 @@ class InstanceOfOperator extends BaseOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("' . trim(escape_class($className), "\\") . '")';
+                                        $code = 'SL("' . trim(escape_class($className), '\\') . '")';
                                     } else {
                                         $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                                         if (!$classEntry) {
-                                            $code = 'SL("' . trim(escape_class($className), "\\") . '")';
+                                            $code = 'SL("' . trim(escape_class($className), '\\') . '")';
                                         }
                                     }
                                 }

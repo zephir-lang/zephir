@@ -47,7 +47,7 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
             }
         }
 

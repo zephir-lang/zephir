@@ -38,11 +38,11 @@ class DivOperator extends ArithmeticalBaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new \Exception("Missing left part of the expression");
+            throw new \Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception("Missing right part of the expression");
+            throw new \Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -163,7 +163,7 @@ class DivOperator extends ArithmeticalBaseOperator
             case 'array':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between " . $right->getType(), $expression);
+                        throw new CompilerException('Operation is not supported between ' . $right->getType(), $expression);
                 }
                 break;
 
@@ -438,7 +438,7 @@ class DivOperator extends ArithmeticalBaseOperator
                 break;
 
             default:
-                throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
+                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
         }
     }
 }

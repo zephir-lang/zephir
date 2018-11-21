@@ -56,7 +56,7 @@ class ObjectPropertyIncr
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
         /**
@@ -86,7 +86,7 @@ class ObjectPropertyIncr
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {

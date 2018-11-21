@@ -28,18 +28,18 @@ class ClassesFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "classes.phtml";
+        return 'classes.phtml';
     }
 
     public function getData()
     {
         return [
-            "classes" => $this->classes,
+            'classes' => $this->classes,
         ];
     }
 
     public function getOutputFile()
     {
-        return "classes.html";
+        return 'classes.html';
     }
 }

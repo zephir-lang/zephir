@@ -274,12 +274,12 @@ class StaticProperty
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

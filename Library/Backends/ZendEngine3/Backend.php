@@ -308,7 +308,7 @@ class Backend extends BackendZendEngine2
             case 'string':
             case 'char':
                 if ($type == 'string' || $type == 'char') {
-                    $value = "\"" . add_slashes($value) . "\"";
+                    $value = '"' . add_slashes($value) . '"';
                 }
                 $dType = 'string';
                 break;
@@ -453,7 +453,7 @@ class Backend extends BackendZendEngine2
         }
 
         if ($type === null) {
-            throw new CompilerException("Unknown type mapping: " . $value->getType());
+            throw new CompilerException('Unknown type mapping: ' . $value->getType());
         }
 
         if (isset($key)) {

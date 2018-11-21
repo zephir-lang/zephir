@@ -35,7 +35,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
     {
         if (isset($expression['parameters'])) {
             if (count($expression['parameters']) > 1) {
-                throw new CompilerException("This function only requires one parameter", $expression);
+                throw new CompilerException('This function only requires one parameter', $expression);
             }
         }
 
@@ -46,7 +46,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
         /**

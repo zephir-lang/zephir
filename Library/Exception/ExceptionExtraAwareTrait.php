@@ -50,7 +50,7 @@ trait ExceptionExtraAwareTrait
 
             if (isset($lines[$extra['line'] - 1])) {
                 $line = $lines[$extra['line'] - 1];
-                $region .= sprintf("\t%s", str_replace("\t", " ", $line));
+                $region .= sprintf("\t%s", str_replace("\t", ' ', $line));
 
                 if (($extra['char'] - 1) > 0) {
                     $region .= sprintf("\t%s^\n", str_repeat('-', $extra['char'] - 1));

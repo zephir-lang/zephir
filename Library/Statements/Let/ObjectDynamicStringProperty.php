@@ -47,19 +47,19 @@ class ObjectDynamicStringProperty
         $propertyName = $statement['property'];
 
         if (!is_string($propertyName)) {
-            throw new CompilerException("Expected string to update object property, ".gettype($propertyName)." received", $statement);
+            throw new CompilerException('Expected string to update object property, '.gettype($propertyName).' received', $statement);
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . '::' . $propertyName . "' because it is not initialized", $statement);
         }
 
         if ($symbolVariable->getType() != 'variable') {
-            throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
+            throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' as an object', $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
         /**
@@ -95,7 +95,7 @@ class ObjectDynamicStringProperty
                 } elseif ($resolvedExpr->getBooleanCode() == '0') {
                     $value = 'false';
                 } else {
-                    throw new \Exception("?");
+                    throw new \Exception('?');
                 }
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $value, $compilationContext);
                 break;
@@ -141,12 +141,12 @@ class ObjectDynamicStringProperty
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

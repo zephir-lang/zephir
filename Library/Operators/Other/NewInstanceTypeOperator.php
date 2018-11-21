@@ -55,7 +55,7 @@ class NewInstanceTypeOperator extends BaseOperator
                 break;
 
             default:
-                throw new CompilerException("Cannot build instance of type", $expression);
+                throw new CompilerException('Cannot build instance of type', $expression);
         }
 
         $builder = new FunctionCallBuilder(

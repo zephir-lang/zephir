@@ -148,12 +148,12 @@ class NativeArray
                         return $itemVariable;
 
                     default:
-                        throw new CompilerException("Unknown " . $itemVariable->getType(), $itemVariable);
+                        throw new CompilerException('Unknown ' . $itemVariable->getType(), $itemVariable);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown", $exprCompiled);
+                throw new CompilerException('Unknown', $exprCompiled);
         }
     }
 
@@ -175,7 +175,7 @@ class NativeArray
                 $symbolVariable = $this->expectingVariable;
                 $symbolVariable->initVariant($compilationContext);
                 if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'array') {
-                    throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an array", $expression);
+                    throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' as an array', $expression);
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('array', $compilationContext, $expression);
@@ -253,7 +253,7 @@ class NativeArray
                                 break;
 
                             default:
-                                throw new CompilerException("Invalid value type: " . $resolvedExpr->getType(), $item['value']);
+                                throw new CompilerException('Invalid value type: ' . $resolvedExpr->getType(), $item['value']);
                         }
                         break;
 
@@ -295,7 +295,7 @@ class NativeArray
                                 break;
 
                             default:
-                                throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+                                throw new CompilerException('Invalid value type: ' . $item['value']['type'], $item['value']);
                         }
                         break;
 
@@ -329,7 +329,7 @@ class NativeArray
                                         break;
 
                                     default:
-                                        throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+                                        throw new CompilerException('Invalid value type: ' . $item['value']['type'], $item['value']);
                                 }
                                 break;
 
@@ -369,7 +369,7 @@ class NativeArray
                                         break;
 
                                     default:
-                                        throw new CompilerException("Invalid value type: " . $resolvedExpr->getType(), $item['value']);
+                                        throw new CompilerException('Invalid value type: ' . $resolvedExpr->getType(), $item['value']);
                                 }
                                 break;
 
@@ -397,17 +397,17 @@ class NativeArray
                                         break;
 
                                     default:
-                                        throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+                                        throw new CompilerException('Invalid value type: ' . $item['value']['type'], $item['value']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot use variable type: " . $variableVariable->getType(). " as array index", $item['key']);
+                                throw new CompilerException('Cannot use variable type: ' . $variableVariable->getType(). ' as array index', $item['key']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Invalid key type: " . $resolvedExprKey->getType(), $item['key']);
+                        throw new CompilerException('Invalid key type: ' . $resolvedExprKey->getType(), $item['key']);
                 }
             } else {
                 $expr = new Expression($item['value']);

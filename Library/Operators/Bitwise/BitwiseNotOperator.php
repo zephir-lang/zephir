@@ -28,7 +28,7 @@ class BitwiseNotOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -57,12 +57,12 @@ class BitwiseNotOperator extends BaseOperator
                         return new CompiledExpression('int', '~zephir_get_intval(' . $variable->getName() . ')', $expression);
 
                     default:
-                        throw new CompilerException("Unknown type: " . $variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $left->getType(), $expression);
+                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
         }
     }
 }

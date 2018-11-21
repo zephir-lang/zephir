@@ -94,7 +94,7 @@ class ConcatOperator extends BaseOperator
                             break;
 
                         default:
-                            throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
+                            throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used in concat operation', $compiledExpr->getOriginal());
                     }
                     break;
 
@@ -112,7 +112,7 @@ class ConcatOperator extends BaseOperator
                     break;
 
                 default:
-                    throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
+                    throw new CompilerException('Variable type: ' . $compiledExpr->getType() . ' cannot be used in concat operation', $compiledExpr->getOriginal());
             }
         }
 
@@ -130,11 +130,11 @@ class ConcatOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new CompilerException("Missing right part of the expression", $expression);
+            throw new CompilerException('Missing right part of the expression', $expression);
         }
 
         $compilationContext->headersManager->add('kernel/concat');

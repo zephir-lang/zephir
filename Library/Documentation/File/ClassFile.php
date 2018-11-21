@@ -36,7 +36,7 @@ class ClassFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "class.phtml";
+        return 'class.phtml';
     }
 
     public function getData()
@@ -44,7 +44,7 @@ class ClassFile extends AbstractFile
         $nsPieces = explode('\\', $this->class->getNamespace());
 
         $nsPatches = [];
-        $nsStr = "";
+        $nsStr = '';
 
         foreach ($nsPieces as $n) {
             if (strlen($nsStr) > 0) {
@@ -56,13 +56,13 @@ class ClassFile extends AbstractFile
 
         return [
 
-            "classDefinition" => $this->class,
-            "compilerFile"    => $this->compilerFile,
-            "className" => $this->class->getName(),
-            "classNamespace" => $this->class->getNamespace(),
-            "fullName"  => $this->class->getCompleteName(),
-            "methods"   => $this->class->getMethods(),
-            "namespacePieces" => $nsPatches
+            'classDefinition' => $this->class,
+            'compilerFile'    => $this->compilerFile,
+            'className' => $this->class->getName(),
+            'classNamespace' => $this->class->getNamespace(),
+            'fullName'  => $this->class->getCompleteName(),
+            'methods'   => $this->class->getMethods(),
+            'namespacePieces' => $nsPatches
 
         ];
     }

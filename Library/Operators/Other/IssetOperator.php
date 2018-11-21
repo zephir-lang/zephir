@@ -50,7 +50,7 @@ class IssetOperator extends BaseOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable' && $exprCompiledVariable->getType() != 'array') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $left['left']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array', $left['left']);
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
@@ -60,7 +60,7 @@ class IssetOperator extends BaseOperator
                         break;
 
                     default:
-                        throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $left['left']);
+                        throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as array', $left['left']);
                         break;
                 }
 
@@ -101,12 +101,12 @@ class IssetOperator extends BaseOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $left['left']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object', $left['left']);
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
                 if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $left['left']);
+                    throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as object', $left['left']);
                 }
 
                 if ($variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {

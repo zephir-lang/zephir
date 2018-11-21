@@ -467,7 +467,7 @@ class ClassDefinition
     {
         if (!$this->parsedDocblock) {
             if (strlen($this->docBlock) > 0) {
-                $parser = new DocblockParser("/" . $this->docBlock . "/");
+                $parser = new DocblockParser('/' . $this->docBlock . '/');
                 $this->parsedDocblock = $parser->parse();
             } else {
                 return null;
@@ -827,7 +827,7 @@ class ClassDefinition
      */
     public function getSCName($namespace)
     {
-        return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name));
+        return str_replace($namespace . '_', '', strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name));
     }
 
     /**
@@ -852,13 +852,13 @@ class ClassDefinition
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
-                throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement a method called: \"" . $method->getName() . "\" as requirement of interface: \"" . $interfaceDefinition->getCompleteName() . "\"");
+                throw new CompilerException('Class ' . $classDefinition->getCompleteName() . ' must implement a method called: "' . $method->getName() . '" as requirement of interface: "' . $interfaceDefinition->getCompleteName() . '"');
             }
 
             if ($method->hasParameters()) {
                 $implementedMethod = $classDefinition->getMethod($method->getName());
                 if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()) {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: \"" . $interfaceDefinition->getCompleteName() . "\"");
+                    throw new CompilerException('Class ' . $classDefinition->getCompleteName() . '::' . $method->getName() . '() does not have the same number of required parameters in interface: "' . $interfaceDefinition->getCompleteName() . '"');
                 }
             }
         }
@@ -1120,9 +1120,9 @@ class ClassDefinition
 
                 if (!$classEntry) {
                     if ($compiler->isClass($interface)) {
-                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName() . '. ' . $interface . ' is currently a class', $this->originalNode);
+                        throw new CompilerException('Cannot locate interface ' . $interface . ' when implementing interfaces on ' . $this->getCompleteName() . '. ' . $interface . ' is currently a class', $this->originalNode);
                     } else {
-                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
+                        throw new CompilerException('Cannot locate interface ' . $interface . ' when implementing interfaces on ' . $this->getCompleteName(), $this->originalNode);
                     }
                 }
 
@@ -1674,7 +1674,7 @@ class ClassDefinition
 
             case 'pdostatement':
                 $compilationContext->headersManager->add('kernel/main');
-                $classEntry = $compilationContext->backend->fetchClassEntry("pdostatement");
+                $classEntry = $compilationContext->backend->fetchClassEntry('pdostatement');
                 break;
 
             case 'pdoexception':

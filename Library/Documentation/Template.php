@@ -22,7 +22,7 @@ class Template
     protected $template;
     protected $data;
     protected $nestedLevel;
-    protected $pathToRoot = "./";
+    protected $pathToRoot = './';
     protected $themeOptions;
     protected $theme;
     /**
@@ -34,7 +34,7 @@ class Template
     {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
-            throw new Exception("Recursive inclusion detected in theme creation");
+            throw new Exception('Recursive inclusion detected in theme creation');
         }
 
         $this->theme = $theme;
@@ -108,12 +108,12 @@ class Template
      */
     public function getAssets()
     {
-        $css = $this->theme->getThemeInfoExtendAware("css");
-        $js = $this->theme->getThemeInfoExtendAware("javascript");
+        $css = $this->theme->getThemeInfoExtendAware('css');
+        $js = $this->theme->getThemeInfoExtendAware('javascript');
 
         return [
-            "css" => $css,
-            "javascript"  => $js
+            'css' => $css,
+            'javascript'  => $js
         ];
     }
 
@@ -135,8 +135,8 @@ class Template
     public function url($url)
     {
         if (is_string($url)) {
-            if ($url{0} == "/") {
-                return $this->getPathToRoot() . ltrim($url, "/");
+            if ($url{0} == '/') {
+                return $this->getPathToRoot() . ltrim($url, '/');
             } elseif (is_string($url)) {
                 return $url;
             }
@@ -146,7 +146,7 @@ class Template
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
         }
 
-        return "";
+        return '';
     }
 
     /**
@@ -159,7 +159,7 @@ class Template
 
     public function asset($name)
     {
-        return $this->getPathToRoot() . "asset/" . rtrim($name);
+        return $this->getPathToRoot() . 'asset/' . rtrim($name);
     }
 
     public function write($outputFile)
@@ -183,7 +183,7 @@ class Template
 
     private function __getTemplatePath($fileName)
     {
-        if ("/" == $fileName{0} || strpos($fileName, 'phar://') === 0) {
+        if ('/' == $fileName{0} || strpos($fileName, 'phar://') === 0) {
             return $fileName;
         }
 

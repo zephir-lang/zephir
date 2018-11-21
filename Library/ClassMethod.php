@@ -477,7 +477,7 @@ class ClassMethod
     {
         if (!$this->parsedDocblock) {
             if (strlen($this->docblock) > 0) {
-                $parser = new DocblockParser("/" . $this->docblock ."/");
+                $parser = new DocblockParser('/' . $this->docblock .'/');
                 $this->parsedDocblock = $parser->parse();
             } else {
                 return null;
@@ -492,7 +492,7 @@ class ClassMethod
      */
     public function getLine()
     {
-        return $this->expression["line"];
+        return $this->expression['line'];
     }
 
     /**
@@ -501,7 +501,7 @@ class ClassMethod
      */
     public function getLastLine()
     {
-        return $this->expression["last-line"];
+        return $this->expression['last-line'];
     }
 
     /**
@@ -713,7 +713,7 @@ class ClassMethod
                 return count($parameters) . ', ...';
             }
         }
-        return "";
+        return '';
     }
 
     /**
@@ -1078,7 +1078,7 @@ class ClassMethod
                         $compiledExpression = $expression->compile($compilationContext);
 
                         if ($compiledExpression->getType() != 'int') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(int)", $parameter);
+                            throw new CompilerException('Default parameter value type: ' . $compiledExpression->getType() . ' cannot be assigned to variable(int)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -1103,7 +1103,7 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+                        throw new CompilerException('Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(int)', $parameter);
                 }
                 break;
 
@@ -1120,7 +1120,7 @@ class ClassMethod
                         $compiledExpression = $expression->compile($compilationContext);
 
                         if ($compiledExpression->getType() != 'double') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(double)", $parameter);
+                            throw new CompilerException('Default parameter value type: ' . $compiledExpression->getType() . ' cannot be assigned to variable(double)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -1145,7 +1145,7 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
+                        throw new CompilerException('Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(double)', $parameter);
                 }
                 break;
 
@@ -1162,7 +1162,7 @@ class ClassMethod
                         $compiledExpression = $expression->compile($compilationContext);
 
                         if ($compiledExpression->getType() != 'bool') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(bool)", $parameter);
+                            throw new CompilerException('Default parameter value type: ' . $compiledExpression->getType() . ' cannot be assigned to variable(bool)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -1185,7 +1185,7 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
+                        throw new CompilerException('Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(bool)', $parameter);
                 }
                 break;
 
@@ -1205,7 +1205,7 @@ class ClassMethod
                         $compiledExpression = $expression->compile($compilationContext);
 
                         if ($compiledExpression->getType() != 'string') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(string)", $parameter);
+                            throw new CompilerException('Default parameter value type: ' . $compiledExpression->getType() . ' cannot be assigned to variable(string)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -1256,7 +1256,7 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(array)", $parameter);
+                        throw new CompilerException('Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(array)', $parameter);
                 }
                 break;
 
@@ -1345,12 +1345,12 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
+                        throw new CompilerException('Default parameter value type: ' . $parameter['default']['type'] . ' cannot be assigned to variable(variable)', $parameter);
                 }
                 break;
 
             default:
-                throw new CompilerException("Default parameter type: " . $dataType, $parameter);
+                throw new CompilerException('Default parameter type: ' . $dataType, $parameter);
         }
 
         $compilationContext->codePrinter = $oldCodePrinter;
@@ -1438,7 +1438,7 @@ class ClassMethod
                 return "\t" . 'zephir_get_arrval(' . $inputParamCode . ', ' . $parameterCode . ');' . PHP_EOL;
 
             default:
-                throw new CompilerException("Parameter type: " . $dataType, $parameter);
+                throw new CompilerException('Parameter type: ' . $dataType, $parameter);
         }
     }
 
@@ -1751,8 +1751,8 @@ class ClassMethod
         /**
          * Fetch parameters from vm-top
          */
-        $initCode = "";
-        $code = "";
+        $initCode = '';
+        $code = '';
         if (is_object($parameters)) {
             /**
              * Round 2. Fetch the parameters in the method
@@ -1875,7 +1875,7 @@ class ClassMethod
                     case 'callable':
                         if (isset($parametersToSeparate[$parameter['name']])) {
                             $symbolTable->mustGrownStack(true);
-                            $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
+                            $initCode .= "\t" . 'ZEPHIR_SEPARATE_PARAM(' . $parameter['name'] . ');' . PHP_EOL;
                         }
                         break;
                 }
@@ -1927,7 +1927,7 @@ class ClassMethod
                 if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
                     $initCode .= "\t" . '} else {' . PHP_EOL;
                     if (isset($parametersToSeparate[$name])) {
-                        $initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+                        $initCode .= "\t\t" . 'ZEPHIR_SEPARATE_PARAM(' . $name . ');' . PHP_EOL;
                     } else {
                         if ($mandatory) {
                             $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
@@ -2002,10 +2002,10 @@ class ClassMethod
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
                 if ($variable->isExternal() == false) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $variable->getOriginal());
                     continue;
                 }
-                $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable-external", $variable->getOriginal());
+                $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable-external', $variable->getOriginal());
             }
 
             if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
@@ -2033,9 +2033,9 @@ class ClassMethod
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (is_array($node)) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $node);
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $node);
                 } else {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $variable->getOriginal());
                 }
             }
         }

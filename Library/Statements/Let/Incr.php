@@ -75,7 +75,7 @@ class Incr
                 break;
 
             default:
-                throw new CompilerException("Cannot increment: " . $symbolVariable->getType(), $statement);
+                throw new CompilerException('Cannot increment: ' . $symbolVariable->getType(), $statement);
         }
     }
 }

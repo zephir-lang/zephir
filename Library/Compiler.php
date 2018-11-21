@@ -442,7 +442,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return bool
      */
-    protected function recursiveProcess($src, $dest, $pattern = null, $callback = "copy")
+    protected function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
     {
         $success = true;
         $iterator = new \DirectoryIterator($src);
@@ -815,7 +815,7 @@ class Compiler implements InjectionAwareInterface
          */
         $files = [];
 
-        $hash = "";
+        $hash = '';
         foreach ($this->files as $compileFile) {
             /**
              * Only compile classes in the local extension, ignore external classes
@@ -959,7 +959,7 @@ class Compiler implements InjectionAwareInterface
                  * fix until patch hits all supported PHP builds
                  * @link https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
                  */
-                $fixMarker = "/* zephir_phpize_fix */";
+                $fixMarker = '/* zephir_phpize_fix */';
 
                 $configureFile = file_get_contents('ext\\configure.js');
                 $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
@@ -974,10 +974,10 @@ class Compiler implements InjectionAwareInterface
                 $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
                 $pos = strpos($configureFile, $marker);
                 if ($pos !== false) {
-                    $spMarker = "if (MODE_PHPIZE) {";
+                    $spMarker = 'if (MODE_PHPIZE) {';
                     $sp = strpos($configureFile, $spMarker, $pos - 200);
                     if ($sp === false) {
-                        throw new CompilerException("outofdate... phpize seems broken again");
+                        throw new CompilerException('outofdate... phpize seems broken again');
                     }
                     $configureFile = substr($configureFile, 0, $sp) . 'if (false) {' . substr($configureFile, $sp + strlen($spMarker));
                     $hasChanged = true;
@@ -1135,7 +1135,7 @@ class Compiler implements InjectionAwareInterface
 
         if (file_exists("{$currentDir}/ext/modules/{$fileName}.so") == false) {
             throw new CompilerException(
-                "Internal extension compilation failed. Check compile-errors.log for more information."
+                'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
         }
     }
@@ -1224,7 +1224,7 @@ class Compiler implements InjectionAwareInterface
             '%PROJECT_UPPER%'        => strtoupper($project),
             '%PROJECT_CAMELIZE%'     => ucfirst($project),
             '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
-            '%HEADERS_COMPILED%'     => implode(" ", $compiledHeaders),
+            '%HEADERS_COMPILED%'     => implode(' ', $compiledHeaders),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
@@ -1558,7 +1558,7 @@ class Compiler implements InjectionAwareInterface
                     $codes[] = $entry['code'] . ';';
                 }
                 if (isset($entry['include']) && !empty($entry['include'])) {
-                    $includes[] = "#include \"" . $entry['include'] . "\"";
+                    $includes[] = '#include "' . $entry['include'] . '"';
                 }
             }
         }
@@ -1862,7 +1862,7 @@ class Compiler implements InjectionAwareInterface
         $includeHeaders = [];
         foreach ($this->compiledFiles as $file) {
             if ($file) {
-                $fileH = str_replace(".c", ".zep.h", $file);
+                $fileH = str_replace('.c', '.zep.h', $file);
                 $include = '#include "' . $fileH . '"';
                 $includeHeaders[] = $include;
             }
@@ -2042,7 +2042,7 @@ class Compiler implements InjectionAwareInterface
 
                 $operator = '=';
                 $operatorCmd = '--exact-version';
-                $ar = explode("=", $version);
+                $ar = explode('=', $version);
                 if (count($ar) == 1) {
                     if ($version == '*') {
                         $version = '0.0.0';
@@ -2101,12 +2101,12 @@ class Compiler implements InjectionAwareInterface
      */
     protected function checkRequires()
     {
-        $extensionRequires = $this->config->get("extensions", "requires");
+        $extensionRequires = $this->config->get('extensions', 'requires');
         if ($extensionRequires) {
             $collectionError = PHP_EOL . "\tCould not load extension : ";
             foreach ($extensionRequires as $key => $value) {
                 if (!extension_loaded($value)) {
-                    $collectionError .= $value . ", ";
+                    $collectionError .= $value . ', ';
                 }
             }
 
@@ -2189,11 +2189,11 @@ class Compiler implements InjectionAwareInterface
         if (!$namespace) {
             // TODO: Add more user friendly message.
             // For example assume if the user call the command from the wrong dir
-            throw new Exception("Extension namespace cannot be loaded");
+            throw new Exception('Extension namespace cannot be loaded');
         }
 
         if (!is_string($namespace)) {
-            throw new Exception("Extension namespace is invalid");
+            throw new Exception('Extension namespace is invalid');
         }
 
         if (!$this->filesystem->isInitialized()) {

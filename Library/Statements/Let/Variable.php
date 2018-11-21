@@ -258,7 +258,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
                 }
                 break;
             default:
@@ -445,11 +445,11 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
                 }
                 break;
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 
@@ -630,12 +630,12 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 
@@ -685,7 +685,7 @@ class Variable
                 break;
 
             default:
-                throw new CompilerException("Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . " for array type", $resolvedExpr->getOriginal());
+                throw new CompilerException("Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . ' for array type', $resolvedExpr->getOriginal());
         }
     }
 
@@ -815,12 +815,12 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Cannot assign variable: " . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Cannot assign variable: ' . $itemVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $statement);
         }
     }
 
@@ -1212,12 +1212,12 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $itemVariable->getType(), $resolvedExpr->getOriginal());
+                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $resolvedExpr->getOriginal());
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
         }
     }
 
@@ -1298,7 +1298,7 @@ class Variable
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $type, $statement);
+                throw new CompilerException('Unknown type: ' . $type, $statement);
         }
     }
 }

@@ -285,7 +285,7 @@ class Call
                     continue;
                 }
 
-                throw new CompilerException("Invalid expression ", $expression);
+                throw new CompilerException('Invalid expression ', $expression);
             }
             $this->resolvedParams = $params;
         }
@@ -474,12 +474,12 @@ class Call
                             break;
 
                         default:
-                            throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
+                            throw new CompilerException('Cannot use variable type: ' . $parameterVariable->getType() . ' as parameter', $expression);
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
+                    throw new CompilerException('Cannot use value type: ' . $compiledExpression->getType() . ' as parameter', $expression);
             }
         }
 
@@ -659,12 +659,12 @@ class Call
                             break;
 
                         default:
-                            throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
+                            throw new CompilerException('Cannot use variable type: ' . $parameterVariable->getType() . ' as parameter', $expression);
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
+                    throw new CompilerException('Cannot use value type: ' . $compiledExpression->getType() . ' as parameter', $expression);
             }
         }
 

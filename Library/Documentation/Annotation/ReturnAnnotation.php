@@ -23,7 +23,7 @@ class ReturnAnnotation extends Annotation
 
     protected function parseContent()
     {
-        $spaceIndex = strpos($this->string, " ");
+        $spaceIndex = strpos($this->string, ' ');
 
         if (false !== $spaceIndex) {
             $this->returnType = substr($this->string, 0, $spaceIndex);

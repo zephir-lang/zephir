@@ -123,7 +123,7 @@ class LetStatement extends StatementAbstract
                  * Bad implemented operators could return values different than objects
                  */
                 if (!is_object($resolvedExpr)) {
-                    throw new CompilerException("Resolved expression is not valid", $assignment['expr']);
+                    throw new CompilerException('Resolved expression is not valid', $assignment['expr']);
                 }
             }
 
@@ -236,7 +236,7 @@ class LetStatement extends StatementAbstract
                     break;
 
                 default:
-                    throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
+                    throw new CompilerException('Unknown assignment: ' . $assignment['assign-type'], $assignment);
             }
         }
     }

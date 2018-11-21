@@ -72,22 +72,22 @@ class Documentation implements InjectionAwareInterface
         $this->logger  = $logger;
         $this->options = $options;
 
-        $themeConfig = $config->get("theme", "api");
+        $themeConfig = $config->get('theme', 'api');
 
         if (!$themeConfig) {
-            throw new ConfigException("Theme configuration is not present");
+            throw new ConfigException('Theme configuration is not present');
         }
 
         $themeDir = $this->findThemeDirectory($themeConfig, $options['path']);
 
         if (!file_exists($themeDir)) {
-            throw new ConfigException("There is no theme named " . $themeConfig['name']);
+            throw new ConfigException('There is no theme named ' . $themeConfig['name']);
         }
 
         $outputDir = $this->findOutputDirectory($options['output']);
 
         if (!$outputDir) {
-            throw new ConfigException("Api path (output directory) is not configured");
+            throw new ConfigException('Api path (output directory) is not configured');
         }
 
         $this->outputDirectory = $outputDir;
@@ -102,7 +102,7 @@ class Documentation implements InjectionAwareInterface
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $themeConfig["options"] = $this->prepareThemeOptions($themeConfig, $options['options']);
+        $themeConfig['options'] = $this->prepareThemeOptions($themeConfig, $options['options']);
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
 
@@ -125,7 +125,7 @@ class Documentation implements InjectionAwareInterface
     {
         $parsedOptions = null;
         if (!empty($options)) {
-            if ("{" == $options{0}) {
+            if ('{' == $options{0}) {
                 $parsedOptions = json_decode(trim($options), true);
                 if (!$parsedOptions || !is_array($parsedOptions)) {
                     throw new Exception("Unable to parse json from 'theme-options' argument");
@@ -146,9 +146,9 @@ class Documentation implements InjectionAwareInterface
         }
 
         if (is_array($parsedOptions)) {
-            $options = array_merge($themeConfig["options"], $parsedOptions);
+            $options = array_merge($themeConfig['options'], $parsedOptions);
         } else {
-            $options = $themeConfig["options"];
+            $options = $themeConfig['options'];
         }
 
         return $options;
@@ -169,8 +169,8 @@ class Documentation implements InjectionAwareInterface
     {
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
-        if ("/" !== $outputDir{0}) {
-            $outputDir = getcwd() . "/" . $outputDir;
+        if ('/' !== $outputDir{0}) {
+            $outputDir = getcwd() . '/' . $outputDir;
         }
 
         return $outputDir;
@@ -195,7 +195,7 @@ class Documentation implements InjectionAwareInterface
     private function findThemeDirectory($themeConfig, $path = null)
     {
         // check if there are additional theme paths in the config
-        $themeDirectoriesConfig = $this->config->get("theme-directories", "api");
+        $themeDirectoriesConfig = $this->config->get('theme-directories', 'api');
         if ($themeDirectoriesConfig) {
             if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
@@ -226,13 +226,13 @@ class Documentation implements InjectionAwareInterface
             }
         }
 
-        if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
+        if (!isset($themeConfig['name']) || !$themeConfig['name']) {
             throw new ConfigException(
                 'There is no theme neither in the the theme config nor as a command line argument'
             );
         }
 
-        return $this->findThemePathByName($themeConfig["name"]);
+        return $this->findThemePathByName($themeConfig['name']);
     }
 
     /**
@@ -306,7 +306,7 @@ class Documentation implements InjectionAwareInterface
         $this->theme->buildStaticDirectory();
 
         $JsonClassDef = $this->theme->buildJsonClassDefinition($this->classes, $namespaceAccessor);
-        $this->theme->createFile("asset/api_definition.js", "var ZephirApi = $JsonClassDef;");
+        $this->theme->createFile('asset/api_definition.js', "var ZephirApi = $JsonClassDef;");
     }
 
     public static function classUrl($c)
@@ -317,17 +317,17 @@ class Documentation implements InjectionAwareInterface
             $cname = $c;
         }
 
-        return "/class/" . str_replace("\\", "/", $cname) . ".html";
+        return '/class/' . str_replace('\\', '/', $cname) . '.html';
     }
 
     public static function namespaceUrl($ns)
     {
-        return "/namespace/" . str_replace("\\", "/", $ns) . ".html";
+        return '/namespace/' . str_replace('\\', '/', $ns) . '.html';
     }
 
     public static function sourceUrl(ClassDefinition $c)
     {
-        return "/source/" . str_replace("\\", "/", $c->getCompleteName()) . ".html";
+        return '/source/' . str_replace('\\', '/', $c->getCompleteName()) . '.html';
     }
 
     /**

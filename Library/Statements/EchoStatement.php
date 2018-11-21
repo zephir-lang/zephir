@@ -98,12 +98,12 @@ class EchoStatement extends StatementAbstract
                             break;
 
                         default:
-                            throw new CompilerException("Unknown type: " . $variable->getType(), $echoExpr);
+                            throw new CompilerException('Unknown type: ' . $variable->getType(), $echoExpr);
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $echoExpr);
+                    throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $echoExpr);
             }
         }
     }

@@ -28,7 +28,7 @@ class NotOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -58,12 +58,12 @@ class NotOperator extends BaseOperator
                         return new CompiledExpression('bool', '!zephir_is_true(' . $symbol . ')', $expression);
 
                     default:
-                        throw new CompilerException("Unknown type: " . $variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $left->getType(), $expression);
+                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
         }
     }
 }

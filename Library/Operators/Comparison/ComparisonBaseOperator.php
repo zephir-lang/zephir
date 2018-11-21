@@ -48,7 +48,7 @@ class ComparisonBaseOperator extends BaseOperator
 
         if ($expr['left']['type'] == 'typeof') {
             if ($expr['right']['type'] != 'string') {
-                $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
+                $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", 'invalid-typeof-comparison', $expr['right']);
                 return false;
             }
 
@@ -174,11 +174,11 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new CompilerException("Missing right part of the expression", $expression);
+            throw new CompilerException('Missing right part of the expression', $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -225,12 +225,12 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', $condition, $expression);
 
                             default:
-                                throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $right->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $right->getType(), $expression);
                 }
                 break;
 
@@ -275,12 +275,12 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', $this->zvalLongNegOperator . '(' . $variableCode . ', ' . $left->getCode() . ')', $expression);
 
                             default:
-                                throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot compare " . $left->getType() . " with " . $right->getType(), $expression);
+                        throw new CompilerException('Cannot compare ' . $left->getType() . ' with ' . $right->getType(), $expression);
                 }
                 break;
 
@@ -322,12 +322,12 @@ class ComparisonBaseOperator extends BaseOperator
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
                                 return new CompiledExpression('bool', $boolOperator . '(' . $variableRight . ')', $expression);
                             default:
-                                throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot compare " . $left->getType() . " with " . $right->getType(), $expression);
+                        throw new CompilerException('Cannot compare ' . $left->getType() . ' with ' . $right->getType(), $expression);
                 }
                 break;
 
@@ -354,12 +354,12 @@ class ComparisonBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                        throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                 }
                 break;
 
@@ -408,12 +408,12 @@ class ComparisonBaseOperator extends BaseOperator
                                         break;
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
+                                throw new CompilerException('Cannot compare variable: ' . $variable->getType() . ' with: ' . $right->getType(), $expression);
                         }
                         break;
 
@@ -450,12 +450,12 @@ class ComparisonBaseOperator extends BaseOperator
                                         return new CompiledExpression('bool', $this->zvalDoubleNegOperator . '(' . $variableRightCode . ', ' . $variableCode . ')', $expression);
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
+                                throw new CompilerException('Cannot compare variable: ' . $variable->getType() . ' with: ' . $right->getType(), $expression);
                         }
                         break;
 
@@ -489,12 +489,12 @@ class ComparisonBaseOperator extends BaseOperator
                                         return new CompiledExpression('bool', $boolOperator . '(' . $variableRightCode . ')', $expression);
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
+                                throw new CompilerException('Cannot compare variable: ' . $variable->getType() . ' with: ' . $right->getType(), $expression);
                         }
                         break;
 
@@ -515,12 +515,12 @@ class ComparisonBaseOperator extends BaseOperator
                                         return new CompiledExpression('bool', $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                                throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
                         break;
 
@@ -545,12 +545,12 @@ class ComparisonBaseOperator extends BaseOperator
                                         return new CompiledExpression('bool', $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                                throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
                         break;
 
@@ -609,22 +609,22 @@ class ComparisonBaseOperator extends BaseOperator
                                         return new CompiledExpression('bool', $this->zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
 
                                     default:
-                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                        throw new CompilerException('Unknown type: ' . $variableRight->getType(), $expression['right']);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                                throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $left->getType(), $expression);
+                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
         }
     }
 }

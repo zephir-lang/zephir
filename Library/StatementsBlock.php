@@ -123,11 +123,11 @@ class StatementsBlock
             if ($this->unreachable === true) {
                 switch ($statement['type']) {
                     case 'echo':
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expressions'][0]);
+                        $compilationContext->logger->warning('Unreachable code', 'unreachable-code', $statement['expressions'][0]);
                         break;
 
                     case 'let':
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['assignments'][0]);
+                        $compilationContext->logger->warning('Unreachable code', 'unreachable-code', $statement['assignments'][0]);
                         break;
 
                     case 'fetch':
@@ -142,14 +142,14 @@ class StatementsBlock
                     case 'return':
                     case 'c-block':
                         if (isset($statement['expr'])) {
-                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expr']);
+                            $compilationContext->logger->warning('Unreachable code', 'unreachable-code', $statement['expr']);
                         } else {
-                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
+                            $compilationContext->logger->warning('Unreachable code', 'unreachable-code', $statement);
                         }
                         break;
 
                     default:
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
+                        $compilationContext->logger->warning('Unreachable code', 'unreachable-code', $statement);
                 }
             }
 

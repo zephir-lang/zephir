@@ -85,7 +85,7 @@ class ArrayType extends AbstractType
      */
     protected function getNumberParam($methodName)
     {
-        if ($methodName == "map") {
+        if ($methodName == 'map') {
             return 1;
         }
 

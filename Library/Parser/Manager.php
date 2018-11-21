@@ -103,7 +103,7 @@ EOF;
         if ($this->parser->isAvailable()) {
             $add = sprintf("Minimum required Zephir Parser version: %s\n", self::MINIMUM_PARSER_VERSION);
         } else {
-            $add = "";
+            $add = '';
         }
 
         return sprintf($temlate, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);

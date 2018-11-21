@@ -27,12 +27,12 @@ class NamespaceHelper
     {
         $this->fullNamespace = $fullNamespace;
 
-        $ex = explode("\\", $fullNamespace);
+        $ex = explode('\\', $fullNamespace);
         $this->endNamespace = $ex[count($ex) - 1];
 
         array_pop($ex);
 
-        $this->parentName = implode("\\", $ex);
+        $this->parentName = implode('\\', $ex);
     }
 
     public function addClass(CompilerFile $c)

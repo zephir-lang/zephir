@@ -22,7 +22,7 @@ class SourceFile extends ClassFile
 
     public function getTemplateName()
     {
-        return "source.phtml";
+        return 'source.phtml';
     }
 
     public function getOutputFile()

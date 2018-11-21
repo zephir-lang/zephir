@@ -93,12 +93,12 @@ class PropertyAccess
                         break;
 
                     default:
-                        throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as object', $propertyAccess['left']);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an object', $propertyAccess['left']);
         }
 
         $property = $propertyAccess['right']['value'];
@@ -129,7 +129,7 @@ class PropertyAccess
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $expression);
+                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $expression);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
@@ -239,7 +239,7 @@ class PropertyAccess
          * Variable that receives a property value must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
         }
 
         /**

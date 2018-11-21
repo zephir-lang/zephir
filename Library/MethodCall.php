@@ -118,7 +118,7 @@ class MethodCall extends Call
                             $builtInType = new $builtInTypeClass;
                             $caller = $exprCompiledVariable;
                         } else {
-                            throw new CompilerException("Methods cannot be called on variable type: " . $variableVariable->getType(), $expression);
+                            throw new CompilerException('Methods cannot be called on variable type: ' . $variableVariable->getType(), $expression);
                         }
                 }
                 break;
@@ -129,7 +129,7 @@ class MethodCall extends Call
                     $builtInType = new $builtInTypeClass;
                     $caller = $exprCompiledVariable;
                 } else {
-                    throw new CompilerException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
+                    throw new CompilerException('Cannot use expression: ' . $exprCompiledVariable->getType() . ' as method caller', $expression['variable']);
                 }
         }
 
@@ -146,11 +146,11 @@ class MethodCall extends Call
             $variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 
             if (is_object($builtInType)) {
-                throw new CompilerException("Dynamic method invocation for type: " . $variableMethod->getType() . " is not supported", $expression);
+                throw new CompilerException('Dynamic method invocation for type: ' . $variableMethod->getType() . ' is not supported', $expression);
             }
 
             if ($variableMethod->isNotVariableAndString()) {
-                throw new CompilerException("Cannot use variable type: " . $variableMethod->getType() . " as dynamic method name", $expression);
+                throw new CompilerException('Cannot use variable type: ' . $variableMethod->getType() . ' as dynamic method name', $expression);
             }
         }
 
@@ -181,7 +181,7 @@ class MethodCall extends Call
         if (!$builtInType) {
             if ($isExpecting) {
                 if (!$symbolVariable->isVariable()) {
-                    throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                    throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
                 }
 
                 /**
@@ -272,12 +272,12 @@ class MethodCall extends Call
                     if (!$expectedNumberParameters && $callNumberParameters > 0) {
                         $numberParameters = $classMethod->getNumberOfParameters();
                         if ($callNumberParameters > $numberParameters) {
-                            throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                            throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                         }
                     }
 
                     if ($callNumberParameters < $expectedNumberParameters) {
-                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                     }
 
                     $method = $classMethod;
@@ -303,7 +303,7 @@ class MethodCall extends Call
                                 }
 
                                 if (!$classDefinition) {
-                                    throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
+                                    throw new CompilerException('Cannot locate class definition for class ' . $classType, $expression);
                                 }
 
                                 if (!$classDefinition->hasMethod($methodName)) {
@@ -352,12 +352,12 @@ class MethodCall extends Call
                                         $numberParameters = $classMethod->getNumberOfParameters();
                                         if ($callNumberParameters > $numberParameters) {
                                             $className = $classDefinition->getCompleteName();
-                                            throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                                            throw new CompilerException("Method '" . $className . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                                         }
                                     }
 
                                     if ($callNumberParameters < $expectedNumberParameters) {
-                                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                                     }
                                 }
 
@@ -369,7 +369,7 @@ class MethodCall extends Call
                                 break;
                             } else {
                                 $numberImplemented++;
-                                $compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistent-class", $expression);
+                                $compilationContext->logger->warning('Class "' . $classType . '" does not exist at compile time', 'nonexistent-class', $expression);
                             }
                         }
 
@@ -400,7 +400,7 @@ class MethodCall extends Call
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
                     if ($method->isVoid()) {
-                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' is marked as 'void' and it does not return anything", $expression);
+                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' is marked as 'void' and it does not return anything", $expression);
                     }
 
                     $returnClassTypes = $method->getReturnClassTypes();
@@ -494,7 +494,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning('Passing possible incorrect type for parameter: ' . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . 'expecting: ' . $parameter['data-type'], 'possible-wrong-parameter', $expression);
                                                 break;
                                         }
                                         break;
@@ -515,7 +515,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning('Passing possible incorrect type for parameter: ' . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . 'expecting: ' . $parameter['data-type'], 'possible-wrong-parameter', $expression);
                                                 break;
                                         }
                                         break;
@@ -528,7 +528,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning('Passing possible incorrect type for parameter: ' . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . 'expecting: ' . $parameter['data-type'], 'possible-wrong-parameter', $expression);
                                                 break;
                                         }
                                         break;
@@ -541,7 +541,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning('Passing possible incorrect type for parameter: ' . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . 'expecting: ' . $parameter['data-type'], 'possible-wrong-parameter', $expression);
                                                 break;
                                         }
                                         break;
@@ -553,7 +553,7 @@ class MethodCall extends Call
                                     case 'variable':
                                         if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
                                             if ($resolvedDynamicTypes[$n] == 'undefined') {
-                                                $compilationContext->logger->warning("Passing possible incorrect type to parameter: " . $classDefinition->getCompleteName() . '::' . $parameter[$n]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter[$n]['data-type'], "possible-wrong-parameter-undefined", $expression);
+                                                $compilationContext->logger->warning('Passing possible incorrect type to parameter: ' . $classDefinition->getCompleteName() . '::' . $parameter[$n]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . 'expecting: ' . $parameter[$n]['data-type'], 'possible-wrong-parameter-undefined', $expression);
                                             }
                                             //echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
                                         }

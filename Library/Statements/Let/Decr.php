@@ -60,7 +60,7 @@ class Decr
                  * Variable is probably not initialized here
                  */
                 if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                    throw new CompilerException("Attempt to decrement uninitialized variable", $statement);
+                    throw new CompilerException('Attempt to decrement uninitialized variable', $statement);
                 }
 
                 /**
@@ -78,7 +78,7 @@ class Decr
                 break;
 
             default:
-                throw new CompilerException("Cannot decrement variable: " . $symbolVariable->getType(), $statement);
+                throw new CompilerException('Cannot decrement variable: ' . $symbolVariable->getType(), $statement);
         }
     }
 }
