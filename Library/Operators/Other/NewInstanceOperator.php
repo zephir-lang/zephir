@@ -46,11 +46,11 @@ class NewInstanceOperator extends BaseOperator
         $this->literalOnly = false;
         $symbolVariable = $this->getExpectedNonLiteral($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Objects can only be instantiated into dynamic variables", $expression);
+            throw new CompilerException('Objects can only be instantiated into dynamic variables', $expression);
         }
 
         if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot use non-heap variable to store new instance", $expression);
+            throw new CompilerException('Cannot use non-heap variable to store new instance', $expression);
         }
 
         if ($symbolVariable->getName() != 'return_value') {
@@ -76,7 +76,7 @@ class NewInstanceOperator extends BaseOperator
         }
 
         if (!$className) {
-            throw new CompilerException("A class name is required to instantiate the object", $expression);
+            throw new CompilerException('A class name is required to instantiate the object', $expression);
         }
 
         /**
@@ -87,7 +87,7 @@ class NewInstanceOperator extends BaseOperator
 
         if ($isStdClass) {
             if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
-                throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
+                throw new CompilerException('stdclass does not receive parameters in its constructor', $expression);
             }
 
             $compilationContext->backend->initObject($symbolVariable, null, $compilationContext);
@@ -112,7 +112,7 @@ class NewInstanceOperator extends BaseOperator
                 if ($dynamic) {
                     $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
                     if ($classNameVariable->isNotVariableAndString()) {
-                        throw new CompilerException("Only dynamic/string variables can be used in new operator. " . $classNameVariable->getName(), $expression);
+                        throw new CompilerException('Only dynamic/string variables can be used in new operator. ' . $classNameVariable->getName(), $expression);
                     }
 
                     /**
@@ -132,7 +132,7 @@ class NewInstanceOperator extends BaseOperator
                     $classEntry = $zendClassEntry->getName();
                 } else {
                     if (!class_exists($className, false)) {
-                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', "nonexistent-class", $expression);
+                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', 'nonexistent-class', $expression);
                         $classNameToFetch = 'SL("' . escape_class($className) . '")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
@@ -187,14 +187,14 @@ class NewInstanceOperator extends BaseOperator
             $classDefinition = $compilationContext->compiler->getClassDefinition($className);
 
             if ($classDefinition->getType() != 'class') {
-                throw new CompilerException("Only classes can be instantiated", $expression);
+                throw new CompilerException('Only classes can be instantiated', $expression);
             }
 
-            $callConstructor = $classDefinition->hasMethod("__construct");
+            $callConstructor = $classDefinition->hasMethod('__construct');
         } else {
             if ($compilationContext->compiler->isBundledClass($className)) {
                 $classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
-                $callConstructor = $classDefinition->hasMethod("__construct");
+                $callConstructor = $classDefinition->hasMethod('__construct');
             }
         }
 

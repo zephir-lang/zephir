@@ -431,12 +431,12 @@ class WriteDetector
                     break;
 
                 case 'unset':
-                    if ($statement['expr']['type'] == "array-access") {
+                    if ($statement['expr']['type'] == 'array-access') {
                         if ($statement['expr']['left']['type'] == 'variable') {
                             $this->increaseMutations($statement['expr']['left']['value']);
                         }
                     } else {
-                        if ($statement['expr']['type'] == "list") {
+                        if ($statement['expr']['type'] == 'list') {
                             if ($statement['expr']['left']['type'] == 'array-access') {
                                 if ($statement['expr']['left']['left']['type'] == 'variable') {
                                     $this->increaseMutations($statement['expr']['left']['left']['value']);

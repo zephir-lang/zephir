@@ -54,7 +54,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'variable':
                 break;
             default:
-                throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement);
+                throw new CompilerException('Expression: ' . $resolvedIndex->getType() . ' cannot be used as index without cast', $statement);
         }
 
         if ($resolvedIndex->getType() == 'variable') {
@@ -68,7 +68,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index without cast", $statement);
+                    throw new CompilerException('Variable: ' . $indexVariable->getType() . ' cannot be used as index without cast', $statement);
             }
 
             if ($indexVariable->getType() == 'variable') {
@@ -124,7 +124,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
@@ -212,17 +212,17 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
+                                throw new CompilerException('Cannot update variable type: ' . $variableExpr->getType(), $statement);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Variable index: " . $indexVariable->getType() . " cannot be updated into array property", $statement);
+                        throw new CompilerException('Variable index: ' . $indexVariable->getType() . ' cannot be updated into array property', $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Index: " . $resolvedIndex->getType() . " cannot be updated into array property", $statement);
+                throw new CompilerException('Index: ' . $resolvedIndex->getType() . ' cannot be updated into array property', $statement);
         }
     }
 
@@ -263,7 +263,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement['index-expr']);
+                    throw new CompilerException('Expression: ' . $resolvedIndex->getType() . ' cannot be used as index without cast', $statement['index-expr']);
             }
 
             $offsetExprs[] = $resolvedIndex;
@@ -294,7 +294,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
         }
 
         /**

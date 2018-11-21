@@ -74,8 +74,8 @@ class DocblockParser
         $this->currentAnnotationStr = null;
         $this->currentAnnotationContentStr = null;
 
-        $this->summaryStr = "";
-        $this->descriptionStr = "";
+        $this->summaryStr = '';
+        $this->descriptionStr = '';
 
         $this->currentLine = 0;
         $this->currentCharIndex = 0;
@@ -88,36 +88,36 @@ class DocblockParser
             if ($this->ignoreSpaces && ctype_space($currentChar)) {
             } else {
                 if (!$this->commentOpen) {
-                    if ($currentChar == "/") {
-                        if ($this->nextCharacter() == "*" && $this->nextCharacter() == "*") {
+                    if ($currentChar == '/') {
+                        if ($this->nextCharacter() == '*' && $this->nextCharacter() == '*') {
                             $this->commentOpen = true;
                         } else {
                             continue;
                         }
                     }
                 } else {
-                    if ($currentChar == "*") {
+                    if ($currentChar == '*') {
                         $nextCharacter = $this->nextCharacter();
-                        if ("/" == $nextCharacter) {
+                        if ('/' == $nextCharacter) {
                             // stop annotation parsing on end of comment
                             $this->__tryRegisterAnnotation();
                             break;
                         } elseif ($this->ignoreStar) {
-                            if ($nextCharacter == " ") {
+                            if ($nextCharacter == ' ') {
                                 $this->nextCharacter();
                             }
                             continue;
                         }
                     }
 
-                    if ($currentChar == "@") {
+                    if ($currentChar == '@') {
                         $this->descriptionStr = trim($this->descriptionStr);
                         if ($this->descriptionOpen && strlen($this->descriptionStr) > 0) {
                             $this->descriptionOpen = false;
                         }
 
-                        $this->currentAnnotationStr = "";
-                        $this->currentAnnotationContentStr = "";
+                        $this->currentAnnotationStr = '';
+                        $this->currentAnnotationContentStr = '';
 
                         $this->ignoreSpaces = false;
                         $this->annotationNameOpen = true;
@@ -198,17 +198,17 @@ class DocblockParser
     private function __createAnnotation($name, $string)
     {
         switch ($name) {
-            case "link":
+            case 'link':
                 $annotation = new Annotation\Link($name, $string);
                 $annotation->getLinkText();
                 break;
 
-            case "return":
+            case 'return':
                 $annotation = new Annotation\ReturnAnnotation($name, $string);
                 $annotation->getReturnType();
                 break;
 
-            case "see":
+            case 'see':
                 $annotation = new Annotation\See($name, $string);
                 $annotation->getResource();
                 break;

@@ -34,11 +34,11 @@ class CreateInstanceOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-            throw new CompilerException("This function requires parameters", $expression);
+            throw new CompilerException('This function requires parameters', $expression);
         }
 
         if (count($expression['parameters']) != 1) {
-            throw new CompilerException("This function only requires one parameter", $expression);
+            throw new CompilerException('This function only requires one parameter', $expression);
         }
 
         /**
@@ -48,7 +48,7 @@ class CreateInstanceOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
         /**

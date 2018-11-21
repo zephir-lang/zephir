@@ -116,12 +116,12 @@ class NativeArrayAccess
                         break;
 
                     default:
-                        throw new CompilerException("Cannot use index type " . $variableIndex->getType() . " as offset", $expression['right']);
+                        throw new CompilerException('Cannot use index type ' . $variableIndex->getType() . ' as offset', $expression['right']);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot use index type " . $exprIndex->getType() . " as offset", $expression['right']);
+                throw new CompilerException('Cannot use index type ' . $exprIndex->getType() . ' as offset', $expression['right']);
         }
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
@@ -141,7 +141,7 @@ class NativeArrayAccess
 
         if ($variableVariable->getType() == 'variable') {
             if ($variableVariable->hasAnyDynamicType('unknown')) {
-                throw new CompilerException("Cannot use non-initialized variable as an array", $arrayAccess['left']);
+                throw new CompilerException('Cannot use non-initialized variable as an array', $arrayAccess['left']);
             }
 
             /**
@@ -230,7 +230,7 @@ class NativeArrayAccess
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
+            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign array index', $expression);
         }
 
         /**
@@ -297,12 +297,12 @@ class NativeArrayAccess
                         break;
 
                     default:
-                        throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $expression['left']);
+                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as array', $expression['left']);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an array", $expression['left']);
+                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an array', $expression['left']);
         }
 
         /**

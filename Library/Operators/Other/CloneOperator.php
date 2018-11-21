@@ -40,12 +40,12 @@ class CloneOperator extends BaseOperator
 
         $exprCompiledVariable = $exprVariable->compile($compilationContext);
         if ($exprCompiledVariable->getType() != 'variable') {
-            throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression);
+            throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array', $expression);
         }
 
         $clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
         if ($clonedVariable->getType() != 'variable') {
-            throw new CompilerException("Variable type: " . $exprVariable->getType() . " cannot be cloned");
+            throw new CompilerException('Variable type: ' . $exprVariable->getType() . ' cannot be cloned');
         }
 
         if ($clonedVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -54,7 +54,7 @@ class CloneOperator extends BaseOperator
 
         $symbolVariable = $this->getExpected($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
+            throw new CompilerException('Objects can only be cloned into dynamic variables', $expression);
         }
 
         $symbolVariable->setDynamicTypes('object');

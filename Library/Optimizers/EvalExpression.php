@@ -216,7 +216,7 @@ class EvalExpression
                 break;
 
             default:
-                throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
+                throw new CompilerException('Expression ' . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
         }
     }
 

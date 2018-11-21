@@ -160,7 +160,7 @@ class FcallManager implements FcallManagerInterface
         }
 
         $codePrinter->decreaseLevel();
-        $codePrinter->output("#endif");
+        $codePrinter->output('#endif');
         file_put_contents_ex($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
     }
 }

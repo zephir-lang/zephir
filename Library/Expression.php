@@ -248,7 +248,7 @@ class Expression
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable() && $symbolVariable->getType() != 'array') {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ") to create empty array", $expression);
+            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ') to create empty array', $expression);
         }
 
         /**
@@ -294,7 +294,7 @@ class Expression
 
             case 'char':
                 if (!strlen($expression['value'])) {
-                    throw new CompilerException("Invalid empty char literal", $expression);
+                    throw new CompilerException('Invalid empty char literal', $expression);
                 }
                 if (strlen($expression['value']) > 2) {
                     if (strlen($expression['value']) > 10) {
@@ -492,7 +492,7 @@ class Expression
 
             case 'list':
                 if ($expression['left']['type'] == 'list') {
-                    $compilationContext->logger->warning("Unnecessary extra parentheses", "extra-parentheses", $expression);
+                    $compilationContext->logger->warning('Unnecessary extra parentheses', 'extra-parentheses', $expression);
                 }
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
                 $expr = new Expression($expression['left']);
@@ -570,11 +570,11 @@ class Expression
                 break;
 
             default:
-                throw new CompilerException("Unknown expression: " . $type, $expression);
+                throw new CompilerException('Unknown expression: ' . $type, $expression);
         }
 
         if (!$compilableExpression) {
-            throw new CompilerException("Unknown expression passed as compilableExpression", $expression);
+            throw new CompilerException('Unknown expression passed as compilableExpression', $expression);
         }
         $compilableExpression->setReadOnly($this->isReadOnly());
         $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);

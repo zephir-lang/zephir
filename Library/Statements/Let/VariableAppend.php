@@ -140,17 +140,17 @@ class VariableAppend
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type: " . $exprVariable->getType(), $statement);
+                                throw new CompilerException('Unknown type: ' . $exprVariable->getType(), $statement);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+                        throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type: " . $type, $statement);
+                throw new CompilerException('Unknown type: ' . $type, $statement);
         }
     }
 }

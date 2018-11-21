@@ -68,7 +68,7 @@ class MethodDocBlock extends DocBlock
         if ($returnClassTypes) {
             foreach ($returnClassTypes as $key => $returnClassType) {
                 if ($this->aliasManager->isAlias($returnClassType)) {
-                    $returnClassTypes[$key] = "\\" . $this->aliasManager->getAlias($returnClassType);
+                    $returnClassTypes[$key] = '\\' . $this->aliasManager->getAlias($returnClassType);
                 }
             }
 
@@ -88,7 +88,7 @@ class MethodDocBlock extends DocBlock
                     $type = $key;
 
                     if ($this->aliasManager->isAlias($type)) {
-                        $type = "\\" . $this->aliasManager->getAlias($type);
+                        $type = '\\' . $this->aliasManager->getAlias($type);
                     }
 
                     $return[$key] = $type . '[]';

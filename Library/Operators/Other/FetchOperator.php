@@ -85,12 +85,12 @@ class FetchOperator extends BaseOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['right']['left']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array', $expression['right']['left']);
                 }
 
                 $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
                 if ($evalVariable->getType() != 'variable' && $evalVariable->getType() != 'array') {
-                    throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['right']['left']);
+                    throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as array', $expression['right']['left']);
                 }
 
                 if ($evalVariable->getType() == 'variable') {
@@ -114,12 +114,12 @@ class FetchOperator extends BaseOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $expression['right']['left']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object', $expression['right']['left']);
                 }
 
                 $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
                 if ($evalVariable->getType() != 'variable') {
-                    throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $expression['right']['left']);
+                    throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as object', $expression['right']['left']);
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -140,12 +140,12 @@ class FetchOperator extends BaseOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $expression['right']['left']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object', $expression['right']['left']);
                 }
 
                 $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
                 if ($evalVariable->getType() != 'variable') {
-                    throw new CompilerException("Variable type: " . $evalVariable->getType() . " cannot be used as object", $expression['right']['left']);
+                    throw new CompilerException('Variable type: ' . $evalVariable->getType() . ' cannot be used as object', $expression['right']['left']);
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -157,12 +157,12 @@ class FetchOperator extends BaseOperator
 
                 $exprCompiledVariableProperty = $exprVariableProperty->compile($compilationContext);
                 if ($exprCompiledVariableProperty->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariableProperty->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
+                    throw new CompilerException('Expression type: ' . $exprCompiledVariableProperty->getType() . ' cannot be used in property-dynamic-access', $expression['right']['right']);
                 }
 
                 $evalVariableProperty = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariableProperty->getCode(), $compilationContext, $expression['right']['right']);
                 if ($evalVariableProperty->getType() != 'variable' && $evalVariableProperty->getType() != 'string') {
-                    throw new CompilerException("Variable type: " . $evalVariableProperty->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
+                    throw new CompilerException('Variable type: ' . $evalVariableProperty->getType() . ' cannot be used in property-dynamic-access', $expression['right']['right']);
                 }
 
                 $compilationContext->headersManager->add('kernel/object');

@@ -108,12 +108,12 @@ class ArrayIndex
                         break;
 
                     default:
-                        throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
+                        throw new CompilerException('Variable: ' . $variableExpr->getType() . ' cannot be assigned to array offset', $resolvedExpr->getOriginal());
                 }
                 break;
 
             default:
-                throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
+                throw new CompilerException('Expression: ' . $resolvedExpr->getType() . ' cannot be assigned to array offset', $resolvedExpr->getOriginal());
         }
 
         return $symbolVariable;
@@ -144,7 +144,7 @@ class ArrayIndex
             case 'variable':
                 break;
             default:
-                throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array offset in assignment without cast", $statement['index-expr'][0]);
+                throw new CompilerException('Index: ' . $exprIndex->getType() . ' cannot be used as array offset in assignment without cast', $statement['index-expr'][0]);
         }
 
         /**
@@ -178,11 +178,11 @@ class ArrayIndex
                         $compilationContext->backend->updateArray($realSymbolVariable, $variableIndex, $symbolVariable, $compilationContext, $flags);
                         break;
                     default:
-                        throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                        throw new CompilerException('Variable: ' . $variableIndex->getType() . ' cannot be used as array index', $statement);
                 }
                 break;
             default:
-                throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
+                throw new CompilerException('Value: ' . $exprIndex->getType() . ' cannot be used as array index', $statement);
         }
     }
 
@@ -301,7 +301,7 @@ class ArrayIndex
 
         if ($symbolVariable->getType() == 'variable') {
             if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+                throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
             }
 
             /**

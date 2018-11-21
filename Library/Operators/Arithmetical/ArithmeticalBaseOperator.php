@@ -251,7 +251,7 @@ class ArithmeticalBaseOperator extends BaseOperator
             case 'string':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between strings", $expression);
+                        throw new CompilerException('Operation is not supported between strings', $expression);
                 }
                 break;
 
@@ -524,7 +524,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                 break;
 
             default:
-                throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
+                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
         }
     }
 }

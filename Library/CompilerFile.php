@@ -275,7 +275,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $classDefinition->setType('interface');
 
         if (is_array($docblock)) {
-            $classDefinition->setDocBlock($docblock["value"]);
+            $classDefinition->setDocBlock($docblock['value']);
         }
 
         if (isset($topStatement['definition'])) {
@@ -504,7 +504,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (is_array($docblock)) {
-            $classDefinition->setDocBlock($docblock["value"]);
+            $classDefinition->setDocBlock($docblock['value']);
         }
 
         if (isset($topStatement['definition'])) {
@@ -591,7 +591,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $ir = $this->genIR($compiler);
 
         if (!is_array($ir)) {
-            throw new Exception("Cannot parse file: " . realpath($this->filePath));
+            throw new Exception('Cannot parse file: ' . realpath($this->filePath));
         }
 
         if (isset($ir['type']) && $ir['type'] == 'error') {
@@ -633,7 +633,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'namespace':
                     if ($namespace !== null) {
-                        throw new CompilerException("The namespace must be defined just one time", $topStatement);
+                        throw new CompilerException('The namespace must be defined just one time', $topStatement);
                     }
                     $namespace = $topStatement['name'];
                     $this->namespace = $namespace;
@@ -663,7 +663,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$namespace) {
-            throw new CompilerException("A namespace is required", $topStatement);
+            throw new CompilerException('A namespace is required', $topStatement);
         }
 
         /* Set namespace and flag as global, if before namespace declaration */
@@ -682,7 +682,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'class':
                     if ($class || $interface) {
-                        throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class/interface defined in the same file', $topStatement);
                     }
                     $class = true;
                     $name = $topStatement['name'];
@@ -693,7 +693,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'interface':
                     if ($class || $interface) {
-                        throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class/interface defined in the same file', $topStatement);
                     }
                     $interface = true;
                     $name = $topStatement['name'];
@@ -704,7 +704,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'use':
                     if ($interface || $class) {
-                        throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
+                        throw new CompilerException('Aliasing must be done before declaring any class or interface', $topStatement);
                     }
                     $this->aliasManager->add($topStatement);
                     break;
@@ -716,7 +716,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$class && !$interface) {
-            throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
+            throw new CompilerException('Every file must contain at least a class or an interface', $topStatement);
         }
 
         if (!$this->external) {
@@ -891,7 +891,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'class':
                     if ($interface || $class) {
-                        throw new CompilerException("More than one class defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
                     $class = true;
                     $this->compileClass($compilationContext, $this->namespace, $topStatement);
@@ -899,7 +899,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'interface':
                     if ($interface || $class) {
-                        throw new CompilerException("More than one class defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
                     $class = true;
                     $this->compileClass($compilationContext, $this->namespace, $topStatement);

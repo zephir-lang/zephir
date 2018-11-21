@@ -90,11 +90,11 @@ class PropertyDynamicAccess
                     case 'variable':
                         break;
                     default:
-                        throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as object', $propertyAccess['left']);
                 }
                 break;
             default:
-                throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an object', $propertyAccess['left']);
         }
 
         switch ($propertyAccess['right']['type']) {
@@ -105,7 +105,7 @@ class PropertyDynamicAccess
                 $propertyVariable = null;
                 break;
             default:
-                throw new CompilerException("Variable type: " . $propertyAccess['right']['type'] . " cannot be used as object", $propertyAccess['left']);
+                throw new CompilerException('Variable type: ' . $propertyAccess['right']['type'] . ' cannot be used as object', $propertyAccess['left']);
         }
 
         /**
@@ -128,7 +128,7 @@ class PropertyDynamicAccess
          * Variable that receives a property value must be polymorphic
          */
         if ($symbolVariable && !$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
         }
 
         /**

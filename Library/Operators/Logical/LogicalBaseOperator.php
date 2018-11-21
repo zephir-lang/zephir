@@ -27,11 +27,11 @@ class LogicalBaseOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new CompilerException("Missing right part of the expression", $expression);
+            throw new CompilerException('Missing right part of the expression', $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -135,7 +135,7 @@ class LogicalBaseOperator extends BaseOperator
             case 'string':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between strings", $expression);
+                        throw new CompilerException('Operation is not supported between strings', $expression);
                 }
                 break;
 
@@ -352,7 +352,7 @@ class LogicalBaseOperator extends BaseOperator
                 break;
 
             default:
-                throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
+                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
         }
     }
 }

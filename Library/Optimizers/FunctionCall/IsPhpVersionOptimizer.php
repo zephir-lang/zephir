@@ -44,11 +44,11 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-            throw new CompilerException("This function requires parameters", $expression);
+            throw new CompilerException('This function requires parameters', $expression);
         }
 
         if (count($expression['parameters']) != 1) {
-            throw new CompilerException("This function only requires one parameter", $expression);
+            throw new CompilerException('This function only requires one parameter', $expression);
         }
 
         $variableType = $expression['parameters'][0]['parameter']['type'];
@@ -59,7 +59,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
 
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
         if (!count($matches)) {
-            throw new CompilerException("Could not parse PHP version", $expression);
+            throw new CompilerException('Could not parse PHP version', $expression);
         }
 
         $minorVersion   = 0;

@@ -138,12 +138,12 @@ class Reference
                         return $itemVariable;
 
                     default:
-                        throw new CompilerException("Unknown " . $itemVariable->getType(), $itemVariable);
+                        throw new CompilerException('Unknown ' . $itemVariable->getType(), $itemVariable);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown", $exprCompiled);
+                throw new CompilerException('Unknown', $exprCompiled);
         }
     }
 
@@ -164,7 +164,7 @@ class Reference
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
                 if ($symbolVariable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " to store a reference", $expression);
+                    throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' to store a reference', $expression);
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -185,7 +185,7 @@ class Reference
             case 'callable':
                 break;
             default:
-                throw new CompilerException("Cannot obtain a reference from type: " . $left->getType(), $expression);
+                throw new CompilerException('Cannot obtain a reference from type: ' . $left->getType(), $expression);
         }
 
         $leftVariable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression);
@@ -197,7 +197,7 @@ class Reference
             case 'callable':
                 break;
             default:
-                throw new CompilerException("Cannot obtain reference from variable type: " . $leftVariable->getType(), $expression);
+                throw new CompilerException('Cannot obtain reference from variable type: ' . $leftVariable->getType(), $expression);
         }
 
         $symbolVariable->setMustInitNull(true);

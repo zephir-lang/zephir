@@ -323,7 +323,7 @@ class StaticCall extends Call
          */
         $classNameVariable = $compilationContext->symbolTable->getVariableForRead($expression['class'], $compilationContext, $expression);
         if ($classNameVariable->isNotVariableAndString()) {
-            throw new CompilerException("Only dynamic/string variables can be used in dynamic classes", $expression);
+            throw new CompilerException('Only dynamic/string variables can be used in dynamic classes', $expression);
         }
 
         $compilationContext->headersManager->add('kernel/object');
@@ -404,7 +404,7 @@ class StaticCall extends Call
          */
         $classNameVariable = $compilationContext->symbolTable->getVariableForRead($expression['class'], $compilationContext, $expression);
         if ($classNameVariable->isNotVariableAndString()) {
-            throw new CompilerException("Only dynamic/string variables can be used in dynamic classes", $expression);
+            throw new CompilerException('Only dynamic/string variables can be used in dynamic classes', $expression);
         }
 
         $compilationContext->headersManager->add('kernel/object');
@@ -420,7 +420,7 @@ class StaticCall extends Call
          */
         $methodNameVariable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
         if ($methodNameVariable->isNotVariableAndString()) {
-            throw new CompilerException("Only dynamic/string variables can be used in dynamic methods", $expression);
+            throw new CompilerException('Only dynamic/string variables can be used in dynamic methods', $expression);
         }
 
         if ($symbolVariable) {
@@ -510,7 +510,7 @@ class StaticCall extends Call
             $symbolVariable->setDynamicTypes('undefined');
 
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
             }
         }
 
@@ -535,7 +535,7 @@ class StaticCall extends Call
                         if ($compiler->isBundledClass($className)) {
                             $classDefinition = $compiler->getInternalClassDefinition($className);
                         } else {
-                            throw new CompilerException("Class name: " . $className . " does not exist", $expression);
+                            throw new CompilerException('Class name: ' . $className . ' does not exist', $expression);
                         }
                     }
                 } else {
@@ -544,7 +544,7 @@ class StaticCall extends Call
                         if ($compiler->isClass($singleClass)) {
                             $classDefinition = $compiler->getClassDefinition($singleClass);
                         } else {
-                            throw new CompilerException("Class name: " . $className . " does not exist", $expression);
+                            throw new CompilerException('Class name: ' . $className . ' does not exist', $expression);
                         }
                     }
                 }
@@ -587,7 +587,7 @@ class StaticCall extends Call
                     }
                 }
 
-                if (!$classDefinition->hasMethod("__callStatic")) {
+                if (!$classDefinition->hasMethod('__callStatic')) {
                     if ($method instanceof ClassMethod && !$method->isBundled()) {
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
@@ -604,17 +604,17 @@ class StaticCall extends Call
                         if (!$expectedNumberParameters && $callNumberParameters > 0) {
                             $numberParameters = $classMethod->getNumberOfParameters();
                             if ($callNumberParameters > $numberParameters) {
-                                throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                                throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                             }
                         }
 
                         if ($callNumberParameters < $expectedNumberParameters) {
-                            throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                            throw new CompilerException("Method '" . $classDefinition->getCompleteName() . '::' . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ', passed: ' . $callNumberParameters, $expression);
                         }
                     }
                 } else {
                     if (!isset($method)) {
-                        $method = $classDefinition->getMethod("__callStatic");
+                        $method = $classDefinition->getMethod('__callStatic');
                         if ($method->isPrivate() && $method->getClassDefinition() !== $compilationContext->classDefinition) {
                             throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
                         }

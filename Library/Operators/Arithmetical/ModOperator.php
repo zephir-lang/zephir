@@ -38,11 +38,11 @@ class ModOperator extends ArithmeticalBaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new \Exception("Missing left part of the expression");
+            throw new \Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception("Missing right part of the expression");
+            throw new \Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -170,7 +170,7 @@ class ModOperator extends ArithmeticalBaseOperator
             case 'array':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between " . $right->getType(), $expression);
+                        throw new CompilerException('Operation is not supported between ' . $right->getType(), $expression);
                 }
                 break;
 
@@ -315,7 +315,7 @@ class ModOperator extends ArithmeticalBaseOperator
 
                     case 'string':
                     case 'array':
-                        throw new CompilerException("Cannot operate " . $variableLeft->getType() . " variables'", $expression);
+                        throw new CompilerException('Cannot operate ' . $variableLeft->getType() . " variables'", $expression);
 
                     case 'variable':
                         $op1 = $compilationContext->backend->getVariableCode($variableLeft);
@@ -446,7 +446,7 @@ class ModOperator extends ArithmeticalBaseOperator
                 break;
 
             default:
-                throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
+                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
         }
     }
 }

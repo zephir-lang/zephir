@@ -45,7 +45,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
         if (count($statement['index-expr']) > 16) {
-            throw new CompilerException("Too many array indexes", $statement);
+            throw new CompilerException('Too many array indexes', $statement);
         }
 
         /**
@@ -65,7 +65,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement);
+                    throw new CompilerException('Expression: ' . $resolvedIndex->getType() . ' cannot be used as index without cast', $statement);
             }
 
             $offsetExprs[] = $resolvedIndex;
@@ -91,7 +91,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
@@ -121,7 +121,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
         }
 
         $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);

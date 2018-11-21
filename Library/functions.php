@@ -68,7 +68,7 @@ function escape_class($className)
  */
 function add_slashes($string)
 {
-    $newstr = "";
+    $newstr = '';
     $after = null;
     $length = \strlen($string);
 
@@ -82,33 +82,33 @@ function add_slashes($string)
 
         switch ($ch) {
             case '"':
-                $newstr .= "\\" . '"';
+                $newstr .= '\\' . '"';
                 break;
             case "\n":
-                $newstr .= "\\" . 'n';
+                $newstr .= '\\' . 'n';
                 break;
             case "\t":
-                $newstr .= "\\" . 't';
+                $newstr .= '\\' . 't';
                 break;
             case "\r":
-                $newstr .= "\\" . 'r';
+                $newstr .= '\\' . 'r';
                 break;
             case "\v":
-                $newstr .= "\\" . 'v';
+                $newstr .= '\\' . 'v';
                 break;
             case '\\':
                 switch ($after) {
-                    case "n":
-                    case "v":
-                    case "t":
-                    case "r":
+                    case 'n':
+                    case 'v':
+                    case 't':
+                    case 'r':
                     case '"':
-                    case "\\":
+                    case '\\':
                         $newstr .= $ch . $after;
                         $i++;
                         break;
                     default:
-                        $newstr .= "\\\\";
+                        $newstr .= '\\\\';
                         break;
                 }
                 break;

@@ -50,7 +50,7 @@ class ForStatement extends StatementAbstract
         $parameters = $functionCall->getResolvedParamsAsExpr($exprRaw['parameters'], $compilationContext, $exprRaw);
 
         if (count($parameters) != 2 && count($parameters) != 3) {
-            throw new CompilerException("Wrong number of parameters", $this->statement['expr']);
+            throw new CompilerException('Wrong number of parameters', $this->statement['expr']);
         }
 
         if ($parameters[0]->getType() != 'variable') {
@@ -275,7 +275,7 @@ class ForStatement extends StatementAbstract
          */
         $condition = $expr->optimize($conditionExpr, $compilationContext);
         $codePrinter->output('if (!(' . $condition . ')) {');
-        $codePrinter->output("\t" . "break;");
+        $codePrinter->output("\t" . 'break;');
         $codePrinter->output('}');
 
         $codePrinter->decreaseLevel();
@@ -414,7 +414,7 @@ class ForStatement extends StatementAbstract
         $expression = $expr->compile($compilationContext);
 
         if ($expression->getType() != 'variable') {
-            throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
+            throw new CompilerException('Unknown type: ' . $expression->getType(), $exprRaw);
         }
 
         $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
@@ -430,7 +430,7 @@ class ForStatement extends StatementAbstract
             if ($this->statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->statement['key'], $compilationContext, $this->statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->statement['expr']);
+                    throw new CompilerException('Cannot use variable: ' . $this->statement['key'] . ' type: ' . $keyVariable->getType() . ' as key in hash traversal', $this->statement['expr']);
                 }
             } else {
                 /**
@@ -452,7 +452,7 @@ class ForStatement extends StatementAbstract
             if ($this->statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->statement['value'], $compilationContext, $this->statement['expr']);
                 if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->statement['expr']);
+                    throw new CompilerException('Cannot use variable: ' . $this->statement['value'] . ' type: ' . $variable->getType() . ' as value in hash traversal', $this->statement['expr']);
                 }
             } else {
                 /**
@@ -545,7 +545,7 @@ class ForStatement extends StatementAbstract
                     case 'uchar':
                         break;
                     default:
-                        throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->statement['expr']);
+                        throw new CompilerException('Cannot use variable: ' . $this->statement['key'] . ' type: ' . $keyVariable->getType() . ' as key in string traversal', $this->statement['expr']);
                 }
             } else {
                 $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
@@ -571,7 +571,7 @@ class ForStatement extends StatementAbstract
                     case 'uchar':
                         break;
                     default:
-                        throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->statement['expr']);
+                        throw new CompilerException('Cannot use variable: ' . $this->statement['value'] . ' type: ' . $variable->getType() . ' as value in string traversal', $this->statement['expr']);
                 }
             } else {
                 $variable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
@@ -660,7 +660,7 @@ class ForStatement extends StatementAbstract
             if ($this->statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->statement['key'], $compilationContext, $this->statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->statement['expr']);
+                    throw new CompilerException('Cannot use variable: ' . $this->statement['key'] . ' type: ' . $keyVariable->getType() . ' as key in hash traversal', $this->statement['expr']);
                 }
             } else {
                 $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -678,7 +678,7 @@ class ForStatement extends StatementAbstract
             if ($this->statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->statement['value'], $compilationContext, $this->statement['expr']);
                 if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Cannot use variable: " . $this->statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->statement['expr']);
+                    throw new CompilerException('Cannot use variable: ' . $this->statement['value'] . ' type: ' . $variable->getType() . ' as value in hash traversal', $this->statement['expr']);
                 }
             } else {
                 $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -785,7 +785,7 @@ class ForStatement extends StatementAbstract
         }
 
         if ($expression->getType() != 'variable' && $expression->getType() != 'array') {
-            throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
+            throw new CompilerException('Unknown type: ' . $expression->getType(), $exprRaw);
         }
 
         $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
@@ -800,7 +800,7 @@ class ForStatement extends StatementAbstract
                 break;
 
             default:
-                throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
+                throw new CompilerException('Cannot traverse value type: ' . $exprVariable->getType(), $exprRaw);
         }
     }
 }

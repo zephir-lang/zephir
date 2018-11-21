@@ -74,16 +74,16 @@ class Logger
 
                 if (isset($lines[$node['line'] - 1])) {
                     $line = $lines[$node['line'] - 1];
-                    $warning .= "\t" . str_replace("\t", " ", $line);
+                    $warning .= "\t" . str_replace("\t", ' ', $line);
                     if (($node['char'] - 1) > 0) {
-                        $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
+                        $warning .= "\t" . str_repeat('-', $node['char'] - 1) . '^' . PHP_EOL;
                     }
                 }
 
                 $warning .= PHP_EOL;
             }
 
-            fprintf(STDERR, "%s", Color::warning($warning));
+            fprintf(STDERR, '%s', Color::warning($warning));
 
             return true;
         }

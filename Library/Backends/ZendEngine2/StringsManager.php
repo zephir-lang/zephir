@@ -179,14 +179,14 @@ class StringsManager extends BaseStringsManager
             $code .= "\t" . '   zval_dtor(&result_copy);' . PHP_EOL;
             $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
 
-            $code .= "}" . PHP_EOL . PHP_EOL;
+            $code .= '}' . PHP_EOL . PHP_EOL;
         }
 
-        $codeh .= "#define zephir_concat_function(d, l, r) _zephir_concat_function(d, l, r TSRMLS_CC)
+        $codeh .= '#define zephir_concat_function(d, l, r) _zephir_concat_function(d, l, r TSRMLS_CC)
 void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
-";
+';
 
         $code .= "void _zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC)
 {

@@ -89,7 +89,7 @@ class ArgInfoDefinition
         } elseif ($this->hasParameters() == true) {
             $this->codePrinter->output(
                 sprintf(
-                    "ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)",
+                    'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
                     $this->name,
                     (int)$this->returnByRef,
                     $this->method->getNumberOfRequiredParameters()

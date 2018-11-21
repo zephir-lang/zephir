@@ -166,17 +166,17 @@ class Color
 
         // Check if given foreground color is supported
         if (isset(static::$fg[$fg])) {
-            $colored .= "\033[" . static::$fg[$fg] . "m";
+            $colored .= "\033[" . static::$fg[$fg] . 'm';
         }
 
         // Check if given background color is supported
         if (isset(static::$bg[$bg])) {
-            $colored .= "\033[" . static::$bg[$bg] . "m";
+            $colored .= "\033[" . static::$bg[$bg] . 'm';
         }
 
         // Check if given attribute is supported
         if (isset(static::$at[$at])) {
-            $colored .= "\033[" . static::$at[$at] . "m";
+            $colored .= "\033[" . static::$at[$at] . 'm';
         }
 
         // Add string and end coloring

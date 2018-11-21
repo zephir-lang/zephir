@@ -40,7 +40,7 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
         if ($call->mustInitSymbolVariable()) {

@@ -30,7 +30,7 @@ class PlusOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression");
+            throw new CompilerException('Missing left part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);

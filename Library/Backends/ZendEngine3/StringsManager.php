@@ -171,7 +171,7 @@ class StringsManager extends BaseStringsManager
             $code .= "\t" . '   zval_dtor(&result_copy);' . PHP_EOL;
             $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
 
-            $code .= "}" . PHP_EOL . PHP_EOL;
+            $code .= '}' . PHP_EOL . PHP_EOL;
         }
 
         $code .= <<<EOF
@@ -200,9 +200,9 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2)
 }
 EOF;
 
-        $codeh .= "void zephir_concat_function(zval *result, zval *op1, zval *op2);
+        $codeh .= 'void zephir_concat_function(zval *result, zval *op1, zval *op2);
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
-";
+';
         $contents = $pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh;
         file_put_contents_ex($contents, 'ext/kernel/concat.h');
         file_put_contents_ex($code, 'ext/kernel/concat.c');

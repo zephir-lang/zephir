@@ -117,7 +117,7 @@ class FunctionCall extends Call
              * Check if the number of parameters
              */
             $numberParameters = count($expression['parameters']);
-            if ($funcName == "unpack" &&
+            if ($funcName == 'unpack' &&
                 (version_compare(PHP_VERSION, '7.1.0') == 0 ||
                     version_compare(PHP_VERSION, '7.1.1') == 0)
             ) {
@@ -186,8 +186,8 @@ class FunctionCall extends Call
 
                             if (!preg_match('/^[a-zA-Z0-9$\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning(
-                                    "Cannot mark complex expression as reference",
-                                    "invalid-reference",
+                                    'Cannot mark complex expression as reference',
+                                    'invalid-reference',
                                     $expression
                                 );
                                 continue;
@@ -409,7 +409,7 @@ class FunctionCall extends Call
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
                 throw new CompilerException(
-                    "Returned values by functions can only be assigned to variant variables",
+                    'Returned values by functions can only be assigned to variant variables',
                     $expression
                 );
             }
@@ -548,7 +548,7 @@ class FunctionCall extends Call
 
             default:
                 throw new CompilerException(
-                    "Variable type: " . $variable->getType() . " cannot be used as dynamic caller",
+                    'Variable type: ' . $variable->getType() . ' cannot be used as dynamic caller',
                     $expression['left']
                 );
         }
@@ -577,7 +577,7 @@ class FunctionCall extends Call
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
                 throw new CompilerException(
-                    "Returned values by functions can only be assigned to variant variables",
+                    'Returned values by functions can only be assigned to variant variables',
                     $expression
                 );
             }

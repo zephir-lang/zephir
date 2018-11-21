@@ -52,15 +52,15 @@ class ObjectDynamicProperty
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . '::' . $propertyName . "' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
+            throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' as an object', $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
         /**
@@ -146,12 +146,12 @@ class ObjectDynamicProperty
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

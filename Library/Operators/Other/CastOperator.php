@@ -98,12 +98,12 @@ class CastOperator extends BaseOperator
                                 return new CompiledExpression('int', 'zephir_get_intval(' . $symbol . ')', $expression);
 
                             default:
-                                throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+                                throw new CompilerException('Cannot cast: ' . $resolved->getType() . '(' . $symbolVariable->getType() . ') to ' . $expression['left'], $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -135,12 +135,12 @@ class CastOperator extends BaseOperator
                                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                                 return new CompiledExpression('long', 'zephir_get_intval(' . $symbol . ')', $expression);
                             default:
-                                throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+                                throw new CompilerException('Cannot cast: ' . $resolved->getType() . '(' . $symbolVariable->getType() . ') to ' . $expression['left'], $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -177,12 +177,12 @@ class CastOperator extends BaseOperator
                                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                                 return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbol . ')', $expression);
                             default:
-                                throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+                                throw new CompilerException('Cannot cast: ' . $resolved->getType() . '(' . $symbolVariable->getType() . ') to ' . $expression['left'], $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -204,12 +204,12 @@ class CastOperator extends BaseOperator
                             case 'variable':
                                 return new CompiledExpression('bool', 'zephir_get_boolval(' . $symbol . ')', $expression);
                             default:
-                                throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+                                throw new CompilerException('Cannot cast: ' . $resolved->getType() . '(' . $symbolVariable->getType() . ') to ' . $expression['left'], $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -225,7 +225,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -248,7 +248,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -271,7 +271,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
@@ -312,12 +312,12 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                        throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                throw new CompilerException('Cannot cast: ' . $resolved->getType() . ' to ' . $expression['left'], $expression);
         }
     }
 }
