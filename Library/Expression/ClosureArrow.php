@@ -17,6 +17,7 @@ use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\StatementsBlock;
 
@@ -33,7 +34,7 @@ class ClosureArrow extends Closure
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

@@ -207,7 +207,7 @@ class Call
      * @return array|null|CompiledExpression[]
      *
      * @return array
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
@@ -303,7 +303,7 @@ class Call
      * @param array $calleeDefinition
      * @return array
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
@@ -497,7 +497,7 @@ class Call
      * @param array $expression
      *
      * @return array
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      * @throws Exception
      */
     public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, array $expression)

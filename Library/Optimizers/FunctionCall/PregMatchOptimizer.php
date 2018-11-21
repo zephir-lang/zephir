@@ -120,7 +120,7 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param  CompilationContext $context
      * @return array
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     private function processOptionals(array &$expression, Call $call, CompilationContext $context)
     {

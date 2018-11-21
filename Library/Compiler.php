@@ -176,7 +176,7 @@ class Compiler implements InjectionAwareInterface
      * @param  array $statement
      * @return void
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
@@ -197,7 +197,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $filePath
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      * @throws IllegalStateException
      * @throws ParseException
      */
@@ -265,7 +265,7 @@ class Compiler implements InjectionAwareInterface
      * @param string $className
      * @param string $location
      * @return boolean
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      * @throws Exception
      * @throws ParseException
      */

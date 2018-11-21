@@ -29,7 +29,7 @@ class AddslashesOptimizer extends OptimizerAbstract
      * @param Call $call
      * @param CompilationContext $context
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

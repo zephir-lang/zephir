@@ -29,7 +29,7 @@ class TypeOfOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

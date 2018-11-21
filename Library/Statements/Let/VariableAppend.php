@@ -31,7 +31,7 @@ class VariableAppend
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param $statement
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {

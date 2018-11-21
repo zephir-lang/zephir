@@ -34,8 +34,8 @@ class StaticProperty
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws \Zephir\Exception\CompilerException
-     * @throws \Zephir\Exception\IllegalOperationException
+     * @throws CompilerException
+     * @throws IllegalOperationException
      * @internal param string $variable
      */
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

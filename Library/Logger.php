@@ -51,7 +51,7 @@ class Logger
      * @param $type
      * @param $node
      * @return bool
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function warning($message, $type, $node)
     {

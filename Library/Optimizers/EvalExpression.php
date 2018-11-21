@@ -65,7 +65,7 @@ class EvalExpression
      * @param $exprRaw
      * @param CompilationContext $compilationContext
      * @return bool|string
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function optimize($exprRaw, CompilationContext $compilationContext)
     {

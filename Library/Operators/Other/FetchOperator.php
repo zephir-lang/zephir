@@ -13,7 +13,7 @@ namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Compiler\CompilerException;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
@@ -29,7 +29,7 @@ class FetchOperator extends BaseOperator
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {

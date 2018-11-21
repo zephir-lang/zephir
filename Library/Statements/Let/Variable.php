@@ -276,7 +276,7 @@ class Variable
      * @param CompilationContext $compilationContext
      *
      * @return void
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      * @throws IllegalOperationException
      */
     private function doDoubleAssignment(

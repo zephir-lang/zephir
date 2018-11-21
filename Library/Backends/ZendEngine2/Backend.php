@@ -900,7 +900,10 @@ class Backend extends BaseBackend
                 break;
 
             default:
-                throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
+                throw new CompilerException(
+                    sprintf('Variable type: %s cannot be used as array index without cast', $index->getType()),
+                    $arrayAccess['right']
+                );
         }
         if ($isVariable && in_array($index->getType(), ['variable', 'string'])) {
             $output = 'zephir_array_fetch(' . $this->getVariableCodePointer($var) . ', ' . $this->getVariableCode($src) . ', ' . $this->getVariableCode($index) . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
@@ -1016,7 +1019,7 @@ class Backend extends BaseBackend
      * @param  CompilationContext            $compilationContext
      * @return array
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
     {

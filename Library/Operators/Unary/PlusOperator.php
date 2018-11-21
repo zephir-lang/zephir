@@ -25,7 +25,7 @@ class PlusOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

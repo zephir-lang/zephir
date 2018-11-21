@@ -158,7 +158,7 @@ class ClassConstant
      *
      * @return void
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext)

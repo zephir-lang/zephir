@@ -109,7 +109,7 @@ class DeclareStatement extends StatementAbstract
      * @param $defaultType
      * @param $dateType
      * @param $variable
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public static function invalidDefaultTypeException($defaultType, $dateType, $variable)
     {
