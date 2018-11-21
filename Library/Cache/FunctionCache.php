@@ -56,7 +56,7 @@ class FunctionCache
      * @param string             $functionName
      * @param Call               $call
      * @param CompilationContext $compilationContext
-     * @param boolean            $exists
+     * @param bool               $exists
      *
      * @return string
      */

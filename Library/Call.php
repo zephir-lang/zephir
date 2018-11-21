@@ -160,7 +160,7 @@ class Call
     /**
      * Check if an external expression is expecting the call return a value
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpectingReturn()
     {
@@ -170,7 +170,7 @@ class Call
     /**
      * Returns if the symbol to be returned by the call must be initialized
      *
-     * @return boolean
+     * @return bool
      */
     public function mustInitSymbolVariable()
     {
@@ -201,7 +201,7 @@ class Call
      * @param  array                           $parameters
      * @param  CompilationContext              $compilationContext
      * @param  array                           $expression
-     * @param  boolean                         $readOnly
+     * @param  bool                            $readOnly
      * @return array|null|CompiledExpression[]
      *
      * @return array

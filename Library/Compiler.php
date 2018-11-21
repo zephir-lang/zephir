@@ -112,7 +112,7 @@ class Compiler implements InjectionAwareInterface
     protected static $internalDefinitions = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected static $loadedPrototypes = false;
 
@@ -195,7 +195,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param  string            $className
      * @param  string            $location
-     * @return boolean
+     * @return bool
      * @throws CompilerException
      * @throws Exception
      * @throws ParseException
@@ -231,8 +231,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Allows to check if a class is part of the compiled extension
      *
-     * @param  string  $className
-     * @return boolean
+     * @param  string $className
+     * @return bool
      */
     public function isClass($className)
     {
@@ -263,7 +263,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isInterface($className)
     {
@@ -294,7 +294,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundledClass($className)
     {
@@ -306,7 +306,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundledInterface($className)
     {
@@ -365,7 +365,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function isConstant($name)
     {
@@ -399,7 +399,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function isExtensionGlobal($name)
     {
@@ -421,7 +421,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Returns GCC flags for current compilation
      *
-     * @param  boolean $development
+     * @param  bool   $development
      * @return string
      */
     public function getGccFlags($development = false)
@@ -1429,7 +1429,7 @@ class Compiler implements InjectionAwareInterface
      * @param string $project
      *
      * @throws Exception
-     * @return boolean
+     * @return bool
      *                   TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
      */
     public function createProjectFiles($project)
@@ -1793,7 +1793,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Check if the project must be phpized again
      *
-     * @return boolean
+     * @return bool
      */
     public function checkIfPhpized()
     {
@@ -2121,7 +2121,7 @@ class Compiler implements InjectionAwareInterface
      * @param string $src
      * @param string $dst
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkKernelFile($src, $dst)
     {
@@ -2139,7 +2139,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Checks which files in the base kernel must be copied
      *
-     * @return boolean
+     * @return bool
      * @throws Exception
      */
     protected function checkKernelFiles()

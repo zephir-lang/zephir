@@ -36,7 +36,7 @@ class Reference
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean  $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -48,7 +48,7 @@ class Reference
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {

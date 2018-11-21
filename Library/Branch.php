@@ -91,7 +91,7 @@ class Branch
     /**
      * Sets if the branch is unreachable
      *
-     * @param boolean $unreachable
+     * @param bool $unreachable
      */
     public function setUnreachable($unreachable)
     {

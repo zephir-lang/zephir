@@ -40,7 +40,7 @@ class CompilationContext
     /**
      * Whether the current method is static or not
      *
-     * @var boolean
+     * @var bool
      */
     public $staticContext;
 

@@ -72,56 +72,56 @@ class ClassMethod
     /**
      * Whether the variable is void
      *
-     * @var boolean
+     * @var bool
      */
     protected $void = false;
 
     /**
      * Whether the method is public or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isPublic = true;
 
     /**
      * Whether the method is static or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isStatic = false;
 
     /**
      * Whether the method is final or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isFinal = false;
 
     /**
      * Whether the method is abstract or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isAbstract = false;
 
     /**
      * Whether the method is internal or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isInternal = false;
 
     /**
      * Whether the method is bundled with PHP or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isBundled = false;
 
     /**
      * Whether the method is an initializer or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $isInitializer = false;
 
@@ -260,7 +260,7 @@ class ClassMethod
     /**
      * Checks whether the method is empty
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -327,7 +327,7 @@ class ClassMethod
     /**
      * Sets if the method is internal or not
      *
-     * @param boolean $static
+     * @param bool $static
      */
     public function setIsStatic($static)
     {
@@ -337,7 +337,7 @@ class ClassMethod
     /**
      * Sets if the method is internal or not
      *
-     * @param boolean $internal
+     * @param bool $internal
      */
     public function setIsInternal($internal)
     {
@@ -347,7 +347,7 @@ class ClassMethod
     /**
      * Sets if the method is bundled or not
      *
-     * @param boolean $bundled
+     * @param bool $bundled
      */
     public function setIsBundled($bundled)
     {
@@ -357,7 +357,7 @@ class ClassMethod
     /**
      * Sets if the method is an initializer or not
      *
-     * @param boolean $initializer
+     * @param bool $initializer
      */
     public function setIsInitializer($initializer)
     {
@@ -516,7 +516,7 @@ class ClassMethod
     /**
      * Checks if the method has return-type or cast hints
      *
-     * @return boolean
+     * @return bool
      */
     public function hasReturnTypes()
     {
@@ -534,8 +534,8 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is null compatible
      *
-     * @param  string  $type
-     * @return boolean
+     * @param  string $type
+     * @return bool
      */
     public function areReturnTypesNullCompatible($type = null)
     {
@@ -553,8 +553,8 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string  $type
-     * @return boolean
+     * @param  string $type
+     * @return bool
      */
     public function areReturnTypesIntCompatible($type = null)
     {
@@ -577,8 +577,8 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is double compatible
      *
-     * @param  string  $type
-     * @return boolean
+     * @param  string $type
+     * @return bool
      */
     public function areReturnTypesDoubleCompatible($type = null)
     {
@@ -596,8 +596,8 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string  $type
-     * @return boolean
+     * @param  string $type
+     * @return bool
      */
     public function areReturnTypesBoolCompatible($type = null)
     {
@@ -615,8 +615,8 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string  $type
-     * @return boolean
+     * @param  string $type
+     * @return bool
      */
     public function areReturnTypesStringCompatible($type = null)
     {
@@ -654,7 +654,7 @@ class ClassMethod
     /**
      * Returns the number of parameters the method has
      *
-     * @return boolean
+     * @return bool
      */
     public function hasParameters()
     {
@@ -718,8 +718,8 @@ class ClassMethod
     /**
      * Checks whether the method has a specific modifier
      *
-     * @param  string  $modifier
-     * @return boolean
+     * @param  string $modifier
+     * @return bool
      */
     public function hasModifier($modifier)
     {
@@ -813,7 +813,7 @@ class ClassMethod
     /**
      * Checks if the method must not return any value
      *
-     * @return boolean
+     * @return bool
      */
     public function isVoid()
     {
@@ -823,7 +823,7 @@ class ClassMethod
     /**
      * Checks if the method is inline
      *
-     * @return boolean
+     * @return bool
      */
     public function isInline()
     {
@@ -836,7 +836,7 @@ class ClassMethod
     /**
      * Checks if the method is private
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -849,7 +849,7 @@ class ClassMethod
     /**
      * Checks if the method is protected
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -862,7 +862,7 @@ class ClassMethod
     /**
      * Checks if the method is public
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -882,7 +882,7 @@ class ClassMethod
     /**
      * Checks whether the method is static
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -892,7 +892,7 @@ class ClassMethod
     /**
      * Checks whether the method is final
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
@@ -902,7 +902,7 @@ class ClassMethod
     /**
      * Checks whether the method is internal
      *
-     * @return boolean
+     * @return bool
      */
     public function isInternal()
     {
@@ -912,7 +912,7 @@ class ClassMethod
     /**
      * Checks whether the method is bundled
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundled()
     {
@@ -922,7 +922,7 @@ class ClassMethod
     /**
      * Checks whether the method is an initializer
      *
-     * @return boolean
+     * @return bool
      */
     public function isInitializer()
     {
@@ -932,7 +932,7 @@ class ClassMethod
     /**
      * Check whether the current method is a constructor
      *
-     * @return boolean
+     * @return bool
      */
     public function isConstructor()
     {
@@ -2104,8 +2104,8 @@ class ClassMethod
     /**
      * Simple method to check if one of the paths are returning the right expected type
      *
-     * @param  array   $statement
-     * @return boolean
+     * @param  array $statement
+     * @return bool
      */
     public function hasChildReturnStatementType($statement)
     {

@@ -21,7 +21,7 @@ class MessagePackUnpacker
     /**
      * MessagePackUnpacker constructor.
      *
-     * @param boolean $opt
+     * @param bool $opt
      */
     public function __construct($opt = null)
     {
@@ -35,8 +35,8 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param integer $option
-     * @param boolean $value
+     * @param int  $option
+     * @param bool $value
      */
     public function setOption($option, $value)
     {
@@ -50,8 +50,8 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param string  $str
-     * @param integer $offset
+     * @param string $str
+     * @param int    $offset
      */
     public function execute($str = null, &$offset = null)
     {
@@ -79,15 +79,15 @@ class MessagePack
     /**
      * MessagePack constructor.
      *
-     * @param boolean $opt
+     * @param bool $opt
      */
     public function __construct($opt = null)
     {
     }
 
     /**
-     * @param integer $option
-     * @param boolean $value
+     * @param int  $option
+     * @param bool $value
      */
     public function setOption($option, $value)
     {

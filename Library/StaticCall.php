@@ -258,8 +258,8 @@ class StaticCall extends Call
      * @param string             $methodName
      * @param array              $expression
      * @param Variable           $symbolVariable
-     * @param boolean            $mustInit
-     * @param boolean            $isExpecting
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param ClassDefinition    $classDefinition
      * @param CompilationContext $compilationContext
      * @param ClassMethod        $method
@@ -352,8 +352,8 @@ class StaticCall extends Call
      * @param string             $methodName
      * @param array              $expression
      * @param Variable           $symbolVariable
-     * @param boolean            $mustInit
-     * @param boolean            $isExpecting
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param ClassDefinition    $classDefinition
      * @param CompilationContext $compilationContext
      * @param ClassMethod        $method
@@ -424,8 +424,8 @@ class StaticCall extends Call
      * @param string             $methodName
      * @param array              $expression
      * @param Variable           $symbolVariable
-     * @param boolean            $mustInit
-     * @param boolean            $isExpecting
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param ClassDefinition    $classDefinition
      * @param CompilationContext $compilationContext
      * @param ClassMethod        $method
@@ -522,8 +522,8 @@ class StaticCall extends Call
      * @param string             $methodName
      * @param array              $expression
      * @param Variable           $symbolVariable
-     * @param boolean            $mustInit
-     * @param boolean            $isExpecting
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param CompilationContext $compilationContext
      */
     protected function callFromDynamicClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, CompilationContext $compilationContext)
@@ -603,8 +603,8 @@ class StaticCall extends Call
      *
      * @param array              $expression
      * @param Variable           $symbolVariable
-     * @param boolean            $mustInit
-     * @param boolean            $isExpecting
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param CompilationContext $compilationContext
      */
     protected function callFromDynamicClassDynamicMethod(array $expression, $symbolVariable, $mustInit, $isExpecting, CompilationContext $compilationContext)

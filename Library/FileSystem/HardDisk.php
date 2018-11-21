@@ -225,9 +225,9 @@ final class HardDisk implements FileSystemInterface
      * This function does not perform operations in the temporary
      * directory but it caches the results to avoid reprocessing.
      *
-     * @param  string  $algorithm
-     * @param  string  $sourceFile
-     * @param  boolean $useCache
+     * @param  string $algorithm
+     * @param  string $sourceFile
+     * @param  bool   $useCache
      * @return string
      *
      * @throws Flysystem\FileExistsException

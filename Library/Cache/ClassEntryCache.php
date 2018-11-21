@@ -26,7 +26,7 @@ class ClassEntryCache
      * Retrieves/Creates a class entry cache
      *
      * @param  string             $className
-     * @param  boolean            $dynamic
+     * @param  bool               $dynamic
      * @param  CompilationContext $compilationContext
      * @return \Zephir\Variable
      */

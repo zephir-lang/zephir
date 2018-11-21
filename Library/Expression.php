@@ -114,7 +114,7 @@ class Expression
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param boolean  $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -126,7 +126,7 @@ class Expression
     /**
      * Sets if the result of the evaluated expression is read only
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -136,7 +136,7 @@ class Expression
     /**
      * Checks if the result of the evaluated expression is read only
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadOnly()
     {
@@ -147,7 +147,7 @@ class Expression
      * Checks if the returned value by the expression
      * is expected to be assigned to an external symbol
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpectingReturn()
     {
@@ -168,7 +168,7 @@ class Expression
     /**
      * Sets whether the expression must be resolved in "noisy" mode
      *
-     * @param boolean $noisy
+     * @param bool $noisy
      */
     public function setNoisy($noisy)
     {
@@ -178,7 +178,7 @@ class Expression
     /**
      * Checks whether the expression must be resolved in "noisy" mode
      *
-     * @return boolean
+     * @return bool
      */
     public function isNoisy()
     {
@@ -190,7 +190,7 @@ class Expression
      * thus avoiding promote numeric strings to longs
      *
      * @deprecated
-     * @param boolean $stringOperation
+     * @param bool $stringOperation
      */
     public function setStringOperation($stringOperation)
     {
@@ -202,7 +202,7 @@ class Expression
      * in a string operation like "concat"
      *
      * @deprecated
-     * @return boolean
+     * @return bool
      */
     public function isStringOperation()
     {
@@ -212,7 +212,7 @@ class Expression
     /**
      * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements
      *
-     * @param boolean $evalMode
+     * @param bool $evalMode
      */
     public function setEvalMode($evalMode)
     {

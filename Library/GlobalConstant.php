@@ -44,7 +44,7 @@ class GlobalConstant
     /**
      * Check if the global constant is temporal
      *
-     * @return boolean
+     * @return bool
      */
     public function isTemporal()
     {

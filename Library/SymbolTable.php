@@ -109,7 +109,7 @@ class SymbolTable
      *
      * @param  string             $name
      * @param  CompilationContext $compilationContext
-     * @return boolean
+     * @return bool
      */
     public function hasVariable($name, CompilationContext $compilationContext = null)
     {
@@ -514,7 +514,7 @@ class SymbolTable
     /**
      * Return a variable in the symbol table, it will be used for a write operation
      *
-     * @param boolean $mustGrownStack
+     * @param bool $mustGrownStack
      */
     public function mustGrownStack($mustGrownStack)
     {
@@ -524,7 +524,7 @@ class SymbolTable
     /**
      * Returns if the current symbol label must add a memory frame
      *
-     * @return boolean
+     * @return bool
      */
     public function getMustGrownStack()
     {

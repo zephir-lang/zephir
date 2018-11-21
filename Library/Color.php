@@ -121,7 +121,7 @@ class Color
     /**
      * Identify if console supports colors
      *
-     * @return boolean
+     * @return bool
      */
     public static function isSupportedShell()
     {
@@ -147,9 +147,9 @@ class Color
      *
      * @static
      * @param $string
-     * @param null|integer $fg
-     * @param null|integer $at
-     * @param null|integer $bg
+     * @param null|int $fg
+     * @param null|int $at
+     * @param null|int $bg
      *
      * @return string
      */

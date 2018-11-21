@@ -88,7 +88,7 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Checks if the compiled expression is an integer or compatible type
      *
-     * @return boolean
+     * @return bool
      */
     public function isIntCompatibleType()
     {
@@ -107,7 +107,7 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Checks if the compiled expression is a char or compatible type
      *
-     * @return boolean
+     * @return bool
      */
     public function isCharCompatibleType()
     {

@@ -77,8 +77,8 @@ class Globals
     /**
      * Checks if a variable is a superglobal
      *
-     * @param  string  $name
-     * @return boolean
+     * @param  string $name
+     * @return bool
      */
     public function isSuperGlobal($name)
     {

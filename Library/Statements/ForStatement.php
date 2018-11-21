@@ -34,7 +34,7 @@ class ForStatement extends StatementAbstract
      *
      * @param  array              $exprRaw
      * @param  CompilationContext $compilationContext
-     * @return boolean
+     * @return bool
      */
     public function compileRange($exprRaw, CompilationContext $compilationContext)
     {
@@ -396,7 +396,7 @@ class ForStatement extends StatementAbstract
      *
      * @param  array              $exprRaw
      * @param  CompilationContext $compilationContext
-     * @return boolean
+     * @return bool
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext)
     {
