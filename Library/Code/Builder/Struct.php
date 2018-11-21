@@ -11,6 +11,9 @@
 
 namespace Zephir\Code\Builder;
 
+use Zephir\Exception\InvalidArgumentException;
+use Zephir\Exception\RuntimeException;
+
 /**
  * Zephir\Code\Builder\Struct
  *
@@ -33,20 +36,20 @@ class Struct
      * @param string $name
      * @param string $simpleName
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($name, $simpleName)
     {
         if (!is_string($name)) {
-            throw new \InvalidArgumentException('Struct name must be string');
+            throw new InvalidArgumentException('Struct name must be string');
         }
 
         if (!is_string($simpleName)) {
-            throw new \InvalidArgumentException('Struct name must be string');
+            throw new InvalidArgumentException('Struct name must be string');
         }
 
         if (empty($name)) {
-            throw new \InvalidArgumentException('Struct name must not be empty');
+            throw new InvalidArgumentException('Struct name must not be empty');
         }
 
         $this->name = $name;
@@ -54,26 +57,28 @@ class Struct
     }
 
     /**
-     * @param string $field
-     * @param array $global
-     * @throws \InvalidArgumentException
+     * @param  string $field
+     * @param  array $global
+     * @return void
+     *
+     * @throws InvalidArgumentException
      */
     public function addProperty($field, $global)
     {
         if (!isset($global['type'])) {
-            throw new \InvalidArgumentException('Property type must be string');
+            throw new InvalidArgumentException('Property type must be string');
         }
 
         if (!is_string($global['type'])) {
-            throw new \InvalidArgumentException('Property type must be string');
+            throw new InvalidArgumentException('Property type must be string');
         }
 
         if (!is_string($field)) {
-            throw new \InvalidArgumentException('Property name must be string');
+            throw new InvalidArgumentException('Property name must be string');
         }
 
         if (isset($this->properties[$field])) {
-            throw new \InvalidArgumentException('Property was defined more than once');
+            throw new InvalidArgumentException('Property was defined more than once');
         }
 
         $this->properties[$field] = $this->convertToCType($global['type']);
@@ -84,7 +89,7 @@ class Struct
      *
      * @param string $type
      * @return string
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
     protected function convertToCType($type)
     {
@@ -105,20 +110,25 @@ class Struct
                 return $type;
 
             default:
-                throw new \Exception('Unknown global type: ' . $type);
+                throw new InvalidArgumentException('Unknown global type: ' . $type);
         }
     }
 
     /**
-     * Returns the C code that initializes the extension global
+     * Returns the C code that initializes the extension global.
      *
-     * @param string $name
-     * @param array $global
+     * @param  string $name
+     * @param  array $global
+     * @param  mixed $namespace
+     * @return string
+     *
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function getCDefault($name, $global, $namespace)
     {
         if (!isset($global['default'])) {
-            throw new \Exception('Field "' . $name . '" does not have a default value');
+            throw new RuntimeException('Field "' . $name . '" does not have a default value');
         }
 
         switch ($global['type']) {
@@ -146,7 +156,7 @@ class Struct
                 return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
             default:
-                throw new \Exception('Unknown global type: ' . $global['type']);
+                throw new InvalidArgumentException('Unknown global type: ' . $global['type']);
         }
     }
 
@@ -166,6 +176,9 @@ class Struct
 
     /**
      * @return string
+     * @param mixed $name
+     * @param mixed $global
+     * @param mixed $namespace
      */
     public function getInitEntry($name, $global, $namespace)
     {

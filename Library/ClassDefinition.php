@@ -480,8 +480,8 @@ class ClassDefinition
     /**
      * Adds a property to the definition
      *
-     * @param ClassProperty $property
-     * @throws \Zephir\Exception\CompilerException
+     * @param  ClassProperty $property
+     * @throws CompilerException
      */
     public function addProperty(ClassProperty $property)
     {
@@ -495,8 +495,8 @@ class ClassDefinition
     /**
      * Adds a constant to the definition
      *
-     * @param ClassConstant $constant
-     * @throws \Zephir\Exception\CompilerException
+     * @param  ClassConstant $constant
+     * @throws CompilerException
      */
     public function addConstant(ClassConstant $constant)
     {
@@ -529,10 +529,10 @@ class ClassDefinition
     }
 
     /**
-     * Returns a method definition by its name
+     * Returns a method definition by its name.
      *
-     * @param string string
-     * @return boolean|ClassProperty
+     * @param  string $propertyName
+     * @return bool|ClassProperty
      */
     public function getProperty($propertyName)
     {
@@ -546,13 +546,14 @@ class ClassDefinition
                 return $extendsClassDefinition->getProperty($propertyName);
             }
         }
+
         return false;
     }
 
     /**
-     * Checks if class definition has a property
+     * Checks if class definition has a property.
      *
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public function hasConstant($name)
@@ -677,8 +678,8 @@ class ClassDefinition
     /**
      * Checks if the class implements an specific name
      *
-     * @param string string
-     * @return boolean
+     * @param  string $methodName
+     * @return bool
      */
     public function hasMethod($methodName)
     {
@@ -701,10 +702,9 @@ class ClassDefinition
     /**
      * Returns a method by its name
      *
-     * @param string string
-     * @param bool|true $checkExtends
-     *
-     * @return boolean|ClassMethod
+     * @param  string $methodName
+     * @param  bool   $checkExtends
+     * @return bool|ClassMethod
      */
     public function getMethod($methodName, $checkExtends = true)
     {
@@ -1865,7 +1865,7 @@ class ClassDefinition
     }
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool
      */
     protected function hasConstantFromInterfaces($name)
@@ -1882,7 +1882,7 @@ class ClassDefinition
     }
 
     /**
-     * @param $name
+     * @param  string $name
      * @return bool|ClassConstant
      */
     protected function getConstantFromInterfaces($name)

@@ -62,8 +62,12 @@ class Theme
     }
 
     /**
-     * parse and draw the specified file
-     * @param AbstractFile $file
+     * Parse and draw the specified file.
+     *
+     * @param  AbstractFile $file
+     * @return void
+     *
+     * @throws Exception
      */
     public function drawFile(AbstractFile $file)
     {
@@ -97,18 +101,24 @@ class Theme
     }
 
     /**
-     * get assets from the theme info (theme.json file placed inside the theme directory)
+     * Get assets from the theme info (theme.json file placed inside the theme directory).
+     *
+     * @param  string $name
+     * @return mixed|null
      */
     public function getThemeInfo($name)
     {
         if (isset($this->themeInfos[$name])) {
             return $this->themeInfos[$name];
         }
+
         return null;
     }
 
     /**
-     * similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array
+     * Similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array.
+     *
+     * @param  string $name
      * @return array
      */
     public function getThemeInfoExtendAware($name)

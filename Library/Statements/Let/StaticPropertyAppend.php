@@ -14,6 +14,7 @@ namespace Zephir\Statements\Let;
 use Zephir\ClassProperty;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 
 /**
@@ -24,45 +25,25 @@ use Zephir\Exception\CompilerException;
 class StaticPropertyAppend extends ArrayIndex
 {
     /**
-     * Compiles x::y[a][b][] = {expr} (multiple offset assignment)
-     *
-     * @param string $variable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
-     * @param array $statement
-     */
-    protected function _assignStaticPropertyArrayMultipleIndex($classEntry, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-        $property = $statement['property'];
-        $compilationContext->headersManager->add('kernel/object');
-
-        /**
-         * Create a temporal zval (if needed)
-         */
-        $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
-
-        $offsetExprs[] = 'a';
-        $compilationContext->backend->assignStaticPropertyArrayMulti($classEntry, $variableExpr, $property, $offsetExprs, $compilationContext);
-
-        if ($variableExpr->isTemporal()) {
-            $variableExpr->setIdle(true);
-        }
-    }
-
-    /**
      * Compiles ClassName::foo[index] = {expr}
      *
-     * @param                    $className
-     * @param                    $property
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param  string             $className
+     * @param  string             $property
+     * @param  CompiledExpression $resolvedExpr
+     * @param  CompilationContext $compilationContext
+     * @param  array              $statement
+     * @return void
      *
-     * @throws \Zephir\Exception\CompilerException
-     * @internal param string $variable
+     * @throws Exception
+     * @throws CompilerException
      */
-    public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
+    public function assignStatic(
+        $className,
+        $property,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ) {
         $compiler = $compilationContext->compiler;
         if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
@@ -110,5 +91,44 @@ class StaticPropertyAppend extends ArrayIndex
         $compilationContext->headersManager->add('kernel/object');
         $classEntry = $classDefinition->getClassEntry($compilationContext);
         $this->_assignStaticPropertyArrayMultipleIndex($classEntry, $property, $resolvedExpr, $compilationContext, $statement);
+    }
+
+    /**
+     * Compiles x::y[a][b][] = {expr} (multiple offset assignment).
+     *
+     * @param  string             $classEntry
+     * @param  string             $property
+     * @param  CompiledExpression $resolvedExpr
+     * @param  CompilationContext $compilationContext
+     * @param  array              $statement
+     * @return void
+     */
+    protected function _assignStaticPropertyArrayMultipleIndex(
+        $classEntry,
+        $property,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ) {
+        $property = $statement['property'];
+        $compilationContext->headersManager->add('kernel/object');
+
+        /**
+         * Create a temporal zval (if needed)
+         */
+        $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+
+        $offsetExpressions[] = 'a';
+        $compilationContext->backend->assignStaticPropertyArrayMulti(
+            $classEntry,
+            $variableExpr,
+            $property,
+            $offsetExpressions,
+            $compilationContext
+        );
+
+        if ($variableExpr->isTemporal()) {
+            $variableExpr->setIdle(true);
+        }
     }
 }
