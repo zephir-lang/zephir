@@ -57,8 +57,10 @@ return PhpCsFixer\Config::create()
         'no_empty_phpdoc' => true,
         'no_extra_consecutive_blank_lines' => true,
         'no_spaces_inside_parenthesis' => true,
+        'no_blank_lines_after_class_opening' => true,
         'no_trailing_whitespace' => true,
         'no_trailing_whitespace_in_comment' => true,
+        'no_trailing_comma_in_singleline_array' => true,
         'ordered_class_elements' => [
             'order' => [
                 'use_trait',
@@ -83,14 +85,23 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => [
             'only_untyped' => true,
         ],
-        'phpdoc_align' => [
-            'align' => 'vertical',
-        ],
+        'phpdoc_align' => true,
+        'phpdoc_indent' => true,
+        'phpdoc_no_access' => true,
+        'phpdoc_no_package' => true,
+        'phpdoc_order' => true,
+        'phpdoc_scalar' => true,
+        'phpdoc_trim' => true,
+        'phpdoc_types' => true,
         'single_blank_line_at_eof' => true,
+        'single_blank_line_before_namespace' => true,
         'single_class_element_per_statement' => true,
         'single_import_per_statement' => true,
         'single_line_after_imports' => true,
         'single_quote' => true,
+        'standardize_not_equals' => true,
         'visibility_required' => true,
         'no_unused_imports' => true,
+        'ternary_operator_spaces' => true,
+        'trailing_comma_in_multiline_array' => true,
     ]);
