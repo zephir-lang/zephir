@@ -26,8 +26,8 @@ class StaticCall extends Call
      *
      * @param  Expression         $expr
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {

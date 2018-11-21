@@ -37,8 +37,8 @@ class Variable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @return void
      * @throws CompilerException
+     * @return void
      */
     public function assign(
         $variable,
@@ -116,9 +116,9 @@ class Variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
      *
-     * @return void
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
+     * @return void
      */
     private function doNumericAssignment(
         CodePrinter $codePrinter,
@@ -354,9 +354,9 @@ class Variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
      *
-     * @return void
      * @throws CompilerException
      * @throws IllegalOperationException
+     * @return void
      */
     private function doDoubleAssignment(
         CodePrinter $codePrinter,
@@ -542,9 +542,9 @@ class Variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
      *
-     * @return void
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
+     * @return void
      */
     private function doStringAssignment(
         CodePrinter $codePrinter,
@@ -728,9 +728,9 @@ class Variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
      *
-     * @return void
      * @throws CompilerException
      * @throws IllegalOperationException
+     * @return void
      */
     private function doArrayAssignment(
         CodePrinter $codePrinter,
@@ -777,9 +777,9 @@ class Variable
      * @param array              $statement
      * @param CompilationContext $compilationContext
      *
-     * @return void
      * @throws CompilerException
      * @throws IllegalOperationException
+     * @return void
      */
     private function doBoolAssignment(
         CodePrinter $codePrinter,
@@ -914,9 +914,9 @@ class Variable
      * @param CompilationContext $compilationContext
      * @param ReadDetector       $readDetector
      *
-     * @return void
      * @throws CompilerException
      * @throws IllegalOperationException
+     * @return void
      */
     private function doVariableAssignment(
         CodePrinter $codePrinter,

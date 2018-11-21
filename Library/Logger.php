@@ -48,8 +48,8 @@ class Logger
      * @param $message
      * @param $type
      * @param $node
-     * @return bool
      * @throws CompilerException
+     * @return bool
      */
     public function warning($message, $type, $node)
     {

@@ -29,9 +29,9 @@ class InstanceOfOperator extends BaseOperator
     /**
      * @param $expression
      * @param  CompilationContext $context
-     * @return CompiledExpression
      * @throws CompilerException
      * @throws \Zephir\Exception
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $context)
     {

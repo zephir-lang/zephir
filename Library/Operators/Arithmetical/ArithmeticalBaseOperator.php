@@ -82,10 +82,9 @@ class ArithmeticalBaseOperator extends BaseOperator
      *
      * @param  array              $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

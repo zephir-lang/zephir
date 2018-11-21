@@ -27,9 +27,8 @@ final class BackendProvider implements ServiceProviderInterface
      * {@inheritdoc}
      *
      * @param  ContainerInterface|Container $container
-     * @return void
-     *
      * @throws IllegalStateException
+     * @return void
      */
     public function register(ContainerInterface $container)
     {
@@ -48,10 +47,9 @@ final class BackendProvider implements ServiceProviderInterface
     /**
      * Resolve backend class.
      *
-     * @param  ContainerInterface $container
-     * @return string
-     *
+     * @param  ContainerInterface    $container
      * @throws IllegalStateException
+     * @return string
      */
     private function resolveBackendClass(ContainerInterface $container)
     {

@@ -28,8 +28,8 @@ class CreateInstanceOptimizer extends OptimizerAbstract
      * @param  array                    $expression
      * @param  Call                     $call
      * @param  CompilationContext       $context
-     * @return CompiledExpression|mixed
      * @throws CompilerException
+     * @return CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

@@ -69,10 +69,9 @@ trait ContainerAwareTrait
      *
      * @param string $name
      *
-     * @return mixed
-     *
      * @throws InvalidCallException
      * @throws UnknownPropertyException
+     * @return mixed
      */
     public function __get($name)
     {
@@ -89,9 +88,8 @@ trait ContainerAwareTrait
      * {@inheritdoc}
      *
      * @see    InjectionAwareInterface
-     * @return Container
-     *
      * @throws ContainerException
+     * @return Container
      */
     public function getContainer()
     {

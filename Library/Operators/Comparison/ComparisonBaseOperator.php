@@ -31,8 +31,8 @@ class ComparisonBaseOperator extends BaseOperator
     /**
      * @param $expr
      * @param  CompilationContext      $compilationContext
-     * @return bool|CompiledExpression
      * @throws CompilerException
+     * @return bool|CompiledExpression
      */
     public function optimizeTypeOf($expr, CompilationContext $compilationContext)
     {

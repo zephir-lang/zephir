@@ -611,8 +611,8 @@ class ClassDefinition
      * @param ClassMethod $method
      * @param array       $statement
      *
-     * @return void
      * @throws CompilerException
+     * @return void
      */
     public function addMethod(ClassMethod $method, $statement = null)
     {
@@ -630,8 +630,8 @@ class ClassDefinition
      * @param ClassMethod $method
      * @param array       $statement
      *
-     * @return void
      * @throws CompilerException
+     * @return void
      */
     public function updateMethod(ClassMethod $method, $statement = null)
     {
@@ -776,8 +776,8 @@ class ClassDefinition
      *
      * @param CompilationContext $compilationContext
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public function getClassEntry(CompilationContext $compilationContext = null)
     {
@@ -1365,8 +1365,8 @@ class ClassDefinition
      * @param  string             $className
      * @param  CompilationContext $compilationContext
      * @param  bool               $check
-     * @return string
      * @throws CompilerException
+     * @return string
      */
     public function getClassEntryByClassName($className, CompilationContext $compilationContext, $check = true)
     {

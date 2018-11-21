@@ -28,8 +28,8 @@ class TypeOfOperator extends BaseOperator
     /**
      * @param $expression
      * @param  CompilationContext      $compilationContext
-     * @return bool|CompiledExpression
      * @throws CompilerException
+     * @return bool|CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

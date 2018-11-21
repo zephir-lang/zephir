@@ -63,9 +63,8 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @return void
-     *
      * @throws RuntimeException
+     * @return void
      */
     public function initialize()
     {
@@ -105,10 +104,9 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @return array
-     *
+     * @param  string                          $path
      * @throws Flysystem\FileNotFoundException
+     * @return array
      */
     public function file($path)
     {
@@ -132,10 +130,9 @@ final class HardDisk implements FileSystemInterface
     /**
      * Writes data from a temporary entry.
      *
-     * @param  string $path
-     * @return string
-     *
+     * @param  string                          $path
      * @throws Flysystem\FileNotFoundException
+     * @return string
      */
     public function read($path)
     {
@@ -145,10 +142,9 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @return void
-     *
+     * @param  string                          $path
      * @throws Flysystem\FileNotFoundException
+     * @return void
      */
     public function delete($path)
     {
@@ -158,11 +154,10 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @param  string $contents
-     * @return void
-     *
+     * @param  string                        $path
+     * @param  string                        $contents
      * @throws Flysystem\FileExistsException
+     * @return void
      */
     public function write($path, $contents)
     {
@@ -210,9 +205,8 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @return void
-     *
      * @throws Flysystem\RootViolationException
+     * @return void
      */
     public function clean()
     {
@@ -225,13 +219,12 @@ final class HardDisk implements FileSystemInterface
      * This function does not perform operations in the temporary
      * directory but it caches the results to avoid reprocessing.
      *
-     * @param  string $algorithm
-     * @param  string $sourceFile
-     * @param  bool   $useCache
-     * @return string
-     *
+     * @param  string                          $algorithm
+     * @param  string                          $sourceFile
+     * @param  bool                            $useCache
      * @throws Flysystem\FileExistsException
      * @throws Flysystem\FileNotFoundException
+     * @return string
      */
     public function getHashFile($algorithm, $sourceFile, $useCache = false)
     {

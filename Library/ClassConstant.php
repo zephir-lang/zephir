@@ -122,9 +122,8 @@ class ClassConstant
      *
      * @param CompilationContext $compilationContext
      *
-     * @return void
-     *
      * @throws Exception
+     * @return void
      */
     public function processValue(CompilationContext $compilationContext)
     {
@@ -156,10 +155,9 @@ class ClassConstant
      *
      * @param CompilationContext $compilationContext
      *
-     * @return void
-     *
      * @throws CompilerException
      * @throws Exception
+     * @return void
      */
     public function compile(CompilationContext $compilationContext)
     {

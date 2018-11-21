@@ -29,8 +29,8 @@ class ExplodeOptimizer extends OptimizerAbstract
      * @param  array                         $expression
      * @param  Call                          $call
      * @param  CompilationContext            $context
-     * @return bool|CompiledExpression|mixed
      * @throws CompilerException
+     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

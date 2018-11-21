@@ -749,8 +749,8 @@ class ClassMethod
     /**
      * Returns the C-modifier flags
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public function getModifiers()
     {
@@ -1030,8 +1030,8 @@ class ClassMethod
      *
      * @param  array              $parameter
      * @param  CompilationContext $compilationContext
-     * @return string
      * @throws CompilerException
+     * @return string
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext)
     {
@@ -1363,8 +1363,8 @@ class ClassMethod
      *
      * @param  array              $parameter
      * @param  CompilationContext $compilationContext
-     * @return string
      * @throws CompilerException
+     * @return string
      */
     public function checkStrictType(array $parameter, CompilationContext $compilationContext)
     {
@@ -1392,8 +1392,8 @@ class ClassMethod
      *
      * @param  array              $parameter
      * @param  CompilationContext $compilationContext
-     * @return string
      * @throws CompilerException
+     * @return string
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext)
     {
@@ -1445,8 +1445,8 @@ class ClassMethod
      * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods
      *
      * @param  CompilationContext $compilationContext
-     * @return null
      * @throws CompilerException
+     * @return null
      */
     public function preCompile(CompilationContext $compilationContext)
     {
@@ -1498,8 +1498,8 @@ class ClassMethod
      * Compiles the method
      *
      * @param  CompilationContext $compilationContext
-     * @return null
      * @throws CompilerException
+     * @return null
      */
     public function compile(CompilationContext $compilationContext)
     {

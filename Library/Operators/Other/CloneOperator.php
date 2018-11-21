@@ -27,8 +27,8 @@ class CloneOperator extends BaseOperator
     /**
      * @param  array              $expression
      * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
      * @throws CompilerException
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
