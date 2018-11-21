@@ -25,7 +25,6 @@ use Zephir\StatementsBlock;
  * This pass is used by the function/method caches to explore possible
  * optimizations by implementing inline caches.
  *
- * @package Zephir\Passes
  */
 class CallGathererPass
 {

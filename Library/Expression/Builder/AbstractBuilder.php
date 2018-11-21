@@ -13,7 +13,6 @@ namespace Zephir\Expression\Builder;
 
 /**
  * Class AbstractBuilder
- * @package Zephir\Builder
  */
 abstract class AbstractBuilder
 {

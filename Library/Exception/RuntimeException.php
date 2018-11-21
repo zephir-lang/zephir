@@ -16,7 +16,6 @@ namespace Zephir\Exception;
  *
  * Exception thrown if an error which can only be found on runtime occurs.
  *
- * @package Zephir\Exception
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {

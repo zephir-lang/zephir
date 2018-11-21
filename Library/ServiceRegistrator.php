@@ -20,7 +20,6 @@ use Zephir\Exception\InvalidArgumentException;
 /**
  * Zephir\ServiceRegistrator
  *
- * @package Zephir
  */
 final class ServiceRegistrator implements InjectionAwareInterface
 {

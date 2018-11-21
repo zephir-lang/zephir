@@ -21,7 +21,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  * Call functions. By default functions are called in the PHP userland if an optimizer
  * was not found or there is not a user-handler for it
  *
- * @package Zephir
  */
 class FunctionCall extends Call
 {

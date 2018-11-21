@@ -14,7 +14,6 @@ namespace Zephir\Command;
 /**
  * Zephir\Command\ZflagsAwareInterface
  *
- * @package Zephir\Command
  */
 interface ZflagsAwareInterface
 {

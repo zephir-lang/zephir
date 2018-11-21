@@ -25,7 +25,6 @@ use Zephir\Parser\ParseException;
  *
  * The main compiler.
  *
- * @package Zephir
  */
 class Compiler implements InjectionAwareInterface
 {

@@ -20,7 +20,6 @@ use Zephir\Exception\CompilerException;
  *
  * Represents a class/interface and their properties and methods.
  *
- * @package Zephir
  */
 class ClassDefinition
 {

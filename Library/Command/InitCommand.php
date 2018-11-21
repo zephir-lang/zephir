@@ -23,7 +23,6 @@ use Zephir\BaseBackend;
  *
  * Initializes a Zephir extension.
  *
- * @package Zephir\Command
  */
 class InitCommand extends ContainerAwareCommand
 {

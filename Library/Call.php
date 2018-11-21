@@ -19,7 +19,6 @@ use Zephir\Exception\CompilerException;
  *
  * Base class for common functionality in functions/calls
  *
- * @package Zephir
  */
 class Call
 {

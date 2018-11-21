@@ -69,7 +69,6 @@ use Zephir\Operators\Unary\NotOperator;
  *
  * Represents an expression. Most language constructs in a language are expressions
  *
- * @package Zephir
  */
 class Expression
 {

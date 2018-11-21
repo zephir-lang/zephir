@@ -16,7 +16,6 @@ namespace Zephir\Variable;
  *
  * Represents a central knowledge base on global variables.
  *
- * @package Zephir\Variable
  */
 class Globals
 {

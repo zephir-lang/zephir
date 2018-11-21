@@ -16,7 +16,6 @@ use Psr\Container\ContainerExceptionInterface;
 /**
  * Zephir\Exception\ContainerException
  *
- * @package Zephir\Exception
  */
 class ContainerException extends RuntimeException implements ContainerExceptionInterface
 {

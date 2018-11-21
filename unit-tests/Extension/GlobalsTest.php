@@ -17,7 +17,6 @@ use Zephir\Support\TestCase;
 /**
  * Extension\GlobalsTest
  *
- * @package Extension
  */
 class GlobalsTest extends TestCase
 {

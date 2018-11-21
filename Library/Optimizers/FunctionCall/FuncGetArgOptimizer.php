@@ -23,7 +23,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  *
  * Optimizes calls to 'func_get_arg' using internal function.
  *
- * @package Zephir\Optimizers\FunctionCall
  */
 class FuncGetArgOptimizer extends OptimizerAbstract
 {

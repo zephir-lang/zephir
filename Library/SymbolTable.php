@@ -20,7 +20,6 @@ use Zephir\Variable\Globals;
  *
  * A symbol table stores all the variables defined in a method, their data types and default values.
  *
- * @package Zephir
  */
 class SymbolTable
 {

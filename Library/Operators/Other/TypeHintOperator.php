@@ -20,7 +20,6 @@ use Zephir\Operators\BaseOperator;
 /**
  * Zephir\Operators\Other\TypeHintOperator
  *
- * @package Zephir\Operators\Other
  */
 class TypeHintOperator extends BaseOperator
 {

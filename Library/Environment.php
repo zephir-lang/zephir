@@ -19,7 +19,6 @@ use Zephir\Exception\InvalidArgumentException;
 /**
  * Zephir\Environment
  *
- * @package Zephir
  */
 final class Environment implements InjectionAwareInterface
 {

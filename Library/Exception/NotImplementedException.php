@@ -18,7 +18,6 @@ namespace Zephir\Exception;
  * Represents the case where the author has yet to implement
  * the logic at this point in the program.
  *
- * @package Zephir\Exception
  */
 class NotImplementedException extends RuntimeException
 {

@@ -21,7 +21,6 @@ use Zephir\Expression\Builder\Operators\UnaryOperator;
 
 /**
  * Class OperatorsFactory
- * @package Zephir\Expression\Builder
  */
 class OperatorsFactory
 {

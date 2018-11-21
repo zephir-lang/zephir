@@ -14,7 +14,6 @@ namespace Zephir\Command;
 /**
  * Zephir\Command\ZflagsAwareTrait
  *
- * @package Zephir\Command
  */
 trait ZflagsAwareTrait
 {

@@ -16,7 +16,6 @@ namespace Zephir;
  *
  * Manages compiler global configuration.
  *
- * @package Zephir
  */
 class Config implements \ArrayAccess, \JsonSerializable
 {

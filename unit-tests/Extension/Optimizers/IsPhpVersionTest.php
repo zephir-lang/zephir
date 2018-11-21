@@ -18,7 +18,6 @@ use Zephir\Support\TestCase;
  * Extension\Optimizers\IsPhpVersionTest
  *
  * @issue https://github.com/phalcon/zephir/issues/1404
- * @package Extension\Optimizers
  */
 class IsPhpVersionTest extends TestCase
 {
