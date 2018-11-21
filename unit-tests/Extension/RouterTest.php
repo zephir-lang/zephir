@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -173,13 +173,13 @@ class RouterTest extends TestCase
             'action' => 'route'
         ]);
 
-        $router->add("/feed/{lang:[a-z]+}/blog/{blog:[a-z\-]+}\.{type:[a-z\-]+}", "Feed::get");
+        $router->add("/feed/{lang:[a-z]+}/blog/{blog:[a-z\-]+}\.{type:[a-z\-]+}", 'Feed::get');
 
-        $router->add("/posts/{year:[0-9]+}/s/{title:[a-z\-]+}", "Posts::show");
+        $router->add("/posts/{year:[0-9]+}/s/{title:[a-z\-]+}", 'Posts::show');
 
-        $router->add("/posts/delete/{id}", "Posts::delete");
+        $router->add('/posts/delete/{id}', 'Posts::delete');
 
-        $router->add("/show/{id:video([0-9]+)}/{title:[a-z\-]+}", "Videos::show");
+        $router->add("/show/{id:video([0-9]+)}/{title:[a-z\-]+}", 'Videos::show');
 
         foreach ($tests as $n => $test) {
             $router->handle($test['uri']);

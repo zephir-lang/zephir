@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -46,6 +46,9 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelize
+     * @param mixed $actual
+     * @param mixed $expected
+     * @param mixed $delimiter
      */
     public function testCamelize($actual, $expected, $delimiter)
     {
@@ -58,6 +61,7 @@ class StringTest extends TestCase
      * @dataProvider providerCamelizeWrongSecondParam
      * @expectedException \PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage The second argument passed to the camelize() must be a string containing at least one character
+     * @param mixed $delimiter
      */
     public function testCamelizeWrongSecondParam($delimiter)
     {
@@ -68,6 +72,9 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerUnCamelize
+     * @param mixed $actual
+     * @param mixed $expected
+     * @param mixed $delimiter
      */
     public function testUnCamelize($actual, $expected, $delimiter)
     {
@@ -80,6 +87,7 @@ class StringTest extends TestCase
      * @dataProvider providerCamelizeWrongSecondParam
      * @expectedException \PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
+     * @param mixed $delimiter
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
     {
@@ -133,7 +141,7 @@ class StringTest extends TestCase
     {
         $t = new \Test\Strings();
 
-        $pieces = array('a', 'b', 'c');
+        $pieces = ['a', 'b', 'c'];
         $this->assertSame($t->testImplode(',', $pieces), 'a,b,c');
     }
 
@@ -141,7 +149,7 @@ class StringTest extends TestCase
     {
         $t = new \Test\Strings();
 
-        $pizza  = "piece1,piece2,piece3,piece4,piece5,piece6";
+        $pizza  = 'piece1,piece2,piece3,piece4,piece5,piece6';
         $ar1 = $t->testExplode(',', $pizza);
         $ar2 = $t->testExplodeStr($pizza);
 
@@ -226,7 +234,7 @@ class StringTest extends TestCase
     public function testStrToHex()
     {
         $t = new \Test\Strings();
-        $this->assertSame('746573742073656e74656e73652e2e2e', $t->strToHex("test sentense..."));
+        $this->assertSame('746573742073656e74656e73652e2e2e', $t->strToHex('test sentense...'));
     }
 
     public function providerHashEquals()
@@ -263,40 +271,40 @@ class StringTest extends TestCase
     public function providerCamelize()
     {
         return [
-            ["=_camelize",      '=Camelize', "_" ],
-            ["camelize",        'Camelize',  "_" ],
-            ["came_li_ze",      'CameLiZe',  "_" ],
-            ["came_li_ze",      'CameLiZe',  null],
-            ["came#li#ze",      'CameLiZe',  "#" ],
-            ["came li ze",      'CameLiZe',  " " ],
-            ["came.li^ze",      'CameLiZe',  ".^"],
-            ["c_a-m_e-l_i-z_e", 'CAMELIZE',  "-_"],
-            ["c_a-m_e-l_i-z_e", 'CAMELIZE',  null],
-            ["came.li.ze",      'CameLiZe',  "." ],
-            ["came-li-ze",      'CameLiZe',  "-" ],
-            ["c+a+m+e+l+i+z+e", 'CAMELIZE',  "+" ],
+            ['=_camelize',      '=Camelize', '_' ],
+            ['camelize',        'Camelize',  '_' ],
+            ['came_li_ze',      'CameLiZe',  '_' ],
+            ['came_li_ze',      'CameLiZe',  null],
+            ['came#li#ze',      'CameLiZe',  '#' ],
+            ['came li ze',      'CameLiZe',  ' ' ],
+            ['came.li^ze',      'CameLiZe',  '.^'],
+            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  '-_'],
+            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  null],
+            ['came.li.ze',      'CameLiZe',  '.' ],
+            ['came-li-ze',      'CameLiZe',  '-' ],
+            ['c+a+m+e+l+i+z+e', 'CAMELIZE',  '+' ],
         ];
     }
 
     public function providerUnCamelize()
     {
         return [
-            ["=Camelize", '=_camelize',      "_" ],
-            ["Camelize",  'camelize',        "_" ],
-            ["Camelize",  'camelize',        null],
-            ["CameLiZe",  'came_li_ze',      "_" ],
-            ["CameLiZe",  'came#li#ze',      "#" ],
-            ["CameLiZe",  'came li ze',      " " ],
-            ["CameLiZe",  'came.li.ze',      "." ],
-            ["CameLiZe",  'came-li-ze',      "-" ],
-            ["CAMELIZE",  'c/a/m/e/l/i/z/e', "/" ],
+            ['=Camelize', '=_camelize',      '_' ],
+            ['Camelize',  'camelize',        '_' ],
+            ['Camelize',  'camelize',        null],
+            ['CameLiZe',  'came_li_ze',      '_' ],
+            ['CameLiZe',  'came#li#ze',      '#' ],
+            ['CameLiZe',  'came li ze',      ' ' ],
+            ['CameLiZe',  'came.li.ze',      '.' ],
+            ['CameLiZe',  'came-li-ze',      '-' ],
+            ['CAMELIZE',  'c/a/m/e/l/i/z/e', '/' ],
         ];
     }
 
     public function providerCamelizeWrongSecondParam()
     {
         return [
-            [""                         ],
+            [''                         ],
             [true                       ],
             [false                      ],
             [1                          ],
@@ -304,7 +312,7 @@ class StringTest extends TestCase
             [[]                         ],
             [
                 function () {
-                    return "-";
+                    return '-';
                 }
             ],
             [new \stdClass              ],

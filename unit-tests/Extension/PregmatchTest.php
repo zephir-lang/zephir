@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -20,7 +20,7 @@ class PregmatchTest extends TestCase
     {
         $t = new Pregmatch();
         $this->assertSame(1, $t->testWithoutReturnAndMatches());
-        $this->assertSame(array('def'), $t->testWithoutReturns());
+        $this->assertSame(['def'], $t->testWithoutReturns());
         $this->assertSame(1, $t->testWithoutMatches());
         $this->assertSame(1, $t->testPregMatchAll());
         $this->assertSame(1, $t->testPregMatchFallback());
@@ -36,7 +36,7 @@ class PregmatchTest extends TestCase
             $string = 'Hello, world. [*], this is \ a string';
             $match1 = null;
             $this->assertSame(1, $t->testPregMatch3Params('/^[hH]ello,\s/', $string, $match1)); //finds "Hello, "
-            $this->assertSame("Hello, ", $match1[0]);
+            $this->assertSame('Hello, ', $match1[0]);
 
             $match2 = null;
             $this->assertSame(0, $t->testPregMatch4Params('/l^o,\s\w{5}/', $string, $match2, PREG_OFFSET_CAPTURE)); // tries to find "lo, world" at start of string
@@ -59,11 +59,11 @@ class PregmatchTest extends TestCase
 
             $string2 = "My\nName\nIs\nStrange";
             $match6 = null;
-            $this->assertSame(1, $t->testPregMatch3Params("/M(.*)/", $string2, $match6));
+            $this->assertSame(1, $t->testPregMatch3Params('/M(.*)/', $string2, $match6));
             $this->assertCount(2, $match6);
         }
 
-        $this->assertSame(1, $t->testPregMatch2Params("#asd#", "asd"));
+        $this->assertSame(1, $t->testPregMatch2Params('#asd#', 'asd'));
     }
 
     /**
@@ -72,7 +72,7 @@ class PregmatchTest extends TestCase
     public function testCollectMatches()
     {
         $t = new Pregmatch;
-        $this->assertSame(array('asd'), $t->testPregMatchSaveMatches("asd", "#asd#"));
+        $this->assertSame(['asd'], $t->testPregMatchSaveMatches('asd', '#asd#'));
     }
 
     /**
@@ -82,7 +82,7 @@ class PregmatchTest extends TestCase
     {
         $t = new Pregmatch;
         $arr = $t->testMatchAllInZep();
-        $this->assertSame($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
-        $this->assertSame($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
+        $this->assertSame($arr[0], [['test1', 'test2'], ['test1', 'test2']]);
+        $this->assertSame($arr[1], [['test1', 'test1'], ['test2', 'test2']]);
     }
 }

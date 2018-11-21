@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -40,7 +40,7 @@ class IsPhpVersionTest extends TestCase
     /**
      * {@inheritdoc}
      *
-     * @param  \Exception|\Throwable $error
+     * @param \Exception|\Throwable $error
      *
      * @throws \Exception|\Throwable
      */
@@ -78,6 +78,8 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider phpVersionProvider
+     * @param mixed $version
+     * @param mixed $expected
      */
     public function testOptimizer($version, $expected)
     {
@@ -125,7 +127,7 @@ class IsPhpVersionTest extends TestCase
     {
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
         if (!count($matches)) {
-            throw new \Exception("Could not parse PHP version");
+            throw new \Exception('Could not parse PHP version');
         }
 
         $majorVersion   = 0;
@@ -187,7 +189,7 @@ class IsPhpVersionTest extends TestCase
     public function testZephirUsingString70000()
     {
         $actual   = $this->test->testIsPhpVersionUsingString70000();
-        $expected = $this->isPhpVersion("7");
+        $expected = $this->isPhpVersion('7');
 
         $this->assertEquals($expected, $actual);
     }
@@ -205,6 +207,8 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider releaseVersionProvider
+     * @param mixed $testName
+     * @param mixed $version
      */
     public function testIsPhpVersionVersionUsing701XX($testName, $version)
     {
@@ -227,6 +231,8 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider minorVersionProvider
+     * @param mixed $testName
+     * @param mixed $version
      */
     public function testIsPhpVersionVersionUsing70X00($testName, $version)
     {
@@ -239,7 +245,7 @@ class IsPhpVersionTest extends TestCase
     public function testZephirUsingString50000()
     {
         $actual   = $this->test->testIsPhpVersionUsing50000();
-        $expected = $this->isPhpVersion("5");
+        $expected = $this->isPhpVersion('5');
 
         $this->assertEquals($expected, $actual);
     }
@@ -247,7 +253,7 @@ class IsPhpVersionTest extends TestCase
     public function testZephirUsingString50500()
     {
         $actual   = $this->test->testIsPhpVersionUsing50500();
-        $expected = $this->isPhpVersion("5.5");
+        $expected = $this->isPhpVersion('5.5');
 
         $this->assertEquals($expected, $actual);
     }
@@ -255,7 +261,7 @@ class IsPhpVersionTest extends TestCase
     public function testZephirUsingString50600()
     {
         $actual   = $this->test->testIsPhpVersionUsing50600();
-        $expected = $this->isPhpVersion("5.6");
+        $expected = $this->isPhpVersion('5.6');
 
         $this->assertEquals($expected, $actual);
     }

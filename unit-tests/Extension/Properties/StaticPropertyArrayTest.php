@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,7 +18,7 @@ class StaticPropertyArrayTest extends TestCase
 {
     public function testAssertations()
     {
-        $this->assertSame(array(), StaticPropertyArray::$someEmptyArray);
-        $this->assertSame(array(1, 2, 3, 4), StaticPropertyArray::$someArray);
+        $this->assertSame([], StaticPropertyArray::$someEmptyArray);
+        $this->assertSame([1, 2, 3, 4], StaticPropertyArray::$someArray);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -103,11 +103,11 @@ class FcallTest extends TestCase
 
     public function testFunctionDeclaration()
     {
-        $this->assertSame("aaaaa", \Test\zephir_namespaced_method_test("a"));
+        $this->assertSame('aaaaa', \Test\zephir_namespaced_method_test('a'));
         $this->assertTrue(\Test\test_call_relative_object_hint(new PropertyAccess()));
         $this->assertTrue(\Test\test_call_object_hint(new PropertyAccess()));
 
-        $this->assertSame("ab", zephir_global_method_test("ab/c"));
+        $this->assertSame('ab', zephir_global_method_test('ab/c'));
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));
         $this->assertInstanceOf(\stdClass::class, \zephir_global_method_with_type_casting(new \stdClass()));

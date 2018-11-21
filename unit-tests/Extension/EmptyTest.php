@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -23,7 +23,7 @@ class EmptyTest extends TestCase
         $this->assertFalse($t->testDynamicVarArrayNotEmpty());
         $this->assertTrue($t->testEmptyString());
         $this->assertFalse($t->testNotEmptyString());
-        $this->assertTrue($t->testString(""));
+        $this->assertTrue($t->testString(''));
         $this->assertFalse($t->testString('this is a string'));
         $this->assertTrue($t->testString('0'));
     }

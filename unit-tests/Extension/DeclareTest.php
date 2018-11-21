@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,6 +18,6 @@ class DeclareTest extends TestCase
     public function testDeclareMcallExpression()
     {
         $t = new \Test\DeclareTest();
-        $this->assertSame($t->testDeclareMcallExpression(), "hello");
+        $this->assertSame($t->testDeclareMcallExpression(), 'hello');
     }
 }

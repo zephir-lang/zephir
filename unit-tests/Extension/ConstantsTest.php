@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -51,8 +51,8 @@ class ConstantsTest extends TestCase
         $this->assertTrue($this->test->getPropertyC3());
         $this->assertSame($this->test->getPropertyC4(), 10);
         $this->assertSame($this->test->getPropertyC5(), 10.25);
-        $this->assertSame($this->test->getPropertyC6(), "test");
-        $this->assertSame($this->test->getPropertyC9(), "some-value");
+        $this->assertSame($this->test->getPropertyC6(), 'test');
+        $this->assertSame($this->test->getPropertyC9(), 'some-value');
     }
 
     public function testConstantsRead()

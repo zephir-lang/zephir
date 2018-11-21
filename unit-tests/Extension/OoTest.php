@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -26,13 +26,13 @@ class OoTest extends TestCase
 
         $obj4 = $t->testInstance4();
         $this->assertTrue(is_object($obj4));
-        $this->assertSame($obj4->getA(), "a");
-        $this->assertSame($obj4->getB(), "b");
+        $this->assertSame($obj4->getA(), 'a');
+        $this->assertSame($obj4->getB(), 'b');
 
         $obj5 = $t->testInstance5();
         $this->assertTrue(is_object($obj5));
-        $this->assertSame($obj5->getA(), "a");
-        $this->assertSame($obj5->getB(), "b");
+        $this->assertSame($obj5->getA(), 'a');
+        $this->assertSame($obj5->getB(), 'b');
 
         $obj6 = $t->testInstance6();
         $this->assertTrue(is_object($obj6));
@@ -75,7 +75,7 @@ class OoTest extends TestCase
         $test = new Oo();
 
         $this->assertEquals(
-            ["A", "AA", "B", "BB"],
+            ['A', 'AA', 'B', 'BB'],
             $test->createInstancesInLoop()
         );
     }

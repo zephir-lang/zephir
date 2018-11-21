@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -34,10 +34,10 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
 
         $tester = new Child();
-        $tester->test = "Some session data here";
+        $tester->test = 'Some session data here';
 
         $this->assertArrayHasKey('test', $_SESSION);
-        $this->assertContains("Some session data here", $_SESSION['test']);
+        $this->assertContains('Some session data here', $_SESSION['test']);
 
         $result = $tester->destroy();
 

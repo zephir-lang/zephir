@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -146,8 +146,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParamWithDefaultEmptyArray(), array());
-        $this->assertSame($t->arrayParamWithDefaultEmptyArray(array(1)), array(1));
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray(), []);
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray([1]), [1]);
     }
 
     /**
@@ -161,8 +161,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParamWithDefaultNullValue(), array());
-        $this->assertSame($t->arrayParamWithDefaultNullValue(array(1)), array(1));
+        $this->assertSame($t->arrayParamWithDefaultNullValue(), []);
+        $this->assertSame($t->arrayParamWithDefaultNullValue([1]), [1]);
     }
 
     /**
@@ -176,8 +176,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParam(array()), array());
-        $this->assertSame($t->arrayParam(array(1, 2, 3)), array(1, 2, 3));
+        $this->assertSame($t->arrayParam([]), []);
+        $this->assertSame($t->arrayParam([1, 2, 3]), [1, 2, 3]);
     }
 
     /**

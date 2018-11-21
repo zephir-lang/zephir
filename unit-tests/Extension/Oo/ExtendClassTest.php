@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -44,7 +44,7 @@ class ExtendClassTest extends TestCase
     public function shouldExtendMiddlewareInterface()
     {
         if (!extension_loaded('psr')) {
-            $this->markTestSkipped("The psr extension is not loaded");
+            $this->markTestSkipped('The psr extension is not loaded');
         }
 
         $this->assertTrue(

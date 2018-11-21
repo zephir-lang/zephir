@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,8 +14,8 @@ namespace Zephir\Test\Command;
 use League\Container\Container;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tester\CommandTester;
 use Zephir\Application;
 use Zephir\Command\CompileCommand;
 use Zephir\Di\Singleton;

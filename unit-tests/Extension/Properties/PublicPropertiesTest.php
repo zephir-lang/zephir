@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -30,7 +30,7 @@ class PublicPropertiesTest extends TestCase
         $this->assertSame($t->someString, 'test');
 
         $this->assertInternalType('array', $t->someEmptyArray);
-        $this->assertSame(array(1, 2, 3, 4), $t->someArray);
+        $this->assertSame([1, 2, 3, 4], $t->someArray);
     }
 
     public function test394Issue()
@@ -45,6 +45,6 @@ class PublicPropertiesTest extends TestCase
     public function test537Issue()
     {
         $t = new ExtendsPublicProperties();
-        $this->assertSame($t->getSomeGetterSetterArray(), array('holy'));
+        $this->assertSame($t->getSomeGetterSetterArray(), ['holy']);
     }
 }

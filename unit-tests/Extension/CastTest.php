@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -51,11 +51,11 @@ class CastTest extends TestCase
         $this->assertSame(0, $this->test->testIntCastFromVariableNull());
 
         $this->assertSame(0, $this->test->testIntCastFromVariableString());
-        $this->assertSame((int) "test", $this->test->testIntCastFromParameterString("test"));
-        $this->assertSame((int) "1", $this->test->testIntCastFromParameterString("1"));
-        $this->assertSame((int) "12345", $this->test->testIntCastFromParameterString("12345"));
-        $this->assertSame((int) "-1", $this->test->testIntCastFromParameterString("-1"));
-        $this->assertSame((int) "+5", $this->test->testIntCastFromParameterString("+5"));
+        $this->assertSame((int) 'test', $this->test->testIntCastFromParameterString('test'));
+        $this->assertSame((int) '1', $this->test->testIntCastFromParameterString('1'));
+        $this->assertSame((int) '12345', $this->test->testIntCastFromParameterString('12345'));
+        $this->assertSame((int) '-1', $this->test->testIntCastFromParameterString('-1'));
+        $this->assertSame((int) '+5', $this->test->testIntCastFromParameterString('+5'));
 
         $this->assertSame(0, $this->test->testIntCastFromVariableEmptyArray());
         $this->assertSame(1, $this->test->testIntCastFromVariableArray());
@@ -99,10 +99,10 @@ class CastTest extends TestCase
         $this->assertEquals((object) false, $this->test->testObjectCastFromFalse());
         $this->assertEquals((object) true, $this->test->testObjectCastFromTrue());
         $this->assertEquals((object) null, $this->test->testObjectCastFromNull());
-        $this->assertEquals((object) array(), $this->test->testObjectCastFromEmptyArray());
-        $this->assertEquals((object) array(1, 2, 3, 4), $this->test->testObjectCastFromArray());
-        $this->assertEquals((object) "", $this->test->testObjectCastFromEmptyString());
-        $this->assertEquals((object) "test string", $this->test->testObjectCastFromString());
+        $this->assertEquals((object) [], $this->test->testObjectCastFromEmptyArray());
+        $this->assertEquals((object) [1, 2, 3, 4], $this->test->testObjectCastFromArray());
+        $this->assertEquals((object) '', $this->test->testObjectCastFromEmptyString());
+        $this->assertEquals((object) 'test string', $this->test->testObjectCastFromString());
     }
 
     /**
@@ -116,7 +116,7 @@ class CastTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             $this->markTestSkipped(
-                "Cast Resource to integer not implemented for ZendEngine 2."
+                'Cast Resource to integer not implemented for ZendEngine 2.'
             );
         }
 

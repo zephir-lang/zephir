@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -38,15 +38,15 @@ class InstanceOffTest extends TestCase
     {
         $t = new InstanceOff();
 
-        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator(array())));
+        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator([])));
         $this->assertTrue($t->testInstanceOf4(new \ArrayObject()));
 
         $this->assertFalse($t->testInstanceOf4(1));
         $this->assertFalse($t->testInstanceOf4(1.25));
         $this->assertFalse($t->testInstanceOf4(true));
         $this->assertFalse($t->testInstanceOf4(false));
-        $this->assertFalse($t->testInstanceOf4("test"));
-        $this->assertFalse($t->testInstanceOf4(array()));
+        $this->assertFalse($t->testInstanceOf4('test'));
+        $this->assertFalse($t->testInstanceOf4([]));
         $this->assertFalse($t->testInstanceOf4(new \StdClass));
     }
 

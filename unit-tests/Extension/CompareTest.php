@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -62,7 +62,6 @@ class CompareTest extends TestCase
         $this->assertTrue($t->testNullEqualsVar(null));
         $this->assertFalse($t->testNullEqualsVar(1));
     }
-
 
     public function testNotEquals()
     {
