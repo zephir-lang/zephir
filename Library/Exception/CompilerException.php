@@ -23,9 +23,9 @@ class CompilerException extends RuntimeException
     /**
      * CompilerException constructor.
      *
-     * @param string $message The Exception message to throw [optional].
-     * @param array|null $extra Extra info [optional].
-     * @param int $code The Exception code [optional].
+     * @param string                $message  The Exception message to throw [optional].
+     * @param array|null            $extra    Extra info [optional].
+     * @param int                   $code     The Exception code [optional].
      * @param \Throwable|\Exception $previous The previous throwable used for the exception chaining [optional].
      */
     public function __construct($message = '', $extra = null, $code = 0, $previous = null)

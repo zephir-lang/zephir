@@ -197,10 +197,10 @@ class Backend extends BaseBackend
     /**
      * Checks the type of a variable using the ZendEngine constants
      *
-     * @param Variable $variableVariable
-     * @param string $operator
-     * @param string $value
-     * @param CompilationContext $context
+     * @param  Variable           $variableVariable
+     * @param  string             $operator
+     * @param  string             $value
+     * @param  CompilationContext $context
      * @return string
      *
      * @throws CompilerException

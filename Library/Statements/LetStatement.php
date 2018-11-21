@@ -44,7 +44,7 @@ use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 class LetStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
+     * @param  CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

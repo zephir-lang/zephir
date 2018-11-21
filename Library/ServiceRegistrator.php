@@ -165,7 +165,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Instantiate a service provider.
      *
-     * @param  string $serviceProvider
+     * @param  string                          $serviceProvider
      * @return object|ServiceProviderInterface
      */
     public function instantiateProvider($serviceProvider)

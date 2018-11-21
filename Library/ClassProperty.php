@@ -41,11 +41,11 @@ class ClassProperty
     /**
      *
      * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param string $name
-     * @param mixed $defaultValue
-     * @param string $docBlock
-     * @param array $original
+     * @param array           $visibility
+     * @param string          $name
+     * @param mixed           $defaultValue
+     * @param string          $docBlock
+     * @param array           $original
      */
     public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
     {
@@ -119,9 +119,9 @@ class ClassProperty
     /**
      * Checks for visibility congruence
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $name
-     * @param array $original
+     * @param array  $original
      *
      * @throws CompilerException
      */
@@ -293,7 +293,7 @@ class ClassProperty
     /**
      * Produce the code to register a property
      *
-     * @param CompilationContext $compilationContext
+     * @param  CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
@@ -411,7 +411,7 @@ class ClassProperty
      * Declare class property with default value
      *
      * @param CompilationContext $compilationContext
-     * @param string $type
+     * @param string             $type
      * @param $value
      * @throws CompilerException
      */

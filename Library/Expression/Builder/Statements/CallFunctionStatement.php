@@ -41,8 +41,8 @@ class CallFunctionStatement extends AbstractStatement
 
     /**
      * @param string|null $name
-     * @param array|null $parameters
-     * @param int $typeCall
+     * @param array|null  $parameters
+     * @param int         $typeCall
      */
     public function __construct($name = null, array $parameters = null, $typeCall = self::TYPE_CALL_DIRECT)
     {
@@ -68,7 +68,7 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
@@ -86,7 +86,7 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @param array $arguments
+     * @param  array $arguments
      * @return $this
      */
     public function setArguments(array $arguments = null)
@@ -104,7 +104,7 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @param int $typeCall
+     * @param  int   $typeCall
      * @return $this
      */
     public function setTypeCall($typeCall)

@@ -88,7 +88,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param  Command $command
+     * @param  Command      $command
      * @return Command|null
      */
     public function add(Command $command)
@@ -134,7 +134,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param  InputInterface $input
+     * @param  InputInterface  $input
      * @param  OutputInterface $output
      * @return int
      *
@@ -158,7 +158,7 @@ final class Application extends BaseApplication
      * @deprecated
      *
      * @param  \Exception $exception
-     * @param  Config     $config Current config object [optional].
+     * @param  Config     $config    Current config object [optional].
      * @return string
      */
     protected function formatErrorMessage(\Exception $exception, Config $config = null)

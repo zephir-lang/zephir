@@ -122,9 +122,9 @@ function add_slashes($string)
 /**
  * Transform class/interface name to FQN format
  *
- * @param string       $className
- * @param string       $currentNamespace
- * @param AliasManager $aliasManager
+ * @param  string       $className
+ * @param  string       $currentNamespace
+ * @param  AliasManager $aliasManager
  * @return string
  */
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)

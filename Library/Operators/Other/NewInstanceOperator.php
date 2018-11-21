@@ -32,7 +32,7 @@ class NewInstanceOperator extends BaseOperator
      * Creates a new instance
      *
      * @param $expression
-     * @param CompilationContext $compilationContext
+     * @param  CompilationContext $compilationContext
      * @return CompiledExpression
      * @throws CompilerException
      */

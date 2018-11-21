@@ -23,8 +23,8 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
     /**
      * @param $left
      * @param null $file
-     * @param int $line
-     * @param int $char
+     * @param int  $line
+     * @param int  $char
      */
     public function __construct($left, $file = null, $line = 0, $char = 0)
     {

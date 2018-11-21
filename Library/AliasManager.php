@@ -41,7 +41,7 @@ class AliasManager
     /**
      * Checks if a class name is an existing alias
      *
-     * @param string $alias
+     * @param  string  $alias
      * @return boolean
      */
     public function isAlias($alias)
@@ -52,7 +52,7 @@ class AliasManager
     /**
      * Returns the class name according to an existing alias
      *
-     * @param string $alias
+     * @param  string $alias
      * @return string
      */
     public function getAlias($alias)

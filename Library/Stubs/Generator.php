@@ -47,7 +47,7 @@ class Generator
 
     /**
      * @param CompilerFile[] $files
-     * @param Config $config
+     * @param Config         $config
      */
     public function __construct(array $files, Config $config)
     {
@@ -95,8 +95,8 @@ class Generator
     /**
      * Build class
      *
-     * @param ClassDefinition $class
-     * @param string $indent
+     * @param  ClassDefinition $class
+     * @param  string          $indent
      * @return string
      */
     protected function buildClass(ClassDefinition $class, $indent)
@@ -163,8 +163,8 @@ EOF;
     /**
      * Build property
      *
-     * @param ClassProperty $property
-     * @param string $indent
+     * @param  ClassProperty $property
+     * @param  string        $indent
      * @return string
      */
     protected function buildProperty(ClassProperty $property, $indent)
@@ -194,7 +194,7 @@ EOF;
 
     /**
      * @param ClassConstant $constant
-     * @param string $indent
+     * @param string        $indent
      *
      * @return string
      */
@@ -212,8 +212,8 @@ EOF;
 
     /**
      * @param ClassMethod $method
-     * @param bool $isInterface
-     * @param string $indent
+     * @param bool        $isInterface
+     * @param string      $indent
      *
      * @return string
      */

@@ -62,7 +62,7 @@ class StatementsBlock
     /**
      * Sets whether the statements blocks belongs to a loop
      *
-     * @param boolean $loop
+     * @param  boolean         $loop
      * @return StatementsBlock
      */
     public function isLoop($loop)
@@ -72,9 +72,9 @@ class StatementsBlock
     }
 
     /**
-     * @param CompilationContext $compilationContext
-     * @param boolean $unreachable
-     * @param int $branchType
+     * @param  CompilationContext $compilationContext
+     * @param  boolean            $unreachable
+     * @param  int                $branchType
      * @return Branch
      */
     public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN)
@@ -380,7 +380,7 @@ class StatementsBlock
     /**
      * Create/Returns a mutate gatherer pass for this block
      *
-     * @param boolean $pass
+     * @param  boolean            $pass
      * @return MutateGathererPass
      */
     public function getMutateGatherer($pass = false)

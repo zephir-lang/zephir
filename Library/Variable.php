@@ -372,7 +372,7 @@ class Variable implements TypeAwareInterface
      * Sets the latest node where a variable was used
      *
      * @param boolean $used
-     * @param array $node
+     * @param array   $node
      */
     public function setUsed($used, $node)
     {
@@ -545,7 +545,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable has any of the passed dynamic
      *
-     * @param mixed $types
+     * @param  mixed $types
      * @return bool
      */
     public function hasAnyDynamicType($types)
@@ -565,7 +565,7 @@ class Variable implements TypeAwareInterface
     /**
      * Check if the variable has at least one dynamic type to the ones passed in the list
      *
-     * @param array|string $types
+     * @param  array|string $types
      * @return bool
      */
     public function hasDifferentDynamicType($types)
@@ -619,7 +619,7 @@ class Variable implements TypeAwareInterface
      * Sets if the variable is initialized
      * This allow to throw an exception if the variable is being read without prior initialization
      *
-     * @param boolean $initialized
+     * @param boolean            $initialized
      * @param CompilationContext $compilationContext
      */
     public function setIsInitialized($initialized, CompilationContext $compilationContext)

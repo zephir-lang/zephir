@@ -99,8 +99,8 @@ class InitCommand extends ContainerAwareCommand
     /**
      * Copies the base kernel to the extension destination.
      *
-     * @param        $src
-     * @param        $dst
+     * @param $src
+     * @param $dst
      * @param string $pattern
      * @param mixed  $callback
      *

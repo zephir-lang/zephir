@@ -39,8 +39,8 @@ class WriteDetector
     /**
      * Do the detection pass on a single variable
      *
-     * @param string $variable
-     * @param array $statements
+     * @param  string  $variable
+     * @param  array   $statements
      * @return boolean
      */
     public function detect($variable, array $statements)
@@ -62,7 +62,7 @@ class WriteDetector
     /**
      * Increase the number of mutations a variable has inside a statement block
      *
-     * @param string $variable
+     * @param  string              $variable
      * @return ForValueUseDetector
      */
     public function increaseMutations($variable)
@@ -78,7 +78,7 @@ class WriteDetector
     /**
      * Returns the number of assignment instructions that mutated a variable
      *
-     * @param string $variable
+     * @param  string $variable
      * @return int
      */
     public function getNumberOfMutations($variable)

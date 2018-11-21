@@ -162,7 +162,7 @@ class Documentation implements InjectionAwareInterface
      *  => if not ; check if config config[api][path] was given
      *
      *
-     * @param  string $outputDir
+     * @param  string      $outputDir
      * @return null|string
      */
     private function findOutputDirectory($outputDir)
@@ -240,7 +240,7 @@ class Documentation implements InjectionAwareInterface
      *
      * Return the path to it if it exists. Otherwise NULL.
      *
-     * @param  string $name
+     * @param  string      $name
      * @return string|null
      */
     public function findThemePathByName($name)

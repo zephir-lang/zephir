@@ -25,10 +25,10 @@ class Decr
     /**
      * Compiles x--
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */

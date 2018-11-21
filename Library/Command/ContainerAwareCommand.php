@@ -31,8 +31,8 @@ abstract class ContainerAwareCommand extends Command implements InjectionAwareIn
     /**
      * {@inheritdoc}
      *
-     * @param  ContainerInterface|null $container
-     * @param  string|null             $name
+     * @param ContainerInterface|null $container
+     * @param string|null             $name
      *
      * @throws LogicException
      */

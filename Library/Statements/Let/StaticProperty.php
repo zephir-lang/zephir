@@ -28,8 +28,8 @@ class StaticProperty
     /**
      * Compiles ClassName::foo = {expr}
      *
-     * @param                    $className
-     * @param                    $property
+     * @param $className
+     * @param $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array              $statement

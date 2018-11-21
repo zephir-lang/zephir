@@ -30,7 +30,7 @@ class SkipVariantInit
     /**
      * Do the compilation pass
      *
-     * @param int $branchNumber
+     * @param int             $branchNumber
      * @param StatementsBlock $block
      */
     public function pass($branchNumber, StatementsBlock $block)
@@ -42,7 +42,7 @@ class SkipVariantInit
     /**
      * Check assignment types for possible skip
      *
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $statement
      */
     public function passLetStatement($branchNumber, $statement)
@@ -113,7 +113,7 @@ class SkipVariantInit
     }
 
     /**
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $variablesToSkip
      */
     public function setVariablesToSkip($branchNumber, $variablesToSkip)

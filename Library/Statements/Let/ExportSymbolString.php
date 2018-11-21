@@ -26,11 +26,11 @@ class ExportSymbolString
     /**
      * Compiles {"var"} = {expr}
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext,
-     * @param array $statement
+     * @param array              $statement
      */
     public function assign($variable, ZephirVariable $symbolVariable = null, CompiledExpression $resolvedExpr = null, CompilationContext $compilationContext = null, $statement = null)
     {

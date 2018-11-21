@@ -27,11 +27,11 @@ class ArrayIndexAppend extends ArrayIndex
     /**
      * Compiles foo[y][x][] = {expr} (multiple offset)
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
@@ -71,11 +71,11 @@ class ArrayIndexAppend extends ArrayIndex
     /**
      * Compiles foo[y][] = {expr}
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param  string             $variable
+     * @param  ZephirVariable     $symbolVariable
+     * @param  CompiledExpression $resolvedExpr
+     * @param  CompilationContext $compilationContext
+     * @param  array              $statement
      * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

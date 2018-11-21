@@ -27,9 +27,9 @@ class TrimOptimizer extends OptimizerAbstract
     protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
 
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
+     * @param  array                         $expression
+     * @param  Call                          $call
+     * @param  CompilationContext            $context
      * @return bool|CompiledExpression|mixed
      * @throws CompilerException
      */

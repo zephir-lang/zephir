@@ -171,8 +171,8 @@ class PregMatchOptimizer extends OptimizerAbstract
      *
      *     preg_match(pattern, subject, matches)
      *
-     * @param  array              $expression
-     * @param  CompilationContext $context
+     * @param array              $expression
+     * @param CompilationContext $context
      *
      * @return Variable
      */

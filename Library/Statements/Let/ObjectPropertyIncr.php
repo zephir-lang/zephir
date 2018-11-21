@@ -25,11 +25,11 @@ class ObjectPropertyIncr
     /**
      * Compiles obj->x++
      *
-     * @param string $variable
-     * @param string $property
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param string             $property
+     * @param ZephirVariable     $symbolVariable
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      */
     public function assign($variable, $property, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
     {

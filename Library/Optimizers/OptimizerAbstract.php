@@ -26,9 +26,9 @@ abstract class OptimizerAbstract implements InjectionAwareInterface
     }
 
     /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
+     * @param  array              $expression
+     * @param  Call               $call
+     * @param  CompilationContext $context
      * @return mixed
      */
     abstract public function optimize(array $expression, Call $call, CompilationContext $context);

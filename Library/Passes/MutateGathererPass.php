@@ -47,7 +47,7 @@ class MutateGathererPass
     /**
      * Increase the number of mutations a variable has inside a statement block
      *
-     * @param string $variable
+     * @param  string             $variable
      * @return MutateGathererPass
      */
     public function increaseMutations($variable)
@@ -63,7 +63,7 @@ class MutateGathererPass
     /**
      * Returns the number of assignment instructions that mutated a variable
      *
-     * @param string $variable
+     * @param  string $variable
      * @return int
      */
     public function getNumberOfMutations($variable)

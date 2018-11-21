@@ -21,10 +21,10 @@ class CallMethodStatement extends CallFunctionStatement
     private $variable;
 
     /**
-     * @param null $variable
-     * @param null $name
+     * @param null       $variable
+     * @param null       $name
      * @param array|null $parameters
-     * @param int $type
+     * @param int        $type
      */
     public function __construct($variable = null, $name = null, array $parameters = null, $type = self::TYPE_CALL_DIRECT)
     {

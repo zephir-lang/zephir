@@ -31,8 +31,8 @@ class IfStatementBuilder extends AbstractStatementBuilder
      * IfStatementBuilder constructor
      *
      * @param AbstractOperatorBuilder $evalExpr
-     * @param StatementsBlockBuilder $ifBlock
-     * @param StatementsBlockBuilder $elseBlock
+     * @param StatementsBlockBuilder  $ifBlock
+     * @param StatementsBlockBuilder  $elseBlock
      */
     public function __construct(AbstractOperatorBuilder $evalExpr, StatementsBlockBuilder $ifBlock, StatementsBlockBuilder $elseBlock = null)
     {

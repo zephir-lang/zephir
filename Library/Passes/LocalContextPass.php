@@ -84,7 +84,7 @@ class LocalContextPass
      * Marks the latest use/read of a variable
      *
      * @param string $variable
-     * @param array $node
+     * @param array  $node
      */
     public function markLastUse($variable, $node)
     {
@@ -128,7 +128,7 @@ class LocalContextPass
     /**
      * Returns the number of assignment instructions that mutated a variable
      *
-     * @param string $variable
+     * @param  string $variable
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -143,7 +143,7 @@ class LocalContextPass
     /**
      * Returns the latest line where a variable was read
      *
-     * @param string $variable
+     * @param  string $variable
      * @return int
      */
     public function getLastVariableUseLine($variable)

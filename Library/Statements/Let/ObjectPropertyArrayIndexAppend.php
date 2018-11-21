@@ -27,11 +27,11 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
     /**
      * Compiles x->y[a][b][] = {expr} (multiple offset assignment)
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param  string             $variable
+     * @param  ZephirVariable     $symbolVariable
+     * @param  CompiledExpression $resolvedExpr
+     * @param  CompilationContext $compilationContext
+     * @param  array              $statement
      * @throws CompilerException
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
@@ -108,11 +108,11 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
     /**
      * Compiles x->y[z][] = foo
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext,
-     * @param array $statement
+     * @param array              $statement
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {

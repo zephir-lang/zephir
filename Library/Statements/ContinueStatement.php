@@ -22,7 +22,7 @@ use Zephir\Exception\CompilerException;
 class ContinueStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
+     * @param  CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

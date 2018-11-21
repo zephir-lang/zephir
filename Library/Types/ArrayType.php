@@ -95,10 +95,10 @@ class ArrayType extends AbstractType
     /**
      * Transforms calls to method "join" to function calls to "join"
      *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param  object                          $caller
+     * @param  CompilationContext              $compilationContext
+     * @param  Call                            $call
+     * @param  array                           $expression
      * @return bool|\Zephir\CompiledExpression
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
