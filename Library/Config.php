@@ -18,7 +18,6 @@ namespace Zephir;
  */
 class Config implements \ArrayAccess, \JsonSerializable
 {
-
     /**
      * Is config changed?
      *
