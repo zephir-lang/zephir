@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 define('MSGPACK_CLASS_OPT_PHPONLY', -1001);
 
 /**
@@ -41,7 +50,7 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param string $str
+     * @param string  $str
      * @param integer $offset
      */
     public function execute($str = null, &$offset = null)
@@ -85,7 +94,7 @@ class MessagePack
     }
 
     /**
-     * @param mixed $value
+     * @param  mixed  $value
      * @return string
      */
     public function pack($value)
@@ -93,8 +102,8 @@ class MessagePack
     }
 
     /**
-     * @param string $str
-     * @param mixed $object
+     * @param  string $str
+     * @param  mixed  $object
      * @return mixed
      */
     public function unpack($str, $object = null)
@@ -110,34 +119,33 @@ class MessagePack
 }
 
 /**
- * @param mixed $value
+ * @param  mixed  $value
  * @return string
  */
-function msgpack_pack($value) {
-
+function msgpack_pack($value)
+{
 }
 
 /**
- * @param string $str
+ * @param  string $str
  * @return mixed
  */
-function msgpack_unpack($str) {
-
+function msgpack_unpack($str)
+{
 }
 
-
 /**
- * @param mixed $value
+ * @param  mixed  $value
  * @return string
  */
-function msgpack_serialize($value) {
-
+function msgpack_serialize($value)
+{
 }
 
 /**
- * @param string $str
+ * @param  string $str
  * @return mixed
  */
-function msgpack_unserialize($str) {
-
+function msgpack_unserialize($str)
+{
 }
