@@ -86,7 +86,7 @@ class Memcache
     {
     }
 
-    public function getExtendedStats($type, $slabid, $limit=100)
+    public function getExtendedStats($type, $slabid, $limit = 100)
     {
     }
 

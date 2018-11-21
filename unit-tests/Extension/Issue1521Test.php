@@ -17,7 +17,7 @@ class Issue1521Test extends TestCase
 {
     public function testIssue1521()
     {
-        $t      = new \Test\Issue1521();
+        $t = new \Test\Issue1521();
         $actual = $t->test();
 
         $this->assertTrue('0' === $actual['zero']);

@@ -130,27 +130,27 @@ class IsPhpVersionTest extends TestCase
             throw new \Exception('Could not parse PHP version');
         }
 
-        $majorVersion   = 0;
-        $minorVersion   = 0;
+        $majorVersion = 0;
+        $minorVersion = 0;
         $releaseVersion = 0;
 
-        $phpMinorVersion   = 0;
+        $phpMinorVersion = 0;
         $phpReleaseVersion = 0;
 
-        $majorVersion      = $matches['major'] * 10000;
-        $phpMajorVersion   = PHP_MAJOR_VERSION * 10000;
+        $majorVersion = $matches['major'] * 10000;
+        $phpMajorVersion = PHP_MAJOR_VERSION * 10000;
 
         if (isset($matches['minor'])) {
-            $minorVersion       = $matches['minor'] * 100;
-            $phpMinorVersion    = PHP_MINOR_VERSION * 100;
+            $minorVersion = $matches['minor'] * 100;
+            $phpMinorVersion = PHP_MINOR_VERSION * 100;
         }
 
         if (isset($matches['patch'])) {
-            $releaseVersion     = $matches['patch'];
-            $phpReleaseVersion  = PHP_RELEASE_VERSION;
+            $releaseVersion = $matches['patch'];
+            $phpReleaseVersion = PHP_RELEASE_VERSION;
         }
 
-        $versionId    = intval($majorVersion + $minorVersion + $releaseVersion);
+        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
         $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
 
         return (bool)($phpVersionId == $versionId ? 1 : 0);
@@ -159,7 +159,7 @@ class IsPhpVersionTest extends TestCase
     /* -------------- Zephir Tests -------------- */
     public function testZephirUsingInteger70000()
     {
-        $actual   = $this->test->testIsPhpVersionUsingInteger70000();
+        $actual = $this->test->testIsPhpVersionUsingInteger70000();
         $expected = $this->isPhpVersion(7);
 
         $this->assertEquals($expected, $actual);
@@ -167,7 +167,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingDouble70100()
     {
-        $actual   = $this->test->testIsPhpVersionUsingDouble70100();
+        $actual = $this->test->testIsPhpVersionUsingDouble70100();
         $expected = $this->isPhpVersion(7.1);
 
         $this->assertEquals($expected, $actual);
@@ -175,7 +175,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingLong70000()
     {
-        $actual   = $this->test->testIsPhpVersionUsingLong70000();
+        $actual = $this->test->testIsPhpVersionUsingLong70000();
         $expected = $this->isPhpVersion(2147483647);
 
         $this->assertEquals($expected, $actual);
@@ -188,7 +188,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingString70000()
     {
-        $actual   = $this->test->testIsPhpVersionUsingString70000();
+        $actual = $this->test->testIsPhpVersionUsingString70000();
         $expected = $this->isPhpVersion('7');
 
         $this->assertEquals($expected, $actual);
@@ -236,7 +236,7 @@ class IsPhpVersionTest extends TestCase
      */
     public function testIsPhpVersionVersionUsing70X00($testName, $version)
     {
-        $actual   = $this->test->$testName();
+        $actual = $this->test->$testName();
         $expected = $this->isPhpVersion($version);
 
         $this->assertEquals($expected, $actual);
@@ -244,7 +244,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingString50000()
     {
-        $actual   = $this->test->testIsPhpVersionUsing50000();
+        $actual = $this->test->testIsPhpVersionUsing50000();
         $expected = $this->isPhpVersion('5');
 
         $this->assertEquals($expected, $actual);
@@ -252,7 +252,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingString50500()
     {
-        $actual   = $this->test->testIsPhpVersionUsing50500();
+        $actual = $this->test->testIsPhpVersionUsing50500();
         $expected = $this->isPhpVersion('5.5');
 
         $this->assertEquals($expected, $actual);
@@ -260,7 +260,7 @@ class IsPhpVersionTest extends TestCase
 
     public function testZephirUsingString50600()
     {
-        $actual   = $this->test->testIsPhpVersionUsing50600();
+        $actual = $this->test->testIsPhpVersionUsing50600();
         $expected = $this->isPhpVersion('5.6');
 
         $this->assertEquals($expected, $actual);

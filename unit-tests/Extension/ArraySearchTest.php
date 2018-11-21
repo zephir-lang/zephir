@@ -24,7 +24,7 @@ class ArraySearchTest extends TestCase
     {
         $t = new ArraySearch();
 
-        $needle   = 'value';
+        $needle = 'value';
         $haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
 
         $this->assertEquals(7, $t->simpleSearch($needle, $haystack));

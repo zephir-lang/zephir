@@ -172,28 +172,24 @@ class Constants
                         add_slashes($compilationContext->classDefinition->getCompleteName()),
                         $expression
                     );
-                    //no break
                 case '__NAMESPACE__':
                     return new CompiledExpression(
                         'string',
                         add_slashes($compilationContext->classDefinition->getNamespace()),
                         $expression
                     );
-                    //no break
                 case '__METHOD__':
                     return new CompiledExpression(
                         'string',
                         $compilationContext->classDefinition->getName() . ':' . $compilationContext->currentMethod->getName(),
                         $expression
                     );
-                    //no break
                 case '__FUNCTION__':
                     return new CompiledExpression(
                         'string',
                         $compilationContext->currentMethod->getName(),
                         $expression
                     );
-                    //no break
             }
 
             $compilationContext->logger->warning("Magic constant '" . $constantName . "' is not supported", 'not-supported-magic-constant', $expression);

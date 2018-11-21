@@ -108,7 +108,7 @@ class CompileCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                $flag     => true,
+                $flag => true,
             ],
             ['verbosity' => OutputInterface::VERBOSITY_QUIET]
         );

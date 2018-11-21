@@ -14,17 +14,17 @@ class Redis
     /**
      * Options
      */
-    const OPT_SERIALIZER        = 1;
-    const OPT_PREFIX            = 2;
+    const OPT_SERIALIZER = 1;
+    const OPT_PREFIX = 2;
     const OPT_READ_TIMEOUT = 3;
     const OPT_SCAN = 4;
 
     /**
      * Serializers
      */
-    const SERIALIZER_NONE       = 0;
-    const SERIALIZER_PHP        = 1;
-    const SERIALIZER_IGBINARY   = 2;
+    const SERIALIZER_NONE = 0;
+    const SERIALIZER_PHP = 1;
+    const SERIALIZER_IGBINARY = 2;
 
     /**
      * Multi
@@ -36,12 +36,12 @@ class Redis
     /**
      * Type
      */
-    const REDIS_NOT_FOUND       = 0;
-    const REDIS_STRING          = 1;
-    const REDIS_SET             = 2;
-    const REDIS_LIST            = 3;
-    const REDIS_ZSET            = 4;
-    const REDIS_HASH            = 5;
+    const REDIS_NOT_FOUND = 0;
+    const REDIS_STRING = 1;
+    const REDIS_SET = 2;
+    const REDIS_LIST = 3;
+    const REDIS_ZSET = 4;
+    const REDIS_HASH = 5;
 
     /**
      * Scan

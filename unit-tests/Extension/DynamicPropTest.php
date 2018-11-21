@@ -36,7 +36,7 @@ class DynamicPropTest extends TestCase
         $this->assertSame(ord('A'), $class->test);
 
         $class->setPropertyUChar('test');
-        $this->assertSame(ord('B')-1, $class->test);
+        $this->assertSame(ord('B') - 1, $class->test);
 
         $class->setPropertyNull('test');
         $this->assertSame(null, $class->test);

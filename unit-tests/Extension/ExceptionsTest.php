@@ -173,7 +173,7 @@ class ExceptionsTest extends TestCase
 
     public function testIssue1325()
     {
-        $t   = new Exceptions();
+        $t = new Exceptions();
         $res = $t->issue1325();
         $this->assertSame(1, $res);
     }

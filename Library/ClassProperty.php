@@ -310,8 +310,7 @@ class ClassProperty
             case 'array':
             case 'empty-array':
                 $this->initializeArray($compilationContext);
-                //continue
-
+                // no break
             case 'null':
                 $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
                 break;
