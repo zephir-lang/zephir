@@ -14,7 +14,6 @@ namespace Zephir;
 /**
  * Class EventsManager
  *
- * @package Zephir
  */
 class EventsManager
 {

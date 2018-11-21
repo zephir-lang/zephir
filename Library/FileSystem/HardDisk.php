@@ -21,7 +21,6 @@ use Zephir\Zephir;
  *
  * Uses the standard hard-disk as filesystem for temporary operations.
  *
- * @package Zephir\FileSystem
  */
 final class HardDisk implements FileSystemInterface
 {

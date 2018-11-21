@@ -16,7 +16,6 @@ namespace Zephir;
  *
  * Allows to visualize assignments for a specific variable in every branch used
  *
- * @package Zephir
  */
 class BranchGraphNode
 {

@@ -15,7 +15,6 @@ use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
  * Class AssignPropertyOperator
- * @package Zephir\Builder\Operators\Assignment
  */
 class AssignPropertyOperator extends AssignVariableOperator
 {

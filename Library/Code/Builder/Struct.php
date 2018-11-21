@@ -19,7 +19,6 @@ use Zephir\Exception\RuntimeException;
  *
  * Represents an internal extension global structure
  *
- * @package Code\Builder
  */
 class Struct
 {

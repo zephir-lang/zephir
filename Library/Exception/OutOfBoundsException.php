@@ -14,7 +14,6 @@ namespace Zephir\Exception;
 /**
  * Zephir\Exception\OutOfBoundsException
  *
- * @package Zephir\Exception
  */
 class OutOfBoundsException extends \OutOfBoundsException implements ExceptionInterface
 {

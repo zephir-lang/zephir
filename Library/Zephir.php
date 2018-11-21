@@ -14,7 +14,6 @@ namespace Zephir;
 /**
  * Zephir\Zephir
  *
- * @package Zephir
  */
 final class Zephir
 {

@@ -23,7 +23,6 @@ use Zephir\Variable;
  *
  * Resolves expressions that create arrays
  *
- * @package Zephir\Expression
  */
 class NativeArray
 {

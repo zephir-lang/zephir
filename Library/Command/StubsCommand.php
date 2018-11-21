@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Generates stubs that can be used in a PHP IDE.
  *
- * @package Zephir\Command
  */
 class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {

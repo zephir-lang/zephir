@@ -15,7 +15,6 @@ namespace Zephir;
  * Constants for types
  *
  * Class Types
- * @package Zephir
  */
 class Types
 {

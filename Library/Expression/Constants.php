@@ -23,7 +23,6 @@ use function Zephir\add_slashes;
  *
  * Resolves PHP or Zephir constants into C-Code
  *
- * @package Zephir\Expression
  */
 class Constants
 {

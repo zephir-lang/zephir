@@ -17,7 +17,6 @@ use Psr\Container\ContainerInterface;
 /**
  * Zephir\Di\ServiceProviderInterface
  *
- * @package Zephir\Di
  */
 interface ServiceProviderInterface
 {

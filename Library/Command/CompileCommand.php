@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Compile a Zephir extension.
  *
- * @package Zephir\Command
  */
 class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
 {

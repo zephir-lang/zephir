@@ -24,7 +24,6 @@ use Zephir\Variable;
  *
  * Optimizes calls to 'preg_match' using internal function.
  *
- * @package Zephir\Optimizers\FunctionCall
  */
 class PregMatchOptimizer extends OptimizerAbstract
 {

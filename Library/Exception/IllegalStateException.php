@@ -14,7 +14,6 @@ namespace Zephir\Exception;
 /**
  * Zephir\Exception\IllegalStateException
  *
- * @package Zephir\Exception
  */
 class IllegalStateException extends RuntimeException
 {

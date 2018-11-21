@@ -14,7 +14,6 @@ namespace Zephir;
 /**
  * Zephir\ArgInfoDefinition
  *
- * @package Zephir
  */
 class ArgInfoDefinition
 {

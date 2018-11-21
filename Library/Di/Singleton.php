@@ -17,7 +17,6 @@ use Psr\Container\ContainerInterface;
 /**
  * Zephir\Di\Singleton
  *
- * @package Zephir
  */
 final class Singleton
 {

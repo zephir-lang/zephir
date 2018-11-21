@@ -16,7 +16,6 @@ use Zephir\TypeAwareInterface;
 /**
  * Zephir\Exception\IllegalOperationException
  *
- * @package Zephir\Compiler
  */
 class IllegalOperationException extends CompilerException
 {

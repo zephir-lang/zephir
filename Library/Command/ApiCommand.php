@@ -21,7 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Generates a HTML API based on the classes exposed in the extension.
  *
- * @package Zephir\Command
  */
 class ApiCommand extends ContainerAwareCommand implements ZflagsAwareInterface
 {

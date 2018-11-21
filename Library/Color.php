@@ -18,7 +18,6 @@ namespace Zephir;
  * This class is based on Phalcon\Script available in Phalcon DevTools
  * licensed under New BSD license
  *
- * @package Zephir
  */
 class Color
 {

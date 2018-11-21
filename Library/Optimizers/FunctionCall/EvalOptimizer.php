@@ -20,7 +20,6 @@ use Zephir\Optimizers\OptimizerAbstract;
 /**
  * Zephir\Optimizers\FunctionCall\EvalOptimizer
  *
- * @package Zephir\Optimizers\FunctionCall
  */
 class EvalOptimizer extends OptimizerAbstract
 {

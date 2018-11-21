@@ -17,7 +17,6 @@ use Zephir\Parser\ParseException;
 /**
  * Zephir\Parser
  *
- * @package Zephir
  */
 class Parser
 {

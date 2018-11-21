@@ -21,7 +21,6 @@ use Zephir\FileSystem\HardDisk;
 /**
  * Zephir\Providers\FileSystemProvider
  *
- * @package Zephir\Providers
  */
 final class FileSystemProvider implements ServiceProviderInterface
 {

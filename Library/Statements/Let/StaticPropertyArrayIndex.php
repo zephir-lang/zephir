@@ -23,7 +23,6 @@ use Zephir\Expression;
  *
  * Updates object properties dynamically.
  *
- * @package Zephir\Statements\Let
  */
 class StaticPropertyArrayIndex extends ArrayIndex
 {

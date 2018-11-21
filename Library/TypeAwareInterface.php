@@ -14,7 +14,6 @@ namespace Zephir;
 /**
  * Zephir\TypeAwareInterface
  *
- * @package Zephir
  */
 interface TypeAwareInterface
 {

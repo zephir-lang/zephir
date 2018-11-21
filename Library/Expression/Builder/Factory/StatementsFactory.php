@@ -24,7 +24,6 @@ use Zephir\Expression\Builder\Statements\StatementsBlock;
 
 /**
  * Class StatementsFactory
- * @package Zephir\Expression\Builder
  */
 class StatementsFactory
 {

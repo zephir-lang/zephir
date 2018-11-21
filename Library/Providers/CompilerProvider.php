@@ -21,7 +21,6 @@ use Zephir\Parser\Manager;
 /**
  * Zephir\Providers\CompilerProvider
  *
- * @package Zephir\Providers
  */
 final class CompilerProvider implements ServiceProviderInterface
 {

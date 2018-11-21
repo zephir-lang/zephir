@@ -22,7 +22,6 @@ use Zephir\Support\PropertyAccessor;
 /**
  * Zephir\Di\ContainerAwareTrait
  *
- * @package Zephir\Di
  *
  * @property-read \Zephir\Environment $environment
  * @property-read \Zephir\Logger $logger

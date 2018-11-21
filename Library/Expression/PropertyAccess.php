@@ -22,7 +22,6 @@ use Zephir\Variable;
  *
  * Resolves expressions that read properties
  *
- * @package Zephir\Expression
  */
 class PropertyAccess
 {

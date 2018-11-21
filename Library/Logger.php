@@ -18,7 +18,6 @@ use Zephir\Exception\CompilerException;
  *
  * Entrypoint for warnings/notices/errors generated in compilation.
  *
- * @package Zephir
  */
 class Logger
 {

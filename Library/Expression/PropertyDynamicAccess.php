@@ -23,7 +23,6 @@ use function Zephir\add_slashes;
  *
  * Resolves expressions that read properties with a dynamic variable as property
  *
- * @package Zephir\Expression
  */
 class PropertyDynamicAccess
 {

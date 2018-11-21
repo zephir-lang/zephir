@@ -24,7 +24,6 @@ use Zephir\Variable as ZephirVariable;
  *
  * Assign a value to a variable.
  *
- * @package Zephir\Statements\Let
  */
 class Variable
 {

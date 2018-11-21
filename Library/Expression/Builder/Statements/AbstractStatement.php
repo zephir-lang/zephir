@@ -15,7 +15,6 @@ use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
  * Class AbstractStatement
- * @package Zephir\Expression\Builder\Statements
  */
 abstract class AbstractStatement extends AbstractBuilder
 {
