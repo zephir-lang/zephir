@@ -31,6 +31,30 @@ class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwa
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getDevelopmentModeHelp()
+    {
+        return <<<EOT
+Using <comment>--dev</comment> option will try installing the extension in development mode
+(debug symbols and no optimizations). An extension compiled with debugging symbols means
+you can run a program or library through a debugger and the debugger's output will be user
+friendlier. These debugging symbols also enlarge the program or library significantly.
+
+NOTE: Zephir development mode will be enabled silently if your PHP binary was compiled in
+a debug configuration.
+
+In some cases, we would like to get production ready extension even if the PHP binary was
+compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
+
+NOTE: This command may require root password on Linux/Unit systems.
+
+EOT;
+    }
+
     protected function configure()
     {
         $this
@@ -71,29 +95,5 @@ class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwa
         $io->note("Don't forget to restart your web server");
 
         return 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getDevelopmentModeHelp()
-    {
-        return <<<EOT
-Using <comment>--dev</comment> option will try installing the extension in development mode
-(debug symbols and no optimizations). An extension compiled with debugging symbols means
-you can run a program or library through a debugger and the debugger's output will be user
-friendlier. These debugging symbols also enlarge the program or library significantly.
-
-NOTE: Zephir development mode will be enabled silently if your PHP binary was compiled in
-a debug configuration.
-
-In some cases, we would like to get production ready extension even if the PHP binary was
-compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
-
-NOTE: This command may require root password on Linux/Unit systems.
-
-EOT;
     }
 }

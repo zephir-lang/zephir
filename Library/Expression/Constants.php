@@ -37,29 +37,6 @@ class Constants
     protected $expectingVariable;
 
     /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
-     *
-     * @param boolean  $expecting
-     * @param Variable $expectingVariable
-     */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only
-     *
-     * @param boolean $readOnly
-     */
-    public function setReadOnly($readOnly)
-    {
-        $this->readOnly = $readOnly;
-    }
-
-    /**
      * Reserved ENV Constants
      * @link http://www.php.net/manual/ru/reserved.constants.php
      * @var array
@@ -106,6 +83,29 @@ class Constants
         'STDOUT',
         'STDERR'
     ];
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value
+     *
+     * @param boolean  $expecting
+     * @param Variable $expectingVariable
+     */
+    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    {
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only
+     *
+     * @param boolean $readOnly
+     */
+    public function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+    }
 
     /**
      * Resolves a PHP constant value into C-code

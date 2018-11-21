@@ -43,6 +43,21 @@ class Template
         $this->nestedLevel = $nestedLevel;
     }
 
+    private function __getTemplatePath($fileName)
+    {
+        if ('/' == $fileName{0} || strpos($fileName, 'phar://') === 0) {
+            return $fileName;
+        }
+
+        $inputFilename = $this->theme->getThemePathExtendsAware($fileName);
+
+        if (!file_exists($inputFilename)) {
+            throw new Exception("Template not found : $inputFilename");
+        }
+
+        return $inputFilename;
+    }
+
     /**
      * set a variable that will be accessible in the template
      * @param $name
@@ -179,21 +194,6 @@ class Template
         $content = ob_get_clean();
 
         return $content;
-    }
-
-    private function __getTemplatePath($fileName)
-    {
-        if ('/' == $fileName{0} || strpos($fileName, 'phar://') === 0) {
-            return $fileName;
-        }
-
-        $inputFilename = $this->theme->getThemePathExtendsAware($fileName);
-
-        if (!file_exists($inputFilename)) {
-            throw new Exception("Template not found : $inputFilename");
-        }
-
-        return $inputFilename;
     }
 
     public function partial($fileName, array $data = [])

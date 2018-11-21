@@ -193,73 +193,6 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Pre-compiles classes creating a CompilerFile definition
-     *
-     * @param string $filePath
-     *
-     * @throws CompilerException
-     * @throws IllegalStateException
-     * @throws ParseException
-     */
-    protected function preCompile($filePath)
-    {
-        if (!$this->parserManager->isAvailable()) {
-            throw new IllegalStateException($this->parserManager->requirements());
-        }
-
-        if (preg_match('#\.zep$#', $filePath)) {
-            $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
-            $className = preg_replace('#.zep$#', '', $className);
-
-            $className = join('\\', array_map(function ($i) {
-                return ucfirst($i);
-            }, explode('\\', $className)));
-
-            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
-            $this->files[$className]->preCompile($this);
-
-            $this->definitions[$className] = $this->files[$className]->getClassDefinition();
-        }
-    }
-
-    /**
-     * Recursively pre-compiles all sources found in the given path
-     *
-     * @param string $path
-     *
-     * @throws CompilerException
-     */
-    protected function recursivePreCompile($path)
-    {
-        if (!is_string($path)) {
-            throw new CompilerException('Invalid compilation path' . var_export($path, true));
-        }
-
-        /**
-         * Pre compile all files
-         */
-        $files = [];
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        /**
-         * @var $item \SplFileInfo
-         */
-        foreach ($iterator as $item) {
-            if (!$item->isDir()) {
-                $files[] = $item->getPathname();
-            }
-        }
-
-        sort($files, SORT_STRING);
-        foreach ($files as $file) {
-            $this->preCompile($file);
-        }
-    }
-
-    /**
      * Loads a class definition in an external dependency
      *
      * @param  string            $className
@@ -427,101 +360,6 @@ class Compiler implements InjectionAwareInterface
         }
 
         return self::$internalDefinitions[$className];
-    }
-
-    /**
-     * Copies the base kernel to the extension destination
-     *
-     * @todo
-     * @deprecated
-     *
-     * @param $src
-     * @param $dest
-     * @param string $pattern
-     * @param mixed  $callback
-     *
-     * @return bool
-     */
-    protected function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
-    {
-        $success = true;
-        $iterator = new \DirectoryIterator($src);
-        foreach ($iterator as $item) {
-            $pathName = $item->getPathname();
-            if (!is_readable($pathName)) {
-                $this->logger->output('File is not readable :' . $pathName);
-                continue;
-            }
-
-            $fileName = $item->getFileName();
-
-            if ($item->isDir()) {
-                if ($fileName != '.' && $fileName != '..' && $fileName != '.libs') {
-                    if (!is_dir($dest . DIRECTORY_SEPARATOR . $fileName)) {
-                        mkdir($dest . DIRECTORY_SEPARATOR . $fileName, 0755, true);
-                    }
-                    $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
-                }
-            } elseif (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-                $path = $dest . DIRECTORY_SEPARATOR . $fileName;
-                $success = $success && call_user_func($callback, $pathName, $path);
-            }
-        }
-
-        return $success;
-    }
-
-    /**
-     * Recursively deletes files in a specified location
-     *
-     * @param string $path Directory to deletes files
-     * @param string $mask Regular expression to deletes files
-     *
-     * @return void
-     */
-    protected function recursiveDeletePath($path, $mask)
-    {
-        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
-            $this->logger->output("Directory {$path} does not exist or it is not readable. Skip...");
-            return;
-        }
-
-        $objects = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        foreach ($objects as $name => $object) {
-            if (preg_match($mask, $name)) {
-                @unlink($name);
-            }
-        }
-    }
-
-    /**
-     * Registers C-constants as PHP constants from a C-file
-     *
-     * @param array $constantsSources
-     *
-     * @throws Exception
-     */
-    protected function loadConstantsSources($constantsSources)
-    {
-        foreach ($constantsSources as $constantsSource) {
-            if (!file_exists($constantsSource)) {
-                throw new Exception("File '" . $constantsSource . "' with constants definitions");
-            }
-
-            foreach (file($constantsSource) as $line) {
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
-                    $this->constants[$matches[1]] = ['int', $matches[2]];
-                    continue;
-                }
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
-                    $this->constants[$matches[1]] = ['char', $matches[3]];
-                }
-            }
-        }
     }
 
     /**
@@ -1138,31 +976,6 @@ class Compiler implements InjectionAwareInterface
                 'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
         }
-    }
-
-    /**
-     * Process config.w32 sections
-     *
-     * @param  array  $sources
-     * @param  string $project
-     * @return array
-     */
-    protected function processAddSources($sources, $project)
-    {
-        $groupSources = [];
-        foreach ($sources as $source) {
-            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
-            if (!isset($groupSources[$dirName])) {
-                $groupSources[$dirName] = [];
-            }
-            $groupSources[$dirName][] = basename($source);
-        }
-        $groups = [];
-        foreach ($groupSources as $dirname => $files) {
-            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
-                        join(' ', $files) . '", "' . $project . '");';
-        }
-        return $groups;
     }
 
     /**
@@ -2090,6 +1903,193 @@ class Compiler implements InjectionAwareInterface
 
         $contentM4 = str_replace('%PROJECT_PACKAGE_DEPENDENCIES%', '', $contentM4);
         return $contentM4;
+    }
+
+    /**
+     * Pre-compiles classes creating a CompilerFile definition
+     *
+     * @param string $filePath
+     *
+     * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws ParseException
+     */
+    protected function preCompile($filePath)
+    {
+        if (!$this->parserManager->isAvailable()) {
+            throw new IllegalStateException($this->parserManager->requirements());
+        }
+
+        if (preg_match('#\.zep$#', $filePath)) {
+            $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
+            $className = preg_replace('#.zep$#', '', $className);
+
+            $className = join('\\', array_map(function ($i) {
+                return ucfirst($i);
+            }, explode('\\', $className)));
+
+            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
+            $this->files[$className]->preCompile($this);
+
+            $this->definitions[$className] = $this->files[$className]->getClassDefinition();
+        }
+    }
+
+    /**
+     * Recursively pre-compiles all sources found in the given path
+     *
+     * @param string $path
+     *
+     * @throws CompilerException
+     */
+    protected function recursivePreCompile($path)
+    {
+        if (!is_string($path)) {
+            throw new CompilerException('Invalid compilation path' . var_export($path, true));
+        }
+
+        /**
+         * Pre compile all files
+         */
+        $files = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        /**
+         * @var $item \SplFileInfo
+         */
+        foreach ($iterator as $item) {
+            if (!$item->isDir()) {
+                $files[] = $item->getPathname();
+            }
+        }
+
+        sort($files, SORT_STRING);
+        foreach ($files as $file) {
+            $this->preCompile($file);
+        }
+    }
+
+    /**
+     * Copies the base kernel to the extension destination
+     *
+     * @todo
+     * @deprecated
+     *
+     * @param $src
+     * @param $dest
+     * @param string $pattern
+     * @param mixed  $callback
+     *
+     * @return bool
+     */
+    protected function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
+    {
+        $success = true;
+        $iterator = new \DirectoryIterator($src);
+        foreach ($iterator as $item) {
+            $pathName = $item->getPathname();
+            if (!is_readable($pathName)) {
+                $this->logger->output('File is not readable :' . $pathName);
+                continue;
+            }
+
+            $fileName = $item->getFileName();
+
+            if ($item->isDir()) {
+                if ($fileName != '.' && $fileName != '..' && $fileName != '.libs') {
+                    if (!is_dir($dest . DIRECTORY_SEPARATOR . $fileName)) {
+                        mkdir($dest . DIRECTORY_SEPARATOR . $fileName, 0755, true);
+                    }
+                    $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
+                }
+            } elseif (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+                $path = $dest . DIRECTORY_SEPARATOR . $fileName;
+                $success = $success && call_user_func($callback, $pathName, $path);
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * Recursively deletes files in a specified location
+     *
+     * @param string $path Directory to deletes files
+     * @param string $mask Regular expression to deletes files
+     *
+     * @return void
+     */
+    protected function recursiveDeletePath($path, $mask)
+    {
+        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
+            $this->logger->output("Directory {$path} does not exist or it is not readable. Skip...");
+            return;
+        }
+
+        $objects = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($objects as $name => $object) {
+            if (preg_match($mask, $name)) {
+                @unlink($name);
+            }
+        }
+    }
+
+    /**
+     * Registers C-constants as PHP constants from a C-file
+     *
+     * @param array $constantsSources
+     *
+     * @throws Exception
+     */
+    protected function loadConstantsSources($constantsSources)
+    {
+        foreach ($constantsSources as $constantsSource) {
+            if (!file_exists($constantsSource)) {
+                throw new Exception("File '" . $constantsSource . "' with constants definitions");
+            }
+
+            foreach (file($constantsSource) as $line) {
+                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
+                    $this->constants[$matches[1]] = ['int', $matches[2]];
+                    continue;
+                }
+                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
+                    $this->constants[$matches[1]] = ['char', $matches[3]];
+                }
+            }
+        }
+    }
+
+    /**
+     * Process config.w32 sections
+     *
+     * @param  array  $sources
+     * @param  string $project
+     * @return array
+     */
+    protected function processAddSources($sources, $project)
+    {
+        $groupSources = [];
+        foreach ($sources as $source) {
+            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
+            if (!isset($groupSources[$dirName])) {
+                $groupSources[$dirName] = [];
+            }
+            $groupSources[$dirName][] = basename($source);
+        }
+        $groups = [];
+        foreach ($groupSources as $dirname => $files) {
+            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
+                        join(' ', $files) . '", "' . $project . '");';
+        }
+        return $groups;
     }
 
     /**

@@ -22,20 +22,6 @@ class Link extends Annotation
     protected $uri;
     protected $linkText;
 
-    protected function parseContent()
-    {
-        $spaceIndex = strpos($this->string, ' ');
-
-        if (false !== $spaceIndex) {
-            $this->uri = substr($this->string, 0, $spaceIndex);
-            $this->linkText = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->uri = $this->string;
-        }
-
-        $this->contentParsed = true;
-    }
-
     public function getUri()
     {
         if (!$this->contentParsed) {
@@ -52,5 +38,19 @@ class Link extends Annotation
         }
 
         return $this->linkText;
+    }
+
+    protected function parseContent()
+    {
+        $spaceIndex = strpos($this->string, ' ');
+
+        if (false !== $spaceIndex) {
+            $this->uri = substr($this->string, 0, $spaceIndex);
+            $this->linkText = substr($this->string, $spaceIndex + 1);
+        } else {
+            $this->uri = $this->string;
+        }
+
+        $this->contentParsed = true;
     }
 }

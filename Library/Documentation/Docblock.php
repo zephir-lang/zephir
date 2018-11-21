@@ -36,6 +36,14 @@ class Docblock
     /**
      * @return string
      */
+    public function __toString()
+    {
+        return $this->generate();
+    }
+
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -133,13 +141,5 @@ class Docblock
         }
 
         return $docBlock . PHP_EOL . ' *';
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->generate();
     }
 }

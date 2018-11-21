@@ -35,6 +35,11 @@ class FetchTest extends TestCase
         ]);
     }
 
+    public static function tearDownAfterClass()
+    {
+        self::$test = null;
+    }
+
     public function testPost()
     {
         $this->assertSame(self::$test->testFetchPost(1), 'one');
@@ -68,10 +73,5 @@ class FetchTest extends TestCase
             ['two', 2, true],
             ['three', [3], true],
         ];
-    }
-
-    public static function tearDownAfterClass()
-    {
-        self::$test = null;
     }
 }

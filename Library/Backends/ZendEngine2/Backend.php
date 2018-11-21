@@ -619,55 +619,6 @@ class Backend extends BaseBackend
         }
     }
 
-    /* Assign value to variable */
-    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
-    {
-        if ($value instanceof Variable) {
-            $value = $value->getName();
-        } else {
-            $value = $macro == 'ZVAL_STRING' ? '"' . $value . '"' : $value;
-        }
-
-        $copyStr = '';
-        if ($doCopy === true) {
-            $copyStr = ', 1';
-        } elseif ($doCopy === false) {
-            $copyStr = ', 0';
-        } elseif (isset($doCopy)) {
-            $copyStr = ', ' . $doCopy;
-        }
-
-        $output = $macro . '(' . $variableName . ', ' . $value . $copyStr . ');';
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-        return $output;
-    }
-
-    protected function returnHelper($macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
-    {
-        if ($value instanceof Variable) {
-            $value = $value->getName();
-        } else {
-            $value = $macro == 'RETURN_MM_STRING' ? '"' . $value . '"' : $value;
-        }
-
-        $copyStr = '';
-        if ($doCopy === true) {
-            $copyStr = ', 1';
-        } elseif ($doCopy === false) {
-            $copyStr = ', 0';
-        } elseif (isset($doCopy)) {
-            $copyStr = ', ' . $doCopy;
-        }
-
-        $output = $macro . '(' . $value . $copyStr . ');';
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-        return $output;
-    }
-
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
         if ($value === null) {
@@ -1010,83 +961,6 @@ class Backend extends BaseBackend
             default:
                 throw new CompilerException('Cannot use expression: ' . $exprIndex->getType() . ' as array index without cast', $expression['right']);
         }
-    }
-
-    /**
-     * Resolve expressions.
-     *
-     * @param  CompiledExpression[]|string[] $offsetExprs
-     * @param  CompilationContext            $compilationContext
-     * @return array
-     *
-     * @throws CompilerException
-     */
-    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
-    {
-        $keys = '';
-        $offsetItems = [];
-        $numberParams = 0;
-
-        foreach ($offsetExprs as $offsetExpr) {
-            if ($offsetExpr == 'a') {
-                $keys .= 'a';
-                $numberParams++;
-                continue;
-            }
-            switch ($offsetExpr->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                    $keys .= 'l';
-                    $offsetItems[] = $offsetExpr->getCode();
-                    $numberParams++;
-                    break;
-
-                case 'string':
-                    $keys .= 's';
-                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
-                    $numberParams += 2;
-                    break;
-
-                case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead(
-                        $offsetExpr->getCode(),
-                        $compilationContext,
-                        null
-                    );
-
-                    switch ($variableIndex->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                            $keys .= 'l';
-                            $offsetItems[] = $this->getVariableCode($variableIndex);
-                            $numberParams++;
-                            break;
-                        case 'string':
-                        case 'variable':
-                            $keys .= 'z';
-                            $offsetItems[] = $this->getVariableCode($variableIndex);
-                            $numberParams++;
-                            break;
-                        default:
-                            throw new CompilerException(
-                                sprintf('Variable: %s cannot be used as array index', $variableIndex->getType()),
-                                $offsetExpr->getOriginal()
-                            );
-                    }
-                    break;
-
-                default:
-                    throw new CompilerException(
-                        sprintf('Value: %s cannot be used as array index', $offsetExpr->getType()),
-                        $offsetExpr->getOriginal()
-                    );
-            }
-        }
-        return [$keys, $offsetItems, $numberParams];
     }
 
     public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
@@ -1485,5 +1359,131 @@ class Backend extends BaseBackend
             return $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
         }
         return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
+    }
+
+    /* Assign value to variable */
+    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    {
+        if ($value instanceof Variable) {
+            $value = $value->getName();
+        } else {
+            $value = $macro == 'ZVAL_STRING' ? '"' . $value . '"' : $value;
+        }
+
+        $copyStr = '';
+        if ($doCopy === true) {
+            $copyStr = ', 1';
+        } elseif ($doCopy === false) {
+            $copyStr = ', 0';
+        } elseif (isset($doCopy)) {
+            $copyStr = ', ' . $doCopy;
+        }
+
+        $output = $macro . '(' . $variableName . ', ' . $value . $copyStr . ');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
+    protected function returnHelper($macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    {
+        if ($value instanceof Variable) {
+            $value = $value->getName();
+        } else {
+            $value = $macro == 'RETURN_MM_STRING' ? '"' . $value . '"' : $value;
+        }
+
+        $copyStr = '';
+        if ($doCopy === true) {
+            $copyStr = ', 1';
+        } elseif ($doCopy === false) {
+            $copyStr = ', 0';
+        } elseif (isset($doCopy)) {
+            $copyStr = ', ' . $doCopy;
+        }
+
+        $output = $macro . '(' . $value . $copyStr . ');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
+    /**
+     * Resolve expressions.
+     *
+     * @param  CompiledExpression[]|string[] $offsetExprs
+     * @param  CompilationContext            $compilationContext
+     * @return array
+     *
+     * @throws CompilerException
+     */
+    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
+    {
+        $keys = '';
+        $offsetItems = [];
+        $numberParams = 0;
+
+        foreach ($offsetExprs as $offsetExpr) {
+            if ($offsetExpr == 'a') {
+                $keys .= 'a';
+                $numberParams++;
+                continue;
+            }
+            switch ($offsetExpr->getType()) {
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                    $keys .= 'l';
+                    $offsetItems[] = $offsetExpr->getCode();
+                    $numberParams++;
+                    break;
+
+                case 'string':
+                    $keys .= 's';
+                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
+                    $numberParams += 2;
+                    break;
+
+                case 'variable':
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                        $offsetExpr->getCode(),
+                        $compilationContext,
+                        null
+                    );
+
+                    switch ($variableIndex->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                            $keys .= 'l';
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            $numberParams++;
+                            break;
+                        case 'string':
+                        case 'variable':
+                            $keys .= 'z';
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            $numberParams++;
+                            break;
+                        default:
+                            throw new CompilerException(
+                                sprintf('Variable: %s cannot be used as array index', $variableIndex->getType()),
+                                $offsetExpr->getOriginal()
+                            );
+                    }
+                    break;
+
+                default:
+                    throw new CompilerException(
+                        sprintf('Value: %s cannot be used as array index', $offsetExpr->getType()),
+                        $offsetExpr->getOriginal()
+                    );
+            }
+        }
+        return [$keys, $offsetItems, $numberParams];
     }
 }

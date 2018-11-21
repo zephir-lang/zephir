@@ -1847,23 +1847,6 @@ class ClassDefinition
         return $classDefinition;
     }
 
-    private static function _convertPhpConstantType($phpType)
-    {
-        $map = [
-            'boolean' => 'bool',
-            'integer' => 'int',
-            'double' => 'double',
-            'string' => 'string',
-            'NULL' => 'null',
-        ];
-
-        if (!isset($map[$phpType])) {
-            throw new CompilerException("Cannot parse constant type '$phpType'");
-        }
-
-        return $map[$phpType];
-    }
-
     /**
      * @param  string $name
      * @return bool
@@ -1896,5 +1879,22 @@ class ClassDefinition
         }
 
         return false;
+    }
+
+    private static function _convertPhpConstantType($phpType)
+    {
+        $map = [
+            'boolean' => 'bool',
+            'integer' => 'int',
+            'double' => 'double',
+            'string' => 'string',
+            'NULL' => 'null',
+        ];
+
+        if (!isset($map[$phpType])) {
+            throw new CompilerException("Cannot parse constant type '$phpType'");
+        }
+
+        return $map[$phpType];
     }
 }

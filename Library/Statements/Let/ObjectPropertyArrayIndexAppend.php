@@ -25,6 +25,28 @@ use Zephir\Variable as ZephirVariable;
 class ObjectPropertyArrayIndexAppend extends ArrayIndex
 {
     /**
+     * Compiles x->y[z][] = foo
+     *
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
+     * @param array              $statement
+     */
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    {
+        if (!$symbolVariable->isInitialized()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+        }
+
+        if (!$symbolVariable->isVariable()) {
+            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
+        }
+
+        $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+    }
+
+    /**
      * Compiles x->y[a][b][] = {expr} (multiple offset assignment)
      *
      * @param  string             $variable
@@ -103,27 +125,5 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
 
         $offsetExprs[] = 'a';
         $compilationContext->backend->assignPropertyArrayMulti($symbolVariable, $variableExpr, $property, $offsetExprs, $compilationContext);
-    }
-
-    /**
-     * Compiles x->y[z][] = foo
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
-     * @param array              $statement
-     */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
-        }
-
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
-        }
-
-        $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
     }
 }

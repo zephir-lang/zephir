@@ -20,17 +20,6 @@ use Zephir\Statements\StatementAbstract;
  */
 class Branch
 {
-    protected $parentBranch;
-
-    protected $level = -1;
-
-    /** @var  StatementAbstract|null */
-    protected $relatedStatement;
-
-    protected $type;
-
-    protected $unreachable;
-
     const TYPE_ROOT = 0;
 
     const TYPE_CONDITIONAL_TRUE = 1;
@@ -46,6 +35,16 @@ class Branch
     const TYPE_EXTERNAL = 6;
 
     const TYPE_UNKNOWN = 7;
+    protected $parentBranch;
+
+    protected $level = -1;
+
+    /** @var  StatementAbstract|null */
+    protected $relatedStatement;
+
+    protected $type;
+
+    protected $unreachable;
 
     private $uniqueId;
 

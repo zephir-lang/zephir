@@ -55,6 +55,51 @@ class DocblockParser
     }
 
     /**
+     * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
+     */
+    private function __tryRegisterAnnotation()
+    {
+        if (($this->annotationNameOpen || $this->annotationOpen) && strlen($this->currentAnnotationStr) > 0) {
+            $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
+            $this->docblockObj->addAnnotation($annotation);
+        }
+
+        $this->annotationNameOpen = false;
+        $this->annotationOpen = false;
+    }
+
+    /**
+     * @param  string                           $name   the annotation name
+     * @param  string                           $string the annotation name
+     * @return \Zephir\Documentation\Annotation
+     */
+    private function __createAnnotation($name, $string)
+    {
+        switch ($name) {
+            case 'link':
+                $annotation = new Annotation\Link($name, $string);
+                $annotation->getLinkText();
+                break;
+
+            case 'return':
+                $annotation = new Annotation\ReturnAnnotation($name, $string);
+                $annotation->getReturnType();
+                break;
+
+            case 'see':
+                $annotation = new Annotation\See($name, $string);
+                $annotation->getResource();
+                break;
+
+            default:
+                $annotation = new Annotation($name, $string);
+                break;
+        }
+
+        return $annotation;
+    }
+
+    /**
      * Parses the internal annotation string
      *
      * @return Docblock the parsed docblock
@@ -174,51 +219,6 @@ class DocblockParser
     public function getParsedDocblock()
     {
         return $this->docblockObj;
-    }
-
-    /**
-     * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
-     */
-    private function __tryRegisterAnnotation()
-    {
-        if (($this->annotationNameOpen || $this->annotationOpen) && strlen($this->currentAnnotationStr) > 0) {
-            $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
-            $this->docblockObj->addAnnotation($annotation);
-        }
-
-        $this->annotationNameOpen = false;
-        $this->annotationOpen = false;
-    }
-
-    /**
-     * @param  string                           $name   the annotation name
-     * @param  string                           $string the annotation name
-     * @return \Zephir\Documentation\Annotation
-     */
-    private function __createAnnotation($name, $string)
-    {
-        switch ($name) {
-            case 'link':
-                $annotation = new Annotation\Link($name, $string);
-                $annotation->getLinkText();
-                break;
-
-            case 'return':
-                $annotation = new Annotation\ReturnAnnotation($name, $string);
-                $annotation->getReturnType();
-                break;
-
-            case 'see':
-                $annotation = new Annotation\See($name, $string);
-                $annotation->getResource();
-                break;
-
-            default:
-                $annotation = new Annotation($name, $string);
-                break;
-        }
-
-        return $annotation;
     }
 
     /**

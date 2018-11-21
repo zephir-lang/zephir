@@ -37,28 +37,6 @@ class IsPhpVersionTest extends TestCase
         $this->test = null;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Exception|\Throwable $error
-     *
-     * @throws \Exception|\Throwable
-     */
-    protected function onNotSuccessfulTest($error)
-    {
-        $phpVer = sprintf(
-            'PHP_VERSION_ID:%d(%d.%d.%d)',
-            PHP_VERSION_ID,
-            PHP_MAJOR_VERSION,
-            PHP_MINOR_VERSION,
-            PHP_RELEASE_VERSION
-        );
-
-        fwrite(STDOUT, "{$phpVer}\nError: {$error}");
-
-        throw $error;
-    }
-
     public function phpVersionProvider()
     {
         return [
@@ -113,47 +91,6 @@ class IsPhpVersionTest extends TestCase
     public function testOptimizerExceptionNull()
     {
         $this->isPhpVersion(null);
-    }
-
-    /**
-     * Optimizer: isPhpVersion
-     * Compare user entered PHP version with Environment and return Boolean
-     * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
-     *
-     * @param  int|double|string $version - PHP version in any format: 7, 7.1, "7.1.1"
-     * @return boolean
-     */
-    private function isPhpVersion($version)
-    {
-        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
-        if (!count($matches)) {
-            throw new \Exception('Could not parse PHP version');
-        }
-
-        $majorVersion = 0;
-        $minorVersion = 0;
-        $releaseVersion = 0;
-
-        $phpMinorVersion = 0;
-        $phpReleaseVersion = 0;
-
-        $majorVersion = $matches['major'] * 10000;
-        $phpMajorVersion = PHP_MAJOR_VERSION * 10000;
-
-        if (isset($matches['minor'])) {
-            $minorVersion = $matches['minor'] * 100;
-            $phpMinorVersion = PHP_MINOR_VERSION * 100;
-        }
-
-        if (isset($matches['patch'])) {
-            $releaseVersion = $matches['patch'];
-            $phpReleaseVersion = PHP_RELEASE_VERSION;
-        }
-
-        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
-        $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
-
-        return (bool)($phpVersionId == $versionId ? 1 : 0);
     }
 
     /* -------------- Zephir Tests -------------- */
@@ -264,5 +201,68 @@ class IsPhpVersionTest extends TestCase
         $expected = $this->isPhpVersion('5.6');
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Exception|\Throwable $error
+     *
+     * @throws \Exception|\Throwable
+     */
+    protected function onNotSuccessfulTest($error)
+    {
+        $phpVer = sprintf(
+            'PHP_VERSION_ID:%d(%d.%d.%d)',
+            PHP_VERSION_ID,
+            PHP_MAJOR_VERSION,
+            PHP_MINOR_VERSION,
+            PHP_RELEASE_VERSION
+        );
+
+        fwrite(STDOUT, "{$phpVer}\nError: {$error}");
+
+        throw $error;
+    }
+
+    /**
+     * Optimizer: isPhpVersion
+     * Compare user entered PHP version with Environment and return Boolean
+     * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
+     *
+     * @param  int|double|string $version - PHP version in any format: 7, 7.1, "7.1.1"
+     * @return boolean
+     */
+    private function isPhpVersion($version)
+    {
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
+        if (!count($matches)) {
+            throw new \Exception('Could not parse PHP version');
+        }
+
+        $majorVersion = 0;
+        $minorVersion = 0;
+        $releaseVersion = 0;
+
+        $phpMinorVersion = 0;
+        $phpReleaseVersion = 0;
+
+        $majorVersion = $matches['major'] * 10000;
+        $phpMajorVersion = PHP_MAJOR_VERSION * 10000;
+
+        if (isset($matches['minor'])) {
+            $minorVersion = $matches['minor'] * 100;
+            $phpMinorVersion = PHP_MINOR_VERSION * 100;
+        }
+
+        if (isset($matches['patch'])) {
+            $releaseVersion = $matches['patch'];
+            $phpReleaseVersion = PHP_RELEASE_VERSION;
+        }
+
+        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
+        $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
+
+        return (bool)($phpVersionId == $versionId ? 1 : 0);
     }
 }

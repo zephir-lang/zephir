@@ -57,6 +57,20 @@ class Struct
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $code = 'typedef struct '. $this->name .' { '.PHP_EOL;
+
+        foreach ($this->properties as $name => $type) {
+            $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
+        }
+
+        return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
+    }
+
+    /**
      * @param  string $field
      * @param  array  $global
      * @return void
@@ -82,36 +96,6 @@ class Struct
         }
 
         $this->properties[$field] = $this->convertToCType($global['type']);
-    }
-
-    /**
-     * Generates the internal c-type according to the php's type
-     *
-     * @param  string                   $type
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    protected function convertToCType($type)
-    {
-        switch ($type) {
-            case 'boolean':
-            case 'bool':
-                return 'zend_bool';
-
-            case 'hash':
-                return 'HashTable* ';
-
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'char':
-            case 'uchar':
-            case 'double':
-                return $type;
-
-            default:
-                throw new InvalidArgumentException('Unknown global type: ' . $type);
-        }
     }
 
     /**
@@ -162,20 +146,6 @@ class Struct
 
     /**
      * @return string
-     */
-    public function __toString()
-    {
-        $code = 'typedef struct '. $this->name .' { '.PHP_EOL;
-
-        foreach ($this->properties as $name => $type) {
-            $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
-        }
-
-        return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
-    }
-
-    /**
-     * @return string
      * @param  mixed  $name
      * @param  mixed  $global
      * @param  mixed  $namespace
@@ -217,5 +187,35 @@ class Struct
             break;
         }
         return '';
+    }
+
+    /**
+     * Generates the internal c-type according to the php's type
+     *
+     * @param  string                   $type
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    protected function convertToCType($type)
+    {
+        switch ($type) {
+            case 'boolean':
+            case 'bool':
+                return 'zend_bool';
+
+            case 'hash':
+                return 'HashTable* ';
+
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'char':
+            case 'uchar':
+            case 'double':
+                return $type;
+
+            default:
+                throw new InvalidArgumentException('Unknown global type: ' . $type);
+        }
     }
 }

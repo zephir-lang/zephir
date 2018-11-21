@@ -72,6 +72,60 @@ class NativeArrayAccess
     }
 
     /**
+     * Compiles foo[x] = {expr}
+     *
+     * @param $expression
+     * @param  CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
+
+        /**
+         * Resolve the left part of the expression
+         */
+        $expr = new Expression($expression['left']);
+        $expr->setReadOnly(true);
+        $exprVariable = $expr->compile($compilationContext);
+
+        /**
+         * Only dynamic variables can be used as arrays
+         */
+        switch ($exprVariable->getType()) {
+            case 'variable':
+                $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
+                switch ($variableVariable->getType()) {
+                    case 'variable':
+                    case 'array':
+                    case 'string':
+                        break;
+
+                    default:
+                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as array', $expression['left']);
+                }
+                break;
+
+            default:
+                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an array', $expression['left']);
+        }
+
+        /**
+         * Resolve the dimension according to variable's type
+         */
+        switch ($variableVariable->getType()) {
+            case 'variable':
+                return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
+
+            case 'array':
+                return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
+
+            case 'string':
+                return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
+        }
+    }
+
+    /**
      * @param array              $expression
      * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
@@ -264,59 +318,5 @@ class NativeArrayAccess
         $compilationContext->backend->arrayFetch($symbolVariable, $variableVariable, $exprIndex, $flags, $arrayAccess, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-    }
-
-    /**
-     * Compiles foo[x] = {expr}
-     *
-     * @param $expression
-     * @param  CompilationContext $compilationContext
-     * @return CompiledExpression
-     * @throws CompilerException
-     */
-    public function compile($expression, CompilationContext $compilationContext)
-    {
-
-        /**
-         * Resolve the left part of the expression
-         */
-        $expr = new Expression($expression['left']);
-        $expr->setReadOnly(true);
-        $exprVariable = $expr->compile($compilationContext);
-
-        /**
-         * Only dynamic variables can be used as arrays
-         */
-        switch ($exprVariable->getType()) {
-            case 'variable':
-                $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
-                switch ($variableVariable->getType()) {
-                    case 'variable':
-                    case 'array':
-                    case 'string':
-                        break;
-
-                    default:
-                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as array', $expression['left']);
-                }
-                break;
-
-            default:
-                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an array', $expression['left']);
-        }
-
-        /**
-         * Resolve the dimension according to variable's type
-         */
-        switch ($variableVariable->getType()) {
-            case 'variable':
-                return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
-
-            case 'array':
-                return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
-
-            case 'string':
-                return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
-        }
     }
 }

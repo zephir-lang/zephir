@@ -78,37 +78,6 @@ class ArithmeticalBaseOperator extends BaseOperator
     }
 
     /**
-     * Returns proper dynamic types
-     *
-     * @param  Variable $left
-     * @param  Variable $right
-     * @return string
-     */
-    private function getDynamicTypes(Variable $left, Variable $right)
-    {
-        if ($this->operator == '/') {
-            return 'double';
-        }
-
-        switch ($left->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return 'int';
-                }
-                break;
-        }
-
-        return 'double';
-    }
-
-    /**
      * Compiles the arithmetical operation
      *
      * @param  array              $expression
@@ -526,5 +495,36 @@ class ArithmeticalBaseOperator extends BaseOperator
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
         }
+    }
+
+    /**
+     * Returns proper dynamic types
+     *
+     * @param  Variable $left
+     * @param  Variable $right
+     * @return string
+     */
+    private function getDynamicTypes(Variable $left, Variable $right)
+    {
+        if ($this->operator == '/') {
+            return 'double';
+        }
+
+        switch ($left->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                switch ($right->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                        return 'int';
+                }
+                break;
+        }
+
+        return 'double';
     }
 }

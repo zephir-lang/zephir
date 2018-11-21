@@ -25,50 +25,6 @@ use Zephir\Variable as ZephirVariable;
 class ArrayIndexAppend extends ArrayIndex
 {
     /**
-     * Compiles foo[y][x][] = {expr} (multiple offset)
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     */
-    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-        $offsetExprs = [];
-        foreach ($statement['index-expr'] as $indexExpr) {
-            $expression = new Expression($indexExpr);
-            $expression->setReadOnly(true);
-            $exprIndex = $expression->compile($compilationContext);
-
-            switch ($exprIndex->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                case 'string':
-                case 'variable':
-                    break;
-                default:
-                    throw new CompilerException('Index: ' . $exprIndex->getType() . ' cannot be used as array index in assignment without cast', $indexExpr);
-            }
-
-            $offsetExprs[] = $exprIndex;
-        }
-
-        $compilationContext->headersManager->add('kernel/array');
-
-        /**
-         * Create a temporal zval (if needed)
-         */
-        $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
-        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
-
-        $offsetExprs[] = 'a';
-        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
-    }
-
-    /**
      * Compiles foo[y][] = {expr}
      *
      * @param  string             $variable
@@ -119,5 +75,49 @@ class ArrayIndexAppend extends ArrayIndex
         }
 
         $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+    }
+
+    /**
+     * Compiles foo[y][x][] = {expr} (multiple offset)
+     *
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     */
+    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    {
+        $offsetExprs = [];
+        foreach ($statement['index-expr'] as $indexExpr) {
+            $expression = new Expression($indexExpr);
+            $expression->setReadOnly(true);
+            $exprIndex = $expression->compile($compilationContext);
+
+            switch ($exprIndex->getType()) {
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                case 'string':
+                case 'variable':
+                    break;
+                default:
+                    throw new CompilerException('Index: ' . $exprIndex->getType() . ' cannot be used as array index in assignment without cast', $indexExpr);
+            }
+
+            $offsetExprs[] = $exprIndex;
+        }
+
+        $compilationContext->headersManager->add('kernel/array');
+
+        /**
+         * Create a temporal zval (if needed)
+         */
+        $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
+
+        $offsetExprs[] = 'a';
+        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
     }
 }

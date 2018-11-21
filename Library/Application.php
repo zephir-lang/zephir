@@ -30,6 +30,13 @@ use Zephir\Providers\CompilerProvider;
  */
 final class Application extends BaseApplication
 {
+
+    /**
+     * The Service Registrator instance.
+     *
+     * @var ServiceRegistrator
+     */
+    protected $serviceRegistrator;
     private $logo = '
  _____              __    _
 /__  /  ___  ____  / /_  (_)____
@@ -38,13 +45,6 @@ final class Application extends BaseApplication
 /____/\___/ .___/_/ /_/_/_/
          /_/
 ';
-
-    /**
-     * The Service Registrator instance.
-     *
-     * @var ServiceRegistrator
-     */
-    protected $serviceRegistrator;
 
     /**
      * Bootstrap constructor.
@@ -71,18 +71,6 @@ final class Application extends BaseApplication
 
             exit(1);
         }
-    }
-
-    /**
-     * Register Zephir compiler.
-     *
-     * @return void
-     */
-    protected function registerCompiler()
-    {
-        $this->serviceRegistrator->registerService(
-            new CompilerProvider()
-        );
     }
 
     /**
@@ -113,6 +101,38 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
+     * @return int
+     *
+     * @throws \Throwable|\Exception
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        if (true === $input->hasParameterOption(['--dumpversion'], true)) {
+            $output->writeln($this->getVersion());
+
+            return 0;
+        }
+
+        return parent::doRun($input, $output);
+    }
+
+    /**
+     * Register Zephir compiler.
+     *
+     * @return void
+     */
+    protected function registerCompiler()
+    {
+        $this->serviceRegistrator->registerService(
+            new CompilerProvider()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @return InputDefinition
      */
     protected function getDefaultInputDefinition()
@@ -129,26 +149,6 @@ final class Application extends BaseApplication
         );
 
         return $definition;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
-     * @return int
-     *
-     * @throws \Throwable|\Exception
-     */
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-        if (true === $input->hasParameterOption(['--dumpversion'], true)) {
-            $output->writeln($this->getVersion());
-
-            return 0;
-        }
-
-        return parent::doRun($input, $output);
     }
 
     /**

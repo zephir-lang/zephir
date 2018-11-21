@@ -319,159 +319,6 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Creates the property shortcuts.
-     *
-     * @param  array           $property
-     * @param  ClassDefinition $classDefinition
-     * @return void
-     *
-     * @throws CompilerException
-     */
-    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
-    {
-        foreach ($property['shortcuts'] as $shortcut) {
-            if (substr($property['name'], 0, 1) == '_') {
-                $name = substr($property['name'], 1);
-            } else {
-                $name = $property['name'];
-            }
-
-            $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
-            $returnsType = [];
-
-            if ($docBlock) {
-                $docBlockParser = new DocblockParser('/' . $docBlock .'/');
-                $docBlockParsed = $docBlockParser->parse();
-
-                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
-                    $returnsType = array_map(function ($type) {
-                        return ($type = trim($type)) == 'mixed' ? 'variable' : $type;
-                    }, (array)explode('|', $annotations[0]->getString()));
-                }
-
-                // Clear annotations
-                $docBlockParsed->setAnnotations([]);
-                $docBlock = $docBlockParsed->generate();
-            }
-
-            switch ($shortcut['name']) {
-                case 'get':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        ['public'],
-                        'get' . camelize($name),
-                        null,
-                        new StatementsBlock([
-                            [
-                                'type' => 'return',
-                                'expr' => [
-                                    'type' => 'property-access',
-                                    'left' => [
-                                        'type' => 'variable',
-                                        'value' => 'this'
-                                    ],
-                                    'right' => [
-                                        'type' => 'variable',
-                                        'value' => $property['name']
-                                    ]
-                                ]
-                            ]
-                        ]),
-                        $docBlock,
-                        $this->createReturnsType($returnsType, true),
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                case 'set':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        ['public'],
-                        'set' . camelize($name),
-                        new ClassMethodParameters([
-                            [
-                                'type' => 'parameter',
-                                'name' => $name,
-                                'const' => 0,
-                                'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
-                                'mandatory' => 0
-                            ]
-                        ]),
-                        new StatementsBlock([
-                            [
-                                'type' => 'let',
-                                'assignments' => [
-                                    [
-                                        'assign-type' => 'object-property',
-                                        'operator' => 'assign',
-                                        'variable' => 'this',
-                                        'property' => $property['name'],
-                                        'expr' => [
-                                            'type' => 'variable',
-                                            'value' => $name,
-                                            'file' => $property['file'],
-                                            'line' => $property['line'],
-                                            'char' => $property['char']
-                                        ],
-                                        'file' => $property['file'],
-                                        'line' => $property['line'],
-                                        'char' => $property['char']
-                                    ]
-                                ]
-                            ],
-                            [
-                                'type' => 'return',
-                                'expr' => [
-                                    'type' => 'variable',
-                                    'value' => 'this',
-                                    'file' => $property['file'],
-                                    'line' => $property['line'],
-                                    'char' => $property['char']
-                                ]
-                            ]
-                        ]),
-                        $docBlock,
-                        null,
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                case 'toString':
-                case '__toString':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        ['public'],
-                        '__toString',
-                        null,
-                        new StatementsBlock([
-                            [
-                                'type' => 'return',
-                                'expr' => [
-                                    'type' => 'property-access',
-                                    'left' => [
-                                        'type' => 'variable',
-                                        'value' => 'this'
-                                    ],
-                                    'right' => [
-                                        'type' => 'variable',
-                                        'value' => $property['name']
-                                    ]
-                                ]
-                            ]
-                        ]),
-                        $docBlock,
-                        $this->createReturnsType(['string']),
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                default:
-                    throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
-            }
-        }
-    }
-
-    /**
      * Creates a definition for a class
      *
      * @param CompilationContext $compilationContext
@@ -1024,6 +871,169 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
+     * Returns the path to the source file
+     *
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
+    }
+
+    /**
+     * Creates the property shortcuts.
+     *
+     * @param  array           $property
+     * @param  ClassDefinition $classDefinition
+     * @return void
+     *
+     * @throws CompilerException
+     */
+    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
+    {
+        foreach ($property['shortcuts'] as $shortcut) {
+            if (substr($property['name'], 0, 1) == '_') {
+                $name = substr($property['name'], 1);
+            } else {
+                $name = $property['name'];
+            }
+
+            $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
+            $returnsType = [];
+
+            if ($docBlock) {
+                $docBlockParser = new DocblockParser('/' . $docBlock .'/');
+                $docBlockParsed = $docBlockParser->parse();
+
+                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
+                    $returnsType = array_map(function ($type) {
+                        return ($type = trim($type)) == 'mixed' ? 'variable' : $type;
+                    }, (array)explode('|', $annotations[0]->getString()));
+                }
+
+                // Clear annotations
+                $docBlockParsed->setAnnotations([]);
+                $docBlock = $docBlockParsed->generate();
+            }
+
+            switch ($shortcut['name']) {
+                case 'get':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        'get' . camelize($name),
+                        null,
+                        new StatementsBlock([
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'property-access',
+                                    'left' => [
+                                        'type' => 'variable',
+                                        'value' => 'this'
+                                    ],
+                                    'right' => [
+                                        'type' => 'variable',
+                                        'value' => $property['name']
+                                    ]
+                                ]
+                            ]
+                        ]),
+                        $docBlock,
+                        $this->createReturnsType($returnsType, true),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                case 'set':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        'set' . camelize($name),
+                        new ClassMethodParameters([
+                            [
+                                'type' => 'parameter',
+                                'name' => $name,
+                                'const' => 0,
+                                'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
+                                'mandatory' => 0
+                            ]
+                        ]),
+                        new StatementsBlock([
+                            [
+                                'type' => 'let',
+                                'assignments' => [
+                                    [
+                                        'assign-type' => 'object-property',
+                                        'operator' => 'assign',
+                                        'variable' => 'this',
+                                        'property' => $property['name'],
+                                        'expr' => [
+                                            'type' => 'variable',
+                                            'value' => $name,
+                                            'file' => $property['file'],
+                                            'line' => $property['line'],
+                                            'char' => $property['char']
+                                        ],
+                                        'file' => $property['file'],
+                                        'line' => $property['line'],
+                                        'char' => $property['char']
+                                    ]
+                                ]
+                            ],
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'variable',
+                                    'value' => 'this',
+                                    'file' => $property['file'],
+                                    'line' => $property['line'],
+                                    'char' => $property['char']
+                                ]
+                            ]
+                        ]),
+                        $docBlock,
+                        null,
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                case 'toString':
+                case '__toString':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        '__toString',
+                        null,
+                        new StatementsBlock([
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'property-access',
+                                    'left' => [
+                                        'type' => 'variable',
+                                        'value' => 'this'
+                                    ],
+                                    'right' => [
+                                        'type' => 'variable',
+                                        'value' => $property['name']
+                                    ]
+                                ]
+                            ]
+                        ]),
+                        $docBlock,
+                        $this->createReturnsType(['string']),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                default:
+                    throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
+            }
+        }
+    }
+
+    /**
      * Transform class/interface name to FQN format
      *
      * @param  string $name
@@ -1032,16 +1042,6 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     protected function getFullName($name)
     {
         return fqcn($name, $this->namespace, $this->aliasManager);
-    }
-
-    /**
-     * Returns the path to the source file
-     *
-     * @return string
-     */
-    public function getFilePath()
-    {
-        return $this->filePath;
     }
 
     /**

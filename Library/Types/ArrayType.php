@@ -81,18 +81,6 @@ class ArrayType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getNumberParam($methodName)
-    {
-        if ($methodName == 'map') {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    /**
      * Transforms calls to method "join" to function calls to "join"
      *
      * @param  object                          $caller
@@ -113,5 +101,17 @@ class ArrayType extends AbstractType
         $expression = new Expression($functionCall->build());
 
         return $expression->compile($compilationContext);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNumberParam($methodName)
+    {
+        if ($methodName == 'map') {
+            return 1;
+        }
+
+        return 0;
     }
 }

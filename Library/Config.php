@@ -20,6 +20,13 @@ namespace Zephir;
  */
 class Config implements \ArrayAccess, \JsonSerializable
 {
+
+    /**
+     * Is config changed?
+     *
+     * @var bool
+     */
+    protected $changed = false;
     /**
      * Default configuration for project
      *
@@ -95,13 +102,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     ];
 
     /**
-     * Is config changed?
-     *
-     * @var bool
-     */
-    protected $changed = false;
-
-    /**
      * Config constructor.
      *
      * @throws Exception
@@ -112,6 +112,16 @@ class Config implements \ArrayAccess, \JsonSerializable
         $this->changed = false;
 
         $this->registerShutdownFunction();
+    }
+
+    /**
+     * Returns JSON representation of the project config.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -304,16 +314,6 @@ class Config implements \ArrayAccess, \JsonSerializable
         if ($this->changed && !file_exists('config.json')) {
             file_put_contents('config.json', $this);
         }
-    }
-
-    /**
-     * Returns JSON representation of the project config.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return json_encode($this, JSON_PRETTY_PRINT);
     }
 
     /**
