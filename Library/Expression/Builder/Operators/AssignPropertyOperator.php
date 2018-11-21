@@ -85,7 +85,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     {
         $expression = parent::preBuild();
         $expression['assign-type'] = $this->getType();
-        $expression['property']    = $this->getProperty();
+        $expression['property'] = $this->getProperty();
 
         return $expression;
     }

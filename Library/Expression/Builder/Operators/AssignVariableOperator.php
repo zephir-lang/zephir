@@ -120,9 +120,9 @@ class AssignVariableOperator extends AbstractOperator
     {
         return [
             'assign-type' => 'variable',
-            'variable'    => $this->getVariable(),
-            'operator'    => $this->getOperator(),
-            'expr'        => $this->getExpression()
+            'variable' => $this->getVariable(),
+            'operator' => $this->getOperator(),
+            'expr' => $this->getExpression()
         ];
     }
 }

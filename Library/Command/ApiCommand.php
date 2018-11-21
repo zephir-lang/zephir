@@ -69,10 +69,10 @@ class ApiCommand extends ContainerAwareCommand implements ZflagsAwareInterface
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $defaults = [
-            'path'    => null,
-            'output'  => $this->config->get('path', 'api'),
+            'path' => null,
+            'output' => $this->config->get('path', 'api'),
             'options' => null,
-            'url'     => $this->config->get('base-url', 'api'),
+            'url' => $this->config->get('base-url', 'api'),
         ];
 
         $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {

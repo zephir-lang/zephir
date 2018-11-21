@@ -70,7 +70,7 @@ class StaticConstantAccess
     {
         $compiler = &$compilationContext->compiler;
         $className = $expression['left']['value'];
-        $constant  = $expression['right']['value'];
+        $constant = $expression['right']['value'];
 
         /**
          * Fetch the class definition according to the class where the constant

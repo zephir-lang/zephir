@@ -154,11 +154,11 @@ class Variable implements TypeAwareInterface
      */
     protected $complexTypes = [
         'variable' => 1,
-        'string'   => 1,
-        'array'    => 1,
+        'string' => 1,
+        'array' => 1,
         'resource' => 1,
         'callable' => 1,
-        'object'   => 1,
+        'object' => 1,
     ];
 
     /**

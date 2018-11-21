@@ -348,11 +348,11 @@ class ForStatement extends StatementAbstract
                         'variable' => $valueVariable,
                         'operator' => 'assign',
                         'expr' => [
-                            'type'  => 'variable',
+                            'type' => 'variable',
                             'value' => $tempVariable->getName(),
-                            'file'  => $this->statement['file'],
-                            'line'  => $this->statement['line'],
-                            'char'  => $this->statement['char']
+                            'file' => $this->statement['file'],
+                            'line' => $this->statement['line'],
+                            'char' => $this->statement['char']
                         ],
                         'file' => $this->statement['file'],
                         'line' => $this->statement['line'],

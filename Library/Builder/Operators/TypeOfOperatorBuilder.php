@@ -42,11 +42,11 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
     public function get()
     {
         return [
-            'type'       => 'typeof',
-            'left'       => $this->leftOperand->get(),
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
+            'type' => 'typeof',
+            'left' => $this->leftOperand->get(),
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char
         ];
     }
 }

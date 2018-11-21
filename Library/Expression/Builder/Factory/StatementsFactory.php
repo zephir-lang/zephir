@@ -132,7 +132,7 @@ class StatementsFactory
     public function rawC($value)
     {
         return $this->raw([
-            'type'  => 'cblock',
+            'type' => 'cblock',
             'value' => $value
         ]);
     }

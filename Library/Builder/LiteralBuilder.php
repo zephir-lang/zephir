@@ -31,7 +31,7 @@ class LiteralBuilder
     public function get()
     {
         return [
-            'type'  => $this->type,
+            'type' => $this->type,
             'value' => $this->value
         ];
     }

@@ -137,9 +137,9 @@ class CallFunctionStatement extends AbstractStatement
         }
 
         return [
-            'type'       => 'fcall',
-            'name'       => $this->getName(),
-            'call-type'  => $this->getTypeCall(),
+            'type' => 'fcall',
+            'name' => $this->getName(),
+            'call-type' => $this->getTypeCall(),
             'parameters' => $arguments,
         ];
     }

@@ -50,19 +50,19 @@ class AndOperator extends LogicalBaseOperator
             case 'uint':
             case 'uchar':
                 $assignExprLeft = [
-                    'type'  => $left->getType(),
+                    'type' => $left->getType(),
                     'value' => $left->getCode(),
                 ];
                 break;
             case 'variable':
                 $assignExprLeft = [
-                    'type'  => 'variable',
+                    'type' => 'variable',
                     'value' => $left->getCode(),
                 ];
                 break;
             case 'null':
                 $assignExprLeft = [
-                    'type'  => 'null',
+                    'type' => 'null',
                     'value' => null
                 ];
                 break;
@@ -107,19 +107,19 @@ class AndOperator extends LogicalBaseOperator
             case 'uint':
             case 'uchar':
                 $assignExprRight = [
-                    'type'  => $right->getType(),
+                    'type' => $right->getType(),
                     'value' => $right->getCode(),
                 ];
                 break;
             case 'variable':
                 $assignExprRight = [
-                    'type'  => 'variable',
+                    'type' => 'variable',
                     'value' => $right->getCode(),
                 ];
                 break;
             case 'null':
                 $assignExprRight = [
-                    'type'  => 'null',
+                    'type' => 'null',
                     'value' => null
                 ];
                 break;

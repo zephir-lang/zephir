@@ -1561,9 +1561,9 @@ class ClassMethod
         $cacheManager = new CacheManager();
         $cacheManager->setGatherer($callGathererPass);
 
-        $compilationContext->cacheManager  = $cacheManager;
+        $compilationContext->cacheManager = $cacheManager;
         $compilationContext->typeInference = $typeInference;
-        $compilationContext->symbolTable   = $symbolTable;
+        $compilationContext->symbolTable = $symbolTable;
 
         $oldCodePrinter = $compilationContext->codePrinter;
 

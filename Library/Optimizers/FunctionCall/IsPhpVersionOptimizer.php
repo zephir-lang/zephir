@@ -25,13 +25,13 @@ use Zephir\Optimizers\OptimizerAbstract;
 class IsPhpVersionOptimizer extends OptimizerAbstract
 {
     protected $allowedTypes = [
-        'string'    => true,
-        'int'       => true,
-        'long'      => true,
-        'double'    => true,
-        'uint'      => true,
-        'ulong'     => true,
-        'istring'   => true
+        'string' => true,
+        'int' => true,
+        'long' => true,
+        'double' => true,
+        'uint' => true,
+        'ulong' => true,
+        'istring' => true
     ];
 
     /**
@@ -62,7 +62,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException('Could not parse PHP version', $expression);
         }
 
-        $minorVersion   = 0;
+        $minorVersion = 0;
         $releaseVersion = 0;
 
         $majorVersion = $matches['major'] * 10000;

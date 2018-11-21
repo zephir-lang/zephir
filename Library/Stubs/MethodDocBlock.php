@@ -84,7 +84,7 @@ class MethodDocBlock extends DocBlock
                         continue;
                     }
 
-                    $key  = $returnType['cast']['value'];
+                    $key = $returnType['cast']['value'];
                     $type = $key;
 
                     if ($this->aliasManager->isAlias($type)) {

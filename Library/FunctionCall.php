@@ -465,9 +465,9 @@ class FunctionCall extends Call
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output(
                         strtr('ZEPHIR_RETURN_CALL_FUNCTION(":func", :pointer, :params);', [
-                            ':func'    => $funcName,
+                            ':func' => $funcName,
                             ':pointer' => $cachePointer,
-                            ':params'  => implode(', ', $params),
+                            ':params' => implode(', ', $params),
                         ])
                     );
                 } else {
@@ -478,19 +478,19 @@ class FunctionCall extends Call
 
                     $codePrinter->output(
                         strtr('ZEPHIR_CALL_FUNCTION(:symbol, ":func", :pointer, :params);', [
-                            ':symbol'  => $symbol,
-                            ':func'    => $funcName,
+                            ':symbol' => $symbol,
+                            ':func' => $funcName,
                             ':pointer' => $cachePointer,
-                            ':params'  => implode(', ', $params),
+                            ':params' => implode(', ', $params),
                         ])
                     );
                 }
             } else {
                 $codePrinter->output(
                     strtr('ZEPHIR_CALL_FUNCTION(NULL, ":func", :pointer, :params);', [
-                        ':func'    => $funcName,
+                        ':func' => $funcName,
                         ':pointer' => $cachePointer,
-                        ':params'  => implode(', ', $params),
+                        ':params' => implode(', ', $params),
                     ])
                 );
             }

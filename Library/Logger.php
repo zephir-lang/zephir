@@ -60,7 +60,7 @@ class Logger
                 return false;
             }
 
-            $warning  = 'Warning: ' . $message;
+            $warning = 'Warning: ' . $message;
             if (!isset($node['file'])) {
                 $warning .= ' in unknown on 0';
             } else {

@@ -51,11 +51,11 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
         }
 
         return [
-            'type'       => $this->operator,
-            'left'       => $expr,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
+            'type' => $this->operator,
+            'left' => $expr,
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char
         ];
     }
 }

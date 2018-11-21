@@ -532,7 +532,7 @@ class Backend extends BackendZendEngine2
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
     {
-        $name  = $globalVar->getName();
+        $name = $globalVar->getName();
         $output = strtr('zephir_get_global(&:name, SL(":name"));', [':name' => $name]);
 
         if ($useCodePrinter) {

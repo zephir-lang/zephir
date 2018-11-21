@@ -357,7 +357,7 @@ class ClassProperty
 
         if ($this->isStatic()) {
             $className = '\\' . $this->classDefinition->getCompleteName();
-            $expr      = $exprBuilder->raw($this->original['default']);
+            $expr = $exprBuilder->raw($this->original['default']);
             return $exprBuilder->statements()->let([
                 $exprBuilder->operators()
                     ->assignStaticProperty($className, $this->name, $expr)

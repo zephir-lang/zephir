@@ -67,9 +67,9 @@ class Documentation implements InjectionAwareInterface
         // TODO: Validate options
         ksort($classes);
 
-        $this->config  = $config;
+        $this->config = $config;
         $this->classes = $classes;
-        $this->logger  = $logger;
+        $this->logger = $logger;
         $this->options = $options;
 
         $themeConfig = $config->get('theme', 'api');

@@ -65,15 +65,15 @@ class VarDumpOptimizer extends OptimizerAbstract
                             'variable' => $variable->getName(),
                             'operator' => 'assign',
                             'expr' => [
-                                'type'  => $resolvedParam->getType(),
+                                'type' => $resolvedParam->getType(),
                                 'value' => $resolvedParam->getCode(),
-                                'file'  => $expression['file'],
-                                'line'  => $expression['line'],
-                                'char'  => $expression['char'],
+                                'file' => $expression['file'],
+                                'line' => $expression['line'],
+                                'char' => $expression['char'],
                             ],
-                            'file'  => $expression['file'],
-                            'line'  => $expression['line'],
-                            'char'  => $expression['char'],
+                            'file' => $expression['file'],
+                            'line' => $expression['line'],
+                            'char' => $expression['char'],
                         ]
                     ]
                 ]);

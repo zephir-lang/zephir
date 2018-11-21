@@ -113,7 +113,7 @@ class Template
 
         return [
             'css' => $css,
-            'javascript'  => $js
+            'javascript' => $js
         ];
     }
 
@@ -198,7 +198,7 @@ class Template
 
     public function partial($fileName, array $data = [])
     {
-        $newLevel = $this->nestedLevel+1;
+        $newLevel = $this->nestedLevel + 1;
 
         $template = new Template($this->theme, array_merge($this->data, $data), $fileName, $newLevel);
         $template->setPathToRoot($this->getPathToRoot());

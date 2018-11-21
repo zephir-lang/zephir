@@ -109,7 +109,7 @@ class CompilerFileAnonymous implements FileInterface
 
         $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code  = '' . PHP_EOL;
+        $code = '' . PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
         $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
         $code .= '#endif' . PHP_EOL;
@@ -205,7 +205,7 @@ class CompilerFileAnonymous implements FileInterface
 
         $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
 
-        $filePath       = 'ext/' . $path . '.zep.c';
+        $filePath = 'ext/' . $path . '.zep.c';
         $filePathHeader = 'ext/' . $path . '.zep.h';
 
         if (strpos($path, DIRECTORY_SEPARATOR)) {

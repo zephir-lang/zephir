@@ -120,7 +120,7 @@ class Constants
         $isPhpConstant = false;
         $isZephirConstant = false;
 
-        $constantName    = $expression['value'];
+        $constantName = $expression['value'];
 
         $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
