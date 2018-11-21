@@ -48,20 +48,20 @@ class ClassFile extends AbstractFile
 
         foreach ($nsPieces as $n) {
             if (strlen($nsStr) > 0) {
-                $nsStr.= '\\';
+                $nsStr .= '\\';
             }
-            $nsStr.= $n;
+            $nsStr .= $n;
             $nsPatches[$n] = $nsStr;
         }
 
         return [
 
             'classDefinition' => $this->class,
-            'compilerFile'    => $this->compilerFile,
+            'compilerFile' => $this->compilerFile,
             'className' => $this->class->getName(),
             'classNamespace' => $this->class->getNamespace(),
-            'fullName'  => $this->class->getCompleteName(),
-            'methods'   => $this->class->getMethods(),
+            'fullName' => $this->class->getCompleteName(),
+            'methods' => $this->class->getMethods(),
             'namespacePieces' => $nsPatches
 
         ];

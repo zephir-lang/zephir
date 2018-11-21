@@ -36,9 +36,9 @@ class Sitemap extends AbstractFile
     public function getData()
     {
         return [
-            'classes'    => $this->classes,
+            'classes' => $this->classes,
             'namespaces' => $this->namespaces,
-            'baseUrl'    => $this->baseUrl,
+            'baseUrl' => $this->baseUrl,
         ];
     }
 

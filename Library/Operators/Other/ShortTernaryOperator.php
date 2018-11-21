@@ -65,12 +65,12 @@ class ShortTernaryOperator extends BaseOperator
                  */
                 new LetStatementBuilder([
                     'assign-type' => 'variable',
-                    'variable'    => $returnVariable->getName(),
-                    'operator'    => 'assign',
-                    'expr'        => $expression['extra'],
-                    'file'        => $expression['file'],
-                    'line'        => $expression['line'],
-                    'char'        => $expression['char']
+                    'variable' => $returnVariable->getName(),
+                    'operator' => 'assign',
+                    'expr' => $expression['extra'],
+                    'file' => $expression['file'],
+                    'line' => $expression['line'],
+                    'char' => $expression['char']
                 ], $expression['extra'])
             ]),
             new StatementsBlockBuilder([
@@ -79,12 +79,12 @@ class ShortTernaryOperator extends BaseOperator
                  */
                 new LetStatementBuilder([
                     'assign-type' => 'variable',
-                    'variable'    => $returnVariable->getName(),
-                    'operator'    => 'assign',
-                    'expr'        => $expression['left'],
-                    'file'        => $expression['file'],
-                    'line'        => $expression['line'],
-                    'char'        => $expression['char']
+                    'variable' => $returnVariable->getName(),
+                    'operator' => 'assign',
+                    'expr' => $expression['left'],
+                    'file' => $expression['file'],
+                    'line' => $expression['line'],
+                    'char' => $expression['char']
                 ], $expression['extra'])
             ])
         );

@@ -30,11 +30,11 @@ class WriteDetector
 
     const DETECT_PARAM_PASS = 1;
 
-    const DETECT_ARRAY_USE  = 2;
+    const DETECT_ARRAY_USE = 2;
 
     const DETECT_VALUE_IN_ASSIGNMENT = 4;
 
-    const DETECT_ALL  = 255;
+    const DETECT_ALL = 255;
 
     /**
      * Do the detection pass on a single variable

@@ -64,7 +64,7 @@ class TryCatchStatement extends StatementAbstract
             $compilationContext->backend->copyOnWrite($exc_var, 'EG(exception)', $compilationContext);
 
             $exprBuilder = BuilderFactory::getInstance();
-            $ifs         = [];
+            $ifs = [];
 
             foreach ($this->statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
@@ -115,8 +115,8 @@ class TryCatchStatement extends StatementAbstract
             }
 
             $primaryIf = $ifs[0];
-            $lastIf    = $ifs[0];
-            for ($i=1; $i<count($ifs); ++$i) {
+            $lastIf = $ifs[0];
+            for ($i = 1; $i < count($ifs); ++$i) {
                 $lastIf->setElseStatements($exprBuilder->statements()->block([$ifs[$i]]));
                 $lastIf = $ifs[$i];
             }

@@ -57,13 +57,13 @@ class NamespaceAccessor
             foreach ($ns as $n) {
                 if (strlen($actualStr) > 0) {
                     $previous = $byNamespace[$actualStr];
-                    $actualStr.= '\\';
+                    $actualStr .= '\\';
                     $isRoot = false;
                 } else {
                     $previous = null;
                     $isRoot = true;
                 }
-                $actualStr.= $n;
+                $actualStr .= $n;
 
                 if (!isset($byNamespace[$actualStr])) {
                     $byNamespace[$actualStr] = new NamespaceHelper($actualStr);

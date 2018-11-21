@@ -409,24 +409,24 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                                         'expr' => [
                                             'type' => 'variable',
                                             'value' => $name,
-                                            'file'  => $property['file'],
-                                            'line'  => $property['line'],
-                                            'char'  => $property['char']
+                                            'file' => $property['file'],
+                                            'line' => $property['line'],
+                                            'char' => $property['char']
                                         ],
-                                        'file'  => $property['file'],
-                                        'line'  => $property['line'],
-                                        'char'  => $property['char']
+                                        'file' => $property['file'],
+                                        'line' => $property['line'],
+                                        'char' => $property['char']
                                     ]
                                 ]
                             ],
                             [
                                 'type' => 'return',
                                 'expr' => [
-                                    'type'  => 'variable',
+                                    'type' => 'variable',
                                     'value' => 'this',
-                                    'file'  => $property['file'],
-                                    'line'  => $property['line'],
-                                    'char'  => $property['char']
+                                    'file' => $property['file'],
+                                    'line' => $property['line'],
+                                    'char' => $property['char']
                                 ]
                             ]
                         ]),
@@ -985,7 +985,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
         $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code  = '' . PHP_EOL;
+        $code = '' . PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
         $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
         $code .= '#endif' . PHP_EOL;

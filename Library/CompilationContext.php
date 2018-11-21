@@ -200,7 +200,7 @@ class CompilationContext
     public function getFullName($className)
     {
         $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
-        $namespace  = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
+        $namespace = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
         return fqcn($className, $namespace, $this->aliasManager);
     }

@@ -74,7 +74,7 @@ function add_slashes($string)
 
     for ($i = 0; $i < $length; $i++) {
         $ch = \substr($string, $i, 1);
-        if ($i != ($length -1)) {
+        if ($i != ($length - 1)) {
             $after = \substr($string, $i + 1, 1);
         } else {
             $after = null;

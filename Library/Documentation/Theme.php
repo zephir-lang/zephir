@@ -35,11 +35,11 @@ class Theme
 
     public function __construct($themeDir, $outputDir, $themeConfig, $config, Documentation $documentation)
     {
-        $this->outputDir   = $outputDir;
+        $this->outputDir = $outputDir;
         $this->themeConfig = $themeConfig;
-        $this->themeDir    = $themeDir;
-        $this->options     = $themeConfig['options'];
-        $this->projectConfig= $config;
+        $this->themeDir = $themeDir;
+        $this->options = $themeConfig['options'];
+        $this->projectConfig = $config;
         $this->documentation = $documentation;
 
         $themeInfosPath = $this->getThemePath('theme.json');
@@ -73,8 +73,8 @@ class Theme
     {
         $outputFile = ltrim($file->getOutputFile(), '/');
 
-        $output   = pathinfo($this->outputDir . '/' . $outputFile);
-        $outputDirname  = $output['dirname'];
+        $output = pathinfo($this->outputDir . '/' . $outputFile);
+        $outputDirname = $output['dirname'];
         $outputBasename = $output['basename'];
         $outputFilename = $outputDirname . '/' . $outputBasename;
 
@@ -83,7 +83,7 @@ class Theme
             mkdir($outputDirname, 0777, true);
         }
 
-        $subDirNumber= count(explode('/', $outputFile))-1;
+        $subDirNumber = count(explode('/', $outputFile)) - 1;
 
         if ($subDirNumber > 0) {
             $pathToRoot = str_repeat('../', $subDirNumber);
@@ -196,8 +196,8 @@ class Theme
         $namespaces = $nsA->getByNamespace();
 
         foreach ($namespaces as $ns) {
-            $subclasses     = [];
-            $subnamespaces  = [];
+            $subclasses = [];
+            $subnamespaces = [];
 
             foreach ($ns->getClasses() as $scs) {
                 $subclasses[] = $scs->getClassDefinition()->getCompleteName();
@@ -209,10 +209,10 @@ class Theme
 
             $output['allNamespaces'][$ns->getFullNamespace()] = [
 
-                'name'       => $ns->getFullNamespace(),
-                'shortName'  => $ns->getShortName(),
+                'name' => $ns->getFullNamespace(),
+                'shortName' => $ns->getShortName(),
                 'parentName' => $ns->getParentName(),
-                'classes'    => $subclasses,
+                'classes' => $subclasses,
                 'namespaces' => $subnamespaces
 
             ];
@@ -234,7 +234,7 @@ class Theme
     private function __namespaceTreeHelper(NamespaceHelper $ns)
     {
         $output = [
-            'classes'    => [],
+            'classes' => [],
             'namespaces' => []
         ];
 
@@ -300,8 +300,8 @@ class Theme
      */
     public function getThemePath($path)
     {
-        $path   = pathinfo($this->themeDir . '/' . $path);
-        $pathDirname  = $path['dirname'];
+        $path = pathinfo($this->themeDir . '/' . $path);
+        $pathDirname = $path['dirname'];
         $pathBasename = $path['basename'];
         $pathFilename = $pathDirname . '/' . $pathBasename;
 
@@ -314,8 +314,8 @@ class Theme
 
     public function getOutputPath($path)
     {
-        $path   = pathinfo($this->outputDir . '/' . $path);
-        $pathDirname  = $path['dirname'];
+        $path = pathinfo($this->outputDir . '/' . $path);
+        $pathDirname = $path['dirname'];
         $pathBasename = $path['basename'];
         $pathFilename = $pathDirname . '/' . $pathBasename;
 

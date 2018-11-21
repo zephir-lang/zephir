@@ -47,15 +47,15 @@ class ExportSymbolString
                     'variable' => $variable->getName(),
                     'operator' => 'assign',
                     'expr' => [
-                        'type'  => $resolvedExpr->getType(),
+                        'type' => $resolvedExpr->getType(),
                         'value' => $resolvedExpr->getCode(),
-                        'file'  => $statement['file'],
-                        'line'  => $statement['line'],
-                        'char'  => $statement['char'],
+                        'file' => $statement['file'],
+                        'line' => $statement['line'],
+                        'char' => $statement['char'],
                     ],
-                    'file'  => $statement['file'],
-                    'line'  => $statement['line'],
-                    'char'  => $statement['char'],
+                    'file' => $statement['file'],
+                    'line' => $statement['line'],
+                    'char' => $statement['char'],
                 ]
             ]
         ]);

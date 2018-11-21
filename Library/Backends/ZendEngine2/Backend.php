@@ -909,7 +909,7 @@ class Backend extends BaseBackend
             $output = 'zephir_array_fetch(' . $this->getVariableCodePointer($var) . ', ' . $this->getVariableCode($src) . ', ' . $this->getVariableCode($index) . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
         } else {
             if ($isVariable) {
-                $indexAccess =  $this->getVariableCode($index);
+                $indexAccess = $this->getVariableCode($index);
             } else {
                 $indexAccess = $index->getCode();
                 if ($type == 'string') {

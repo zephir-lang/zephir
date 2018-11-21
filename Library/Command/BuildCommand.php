@@ -51,7 +51,7 @@ class BuildCommand extends ContainerAwareCommand implements DevelopmentModeAware
 
         $arguments = [
             'command' => 'install',
-            '--dev'   => $this->isDevelopmentModeEnabled($input),
+            '--dev' => $this->isDevelopmentModeEnabled($input),
         ];
 
         try {

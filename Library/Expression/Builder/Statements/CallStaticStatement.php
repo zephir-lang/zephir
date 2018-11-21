@@ -21,8 +21,8 @@ class CallStaticStatement extends AbstractStatement
     private $class;
     private $method;
     private $arguments;
-    private $dynamicClass     = false;
-    private $dynamicMethod    = false;
+    private $dynamicClass = false;
+    private $dynamicMethod = false;
 
     /**
      * @param null       $class
@@ -148,12 +148,12 @@ class CallStaticStatement extends AbstractStatement
         }
 
         return [
-            'type'           => 'scall',
-            'class'          => $this->getClass(),
-            'name'           => $this->getMethod(),
-            'parameters'     => $arguments,
-            'dynamic-class'  => $this->isDynamicClass(),
-            'dynamic'        => $this->isDynamicMethod(),
+            'type' => 'scall',
+            'class' => $this->getClass(),
+            'name' => $this->getMethod(),
+            'parameters' => $arguments,
+            'dynamic-class' => $this->isDynamicClass(),
+            'dynamic' => $this->isDynamicMethod(),
 
         ];
     }

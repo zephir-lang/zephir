@@ -66,14 +66,14 @@ class Globals
      * @var array
      */
     protected $superglobals = [
-        self::GET     => 1,
-        self::POST    => 1,
-        self::ENV     => 1,
-        self::COOKIE  => 1,
-        self::SERVER  => 1,
+        self::GET => 1,
+        self::POST => 1,
+        self::ENV => 1,
+        self::COOKIE => 1,
+        self::SERVER => 1,
         self::SESSION => 1,
         self::REQUEST => 1,
-        self::FILES   => 1,
+        self::FILES => 1,
     ];
 
     /**

@@ -52,13 +52,13 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
             $parameters[] = $parameter->get();
         }
         return [
-            'type'       => 'new',
-            'class'      => $this->className,
+            'type' => 'new',
+            'class' => $this->className,
             'parameters' => $parameters,
-            'dynamic'    => $this->dynamic,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
+            'dynamic' => $this->dynamic,
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char
         ];
     }
 }

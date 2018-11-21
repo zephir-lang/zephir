@@ -112,23 +112,23 @@ class Docblock
         $docBlock = '**';
 
         if ($summary = $this->getSummary()) {
-            $docBlock.= PHP_EOL . ' * ' . $summary;
+            $docBlock .= PHP_EOL . ' * ' . $summary;
         }
 
         if ($description = $this->getDescription()) {
-            $docBlock.= PHP_EOL . ' *';
-            $docBlock.= PHP_EOL . ' *';
+            $docBlock .= PHP_EOL . ' *';
+            $docBlock .= PHP_EOL . ' *';
 
             foreach ((array)explode("\n", $description) as $line) {
-                $docBlock.= PHP_EOL . ' * ' . trim($line);
+                $docBlock .= PHP_EOL . ' * ' . trim($line);
             }
 
-            $docBlock.= PHP_EOL . ' *';
+            $docBlock .= PHP_EOL . ' *';
         }
 
         if ($annotations = $this->getAnnotations()) {
             foreach ($annotations as $annotation) {
-                $docBlock.= PHP_EOL . ' * @' . $annotation->getName() . ' ' . $annotation->getString();
+                $docBlock .= PHP_EOL . ' * @' . $annotation->getName() . ' ' . $annotation->getString();
             }
         }
 

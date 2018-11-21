@@ -19,9 +19,9 @@ namespace Zephir;
  */
 class Types
 {
-    const CHAR      = 'char';
-    const STRING    = 'string';
-    const NULL_     = 'null';
-    const ARRAY_    = 'array';
-    const INTEGER   = 'int';
+    const CHAR = 'char';
+    const STRING = 'string';
+    const NULL_ = 'null';
+    const ARRAY_ = 'array';
+    const INTEGER = 'int';
 }

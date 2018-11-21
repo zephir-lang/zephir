@@ -64,8 +64,8 @@ class DocblockParser
         $this->docblockObj = new Docblock();
 
         $this->ignoreSpaces = false;
-        $this->ignoreStar   = true;
-        $this->commentOpen  = false;
+        $this->ignoreStar = true;
+        $this->commentOpen = false;
         $this->annotationNameOpen = false;
         $this->annotationOpen = false;
         $this->summaryOpen = true;
@@ -127,7 +127,7 @@ class DocblockParser
                             $this->__tryRegisterAnnotation();
 
                             $this->ignoreSpaces = false;
-                            $this->ignoreStar   = true;
+                            $this->ignoreStar = true;
                         } elseif ($this->annotationNameOpen) {
                             if (ctype_space($currentChar)) {
                                 $this->annotationNameOpen = false;
@@ -143,7 +143,7 @@ class DocblockParser
                         if (strlen($this->summaryStr) > 0 && ($currentChar == "\n" || $currentChar == "\r")) {
                             $this->summaryOpen = false;
                             $this->descriptionOpen = true;
-                            $this->ignoreStar  = true;
+                            $this->ignoreStar = true;
                         } else {
                             $this->summaryStr .= $currentChar;
                         }

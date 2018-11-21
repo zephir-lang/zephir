@@ -201,24 +201,24 @@ class NewInstanceOperator extends BaseOperator
         /* @TODO use the MethodBuilder here */
         if (isset($expression['parameters'])) {
             $callExpr = new Expression([
-                'variable'   => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
-                'name'       => '__construct',
+                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name' => '__construct',
                 'parameters' => $expression['parameters'],
-                'call-type'  => MethodCall::CALL_NORMAL,
-                'file'       => $expression['file'],
-                'line'       => $expression['line'],
-                'char'       => $expression['char'],
-                'check'      => $callConstructor
+                'call-type' => MethodCall::CALL_NORMAL,
+                'file' => $expression['file'],
+                'line' => $expression['line'],
+                'char' => $expression['char'],
+                'check' => $callConstructor
             ]);
         } else {
             $callExpr = new Expression([
-                'variable'  => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
-                'name'      => '__construct',
+                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name' => '__construct',
                 'call-type' => MethodCall::CALL_NORMAL,
-                'file'      => $expression['file'],
-                'line'      => $expression['line'],
-                'char'      => $expression['char'],
-                'check'     => $callConstructor
+                'file' => $expression['file'],
+                'line' => $expression['line'],
+                'char' => $expression['char'],
+                'check' => $callConstructor
             ]);
         }
 

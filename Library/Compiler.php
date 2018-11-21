@@ -776,7 +776,7 @@ class Compiler implements InjectionAwareInterface
                     }
 
                     // Do not use $file->getRealPath() because it does not work inside phar
-                    $realPath =  $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
+                    $realPath = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
 
                     $extension = $file->getBasename(".{$file->getExtension()}");
                     if (!extension_loaded($extension)) {
@@ -886,13 +886,13 @@ class Compiler implements InjectionAwareInterface
         /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
          */
-        $namespace      = str_replace('\\', '_', $namespace);
-        $extensionName  = $this->config->get('extension-name');
+        $namespace = str_replace('\\', '_', $namespace);
+        $extensionName = $this->config->get('extension-name');
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
-        $needConfigure  = $this->createConfigFiles($extensionName);
+        $needConfigure = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
@@ -937,7 +937,7 @@ class Compiler implements InjectionAwareInterface
          * Get global namespace
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
-        $extensionName  = $this->config->get('extension-name');
+        $extensionName = $this->config->get('extension-name');
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
@@ -1219,12 +1219,12 @@ class Compiler implements InjectionAwareInterface
          * Generate config.m4
          */
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
-            '%PROJECT_LOWER%'        => strtolower($project),
-            '%PROJECT_UPPER%'        => strtoupper($project),
-            '%PROJECT_CAMELIZE%'     => ucfirst($project),
-            '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
-            '%HEADERS_COMPILED%'     => implode(' ', $compiledHeaders),
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%FILES_COMPILED%' => implode("\n\t", $compiledFiles),
+            '%HEADERS_COMPILED%' => implode(' ', $compiledHeaders),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
@@ -1240,10 +1240,10 @@ class Compiler implements InjectionAwareInterface
          * Generate config.w32
          */
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
-            '%PROJECT_LOWER%'        => strtolower($project),
-            '%PROJECT_UPPER%'        => strtoupper($project),
-            '%FILES_COMPILED%'       => implode(
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%FILES_COMPILED%' => implode(
                 "\r\n\t",
                 $this->processAddSources($compiledFiles, strtolower($project))
             ),
@@ -1794,36 +1794,36 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
-            '%PROJECT_LOWER%'       => strtolower($project),
-            '%PROJECT_UPPER%'       => strtoupper($project),
-            '%PROJECT_CAMELIZE%'    => ucfirst($project),
-            '%CLASS_ENTRIES%'       => implode(
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%CLASS_ENTRIES%' => implode(
                 PHP_EOL,
                 array_merge($completeInterfaceEntries, $completeClassEntries)
             ),
-            '%CLASS_INITS%'         => implode(
+            '%CLASS_INITS%' => implode(
                 PHP_EOL . "\t",
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
-            '%INIT_GLOBALS%'        => implode(
+            '%INIT_GLOBALS%' => implode(
                 PHP_EOL . "\t",
                 array_merge((array)$globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
-            '%DESTROY_GLOBALS%'     => $glbDestructors,
-            '%EXTENSION_INFO%'      => $phpInfo,
-            '%EXTRA_INCLUDES%'      => implode(
+            '%DESTROY_GLOBALS%' => $glbDestructors,
+            '%EXTENSION_INFO%' => $phpInfo,
+            '%EXTRA_INCLUDES%' => implode(
                 PHP_EOL,
                 array_unique(explode(PHP_EOL, $includes))
             ),
-            '%MOD_INITIALIZERS%'    => $modInitializers,
-            '%MOD_DESTRUCTORS%'     => $modDestructors,
-            '%REQ_INITIALIZERS%'    => implode(
+            '%MOD_INITIALIZERS%' => $modInitializers,
+            '%MOD_DESTRUCTORS%' => $modDestructors,
+            '%REQ_INITIALIZERS%' => implode(
                 PHP_EOL . "\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
             ),
-            '%REQ_DESTRUCTORS%'     => $reqDestructors,
+            '%REQ_DESTRUCTORS%' => $reqDestructors,
             '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
                 [
@@ -1837,8 +1837,8 @@ class Compiler implements InjectionAwareInterface
                     '}'
                 ]
             ),
-            '%FE_HEADER%'           => $feHeader,
-            '%FE_ENTRIES%'          => $feEntries,
+            '%FE_HEADER%' => $feHeader,
+            '%FE_ENTRIES%' => $feEntries,
             '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
         ];
         foreach ($toReplace as $mark => $replace) {
@@ -1901,16 +1901,16 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
-            '%PROJECT_LOWER%'            => strtolower($project),
-            '%PROJECT_UPPER%'            => strtoupper($project),
-            '%PROJECT_EXTNAME%'          => strtolower($project),
-            '%PROJECT_NAME%'             => utf8_decode($this->config->get('name')),
-            '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
-            '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
-            '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
-            '%EXTENSION_GLOBALS%'        => $globalCode,
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_EXTNAME%' => strtolower($project),
+            '%PROJECT_NAME%' => utf8_decode($this->config->get('name')),
+            '%PROJECT_AUTHOR%' => utf8_decode($this->config->get('author')),
+            '%PROJECT_VERSION%' => utf8_decode($this->config->get('version')),
+            '%PROJECT_DESCRIPTION%' => utf8_decode($this->config->get('description')),
+            '%PROJECT_ZEPVERSION%' => Zephir::VERSION,
+            '%EXTENSION_GLOBALS%' => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         ];
 
@@ -2068,10 +2068,10 @@ class Compiler implements InjectionAwareInterface
                 }
 
                 $toReplace = [
-                    '%PACKAGE_LOWER%'        => strtolower($pkg),
-                    '%PACKAGE_UPPER%'        => strtoupper($pkg),
-                    '%PACKAGE_REQUESTED_VERSION%'        => $operator . ' ' . $version,
-                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd . '=' . $version,
+                    '%PACKAGE_LOWER%' => strtolower($pkg),
+                    '%PACKAGE_UPPER%' => strtoupper($pkg),
+                    '%PACKAGE_REQUESTED_VERSION%' => $operator . ' ' . $version,
+                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%' => $operatorCmd . '=' . $version,
                 ];
 
                 foreach ($toReplace as $mark => $replace) {

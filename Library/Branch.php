@@ -31,21 +31,21 @@ class Branch
 
     protected $unreachable;
 
-    const TYPE_ROOT              = 0;
+    const TYPE_ROOT = 0;
 
-    const TYPE_CONDITIONAL_TRUE  = 1;
+    const TYPE_CONDITIONAL_TRUE = 1;
 
     const TYPE_CONDITIONAL_FALSE = 2;
 
-    const TYPE_LOOP_INFINITE     = 3;
+    const TYPE_LOOP_INFINITE = 3;
 
-    const TYPE_LOOP_CONDITIONAL  = 4;
+    const TYPE_LOOP_CONDITIONAL = 4;
 
-    const TYPE_SWITCH            = 5;
+    const TYPE_SWITCH = 5;
 
-    const TYPE_EXTERNAL          = 6;
+    const TYPE_EXTERNAL = 6;
 
-    const TYPE_UNKNOWN           = 7;
+    const TYPE_UNKNOWN = 7;
 
     private $uniqueId;
 

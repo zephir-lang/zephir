@@ -200,8 +200,8 @@ class BinaryOperator extends AbstractOperator
     protected function preBuild()
     {
         return [
-            'type'  => $this->getOperator(),
-            'left'  => $this->getLeftExpression(),
+            'type' => $this->getOperator(),
+            'left' => $this->getLeftExpression(),
             'right' => $this->getRightExpression()
         ];
     }
