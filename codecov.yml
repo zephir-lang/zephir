@@ -2,7 +2,3 @@ ignore:
   - "/usr/.*"
   - ".*/.phpenv/.*"
   - "/home/travis/build/include/.*"
-
-fixes:
-  # reduce root
-  - ".*phalcon/zephir/::"
