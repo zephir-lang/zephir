@@ -1,0 +1,96 @@
+<?php
+
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+$header = <<<'EOF'
+This file is part of the Zephir.
+
+(c) Zephir Team <team@zephir-lang.com>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+EOF;
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('unit-tests/fixtures')
+    ->name('*.php')
+    ->exclude('ide')
+    ->exclude('templates')
+    ->in(__DIR__);
+
+return PhpCsFixer\Config::create()
+    ->setUsingCache(true)
+    ->setRiskyAllowed(true)
+    ->setFinder($finder)
+    ->setRules([
+        '@PSR2' => true,
+        'array_indentation' => true,
+        'array_syntax' => [
+            'syntax' => 'short',
+        ],
+        'binary_operator_spaces' => true,
+        'blank_line_after_namespace' => true,
+        'braces' => true,
+        'class_definition' => true,
+        'elseif' => true,
+        'encoding' => true,
+        'full_opening_tag' => true,
+        'function_declaration' => true,
+        'indentation_type' => true,
+        'line_ending' => true,
+        'lowercase_constants' => true,
+        'lowercase_keywords' => true,
+        'method_argument_space' => true,
+        'method_separation' => true,
+        'header_comment' => [
+            'header' => $header,
+        ],
+        'no_closing_tag' => true,
+        'no_empty_comment' => true,
+        'no_empty_phpdoc' => true,
+        'no_extra_consecutive_blank_lines' => true,
+        'no_spaces_inside_parenthesis' => true,
+        'no_trailing_whitespace' => true,
+        'no_trailing_whitespace_in_comment' => true,
+        'ordered_class_elements' => [
+            'order' => [
+                'use_trait',
+                'constant_public',
+                'constant_protected',
+                'constant_private',
+                'property_public',
+                'property_protected',
+                'property_private',
+                'construct',
+                'destruct',
+                'magic',
+                'phpunit',
+                'method_public',
+                'method_protected',
+                'method_private',
+            ]
+        ],
+        'ordered_imports' => [
+            'sortAlgorithm' => 'alpha',
+        ],
+        'phpdoc_add_missing_param_annotation' => [
+            'only_untyped' => true,
+        ],
+        'phpdoc_align' => [
+            'align' => 'vertical',
+        ],
+        'single_blank_line_at_eof' => true,
+        'single_class_element_per_statement' => true,
+        'single_import_per_statement' => true,
+        'single_line_after_imports' => true,
+        'single_quote' => true,
+        'visibility_required' => true,
+        'no_unused_imports' => true,
+    ]);
