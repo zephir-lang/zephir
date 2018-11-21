@@ -22,17 +22,17 @@ use Zephir\Exception\CompilerException;
  */
 class Logger
 {
+
+    /**
+     * @var Config
+     */
+    protected $config;
     /**
      * The contents of the files that are involved in the log message.
      *
      * @var array
      */
     private $filesContent = [];
-
-    /**
-     * @var Config
-     */
-    protected $config;
 
     /**
      * Logger constructor

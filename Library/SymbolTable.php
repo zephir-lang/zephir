@@ -534,51 +534,6 @@ class SymbolTable
     }
 
     /**
-     * Register a variable as temporal
-     *
-     * @param string             $type
-     * @param string             $location
-     * @param Variable           $variable
-     * @param CompilationContext $compilationContext
-     */
-    protected function registerTempVariable($type, $location, Variable $variable, CompilationContext $compilationContext = null)
-    {
-        $compilationContext = $compilationContext ?: $this->compilationContext;
-        $branchId = $compilationContext->branchManager->getCurrentBranchId();
-
-        if (!isset($this->branchTempVariables[$branchId][$location][$type])) {
-            $this->branchTempVariables[$branchId][$location][$type] = [];
-        }
-        $this->branchTempVariables[$branchId][$location][$type][] = $variable;
-    }
-
-    /**
-     * Reuse variables marked as idle after leave a branch
-     *
-     * @param  string             $type
-     * @param  string             $location
-     * @param  CompilationContext $compilationContext
-     * @return Variable
-     */
-    protected function reuseTempVariable($type, $location, CompilationContext $compilationContext = null)
-    {
-        $compilationContext = $compilationContext ?: $this->compilationContext;
-        $branchId = $compilationContext->branchManager->getCurrentBranchId();
-
-        if (isset($this->branchTempVariables[$branchId][$location][$type])) {
-            foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
-                if (!$variable->isDoublePointer()) {
-                    if ($variable->isIdle()) {
-                        $variable->setIdle(false);
-                        return $variable;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * @return int
      */
     public function getNextTempVar()
@@ -928,5 +883,50 @@ class SymbolTable
             return $this->localContext->getLastUnsetLine();
         }
         return 0;
+    }
+
+    /**
+     * Register a variable as temporal
+     *
+     * @param string             $type
+     * @param string             $location
+     * @param Variable           $variable
+     * @param CompilationContext $compilationContext
+     */
+    protected function registerTempVariable($type, $location, Variable $variable, CompilationContext $compilationContext = null)
+    {
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        if (!isset($this->branchTempVariables[$branchId][$location][$type])) {
+            $this->branchTempVariables[$branchId][$location][$type] = [];
+        }
+        $this->branchTempVariables[$branchId][$location][$type][] = $variable;
+    }
+
+    /**
+     * Reuse variables marked as idle after leave a branch
+     *
+     * @param  string             $type
+     * @param  string             $location
+     * @param  CompilationContext $compilationContext
+     * @return Variable
+     */
+    protected function reuseTempVariable($type, $location, CompilationContext $compilationContext = null)
+    {
+        $compilationContext = $compilationContext ?: $this->compilationContext;
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
+
+        if (isset($this->branchTempVariables[$branchId][$location][$type])) {
+            foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
+                if (!$variable->isDoublePointer()) {
+                    if ($variable->isIdle()) {
+                        $variable->setIdle(false);
+                        return $variable;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

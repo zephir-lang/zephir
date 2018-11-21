@@ -31,27 +31,6 @@ class MCallTest extends TestCase
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
     }
 
-    private function getReflection()
-    {
-        if (is_null($this->reflection)) {
-            return $this->reflection = new \ReflectionClass('\Test\Mcall');
-        }
-
-        return $this->reflection;
-    }
-
-    /**
-     * @return \ReflectionParameter
-     */
-    protected function getMethodFirstParameter()
-    {
-        $backtrace = debug_backtrace();
-        $methodInfo = $this->reflection->getMethod($this->getName());
-        $parameters = $methodInfo->getParameters();
-
-        return $parameters[0];
-    }
-
     public function testCall()
     {
         $t = new Mcall();
@@ -206,5 +185,26 @@ class MCallTest extends TestCase
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
+
+    /**
+     * @return \ReflectionParameter
+     */
+    protected function getMethodFirstParameter()
+    {
+        $backtrace = debug_backtrace();
+        $methodInfo = $this->reflection->getMethod($this->getName());
+        $parameters = $methodInfo->getParameters();
+
+        return $parameters[0];
+    }
+
+    private function getReflection()
+    {
+        if (is_null($this->reflection)) {
+            return $this->reflection = new \ReflectionClass('\Test\Mcall');
+        }
+
+        return $this->reflection;
     }
 }

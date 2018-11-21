@@ -96,6 +96,14 @@ abstract class AbstractType
     abstract public function getTypeName();
 
     /**
+     * @return array
+     */
+    public function getMethodMap()
+    {
+        return $this->methodMap;
+    }
+
+    /**
      * Returns the number of the parameter where the object must be bound
      *
      * @param $methodName
@@ -104,13 +112,5 @@ abstract class AbstractType
     protected function getNumberParam($methodName)
     {
         return 0;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMethodMap()
-    {
-        return $this->methodMap;
     }
 }

@@ -223,73 +223,6 @@ class ClassProperty
         return in_array('private', $this->visibility);
     }
 
-    private function initializeArray($compilationContext)
-    {
-        $classDefinition = $this->classDefinition;
-        $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
-
-        if (!$this->isStatic()) {
-            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getInitMethod() : null;
-            $constructMethod = $classDefinition->getInitMethod();
-        } else {
-            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getStaticInitMethod() : null;
-            $constructMethod = $classDefinition->getStaticInitMethod();
-        }
-
-        if ($constructMethod) {
-            $statementsBlock = $constructMethod->getStatementsBlock();
-            if ($statementsBlock) {
-                $statements = $statementsBlock->getStatements();
-                $letStatement = $this->getLetStatement()->build();
-
-                $needLetStatementAdded = true;
-                foreach ($statements as $statement) {
-                    if ($statement === $letStatement) {
-                        $needLetStatementAdded = false;
-                        break;
-                    }
-                }
-
-                $this->removeInitializationStatements($statements);
-                if ($needLetStatementAdded) {
-                    $newStatements = [];
-
-                    /**
-                     * Start from let statement
-                     */
-                    $newStatements[] = $letStatement;
-
-                    foreach ($statements as $statement) {
-                        $newStatements[] = $statement;
-                    }
-
-                    $statementsBlock->setStatements($newStatements);
-                    $constructMethod->setStatementsBlock($statementsBlock);
-                    $classDefinition->updateMethod($constructMethod);
-                }
-            } else {
-                $statementsBlockBuilder = BuilderFactory::getInstance()->statements()
-                    ->block([$this->getLetStatement()]);
-                $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->build()));
-                $classDefinition->updateMethod($constructMethod);
-            }
-        } else {
-            $statements = [];
-            if ($constructParentMethod) {
-                $statements = $constructParentMethod->getStatementsBlock()->getStatements();
-            }
-            $this->removeInitializationStatements($statements);
-            $statements[] = $this->getLetStatement()->build();
-            $statementsBlock = new StatementsBlock($statements);
-
-            if ($this->isStatic()) {
-                $classDefinition->addStaticInitMethod($statementsBlock);
-            } else {
-                $classDefinition->addInitMethod($statementsBlock);
-            }
-        }
-    }
-
     /**
      * Produce the code to register a property
      *
@@ -459,6 +392,73 @@ class ClassProperty
 
             default:
                 throw new CompilerException('Unknown default type: ' . $type, $this->original);
+        }
+    }
+
+    private function initializeArray($compilationContext)
+    {
+        $classDefinition = $this->classDefinition;
+        $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
+
+        if (!$this->isStatic()) {
+            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getInitMethod() : null;
+            $constructMethod = $classDefinition->getInitMethod();
+        } else {
+            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getStaticInitMethod() : null;
+            $constructMethod = $classDefinition->getStaticInitMethod();
+        }
+
+        if ($constructMethod) {
+            $statementsBlock = $constructMethod->getStatementsBlock();
+            if ($statementsBlock) {
+                $statements = $statementsBlock->getStatements();
+                $letStatement = $this->getLetStatement()->build();
+
+                $needLetStatementAdded = true;
+                foreach ($statements as $statement) {
+                    if ($statement === $letStatement) {
+                        $needLetStatementAdded = false;
+                        break;
+                    }
+                }
+
+                $this->removeInitializationStatements($statements);
+                if ($needLetStatementAdded) {
+                    $newStatements = [];
+
+                    /**
+                     * Start from let statement
+                     */
+                    $newStatements[] = $letStatement;
+
+                    foreach ($statements as $statement) {
+                        $newStatements[] = $statement;
+                    }
+
+                    $statementsBlock->setStatements($newStatements);
+                    $constructMethod->setStatementsBlock($statementsBlock);
+                    $classDefinition->updateMethod($constructMethod);
+                }
+            } else {
+                $statementsBlockBuilder = BuilderFactory::getInstance()->statements()
+                    ->block([$this->getLetStatement()]);
+                $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->build()));
+                $classDefinition->updateMethod($constructMethod);
+            }
+        } else {
+            $statements = [];
+            if ($constructParentMethod) {
+                $statements = $constructParentMethod->getStatementsBlock()->getStatements();
+            }
+            $this->removeInitializationStatements($statements);
+            $statements[] = $this->getLetStatement()->build();
+            $statementsBlock = new StatementsBlock($statements);
+
+            if ($this->isStatic()) {
+                $classDefinition->addStaticInitMethod($statementsBlock);
+            } else {
+                $classDefinition->addInitMethod($statementsBlock);
+            }
         }
     }
 }

@@ -26,6 +26,69 @@ use Zephir\Variable as ZephirVariable;
 class ArrayIndex
 {
     /**
+     * Compiles foo[y] = {expr}
+     *
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     *
+     * @throws CompilerException
+     */
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    {
+
+        /**
+         * Arrays must be stored in the HEAP
+         */
+        if ($symbolVariable->isLocalOnly()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
+        }
+
+        if (!$symbolVariable->isInitialized()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+        }
+
+        if ($symbolVariable->isReadOnly()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
+        }
+
+        if ($symbolVariable->isLocalOnly()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
+        }
+
+        /**
+         * Only dynamic variables can be used as arrays
+         */
+        if ($symbolVariable->isNotVariableAndArray()) {
+            throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+        }
+
+        if ($symbolVariable->getType() == 'variable') {
+            if ($symbolVariable->hasAnyDynamicType('unknown')) {
+                throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
+            }
+
+            /**
+             * Trying to use a non-object dynamic variable as object
+             */
+            if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
+                $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
+            }
+        }
+
+        /**
+         * Choose one-offset or multiple-offset functions
+         */
+        if (count($statement['index-expr']) == 1) {
+            $this->_assignArrayIndexSingle($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        } else {
+            $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        }
+    }
+
+    /**
      * Resolves an item that will be assigned to an array offset
      *
      * @param CompiledExpression $resolvedExpr
@@ -256,69 +319,6 @@ class ArrayIndex
 
         if ($symbolVariable->isTemporal()) {
             $symbolVariable->setIdle(true);
-        }
-    }
-
-    /**
-     * Compiles foo[y] = {expr}
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
-     */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-
-        /**
-         * Arrays must be stored in the HEAP
-         */
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
-        }
-
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
-        }
-
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
-        }
-
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
-        }
-
-        /**
-         * Only dynamic variables can be used as arrays
-         */
-        if ($symbolVariable->isNotVariableAndArray()) {
-            throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
-        }
-
-        if ($symbolVariable->getType() == 'variable') {
-            if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
-            }
-
-            /**
-             * Trying to use a non-object dynamic variable as object
-             */
-            if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-                $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
-            }
-        }
-
-        /**
-         * Choose one-offset or multiple-offset functions
-         */
-        if (count($statement['index-expr']) == 1) {
-            $this->_assignArrayIndexSingle($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-        } else {
-            $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
         }
     }
 }

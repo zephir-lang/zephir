@@ -22,10 +22,6 @@ namespace Zephir\Detectors;
  */
 class WriteDetector
 {
-    protected $detectionFlags = 0;
-
-    protected $mutations = [];
-
     const DETECT_NONE = 0;
 
     const DETECT_PARAM_PASS = 1;
@@ -35,6 +31,9 @@ class WriteDetector
     const DETECT_VALUE_IN_ASSIGNMENT = 4;
 
     const DETECT_ALL = 255;
+    protected $detectionFlags = 0;
+
+    protected $mutations = [];
 
     /**
      * Do the detection pass on a single variable

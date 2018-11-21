@@ -76,6 +76,105 @@ class FunctionCall extends Call
     }
 
     /**
+     * Checks if the function is a built-in provided by Zephir
+     *
+     * @param string $functionName
+     *
+     * @return bool
+     */
+    public function isBuiltInFunction($functionName)
+    {
+        switch ($functionName) {
+            case 'memstr':
+            case 'get_class_ns':
+            case 'get_ns_class':
+            case 'camelize':
+            case 'uncamelize':
+            case 'starts_with':
+            case 'ends_with':
+            case 'prepare_virtual_path':
+            case 'create_instance':
+            case 'create_instance_params':
+            case 'create_symbol_table':
+            case 'globals_get':
+            case 'globals_set':
+            case 'merge_append':
+            case 'get_class_lower':
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if a function exists or is a built-in Zephir function
+     *
+     * @param string             $functionName
+     * @param CompilationContext $context
+     *
+     * @return bool
+     */
+    public function functionExists($functionName, CompilationContext $context)
+    {
+        if (function_exists($functionName)) {
+            return true;
+        }
+        if ($this->isBuiltInFunction($functionName)) {
+            return true;
+        }
+
+        $internalName = ['f__' . $functionName];
+        if (isset($context->classDefinition)) {
+            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
+            $prefix = 'f_' . str_replace('\\', '_', $lowerNamespace);
+
+            $internalName[] = $prefix . '_' . $functionName;
+        }
+
+        foreach ($internalName as $name) {
+            if (isset($context->compiler->functionDefinitions[$name])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Compiles a function.
+     *
+     * @param Expression         $expr
+     * @param CompilationContext $compilationContext
+     *
+     * @return CompiledExpression
+     * @throws Exception|CompilerException
+     */
+    public function compile(Expression $expr, CompilationContext $compilationContext)
+    {
+        $this->expression = $expr;
+        $expression = $expr->getExpression();
+
+        switch ($expression['call-type']) {
+            case self::CALL_NORMAL:
+                return $this->_callNormal($expression, $compilationContext);
+            case self::CALL_DYNAMIC:
+                return $this->_callDynamic($expression, $compilationContext);
+        }
+
+        return new CompiledExpression('null', null, $expression);
+    }
+
+    /**
+     * Appends an optimizer directory to the directory list
+     *
+     * @param string $directory
+     */
+    public static function addOptimizerDir($directory)
+    {
+        self::$optimizerDirectories[] = $directory;
+    }
+
+    /**
      * This method gets the reflection of a function
      * to check if any of their parameters are passed by reference
      * Built-in functions rarely change the parameters if they aren't passed by reference
@@ -264,71 +363,6 @@ class FunctionCall extends Call
 
         if ($optimizer) {
             return $optimizer->optimize($expression, $call, $compilationContext);
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks if the function is a built-in provided by Zephir
-     *
-     * @param string $functionName
-     *
-     * @return bool
-     */
-    public function isBuiltInFunction($functionName)
-    {
-        switch ($functionName) {
-            case 'memstr':
-            case 'get_class_ns':
-            case 'get_ns_class':
-            case 'camelize':
-            case 'uncamelize':
-            case 'starts_with':
-            case 'ends_with':
-            case 'prepare_virtual_path':
-            case 'create_instance':
-            case 'create_instance_params':
-            case 'create_symbol_table':
-            case 'globals_get':
-            case 'globals_set':
-            case 'merge_append':
-            case 'get_class_lower':
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks if a function exists or is a built-in Zephir function
-     *
-     * @param string             $functionName
-     * @param CompilationContext $context
-     *
-     * @return bool
-     */
-    public function functionExists($functionName, CompilationContext $context)
-    {
-        if (function_exists($functionName)) {
-            return true;
-        }
-        if ($this->isBuiltInFunction($functionName)) {
-            return true;
-        }
-
-        $internalName = ['f__' . $functionName];
-        if (isset($context->classDefinition)) {
-            $lowerNamespace = strtolower($context->classDefinition->getNamespace());
-            $prefix = 'f_' . str_replace('\\', '_', $lowerNamespace);
-
-            $internalName[] = $prefix . '_' . $functionName;
-        }
-
-        foreach ($internalName as $name) {
-            if (isset($context->compiler->functionDefinitions[$name])) {
-                return true;
-            }
         }
 
         return false;
@@ -669,39 +703,5 @@ class FunctionCall extends Call
         }
 
         return new CompiledExpression('null', null, $expression);
-    }
-
-    /**
-     * Compiles a function.
-     *
-     * @param Expression         $expr
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     * @throws Exception|CompilerException
-     */
-    public function compile(Expression $expr, CompilationContext $compilationContext)
-    {
-        $this->expression = $expr;
-        $expression = $expr->getExpression();
-
-        switch ($expression['call-type']) {
-            case self::CALL_NORMAL:
-                return $this->_callNormal($expression, $compilationContext);
-            case self::CALL_DYNAMIC:
-                return $this->_callDynamic($expression, $compilationContext);
-        }
-
-        return new CompiledExpression('null', null, $expression);
-    }
-
-    /**
-     * Appends an optimizer directory to the directory list
-     *
-     * @param string $directory
-     */
-    public static function addOptimizerDir($directory)
-    {
-        self::$optimizerDirectories[] = $directory;
     }
 }

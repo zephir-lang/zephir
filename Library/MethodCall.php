@@ -37,56 +37,6 @@ class MethodCall extends Call
     const CALL_DYNAMIC_STRING = 3;
 
     /**
-     * Examine internal class information and returns the method called
-     *
-     * @param  CompilationContext $compilationContext
-     * @param  Variable           $caller
-     * @param  string             $methodName
-     * @return array
-     */
-    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, $methodName)
-    {
-        $compiler = $compilationContext->compiler;
-
-        $numberPoly = 0;
-        $method = null;
-
-        if ($caller->getRealName() == 'this') {
-            $classDefinition = $compilationContext->classDefinition;
-            if ($classDefinition->hasMethod($methodName)) {
-                $numberPoly++;
-                $method = $classDefinition->getMethod($methodName);
-            }
-        } else {
-            $classTypes = $caller->getClassTypes();
-            foreach ($classTypes as $classType) {
-                if ($compiler->isInterface($classType)) {
-                    continue;
-                }
-
-                if ($compiler->isClass($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
-                    if ($compiler->isClass($classType)) {
-                        $classDefinition = $compiler->getClassDefinition($classType);
-                    } else {
-                        $classDefinition = $compiler->getInternalClassDefinition($classType);
-                    }
-
-                    if (!$classDefinition) {
-                        continue;
-                    }
-
-                    if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
-                        $numberPoly++;
-                        $method = $classDefinition->getMethod($methodName);
-                    }
-                }
-            }
-        }
-
-        return [$numberPoly, $method];
-    }
-
-    /**
      * Compiles a method call
      *
      * @param Expression         $expr
@@ -668,5 +618,55 @@ class MethodCall extends Call
         }
 
         return new CompiledExpression('null', null, $expression);
+    }
+
+    /**
+     * Examine internal class information and returns the method called
+     *
+     * @param  CompilationContext $compilationContext
+     * @param  Variable           $caller
+     * @param  string             $methodName
+     * @return array
+     */
+    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, $methodName)
+    {
+        $compiler = $compilationContext->compiler;
+
+        $numberPoly = 0;
+        $method = null;
+
+        if ($caller->getRealName() == 'this') {
+            $classDefinition = $compilationContext->classDefinition;
+            if ($classDefinition->hasMethod($methodName)) {
+                $numberPoly++;
+                $method = $classDefinition->getMethod($methodName);
+            }
+        } else {
+            $classTypes = $caller->getClassTypes();
+            foreach ($classTypes as $classType) {
+                if ($compiler->isInterface($classType)) {
+                    continue;
+                }
+
+                if ($compiler->isClass($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
+                    if ($compiler->isClass($classType)) {
+                        $classDefinition = $compiler->getClassDefinition($classType);
+                    } else {
+                        $classDefinition = $compiler->getInternalClassDefinition($classType);
+                    }
+
+                    if (!$classDefinition) {
+                        continue;
+                    }
+
+                    if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
+                        $numberPoly++;
+                        $method = $classDefinition->getMethod($methodName);
+                    }
+                }
+            }
+        }
+
+        return [$numberPoly, $method];
     }
 }

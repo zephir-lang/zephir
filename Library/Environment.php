@@ -72,21 +72,6 @@ final class Environment implements InjectionAwareInterface
     }
 
     /**
-     * Initialize all of the application paths in the DI container.
-     *
-     * @return void
-     */
-    protected function registerPaths()
-    {
-        $this->getContainer()->share('paths', (object) [
-            'base' => $this->getPath(),
-            'templates' => $this->getPath('templates'),
-            'kernels' => $this->getPath('kernels'),
-            'prototypes' => $this->getPath('prototypes'),
-        ]);
-    }
-
-    /**
      * Get the path to the Zephir installation.
      *
      * @param  string $path
@@ -214,5 +199,20 @@ final class Environment implements InjectionAwareInterface
                 return 'ext\\Release';
             }
         }
+    }
+
+    /**
+     * Initialize all of the application paths in the DI container.
+     *
+     * @return void
+     */
+    protected function registerPaths()
+    {
+        $this->getContainer()->share('paths', (object) [
+            'base' => $this->getPath(),
+            'templates' => $this->getPath('templates'),
+            'kernels' => $this->getPath('kernels'),
+            'prototypes' => $this->getPath('prototypes'),
+        ]);
     }
 }

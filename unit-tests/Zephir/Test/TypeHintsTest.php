@@ -62,27 +62,6 @@ class TypeHintsTest extends TestCase
         }
     }
 
-    protected function generate($backend)
-    {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/typehints');
-
-        try {
-            putenv('ZEPHIR_BACKEND=' . $backend);
-
-            $container = $this->createContainer(getcwd());
-            $container->delegate(new ReflectionContainer());
-
-            new Application(ZEPHIRPATH, $container);
-            $this->muteOutput($container);
-
-            /** @var Compiler $compiler */
-            $compiler = $container->get(Compiler::class);
-            $compiler->generate(true);
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
-    }
-
     /** @test */
     public function shouldSpecifyCorrectArgumentInformationForZendEngine2()
     {
@@ -133,6 +112,27 @@ class TypeHintsTest extends TestCase
             implode(PHP_EOL, file('expected_both3.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/both.zep.h', FILE_IGNORE_NEW_LINES))
         );
+    }
+
+    protected function generate($backend)
+    {
+        chdir(ZEPHIRPATH . '/unit-tests/fixtures/typehints');
+
+        try {
+            putenv('ZEPHIR_BACKEND=' . $backend);
+
+            $container = $this->createContainer(getcwd());
+            $container->delegate(new ReflectionContainer());
+
+            new Application(ZEPHIRPATH, $container);
+            $this->muteOutput($container);
+
+            /** @var Compiler $compiler */
+            $compiler = $container->get(Compiler::class);
+            $compiler->generate(true);
+        } catch (\Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
 
     /**

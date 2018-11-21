@@ -58,27 +58,6 @@ class LifeCycleTest extends TestCase
         }
     }
 
-    protected function createProject($backend)
-    {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
-
-        try {
-            $container = $this->createContainer(getcwd());
-            $container->delegate(new ReflectionContainer());
-            $container->add('ZEPHIR_BACKEND', $backend);
-
-            new Application(ZEPHIRPATH, $container);
-
-            $this->muteOutput($container);
-
-            /** @var Compiler $compiler */
-            $compiler = $container->get(Compiler::class);
-            $compiler->createProjectFiles('lifecycle');
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
-    }
-
     /** @test */
     public function shouldCreateProjectFilesUsingZendEngine2()
     {
@@ -99,6 +78,27 @@ class LifeCycleTest extends TestCase
             implode(PHP_EOL, file('expected3.c', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/lifecycle.c', FILE_IGNORE_NEW_LINES))
         );
+    }
+
+    protected function createProject($backend)
+    {
+        chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
+
+        try {
+            $container = $this->createContainer(getcwd());
+            $container->delegate(new ReflectionContainer());
+            $container->add('ZEPHIR_BACKEND', $backend);
+
+            new Application(ZEPHIRPATH, $container);
+
+            $this->muteOutput($container);
+
+            /** @var Compiler $compiler */
+            $compiler = $container->get(Compiler::class);
+            $compiler->createProjectFiles('lifecycle');
+        } catch (\Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
 
     /**

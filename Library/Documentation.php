@@ -110,6 +110,110 @@ class Documentation implements InjectionAwareInterface
     }
 
     /**
+     * Search a theme by its name.
+     *
+     * Return the path to it if it exists. Otherwise NULL.
+     *
+     * @param  string      $name
+     * @return string|null
+     */
+    public function findThemePathByName($name)
+    {
+        // check the theme from the config
+        $path = null;
+
+        foreach ($this->themesDirectories as $themeDir) {
+            $path = rtrim($themeDir, '\\/') . DIRECTORY_SEPARATOR . $name;
+            if (strpos($path, 'phar://') !== 0) {
+                $path = realpath($path);
+            }
+
+            if (is_dir($path)) {
+                break;
+            }
+        }
+
+        return $path;
+    }
+
+    public function build()
+    {
+        foreach ($this->classes as $class) {
+            // class files (class/ns1/n2/class.html)
+            $cfile = new File\ClassFile($this->config, $class);
+            $this->theme->drawFile($cfile);
+
+            // class source file (source/ns1/n2/class.html)
+            $sfile = new File\SourceFile($this->config, $class);
+            $this->theme->drawFile($sfile);
+        }
+
+        // classes file (classes.html)
+        $file = new File\ClassesFile($this->config, $this->classes);
+        $this->theme->drawFile($file);
+
+        $namespaceAccessor = new NamespaceAccessor($this->classes);
+        $namespaceAccessor->build();
+
+        $byNamespace = $namespaceAccessor->getByNamespace();
+
+        foreach ($byNamespace as $namespaceName => $nh) {
+            // namespace files (namespace/ns1/n2/namespace.html)
+            $nfile = new File\NamespaceFile($this->config, $nh);
+            $this->theme->drawFile($nfile);
+        }
+
+        /** @var Environment $environment */
+        $environment = $this->container->get('environment');
+
+        $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
+        $this->theme->drawFile($sitemapFile);
+
+        // namespaces files (namespaces.html)
+        $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
+        $this->theme->drawFile($nsfile);
+
+        // index (index.html)
+        $indexfile = new File\IndexFile($this->config, $namespaceAccessor);
+        $this->theme->drawFile($indexfile);
+
+        $this->theme->buildStaticDirectory();
+
+        $JsonClassDef = $this->theme->buildJsonClassDefinition($this->classes, $namespaceAccessor);
+        $this->theme->createFile('asset/api_definition.js', "var ZephirApi = $JsonClassDef;");
+    }
+
+    public static function classUrl($c)
+    {
+        if ($c instanceof ClassDefinition) {
+            $cname = $c->getCompleteName();
+        } else {
+            $cname = $c;
+        }
+
+        return '/class/' . str_replace('\\', '/', $cname) . '.html';
+    }
+
+    public static function namespaceUrl($ns)
+    {
+        return '/namespace/' . str_replace('\\', '/', $ns) . '.html';
+    }
+
+    public static function sourceUrl(ClassDefinition $c)
+    {
+        return '/source/' . str_replace('\\', '/', $c->getCompleteName()) . '.html';
+    }
+
+    /**
+     * get the directory where the doc is going to be generated
+     * @return string
+     */
+    public function getOutputDirectory()
+    {
+        return $this->outputDirectory;
+    }
+
+    /**
      *
      * Prepare the options by merging the one in the project config with the one in the command line arg "theme-options"
      *
@@ -233,109 +337,5 @@ class Documentation implements InjectionAwareInterface
         }
 
         return $this->findThemePathByName($themeConfig['name']);
-    }
-
-    /**
-     * Search a theme by its name.
-     *
-     * Return the path to it if it exists. Otherwise NULL.
-     *
-     * @param  string      $name
-     * @return string|null
-     */
-    public function findThemePathByName($name)
-    {
-        // check the theme from the config
-        $path = null;
-
-        foreach ($this->themesDirectories as $themeDir) {
-            $path = rtrim($themeDir, '\\/') . DIRECTORY_SEPARATOR . $name;
-            if (strpos($path, 'phar://') !== 0) {
-                $path = realpath($path);
-            }
-
-            if (is_dir($path)) {
-                break;
-            }
-        }
-
-        return $path;
-    }
-
-    public function build()
-    {
-        foreach ($this->classes as $class) {
-            // class files (class/ns1/n2/class.html)
-            $cfile = new File\ClassFile($this->config, $class);
-            $this->theme->drawFile($cfile);
-
-            // class source file (source/ns1/n2/class.html)
-            $sfile = new File\SourceFile($this->config, $class);
-            $this->theme->drawFile($sfile);
-        }
-
-        // classes file (classes.html)
-        $file = new File\ClassesFile($this->config, $this->classes);
-        $this->theme->drawFile($file);
-
-        $namespaceAccessor = new NamespaceAccessor($this->classes);
-        $namespaceAccessor->build();
-
-        $byNamespace = $namespaceAccessor->getByNamespace();
-
-        foreach ($byNamespace as $namespaceName => $nh) {
-            // namespace files (namespace/ns1/n2/namespace.html)
-            $nfile = new File\NamespaceFile($this->config, $nh);
-            $this->theme->drawFile($nfile);
-        }
-
-        /** @var Environment $environment */
-        $environment = $this->container->get('environment');
-
-        $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
-        $this->theme->drawFile($sitemapFile);
-
-        // namespaces files (namespaces.html)
-        $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
-        $this->theme->drawFile($nsfile);
-
-        // index (index.html)
-        $indexfile = new File\IndexFile($this->config, $namespaceAccessor);
-        $this->theme->drawFile($indexfile);
-
-        $this->theme->buildStaticDirectory();
-
-        $JsonClassDef = $this->theme->buildJsonClassDefinition($this->classes, $namespaceAccessor);
-        $this->theme->createFile('asset/api_definition.js', "var ZephirApi = $JsonClassDef;");
-    }
-
-    public static function classUrl($c)
-    {
-        if ($c instanceof ClassDefinition) {
-            $cname = $c->getCompleteName();
-        } else {
-            $cname = $c;
-        }
-
-        return '/class/' . str_replace('\\', '/', $cname) . '.html';
-    }
-
-    public static function namespaceUrl($ns)
-    {
-        return '/namespace/' . str_replace('\\', '/', $ns) . '.html';
-    }
-
-    public static function sourceUrl(ClassDefinition $c)
-    {
-        return '/source/' . str_replace('\\', '/', $c->getCompleteName()) . '.html';
-    }
-
-    /**
-     * get the directory where the doc is going to be generated
-     * @return string
-     */
-    public function getOutputDirectory()
-    {
-        return $this->outputDirectory;
     }
 }

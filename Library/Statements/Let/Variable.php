@@ -29,6 +29,87 @@ use Zephir\Variable as ZephirVariable;
 class Variable
 {
     /**
+     * Compiles foo = {expr}
+     * Changes the value of a mutable variable
+     *
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param ReadDetector       $readDetector
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     *
+     * @return void
+     * @throws CompilerException
+     */
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        ReadDetector $readDetector,
+        CompilationContext $compilationContext,
+        array $statement
+    ) {
+        if ($symbolVariable->isReadOnly()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
+        }
+
+        $codePrinter = $compilationContext->codePrinter;
+
+        /**
+         * Only initialize variables if it's direct assignment
+         */
+        if ($statement['operator'] == 'assign') {
+            $symbolVariable->setIsInitialized(true, $compilationContext);
+        } else {
+            if (!$symbolVariable->isInitialized()) {
+                throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            }
+        }
+
+        /**
+         * Set the assigned value to the variable as a CompiledExpression
+         * We could use this expression for further analysis
+         */
+        $symbolVariable->setPossibleValue($resolvedExpr, $compilationContext);
+
+        $type = $symbolVariable->getType();
+        switch ($type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'char':
+            case 'uchar':
+                $this->doNumericAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                break;
+
+            case 'double':
+                $this->doDoubleAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                break;
+
+            case 'array':
+                $this->doArrayAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
+                break;
+
+            case 'string':
+                $this->doStringAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
+                break;
+
+            case 'bool':
+                $this->doBoolAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                break;
+
+            case 'variable':
+                $this->doVariableAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext, $readDetector);
+                break;
+
+            default:
+                throw new CompilerException('Unknown type: ' . $type, $statement);
+        }
+    }
+
+    /**
      * Performs numeric assignment.
      *
      * @param CodePrinter        $codePrinter
@@ -1218,87 +1299,6 @@ class Variable
 
             default:
                 throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
-        }
-    }
-
-    /**
-     * Compiles foo = {expr}
-     * Changes the value of a mutable variable
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param ReadDetector       $readDetector
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @return void
-     * @throws CompilerException
-     */
-    public function assign(
-        $variable,
-        ZephirVariable $symbolVariable,
-        CompiledExpression $resolvedExpr,
-        ReadDetector $readDetector,
-        CompilationContext $compilationContext,
-        array $statement
-    ) {
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
-        }
-
-        $codePrinter = $compilationContext->codePrinter;
-
-        /**
-         * Only initialize variables if it's direct assignment
-         */
-        if ($statement['operator'] == 'assign') {
-            $symbolVariable->setIsInitialized(true, $compilationContext);
-        } else {
-            if (!$symbolVariable->isInitialized()) {
-                throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
-            }
-        }
-
-        /**
-         * Set the assigned value to the variable as a CompiledExpression
-         * We could use this expression for further analysis
-         */
-        $symbolVariable->setPossibleValue($resolvedExpr, $compilationContext);
-
-        $type = $symbolVariable->getType();
-        switch ($type) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-            case 'char':
-            case 'uchar':
-                $this->doNumericAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
-                break;
-
-            case 'double':
-                $this->doDoubleAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
-                break;
-
-            case 'array':
-                $this->doArrayAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
-                break;
-
-            case 'string':
-                $this->doStringAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext);
-                break;
-
-            case 'bool':
-                $this->doBoolAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
-                break;
-
-            case 'variable':
-                $this->doVariableAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext, $readDetector);
-                break;
-
-            default:
-                throw new CompilerException('Unknown type: ' . $type, $statement);
         }
     }
 }

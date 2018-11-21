@@ -53,31 +53,6 @@ class MethodCache
     }
 
     /**
-     * Checks if the class is suitable for caching
-     *
-     * @param  ClassDefinition $classDefinition
-     * @return boolean
-     */
-    private function isClassCacheable($classDefinition)
-    {
-        if ($classDefinition instanceof ClassDefinition) {
-            return true;
-        }
-        if ($classDefinition instanceof \ReflectionClass) {
-            if ($classDefinition->isInternal() && $classDefinition->isInstantiable()) {
-                $extension = $classDefinition->getExtension();
-                switch ($extension->getName()) {
-                    case 'Reflection':
-                    case 'Core':
-                    case 'SPL':
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Retrieves/Creates a function cache for a method call.
      *
      * @param  CompilationContext $compilationContext
@@ -204,5 +179,30 @@ class MethodCache
         }
 
         return $functionCache . ', ' . $cacheSlot;
+    }
+
+    /**
+     * Checks if the class is suitable for caching
+     *
+     * @param  ClassDefinition $classDefinition
+     * @return boolean
+     */
+    private function isClassCacheable($classDefinition)
+    {
+        if ($classDefinition instanceof ClassDefinition) {
+            return true;
+        }
+        if ($classDefinition instanceof \ReflectionClass) {
+            if ($classDefinition->isInternal() && $classDefinition->isInstantiable()) {
+                $extension = $classDefinition->getExtension();
+                switch ($extension->getName()) {
+                    case 'Reflection':
+                    case 'Core':
+                    case 'SPL':
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }

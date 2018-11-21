@@ -22,20 +22,6 @@ class See extends Annotation
     protected $resource;
     protected $text;
 
-    protected function parseContent()
-    {
-        $spaceIndex = strpos($this->string, ' ');
-
-        if (false !== $spaceIndex) {
-            $this->resource = substr($this->string, 0, $spaceIndex);
-            $this->text = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->resource = $this->string;
-        }
-
-        $this->contentParsed = true;
-    }
-
     public function getResource()
     {
         if (!$this->contentParsed) {
@@ -52,5 +38,19 @@ class See extends Annotation
         }
 
         return $this->text;
+    }
+
+    protected function parseContent()
+    {
+        $spaceIndex = strpos($this->string, ' ');
+
+        if (false !== $spaceIndex) {
+            $this->resource = substr($this->string, 0, $spaceIndex);
+            $this->text = substr($this->string, $spaceIndex + 1);
+        } else {
+            $this->resource = $this->string;
+        }
+
+        $this->contentParsed = true;
     }
 }

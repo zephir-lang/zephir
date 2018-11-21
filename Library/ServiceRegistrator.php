@@ -29,18 +29,18 @@ final class ServiceRegistrator implements InjectionAwareInterface
     }
 
     /**
-     * The base path for the application.
-     *
-     * @var string
-     */
-    protected $basePath;
-
-    /**
      * A list of the registered service providers.
      *
      * @var ServiceProviderInterface[]
      */
     public $serviceProviders = [];
+
+    /**
+     * The base path for the application.
+     *
+     * @var string
+     */
+    protected $basePath;
 
     /**
      * ServiceRegistrator constructor.
@@ -55,48 +55,6 @@ final class ServiceRegistrator implements InjectionAwareInterface
         $this->registerBaseBindings();
         $this->createEnvironment($basePath);
         $this->registerBaseServices();
-    }
-
-    /**
-     * Registers the base bindings.
-     *
-     * @return void
-     */
-    protected function registerBaseBindings()
-    {
-        $container = $this->getContainer();
-
-        $container->share(Parser::class, Parser::class);
-    }
-
-    /**
-     * Registers the base services.
-     *
-     * @return void
-     */
-    protected function registerBaseServices()
-    {
-        $container = $this->getContainer();
-
-        $container->share('logger', function () use ($container) {
-            return new Logger($container->get('config'));
-        });
-
-        $this->registerService(new Providers\ConfigProvider());
-        $this->registerService(new Providers\FileSystemProvider());
-        $this->registerService(new Providers\ParserManagerProvider());
-        $this->registerService(new Providers\BackendProvider());
-    }
-
-    /**
-     * Creates and registers application environment.
-     *
-     * @param  string|null $basePath
-     * @return void
-     */
-    protected function createEnvironment($basePath)
-    {
-        $this->container->share('environment', new Environment($basePath, $this->getContainer()));
     }
 
     /**
@@ -170,6 +128,48 @@ final class ServiceRegistrator implements InjectionAwareInterface
     public function instantiateProvider($serviceProvider)
     {
         return new $serviceProvider();
+    }
+
+    /**
+     * Registers the base bindings.
+     *
+     * @return void
+     */
+    protected function registerBaseBindings()
+    {
+        $container = $this->getContainer();
+
+        $container->share(Parser::class, Parser::class);
+    }
+
+    /**
+     * Registers the base services.
+     *
+     * @return void
+     */
+    protected function registerBaseServices()
+    {
+        $container = $this->getContainer();
+
+        $container->share('logger', function () use ($container) {
+            return new Logger($container->get('config'));
+        });
+
+        $this->registerService(new Providers\ConfigProvider());
+        $this->registerService(new Providers\FileSystemProvider());
+        $this->registerService(new Providers\ParserManagerProvider());
+        $this->registerService(new Providers\BackendProvider());
+    }
+
+    /**
+     * Creates and registers application environment.
+     *
+     * @param  string|null $basePath
+     * @return void
+     */
+    protected function createEnvironment($basePath)
+    {
+        $this->container->share('environment', new Environment($basePath, $this->getContainer()));
     }
 
     /**

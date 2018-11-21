@@ -22,13 +22,12 @@ use Zephir\ClassMethod;
  */
 class SlotsCache
 {
+    const MAX_SLOTS_NUMBER = 512;
     private static $slot = 1;
 
     private static $cacheMethodSlots = [];
 
     private static $cacheFunctionSlots = [];
-
-    const MAX_SLOTS_NUMBER = 512;
 
     /**
      * Returns or creates a cache slot for a function

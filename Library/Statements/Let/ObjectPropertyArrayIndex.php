@@ -25,6 +25,37 @@ use Zephir\Variable as ZephirVariable;
 class ObjectPropertyArrayIndex extends ArrayIndex
 {
     /**
+     * Compiles x->y[z] = foo
+     *
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
+     * @param array              $statement
+     *
+     * @throws CompilerException
+     */
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    {
+        if (!$symbolVariable->isInitialized()) {
+            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+        }
+
+        if (!$symbolVariable->isVariable()) {
+            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
+        }
+
+        /**
+         * Update the property according to the number of array-offsets
+         */
+        if (count($statement['index-expr']) == 1) {
+            $this->_assignPropertyArraySingleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        } else {
+            $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        }
+    }
+
+    /**
      * Compiles x->y[z] = {expr} (single offset assignment)
      *
      * @param  string             $variable
@@ -273,37 +304,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
         if ($variableExpr->isTemporal()) {
             $variableExpr->setIdle(true);
-        }
-    }
-
-    /**
-     * Compiles x->y[z] = foo
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
-     * @param array              $statement
-     *
-     * @throws CompilerException
-     */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
-        }
-
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
-        }
-
-        /**
-         * Update the property according to the number of array-offsets
-         */
-        if (count($statement['index-expr']) == 1) {
-            $this->_assignPropertyArraySingleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-        } else {
-            $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
         }
     }
 }

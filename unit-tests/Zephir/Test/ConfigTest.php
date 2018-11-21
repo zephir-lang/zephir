@@ -30,6 +30,18 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Restore current directory, and clean config.json.
+     */
+    public function tearDown()
+    {
+        if (getcwd() != $this->pwd) {
+            chdir($this->pwd);
+        }
+
+        $this->cleanTmpConfigFile();
+    }
+
+    /**
      * Test when we have a bad config.json file.
      *
      * @expectedException \Zephir\Exception
@@ -82,18 +94,6 @@ class ConfigTest extends TestCase
         $configJson = json_decode(file_get_contents('config.json'), true);
         $this->assertInternalType('array', $configJson);
         $this->assertSame($configJson['name'], 'foo');
-        $this->cleanTmpConfigFile();
-    }
-
-    /**
-     * Restore current directory, and clean config.json.
-     */
-    public function tearDown()
-    {
-        if (getcwd() != $this->pwd) {
-            chdir($this->pwd);
-        }
-
         $this->cleanTmpConfigFile();
     }
 

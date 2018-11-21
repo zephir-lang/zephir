@@ -26,6 +26,7 @@ use Zephir\Passes\StaticTypeInference;
  */
 class ClassMethod
 {
+    public $optimizable = true;
     /** @var ClassDefinition */
     protected $classDefinition;
 
@@ -147,8 +148,6 @@ class ClassMethod
      * @var CallGathererPass
      */
     protected $callGathererPass;
-
-    public $optimizable = true;
 
     /**
      * ClassMethod constructor
