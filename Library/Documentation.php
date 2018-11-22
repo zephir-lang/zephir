@@ -52,9 +52,9 @@ class Documentation implements InjectionAwareInterface
      * Documentation constructor.
      *
      * @param CompilerFile[] $classes
-     * @param Config         $config
-     * @param Logger         $logger
-     * @param array          $options
+     * @param Config $config
+     * @param Logger $logger
+     * @param array $options
      *
      * @throws ConfigException
      * @throws Exception
@@ -114,7 +114,7 @@ class Documentation implements InjectionAwareInterface
      *
      * Return the path to it if it exists. Otherwise NULL.
      *
-     * @param  string      $name
+     * @param string $name
      * @return string|null
      */
     public function findThemePathByName($name)
@@ -218,8 +218,8 @@ class Documentation implements InjectionAwareInterface
      *
      * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
      *
-     * @param  array       $themeConfig
-     * @param  string|null $options
+     * @param array $themeConfig
+     * @param string|null $options
      * @throws Exception
      * @return array
      */
@@ -264,8 +264,8 @@ class Documentation implements InjectionAwareInterface
      *  => if not ; check if config config[api][path] was given
      *
      *
-     * @param  string      $outputDir
-     * @return null|string
+     * @param string $outputDir
+     * @return string|null
      */
     private function findOutputDirectory($outputDir)
     {
@@ -287,11 +287,11 @@ class Documentation implements InjectionAwareInterface
      *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
      * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
      *
-     * @param  array                    $themeConfig
-     * @param  string|null              $path
+     * @param array $themeConfig
+     * @param string|null $path
      * @throws InvalidArgumentException
      * @throws ConfigException
-     * @return null|string
+     * @return string|null
      */
     private function findThemeDirectory($themeConfig, $path = null)
     {

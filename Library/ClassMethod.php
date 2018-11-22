@@ -152,14 +152,14 @@ class ClassMethod
     /**
      * ClassMethod constructor
      *
-     * @param ClassDefinition            $classDefinition
-     * @param array                      $visibility
-     * @param string                     $name
+     * @param ClassDefinition $classDefinition
+     * @param array $visibility
+     * @param string $name
      * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null       $statements
-     * @param string|null                $docblock
-     * @param array|null                 $returnType
-     * @param array|null                 $original
+     * @param StatementsBlock|null $statements
+     * @param string|null $docblock
+     * @param array|null $returnType
+     * @param array|null $original
      */
     public function __construct(
         ClassDefinition $classDefinition,
@@ -270,9 +270,9 @@ class ClassMethod
     /**
      * Checks for visibility congruence
      *
-     * @param  array             $visibility
-     * @param  string            $name
-     * @param  array             $original
+     * @param array $visibility
+     * @param string $name
+     * @param array $original
      * @throws CompilerException
      */
     public function checkVisibility(array $visibility, $name, array $original = null)
@@ -534,7 +534,7 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is null compatible
      *
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
     public function areReturnTypesNullCompatible($type = null)
@@ -553,7 +553,7 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
     public function areReturnTypesIntCompatible($type = null)
@@ -577,7 +577,7 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is double compatible
      *
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
     public function areReturnTypesDoubleCompatible($type = null)
@@ -596,7 +596,7 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
     public function areReturnTypesBoolCompatible($type = null)
@@ -615,7 +615,7 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible
      *
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
     public function areReturnTypesStringCompatible($type = null)
@@ -718,7 +718,7 @@ class ClassMethod
     /**
      * Checks whether the method has a specific modifier
      *
-     * @param  string $modifier
+     * @param string $modifier
      * @return bool
      */
     public function hasModifier($modifier)
@@ -993,7 +993,7 @@ class ClassMethod
      * Replace macros
      *
      * @param SymbolTable $symbolTable
-     * @param string      $containerCode
+     * @param string $containerCode
      *
      * @return mixed
      */
@@ -1028,8 +1028,8 @@ class ClassMethod
     /**
      * Assigns a default value
      *
-     * @param  array              $parameter
-     * @param  CompilationContext $compilationContext
+     * @param array $parameter
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return string
      */
@@ -1361,8 +1361,8 @@ class ClassMethod
      *
      * @todo rewrite this to build ifs and throw from builders
      *
-     * @param  array              $parameter
-     * @param  CompilationContext $compilationContext
+     * @param array $parameter
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return string
      */
@@ -1390,8 +1390,8 @@ class ClassMethod
     /**
      * Assigns a zval value to a static low-level type
      *
-     * @param  array              $parameter
-     * @param  CompilationContext $compilationContext
+     * @param array $parameter
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return string
      */
@@ -1444,7 +1444,7 @@ class ClassMethod
     /**
      * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods
      *
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return null
      */
@@ -1497,7 +1497,7 @@ class ClassMethod
     /**
      * Compiles the method
      *
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return null
      */
@@ -2104,7 +2104,7 @@ class ClassMethod
     /**
      * Simple method to check if one of the paths are returning the right expected type
      *
-     * @param  array $statement
+     * @param array $statement
      * @return bool
      */
     public function hasChildReturnStatementType($statement)
@@ -2166,7 +2166,7 @@ class ClassMethod
     /**
      * Returns arginfo name for current method.
      *
-     * @param  ClassDefinition|null $classDefinition
+     * @param ClassDefinition|null $classDefinition
      * @return string
      */
     public function getArgInfoName(ClassDefinition $classDefinition = null)

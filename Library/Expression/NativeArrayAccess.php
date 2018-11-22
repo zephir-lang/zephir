@@ -40,7 +40,7 @@ class NativeArrayAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param bool     $expecting
+     * @param bool $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -73,7 +73,7 @@ class NativeArrayAccess
      * Compiles foo[x] = {expr}
      *
      * @param $expression
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */
@@ -124,8 +124,8 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array              $expression
-     * @param Variable           $variableVariable
+     * @param array $expression
+     * @param Variable $variableVariable
      * @param CompilationContext $compilationContext
      */
     protected function _accessStringOffset($expression, Variable $variableVariable, CompilationContext $compilationContext)
@@ -180,9 +180,9 @@ class NativeArrayAccess
     }
 
     /**
-     * @param  array              $expression
-     * @param  Variable           $variableVariable
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param Variable $variableVariable
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */

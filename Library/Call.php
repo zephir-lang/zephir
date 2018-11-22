@@ -180,8 +180,8 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call
      *
-     * @param  bool                    $useTemp
-     * @param  CompilationContext|null $compilationContext
+     * @param bool $useTemp
+     * @param CompilationContext|null $compilationContext
      * @return Variable
      */
     public function getSymbolVariable($useTemp = false, CompilationContext $compilationContext = null)
@@ -198,12 +198,12 @@ class Call
     /**
      * Resolves parameters
      *
-     * @param  array                           $parameters
-     * @param  CompilationContext              $compilationContext
-     * @param  array                           $expression
-     * @param  bool                            $readOnly
+     * @param array $parameters
+     * @param CompilationContext $compilationContext
+     * @param array $expression
+     * @param bool $readOnly
      * @throws CompilerException
-     * @return array|null|CompiledExpression[]
+     * @return array|CompiledExpression[]|null
      *
      * @return array
      */
@@ -295,10 +295,10 @@ class Call
      * Resolve parameters getting aware that the target function/method could retain or change
      * the parameters
      *
-     * @param  array              $parameters
-     * @param  CompilationContext $compilationContext
-     * @param  array              $expression
-     * @param  array              $calleeDefinition
+     * @param array $parameters
+     * @param CompilationContext $compilationContext
+     * @param array $expression
+     * @param array $calleeDefinition
      * @throws CompilerException
      * @return array
      */
@@ -489,9 +489,9 @@ class Call
     /**
      * Resolve parameters using zvals in the stack and without allocating memory for constants
      *
-     * @param array              $parameters
+     * @param array $parameters
      * @param CompilationContext $compilationContext
-     * @param array              $expression
+     * @param array $expression
      *
      * @throws CompilerException
      * @throws Exception

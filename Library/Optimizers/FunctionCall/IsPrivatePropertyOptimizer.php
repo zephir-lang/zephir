@@ -26,8 +26,8 @@ use Zephir\Optimizers\OptimizerAbstract;
 class IsPrivatePropertyOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $context
      *
      * @throws CompilerException

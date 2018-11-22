@@ -25,7 +25,7 @@ interface DevelopmentModeAwareInterface
     /**
      * Checks if the development mode is enabled.
      *
-     * @param  InputInterface $input
+     * @param InputInterface $input
      * @return bool
      */
     public function isDevelopmentModeEnabled(InputInterface $input);

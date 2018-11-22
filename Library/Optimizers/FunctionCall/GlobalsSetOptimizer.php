@@ -26,8 +26,8 @@ use Zephir\Optimizers\OptimizerAbstract;
 class GlobalsSetOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $context
      *
      * @throws CompilerException
@@ -102,8 +102,8 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      * @todo  Add 'hash' support
      * @todo  Use zval_get_string, zval_get_long, zval_get_double for ZE3
      *
-     * @param array  $definition
-     * @param array  $expression
+     * @param array $definition
+     * @param array $expression
      * @param string $name
      * @param string $value
      *

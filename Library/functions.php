@@ -18,7 +18,7 @@ use Zephir\Exception\InvalidArgumentException;
  *
  * A E_WARNING level error will be generated on failure.
  *
- * @param  string $path
+ * @param string $path
  * @return void
  */
 function unlink_recursive($path)
@@ -41,7 +41,7 @@ function unlink_recursive($path)
 /**
  * Camelize a string.
  *
- * @param  string $string
+ * @param string $string
  * @return string
  */
 function camelize($string)
@@ -52,7 +52,7 @@ function camelize($string)
 /**
  * Prepares a class name to be used as a C-string.
  *
- * @param  string $className
+ * @param string $className
  * @return string
  */
 function escape_class($className)
@@ -63,7 +63,7 @@ function escape_class($className)
 /**
  * Prepares a string to be used as a C-string.
  *
- * @param  string $string
+ * @param string $string
  * @return string
  */
 function add_slashes($string)
@@ -122,9 +122,9 @@ function add_slashes($string)
 /**
  * Transform class/interface name to FQN format
  *
- * @param  string       $className
- * @param  string       $currentNamespace
- * @param  AliasManager $aliasManager
+ * @param string $className
+ * @param string $currentNamespace
+ * @param AliasManager $aliasManager
  * @return string
  */
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
@@ -160,8 +160,8 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 /**
  * Checks if the content of the file on the disk is the same as the content.
  *
- * @param  string $content
- * @param  string $path
+ * @param string $content
+ * @param string $path
  * @return bool
  */
 function file_put_contents_ex($content, $path)

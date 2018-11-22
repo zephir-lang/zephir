@@ -26,9 +26,9 @@ use function Zephir\add_slashes;
 class ImplodeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param  array                         $expression
-     * @param  Call                          $call
-     * @param  CompilationContext            $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return bool|CompiledExpression|mixed
      */

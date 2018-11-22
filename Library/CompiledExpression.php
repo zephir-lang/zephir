@@ -28,7 +28,7 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * @param string $type
      * @param string $code
-     * @param array  $originalExpr
+     * @param array $originalExpr
      */
     public function __construct($type, $code, $originalExpr)
     {
@@ -125,8 +125,8 @@ class CompiledExpression implements TypeAwareInterface
      * because it's missing some bound parts, this method resolves the missing parts
      * returning the generated code
      *
-     * @param  string             $result
-     * @param  CompilationContext $compilationContext
+     * @param string $result
+     * @param CompilationContext $compilationContext
      * @return string
      */
     public function resolve($result, CompilationContext $compilationContext)

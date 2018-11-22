@@ -38,7 +38,7 @@ trait ContainerAwareTrait
     /**
      * The Dependency Injection container.
      *
-     * @var ContainerInterface|Container
+     * @var Container|ContainerInterface
      */
     private $container;
 
@@ -52,7 +52,7 @@ trait ContainerAwareTrait
     /**
      * ContainerAwareTrait constructor.
      *
-     * @param ContainerInterface|Container|null $container
+     * @param Container|ContainerInterface|null $container
      */
     public function __construct(ContainerInterface $container = null)
     {
@@ -104,7 +104,7 @@ trait ContainerAwareTrait
      * {@inheritdoc}
      *
      * @see    InjectionAwareInterface
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @return void
      */
     public function setContainer(ContainerInterface $container)

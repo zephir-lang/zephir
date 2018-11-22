@@ -28,8 +28,8 @@ class ConcatOperator extends BaseOperator
     /**
      * Performs concat compilation.
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -120,9 +120,9 @@ class ConcatOperator extends BaseOperator
     }
 
     /**
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
-     * @param  bool               $isFullString
+     * @param array $expression
+     * @param CompilationContext $compilationContext
+     * @param bool $isFullString
      * @return array
      */
     private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)

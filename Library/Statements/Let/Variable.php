@@ -30,12 +30,12 @@ class Variable
      * Compiles foo = {expr}
      * Changes the value of a mutable variable
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param ReadDetector       $readDetector
+     * @param ReadDetector $readDetector
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
      * @throws CompilerException
      * @return void
@@ -110,10 +110,10 @@ class Variable
     /**
      * Performs numeric assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param array              $statement
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
@@ -348,10 +348,10 @@ class Variable
     /**
      * Performs double assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param array              $statement
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
@@ -535,11 +535,11 @@ class Variable
     /**
      * Performs string assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
+     * @param ZephirVariable $symbolVariable
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
@@ -721,11 +721,11 @@ class Variable
     /**
      * Performs array assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
+     * @param ZephirVariable $symbolVariable
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
@@ -771,10 +771,10 @@ class Variable
     /**
      * Performs boolean assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param array              $statement
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
@@ -906,13 +906,13 @@ class Variable
     /**
      * Performs variable assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param CodePrinter $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
+     * @param ZephirVariable $symbolVariable
+     * @param string $variable
+     * @param array $statement
      * @param CompilationContext $compilationContext
-     * @param ReadDetector       $readDetector
+     * @param ReadDetector $readDetector
      *
      * @throws CompilerException
      * @throws IllegalOperationException

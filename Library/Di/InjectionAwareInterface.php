@@ -21,7 +21,7 @@ interface InjectionAwareInterface
     /**
      * Set a container
      *
-     * @param  ContainerInterface $container
+     * @param ContainerInterface $container
      * @return void
      */
     public function setContainer(ContainerInterface $container);

@@ -52,7 +52,7 @@ abstract class StatementAbstract
     }
 
     /**
-     * @return null|EvalExpression
+     * @return EvalExpression|null
      */
     public function getEvalExpression()
     {

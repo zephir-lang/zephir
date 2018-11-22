@@ -33,7 +33,7 @@ class ShortTernaryOperator extends BaseOperator
      * Compile ternary operator
      *
      * @param $expression
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

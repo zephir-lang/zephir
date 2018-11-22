@@ -30,7 +30,7 @@ class ComparisonBaseOperator extends BaseOperator
 
     /**
      * @param $expr
-     * @param  CompilationContext      $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return bool|CompiledExpression
      */
@@ -161,7 +161,7 @@ class ComparisonBaseOperator extends BaseOperator
     /**
      * Compile the expression
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      */
     public function compile($expression, CompilationContext $compilationContext)

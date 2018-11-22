@@ -37,7 +37,7 @@ class NativeArray
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param bool     $expecting
+     * @param bool $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -69,8 +69,8 @@ class NativeArray
     /**
      * Resolves an item to be added in an array
      *
-     * @param  CompiledExpression $exprCompiled
-     * @param  CompilationContext $compilationContext
+     * @param CompiledExpression $exprCompiled
+     * @param CompilationContext $compilationContext
      * @return Variable
      */
     public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
@@ -158,8 +158,8 @@ class NativeArray
     /**
      * Compiles an array initialization
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

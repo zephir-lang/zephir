@@ -31,9 +31,9 @@ class PregMatchOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return CompiledExpression
      */
@@ -112,9 +112,9 @@ class PregMatchOptimizer extends OptimizerAbstract
      *
      *     preg_match(pattern, subject, matches, flags, offset)
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return array
      */
@@ -167,7 +167,7 @@ class PregMatchOptimizer extends OptimizerAbstract
      *
      *     preg_match(pattern, subject, matches)
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $context
      *
      * @return Variable

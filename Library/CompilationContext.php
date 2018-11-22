@@ -194,7 +194,7 @@ class CompilationContext
      * Transform class/interface name to FQN format
      * @todo WHY WHY :'(
      *
-     * @param  string $className
+     * @param string $className
      * @return string
      */
     public function getFullName($className)

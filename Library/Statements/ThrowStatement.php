@@ -27,7 +27,7 @@ use function Zephir\fqcn;
 class ThrowStatement extends StatementAbstract
 {
     /**
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
@@ -113,9 +113,9 @@ class ThrowStatement extends StatementAbstract
      * Throws an exception escaping the data
      *
      * @param CodePrinter $printer
-     * @param string      $class
-     * @param string      $message
-     * @param array       $expression
+     * @param string $class
+     * @param string $message
+     * @param array $expression
      */
     private function throwStringException(CodePrinter $printer, $class, $message, $expression)
     {

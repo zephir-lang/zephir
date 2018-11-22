@@ -229,7 +229,7 @@ class IsPhpVersionTest extends TestCase
      * Compare user entered PHP version with Environment and return Boolean
      * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
      *
-     * @param  int|float|string $version - PHP version in any format: 7, 7.1, "7.1.1"
+     * @param float|int|string $version - PHP version in any format: 7, 7.1, "7.1.1"
      * @return bool
      */
     private function isPhpVersion($version)

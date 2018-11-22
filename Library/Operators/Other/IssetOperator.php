@@ -27,8 +27,8 @@ class IssetOperator extends BaseOperator
     /**
      * Compiles an 'isset' operator
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */

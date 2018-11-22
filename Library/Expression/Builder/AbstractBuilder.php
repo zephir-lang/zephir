@@ -21,9 +21,9 @@ abstract class AbstractBuilder
     private $char = null;
 
     /**
-     * @param  string $file
-     * @param  int    $line
-     * @param  null   $char
+     * @param string $file
+     * @param int $line
+     * @param null $char
      * @return $this
      */
     public function setParseInfo($file, $line, $char = null)
@@ -39,7 +39,7 @@ abstract class AbstractBuilder
     }
 
     /**
-     * @param  string          $file
+     * @param string $file
      * @return AbstractBuilder
      */
     public function setFile($file)
@@ -57,7 +57,7 @@ abstract class AbstractBuilder
     }
 
     /**
-     * @param  string          $line
+     * @param string $line
      * @return AbstractBuilder
      */
     public function setLine($line)
@@ -75,7 +75,7 @@ abstract class AbstractBuilder
     }
 
     /**
-     * @param  int             $char
+     * @param int $char
      * @return AbstractBuilder
      */
     public function setChar($char)

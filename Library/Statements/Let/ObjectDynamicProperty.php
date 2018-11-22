@@ -26,11 +26,11 @@ class ObjectDynamicProperty
     /**
      * Compiles foo->{x} = {expr}
      *
-     * @param  string             $variable
-     * @param  ZephirVariable     $symbolVariable
-     * @param  CompiledExpression $resolvedExpr
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws CompilerException
      * @throws \Exception
      */

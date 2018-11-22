@@ -44,7 +44,7 @@ class AssignVariableOperator extends AbstractOperator
     private $expression;
 
     /**
-     * @param null                 $variable
+     * @param null $variable
      * @param AbstractBuilder|null $expression
      */
     public function __construct($variable = null, AbstractBuilder $expression = null)
@@ -67,7 +67,7 @@ class AssignVariableOperator extends AbstractOperator
     }
 
     /**
-     * @param  string $variable
+     * @param string $variable
      * @return $this
      */
     public function setVariable($variable)

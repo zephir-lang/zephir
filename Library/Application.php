@@ -46,7 +46,7 @@ final class Application extends BaseApplication
     /**
      * Bootstrap constructor.
      *
-     * @param string             $basePath  The Zephir compiler base directory.
+     * @param string $basePath The Zephir compiler base directory.
      * @param ContainerInterface $container The DI container (if any).
      */
     public function __construct($basePath, ContainerInterface $container = null)
@@ -73,7 +73,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param  Command      $command
+     * @param Command $command
      * @return Command|null
      */
     public function add(Command $command)
@@ -98,9 +98,9 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param  InputInterface        $input
-     * @param  OutputInterface       $output
-     * @throws \Throwable|\Exception
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws \Exception|\Throwable
      * @return int
      */
     public function doRun(InputInterface $input, OutputInterface $output)
@@ -153,8 +153,8 @@ final class Application extends BaseApplication
      * @todo
      * @deprecated
      *
-     * @param  \Exception $exception
-     * @param  Config     $config    Current config object [optional].
+     * @param \Exception $exception
+     * @param Config $config Current config object [optional].
      * @return string
      */
     protected function formatErrorMessage(\Exception $exception, Config $config = null)

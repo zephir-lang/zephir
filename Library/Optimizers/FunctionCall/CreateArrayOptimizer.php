@@ -25,9 +25,9 @@ use Zephir\Optimizers\OptimizerAbstract;
 class CreateArrayOptimizer extends OptimizerAbstract
 {
     /**
-     * @param  array                    $expression
-     * @param  Call                     $call
-     * @param  CompilationContext       $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return CompiledExpression|mixed
      */

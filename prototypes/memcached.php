@@ -133,9 +133,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.get.php
-     * @param  string   $key
-     * @param  callable $cache_cb
-     * @param  float    $cas_token
+     * @param string $key
+     * @param callable $cache_cb
+     * @param float $cas_token
      * @return mixed
      */
     public function get($key, callable $cache_cb = null, &$cas_token = null)
@@ -144,10 +144,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getbykey.php
-     * @param  string   $server_key
-     * @param  string   $key
-     * @param  callable $cache_cb
-     * @param  float    $cas_token
+     * @param string $server_key
+     * @param string $key
+     * @param callable $cache_cb
+     * @param float $cas_token
      * @return mixed
      */
     public function getByKey($server_key, $key, callable $cache_cb = null, &$cas_token = null)
@@ -156,9 +156,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getmulti.php
-     * @param  array $keys
-     * @param  array $cas_tokens
-     * @param  int   $flags
+     * @param array $keys
+     * @param array $cas_tokens
+     * @param int $flags
      * @return mixed
      */
     public function getMulti(array $keys, array &$cas_tokens = null, $flags = null)
@@ -167,10 +167,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getmultibykey.php
-     * @param  string $server_key
-     * @param  array  $keys
-     * @param  string $cas_tokens
-     * @param  int    $flags
+     * @param string $server_key
+     * @param array $keys
+     * @param string $cas_tokens
+     * @param int $flags
      * @return array
      */
     public function getMultiByKey($server_key, array $keys, &$cas_tokens = null, $flags = null)
@@ -179,9 +179,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getdelayed.php
-     * @param  array    $keys
-     * @param  bool     $with_cas
-     * @param  callable $value_cb
+     * @param array $keys
+     * @param bool $with_cas
+     * @param callable $value_cb
      * @return bool
      */
     public function getDelayed(array $keys, $with_cas = null, callable $value_cb = null)
@@ -190,10 +190,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getdelayedbykey.php
-     * @param  string   $server_key
-     * @param  array    $keys
-     * @param  bool     $with_cas
-     * @param  callable $value_cb
+     * @param string $server_key
+     * @param array $keys
+     * @param bool $with_cas
+     * @param callable $value_cb
      * @return bool
      */
     public function getDelayedByKey($server_key, array $keys, $with_cas = null, callable $value_cb = null)
@@ -218,9 +218,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.set.php
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function set($key, $value, $expiration = null)
@@ -229,10 +229,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.setbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function setByKey($server_key, $key, $value, $expiration = null)
@@ -241,8 +241,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.touch.php
-     * @param  string $key
-     * @param  int    $expiration
+     * @param string $key
+     * @param int $expiration
      * @return bool
      */
     public function touch($key, $expiration)
@@ -251,9 +251,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.touchbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  int    $expiration
+     * @param string $server_key
+     * @param string $key
+     * @param int $expiration
      * @return bool
      */
     public function touchByKey($server_key, $key, $expiration)
@@ -262,8 +262,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.setmulti.php
-     * @param  array $items
-     * @param  int   $expiration
+     * @param array $items
+     * @param int $expiration
      * @return bool
      */
     public function setMulti(array $items, $expiration = null)
@@ -272,9 +272,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.setmultibykey.php
-     * @param  string $server_key
-     * @param  array  $items
-     * @param  int    $expiration
+     * @param string $server_key
+     * @param array $items
+     * @param int $expiration
      * @return bool
      */
     public function setMultiByKey($server_key, array $items, $expiration = null)
@@ -283,10 +283,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.cas.php
-     * @param  float  $cas_token
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param float $cas_token
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function cas($cas_token, $key, $value, $expiration = null)
@@ -295,11 +295,11 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.casbykey.php
-     * @param  float  $cas_token
-     * @param  string $server_key
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param float $cas_token
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function casByKey($cas_token, $server_key, $key, $value, $expiration = null)
@@ -308,9 +308,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.add.php
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function add($key, $value, $expiration = null)
@@ -319,10 +319,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.addbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function addByKey($server_key, $key, $value, $expiration = null)
@@ -331,8 +331,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.append.php
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      * @return bool
      */
     public function append($key, $value)
@@ -341,9 +341,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.appendbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  string $value
+     * @param string $server_key
+     * @param string $key
+     * @param string $value
      * @return bool
      */
     public function appendByKey($server_key, $key, $value)
@@ -352,8 +352,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.prepend.php
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      * @return bool
      */
     public function prepend($key, $value)
@@ -362,9 +362,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.prependbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  string $value
+     * @param string $server_key
+     * @param string $key
+     * @param string $value
      * @return bool
      */
     public function prependByKey($server_key, $key, $value)
@@ -373,9 +373,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.replace.php
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function replace($key, $value, $expiration = null)
@@ -384,10 +384,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.replacebykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $expiration
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
      * @return bool
      */
     public function replaceByKey($server_key, $key, $value, $expiration = null)
@@ -396,8 +396,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.delete.php
-     * @param  string $key
-     * @param  int    $time
+     * @param string $key
+     * @param int $time
      * @return bool
      */
     public function delete($key, $time = 0)
@@ -406,8 +406,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.deletemulti.php
-     * @param  array $keys
-     * @param  int   $time
+     * @param array $keys
+     * @param int $time
      * @return bool
      */
     public function deleteMulti(array $keys, $time = 0)
@@ -416,9 +416,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.deletebykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  int    $time
+     * @param string $server_key
+     * @param string $key
+     * @param int $time
      * @return bool
      */
     public function deleteByKey($server_key, $key, $time = 0)
@@ -427,9 +427,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.deletemultibykey.php
-     * @param  string $server_key
-     * @param  array  $keys
-     * @param  int    $time
+     * @param string $server_key
+     * @param array $keys
+     * @param int $time
      * @return bool
      */
     public function deleteMultiByKey($server_key, array $keys, $time = 0)
@@ -438,10 +438,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.increment.php
-     * @param  string $key
-     * @param  int    $offset
-     * @param  int    $initial_value
-     * @param  int    $expiry
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
      * @return int
      */
     public function increment($key, $offset = 1, $initial_value = 0, $expiry = 0)
@@ -450,10 +450,10 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.decrement.php
-     * @param  string $key
-     * @param  int    $offset
-     * @param  int    $initial_value
-     * @param  int    $expiry
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
      * @return int
      */
     public function decrement($key, $offset = 1, $initial_value = 0, $expiry = 0)
@@ -462,11 +462,11 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.incrementbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  int    $offset
-     * @param  int    $initial_value
-     * @param  int    $expiry
+     * @param string $server_key
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
      * @return int
      */
     public function incrementByKey($server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0)
@@ -475,11 +475,11 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.decrementbykey.php
-     * @param  string $server_key
-     * @param  string $key
-     * @param  int    $offset
-     * @param  int    $initial_value
-     * @param  int    $expiry
+     * @param string $server_key
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
      * @return int
      */
     public function decrementByKey($server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0)
@@ -488,9 +488,9 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.addserver.php
-     * @param  string $host
-     * @param  int    $port
-     * @param  int    $weight
+     * @param string $host
+     * @param int $port
+     * @param int $weight
      * @return bool
      */
     public function addServer($host, $port, $weight = 0)
@@ -499,7 +499,7 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.addservers.php
-     * @param  array $servers
+     * @param array $servers
      * @return bool
      */
     public function addServers(array $servers)
@@ -516,7 +516,7 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getserverbykey.php
-     * @param  string $server_key
+     * @param string $server_key
      * @return array
      */
     public function getServerByKey($server_key)
@@ -565,7 +565,7 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.flush.php
-     * @param  int  $delay
+     * @param int $delay
      * @return bool
      */
     public function flush($delay = 0)
@@ -574,7 +574,7 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.getoption.php
-     * @param  int   $option
+     * @param int $option
      * @return mixed
      */
     public function getOption($option)
@@ -583,8 +583,8 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.setoption.php
-     * @param  int   $option
-     * @param  mixed $value
+     * @param int $option
+     * @param mixed $value
      * @return bool
      */
     public function setOption($option, $value)
@@ -593,7 +593,7 @@ class Memcached
 
     /**
      * @link http://php.net/manual/en/memcached.setoptions.php
-     * @param  array $options
+     * @param array $options
      * @return bool
      */
     public function setOptions(array $options)

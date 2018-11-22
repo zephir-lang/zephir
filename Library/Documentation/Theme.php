@@ -110,7 +110,7 @@ class Theme
     /**
      * Parse and draw the specified file.
      *
-     * @param  AbstractFile $file
+     * @param AbstractFile $file
      * @throws Exception
      * @return void
      */
@@ -148,7 +148,7 @@ class Theme
     /**
      * Get assets from the theme info (theme.json file placed inside the theme directory).
      *
-     * @param  string     $name
+     * @param string $name
      * @return mixed|null
      */
     public function getThemeInfo($name)
@@ -163,7 +163,7 @@ class Theme
     /**
      * Similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array.
      *
-     * @param  string $name
+     * @param string $name
      * @return array
      */
     public function getThemeInfoExtendAware($name)

@@ -55,9 +55,9 @@ class MethodCache
     /**
      * Retrieves/Creates a function cache for a method call.
      *
-     * @param  CompilationContext $compilationContext
-     * @param  string             $methodName
-     * @param  Variable           $caller
+     * @param CompilationContext $compilationContext
+     * @param string $methodName
+     * @param Variable $caller
      * @return string
      */
     public function get(CompilationContext $compilationContext, $methodName, Variable $caller)
@@ -184,7 +184,7 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching
      *
-     * @param  ClassDefinition $classDefinition
+     * @param ClassDefinition $classDefinition
      * @return bool
      */
     private function isClassCacheable($classDefinition)

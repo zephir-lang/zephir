@@ -69,8 +69,8 @@ class Struct
     }
 
     /**
-     * @param  string                   $field
-     * @param  array                    $global
+     * @param string $field
+     * @param array $global
      * @throws InvalidArgumentException
      * @return void
      */
@@ -98,9 +98,9 @@ class Struct
     /**
      * Returns the C code that initializes the extension global.
      *
-     * @param  string                   $name
-     * @param  array                    $global
-     * @param  mixed                    $namespace
+     * @param string $name
+     * @param array $global
+     * @param mixed $namespace
      * @throws RuntimeException
      * @throws InvalidArgumentException
      * @return string
@@ -141,9 +141,9 @@ class Struct
     }
 
     /**
-     * @param  mixed  $name
-     * @param  mixed  $global
-     * @param  mixed  $namespace
+     * @param mixed $name
+     * @param mixed $global
+     * @param mixed $namespace
      * @return string
      */
     public function getInitEntry($name, $global, $namespace)
@@ -188,7 +188,7 @@ class Struct
     /**
      * Generates the internal c-type according to the php's type
      *
-     * @param  string                   $type
+     * @param string $type
      * @throws InvalidArgumentException
      * @return string
      */

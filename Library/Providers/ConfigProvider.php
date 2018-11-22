@@ -24,7 +24,7 @@ final class ConfigProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @throws \Zephir\Exception
      * @return void
      */

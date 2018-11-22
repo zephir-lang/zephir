@@ -106,7 +106,7 @@ class Logger
     /**
      * Gets the contents of the files that are involved in the log message.
      *
-     * @param  string $file File path
+     * @param string $file File path
      * @return array
      */
     protected function getFileContents($file)

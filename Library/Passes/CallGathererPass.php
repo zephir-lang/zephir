@@ -56,7 +56,7 @@ class CallGathererPass
     /**
      * Returns the number of calls a function had
      *
-     * @param  string $funcName
+     * @param string $funcName
      * @return int
      */
     public function getNumberOfFunctionCalls($funcName)
@@ -70,8 +70,8 @@ class CallGathererPass
     /**
      * Returns the number of calls a function had
      *
-     * @param  string $className
-     * @param  string $methodName
+     * @param string $className
+     * @param string $methodName
      * @return int
      */
     public function getNumberOfMethodCalls($className, $methodName)

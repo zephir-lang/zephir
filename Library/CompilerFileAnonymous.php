@@ -51,8 +51,8 @@ class CompilerFileAnonymous implements FileInterface
      * CompilerFileAnonymous constructor
      *
      * @param ClassDefinition $classDefinition
-     * @param Config          $config
-     * @param Logger          $logger
+     * @param Config $config
+     * @param Logger $logger
      */
     public function __construct(ClassDefinition $classDefinition, Config $config, Logger $logger)
     {
@@ -95,7 +95,7 @@ class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the class/interface contained in the file
      *
-     * @param ClassDefinition    $classDefinition
+     * @param ClassDefinition $classDefinition
      * @param CompilationContext $compilationContext
      */
     public function compileClass(ClassDefinition $classDefinition, CompilationContext $compilationContext)
@@ -146,7 +146,7 @@ class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the file
      *
-     * @param Compiler       $compiler
+     * @param Compiler $compiler
      * @param StringsManager $stringsManager
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)

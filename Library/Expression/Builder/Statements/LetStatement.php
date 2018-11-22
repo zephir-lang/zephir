@@ -39,7 +39,7 @@ class LetStatement extends AbstractStatement
     }
 
     /**
-     * @param  array $assignments
+     * @param array $assignments
      * @return $this
      */
     public function setAssignments($assignments)
@@ -49,7 +49,7 @@ class LetStatement extends AbstractStatement
     }
 
     /**
-     * @param  mixed $assignment
+     * @param mixed $assignment
      * @return $this
      */
     public function addAssignment($assignment)

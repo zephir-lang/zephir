@@ -25,8 +25,8 @@ class CallStaticStatement extends AbstractStatement
     private $dynamicMethod = false;
 
     /**
-     * @param null       $class
-     * @param null       $method
+     * @param null $class
+     * @param null $method
      * @param array|null $parameters
      */
     public function __construct($class = null, $method = null, array $parameters = null)
@@ -53,7 +53,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  mixed               $class
+     * @param mixed $class
      * @return CallStaticStatement
      */
     public function setClass($class)
@@ -71,7 +71,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  mixed               $method
+     * @param mixed $method
      * @return CallStaticStatement
      */
     public function setMethod($method)
@@ -89,7 +89,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  mixed               $arguments
+     * @param mixed $arguments
      * @return CallStaticStatement
      */
     public function setArguments($arguments)
@@ -107,7 +107,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  bool                $dynamicClass
+     * @param bool $dynamicClass
      * @return CallStaticStatement
      */
     public function setDynamicClass($dynamicClass)
@@ -125,7 +125,7 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param  bool                $dynamicMethod
+     * @param bool $dynamicMethod
      * @return CallStaticStatement
      */
     public function setDynamicMethod($dynamicMethod)

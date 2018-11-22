@@ -37,8 +37,8 @@ class IfStatement extends AbstractStatement
 
     /**
      * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null  $statements
-     * @param StatementsBlock|null  $elseStatements
+     * @param StatementsBlock|null $statements
+     * @param StatementsBlock|null $elseStatements
      */
     public function __construct(AbstractOperator $condition = null, StatementsBlock $statements = null, StatementsBlock $elseStatements = null)
     {
@@ -82,7 +82,7 @@ class IfStatement extends AbstractStatement
     }
 
     /**
-     * @param  StatementsBlock $statements
+     * @param StatementsBlock $statements
      * @return $this
      */
     public function setStatements(StatementsBlock $statements)
@@ -100,7 +100,7 @@ class IfStatement extends AbstractStatement
     }
 
     /**
-     * @param  StatementsBlock $elseStatements
+     * @param StatementsBlock $elseStatements
      * @return $this
      */
     public function setElseStatements(StatementsBlock $elseStatements)

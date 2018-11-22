@@ -35,8 +35,8 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
     ];
 
     /**
-     * @param array              $expression
-     * @param Call               $call
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $context
      *
      * @return CompiledExpression

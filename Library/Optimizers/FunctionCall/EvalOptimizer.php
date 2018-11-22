@@ -25,9 +25,9 @@ class EvalOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param  array                         $expression
-     * @param  Call                          $call
-     * @param  CompilationContext            $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @throws \Zephir\Exception
      * @return bool|CompiledExpression|mixed

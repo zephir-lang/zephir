@@ -195,10 +195,10 @@ class Backend extends BaseBackend
     /**
      * Checks the type of a variable using the ZendEngine constants
      *
-     * @param  Variable           $variableVariable
-     * @param  string             $operator
-     * @param  string             $value
-     * @param  CompilationContext $context
+     * @param Variable $variableVariable
+     * @param string $operator
+     * @param string $value
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return string
      */
@@ -1410,8 +1410,8 @@ class Backend extends BaseBackend
     /**
      * Resolve expressions.
      *
-     * @param  CompiledExpression[]|string[] $offsetExprs
-     * @param  CompilationContext            $compilationContext
+     * @param CompiledExpression[]|string[] $offsetExprs
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return array
      */

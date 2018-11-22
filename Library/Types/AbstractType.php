@@ -29,11 +29,11 @@ abstract class AbstractType
     /**
      * Intercepts calls to built-in methods
      *
-     * @param  string                          $methodName
-     * @param  object                          $caller
-     * @param  CompilationContext              $compilationContext
-     * @param  Call                            $call
-     * @param  array                           $expression
+     * @param string $methodName
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
      * @throws CompilerException
      * @return bool|\Zephir\CompiledExpression
      */

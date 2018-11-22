@@ -114,7 +114,7 @@ class Expression
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param bool     $expecting
+     * @param bool $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -222,8 +222,8 @@ class Expression
     /**
      * Compiles foo = []
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function emptyArray($expression, CompilationContext $compilationContext)
@@ -262,7 +262,7 @@ class Expression
     /**
      * Resolves an expression
      *
-     * @param  CompilationContext          $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException|Exception
      * @return bool|CompiledExpression
      */

@@ -32,7 +32,7 @@ class Parser
     /**
      * Gets Zephir Parser version.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getVersion()
     {
@@ -42,7 +42,7 @@ class Parser
     /**
      * Parses a file and returning an intermediate representation (IR).
      *
-     * @param  string                $filepath Absolute path to the *.zep file
+     * @param string $filepath Absolute path to the *.zep file
      * @throws IllegalStateException
      * @throws ParseException
      * @return array

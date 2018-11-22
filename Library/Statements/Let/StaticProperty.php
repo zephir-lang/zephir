@@ -32,7 +32,7 @@ class StaticProperty
      * @param $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
      * @throws CompilerException
      * @throws IllegalOperationException

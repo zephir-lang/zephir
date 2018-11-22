@@ -22,7 +22,7 @@ class MongoClient
 
     /**
      * @link http://www.php.net/manual/en/mongoclient.selectdb.php
-     * @param  string  $name
+     * @param string $name
      * @return MongoDB
      */
     public function selectDB($name)
@@ -44,7 +44,7 @@ class MongoDB
     /**
      * @link http://www.php.net/manual/en/mongodb.construct.php
      * @param MongoClient $conn
-     * @param string      $name
+     * @param string $name
      */
     public function __construct(MongoClient $conn, $name)
     {

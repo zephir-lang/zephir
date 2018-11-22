@@ -25,7 +25,7 @@ final class ParserManagerProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @return void
      */
     public function register(ContainerInterface $container)

@@ -107,8 +107,8 @@ class SymbolTable
     /**
      * Check if a variable is declared in the current symbol table
      *
-     * @param  string             $name
-     * @param  CompilationContext $compilationContext
+     * @param string $name
+     * @param CompilationContext $compilationContext
      * @return bool
      */
     public function hasVariable($name, CompilationContext $compilationContext = null)
@@ -126,9 +126,9 @@ class SymbolTable
     /**
      * Adds a variable to the symbol table
      *
-     * @param  int                $type
-     * @param  string             $name
-     * @param  CompilationContext $compilationContext
+     * @param int $type
+     * @param string $name
+     * @param CompilationContext $compilationContext
      * @return Variable
      */
     public function addVariable($type, $name, CompilationContext $compilationContext)
@@ -165,7 +165,7 @@ class SymbolTable
     /**
      * Adds a raw variable to the symbol table (root branch)
      *
-     * @param  Variable $variable
+     * @param Variable $variable
      * @return Variable
      */
     public function addRawVariable(Variable $variable)
@@ -181,8 +181,8 @@ class SymbolTable
      * Returns a variable in the symbol table
      *
      * @param $name
-     * @param  CompilationContext    $compilationContext
-     * @return \Zephir\Variable|bool
+     * @param CompilationContext $compilationContext
+     * @return bool|\Zephir\Variable
      */
     public function getVariable($name, $compilationContext = null)
     {
@@ -231,9 +231,9 @@ class SymbolTable
     /**
      * Return a variable in the symbol table, it will be used for a read operation
      *
-     * @param  string             $name
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $name
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws CompilerException
      * @return Variable
      */
@@ -410,9 +410,9 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a write operation
      * Some variables aren't writable themselves but their members do
      *
-     * @param string             $name
+     * @param string $name
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
      * @throws CompilerException
      * @return bool|\Zephir\Variable
@@ -465,9 +465,9 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a mutating operation
      * This method implies mutation of one of the members of the variable but no the variables it self
      *
-     * @param  string             $name
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $name
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws CompilerException
      * @return Variable
      */
@@ -542,8 +542,8 @@ class SymbolTable
     /**
      * Returns a temporal variable
      *
-     * @param  string             $type
-     * @param  CompilationContext $compilationContext
+     * @param string $type
+     * @param CompilationContext $compilationContext
      * @return Variable
      */
     public function getTempVariable($type, CompilationContext $compilationContext)
@@ -559,9 +559,9 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used in a write operation
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
-     * @param  mixed              $init
+     * @param string $type
+     * @param CompilationContext $context
+     * @param mixed $init
      * @return Variable
      */
     public function getTempVariableForWrite($type, CompilationContext $context, $init = true)
@@ -595,8 +595,8 @@ class SymbolTable
      * These kind of variables MUST not be tracked by the Zephir memory manager
      *
      * @param $type
-     * @param  CompilationContext $context
-     * @param  bool               $initNonReferenced
+     * @param CompilationContext $context
+     * @param bool $initNonReferenced
      * @return Variable
      */
     public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced = false)
@@ -633,8 +633,8 @@ class SymbolTable
      * Creates a temporary variable to be used in a read-only operation within native-array-access and property-access
      * These kind of variables MUST not be tracked by the Zephir memory manager
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function getTempNonTrackedUninitializedVariable($type, CompilationContext $context)
@@ -664,8 +664,8 @@ class SymbolTable
      * the body of the variable is freed between iterations instead of
      * request a new full zval variable
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
@@ -697,8 +697,8 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used in a write operation
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function getTempLocalVariableForWrite($type, CompilationContext $context)
@@ -732,8 +732,8 @@ class SymbolTable
     /**
      * Creates a temporary variable
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function addTemp($type, CompilationContext $context)
@@ -752,8 +752,8 @@ class SymbolTable
      * Creates a temporary variable to be used as intermediate variable of a read operation
      * Variables are automatically tracked by the memory manager
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function getTempVariableForObserve($type, CompilationContext $context)
@@ -782,8 +782,8 @@ class SymbolTable
      * Creates a temporary variable to be used as intermediate variable in a call operation
      * Variables are automatically tracked by the memory manager
      *
-     * @param  string             $type
-     * @param  CompilationContext $context
+     * @param string $type
+     * @param CompilationContext $context
      * @return Variable
      */
     public function getTempVariableForObserveOrNullify($type, CompilationContext $context)
@@ -842,7 +842,7 @@ class SymbolTable
     /**
      * Returns the number of expected mutations for a variable
      *
-     * @param  string $variable
+     * @param string $variable
      * @return int
      */
     public function getExpectedMutations($variable)
@@ -886,9 +886,9 @@ class SymbolTable
     /**
      * Register a variable as temporal
      *
-     * @param string             $type
-     * @param string             $location
-     * @param Variable           $variable
+     * @param string $type
+     * @param string $location
+     * @param Variable $variable
      * @param CompilationContext $compilationContext
      */
     protected function registerTempVariable($type, $location, Variable $variable, CompilationContext $compilationContext = null)
@@ -905,9 +905,9 @@ class SymbolTable
     /**
      * Reuse variables marked as idle after leave a branch
      *
-     * @param  string             $type
-     * @param  string             $location
-     * @param  CompilationContext $compilationContext
+     * @param string $type
+     * @param string $location
+     * @param CompilationContext $compilationContext
      * @return Variable
      */
     protected function reuseTempVariable($type, $location, CompilationContext $compilationContext = null)

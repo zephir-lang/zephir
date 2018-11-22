@@ -36,7 +36,7 @@ final class HardDisk implements FileSystemInterface
      * HardDisk constructor
      *
      * @param Flysystem\FilesystemInterface $filesystem
-     * @param string                        $localPath
+     * @param string $localPath
      *
      * @throws InvalidArgumentException
      */
@@ -82,7 +82,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      * @return bool
      */
     public function exists($path)
@@ -93,7 +93,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      * @return bool
      */
     public function makeDirectory($path)
@@ -104,7 +104,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string                          $path
+     * @param string $path
      * @throws Flysystem\FileNotFoundException
      * @return array
      */
@@ -130,7 +130,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * Writes data from a temporary entry.
      *
-     * @param  string                          $path
+     * @param string $path
      * @throws Flysystem\FileNotFoundException
      * @return string
      */
@@ -142,7 +142,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string                          $path
+     * @param string $path
      * @throws Flysystem\FileNotFoundException
      * @return void
      */
@@ -154,8 +154,8 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string                        $path
-     * @param  string                        $contents
+     * @param string $path
+     * @param string $contents
      * @throws Flysystem\FileExistsException
      * @return void
      */
@@ -189,7 +189,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      * @return mixed
      */
     public function requireFile($path)
@@ -219,9 +219,9 @@ final class HardDisk implements FileSystemInterface
      * This function does not perform operations in the temporary
      * directory but it caches the results to avoid reprocessing.
      *
-     * @param  string                          $algorithm
-     * @param  string                          $sourceFile
-     * @param  bool                            $useCache
+     * @param string $algorithm
+     * @param string $sourceFile
+     * @param bool $useCache
      * @throws Flysystem\FileExistsException
      * @throws Flysystem\FileNotFoundException
      * @return string
@@ -256,7 +256,7 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function normalizePath($path)
