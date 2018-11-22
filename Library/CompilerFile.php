@@ -17,7 +17,7 @@ use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
-use Zephir\Parser\ParseException;
+use Zephir\Exception\ParseException;
 
 /**
  * Zephir\CompilerFile
@@ -131,7 +131,6 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * @param Compiler $compiler
      * @param FunctionDefinition $func
      * @param array $statement
-     *
      * @throws CompilerException
      */
     public function addFunction(Compiler $compiler, FunctionDefinition $func, $statement = null)
@@ -148,8 +147,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Compiles the file generating a JSON intermediate representation.
      *
      * @param Compiler $compiler
-     * @throws IllegalStateException
      * @throws ParseException
+     * @throws IllegalStateException if the intermediate representation is not of type 'array'.
      * @return array
      */
     public function genIR(Compiler $compiler)
@@ -182,20 +181,22 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 $ir = json_decode($this->filesystem->read($compilePath), true);
             }
 
-            if (is_array($ir) == false) {
-                throw new IllegalStateException(
-                    sprintf(
-                        'Generating the intermediate representation for the file "%s" was failed.',
-                        realpath($this->filePath)
-                    )
-                );
-            }
-
             $data = '<?php return ' . var_export($ir, true) . ';';
             $this->filesystem->write($compilePath . '.php', $data);
         }
 
-        return $this->filesystem->requireFile($compilePath . '.php');
+        $contents = $this->filesystem->requireFile($compilePath . '.php');
+
+        if (is_array($contents) == false) {
+            throw new IllegalStateException(
+                sprintf(
+                    'Generating the intermediate representation for the file "%s" was failed.',
+                    realpath($this->filePath)
+                )
+            );
+        }
+
+        return $contents;
     }
 
     /**
@@ -423,20 +424,17 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Pre-compiles a Zephir file. Generates the IR and perform basic validations
+     * Pre-compiles a Zephir file.
+     *
+     * Generates the IR and perform basic validations.
      *
      * @param Compiler $compiler
      * @throws ParseException
      * @throws CompilerException
-     * @throws Exception
      */
     public function preCompile(Compiler $compiler)
     {
         $ir = $this->genIR($compiler);
-
-        if (!is_array($ir)) {
-            throw new Exception('Cannot parse file: ' . realpath($this->filePath));
-        }
 
         if (isset($ir['type']) && $ir['type'] == 'error') {
             throw new ParseException($ir['message'], $ir);
@@ -473,6 +471,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
          * Traverse the top level statements looking for the namespace
          */
         $namespace = null;
+
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'namespace':
@@ -482,7 +481,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     $namespace = $topStatement['name'];
                     $this->namespace = $namespace;
                     if (!preg_match('/^[A-Z]/', $namespace)) {
-                        throw new CompilerException("Namespace '" . $namespace . "' must be in camelized-form", $topStatement);
+                        throw new CompilerException(
+                            "Namespace '{$namespace}' must be in camelized-form",
+                            $topStatement
+                        );
                     }
                     break;
 
@@ -491,13 +493,28 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     break;
 
                 case 'function':
-                    /* Just do the precompilation of the function */
+                    $statements = null;
+                    if (isset($topStatement['statements'])) {
+                        $statements = new StatementsBlock($topStatement['statements']);
+                    }
+
+                    $parameters = null;
+                    if (isset($topStatement['parameters'])) {
+                        $parameters = new ClassMethodParameters($topStatement['parameters']);
+                    }
+
+                    $returnType = null;
+                    if (isset($topStatement['return-type'])) {
+                        $returnType = $topStatement['return-type'];
+                    }
+
+                    // Just do the precompilation of the function
                     $functionDefinition = new FunctionDefinition(
                         $namespace,
                         $topStatement['name'],
-                        isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
-                        isset($topStatement['statements']) ? new StatementsBlock($topStatement['statements']) : null,
-                        isset($topStatement['return-type']) ? $topStatement['return-type'] : null,
+                        $parameters,
+                        $statements,
+                        $returnType,
                         $topStatement
                     );
                     $functionDefinition->preCompile($compilationContext);
@@ -507,10 +524,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$namespace) {
-            throw new CompilerException('A namespace is required', $topStatement);
+            throw new CompilerException('A namespace is required', isset($topStatement) ? $topStatement : null);
         }
 
-        /* Set namespace and flag as global, if before namespace declaration */
+        // Set namespace and flag as global, if before namespace declaration
         foreach ($this->functionDefinitions as $funcDef) {
             if ($funcDef->getNamespace() == null) {
                 $funcDef->setGlobal(true);
@@ -518,6 +535,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             }
         }
 
+        $name = null;
         $class = false;
         $interface = false;
         $lastComment = null;
@@ -526,7 +544,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'class':
                     if ($class || $interface) {
-                        throw new CompilerException('More than one class/interface defined in the same file', $topStatement);
+                        throw new CompilerException(
+                            'More than one class/interface defined in the same file',
+                            $topStatement
+                        );
                     }
                     $class = true;
                     $name = $topStatement['name'];
@@ -537,7 +558,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'interface':
                     if ($class || $interface) {
-                        throw new CompilerException('More than one class/interface defined in the same file', $topStatement);
+                        throw new CompilerException(
+                            'More than one class/interface defined in the same file',
+                            $topStatement
+                        );
                     }
                     $interface = true;
                     $name = $topStatement['name'];
@@ -548,7 +572,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'use':
                     if ($interface || $class) {
-                        throw new CompilerException('Aliasing must be done before declaring any class or interface', $topStatement);
+                        throw new CompilerException(
+                            'Aliasing must be done before declaring any class or interface',
+                            $topStatement
+                        );
                     }
                     $this->aliasManager->add($topStatement);
                     break;
@@ -560,15 +587,28 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$class && !$interface) {
-            throw new CompilerException('Every file must contain at least a class or an interface', $topStatement);
+            throw new CompilerException(
+                'Every file must contain at least a class or an interface',
+                isset($topStatement) ? $topStatement : null
+            );
         }
 
         if (!$this->external) {
-            $expectedPath = strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $name) . '.zep';
+            $expectedPath = strtolower(
+                str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $name  . '.zep'
+            );
+
             if (strtolower($this->filePath) != $expectedPath) {
                 $className = $namespace . '\\' . $name;
-                $message = 'Unexpected class name ' . $className . ' in file: ' . $this->filePath . ', expected: ' . $expectedPath;
-                throw new CompilerException($message);
+
+                throw new CompilerException(
+                    sprintf(
+                        "Unexpected class name '%s' in file: '%s', expected: '%s'",
+                        $className,
+                        $this->filePath,
+                        $expectedPath
+                    )
+                );
             }
         }
 

@@ -88,7 +88,7 @@ class Manager
 
     public function requirements()
     {
-        $temlate = <<<EOF
+        $template = <<<EOF
 
 
 ────────────────────────────────────────────────────────────
@@ -106,6 +106,6 @@ EOF;
             $add = '';
         }
 
-        return sprintf($temlate, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
+        return sprintf($template, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
     }
 }

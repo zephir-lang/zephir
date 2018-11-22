@@ -16,9 +16,9 @@ use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\NotImplementedException;
+use Zephir\Exception\ParseException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\Parser\Manager;
-use Zephir\Parser\ParseException;
 
 /**
  * Zephir\Compiler

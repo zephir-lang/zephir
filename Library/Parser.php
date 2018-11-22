@@ -12,7 +12,8 @@
 namespace Zephir;
 
 use Zephir\Exception\IllegalStateException;
-use Zephir\Parser\ParseException;
+use Zephir\Exception\InvalidArgumentException;
+use Zephir\Exception\ParseException;
 
 /**
  * Zephir\Parser
@@ -36,31 +37,34 @@ class Parser
      */
     public function getVersion()
     {
-        return extension_loaded('Zephir Parser') ? phpversion('Zephir Parser') : null;
+        return phpversion('Zephir Parser') ?: null;
     }
 
     /**
      * Parses a file and returning an intermediate representation (IR).
      *
-     * @param string $filepath Absolute path to the *.zep file
+     * @param string $filePath Absolute path to the *.zep file
      * @throws IllegalStateException
+     * @throws InvalidArgumentException
      * @throws ParseException
      * @return array
      */
-    public function parse($filepath)
+    public function parse($filePath)
     {
         if (!$this->isAvailable()) {
             throw new IllegalStateException("Zephir Parser extension couldn't be loaded.");
         }
 
-        if (!is_file($filepath) || !is_readable($filepath)) {
-            throw new ParseException('Unable to locate source file to parse.');
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            throw new InvalidArgumentException('Unable to locate source file to parse.');
         }
 
-        if (!$content = file_get_contents($filepath)) {
+        $content = file_get_contents($filePath);
+
+        if ($content === false) {
             throw new ParseException('Unable to read source file to parse.');
         }
 
-        return zephir_parse_file($content, $filepath);
+        return \zephir_parse_file($content, $filePath);
     }
 }
