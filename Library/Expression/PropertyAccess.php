@@ -39,7 +39,7 @@ class PropertyAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param bool     $expecting
+     * @param bool $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -71,8 +71,8 @@ class PropertyAccess
     /**
      * Resolves the access to a property in an object
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)

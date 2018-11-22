@@ -28,8 +28,8 @@ class AssignPropertyOperator extends AssignVariableOperator
     private $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
 
     /**
-     * @param null                 $variable
-     * @param null                 $property
+     * @param null $variable
+     * @param null $property
      * @param AbstractBuilder|null $expression
      */
     public function __construct($variable = null, $property = null, AbstractBuilder $expression = null)
@@ -50,7 +50,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     }
 
     /**
-     * @param  string $property
+     * @param string $property
      * @return $this
      */
     public function setProperty($property)
@@ -68,7 +68,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     }
 
     /**
-     * @param  string                 $type
+     * @param string $type
      * @return AssignPropertyOperator
      */
     public function setType($type)

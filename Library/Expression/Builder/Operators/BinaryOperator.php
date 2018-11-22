@@ -121,7 +121,7 @@ class BinaryOperator extends AbstractOperator
     private $rightExpression;
 
     /**
-     * @param null                 $operator
+     * @param null $operator
      * @param AbstractBuilder|null $leftExpression
      * @param AbstractBuilder|null $rightExpression
      */
@@ -149,7 +149,7 @@ class BinaryOperator extends AbstractOperator
     }
 
     /**
-     * @param  string         $operator
+     * @param string $operator
      * @return BinaryOperator
      */
     public function setOperator($operator)
@@ -167,7 +167,7 @@ class BinaryOperator extends AbstractOperator
     }
 
     /**
-     * @param  AbstractBuilder $leftExpression
+     * @param AbstractBuilder $leftExpression
      * @return BinaryOperator
      */
     public function setLeftExpression(AbstractBuilder $leftExpression)
@@ -185,7 +185,7 @@ class BinaryOperator extends AbstractOperator
     }
 
     /**
-     * @param  AbstractBuilder $rightExpression
+     * @param AbstractBuilder $rightExpression
      * @return BinaryOperator
      */
     public function setRightExpression(AbstractBuilder $rightExpression)

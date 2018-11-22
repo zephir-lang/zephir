@@ -21,10 +21,10 @@ use Zephir\Variable;
 
 class PregMatchOptimizerTest extends TestCase
 {
-    /** @var MockObject|Call */
+    /** @var Call|MockObject */
     protected $callMock;
 
-    /** @var MockObject|CompilationContext */
+    /** @var CompilationContext|MockObject */
     protected $contextMock;
 
     /** @var MockObject|SymbolTable */

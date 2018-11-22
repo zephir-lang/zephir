@@ -30,7 +30,7 @@ class CastOperator extends BaseOperator
      * Compiles a type cast operation
      *
      * @param $expression
-     * @param  CompilationContext      $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return bool|CompiledExpression
      */

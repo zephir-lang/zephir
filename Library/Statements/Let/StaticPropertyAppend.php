@@ -27,11 +27,11 @@ class StaticPropertyAppend extends ArrayIndex
     /**
      * Compiles ClassName::foo[index] = {expr}
      *
-     * @param  string             $className
-     * @param  string             $property
-     * @param  CompiledExpression $resolvedExpr
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $className
+     * @param string $property
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws Exception
      * @throws CompilerException
      * @return void
@@ -95,11 +95,11 @@ class StaticPropertyAppend extends ArrayIndex
     /**
      * Compiles x::y[a][b][] = {expr} (multiple offset assignment).
      *
-     * @param  string             $classEntry
-     * @param  string             $property
-     * @param  CompiledExpression $resolvedExpr
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $classEntry
+     * @param string $property
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @return void
      */
     protected function _assignStaticPropertyArrayMultipleIndex(

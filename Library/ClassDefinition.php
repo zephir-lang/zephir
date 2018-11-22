@@ -98,8 +98,8 @@ class ClassDefinition
     /**
      * ClassDefinition
      *
-     * @param string      $namespace
-     * @param string      $name
+     * @param string $namespace
+     * @param string $name
      * @param string|null $shortName
      */
     public function __construct($namespace, $name, $shortName = null)
@@ -477,7 +477,7 @@ class ClassDefinition
     /**
      * Adds a property to the definition
      *
-     * @param  ClassProperty     $property
+     * @param ClassProperty $property
      * @throws CompilerException
      */
     public function addProperty(ClassProperty $property)
@@ -492,7 +492,7 @@ class ClassDefinition
     /**
      * Adds a constant to the definition
      *
-     * @param  ClassConstant     $constant
+     * @param ClassConstant $constant
      * @throws CompilerException
      */
     public function addConstant(ClassConstant $constant)
@@ -507,7 +507,7 @@ class ClassDefinition
     /**
      * Checks if a class definition has a property
      *
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
     public function hasProperty($name)
@@ -528,7 +528,7 @@ class ClassDefinition
     /**
      * Returns a method definition by its name.
      *
-     * @param  string             $propertyName
+     * @param string $propertyName
      * @return bool|ClassProperty
      */
     public function getProperty($propertyName)
@@ -550,7 +550,7 @@ class ClassDefinition
     /**
      * Checks if class definition has a property.
      *
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
     public function hasConstant($name)
@@ -575,7 +575,7 @@ class ClassDefinition
     /**
      * Returns a constant definition by its name
      *
-     * @param  string             $constantName
+     * @param string $constantName
      * @return bool|ClassConstant
      */
     public function getConstant($constantName)
@@ -609,7 +609,7 @@ class ClassDefinition
      * Adds a method to the class definition
      *
      * @param ClassMethod $method
-     * @param array       $statement
+     * @param array $statement
      *
      * @throws CompilerException
      * @return void
@@ -628,7 +628,7 @@ class ClassDefinition
      * Updates an existing method definition
      *
      * @param ClassMethod $method
-     * @param array       $statement
+     * @param array $statement
      *
      * @throws CompilerException
      * @return void
@@ -675,7 +675,7 @@ class ClassDefinition
     /**
      * Checks if the class implements an specific name
      *
-     * @param  string $methodName
+     * @param string $methodName
      * @return bool
      */
     public function hasMethod($methodName)
@@ -699,8 +699,8 @@ class ClassDefinition
     /**
      * Returns a method by its name
      *
-     * @param  string           $methodName
-     * @param  bool             $checkExtends
+     * @param string $methodName
+     * @param bool $checkExtends
      * @return bool|ClassMethod
      */
     public function getMethod($methodName, $checkExtends = true)
@@ -750,8 +750,8 @@ class ClassDefinition
     /**
      * Tries to find the most similar name
      *
-     * @param  string      $methodName
-     * @return string|bool
+     * @param string $methodName
+     * @return bool|string
      */
     public function getPossibleMethodName($methodName)
     {
@@ -819,7 +819,7 @@ class ClassDefinition
     /**
      * Class name without namespace prefix for class registration
      *
-     * @param  string $namespace
+     * @param string $namespace
      * @return string
      */
     public function getSCName($namespace)
@@ -841,8 +841,8 @@ class ClassDefinition
     /**
      * Checks if a class implements an interface
      *
-     * @param  ClassDefinition   $classDefinition
-     * @param  ClassDefinition   $interfaceDefinition
+     * @param ClassDefinition $classDefinition
+     * @param ClassDefinition $interfaceDefinition
      * @throws CompilerException
      */
     public function checkInterfaceImplements(ClassDefinition $classDefinition, ClassDefinition $interfaceDefinition)
@@ -864,7 +864,7 @@ class ClassDefinition
     /**
      * Pre-compiles a class/interface gathering method information required by other methods
      *
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext)
@@ -1362,9 +1362,9 @@ class ClassDefinition
     /**
      * Convert Class/Interface name to C ClassEntry
      *
-     * @param  string             $className
-     * @param  CompilationContext $compilationContext
-     * @param  bool               $check
+     * @param string $className
+     * @param CompilationContext $compilationContext
+     * @param bool $check
      * @throws CompilerException
      * @return string
      */
@@ -1845,7 +1845,7 @@ class ClassDefinition
     }
 
     /**
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
     protected function hasConstantFromInterfaces($name)
@@ -1862,7 +1862,7 @@ class ClassDefinition
     }
 
     /**
-     * @param  string             $name
+     * @param string $name
      * @return bool|ClassConstant
      */
     protected function getConstantFromInterfaces($name)

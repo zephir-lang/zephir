@@ -35,7 +35,7 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param int  $option
+     * @param int $option
      * @param bool $value
      */
     public function setOption($option, $value)
@@ -51,7 +51,7 @@ class MessagePackUnpacker
 
     /**
      * @param string $str
-     * @param int    $offset
+     * @param int $offset
      */
     public function execute($str = null, &$offset = null)
     {
@@ -86,7 +86,7 @@ class MessagePack
     }
 
     /**
-     * @param int  $option
+     * @param int $option
      * @param bool $value
      */
     public function setOption($option, $value)
@@ -94,7 +94,7 @@ class MessagePack
     }
 
     /**
-     * @param  mixed  $value
+     * @param mixed $value
      * @return string
      */
     public function pack($value)
@@ -102,8 +102,8 @@ class MessagePack
     }
 
     /**
-     * @param  string $str
-     * @param  mixed  $object
+     * @param string $str
+     * @param mixed $object
      * @return mixed
      */
     public function unpack($str, $object = null)
@@ -119,7 +119,7 @@ class MessagePack
 }
 
 /**
- * @param  mixed  $value
+ * @param mixed $value
  * @return string
  */
 function msgpack_pack($value)
@@ -127,7 +127,7 @@ function msgpack_pack($value)
 }
 
 /**
- * @param  string $str
+ * @param string $str
  * @return mixed
  */
 function msgpack_unpack($str)
@@ -135,7 +135,7 @@ function msgpack_unpack($str)
 }
 
 /**
- * @param  mixed  $value
+ * @param mixed $value
  * @return string
  */
 function msgpack_serialize($value)
@@ -143,7 +143,7 @@ function msgpack_serialize($value)
 }
 
 /**
- * @param  string $str
+ * @param string $str
  * @return mixed
  */
 function msgpack_unserialize($str)

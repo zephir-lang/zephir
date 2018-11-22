@@ -139,7 +139,7 @@ class Branch
     }
 
     /**
-     * @param  StatementAbstract $relatedStatement
+     * @param StatementAbstract $relatedStatement
      * @return void
      */
     public function setRelatedStatement(StatementAbstract $relatedStatement)

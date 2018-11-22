@@ -26,11 +26,11 @@ class ObjectPropertyAppend
     /**
      * Compiles x->y[] = foo
      *
-     * @param  string             $variable
-     * @param  ZephirVariable     $symbolVariable
-     * @param  CompiledExpression $resolvedExpr
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)

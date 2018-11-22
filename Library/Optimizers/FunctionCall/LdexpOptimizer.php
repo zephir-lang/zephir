@@ -35,9 +35,9 @@ class LdexpOptimizer extends MathOptimizer
     }
 
     /**
-     * @param  array                         $expression
-     * @param  Call                          $call
-     * @param  CompilationContext            $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return bool|CompiledExpression|mixed
      */

@@ -40,7 +40,7 @@ class RawOperator extends AbstractOperator
     }
 
     /**
-     * @param  array $expression
+     * @param array $expression
      * @return $this
      */
     public function setExpression(array $expression)

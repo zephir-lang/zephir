@@ -23,7 +23,7 @@ class PlusOperator extends BaseOperator
      * Compile expression
      *
      * @param $expression
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */

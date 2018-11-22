@@ -136,10 +136,10 @@ class Compiler implements InjectionAwareInterface
     /**
      * Compiler constructor
      *
-     * @param Config      $config
-     * @param Logger      $logger
+     * @param Config $config
+     * @param Logger $logger
      * @param BaseBackend $backend
-     * @param Manager     $manager
+     * @param Manager $manager
      *
      * @throws Exception
      */
@@ -170,8 +170,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Adds a function to the function definitions.
      *
-     * @param  FunctionDefinition $func
-     * @param  array              $statement
+     * @param FunctionDefinition $func
+     * @param array $statement
      * @throws CompilerException
      * @return void
      */
@@ -192,8 +192,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Loads a class definition in an external dependency
      *
-     * @param  string            $className
-     * @param  string            $location
+     * @param string $className
+     * @param string $location
      * @throws CompilerException
      * @throws Exception
      * @throws ParseException
@@ -230,7 +230,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Allows to check if a class is part of the compiled extension
      *
-     * @param  string $className
+     * @param string $className
      * @return bool
      */
     public function isClass($className)
@@ -334,7 +334,7 @@ class Compiler implements InjectionAwareInterface
      * Inserts an anonymous class definition in the compiler
      *
      * @param CompilerFileAnonymous $file
-     * @param ClassDefinition       $classDefinition
+     * @param ClassDefinition $classDefinition
      */
     public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition)
     {
@@ -420,7 +420,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Returns GCC flags for current compilation
      *
-     * @param  bool   $development
+     * @param bool $development
      * @return string
      */
     public function getGccFlags($development = false)
@@ -505,7 +505,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generates the C sources from Zephir without compiling them
      *
-     * @param  bool      $fromGenerate
+     * @param bool $fromGenerate
      * @throws Exception
      * @return bool
      */
@@ -764,7 +764,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param bool $development
      *
-     * @throws Exception|CompilerException
+     * @throws CompilerException|Exception
      */
     public function compile($development = false)
     {
@@ -867,8 +867,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate a HTML API.
      *
-     * @param  array           $options
-     * @param  bool            $fromGenerate
+     * @param array $options
+     * @param bool $fromGenerate
      * @throws ConfigException
      * @throws Exception
      * @return void
@@ -889,7 +889,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate IDE stubs.
      *
-     * @param  bool      $fromGenerate
+     * @param bool $fromGenerate
      * @throws Exception
      * @return void
      */
@@ -914,7 +914,7 @@ class Compiler implements InjectionAwareInterface
      *
      * TODO: Move to the separated installer
      *
-     * @param  bool                    $development
+     * @param bool $development
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
@@ -978,8 +978,8 @@ class Compiler implements InjectionAwareInterface
      * @param string $project
      *
      * @throws Exception
-     * @return bool      true if need to run configure
-     *                   TODO: move this to backend?
+     * @return bool true if need to run configure
+     *              TODO: move this to backend?
      */
     public function createConfigFiles($project)
     {
@@ -1350,8 +1350,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Process extension code injection.
      *
-     * @param  array  $entries
-     * @param  string $section
+     * @param array $entries
+     * @param string $section
      * @return array
      */
     public function processCodeInjection(array $entries, $section = 'request')
@@ -1426,7 +1426,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @throws Exception
      * @return bool
-     *                   TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
+     *              TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
      */
     public function createProjectFiles($project)
     {
@@ -1834,7 +1834,7 @@ class Compiler implements InjectionAwareInterface
      * @param $contentM4
      * @throws Exception
      * @return string
-     *                   TODO: Move the template depending part to backend?
+     *                TODO: Move the template depending part to backend?
      */
     public function generatePackageDependenciesM4($contentM4)
     {
@@ -1975,7 +1975,7 @@ class Compiler implements InjectionAwareInterface
      * @param $src
      * @param $dest
      * @param string $pattern
-     * @param mixed  $callback
+     * @param mixed $callback
      *
      * @return bool
      */
@@ -2064,8 +2064,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Process config.w32 sections
      *
-     * @param  array  $sources
-     * @param  string $project
+     * @param array $sources
+     * @param string $project
      * @return array
      */
     protected function processAddSources($sources, $project)

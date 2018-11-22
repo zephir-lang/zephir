@@ -85,7 +85,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => [
             'only_untyped' => true,
         ],
-        'phpdoc_align' => true,
+        'phpdoc_align' => false,
         'phpdoc_indent' => true,
         'phpdoc_no_access' => true,
         'phpdoc_no_package' => true,
@@ -93,6 +93,9 @@ return PhpCsFixer\Config::create()
         'phpdoc_scalar' => true,
         'phpdoc_trim' => true,
         'phpdoc_types' => true,
+        'phpdoc_types_order' => [
+            'null_adjustment' => 'always_last',
+        ],
         'single_blank_line_at_eof' => true,
         'single_blank_line_before_namespace' => true,
         'single_class_element_per_statement' => true,
@@ -100,6 +103,7 @@ return PhpCsFixer\Config::create()
         'single_line_after_imports' => true,
         'single_quote' => true,
         'standardize_not_equals' => true,
+        'short_scalar_cast' => true,
         'visibility_required' => true,
         'no_unused_imports' => true,
         'ternary_operator_spaces' => true,

@@ -19,9 +19,9 @@ class AssignTest extends TestCase
     /**
      * @dataProvider variableAssignProvider
      * @test
-     * @param mixed  $expected
+     * @param mixed $expected
      * @param string $test
-     * @param mixed  $testParams
+     * @param mixed $testParams
      */
     public function shouldPerformAssignment($expected, $test, $testParams = null)
     {
@@ -92,9 +92,9 @@ class AssignTest extends TestCase
     /**
      * @dataProvider propertyAssignProvider
      * @test
-     * @param mixed  $expected
+     * @param mixed $expected
      * @param string $test
-     * @param mixed  $testParams
+     * @param mixed $testParams
      */
     public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {

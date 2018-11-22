@@ -25,7 +25,7 @@ trait PropertyAccessor
      * Do not call this method directly as it is a PHP magic method that
      * will be implicitly called when executing `$value = $object->property;`.
      *
-     * @param  string                   $name
+     * @param string $name
      * @throws InvalidCallException
      * @throws UnknownPropertyException
      * @return mixed

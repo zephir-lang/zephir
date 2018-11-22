@@ -22,7 +22,7 @@ interface ServiceProviderInterface
     /**
      * Registers a service provider.
      *
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @return void
      */
     public function register(ContainerInterface $container);

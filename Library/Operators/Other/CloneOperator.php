@@ -25,8 +25,8 @@ use Zephir\Operators\BaseOperator;
 class CloneOperator extends BaseOperator
 {
     /**
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */

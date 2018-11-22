@@ -25,8 +25,8 @@ use Zephir\Optimizers\OptimizerAbstract;
 class CreateInstanceParamsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $context
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)

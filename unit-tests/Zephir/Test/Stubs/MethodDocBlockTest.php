@@ -26,8 +26,8 @@ class MethodDocBlockTest extends TestCase
         /**
          * ClassDefinition for Class creation
          *
-         * @param string      $namespace Namespace ex: \Zephir\Stubs
-         * @param string      $name      Class name, ex: Stubs
+         * @param string $namespace Namespace ex: \Zephir\Stubs
+         * @param string $name Class name, ex: Stubs
          * @param string|null $shortName {get, set}
          */
         $classNamespace = $params['class']['namespace'];
@@ -43,14 +43,14 @@ class MethodDocBlockTest extends TestCase
         /**
          * ClassMethod constructor
          *
-         * @param ClassDefinition            $classDefinition
-         * @param array                      $visibility
-         * @param string                     $name
+         * @param ClassDefinition $classDefinition
+         * @param array $visibility
+         * @param string $name
          * @param ClassMethodParameters|null $parameters
-         * @param StatementsBlock|null       $statements
-         * @param string|null                $docblock
-         * @param array|null                 $returnType
-         * @param array|null                 $original
+         * @param StatementsBlock|null $statements
+         * @param string|null $docblock
+         * @param array|null $returnType
+         * @param array|null $original
          */
         $methodVisibility = $params['method']['visibility'];
         $methodName = $params['method']['name'];
@@ -159,7 +159,7 @@ DOC;
     /**
      * @dataProvider getDocBlock()
      *
-     * @param array  $parameters
+     * @param array $parameters
      * @param string $expected
      */
     public function testMethodsWithDataSet(array $parameters, $expected)

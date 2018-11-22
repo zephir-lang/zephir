@@ -371,7 +371,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the latest node where a variable was used
      *
-     * @param bool  $used
+     * @param bool $used
      * @param array $node
      */
     public function setUsed($used, $node)
@@ -459,7 +459,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the PHP class related to variable
      *
-     * @param string|array $classTypes
+     * @param array|string $classTypes
      */
     public function setClassTypes($classTypes)
     {
@@ -511,7 +511,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the current dynamic type in a polymorphic variable
      *
-     * @param string|array $types
+     * @param array|string $types
      */
     public function setDynamicTypes($types)
     {
@@ -545,7 +545,7 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable has any of the passed dynamic
      *
-     * @param  mixed $types
+     * @param mixed $types
      * @return bool
      */
     public function hasAnyDynamicType($types)
@@ -565,7 +565,7 @@ class Variable implements TypeAwareInterface
     /**
      * Check if the variable has at least one dynamic type to the ones passed in the list
      *
-     * @param  array|string $types
+     * @param array|string $types
      * @return bool
      */
     public function hasDifferentDynamicType($types)
@@ -619,7 +619,7 @@ class Variable implements TypeAwareInterface
      * Sets if the variable is initialized
      * This allow to throw an exception if the variable is being read without prior initialization
      *
-     * @param bool               $initialized
+     * @param bool $initialized
      * @param CompilationContext $compilationContext
      */
     public function setIsInitialized($initialized, CompilationContext $compilationContext)

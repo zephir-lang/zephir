@@ -67,8 +67,8 @@ class DocblockParser
     }
 
     /**
-     * @param  string                           $name   the annotation name
-     * @param  string                           $string the annotation name
+     * @param string $name the annotation name
+     * @param string $string the annotation name
      * @return \Zephir\Documentation\Annotation
      */
     private function __createAnnotation($name, $string)

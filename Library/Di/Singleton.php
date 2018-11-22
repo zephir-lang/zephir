@@ -29,7 +29,7 @@ final class Singleton
     /**
      * Set a default dependency injection container to be obtained into static methods.
      *
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @return void
      */
     public static function setDefault(ContainerInterface $container)
@@ -40,7 +40,7 @@ final class Singleton
     /**
      * Return the latest container created.
      *
-     * @return ContainerInterface|Container|null
+     * @return Container|ContainerInterface|null
      */
     public static function getDefault()
     {

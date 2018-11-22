@@ -207,7 +207,7 @@ class Config implements \ArrayAccess, \JsonSerializable
     /**
      * Allows to check whether an $key is defined.
      *
-     * @param  mixed $key
+     * @param mixed $key
      * @return bool
      */
     public function offsetExists($key)
@@ -218,7 +218,7 @@ class Config implements \ArrayAccess, \JsonSerializable
     /**
      * Gets a $key from the internal container.
      *
-     * @param  mixed      $key
+     * @param mixed $key
      * @return mixed|null
      */
     public function offsetGet($key)
@@ -281,8 +281,8 @@ class Config implements \ArrayAccess, \JsonSerializable
     /**
      * Retrieves a configuration setting.
      *
-     * @param  mixed      $key
-     * @param  mixed      $namespace
+     * @param mixed $key
+     * @param mixed $namespace
      * @return mixed|null
      */
     public function get($key, $namespace = null)

@@ -38,7 +38,7 @@ class StaticConstantAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
-     * @param bool          $expecting
+     * @param bool $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -60,10 +60,10 @@ class StaticConstantAccess
     /**
      * Access a static constant class
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws Exception|CompilerException
+     * @throws CompilerException|Exception
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)

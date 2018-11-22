@@ -35,7 +35,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * ServiceRegistrator constructor.
      *
-     * @param string|null             $basePath
+     * @param string|null $basePath
      * @param ContainerInterface|null $container
      */
     public function __construct($basePath, ContainerInterface $container = null)
@@ -49,7 +49,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * Set the base path for the Zephir installation.
      *
-     * @param  string                   $basePath
+     * @param string $basePath
      * @throws InvalidArgumentException
      * @return void
      */
@@ -71,7 +71,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * Get the path to the Zephir installation.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function getPath($path = '')
@@ -82,7 +82,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * Get the path to the templates.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function getTemplatesPath($path = '')
@@ -95,7 +95,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * Get the path to the kernels.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function getKernelsPath($path = '')
@@ -108,7 +108,7 @@ final class Environment implements InjectionAwareInterface
     /**
      * Get the path to the prototypes.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function getPrototypesPath($path = '')

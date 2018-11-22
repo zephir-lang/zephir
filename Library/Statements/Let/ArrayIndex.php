@@ -28,11 +28,11 @@ class ArrayIndex
     /**
      * Compiles foo[y] = {expr}
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
      * @throws CompilerException
      */
@@ -185,11 +185,11 @@ class ArrayIndex
     /**
      * Compiles foo[y] = {expr} (one offset)
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
      * @throws CompilerException
      */
@@ -252,11 +252,11 @@ class ArrayIndex
     /**
      * Compiles foo[y][x] = {expr} (multiple offset)
      *
-     * @param  string             $variable
-     * @param  ZephirVariable     $symbolVariable
-     * @param  CompiledExpression $resolvedExpr
-     * @param  CompilationContext $compilationContext
-     * @param  array              $statement
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array $statement
      * @throws CompilerException
      * @throws \Zephir\Exception
      * @return void

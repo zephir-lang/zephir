@@ -41,7 +41,7 @@ class ClassConstant
      * ClassConstant constructor
      *
      * @param string $name
-     * @param array  $value
+     * @param array $value
      * @param string $docBlock
      */
     public function __construct($name, array $value, $docBlock)

@@ -128,9 +128,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Adds a function to the function definitions
      *
-     * @param Compiler $compiler
+     * @param Compiler           $compiler
      * @param FunctionDefinition $func
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -147,8 +147,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Compiles the file generating a JSON intermediate representation.
      *
-     * @param Compiler $compiler
-     * @throws IllegalStateException
+     * @param  Compiler              $compiler
      * @throws ParseException
      * @return array
      */
@@ -182,15 +181,6 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 $ir = json_decode($this->filesystem->read($compilePath), true);
             }
 
-            if (is_array($ir) == false) {
-                throw new IllegalStateException(
-                    sprintf(
-                        'Generating the intermediate representation for the file "%s" was failed.',
-                        realpath($this->filePath)
-                    )
-                );
-            }
-
             $data = '<?php return ' . var_export($ir, true) . ';';
             $this->filesystem->write($compilePath . '.php', $data);
         }
@@ -202,8 +192,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Compiles the class/interface contained in the file
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $classStatement
+     * @param string             $namespace
+     * @param array              $classStatement
      */
     public function compileClass(CompilationContext $compilationContext, $namespace, $classStatement)
     {
@@ -243,7 +233,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Compiles a comment as a top-level statement
      *
      * @param CompilationContext $compilationContext
-     * @param array $topStatement
+     * @param array              $topStatement
      */
     public function compileComment(CompilationContext $compilationContext, $topStatement)
     {
@@ -254,8 +244,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Creates a definition for an interface
      *
      * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param array  $topStatement
+     * @param array  $docblock
      */
     public function preCompileInterface($namespace, $topStatement, $docblock)
     {
@@ -319,9 +309,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
      * Creates a definition for a class
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param string             $namespace
+     * @param array              $topStatement
+     * @param array              $docblock
      */
     public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
     {
@@ -423,19 +413,26 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Pre-compiles a Zephir file. Generates the IR and perform basic validations
+     * Pre-compiles a Zephir file.
      *
-     * @param Compiler $compiler
+     * Generates the IR and perform basic validations.
+     *
+     * @param  Compiler          $compiler
+     * @throws IllegalStateException
      * @throws ParseException
      * @throws CompilerException
-     * @throws Exception
      */
     public function preCompile(Compiler $compiler)
     {
         $ir = $this->genIR($compiler);
 
-        if (!is_array($ir)) {
-            throw new Exception('Cannot parse file: ' . realpath($this->filePath));
+        if (is_array($ir) == false) {
+            throw new IllegalStateException(
+                sprintf(
+                    'Generating the intermediate representation for the file "%s" was failed.',
+                    realpath($this->filePath)
+                )
+            );
         }
 
         if (isset($ir['type']) && $ir['type'] == 'error') {
@@ -665,8 +662,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Compiles the file
      *
-     * @param Compiler $compiler
-     * @param StringsManager $stringsManager
+     * @param  Compiler          $compiler
+     * @param  StringsManager    $stringsManager
      * @throws CompilerException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
@@ -880,8 +877,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Creates the property shortcuts.
      *
-     * @param array $property
-     * @param ClassDefinition $classDefinition
+     * @param  array             $property
+     * @param  ClassDefinition   $classDefinition
      * @throws CompilerException
      * @return void
      */
@@ -1032,7 +1029,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Transform class/interface name to FQN format
      *
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     protected function getFullName($name)
@@ -1043,8 +1040,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Create returns type list.
      *
-     * @param array $types
-     * @param bool $annotated
+     * @param  array $types
+     * @param  bool  $annotated
      * @return array
      */
     protected function createReturnsType(array $types, $annotated = false)

@@ -43,7 +43,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * ServiceRegistrator constructor.
      *
-     * @param string|null             $basePath
+     * @param string|null $basePath
      * @param ContainerInterface|null $container
      */
     public function __construct($basePath, ContainerInterface $container = null)
@@ -58,8 +58,8 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Registers a Service Provider in the internal stack.
      *
-     * @param  ServiceProviderInterface|string $provider
-     * @param  bool                            $force
+     * @param ServiceProviderInterface|string $provider
+     * @param bool $force
      * @throws InvalidArgumentException
      * @return ServiceProviderInterface
      */
@@ -85,7 +85,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Gets a Service Provider matched by provided instance (if any).
      *
-     * @param  ServiceProviderInterface|string $serviceProvider
+     * @param ServiceProviderInterface|string $serviceProvider
      * @throws InvalidArgumentException
      * @return ServiceProviderInterface|null
      */
@@ -99,7 +99,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Gets Service Providers matched by provided instance.
      *
-     * @param  ServiceProviderInterface|string $serviceProvider
+     * @param ServiceProviderInterface|string $serviceProvider
      * @throws InvalidArgumentException
      * @return ServiceProviderInterface[]
      */
@@ -117,7 +117,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Instantiate a service provider.
      *
-     * @param  string                          $serviceProvider
+     * @param string $serviceProvider
      * @return object|ServiceProviderInterface
      */
     public function instantiateProvider($serviceProvider)
@@ -159,7 +159,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Creates and registers application environment.
      *
-     * @param  string|null $basePath
+     * @param string|null $basePath
      * @return void
      */
     protected function createEnvironment($basePath)
@@ -170,7 +170,7 @@ final class ServiceRegistrator implements InjectionAwareInterface
     /**
      * Validates $serviceProvider parameter.
      *
-     * @param  string|object            $serviceProvider
+     * @param object|string $serviceProvider
      * @throws InvalidArgumentException
      * @return void
      */

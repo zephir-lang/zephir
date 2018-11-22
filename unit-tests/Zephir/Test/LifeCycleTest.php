@@ -102,7 +102,7 @@ class LifeCycleTest extends TestCase
     }
 
     /**
-     * @param  Container $container
+     * @param Container $container
      * @return void
      */
     protected function muteOutput(Container $container)

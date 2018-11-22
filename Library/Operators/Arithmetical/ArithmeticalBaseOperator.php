@@ -36,8 +36,8 @@ class ArithmeticalBaseOperator extends BaseOperator
      *
      * @link http://en.wikipedia.org/wiki/Constant_folding
      *
-     * @param  array                   $expression
-     * @param  CompilationContext      $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
      */
     public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
@@ -80,8 +80,8 @@ class ArithmeticalBaseOperator extends BaseOperator
     /**
      * Compiles the arithmetical operation
      *
-     * @param  array              $expression
-     * @param  CompilationContext $compilationContext
+     * @param array $expression
+     * @param CompilationContext $compilationContext
      * @throws Exception
      * @throws CompilerException
      * @return CompiledExpression
@@ -499,8 +499,8 @@ class ArithmeticalBaseOperator extends BaseOperator
     /**
      * Returns proper dynamic types
      *
-     * @param  Variable $left
-     * @param  Variable $right
+     * @param Variable $left
+     * @param Variable $right
      * @return string
      */
     private function getDynamicTypes(Variable $left, Variable $right)

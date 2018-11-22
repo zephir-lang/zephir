@@ -36,8 +36,8 @@ class OperatorsFactory
     }
 
     /**
-     * @param  null                   $variable
-     * @param  AbstractBuilder|null   $expression
+     * @param null $variable
+     * @param AbstractBuilder|null $expression
      * @return AssignVariableOperator
      */
     public function assignVariable($variable = null, AbstractBuilder $expression = null)
@@ -46,9 +46,9 @@ class OperatorsFactory
     }
 
     /**
-     * @param  null                   $variable
-     * @param  null                   $property
-     * @param  AbstractBuilder|null   $expression
+     * @param null $variable
+     * @param null $property
+     * @param AbstractBuilder|null $expression
      * @return AssignPropertyOperator
      */
     public function assignProperty($variable = null, $property = null, AbstractBuilder $expression = null)
@@ -60,9 +60,9 @@ class OperatorsFactory
     }
 
     /**
-     * @param  null                   $variable
-     * @param  null                   $property
-     * @param  AbstractBuilder|null   $expression
+     * @param null $variable
+     * @param null $property
+     * @param AbstractBuilder|null $expression
      * @return AssignPropertyOperator
      */
     public function assignStaticProperty($variable = null, $property = null, AbstractBuilder $expression = null)
@@ -74,9 +74,9 @@ class OperatorsFactory
     }
 
     /**
-     * @param  null                 $operator
-     * @param  AbstractBuilder|null $leftExpression
-     * @param  AbstractBuilder|null $rightExpression
+     * @param null $operator
+     * @param AbstractBuilder|null $leftExpression
+     * @param AbstractBuilder|null $rightExpression
      * @return BinaryOperator
      */
     public function binary($operator = null, AbstractBuilder $leftExpression = null, AbstractBuilder $rightExpression = null)
@@ -85,8 +85,8 @@ class OperatorsFactory
     }
 
     /**
-     * @param  string|null          $operator
-     * @param  AbstractBuilder|null $expression
+     * @param string|null $operator
+     * @param AbstractBuilder|null $expression
      * @return UnaryOperator
      */
     public function unary($operator = null, AbstractBuilder $expression = null)
@@ -96,7 +96,7 @@ class OperatorsFactory
 
     /**
      * @param $type
-     * @param  AbstractBuilder $expression
+     * @param AbstractBuilder $expression
      * @return RawOperator
      */
     public function cast($type, AbstractBuilder $expression)
@@ -110,7 +110,7 @@ class OperatorsFactory
 
     /**
      * @param $type
-     * @param  AbstractBuilder $expression
+     * @param AbstractBuilder $expression
      * @return RawOperator
      */
     public function hint($type, AbstractBuilder $expression)
@@ -123,7 +123,7 @@ class OperatorsFactory
     }
 
     /**
-     * @param  array       $expression
+     * @param array $expression
      * @return RawOperator
      */
     public function raw(array $expression)

@@ -39,7 +39,7 @@ class MethodCall extends Call
     /**
      * Compiles a method call
      *
-     * @param Expression         $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
@@ -623,9 +623,9 @@ class MethodCall extends Call
     /**
      * Examine internal class information and returns the method called
      *
-     * @param  CompilationContext $compilationContext
-     * @param  Variable           $caller
-     * @param  string             $methodName
+     * @param CompilationContext $compilationContext
+     * @param Variable $caller
+     * @param string $methodName
      * @return array
      */
     private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, $methodName)

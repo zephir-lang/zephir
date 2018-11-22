@@ -114,9 +114,9 @@ class Backend extends BackendZendEngine2
     /**
      * Checks the type of a variable using the ZendEngine constants
      *
-     * @param Variable           $variableVariable
-     * @param string             $operator
-     * @param string             $value
+     * @param Variable $variableVariable
+     * @param string $operator
+     * @param string $value
      * @param CompilationContext $context
      *
      * @throws CompilerException
@@ -376,8 +376,8 @@ class Backend extends BackendZendEngine2
     /**
      * Assigns a zval to another
      *
-     * @param Variable           $variable
-     * @param string             $code
+     * @param Variable $variable
+     * @param string $code
      * @param CompilationContext $context
      */
     public function assignZval(Variable $variable, $code, CompilationContext $context)
@@ -569,10 +569,10 @@ class Backend extends BackendZendEngine2
     }
 
     /**
-     * @param Variable        $symbolVariable
+     * @param Variable $symbolVariable
      * @param ClassDefinition $classDefinition
      * @param $property
-     * @param bool               $readOnly
+     * @param bool $readOnly
      * @param CompilationContext $context
      */
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
@@ -592,8 +592,8 @@ class Backend extends BackendZendEngine2
 
     /**
      * @param $value
-     * @param  CompilationContext   $context
-     * @param  bool                 $usePointer
+     * @param CompilationContext $context
+     * @param bool $usePointer
      * @throws CompilerException
      * @return bool|string|Variable
      */

@@ -21,7 +21,7 @@ class NotOperator extends BaseOperator
 {
     /**
      * @param $expression
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return CompiledExpression
      */

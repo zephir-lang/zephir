@@ -100,7 +100,7 @@ class InitCommand extends ContainerAwareCommand
      * @param $src
      * @param $dst
      * @param string $pattern
-     * @param mixed  $callback
+     * @param mixed $callback
      *
      * @return bool
      */

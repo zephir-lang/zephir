@@ -107,7 +107,7 @@ class FunctionCall extends Call
     /**
      * Checks if a function exists or is a built-in Zephir function
      *
-     * @param string             $functionName
+     * @param string $functionName
      * @param CompilationContext $context
      *
      * @return bool
@@ -141,10 +141,10 @@ class FunctionCall extends Call
     /**
      * Compiles a function.
      *
-     * @param Expression         $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
      *
-     * @throws Exception|CompilerException
+     * @throws CompilerException|Exception
      * @return CompiledExpression
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
@@ -178,7 +178,7 @@ class FunctionCall extends Call
      * Built-in functions rarely change the parameters if they aren't passed by reference
      *
      * @param string $funcName
-     * @param array  $expression
+     * @param array $expression
      *
      * @throws CompilerException
      * @return bool
@@ -247,11 +247,11 @@ class FunctionCall extends Call
      * Once the function processes the parameters we should mark
      * specific parameters to be passed by reference
      *
-     * @param string             $funcName
-     * @param array              $parameters
+     * @param string $funcName
+     * @param array $parameters
      * @param CompilationContext $compilationContext
-     * @param array              $references
-     * @param array              $expression
+     * @param array $references
+     * @param array $expression
      *
      * @return void
      */
@@ -308,9 +308,9 @@ class FunctionCall extends Call
     /**
      * Tries to find specific an specialized optimizer for function calls
      *
-     * @param string             $funcName
-     * @param array              $expression
-     * @param Call               $call
+     * @param string $funcName
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
@@ -367,7 +367,7 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @throws Exception|\Zephir\Exception\CompilerException
@@ -559,7 +559,7 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException

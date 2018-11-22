@@ -28,9 +28,9 @@ class FuncGetArgOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
      * @throws CompilerException
      * @return CompiledExpression
      */

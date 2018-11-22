@@ -34,7 +34,7 @@ class EvalExpression
     /**
      * Skips the not operator by recursively optimizing the expression at its right
      *
-     * @param array              $expr
+     * @param array $expr
      * @param CompilationContext $compilationContext
      *
      * @return bool|string
@@ -63,7 +63,7 @@ class EvalExpression
      * Optimizes expressions
      *
      * @param $exprRaw
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      * @return bool|string
      */

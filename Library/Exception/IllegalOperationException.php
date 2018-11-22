@@ -21,9 +21,9 @@ class IllegalOperationException extends CompilerException
     /**
      * IllegalOperationException constructor.
      *
-     * @param array              $statement The statement
-     * @param TypeAwareInterface $type      Operator type
-     * @param array|null         $extra     Extra info [optional].
+     * @param array $statement The statement
+     * @param TypeAwareInterface $type Operator type
+     * @param array|null $extra Extra info [optional].
      */
     public function __construct(array $statement, TypeAwareInterface $type, array $extra = null)
     {

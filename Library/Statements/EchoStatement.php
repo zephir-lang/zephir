@@ -24,7 +24,7 @@ use function Zephir\add_slashes;
 class EchoStatement extends StatementAbstract
 {
     /**
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

@@ -26,7 +26,7 @@ final class BackendProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @param  ContainerInterface|Container $container
+     * @param Container|ContainerInterface $container
      * @throws IllegalStateException
      * @return void
      */
@@ -47,7 +47,7 @@ final class BackendProvider implements ServiceProviderInterface
     /**
      * Resolve backend class.
      *
-     * @param  ContainerInterface    $container
+     * @param ContainerInterface $container
      * @throws IllegalStateException
      * @return string
      */

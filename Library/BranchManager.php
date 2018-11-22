@@ -68,7 +68,7 @@ class BranchManager
     /**
      * Returns the active branch in the manager
      *
-     * @return null|Branch
+     * @return Branch|null
      */
     public function getCurrentBranch()
     {
@@ -86,7 +86,7 @@ class BranchManager
     }
 
     /**
-     * @return null|Branch
+     * @return Branch|null
      */
     public function getRootBranch()
     {

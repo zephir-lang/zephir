@@ -32,7 +32,7 @@ class DivOperator extends ArithmeticalBaseOperator
     /**
      * Compiles the arithmetical division operation
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      */
     public function compile($expression, CompilationContext $compilationContext)

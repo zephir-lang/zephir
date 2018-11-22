@@ -21,7 +21,7 @@ trait DevelopmentModeAwareTrait
     /**
      * {@inheritdoc}
      *
-     * @param  InputInterface $input
+     * @param InputInterface $input
      * @return bool
      */
     public function isDevelopmentModeEnabled(InputInterface $input)

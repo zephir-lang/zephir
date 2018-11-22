@@ -40,7 +40,7 @@ class RawStatement extends AbstractStatement
     }
 
     /**
-     * @param  array $expression
+     * @param array $expression
      * @return $this
      */
     public function setExpression(array $expression)

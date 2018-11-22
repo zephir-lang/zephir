@@ -29,10 +29,10 @@ class CharType extends AbstractType
     /**
      * Transforms calls to method "toHex" to sprintf('%X') call
      *
-     * @param  object                                $caller
-     * @param  CompilationContext                    $compilationContext
-     * @param  Call                                  $call
-     * @param  array                                 $expression
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
      * @return bool|mixed|\Zephir\CompiledExpression
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)

@@ -32,8 +32,8 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a for statement that use a 'range' as expression
      *
-     * @param  array              $exprRaw
-     * @param  CompilationContext $compilationContext
+     * @param array $exprRaw
+     * @param CompilationContext $compilationContext
      * @return bool
      */
     public function compileRange($exprRaw, CompilationContext $compilationContext)
@@ -394,8 +394,8 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a 'for' statement that use an 'iterator' as expression
      *
-     * @param  array              $exprRaw
-     * @param  CompilationContext $compilationContext
+     * @param array $exprRaw
+     * @param CompilationContext $compilationContext
      * @return bool
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext)
@@ -522,9 +522,9 @@ class ForStatement extends StatementAbstract
      * - Every key must be an integer or compatible
      * - Every value must be a char/integer or compatible
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
-     * @param Variable           $exprVariable
+     * @param Variable $exprVariable
      */
     public function compileStringTraverse($expression, CompilationContext $compilationContext, $exprVariable)
     {
@@ -647,9 +647,9 @@ class ForStatement extends StatementAbstract
      * - A key must be a zval
      * - A value must be a zval
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
-     * @param Variable           $exprVariable
+     * @param Variable $exprVariable
      */
     public function compileHashTraverse($expression, CompilationContext $compilationContext, Variable $exprVariable)
     {
@@ -746,7 +746,7 @@ class ForStatement extends StatementAbstract
     }
 
     /**
-     * @param  CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

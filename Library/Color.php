@@ -147,9 +147,9 @@ class Color
      *
      * @static
      * @param $string
-     * @param null|int $fg
-     * @param null|int $at
-     * @param null|int $bg
+     * @param int|null $fg
+     * @param int|null $at
+     * @param int|null $bg
      *
      * @return string
      */
