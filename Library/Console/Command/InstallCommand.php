@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,7 +20,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
 
 /**
- * Zephir\Command\InstallCommand
+ * Zephir\Console\Command\InstallCommand
  *
  * Installs the extension in the extension directory.
  */

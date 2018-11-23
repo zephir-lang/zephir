@@ -15,8 +15,7 @@
        "vendor"
     ],
     "files": [
-        "LICENSE",
-        "autoload.php"
+        "LICENSE"
     ],
     "blacklist": [
         "unit-tests",

@@ -9,8 +9,16 @@
  * file that was distributed with this source code.
  */
 
+namespace Zephir;
+
+use const PHP_BINARY;
+use const PHP_EOL;
+use const PHP_SAPI;
+use const PHP_VERSION;
+use const STDERR;
+
 if (version_compare('5.6.0', PHP_VERSION, '>')) {
-    fprintf(
+    \fprintf(
         STDERR,
         'This Zephir version is supported on PHP >= 5.6.0.' . PHP_EOL .
         'You are using PHP %s (%s).' . PHP_EOL,
@@ -21,29 +29,24 @@ if (version_compare('5.6.0', PHP_VERSION, '>')) {
     exit(1);
 }
 
-$autoloaders = [
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ . '/../../autoload.php',
-];
-
-foreach ($autoloaders as $file) {
-    if (file_exists($file)) {
-        define('ZEPHIR_COMPOSER_INSTALL', $file);
-        break;
-    }
-}
-
-unset($file);
-
-if (!defined('ZEPHIR_COMPOSER_INSTALL')) {
-    fwrite(
+if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+    \fprintf(
         STDERR,
-        'You need to install the Zephir dependencies using Composer:' . PHP_EOL . PHP_EOL .
-        '    composer install' . PHP_EOL . PHP_EOL .
-        'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
+        'Warning: Composer should be invoked via the CLI version of PHP, not the %s SAPI.' . PHP_EOL,
+        PHP_SAPI
     );
 
     exit(1);
 }
 
-require ZEPHIR_COMPOSER_INSTALL;
+$autoloaders = [
+    __DIR__ . '/../vendor/autoload.php', // Is installed locally
+    __DIR__ . '/../../../autoload.php',  // Is installed via Composer
+];
+
+foreach ($autoloaders as $file) {
+    if (\file_exists($file)) {
+        include_once $file;
+        break;
+    }
+}

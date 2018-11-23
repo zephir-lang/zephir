@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\BaseBackend;
 
 /**
- * Zephir\Command\InitCommand
+ * Zephir\Console\Command\InitCommand
  *
  * Initializes a Zephir extension.
  */

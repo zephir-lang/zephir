@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Zephir\Command\GenerateCommand
+ * Zephir\Console\Command\GenerateCommand
  *
  * Generates C code from the Zephir code without compiling it.
  */
