@@ -16,8 +16,8 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Zephir\Application;
-use Zephir\Command\CompileCommand;
+use Zephir\Console\Application;
+use Zephir\Console\Command\CompileCommand;
 use Zephir\Di\Singleton;
 use Zephir\FileSystem\HardDisk;
 use Zephir\Support\TestCase;
@@ -96,7 +96,7 @@ class CompileCommandTest extends TestCase
         $container = $this->createContainer(getcwd());
 
         $application = new Application(ZEPHIRPATH, $container);
-        $application->add(new CompileCommand());
+        $application->add(new CompileCommand($container));
 
         $this->muteOutput($container);
 

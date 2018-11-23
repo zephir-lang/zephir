@@ -9,39 +9,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir;
+namespace Zephir\Console;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zephir\Command\ContainerAwareCommand;
+use Zephir\Config;
 use Zephir\Di\Singleton;
+use Zephir\Environment;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Providers\CompilerProvider;
+use Zephir\ServiceRegistrator;
+use Zephir\Zephir;
 
-/**
- * Zephir\Bootstrap
- */
 final class Application extends BaseApplication
 {
     /**
-     * The Service Registrator instance.
+     * The ServiceRegistrator instance.
      *
      * @var ServiceRegistrator
      */
-    protected $serviceRegistrator;
-    private $logo = '
- _____              __    _
-/__  /  ___  ____  / /_  (_)____
-  / /  / _ \/ __ \/ __ \/ / ___/
- / /__/  __/ /_/ / / / / / /
-/____/\___/ .___/_/ /_/_/_/
-         /_/
-';
+    protected $registrator;
 
     /**
      * Bootstrap constructor.
@@ -54,7 +46,8 @@ final class Application extends BaseApplication
         parent::__construct('Zephir', Zephir::VERSION);
 
         try {
-            $this->serviceRegistrator = new ServiceRegistrator($basePath, $container);
+            $this->registrator = new ServiceRegistrator($basePath, $container);
+
             $this->registerCompiler();
         } catch (\Exception $e) {
             $container = Singleton::getDefault();
@@ -73,26 +66,11 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param Command $command
-     * @return Command|null
-     */
-    public function add(Command $command)
-    {
-        if ($command instanceof ContainerAwareCommand) {
-            $command->setContainer($this->serviceRegistrator->getContainer());
-        }
-
-        return parent::add($command);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return string
      */
     public function getHelp()
     {
-        return $this->logo . PHP_EOL . parent::getHelp();
+        return Zephir::LOGO . parent::getHelp();
     }
 
     /**
@@ -121,7 +99,7 @@ final class Application extends BaseApplication
      */
     protected function registerCompiler()
     {
-        $this->serviceRegistrator->registerService(
+        $this->registrator->registerService(
             new CompilerProvider()
         );
     }
@@ -145,6 +123,34 @@ final class Application extends BaseApplication
         );
 
         return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return BaseCommand[]
+     */
+    protected function getDefaultCommands()
+    {
+        $commands = parent::getDefaultCommands();
+        $di = $this->registrator->getContainer();
+
+        $commands[] = new Command\InitCommand($di);
+        $commands[] = new Command\GenerateCommand($di);
+        $commands[] = new Command\CompileCommand($di);
+        $commands[] = new Command\InstallCommand($di);
+        $commands[] = new Command\BuildCommand($di);
+        $commands[] = new Command\CleanCommand($di);
+        $commands[] = new Command\FullCLeanCommand($di);
+        $commands[] = new Command\ApiCommand($di);
+        $commands[] = new Command\StubsCommand($di);
+
+        // TODO
+        // if (\substr(__FILE__, 0, 5) === 'phar:') {
+        //   $app->add(new Zephir\Command\SelfUpdateCommand());
+        // }
+
+        return $commands;
     }
 
     /**
@@ -176,7 +182,7 @@ final class Application extends BaseApplication
             return $message;
         }
 
-        $container = $this->serviceRegistrator->getContainer();
+        $container = $this->registrator->getContainer();
 
         /** @var Environment $environment */
         $environment = $container->has('environment') ? $container->get('environment') : null;

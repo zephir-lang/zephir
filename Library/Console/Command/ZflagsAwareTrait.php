@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 /**
- * Zephir\Command\ZflagsAwareTrait
+ * Zephir\Console\Command\ZflagsAwareTrait
  */
 trait ZflagsAwareTrait
 {

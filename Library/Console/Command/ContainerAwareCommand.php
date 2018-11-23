@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,7 @@ use Zephir\Di\ContainerAwareTrait;
 use Zephir\Di\InjectionAwareInterface;
 
 /**
- * Zephir\Command\ContainerAwareCommand
+ * Zephir\Console\Command\ContainerAwareCommand
  */
 abstract class ContainerAwareCommand extends Command implements InjectionAwareInterface
 {

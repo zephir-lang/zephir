@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Command;
+namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Zephir\Command\CleanCommand
+ * Zephir\Console\Command\CleanCommand
  *
  * Cleans any object files created by the extension.
  */
