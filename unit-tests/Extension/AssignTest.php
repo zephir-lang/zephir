@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Assign;
-use Zephir\Support\TestCase;
 
 class AssignTest extends TestCase
 {

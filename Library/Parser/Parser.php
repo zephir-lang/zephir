@@ -9,15 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir;
+namespace Zephir\Parser;
 
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\ParseException;
 
-/**
- * Zephir\Parser
- */
 class Parser
 {
     /**

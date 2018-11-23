@@ -11,10 +11,13 @@
 
 namespace Zephir\Console\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Zephir\Compiler;
+use Zephir\Config;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
@@ -24,33 +27,20 @@ use Zephir\Exception\NotImplementedException;
  *
  * Installs the extension in the extension directory.
  */
-class InstallCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
+final class InstallCommand extends Command
 {
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getDevelopmentModeHelp()
+    private $compiler;
+    private $config;
+
+    public function __construct(Compiler $compiler, Config $config)
     {
-        return <<<EOT
-Using <comment>--dev</comment> option will try installing the extension in development mode
-(debug symbols and no optimizations). An extension compiled with debugging symbols means
-you can run a program or library through a debugger and the debugger's output will be user
-friendlier. These debugging symbols also enlarge the program or library significantly.
+        $this->compiler = $compiler;
+        $this->config = $config;
 
-NOTE: Zephir development mode will be enabled silently if your PHP binary was compiled in
-a debug configuration.
-
-In some cases, we would like to get production ready extension even if the PHP binary was
-compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
-
-NOTE: This command may require root password on Linux/Unit systems.
-
-EOT;
+        parent::__construct();
     }
 
     protected function configure()
@@ -93,5 +83,29 @@ EOT;
         $io->note("Don't forget to restart your web server");
 
         return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    protected function getDevelopmentModeHelp()
+    {
+        return <<<EOT
+Using <comment>--dev</comment> option will try installing the extension in development mode
+(debug symbols and no optimizations). An extension compiled with debugging symbols means
+you can run a program or library through a debugger and the debugger's output will be user
+friendlier. These debugging symbols also enlarge the program or library significantly.
+
+NOTE: Zephir development mode will be enabled silently if your PHP binary was compiled in
+a debug configuration.
+
+In some cases, we would like to get production ready extension even if the PHP binary was
+compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
+
+NOTE: This command may require root password on Linux/Unit systems.
+
+EOT;
     }
 }

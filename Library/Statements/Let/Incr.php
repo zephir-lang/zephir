@@ -63,7 +63,10 @@ class Incr
                  * Update non-numeric dynamic variables could be expensive
                  */
                 if (!$symbolVariable->hasAnyDynamicType(['undefined', 'long', 'double'])) {
-                    $compilationContext->logger->warning('Possible attempt to increment non-numeric dynamic variable', 'non-valid-increment', $statement);
+                    $compilationContext->logger->warning(
+                        'Possible attempt to increment non-numeric dynamic variable',
+                        ['non-valid-increment', $statement]
+                    );
                 }
 
                 $compilationContext->headersManager->add('kernel/operators');

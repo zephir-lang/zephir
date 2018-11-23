@@ -11,22 +11,19 @@
 
 namespace Zephir\Test\Command;
 
-use League\Container\Container;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Zephir\Config;
 use Zephir\Console\Application;
-use Zephir\Console\Command\CompileCommand;
-use Zephir\Di\Singleton;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Support\TestCase;
+use Zephir\FileSystem\FileSystemInterface;
+use Zephir\Test\KernelTestCase;
 use function Zephir\unlink_recursive;
 
 /**
  * Zephir\Test\Command\CompileCommandTest
  */
-class CompileCommandTest extends TestCase
+class CompileCommandTest extends KernelTestCase
 {
     /**
      * Common directory.
@@ -43,7 +40,6 @@ class CompileCommandTest extends TestCase
     public function setUp()
     {
         $this->pwd = getcwd();
-        Singleton::reset();
     }
 
     /**
@@ -54,8 +50,9 @@ class CompileCommandTest extends TestCase
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            if (file_exists(getcwd() . '/.temp')) {
-                unlink_recursive(getcwd() . '/.temp');
+            $dotZephir = dirname(dirname(self::$kernel->getCacheDir()));
+            if (file_exists($dotZephir)) {
+                unlink_recursive($dotZephir);
             }
 
             if (file_exists(getcwd() . '/ext')) {
@@ -91,12 +88,16 @@ class CompileCommandTest extends TestCase
             );
         }
 
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/devmode');
+        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/devmode');
 
-        $container = $this->createContainer(getcwd());
+        self::bootKernel();
 
-        $application = new Application(ZEPHIRPATH, $container);
-        $application->add(new CompileCommand($container));
+        $container = self::$kernel->getContainer();
+
+        $application = $container->get(Application::class);
+
+        $compilerFs = $container->get(FileSystemInterface::class);
+        $compilerFs->setBasePath(self::$kernel->getCacheDir());
 
         $this->muteOutput($container);
 
@@ -123,33 +124,11 @@ class CompileCommandTest extends TestCase
     }
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      * @return void
      */
-    protected function muteOutput(Container $container)
+    protected function muteOutput(ContainerInterface $container)
     {
-        $container->get('config')->set('silent', true);
-    }
-
-    /**
-     * Create internal Zephir's container.
-     *
-     * @param  $basePath
-     * @return Container
-     */
-    protected function createContainer($basePath)
-    {
-        $container = new Container();
-
-        $filesystem = function () use ($basePath) {
-            $adapter = new Local($basePath);
-            return new HardDisk(
-                new Filesystem($adapter, ['visibility' => 'public'])
-            );
-        };
-
-        $container->share('filesystem', $filesystem);
-
-        return $container;
+        $container->get(Config::class)->set('silent', true);
     }
 }

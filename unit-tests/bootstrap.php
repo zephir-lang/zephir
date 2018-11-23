@@ -9,17 +9,35 @@
  * file that was distributed with this source code.
  */
 
-error_reporting(-1);
-set_time_limit(-1);
-setlocale(LC_ALL, 'en_US.utf-8');
+require_once __DIR__ . '/../Library/autoload.php';
 
-define('TESTS_PATH', dirname(__FILE__));
-define('DATA_PATH', dirname(__FILE__) . '/Data');
-defined('ZEPHIRPATH') || define('ZEPHIRPATH', dirname(__DIR__));
-
-if (!extension_loaded('phalcon')) {
-    include_once ZEPHIRPATH . '/prototypes/phalcon.php';
+if (false === extension_loaded('phalcon')) {
+    include_once __DIR__ . '/../prototypes/phalcon.php';
 }
+
+// TODO: Bellow code will be removed after dropping support of PHP 5.x
+
+if (!class_exists('\PHPUnit\TextUI\Command') && class_exists('PHPUnit_TextUI_Command')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_TextUI_Command', '\PHPUnit\TextUI\Command');
+}
+
+if (!class_exists('\PHPUnit\Framework\SkippedTestError') && class_exists('PHPUnit_Framework_SkippedTestError')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_SkippedTestError', '\PHPUnit\Framework\SkippedTestError');
+}
+
+if (!class_exists('\PHPUnit\Framework\MockObject\MockObject') && class_exists('PHPUnit_Framework_MockObject_MockObject')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_MockObject_MockObject', '\PHPUnit\Framework\MockObject\MockObject');
+}
+
+if (!class_exists('\PHPUnit\Framework\Error\Warning') && class_exists('PHPUnit_Framework_Error_Warning')) {
+    /** @noinspection PhpIgnoredClassAliasDeclaration */
+    class_alias('PHPUnit_Framework_Error_Warning', '\PHPUnit\Framework\Error\Warning');
+}
+
+// TODO: Move bellow code to the separated place. We don't need this check for "Zephir Test Suite"
 
 if (!extension_loaded('test')) {
     if (ini_get('enable_dl') == '1') {

@@ -46,6 +46,7 @@ environment:
     PARSER_VERSION: 1.1.3
     PARSER_RELEASE: 401
     PSR_VERSION: 0.6.1
+    SYMFONY_PHPUNIT_VERSION: 5.7.27
 
 matrix:
     fast_finish: true
@@ -100,7 +101,7 @@ build_script:
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'php unit-tests/phpunit -c phpunit.xml.dist unit-tests/'
+    - 'php vendor/bin/simple-phpunit --colors=always --testsuite "Extension Test Suite"'
 
 on_success:
     - ps: PrintBuildDetails

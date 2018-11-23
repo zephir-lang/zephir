@@ -11,12 +11,6 @@
 
 namespace Zephir\Parser;
 
-use Zephir\Logger;
-use Zephir\Parser;
-
-/**
- * Zephir\Parser\Manager
- */
 class Manager
 {
     const MINIMUM_PARSER_VERSION = '1.1.0';
@@ -28,33 +22,13 @@ class Manager
     protected $parser;
 
     /**
-     * Is the Zephir Parser enabled
-     * @var bool
-     */
-    protected $parserEnabled = false;
-
-    /**
-     * Should we recompile the Zephir Parser
-     * @var bool
-     */
-    protected $forceCompileParser = false;
-
-    /**
-     * The Zephir Logger
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * Manager constructor.
      *
      * @param Parser $parser The Zephir Parser
-     * @param Logger $logger The Zephir Logger
      */
-    public function __construct(Parser $parser, Logger $logger)
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
-        $this->logger = $logger;
     }
 
     /**

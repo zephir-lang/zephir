@@ -11,8 +11,8 @@
 
 namespace Extension\Globals;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals\Env;
-use Zephir\Support\TestCase;
 
 class EnvTest extends TestCase
 {

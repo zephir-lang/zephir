@@ -11,9 +11,6 @@
 
 namespace Zephir\FileSystem;
 
-/**
- * Zephir\FileSystem\FileSystemInterface
- */
 interface FileSystemInterface
 {
     /**

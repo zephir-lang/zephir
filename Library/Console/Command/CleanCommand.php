@@ -11,16 +11,28 @@
 
 namespace Zephir\Console\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\FileSystem\FileSystemInterface;
+use function Zephir\is_windows;
 
 /**
  * Zephir\Console\Command\CleanCommand
  *
  * Cleans any object files created by the extension.
  */
-class CleanCommand extends ContainerAwareCommand
+final class CleanCommand extends Command
 {
+    private $filesystem;
+
+    public function __construct(FileSystemInterface $filesystem)
+    {
+        $this->filesystem = $filesystem;
+
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
@@ -32,10 +44,10 @@ class CleanCommand extends ContainerAwareCommand
     {
         $this->filesystem->clean();
 
-        if ($this->environment->isWindows()) {
-            system('cd ext && nmake clean-all');
+        if (is_windows()) {
+            \system('cd ext && nmake clean-all');
         } else {
-            system('cd ext && make clean > /dev/null');
+            \system('cd ext && make clean > /dev/null');
         }
 
         return 0;

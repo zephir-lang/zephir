@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\SPropertyAccess;
-use Zephir\Support\TestCase;
 
 class SPropertyAccessTest extends TestCase
 {

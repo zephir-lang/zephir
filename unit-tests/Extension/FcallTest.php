@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Fcall;
 use Test\Oo\PropertyAccess;
-use Zephir\Support\TestCase;
 
 class FcallTest extends TestCase
 {

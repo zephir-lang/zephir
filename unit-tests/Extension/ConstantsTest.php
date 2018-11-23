@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Constants;
 use Test\Oo\ConstantsInterface;
-use Zephir\Support\TestCase;
 
 class ConstantsTest extends TestCase
 {

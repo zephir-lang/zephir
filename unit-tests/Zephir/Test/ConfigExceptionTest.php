@@ -11,8 +11,8 @@
 
 namespace Zephir\Test;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\ConfigException;
-use Zephir\Support\TestCase;
 
 class ConfigExceptionTest extends TestCase
 {

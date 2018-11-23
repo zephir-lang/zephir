@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Di\Singleton;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -284,8 +283,7 @@ class FunctionCall extends Call
                             if (!preg_match('/^[a-zA-Z0-9$\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning(
                                     'Cannot mark complex expression as reference',
-                                    'invalid-reference',
-                                    $expression
+                                    ['invalid-reference', $expression]
                                 );
                                 continue;
                             }
@@ -348,8 +346,6 @@ class FunctionCall extends Call
                         throw new Exception("Class {$className} must be instance of OptimizerAbstract");
                     }
 
-                    $optimizer->setContainer(Singleton::getDefault());
-
                     break;
                 }
             }
@@ -394,8 +390,7 @@ class FunctionCall extends Call
         if (!$exists) {
             $compilationContext->logger->warning(
                 sprintf('Function "%s" does not exist at compile time', $funcName),
-                'nonexistent-function',
-                $expression
+                ['nonexistent-function', $expression]
             );
         }
 
@@ -538,7 +533,9 @@ class FunctionCall extends Call
         if (is_array($references)) {
             foreach ($references as $reference) {
                 $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
-                $compilationContext->codePrinter->output('ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');');
+                $compilationContext->codePrinter->output(
+                    'ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                );
             }
         }
 

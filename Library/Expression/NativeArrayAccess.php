@@ -199,7 +199,10 @@ class NativeArrayAccess
              * Trying to use a non-object dynamic variable as object
              */
             if ($variableVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-                $compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $arrayAccess['left']);
+                $compilationContext->logger->warning(
+                    'Possible attempt to access array-index on a non-array dynamic variable',
+                    ['non-array-access', $arrayAccess['left']]
+                );
             }
         }
 

@@ -190,7 +190,7 @@ class Template
         }
         $path = $this->__getTemplatePath($this->template);
         ob_start();
-        include($path);
+        include $path;
         $content = ob_get_clean();
 
         return $content;

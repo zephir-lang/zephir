@@ -11,31 +11,37 @@
 
 namespace Zephir\Console\Command;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\Compiler;
 
 /**
  * Zephir\Console\Command\StubsCommand
  *
  * Generates stubs that can be used in a PHP IDE.
  */
-class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
+final class StubsCommand extends Command
 {
     use ZflagsAwareTrait;
+
+    private $compiler;
+
+    public function __construct(Compiler $compiler)
+    {
+        $this->compiler = $compiler;
+
+        parent::__construct();
+    }
 
     protected function configure()
     {
         $this
             ->setName('stubs')
             ->setDescription('Generates stubs that can be used in a PHP IDE')
-            ->addOption(
-                'backend',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Used backend to generate stubs for the extension',
-                'ZendEngine3'
-            )
+            ->setDefinition($this->createDefinition())
             ->setHelp($this->getZflagsHelp());
     }
 
@@ -45,5 +51,20 @@ class StubsCommand extends ContainerAwareCommand implements ZflagsAwareInterface
         $this->compiler->stubs();
 
         return 0;
+    }
+
+    protected function createDefinition()
+    {
+        return new InputDefinition(
+            [
+                new InputOption(
+                    'backend',
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Used backend to generate stubs for the extension',
+                    'ZendEngine3'
+                ),
+            ]
+        );
     }
 }

@@ -13,18 +13,12 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
 
 /**
  * Class OptimizerAbstract
  */
-abstract class OptimizerAbstract implements InjectionAwareInterface
+abstract class OptimizerAbstract
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
-
     /**
      * @param array $expression
      * @param Call $call

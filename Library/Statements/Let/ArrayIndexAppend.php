@@ -71,7 +71,10 @@ class ArrayIndexAppend extends ArrayIndex
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-            $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
+            $compilationContext->logger->warning(
+                'Possible attempt to update index on a non-array dynamic variable',
+                ['non-array-update', $statement]
+            );
         }
 
         $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);

@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Cast;
-use Zephir\Support\TestCase;
 
 class CastTest extends TestCase
 {

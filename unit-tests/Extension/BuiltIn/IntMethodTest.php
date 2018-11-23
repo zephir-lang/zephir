@@ -11,8 +11,8 @@
 
 namespace Extension\BuiltIn;
 
+use PHPUnit\Framework\TestCase;
 use Test\BuiltIn\IntMethods;
-use Zephir\Support\TestCase;
 
 class IntMethodTest extends TestCase
 {

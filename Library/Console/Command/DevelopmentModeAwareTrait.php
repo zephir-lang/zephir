@@ -19,12 +19,12 @@ use Symfony\Component\Console\Input\InputInterface;
 trait DevelopmentModeAwareTrait
 {
     /**
-     * {@inheritdoc}
+     * Checks if the development mode is enabled.
      *
      * @param InputInterface $input
      * @return bool
      */
-    public function isDevelopmentModeEnabled(InputInterface $input)
+    protected function isDevelopmentModeEnabled(InputInterface $input)
     {
         if ($input->getOption('no-dev') == false) {
             return $input->getOption('dev') || PHP_DEBUG;

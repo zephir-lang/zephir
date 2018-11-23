@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {

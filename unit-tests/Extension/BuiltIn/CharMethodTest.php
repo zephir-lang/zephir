@@ -11,8 +11,8 @@
 
 namespace Extension\BuiltIn;
 
+use PHPUnit\Framework\TestCase;
 use Test\BuiltIn\CharMethods;
-use Zephir\Support\TestCase;
 
 class CharMethodTest extends TestCase
 {

@@ -95,7 +95,10 @@ class FetchOperator extends BaseOperator
 
                 if ($evalVariable->getType() == 'variable') {
                     if ($evalVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
-                        $compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-fetch', $expression['right']);
+                        $compilationContext->logger->warning(
+                            'Possible attempt to use non array in fetch operator',
+                            ['non-valid-fetch', $expression['right']]
+                        );
                     }
                 }
 
@@ -123,7 +126,10 @@ class FetchOperator extends BaseOperator
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
-                    $compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
+                    $compilationContext->logger->warning(
+                        'Possible attempt to use non object in fetch operator',
+                        ['non-valid-fetch', $expression['right']]
+                    );
                 }
 
                 $property = $expression['right']['right']['value'];
@@ -149,7 +155,10 @@ class FetchOperator extends BaseOperator
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
-                    $compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
+                    $compilationContext->logger->warning(
+                        'Possible attempt to use non object in fetch operator',
+                        ['non-valid-fetch', $expression['right']]
+                    );
                 }
 
                 $exprVariableProperty = new Expression($expression['right']['right']);

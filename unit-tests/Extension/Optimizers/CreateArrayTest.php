@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\CreateArray;
-use Zephir\Support\TestCase;
 
 class CreateArrayTest extends TestCase
 {

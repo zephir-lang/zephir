@@ -11,7 +11,8 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\TestCase;
 
 class StringTest extends TestCase
 {
@@ -59,14 +60,16 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage The second argument passed to the camelize() must be a string containing at least one character
      * @param mixed $delimiter
      */
     public function testCamelizeWrongSecondParam($delimiter)
     {
-        $t = new \Test\Strings();
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'The second argument passed to the camelize() must be a string containing at least one character'
+        );
 
+        $t = new \Test\Strings();
         $t->camelize('CameLiZe', $delimiter);
     }
 
@@ -85,14 +88,16 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
      * @param mixed $delimiter
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
     {
-        $t = new \Test\Strings();
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'Second argument passed to the uncamelize() must be a string of one character'
+        );
 
+        $t = new \Test\Strings();
         $t->uncamelize('CameLiZe', $delimiter);
     }
 

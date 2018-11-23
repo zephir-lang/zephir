@@ -24,7 +24,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_DeprecatedMethods) {
 
 }
 
-PHP_METHOD(Test_Oo_DeprecatedMethods, deprecatedMethod) {
+PHP_METHOD(Test_Oo_DeprecatedMethods, publicDeprecated) {
 
 	zval *this_ptr = getThis();
 
@@ -41,13 +41,13 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedepricatedmethod", NULL, 53);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 53);
 	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
-PHP_METHOD(Test_Oo_DeprecatedMethods, privateDepricatedMethod) {
+PHP_METHOD(Test_Oo_DeprecatedMethods, privateDeprecated) {
 
 	zval *this_ptr = getThis();
 

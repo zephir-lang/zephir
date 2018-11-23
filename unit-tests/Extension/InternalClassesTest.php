@@ -13,8 +13,8 @@ namespace Extension;
 
 use Phalcon\Di;
 use Phalcon\Mvc\Model\Query;
+use PHPUnit\Framework\TestCase;
 use Test\InternalClasses;
-use Zephir\Support\TestCase;
 
 class InternalClassesTest extends TestCase
 {

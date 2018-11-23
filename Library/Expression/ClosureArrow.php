@@ -45,11 +45,8 @@ class ClosureArrow extends Closure
 
         $classDefinition->setIsFinal(true);
 
-        $compilerFile = new CompilerFileAnonymous(
-            $classDefinition,
-            $compilationContext->config,
-            $compilationContext->logger
-        );
+        $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config);
+        $compilerFile->setLogger($compilationContext->logger);
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 

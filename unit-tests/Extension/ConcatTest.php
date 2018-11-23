@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Concat;
-use Zephir\Support\TestCase;
 
 class ConcatTest extends TestCase
 {

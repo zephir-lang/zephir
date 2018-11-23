@@ -11,8 +11,8 @@
 
 namespace Extension\Flow;
 
+use PHPUnit\Framework\TestCase;
 use Test\Flow\SwitchFlow;
-use Zephir\Support\TestCase;
 
 class SwitchFlowTest extends TestCase
 {

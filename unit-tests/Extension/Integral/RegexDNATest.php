@@ -11,7 +11,7 @@
 
 namespace Extension\Integral;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class RegexDNATest extends TestCase
 {

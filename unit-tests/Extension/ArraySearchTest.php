@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\ArraySearch;
-use Zephir\Support\TestCase;
 
 class ArraySearchTest extends TestCase
 {

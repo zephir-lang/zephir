@@ -12,10 +12,10 @@
 namespace Zephir\Test\Optimizers\FunctionCall;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Optimizers\FunctionCall\PregMatchOptimizer;
-use Zephir\Support\TestCase;
 use Zephir\SymbolTable;
 use Zephir\Variable;
 

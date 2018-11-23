@@ -11,7 +11,7 @@
 
 namespace Extension\Properties;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ProtectedPropertiesTEst extends TestCase
 {

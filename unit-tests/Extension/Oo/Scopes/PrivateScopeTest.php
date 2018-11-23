@@ -11,8 +11,8 @@
 
 namespace Extension\Oo;
 
+use PHPUnit\Framework\TestCase;
 use Test\Oo\Scopes\PrivateScopeTester;
-use Zephir\Support\TestCase;
 
 class PrivateScopeTest extends TestCase
 {

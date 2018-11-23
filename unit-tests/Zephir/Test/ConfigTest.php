@@ -11,8 +11,8 @@
 
 namespace Zephir\Test;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\Config;
-use Zephir\Support\TestCase;
 
 class ConfigTest extends TestCase
 {
@@ -50,7 +50,7 @@ class ConfigTest extends TestCase
      */
     public function testConstructWithBadConfigFile()
     {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/badconfig');
+        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/badconfig');
         new Config();
     }
 

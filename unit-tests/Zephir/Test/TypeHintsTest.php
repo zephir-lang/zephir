@@ -11,18 +11,13 @@
 
 namespace Zephir\Test;
 
-use League\Container\Container;
-use League\Container\ReflectionContainer;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use Psr\Container\ContainerInterface;
 use Zephir\Compiler;
-use Zephir\Console\Application;
-use Zephir\Di\Singleton;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Support\TestCase;
+use Zephir\Config;
+use Zephir\FileSystem\FileSystemInterface;
 use function Zephir\unlink_recursive;
 
-class TypeHintsTest extends TestCase
+class TypeHintsTest extends KernelTestCase
 {
     /**
      * Common directory.
@@ -39,7 +34,6 @@ class TypeHintsTest extends TestCase
     public function setUp()
     {
         $this->pwd = getcwd();
-        Singleton::reset();
     }
 
     /**
@@ -50,8 +44,9 @@ class TypeHintsTest extends TestCase
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            if (file_exists(getcwd() . '/.temp')) {
-                unlink_recursive(getcwd() . '/.temp');
+            $dotZephir = dirname(dirname(self::$kernel->getCacheDir()));
+            if (file_exists($dotZephir)) {
+                unlink_recursive($dotZephir);
             }
 
             if (file_exists(getcwd() . '/ext')) {
@@ -116,53 +111,28 @@ class TypeHintsTest extends TestCase
 
     protected function generate($backend)
     {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/typehints');
+        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/typehints');
+        putenv('ZEPHIR_BACKEND=' . $backend);
 
-        try {
-            putenv('ZEPHIR_BACKEND=' . $backend);
+        self::bootKernel();
 
-            $container = $this->createContainer(getcwd());
-            $container->delegate(new ReflectionContainer());
+        $container = self::$kernel->getContainer();
 
-            new Application(ZEPHIRPATH, $container);
-            $this->muteOutput($container);
+        $compilerFs = $container->get(FileSystemInterface::class);
+        $compilerFs->setBasePath(self::$kernel->getCacheDir());
 
-            /** @var Compiler $compiler */
-            $compiler = $container->get(Compiler::class);
-            $compiler->generate(true);
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->muteOutput($container);
+
+        $compiler = $container->get(Compiler::class);
+        $compiler->generate(true);
     }
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      * @return void
      */
-    protected function muteOutput(Container $container)
+    protected function muteOutput(ContainerInterface $container)
     {
-        $container->get('config')->set('silent', true);
-    }
-
-    /**
-     * Create internal Zephir's container.
-     *
-     * @param  $basePath
-     * @return Container
-     */
-    protected function createContainer($basePath)
-    {
-        $container = new Container();
-
-        $filesystem = function () use ($basePath) {
-            $adapter = new Local($basePath);
-            return new HardDisk(
-                new Filesystem($adapter, ['visibility' => 'public'])
-            );
-        };
-
-        $container->share('filesystem', $filesystem);
-
-        return $container;
+        $container->get(Config::class)->set('silent', true);
     }
 }

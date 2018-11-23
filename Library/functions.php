@@ -12,6 +12,10 @@
 namespace Zephir;
 
 use Zephir\Exception\InvalidArgumentException;
+use const INFO_GENERAL;
+use const PHP_INT_SIZE;
+use const PHP_OS;
+use const PHP_ZTS;
 
 /**
  * Attempts to remove recursively the directory with all subdirectories and files.
@@ -180,4 +184,84 @@ function file_put_contents_ex($content, $path)
     }
 
     return false;
+}
+
+/**
+ * Checks if currently running under MS Windows.
+ *
+ * @return bool
+ */
+function is_windows()
+{
+    return 'WIN' === \strtoupper(\substr(PHP_OS, 0, 3));
+}
+
+/**
+ * Checks if currently running under macOs.
+ *
+ * @return bool
+ */
+function is_macos()
+{
+    return 'DARWIN' === \strtoupper(\substr(PHP_OS, 0, 6));
+}
+
+/**
+ * Checks if currently running under BSD based OS.
+ *
+ * @link   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+ * @return bool
+ */
+function is_bsd()
+{
+    return false !== \stristr(\strtolower(PHP_OS), 'bsd');
+}
+
+/**
+ * Checks if current PHP is thread safe.
+ *
+ * @return bool
+ */
+function is_zts()
+{
+    if (\defined('PHP_ZTS') && PHP_ZTS == 1) {
+        return true;
+    }
+
+    \ob_start();
+    \phpinfo(INFO_GENERAL);
+
+    return (bool) \preg_match('/Thread\s*Safety\s*enabled/i', \strip_tags(\ob_get_clean()));
+}
+
+/**
+ * Resolves Windows release folder.
+ *
+ * @return string
+ */
+function windows_release_dir()
+{
+    if (is_zts()) {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return 'ext\\Release_TS';
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return 'ext\\x64\\Release_TS';
+        } else {
+            // fallback
+            return 'ext\\Release_TS';
+        }
+    } else {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return 'ext\\Release';
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return 'ext\\x64\\Release';
+        } else {
+            // fallback
+            return 'ext\\Release';
+        }
+    }
 }

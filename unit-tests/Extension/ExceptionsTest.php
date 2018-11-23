@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Exception;
 use Test\Exceptions;
-use Zephir\Support\TestCase;
 
 class ExceptionsTest extends TestCase
 {

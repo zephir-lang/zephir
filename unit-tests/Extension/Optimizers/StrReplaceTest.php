@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\StrReplace;
-use Zephir\Support\TestCase;
 
 class StrReplaceTest extends TestCase
 {

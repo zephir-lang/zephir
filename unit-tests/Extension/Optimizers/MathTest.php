@@ -11,6 +11,7 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\ACos;
 use Test\Optimizers\ASin;
 use Test\Optimizers\Cos;
@@ -18,7 +19,6 @@ use Test\Optimizers\Ldexp;
 use Test\Optimizers\Sin;
 use Test\Optimizers\Sqrt;
 use Test\Optimizers\Tan;
-use Zephir\Support\TestCase;
 
 class MathTest extends TestCase
 {

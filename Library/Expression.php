@@ -490,7 +490,10 @@ class Expression
 
             case 'list':
                 if ($expression['left']['type'] == 'list') {
-                    $compilationContext->logger->warning('Unnecessary extra parentheses', 'extra-parentheses', $expression);
+                    $compilationContext->logger->warning(
+                        'Unnecessary extra parentheses',
+                        ['extra-parentheses', $expression]
+                    );
                 }
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
                 $expr = new Expression($expression['left']);

@@ -2001,10 +2001,16 @@ class ClassMethod
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
                 if ($variable->isExternal() == false) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $variable->getOriginal());
+                    $compilationContext->logger->warning(
+                        'Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(),
+                        ['unused-variable', $variable->getOriginal()]
+                    );
                     continue;
                 }
-                $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable-external', $variable->getOriginal());
+                $compilationContext->logger->warning(
+                    'Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(),
+                    ['unused-variable-external', $variable->getOriginal()]
+                );
             }
 
             if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
@@ -2032,9 +2038,15 @@ class ClassMethod
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (is_array($node)) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $node);
+                    $compilationContext->logger->warning(
+                        'Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(),
+                        ['unused-variable', $node]
+                    );
                 } else {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), 'unused-variable', $variable->getOriginal());
+                    $compilationContext->logger->warning(
+                        'Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(),
+                        ['unused-variable', $variable->getOriginal()]
+                    );
                 }
             }
         }
