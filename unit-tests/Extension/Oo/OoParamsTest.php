@@ -11,7 +11,7 @@
 
 namespace Extension\Oo;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class OoParamsTest extends TestCase
 {

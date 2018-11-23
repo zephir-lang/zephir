@@ -11,7 +11,7 @@
 
 namespace Extension\Oo;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class OoParamsStrictTest extends TestCase
 {
@@ -33,12 +33,7 @@ class OoParamsStrictTest extends TestCase
         }
 
         if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
+            $this->expectException($except);
         }
 
         $t->setStrictAge(17.0);
@@ -55,12 +50,7 @@ class OoParamsStrictTest extends TestCase
         }
 
         if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
+            $this->expectException($except);
         }
 
         $t->setStrictAge('17');
@@ -75,19 +65,13 @@ class OoParamsStrictTest extends TestCase
 
     public function testSetStrictAverageException1()
     {
-        $t = new \Test\Oo\OoParams();
-
-        // PHP 7 strictness coerces INT types to DOUBLE without complaint
-        // This is the only exception to PHP's strictness rules
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException('\InvalidArgumentException');
-            } else {
-                $this->expectException('\InvalidArgumentException');
-            }
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $this->markTestSkipped('This test is designed to use for PHP < 7.0.0');
         }
 
+        $t = new \Test\Oo\OoParams();
+
+        $this->expectException('\InvalidArgumentException');
         $t->setStrictAverage(17);
     }
 
@@ -102,12 +86,7 @@ class OoParamsStrictTest extends TestCase
         }
 
         if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
+            $this->expectException($except);
         }
 
         $t->setStrictAverage('17');
@@ -130,12 +109,7 @@ class OoParamsStrictTest extends TestCase
         }
 
         if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
+            $this->expectException($except);
         }
 
         $t->setStrictName(1234);

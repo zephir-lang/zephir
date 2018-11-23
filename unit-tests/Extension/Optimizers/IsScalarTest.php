@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\IsScalar;
-use Zephir\Support\TestCase;
 
 class IsScalarTest extends TestCase
 {

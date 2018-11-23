@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Scope;
-use Zephir\Support\TestCase;
 
 class ScopeTest extends TestCase
 {

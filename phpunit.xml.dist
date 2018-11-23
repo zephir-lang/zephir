@@ -14,6 +14,7 @@
         </testsuite>
         <testsuite name="Zephir Test Suite">
             <directory suffix=".php">./unit-tests/Zephir</directory>
+            <exclude>unit-tests/Zephir/Test/KernelTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
@@ -28,6 +29,13 @@
         <ini name="date.timezone" value="UTC"/>
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
+        <ini name="error_reporting" value="-1"/>
+
+        <const name="TESTS_PATH" value="./unit-tests"/>
+        <const name="DATA_PATH" value="./unit-tests/Data"/>
+        <const name="ZEPHIRPATH" value="./"/>
+
+        <server name="KERNEL_CLASS" value="Zephir\DependencyInjection\ZephirKernel" />
     </php>
 
     <logging>

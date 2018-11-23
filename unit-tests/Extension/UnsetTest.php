@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Unsettest as UnsetTestExt;
-use Zephir\Support\TestCase;
 
 class UnsetTest extends TestCase
 {

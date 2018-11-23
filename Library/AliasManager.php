@@ -16,7 +16,7 @@ namespace Zephir;
  *
  * Manage aliases in a file
  */
-class AliasManager
+final class AliasManager
 {
     protected $aliases = [];
 
@@ -31,8 +31,8 @@ class AliasManager
             if (isset($alias['alias'])) {
                 $this->aliases[$alias['alias']] = $alias['name'];
             } else {
-                $parts = explode('\\', $alias['name']);
-                $implicitAlias = $parts[count($parts) - 1];
+                $parts = \explode('\\', $alias['name']);
+                $implicitAlias = $parts[\count($parts) - 1];
                 $this->aliases[$implicitAlias] = $alias['name'];
             }
         }

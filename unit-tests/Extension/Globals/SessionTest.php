@@ -11,8 +11,8 @@
 
 namespace Extension\Globals;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals\Session\Child;
-use Zephir\Support\TestCase;
 
 class SessionTest extends TestCase
 {

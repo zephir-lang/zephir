@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Mcall;
-use Zephir\Support\TestCase;
 
 class MCallTest extends TestCase
 {
@@ -103,12 +103,7 @@ class MCallTest extends TestCase
         }
 
         if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
+            $this->expectException($except);
         }
 
         $t->optionalParameterBoolean('test');
@@ -192,7 +187,6 @@ class MCallTest extends TestCase
      */
     protected function getMethodFirstParameter()
     {
-        $backtrace = debug_backtrace();
         $methodInfo = $this->reflection->getMethod($this->getName());
         $parameters = $methodInfo->getParameters();
 

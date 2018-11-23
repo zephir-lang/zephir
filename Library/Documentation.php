@@ -11,8 +11,8 @@
 
 namespace Zephir;
 
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Zephir\Documentation\File;
 use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
@@ -21,11 +21,9 @@ use Zephir\Exception\InvalidArgumentException;
 /**
  * Documentation Generator
  */
-class Documentation implements InjectionAwareInterface
+class Documentation
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
+    use LoggerAwareTrait;
 
     protected $outputDirectory;
 
@@ -38,9 +36,6 @@ class Documentation implements InjectionAwareInterface
     /** @var Theme */
     protected $theme;
 
-    /** @var Logger */
-    protected $logger;
-
     /** @var array */
     protected $options;
 
@@ -48,43 +43,55 @@ class Documentation implements InjectionAwareInterface
 
     protected $themesDirectories;
 
+    /** @var string|null */
+    private $templatesPath;
+
     /**
      * Documentation constructor.
      *
      * @param CompilerFile[] $classes
      * @param Config $config
-     * @param Logger $logger
+     * @param string $templatesPath
      * @param array $options
      *
      * @throws ConfigException
      * @throws Exception
      */
-    public function __construct(array $classes, Config $config, Logger $logger, array $options)
+    public function __construct(array $classes, Config $config, $templatesPath, array $options)
     {
-        $this->__DiInject();
-
-        // TODO: options => to ApiOptions object
-        // TODO: Validate options
         ksort($classes);
 
         $this->config = $config;
         $this->classes = $classes;
-        $this->logger = $logger;
+        $this->logger = new NullLogger();
+        $this->templatesPath = $templatesPath;
         $this->options = $options;
 
-        $themeConfig = $config->get('theme', 'api');
+        $this->initialize();
+    }
+
+    /**
+     * TODO: options => to ApiOptions object
+     * TODO: Validate options
+     *
+     * @throws ConfigException
+     * @throws Exception
+     */
+    protected function initialize()
+    {
+        $themeConfig = $this->config->get('theme', 'api');
 
         if (!$themeConfig) {
             throw new ConfigException('Theme configuration is not present');
         }
 
-        $themeDir = $this->findThemeDirectory($themeConfig, $options['path']);
+        $themeDir = $this->findThemeDirectory($themeConfig, $this->options['path']);
 
         if (!file_exists($themeDir)) {
             throw new ConfigException('There is no theme named ' . $themeConfig['name']);
         }
 
-        $outputDir = $this->findOutputDirectory($options['output']);
+        $outputDir = $this->findOutputDirectory($this->options['output']);
 
         if (!$outputDir) {
             throw new ConfigException('Api path (output directory) is not configured');
@@ -102,11 +109,11 @@ class Documentation implements InjectionAwareInterface
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $themeConfig['options'] = $this->prepareThemeOptions($themeConfig, $options['options']);
+        $themeConfig['options'] = $this->prepareThemeOptions($themeConfig, $this->options['options']);
 
-        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
+        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $this->config, $this);
 
-        $this->baseUrl = $options['url'];
+        $this->baseUrl = $this->options['url'];
     }
 
     /**
@@ -163,10 +170,13 @@ class Documentation implements InjectionAwareInterface
             $this->theme->drawFile($nfile);
         }
 
-        /** @var Environment $environment */
-        $environment = $this->container->get('environment');
+        $sitemapFile = new File\Sitemap(
+            $this->templatesPath,
+            $this->baseUrl,
+            $this->classes,
+            $byNamespace
+        );
 
-        $sitemapFile = new File\Sitemap($environment->getPath(), $this->baseUrl, $this->classes, $byNamespace);
         $this->theme->drawFile($sitemapFile);
 
         // namespaces files (namespaces.html)
@@ -307,10 +317,7 @@ class Documentation implements InjectionAwareInterface
             $themesDirectories = [];
         }
 
-        /** @var Environment $environment */
-        $environment = $this->container->get('environment');
-
-        $themesDirectories[] = $environment->getPath('templates/Api/themes');
+        $themesDirectories[] = $this->templatesPath . '/Api/themes';
         $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command

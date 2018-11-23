@@ -24,13 +24,13 @@ class Sitemap extends AbstractFile
     {
         $this->classes = $classList;
         $this->namespaces = $namespaceList;
-        $this->baseUrl = rtrim($baseUrl, '/') . '/';
+        $this->baseUrl = rtrim($baseUrl, '\\/') . DIRECTORY_SEPARATOR;
         $this->baseDir = $baseDir;
     }
 
     public function getTemplateName()
     {
-        return $this->baseDir . '/templates/Api/sitemap.php';
+        return $this->baseDir . '/Api/sitemap.php';
     }
 
     public function getData()

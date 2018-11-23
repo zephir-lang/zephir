@@ -55,7 +55,10 @@ class NewInstanceOperator extends BaseOperator
 
         if ($symbolVariable->getName() != 'return_value') {
             if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
-                $compilationContext->logger->warning('Possible attempt to use non-object in "new" operator', 'non-valid-new', $expression);
+                $compilationContext->logger->warning(
+                    'Possible attempt to use non-object in "new" operator',
+                    ['non-valid-new', $expression]
+                );
             }
         }
 
@@ -132,7 +135,10 @@ class NewInstanceOperator extends BaseOperator
                     $classEntry = $zendClassEntry->getName();
                 } else {
                     if (!class_exists($className, false)) {
-                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', 'nonexistent-class', $expression);
+                        $compilationContext->logger->warning(
+                            'Class "' . $className . '" does not exist at compile time',
+                            ['nonexistent-class', $expression]
+                        );
                         $classNameToFetch = 'SL("' . escape_class($className) . '")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);

@@ -11,18 +11,13 @@
 
 namespace Zephir\Test;
 
-use League\Container\Container;
-use League\Container\ReflectionContainer;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use Psr\Container\ContainerInterface;
 use Zephir\Compiler;
-use Zephir\Console\Application;
-use Zephir\Di\Singleton;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Support\TestCase;
+use Zephir\Config;
+use Zephir\FileSystem\FileSystemInterface;
 use function Zephir\unlink_recursive;
 
-class LifeCycleTest extends TestCase
+class LifeCycleTest extends KernelTestCase
 {
     /**
      * Common directory.
@@ -39,7 +34,6 @@ class LifeCycleTest extends TestCase
     public function setUp()
     {
         $this->pwd = getcwd();
-        Singleton::reset();
     }
 
     /**
@@ -50,6 +44,11 @@ class LifeCycleTest extends TestCase
     public function tearDown()
     {
         if (getcwd() != $this->pwd) {
+            $dotZephir = dirname(dirname(self::$kernel->getCacheDir()));
+            if (file_exists($dotZephir)) {
+                unlink_recursive($dotZephir);
+            }
+
             if (file_exists(getcwd() . '/ext')) {
                 unlink_recursive(getcwd() . '/ext');
             }
@@ -82,53 +81,30 @@ class LifeCycleTest extends TestCase
 
     protected function createProject($backend)
     {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/lifecycle');
+        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/lifecycle');
+        putenv('ZEPHIR_BACKEND=' . $backend);
 
-        try {
-            $container = $this->createContainer(getcwd());
-            $container->delegate(new ReflectionContainer());
-            $container->add('ZEPHIR_BACKEND', $backend);
+        self::bootKernel();
 
-            new Application(ZEPHIRPATH, $container);
+        $container = self::$kernel->getContainer();
 
-            $this->muteOutput($container);
+        /** @var \Zephir\FileSystem\HardDisk $compilerFs */
+        $compilerFs = $container->get(FileSystemInterface::class);
+        $compilerFs->setBasePath(self::$kernel->getCacheDir());
 
-            /** @var Compiler $compiler */
-            $compiler = $container->get(Compiler::class);
-            $compiler->createProjectFiles('lifecycle');
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->muteOutput($container);
+
+        /** @var Compiler $compiler */
+        $compiler = $container->get(Compiler::class);
+        $compiler->createProjectFiles('lifecycle');
     }
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      * @return void
      */
-    protected function muteOutput(Container $container)
+    protected function muteOutput(ContainerInterface $container)
     {
-        $container->get('config')->set('silent', true);
-    }
-
-    /**
-     * Create internal Zephir's container.
-     *
-     * @param  $basePath
-     * @return Container
-     */
-    protected function createContainer($basePath)
-    {
-        $container = new Container();
-
-        $filesystem = function () use ($basePath) {
-            $adapter = new Local($basePath);
-            return new HardDisk(
-                new Filesystem($adapter, ['visibility' => 'public'])
-            );
-        };
-
-        $container->share('filesystem', $filesystem);
-
-        return $container;
+        $container->get(Config::class)->set('silent', true);
     }
 }

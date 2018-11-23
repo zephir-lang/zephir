@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Issue1404;
-use Zephir\Support\TestCase;
 
 /**
  * Extension\Optimizers\IsPhpVersionTest

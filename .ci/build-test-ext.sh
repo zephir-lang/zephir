@@ -54,7 +54,11 @@ if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
 	CXXFLAGS="${CXXFLAGS} -O0 -ggdb -fprofile-arcs -ftest-coverage"
 fi
 
-./configure --enable-test CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+if [ ! -z ${CFLAGS+x} ] && [ ! -z ${LDFLAGS+x} ]; then
+	./configure --enable-test CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+else
+	./configure --enable-test
+fi
 
 make -j"$(getconf _NPROCESSORS_ONLN)"
 

@@ -11,9 +11,9 @@
 
 namespace Extension\Properties;
 
+use PHPUnit\Framework\TestCase;
 use Test\Properties\ExtendsPublicProperties;
 use Test\Properties\PublicProperties;
-use Zephir\Support\TestCase;
 
 class PublicPropertiesTest extends TestCase
 {

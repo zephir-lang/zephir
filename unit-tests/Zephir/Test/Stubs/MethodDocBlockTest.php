@@ -11,13 +11,13 @@
 
 namespace Zephir\Test\Stubs;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\StatementsBlock;
 use Zephir\Stubs\MethodDocBlock;
-use Zephir\Support\TestCase;
 
 class MethodDocBlockTest extends TestCase
 {

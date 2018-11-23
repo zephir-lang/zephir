@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\ExtendedInterface;
-use Zephir\Support\TestCase;
 
 class ExtendedInterfaceTest extends TestCase
 {

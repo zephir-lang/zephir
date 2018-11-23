@@ -11,8 +11,8 @@
 
 namespace Extension\Properties;
 
+use PHPUnit\Framework\TestCase;
 use Test\Properties\PropertyArray;
-use Zephir\Support\TestCase;
 
 class PropertyArrayTest extends TestCase
 {

@@ -123,7 +123,10 @@ class Constants
         $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
-                $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistent-constant', $expression);
+                $compilationContext->logger->warning(
+                    "Constant '" . $constantName . "' does not exist at compile time",
+                    ['nonexistent-constant', $expression]
+                );
             } else {
                 $isZephirConstant = true;
             }
@@ -190,7 +193,10 @@ class Constants
                     );
             }
 
-            $compilationContext->logger->warning("Magic constant '" . $constantName . "' is not supported", 'not-supported-magic-constant', $expression);
+            $compilationContext->logger->warning(
+                "Magic constant '" . $constantName . "' is not supported",
+                ['not-supported-magic-constant', $expression]
+            );
             return new LiteralCompiledExpression('null', null, $expression);
         }
 

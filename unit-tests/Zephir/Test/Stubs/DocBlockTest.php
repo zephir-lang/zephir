@@ -11,8 +11,8 @@
 
 namespace Zephir\Test\Stubs;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\Stubs\DocBlock;
-use Zephir\Support\TestCase;
 
 class DocBlockTest extends TestCase
 {

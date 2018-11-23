@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\ArrayObject;
-use Zephir\Support\TestCase;
 
 class ArrayObjectTest extends TestCase
 {

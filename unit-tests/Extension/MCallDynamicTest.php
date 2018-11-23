@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\McallDynamic;
-use Zephir\Support\TestCase;
 
 class MCallTestDynamic extends TestCase
 {

@@ -36,6 +36,7 @@ env:
     - COLLECT_COVERAGE=true
     - BOX_VERSION=3.3.1
     - PATH="${HOME}/bin:${PATH}"
+    - SYMFONY_PHPUNIT_VERSION=5.7.27
 
 before_install:
   - if [ ! -z "${GITHUB_TOKEN}" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; echo "Add Github token"; fi
@@ -63,7 +64,8 @@ before_script:
 
 script:
   - zephir --ansi
-  - php -d extension=ext/modules/test.so unit-tests/phpunit
+  - php -d extension=ext/modules/test.so vendor/bin/simple-phpunit --colors=always --testsuite "Extension Test Suite"
+  - php -d extension=ext/modules/test.so vendor/bin/simple-phpunit --colors=always --testsuite "Zephir Test Suite"
 
 after_success:
   - .ci/after-success.sh

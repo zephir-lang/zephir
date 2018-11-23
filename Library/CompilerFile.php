@@ -11,13 +11,14 @@
 
 namespace Zephir;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Zephir\Compiler\FileInterface;
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
+use Zephir\FileSystem\FileSystemInterface;
 
 /**
  * Zephir\CompilerFile
@@ -25,68 +26,87 @@ use Zephir\Exception\ParseException;
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
  */
-class CompilerFile implements FileInterface, InjectionAwareInterface
+final class CompilerFile implements FileInterface
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
+    use LoggerAwareTrait;
+
+    /** @var string */
+    private $namespace;
+
+    /** @var string */
+    private $className;
+
+    /** @var string */
+    private $filePath;
+
+    /** @var bool */
+    private $external = false;
 
     /**
-     * Namespace of the
+     * Original internal representation (IR) of the file.
+     *
+     * @var array
      */
-    protected $namespace;
+    private $ir;
 
-    protected $className;
+    private $originalNode;
 
-    protected $filePath;
-
-    protected $external = false;
-
-    /**
-     * Original internal representation (IR) of the file
-     */
-    protected $ir;
-
-    protected $originalNode;
-
-    protected $compiledFile;
+    private $compiledFile;
 
     /** @var ClassDefinition */
-    protected $classDefinition;
+    private $classDefinition;
 
     /** @var FunctionDefinition[] */
-    protected $functionDefinitions = [];
+    private $functionDefinitions = [];
 
     /** @var array */
-    protected $headerCBlocks;
+    private $headerCBlocks = [];
 
     /** @var Config */
-    protected $config = null;
-
-    /** @var Logger */
-    protected $logger = null;
+    private $config;
 
     /** @var AliasManager */
-    protected $aliasManager;
+    private $aliasManager;
+
+    /** @var FileSystemInterface */
+    private $filesystem;
 
     /**
      * CompilerFile constructor
      *
-     * @param string $className
-     * @param string $filePath
      * @param Config $config
-     * @param Logger $logger
+     * @param AliasManager $aliasManager
+     * @param FileSystemInterface $filesystem
      */
-    public function __construct($className, $filePath, Config $config, Logger $logger)
-    {
-        $this->__DiInject();
-
-        $this->className = $className;
-        $this->filePath = $filePath;
-        $this->headerCBlocks = [];
+    public function __construct(
+        Config $config,
+        AliasManager $aliasManager,
+        FileSystemInterface $filesystem
+    ) {
         $this->config = $config;
-        $this->logger = $logger;
-        $this->aliasManager = new AliasManager();
+        $this->logger = new NullLogger();
+        $this->aliasManager = $aliasManager;
+        $this->filesystem = $filesystem;
+    }
+
+    /**
+     * @internal
+     * @param string $filePath
+     * @return void
+     */
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
+    }
+
+    /**
+     * @internal
+     * @param string $className
+     * @return void
+     */
+    public function setClassName($className)
+    {
+        $this->className = $className;
     }
 
     /**
@@ -138,7 +158,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $compiler->addFunction($func, $statement);
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
-            throw new CompilerException("Function '" . $func->getName() . "' was defined more than one time (in the same file)", $statement);
+            throw new CompilerException(
+                sprintf("Function '%s' was defined more than one time (in the same file)", $func->getName()),
+                $statement
+            );
         }
         $this->functionDefinitions[$funcName] = $func;
     }
@@ -156,7 +179,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $normalizedPath = $this->filesystem->normalizePath($this->filePath);
 
         // TODO: JS => JSON
-        $compilePath = Zephir::VERSION . "/{$normalizedPath}.js";
+        $compilePath = "{$normalizedPath}.js";
         $zepRealPath = realpath($this->filePath);
 
         if ($this->filesystem->exists($compilePath)) {
@@ -531,7 +554,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         foreach ($this->functionDefinitions as $funcDef) {
             if ($funcDef->getNamespace() == null) {
                 $funcDef->setGlobal(true);
-                $funcDef->setNamespace($compiler->getConfig()->get('namespace'));
+                $funcDef->setNamespace($this->config->get('namespace'));
             }
         }
 
@@ -658,7 +681,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending class "%s"',
+                                $extendedClass,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             } else {
@@ -672,7 +703,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending interface "%s"',
+                                $extendedClass,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             }
@@ -691,7 +730,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending interface "%s"',
+                                $interface,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             }
@@ -934,7 +981,13 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 $name = $property['name'];
             }
 
-            $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
+            $docBlock = null;
+            if (isset($shortcut['docblock'])) {
+                $docBlock = $shortcut['docblock'];
+            } elseif (isset($property['docblock'])) {
+                $docBlock = $property['docblock'];
+            }
+
             $returnsType = [];
 
             if ($docBlock) {

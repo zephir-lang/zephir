@@ -377,7 +377,10 @@ class SymbolTable
                                         throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
-                                        $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", 'conditional-initialization', $statement);
+                                        $compilationContext->logger->warning(
+                                            "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
+                                            ['conditional-initialization', $statement]
+                                        );
                                     }
                                 } else {
                                     if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
@@ -387,7 +390,10 @@ class SymbolTable
                                             throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                         } else {
                                             $variable->enableDefaultAutoInitValue();
-                                            $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", 'conditional-initialization', $statement);
+                                            $compilationContext->logger->warning(
+                                                "Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration",
+                                                ['conditional-initialization', $statement]
+                                            );
                                         }
                                     }
                                 }

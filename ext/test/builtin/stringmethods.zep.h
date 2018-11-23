@@ -34,12 +34,20 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getCompareLocale);
 PHP_METHOD(Test_BuiltIn_StringMethods, getReversed);
 PHP_METHOD(Test_BuiltIn_StringMethods, getHtmlSpecialChars);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_camelize, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_builtin_stringmethods_camelize, 0, 1, IS_STRING, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_builtin_stringmethods_camelize, 0, 1, IS_STRING, NULL, 0)
+#endif
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_uncamelize, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_builtin_stringmethods_uncamelize, 0, 1, IS_STRING, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_builtin_stringmethods_uncamelize, 0, 1, IS_STRING, NULL, 0)
+#endif
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()

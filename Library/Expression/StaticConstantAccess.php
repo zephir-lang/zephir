@@ -173,7 +173,10 @@ class StaticConstantAccess
             case 'null':
                 break;
             default:
-                $compilationContext->logger->warning($constantDefinition->getName(), 'nonexistent-constant', $expression);
+                $compilationContext->logger->warning(
+                    $constantDefinition->getName(),
+                    ['nonexistent-constant', $expression]
+                );
                 return new CompiledExpression('null', null, $expression);
         }
 

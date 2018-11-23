@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\ArrayMerge;
-use Zephir\Support\TestCase;
 
 class ArrayMergeTest extends TestCase
 {

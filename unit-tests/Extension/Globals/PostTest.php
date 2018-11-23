@@ -11,8 +11,8 @@
 
 namespace Extension\Globals;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals\Post;
-use Zephir\Support\TestCase;
 
 class PostTest extends TestCase
 {

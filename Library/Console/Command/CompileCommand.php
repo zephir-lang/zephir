@@ -11,26 +11,74 @@
 
 namespace Zephir\Console\Command;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\Compiler;
 
 /**
  * Zephir\Console\Command\CompileCommand
  *
  * Compile a Zephir extension.
  */
-class CompileCommand extends ContainerAwareCommand implements DevelopmentModeAwareInterface, ZflagsAwareInterface
+final class CompileCommand extends Command
 {
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
+
+    private $compiler;
+
+    public function __construct(Compiler $compiler)
+    {
+        $this->compiler = $compiler;
+
+        parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setName('compile')
+            ->setDescription('Compile a Zephir extension')
+            ->setDefinition($this->createDefinition())
+            ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp());
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        // TODO: Move all the stuff from the compiler
+        $this->compiler->compile(
+            $this->isDevelopmentModeEnabled($input)
+        );
+
+        return 0;
+    }
+
+    protected function createDefinition()
+    {
+        return new InputDefinition(
+            [
+                new InputOption(
+                    'backend',
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Used backend to compile extension',
+                    'ZendEngine3'
+                ),
+            ]
+        );
+    }
 
     /**
      * {@inheritdoc}
      *
      * @return string
      */
-    public function getDevelopmentModeHelp()
+    protected function getDevelopmentModeHelp()
     {
         return <<<EOT
 Using <comment>--dev</comment> option will force compiling the extension in development mode
@@ -45,32 +93,5 @@ In some cases, we would like to get production ready extension even if the PHP b
 compiled in a debug configuration. Use <comment>--no-dev</comment> option to achieve this behavior.
 
 EOT;
-    }
-
-    protected function configure()
-    {
-        $this
-            ->setName('compile')
-            ->setDescription('Compile a Zephir extension')
-            ->addOption(
-                'backend',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Used backend to compile extension',
-                'ZendEngine3'
-            )
-            ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
-            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp());
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->compile(
-            $this->isDevelopmentModeEnabled($input)
-        );
-
-        return 0;
     }
 }

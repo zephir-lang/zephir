@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Instance;
-use Zephir\Support\TestCase;
 
 class InstanceTest extends TestCase
 {

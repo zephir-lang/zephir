@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Pregmatch;
-use Zephir\Support\TestCase;
 
 class PregmatchTest extends TestCase
 {

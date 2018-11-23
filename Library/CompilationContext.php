@@ -11,6 +11,8 @@
 
 namespace Zephir;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * CompilationContext
  *
@@ -179,7 +181,7 @@ class CompilationContext
     /**
      * Global logger
      *
-     * @var Logger
+     * @var LoggerInterface
      */
     public $logger;
 

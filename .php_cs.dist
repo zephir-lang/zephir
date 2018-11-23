@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+if (!file_exists(__DIR__.'/Library')) {
+    exit(0);
+}
+
 $header = <<<'EOF'
 This file is part of the Zephir.
 
@@ -61,35 +65,15 @@ return PhpCsFixer\Config::create()
         'no_trailing_whitespace' => true,
         'no_trailing_whitespace_in_comment' => true,
         'no_trailing_comma_in_singleline_array' => true,
-        'ordered_class_elements' => [
-            'order' => [
-                'use_trait',
-                'constant_public',
-                'constant_protected',
-                'constant_private',
-                'property_public',
-                'property_protected',
-                'property_private',
-                'construct',
-                'destruct',
-                'magic',
-                'phpunit',
-                'method_public',
-                'method_protected',
-                'method_private',
-            ]
-        ],
         'ordered_imports' => [
             'sortAlgorithm' => 'alpha',
         ],
         'phpdoc_add_missing_param_annotation' => [
             'only_untyped' => true,
         ],
-        'phpdoc_align' => ['align' => 'left'],
         'phpdoc_indent' => true,
         'phpdoc_no_access' => true,
         'phpdoc_no_package' => true,
-        'phpdoc_order' => true,
         'phpdoc_scalar' => true,
         'phpdoc_trim' => true,
         'phpdoc_types' => true,

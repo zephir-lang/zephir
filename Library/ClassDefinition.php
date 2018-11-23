@@ -393,7 +393,9 @@ class ClassDefinition
     }
 
     /**
-     * Calculate the dependency rank of the class based on its dependencies
+     * Calculate the dependency rank of the class based on its dependencies.
+     *
+     * @return ClassDefinition[]
      */
     public function getDependencies()
     {

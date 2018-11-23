@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals;
-use Zephir\Support\TestCase;
 
 /**
  * Extension\GlobalsTest

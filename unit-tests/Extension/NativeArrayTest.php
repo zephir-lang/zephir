@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\NativeArray;
-use Zephir\Support\TestCase;
 
 class NativeArrayTest extends TestCase
 {

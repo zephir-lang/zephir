@@ -12,8 +12,8 @@
 namespace Extension\TypeHinting;
 
 use PHPUnit\Framework\SkippedTestError;
+use PHPUnit\Framework\TestCase;
 use TestConcreteClass;
-use Zephir\Support\TestCase;
 
 class AbstractTest extends TestCase
 {

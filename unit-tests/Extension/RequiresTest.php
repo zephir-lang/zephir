@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Requires;
-use Zephir\Support\TestCase;
 
 class RequiresTest extends TestCase
 {

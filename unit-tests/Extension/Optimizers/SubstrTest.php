@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\Substr;
-use Zephir\Support\TestCase;
 
 class SubstrTest extends TestCase
 {

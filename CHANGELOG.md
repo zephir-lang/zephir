@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- The cache directory, formerly known as `.temp`, used for temporary operations was moved to
+  the new `.zephir` directory. The algorithm for calculating cache path is as follows:
+  `%CWD%/.zephir/%HASH%/cache/IR` where `%CWD%` is the current working directory and `%HASH%`
+  means a hash calculated from the current Zephir version, environment and configuration
+- The compiler's messages was divided into streams. Thus, now it is possible to redirect compiler's
+  output as follows: `zephir generate 2> errors.log 1> /dev/null`
+
 ### Fixed
 - Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
 

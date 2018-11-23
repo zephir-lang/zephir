@@ -11,8 +11,9 @@
 
 namespace Extension\BuiltIn;
 
+use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\TestCase;
 use Test\BuiltIn\StringMethods;
-use Zephir\Support\TestCase;
 
 class StringMethodTest extends TestCase
 {
@@ -31,14 +32,16 @@ class StringMethodTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage The second argument passed to the camelize() must be a string containing at least one character
      * @param mixed $delimiter
      */
     public function testCamelizeWrongSecondParam($delimiter)
     {
-        $t = new StringMethods();
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'The second argument passed to the camelize() must be a string containing at least one character'
+        );
 
+        $t = new StringMethods();
         $t->camelize('CameLiZe', $delimiter);
     }
 
@@ -57,12 +60,15 @@ class StringMethodTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
      * @param mixed $delimiter
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
     {
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'Second argument passed to the uncamelize() must be a string of one character'
+        );
+
         $t = new StringMethods();
 
         $t->uncamelize('CameLiZe', $delimiter);
@@ -140,7 +146,10 @@ class StringMethodTest extends TestCase
     public function testParsers()
     {
         $t = new StringMethods();
+
+        // TODO: Do we still need this?
         // $this->assertSame(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
+
         $this->assertSame(['foo', 'bar', 'baz'], $t->getParsedCsv('foo,bar,"baz"'));
     }
 

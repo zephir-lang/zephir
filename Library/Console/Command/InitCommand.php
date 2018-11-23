@@ -11,37 +11,46 @@
 
 namespace Zephir\Console\Command;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\BaseBackend;
+use Zephir\Compiler;
+use Zephir\Config;
 
 /**
  * Zephir\Console\Command\InitCommand
  *
  * Initializes a Zephir extension.
  */
-class InitCommand extends ContainerAwareCommand
+final class InitCommand extends Command
 {
+    private $compiler;
+    private $backend;
+    private $config;
+    private $logger;
+
+    public function __construct(Compiler $compiler, BaseBackend $backend, Config $config, LoggerInterface $logger)
+    {
+        $this->compiler = $compiler;
+        $this->backend = $backend;
+        $this->config = $config;
+        $this->logger = $logger;
+
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
             ->setName('init')
             ->setDescription('Initializes a Zephir extension')
-            ->addArgument(
-                'namespace',
-                InputArgument::REQUIRED,
-                'The extension namespace'
-            )
-            ->addOption(
-                'backend',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Used backend to create extension',
-                'ZendEngine3'
-            );
+            ->setDefinition($this->createDefinition());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -50,8 +59,7 @@ class InitCommand extends ContainerAwareCommand
 
         // Tell the user the name could be reserved by another extension
         if (\extension_loaded($namespace)) {
-            // TODO: Replace by $output->writeln()
-            $this->logger->output('This extension can have conflicts with an existing loaded extension');
+            $this->logger->error('This extension can have conflicts with an existing loaded extension');
         }
 
         $this->config->set('namespace', $namespace);
@@ -72,9 +80,29 @@ class InitCommand extends ContainerAwareCommand
         }
 
         // Copy the latest kernel files
-        $this->recursiveProcess($this->getContainer()->get(BaseBackend::class)->getInternalKernelPath(), 'ext/kernel');
+        $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
 
         return 0;
+    }
+
+    protected function createDefinition()
+    {
+        return new InputDefinition(
+            [
+                new InputArgument(
+                    'namespace',
+                    InputArgument::REQUIRED,
+                    'The extension namespace'
+                ),
+                new InputOption(
+                    'backend',
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Used backend to create extension',
+                    'ZendEngine3'
+                ),
+            ]
+        );
     }
 
     private function sanitizeNamespace($namespace)
@@ -112,7 +140,7 @@ class InitCommand extends ContainerAwareCommand
         foreach ($iterator as $item) {
             $pathName = $item->getPathname();
             if (!\is_readable($pathName)) {
-                $this->logger->output('File is not readable :' . $pathName);
+                $this->logger->error('File is not readable :' . $pathName);
                 continue;
             }
 

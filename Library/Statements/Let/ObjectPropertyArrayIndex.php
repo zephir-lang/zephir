@@ -104,7 +104,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
             if ($indexVariable->getType() == 'variable') {
                 if ($indexVariable->hasDifferentDynamicType(['undefined', 'int', 'string'])) {
-                    $compilationContext->logger->warning('Possible attempt to use non string/long dynamic variable as array index', 'invalid-array-offset', $statement);
+                    $compilationContext->logger->warning(
+                        'Possible attempt to use non string/long dynamic variable as array index',
+                        ['invalid-array-offset', $statement]
+                    );
                 }
             }
         }

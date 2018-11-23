@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Statements;
-use Zephir\Support\TestCase;
 
 class StatementsTest extends TestCase
 {

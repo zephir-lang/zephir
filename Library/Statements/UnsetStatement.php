@@ -70,7 +70,10 @@ class UnsetStatement extends StatementAbstract
         }
 
         if ($variable->hasDifferentDynamicType(['undefined', 'array', 'object', 'null'])) {
-            $compilationContext->logger->warning('Possible attempt to use non array/object in unset operator', 'non-valid-unset', $expression['left']);
+            $compilationContext->logger->warning(
+                'Possible attempt to use non array/object in unset operator',
+                ['non-valid-unset', $expression['left']]
+            );
         }
 
         $compilationContext->backend->arrayUnset($variable, $exprIndex, $flags, $compilationContext);

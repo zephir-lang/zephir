@@ -11,15 +11,12 @@
 
 namespace Zephir;
 
-use Zephir\Di\Singleton;
 use Zephir\Fcall\FcallAwareInterface;
 use Zephir\Fcall\FcallManagerInterface;
 
 abstract class BaseBackend implements FcallAwareInterface
 {
-    /**
-     * @var Config
-     */
+    /** @var Config */
     protected $config;
 
     /**
@@ -28,19 +25,27 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     protected $name;
 
-    /**
-     * @var FcallManagerInterface
-     */
+    /** @var FcallManagerInterface */
     protected $fcallManager;
+
+    /** @var string */
+    protected $kernelsPath;
+
+    /** @var string */
+    protected $templatesPath;
 
     /**
      * BaseBackend constructor
      *
      * @param Config $config
+     * @param string $kernelsPath
+     * @param string $templatesPath
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, $kernelsPath, $templatesPath)
     {
         $this->config = $config;
+        $this->kernelsPath = $kernelsPath;
+        $this->templatesPath = $templatesPath;
     }
 
     /**
@@ -62,7 +67,7 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getInternalKernelPath()
     {
-        return Singleton::getDefault()->get('environment')->getKernelsPath($this->name);
+        return "$this->kernelsPath/{$this->name}";
     }
 
     /**
@@ -72,7 +77,7 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getInternalTemplatePath()
     {
-        return Singleton::getDefault()->get('environment')->getTemplatesPath($this->name);
+        return "$this->templatesPath/{$this->name}";
     }
 
     /**
@@ -83,14 +88,14 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getTemplateFileContents($filename)
     {
-        $templatepath = rtrim($this->config->get('templatepath', 'backend'), '\\/');
+        $templatePath = rtrim($this->config->get('templatepath', 'backend'), '\\/');
         if (empty($templatepath)) {
-            $templatepath = Singleton::getDefault()->get('environment')->getTemplatesPath();
+            $templatePath = $this->templatesPath;
         }
 
-        $filepath = $templatepath . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . $filename;
-
-        return file_get_contents($filepath);
+        return file_get_contents(
+            "{$templatePath}/{$this->name}/{$filename}"
+        );
     }
 
     /**

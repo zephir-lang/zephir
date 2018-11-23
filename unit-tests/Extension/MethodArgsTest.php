@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\MethodArgs;
-use Zephir\Support\TestCase;
 
 class MethodArgsTest extends TestCase
 {
@@ -21,20 +21,14 @@ class MethodArgsTest extends TestCase
         $t = new MethodArgs;
         $callback = function () {
         };
-        $t->setCallable($callback);
 
+        $t->setCallable($callback);
         $this->assertSame($callback, $t->a);
 
         $t->setCallableStrict($callback);
-
         $this->assertSame($callback, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setCallableStrict(true);
     }
@@ -45,19 +39,12 @@ class MethodArgsTest extends TestCase
         $obj = new \stdClass;
 
         $t->setObject($obj);
-
         $this->assertSame($obj, $t->a);
 
         $t->setObjectStrict($obj);
-
         $this->assertSame($obj, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setObjectStrict(true);
     }
@@ -65,16 +52,11 @@ class MethodArgsTest extends TestCase
     public function testResource()
     {
         $t = new MethodArgs;
-        $t->setResourceStrict(STDIN);
 
+        $t->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setResourceStrict(true);
     }

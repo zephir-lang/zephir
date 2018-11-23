@@ -11,9 +11,9 @@
 
 namespace Extension\Properties;
 
+use PHPUnit\Framework\TestCase;
 use Test\Properties\App;
 use Test\Properties\StaticPrivateProperties;
-use Zephir\Support\TestCase;
 
 class StaticPrivatePropertiesTest extends TestCase
 {

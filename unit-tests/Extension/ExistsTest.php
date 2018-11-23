@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Exists;
-use Zephir\Support\TestCase;
 
 class ExistsTest extends TestCase
 {

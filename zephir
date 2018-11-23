@@ -10,23 +10,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir;
-
 use Zephir\Console\Application;
-use function class_exists;
-use function fwrite;
-use const PHP_EOL;
-use const STDERR;
+use Zephir\DependencyInjection\ContainerFactory;
 
-require_once __DIR__ . '/Library/autoload.php';
-
-if (class_exists('Composer\Autoload\ClassLoader', false) == false) {
-    fwrite(STDERR,'Unable to find the Composer autoloader.' . PHP_EOL);
-
-    exit(1);
-}
-
+require __DIR__ . '/Library/autoload.php';
 require __DIR__ . '/Library/bootstrap.php';
 
-$app = new Application(__DIR__);
-$app->run();
+$container = (new ContainerFactory)->create();
+
+$application = $container->get(Application::class);
+$application->run();

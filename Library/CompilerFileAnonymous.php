@@ -11,6 +11,8 @@
 
 namespace Zephir;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Zephir\Compiler\FileInterface;
 
 /**
@@ -19,47 +21,38 @@ use Zephir\Compiler\FileInterface;
  * This class represents an anonymous file created to dump
  * the code produced by an internal closure
  */
-class CompilerFileAnonymous implements FileInterface
+final class CompilerFileAnonymous implements FileInterface
 {
-    /**
-     * @var string
-     */
+    use LoggerAwareTrait;
+
+    /** @var string */
     protected $namespace;
 
+    /** @var string */
     protected $compiledFile;
 
+    /** @var bool */
     protected $external = false;
 
-    /**
-     * @var ClassDefinition
-     */
+    /** @var ClassDefinition */
     protected $classDefinition;
 
-    protected $headerCBlocks;
+    protected $headerCBlocks = [];
 
-    /**
-     * @var Config
-     */
-    protected $config = null;
-
-    /**
-     * @var Logger
-     */
-    protected $logger = null;
+    /** @var Config */
+    protected $config;
 
     /**
      * CompilerFileAnonymous constructor
      *
      * @param ClassDefinition $classDefinition
      * @param Config $config
-     * @param Logger $logger
      */
-    public function __construct(ClassDefinition $classDefinition, Config $config, Logger $logger)
+    public function __construct(ClassDefinition $classDefinition, Config $config)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
-        $this->logger = $logger;
-        $this->headerCBlocks = [];
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -95,10 +88,10 @@ class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the class/interface contained in the file
      *
-     * @param ClassDefinition $classDefinition
      * @param CompilationContext $compilationContext
+     * @throws Exception
      */
-    public function compileClass(ClassDefinition $classDefinition, CompilationContext $compilationContext)
+    private function compileClass(CompilationContext $compilationContext)
     {
         $classDefinition = $this->classDefinition;
 
@@ -148,6 +141,7 @@ class CompilerFileAnonymous implements FileInterface
      *
      * @param Compiler $compiler
      * @param StringsManager $stringsManager
+     * @throws Exception
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
     {
@@ -197,11 +191,9 @@ class CompilerFileAnonymous implements FileInterface
 
         $codePrinter->outputBlankLine();
 
-        $classDefinition = $this->classDefinition;
+        $this->compileClass($compilationContext);
 
-        $this->compileClass($classDefinition, $compilationContext);
-
-        $completeName = $classDefinition->getCompleteName();
+        $completeName = $this->classDefinition->getCompleteName();
 
         $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
 
@@ -259,5 +251,17 @@ class CompilerFileAnonymous implements FileInterface
     public function getCompiledFile()
     {
         return $this->compiledFile;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Only implemented to satisfy the Zephir\Compiler\FileInterface interface.
+     *
+     * @param Compiler $compiler
+     */
+    public function preCompile(Compiler $compiler)
+    {
+        // nothing to do
     }
 }

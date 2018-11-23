@@ -11,22 +11,24 @@
 
 namespace Extension\Oo;
 
+use PHPUnit\Framework\TestCase;
 use Test\Oo\DeprecatedMethods;
-use Zephir\Support\TestCase;
 
 class DeprecatedMethodsTest extends TestCase
 {
     /**
-     * @expectedException \PHPUnit_Framework_Error_Deprecated
+     * @group legacy
+     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
     public function testPublicMethodThrowsDeprecatedWarning()
     {
         $test = new DeprecatedMethods;
-        $test->deprecatedMethod();
+        $test->publicDeprecated();
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Deprecated
+     * @group legacy
+     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
     public function testPrivateMethodThrowsDeprecatedWarning()
     {

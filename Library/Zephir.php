@@ -18,6 +18,8 @@ final class Zephir
 {
     const VERSION = '0.11.7-$Id$';
 
+    const RELEASE_DATE = '$release-date$';
+
     const LOGO = <<<'ASCII'
  _____              __    _
 /__  /  ___  ____  / /_  (_)____

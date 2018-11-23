@@ -11,18 +11,13 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TryTest extends TestCase
 {
     public function testThrow1()
     {
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception', 'error');
-        } else {
-            $this->expectException('\Exception', 'error');
-        }
+        $this->expectException('\Exception');
 
         $t = new \Test\TryTest();
         $t->testThrow1();
@@ -30,12 +25,7 @@ class TryTest extends TestCase
 
     public function testThrow2()
     {
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception', 'error');
-        } else {
-            $this->expectException('\Exception', 'error');
-        }
+        $this->expectException('\Exception');
 
         $t = new \Test\TryTest();
         $t->testThrow2();

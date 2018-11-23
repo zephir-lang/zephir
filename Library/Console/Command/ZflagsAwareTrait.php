@@ -17,12 +17,11 @@ namespace Zephir\Console\Command;
 trait ZflagsAwareTrait
 {
     /**
-     * {@inheritdoc}
+     * Returns ZFLAGS help.
      *
-     * @see ZflagsAwareInterface::getZflagsHelp()
      * @return string
      */
-    public function getZflagsHelp()
+    protected function getZflagsHelp()
     {
         return <<<EOT
 Common flags are:
