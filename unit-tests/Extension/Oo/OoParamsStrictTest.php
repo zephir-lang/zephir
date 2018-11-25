@@ -11,27 +11,26 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Extension\ZE3\Oo;
+namespace Extension\Oo;
 
 use PHPUnit\Framework\TestCase;
+use Test\Oo\OoParams;
 
 /**
- * Extension\ZE3\Oo\OoParamsStrictTest.
- *
- * TODO: Move this test to Extension\Oo\OoParamsStrictTest after dropping PHP 5.x support
+ * @group ze-3
  */
 class OoParamsStrictTest extends TestCase
 {
     public function testSetStrictAgeSuccess()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         $this->assertSame($t->setStrictAge(17), 17);
     }
 
     public function testSetStrictAgeException1()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             $except = '\InvalidArgumentException';
@@ -48,7 +47,7 @@ class OoParamsStrictTest extends TestCase
 
     public function testSetStrictAgeException2()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             $except = '\InvalidArgumentException';
@@ -65,14 +64,14 @@ class OoParamsStrictTest extends TestCase
 
     public function testSetStrictAverageSuccess()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         $this->assertSame($t->setStrictAverage(17.1), 17.1);
     }
 
     public function testSetStrictAverageException2()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             $except = '\InvalidArgumentException';
@@ -89,13 +88,13 @@ class OoParamsStrictTest extends TestCase
 
     public function testSetStrictNameSuccess()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
         $this->assertSame($t->setStrictName('peter'), 'peter');
     }
 
     public function testSetStrictNameException()
     {
-        $t = new \Test\Oo\OoParams();
+        $t = new OoParams();
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
             $except = '\InvalidArgumentException';

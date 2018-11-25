@@ -11,15 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Extension\ZE3;
+namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Test\Mcall;
 
 /**
- * Extension\ZE3\MCallTest.
- *
- * TODO: Move this test to Extension\MCallTest after dropping PHP 5.x support
+ * @group ze-3
  */
 class MCallTest extends TestCase
 {
