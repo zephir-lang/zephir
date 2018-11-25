@@ -49,6 +49,7 @@ class FetchTest extends TestCase
 
     /**
      * @dataProvider fieldProvider
+     *
      * @param mixed $input
      * @param mixed $expected
      * @param mixed $has
@@ -61,7 +62,7 @@ class FetchTest extends TestCase
 
     public function fieldProvider()
     {
-        /**
+        /*
          * input, expected, exist
          */
         return [

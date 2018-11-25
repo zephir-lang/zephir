@@ -32,7 +32,7 @@ final class Application extends BaseApplication
      */
     public function getHelp()
     {
-        return Zephir::LOGO . parent::getHelp();
+        return Zephir::LOGO.parent::getHelp();
     }
 
     /**
@@ -74,9 +74,11 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @throws \Exception|\Throwable
+     *
      * @return int
      */
     public function doRun(InputInterface $input, OutputInterface $output)

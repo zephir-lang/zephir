@@ -20,7 +20,7 @@ use function Zephir\escape_class;
 use function Zephir\fqcn;
 
 /**
- * InstanceOf
+ * InstanceOf.
  *
  * Checks if a variable is an instance of a class
  */
@@ -29,8 +29,10 @@ class InstanceOfOperator extends BaseOperator
     /**
      * @param $expression
      * @param CompilationContext $context
+     *
      * @throws CompilerException
      * @throws \Zephir\Exception
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $context)
@@ -38,7 +40,7 @@ class InstanceOfOperator extends BaseOperator
         $left = new Expression($expression['left']);
         $resolved = $left->compile($context);
 
-        if ($resolved->getType() != 'variable') {
+        if ('variable' != $resolved->getType()) {
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
@@ -60,11 +62,11 @@ class InstanceOfOperator extends BaseOperator
                     $classEntry = $classDefinition->getClassEntry($context);
                 } else {
                     if (!class_exists($className, false)) {
-                        $code = 'SL("' . $resolvedVariable . '")';
+                        $code = 'SL("'.$resolvedVariable.'")';
                     } else {
                         $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                         if (!$classEntry) {
-                            $code = 'SL("' . $resolvedVariable . '")';
+                            $code = 'SL("'.$resolvedVariable.'")';
                         }
                     }
                 }
@@ -72,7 +74,7 @@ class InstanceOfOperator extends BaseOperator
             default:
                 switch ($resolved->getType()) {
                     case 'variable':
-                        if ($resolvedVariable == 'this') {
+                        if ('this' == $resolvedVariable) {
                             /**
                              * @todo It's an optimization variant, but maybe we need to get entry in runtime?
                              */
@@ -80,9 +82,10 @@ class InstanceOfOperator extends BaseOperator
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
                             $className = $context->getFullName($resolvedVariable);
 
-                            if ($className == 'Traversable') {
+                            if ('Traversable' == $className) {
                                 $symbol = $context->backend->getVariableCode($symbolVariable);
-                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbol . ' TSRMLS_CC)', $expression);
+
+                                return new CompiledExpression('bool', 'zephir_zval_is_traversable('.$symbol.' TSRMLS_CC)', $expression);
                             }
 
                             if ($context->compiler->isClass($className)) {
@@ -94,17 +97,17 @@ class InstanceOfOperator extends BaseOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("' . trim(escape_class($className), '\\') . '")';
+                                        $code = 'SL("'.trim(escape_class($className), '\\').'")';
                                     } else {
                                         $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                                         if (!$classEntry) {
-                                            $code = 'SL("' . trim(escape_class($className), '\\') . '")';
+                                            $code = 'SL("'.trim(escape_class($className), '\\').'")';
                                         }
                                     }
                                 }
                             }
                         } else {
-                            $code = 'Z_STRVAL_P(' . $resolvedVariable . '), Z_STRLEN_P(' . $resolvedVariable . ')';
+                            $code = 'Z_STRVAL_P('.$resolvedVariable.'), Z_STRLEN_P('.$resolvedVariable.')';
                         }
                         break;
 
@@ -114,8 +117,8 @@ class InstanceOfOperator extends BaseOperator
                         $tempVariable = $context->symbolTable->getTempVariableForWrite('string', $context);
                         $tempVariable->setMustInitNull(true);
                         $tempVariableName = $tempVariable->getName();
-                        $context->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
-                        $code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
+                        $context->codePrinter->output('zephir_get_strval('.$tempVariableName.', '.$resolvedVariable.');');
+                        $code = 'Z_STRVAL_P('.$tempVariableName.'), Z_STRLEN_P('.$tempVariableName.')';
                         break;
 
                     default:
@@ -127,9 +130,9 @@ class InstanceOfOperator extends BaseOperator
         $context->headersManager->add('kernel/object');
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($code)) {
-            return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbol . ', ' . $code . ' TSRMLS_CC)', $expression);
+            return new CompiledExpression('bool', 'zephir_is_instance_of('.$symbol.', '.$code.' TSRMLS_CC)', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_instance_of_ev(' . $symbol . ', ' . $classEntry . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.' TSRMLS_CC)', $expression);
     }
 }

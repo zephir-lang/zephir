@@ -12,19 +12,19 @@
 namespace Zephir;
 
 /**
- * FunctionDefinition
+ * FunctionDefinition.
  *
  * Represents a function (method)
  */
 class FunctionDefinition extends ClassMethod
 {
     /**
-     * The namespace of the function
+     * The namespace of the function.
      */
     private $namespace;
 
     /**
-     * Whether the function is declared in a global or namespaced scope
+     * Whether the function is declared in a global or namespaced scope.
      *
      * @var bool
      */
@@ -40,6 +40,7 @@ class FunctionDefinition extends ClassMethod
 
         if ($returnType['void']) {
             $this->void = true;
+
             return;
         }
 
@@ -56,22 +57,22 @@ class FunctionDefinition extends ClassMethod
                     $types[$returnTypeItem['data-type']] = $returnTypeItem;
                 }
             }
-            if (count($castTypes)) {
+            if (\count($castTypes)) {
                 $types['object'] = [];
                 $this->returnClassTypes = $castTypes;
             }
-            if (count($types)) {
+            if (\count($types)) {
                 $this->returnTypes = $types;
             }
         }
     }
 
     /**
-     * Get the internal name used in generated C code
+     * Get the internal name used in generated C code.
      */
     public function getInternalName()
     {
-        return ($this->isGlobal() ? 'g_' : 'f_') . str_replace('\\', '_', $this->namespace) . '_' . $this->getName();
+        return ($this->isGlobal() ? 'g_' : 'f_').str_replace('\\', '_', $this->namespace).'_'.$this->getName();
     }
 
     public function isGlobal()

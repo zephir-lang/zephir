@@ -16,7 +16,7 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 
 /**
- * WhileStatement
+ * WhileStatement.
  *
  * While statement, the same as in PHP/C
  */
@@ -30,29 +30,29 @@ class WhileStatement extends StatementAbstract
         $exprRaw = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * Compound conditions can be evaluated in a single line of the C-code
          */
         $codePrinter->output('while (1) {');
 
         $codePrinter->increaseLevel();
 
-        /**
+        /*
          * Variables are initialized in a different way inside loops
          */
-        $compilationContext->insideCycle++;
+        ++$compilationContext->insideCycle;
 
         $expr = new EvalExpression();
         $condition = $expr->optimize($exprRaw, $compilationContext);
         $this->evalExpression = $expr;
 
-        $codePrinter->output('if (!(' . $condition . ')) {');
-        $codePrinter->output("\t" . 'break;');
+        $codePrinter->output('if (!('.$condition.')) {');
+        $codePrinter->output("\t".'break;');
         $codePrinter->output('}');
 
         $codePrinter->decreaseLevel();
 
-        /**
+        /*
          * Compile statements in the 'while' block
          */
         if (isset($this->statement['statements'])) {
@@ -61,10 +61,10 @@ class WhileStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
-        /**
+        /*
          * Restore the cycle counter
          */
-        $compilationContext->insideCycle--;
+        --$compilationContext->insideCycle;
 
         $codePrinter->output('}');
     }

@@ -22,25 +22,27 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\StatementsBlock;
 
 /**
- * ClosureArrow
+ * ClosureArrow.
  *
  * Creates an anonymous function within the extension simulating a closure using the arrow syntax
  */
 class ClosureArrow extends Closure
 {
     /**
-     * Creates a closure
+     * Creates a closure.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
-            self::$id . '__closure'
+            self::$id.'__closure'
         );
 
         $classDefinition->setIsFinal(true);
@@ -51,7 +53,7 @@ class ClosureArrow extends Closure
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
         /**
-         * Builds parameters using the only parameter available
+         * Builds parameters using the only parameter available.
          */
         $parameters = new ClassMethodParameters([
             [
@@ -102,7 +104,7 @@ class ClosureArrow extends Closure
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
-        self::$id++;
+        ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

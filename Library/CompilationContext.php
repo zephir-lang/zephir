@@ -14,7 +14,7 @@ namespace Zephir;
 use Psr\Log\LoggerInterface;
 
 /**
- * CompilationContext
+ * CompilationContext.
  *
  * This class encapsulates important entities required during compilation
  */
@@ -26,105 +26,105 @@ class CompilationContext
     public $eventsManager;
 
     /**
-     * Compiler
+     * Compiler.
      *
      * @var Compiler
      */
     public $compiler;
 
     /**
-     * Current code printer
+     * Current code printer.
      *
      * @var CodePrinter
      */
     public $codePrinter;
 
     /**
-     * Whether the current method is static or not
+     * Whether the current method is static or not.
      *
      * @var bool
      */
     public $staticContext;
 
     /**
-     * Code printer for the header
+     * Code printer for the header.
      *
      * @var CodePrinter
      */
     public $headerPrinter;
 
     /**
-     * Current symbol table
+     * Current symbol table.
      *
      * @var SymbolTable
      */
     public $symbolTable;
 
     /**
-     * Type inference data
+     * Type inference data.
      *
      * @var \Zephir\Passes\StaticTypeInference
      */
     public $typeInference;
 
     /**
-     * Represents the class currently being compiled
+     * Represents the class currently being compiled.
      *
      * @var ClassDefinition
      */
     public $classDefinition;
 
     /**
-     * Current method or function that being compiled
+     * Current method or function that being compiled.
      *
      * @var ClassMethod|FunctionDefinition
      */
     public $currentMethod;
 
     /**
-     * Methods warm-up
+     * Methods warm-up.
      *
      * @var MethodCallWarmUp
      */
     public $methodWarmUp;
 
     /**
-     * Represents the c-headers added to the file
+     * Represents the c-headers added to the file.
      *
      * @var HeadersManager
      */
     public $headersManager;
 
     /**
-     * Represents interned strings and concatenations made in the project
+     * Represents interned strings and concatenations made in the project.
      *
      * @var StringsManager
      */
     public $stringsManager;
 
     /**
-     * Tells if the the compilation is being made inside a cycle/loop
+     * Tells if the the compilation is being made inside a cycle/loop.
      *
      * @var int
      */
     public $insideCycle = 0;
 
     /**
-     * Tells if the the compilation is being made inside a try/catch block
+     * Tells if the the compilation is being made inside a try/catch block.
      *
      * @var int
      */
     public $insideTryCatch = 0;
 
     /**
-     * Tells if the the compilation is being made inside a switch
+     * Tells if the the compilation is being made inside a switch.
      *
      * @var int
      */
     public $insideSwitch = 0;
 
     /**
-     * Current cycle/loop block
+     * Current cycle/loop block.
      *
      * @var array
      */
@@ -132,71 +132,73 @@ class CompilationContext
 
     /**
      * The current branch, variables declared in conditional branches
-     * must be market if they're used out of those branches
+     * must be market if they're used out of those branches.
      */
     public $currentBranch = 0;
 
     /**
-     * Global consecutive for try/catch blocks
+     * Global consecutive for try/catch blocks.
      *
      * @var int
      */
     public $currentTryCatch = 0;
 
     /**
-     * Helps to create graphs of conditional/jump branches in a specific method
+     * Helps to create graphs of conditional/jump branches in a specific method.
      *
      * @var BranchManager
      */
     public $branchManager;
 
     /**
-     * Manages both function and method call caches
+     * Manages both function and method call caches.
      *
      * @var CacheManager
      */
     public $cacheManager;
 
     /**
-     * Manages class renamings using keyword 'use'
+     * Manages class renamings using keyword 'use'.
      *
      * @var AliasManager
      */
     public $aliasManager;
 
     /**
-     * Function Cache
+     * Function Cache.
      *
      * @var Cache\FunctionCache
      */
     public $functionCache;
 
     /**
-     * Global config
+     * Global config.
      *
      * @var Config
      */
     public $config;
 
     /**
-     * Global logger
+     * Global logger.
      *
      * @var LoggerInterface
      */
     public $logger;
 
     /**
-     * The current backend
+     * The current backend.
      *
      * @var BaseBackend
      */
     public $backend;
 
     /**
-     * Transform class/interface name to FQN format
+     * Transform class/interface name to FQN format.
+     *
      * @todo WHY WHY :'(
      *
      * @param string $className
+     *
      * @return string
      */
     public function getFullName($className)

@@ -14,7 +14,7 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * LocalContextPass
+ * LocalContextPass.
  *
  * This pass tries to check whether variables only do exist in the local context of the method block
  * or if they're used externally which will unallow variables to be placed in the stack
@@ -39,7 +39,7 @@ class LocalContextPass
     protected $lastUnsetLine = false;
 
     /**
-     * Do the compilation pass
+     * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
@@ -51,13 +51,13 @@ class LocalContextPass
     public function declareVariables(array $statement)
     {
         if (isset($statement['data-type'])) {
-            if ($statement['data-type'] != 'variable') {
+            if ('variable' != $statement['data-type']) {
                 return;
             }
         }
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
+                if ('string' == $variable['expr']['type'] || 'empty-array' == $variable['expr']['type'] || 'array' == $variable['expr']['type']) {
                     $this->variables[$variable['variable']] = false;
                     continue;
                 }
@@ -69,7 +69,7 @@ class LocalContextPass
     }
 
     /**
-     * Marks a variable to mandatory be stored in the heap
+     * Marks a variable to mandatory be stored in the heap.
      *
      * @param string $variable
      */
@@ -81,10 +81,10 @@ class LocalContextPass
     }
 
     /**
-     * Marks the latest use/read of a variable
+     * Marks the latest use/read of a variable.
      *
      * @param string $variable
-     * @param array $node
+     * @param array  $node
      */
     public function markLastUse($variable, $node)
     {
@@ -94,7 +94,7 @@ class LocalContextPass
     }
 
     /**
-     * Asks the local context information whether a variable can be stored in the stack instead of the heap
+     * Asks the local context information whether a variable can be stored in the stack instead of the heap.
      *
      * @param string $variable
      *
@@ -112,23 +112,24 @@ class LocalContextPass
     }
 
     /**
-     * Increase the number of mutations a variable has inside a statement block
+     * Increase the number of mutations a variable has inside a statement block.
      *
      * @param string $variable
      */
     public function increaseMutations($variable)
     {
         if (isset($this->mutations[$variable])) {
-            $this->mutations[$variable]++;
+            ++$this->mutations[$variable];
         } else {
             $this->mutations[$variable] = 1;
         }
     }
 
     /**
-     * Returns the number of assignment instructions that mutated a variable
+     * Returns the number of assignment instructions that mutated a variable.
      *
      * @param string $variable
+     *
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -141,9 +142,10 @@ class LocalContextPass
     }
 
     /**
-     * Returns the latest line where a variable was read
+     * Returns the latest line where a variable was read.
      *
      * @param string $variable
+     *
      * @return int
      */
     public function getLastVariableUseLine($variable)
@@ -151,11 +153,12 @@ class LocalContextPass
         if (isset($this->uses[$variable])) {
             return $this->uses[$variable];
         }
+
         return 0;
     }
 
     /**
-     * Returns the line where the latest call in the method was made
+     * Returns the line where the latest call in the method was made.
      *
      * @return int
      */
@@ -165,7 +168,7 @@ class LocalContextPass
     }
 
     /**
-     * Returns the line where the latest unset operation was made
+     * Returns the line where the latest unset operation was made.
      *
      * @return int
      */
@@ -221,8 +224,8 @@ class LocalContextPass
                             break;
 
                         case 'constant':
-                            if (defined($assignment['expr']['value'])) {
-                                if (gettype(constant($assignment['expr']['value'])) == 'string') {
+                            if (\defined($assignment['expr']['value'])) {
+                                if ('string' == \gettype(\constant($assignment['expr']['value']))) {
                                     $this->markVariableNoLocal($assignment['variable']);
                                 }
                             }
@@ -280,7 +283,7 @@ class LocalContextPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] == 'variable') {
+                if ('variable' == $parameter['parameter']['type']) {
                     $this->markVariableNoLocal($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -292,7 +295,7 @@ class LocalContextPass
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            if ($item['value']['type'] == 'variable') {
+            if ('variable' == $item['value']['type']) {
                 $this->markVariableNoLocal($item['value']['value']);
             } else {
                 $this->passExpression($item['value']);
@@ -304,7 +307,7 @@ class LocalContextPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] == 'variable') {
+                if ('variable' == $parameter['parameter']['type']) {
                     $this->markVariableNoLocal($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -339,7 +342,7 @@ class LocalContextPass
                 break;
 
             case 'reference':
-                if ($expression['left']['type'] == 'variable') {
+                if ('variable' == $expression['left']['type']) {
                     $this->markVariableNoLocal($expression['left']['value']);
                 }
                 break;
@@ -380,9 +383,9 @@ class LocalContextPass
             case 'mcall':
             case 'fcall':
             case 'scall':
-                if ($expression['type'] == 'mcall') {
+                if ('mcall' == $expression['type']) {
                     if (isset($expression['variable'])) {
-                        if ($expression['variable']['type'] == 'variable') {
+                        if ('variable' == $expression['variable']['type']) {
                             $this->markVariableNoLocal($expression['variable']['value']);
                         }
                     }
@@ -567,9 +570,9 @@ class LocalContextPass
                 case 'scall':
                 case 'fcall':
                 case 'require':
-                    if ($statement['expr']['type'] == 'mcall') {
+                    if ('mcall' == $statement['expr']['type']) {
                         if (isset($statement['expr']['variable'])) {
-                            if ($statement['expr']['variable']['type'] == 'variable') {
+                            if ('variable' == $statement['expr']['variable']['type']) {
                                 $this->markVariableNoLocal($statement['expr']['variable']['value']);
                             }
                         }
@@ -579,15 +582,15 @@ class LocalContextPass
                     break;
 
                 case 'unset':
-                    if ($statement['expr']['type'] == 'array-access') {
-                        if ($statement['expr']['left']['type'] == 'variable') {
+                    if ('array-access' == $statement['expr']['type']) {
+                        if ('variable' == $statement['expr']['left']['type']) {
                             $this->markVariableNoLocal($statement['expr']['left']['value']);
                             $this->increaseMutations($statement['expr']['left']['value']);
                         }
                     } else {
-                        if ($statement['expr']['type'] == 'list') {
-                            if ($statement['expr']['left']['type'] == 'array-access') {
-                                if ($statement['expr']['left']['left']['type'] == 'variable') {
+                        if ('list' == $statement['expr']['type']) {
+                            if ('array-access' == $statement['expr']['left']['type']) {
+                                if ('variable' == $statement['expr']['left']['left']['type']) {
                                     $this->markVariableNoLocal($statement['expr']['left']['left']['value']);
                                     $this->increaseMutations($statement['expr']['left']['left']['value']);
                                 }

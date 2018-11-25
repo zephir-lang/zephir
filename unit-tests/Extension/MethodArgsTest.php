@@ -18,7 +18,7 @@ class MethodArgsTest extends TestCase
 {
     public function testCallable()
     {
-        $t = new MethodArgs;
+        $t = new MethodArgs();
         $callback = function () {
         };
 
@@ -35,8 +35,8 @@ class MethodArgsTest extends TestCase
 
     public function testObject()
     {
-        $t = new MethodArgs;
-        $obj = new \stdClass;
+        $t = new MethodArgs();
+        $obj = new \stdClass();
 
         $t->setObject($obj);
         $this->assertSame($obj, $t->a);
@@ -51,7 +51,7 @@ class MethodArgsTest extends TestCase
 
     public function testResource()
     {
-        $t = new MethodArgs;
+        $t = new MethodArgs();
 
         $t->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $t->a);
@@ -63,7 +63,7 @@ class MethodArgsTest extends TestCase
 
     public function testMethodOptionalValueWithDefaultStaticConstantAccess()
     {
-        $t = new MethodArgs;
+        $t = new MethodArgs();
         $this->assertSame('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 
         $this->assertSame(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());

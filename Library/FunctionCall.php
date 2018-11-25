@@ -15,7 +15,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Zephir\FunctionCall
+ * Zephir\FunctionCall.
  *
  * Call functions. By default functions are called in the PHP userland if an optimizer
  * was not found or there is not a user-handler for it
@@ -23,17 +23,17 @@ use Zephir\Optimizers\OptimizerAbstract;
 class FunctionCall extends Call
 {
     /**
-     * Function is called using a normal method name
+     * Function is called using a normal method name.
      */
     const CALL_NORMAL = 1;
 
     /**
-     * Function is called using a dynamic variable as method name
+     * Function is called using a dynamic variable as method name.
      */
     const CALL_DYNAMIC = 2;
 
     /**
-     * Function is called using a dynamic string as method name
+     * Function is called using a dynamic string as method name.
      */
     const CALL_DYNAMIC_STRING = 3;
 
@@ -44,7 +44,7 @@ class FunctionCall extends Call
     protected static $optimizerDirectories = [];
 
     /**
-     * Process the ReflectionFunction for the specified function name
+     * Process the ReflectionFunction for the specified function name.
      *
      * @param string $funcName
      *
@@ -52,7 +52,7 @@ class FunctionCall extends Call
      */
     public function getReflector($funcName)
     {
-        /**
+        /*
          * Check if the optimizer is already cached
          */
         if (!isset(self::$functionReflection[$funcName])) {
@@ -73,7 +73,7 @@ class FunctionCall extends Call
     }
 
     /**
-     * Checks if the function is a built-in provided by Zephir
+     * Checks if the function is a built-in provided by Zephir.
      *
      * @param string $functionName
      *
@@ -104,28 +104,28 @@ class FunctionCall extends Call
     }
 
     /**
-     * Checks if a function exists or is a built-in Zephir function
+     * Checks if a function exists or is a built-in Zephir function.
      *
-     * @param string $functionName
+     * @param string             $functionName
      * @param CompilationContext $context
      *
      * @return bool
      */
     public function functionExists($functionName, CompilationContext $context)
     {
-        if (function_exists($functionName)) {
+        if (\function_exists($functionName)) {
             return true;
         }
         if ($this->isBuiltInFunction($functionName)) {
             return true;
         }
 
-        $internalName = ['f__' . $functionName];
+        $internalName = ['f__'.$functionName];
         if (isset($context->classDefinition)) {
             $lowerNamespace = strtolower($context->classDefinition->getNamespace());
-            $prefix = 'f_' . str_replace('\\', '_', $lowerNamespace);
+            $prefix = 'f_'.str_replace('\\', '_', $lowerNamespace);
 
-            $internalName[] = $prefix . '_' . $functionName;
+            $internalName[] = $prefix.'_'.$functionName;
         }
 
         foreach ($internalName as $name) {
@@ -140,10 +140,11 @@ class FunctionCall extends Call
     /**
      * Compiles a function.
      *
-     * @param Expression $expr
+     * @param Expression         $expr
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException|Exception
+     *
      * @return CompiledExpression
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
@@ -162,7 +163,7 @@ class FunctionCall extends Call
     }
 
     /**
-     * Appends an optimizer directory to the directory list
+     * Appends an optimizer directory to the directory list.
      *
      * @param string $directory
      */
@@ -174,12 +175,13 @@ class FunctionCall extends Call
     /**
      * This method gets the reflection of a function
      * to check if any of their parameters are passed by reference
-     * Built-in functions rarely change the parameters if they aren't passed by reference
+     * Built-in functions rarely change the parameters if they aren't passed by reference.
      *
      * @param string $funcName
-     * @param array $expression
+     * @param array  $expression
      *
      * @throws CompilerException
+     *
      * @return bool
      */
     protected function isReadOnly($funcName, array $expression)
@@ -188,7 +190,7 @@ class FunctionCall extends Call
             return false;
         }
 
-        /**
+        /*
          * These functions are supposed to be read-only but they change parameters ref-count
          */
         switch ($funcName) {
@@ -210,12 +212,12 @@ class FunctionCall extends Call
 
         if (isset($expression['parameters'])) {
             /**
-             * Check if the number of parameters
+             * Check if the number of parameters.
              */
-            $numberParameters = count($expression['parameters']);
-            if ($funcName == 'unpack' &&
-                (version_compare(PHP_VERSION, '7.1.0') == 0 ||
-                    version_compare(PHP_VERSION, '7.1.1') == 0)
+            $numberParameters = \count($expression['parameters']);
+            if ('unpack' == $funcName &&
+                (0 == version_compare(PHP_VERSION, '7.1.0') ||
+                    0 == version_compare(PHP_VERSION, '7.1.1'))
             ) {
                 if ($numberParameters < 2) {
                     throw new CompilerException(sprintf($messageFormat, $funcName), $expression);
@@ -244,15 +246,13 @@ class FunctionCall extends Call
 
     /**
      * Once the function processes the parameters we should mark
-     * specific parameters to be passed by reference
+     * specific parameters to be passed by reference.
      *
-     * @param string $funcName
-     * @param array $parameters
+     * @param string             $funcName
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $references
-     * @param array $expression
-     *
-     * @return void
+     * @param array              $references
+     * @param array              $expression
      */
     protected function markReferences(
         $funcName,
@@ -267,7 +267,7 @@ class FunctionCall extends Call
 
         $reflector = $this->getReflector($funcName);
         if ($reflector) {
-            $numberParameters = count($parameters);
+            $numberParameters = \count($parameters);
             if ($numberParameters > 0) {
                 $n = 1;
                 $funcParameters = $reflector->getParameters();
@@ -276,7 +276,7 @@ class FunctionCall extends Call
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
                             /* TODO hack, fix this better */
-                            if ($isZendEngine3 && $parameters[$n - 1][0] == '&') {
+                            if ($isZendEngine3 && '&' == $parameters[$n - 1][0]) {
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
 
@@ -292,44 +292,45 @@ class FunctionCall extends Call
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
                                 $referenceSymbol = $compilationContext->backend->getVariableCode($variable);
-                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $referenceSymbol . ');');
+                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF('.$referenceSymbol.');');
                                 $references[] = $parameters[$n - 1];
                             }
                         }
                     }
-                    $n++;
+                    ++$n;
                 }
             }
         }
     }
 
     /**
-     * Tries to find specific an specialized optimizer for function calls
+     * Tries to find specific an specialized optimizer for function calls.
      *
-     * @param string $funcName
-     * @param array $expression
-     * @param Call $call
+     * @param string             $funcName
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
+     *
      * @return bool|mixed
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
         $optimizer = false;
 
-        /**
+        /*
          * Check if the optimizer is already cached
          */
         if (!isset(self::$optimizers[$funcName])) {
             $camelizeFunctionName = camelize($funcName);
 
-            /**
+            /*
              * Check every optimizer directory for an optimizer
              */
             foreach (self::$optimizerDirectories as $directory) {
-                $path = $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
-                $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+                $path = $directory.\DIRECTORY_SEPARATOR.$camelizeFunctionName.'Optimizer.php';
+                $className = 'Zephir\Optimizers\FunctionCall\\'.$camelizeFunctionName.'Optimizer';
 
                 if (file_exists($path)) {
                     if (!class_exists($className, false)) {
@@ -363,25 +364,26 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @throws Exception|\Zephir\Exception\CompilerException
+     *
      * @return CompiledExpression
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
         $funcName = strtolower($expression['name']);
 
-        if ($funcName == 'array') {
+        if ('array' == $funcName) {
             throw new CompilerException("Cannot use 'array' as a function call", $expression);
         }
 
         /**
-         * Try to optimize function calls using existing optimizers
+         * Try to optimize function calls using existing optimizers.
          */
         $compiledExpr = $this->optimize($funcName, $expression, $this, $compilationContext);
-        if (is_object($compiledExpr)) {
+        if (\is_object($compiledExpr)) {
             return $compiledExpr;
         }
 
@@ -394,7 +396,7 @@ class FunctionCall extends Call
             );
         }
 
-        /**
+        /*
          * Static variables can be passed using local variables saving memory if the function is read only
          */
         if ($exists) {
@@ -403,7 +405,7 @@ class FunctionCall extends Call
             $readOnly = false;
         }
 
-        /**
+        /*
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -416,21 +418,21 @@ class FunctionCall extends Call
             $params = [];
         }
 
-        /**
+        /*
          * Some functions receive parameters as references
          * We mark those parameters temporary as references to properly pass them
          */
         $this->markReferences($funcName, $params, $compilationContext, $references, $expression);
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $this->processExpectedObservedReturn($compilationContext);
 
         /**
          * At this point the function will be called in the PHP userland.
-         * PHP functions only return zvals so we need to validate the target variable is also a zval
+         * PHP functions only return zvals so we need to validate the target variable is also a zval.
          */
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
@@ -441,39 +443,39 @@ class FunctionCall extends Call
                 );
             }
 
-            /**
+            /*
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        /**
+        /*
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
 
-        /**
+        /*
          * Call functions must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
         /**
-         * Check if the function can have an inline cache
+         * Check if the function can have an inline cache.
          */
         $functionCache = $compilationContext->cacheManager->getFunctionCache();
         $cachePointer = $functionCache->get($funcName, $compilationContext, $this, $exists);
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
 
-        if (!count($params)) {
+        if (!\count($params)) {
             if ($this->isExpectingReturn()) {
-                if ($symbolVariable->getName() == 'return_value') {
+                if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
-                        'ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_RETURN_CALL_FUNCTION("'.$funcName.'", '.$cachePointer.');'
                     );
                 } else {
                     if ($this->mustInitSymbolVariable()) {
@@ -481,15 +483,15 @@ class FunctionCall extends Call
                         $symbolVariable->trackVariant($compilationContext);
                     }
                     $codePrinter->output(
-                        'ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');'
+                        'ZEPHIR_CALL_FUNCTION('.$symbol.', "'.$funcName.'", '.$cachePointer.');'
                     );
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
+                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "'.$funcName.'", '.$cachePointer.');');
             }
         } else {
             if ($this->isExpectingReturn()) {
-                if ($symbolVariable->getName() == 'return_value') {
+                if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output(
                         strtr('ZEPHIR_RETURN_CALL_FUNCTION(":func", :pointer, :params);', [
                             ':func' => $funcName,
@@ -523,25 +525,25 @@ class FunctionCall extends Call
             }
         }
 
-        /**
+        /*
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
-            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+            $codePrinter->output('zephir_check_temp_parameter('.$checkVariable.');');
         }
 
-        if (is_array($references)) {
+        if (\is_array($references)) {
             foreach ($references as $reference) {
                 $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
                 $compilationContext->codePrinter->output(
-                    'ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                    'ZEPHIR_UNREF('.$compilationContext->backend->getVariableCode($variable).');'
                 );
             }
         }
 
         $this->addCallStatusOrJump($compilationContext);
 
-        /**
+        /*
          * We can mark temporary variables generated as idle
          */
         foreach ($this->getTemporalVariables() as $tempVariable) {
@@ -556,10 +558,11 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
@@ -577,12 +580,12 @@ class FunctionCall extends Call
 
             default:
                 throw new CompilerException(
-                    'Variable type: ' . $variable->getType() . ' cannot be used as dynamic caller',
+                    'Variable type: '.$variable->getType().' cannot be used as dynamic caller',
                     $expression['left']
                 );
         }
 
-        /**
+        /*
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -593,14 +596,14 @@ class FunctionCall extends Call
 
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $this->processExpectedObservedReturn($compilationContext);
 
         /**
          * At this point the function will be called in the PHP userland.
-         * PHP functions only return zvals so we need to validate the target variable is also a zval
+         * PHP functions only return zvals so we need to validate the target variable is also a zval.
          */
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
@@ -611,30 +614,30 @@ class FunctionCall extends Call
                 );
             }
 
-            /**
+            /*
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
         }
 
-        /**
+        /*
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
 
-        /**
+        /*
          * Call functions must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
         if (!isset($expression['parameters'])) {
             if ($this->isExpectingReturn()) {
-                if ($symbolVariable->getName() != 'return_value') {
+                if ('return_value' != $symbolVariable->getName()) {
                     if ($this->mustInitSymbolVariable()) {
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
@@ -645,9 +648,9 @@ class FunctionCall extends Call
                 $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext);
             }
         } else {
-            if (count($params)) {
+            if (\count($params)) {
                 if ($this->isExpectingReturn()) {
-                    if ($symbolVariable->getName() != 'return_value') {
+                    if ('return_value' != $symbolVariable->getName()) {
                         if ($this->mustInitSymbolVariable()) {
                             $symbolVariable->setMustInitNull(true);
                             $symbolVariable->trackVariant($compilationContext);
@@ -664,7 +667,7 @@ class FunctionCall extends Call
                 }
             } else {
                 if ($this->isExpectingReturn()) {
-                    if ($symbolVariable->getName() != 'return_value') {
+                    if ('return_value' != $symbolVariable->getName()) {
                         if ($this->mustInitSymbolVariable()) {
                             $symbolVariable->setMustInitNull(true);
                             $symbolVariable->trackVariant($compilationContext);
@@ -677,16 +680,16 @@ class FunctionCall extends Call
             }
         }
 
-        /**
+        /*
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
-            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+            $codePrinter->output('zephir_check_temp_parameter('.$checkVariable.');');
         }
 
         $this->addCallStatusOrJump($compilationContext);
 
-        /**
+        /*
          * We can mark temporary variables generated as idle
          */
         foreach ($this->getTemporalVariables() as $tempVariable) {

@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * TypeOfOperatorBuilder
+ * TypeOfOperatorBuilder.
  *
  * Allows to manually build a 'typeof' operator AST node
  */
@@ -23,8 +23,8 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
     /**
      * @param $left
      * @param null $file
-     * @param int $line
-     * @param int $char
+     * @param int  $line
+     * @param int  $char
      */
     public function __construct($left, $file = null, $line = 0, $char = 0)
     {
@@ -35,7 +35,7 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 
 /**
- * Zephir\Console\Command\GenerateCommand
+ * Zephir\Console\Command\GenerateCommand.
  *
  * Generates C code from the Zephir code without compiling it.
  */

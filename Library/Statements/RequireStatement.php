@@ -16,7 +16,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * RequireStatement
+ * RequireStatement.
  *
  * Require statement is used to execute PHP scripts in a given path
  */
@@ -24,6 +24,7 @@ class RequireStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

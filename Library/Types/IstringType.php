@@ -12,7 +12,7 @@
 namespace Zephir\Types;
 
 /**
- * IstringType
+ * IstringType.
  *
  * Encapsulates built-in methods for the "istring" type
  */

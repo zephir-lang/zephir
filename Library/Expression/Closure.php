@@ -22,7 +22,7 @@ use Zephir\StatementsBlock;
 use Zephir\Variable;
 
 /**
- * Closure
+ * Closure.
  *
  * Creates an anonymous function within the extension simulating a closure
  */
@@ -44,15 +44,15 @@ class Closure
     protected $expectingVariable;
 
     /**
-     * Unique closure ID
+     * Unique closure ID.
      */
     protected static $id = 0;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -62,7 +62,7 @@ class Closure
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @param bool $readOnly
      */
@@ -72,18 +72,20 @@ class Closure
     }
 
     /**
-     * Creates a closure
+     * Creates a closure.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
-            self::$id . '__closure'
+            self::$id.'__closure'
         );
 
         $classDefinition->setIsFinal(true);
@@ -132,7 +134,7 @@ class Closure
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
-        self::$id++;
+        ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

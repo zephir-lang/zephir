@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * LiteralBuilder
+ * LiteralBuilder.
  *
  * Allows to manually build a literal expressions AST nodes
  */

@@ -18,27 +18,29 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * MicrotimeOptimizer
+ * MicrotimeOptimizer.
  *
  * Optimizes calls to 'microtime' using internal function
  */
 class MicrotimeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         /* microtime has one optional parameter (get_as_float) */
-        if (isset($expression['parameters']) && count($expression['parameters']) > 2) {
+        if (isset($expression['parameters']) && \count($expression['parameters']) > 2) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -56,15 +58,16 @@ class MicrotimeOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime(' . $symbol . ', NULL TSRMLS_CC);');
+            $context->codePrinter->output('zephir_microtime('.$symbol.', NULL TSRMLS_CC);');
         } else {
             $symbolVariable->setDynamicTypes('double');
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_microtime('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
         }
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

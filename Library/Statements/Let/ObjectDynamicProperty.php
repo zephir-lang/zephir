@@ -17,53 +17,54 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectDynamicProperty
+ * ObjectDynamicProperty.
  *
  * Updates object properties dynamically
  */
 class ObjectDynamicProperty
 {
     /**
-     * Compiles foo->{x} = {expr}
+     * Compiles foo->{x} = {expr}.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws CompilerException
      * @throws \Exception
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
+            throw new CompilerException("Variable type '".$symbolVariable->getType()."' cannot be used as object", $statement);
         }
 
         $propertyName = $statement['property'];
 
         $propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
         if ($propertyVariable->isNotVariableAndString()) {
-            throw new CompilerException("Cannot use variable type '" . $propertyVariable->getType() . "' to update object property", $statement);
+            throw new CompilerException("Cannot use variable type '".$propertyVariable->getType()."' to update object property", $statement);
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . '::' . $propertyName . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate static property '".$compilationContext->classDefinition->getCompleteName().'::'.$propertyName."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' as an object', $statement);
+            throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' as an object', $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
             throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /**
+        /*
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -98,9 +99,9 @@ class ObjectDynamicProperty
 
             case 'bool':
                 $value = null;
-                if ($resolvedExpr->getBooleanCode() == '1') {
+                if ('1' == $resolvedExpr->getBooleanCode()) {
                     $value = 'true';
-                } elseif ($resolvedExpr->getBooleanCode() == '0') {
+                } elseif ('0' == $resolvedExpr->getBooleanCode()) {
                     $value = 'false';
                 } else {
                     throw new \Exception('?');
@@ -110,7 +111,7 @@ class ObjectDynamicProperty
 
             case 'empty-array':
                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
+                $codePrinter->output('array_init('.$tempVariable->getName().');');
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
                 break;
 
@@ -149,12 +150,12 @@ class ObjectDynamicProperty
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 }

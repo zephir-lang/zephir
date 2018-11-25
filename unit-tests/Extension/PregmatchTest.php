@@ -32,7 +32,7 @@ class PregmatchTest extends TestCase
         // of the test function, since it's passed by value to testPregMatch3Params for example
         // and any value remains only in the scope of the test function
 
-        if (version_compare(phpversion(), '7.0', '<')) {
+        if (version_compare(PHP_VERSION, '7.0', '<')) {
             $string = 'Hello, world. [*], this is \ a string';
             $match1 = null;
             $this->assertSame(1, $t->testPregMatch3Params('/^[hH]ello,\s/', $string, $match1)); //finds "Hello, "
@@ -48,7 +48,7 @@ class PregmatchTest extends TestCase
 
             $match4 = null;
             $this->assertSame(1, $t->testPregMatch5Params('@\w{4}\s\w{2}\s\\\(?:\s.*)@', $string, $match4, PREG_OFFSET_CAPTURE, 14)); //finds "this is \ a string" (with non-capturing parentheses)
-            /**
+            /*
              * @todo didn`t pass at local machine
              */
             $this->assertSame('this is \ a string', $match4[0][0]);
@@ -67,20 +67,20 @@ class PregmatchTest extends TestCase
     }
 
     /**
-     * @link https://github.com/phalcon/zephir/issues/287
+     * @see https://github.com/phalcon/zephir/issues/287
      */
     public function testCollectMatches()
     {
-        $t = new Pregmatch;
+        $t = new Pregmatch();
         $this->assertSame(['asd'], $t->testPregMatchSaveMatches('asd', '#asd#'));
     }
 
     /**
-     * @link https://github.com/phalcon/zephir/issues/144
+     * @see https://github.com/phalcon/zephir/issues/144
      */
     public function testPregMatchAllFlags()
     {
-        $t = new Pregmatch;
+        $t = new Pregmatch();
         $arr = $t->testMatchAllInZep();
         $this->assertSame($arr[0], [['test1', 'test2'], ['test1', 'test2']]);
         $this->assertSame($arr[1], [['test1', 'test1'], ['test2', 'test2']]);

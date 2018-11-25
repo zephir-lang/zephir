@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Zephir\Color
+ * Zephir\Color.
  *
  * Allows to generate messages using colors on xterm, ddterm, linux, etc.
  * This class is based on Phalcon\Script available in Phalcon DevTools
@@ -108,7 +108,7 @@ class Color
     ];
 
     /**
-     * Supported terminals
+     * Supported terminals.
      *
      * @var string
      */
@@ -119,7 +119,7 @@ class Color
     ];
 
     /**
-     * Identify if console supports colors
+     * Identify if console supports colors.
      *
      * @return bool
      */
@@ -146,6 +146,7 @@ class Color
      * Colorizes the string using provided colors.
      *
      * @static
+     *
      * @param $string
      * @param int|null $fg
      * @param int|null $at
@@ -164,21 +165,21 @@ class Color
 
         // Check if given foreground color is supported
         if (isset(static::$fg[$fg])) {
-            $colored .= "\033[" . static::$fg[$fg] . 'm';
+            $colored .= "\033[".static::$fg[$fg].'m';
         }
 
         // Check if given background color is supported
         if (isset(static::$bg[$bg])) {
-            $colored .= "\033[" . static::$bg[$bg] . 'm';
+            $colored .= "\033[".static::$bg[$bg].'m';
         }
 
         // Check if given attribute is supported
         if (isset(static::$at[$at])) {
-            $colored .= "\033[" . static::$at[$at] . 'm';
+            $colored .= "\033[".static::$at[$at].'m';
         }
 
         // Add string and end coloring
-        $colored .= $string . "\033[0m";
+        $colored .= $string."\033[0m";
 
         return $colored;
     }
@@ -187,35 +188,41 @@ class Color
      * Color style for warning messages.
      *
      * @static
+     *
      * @param $msg
+     *
      * @return string
      */
     public static function warning($msg)
     {
-        return static::colorize($msg, Color::FG_YELLOW) . PHP_EOL;
+        return static::colorize($msg, self::FG_YELLOW).PHP_EOL;
     }
 
     /**
      * Color style for error messages.
      *
      * @static
+     *
      * @param $msg
+     *
      * @return string
      */
     public static function error($msg)
     {
-        return static::colorize($msg, Color::FG_RED) . PHP_EOL;
+        return static::colorize($msg, self::FG_RED).PHP_EOL;
     }
 
     /**
      * Color style for success messages.
      *
      * @static
+     *
      * @param $msg
+     *
      * @return string
      */
     public static function success($msg)
     {
-        return static::colorize($msg, Color::FG_GREEN) . PHP_EOL;
+        return static::colorize($msg, self::FG_GREEN).PHP_EOL;
     }
 }

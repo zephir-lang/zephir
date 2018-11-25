@@ -14,7 +14,7 @@ namespace Zephir;
 use Zephir\Exception\CompilerException;
 
 /**
- * Logger
+ * Logger.
  *
  * Entrypoint for warnings/notices/errors generated in compilation.
  *
@@ -34,7 +34,7 @@ class Logger
     private $filesContent = [];
 
     /**
-     * Logger constructor
+     * Logger constructor.
      *
      * @param Config $config
      */
@@ -44,12 +44,14 @@ class Logger
     }
 
     /**
-     * Sends a warning to the logger
+     * Sends a warning to the logger.
      *
      * @param $message
      * @param $type
      * @param $node
+     *
      * @throws CompilerException
+     *
      * @return bool
      */
     public function warning($message, $type, $node)
@@ -59,23 +61,23 @@ class Logger
                 return false;
             }
 
-            $warning = 'Warning: ' . $message;
+            $warning = 'Warning: '.$message;
             if (!isset($node['file'])) {
                 $warning .= ' in unknown on 0';
             } else {
-                $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
+                $warning .= ' in '.$node['file'].' on '.$node['line'];
             }
 
-            $warning .= ' [' . $type . ']' . PHP_EOL;
+            $warning .= ' ['.$type.']'.PHP_EOL;
             $warning .= PHP_EOL;
             if (isset($node['file'])) {
                 $lines = $this->getFileContents($node['file']);
 
                 if (isset($lines[$node['line'] - 1])) {
                     $line = $lines[$node['line'] - 1];
-                    $warning .= "\t" . str_replace("\t", ' ', $line);
+                    $warning .= "\t".str_replace("\t", ' ', $line);
                     if (($node['char'] - 1) > 0) {
-                        $warning .= "\t" . str_repeat('-', $node['char'] - 1) . '^' . PHP_EOL;
+                        $warning .= "\t".str_repeat('-', $node['char'] - 1).'^'.PHP_EOL;
                     }
                 }
 
@@ -91,17 +93,20 @@ class Logger
     }
 
     /**
-     * Outputs a message to stdout if the silent flag is not enabled
+     * Outputs a message to stdout if the silent flag is not enabled.
      *
      * @param $message
+     *
      * @return bool
      */
     public function output($message)
     {
         if (!$this->config->get('silent')) {
-            fwrite(STDOUT, $message . PHP_EOL);
+            fwrite(STDOUT, $message.PHP_EOL);
+
             return true;
         }
+
         return false;
     }
 
@@ -109,6 +114,7 @@ class Logger
      * Gets the contents of the files that are involved in the log message.
      *
      * @param string $file File path
+     *
      * @return array
      */
     protected function getFileContents($file)

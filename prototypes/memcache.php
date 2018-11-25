@@ -13,10 +13,11 @@ define('MEMCACHE_HAVE_SESSION', 1);
 define('MEMCACHE_COMPRESSED', 2);
 
 /**
- * Class Memcache
- * @link http://se2.php.net/manual/en/class.memcache.php
+ * Class Memcache.
+ *
+ * @see http://se2.php.net/manual/en/class.memcache.php
  */
-class Memcache
+class memcache
 {
     public function connect($host, $port, $timeout)
     {

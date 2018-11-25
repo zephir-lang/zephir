@@ -19,16 +19,17 @@ use Zephir\Optimizers\OptimizerAbstract;
 use function Zephir\add_slashes;
 
 /**
- * MemnstrOptimizer
+ * MemnstrOptimizer.
  *
  * Like 'strpos' but it returns a boolean value
  */
 class MemstrOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +38,11 @@ class MemstrOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        if ($expression['parameters'][1]['parameter']['type'] == 'string') {
+        if ('string' == $expression['parameters'][1]['parameter']['type']) {
             $str = add_slashes($expression['parameters'][1]['parameter']['value']);
             unset($expression['parameters'][1]);
         }
@@ -51,9 +52,9 @@ class MemstrOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
 
         if (isset($str)) {
-            return new CompiledExpression('bool', 'zephir_memnstr_str(' . $resolvedParams[0] . ', SL("' . $str . '"), "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ')', $expression);
+            return new CompiledExpression('bool', 'zephir_memnstr_str('.$resolvedParams[0].', SL("'.$str.'"), "'.Compiler::getShortUserPath($expression['file']).'", '.$expression['line'].')', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ')', $expression);
+        return new CompiledExpression('bool', 'zephir_memnstr('.$resolvedParams[0].', '.$resolvedParams[1].', "'.Compiler::getShortUserPath($expression['file']).'", '.$expression['line'].')', $expression);
     }
 }

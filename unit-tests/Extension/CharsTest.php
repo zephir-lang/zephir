@@ -19,15 +19,15 @@ class CharsTest extends TestCase
     {
         $t = new \Test\Chars();
 
-        $this->assertSame(chr($t->sumChars1()), 'a');
-        $this->assertSame(chr($t->sumChars2('A')), 'a');
+        $this->assertSame(\chr($t->sumChars1()), 'a');
+        $this->assertSame(\chr($t->sumChars2('A')), 'a');
     }
 
     public function testDiffChars()
     {
         $t = new \Test\Chars();
 
-        $this->assertSame(chr($t->diffChars1()), 'A');
-        $this->assertSame(chr($t->diffChars2('a')), 'A');
+        $this->assertSame(\chr($t->diffChars1()), 'A');
+        $this->assertSame(\chr($t->diffChars2('a')), 'A');
     }
 }

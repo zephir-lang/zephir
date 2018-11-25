@@ -40,6 +40,7 @@ final class CompilerFileFactory
      *
      * @param string $className
      * @param string $filePath
+     *
      * @return FileInterface
      */
     public function create($className, $filePath)

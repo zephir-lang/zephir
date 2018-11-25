@@ -18,28 +18,30 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CreateArrayOptimizer
+ * CreateArrayOptimizer.
  *
  * Built-in function that creates new instances of objects from its class name
  */
 class CreateArrayOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (isset($expression['parameters'])) {
-            if (count($expression['parameters']) > 1) {
+            if (\count($expression['parameters']) > 1) {
                 throw new CompilerException('This function only requires one parameter', $expression);
             }
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -49,7 +51,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
             throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
@@ -70,9 +72,9 @@ class CreateArrayOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if ($resolvedParams) {
-            $context->codePrinter->output('zephir_create_array(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . '), 1 TSRMLS_CC);');
+            $context->codePrinter->output('zephir_create_array('.$symbol.', zephir_get_intval('.$resolvedParams[0].'), 1 TSRMLS_CC);');
         } else {
-            $context->codePrinter->output('zephir_create_array(' . $symbol . ', 0, 1 TSRMLS_CC);');
+            $context->codePrinter->output('zephir_create_array('.$symbol.', 0, 1 TSRMLS_CC);');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

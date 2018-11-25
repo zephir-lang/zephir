@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FloorOptimizer
+ * FloorOptimizer.
  *
  * Optimizes calls to 'floor' using internal function
  */
 class FloorOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,13 +39,14 @@ class FloorOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/math');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('double', 'zephir_floor(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+
+        return new CompiledExpression('double', 'zephir_floor('.$resolvedParams[0].' TSRMLS_CC)', $expression);
     }
 }

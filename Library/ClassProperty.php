@@ -17,7 +17,7 @@ use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 
 /**
- * ClassProperty
+ * ClassProperty.
  *
  * Represents a property class
  */
@@ -40,11 +40,11 @@ class ClassProperty
 
     /**
      * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param string $name
-     * @param mixed $defaultValue
-     * @param string $docBlock
-     * @param array $original
+     * @param array           $visibility
+     * @param string          $name
+     * @param mixed           $defaultValue
+     * @param string          $docBlock
+     * @param array           $original
      */
     public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
     {
@@ -57,7 +57,7 @@ class ClassProperty
         $this->docblock = $docBlock;
         $this->original = $original;
 
-        if (!is_array($this->defaultValue)) {
+        if (!\is_array($this->defaultValue)) {
             $this->defaultValue = [];
             $this->defaultValue['type'] = 'null';
             $this->defaultValue['value'] = null;
@@ -65,7 +65,7 @@ class ClassProperty
     }
 
     /**
-     * Returns the class definition where the method was declared
+     * Returns the class definition where the method was declared.
      *
      * @return ClassDefinition
      */
@@ -75,7 +75,7 @@ class ClassProperty
     }
 
     /**
-     * Returns the property name
+     * Returns the property name.
      *
      * @return string
      */
@@ -89,7 +89,7 @@ class ClassProperty
      */
     public function getValue()
     {
-        if ($this->defaultValue['type'] == 'array') {
+        if ('array' == $this->defaultValue['type']) {
             $result = [];
 
             foreach ($this->original['default']['left'] as $key) {
@@ -116,31 +116,32 @@ class ClassProperty
     }
 
     /**
-     * Checks for visibility congruence
+     * Checks for visibility congruence.
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $name
-     * @param array $original
+     * @param array  $original
      *
      * @throws CompilerException
      */
     public function checkVisibility($visibility, $name, $original)
     {
-        if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
         }
-        if (in_array('public', $visibility) && in_array('private', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'private' at the same time", $original);
         }
-        if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'protected' and 'private' at the same time", $original);
         }
     }
 
     /**
-     * Returns the C-visibility accessors for the model
+     * Returns the C-visibility accessors for the model.
      *
      * @throws Exception
+     *
      * @return string
      */
     public function getVisibilityAccessor()
@@ -166,14 +167,15 @@ class ClassProperty
                     break;
 
                 default:
-                    throw new Exception('Unknown modifier ' . $visibility);
+                    throw new Exception('Unknown modifier '.$visibility);
             }
         }
-        return join('|', array_keys($modifiers));
+
+        return implode('|', array_keys($modifiers));
     }
 
     /**
-     * Returns the docblock related to the property
+     * Returns the docblock related to the property.
      *
      * @return string
      */
@@ -183,49 +185,50 @@ class ClassProperty
     }
 
     /**
-     * Checks whether the variable is static
+     * Checks whether the variable is static.
      *
      * @return bool
      */
     public function isStatic()
     {
-        return in_array('static', $this->visibility);
+        return \in_array('static', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is public
+     * Checks whether the variable is public.
      *
      * @return bool
      */
     public function isPublic()
     {
-        return in_array('public', $this->visibility);
+        return \in_array('public', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is protected
+     * Checks whether the variable is protected.
      *
      * @return bool
      */
     public function isProtected()
     {
-        return in_array('protected', $this->visibility);
+        return \in_array('protected', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is private
+     * Checks whether the variable is private.
      *
      * @return bool
      */
     public function isPrivate()
     {
-        return in_array('private', $this->visibility);
+        return \in_array('private', $this->visibility);
     }
 
     /**
-     * Produce the code to register a property
+     * Produce the code to register a property.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
@@ -255,12 +258,12 @@ class ClassProperty
                 break;
 
             default:
-                throw new CompilerException('Unknown default type: ' . $this->defaultValue['type'], $this->original);
+                throw new CompilerException('Unknown default type: '.$this->defaultValue['type'], $this->original);
         }
     }
 
     /**
-     * Removes all initialization statements related to this property
+     * Removes all initialization statements related to this property.
      *
      * @param array $statements
      */
@@ -287,8 +290,9 @@ class ClassProperty
         $exprBuilder = BuilderFactory::getInstance();
 
         if ($this->isStatic()) {
-            $className = '\\' . $this->classDefinition->getCompleteName();
+            $className = '\\'.$this->classDefinition->getCompleteName();
             $expr = $exprBuilder->raw($this->original['default']);
+
             return $exprBuilder->statements()->let([
                 $exprBuilder->operators()
                     ->assignStaticProperty($className, $this->name, $expr)
@@ -323,14 +327,15 @@ class ClassProperty
 
     /**
      * @param $value
+     *
      * @return bool|string
      */
     protected function getBooleanCode($value)
     {
-        if ($value && ($value == 'true' || $value === true)) {
+        if ($value && ('true' == $value || true === $value)) {
             return '1';
         } else {
-            if ($value == 'false' || $value === false) {
+            if ('false' == $value || false === $value) {
                 return '0';
             }
         }
@@ -339,18 +344,19 @@ class ClassProperty
     }
 
     /**
-     * Declare class property with default value
+     * Declare class property with default value.
      *
      * @param CompilationContext $compilationContext
-     * @param string $type
+     * @param string             $type
      * @param $value
+     *
      * @throws CompilerException
      */
     protected function declareProperty(CompilationContext $compilationContext, $type, $value)
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        if (is_object($value)) {
+        if (\is_object($value)) {
             return;
         }
 
@@ -359,15 +365,15 @@ class ClassProperty
         switch ($type) {
             case 'long':
             case 'int':
-                $codePrinter->output('zend_declare_property_long(' . $classEntry . ', SL("' . $this->getName() . '"), ' . $value . ', ' . $this->getVisibilityAccessor() . ' TSRMLS_CC);');
+                $codePrinter->output('zend_declare_property_long('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
                 break;
 
             case 'double':
-                $codePrinter->output('zend_declare_property_double(' . $classEntry . ', SL("' . $this->getName() . '"), ' . $value . ', ' . $this->getVisibilityAccessor() . ' TSRMLS_CC);');
+                $codePrinter->output('zend_declare_property_double('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
                 break;
 
             case 'bool':
-                $codePrinter->output('zend_declare_property_bool(' . $classEntry . ', SL("' . $this->getName() . '"), '.$this->getBooleanCode($value).', ' . $this->getVisibilityAccessor() . ' TSRMLS_CC);');
+                $codePrinter->output('zend_declare_property_bool('.$classEntry.', SL("'.$this->getName().'"), '.$this->getBooleanCode($value).', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
                 break;
 
             case Types::CHAR:
@@ -386,11 +392,11 @@ class ClassProperty
             case 'array':
             case 'empty-array':
             case 'null':
-                $codePrinter->output('zend_declare_property_null(' . $classEntry . ', SL("' . $this->getName() . '"), ' . $this->getVisibilityAccessor() . ' TSRMLS_CC);');
+                $codePrinter->output('zend_declare_property_null('.$classEntry.', SL("'.$this->getName().'"), '.$this->getVisibilityAccessor().' TSRMLS_CC);');
                 break;
 
             default:
-                throw new CompilerException('Unknown default type: ' . $type, $this->original);
+                throw new CompilerException('Unknown default type: '.$type, $this->original);
         }
     }
 
@@ -425,7 +431,7 @@ class ClassProperty
                 if ($needLetStatementAdded) {
                     $newStatements = [];
 
-                    /**
+                    /*
                      * Start from let statement
                      */
                     $newStatements[] = $letStatement;

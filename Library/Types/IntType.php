@@ -12,7 +12,7 @@
 namespace Zephir\Types;
 
 /**
- * IntType
+ * IntType.
  *
  * Defines methods of the built-in int type
  */

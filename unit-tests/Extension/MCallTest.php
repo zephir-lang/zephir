@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * This file is part of the Zephir.
@@ -195,7 +197,7 @@ class MCallTest extends TestCase
 
     private function getReflection()
     {
-        if (is_null($this->reflection)) {
+        if (null === $this->reflection) {
             return $this->reflection = new \ReflectionClass('\Test\Mcall');
         }
 

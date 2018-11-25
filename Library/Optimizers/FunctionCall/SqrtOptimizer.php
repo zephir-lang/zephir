@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * SqrtOptimizer
+ * SqrtOptimizer.
  *
  * Optimizes calls to 'sqrt' using internal function
  */

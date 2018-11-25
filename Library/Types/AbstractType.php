@@ -20,39 +20,40 @@ use Zephir\Expression\Builder\BuilderFactory;
 abstract class AbstractType
 {
     /**
-     * The array of methods in zephir mapped to PHP internal methods
+     * The array of methods in zephir mapped to PHP internal methods.
      *
      * @var array
      */
     protected $methodMap = [];
 
     /**
-     * Intercepts calls to built-in methods
+     * Intercepts calls to built-in methods.
      *
-     * @param string $methodName
-     * @param object $caller
+     * @param string             $methodName
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
+     *
      * @throws CompilerException
+     *
      * @return bool|\Zephir\CompiledExpression
      */
     public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-
-        /**
+        /*
          * Checks first whether the method exist in the array type definition
          */
         if (method_exists($this, $methodName)) {
             return $this->{$methodName}($caller, $compilationContext, $call, $expression);
         }
 
-        /**
+        /*
          * Check the method map
          */
         if (isset($this->methodMap[$methodName])) {
             $paramNumber = $this->getNumberParam($methodName);
-            if ($paramNumber == 0) {
+            if (0 == $paramNumber) {
                 if (isset($expression['parameters'])) {
                     $parameters = $expression['parameters'];
                     array_unshift($parameters, ['parameter' => $caller]);
@@ -89,7 +90,7 @@ abstract class AbstractType
     }
 
     /**
-     * Get the name of the type
+     * Get the name of the type.
      *
      * @return string
      */
@@ -104,9 +105,10 @@ abstract class AbstractType
     }
 
     /**
-     * Returns the number of the parameter where the object must be bound
+     * Returns the number of the parameter where the object must be bound.
      *
      * @param $methodName
+     *
      * @return int
      */
     protected function getNumberParam($methodName)

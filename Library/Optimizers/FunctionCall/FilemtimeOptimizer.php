@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FilemtimeOptimizer
+ * FilemtimeOptimizer.
  *
  * Optimizes calls to 'filemtime' using internal function
  */
 class FilemtimeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,13 +39,13 @@ class FilemtimeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -62,7 +64,7 @@ class FilemtimeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->codePrinter->output('zephir_filemtime(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_filemtime('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

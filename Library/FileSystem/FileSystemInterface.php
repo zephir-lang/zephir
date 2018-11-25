@@ -21,9 +21,7 @@ interface FileSystemInterface
     public function isInitialized();
 
     /**
-     * Initialize the filesystem
-     *
-     * @return void
+     * Initialize the filesystem.
      */
     public function initialize();
 
@@ -31,6 +29,7 @@ interface FileSystemInterface
      * Checks whether a temporary entry does exist.
      *
      * @param string $path
+     *
      * @return bool
      */
     public function exists($path);
@@ -39,14 +38,16 @@ interface FileSystemInterface
      * Creates a directory inside the temporary container.
      *
      * @param string $path
+     *
      * @return bool
      */
     public function makeDirectory($path);
 
     /**
-     * Returns a temporary entry as an array
+     * Returns a temporary entry as an array.
      *
      * @param string $path
+     *
      * @return array
      */
     public function file($path);
@@ -55,14 +56,13 @@ interface FileSystemInterface
      * Requires a file from the temporary directory.
      *
      * @param string $path
+     *
      * @return mixed
      */
     public function requireFile($path);
 
     /**
      * Attempts to remove recursively the temporary directory with all subdirectories and files.
-     *
-     * @return void
      */
     public function clean();
 
@@ -71,7 +71,6 @@ interface FileSystemInterface
      *
      * @param string $path
      * @param string $data
-     * @return void
      */
     public function write($path, $data);
 
@@ -79,6 +78,7 @@ interface FileSystemInterface
      * Writes data from a temporary entry.
      *
      * @param string $path
+     *
      * @return string
      */
     public function read($path);
@@ -87,7 +87,6 @@ interface FileSystemInterface
      * Deletes a temporary entry.
      *
      * @param string $path
-     * @return void
      */
     public function delete($path);
 
@@ -96,7 +95,8 @@ interface FileSystemInterface
      *
      * @param string $algorithm
      * @param string $sourceFile
-     * @param bool $useCache
+     * @param bool   $useCache
+     *
      * @return string
      */
     public function getHashFile($algorithm, $sourceFile, $useCache = false);
@@ -105,6 +105,7 @@ interface FileSystemInterface
      * Returns the modification time of a temporary entry.
      *
      * @param string $path
+     *
      * @return int
      */
     public function modificationTime($path);
@@ -115,8 +116,6 @@ interface FileSystemInterface
      * @param string $command
      * @param string $descriptor
      * @param string $destination
-     *
-     * @return void
      */
     public function system($command, $descriptor, $destination);
 
@@ -124,6 +123,7 @@ interface FileSystemInterface
      * Normalizes path to be used as a temporary entry.
      *
      * @param string $path
+     *
      * @return string
      */
     public function normalizePath($path);

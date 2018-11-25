@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers\FunctionCall;
 
 /**
- * LtrimOptimizer
+ * LtrimOptimizer.
  *
  * Optimizes calls to 'ltrim' using internal function
  */

@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * ACosOptimizer
+ * ACosOptimizer.
  *
  * Optimizes calls to 'acos' using internal function
  */

@@ -19,10 +19,12 @@ use Zephir\Exception\CompilerException;
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -31,20 +33,20 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         if ($context->backend->isZE3()) {
-            if ($this->getType() == 'IS_BOOL') {
-                $condition = '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_TRUE || Z_TYPE_P(' . $resolvedParams[0] . ') == IS_FALSE)';
+            if ('IS_BOOL' == $this->getType()) {
+                $condition = '(Z_TYPE_P('.$resolvedParams[0].') == IS_TRUE || Z_TYPE_P('.$resolvedParams[0].') == IS_FALSE)';
             } else {
-                $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
+                $condition = 'Z_TYPE_P('.$resolvedParams[0].') == '.$this->getType();
             }
         } else {
-            $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
+            $condition = 'Z_TYPE_P('.$resolvedParams[0].') == '.$this->getType();
         }
 
         return new CompiledExpression('bool', $condition, $expression);

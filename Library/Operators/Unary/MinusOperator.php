@@ -20,11 +20,13 @@ use Zephir\Operators\BaseOperator;
 class MinusOperator extends BaseOperator
 {
     /**
-     * Compile expression
+     * Compile expression.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -57,16 +59,17 @@ class MinusOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $compilationContext->codePrinter->output('zephir_negate(' . $compilationContext->backend->getVariableCode($variable) . ' TSRMLS_CC);');
+                        $compilationContext->codePrinter->output('zephir_negate('.$compilationContext->backend->getVariableCode($variable).' TSRMLS_CC);');
+
                         return new CompiledExpression('variable', $variable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
+                        throw new CompilerException("Cannot operate minus with variable of '".$left->getType()."' type");
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
+                throw new CompilerException("Cannot operate minus with '".$left->getType()."' type");
         }
     }
 }

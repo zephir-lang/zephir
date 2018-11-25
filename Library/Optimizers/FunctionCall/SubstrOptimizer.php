@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * SubstrOptimizer
+ * SubstrOptimizer.
  *
  * Optimizes calls to 'strpos' using internal function
  */
 class SubstrOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,14 +39,13 @@ class SubstrOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) < 2 || count($expression['parameters']) > 3) {
+        if (\count($expression['parameters']) < 2 || \count($expression['parameters']) > 3) {
             throw new CompilerException("'substr' require two or three parameters");
         }
 
         /**
-         * Process parameters
+         * Process parameters.
          */
-
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         $params = [];
         $flags = '0';
@@ -52,20 +53,20 @@ class SubstrOptimizer extends OptimizerAbstract
         for ($param = 1; $param <= 2; ++$param) {
             if (!isset($expression['parameters'][$param])) {
                 $params[] = '0';
-                if ($param == 2) {
+                if (2 == $param) {
                     $flags = 'ZEPHIR_SUBSTR_NO_LENGTH';
                 }
                 continue;
             }
-            if ($expression['parameters'][$param]['parameter']['type'] == 'int') {
-                $params[] = $expression['parameters'][$param]['parameter']['value'] . ' ';
+            if ('int' == $expression['parameters'][$param]['parameter']['type']) {
+                $params[] = $expression['parameters'][$param]['parameter']['value'].' ';
             } else {
                 $context->headersManager->add('kernel/operators');
-                $params[] = 'zephir_get_intval(' . $resolvedParams[$param] . ')';
+                $params[] = 'zephir_get_intval('.$resolvedParams[$param].')';
             }
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -83,7 +84,8 @@ class SubstrOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_substr(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] .', ' . $flags .');');
+        $context->codePrinter->output('zephir_substr('.$symbol.', '.$resolvedParams[0].', '.$params[0].', '.$params[1].', '.$flags.');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

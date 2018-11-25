@@ -21,7 +21,7 @@ use Zephir\Compiler;
 use Zephir\Config;
 
 /**
- * Zephir\Console\Command\ApiCommand
+ * Zephir\Console\Command\ApiCommand.
  *
  * Generates a HTML API based on the classes exposed in the extension.
  */
@@ -79,7 +79,7 @@ final class ApiCommand extends Command
         $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {
             $allowedOpts = array_keys($defaults);
 
-            return in_array($k, $allowedOpts, true) && $v !== null;
+            return \in_array($k, $allowedOpts, true) && null !== $v;
         }, ARRAY_FILTER_USE_BOTH);
 
         foreach ($options as $option => $value) {

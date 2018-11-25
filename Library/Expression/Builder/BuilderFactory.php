@@ -15,7 +15,7 @@ use Zephir\Expression\Builder\Factory\OperatorsFactory;
 use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 /**
- * Zephir\Expression\Builder\BuilderFactory
+ * Zephir\Expression\Builder\BuilderFactory.
  */
 class BuilderFactory
 {
@@ -66,6 +66,7 @@ class BuilderFactory
 
     /**
      * @param $name
+     *
      * @return RawExpression
      */
     public function variable($name)
@@ -79,6 +80,7 @@ class BuilderFactory
     /**
      * @param $type
      * @param null $value
+     *
      * @return RawExpression
      */
     public function literal($type, $value = null)
@@ -91,6 +93,7 @@ class BuilderFactory
 
     /**
      * @param $expression
+     *
      * @return RawExpression
      */
     public function raw($expression)

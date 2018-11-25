@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 
 /**
- * Zephir\Console\Command\CompileCommand
+ * Zephir\Console\Command\CompileCommand.
  *
  * Compile a Zephir extension.
  */
@@ -45,7 +45,7 @@ final class CompileCommand extends Command
             ->setDefinition($this->createDefinition())
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

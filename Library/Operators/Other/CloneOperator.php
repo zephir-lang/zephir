@@ -18,16 +18,18 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 /**
- * Clone
+ * Clone.
  *
  * Clones an object into another one
  */
 class CloneOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -39,13 +41,13 @@ class CloneOperator extends BaseOperator
         $exprVariable->setExpectReturn(true);
 
         $exprCompiledVariable = $exprVariable->compile($compilationContext);
-        if ($exprCompiledVariable->getType() != 'variable') {
-            throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array', $expression);
+        if ('variable' != $exprCompiledVariable->getType()) {
+            throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $expression);
         }
 
         $clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
-        if ($clonedVariable->getType() != 'variable') {
-            throw new CompilerException('Variable type: ' . $exprVariable->getType() . ' cannot be cloned');
+        if ('variable' != $clonedVariable->getType()) {
+            throw new CompilerException('Variable type: '.$exprVariable->getType().' cannot be cloned');
         }
 
         if ($clonedVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -71,8 +73,8 @@ class CloneOperator extends BaseOperator
         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         $clonedSymbol = $compilationContext->backend->getVariableCode($clonedVariable);
 
-        $compilationContext->codePrinter->output('if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ' TSRMLS_CC) == FAILURE) {');
-        $compilationContext->codePrinter->output("\t" . 'RETURN_MM();');
+        $compilationContext->codePrinter->output('if (zephir_clone('.$symbol.', '.$clonedSymbol.' TSRMLS_CC) == FAILURE) {');
+        $compilationContext->codePrinter->output("\t".'RETURN_MM();');
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

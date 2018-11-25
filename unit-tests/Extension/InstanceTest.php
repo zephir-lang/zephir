@@ -28,7 +28,7 @@ class InstanceTest extends TestCase
      */
     public function shouldThrowErrorOnInstantiateAbstractClass()
     {
-        if (PHP_VERSION_ID < 70000) {
+        if (\PHP_VERSION_ID < 70000) {
             $this->markTestSkipped("We can't catch fatal errors on php 5.x");
         }
 

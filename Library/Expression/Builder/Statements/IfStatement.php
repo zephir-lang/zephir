@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\Operators\AbstractOperator;
 
 /**
- * IfStatement
+ * IfStatement.
  *
  * Allows to manually build a 'if' statement AST node
  */
@@ -37,20 +37,20 @@ class IfStatement extends AbstractStatement
 
     /**
      * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null $statements
-     * @param StatementsBlock|null $elseStatements
+     * @param StatementsBlock|null  $statements
+     * @param StatementsBlock|null  $elseStatements
      */
     public function __construct(AbstractOperator $condition = null, StatementsBlock $statements = null, StatementsBlock $elseStatements = null)
     {
-        if ($condition !== null) {
+        if (null !== $condition) {
             $this->setCondition($condition);
         }
 
-        if ($statements !== null) {
+        if (null !== $statements) {
             $this->setStatements($statements);
         }
 
-        if ($elseStatements !== null) {
+        if (null !== $elseStatements) {
             $this->setElseStatements($elseStatements);
         }
     }
@@ -65,11 +65,13 @@ class IfStatement extends AbstractStatement
 
     /**
      * @param $condition
+     *
      * @return $this
      */
     public function setCondition(AbstractOperator $condition)
     {
         $this->condition = $condition;
+
         return $this;
     }
 
@@ -83,11 +85,13 @@ class IfStatement extends AbstractStatement
 
     /**
      * @param StatementsBlock $statements
+     *
      * @return $this
      */
     public function setStatements(StatementsBlock $statements)
     {
         $this->statements = $statements;
+
         return $this;
     }
 
@@ -101,11 +105,13 @@ class IfStatement extends AbstractStatement
 
     /**
      * @param StatementsBlock $elseStatements
+     *
      * @return $this
      */
     public function setElseStatements(StatementsBlock $elseStatements)
     {
         $this->elseStatements = $elseStatements;
+
         return $this;
     }
 

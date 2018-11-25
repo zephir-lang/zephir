@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Class Exception for backward compatibility after migrating to namespaces
+ * Class Exception for backward compatibility after migrating to namespaces.
  */
 class Exception extends \Exception
 {

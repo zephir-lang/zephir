@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers\FunctionCall;
 
 /**
- * DieOptimizer
+ * DieOptimizer.
  *
  * Optimizes calls to 'die' using internal function
  * Alias of exit

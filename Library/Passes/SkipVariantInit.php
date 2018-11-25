@@ -14,7 +14,7 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * SkipVariantInit
+ * SkipVariantInit.
  *
  * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch
  * Same case in 'switch' statements
@@ -28,9 +28,9 @@ class SkipVariantInit
     protected $ignoredVariables;
 
     /**
-     * Do the compilation pass
+     * Do the compilation pass.
      *
-     * @param int $branchNumber
+     * @param int             $branchNumber
      * @param StatementsBlock $block
      */
     public function pass($branchNumber, StatementsBlock $block)
@@ -40,16 +40,16 @@ class SkipVariantInit
     }
 
     /**
-     * Check assignment types for possible skip
+     * Check assignment types for possible skip.
      *
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $statement
      */
     public function passLetStatement($branchNumber, $statement)
     {
         foreach ($statement['assignments'] as $assignment) {
-            if ($assignment['assign-type'] == 'variable') {
-                if ($assignment['operator'] == 'assign') {
+            if ('variable' == $assignment['assign-type']) {
+                if ('assign' == $assignment['operator']) {
                     switch ($assignment['expr']['type']) {
                         case 'variable':
                         case 'array-access':
@@ -84,7 +84,7 @@ class SkipVariantInit
     }
 
     /**
-     * Returns a list of variables that are initialized in every analyzed branch
+     * Returns a list of variables that are initialized in every analyzed branch.
      *
      * @return array
      */
@@ -97,23 +97,24 @@ class SkipVariantInit
                 if (!isset($variableStats[$variable])) {
                     $variableStats[$variable] = 1;
                 } else {
-                    $variableStats[$variable]++;
+                    ++$variableStats[$variable];
                 }
             }
         }
 
         $variables = [];
-        $numberBranches = count($this->branches);
+        $numberBranches = \count($this->branches);
         foreach ($variableStats as $variable => $number) {
             if ($number == $numberBranches) {
                 $variables[] = $variable;
             }
         }
+
         return $variables;
     }
 
     /**
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $variablesToSkip
      */
     public function setVariablesToSkip($branchNumber, $variablesToSkip)

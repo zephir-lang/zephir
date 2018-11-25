@@ -15,7 +15,7 @@ use Zephir\ClassDefinition;
 use Zephir\Compiler;
 
 /**
- * FileInterface
+ * FileInterface.
  *
  * Provides a common interface for compiler files
  */
@@ -45,7 +45,7 @@ interface FileInterface
     public function preCompile(Compiler $compiler);
 
     /**
-     * Sets if the class belongs to an external dependency or not
+     * Sets if the class belongs to an external dependency or not.
      *
      * @param bool $external
      */

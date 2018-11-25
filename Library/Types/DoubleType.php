@@ -12,7 +12,7 @@
 namespace Zephir\Types;
 
 /**
- * DoubleType
+ * DoubleType.
  *
  * Defines methods of the built-in double type
  */

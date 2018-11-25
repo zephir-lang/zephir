@@ -12,7 +12,7 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\ExceptionInterface
+ * Zephir\Exception\ExceptionInterface.
  */
 interface ExceptionInterface
 {

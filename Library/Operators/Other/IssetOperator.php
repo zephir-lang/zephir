@@ -18,23 +18,25 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 /**
- * IssetOperator
+ * IssetOperator.
  *
  * Checks if a array offset or a property is defined on a polymorphic variable
  */
 class IssetOperator extends BaseOperator
 {
     /**
-     * Compiles an 'isset' operator
+     * Compiles an 'isset' operator.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-        if ($expression['left']['type'] == 'list') {
+        if ('list' == $expression['left']['type']) {
             $left = $expression['left']['left'];
         } else {
             $left = $expression['left'];
@@ -49,8 +51,8 @@ class IssetOperator extends BaseOperator
                 $exprVariable->setNoisy(false);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ($exprCompiledVariable->getType() != 'variable' && $exprCompiledVariable->getType() != 'array') {
-                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array', $left['left']);
+                if ('variable' != $exprCompiledVariable->getType() && 'array' != $exprCompiledVariable->getType()) {
+                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $left['left']);
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
@@ -60,11 +62,11 @@ class IssetOperator extends BaseOperator
                         break;
 
                     default:
-                        throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as array', $left['left']);
+                        throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as array', $left['left']);
                         break;
                 }
 
-                if ($variable->getType() == 'variable') {
+                if ('variable' == $variable->getType()) {
                     if ($variable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
                         $compilationContext->logger->warning(
                             'Possible attempt to use non array in isset operator',
@@ -91,7 +93,7 @@ class IssetOperator extends BaseOperator
                         break;
 
                     default:
-                        throw new CompilerException('[' . $left['right']['type'] . ']', $expression);
+                        throw new CompilerException('['.$left['right']['type'].']', $expression);
                 }
                 break;
 
@@ -103,13 +105,13 @@ class IssetOperator extends BaseOperator
                 $exprVariable->setReadOnly(true);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException('Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object', $left['left']);
+                if ('variable' != $exprCompiledVariable->getType()) {
+                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as object', $left['left']);
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
-                if ($variable->getType() != 'variable') {
-                    throw new CompilerException('Variable type: ' . $variable->getType() . ' cannot be used as object', $left['left']);
+                if ('variable' != $variable->getType()) {
+                    throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as object', $left['left']);
                 }
 
                 if ($variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -120,7 +122,7 @@ class IssetOperator extends BaseOperator
                 }
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
-                if ($left['type'] == 'property-access') {
+                if ('property-access' == $left['type']) {
                     return $compilationContext->backend->propertyIsset($variable, $left['right']['value'], $compilationContext);
                 }
 
@@ -136,15 +138,16 @@ class IssetOperator extends BaseOperator
                             case 'variable':
                             case 'string':
                                 $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
-                                return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variableCode . ', ' . $indexVariableCode . ' TSRMLS_CC)', $left['right']);
+
+                                return new CompiledExpression('bool', 'zephir_isset_property_zval('.$variableCode.', '.$indexVariableCode.' TSRMLS_CC)', $left['right']);
 
                             default:
-                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
+                                throw new CompilerException('['.$indexVariable->getType().']', $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
+                        throw new CompilerException('['.$expression['left']['right']['type'].']', $expression);
                 }
                 break;
 

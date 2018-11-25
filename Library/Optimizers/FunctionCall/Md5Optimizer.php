@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * MD5Optimizer
+ * MD5Optimizer.
  *
  * Optimizes calls to 'md5' using internal function
  */
 class Md5Optimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class Md5Optimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -60,7 +62,8 @@ class Md5Optimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_md5(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_md5('.$symbol.', '.$resolvedParams[0].');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

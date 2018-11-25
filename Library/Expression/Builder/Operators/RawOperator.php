@@ -12,7 +12,7 @@
 namespace Zephir\Expression\Builder\Operators;
 
 /**
- * Class RawOperator
+ * Class RawOperator.
  */
 class RawOperator extends AbstractOperator
 {
@@ -26,7 +26,7 @@ class RawOperator extends AbstractOperator
      */
     public function __construct(array $expression = null)
     {
-        if ($expression !== null) {
+        if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
@@ -41,11 +41,13 @@ class RawOperator extends AbstractOperator
 
     /**
      * @param array $expression
+     *
      * @return $this
      */
     public function setExpression(array $expression)
     {
         $this->expression = $expression;
+
         return $this;
     }
 

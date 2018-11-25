@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CreateInstanceOptimizer
+ * CreateInstanceOptimizer.
  *
  * Built-in function that creates new instances of objects from its class name
  */
 class CreateInstanceOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             throw new CompilerException('This function only requires one parameter', $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -51,7 +53,7 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
@@ -66,13 +68,13 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
 
         $call->checkTempParameters($context);
         $call->addCallStatusOrJump($context);

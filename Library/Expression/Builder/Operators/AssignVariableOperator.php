@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class AssignVariableOperator
+ * Class AssignVariableOperator.
  */
 class AssignVariableOperator extends AbstractOperator
 {
@@ -44,16 +44,16 @@ class AssignVariableOperator extends AbstractOperator
     private $expression;
 
     /**
-     * @param null $variable
+     * @param null                 $variable
      * @param AbstractBuilder|null $expression
      */
     public function __construct($variable = null, AbstractBuilder $expression = null)
     {
-        if ($variable !== null) {
+        if (null !== $variable) {
             $this->setVariable($variable);
         }
 
-        if ($expression !== null) {
+        if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
@@ -68,11 +68,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param string $variable
+     *
      * @return $this
      */
     public function setVariable($variable)
     {
         $this->variable = $variable;
+
         return $this;
     }
 
@@ -86,11 +88,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param $operator
+     *
      * @return $this
      */
     public function setOperator($operator)
     {
         $this->operator = $operator;
+
         return $this;
     }
 
@@ -104,11 +108,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param $expression
+     *
      * @return $this
      */
     public function setExpression($expression)
     {
         $this->expression = $expression;
+
         return $this;
     }
 

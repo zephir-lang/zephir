@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * ParameterBuilder
+ * ParameterBuilder.
  *
  * Allows to manually build a call parameters AST nodes
  */
@@ -26,7 +26,7 @@ class ParameterBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */

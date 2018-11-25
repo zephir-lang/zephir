@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Constants for types
+ * Constants for types.
  *
  * Class Types
  */

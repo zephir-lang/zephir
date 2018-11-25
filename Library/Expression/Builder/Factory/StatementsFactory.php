@@ -23,7 +23,7 @@ use Zephir\Expression\Builder\Statements\RawStatement;
 use Zephir\Expression\Builder\Statements\StatementsBlock;
 
 /**
- * Class StatementsFactory
+ * Class StatementsFactory.
  */
 class StatementsFactory
 {
@@ -38,9 +38,10 @@ class StatementsFactory
     }
 
     /**
-     * @param string $name
+     * @param string     $name
      * @param array|null $parameters
-     * @param int $type
+     * @param int        $type
+     *
      * @return CallFunctionStatement
      */
     public function functionCall($name, $parameters = null, $type = CallFunctionStatement::TYPE_CALL_DIRECT)
@@ -52,7 +53,8 @@ class StatementsFactory
      * @param $variable
      * @param $name
      * @param null $parameters
-     * @param int $type
+     * @param int  $type
+     *
      * @return CallMethodStatement
      */
     public function methodCall($variable, $name, $parameters = null, $type = CallMethodStatement::TYPE_CALL_DIRECT)
@@ -64,6 +66,7 @@ class StatementsFactory
      * @param $class
      * @param $method
      * @param null $parameters
+     *
      * @return CallStaticStatement
      */
     public function staticCall($class, $method, $parameters = null)
@@ -73,6 +76,7 @@ class StatementsFactory
 
     /**
      * @param array|null $statements
+     *
      * @return StatementsBlock
      */
     public function block(array $statements = null)
@@ -82,6 +86,7 @@ class StatementsFactory
 
     /**
      * @param array|null $assignments
+     *
      * @return LetStatement
      */
     public function let(array $assignments = null)
@@ -91,8 +96,9 @@ class StatementsFactory
 
     /**
      * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null $statements
-     * @param StatementsBlock|null $elseStatements
+     * @param StatementsBlock|null  $statements
+     * @param StatementsBlock|null  $elseStatements
+     *
      * @return IfStatement
      */
     public function ifX(AbstractOperator $condition = null, StatementsBlock $statements = null, StatementsBlock $elseStatements = null)
@@ -102,6 +108,7 @@ class StatementsFactory
 
     /**
      * @param AbstractBuilder $expression
+     *
      * @return RawStatement
      */
     public function returnX(AbstractBuilder $expression)
@@ -114,6 +121,7 @@ class StatementsFactory
 
     /**
      * @param AbstractBuilder $expression
+     *
      * @return RawStatement
      */
     public function throwX(AbstractBuilder $expression)
@@ -126,6 +134,7 @@ class StatementsFactory
 
     /**
      * @param string $value
+     *
      * @return RawStatement
      */
     public function rawC($value)
@@ -138,6 +147,7 @@ class StatementsFactory
 
     /**
      * @param array $expression
+     *
      * @return RawStatement
      */
     public function raw(array $expression)

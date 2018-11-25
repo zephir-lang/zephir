@@ -19,17 +19,19 @@ use Zephir\Optimizers\OptimizerAbstract;
 use function Zephir\add_slashes;
 
 /**
- * ImplodeOptimizer
+ * ImplodeOptimizer.
  *
  * Optimizes calls to 'implode' using internal function
  */
 class ImplodeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -38,11 +40,11 @@ class ImplodeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -52,7 +54,7 @@ class ImplodeOptimizer extends OptimizerAbstract
             throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
-        if ($expression['parameters'][0]['parameter']['type'] == 'string') {
+        if ('string' == $expression['parameters'][0]['parameter']['type']) {
             $str = add_slashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
@@ -68,11 +70,13 @@ class ImplodeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
-            $context->codePrinter->output('zephir_fast_join_str(' . $symbol . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fast_join_str('.$symbol.', SL("'.$str.'"), '.$resolvedParams[0].' TSRMLS_CC);');
+
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_fast_join(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_join('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

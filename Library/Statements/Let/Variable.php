@@ -20,7 +20,7 @@ use Zephir\Exception\IllegalOperationException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * Zephir\Statements\Let\Variable
+ * Zephir\Statements\Let\Variable.
  *
  * Assign a value to a variable.
  */
@@ -28,17 +28,16 @@ class Variable
 {
     /**
      * Compiles foo = {expr}
-     * Changes the value of a mutable variable
+     * Changes the value of a mutable variable.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param ReadDetector $readDetector
+     * @param ReadDetector       $readDetector
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
-     * @return void
      */
     public function assign(
         $variable,
@@ -49,23 +48,23 @@ class Variable
         array $statement
     ) {
         if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
         }
 
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * Only initialize variables if it's direct assignment
          */
-        if ($statement['operator'] == 'assign') {
+        if ('assign' == $statement['operator']) {
             $symbolVariable->setIsInitialized(true, $compilationContext);
         } else {
             if (!$symbolVariable->isInitialized()) {
-                throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+                throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
             }
         }
 
-        /**
+        /*
          * Set the assigned value to the variable as a CompiledExpression
          * We could use this expression for further analysis
          */
@@ -103,22 +102,21 @@ class Variable
                 break;
 
             default:
-                throw new CompilerException('Unknown type: ' . $type, $statement);
+                throw new CompilerException('Unknown type: '.$type, $statement);
         }
     }
 
     /**
      * Performs numeric assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string $variable
-     * @param array $statement
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
-     * @return void
      */
     private function doNumericAssignment(
         CodePrinter $codePrinter,
@@ -131,19 +129,19 @@ class Variable
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = 0;');
+                        $codePrinter->output($variable.' = 0;');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += 0;');
+                        $codePrinter->output($variable.' += 0;');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= 0;');
+                        $codePrinter->output($variable.' -= 0;');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= 0;');
+                        $codePrinter->output($variable.' *= 0;');
                         break;
 
                     default:
@@ -157,27 +155,27 @@ class Variable
             case 'ulong':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' = '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' += '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' -= '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' *= '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'div-assign':
-                        $codePrinter->output($variable . ' /= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' /= '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'mod-assign':
-                        $codePrinter->output($variable . ' %= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' %= '.$resolvedExpr->getCode().';');
                         break;
 
                     default:
@@ -189,19 +187,19 @@ class Variable
             case 'uchar':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
+                        $codePrinter->output($variable.' = \''.$resolvedExpr->getCode().'\';');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += \'' . $resolvedExpr->getCode() . '\';');
+                        $codePrinter->output($variable.' += \''.$resolvedExpr->getCode().'\';');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= \'' . $resolvedExpr->getCode() . '\';');
+                        $codePrinter->output($variable.' -= \''.$resolvedExpr->getCode().'\';');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= \'' . $resolvedExpr->getCode() . '\';');
+                        $codePrinter->output($variable.' *= \''.$resolvedExpr->getCode().'\';');
                         break;
 
                     default:
@@ -212,19 +210,19 @@ class Variable
             case 'double':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' = (long) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += (long) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' += (long) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= (long) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' -= (long) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= (long) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' *= (long) ('.$resolvedExpr->getCode().');');
                         break;
 
                     default:
@@ -235,15 +233,15 @@ class Variable
             case 'bool':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' = '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' += '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' -= '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     default:
@@ -263,27 +261,27 @@ class Variable
                     case 'uchar':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' = '.$itemVariable->getName().';');
                                 break;
 
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' += '.$itemVariable->getName().';');
                                 break;
 
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' -= '.$itemVariable->getName().';');
                                 break;
 
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' *= '.$itemVariable->getName().';');
                                 break;
 
                             case 'div-assign':
-                                $codePrinter->output($variable . ' /= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' /= '.$itemVariable->getName().';');
                                 break;
 
                             case 'mod-assign':
-                                $codePrinter->output($variable . ' %= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' %= '.$itemVariable->getName().';');
                                 break;
 
                             default:
@@ -294,16 +292,16 @@ class Variable
                     case 'double':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' = (long) '.$itemVariable->getName().';');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += (long) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' += (long) '.$itemVariable->getName().';');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= (long) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' -= (long) '.$itemVariable->getName().';');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= (long) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' *= (long) '.$itemVariable->getName().';');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -316,19 +314,19 @@ class Variable
                         $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' = zephir_get_numberval('.$exprVariableCode.');');
                                 break;
 
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' += zephir_get_numberval('.$exprVariableCode.');');
                                 break;
 
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' -= zephir_get_numberval('.$exprVariableCode.');');
                                 break;
 
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' *= zephir_get_numberval('.$exprVariableCode.');');
                                 break;
 
                             default:
@@ -337,26 +335,25 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: '.$itemVariable->getType(), $statement);
                 }
                 break;
             default:
-                throw new CompilerException("Value type '" . $resolvedExpr->getType() . "' cannot be assigned to variable: int", $statement);
+                throw new CompilerException("Value type '".$resolvedExpr->getType()."' cannot be assigned to variable: int", $statement);
         }
     }
 
     /**
      * Performs double assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string $variable
-     * @param array $statement
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     * @return void
      */
     private function doDoubleAssignment(
         CodePrinter $codePrinter,
@@ -369,16 +366,16 @@ class Variable
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = 0.0;');
+                        $codePrinter->output($variable.' = 0.0;');
                         break;
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += 0.0;');
+                        $codePrinter->output($variable.' += 0.0;');
                         break;
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= 0.0;');
+                        $codePrinter->output($variable.' -= 0.0;');
                         break;
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= 0.0;');
+                        $codePrinter->output($variable.' *= 0.0;');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -391,19 +388,19 @@ class Variable
             case 'ulong':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' = (double) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += (double) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' += (double) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= (double) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' -= (double) ('.$resolvedExpr->getCode().');');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= (double) (' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output($variable.' *= (double) ('.$resolvedExpr->getCode().');');
                         break;
 
                     default:
@@ -414,19 +411,19 @@ class Variable
             case 'double':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' = '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' += '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' -= '.$resolvedExpr->getCode().';');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
+                        $codePrinter->output($variable.' *= '.$resolvedExpr->getCode().';');
                         break;
 
                     default:
@@ -437,19 +434,19 @@ class Variable
             case 'bool':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' = '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' += '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' -= '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     case 'mul-assign':
-                        $codePrinter->output($variable . ' *= ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' *= '.$resolvedExpr->getBooleanCode().';');
                         break;
 
                     default:
@@ -467,16 +464,16 @@ class Variable
                     case 'bool':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' = (double) '.$itemVariable->getName().';');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += (double) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' += (double) '.$itemVariable->getName().';');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= (double) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' -= (double) '.$itemVariable->getName().';');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= (double) ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' *= (double) '.$itemVariable->getName().';');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -486,16 +483,16 @@ class Variable
                     case 'double':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' = '.$itemVariable->getName().';');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' += '.$itemVariable->getName().';');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' -= '.$itemVariable->getName().';');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' *= '.$itemVariable->getName().';');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -507,16 +504,16 @@ class Variable
                         $exprVariableCode = $compilationContext->backend->getVariableCode($itemVariable);
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' = zephir_get_numberval('.$exprVariableCode.');');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' += zephir_get_numberval('.$exprVariableCode.');');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' -= zephir_get_numberval('.$exprVariableCode.');');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');');
+                                $codePrinter->output($variable.' *= zephir_get_numberval('.$exprVariableCode.');');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -524,27 +521,26 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: '.$itemVariable->getType(), $statement);
                 }
                 break;
             default:
-                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 
     /**
      * Performs string assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable $symbolVariable
-     * @param string $variable
-     * @param array $statement
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
-     * @return void
      */
     private function doStringAssignment(
         CodePrinter $codePrinter,
@@ -576,7 +572,7 @@ class Variable
                         $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         break;
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -594,7 +590,7 @@ class Variable
                         }
                         break;
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -615,7 +611,7 @@ class Variable
 
                     case 'concat-assign':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
                         break;
 
                     default:
@@ -634,13 +630,13 @@ class Variable
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
-                                $codePrinter->output('Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%ld", ' . $itemVariable->getName() . ');');
-                                $codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
+                                $codePrinter->output('Z_STRLEN_P('.$variable.') = zephir_spprintf(&Z_STRVAL_P('.$variable.'), 0, "%ld", '.$itemVariable->getName().');');
+                                $codePrinter->output('Z_TYPE_P('.$variable.') = IS_STRING;');
                                 break;
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self_long(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $codePrinter->output('zephir_concat_self_long(&'.$variable.', '.$itemVariable->getName().' TSRMLS_CC);');
                                 break;
 
                             default:
@@ -654,13 +650,13 @@ class Variable
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
-                                $codePrinter->output('Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%c", ' . $itemVariable->getName() . ');');
-                                $codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
+                                $codePrinter->output('Z_STRLEN_P('.$variable.') = zephir_spprintf(&Z_STRVAL_P('.$variable.'), 0, "%c", '.$itemVariable->getName().');');
+                                $codePrinter->output('Z_TYPE_P('.$variable.') = IS_STRING;');
                                 break;
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self_char(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $codePrinter->output('zephir_concat_self_char(&'.$variable.', '.$itemVariable->getName().' TSRMLS_CC);');
                                 break;
 
                             default:
@@ -695,7 +691,7 @@ class Variable
                                 $symbolVariable->setMustInitNull(true);
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_get_strval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
+                                $codePrinter->output('zephir_get_strval('.$compilationContext->backend->getVariableCode($symbolVariable).', '.$compilationContext->backend->getVariableCode($itemVariable).');');
                                 break;
 
                             case 'concat-assign':
@@ -709,28 +705,27 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type: '.$itemVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 
     /**
      * Performs array assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable $symbolVariable
-     * @param string $variable
-     * @param array $statement
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     * @return void
      */
     private function doArrayAssignment(
         CodePrinter $codePrinter,
@@ -754,7 +749,7 @@ class Variable
                             $symbolVariable->increaseVariantIfNull();
                             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
+                            $codePrinter->output('ZEPHIR_CPY_WRT('.$symbol.', '.$compilationContext->backend->resolveValue($resolvedExpr, $compilationContext).');');
                         }
                         break;
 
@@ -764,22 +759,21 @@ class Variable
                 break;
 
             default:
-                throw new CompilerException("Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . ' for array type', $resolvedExpr->getOriginal());
+                throw new CompilerException("Cannot '".$statement['operator']."' ".$resolvedExpr->getType().' for array type', $resolvedExpr->getOriginal());
         }
     }
 
     /**
      * Performs boolean assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param string $variable
-     * @param array $statement
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     * @return void
      */
     private function doBoolAssignment(
         CodePrinter $codePrinter,
@@ -792,7 +786,7 @@ class Variable
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = 0;');
+                        $codePrinter->output($variable.' = 0;');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -805,7 +799,7 @@ class Variable
             case 'ulong':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ') ? 1 : 0);');
+                        $codePrinter->output($variable.' = (('.$resolvedExpr->getCode().') ? 1 : 0);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -815,7 +809,7 @@ class Variable
             case 'double':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ((' . $resolvedExpr->getCode() . ' != 0.0) ? 1 : 0);');
+                        $codePrinter->output($variable.' = (('.$resolvedExpr->getCode().' != 0.0) ? 1 : 0);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -826,7 +820,7 @@ class Variable
             case 'uchar':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ((\'' . $resolvedExpr->getCode() . '\') ? 1 : 0);');
+                        $codePrinter->output($variable.' = ((\''.$resolvedExpr->getCode().'\') ? 1 : 0);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -836,7 +830,7 @@ class Variable
             case 'bool':
                 switch ($statement['operator']) {
                     case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+                        $codePrinter->output($variable.' = '.$resolvedExpr->getBooleanCode().';');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -852,7 +846,7 @@ class Variable
                     case 'ulong':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ') ? 1 : 0);');
+                                $codePrinter->output($variable.' = (('.$itemVariable->getName().') ? 1 : 0);');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -862,7 +856,7 @@ class Variable
                     case 'double':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = ((' . $itemVariable->getName() . ' != 0.0) ? 1 : 0);');
+                                $codePrinter->output($variable.' = (('.$itemVariable->getName().' != 0.0) ? 1 : 0);');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -872,7 +866,7 @@ class Variable
                     case 'bool':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($variable.' = '.$itemVariable->getName().';');
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -885,7 +879,7 @@ class Variable
                         switch ($statement['operator']) {
                             case 'assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output($variable . ' = zephir_is_true(' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
+                                $codePrinter->output($variable.' = zephir_is_true('.$compilationContext->backend->getVariableCode($itemVariable).');');
                                 break;
 
                             default:
@@ -894,29 +888,28 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException('Cannot assign variable: ' . $itemVariable->getType(), $statement);
+                        throw new CompilerException('Cannot assign variable: '.$itemVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type: '.$resolvedExpr->getType(), $statement);
         }
     }
 
     /**
      * Performs variable assignment.
      *
-     * @param CodePrinter $codePrinter
+     * @param CodePrinter        $codePrinter
      * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable $symbolVariable
-     * @param string $variable
-     * @param array $statement
+     * @param ZephirVariable     $symbolVariable
+     * @param string             $variable
+     * @param array              $statement
      * @param CompilationContext $compilationContext
-     * @param ReadDetector $readDetector
+     * @param ReadDetector       $readDetector
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     * @return void
      */
     private function doVariableAssignment(
         CodePrinter $codePrinter,
@@ -968,14 +961,14 @@ class Variable
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output($functionName . '(' . $symbol . ', ' . $compilationContext->backend->getVariableCode($tempVariable) . ');');
+                        $codePrinter->output($functionName.'('.$symbol.', '.$compilationContext->backend->getVariableCode($tempVariable).');');
                         break;
 
                     case 'assign':
                         $symbolVariable->setDynamicTypes('long');
                         if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+                            $codePrinter->output($tempVariable->getName().' = '.$resolvedExpr->getCode().';');
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                         } else {
@@ -988,7 +981,7 @@ class Variable
                         $symbolVariable->setDynamicTypes('double');
                         if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+                            $codePrinter->output($tempVariable->getName().' = '.$resolvedExpr->getCode().';');
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignDouble($symbolVariable, $tempVariable, $compilationContext);
                         } else {
@@ -1009,12 +1002,12 @@ class Variable
                         $symbolVariable->setDynamicTypes('long');
                         if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+                            $codePrinter->output($tempVariable->getName().' = '.$resolvedExpr->getCode().';');
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignLong($symbolVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
+                            $compilationContext->backend->assignLong($symbolVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
                         }
 
                         break;
@@ -1048,14 +1041,14 @@ class Variable
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($tempVariable) . ');');
+                        $codePrinter->output($functionName.'('.$compilationContext->backend->getVariableCode($symbolVariable).', '.$compilationContext->backend->getVariableCode($tempVariable).');');
                         break;
 
                     case 'assign':
                         $symbolVariable->setDynamicTypes('double');
                         if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+                            $codePrinter->output($tempVariable->getName().' = '.$resolvedExpr->getCode().';');
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignDouble($symbolVariable, $tempVariable, $compilationContext);
                         } else {
@@ -1072,17 +1065,17 @@ class Variable
                 switch ($statement['operator']) {
                     case 'assign':
                         $symbolVariable->setDynamicTypes('bool');
-                        if ($resolvedExpr->getCode() == 'true') {
+                        if ('true' == $resolvedExpr->getCode()) {
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignBool($symbolVariable, '1', $compilationContext);
                         } else {
-                            if ($resolvedExpr->getCode() == 'false') {
+                            if ('false' == $resolvedExpr->getCode()) {
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->backend->assignBool($symbolVariable, '0', $compilationContext);
                             } else {
                                 if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                                     $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
-                                    $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+                                    $codePrinter->output($tempVariable->getName().' = '.$resolvedExpr->getBooleanCode().';');
                                     $symbolVariable->initVariant($compilationContext);
                                     $compilationContext->backend->assignBool($symbolVariable, $tempVariable, $compilationContext);
                                 } else {
@@ -1107,7 +1100,7 @@ class Variable
 
                     case 'concat-assign':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', SL("' . $resolvedExpr->getCode() . '") TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', SL("'.$resolvedExpr->getCode().'") TSRMLS_CC);');
                         break;
 
                     default:
@@ -1127,7 +1120,7 @@ class Variable
                             $symbolVariable->increaseVariantIfNull();
                             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
+                            $codePrinter->output('ZEPHIR_CPY_WRT('.$symbol.', '.$compilationContext->backend->resolveValue($resolvedExpr, $compilationContext).');');
                         }
                         break;
 
@@ -1157,7 +1150,7 @@ class Variable
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('long');
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
-                                $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ') + ' . $itemVariable->getName() . ';');
+                                $codePrinter->output($tempVariable->getName().' = zephir_get_numberval('.$compilationContext->backend->getVariableCode($symbolVariable).') + '.$itemVariable->getName().';');
                                 $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                                 break;
 
@@ -1166,8 +1159,8 @@ class Variable
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('long');
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
-                                $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
-                                $compilationContext->backend->assignLong($symbolVariable, $tempVariable->getName() . ' - ' . $itemVariable->getName(), $compilationContext);
+                                $codePrinter->output($tempVariable->getName().' = zephir_get_numberval('.$compilationContext->backend->getVariableCode($symbolVariable).');');
+                                $compilationContext->backend->assignLong($symbolVariable, $tempVariable->getName().' - '.$itemVariable->getName(), $compilationContext);
                                 break;
                             default:
                                 throw new IllegalOperationException($statement, $itemVariable);
@@ -1210,7 +1203,7 @@ class Variable
                                     $symbolVariable->increaseVariantIfNull();
                                     $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
+                                    $codePrinter->output('ZEPHIR_CPY_WRT('.$symbol.', '.$compilationContext->backend->resolveValue($resolvedExpr, $compilationContext).');');
                                 }
                                 break;
 
@@ -1247,13 +1240,13 @@ class Variable
                             case 'add-assign':
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
+                                $codePrinter->output('ZEPHIR_ADD_ASSIGN('.$compilationContext->backend->getVariableCode($symbolVariable).', '.$compilationContext->backend->getVariableCode($itemVariable).');');
                                 break;
 
                             case 'sub-assign':
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
+                                $codePrinter->output('ZEPHIR_SUB_ASSIGN('.$compilationContext->backend->getVariableCode($symbolVariable).', '.$compilationContext->backend->getVariableCode($itemVariable).');');
                                 break;
 
                             default:
@@ -1291,12 +1284,12 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $resolvedExpr->getOriginal());
+                        throw new CompilerException('Unknown type: '.$itemVariable->getType(), $resolvedExpr->getOriginal());
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                throw new CompilerException('Unknown type: '.$resolvedExpr->getType(), $resolvedExpr->getOriginal());
         }
     }
 }

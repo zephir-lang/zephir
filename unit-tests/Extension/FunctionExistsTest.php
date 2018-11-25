@@ -20,6 +20,7 @@ class FunctionExistsTest extends TestCase
      * @test
      * @dataProvider providerInternalFunctions
      * @issue https://github.com/phalcon/zephir/issues/1547
+     *
      * @param string $func The internal (built-in) function name
      */
     public function shouldCorrectDetectestExistenceWithPassedName($func)
@@ -71,6 +72,6 @@ class FunctionExistsTest extends TestCase
             $allFunctions['internal']
         );
 
-        return array_slice($functions, 0, 10);
+        return \array_slice($functions, 0, 10);
     }
 }

@@ -19,29 +19,30 @@ use Zephir\Exception\IllegalOperationException;
 use Zephir\Expression;
 
 /**
- * StaticProperty
+ * StaticProperty.
  *
  * Updates static properties
  */
 class StaticProperty
 {
     /**
-     * Compiles ClassName::foo = {expr}
+     * Compiles ClassName::foo = {expr}.
      *
      * @param $className
      * @param $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      * @throws IllegalOperationException
+     *
      * @internal param string $variable
      */
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = $compilationContext->compiler;
-        if (!in_array($className, ['self', 'static', 'parent'])) {
+        if (!\in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -49,18 +50,18 @@ class StaticProperty
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+                    throw new CompilerException("Cannot locate class '".$className."'", $statement);
                 }
             }
         } else {
-            if (in_array($className, ['self', 'static'])) {
+            if (\in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
-                if ($className == 'parent') {
+                if ('parent' == $className) {
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $statement);
+                        throw new CompilerException('Cannot assign static property "'.$property.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $statement);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -69,18 +70,18 @@ class StaticProperty
         }
 
         if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+            throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
         }
 
         /** @var $propertyDefinition ClassProperty */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $statement);
+            throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);
         }
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $statement);
+                throw new CompilerException("Cannot access private static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $statement);
             }
         }
 
@@ -108,7 +109,7 @@ class StaticProperty
             case 'char':
             case 'uchar':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
+                $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
                 $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
@@ -133,7 +134,7 @@ class StaticProperty
                         if ($resolvedExpr->getCode()) {
                             $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
                         } else {
-                            $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
+                            $codePrinter->output('ZVAL_EMPTY_STRING('.$tempVariable->getName().');');
                         }
 
                         if ($tempVariable->isTemporal()) {
@@ -148,13 +149,13 @@ class StaticProperty
                 break;
 
             case 'bool':
-                if ($resolvedExpr->getBooleanCode() == '1') {
+                if ('1' == $resolvedExpr->getBooleanCode()) {
                     $compilationContext->backend->updateStaticProperty($classEntry, $property, 'true', $compilationContext);
                 } else {
-                    if ($resolvedExpr->getBooleanCode() == '0') {
+                    if ('0' == $resolvedExpr->getBooleanCode()) {
                         $compilationContext->backend->updateStaticProperty($classEntry, $property, 'false', $compilationContext);
                     } else {
-                        $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                        $codePrinter->output('if ('.$resolvedExpr->getBooleanCode().') {');
                         $codePrinter->increaseLevel();
                         $compilationContext->backend->updateStaticProperty($classEntry, $property, 'true', $compilationContext);
                         $codePrinter->decreaseLevel();
@@ -195,7 +196,7 @@ class StaticProperty
                             $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
                             $propertyCache->setMustInitNull(true);
                             $propertyCache->setReusable(false);
-                            $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), &' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
+                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().' TSRMLS_CC);');
                         } else {
                             $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                         }
@@ -211,7 +212,7 @@ class StaticProperty
                             $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
                             $propertyCache->setMustInitNull(true);
                             $propertyCache->setReusable(false);
-                            $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), &' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
+                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().' TSRMLS_CC);');
                         } else {
                             $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                         }
@@ -231,7 +232,7 @@ class StaticProperty
 
                     case 'string':
                         switch ($statement['operator']) {
-                            /** @noinspection PhpMissingBreakStatementInspection */
+                            /* @noinspection PhpMissingBreakStatementInspection */
                             case 'concat-assign':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, true);
                                 $expression = new Expression([
@@ -247,12 +248,12 @@ class StaticProperty
                                 $expression->compile($compilationContext);
                                 $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);
                                 $tempVariableCode = $compilationContext->backend->getVariableCode($tempVariable);
-                                if (substr($variableVariableCode, 0, 1) === '&') {
-                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF(' . $variableVariableCode . ');');
+                                if ('&' === substr($variableVariableCode, 0, 1)) {
+                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF('.$variableVariableCode.');');
                                 } else {
-                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF(&' . $variableVariableCode . ');');
+                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF(&'.$variableVariableCode.');');
                                 }
-                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode .');');
+                                $compilationContext->codePrinter->output('zephir_concat_function('.$variableVariableCode.', '.$tempVariableCode.', '.$variableVariableCode.');');
                                 // no break
                             case 'assign':
                                 $compilationContext->backend->updateStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
@@ -273,12 +274,12 @@ class StaticProperty
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 }

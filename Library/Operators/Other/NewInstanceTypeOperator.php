@@ -21,7 +21,7 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 /**
- * NewTypeInstance
+ * NewTypeInstance.
  *
  * Creates a value of the specified type with parameters
  */
@@ -30,11 +30,13 @@ class NewInstanceTypeOperator extends BaseOperator
     protected $literalOnly = false;
 
     /**
-     * Executes the operator
+     * Executes the operator.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -68,7 +70,7 @@ class NewInstanceTypeOperator extends BaseOperator
         );
 
         /**
-         * Implicit type coercing
+         * Implicit type coercing.
          */
         $castBuilder = new CastOperatorBuilder($expression['internal-type'], $builder);
 

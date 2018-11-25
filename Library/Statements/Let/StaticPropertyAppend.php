@@ -18,23 +18,23 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 
 /**
- * StaticPropertyAppend
+ * StaticPropertyAppend.
  *
  * Updates object properties dynamically
  */
 class StaticPropertyAppend extends ArrayIndex
 {
     /**
-     * Compiles ClassName::foo[index] = {expr}
+     * Compiles ClassName::foo[index] = {expr}.
      *
-     * @param string $className
-     * @param string $property
+     * @param string             $className
+     * @param string             $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws Exception
      * @throws CompilerException
-     * @return void
      */
     public function assignStatic(
         $className,
@@ -44,7 +44,7 @@ class StaticPropertyAppend extends ArrayIndex
         array $statement
     ) {
         $compiler = $compilationContext->compiler;
-        if (!in_array($className, ['self', 'static', 'parent'])) {
+        if (!\in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -52,18 +52,18 @@ class StaticPropertyAppend extends ArrayIndex
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+                    throw new CompilerException("Cannot locate class '".$className."'", $statement);
                 }
             }
         } else {
-            if (in_array($className, ['self', 'static'])) {
+            if (\in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
-                if ($className == 'parent') {
+                if ('parent' == $className) {
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $statement);
+                        throw new CompilerException('Cannot assign static property "'.$property.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $statement);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -72,18 +72,18 @@ class StaticPropertyAppend extends ArrayIndex
         }
 
         if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+            throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
         }
 
         /** @var $propertyDefinition ClassProperty */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $statement);
+            throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);
         }
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $statement);
+                throw new CompilerException("Cannot access private static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $statement);
             }
         }
 
@@ -95,12 +95,11 @@ class StaticPropertyAppend extends ArrayIndex
     /**
      * Compiles x::y[a][b][] = {expr} (multiple offset assignment).
      *
-     * @param string $classEntry
-     * @param string $property
+     * @param string             $classEntry
+     * @param string             $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
-     * @return void
+     * @param array              $statement
      */
     protected function _assignStaticPropertyArrayMultipleIndex(
         $classEntry,
@@ -113,7 +112,7 @@ class StaticPropertyAppend extends ArrayIndex
         $compilationContext->headersManager->add('kernel/object');
 
         /**
-         * Create a temporal zval (if needed)
+         * Create a temporal zval (if needed).
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 

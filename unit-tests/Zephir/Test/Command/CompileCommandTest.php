@@ -21,7 +21,7 @@ use Zephir\Test\KernelTestCase;
 use function Zephir\unlink_recursive;
 
 /**
- * Zephir\Test\Command\CompileCommandTest
+ * Zephir\Test\Command\CompileCommandTest.
  */
 class CompileCommandTest extends KernelTestCase
 {
@@ -34,8 +34,6 @@ class CompileCommandTest extends KernelTestCase
 
     /**
      * Store the current directory before to be change.
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -44,27 +42,25 @@ class CompileCommandTest extends KernelTestCase
 
     /**
      * Restore current directory, and clean config.json.
-     *
-     * @return void
      */
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            $dotZephir = dirname(dirname(self::$kernel->getCacheDir()));
+            $dotZephir = \dirname(\dirname(self::$kernel->getCacheDir()));
             if (file_exists($dotZephir)) {
                 unlink_recursive($dotZephir);
             }
 
-            if (file_exists(getcwd() . '/ext')) {
-                unlink_recursive(getcwd() . '/ext');
+            if (file_exists(getcwd().'/ext')) {
+                unlink_recursive(getcwd().'/ext');
             }
 
-            if (file_exists(getcwd() . '/compile.log')) {
-                unlink(getcwd() . '/compile.log');
+            if (file_exists(getcwd().'/compile.log')) {
+                unlink(getcwd().'/compile.log');
             }
 
-            if (file_exists(getcwd() . '/compile-errors.log')) {
-                unlink(getcwd() . '/compile-errors.log');
+            if (file_exists(getcwd().'/compile-errors.log')) {
+                unlink(getcwd().'/compile-errors.log');
             }
 
             chdir($this->pwd);
@@ -82,13 +78,13 @@ class CompileCommandTest extends KernelTestCase
     public function shouldDetermineDevOption($flag, $cflags)
     {
         // TODO: Create a test for Windows
-        if (\strtoupper(\substr(PHP_OS, 0, 3)) === 'WIN') {
+        if ('WIN' === \strtoupper(\substr(PHP_OS, 0, 3))) {
             $this->markTestSkipped(
                 'This test currently works on Linux systems only'
             );
         }
 
-        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/devmode');
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/devmode');
 
         self::bootKernel();
 
@@ -125,7 +121,6 @@ class CompileCommandTest extends KernelTestCase
 
     /**
      * @param ContainerInterface $container
-     * @return void
      */
     protected function muteOutput(ContainerInterface $container)
     {

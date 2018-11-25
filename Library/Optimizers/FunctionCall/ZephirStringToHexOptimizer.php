@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * ZephirStringToHexOptimizer
+ * ZephirStringToHexOptimizer.
  *
  * Optimizes calls to 'zephir_string_to_hex'
  */
 class ZephirStringToHexOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class ZephirStringToHexOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) > 1) {
+        if (\count($expression['parameters']) > 1) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -63,7 +65,7 @@ class ZephirStringToHexOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_string_to_hex(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_string_to_hex('.$symbol.', '.$resolvedParams[0].');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

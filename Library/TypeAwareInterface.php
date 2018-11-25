@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Zephir\TypeAwareInterface
+ * Zephir\TypeAwareInterface.
  */
 interface TypeAwareInterface
 {

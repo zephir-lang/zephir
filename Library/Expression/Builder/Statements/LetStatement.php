@@ -12,7 +12,7 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * LetStatement
+ * LetStatement.
  *
  * Allows to manually build a 'let' statement AST node
  */
@@ -25,7 +25,7 @@ class LetStatement extends AbstractStatement
      */
     public function __construct(array $assignments = null)
     {
-        if ($assignments !== null) {
+        if (null !== $assignments) {
             $this->setAssignments($assignments);
         }
     }
@@ -40,21 +40,25 @@ class LetStatement extends AbstractStatement
 
     /**
      * @param array $assignments
+     *
      * @return $this
      */
     public function setAssignments($assignments)
     {
         $this->assignments = $assignments;
+
         return $this;
     }
 
     /**
      * @param mixed $assignment
+     *
      * @return $this
      */
     public function addAssignment($assignment)
     {
         $this->assignments[] = $assignment;
+
         return $this;
     }
 

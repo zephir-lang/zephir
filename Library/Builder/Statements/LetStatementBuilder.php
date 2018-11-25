@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * IfStatementBuilder
+ * IfStatementBuilder.
  *
  * Allows to manually build a 'let' statement AST node
  */

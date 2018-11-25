@@ -18,7 +18,7 @@ use Zephir\Passes\LoopBreakPass;
 use Zephir\StatementsBlock;
 
 /**
- * LoopStatement
+ * LoopStatement.
  *
  * Loop statement, infinite loop
  */
@@ -26,18 +26,19 @@ class LoopStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
         $compilationContext->codePrinter->output('while (1) {');
 
-        /**
+        /*
          * Variables are initialized in a different way inside cycle
          */
-        $compilationContext->insideCycle++;
+        ++$compilationContext->insideCycle;
 
-        /**
+        /*
          * Compile statements in the 'loop' block
          */
         if (!isset($this->statement['statements'])) {
@@ -47,7 +48,7 @@ class LoopStatement extends StatementAbstract
         $st = new StatementsBlock($this->statement['statements']);
 
         /**
-         * Check if the block contain at least a break statement
+         * Check if the block contain at least a break statement.
          */
         $loopBreakPass = new LoopBreakPass();
         $loopBreakPass->pass($st);
@@ -58,7 +59,7 @@ class LoopStatement extends StatementAbstract
         $st->isLoop(true);
         $st->compile($compilationContext, false, Branch::TYPE_LOOP_INFINITE);
 
-        $compilationContext->insideCycle--;
+        --$compilationContext->insideCycle;
 
         $compilationContext->codePrinter->output('}');
     }

@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * CosOptimizer
+ * CosOptimizer.
  *
  * Optimizes calls to 'cos' using internal function
  */

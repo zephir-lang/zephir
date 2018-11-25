@@ -15,7 +15,7 @@ use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
 
 /**
- * Zephir\Code\Builder\Struct
+ * Zephir\Code\Builder\Struct.
  *
  * Represents an internal extension global structure
  */
@@ -38,11 +38,11 @@ class Struct
      */
     public function __construct($name, $simpleName)
     {
-        if (!is_string($name)) {
+        if (!\is_string($name)) {
             throw new InvalidArgumentException('Struct name must be string');
         }
 
-        if (!is_string($simpleName)) {
+        if (!\is_string($simpleName)) {
             throw new InvalidArgumentException('Struct name must be string');
         }
 
@@ -59,20 +59,20 @@ class Struct
      */
     public function __toString()
     {
-        $code = 'typedef struct '. $this->name .' { '.PHP_EOL;
+        $code = 'typedef struct '.$this->name.' { '.PHP_EOL;
 
         foreach ($this->properties as $name => $type) {
             $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
         }
 
-        return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
+        return $code.'} '.substr($this->name, 1).';'.PHP_EOL;
     }
 
     /**
      * @param string $field
-     * @param array $global
+     * @param array  $global
+     *
      * @throws InvalidArgumentException
-     * @return void
      */
     public function addProperty($field, $global)
     {
@@ -80,11 +80,11 @@ class Struct
             throw new InvalidArgumentException('Property type must be string');
         }
 
-        if (!is_string($global['type'])) {
+        if (!\is_string($global['type'])) {
             throw new InvalidArgumentException('Property type must be string');
         }
 
-        if (!is_string($field)) {
+        if (!\is_string($field)) {
             throw new InvalidArgumentException('Property name must be string');
         }
 
@@ -99,16 +99,18 @@ class Struct
      * Returns the C code that initializes the extension global.
      *
      * @param string $name
-     * @param array $global
-     * @param mixed $namespace
+     * @param array  $global
+     * @param mixed  $namespace
+     *
      * @throws RuntimeException
      * @throws InvalidArgumentException
+     *
      * @return string
      */
     public function getCDefault($name, $global, $namespace)
     {
         if (!isset($global['default'])) {
-            throw new RuntimeException('Field "' . $name . '" does not have a default value');
+            throw new RuntimeException('Field "'.$name.'" does not have a default value');
         }
 
         switch ($global['type']) {
@@ -133,10 +135,10 @@ class Struct
             case 'long':
             case 'double':
             case 'hash':
-                return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ' . $global['default'] . ';';
+                return "\t".$namespace.'_globals->'.$this->simpleName.'.'.$name.' = '.$global['default'].';';
 
             default:
-                throw new InvalidArgumentException('Unknown global type: ' . $global['type']);
+                throw new InvalidArgumentException('Unknown global type: '.$global['type']);
         }
     }
 
@@ -144,6 +146,7 @@ class Struct
      * @param mixed $name
      * @param mixed $global
      * @param mixed $namespace
+     *
      * @return string
      */
     public function getInitEntry($name, $global, $namespace)
@@ -152,9 +155,9 @@ class Struct
         if (isset($global['ini-entry'])) {
             $iniEntry = $global['ini-entry'];
         }
-        $structName = $this->simpleName . '.' . $name;
+        $structName = $this->simpleName.'.'.$name;
         if (!isset($iniEntry['name'])) {
-            $iniName = $namespace . '.' . $structName;
+            $iniName = $namespace.'.'.$structName;
         } else {
             $iniName = $iniEntry['name'];
         }
@@ -168,28 +171,31 @@ class Struct
             case 'boolean':
             case 'bool':
                 return
-                    'STD_PHP_INI_BOOLEAN("' .
-                    $iniName .
-                    '", "' .
-                    (int) ($global['default'] === true) .
-                    '", ' .
-                    $scope .
-                    ', OnUpdateBool, ' .
-                    $structName .
-                    ', zend_' .
-                    $namespace .
-                    '_globals, ' .
-                    $namespace . '_globals)';
+                    'STD_PHP_INI_BOOLEAN("'.
+                    $iniName.
+                    '", "'.
+                    (int) (true === $global['default']).
+                    '", '.
+                    $scope.
+                    ', OnUpdateBool, '.
+                    $structName.
+                    ', zend_'.
+                    $namespace.
+                    '_globals, '.
+                    $namespace.'_globals)';
             break;
         }
+
         return '';
     }
 
     /**
-     * Generates the internal c-type according to the php's type
+     * Generates the internal c-type according to the php's type.
      *
      * @param string $type
+     *
      * @throws InvalidArgumentException
+     *
      * @return string
      */
     protected function convertToCType($type)
@@ -211,7 +217,7 @@ class Struct
                 return $type;
 
             default:
-                throw new InvalidArgumentException('Unknown global type: ' . $type);
+                throw new InvalidArgumentException('Unknown global type: '.$type);
         }
     }
 }

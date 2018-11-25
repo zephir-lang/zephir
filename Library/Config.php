@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Zephir\Config
+ * Zephir\Config.
  *
  * Manages compiler global configuration.
  */
@@ -25,7 +25,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     protected $changed = false;
     /**
-     * Default configuration for project
+     * Default configuration for project.
      *
      * @var array
      */
@@ -125,19 +125,20 @@ class Config implements \ArrayAccess, \JsonSerializable
      * Factory method to create a Config instance from the $_SERVER['argv'].
      *
      * @throws Exception
+     *
      * @return Config
      */
     public static function fromServer()
     {
         $config = new self();
 
-        /**
+        /*
          * Change configurations flags
          */
         if ($_SERVER['argc'] >= 2) {
             $argv = $_SERVER['argv'];
 
-            for ($i = 1; $i < $_SERVER['argc']; $i++) {
+            for ($i = 1; $i < $_SERVER['argc']; ++$i) {
                 $parameter = $argv[$i];
 
                 if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
@@ -166,7 +167,7 @@ class Config implements \ArrayAccess, \JsonSerializable
 
                 if (preg_match('/^--([a-z0-9\-]+)$/', $parameter, $matches)) {
                     // Only known options
-                    if ($config->get($matches[1], 'extra') !== null) {
+                    if (null !== $config->get($matches[1], 'extra')) {
                         $config->set($matches[1], true, 'extra');
                         unset($argv[$i]);
                     }
@@ -176,7 +177,7 @@ class Config implements \ArrayAccess, \JsonSerializable
 
                 if (preg_match('/^--([a-z0-9\-]+)=(.*)$/', $parameter, $matches)) {
                     // Only known options
-                    if ($config->get($matches[1], 'extra') !== null) {
+                    if (null !== $config->get($matches[1], 'extra')) {
                         $config->set($matches[1], $matches[2], 'extra');
                         unset($argv[$i]);
                     }
@@ -198,7 +199,7 @@ class Config implements \ArrayAccess, \JsonSerializable
             }
 
             $_SERVER['argv'] = $argv = array_values($argv);
-            $_SERVER['argc'] = $argc = count($argv);
+            $_SERVER['argc'] = $argc = \count($argv);
         }
 
         return $config;
@@ -208,6 +209,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * Allows to check whether an $key is defined.
      *
      * @param mixed $key
+     *
      * @return bool
      */
     public function offsetExists($key)
@@ -219,18 +221,19 @@ class Config implements \ArrayAccess, \JsonSerializable
      * Gets a $key from the internal container.
      *
      * @param mixed $key
+     *
      * @return mixed|null
      */
     public function offsetGet($key)
     {
-        if (!is_array($key)) {
+        if (!\is_array($key)) {
             return $this->offsetExists($key) ? $this->container[$key] : null;
         }
 
         $namespace = key($key);
         $key = current($key);
 
-        if (!$this->offsetExists($namespace) || !is_array($this->container[$namespace])) {
+        if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
             return null;
         }
 
@@ -249,9 +252,10 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function offsetSet($key, $value)
     {
-        if (!is_array($key)) {
+        if (!\is_array($key)) {
             $this->container[$key] = $value;
             $this->changed = true;
+
             return;
         }
 
@@ -283,15 +287,16 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @param mixed $key
      * @param mixed $namespace
+     *
      * @return mixed|null
      */
     public function get($key, $namespace = null)
     {
-        return $namespace !== null ? $this->offsetGet([$namespace => $key]) : $this->offsetGet($key);
+        return null !== $namespace ? $this->offsetGet([$namespace => $key]) : $this->offsetGet($key);
     }
 
     /**
-     * Changes a configuration setting
+     * Changes a configuration setting.
      *
      * @param mixed $key
      * @param mixed $value
@@ -299,11 +304,11 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function set($key, $value, $namespace = null)
     {
-        $namespace !== null ? $this->offsetSet([$namespace => $key], $value) : $this->offsetSet($key, $value);
+        null !== $namespace ? $this->offsetSet([$namespace => $key], $value) : $this->offsetSet($key, $value);
     }
 
     /**
-     * Writes the configuration if it has been changed
+     * Writes the configuration if it has been changed.
      */
     public function dumpToFile()
     {
@@ -313,7 +318,7 @@ class Config implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Specify data which should be serialized to JSON
+     * Specify data which should be serialized to JSON.
      *
      * @return array
      */
@@ -324,8 +329,6 @@ class Config implements \ArrayAccess, \JsonSerializable
 
     /**
      * Registers shutdown function.
-     *
-     * @return void
      */
     public function registerShutdownFunction()
     {
@@ -344,7 +347,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         }
 
         $config = json_decode(file_get_contents('config.json'), true);
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new Exception(
                 'The config.json file is not valid or there is no Zephir extension initialized in this directory.'
             );

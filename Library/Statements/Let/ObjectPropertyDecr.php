@@ -16,50 +16,50 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectPropertyDecr
+ * ObjectPropertyDecr.
  *
  * Decrements an object property
  */
 class ObjectPropertyDecr
 {
     /**
-     * Compiles obj->x--
+     * Compiles obj->x--.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompilationContext $compilationContext
-     * @param array $statement
-     * @param mixed $property
+     * @param array              $statement
+     * @param mixed              $property
      */
     public function assign($variable, $property, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
-        /**
+        /*
          * Arrays must be stored in the HEAP
          */
         if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is local only", $statement);
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
-        /**
+        /*
          * Only dynamic variables can be used as arrays
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+            throw new CompilerException("Cannot use variable type: '".$symbolVariable->getType()."' as array", $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
             throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /**
+        /*
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -69,16 +69,16 @@ class ObjectPropertyDecr
             );
         }
 
-        /**
+        /*
          * Check if the variable to update is defined
          */
-        if ($symbolVariable->getRealName() == 'this') {
+        if ('this' == $symbolVariable->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
             }
         } else {
-            /**
+            /*
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -89,17 +89,17 @@ class ObjectPropertyDecr
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: '.$classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $statement);
+                        throw new CompilerException("Class '".$classType."' does not have a property called: '".$property."'", $statement);
                     }
                 }
             }
         }
 
         $compilationContext->headersManager->add('kernel/object');
-        $compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_CC));');
+        $compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_decr('.$symbolVariable->getName().', SL("'.$property.'") TSRMLS_CC));');
     }
 }

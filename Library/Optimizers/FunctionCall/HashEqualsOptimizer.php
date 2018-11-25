@@ -18,26 +18,28 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * HashEqualsOptimizer
+ * HashEqualsOptimizer.
  *
  * Optimizes calls to 'hash_equals' using internal function
  */
 class HashEqualsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || count($expression['parameters']) != 2) {
+        if (!isset($expression['parameters']) || 2 != \count($expression['parameters'])) {
             throw new CompilerException("'hash_equals' requires two parameters", $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -50,7 +52,7 @@ class HashEqualsOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
 
         /**
-         * Process parameters
+         * Process parameters.
          */
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
@@ -58,6 +60,6 @@ class HashEqualsOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        return new CompiledExpression('bool', 'zephir_hash_equals(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+        return new CompiledExpression('bool', 'zephir_hash_equals('.$resolvedParams[0].', '.$resolvedParams[1].')', $expression);
     }
 }

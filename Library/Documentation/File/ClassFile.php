@@ -46,7 +46,7 @@ class ClassFile extends AbstractFile
         $nsStr = '';
 
         foreach ($nsPieces as $n) {
-            if (strlen($nsStr) > 0) {
+            if (\strlen($nsStr) > 0) {
                 $nsStr .= '\\';
             }
             $nsStr .= $n;
@@ -54,7 +54,6 @@ class ClassFile extends AbstractFile
         }
 
         return [
-
             'classDefinition' => $this->class,
             'compilerFile' => $this->compilerFile,
             'className' => $this->class->getName(),
@@ -62,7 +61,6 @@ class ClassFile extends AbstractFile
             'fullName' => $this->class->getCompleteName(),
             'methods' => $this->class->getMethods(),
             'namespacePieces' => $nsPatches,
-
         ];
     }
 

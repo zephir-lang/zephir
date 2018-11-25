@@ -12,7 +12,7 @@
 namespace Zephir\Fcall;
 
 /**
- * Zephir\Fcall\FcallAwareInterface
+ * Zephir\Fcall\FcallAwareInterface.
  */
 interface FcallAwareInterface
 {

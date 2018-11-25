@@ -68,7 +68,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Test
      */
     public function testExceptionString()
@@ -78,7 +78,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage t
      */
     public function testExceptionChar()
@@ -88,7 +88,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage 123
      */
     public function testExceptionInt()
@@ -98,7 +98,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage 123.123
      */
     public function testExceptionDouble()
@@ -108,7 +108,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Hello, Zephir
      */
     public function testExceptionSprintf()
@@ -118,7 +118,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Framework Phalcon written using Zephir
      */
     public function testExceptionConcat()
@@ -153,7 +153,7 @@ class ExceptionsTest extends TestCase
             $value = $t->testMultiException('test', new Exception('Some Exception'));
             $this->assertSame($value, 'test');
         } catch (Exception $e) {
-            $this->assertSame(true, false);
+            $this->assertTrue(false);
         }
         try {
             $t->testMultiException('test', new \Exception('Some Exception'));
@@ -167,7 +167,7 @@ class ExceptionsTest extends TestCase
             $t->testMultiException('test', new \Exception('Some Exception'));
             $this->assertSame($value, 'test');
         } catch (\Exception $e) {
-            $this->assertSame(true, false);
+            $this->assertTrue(false);
         }
     }
 

@@ -24,10 +24,10 @@ class MethodDocBlockTest extends TestCase
     public function prepareMethod($params)
     {
         /**
-         * ClassDefinition for Class creation
+         * ClassDefinition for Class creation.
          *
-         * @param string $namespace Namespace ex: \Zephir\Stubs
-         * @param string $name Class name, ex: Stubs
+         * @param string      $namespace Namespace ex: \Zephir\Stubs
+         * @param string      $name      Class name, ex: Stubs
          * @param string|null $shortName {get, set}
          */
         $classNamespace = $params['class']['namespace'];
@@ -41,16 +41,16 @@ class MethodDocBlockTest extends TestCase
         );
 
         /**
-         * ClassMethod constructor
+         * ClassMethod constructor.
          *
-         * @param ClassDefinition $classDefinition
-         * @param array $visibility
-         * @param string $name
+         * @param ClassDefinition            $classDefinition
+         * @param array                      $visibility
+         * @param string                     $name
          * @param ClassMethodParameters|null $parameters
-         * @param StatementsBlock|null $statements
-         * @param string|null $docblock
-         * @param array|null $returnType
-         * @param array|null $original
+         * @param StatementsBlock|null       $statements
+         * @param string|null                $docblock
+         * @param array|null                 $returnType
+         * @param array|null                 $original
          */
         $methodVisibility = $params['method']['visibility'];
         $methodName = $params['method']['name'];
@@ -78,7 +78,7 @@ class MethodDocBlockTest extends TestCase
 
     public function testMethodWithoutInputArgs()
     {
-        $classDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-2.php';
+        $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-2.php';
         $testDocBlock = $this->prepareMethod($classDefinition);
         $expected = <<<DOC
     /**
@@ -86,12 +86,12 @@ class MethodDocBlockTest extends TestCase
      */
 DOC;
 
-        $this->assertSame($expected, (string)$testDocBlock);
+        $this->assertSame($expected, (string) $testDocBlock);
     }
 
     public function testMethodWithInputArgs()
     {
-        $classDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-1.php';
+        $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-1.php';
 
         $testDocBlock = $this->prepareMethod($classDefinition);
         $expected = <<<DOC
@@ -107,7 +107,7 @@ DOC;
      */
 DOC;
 
-        $this->assertSame($expected, (string)$testDocBlock);
+        $this->assertSame($expected, (string) $testDocBlock);
     }
 
     public function getDocBlock()
@@ -159,27 +159,27 @@ DOC;
     /**
      * @dataProvider getDocBlock()
      *
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $expected
      */
     public function testMethodsWithDataSet(array $parameters, $expected)
     {
-        $baseDefinition = require ZEPHIRPATH . '/unit-tests/fixtures/base-definition.php';
+        $baseDefinition = require ZEPHIRPATH.'/unit-tests/fixtures/base-definition.php';
         $baseDefinition['method']['parameters'][] = $parameters;
 
-        $this->assertSame($expected, (string)$this->prepareMethod($baseDefinition));
+        $this->assertSame($expected, (string) $this->prepareMethod($baseDefinition));
     }
 
     public function testMethodWithFullDocBlock()
     {
-        $docblock = "Test for full filled Method\n" .
-                    "with non-ordered params\n" .
-                    "@param int \$val1\n" .
-                    "@param array \$val3 \n" .
-                    "@param string \$val2 - with additional descrription\n" .
+        $docblock = "Test for full filled Method\n".
+                    "with non-ordered params\n".
+                    "@param int \$val1\n".
+                    "@param array \$val3 \n".
+                    "@param string \$val2 - with additional descrription\n".
                     "@throws \Zephir\Compiler\CompilerException \n";
 
-        $testDefinition = require_once ZEPHIRPATH . '/unit-tests/fixtures/class-definition-3.php';
+        $testDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-3.php';
         $testDefinition['method']['docblock'] = $docblock;
 
         $expected = <<<DOC
@@ -194,6 +194,6 @@ DOC;
      */
 DOC;
 
-        $this->assertSame($expected, (string)$this->prepareMethod($testDefinition));
+        $this->assertSame($expected, (string) $this->prepareMethod($testDefinition));
     }
 }

@@ -19,7 +19,7 @@ use Zephir\Passes\SkipVariantInit;
 use Zephir\StatementsBlock;
 
 /**
- * IfStatement
+ * IfStatement.
  *
  * 'If' statement, the same as in PHP/C
  */
@@ -35,7 +35,7 @@ class IfStatement extends StatementAbstract
         $expr = new EvalExpression();
         $condition = $expr->optimize($exprRaw, $compilationContext);
 
-        /**
+        /*
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
         if (isset($this->statement['statements']) && (isset($this->statement['else_statements']) || isset($this->statement['elseif_statements']))) {
@@ -58,7 +58,7 @@ class IfStatement extends StatementAbstract
                 foreach ($this->statement['elseif_statements'] as $key => $statement) {
                     $this->statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
 
-                    $lastBranchId++;
+                    ++$lastBranchId;
                     $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
 
                     if (!isset($statement['statements'])) {
@@ -73,7 +73,7 @@ class IfStatement extends StatementAbstract
             foreach ($skipVariantInit->getVariables() as $variable) {
                 if ($symbolTable->hasVariable($variable)) {
                     $symbolVariable = $symbolTable->getVariable($variable);
-                    if ($symbolVariable->getType() == 'variable') {
+                    if ('variable' == $symbolVariable->getType()) {
                         if (!$readDetector->detect($variable, $exprRaw)) {
                             $symbolVariable->initVariant($compilationContext);
                             $symbolVariable->skipInitVariant(2);
@@ -83,20 +83,20 @@ class IfStatement extends StatementAbstract
             }
         }
 
-        $compilationContext->codePrinter->output('if (' . $condition . ') {');
+        $compilationContext->codePrinter->output('if ('.$condition.') {');
         $this->evalExpression = $expr;
 
         /**
-         * Try to mark latest temporary variable used as idle
+         * Try to mark latest temporary variable used as idle.
          */
         $evalVariable = $expr->getEvalVariable();
-        if (is_object($evalVariable)) {
+        if (\is_object($evalVariable)) {
             if ($evalVariable->isTemporal()) {
                 $evalVariable->setIdle(true);
             }
         }
 
-        /**
+        /*
          * Compile statements in the 'if' block
          */
         if (isset($this->statement['statements'])) {
@@ -105,7 +105,7 @@ class IfStatement extends StatementAbstract
             $branch->setRelatedStatement($this);
         }
 
-        /**
+        /*
          * Compile statements in the 'elseif' block
          */
         if (isset($this->statement['elseif_statements'])) {
@@ -115,13 +115,13 @@ class IfStatement extends StatementAbstract
                 }
 
                 $st = new StatementsBlock($statement['statements']);
-                $compilationContext->codePrinter->output('} else if (' . $statement['condition'] . ') {');
+                $compilationContext->codePrinter->output('} else if ('.$statement['condition'].') {');
                 $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
                 $branch->setRelatedStatement($this);
             }
         }
 
-        /**
+        /*
          * Compile statements in the 'else' block
          */
         if (isset($this->statement['else_statements'])) {

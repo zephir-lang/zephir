@@ -15,14 +15,15 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 
 /**
- * Class OptimizerAbstract
+ * Class OptimizerAbstract.
  */
 abstract class OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return mixed
      */
     abstract public function optimize(array $expression, Call $call, CompilationContext $context);

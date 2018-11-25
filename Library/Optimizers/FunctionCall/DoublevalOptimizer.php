@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * DoublevalOptimizer
+ * DoublevalOptimizer.
  *
  * Optimizes calls to 'doubleval' using internal function
  */
 class DoublevalOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,13 +39,14 @@ class DoublevalOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/operators');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('double', 'zephir_get_doubleval(' . $resolvedParams[0] . ')', $expression);
+
+        return new CompiledExpression('double', 'zephir_get_doubleval('.$resolvedParams[0].')', $expression);
     }
 }

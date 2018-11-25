@@ -19,7 +19,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Operators\BaseOperator;
 
 /**
- * TypeOf
+ * TypeOf.
  *
  * Obtains the type of a dynamic variable
  */
@@ -28,7 +28,9 @@ class TypeOfOperator extends BaseOperator
     /**
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -39,6 +41,7 @@ class TypeOfOperator extends BaseOperator
 
         $functionCall = BuilderFactory::getInstance()->statements()->functionCall('gettype', [$expression['left']]);
         $expression = new Expression($functionCall->build());
+
         return $expression->compile($compilationContext);
     }
 }

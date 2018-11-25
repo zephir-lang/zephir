@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * StrposOptimizer
+ * StrposOptimizer.
  *
  * Optimizes calls to 'strpos' using internal function
  */
 class StrposOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,26 +39,26 @@ class StrposOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) < 2) {
+        if (\count($expression['parameters']) < 2) {
             throw new CompilerException("'strpos' require two or three parameters");
         }
 
         /**
-         * Process offset
+         * Process offset.
          */
         $offset = '0 ';
-        if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['parameter']['type'] == 'int') {
-            $offset = $expression['parameters'][2]['parameter']['value'] . ' ';
+        if (\count($expression['parameters']) >= 3 && 'int' == $expression['parameters'][2]['parameter']['type']) {
+            $offset = $expression['parameters'][2]['parameter']['value'].' ';
             unset($expression['parameters'][2]);
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if (count($resolvedParams) >= 3) {
+        if (\count($resolvedParams) >= 3) {
             $context->headersManager->add('kernel/operators');
-            $offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
+            $offset = 'zephir_get_intval('.$resolvedParams[2].') ';
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -73,7 +75,8 @@ class StrposOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_strpos(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset .');');
+        $context->codePrinter->output('zephir_fast_strpos('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$offset.');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

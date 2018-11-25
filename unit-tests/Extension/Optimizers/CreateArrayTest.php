@@ -18,14 +18,14 @@ class CreateArrayTest extends TestCase
 {
     public function testCreateArrayNoSize()
     {
-        $t = new CreateArray;
-        $this->assertSame(count($t->createNoSize()), 0);
+        $t = new CreateArray();
+        $this->assertSame(\count($t->createNoSize()), 0);
     }
 
     public function testCreateArraySize()
     {
-        $t = new CreateArray;
-        $this->assertSame(count($t->createSize(3)), 3);
-        $this->assertSame(count($t->createSize(10)), 10);
+        $t = new CreateArray();
+        $this->assertSame(\count($t->createSize(3)), 3);
+        $this->assertSame(\count($t->createSize(10)), 10);
     }
 }

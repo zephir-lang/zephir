@@ -18,7 +18,7 @@ use Zephir\Expression;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\NativeArrayAccess
+ * Zephir\Expression\NativeArrayAccess.
  *
  * Resolves expressions that read array indexes
  */
@@ -38,9 +38,9 @@ class NativeArrayAccess
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -50,7 +50,7 @@ class NativeArrayAccess
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @param bool $readOnly
      */
@@ -60,7 +60,7 @@ class NativeArrayAccess
     }
 
     /**
-     * Sets whether the expression must be resolved in "noisy" mode
+     * Sets whether the expression must be resolved in "noisy" mode.
      *
      * @param bool $noisy
      */
@@ -70,24 +70,25 @@ class NativeArrayAccess
     }
 
     /**
-     * Compiles foo[x] = {expr}
+     * Compiles foo[x] = {expr}.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         /**
-         * Resolve the left part of the expression
+         * Resolve the left part of the expression.
          */
         $expr = new Expression($expression['left']);
         $expr->setReadOnly(true);
         $exprVariable = $expr->compile($compilationContext);
 
-        /**
+        /*
          * Only dynamic variables can be used as arrays
          */
         switch ($exprVariable->getType()) {
@@ -100,15 +101,15 @@ class NativeArrayAccess
                         break;
 
                     default:
-                        throw new CompilerException('Variable type: ' . $variableVariable->getType() . ' cannot be used as array', $expression['left']);
+                        throw new CompilerException('Variable type: '.$variableVariable->getType().' cannot be used as array', $expression['left']);
                 }
                 break;
 
             default:
-                throw new CompilerException('Cannot use expression: ' . $exprVariable->getType() . ' as an array', $expression['left']);
+                throw new CompilerException('Cannot use expression: '.$exprVariable->getType().' as an array', $expression['left']);
         }
 
-        /**
+        /*
          * Resolve the dimension according to variable's type
          */
         switch ($variableVariable->getType()) {
@@ -124,8 +125,8 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array $expression
-     * @param Variable $variableVariable
+     * @param array              $expression
+     * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
      */
     protected function _accessStringOffset($expression, Variable $variableVariable, CompilationContext $compilationContext)
@@ -133,7 +134,7 @@ class NativeArrayAccess
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                if ($symbolVariable->getType() != 'char' && $symbolVariable->getType() != 'uchar') {
+                if ('char' != $symbolVariable->getType() && 'uchar' != $symbolVariable->getType()) {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('uchar', $compilationContext);
                 }
             } else {
@@ -142,7 +143,7 @@ class NativeArrayAccess
         }
 
         /**
-         * Right part of expression is the index
+         * Right part of expression is the index.
          */
         $expr = new Expression($expression['right']);
         $exprIndex = $expr->compile($compilationContext);
@@ -155,7 +156,7 @@ class NativeArrayAccess
             case 'uint':
             case 'long':
                 $compilationContext->headersManager->add('kernel/operators');
-                $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $exprIndex->getCode() . ');');
+                $codePrinter->output($symbolVariable->getName().' = ZEPHIR_STRING_OFFSET('.$variableCode.', '.$exprIndex->getCode().');');
                 break;
 
             case 'variable':
@@ -164,38 +165,40 @@ class NativeArrayAccess
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $variableIndex->getName() . ');');
+                        $codePrinter->output($symbolVariable->getName().' = ZEPHIR_STRING_OFFSET('.$variableCode.', '.$variableIndex->getName().');');
                         break;
 
                     default:
-                        throw new CompilerException('Cannot use index type ' . $variableIndex->getType() . ' as offset', $expression['right']);
+                        throw new CompilerException('Cannot use index type '.$variableIndex->getType().' as offset', $expression['right']);
                 }
                 break;
 
             default:
-                throw new CompilerException('Cannot use index type ' . $exprIndex->getType() . ' as offset', $expression['right']);
+                throw new CompilerException('Cannot use index type '.$exprIndex->getType().' as offset', $expression['right']);
         }
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }
 
     /**
-     * @param array $expression
-     * @param Variable $variableVariable
+     * @param array              $expression
+     * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     protected function _accessDimensionArray($expression, Variable $variableVariable, CompilationContext $compilationContext)
     {
         $arrayAccess = $expression;
 
-        if ($variableVariable->getType() == 'variable') {
+        if ('variable' == $variableVariable->getType()) {
             if ($variableVariable->hasAnyDynamicType('unknown')) {
                 throw new CompilerException('Cannot use non-initialized variable as an array', $arrayAccess['left']);
             }
 
-            /**
+            /*
              * Trying to use a non-object dynamic variable as object
              */
             if ($variableVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
@@ -207,22 +210,22 @@ class NativeArrayAccess
         }
 
         /**
-         * Resolves the symbol that expects the value
+         * Resolves the symbol that expects the value.
          */
         $readOnly = false;
         $symbolVariable = $this->expectingVariable;
 
         if ($this->readOnly) {
             if ($this->expecting && $this->expectingVariable) {
-                /**
+                /*
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
-                if ($symbolVariable->getName() != 'return_value') {
+                if ('return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
-                    if ($line === false || ($line > 0 && $line < $expression['line'])) {
+                    if (false === $line || ($line > 0 && $line < $expression['line'])) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-                        if ($numberMutations == 1) {
+                        if (1 == $numberMutations) {
                             if ($symbolVariable->getNumberMutations() == $numberMutations) {
                                 $symbolVariable->setMemoryTracked(false);
                                 $readOnly = true;
@@ -231,11 +234,11 @@ class NativeArrayAccess
                     }
                 }
 
-                /**
+                /*
                  * Variable is not read-only or it wasn't promoted
                  */
                 if (!$readOnly) {
-                    if ($symbolVariable->getName() != 'return_value') {
+                    if ('return_value' != $symbolVariable->getName()) {
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
@@ -247,15 +250,15 @@ class NativeArrayAccess
             }
         } else {
             if ($this->expecting && $this->expectingVariable) {
-                /**
+                /*
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
-                if ($symbolVariable->getName() != 'return_value') {
+                if ('return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
-                    if ($line === false || ($line > 0 && $line < $expression['line'])) {
+                    if (false === $line || ($line > 0 && $line < $expression['line'])) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-                        if ($numberMutations == 1) {
+                        if (1 == $numberMutations) {
                             if ($symbolVariable->getNumberMutations() == $numberMutations) {
                                 $symbolVariable->setMemoryTracked(false);
                                 $readOnly = true;
@@ -264,11 +267,11 @@ class NativeArrayAccess
                     }
                 }
 
-                /**
+                /*
                  * Variable is not read-only or it wasn't promoted
                  */
                 if (!$readOnly) {
-                    if ($symbolVariable->getName() != 'return_value') {
+                    if ('return_value' != $symbolVariable->getName()) {
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
@@ -280,14 +283,14 @@ class NativeArrayAccess
             }
         }
 
-        /**
+        /*
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign array index', $expression);
+            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign array index', $expression);
         }
 
-        /**
+        /*
          * At this point, we don't know the type fetched from the index
          */
         $symbolVariable->setDynamicTypes('undefined');
@@ -307,12 +310,12 @@ class NativeArrayAccess
         }
 
         /**
-         * Right part of expression is the index
+         * Right part of expression is the index.
          */
         $expr = new Expression($arrayAccess['right']);
         $exprIndex = $expr->compile($compilationContext);
         $compilationContext->headersManager->add('kernel/array');
-        if ($exprIndex->getType() == 'variable') {
+        if ('variable' == $exprIndex->getType()) {
             $exprIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
         }
         $compilationContext->backend->arrayFetch($symbolVariable, $variableVariable, $exprIndex, $flags, $arrayAccess, $compilationContext);

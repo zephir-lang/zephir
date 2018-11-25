@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * ArrayKeysExistsOptimizer
+ * ArrayKeysExistsOptimizer.
  *
  * Optimizes calls to 'array_key_exists' using internal function
  */
 class ArrayKeyExistsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,7 +39,7 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
@@ -46,6 +48,6 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         //Note: the first parameter is key in php array_key_exists
-        return new CompiledExpression('bool', 'zephir_array_key_exists(' . $resolvedParams[1] . ', ' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_array_key_exists('.$resolvedParams[1].', '.$resolvedParams[0].' TSRMLS_CC)', $expression);
     }
 }

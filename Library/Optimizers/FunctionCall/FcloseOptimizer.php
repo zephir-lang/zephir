@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FcloseOptimizer
+ * FcloseOptimizer.
  *
  * Optimizes calls to 'fclose' using internal function
  */
 class FcloseOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,7 +39,7 @@ class FcloseOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
@@ -45,6 +47,6 @@ class FcloseOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_fclose(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_fclose('.$resolvedParams[0].' TSRMLS_CC)', $expression);
     }
 }

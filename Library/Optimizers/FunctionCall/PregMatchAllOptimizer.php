@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers\FunctionCall;
 
 /**
- * PregMatchAllOptimizer
+ * PregMatchAllOptimizer.
  *
  * Optimizes calls to 'preg_match_all' using internal function
  */

@@ -19,15 +19,16 @@ class AssignTest extends TestCase
     /**
      * @dataProvider variableAssignProvider
      * @test
-     * @param mixed $expected
+     *
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignment($expected, $test, $testParams = null)
     {
         $t = new Assign();
 
-        $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+        $this->assertSame($expected, \call_user_func([$t, $test], $testParams));
     }
 
     public function variableAssignProvider()
@@ -92,18 +93,19 @@ class AssignTest extends TestCase
     /**
      * @dataProvider propertyAssignProvider
      * @test
-     * @param mixed $expected
+     *
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {
         $t = new Assign();
 
-        if (gettype($testParams) === 'array') {
-            $this->assertSame($expected, call_user_func_array([$t, $test], $testParams));
+        if ('array' === \gettype($testParams)) {
+            $this->assertSame($expected, \call_user_func_array([$t, $test], $testParams));
         } else {
-            $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+            $this->assertSame($expected, \call_user_func([$t, $test], $testParams));
         }
     }
 
@@ -142,7 +144,7 @@ class AssignTest extends TestCase
     {
         $t = new Assign();
 
-        /**
+        /*
          * @see LetStatement::_assignArrayIndexSingle();
          */
         $this->assertTrue(!isset($_POST['test_index']));

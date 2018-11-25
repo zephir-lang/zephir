@@ -22,7 +22,9 @@ class BitwiseNotOperator extends BaseOperator
     /**
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -41,7 +43,7 @@ class BitwiseNotOperator extends BaseOperator
             case 'uint':
             case 'long':
             case 'ulong':
-                return new CompiledExpression('int', '~(' . $left->getCode() . ')', $expression);
+                return new CompiledExpression('int', '~('.$left->getCode().')', $expression);
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
@@ -50,19 +52,20 @@ class BitwiseNotOperator extends BaseOperator
                     case 'int':
                     case 'uint':
                     case 'long':
-                        return new CompiledExpression('int', '~' . $variable->getName(), $expression);
+                        return new CompiledExpression('int', '~'.$variable->getName(), $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        return new CompiledExpression('int', '~zephir_get_intval(' . $variable->getName() . ')', $expression);
+
+                        return new CompiledExpression('int', '~zephir_get_intval('.$variable->getName().')', $expression);
 
                     default:
-                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: '.$variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
+                throw new CompilerException('Unknown type: '.$left->getType(), $expression);
         }
     }
 }

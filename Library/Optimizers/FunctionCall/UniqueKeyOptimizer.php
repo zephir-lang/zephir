@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * UniqueKeyOptimizer
+ * UniqueKeyOptimizer.
  *
  * Optimizes calls to 'unique_key' using internal function
  */
 class UniqueKeyOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class UniqueKeyOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             throw new CompilerException("'unique_key' only accepts two parameter", $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -61,7 +63,7 @@ class UniqueKeyOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_unique_key(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_unique_key('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

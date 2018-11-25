@@ -13,7 +13,7 @@ namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
 
-class ProtectedPropertiesTEst extends TestCase
+class ProtectedPropertiesTest extends TestCase
 {
     public function testAssertations()
     {

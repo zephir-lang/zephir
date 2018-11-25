@@ -42,6 +42,6 @@ class IndexFile extends AbstractFile
 
     public function getOutputFile()
     {
-        return 'index.html' ;
+        return 'index.html';
     }
 }

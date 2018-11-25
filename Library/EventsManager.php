@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Class EventsManager
+ * Class EventsManager.
  */
 class EventsManager
 {
@@ -22,7 +22,7 @@ class EventsManager
     private $listeners = [];
 
     /**
-     * Attaches a listener to a specific event type
+     * Attaches a listener to a specific event type.
      *
      * @param $event
      * @param $callback
@@ -37,7 +37,7 @@ class EventsManager
     }
 
     /**
-     * Triggers an event for the specified event type
+     * Triggers an event for the specified event type.
      *
      * @param $event
      * @param array $param
@@ -45,7 +45,7 @@ class EventsManager
     public function dispatch($event, array $param = [])
     {
         foreach ($this->listeners[$event] as $listener) {
-            call_user_func_array($listener, $param);
+            \call_user_func_array($listener, $param);
         }
     }
 }

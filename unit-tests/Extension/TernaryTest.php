@@ -25,11 +25,11 @@ class TernaryTest extends TestCase
         $this->assertSame(3, $t->testTernaryAfterLetVariable());
         $this->assertSame(['', 'c', ''], $t->testTernaryWithPromotedTemporaryVariable());
 
-        $this->assertSame(true, $t->testShortTernary(true));
-        $this->assertSame(false, $t->testShortTernary([]));
-        $this->assertSame([1,2,3], $t->testShortTernary([1,2,3]));
-        $this->assertSame(false, $t->testShortTernary(false));
-        $this->assertSame(false, $t->testShortTernary(0));
+        $this->assertTrue($t->testShortTernary(true));
+        $this->assertFalse($t->testShortTernary([]));
+        $this->assertSame([1, 2, 3], $t->testShortTernary([1, 2, 3]));
+        $this->assertFalse($t->testShortTernary(false));
+        $this->assertFalse($t->testShortTernary(0));
 
         $this->assertSame(1, $t->testShortTernaryComplex(false, 1));
         $this->assertSame('test string', $t->testShortTernaryComplex(false, 'test string'));

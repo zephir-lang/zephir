@@ -65,7 +65,7 @@ use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 
 /**
- * Zephir\Expressions
+ * Zephir\Expressions.
  *
  * Represents an expression. Most language constructs in a language are expressions
  */
@@ -81,6 +81,7 @@ class Expression
 
     /**
      * @deprecated
+     *
      * @var bool
      */
     protected $stringOperation = false;
@@ -91,7 +92,7 @@ class Expression
     protected $evalMode = false;
 
     /**
-     * Expression constructor
+     * Expression constructor.
      *
      * @param array $expression
      */
@@ -101,7 +102,7 @@ class Expression
     }
 
     /**
-     * Returns the original expression
+     * Returns the original expression.
      *
      * @return array
      */
@@ -112,9 +113,9 @@ class Expression
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -124,7 +125,7 @@ class Expression
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @param bool $readOnly
      */
@@ -134,7 +135,7 @@ class Expression
     }
 
     /**
-     * Checks if the result of the evaluated expression is read only
+     * Checks if the result of the evaluated expression is read only.
      *
      * @return bool
      */
@@ -145,7 +146,7 @@ class Expression
 
     /**
      * Checks if the returned value by the expression
-     * is expected to be assigned to an external symbol
+     * is expected to be assigned to an external symbol.
      *
      * @return bool
      */
@@ -156,7 +157,7 @@ class Expression
 
     /**
      * Returns the variable which is expected to return the
-     * result of the expression evaluation
+     * result of the expression evaluation.
      *
      * @return Variable
      */
@@ -166,7 +167,7 @@ class Expression
     }
 
     /**
-     * Sets whether the expression must be resolved in "noisy" mode
+     * Sets whether the expression must be resolved in "noisy" mode.
      *
      * @param bool $noisy
      */
@@ -176,7 +177,7 @@ class Expression
     }
 
     /**
-     * Checks whether the expression must be resolved in "noisy" mode
+     * Checks whether the expression must be resolved in "noisy" mode.
      *
      * @return bool
      */
@@ -187,9 +188,10 @@ class Expression
 
     /**
      * Sets if current operation is a string operation like "concat"
-     * thus avoiding promote numeric strings to longs
+     * thus avoiding promote numeric strings to longs.
      *
      * @deprecated
+     *
      * @param bool $stringOperation
      */
     public function setStringOperation($stringOperation)
@@ -199,9 +201,10 @@ class Expression
 
     /**
      * Checks if the result of the evaluated expression is intended to be used
-     * in a string operation like "concat"
+     * in a string operation like "concat".
      *
      * @deprecated
+     *
      * @return bool
      */
     public function isStringOperation()
@@ -210,7 +213,7 @@ class Expression
     }
 
     /**
-     * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements
+     * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
      *
      * @param bool $evalMode
      */
@@ -220,20 +223,21 @@ class Expression
     }
 
     /**
-     * Compiles foo = []
+     * Compiles foo = [].
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function emptyArray($expression, CompilationContext $compilationContext)
     {
-        /**
+        /*
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
             if ($this->expectingVariable) {
-                $symbolVariable = & $this->expectingVariable;
+                $symbolVariable = &$this->expectingVariable;
                 $symbolVariable->initVariant($compilationContext);
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -242,14 +246,14 @@ class Expression
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
         }
 
-        /**
+        /*
          * Variable that receives property accesses must be polymorphic
          */
-        if (!$symbolVariable->isVariable() && $symbolVariable->getType() != 'array') {
-            throw new CompilerException('Cannot use variable: ' . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ') to create empty array', $expression);
+        if (!$symbolVariable->isVariable() && 'array' != $symbolVariable->getType()) {
+            throw new CompilerException('Cannot use variable: '.$symbolVariable->getName().'('.$symbolVariable->getType().') to create empty array', $expression);
         }
 
-        /**
+        /*
          * Mark the variable as an 'array'
          */
         $symbolVariable->setDynamicTypes('array');
@@ -260,10 +264,12 @@ class Expression
     }
 
     /**
-     * Resolves an expression
+     * Resolves an expression.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException|Exception
+     *
      * @return bool|CompiledExpression
      */
     public function compile(CompilationContext $compilationContext)
@@ -291,22 +297,23 @@ class Expression
                 return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 
             case 'char':
-                if (!strlen($expression['value'])) {
+                if (!\strlen($expression['value'])) {
                     throw new CompilerException('Invalid empty char literal', $expression);
                 }
-                if (strlen($expression['value']) > 2) {
-                    if (strlen($expression['value']) > 10) {
-                        throw new CompilerException("Invalid char literal: '" . substr($expression['value'], 0, 10) . "...'", $expression);
+                if (\strlen($expression['value']) > 2) {
+                    if (\strlen($expression['value']) > 10) {
+                        throw new CompilerException("Invalid char literal: '".substr($expression['value'], 0, 10)."...'", $expression);
                     } else {
-                        throw new CompilerException("Invalid char literal: '" . $expression['value'] . "'", $expression);
+                        throw new CompilerException("Invalid char literal: '".$expression['value']."'", $expression);
                     }
                 }
+
                 return new LiteralCompiledExpression('char', $expression['value'], $expression);
 
             case 'variable':
                 $var = $compilationContext->symbolTable->getVariable($expression['value']);
                 if ($var) {
-                    if ($var->getRealName() == 'this') {
+                    if ('this' == $var->getRealName()) {
                         $var = 'this';
                     } else {
                         $var = $var->getName();
@@ -314,6 +321,7 @@ class Expression
                 } else {
                     $var = $expression['value'];
                 }
+
                 return new CompiledExpression('variable', $var, $expression);
 
             case 'constant':
@@ -349,14 +357,17 @@ class Expression
 
             case 'fcall':
                 $functionCall = new FunctionCall();
+
                 return $functionCall->compile($this, $compilationContext);
 
             case 'mcall':
                 $methodCall = new MethodCall();
+
                 return $methodCall->compile($this, $compilationContext);
 
             case 'scall':
                 $staticCall = new StaticCall();
+
                 return $staticCall->compile($this, $compilationContext);
 
             case 'isset':
@@ -478,6 +489,7 @@ class Expression
             case 'concat':
                 $expr = new ConcatOperator();
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
+
                 return $expr->compile($expression, $compilationContext);
 
             case 'irange':
@@ -489,21 +501,22 @@ class Expression
                 break;
 
             case 'list':
-                if ($expression['left']['type'] == 'list') {
+                if ('list' == $expression['left']['type']) {
                     $compilationContext->logger->warning(
                         'Unnecessary extra parentheses',
                         ['extra-parentheses', $expression]
                     );
                 }
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
-                $expr = new Expression($expression['left']);
+                $expr = new self($expression['left']);
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
                 if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
-                    if (strpos($resolved->getCode(), ' ') !== false) {
-                        return new CompiledExpression($resolved->getType(), '(' . $resolved->getCode() . ')', $expression);
+                    if (false !== strpos($resolved->getCode(), ' ')) {
+                        return new CompiledExpression($resolved->getType(), '('.$resolved->getCode().')', $expression);
                     }
                 }
+
                 return $resolved;
 
             case 'cast':
@@ -514,6 +527,7 @@ class Expression
                 $expr = new TypeHintOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
+
                 return $expr->compile($expression, $compilationContext);
 
             case 'instanceof':
@@ -532,6 +546,7 @@ class Expression
                 $expr = new ShortTernaryOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
+
                 return $expr->compile($expression, $compilationContext);
 
             case 'likely':
@@ -540,6 +555,7 @@ class Expression
                 }
                 $expr = new LikelyOperator();
                 $expr->setReadOnly($this->isReadOnly());
+
                 return $expr->compile($expression, $compilationContext);
 
             case 'unlikely':
@@ -548,6 +564,7 @@ class Expression
                 }
                 $expr = new UnlikelyOperator();
                 $expr->setReadOnly($this->isReadOnly());
+
                 return $expr->compile($expression, $compilationContext);
 
             case 'typeof':
@@ -571,7 +588,7 @@ class Expression
                 break;
 
             default:
-                throw new CompilerException('Unknown expression: ' . $type, $expression);
+                throw new CompilerException('Unknown expression: '.$type, $expression);
         }
 
         if (!$compilableExpression) {
@@ -579,6 +596,7 @@ class Expression
         }
         $compilableExpression->setReadOnly($this->isReadOnly());
         $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);
+
         return $compilableExpression->compile($expression, $compilationContext);
     }
 }

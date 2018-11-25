@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
 /**
- * IsIntOptimizer
+ * IsIntOptimizer.
  *
  * Optimizes calls to 'is_int' using internal function
  */

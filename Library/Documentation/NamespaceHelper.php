@@ -28,7 +28,7 @@ class NamespaceHelper
         $this->fullNamespace = $fullNamespace;
 
         $ex = explode('\\', $fullNamespace);
-        $this->endNamespace = $ex[count($ex) - 1];
+        $this->endNamespace = $ex[\count($ex) - 1];
 
         array_pop($ex);
 
@@ -40,7 +40,7 @@ class NamespaceHelper
         $this->classes[] = $c;
     }
 
-    public function addNamespace(NamespaceHelper $n)
+    public function addNamespace(self $n)
     {
         if (!isset($this->namespaces[$n->getFullNamespace()])) {
             $this->namespaces[$n->getFullNamespace()] = $n;

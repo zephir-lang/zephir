@@ -38,7 +38,7 @@ class OrOperator extends LogicalBaseOperator
         $left = $leftExpr->compile($compilationContext);
 
         /**
-         * This variable is used to check if the compound and expression is evaluated as true or false
+         * This variable is used to check if the compound and expression is evaluated as true or false.
          */
         $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
 
@@ -73,7 +73,7 @@ class OrOperator extends LogicalBaseOperator
         }
 
         /**
-         * Create an implicit 'let' operation to update the evaluated left operator
+         * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
             'type' => 'let',
@@ -91,7 +91,7 @@ class OrOperator extends LogicalBaseOperator
         ]);
         $statement->compile($compilationContext);
 
-        $compilationContext->codePrinter->output('if (!(' . $flagVariable->getName() . ')) {');
+        $compilationContext->codePrinter->output('if (!('.$flagVariable->getName().')) {');
 
         $compilationContext->codePrinter->increaseLevel();
 
@@ -130,7 +130,7 @@ class OrOperator extends LogicalBaseOperator
         }
 
         /**
-         * Create an implicit 'let' operation to update the evaluated right operator
+         * Create an implicit 'let' operation to update the evaluated right operator.
          */
         $statement = new LetStatement([
             'type' => 'let',

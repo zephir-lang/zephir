@@ -15,7 +15,7 @@ use Zephir\Builder\Operators\AbstractOperatorBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 
 /**
- * IfStatementBuilder
+ * IfStatementBuilder.
  *
  * Allows to manually build a 'if' statement AST node
  */
@@ -28,11 +28,11 @@ class IfStatementBuilder extends AbstractStatementBuilder
     private $elseBlock;
 
     /**
-     * IfStatementBuilder constructor
+     * IfStatementBuilder constructor.
      *
      * @param AbstractOperatorBuilder $evalExpr
-     * @param StatementsBlockBuilder $ifBlock
-     * @param StatementsBlockBuilder $elseBlock
+     * @param StatementsBlockBuilder  $ifBlock
+     * @param StatementsBlockBuilder  $elseBlock
      */
     public function __construct(AbstractOperatorBuilder $evalExpr, StatementsBlockBuilder $ifBlock, StatementsBlockBuilder $elseBlock = null)
     {

@@ -21,7 +21,7 @@ use Zephir\Operators\BaseOperator;
 use Zephir\Statements\IfStatement;
 
 /**
- * ShortTernary
+ * ShortTernary.
  *
  * a ?: b
  *
@@ -30,15 +30,16 @@ use Zephir\Statements\IfStatement;
 class ShortTernaryOperator extends BaseOperator
 {
     /**
-     * Compile ternary operator
+     * Compile ternary operator.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        /**
+        /*
          * This variable is used to check if the compound and expression is evaluated as true or false:
          * Ensure that newly allocated variables are local-only (setReadOnly)
          */
@@ -47,7 +48,7 @@ class ShortTernaryOperator extends BaseOperator
         /* Make sure that passed variables (passed symbol variables) are promoted */
         $returnVariable->setLocalOnly(false);
 
-        if ($returnVariable->getType() != 'variable' || $returnVariable->getName() == 'return_value') {
+        if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
             $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
             if ($returnVariable->isTemporal()) {
                 $returnVariable->skipInitVariant(2);
@@ -60,7 +61,7 @@ class ShortTernaryOperator extends BaseOperator
                 $expression['left']
             ),
             new StatementsBlockBuilder([
-                /**
+                /*
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
                 new LetStatementBuilder([
@@ -74,7 +75,7 @@ class ShortTernaryOperator extends BaseOperator
                 ], $expression['extra']),
             ]),
             new StatementsBlockBuilder([
-                /**
+                /*
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
                 new LetStatementBuilder([

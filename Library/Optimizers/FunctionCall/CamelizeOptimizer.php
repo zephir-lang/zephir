@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CamelizeOptimizer
+ * CamelizeOptimizer.
  *
  * Optimizes calls to 'camelize' using internal function
  */
 class CamelizeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,18 +39,18 @@ class CamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
+        if (\count($expression['parameters']) < 1 || \count($expression['parameters']) > 2) {
             throw new CompilerException("'camelize' only accepts one or two parameters");
         }
 
         $delimiter = 'NULL ';
-        if (count($expression['parameters']) == 2) {
-            if ($expression['parameters'][1]['parameter']['type'] == 'null') {
+        if (2 == \count($expression['parameters'])) {
+            if ('null' == $expression['parameters'][1]['parameter']['type']) {
                 unset($expression['parameters'][1]);
             }
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -73,7 +75,7 @@ class CamelizeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );');
+        $context->codePrinter->output('zephir_camelize('.$symbol.', '.$resolvedParams[0].', '.$delimiter.' );');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

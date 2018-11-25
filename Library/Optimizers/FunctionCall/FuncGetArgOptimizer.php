@@ -19,7 +19,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Zephir\Optimizers\FunctionCall\FuncGetArgOptimizer
+ * Zephir\Optimizers\FunctionCall\FuncGetArgOptimizer.
  *
  * Optimizes calls to 'func_get_arg' using internal function.
  */
@@ -28,25 +28,27 @@ class FuncGetArgOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || count($expression['parameters']) != 1) {
+        if (!isset($expression['parameters']) || 1 != \count($expression['parameters'])) {
             throw new CompilerException(
                 sprintf(
                     'func_get_arg() expects at exactly 1 parameter, %d given',
-                    isset($expression['parameters']) ? count($expression['parameters']) : 0
+                    isset($expression['parameters']) ? \count($expression['parameters']) : 0
                 ),
                 $expression
             );
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);

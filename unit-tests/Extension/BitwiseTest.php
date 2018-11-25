@@ -123,7 +123,7 @@ class BitwiseTest extends TestCase
         $this->assertSame($t->testBitwiseNot(666), -667);
         $this->assertSame($t->testBitwiseAndNot(5, 4), 1);
 
-        /**
+        /*
          * Bitwise XOR
          * @issue https://github.com/phalcon/zephir/issues/1581
          */

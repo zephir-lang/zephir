@@ -24,7 +24,7 @@ use Zephir\Compiler;
 use Zephir\Config;
 
 /**
- * Zephir\Console\Command\InitCommand
+ * Zephir\Console\Command\InitCommand.
  *
  * Initializes a Zephir extension.
  */
@@ -128,7 +128,7 @@ final class InitCommand extends Command
      * @param $src
      * @param $dst
      * @param string $pattern
-     * @param mixed $callback
+     * @param mixed  $callback
      *
      * @return bool
      */
@@ -140,21 +140,21 @@ final class InitCommand extends Command
         foreach ($iterator as $item) {
             $pathName = $item->getPathname();
             if (!\is_readable($pathName)) {
-                $this->logger->error('File is not readable :' . $pathName);
+                $this->logger->error('File is not readable :'.$pathName);
                 continue;
             }
 
             $fileName = $item->getFileName();
 
             if ($item->isDir()) {
-                if ($fileName != '.' && $fileName != '..' && $fileName != '.libs') {
-                    if (!\is_dir($dst . DIRECTORY_SEPARATOR . $fileName)) {
-                        \mkdir($dst . DIRECTORY_SEPARATOR . $fileName, 0755, true);
+                if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
+                    if (!\is_dir($dst.\DIRECTORY_SEPARATOR.$fileName)) {
+                        \mkdir($dst.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dst . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dst.\DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
-            } elseif (!$pattern || ($pattern && \preg_match($pattern, $fileName) === 1)) {
-                $path = $dst . DIRECTORY_SEPARATOR . $fileName;
+            } elseif (!$pattern || ($pattern && 1 === \preg_match($pattern, $fileName))) {
+                $path = $dst.\DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && \call_user_func($callback, $pathName, $path);
             }
         }

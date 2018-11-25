@@ -12,7 +12,7 @@
 namespace Zephir\Operators\Arithmetical;
 
 /**
- * MulOperator
+ * MulOperator.
  *
  * Generates an arithmetical operation according to the operands
  */

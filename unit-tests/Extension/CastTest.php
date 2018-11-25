@@ -30,7 +30,7 @@ class CastTest extends TestCase
 
     public function testIntCast()
     {
-        /**
+        /*
          * Value
          */
         $this->assertSame(5, $this->test->testIntCastFromFloat());
@@ -42,7 +42,7 @@ class CastTest extends TestCase
         $this->assertSame(1, $this->test->testIntCastFromArray());
         $this->assertSame(1, $this->test->testIntCastFromStdClass());
 
-        /**
+        /*
          * Variable types
          */
         $this->assertSame(5, $this->test->testIntCastFromVariableFloat());
@@ -107,10 +107,9 @@ class CastTest extends TestCase
 
     /**
      * Test cases for Issue 1524
-     * Casting Resource to Integer must always return int value of Resource Id
+     * Casting Resource to Integer must always return int value of Resource Id.
      *
      * @author Alexander Andriiako <AlexNDR@phalconphp.com>
-     * @return void
      */
     public function testResourceCast()
     {
@@ -120,7 +119,7 @@ class CastTest extends TestCase
             );
         }
 
-        $file = fopen(__DIR__ . '/../fixtures/exists.php', 'r');
+        $file = fopen(__DIR__.'/../fixtures/exists.php', 'r');
 
         $this->assertEquals((int) STDIN, $this->test->testCastStdinToInteger());
         $this->assertEquals((int) STDOUT, $this->test->testCastStdoutToInteger());

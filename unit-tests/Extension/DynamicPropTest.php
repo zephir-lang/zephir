@@ -18,28 +18,28 @@ class DynamicPropTest extends TestCase
     public function testSetProperty()
     {
         $class = new \Test\Oo\DynamicProp();
-        $this->assertSame(null, $class->test);
+        $this->assertNull($class->test);
 
         $class->setPropertyInt('test');
         $this->assertSame(10, $class->test);
 
         $class->setPropertyBoolTrue('test');
-        $this->assertSame(true, $class->test);
+        $this->assertTrue($class->test);
 
         $class->setPropertyBoolFalse('test');
-        $this->assertSame(false, $class->test);
+        $this->assertFalse($class->test);
 
         $class->setPropertyString('test');
         $this->assertSame('string', $class->test);
 
         $class->setPropertyChar('test');
-        $this->assertSame(ord('A'), $class->test);
+        $this->assertSame(\ord('A'), $class->test);
 
         $class->setPropertyUChar('test');
-        $this->assertSame(ord('B') - 1, $class->test);
+        $this->assertSame(\ord('B') - 1, $class->test);
 
         $class->setPropertyNull('test');
-        $this->assertSame(null, $class->test);
+        $this->assertNull($class->test);
 
         $class->setPropertyVariableInt('test');
         $this->assertSame(10, $class->test);
@@ -48,10 +48,10 @@ class DynamicPropTest extends TestCase
         $this->assertSame('test', $class->test);
 
         $class->setPropertyVariableBoolTrue('test');
-        $this->assertSame(true, $class->test);
+        $this->assertTrue($class->test);
 
         $class->setPropertyVariableBoolFalse('test');
-        $this->assertSame(false, $class->test);
+        $this->assertFalse($class->test);
 
         $class->setPropertyInt('property');
         $this->assertSame(10, $class->property);

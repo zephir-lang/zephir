@@ -14,7 +14,7 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * MutateGathererPass
+ * MutateGathererPass.
  *
  * Counts variables mutated inside a specific statement block
  * Non-mutated variables can be promoted to use an inline cache
@@ -26,7 +26,7 @@ class MutateGathererPass
     protected $mutations = [];
 
     /**
-     * Do the compilation pass
+     * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
@@ -45,25 +45,28 @@ class MutateGathererPass
     }
 
     /**
-     * Increase the number of mutations a variable has inside a statement block
+     * Increase the number of mutations a variable has inside a statement block.
      *
      * @param string $variable
+     *
      * @return MutateGathererPass
      */
     public function increaseMutations($variable)
     {
         if (isset($this->mutations[$variable])) {
-            $this->mutations[$variable]++;
+            ++$this->mutations[$variable];
         } else {
             $this->mutations[$variable] = 1;
         }
+
         return $this;
     }
 
     /**
-     * Returns the number of assignment instructions that mutated a variable
+     * Returns the number of assignment instructions that mutated a variable.
      *
      * @param string $variable
+     *
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -71,11 +74,12 @@ class MutateGathererPass
         if (isset($this->mutations[$variable])) {
             return $this->mutations[$variable];
         }
+
         return 0;
     }
 
     /**
-     * Pass let statements
+     * Pass let statements.
      *
      * @param array $statement
      */
@@ -90,7 +94,7 @@ class MutateGathererPass
     }
 
     /**
-     * Pass call expressions
+     * Pass call expressions.
      *
      * @param array $expression
      */
@@ -98,7 +102,7 @@ class MutateGathererPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] == 'variable') {
+                if ('variable' == $parameter['parameter']['type']) {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -108,21 +112,21 @@ class MutateGathererPass
     }
 
     /**
-     * Pass array expressions
+     * Pass array expressions.
      *
      * @param array $expression
      */
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            if ($item['value']['type'] != 'variable') {
+            if ('variable' != $item['value']['type']) {
                 $this->passExpression($item['value']);
             }
         }
     }
 
     /**
-     * Pass "new" expressions
+     * Pass "new" expressions.
      *
      * @param array $expression
      */
@@ -130,7 +134,7 @@ class MutateGathererPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] != 'variable') {
+                if ('variable' != $parameter['parameter']['type']) {
                     $this->passExpression($parameter['parameter']);
                 }
             }
@@ -138,7 +142,7 @@ class MutateGathererPass
     }
 
     /**
-     * Pass expressions
+     * Pass expressions.
      *
      * @param array $expression
      */
@@ -256,7 +260,7 @@ class MutateGathererPass
     }
 
     /**
-     * Pass statement block
+     * Pass statement block.
      *
      * @param array $statements
      */
@@ -382,14 +386,14 @@ class MutateGathererPass
                     break;
 
                 case 'unset':
-                    if ($statement['expr']['type'] == 'array-access') {
-                        if ($statement['expr']['left']['type'] == 'variable') {
+                    if ('array-access' == $statement['expr']['type']) {
+                        if ('variable' == $statement['expr']['left']['type']) {
                             $this->increaseMutations($statement['expr']['left']['value']);
                         }
                     } else {
-                        if ($statement['expr']['type'] == 'list') {
-                            if ($statement['expr']['left']['type'] == 'array-access') {
-                                if ($statement['expr']['left']['left']['type'] == 'variable') {
+                        if ('list' == $statement['expr']['type']) {
+                            if ('array-access' == $statement['expr']['left']['type']) {
+                                if ('variable' == $statement['expr']['left']['left']['type']) {
                                     $this->increaseMutations($statement['expr']['left']['left']['value']);
                                 }
                             }

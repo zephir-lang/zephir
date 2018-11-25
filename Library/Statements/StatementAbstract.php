@@ -15,7 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Optimizers\EvalExpression;
 
 /**
- * Zephir\Statements\StatementAbstract
+ * Zephir\Statements\StatementAbstract.
  */
 abstract class StatementAbstract
 {
@@ -29,7 +29,7 @@ abstract class StatementAbstract
     protected static $uniqueGenerator;
 
     /**
-     * StatementAbstract construct
+     * StatementAbstract construct.
      *
      * @param array $statement
      */
@@ -39,7 +39,7 @@ abstract class StatementAbstract
     }
 
     /**
-     * Generates a uniqueId for those instructions that need it
+     * Generates a uniqueId for those instructions that need it.
      *
      * @return int
      */
@@ -48,6 +48,7 @@ abstract class StatementAbstract
         if (!$this->uniqueId) {
             $this->uniqueId = self::$uniqueGenerator++;
         }
+
         return $this->uniqueId;
     }
 
@@ -60,7 +61,7 @@ abstract class StatementAbstract
     }
 
     /**
-     * Compiles the statement
+     * Compiles the statement.
      *
      * @param CompilationContext $compilationContext
      */

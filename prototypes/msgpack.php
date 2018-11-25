@@ -12,9 +12,9 @@
 define('MSGPACK_CLASS_OPT_PHPONLY', -1001);
 
 /**
- * \MessagePackUnpacker
+ * \MessagePackUnpacker.
  *
- * @link https://github.com/msgpack/msgpack-php
+ * @see https://github.com/msgpack/msgpack-php
  */
 class MessagePackUnpacker
 {
@@ -35,7 +35,7 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param int $option
+     * @param int  $option
      * @param bool $value
      */
     public function setOption($option, $value)
@@ -51,7 +51,7 @@ class MessagePackUnpacker
 
     /**
      * @param string $str
-     * @param int $offset
+     * @param int    $offset
      */
     public function execute($str = null, &$offset = null)
     {
@@ -70,9 +70,9 @@ class MessagePackUnpacker
 }
 
 /**
- * \MessagePack
+ * \MessagePack.
  *
- * @link https://github.com/msgpack/msgpack-php
+ * @see https://github.com/msgpack/msgpack-php
  */
 class MessagePack
 {
@@ -86,7 +86,7 @@ class MessagePack
     }
 
     /**
-     * @param int $option
+     * @param int  $option
      * @param bool $value
      */
     public function setOption($option, $value)
@@ -95,6 +95,7 @@ class MessagePack
 
     /**
      * @param mixed $value
+     *
      * @return string
      */
     public function pack($value)
@@ -103,7 +104,8 @@ class MessagePack
 
     /**
      * @param string $str
-     * @param mixed $object
+     * @param mixed  $object
+     *
      * @return mixed
      */
     public function unpack($str, $object = null)
@@ -120,6 +122,7 @@ class MessagePack
 
 /**
  * @param mixed $value
+ *
  * @return string
  */
 function msgpack_pack($value)
@@ -128,6 +131,7 @@ function msgpack_pack($value)
 
 /**
  * @param string $str
+ *
  * @return mixed
  */
 function msgpack_unpack($str)
@@ -136,6 +140,7 @@ function msgpack_unpack($str)
 
 /**
  * @param mixed $value
+ *
  * @return string
  */
 function msgpack_serialize($value)
@@ -144,6 +149,7 @@ function msgpack_serialize($value)
 
 /**
  * @param string $str
+ *
  * @return mixed
  */
 function msgpack_unserialize($str)

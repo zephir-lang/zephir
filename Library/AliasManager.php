@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * AliasManager
+ * AliasManager.
  *
  * Manage aliases in a file
  */
@@ -21,7 +21,7 @@ final class AliasManager
     protected $aliases = [];
 
     /**
-     * Adds a renaming in a "use" to the alias manager
+     * Adds a renaming in a "use" to the alias manager.
      *
      * @param array $useStatement
      */
@@ -39,9 +39,10 @@ final class AliasManager
     }
 
     /**
-     * Checks if a class name is an existing alias
+     * Checks if a class name is an existing alias.
      *
      * @param string $alias
+     *
      * @return bool
      */
     public function isAlias($alias)
@@ -50,9 +51,10 @@ final class AliasManager
     }
 
     /**
-     * Returns the class name according to an existing alias
+     * Returns the class name according to an existing alias.
      *
      * @param string $alias
+     *
      * @return string
      */
     public function getAlias($alias)

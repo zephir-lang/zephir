@@ -40,7 +40,7 @@ class UnsetTest extends TestCase
         $this->assertFalse($t->has('testVar'));
 
         $t->testUnsetProperty();
-        $this->assertSame(null, $t->getProperty());
+        $this->assertNull($t->getProperty());
     }
 
     public function xtestStdClassUnset()
@@ -48,7 +48,7 @@ class UnsetTest extends TestCase
         //@todo Zephir is not generating the correct code to make this work
         $t = new UnsetTestExt();
 
-        $equalsStdClass = new \StdClass;
+        $equalsStdClass = new \StdClass();
         $equalsStdClass->property1 = 12345;
         $equalsStdClass->property3 = 12345;
 

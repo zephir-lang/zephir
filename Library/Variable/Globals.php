@@ -12,7 +12,7 @@
 namespace Zephir\Variable;
 
 /**
- * Zephir\Variable\Globals
+ * Zephir\Variable\Globals.
  *
  * Represents a central knowledge base on global variables.
  */
@@ -61,6 +61,7 @@ class Globals
 
     /**
      * Names of superglobal variables.
+     *
      * @var array
      */
     protected $superglobals = [
@@ -75,9 +76,10 @@ class Globals
     ];
 
     /**
-     * Checks if a variable is a superglobal
+     * Checks if a variable is a superglobal.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function isSuperGlobal($name)

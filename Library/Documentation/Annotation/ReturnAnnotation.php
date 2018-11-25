@@ -14,7 +14,7 @@ namespace Zephir\Documentation\Annotation;
 use Zephir\Documentation\Annotation;
 
 /**
- * A return annotation that looks like  `(@)return type description`
+ * A return annotation that looks like  `(@)return type description`.
  */
 class ReturnAnnotation extends Annotation
 {

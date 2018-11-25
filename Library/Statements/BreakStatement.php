@@ -15,7 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
 /**
- * BreakStatement
+ * BreakStatement.
  *
  * Break statement
  */
@@ -23,6 +23,7 @@ class BreakStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

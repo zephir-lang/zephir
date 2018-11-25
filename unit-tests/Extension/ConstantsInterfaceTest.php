@@ -29,7 +29,7 @@ class ConstantsInterfaceTest extends TestCase
     {
         $t = new \Test\ConstantsInterface();
 
-        $this->assertTrue(is_object($t));
+        $this->assertInternalType('object', $t);
         $this->assertSame($t->testReadInterfaceConstant1(), null);
         $this->assertSame($t->testReadInterfaceConstant2(), false);
         $this->assertSame($t->testReadInterfaceConstant3(), true);
@@ -52,7 +52,7 @@ class ConstantsInterfaceTest extends TestCase
     {
         $t = new \Test\ConstantsInterface();
 
-        $this->assertTrue(is_object($t));
+        $this->assertInternalType('object', $t);
         $this->assertSame($t->testReadInheritanceFromInterfaceConstant1(), null);
         $this->assertSame($t->testReadInheritanceFromInterfaceConstant2(), false);
         $this->assertSame($t->testReadInheritanceFromInterfaceConstant3(), true);

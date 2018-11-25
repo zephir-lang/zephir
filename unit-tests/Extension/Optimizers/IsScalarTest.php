@@ -41,7 +41,7 @@ class IsScalarTest extends TestCase
         $this->assertTrue($t->testVarParameter('test string'));
 
         $this->assertFalse($t->testVarParameter([]));
-        $this->assertFalse($t->testVarParameter([1,2,3,4,5]));
+        $this->assertFalse($t->testVarParameter([1, 2, 3, 4, 5]));
         $this->assertFalse($t->testVarParameter($this));
         $this->assertFalse(
             $t->testVarParameter(

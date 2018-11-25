@@ -17,7 +17,7 @@ use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
- * ArrayType
+ * ArrayType.
  *
  * Defines methods of the built-in array type
  */
@@ -81,12 +81,13 @@ class ArrayType extends AbstractType
     }
 
     /**
-     * Transforms calls to method "join" to function calls to "join"
+     * Transforms calls to method "join" to function calls to "join".
      *
-     * @param object $caller
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
+     *
      * @return bool|\Zephir\CompiledExpression
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
@@ -108,7 +109,7 @@ class ArrayType extends AbstractType
      */
     protected function getNumberParam($methodName)
     {
-        if ($methodName == 'map') {
+        if ('map' == $methodName) {
             return 1;
         }
 

@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Test\ExitDie;
 
 if (!extension_loaded('test')) {
-    if (ini_get('enable_dl') == '1') {
+    if ('1' == ini_get('enable_dl')) {
         $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-        dl($prefix . 'test.' . PHP_SHLIB_SUFFIX);
+        dl($prefix.'test.'.PHP_SHLIB_SUFFIX);
     }
 }
 
@@ -26,6 +25,6 @@ $argv = $_SERVER['argv'];
 
 if (isset($argv[1])) {
     $t = new ExitDie();
-    $v = intval($argv[1]);
+    $v = (int) ($argv[1]);
     $t->testExit($v);
 }

@@ -26,7 +26,8 @@ class KernelTestCase extends BaseTestCase
      *  * debug
      *  * config_files
      *
-     * @param  array $options  Kernel configuration
+     * @param array $options Kernel configuration
+     *
      * @return KernelInterface A KernelInterface instance
      */
     protected static function createKernel(array $options = [])
@@ -55,9 +56,9 @@ class KernelTestCase extends BaseTestCase
             $debug = true;
         }
 
-        if (static::$class === ZephirKernel::class) {
+        if (ZephirKernel::class === static::$class) {
             $configFiles = [];
-            if (isset($options['config_files']) && is_array($options['config_files'])) {
+            if (isset($options['config_files']) && \is_array($options['config_files'])) {
                 $configFiles = $options['config_files'];
             }
 

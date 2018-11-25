@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
 /**
- * IsStringOptimizer
+ * IsStringOptimizer.
  *
  * Optimizes calls to 'is_string' using internal function
  */

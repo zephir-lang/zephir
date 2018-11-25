@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * PrepareVirtualPathOptimizer
+ * PrepareVirtualPathOptimizer.
  *
  * Optimizes calls to 'prepare_virtual_path' using internal function
  */
 class PrepareVirtualPathOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,13 +39,13 @@ class PrepareVirtualPathOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -61,7 +63,7 @@ class PrepareVirtualPathOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_prepare_virtual_path(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_prepare_virtual_path('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
