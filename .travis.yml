@@ -71,27 +71,25 @@ before_script:
 script:
   - zephir --ansi
   - |
-      # Running tests
-      if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        php \
-          -d extension=ext/modules/test.so \
-          vendor/bin/simple-phpunit \
-          --colors=always \
-          --exclude-group ze-3 \
-          --testsuite "Extension Test Suite"
-      else
-        php \
-          -d extension=ext/modules/test.so \
-          vendor/bin/simple-phpunit \
-          --colors=always \
-          --testsuite "Extension Test Suite"
-      fi
+    # Running tests
+    if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
+      test_suite="ExtensionZE2"
+    else
+      test_suite="ExtensionZE3"
+    fi
 
-      php \
-        -d extension=ext/modules/test.so \
-        vendor/bin/simple-phpunit \
-        --colors=always \
-        --testsuite "Zephir Test Suite"
+    php \
+      -d extension=ext/modules/test.so \
+      vendor/bin/simple-phpunit \
+      --colors=always \
+      --bootstrap unit-tests/ext-bootstrap.php \
+      --testsuite $test_suite
+
+    php \
+      -d extension=ext/modules/test.so \
+      vendor/bin/simple-phpunit \
+      --colors=always \
+      --testsuite Zephir
 
 after_success:
   - .ci/after-success.sh

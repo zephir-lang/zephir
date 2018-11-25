@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Zephir.
  *
@@ -16,9 +14,6 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Test\Mcall;
 
-/**
- * @group ze-3
- */
 class MCallTest extends TestCase
 {
     /**
@@ -95,23 +90,6 @@ class MCallTest extends TestCase
 
         $this->assertTrue($t->optionalParameterBoolean());
         $this->assertFalse($t->optionalParameterBoolean(false));
-    }
-
-    public function testOptionalParameterBooleanException()
-    {
-        $t = new Mcall();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            $this->expectException($except);
-        }
-
-        $t->optionalParameterBoolean('test');
     }
 
     /**
