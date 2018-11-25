@@ -16,11 +16,9 @@ namespace Extension\ZE3\Oo;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Extension\ZE3\Oo\OoParamsStrictTest
+ * Extension\ZE3\Oo\OoParamsStrictTest.
  *
  * TODO: Move this test to Extension\Oo\OoParamsStrictTest after dropping PHP 5.x support
- *
- * @package Extension\ZE3\Oo
  */
 class OoParamsStrictTest extends TestCase
 {
@@ -70,18 +68,6 @@ class OoParamsStrictTest extends TestCase
         $t = new \Test\Oo\OoParams();
 
         $this->assertSame($t->setStrictAverage(17.1), 17.1);
-    }
-
-    public function testSetStrictAverageException1()
-    {
-        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
-            $this->markTestSkipped('This test is designed to use for PHP < 7.0.0');
-        }
-
-        $t = new \Test\Oo\OoParams();
-
-        $this->expectException('\InvalidArgumentException');
-        $t->setStrictAverage(17);
     }
 
     public function testSetStrictAverageException2()
