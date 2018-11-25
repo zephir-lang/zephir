@@ -11,10 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Extension\Oo;
+namespace Extension\ZE3\Oo;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Extension\ZE3\Oo\OoParamsStrictTest
+ *
+ * TODO: Move this test to Extension\Oo\OoParamsStrictTest after dropping PHP 5.x support
+ *
+ * @package Extension\ZE3\Oo
+ */
 class OoParamsStrictTest extends TestCase
 {
     public function testSetStrictAgeSuccess()
