@@ -13,17 +13,15 @@ services:
   Zephir\Console\Application:
     public: true
 
-  Zephir\FileSystem\HardDisk:
-    calls:
-    - method: setBasePath
-      arguments:
-      - '%kernel.cache_dir%'
-
   Zephir\FileSystem\FileSystemInterface:
     class: Zephir\FileSystem\HardDisk
     public: true
     arguments:
       $filesystem: '@compiler_filesystem'
+    calls:
+    - method: setBasePath
+      arguments:
+        - '%kernel.cache_dir%'
 
   Zephir\Config:
     factory: 'Zephir\Config::fromServer'
