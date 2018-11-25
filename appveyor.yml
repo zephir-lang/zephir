@@ -79,8 +79,8 @@ build_script:
 test_script:
     - SET X=0
     - cd %APPVEYOR_BUILD_FOLDER%
-    - php vendor/bin/simple-phpunit --testsuite "Extension Test Suite" || SET X=!errorlevel!
-    - php vendor/bin/simple-phpunit --testsuite "Zephir Test Suite" || SET X=!errorlevel!
+    - php vendor/bin/simple-phpunit --testsuite --bootstrap unit-tests\ext-bootstrap.php ExtensionZE3 || SET X=!errorlevel!
+    - php vendor/bin/simple-phpunit --testsuite Zephir || SET X=!errorlevel!
     - exit %X%
 
 on_success:

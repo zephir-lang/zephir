@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Zephir.
@@ -16,9 +14,6 @@ namespace Extension\Oo;
 use PHPUnit\Framework\TestCase;
 use Test\Oo\OoParams;
 
-/**
- * @group ze-3
- */
 class OoParamsStrictTest extends TestCase
 {
     public function testSetStrictAgeSuccess()
@@ -28,40 +23,6 @@ class OoParamsStrictTest extends TestCase
         $this->assertSame($t->setStrictAge(17), 17);
     }
 
-    public function testSetStrictAgeException1()
-    {
-        $t = new OoParams();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            $this->expectException($except);
-        }
-
-        $t->setStrictAge(17.0);
-    }
-
-    public function testSetStrictAgeException2()
-    {
-        $t = new OoParams();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            $this->expectException($except);
-        }
-
-        $t->setStrictAge('17');
-    }
-
     public function testSetStrictAverageSuccess()
     {
         $t = new OoParams();
@@ -69,43 +30,9 @@ class OoParamsStrictTest extends TestCase
         $this->assertSame($t->setStrictAverage(17.1), 17.1);
     }
 
-    public function testSetStrictAverageException2()
-    {
-        $t = new OoParams();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            $this->expectException($except);
-        }
-
-        $t->setStrictAverage('17');
-    }
-
     public function testSetStrictNameSuccess()
     {
         $t = new OoParams();
         $this->assertSame($t->setStrictName('peter'), 'peter');
-    }
-
-    public function testSetStrictNameException()
-    {
-        $t = new OoParams();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            $this->expectException($except);
-        }
-
-        $t->setStrictName(1234);
     }
 }
