@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   means a hash calculated from the current Zephir version, environment and configuration
 - The compiler's messages was divided into streams. Thus, now it is possible to redirect compiler's
   output as follows: `zephir generate 2> errors.log 1> /dev/null`
+- Fixed type hints for scalar arguments for PHP < 7.2
 
 ### Fixed
 - Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
