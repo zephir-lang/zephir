@@ -28,6 +28,7 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.local/opt
+    - .phpunit
 
 env:
   global:
@@ -44,6 +45,8 @@ before_install:
       set -e
       stty cols 120
       ulimit -c unlimited -S
+
+      export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
 
       if [ ! -z "${GITHUB_TOKEN}" ]; then
         composer config github-oauth.github.com ${GITHUB_TOKEN}
