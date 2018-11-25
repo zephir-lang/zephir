@@ -17,11 +17,9 @@ use PHPUnit\Framework\TestCase;
 use Test\Mcall;
 
 /**
- * Extension\ZE3\MCallTest
+ * Extension\ZE3\MCallTest.
  *
  * TODO: Move this test to Extension\MCallTest after dropping PHP 5.x support
- *
- * @package Extension\ZE3
  */
 class MCallTest extends TestCase
 {
