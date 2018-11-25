@@ -143,11 +143,31 @@ static PHP_GSHUTDOWN_FUNCTION(typehints)
 PHP_FUNCTION(f_TypeHints_args);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_args, 0, 0, 7)
 	ZEND_ARG_INFO(0, _var)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _string, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, _string)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _bool, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, _bool)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _int, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, _int)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _long, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, _long)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _double, IS_DOUBLE, 0)
+#else
+	ZEND_ARG_INFO(0, _double)
+#endif
 	ZEND_ARG_OBJ_INFO(0, _args, TypeHints\\Args, 0)
 ZEND_END_ARG_INFO()
 
@@ -157,7 +177,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_both, 0, 1, IS_STRIN
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_both, 0, 1, IS_STRING, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _string, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, _string)
+#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_var_var_builit_1);
