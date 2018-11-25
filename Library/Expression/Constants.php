@@ -176,7 +176,8 @@ class Constants
                 case '__CLASS__':
                     return new CompiledExpression(
                         'string',
-                        add_slashes($compilationContext->classDefinition->getCompleteName()),
+                        //add_slashes($compilationContext->classDefinition->getCompleteName()),
+                        addslashes($compilationContext->classDefinition->getCompleteName()),
                         $expression
                     );
                 case '__NAMESPACE__':
