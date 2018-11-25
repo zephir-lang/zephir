@@ -62,18 +62,7 @@ install:
 
 before_script:
   - .ci/build-test-ext.sh
-  - |
-      # Setting up PHP
-
-      # Changes for https://github.com/phalcon/zephir/pull/1537
-      echo 'variables_order=EGPCS' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
-      # Changes for https://github.com/phalcon/zephir/pull/1654
-      echo 'enable_dl=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
-      # Changes for https://github.com/phalcon/zephir/issues/1713
-      echo 'allow_url_include=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-      echo 'allow_url_fopen=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
   - zephir --ansi
@@ -94,7 +83,7 @@ script:
         -d extension=ext/modules/test.so \
         vendor/bin/simple-phpunit \
         --colors=always \
-        --testsuite "$extension_test_suite"
+        --testsuite "Zephir Test Suite"
 
 after_success:
   - .ci/after-success.sh
