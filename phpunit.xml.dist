@@ -9,11 +9,7 @@
 >
 
     <testsuites>
-        <testsuite name="Extension Test Suite (any PHP version)">
-            <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/ZE3</exclude>
-        </testsuite>
-        <testsuite name="Extension Test Suite (PHP >= 7.0.0)">
+        <testsuite name="Extension Test Suite">
             <directory suffix=".php">./unit-tests/Extension</directory>
         </testsuite>
         <testsuite name="Zephir Test Suite">

@@ -40,6 +40,7 @@ env:
 
 before_install:
   - |
+      # General settins
       set -e
       stty cols 120
       ulimit -c unlimited -S
@@ -67,17 +68,21 @@ before_script:
 script:
   - zephir --ansi
   - |
+      # Running tests
       if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        extension_test_suite="Extension Test Suite (any PHP version)"
+        php \
+          -d extension=ext/modules/test.so \
+          vendor/bin/simple-phpunit \
+          --colors=always \
+          --exclude-group ze-3 \
+          --testsuite "Extension Test Suite"
       else
-        extension_test_suite="Extension Test Suite (PHP >= 7.0.0)"
+        php \
+          -d extension=ext/modules/test.so \
+          vendor/bin/simple-phpunit \
+          --colors=always \
+          --testsuite "Extension Test Suite"
       fi
-
-      php \
-        -d extension=ext/modules/test.so \
-        vendor/bin/simple-phpunit \
-        --colors=always \
-        --testsuite "$extension_test_suite"
 
       php \
         -d extension=ext/modules/test.so \
