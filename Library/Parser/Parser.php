@@ -24,7 +24,7 @@ class Parser
      */
     public function isAvailable()
     {
-        return function_exists('zephir_parse_file');
+        return \function_exists('zephir_parse_file');
     }
 
     /**
@@ -41,9 +41,11 @@ class Parser
      * Parses a file and returning an intermediate representation (IR).
      *
      * @param string $filePath Absolute path to the *.zep file
+     *
      * @throws IllegalStateException
      * @throws InvalidArgumentException
      * @throws ParseException
+     *
      * @return array
      */
     public function parse($filePath)
@@ -58,7 +60,7 @@ class Parser
 
         $content = file_get_contents($filePath);
 
-        if ($content === false) {
+        if (false === $content) {
             throw new ParseException('Unable to read source file to parse.');
         }
 

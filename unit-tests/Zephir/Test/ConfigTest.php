@@ -50,7 +50,7 @@ class ConfigTest extends TestCase
      */
     public function testConstructWithBadConfigFile()
     {
-        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/badconfig');
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/badconfig');
         new Config();
     }
 
@@ -103,7 +103,7 @@ class ConfigTest extends TestCase
     private function cleanTmpConfigFile()
     {
         /* clean config.json into tmp dir */
-        $tmpConfigFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'config.json';
+        $tmpConfigFile = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'config.json';
 
         if (file_exists($tmpConfigFile)) {
             unlink($tmpConfigFile);

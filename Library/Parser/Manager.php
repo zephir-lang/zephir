@@ -16,7 +16,8 @@ class Manager
     const MINIMUM_PARSER_VERSION = '1.1.0';
 
     /**
-     * Zephir Parser
+     * Zephir Parser.
+     *
      * @var Parser
      */
     protected $parser;

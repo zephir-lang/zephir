@@ -34,6 +34,7 @@ class FcallTest extends TestCase
 
     /**
      * @dataProvider getArgsDataProvider
+     *
      * @param mixed $param1
      * @param mixed $param2
      */
@@ -46,6 +47,7 @@ class FcallTest extends TestCase
     /**
      * @test
      * @dataProvider getArgsDataProvider
+     *
      * @param mixed $param1
      * @param mixed $param2
      */
@@ -58,6 +60,7 @@ class FcallTest extends TestCase
     /**
      * @test
      * @dataProvider getArgsDataProvider
+     *
      * @param mixed $param1
      * @param mixed $param2
      */

@@ -18,6 +18,7 @@ class StringTest extends TestCase
 {
     /**
      * @dataProvider providerHashEquals
+     *
      * @param string $knownString
      * @param string $userString
      * @param string $expected
@@ -35,6 +36,7 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerHashEqualsNonString
+     *
      * @param string $knownString
      * @param string $userString
      */
@@ -47,6 +49,7 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelize
+     *
      * @param mixed $actual
      * @param mixed $expected
      * @param mixed $delimiter
@@ -60,6 +63,7 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
+     *
      * @param mixed $delimiter
      */
     public function testCamelizeWrongSecondParam($delimiter)
@@ -75,6 +79,7 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerUnCamelize
+     *
      * @param mixed $actual
      * @param mixed $expected
      * @param mixed $delimiter
@@ -88,6 +93,7 @@ class StringTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
+     *
      * @param mixed $delimiter
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
@@ -276,51 +282,51 @@ class StringTest extends TestCase
     public function providerCamelize()
     {
         return [
-            ['=_camelize',      '=Camelize', '_' ],
-            ['camelize',        'Camelize',  '_' ],
-            ['came_li_ze',      'CameLiZe',  '_' ],
+            ['=_camelize',      '=Camelize', '_'],
+            ['camelize',        'Camelize',  '_'],
+            ['came_li_ze',      'CameLiZe',  '_'],
             ['came_li_ze',      'CameLiZe',  null],
-            ['came#li#ze',      'CameLiZe',  '#' ],
-            ['came li ze',      'CameLiZe',  ' ' ],
+            ['came#li#ze',      'CameLiZe',  '#'],
+            ['came li ze',      'CameLiZe',  ' '],
             ['came.li^ze',      'CameLiZe',  '.^'],
             ['c_a-m_e-l_i-z_e', 'CAMELIZE',  '-_'],
             ['c_a-m_e-l_i-z_e', 'CAMELIZE',  null],
-            ['came.li.ze',      'CameLiZe',  '.' ],
-            ['came-li-ze',      'CameLiZe',  '-' ],
-            ['c+a+m+e+l+i+z+e', 'CAMELIZE',  '+' ],
+            ['came.li.ze',      'CameLiZe',  '.'],
+            ['came-li-ze',      'CameLiZe',  '-'],
+            ['c+a+m+e+l+i+z+e', 'CAMELIZE',  '+'],
         ];
     }
 
     public function providerUnCamelize()
     {
         return [
-            ['=Camelize', '=_camelize',      '_' ],
-            ['Camelize',  'camelize',        '_' ],
+            ['=Camelize', '=_camelize',      '_'],
+            ['Camelize',  'camelize',        '_'],
             ['Camelize',  'camelize',        null],
-            ['CameLiZe',  'came_li_ze',      '_' ],
-            ['CameLiZe',  'came#li#ze',      '#' ],
-            ['CameLiZe',  'came li ze',      ' ' ],
-            ['CameLiZe',  'came.li.ze',      '.' ],
-            ['CameLiZe',  'came-li-ze',      '-' ],
-            ['CAMELIZE',  'c/a/m/e/l/i/z/e', '/' ],
+            ['CameLiZe',  'came_li_ze',      '_'],
+            ['CameLiZe',  'came#li#ze',      '#'],
+            ['CameLiZe',  'came li ze',      ' '],
+            ['CameLiZe',  'came.li.ze',      '.'],
+            ['CameLiZe',  'came-li-ze',      '-'],
+            ['CAMELIZE',  'c/a/m/e/l/i/z/e', '/'],
         ];
     }
 
     public function providerCamelizeWrongSecondParam()
     {
         return [
-            [''                         ],
-            [true                       ],
-            [false                      ],
-            [1                          ],
-            [0                          ],
-            [[]                         ],
+            [''],
+            [true],
+            [false],
+            [1],
+            [0],
+            [[]],
             [
                 function () {
                     return '-';
                 },
             ],
-            [new \stdClass              ],
+            [new \stdClass()],
         ];
     }
 }

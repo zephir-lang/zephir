@@ -20,12 +20,13 @@ use Zephir\Config;
 use Zephir\Exception;
 
 /**
- * Stubs Generator
+ * Stubs Generator.
  */
 class Generator
 {
     /**
-     * Not php visible style variants
+     * Not php visible style variants.
+     *
      * @var array
      */
     protected $ignoreModifiers = [
@@ -47,7 +48,7 @@ class Generator
 
     /**
      * @param CompilerFile[] $files
-     * @param Config $config
+     * @param Config         $config
      */
     public function __construct(array $files, Config $config)
     {
@@ -56,13 +57,13 @@ class Generator
     }
 
     /**
-     * Generates stubs
+     * Generates stubs.
      *
      * @param string $path
      */
     public function generate($path)
     {
-        if ($this->config->get('indent', 'extra') === 'tabs') {
+        if ('tabs' === $this->config->get('indent', 'extra')) {
             $indent = "\t";
         } else {
             $indent = '    ';
@@ -74,29 +75,30 @@ class Generator
             $class = $file->getClassDefinition();
             $source = $this->buildClass($class, $indent);
 
-            $filename = ucfirst($class->getName()) . '.zep.php';
-            $filePath = $path . str_replace(
+            $filename = ucfirst($class->getName()).'.zep.php';
+            $filePath = $path.str_replace(
                 $namespace,
                 '',
-                str_replace($namespace . '\\\\', DIRECTORY_SEPARATOR, strtolower($class->getNamespace()))
+                str_replace($namespace.'\\\\', \DIRECTORY_SEPARATOR, strtolower($class->getNamespace()))
             );
-            $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
-            $filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
+            $filePath = str_replace('\\', \DIRECTORY_SEPARATOR, $filePath);
+            $filePath = str_replace(\DIRECTORY_SEPARATOR.\DIRECTORY_SEPARATOR, \DIRECTORY_SEPARATOR, $filePath);
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);
             }
 
-            $filePath = realpath($filePath) . '/';
-            file_put_contents($filePath . $filename, $source);
+            $filePath = realpath($filePath).'/';
+            file_put_contents($filePath.$filename, $source);
         }
     }
 
     /**
-     * Build class
+     * Build class.
      *
      * @param ClassDefinition $class
-     * @param string $indent
+     * @param string          $indent
+     *
      * @return string
      */
     protected function buildClass(ClassDefinition $class, $indent)
@@ -109,7 +111,7 @@ namespace {$class->getNamespace()};
 
 EOF;
 
-        $source .= (new DocBlock($class->getDocBlock(), '')) . "\n";
+        $source .= (new DocBlock($class->getDocBlock(), ''))."\n";
 
         if ($class->isFinal()) {
             $source .= 'final ';
@@ -117,34 +119,34 @@ EOF;
             $source .= 'abstract ';
         }
 
-        $source .= $class->getType() . ' ' . $class->getName();
+        $source .= $class->getType().' '.$class->getName();
 
         if ($class->getExtendsClass()) {
             $extendsClassDefinition = $class->getExtendsClassDefinition();
             if (!$extendsClassDefinition) {
-                throw new \RuntimeException('Class "' . $class->getName() . '" does not have a extendsClassDefinition');
+                throw new \RuntimeException('Class "'.$class->getName().'" does not have a extendsClassDefinition');
             }
 
-            $source .= ' extends ' . ($extendsClassDefinition->isBundled() ? '' : '\\') . trim($extendsClassDefinition->getCompleteName(), '\\');
+            $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').trim($extendsClassDefinition->getCompleteName(), '\\');
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
             $interfaces = array_map(function ($val) {
-                return '\\' . trim($val, '\\');
+                return '\\'.trim($val, '\\');
             }, $implementedInterfaces);
 
-            $keyword = $class->getType() == 'interface' ? ' extends ' : ' implements ';
-            $source .= $keyword . join(', ', $interfaces);
+            $keyword = 'interface' == $class->getType() ? ' extends ' : ' implements ';
+            $source .= $keyword.implode(', ', $interfaces);
         }
 
-        $source .= PHP_EOL . '{' . PHP_EOL;
+        $source .= PHP_EOL.'{'.PHP_EOL;
 
         foreach ($class->getConstants() as $constant) {
-            $source .= $this->buildConstant($constant, $indent) . PHP_EOL . PHP_EOL;
+            $source .= $this->buildConstant($constant, $indent).PHP_EOL.PHP_EOL;
         }
 
         foreach ($class->getProperties() as $property) {
-            $source .= $this->buildProperty($property, $indent) . PHP_EOL . PHP_EOL;
+            $source .= $this->buildProperty($property, $indent).PHP_EOL.PHP_EOL;
         }
 
         $source .= PHP_EOL;
@@ -154,66 +156,69 @@ EOF;
                 continue;
             }
 
-            $source .= $this->buildMethod($method, $class->getType() === 'interface', $indent) . "\n\n";
+            $source .= $this->buildMethod($method, 'interface' === $class->getType(), $indent)."\n\n";
         }
 
-        return $source . '}' . PHP_EOL;
+        return $source.'}'.PHP_EOL;
     }
 
     /**
-     * Build property
+     * Build property.
      *
      * @param ClassProperty $property
-     * @param string $indent
+     * @param string        $indent
+     *
      * @return string
      */
     protected function buildProperty(ClassProperty $property, $indent)
     {
         $visibility = 'public';
 
-        if ($property->isPublic() === false) {
+        if (false === $property->isPublic()) {
             $visibility = $property->isProtected() ? 'protected' : 'private';
         }
 
         if ($property->isStatic()) {
-            $visibility = 'static ' . $visibility;
+            $visibility = 'static '.$visibility;
         }
 
-        $source = $visibility . ' $' . $property->getName();
+        $source = $visibility.' $'.$property->getName();
         $original = $property->getOriginal();
 
         if (isset($original['default'])) {
-            $source .= ' = ' . $this->wrapPHPValue([
+            $source .= ' = '.$this->wrapPHPValue([
                 'default' => $original['default'],
             ]);
         }
 
         $docBlock = new DocBlock($property->getDocBlock(), $indent);
-        return $docBlock . "\n" . $indent . $source . ';';
+
+        return $docBlock."\n".$indent.$source.';';
     }
 
     /**
      * @param ClassConstant $constant
-     * @param string $indent
+     * @param string        $indent
      *
      * @return string
      */
     protected function buildConstant(ClassConstant $constant, $indent)
     {
-        $source = 'const ' . $constant->getName();
+        $source = 'const '.$constant->getName();
 
         $value = $this->wrapPHPValue([
             'default' => $constant->getValue(),
         ]);
 
         $docBlock = new DocBlock($constant->getDocBlock(), $indent);
-        return $docBlock . "\n" . $indent . $source . ' = ' . $value . ';';
+
+        return $docBlock."\n".$indent.$source.' = '.$value.';';
     }
 
     /**
      * @param ClassMethod $method
-     * @param bool $isInterface
-     * @param string $indent
+     * @param bool        $isInterface
+     * @param string      $indent
      *
      * @return string
      */
@@ -232,29 +237,29 @@ EOF;
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
                     if ($aliasManager->isAlias($parameter['cast']['value'])) {
-                        $cast = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
+                        $cast = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
                     } else {
                         $cast = $parameter['cast']['value'];
                     }
-                    $paramStr .= $cast . ' ';
-                } elseif (isset($parameter['data-type']) && $parameter['data-type'] == 'array') {
+                    $paramStr .= $cast.' ';
+                } elseif (isset($parameter['data-type']) && 'array' == $parameter['data-type']) {
                     $paramStr .= 'array ';
                 } elseif (isset($parameter['data-type']) && version_compare(PHP_VERSION, '7.0.0', '>=')) {
-                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                    if (\in_array($parameter['data-type'], ['bool', 'boolean'])) {
                         $paramStr .= 'bool ';
-                    } elseif ($parameter['data-type'] == 'double') {
+                    } elseif ('double' == $parameter['data-type']) {
                         $paramStr .= 'float ';
-                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                    } elseif (\in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
                         $paramStr .= 'int ';
-                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
+                    } elseif (\in_array($parameter['data-type'], ['char', 'string'])) {
                         $paramStr .= 'string ';
                     }
                 }
 
-                $paramStr .= '$' . $parameter['name'];
+                $paramStr .= '$'.$parameter['name'];
 
                 if (isset($parameter['default'])) {
-                    $paramStr .= ' = ' . $this->wrapPHPValue($parameter);
+                    $paramStr .= ' = '.$this->wrapPHPValue($parameter);
                 }
 
                 $parameters[] = $paramStr;
@@ -265,35 +270,35 @@ EOF;
         if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes()) && count($method->getReturnClassTypes()) == 1) {
+            if (array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
                 $return = key($method->getReturnClassTypes());
-                $supported++;
+                ++$supported;
             }
 
             if ($method->areReturnTypesIntCompatible()) {
                 $return = 'int';
-                $supported++;
+                ++$supported;
             }
             if ($method->areReturnTypesDoubleCompatible()) {
                 $return = 'float';
-                $supported++;
+                ++$supported;
             }
             if ($method->areReturnTypesBoolCompatible()) {
                 $return = 'bool';
-                $supported++;
+                ++$supported;
             }
             if ($method->areReturnTypesStringCompatible()) {
                 $return = 'string';
-                $supported++;
+                ++$supported;
             }
             if (array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
-                $supported++;
+                ++$supported;
             }
 
             if ($method->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                    $return = '?' . $return;
+                    $return = '?'.$return;
                 } else {
                     $return = '';
                 }
@@ -305,11 +310,11 @@ EOF;
             }
         }
         if (!empty($return)) {
-            $return = ': ' . $return;
+            $return = ': '.$return;
         }
 
-        $function = trim($modifier . ' function', ' ') . ' ';
-        $methodBody = $indent . $function . $method->getName() . '(' . implode(', ', $parameters) . ')' . $return;
+        $function = trim($modifier.' function', ' ').' ';
+        $methodBody = $indent.$function.$method->getName().'('.implode(', ', $parameters).')'.$return;
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
@@ -317,14 +322,16 @@ EOF;
             $methodBody .= ' {}';
         }
 
-        return $docBlock . "\n" . $methodBody;
+        return $docBlock."\n".$methodBody;
     }
 
     /**
-     * Prepare AST default value to PHP code print
+     * Prepare AST default value to PHP code print.
      *
      * @param $parameter
+     *
      * @throws Exception
+     *
      * @return string
      */
     protected function wrapPHPValue($parameter)
@@ -336,7 +343,7 @@ EOF;
 
             case 'string':
             case 'char':
-                return '\'' . addslashes($parameter['default']['value']) . '\'';
+                return '\''.addslashes($parameter['default']['value']).'\'';
                 break;
 
             case 'empty-array':
@@ -353,20 +360,20 @@ EOF;
                         $source .= $this->wrapPHPValue([
                             'default' => $value['key'],
                             'type' => $value['key']['type'],
-                        ]) . ' => ';
+                        ]).' => ';
                     }
 
-                    $parameters[] = $source . $this->wrapPHPValue([
+                    $parameters[] = $source.$this->wrapPHPValue([
                         'default' => $value['value'],
                         'type' => $value['value']['type'],
                     ]);
                 }
 
-                return 'array(' . implode(', ', $parameters) . ')';
+                return 'array('.implode(', ', $parameters).')';
                 break;
 
             case 'static-constant-access':
-                return $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
+                return $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
                 break;
 
             case 'int':
@@ -376,7 +383,7 @@ EOF;
                 break;
 
             default:
-                throw new Exception('Stubs - value with type: ' . $parameter['default']['type'] . ' is not supported');
+                throw new Exception('Stubs - value with type: '.$parameter['default']['type'].' is not supported');
                 break;
         }
     }

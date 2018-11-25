@@ -24,11 +24,11 @@ final class CollectCommandsToApplicationCompilerPass implements CompilerPassInte
         $applicationDefinition = $containerBuilder->getDefinition(Application::class);
 
         foreach ($containerBuilder->getDefinitions() as $name => $definition) {
-            if ($definition->getClass() === null) {
+            if (null === $definition->getClass()) {
                 continue;
             }
 
-            /**
+            /*
              * TODO: Deal with SelfUpdateCommand.
              *
              * if (\substr(__FILE__, 0, 5) === 'phar:') {

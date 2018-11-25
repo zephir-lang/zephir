@@ -14,7 +14,7 @@ namespace Zephir\Cache;
 use Zephir\ClassMethod;
 
 /**
- * SlotsCache
+ * SlotsCache.
  *
  * In order to reduce memory allocation when calling functions and method_exists
  * Zephir provides a global cache that store pointers to resolved functions
@@ -30,9 +30,10 @@ class SlotsCache
     private static $cacheFunctionSlots = [];
 
     /**
-     * Returns or creates a cache slot for a function
+     * Returns or creates a cache slot for a function.
      *
      * @param string $functionName
+     *
      * @return int
      */
     public static function getFunctionSlot($functionName)
@@ -47,13 +48,15 @@ class SlotsCache
         }
 
         self::$cacheFunctionSlots[$functionName] = $slot;
+
         return $slot;
     }
 
     /**
-     * Returns or creates a cache slot for a function
+     * Returns or creates a cache slot for a function.
      *
      * @param string $functionName
+     *
      * @return int
      */
     public static function getExistingFunctionSlot($functionName)
@@ -66,9 +69,10 @@ class SlotsCache
     }
 
     /**
-     * Returns or creates a cache slot for a method
+     * Returns or creates a cache slot for a method.
      *
      * @param ClassMethod $method
+     *
      * @return int
      */
     public static function getMethodSlot(ClassMethod $method)
@@ -86,13 +90,15 @@ class SlotsCache
         }
 
         self::$cacheMethodSlots[$className][$methodName] = $slot;
+
         return $slot;
     }
 
     /**
-     * Returns a cache slot for a method
+     * Returns a cache slot for a method.
      *
      * @param ClassMethod $method
+     *
      * @return int
      */
     public static function getExistingMethodSlot(ClassMethod $method)

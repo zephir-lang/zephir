@@ -15,7 +15,7 @@ use Zephir\Exception\InvalidCallException;
 use Zephir\Exception\UnknownPropertyException;
 
 /**
- * Zephir\Support\PropertyAccessor
+ * Zephir\Support\PropertyAccessor.
  */
 trait PropertyAccessor
 {
@@ -26,25 +26,27 @@ trait PropertyAccessor
      * will be implicitly called when executing `$value = $object->property;`.
      *
      * @param string $name
+     *
      * @throws InvalidCallException
      * @throws UnknownPropertyException
+     *
      * @return mixed
      */
     public function __get($name)
     {
-        $getter = 'get' . ucfirst($name);
-        $setter = 'set' . ucfirst($name);
+        $getter = 'get'.ucfirst($name);
+        $setter = 'set'.ucfirst($name);
 
         if (method_exists($this, $getter)) {
             return $this->$getter();
         } elseif (method_exists($this, $setter)) {
             throw new InvalidCallException(
-                sprintf('Getting write-only property: %s::%s', get_class($this), $name)
+                sprintf('Getting write-only property: %s::%s', \get_class($this), $name)
             );
         }
 
         throw new UnknownPropertyException(
-            sprintf('Getting unknown property: %s::%s', get_class($this), $name)
+            sprintf('Getting unknown property: %s::%s', \get_class($this), $name)
         );
     }
 }

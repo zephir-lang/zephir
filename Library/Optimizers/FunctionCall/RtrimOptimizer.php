@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers\FunctionCall;
 
 /**
- * RtrimOptimizer
+ * RtrimOptimizer.
  *
  * Optimizes calls to 'rtrim' using internal function
  */

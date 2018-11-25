@@ -17,20 +17,20 @@ use Zephir\Statements\LetStatement;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ExportSymbol
+ * ExportSymbol.
  *
  * Exports a symbol to the current PHP symbol table using a variable as parameter
  */
 class ExportSymbol
 {
     /**
-     * Compiles {var} = {expr}
+     * Compiles {var} = {expr}.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext,
-     * @param array $statement
+     * @param array              $statement
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
@@ -64,8 +64,8 @@ class ExportSymbol
         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         $variable = $compilationContext->backend->getVariableCode($variable);
 
-        $codePrinter->output('if (zephir_set_symbol(' . $symbol . ', ' . $variable . ' TSRMLS_CC) == FAILURE) {');
-        $codePrinter->output("\t" . 'return;');
+        $codePrinter->output('if (zephir_set_symbol('.$symbol.', '.$variable.' TSRMLS_CC) == FAILURE) {');
+        $codePrinter->output("\t".'return;');
         $codePrinter->output('}');
     }
 }

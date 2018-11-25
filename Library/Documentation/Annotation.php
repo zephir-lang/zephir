@@ -12,7 +12,7 @@
 namespace Zephir\Documentation;
 
 /**
- * Annotation
+ * Annotation.
  *
  * A parsed Annotation
  */

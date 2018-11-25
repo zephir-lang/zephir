@@ -12,14 +12,15 @@
 namespace Zephir;
 
 /**
- * Class StringsManager
+ * Class StringsManager.
  *
  * Manages the concatenation keys for the extension and the interned strings
  */
 abstract class StringsManager
 {
     /**
-     * List of headers
+     * List of headers.
+     *
      * @var array
      */
     protected $concatKeys = [
@@ -29,7 +30,7 @@ abstract class StringsManager
     ];
 
     /**
-     * Adds a concatenation combination to the manager
+     * Adds a concatenation combination to the manager.
      *
      * @param string $key
      */
@@ -39,14 +40,14 @@ abstract class StringsManager
     }
 
     /**
-     * Generates the concatenation code
+     * Generates the concatenation code.
      *
      * @return array
      */
     abstract public function genConcatCode();
 
     /**
-     * Obtains the existing concatenation keys
+     * Obtains the existing concatenation keys.
      *
      * @return array
      */

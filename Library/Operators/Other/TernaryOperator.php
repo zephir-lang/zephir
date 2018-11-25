@@ -18,22 +18,23 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\Statements\LetStatement;
 
 /**
- * Ternary
+ * Ternary.
  *
  * Compiles ternary expressions
  */
 class TernaryOperator extends BaseOperator
 {
     /**
-     * Compile ternary operator
+     * Compile ternary operator.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        /**
+        /*
          * This variable is used to check if the compound and expression is evaluated as true or false:
          * Ensure that newly allocated variables are local-only (setReadOnly)
          */
@@ -42,7 +43,7 @@ class TernaryOperator extends BaseOperator
         /* Make sure that passed variables (passed symbol variables) are promoted */
         $returnVariable->setLocalOnly(false);
 
-        if ($returnVariable->getType() != 'variable' || $returnVariable->getName() == 'return_value') {
+        if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
             $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
             if ($returnVariable->isTemporal()) {
                 $returnVariable->skipInitVariant(2);
@@ -51,12 +52,12 @@ class TernaryOperator extends BaseOperator
 
         $expr = new EvalExpression();
         $condition = $expr->optimize($expression['left'], $compilationContext);
-        $compilationContext->codePrinter->output('if (' . $condition . ') {');
+        $compilationContext->codePrinter->output('if ('.$condition.') {');
 
         $compilationContext->codePrinter->increaseLevel();
 
         /**
-         * Create an implicit 'let' operation to update the evaluated left operator
+         * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
             'type' => 'let',
@@ -79,7 +80,7 @@ class TernaryOperator extends BaseOperator
         $compilationContext->codePrinter->increaseLevel();
 
         /**
-         * Create an implicit 'let' operation to update the evaluated left operator
+         * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
             'type' => 'let',

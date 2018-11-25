@@ -23,12 +23,12 @@ class CheckDependenciesTest extends KernelTestCase
 {
     public function testExtendsClassThatDoesNotExist()
     {
-        self::bootKernel(['config_files' => [__DIR__ . '/../../../config.yml']]);
+        self::bootKernel(['config_files' => [__DIR__.'/../../../config.yml']]);
 
         $logger = new TestLogger();
 
         /**
-         * @var Compiler            $compiler
+         * @var Compiler
          * @var Config              $config
          * @var FileSystemInterface $fs
          */

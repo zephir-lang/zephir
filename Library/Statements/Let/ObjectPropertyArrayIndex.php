@@ -18,37 +18,37 @@ use Zephir\Expression;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectPropertyArrayIndex
+ * ObjectPropertyArrayIndex.
  *
  * Updates object properties dynamically
  */
 class ObjectPropertyArrayIndex extends ArrayIndex
 {
     /**
-     * Compiles x->y[z] = foo
+     * Compiles x->y[z] = foo.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext,
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
+            throw new CompilerException('Attempt to use variable type: '.$symbolVariable->getType().' as object', $statement);
         }
 
-        /**
+        /*
          * Update the property according to the number of array-offsets
          */
-        if (count($statement['index-expr']) == 1) {
+        if (1 == \count($statement['index-expr'])) {
             $this->_assignPropertyArraySingleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
         } else {
             $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
@@ -56,13 +56,14 @@ class ObjectPropertyArrayIndex extends ArrayIndex
     }
 
     /**
-     * Compiles x->y[z] = {expr} (single offset assignment)
+     * Compiles x->y[z] = {expr} (single offset assignment).
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws CompilerException
      */
     protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
@@ -71,7 +72,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         $compilationContext->headersManager->add('kernel/object');
 
         /**
-         * Only string/variable/int
+         * Only string/variable/int.
          */
         $indexExpression = new Expression($statement['index-expr'][0]);
         $resolvedIndex = $indexExpression->compile($compilationContext);
@@ -85,10 +86,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'variable':
                 break;
             default:
-                throw new CompilerException('Expression: ' . $resolvedIndex->getType() . ' cannot be used as index without cast', $statement);
+                throw new CompilerException('Expression: '.$resolvedIndex->getType().' cannot be used as index without cast', $statement);
         }
 
-        if ($resolvedIndex->getType() == 'variable') {
+        if ('variable' == $resolvedIndex->getType()) {
             $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement);
             switch ($indexVariable->getType()) {
                 case 'string':
@@ -99,10 +100,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException('Variable: ' . $indexVariable->getType() . ' cannot be used as index without cast', $statement);
+                    throw new CompilerException('Variable: '.$indexVariable->getType().' cannot be used as index without cast', $statement);
             }
 
-            if ($indexVariable->getType() == 'variable') {
+            if ('variable' == $indexVariable->getType()) {
                 if ($indexVariable->hasDifferentDynamicType(['undefined', 'int', 'string'])) {
                     $compilationContext->logger->warning(
                         'Possible attempt to use non string/long dynamic variable as array index',
@@ -138,16 +139,16 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 break;
         }
 
-        /**
+        /*
          * Check if the variable to update is defined
          */
-        if ($symbolVariable->getRealName() == 'this') {
+        if ('this' == $symbolVariable->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
             }
         } else {
-            /**
+            /*
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -158,11 +159,11 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: '.$classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $statement);
+                        throw new CompilerException("Class '".$classType."' does not have a property called: '".$property."'", $statement);
                     }
                 }
             }
@@ -178,9 +179,9 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
                     case 'bool':
                         $booleanCode = $resolvedExpr->getBooleanCode();
-                        if ($booleanCode == '1') {
+                        if ('1' == $booleanCode) {
                             $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, 'true', $compilationContext);
-                        } elseif ($booleanCode == '0') {
+                        } elseif ('0' == $booleanCode) {
                             $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, 'false', $compilationContext);
                         } else {
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -199,7 +200,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
                     case 'char':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $compilationContext->backend->assignLong($tempVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
+                        $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
                         $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, $tempVariable, $compilationContext);
                         break;
 
@@ -246,28 +247,29 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                                 break;
 
                             default:
-                                throw new CompilerException('Cannot update variable type: ' . $variableExpr->getType(), $statement);
+                                throw new CompilerException('Cannot update variable type: '.$variableExpr->getType(), $statement);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('Variable index: ' . $indexVariable->getType() . ' cannot be updated into array property', $statement);
+                        throw new CompilerException('Variable index: '.$indexVariable->getType().' cannot be updated into array property', $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Index: ' . $resolvedIndex->getType() . ' cannot be updated into array property', $statement);
+                throw new CompilerException('Index: '.$resolvedIndex->getType().' cannot be updated into array property', $statement);
         }
     }
 
     /**
-     * Compiles x->y[a][b] = {expr} (multiple offset assignment)
+     * Compiles x->y[a][b] = {expr} (multiple offset assignment).
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws CompilerException
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
@@ -276,12 +278,12 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         $compilationContext->headersManager->add('kernel/object');
 
         /**
-         * Create a temporal zval (if needed)
+         * Create a temporal zval (if needed).
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
         /**
-         * Only string/variable/int
+         * Only string/variable/int.
          */
         $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
@@ -297,7 +299,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException('Expression: ' . $resolvedIndex->getType() . ' cannot be used as index without cast', $statement['index-expr']);
+                    throw new CompilerException('Expression: '.$resolvedIndex->getType().' cannot be used as index without cast', $statement['index-expr']);
             }
 
             $offsetExprs[] = $resolvedIndex;

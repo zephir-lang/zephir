@@ -18,7 +18,7 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 /**
- * Zephir\Operators\Other\TypeHintOperator
+ * Zephir\Operators\Other\TypeHintOperator.
  */
 class TypeHintOperator extends BaseOperator
 {
@@ -37,9 +37,11 @@ class TypeHintOperator extends BaseOperator
     /**
      * Performs type-hint compilation.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -48,7 +50,7 @@ class TypeHintOperator extends BaseOperator
         $expr->setReadOnly(true);
         $resolved = $expr->compile($compilationContext);
 
-        if ($resolved->getType() != 'variable') {
+        if ('variable' != $resolved->getType()) {
             throw new CompilerException('Type-Hints only can be applied to dynamic variables.', $expression);
         }
 

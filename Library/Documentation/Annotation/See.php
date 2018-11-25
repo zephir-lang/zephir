@@ -14,7 +14,7 @@ namespace Zephir\Documentation\Annotation;
 use Zephir\Documentation\Annotation;
 
 /**
- * A link annotation that looks like  `(@)link uri text`
+ * A link annotation that looks like  `(@)link uri text`.
  */
 class See extends Annotation
 {

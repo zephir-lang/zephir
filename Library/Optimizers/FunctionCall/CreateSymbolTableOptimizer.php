@@ -18,28 +18,30 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CreateSymbolTableOptimizer
+ * CreateSymbolTableOptimizer.
  *
  * Built-in function that creates a virtual symbol table
  */
 class CreateSymbolTableOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (isset($expression['parameters'])) {
-            if (count($expression['parameters']) != 0) {
+            if (0 != \count($expression['parameters'])) {
                 throw new CompilerException("This function doesn't require parameters", $expression);
             }
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);

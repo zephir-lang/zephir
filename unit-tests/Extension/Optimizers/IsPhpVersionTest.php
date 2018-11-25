@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Test\Issue1404;
 
 /**
- * Extension\Optimizers\IsPhpVersionTest
+ * Extension\Optimizers\IsPhpVersionTest.
  *
  * @issue https://github.com/phalcon/zephir/issues/1404
  */
@@ -41,13 +41,13 @@ class IsPhpVersionTest extends TestCase
         return [
             [PHP_VERSION, true],
             [PHP_MAJOR_VERSION,   true],
-            [PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION, true],
-            [PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION, true],
-            [PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . (PHP_RELEASE_VERSION + 1), false],
-            [PHP_MAJOR_VERSION . '.' . (PHP_MINOR_VERSION + 1), false],
-            [(PHP_MAJOR_VERSION + 1) . '.' . PHP_MINOR_VERSION, false],
-            [(PHP_MAJOR_VERSION + 1) . '.' . (PHP_MINOR_VERSION + 1), false],
-            [PHP_MAJOR_VERSION . '.1.90009', false],
+            [PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION, true],
+            [PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION, true],
+            [PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.(PHP_RELEASE_VERSION + 1), false],
+            [PHP_MAJOR_VERSION.'.'.(PHP_MINOR_VERSION + 1), false],
+            [(PHP_MAJOR_VERSION + 1).'.'.PHP_MINOR_VERSION, false],
+            [(PHP_MAJOR_VERSION + 1).'.'.(PHP_MINOR_VERSION + 1), false],
+            [PHP_MAJOR_VERSION.'.1.90009', false],
             [0.1, false],
             [0, false],
         ];
@@ -55,18 +55,19 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider phpVersionProvider
+     *
      * @param mixed $version
      * @param mixed $expected
      */
     public function testOptimizer($version, $expected)
     {
-        $isPhpVersion = (bool)$this->isPhpVersion($version);
+        $isPhpVersion = (bool) $this->isPhpVersion($version);
 
         $this->assertEquals($expected, $isPhpVersion);
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Could not parse PHP version
      */
     public function testOptimizerExceptionLLU()
@@ -75,7 +76,7 @@ class IsPhpVersionTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Could not parse PHP version
      */
     public function testOptimizerExceptionNegativeNumber()
@@ -84,7 +85,7 @@ class IsPhpVersionTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Could not parse PHP version
      */
     public function testOptimizerExceptionNull()
@@ -143,6 +144,7 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider releaseVersionProvider
+     *
      * @param mixed $testName
      * @param mixed $version
      */
@@ -167,6 +169,7 @@ class IsPhpVersionTest extends TestCase
 
     /**
      * @dataProvider minorVersionProvider
+     *
      * @param mixed $testName
      * @param mixed $version
      */
@@ -213,7 +216,7 @@ class IsPhpVersionTest extends TestCase
     {
         $phpVer = sprintf(
             'PHP_VERSION_ID:%d(%d.%d.%d)',
-            PHP_VERSION_ID,
+            \PHP_VERSION_ID,
             PHP_MAJOR_VERSION,
             PHP_MINOR_VERSION,
             PHP_RELEASE_VERSION
@@ -227,15 +230,16 @@ class IsPhpVersionTest extends TestCase
     /**
      * Optimizer: isPhpVersion
      * Compare user entered PHP version with Environment and return Boolean
-     * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE
+     * Check only MAJOR or MAJOR + MINOR or MAJOR + MINOR + RELEASE.
      *
      * @param float|int|string $version - PHP version in any format: 7, 7.1, "7.1.1"
+     *
      * @return bool
      */
     private function isPhpVersion($version)
     {
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
-        if (!count($matches)) {
+        if (!\count($matches)) {
             throw new \Exception('Could not parse PHP version');
         }
 
@@ -259,9 +263,9 @@ class IsPhpVersionTest extends TestCase
             $phpReleaseVersion = PHP_RELEASE_VERSION;
         }
 
-        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
+        $versionId = (int) ($majorVersion + $minorVersion + $releaseVersion);
         $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
 
-        return (bool)($phpVersionId == $versionId ? 1 : 0);
+        return (bool) ($phpVersionId == $versionId ? 1 : 0);
     }
 }

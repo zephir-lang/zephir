@@ -19,18 +19,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
+ * Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer.
  *
  * Writes values from extensions globals
  */
 class GlobalsSetOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
      *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -39,11 +40,11 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 
-        if ($expression['parameters'][0]['parameter']['type'] != 'string') {
+        if ('string' != $expression['parameters'][0]['parameter']['type']) {
             throw new CompilerException("A string parameter is required for 'globals_set'", $expression);
         }
 
@@ -62,7 +63,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !is_string($resolvedParams[0])) {
+            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !\is_string($resolvedParams[0])) {
                 throw new CompilerException(
                     "Unable to reslove value for '{$globalName}' global variable.",
                     $expression
@@ -102,8 +103,8 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      * @todo  Add 'hash' support
      * @todo  Use zval_get_string, zval_get_long, zval_get_double for ZE3
      *
-     * @param array $definition
-     * @param array $expression
+     * @param array  $definition
+     * @param array  $expression
      * @param string $name
      * @param string $value
      *

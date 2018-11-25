@@ -20,12 +20,12 @@ class RegexDNATest extends TestCase
         $t = new \Test\RegexDNA();
 
         ob_start();
-        $t->process(dirname(__DIR__) . '/../fixtures/regexdna/input.txt');
+        $t->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(
             $content,
-            file_get_contents(dirname(__DIR__) . '/../fixtures/regexdna/output.txt')
+            file_get_contents(\dirname(__DIR__).'/../fixtures/regexdna/output.txt')
         );
     }
 }

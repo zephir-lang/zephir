@@ -12,7 +12,7 @@
 namespace Zephir\Documentation;
 
 /**
- * Helper to parse raw docblocks to structured object
+ * Helper to parse raw docblocks to structured object.
  */
 class DocblockParser
 {
@@ -53,11 +53,11 @@ class DocblockParser
     }
 
     /**
-     * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
+     * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing.
      */
     private function __tryRegisterAnnotation()
     {
-        if (($this->annotationNameOpen || $this->annotationOpen) && strlen($this->currentAnnotationStr) > 0) {
+        if (($this->annotationNameOpen || $this->annotationOpen) && \strlen($this->currentAnnotationStr) > 0) {
             $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
             $this->docblockObj->addAnnotation($annotation);
         }
@@ -67,8 +67,9 @@ class DocblockParser
     }
 
     /**
-     * @param string $name the annotation name
+     * @param string $name   the annotation name
      * @param string $string the annotation name
+     *
      * @return \Zephir\Documentation\Annotation
      */
     private function __createAnnotation($name, $string)
@@ -98,7 +99,7 @@ class DocblockParser
     }
 
     /**
-     * Parses the internal annotation string
+     * Parses the internal annotation string.
      *
      * @return Docblock the parsed docblock
      */
@@ -122,7 +123,7 @@ class DocblockParser
 
         $this->currentLine = 0;
         $this->currentCharIndex = 0;
-        $this->annotationLen = strlen($this->annotation);
+        $this->annotationLen = \strlen($this->annotation);
         $this->currentChar = $this->annotation[0];
 
         while (null !== $this->currentChar) {
@@ -131,31 +132,31 @@ class DocblockParser
             if ($this->ignoreSpaces && ctype_space($currentChar)) {
             } else {
                 if (!$this->commentOpen) {
-                    if ($currentChar == '/') {
-                        if ($this->nextCharacter() == '*' && $this->nextCharacter() == '*') {
+                    if ('/' == $currentChar) {
+                        if ('*' == $this->nextCharacter() && '*' == $this->nextCharacter()) {
                             $this->commentOpen = true;
                         } else {
                             continue;
                         }
                     }
                 } else {
-                    if ($currentChar == '*') {
+                    if ('*' == $currentChar) {
                         $nextCharacter = $this->nextCharacter();
                         if ('/' == $nextCharacter) {
                             // stop annotation parsing on end of comment
                             $this->__tryRegisterAnnotation();
                             break;
                         } elseif ($this->ignoreStar) {
-                            if ($nextCharacter == ' ') {
+                            if (' ' == $nextCharacter) {
                                 $this->nextCharacter();
                             }
                             continue;
                         }
                     }
 
-                    if ($currentChar == '@') {
+                    if ('@' == $currentChar) {
                         $this->descriptionStr = trim($this->descriptionStr);
-                        if ($this->descriptionOpen && strlen($this->descriptionStr) > 0) {
+                        if ($this->descriptionOpen && \strlen($this->descriptionStr) > 0) {
                             $this->descriptionOpen = false;
                         }
 
@@ -166,7 +167,7 @@ class DocblockParser
                         $this->annotationNameOpen = true;
                     } elseif ($this->annotationNameOpen || $this->annotationOpen) {
                         // stop annotation parsing on new line
-                        if ($currentChar == "\n" || $currentChar == "\r") {
+                        if ("\n" == $currentChar || "\r" == $currentChar) {
                             $this->__tryRegisterAnnotation();
 
                             $this->ignoreSpaces = false;
@@ -183,7 +184,7 @@ class DocblockParser
                         }
                     } elseif ($this->summaryOpen) {
                         // stop summary on new line
-                        if (strlen($this->summaryStr) > 0 && ($currentChar == "\n" || $currentChar == "\r")) {
+                        if (\strlen($this->summaryStr) > 0 && ("\n" == $currentChar || "\r" == $currentChar)) {
                             $this->summaryOpen = false;
                             $this->descriptionOpen = true;
                             $this->ignoreStar = true;
@@ -192,7 +193,7 @@ class DocblockParser
                         }
                     } elseif ($this->descriptionOpen) {
                         // stop description on new line
-                        if ($currentChar == "\n" || $currentChar == "\r") {
+                        if ("\n" == $currentChar || "\r" == $currentChar) {
                             $this->descriptionStr .= PHP_EOL;
                         } else {
                             $this->descriptionStr .= $currentChar;
@@ -211,7 +212,8 @@ class DocblockParser
     }
 
     /**
-     * return the parsed docblock. It will return null until you run the parse() method
+     * return the parsed docblock. It will return null until you run the parse() method.
+     *
      * @return Docblock the parsed docblock
      */
     public function getParsedDocblock()
@@ -220,17 +222,18 @@ class DocblockParser
     }
 
     /**
-     * moves the current cursor to the next character
+     * moves the current cursor to the next character.
+     *
      * @return string the new current character
      */
     private function nextCharacter()
     {
-        $this->currentCharIndex++;
+        ++$this->currentCharIndex;
 
         if ($this->annotationLen <= $this->currentCharIndex) {
             $this->currentChar = null;
         } else {
-            $this->currentChar = $this->annotation{$this->currentCharIndex};
+            $this->currentChar = $this->annotation[$this->currentCharIndex];
         }
 
         return $this->currentChar;

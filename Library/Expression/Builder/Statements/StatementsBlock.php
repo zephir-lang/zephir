@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * StatementsBlock
+ * StatementsBlock.
  *
  * Allows to manually build a statements block AST node
  */
@@ -27,7 +27,7 @@ class StatementsBlock extends AbstractBuilder
      */
     public function __construct(array $statements = null)
     {
-        if ($statements !== null) {
+        if (null !== $statements) {
             $this->setStatements($statements);
         }
     }
@@ -42,21 +42,25 @@ class StatementsBlock extends AbstractBuilder
 
     /**
      * @param array $statements
+     *
      * @return $this
      */
     public function setStatements($statements)
     {
         $this->statements = $statements;
+
         return $this;
     }
 
     /**
      * @param $statement
+     *
      * @return $this
      */
     public function addStatement($statement)
     {
         $this->statements[] = $statement;
+
         return $this;
     }
 

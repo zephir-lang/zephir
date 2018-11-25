@@ -29,9 +29,9 @@ class BaseOperator
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -42,11 +42,12 @@ class BaseOperator
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to
-     * store the result. This method returns a variable that is always stored in the heap
+     * store the result. This method returns a variable that is always stored in the heap.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $init
+     * @param array              $expression
+     * @param bool               $init
+     *
      * @return Variable
      */
     public function getExpectedNonLiteral(CompilationContext $compilationContext, $expression, $init = true)
@@ -55,8 +56,8 @@ class BaseOperator
         $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
-            if (is_object($symbolVariable)) {
-                if ($symbolVariable->getType() == 'variable' && !$symbolVariable->isLocalOnly()) {
+            if (\is_object($symbolVariable)) {
+                if ('variable' == $symbolVariable->getType() && !$symbolVariable->isLocalOnly()) {
                     if (!$init) {
                         return $symbolVariable;
                     }
@@ -68,16 +69,18 @@ class BaseOperator
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
             }
         }
+
         return $symbolVariable;
     }
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to
-     * store the result
+     * store the result.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $init
+     * @param array              $expression
+     * @param bool               $init
+     *
      * @return Variable
      */
     public function getExpected(CompilationContext $compilationContext, $expression, $init = true)
@@ -86,8 +89,8 @@ class BaseOperator
         $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
-            if (is_object($symbolVariable)) {
-                if ($symbolVariable->getType() == 'variable') {
+            if (\is_object($symbolVariable)) {
+                if ('variable' == $symbolVariable->getType()) {
                     if (!$init) {
                         return $symbolVariable;
                     }
@@ -115,17 +118,19 @@ class BaseOperator
                 }
             }
         }
+
         return $symbolVariable;
     }
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to
      * store the result, if a temporary variable is created it use whose body is only freed
-     * on every iteration
+     * on every iteration.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param string $type
+     * @param array              $expression
+     * @param string             $type
+     *
      * @return Variable
      */
     public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression, $type = 'variable')
@@ -134,8 +139,8 @@ class BaseOperator
         $symbolVariable = $this->expectingVariable;
 
         if ($isExpecting) {
-            if (is_object($symbolVariable)) {
-                if ($symbolVariable->getType() == $type || $symbolVariable->getName() == 'return_value') {
+            if (\is_object($symbolVariable)) {
+                if ($symbolVariable->getType() == $type || 'return_value' == $symbolVariable->getName()) {
                     $symbolVariable->initVariant($compilationContext);
                 } else {
                     if (!$this->readOnly) {
@@ -157,7 +162,7 @@ class BaseOperator
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @return bool
      */
@@ -167,7 +172,7 @@ class BaseOperator
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @param bool $readOnly
      */
@@ -177,7 +182,7 @@ class BaseOperator
     }
 
     /**
-     * Checks if the result of the evaluated expression is read only
+     * Checks if the result of the evaluated expression is read only.
      *
      * @return bool
      */

@@ -23,7 +23,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
 
 /**
- * Zephir\Console\Command\InstallCommand
+ * Zephir\Console\Command\InstallCommand.
  *
  * Installs the extension in the extension directory.
  */
@@ -50,7 +50,7 @@ final class InstallCommand extends Command
             ->setDescription('Installs the extension in the extension directory (may require root password)')
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Install the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -63,19 +63,22 @@ final class InstallCommand extends Command
             );
         } catch (NotImplementedException $e) {
             $io->note($e->getMessage());
+
             return 0;
         } catch (CompilerException $e) {
             $io->error($e->getMessage());
+
             return 1;
         } catch (Exception $e) {
             $io->error($e->getMessage());
+
             return 1;
         }
 
         $success = ['Extension installed.'];
 
         $namespace = $this->config->get('namespace');
-        if (!extension_loaded($namespace)) {
+        if (!\extension_loaded($namespace)) {
             $success[] = sprintf('Add "extension=%s.so" to your php.ini', $namespace);
         }
 

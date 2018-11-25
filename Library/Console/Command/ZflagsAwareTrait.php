@@ -12,7 +12,7 @@
 namespace Zephir\Console\Command;
 
 /**
- * Zephir\Console\Command\ZflagsAwareTrait
+ * Zephir\Console\Command\ZflagsAwareTrait.
  */
 trait ZflagsAwareTrait
 {

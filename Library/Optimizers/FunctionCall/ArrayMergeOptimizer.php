@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * ArrayMergeOptimizer
+ * ArrayMergeOptimizer.
  *
  * Optimizes calls to 'array_merge' using internal function
  */
 class ArrayMergeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class ArrayMergeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -61,15 +63,16 @@ class ArrayMergeOptimizer extends OptimizerAbstract
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $resolveParam = $this->createParamResolver($context);
-        $context->codePrinter->output('zephir_fast_array_merge(' . $symbol . ', ' . $resolveParam($resolvedParams[0]) . ', ' . $resolveParam($resolvedParams[1]) . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_array_merge('.$symbol.', '.$resolveParam($resolvedParams[0]).', '.$resolveParam($resolvedParams[1]).' TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
     private function createParamResolver(CompilationContext $context)
     {
-        if ($context->backend->isZE3() == false) {
+        if (false == $context->backend->isZE3()) {
             return function ($str) {
-                return '&(' . $str . ')';
+                return '&('.$str.')';
             };
         }
 

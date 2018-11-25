@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * MethodCallWarmUp
+ * MethodCallWarmUp.
  *
  * List of methods that require warm up
  */
@@ -22,7 +22,7 @@ class MethodCallWarmUp
 
     /**
      * @param ClassDefinition $classDefinition
-     * @param ClassMethod $method
+     * @param ClassMethod     $method
      */
     public function add(ClassDefinition $classDefinition, ClassMethod $method)
     {

@@ -17,30 +17,31 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectPropertyAppend
+ * ObjectPropertyAppend.
  *
  * Appends a value to a property
  */
 class ObjectPropertyAppend
 {
     /**
-     * Compiles x->y[] = foo
+     * Compiles x->y[] = foo.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Attempt to use variable type: ' . $symbolVariable->getType() . ' as object', $statement);
+            throw new CompilerException('Attempt to use variable type: '.$symbolVariable->getType().' as object', $statement);
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -49,16 +50,16 @@ class ObjectPropertyAppend
 
         $compilationContext->headersManager->add('kernel/object');
 
-        /**
+        /*
          * Check if the variable to update is defined
          */
-        if ($symbolVariable->getRealName() == 'this') {
+        if ('this' == $symbolVariable->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
             }
         } else {
-            /**
+            /*
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -69,11 +70,11 @@ class ObjectPropertyAppend
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException('Cannot locate class definition for class: ' . $classType, $statement);
+                        throw new CompilerException('Cannot locate class definition for class: '.$classType, $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $statement);
+                        throw new CompilerException("Class '".$classType."' does not have a property called: '".$property."'", $statement);
                     }
                 }
             }
@@ -85,7 +86,7 @@ class ObjectPropertyAppend
                 break;
 
             case 'bool':
-                $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                $codePrinter->output('if ('.$resolvedExpr->getBooleanCode().') {');
                 $codePrinter->increaseLevel();
                 $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, 'true', $compilationContext);
                 $codePrinter->decreaseLevel();
@@ -98,7 +99,7 @@ class ObjectPropertyAppend
 
             case 'char':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
+                $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
                 $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, $tempVariable, $compilationContext);
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
@@ -184,12 +185,12 @@ class ObjectPropertyAppend
                         break;
 
                     default:
-                        throw new CompilerException('Variable: ' . $variableExpr->getType() . ' cannot be appended to array property', $statement);
+                        throw new CompilerException('Variable: '.$variableExpr->getType().' cannot be appended to array property', $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Expression: ' . $resolvedExpr->getType() . ' cannot be appended to array property', $statement);
+                throw new CompilerException('Expression: '.$resolvedExpr->getType().' cannot be appended to array property', $statement);
         }
     }
 }

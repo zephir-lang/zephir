@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * Class AbstractStatementBuilder
+ * Class AbstractStatementBuilder.
  */
 abstract class AbstractStatementBuilder
 {

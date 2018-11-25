@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * TanOptimizer
+ * TanOptimizer.
  *
  * Optimizes calls to 'tan' using internal function
  */

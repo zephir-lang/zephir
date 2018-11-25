@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Crc32Optimizer
+ * Crc32Optimizer.
  *
  * Optimizes calls to 'crc32' using internal function
  */
 class Crc32Optimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class Crc32Optimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -59,7 +61,8 @@ class Crc32Optimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_crc32(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_crc32('.$symbol.', '.$resolvedParams[0].');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

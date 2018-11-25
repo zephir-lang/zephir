@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class AssignPropertyOperator
+ * Class AssignPropertyOperator.
  */
 class AssignPropertyOperator extends AssignVariableOperator
 {
@@ -28,15 +28,15 @@ class AssignPropertyOperator extends AssignVariableOperator
     private $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
 
     /**
-     * @param null $variable
-     * @param null $property
+     * @param null                 $variable
+     * @param null                 $property
      * @param AbstractBuilder|null $expression
      */
     public function __construct($variable = null, $property = null, AbstractBuilder $expression = null)
     {
         parent::__construct($variable, $expression);
 
-        if ($property !== null) {
+        if (null !== $property) {
             $this->setProperty($property);
         }
     }
@@ -51,11 +51,13 @@ class AssignPropertyOperator extends AssignVariableOperator
 
     /**
      * @param string $property
+     *
      * @return $this
      */
     public function setProperty($property)
     {
         $this->property = $property;
+
         return $this;
     }
 
@@ -69,11 +71,13 @@ class AssignPropertyOperator extends AssignVariableOperator
 
     /**
      * @param string $type
+     *
      * @return AssignPropertyOperator
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 

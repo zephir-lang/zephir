@@ -14,11 +14,11 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Test\McallDynamic;
 
-class MCallTestDynamic extends TestCase
+class MCallDynamicTest extends TestCase
 {
     public function testCallDynamic()
     {
-        $a = new McallDynamic;
+        $a = new McallDynamic();
         $this->assertSame($a->method1(), 1);
         $this->assertSame($a->testMagicCall1(), 2);
     }

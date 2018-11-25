@@ -18,16 +18,17 @@ use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
 
 /**
- * VarDumpOptimizer
+ * VarDumpOptimizer.
  *
  * Optimizes calls to 'var_dump' using internal function
  */
 class VarDumpOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -42,7 +43,7 @@ class VarDumpOptimizer extends OptimizerAbstract
         foreach ($resolvedParams as $resolvedParam) {
             $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
             if (!$variable || !$variable->isVariable()) {
-                /**
+                /*
                  * Complex expressions require a temporary variable
                  */
                 switch ($resolvedParam->getType()) {
@@ -80,13 +81,13 @@ class VarDumpOptimizer extends OptimizerAbstract
                 $statement->compile($context);
             } else {
                 /**
-                 * This mark the variable as used
+                 * This mark the variable as used.
                  */
                 $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
             }
 
             $symbol = $context->backend->getVariableCodePointer($variable);
-            $context->codePrinter->output('zephir_var_dump(' . $symbol . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_var_dump('.$symbol.' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

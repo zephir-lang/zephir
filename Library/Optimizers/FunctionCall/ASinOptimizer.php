@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * ASinOptimizer
+ * ASinOptimizer.
  *
  * Optimizes calls to 'asin' using internal function
  */

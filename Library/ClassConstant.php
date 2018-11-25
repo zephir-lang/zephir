@@ -16,7 +16,7 @@ use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
 /**
- * ClassConstant
+ * ClassConstant.
  *
  * Represents a class constant
  */
@@ -38,10 +38,10 @@ class ClassConstant
     protected $docblock;
 
     /**
-     * ClassConstant constructor
+     * ClassConstant constructor.
      *
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @param string $docBlock
      */
     public function __construct($name, array $value, $docBlock)
@@ -52,7 +52,7 @@ class ClassConstant
     }
 
     /**
-     * Returns the constant's name
+     * Returns the constant's name.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class ClassConstant
     }
 
     /**
-     * Returns the constant's value
+     * Returns the constant's value.
      *
      * @todo Rewrite name
      *
@@ -74,7 +74,7 @@ class ClassConstant
     }
 
     /**
-     * Get the type of the value of the constant
+     * Get the type of the value of the constant.
      *
      * @return string
      */
@@ -84,7 +84,7 @@ class ClassConstant
     }
 
     /**
-     * Get value of the value of the constant
+     * Get value of the value of the constant.
      *
      * @return mixed
      */
@@ -98,7 +98,7 @@ class ClassConstant
     }
 
     /**
-     * Returns the docblock related to the constant
+     * Returns the docblock related to the constant.
      *
      * @return string
      */
@@ -108,7 +108,7 @@ class ClassConstant
     }
 
     /**
-     * Get type of class constant
+     * Get type of class constant.
      *
      * @return string
      */
@@ -118,16 +118,15 @@ class ClassConstant
     }
 
     /**
-     * Process the value of the class constant if needed
+     * Process the value of the class constant if needed.
      *
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @return void
      */
     public function processValue(CompilationContext $compilationContext)
     {
-        if ($this->value['type'] == 'constant') {
+        if ('constant' == $this->value['type']) {
             $constant = new Constants();
             $compiledExpression = $constant->compile($this->value, $compilationContext);
 
@@ -135,10 +134,11 @@ class ClassConstant
                 'type' => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
+
             return;
         }
 
-        if ($this->value['type'] == 'static-constant-access') {
+        if ('static-constant-access' == $this->value['type']) {
             $staticConstantAccess = new StaticConstantAccess();
             $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
 
@@ -146,18 +146,18 @@ class ClassConstant
                 'type' => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
+
             return;
         }
     }
 
     /**
-     * Produce the code to register a class constant
+     * Produce the code to register a class constant.
      *
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
      * @throws Exception
-     * @return void
      */
     public function compile(CompilationContext $compilationContext)
     {

@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * VariableBuilder
+ * VariableBuilder.
  *
  * Allows to manually build a variable AST node
  */
@@ -26,7 +26,7 @@ class VariableBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */

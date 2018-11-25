@@ -14,24 +14,24 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\FunctionCall;
 
 /**
- * CallFunctionStatement
+ * CallFunctionStatement.
  *
  * Allows to manually build a function call AST node
  */
 class CallFunctionStatement extends AbstractStatement
 {
     /**
-     * f(x, y, ... , N)
+     * f(x, y, ... , N).
      */
     const TYPE_CALL_DIRECT = FunctionCall::CALL_NORMAL;
 
     /**
-     * {f}(x, y, ... , N)
+     * {f}(x, y, ... , N).
      */
     const TYPE_CALL_DYNAMIC = FunctionCall::CALL_DYNAMIC;
 
     /**
-     * {"f"}(x, y, ... , N)
+     * {"f"}(x, y, ... , N).
      */
     const TYPE_CALL_DYNAMIC_STRING = FunctionCall::CALL_DYNAMIC_STRING;
 
@@ -41,20 +41,20 @@ class CallFunctionStatement extends AbstractStatement
 
     /**
      * @param string|null $name
-     * @param array|null $parameters
-     * @param int $typeCall
+     * @param array|null  $parameters
+     * @param int         $typeCall
      */
     public function __construct($name = null, array $parameters = null, $typeCall = self::TYPE_CALL_DIRECT)
     {
-        if ($name !== null) {
+        if (null !== $name) {
             $this->setName($name);
         }
 
-        if ($parameters !== null) {
+        if (null !== $parameters) {
             $this->setArguments($parameters);
         }
 
-        if ($typeCall !== null) {
+        if (null !== $typeCall) {
             $this->setTypeCall($typeCall);
         }
     }
@@ -69,11 +69,13 @@ class CallFunctionStatement extends AbstractStatement
 
     /**
      * @param string $name
+     *
      * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -87,11 +89,13 @@ class CallFunctionStatement extends AbstractStatement
 
     /**
      * @param array $arguments
+     *
      * @return $this
      */
     public function setArguments(array $arguments = null)
     {
         $this->arguments = $arguments;
+
         return $this;
     }
 
@@ -105,21 +109,25 @@ class CallFunctionStatement extends AbstractStatement
 
     /**
      * @param int $typeCall
+     *
      * @return $this
      */
     public function setTypeCall($typeCall)
     {
         $this->typeCall = $typeCall;
+
         return $this;
     }
 
     /**
      * @param $argument
+     *
      * @return $this
      */
     public function addArgument($argument)
     {
         $this->arguments[] = $argument;
+
         return $this;
     }
 
@@ -130,7 +138,7 @@ class CallFunctionStatement extends AbstractStatement
     {
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
-                if (!is_array($argument) || !isset($argument['parameter'])) {
+                if (!\is_array($argument) || !isset($argument['parameter'])) {
                     $argument = ['parameter' => $argument];
                 }
             }

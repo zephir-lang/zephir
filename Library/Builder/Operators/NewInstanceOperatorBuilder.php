@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * NewInstanceOperatorBuilder
+ * NewInstanceOperatorBuilder.
  *
  * Allows to manually build a 'new instance' operator AST node
  */
@@ -41,7 +41,7 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
@@ -51,6 +51,7 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
         foreach ($this->parameters as $parameter) {
             $parameters[] = $parameter->get();
         }
+
         return [
             'type' => 'new',
             'class' => $this->className,

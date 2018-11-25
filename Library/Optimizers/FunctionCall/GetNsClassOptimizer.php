@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * GetNsClassOptimizer
+ * GetNsClassOptimizer.
  *
  * Optimizes calls to 'get_ns_class' using internal function
  */
 class GetNsClassOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class GetNsClassOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             throw new CompilerException("'get_class_ns' only accepts one parameter");
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -60,7 +62,8 @@ class GetNsClassOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_get_ns_class(' . $symbol . ', ' . $resolvedParams[0] . ', 0 TSRMLS_CC);');
+        $context->codePrinter->output('zephir_get_ns_class('.$symbol.', '.$resolvedParams[0].', 0 TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

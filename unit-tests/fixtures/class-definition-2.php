@@ -13,15 +13,15 @@ return [
     'class' => [
         'namespace' => 'Zephir\Stubs',
         'className' => 'Stubs',
-        'classShortName' => 'get'
+        'classShortName' => 'get',
     ],
     'method' => [
         'visibility' => ['public', 'final'],
-        'name'       => 'fooTest',
+        'name' => 'fooTest',
         'parameters' => null,
         'statements' => [],
-        'docblock'   => 'Zephir',
+        'docblock' => 'Zephir',
         'returnType' => null,
-        'expression' => null
-    ]
+        'expression' => null,
+    ],
 ];

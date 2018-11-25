@@ -18,7 +18,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * TrimOptimizer
+ * TrimOptimizer.
  *
  * Optimizes calls to 'trim' using internal function
  */
@@ -27,10 +27,12 @@ class TrimOptimizer extends OptimizerAbstract
     protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
 
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -40,13 +42,13 @@ class TrimOptimizer extends OptimizerAbstract
         }
 
         $charlist = 'NULL ';
-        if (count($expression['parameters']) == 2) {
-            if ($expression['parameters'][1]['parameter']['type'] == 'null') {
+        if (2 == \count($expression['parameters'])) {
+            if ('null' == $expression['parameters'][1]['parameter']['type']) {
                 unset($expression['parameters'][1]);
             }
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -72,7 +74,8 @@ class TrimOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_trim(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $charlist . ', ' . static::$TRIM_WHERE . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_trim('.$symbol.', '.$resolvedParams[0].', '.$charlist.', '.static::$TRIM_WHERE.' TSRMLS_CC);');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

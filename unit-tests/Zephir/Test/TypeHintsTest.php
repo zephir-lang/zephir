@@ -28,8 +28,6 @@ class TypeHintsTest extends KernelTestCase
 
     /**
      * Store the current directory before to be change.
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -38,19 +36,17 @@ class TypeHintsTest extends KernelTestCase
 
     /**
      * Restore current directory, and clean config.json.
-     *
-     * @return void
      */
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            $dotZephir = dirname(dirname(self::$kernel->getCacheDir()));
+            $dotZephir = \dirname(\dirname(self::$kernel->getCacheDir()));
             if (file_exists($dotZephir)) {
                 unlink_recursive($dotZephir);
             }
 
-            if (file_exists(getcwd() . '/ext')) {
-                unlink_recursive(getcwd() . '/ext');
+            if (file_exists(getcwd().'/ext')) {
+                unlink_recursive(getcwd().'/ext');
             }
 
             chdir($this->pwd);
@@ -111,8 +107,8 @@ class TypeHintsTest extends KernelTestCase
 
     protected function generate($backend)
     {
-        chdir(constant('ZEPHIRPATH') . '/unit-tests/fixtures/typehints');
-        putenv('ZEPHIR_BACKEND=' . $backend);
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/typehints');
+        putenv('ZEPHIR_BACKEND='.$backend);
 
         self::bootKernel();
 
@@ -129,7 +125,6 @@ class TypeHintsTest extends KernelTestCase
 
     /**
      * @param ContainerInterface $container
-     * @return void
      */
     protected function muteOutput(ContainerInterface $container)
     {

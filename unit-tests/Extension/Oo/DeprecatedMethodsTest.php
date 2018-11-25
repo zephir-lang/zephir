@@ -22,7 +22,7 @@ class DeprecatedMethodsTest extends TestCase
      */
     public function testPublicMethodThrowsDeprecatedWarning()
     {
-        $test = new DeprecatedMethods;
+        $test = new DeprecatedMethods();
         $test->publicDeprecated();
     }
 
@@ -32,7 +32,7 @@ class DeprecatedMethodsTest extends TestCase
      */
     public function testPrivateMethodThrowsDeprecatedWarning()
     {
-        $test = new DeprecatedMethods;
+        $test = new DeprecatedMethods();
         $test->normalMethod();
     }
 }

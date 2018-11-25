@@ -74,7 +74,7 @@ class TypeoffTest extends TestCase
         $this->assertSame('boolean', $t->testUnknownTypeOf(true));
         $this->assertSame('double', $t->testUnknownTypeOf(5.5));
         $this->assertSame('array', $t->testUnknownTypeOf([]));
-        $this->assertSame('object', $t->testUnknownTypeOf(new \stdClass));
+        $this->assertSame('object', $t->testUnknownTypeOf(new \stdClass()));
         $this->assertSame('NULL', $t->testUnknownTypeOf(null));
     }
 }

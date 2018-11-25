@@ -23,73 +23,26 @@ file that was distributed with this source code.
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('unit-tests/fixtures')
-    ->name('*.php')
-    ->exclude('ide')
-    ->exclude('templates')
-    ->in(__DIR__);
+    ->in(__DIR__)
+    ->append([__FILE__])
+    ->exclude([
+        'ext',
+        'ide',
+        'templates/ZendEngine2',
+        'templates/ZendEngine3',
+    ]);
 
 return PhpCsFixer\Config::create()
-    ->setUsingCache(true)
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules([
-        '@PSR2' => true,
-        'array_indentation' => true,
-        'array_syntax' => [
-            'syntax' => 'short',
-        ],
-        'binary_operator_spaces' => true,
-        'blank_line_after_namespace' => true,
-        'braces' => true,
-        'class_definition' => true,
-        'elseif' => true,
-        'encoding' => true,
-        'full_opening_tag' => true,
-        'function_declaration' => true,
-        'indentation_type' => true,
-        'line_ending' => true,
-        'lowercase_constants' => true,
-        'lowercase_keywords' => true,
-        'method_argument_space' => true,
-        'method_separation' => true,
-        'header_comment' => [
-            'header' => $header,
-        ],
-        'no_closing_tag' => true,
-        'no_empty_comment' => true,
-        'no_empty_phpdoc' => true,
-        'no_extra_consecutive_blank_lines' => true,
-        'no_spaces_inside_parenthesis' => true,
-        'no_blank_lines_after_class_opening' => true,
-        'no_trailing_whitespace' => true,
-        'no_trailing_whitespace_in_comment' => true,
-        'no_trailing_comma_in_singleline_array' => true,
-        'ordered_imports' => [
-            'sortAlgorithm' => 'alpha',
-        ],
-        'phpdoc_add_missing_param_annotation' => [
-            'only_untyped' => true,
-        ],
-        'phpdoc_indent' => true,
-        'phpdoc_no_access' => true,
-        'phpdoc_no_package' => true,
-        'phpdoc_scalar' => true,
-        'phpdoc_trim' => true,
-        'phpdoc_types' => true,
-        'phpdoc_types_order' => [
-            'null_adjustment' => 'always_last',
-        ],
-        'single_blank_line_at_eof' => true,
-        'single_blank_line_before_namespace' => true,
-        'single_class_element_per_statement' => true,
-        'single_import_per_statement' => true,
-        'single_line_after_imports' => true,
-        'single_quote' => true,
-        'standardize_not_equals' => true,
-        'short_scalar_cast' => true,
-        'visibility_required' => true,
-        'no_unused_imports' => true,
-        'ternary_operator_spaces' => true,
-        'trailing_comma_in_multiline_array' => true,
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        '@PHPUnit48Migration:risky' => true,
+        'php_unit_no_expectation_annotation' => false,
+        'array_syntax' => ['syntax' => 'short'],
+        'fopen_flags' => false,
+        'ordered_imports' => ['sortAlgorithm' => 'alpha'],
+        'protected_to_private' => false,
+        'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
     ]);

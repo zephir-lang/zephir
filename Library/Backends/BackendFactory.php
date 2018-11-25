@@ -45,6 +45,7 @@ final class BackendFactory
      * Resolve backend class.
      *
      * @throws IllegalStateException
+     *
      * @return string
      */
     private function resolveBackendClass()

@@ -11,7 +11,7 @@
 
 namespace MongoDB\Driver;
 
-class Manage
+class manage
 {
     public function __construct($uri, $options, $driverOptions)
     {

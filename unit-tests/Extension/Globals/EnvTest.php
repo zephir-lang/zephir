@@ -23,9 +23,9 @@ class EnvTest extends TestCase
     {
         parent::setUp();
 
-        if (strpos(ini_get('variables_order'), 'E') === false) {
+        if (false === strpos(ini_get('variables_order'), 'E')) {
             $this->markTestSkipped(
-                "variables_order ini directive does not contain 'E'. " .
+                "variables_order ini directive does not contain 'E'. ".
                 "Make sure you have set variables_order to 'EGPCS' in php.ini."
             );
         }

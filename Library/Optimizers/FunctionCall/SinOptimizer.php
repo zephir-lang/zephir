@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * SinOptimizer
+ * SinOptimizer.
  *
  * Optimizes calls to 'sin' using internal function
  */

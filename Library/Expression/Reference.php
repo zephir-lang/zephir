@@ -20,7 +20,7 @@ use Zephir\GlobalConstant;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\Reference
+ * Zephir\Expression\Reference.
  *
  * Resolves expressions that create arrays
  */
@@ -34,9 +34,9 @@ class Reference
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -46,7 +46,7 @@ class Reference
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
      * @param bool $readOnly
      */
@@ -56,10 +56,11 @@ class Reference
     }
 
     /**
-     * Resolves an item to be added in an array
+     * Resolves an item to be added in an array.
      *
      * @param CompiledExpression $exprCompiled
      * @param CompilationContext $compilationContext
+     *
      * @return Variable
      */
     public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
@@ -71,25 +72,28 @@ class Reference
             case 'uint':
             case 'long':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $codePrinter->output('ZVAL_LONG('.$tempVar->getName().', '.$exprCompiled->getCode().');');
+
                 return $tempVar;
 
             case 'char':
             case 'uchar':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', \'' . $exprCompiled->getCode() . '\');');
+                $codePrinter->output('ZVAL_LONG('.$tempVar->getName().', \''.$exprCompiled->getCode().'\');');
+
                 return $tempVar;
 
             case 'double':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $codePrinter->output('ZVAL_DOUBLE('.$tempVar->getName().', '.$exprCompiled->getCode().');');
+
                 return $tempVar;
 
             case 'bool':
-                if ($exprCompiled->getCode() == 'true') {
+                if ('true' == $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
                 } else {
-                    if ($exprCompiled->getCode() == 'false') {
+                    if ('false' == $exprCompiled->getCode()) {
                         return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
                     } else {
                         throw new Exception('?');
@@ -103,7 +107,8 @@ class Reference
             case 'string':
             case 'ulong':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
+                $codePrinter->output('ZVAL_STRING('.$tempVar->getName().', "'.$exprCompiled->getCode().'", 1);');
+
                 return $tempVar;
 
             case 'array':
@@ -117,17 +122,20 @@ class Reference
                     case 'long':
                     case 'ulong':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $codePrinter->output('ZVAL_LONG('.$tempVar->getName().', '.$itemVariable->getName().');');
+
                         return $tempVar;
 
                     case 'double':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $codePrinter->output('ZVAL_DOUBLE('.$tempVar->getName().', '.$itemVariable->getName().');');
+
                         return $tempVar;
 
                     case 'bool':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $codePrinter->output('ZVAL_BOOL('.$tempVar->getName().', '.$itemVariable->getName().');');
+
                         return $tempVar;
 
                     case 'string':
@@ -136,7 +144,7 @@ class Reference
                         return $itemVariable;
 
                     default:
-                        throw new CompilerException('Unknown ' . $itemVariable->getType(), $itemVariable);
+                        throw new CompilerException('Unknown '.$itemVariable->getType(), $itemVariable);
                 }
                 break;
 
@@ -146,23 +154,23 @@ class Reference
     }
 
     /**
-     * Compiles a reference to a value
+     * Compiles a reference to a value.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
-        /**
+        /*
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                if ($symbolVariable->getType() != 'variable') {
-                    throw new CompilerException('Cannot use variable type: ' . $symbolVariable->getType() . ' to store a reference', $expression);
+                if ('variable' != $symbolVariable->getType()) {
+                    throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' to store a reference', $expression);
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -183,7 +191,7 @@ class Reference
             case 'callable':
                 break;
             default:
-                throw new CompilerException('Cannot obtain a reference from type: ' . $left->getType(), $expression);
+                throw new CompilerException('Cannot obtain a reference from type: '.$left->getType(), $expression);
         }
 
         $leftVariable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression);
@@ -195,14 +203,14 @@ class Reference
             case 'callable':
                 break;
             default:
-                throw new CompilerException('Cannot obtain reference from variable type: ' . $leftVariable->getType(), $expression);
+                throw new CompilerException('Cannot obtain reference from variable type: '.$leftVariable->getType(), $expression);
         }
 
         $symbolVariable->setMustInitNull(true);
         $compilationContext->symbolTable->mustGrownStack(true);
 
         $symbolVariable->increaseVariantIfNull();
-        $compilationContext->codePrinter->output('ZEPHIR_MAKE_REFERENCE(' . $symbolVariable->getName() . ', ' . $leftVariable->getName() . ');');
+        $compilationContext->codePrinter->output('ZEPHIR_MAKE_REFERENCE('.$symbolVariable->getName().', '.$leftVariable->getName().');');
 
         return new CompiledExpression('reference', $symbolVariable->getRealName(), $expression);
     }

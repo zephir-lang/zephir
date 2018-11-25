@@ -17,16 +17,17 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * IsCallableOptimizer
+ * IsCallableOptimizer.
  *
  * Optimizes calls to 'is_callable' using internal function
  */
 class IsCallableOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -35,11 +36,12 @@ class IsCallableOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+
+        return new CompiledExpression('bool', 'zephir_is_callable('.$resolvedParams[0].' TSRMLS_CC)', $expression);
     }
 }

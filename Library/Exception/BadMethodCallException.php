@@ -12,7 +12,7 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\BadMethodCallException
+ * Zephir\Exception\BadMethodCallException.
  */
 class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface
 {

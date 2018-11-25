@@ -14,7 +14,7 @@ namespace Zephir;
 use Zephir\Statements\StatementAbstract;
 
 /**
- * Branch
+ * Branch.
  *
  * Represents every branch within a method
  */
@@ -39,7 +39,7 @@ class Branch
 
     protected $level = -1;
 
-    /** @var  StatementAbstract|null */
+    /** @var StatementAbstract|null */
     protected $relatedStatement;
 
     protected $type;
@@ -49,17 +49,17 @@ class Branch
     private $uniqueId;
 
     /**
-     * Set the branch's parent
+     * Set the branch's parent.
      *
      * @param Branch $parentBranch
      */
-    public function setParentBranch(Branch $parentBranch)
+    public function setParentBranch(self $parentBranch)
     {
         $this->parentBranch = $parentBranch;
     }
 
     /**
-     * Returns the branch's parent
+     * Returns the branch's parent.
      *
      * @return Branch
      */
@@ -69,7 +69,7 @@ class Branch
     }
 
     /**
-     * Set the type of branch. One of the TYPE_* constants
+     * Set the type of branch. One of the TYPE_* constants.
      *
      * @param int $type
      */
@@ -79,7 +79,7 @@ class Branch
     }
 
     /**
-     * Returns the branch type
+     * Returns the branch type.
      *
      * @return int
      */
@@ -89,7 +89,7 @@ class Branch
     }
 
     /**
-     * Sets if the branch is unreachable
+     * Sets if the branch is unreachable.
      *
      * @param bool $unreachable
      */
@@ -140,7 +140,6 @@ class Branch
 
     /**
      * @param StatementAbstract $relatedStatement
-     * @return void
      */
     public function setRelatedStatement(StatementAbstract $relatedStatement)
     {

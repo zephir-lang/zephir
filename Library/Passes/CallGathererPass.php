@@ -16,7 +16,7 @@ use Zephir\FunctionCall;
 use Zephir\StatementsBlock;
 
 /**
- * Zephir\Passes\CallGathererPass
+ * Zephir\Passes\CallGathererPass.
  *
  * This pass counts how many times the same function is called inside a
  * statements block. It also count how many times a method is calling
@@ -34,7 +34,7 @@ class CallGathererPass
     protected $compilationContext;
 
     /**
-     * CallGathererPass constructor
+     * CallGathererPass constructor.
      *
      * @param CompilationContext $compilationContext
      */
@@ -54,9 +54,10 @@ class CallGathererPass
     }
 
     /**
-     * Returns the number of calls a function had
+     * Returns the number of calls a function had.
      *
      * @param string $funcName
+     *
      * @return int
      */
     public function getNumberOfFunctionCalls($funcName)
@@ -64,14 +65,16 @@ class CallGathererPass
         if (isset($this->functionCalls[$funcName])) {
             return $this->functionCalls[$funcName];
         }
+
         return 0;
     }
 
     /**
-     * Returns the number of calls a function had
+     * Returns the number of calls a function had.
      *
      * @param string $className
      * @param string $methodName
+     *
      * @return int
      */
     public function getNumberOfMethodCalls($className, $methodName)
@@ -79,11 +82,12 @@ class CallGathererPass
         if (isset($this->methodCalls[$className][$methodName])) {
             return $this->methodCalls[$className][$methodName];
         }
+
         return 0;
     }
 
     /**
-     * Returns all the method calls
+     * Returns all the method calls.
      *
      * @return array
      */
@@ -93,7 +97,7 @@ class CallGathererPass
     }
 
     /**
-     * Do the compilation pass
+     * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
@@ -134,7 +138,7 @@ class CallGathererPass
             if (!isset($this->methodCalls[$className]['__construct'])) {
                 $this->methodCalls[$className]['__construct'] = 1;
             } else {
-                $this->methodCalls[$className]['__construct']++;
+                ++$this->methodCalls[$className]['__construct'];
             }
         }
 
@@ -220,13 +224,13 @@ class CallGathererPass
 
             case 'mcall':
                 if (isset($expression['variable']['value'])) {
-                    if ($expression['variable']['value'] == 'this') {
+                    if ('this' == $expression['variable']['value']) {
                         $methodName = $expression['name'];
                         $className = $this->compilationContext->classDefinition->getCompleteName();
                         if (!isset($this->methodCalls[$className][$methodName])) {
                             $this->methodCalls[$className][$methodName] = 1;
                         } else {
-                            $this->methodCalls[$className][$methodName]++;
+                            ++$this->methodCalls[$className][$methodName];
                         }
                     }
                 }
@@ -238,12 +242,12 @@ class CallGathererPass
                 break;
 
             case 'fcall':
-                if ($expression['call-type'] == FunctionCall::CALL_NORMAL) {
+                if (FunctionCall::CALL_NORMAL == $expression['call-type']) {
                     $name = $expression['name'];
                     if (!isset($this->functionCalls[$name])) {
                         $this->functionCalls[$name] = 1;
                     } else {
-                        $this->functionCalls[$name]++;
+                        ++$this->functionCalls[$name];
                     }
                 }
                 $this->passCall($expression);
@@ -410,12 +414,12 @@ class CallGathererPass
 
                 case 'fcall':
                     $expr = $statement['expr'];
-                    if ($expr['call-type'] == FunctionCall::CALL_NORMAL) {
+                    if (FunctionCall::CALL_NORMAL == $expr['call-type']) {
                         $name = $expr['name'];
                         if (!isset($this->functionCalls[$name])) {
                             $this->functionCalls[$name] = 1;
                         } else {
-                            $this->functionCalls[$name]++;
+                            ++$this->functionCalls[$name];
                         }
                     }
                     $this->passCall($expr);

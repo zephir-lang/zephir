@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Test\Globals;
 
 /**
- * Extension\GlobalsTest
+ * Extension\GlobalsTest.
  */
 class GlobalsTest extends TestCase
 {

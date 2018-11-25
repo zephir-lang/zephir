@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * ClassDefinitionRuntime
+ * ClassDefinitionRuntime.
  *
  * Represents a class/interface that only exists in runtime
  */

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 
 /**
- * Zephir\Console\Command\StubsCommand
+ * Zephir\Console\Command\StubsCommand.
  *
  * Generates stubs that can be used in a PHP IDE.
  */

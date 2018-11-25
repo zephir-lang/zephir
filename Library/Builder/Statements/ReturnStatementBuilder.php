@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * ReturnStatementBuilder
+ * ReturnStatementBuilder.
  *
  * Allows to manually build a 'return' statement AST node
  */
@@ -21,7 +21,7 @@ class ReturnStatementBuilder extends AbstractStatementBuilder
     private $expr;
 
     /**
-     * ReturnStatementBuilder constructor
+     * ReturnStatementBuilder constructor.
      *
      * @param mixed $expr
      */

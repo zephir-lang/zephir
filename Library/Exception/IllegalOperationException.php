@@ -14,16 +14,16 @@ namespace Zephir\Exception;
 use Zephir\TypeAwareInterface;
 
 /**
- * Zephir\Exception\IllegalOperationException
+ * Zephir\Exception\IllegalOperationException.
  */
 class IllegalOperationException extends CompilerException
 {
     /**
      * IllegalOperationException constructor.
      *
-     * @param array $statement The statement
-     * @param TypeAwareInterface $type Operator type
-     * @param array|null $extra Extra info [optional].
+     * @param array              $statement The statement
+     * @param TypeAwareInterface $type      Operator type
+     * @param array|null         $extra     extra info [optional]
      */
     public function __construct(array $statement, TypeAwareInterface $type, array $extra = null)
     {

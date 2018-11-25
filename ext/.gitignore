@@ -35,3 +35,4 @@ mkinstalldirs
 
 run-tests.php
 CMakeLists.txt
+cmake-build-debug

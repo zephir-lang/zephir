@@ -18,7 +18,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * IsPhpVersionOptimizer
+ * IsPhpVersionOptimizer.
  *
  * Checks if PHP has a specific version
  */
@@ -35,8 +35,8 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
     ];
 
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
      *
      * @return CompiledExpression
@@ -47,7 +47,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             throw new CompilerException('This function only requires one parameter', $expression);
         }
 
@@ -58,7 +58,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
         }
 
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
-        if (!count($matches)) {
+        if (!\count($matches)) {
             throw new CompilerException('Could not parse PHP version', $expression);
         }
 
@@ -75,7 +75,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             $releaseVersion = $matches['patch'];
         }
 
-        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
+        $versionId = (int) ($majorVersion + $minorVersion + $releaseVersion);
 
         return new CompiledExpression('bool', 'zephir_is_php_version('.$versionId.')', $expression);
     }

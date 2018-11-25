@@ -23,6 +23,7 @@ class ExtendedInterfaceTest extends TestCase
             $reflection = new \ReflectionClass(ExtendedInterface::class);
         } catch (\ReflectionException $e) {
             $this->fail($e->getMessage());
+
             return;
         }
 

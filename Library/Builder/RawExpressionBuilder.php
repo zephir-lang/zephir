@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * RawExpressionBuilder
+ * RawExpressionBuilder.
  *
  * Allows to use a raw expression in a builder
  */

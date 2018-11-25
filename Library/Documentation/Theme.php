@@ -52,10 +52,10 @@ class Theme
                 if (isset($themeInfos['extends'])) {
                     $extThemePath = $documentation->findThemePathByName($themeInfos['extends']);
                     if (!$extThemePath) {
-                        throw new Exception('Unable to find extended theme ' . $themeInfos['extends']);
+                        throw new Exception('Unable to find extended theme '.$themeInfos['extends']);
                     }
 
-                    $this->extendedTheme = new Theme($extThemePath, $outputDir, $themeConfig, $config, $documentation);
+                    $this->extendedTheme = new self($extThemePath, $outputDir, $themeConfig, $config, $documentation);
                 }
             }
         }
@@ -83,7 +83,8 @@ class Theme
     }
 
     /**
-     * from : http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php
+     * from : http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
+     *
      * @param $src
      * @param $dst
      * @param $files
@@ -93,13 +94,13 @@ class Theme
         $dir = opendir($src);
         @mkdir($dst);
         while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->__copyDir($src . '/' . $file, $dst . '/' . $file, $files);
+            if (('.' != $file) && ('..' != $file)) {
+                if (is_dir($src.'/'.$file)) {
+                    $this->__copyDir($src.'/'.$file, $dst.'/'.$file, $files);
                 } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                    if (is_array($files)) {
-                        $files[] = $dst . '/' . $file;
+                    copy($src.'/'.$file, $dst.'/'.$file);
+                    if (\is_array($files)) {
+                        $files[] = $dst.'/'.$file;
                     }
                 }
             }
@@ -111,24 +112,24 @@ class Theme
      * Parse and draw the specified file.
      *
      * @param AbstractFile $file
+     *
      * @throws Exception
-     * @return void
      */
     public function drawFile(AbstractFile $file)
     {
         $outputFile = ltrim($file->getOutputFile(), '/');
 
-        $output = pathinfo($this->outputDir . '/' . $outputFile);
+        $output = pathinfo($this->outputDir.'/'.$outputFile);
         $outputDirname = $output['dirname'];
         $outputBasename = $output['basename'];
-        $outputFilename = $outputDirname . '/' . $outputBasename;
+        $outputFilename = $outputDirname.'/'.$outputBasename;
 
         // todo : check if writable
         if (!file_exists($outputDirname)) {
             mkdir($outputDirname, 0777, true);
         }
 
-        $subDirNumber = count(explode('/', $outputFile)) - 1;
+        $subDirNumber = \count(explode('/', $outputFile)) - 1;
 
         if ($subDirNumber > 0) {
             $pathToRoot = str_repeat('../', $subDirNumber);
@@ -149,6 +150,7 @@ class Theme
      * Get assets from the theme info (theme.json file placed inside the theme directory).
      *
      * @param string $name
+     *
      * @return mixed|null
      */
     public function getThemeInfo($name)
@@ -164,6 +166,7 @@ class Theme
      * Similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array.
      *
      * @param string $name
+     *
      * @return array
      */
     public function getThemeInfoExtendAware($name)
@@ -180,7 +183,7 @@ class Theme
     }
 
     /**
-     * copy the static directory of the theme into the output directory
+     * copy the static directory of the theme into the output directory.
      */
     public function buildStaticDirectory()
     {
@@ -199,12 +202,12 @@ class Theme
         if ($themeStt) {
             $files = [];
 
-            $this->__copyDir($themeStt, $outputStt . '/static', $files);
+            $this->__copyDir($themeStt, $outputStt.'/static', $files);
 
             foreach ($files as $f) {
                 foreach ($this->options as $optName => $opt) {
                     $fcontent = file_get_contents($f);
-                    $fcontent = str_replace('%_' . $optName . '_%', $opt, $fcontent);
+                    $fcontent = str_replace('%_'.$optName.'_%', $opt, $fcontent);
 
                     file_put_contents($f, $fcontent);
                 }
@@ -215,12 +218,10 @@ class Theme
     public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
     {
         $output = [
-
             'allClasses' => [],
             'allNamespaces' => [],
             'classes' => [],
             'namespaces' => [],
-
         ];
 
         foreach ($classList as $class) {
@@ -253,19 +254,18 @@ class Theme
             }
 
             $output['allNamespaces'][$ns->getFullNamespace()] = [
-
                 'name' => $ns->getFullNamespace(),
                 'shortName' => $ns->getShortName(),
                 'parentName' => $ns->getParentName(),
                 'classes' => $subclasses,
                 'namespaces' => $subnamespaces,
-
             ];
 
             if (!strpos($ns->getFullNamespace(), '\\') > 0) {
                 $output['namespaces'][] = $ns->getFullNamespace();
             }
         }
+
         return json_encode($output);
     }
 
@@ -277,8 +277,10 @@ class Theme
     }
 
     /**
-     * find the path to a file in the theme or from the extended theme
+     * find the path to a file in the theme or from the extended theme.
+     *
      * @param $path
+     *
      * @return string
      */
     public function getThemePathExtendsAware($path)
@@ -289,20 +291,23 @@ class Theme
                 return $this->extendedTheme->getThemePathExtendsAware($path);
             }
         }
+
         return $newPath;
     }
 
     /**
-     * find the path to a file in the theme
+     * find the path to a file in the theme.
+     *
      * @param $path
+     *
      * @return string
      */
     public function getThemePath($path)
     {
-        $path = pathinfo($this->themeDir . '/' . $path);
+        $path = pathinfo($this->themeDir.'/'.$path);
         $pathDirname = $path['dirname'];
         $pathBasename = $path['basename'];
-        $pathFilename = $pathDirname . '/' . $pathBasename;
+        $pathFilename = $pathDirname.'/'.$pathBasename;
 
         if (!file_exists($pathFilename)) {
             return null;
@@ -313,10 +318,10 @@ class Theme
 
     public function getOutputPath($path)
     {
-        $path = pathinfo($this->outputDir . '/' . $path);
+        $path = pathinfo($this->outputDir.'/'.$path);
         $pathDirname = $path['dirname'];
         $pathBasename = $path['basename'];
-        $pathFilename = $pathDirname . '/' . $pathBasename;
+        $pathFilename = $pathDirname.'/'.$pathBasename;
 
         return $pathFilename;
     }

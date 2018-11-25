@@ -18,16 +18,17 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * GetDefinedVars
+ * GetDefinedVars.
  *
  * Optimizes calls to 'get_defined_vars' using internal function
  */
 class GetDefinedVarsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -45,9 +46,9 @@ class GetDefinedVarsOptimizer extends OptimizerAbstract
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/variables');
         if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_get_defined_vars(' . $symbol . ');');
+            $context->codePrinter->output('zephir_get_defined_vars('.$symbol.');');
         } else {
-            $context->codePrinter->output('zephir_get_defined_vars(' . $symbol . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_get_defined_vars('.$symbol.' TSRMLS_CC);');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

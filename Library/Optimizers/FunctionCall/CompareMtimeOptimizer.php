@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CompareMtimeOptimizer
+ * CompareMtimeOptimizer.
  *
  * Optimizes calls to 'compare_mtime' using internal function
  */
 class CompareMtimeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,19 +39,19 @@ class CompareMtimeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_compare_mtime(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_compare_mtime('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)', $expression);
     }
 }

@@ -33,7 +33,7 @@ class ExistsTest extends TestCase
 
         $this->assertTrue($t->testMethodExists($t, 'testMethodExists'));
 
-        $this->assertTrue($t->testFileExists(__DIR__ . '/../fixtures/exists.php'));
-        $this->assertFalse($t->testFileExists(__DIR__ . '/php/existsxxxx.php'));
+        $this->assertTrue($t->testFileExists(__DIR__.'/../fixtures/exists.php'));
+        $this->assertFalse($t->testFileExists(__DIR__.'/php/existsxxxx.php'));
     }
 }

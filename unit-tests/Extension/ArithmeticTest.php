@@ -87,7 +87,7 @@ class ArithmeticTest extends TestCase
         $this->assertTrue($this->class->less1());
         $this->assertFalse($this->class->less2());
 
-        /**
+        /*
          * X < 5
          */
         $this->assertFalse($this->class->less3(100));
@@ -95,7 +95,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->less3(5));
         $this->assertTrue($this->class->less3(4));
 
-        /**
+        /*
          * X < 5.0
          */
         $this->assertFalse($this->class->less4(100));
@@ -109,7 +109,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->greater1());
         $this->assertTrue($this->class->greater2());
 
-        /**
+        /*
          * X > 5
          */
         $this->assertTrue($this->class->greater3(100));
@@ -117,7 +117,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->greater3(5));
         $this->assertFalse($this->class->greater3(4));
 
-        /**
+        /*
          * X > 5.0
          */
         $this->assertTrue($this->class->greater4(100));

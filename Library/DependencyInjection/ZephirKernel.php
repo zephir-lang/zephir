@@ -56,12 +56,13 @@ final class ZephirKernel extends Kernel
     /**
      * {@inheritdoc}
      *
-     * @param  LoaderInterface $loader
+     * @param LoaderInterface $loader
+     *
      * @throws \Exception|\Throwable
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/../config/config.yml');
+        $loader->load(__DIR__.'/../config/config.yml');
 
         foreach ($this->extraConfigFiles as $configFile) {
             $loader->load($configFile);
@@ -76,9 +77,9 @@ final class ZephirKernel extends Kernel
     public function getCacheDir()
     {
         // allows container rebuild when config or version changes
-        $hash = Zephir::VERSION . $this->environment . \serialize($this->extraConfigFiles);
+        $hash = Zephir::VERSION.$this->environment.\serialize($this->extraConfigFiles);
 
-        return $this->startedDirectory . '/.zephir/' . \substr(\md5($hash), 0, 16) . '/cache';
+        return $this->startedDirectory.'/.zephir/'.\substr(\md5($hash), 0, 16).'/cache';
     }
 
     /**
@@ -89,9 +90,9 @@ final class ZephirKernel extends Kernel
     public function getLogDir()
     {
         // allows container rebuild when config or version changes
-        $hash = Zephir::VERSION . $this->environment . \serialize($this->extraConfigFiles);
+        $hash = Zephir::VERSION.$this->environment.\serialize($this->extraConfigFiles);
 
-        return $this->startedDirectory . '/.zephir/' . \substr(\md5($hash), 0, 16) . '/logs';
+        return $this->startedDirectory.'/.zephir/'.\substr(\md5($hash), 0, 16).'/logs';
     }
 
     /**
@@ -116,7 +117,6 @@ final class ZephirKernel extends Kernel
      * {@inheritdoc}
      *
      * @param ContainerBuilder $containerBuilder
-     * @return void
      */
     protected function build(ContainerBuilder $containerBuilder)
     {

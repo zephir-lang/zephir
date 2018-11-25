@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * AddslashesOptimizer
+ * AddslashesOptimizer.
  *
  * Optimizes calls to 'addslashes' using internal function
  */
 class AddslashesOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +39,11 @@ class AddslashesOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) > 1) {
+        if (\count($expression['parameters']) > 1) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -63,7 +65,7 @@ class AddslashesOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_addslashes(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_addslashes('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

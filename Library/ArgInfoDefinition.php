@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Zephir\ArgInfoDefinition
+ * Zephir\ArgInfoDefinition.
  */
 class ArgInfoDefinition
 {
@@ -59,12 +59,12 @@ class ArgInfoDefinition
 
     public function setBooleanDefinition($definition)
     {
-        $this->booleanDefinition = (string)$definition;
+        $this->booleanDefinition = (string) $definition;
     }
 
     public function setRichFormat($flag)
     {
-        $this->richFormat = (bool)$flag;
+        $this->richFormat = (bool) $flag;
     }
 
     /**
@@ -80,22 +80,22 @@ class ArgInfoDefinition
         ) {
             $this->richRenderStart();
 
-            if ($this->hasParameters() == false) {
+            if (false == $this->hasParameters()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
                 $this->codePrinter->outputBlankLine();
             }
-        } elseif ($this->hasParameters() == true) {
+        } elseif (true == $this->hasParameters()) {
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
                     $this->name,
-                    (int)$this->returnByRef,
+                    (int) $this->returnByRef,
                     $this->method->getNumberOfRequiredParameters()
                 )
             );
         }
 
-        if ($this->hasParameters() == true) {
+        if (true == $this->hasParameters()) {
             $this->renderEnd();
 
             $this->codePrinter->output('ZEND_END_ARG_INFO()');
@@ -108,7 +108,7 @@ class ArgInfoDefinition
         if (array_key_exists('object', $this->method->getReturnTypes())) {
             $class = 'NULL';
 
-            if (count($this->method->getReturnClassTypes()) == 1) {
+            if (1 == \count($this->method->getReturnClassTypes())) {
                 $class = key($this->method->getReturnClassTypes());
                 $class = escape_class($this->compilationContext->getFullName($class));
             }
@@ -118,10 +118,10 @@ class ArgInfoDefinition
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)',
                     $this->name,
-                    (int)$this->returnByRef,
+                    (int) $this->returnByRef,
                     $this->method->getNumberOfRequiredParameters(),
                     $class,
-                    (int)$this->method->areReturnTypesNullCompatible()
+                    (int) $this->method->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#else');
@@ -129,10 +129,10 @@ class ArgInfoDefinition
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
                     $this->name,
-                    (int)$this->returnByRef,
+                    (int) $this->returnByRef,
                     $this->method->getNumberOfRequiredParameters(),
                     $class,
-                    (int)$this->method->areReturnTypesNullCompatible()
+                    (int) $this->method->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#endif');
@@ -145,10 +145,10 @@ class ArgInfoDefinition
             sprintf(
                 'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
                 $this->name,
-                (int)$this->returnByRef,
+                (int) $this->returnByRef,
                 $this->method->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int)$this->method->areReturnTypesNullCompatible()
+                (int) $this->method->areReturnTypesNullCompatible()
             )
         );
 
@@ -158,10 +158,10 @@ class ArgInfoDefinition
             sprintf(
                 'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, NULL, %d)',
                 $this->name,
-                (int)$this->returnByRef,
+                (int) $this->returnByRef,
                 $this->method->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int)$this->method->areReturnTypesNullCompatible()
+                (int) $this->method->areReturnTypesNullCompatible()
             )
         );
 
@@ -173,7 +173,7 @@ class ArgInfoDefinition
         $flag = $this->richFormat ? '1' : '0';
 
         foreach ($this->parameters->getParameters() as $parameter) {
-            switch ("{$flag}:" . $parameter['data-type']) {
+            switch ("{$flag}:".$parameter['data-type']) {
                 case '0:array':
                 case '1:array':
                     $this->codePrinter->output(
@@ -181,7 +181,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            (int)$this->allowNull($parameter)
+                            (int) $this->allowNull($parameter)
                         )
                     );
                     break;
@@ -197,7 +197,7 @@ class ArgInfoDefinition
                                         $this->passByReference($parameter),
                                         $parameter['name'],
                                         escape_class($this->compilationContext->getFullName($value)),
-                                        (int)$this->allowNull($parameter)
+                                        (int) $this->allowNull($parameter)
                                     )
                                 );
                                 break;
@@ -224,7 +224,7 @@ class ArgInfoDefinition
                             $this->passByReference($parameter),
                             $parameter['name'],
                             $this->booleanDefinition,
-                            (int)$this->allowNull($parameter)
+                            (int) $this->allowNull($parameter)
                         )
                     );
                     break;
@@ -238,7 +238,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            (int)$this->allowNull($parameter)
+                            (int) $this->allowNull($parameter)
                         )
                     );
                     break;
@@ -248,7 +248,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            (int)$this->allowNull($parameter)
+                            (int) $this->allowNull($parameter)
                         )
                     );
                     break;
@@ -259,7 +259,7 @@ class ArgInfoDefinition
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)",
                             $this->passByReference($parameter),
                             $parameter['name'],
-                            (int)$this->allowNull($parameter)
+                            (int) $this->allowNull($parameter)
                         )
                     );
                     break;
@@ -278,16 +278,16 @@ class ArgInfoDefinition
 
     private function hasParameters()
     {
-        return $this->parameters !== null && count($this->parameters->getParameters()) > 0;
+        return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
     }
 
     private function allowNull($parameter)
     {
-        if (!isset($parameter['default']) || !is_array($parameter['default'])) {
+        if (!isset($parameter['default']) || !\is_array($parameter['default'])) {
             return false;
         }
 
-        if ($parameter['default']['type'] == 'null') {
+        if ('null' == $parameter['default']['type']) {
             return true;
         }
 

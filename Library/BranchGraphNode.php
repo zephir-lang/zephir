@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * Branch\BranchGraphNode
+ * Branch\BranchGraphNode.
  *
  * Allows to visualize assignments for a specific variable in every branch used
  */
@@ -28,7 +28,7 @@ class BranchGraphNode
     protected $branch;
 
     /**
-     * BranchGraphNode
+     * BranchGraphNode.
      *
      * @param Branch $branch
      */
@@ -38,34 +38,34 @@ class BranchGraphNode
     }
 
     /**
-     * Inserts a node in the branch graph
+     * Inserts a node in the branch graph.
      *
      * @param BranchGraphNode $branch
      */
-    public function insert(BranchGraphNode $branch)
+    public function insert(self $branch)
     {
-        if (!in_array($branch, $this->branches)) {
+        if (!\in_array($branch, $this->branches)) {
             $this->branches[] = $branch;
         }
     }
 
     /**
-     * Increases the branch graph level
+     * Increases the branch graph level.
      */
     public function increase()
     {
-        $this->increase++;
+        ++$this->increase;
     }
 
     /**
-     * Generates an ASCII visualization of the branch
+     * Generates an ASCII visualization of the branch.
      *
      * @param int $padding
      */
     public function show($padding = 0)
     {
         echo str_repeat('    ', $padding), $this->branch->getUniqueId(), ':' , $this->increase;
-        if (count($this->branches)) {
+        if (\count($this->branches)) {
             echo ':', PHP_EOL;
             foreach ($this->branches as $node) {
                 $node->show($padding + 1);

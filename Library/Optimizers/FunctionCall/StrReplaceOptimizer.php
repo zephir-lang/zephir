@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * StrReplaceOptimizer
+ * StrReplaceOptimizer.
  *
  * Optimizes calls to 'str_replace' using internal function
  */
 class StrReplaceOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,14 +39,14 @@ class StrReplaceOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 3) {
-            if (count($expression['parameters']) == 4) {
+        if (3 != \count($expression['parameters'])) {
+            if (4 == \count($expression['parameters'])) {
                 return false;
             }
             throw new CompilerException("'str_replace' only accepts three parameter", $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -61,7 +63,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         if ($call->mustInitSymbolVariable()) {
-            if ($symbolVariable->getName() == 'return_value') {
+            if ('return_value' == $symbolVariable->getName()) {
                 $symbolVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
             } else {
                 $symbolVariable->initVariant($context);
@@ -70,7 +72,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCodePointer($symbolVariable);
 
-        $context->codePrinter->output('zephir_fast_str_replace(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_str_replace('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].' TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

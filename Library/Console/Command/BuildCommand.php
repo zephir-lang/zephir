@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Zephir\Console\Command\BuildCommand
+ * Zephir\Console\Command\BuildCommand.
  *
  * Generates/Compiles/Installs a Zephir extension.
  */
@@ -36,7 +36,7 @@ final class BuildCommand extends Command
             ->setDefinition($this->createDefinition())
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Build the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Build the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp(). PHP_EOL . $this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -52,6 +52,7 @@ final class BuildCommand extends Command
             return $command->run(new ArrayInput($arguments), $output);
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
+
             return 1;
         }
     }

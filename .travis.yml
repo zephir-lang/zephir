@@ -39,9 +39,17 @@ env:
     - SYMFONY_PHPUNIT_VERSION=5.7.27
 
 before_install:
-  - if [ ! -z "${GITHUB_TOKEN}" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; echo "Add Github token"; fi
-  - ulimit -c unlimited -S
-  - mkdir -p ${HOME}/bin
+  - |
+      set -e
+      stty cols 120
+      ulimit -c unlimited -S
+
+      if [ ! -z "${GITHUB_TOKEN}" ]; then
+        composer config github-oauth.github.com ${GITHUB_TOKEN}
+        printf "Add Github token\n"
+      fi
+
+      [ -d ~/bin ] || mkdir ~/bin
 
 install:
   - .ci/install-prereqs.sh

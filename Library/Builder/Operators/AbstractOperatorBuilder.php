@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * Abstract class for builders
+ * Abstract class for builders.
  */
 abstract class AbstractOperatorBuilder
 {

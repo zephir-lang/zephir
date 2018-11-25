@@ -12,7 +12,7 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\UnknownPropertyException
+ * Zephir\Exception\UnknownPropertyException.
  */
 class UnknownPropertyException extends LogicException
 {

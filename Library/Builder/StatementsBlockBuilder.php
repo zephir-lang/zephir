@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * StatementsBlockBuilder
+ * StatementsBlockBuilder.
  *
  * Allows to manually build a statements block AST node
  */
@@ -29,7 +29,7 @@ class StatementsBlockBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */

@@ -20,8 +20,8 @@ use const STDERR;
 if (\version_compare('5.6.0', PHP_VERSION, '>')) {
     \fprintf(
         STDERR,
-        'This Zephir version is supported on PHP >= 5.6.0.' . PHP_EOL .
-        'You are using PHP %s (%s).' . PHP_EOL,
+        'This Zephir version is supported on PHP >= 5.6.0.'.PHP_EOL.
+        'You are using PHP %s (%s).'.PHP_EOL,
         PHP_VERSION,
         PHP_BINARY
     );
@@ -32,7 +32,7 @@ if (\version_compare('5.6.0', PHP_VERSION, '>')) {
 if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
     \fprintf(
         STDERR,
-        'Zephir should be invoked via the CLI version of PHP, not the %s SAPI.' . PHP_EOL,
+        'Zephir should be invoked via the CLI version of PHP, not the %s SAPI.'.PHP_EOL,
         PHP_SAPI
     );
 
@@ -40,8 +40,8 @@ if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
 }
 
 $autoloaders = [
-    __DIR__ . '/../vendor/autoload.php', // Is installed locally
-    __DIR__ . '/../../../autoload.php',  // Is installed via Composer
+    __DIR__.'/../vendor/autoload.php', // Is installed locally
+    __DIR__.'/../../../autoload.php',  // Is installed via Composer
 ];
 
 foreach ($autoloaders as $file) {
@@ -51,8 +51,8 @@ foreach ($autoloaders as $file) {
     }
 }
 
-if (\class_exists('Composer\Autoload\ClassLoader', false) == false) {
-    \fwrite(STDERR, 'Unable to find the Composer autoloader.' . PHP_EOL);
+if (false == \class_exists('Composer\Autoload\ClassLoader', false)) {
+    \fwrite(STDERR, 'Unable to find the Composer autoloader.'.PHP_EOL);
 
     exit(1);
 }

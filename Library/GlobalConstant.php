@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * GlobalConstant
+ * GlobalConstant.
  *
  * Global constants are allocated one time at extension initialization
  * and are referenced across the C code saving memory
@@ -22,7 +22,7 @@ class GlobalConstant
     protected $name;
 
     /**
-     * Creates a new global constant
+     * Creates a new global constant.
      *
      * @param string $name
      */
@@ -32,7 +32,7 @@ class GlobalConstant
     }
 
     /**
-     * Returns global constant name
+     * Returns global constant name.
      *
      * @return string
      */
@@ -42,7 +42,7 @@ class GlobalConstant
     }
 
     /**
-     * Check if the global constant is temporal
+     * Check if the global constant is temporal.
      *
      * @return bool
      */

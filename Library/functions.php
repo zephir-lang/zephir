@@ -23,7 +23,6 @@ use const PHP_ZTS;
  * A E_WARNING level error will be generated on failure.
  *
  * @param string $path
- * @return void
  */
 function unlink_recursive($path)
 {
@@ -46,6 +45,7 @@ function unlink_recursive($path)
  * Camelize a string.
  *
  * @param string $string
+ *
  * @return string
  */
 function camelize($string)
@@ -57,6 +57,7 @@ function camelize($string)
  * Prepares a class name to be used as a C-string.
  *
  * @param string $className
+ *
  * @return string
  */
 function escape_class($className)
@@ -68,6 +69,7 @@ function escape_class($className)
  * Prepares a string to be used as a C-string.
  *
  * @param string $string
+ *
  * @return string
  */
 function add_slashes($string)
@@ -76,7 +78,7 @@ function add_slashes($string)
     $after = null;
     $length = \strlen($string);
 
-    for ($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; ++$i) {
         $ch = \substr($string, $i, 1);
         if ($i != ($length - 1)) {
             $after = \substr($string, $i + 1, 1);
@@ -86,19 +88,19 @@ function add_slashes($string)
 
         switch ($ch) {
             case '"':
-                $newstr .= '\\' . '"';
+                $newstr .= '\\'.'"';
                 break;
             case "\n":
-                $newstr .= '\\' . 'n';
+                $newstr .= '\\'.'n';
                 break;
             case "\t":
-                $newstr .= '\\' . 't';
+                $newstr .= '\\'.'t';
                 break;
             case "\r":
-                $newstr .= '\\' . 'r';
+                $newstr .= '\\'.'r';
                 break;
             case "\v":
-                $newstr .= '\\' . 'v';
+                $newstr .= '\\'.'v';
                 break;
             case '\\':
                 switch ($after) {
@@ -108,8 +110,8 @@ function add_slashes($string)
                     case 'r':
                     case '"':
                     case '\\':
-                        $newstr .= $ch . $after;
-                        $i++;
+                        $newstr .= $ch.$after;
+                        ++$i;
                         break;
                     default:
                         $newstr .= '\\\\';
@@ -120,25 +122,27 @@ function add_slashes($string)
                 $newstr .= $ch;
         }
     }
+
     return $newstr;
 }
 
 /**
- * Transform class/interface name to FQN format
+ * Transform class/interface name to FQN format.
  *
- * @param string $className
- * @param string $currentNamespace
+ * @param string       $className
+ * @param string       $currentNamespace
  * @param AliasManager $aliasManager
+ *
  * @return string
  */
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 {
-    if (\is_string($className) == false) {
-        throw new InvalidArgumentException('Class name must be a string, got ' . \gettype($className));
+    if (false == \is_string($className)) {
+        throw new InvalidArgumentException('Class name must be a string, got '.\gettype($className));
     }
 
     // Absolute class/interface name
-    if ($className[0] === '\\') {
+    if ('\\' === $className[0]) {
         return \substr($className, 1);
     }
 
@@ -147,7 +151,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
     if (false !== $firstSepPos) {
         $baseName = \substr($className, 0, $firstSepPos);
         if ($aliasManager && $aliasManager->isAlias($baseName)) {
-            return $aliasManager->getAlias($baseName) . '\\' . \substr($className, $firstSepPos + 1);
+            return $aliasManager->getAlias($baseName).'\\'.\substr($className, $firstSepPos + 1);
         }
     } elseif ($aliasManager && $aliasManager->isAlias($className)) {
         return $aliasManager->getAlias($className);
@@ -155,7 +159,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 
     // Relative class/interface name
     if ($currentNamespace) {
-        return $currentNamespace . '\\' . $className;
+        return $currentNamespace.'\\'.$className;
     }
 
     return $className;
@@ -166,6 +170,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
  *
  * @param string $content
  * @param string $path
+ *
  * @return bool
  */
 function file_put_contents_ex($content, $path)
@@ -176,10 +181,12 @@ function file_put_contents_ex($content, $path)
 
         if ($contentMd5 != $existingMd5) {
             \file_put_contents($path, $content);
+
             return true;
         }
     } else {
         \file_put_contents($path, $content);
+
         return true;
     }
 
@@ -209,7 +216,8 @@ function is_macos()
 /**
  * Checks if currently running under BSD based OS.
  *
- * @link   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+ * @see   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+ *
  * @return bool
  */
 function is_bsd()

@@ -17,7 +17,7 @@ use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
 
 /**
- * Zephir\Backends\ZendEngine3\FcallManager
+ * Zephir\Backends\ZendEngine3\FcallManager.
  */
 class FcallManager extends ZE2FcallManager implements FcallManagerInterface
 {
@@ -40,20 +40,20 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
             $postStatements = [];
 
             for ($i = 0; $i < $paramCount; ++$i) {
-                $params[] = 'p' . $i;
+                $params[] = 'p'.$i;
             }
             if ($paramCount) {
-                $paramsStr = ', ' . implode(', ', $params);
+                $paramsStr = ', '.implode(', ', $params);
             }
 
-            if ($mode == 'CALL_INTERNAL_METHOD_P') {
+            if ('CALL_INTERNAL_METHOD_P' == $mode) {
                 $retValueUsed = '1';
                 $retParam = 'return_value_ptr';
                 $initStatements[] = 'ZEPHIR_INIT_NVAR((return_value_ptr)); \\';
             }
             $objParam = $scope ? 'scope_ce, ' : 'object, ';
-            $macroName = $name . '(' . ($retParam ? $retParam . ', ' : '') . $objParam . 'method' . $paramsStr . ')';
-            $codePrinter->output('#define ' . $macroName . ' \\');
+            $macroName = $name.'('.($retParam ? $retParam.', ' : '').$objParam.'method'.$paramsStr.')';
+            $codePrinter->output('#define '.$macroName.' \\');
             if (!$retParam) {
                 $retParam = 'return_value';
             }
@@ -61,7 +61,7 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
             $codePrinter->output('do { \\');
             $codePrinter->increaseLevel();
 
-            if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
+            if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $codePrinter->output('zval rv; \\');
                 $codePrinter->output('zval *rvp = &rv; \\');
                 $codePrinter->output('ZVAL_UNDEF(&rv); \\');
@@ -80,21 +80,21 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
 
             /* Create new zval's for parameters */
             for ($i = 0; $i < $paramCount; ++$i) {
-                $zv = '_' . $params[$i];
+                $zv = '_'.$params[$i];
                 $zvals[] = $zv;
-                $initStatements[] = 'ZVAL_COPY(&' . $zv . ', ' . $params[$i] . '); \\';
-                $postStatements[] = 'Z_TRY_DELREF_P(' . $params[$i] . '); \\';
+                $initStatements[] = 'ZVAL_COPY(&'.$zv.', '.$params[$i].'); \\';
+                $postStatements[] = 'Z_TRY_DELREF_P('.$params[$i].'); \\';
                 //$postStatements[] = 'zval_ptr_dtor(' . $params[$i] . '); \\';
             }
             if ($i) {
-                $codePrinter->output('zval ' . implode(', ', $zvals) . '; \\');
+                $codePrinter->output('zval '.implode(', ', $zvals).'; \\');
             }
             foreach ($initStatements as $statement) {
                 $codePrinter->output($statement);
             }
-            $zvalStr = $i ? ', &' . implode(', &', $zvals) : '';
-            $codePrinter->output('method(0, ' . $retParam . ', ' . ($scope ? 'NULL, ' : $objParam) . $retValueUsed . $zvalStr . '); \\');
-            if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
+            $zvalStr = $i ? ', &'.implode(', &', $zvals) : '';
+            $codePrinter->output('method(0, '.$retParam.', '.($scope ? 'NULL, ' : $objParam).$retValueUsed.$zvalStr.'); \\');
+            if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $postStatements[] = 'zval_ptr_dtor(rvp); \\';
             }
             foreach ($postStatements as $statement) {

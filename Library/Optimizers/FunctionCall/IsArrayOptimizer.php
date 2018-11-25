@@ -14,7 +14,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
 /**
- * IsArrayOptimizer
+ * IsArrayOptimizer.
  *
  * Optimizes calls to 'is_array' using internal function
  */

@@ -12,7 +12,7 @@
 namespace Zephir\Operators\Arithmetical;
 
 /**
- * AddOperator
+ * AddOperator.
  *
  * Generates an arithmetical operation according to the operands
  */

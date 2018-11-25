@@ -17,16 +17,17 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CountOptimizer
+ * CountOptimizer.
  *
  * Optimizes calls to 'count' using internal function
  */
 class CountOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -35,11 +36,12 @@ class CountOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('int', 'zephir_fast_count_int(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+
+        return new CompiledExpression('int', 'zephir_fast_count_int('.$resolvedParams[0].' TSRMLS_CC)', $expression);
     }
 }

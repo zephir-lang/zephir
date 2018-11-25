@@ -16,33 +16,33 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * Incr
+ * Incr.
  *
  * Increments a variable
  */
 class Incr
 {
     /**
-     * Compiles x++
+     * Compiles x++.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
         if ($symbolVariable->isReadOnly()) {
-            /**
+            /*
              * @TODO implement increment of objects members
              */
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
         }
 
         $codePrinter = &$compilationContext->codePrinter;
@@ -55,11 +55,11 @@ class Incr
             case 'double':
             case 'char':
             case 'uchar':
-                $codePrinter->output($variable . '++;');
+                $codePrinter->output($variable.'++;');
                 break;
 
             case 'variable':
-                /**
+                /*
                  * Update non-numeric dynamic variables could be expensive
                  */
                 if (!$symbolVariable->hasAnyDynamicType(['undefined', 'long', 'double'])) {
@@ -74,11 +74,11 @@ class Incr
                     $symbolVariable->separate($compilationContext);
                 }
                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-                $codePrinter->output('zephir_increment(' . $symbol . ');');
+                $codePrinter->output('zephir_increment('.$symbol.');');
                 break;
 
             default:
-                throw new CompilerException('Cannot increment: ' . $symbolVariable->getType(), $statement);
+                throw new CompilerException('Cannot increment: '.$symbolVariable->getType(), $statement);
         }
     }
 }

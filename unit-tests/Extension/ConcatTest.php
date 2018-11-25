@@ -21,7 +21,7 @@ class ConcatTest extends TestCase
     {
         $t = new Concat();
 
-        $this->assertSame(null, $t->getTestProperty());
+        $this->assertNull($t->getTestProperty());
 
         $t->testConcatBySelfProperty('test');
         $this->assertSame('test', $t->getTestProperty());

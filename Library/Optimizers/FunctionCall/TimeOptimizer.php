@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * TimeOptimizer
+ * TimeOptimizer.
  *
  * Optimizes calls to 'time' using internal function
  */
 class TimeOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,7 +39,7 @@ class TimeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -54,7 +56,8 @@ class TimeOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_time(' . $symbol . ');');
+        $context->codePrinter->output('zephir_time('.$symbol.');');
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

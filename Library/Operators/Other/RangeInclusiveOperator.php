@@ -19,16 +19,18 @@ use Zephir\Operators\BaseOperator;
 use Zephir\Types;
 
 /**
- * RangeInclusive
+ * RangeInclusive.
  *
  * Inclusive range operator
  */
 class RangeInclusiveOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -44,13 +46,14 @@ class RangeInclusiveOperator extends BaseOperator
         $exprBuilder = Expression\Builder\BuilderFactory::getInstance();
 
         /**
-         * Implicit type coercing
+         * Implicit type coercing.
          */
         $castBuilder = $exprBuilder->operators()->cast(Types::ARRAY_, $exprBuilder->statements()
             ->functionCall('range', [$expression['left'], $expression['right']]));
 
         $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->readOnly);
+
         return $expression->compile($compilationContext);
     }
 }

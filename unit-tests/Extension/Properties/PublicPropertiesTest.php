@@ -40,7 +40,7 @@ class PublicPropertiesTest extends TestCase
     }
 
     /**
-     * @link https://github.com/phalcon/zephir/issues/537
+     * @see https://github.com/phalcon/zephir/issues/537
      */
     public function test537Issue()
     {

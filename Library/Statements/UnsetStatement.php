@@ -16,12 +16,13 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * Class UnsetStatement
+ * Class UnsetStatement.
  */
 class UnsetStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
@@ -31,7 +32,7 @@ class UnsetStatement extends StatementAbstract
 
         $flags = 'PH_SEPARATE';
 
-        if ($expression['type'] == 'list') {
+        if ('list' == $expression['type']) {
             $expression = $expression['left'];
         }
 
@@ -55,18 +56,19 @@ class UnsetStatement extends StatementAbstract
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 $compilationContext->headersManager->add('kernel/object');
-                $compilationContext->codePrinter->output('zephir_unset_property(' . $variableCode . ', "' . $expression['right']['value'] . '" TSRMLS_CC);');
+                $compilationContext->codePrinter->output('zephir_unset_property('.$variableCode.', "'.$expression['right']['value'].'" TSRMLS_CC);');
+
                 return true;
 
             case 'property-dynamic-access':
                 //@todo fix it
 
             default:
-                throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
+                throw new CompilerException('Cannot use expression type: '.$expression['type'].' in "unset"', $expression);
         }
 
-        if (!in_array($variable->getType(), ['variable', 'array'])) {
-            throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression['left']);
+        if (!\in_array($variable->getType(), ['variable', 'array'])) {
+            throw new CompilerException('Cannot use variable type: '.$variable->gettype().' in "unset"', $expression['left']);
         }
 
         if ($variable->hasDifferentDynamicType(['undefined', 'array', 'object', 'null'])) {

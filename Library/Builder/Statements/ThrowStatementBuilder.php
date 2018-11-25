@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * ThrowStatementBuilder
+ * ThrowStatementBuilder.
  *
  * Allows to manually build a 'throw' statement AST node
  */
@@ -21,7 +21,7 @@ class ThrowStatementBuilder extends AbstractStatementBuilder
     private $expr;
 
     /**
-     * ThrowStatementBuilder constructor
+     * ThrowStatementBuilder constructor.
      *
      * @param mixed $expr
      */

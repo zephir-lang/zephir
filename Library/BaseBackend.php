@@ -20,7 +20,8 @@ abstract class BaseBackend implements FcallAwareInterface
     protected $config;
 
     /**
-     * The name of the backend (e.g. ZendEngine2)
+     * The name of the backend (e.g. ZendEngine2).
+     *
      * @var string
      */
     protected $name;
@@ -35,7 +36,7 @@ abstract class BaseBackend implements FcallAwareInterface
     protected $templatesPath;
 
     /**
-     * BaseBackend constructor
+     * BaseBackend constructor.
      *
      * @param Config $config
      * @param string $kernelsPath
@@ -84,6 +85,7 @@ abstract class BaseBackend implements FcallAwareInterface
      * Resolves the path to the source template file of the backend.
      *
      * @param string $filename
+     *
      * @return string
      */
     public function getTemplateFileContents($filename)
@@ -215,14 +217,16 @@ abstract class BaseBackend implements FcallAwareInterface
 
     /**
      * @param Variable $variable
+     *
      * @return string
      */
     abstract public function getVariableCode(Variable $variable);
 
     /**
-     * Get a double pointer to the variable
+     * Get a double pointer to the variable.
      *
      * @param Variable $variable
+     *
      * @return string
      */
     abstract public function getVariableCodePointer(Variable $variable);
@@ -231,7 +235,7 @@ abstract class BaseBackend implements FcallAwareInterface
 
     public static function getActiveBackend()
     {
-        if (version_compare(phpversion(), '7.0', '>=')) {
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
             return 'ZendEngine3';
         }
 

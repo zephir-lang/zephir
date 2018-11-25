@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * DependencyMap
+ * DependencyMap.
  *
  * Manage dependencies between files to perform incremental builds
  */

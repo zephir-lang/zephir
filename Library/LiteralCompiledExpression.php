@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * LiteralCompiledExpression
+ * LiteralCompiledExpression.
  *
  * This represent a compiled expression as CompiledExpression, but the contents of
  * the resolved code is potentially a simple literal expression

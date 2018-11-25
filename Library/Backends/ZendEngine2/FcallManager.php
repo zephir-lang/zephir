@@ -16,7 +16,7 @@ use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
 
 /**
- * Zephir\Backends\ZendEngine2\FcallManager
+ * Zephir\Backends\ZendEngine2\FcallManager.
  */
 class FcallManager implements FcallManagerInterface
 {
@@ -31,8 +31,9 @@ class FcallManager implements FcallManagerInterface
      * {@inheritdoc}
      *
      * @param bool $static
-     * @param int $doReturn tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
-     * @param int $paramCount
+     * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     * @param int  $paramCount
+     *
      * @return string
      */
     public function getMacro($static, $doReturn, $paramCount)
@@ -45,14 +46,15 @@ class FcallManager implements FcallManagerInterface
         $mode = 'CALL_INTERNAL_METHOD_NORETURN_P';
         if ($doReturn) {
             $mode = 'RETURN_CALL_INTERNAL_METHOD_P';
-            if ($doReturn === 2) {
+            if (2 === $doReturn) {
                 $mode = 'CALL_INTERNAL_METHOD_P';
             }
         }
-        $macroName = 'ZEPHIR_' . ($scope ? $scope . '_' : '') . $mode . $paramCount;
+        $macroName = 'ZEPHIR_'.($scope ? $scope.'_' : '').$mode.$paramCount;
         if (!$this->macroIsRequired($macroName)) {
             $this->requiredMacros[$macroName] = [$scope, $mode, $paramCount];
         }
+
         return $macroName;
     }
 
@@ -75,20 +77,20 @@ class FcallManager implements FcallManagerInterface
             $postStatements = [];
 
             for ($i = 0; $i < $paramCount; ++$i) {
-                $params[] = 'p' . $i;
+                $params[] = 'p'.$i;
             }
             if ($paramCount) {
-                $paramsStr = ', ' . implode(', ', $params);
+                $paramsStr = ', '.implode(', ', $params);
             }
 
-            if ($mode == 'CALL_INTERNAL_METHOD_P') {
+            if ('CALL_INTERNAL_METHOD_P' == $mode) {
                 $retValueUsed = '1';
                 $retParam = 'return_value_ptr';
                 $initStatements[] = 'ZEPHIR_INIT_NVAR(*(return_value_ptr)); \\';
             }
             $objParam = $scope ? 'scope_ce, ' : 'object, ';
-            $macroName = $name . '(' . ($retParam ? $retParam . ', ' : '') . $objParam . 'method' . $paramsStr . ')';
-            $codePrinter->output('#define ' . $macroName . ' \\');
+            $macroName = $name.'('.($retParam ? $retParam.', ' : '').$objParam.'method'.$paramsStr.')';
+            $codePrinter->output('#define '.$macroName.' \\');
             if (!$retParam) {
                 $retParam = 'return_value';
             }
@@ -96,7 +98,7 @@ class FcallManager implements FcallManagerInterface
             $codePrinter->output('do { \\');
             $codePrinter->increaseLevel();
 
-            if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
+            if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $codePrinter->output('zval *rv = NULL; \\');
                 $codePrinter->output('zval **rvp = &rv; \\');
                 $codePrinter->output('ALLOC_INIT_ZVAL(rv); \\');
@@ -122,8 +124,8 @@ class FcallManager implements FcallManagerInterface
                 //$postStatements[] = 'zval_ptr_dtor(&' . $zv . '); \\';
                 $zv = $params[$i];
                 $zvals[] = $zv;
-                $initStatements[] = 'Z_ADDREF_P(' . $zv . '); \\';
-                $postStatements[] = 'Z_DELREF_P(' . $zv . '); \\';
+                $initStatements[] = 'Z_ADDREF_P('.$zv.'); \\';
+                $postStatements[] = 'Z_DELREF_P('.$zv.'); \\';
             }
             if ($i) {
                 //$codePrinter->output('zval *' . implode(', *', $zvals) . '; \\');
@@ -131,17 +133,17 @@ class FcallManager implements FcallManagerInterface
             foreach ($initStatements as $statement) {
                 $codePrinter->output($statement);
             }
-            $zvalStr = $i ? ', ' . implode(', ', $zvals) : '';
+            $zvalStr = $i ? ', '.implode(', ', $zvals) : '';
             $retExpr = '';
             if ($retParam) {
-                if ($retParam == 'return_value') {
+                if ('return_value' == $retParam) {
                     $retExpr = ', return_value, return_value_ptr';
                 } else {
-                    $retExpr = ', *' . $retParam . ', ' . $retParam;
+                    $retExpr = ', *'.$retParam.', '.$retParam;
                 }
             }
-            $codePrinter->output('method(0' . $retExpr . ', ' . ($scope ? 'NULL, ' : $objParam) . $retValueUsed . $zvalStr . ' TSRMLS_CC); \\');
-            if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
+            $codePrinter->output('method(0'.$retExpr.', '.($scope ? 'NULL, ' : $objParam).$retValueUsed.$zvalStr.' TSRMLS_CC); \\');
+            if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $postStatements[] = 'zval_ptr_dtor(rvp); \\';
             }
             foreach ($postStatements as $statement) {

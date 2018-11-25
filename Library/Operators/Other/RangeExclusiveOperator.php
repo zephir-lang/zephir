@@ -19,16 +19,18 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Operators\BaseOperator;
 
 /**
- * RangeExclusive
+ * RangeExclusive.
  *
  * Exclusive range operator
  */
 class RangeExclusiveOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -44,13 +46,14 @@ class RangeExclusiveOperator extends BaseOperator
         $exprBuilder = BuilderFactory::getInstance();
 
         /**
-         * Implicit type coercing
+         * Implicit type coercing.
          */
         $castBuilder = $exprBuilder->operators()->cast('array', $exprBuilder->statements()
             ->functionCall('range', [$expression['left'], $expression['right']]));
 
         $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->readOnly);
+
         return $expression->compile($compilationContext);
     }
 }

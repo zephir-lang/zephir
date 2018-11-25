@@ -18,17 +18,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FilePutContentsOptimizer
+ * FilePutContentsOptimizer.
  *
  * Optimizes calls to 'file_put_contents' using internal function
  */
 class FilePutContentsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,13 +39,13 @@ class FilePutContentsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -61,10 +63,11 @@ class FilePutContentsOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_file_put_contents(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_file_put_contents('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {
-            $context->codePrinter->output('zephir_file_put_contents(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_file_put_contents(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

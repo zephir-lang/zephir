@@ -12,7 +12,7 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\RuntimeException
+ * Zephir\Exception\RuntimeException.
  *
  * Exception thrown if an error which can only be found on runtime occurs.
  */
