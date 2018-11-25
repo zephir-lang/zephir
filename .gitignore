@@ -7,6 +7,7 @@
 
 .zephir/
 .libs/
+.phpunit/
 ide/
 doc/
 vendor/
