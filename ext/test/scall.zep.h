@@ -110,17 +110,33 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_testmethod16, 0, 2, I
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_testmethod16, 0, 2, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scall_testcall17, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, k)
+#endif
 	ZEND_ARG_INFO(0, p)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scall_testcall18, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, k)
+#endif
 	ZEND_ARG_INFO(0, p)
 ZEND_END_ARG_INFO()
 

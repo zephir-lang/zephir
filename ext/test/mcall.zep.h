@@ -129,39 +129,79 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall17, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod19, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall20, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, k)
+#endif
 	ZEND_ARG_INFO(0, p)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod21, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall22, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, k, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, k)
+#endif
 	ZEND_ARG_INFO(0, p)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalrequerestring, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterstring, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterstringnull, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, IS_STRING, 1)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterint, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparametervar, 0, 0, 0)
@@ -169,19 +209,35 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparametervar, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterbooltrue, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterboolfalse, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, param, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, param)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterboolean, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, start, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, start)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterbooleannull, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, value, _IS_BOOL, 1)
+#else
+	ZEND_ARG_INFO(0, value)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_arrayparamwithdefaultemptyarray, 0, 0, 0)

@@ -93,7 +93,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_switchflow_testswitch12, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_switchflow_testswitch13, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_flow_switchflow_method_entry) {

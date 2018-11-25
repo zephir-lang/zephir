@@ -37,7 +37,11 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_unsettest_testunsettypedarray, 0, 0, 2)
 	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, key)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_unsettest_method_entry) {

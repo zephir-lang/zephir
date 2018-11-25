@@ -106,8 +106,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testwhiledonexttest, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor15, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, c, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, c)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, d, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, d)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor32, 0, 0, 1)

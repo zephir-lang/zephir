@@ -43,8 +43,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch5params, 0, 0, 5)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatchsavematches, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, str)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, pattern, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, pattern)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testmatchall, 0, 0, 1)

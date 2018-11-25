@@ -16,9 +16,21 @@ PHP_METHOD(Test_TypeHinting_TestAbstract, returnChar);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_typehinting_testabstract_testfunc, 0, 0, 0)
 	ZEND_ARG_ARRAY_INFO(0, text, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, text2, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, text2)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, flag, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, flag)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, optional, IS_LONG, 1)
+#else
+	ZEND_ARG_INFO(0, optional)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200

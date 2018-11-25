@@ -188,6 +188,23 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 
 }
 
+PHP_METHOD(Test_Oo_OoParams, setStrictNameFromZephirLand) {
+
+	zval _0;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZVAL_LONG(&_0, 12345);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "setstrictname", NULL, 0, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
 PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 
 	zval *name_param = NULL;

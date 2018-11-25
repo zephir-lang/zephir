@@ -19,16 +19,32 @@ PHP_METHOD(Test_Exceptions, issue1325);
 PHP_METHOD(Test_Exceptions, doNoopException);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionliteral, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, type)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionsprintf, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, name)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionconcat, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, framework, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, framework)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, language, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, language)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testmultiexception, 0, 0, 2)

@@ -35,12 +35,20 @@ PHP_METHOD(Test_Strings, strToHex);
 PHP_METHOD(Test_Strings, issue1267);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_camelize, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, str)
+#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_uncamelize, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, str)
+#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
@@ -84,7 +92,11 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_teststrposoffset, 0, 0, 3)
 	ZEND_ARG_INFO(0, haystack)
 	ZEND_ARG_INFO(0, needle)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, offset, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, offset)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testexplode, 0, 0, 2)
@@ -98,18 +110,34 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testexplodelimit, 0, 0, 2)
 	ZEND_ARG_INFO(0, str)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, limit, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, limit)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr, 0, 0, 3)
 	ZEND_ARG_INFO(0, str)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, from, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, from)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, len, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, len)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr2, 0, 0, 2)
 	ZEND_ARG_INFO(0, str)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, from, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, from)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr3, 0, 0, 1)
@@ -150,7 +178,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_strings_strtohex, 0, 1, IS_
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_strings_strtohex, 0, 1, IS_STRING, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, value)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_issue1267, 0, 0, 1)

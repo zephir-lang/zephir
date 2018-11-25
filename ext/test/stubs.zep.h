@@ -28,7 +28,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_stubs_testmixedinputparamsd
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_stubs_testmixedinputparamsdocblock, 0, 1, IS_LONG, NULL, 1)
 #endif
 	ZEND_ARG_INFO(0, intOrString)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, number)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -37,7 +41,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_stubs_testmixedinputparamsd
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_stubs_testmixedinputparamsdocblockdeclared, 0, 1, IS_LONG, NULL, 1)
 #endif
 	ZEND_ARG_INFO(0, intOrString)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, number)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_stubs_method_entry) {
