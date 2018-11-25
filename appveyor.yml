@@ -75,9 +75,11 @@ build_script:
     - ps: EnableExtension
 
 test_script:
+    - SET X=0
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'php vendor/bin/simple-phpunit --colors=always --testsuite "Extension Test Suite (PHP >= 7.0.0)"'
-    - 'php vendor/bin/simple-phpunit --colors=always --testsuite "Zephir Test Suite"'
+    - php vendor/bin/simple-phpunit --testsuite "Extension Test Suite" || SET X=!errorlevel!
+    - php vendor/bin/simple-phpunit --testsuite "Zephir Test Suite" || SET X=!errorlevel!
+    - exit %X%
 
 on_success:
     - ps: PrintBuildDetails
