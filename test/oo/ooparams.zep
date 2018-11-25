@@ -52,7 +52,12 @@ class OoParams
 		return average;
 	}
 
-	public function setStrictName(string! name)
+	public function setStrictNameFromZephirLand()
+	{
+		return this->setStrictName(12345);
+	}
+
+	public function setStrictName(string! name) -> string
 	{
 		return name;
 	}
