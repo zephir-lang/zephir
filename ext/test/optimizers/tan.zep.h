@@ -12,7 +12,11 @@ PHP_METHOD(Test_Optimizers_Tan, testIntParameter);
 PHP_METHOD(Test_Optimizers_Tan, testVarParameter);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_optimizers_tan_testintparameter, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_optimizers_tan_testvarparameter, 0, 0, 1)

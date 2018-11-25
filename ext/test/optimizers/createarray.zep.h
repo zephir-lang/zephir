@@ -7,7 +7,11 @@ PHP_METHOD(Test_Optimizers_CreateArray, createNoSize);
 PHP_METHOD(Test_Optimizers_CreateArray, createSize);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_optimizers_createarray_createsize, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, n)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_optimizers_createarray_method_entry) {

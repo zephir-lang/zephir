@@ -9,7 +9,11 @@ PHP_METHOD(Test_Fasta, main);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fasta_fastarepeat, 0, 0, 2)
 	ZEND_ARG_INFO(0, n)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, seq, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, seq)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fasta_main, 0, 0, 1)

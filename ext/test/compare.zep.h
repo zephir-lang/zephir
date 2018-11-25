@@ -16,30 +16,66 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroInt);
 PHP_METHOD(Test_Compare, testNotIdenticalZeroLong);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_islessint, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_isgreaterequal, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_islessdouble, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_DOUBLE, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_islessthenpi, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_ismorethenpi, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_DOUBLE, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_testvarwithstringequals, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, str)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_compare_testvarequalsnull, 0, 0, 1)

@@ -20,7 +20,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_chars_sumchars2, 0, 1, IS_L
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_chars_sumchars2, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, ch, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, ch)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -35,7 +39,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_chars_diffchars2, 0, 1, IS_
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_chars_diffchars2, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, ch, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, ch)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_chars_method_entry) {

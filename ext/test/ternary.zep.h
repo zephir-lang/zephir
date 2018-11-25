@@ -14,7 +14,11 @@ PHP_METHOD(Test_Ternary, testShortTernary);
 PHP_METHOD(Test_Ternary, testShortTernaryComplex);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternary2, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternarycomplex1, 0, 0, 2)

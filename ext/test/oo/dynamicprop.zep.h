@@ -19,51 +19,99 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString);
 PHP_METHOD(Test_Oo_DynamicProp, setNonExistingStringProperty);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyint, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertybooltrue, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyboolfalse, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertystring, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertychar, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyuchar, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertynull, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyvariableint, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyvariablestring, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyvariablebooltrue, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setpropertyvariableboolfalse, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, property)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_dynamicprop_setexistingstringpropertystring, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, value)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_oo_dynamicprop_method_entry) {

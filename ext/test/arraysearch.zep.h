@@ -9,7 +9,11 @@ PHP_METHOD(Test_ArraySearch, searchUsingArrayInsideZephir);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arraysearch_simplesearch, 0, 0, 2)
 	ZEND_ARG_INFO(0, needle)
 	ZEND_ARG_ARRAY_INFO(0, haystack, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, strict, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, strict)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_arraysearch_method_entry) {

@@ -17,7 +17,11 @@ PHP_METHOD(Test_Logical, testMixed4);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testand9, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testmixed2, 0, 0, 2)
@@ -26,8 +30,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testmixed2, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testmixed4, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, b, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, b)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_logical_method_entry) {
