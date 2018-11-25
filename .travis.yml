@@ -72,10 +72,12 @@ script:
   - zephir --ansi
   - |
     # Running tests
-    if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-      test_suite="ExtensionZE2"
+    if [ "$(php-config --vernum)" -lt "70000" ]; then
+      test_suite="Extension_Php56"
+    elif [ "$(php-config --vernum)" -lt "70200" ]; then
+      test_suite="Extension_Php70"
     else
-      test_suite="ExtensionZE3"
+      test_suite="Extension_Php72"
     fi
 
     php \
