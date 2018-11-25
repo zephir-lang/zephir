@@ -77,6 +77,7 @@ build_script:
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
     - 'php vendor/bin/simple-phpunit --colors=always --testsuite "Extension Test Suite (PHP >= 7.0.0)"'
+    - 'php vendor/bin/simple-phpunit --colors=always --testsuite "Zephir Test Suite"'
 
 on_success:
     - ps: PrintBuildDetails
