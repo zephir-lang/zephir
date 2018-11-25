@@ -22,8 +22,8 @@ class AbstractTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippedTestError('Scalar type hint are avalibale in PHP 7 only');
+        if (\PHP_VERSION_ID < 70200) {
+            throw new SkippedTestError('Scalar type hints are available since PHP 7.2');
         }
     }
 
