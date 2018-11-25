@@ -1,4 +1,6 @@
-<p align="center"><img src="https://zephir-lang.com/images/logo-105x36.svg" alt="Zephir"/></p>
+<p align="center"><a href="https://zephir-lang.com" target="_blank">
+    <img src="https://zephir-lang.com/images/logo-105x36.svg" height="100" alt="Zephir"/>
+</a></p>
 
 <p align="center">
 <a href="https://travis-ci.org/phalcon/zephir"><img src="https://travis-ci.org/phalcon/zephir.svg" alt="Build on Linux"></a>
@@ -8,19 +10,38 @@
 <a href="https://packagist.org/packages/phalcon/zephir"><img src="https://poser.pugx.org/phalcon/zephir/license.svg" alt="License"></a>
 </p>
 
-## Introduction
+[Zephir][0] - (_<strong>Ze</strong>nd Engine Ph<strong>p</strong> <strong>I</strong>nt<strong>r</strong>mediate_), - 
+is a high level **Programming Language** that eases the creation and maintainability of extensions for PHP.
+Zephir extensions are exported to C code that can be compiled and optimized by major C compilers such as gcc/clang/vc++.
+Functionality is exposed to the PHP language.
 
-**Zephir** - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
-of extensions for PHP. Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
-such as gcc/clang/vc++. Functionality is exposed to the PHP language.
+Documentation
+-------------
+* Official documentation is [located here][1]
 
-Official documentation [is located here](https://docs.zephir-lang.com).
+Community
+---------
+* Follow us on [GitHub][2] and [Facebook][3]
+* Get Zephir support on [Discord][4] and [Official Forums][5]
+* Read our [Code of Conduct][6]
 
-## Contributing
+Contributing
+------------
 
-See [CONTRIBUTING.md](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
+Zephir is an Open Source, community-driven project. See [CONTRIBUTING.md][7]
+for details about contributions to this repository.
 
-## License
+License
+-------
 
-Zephir is open-sourced software licensed under the MIT License.
-See the [LICENSE](https://github.com/phalcon/zephir/blob/master/LICENSE) file for more information.
+Zephir licensed under the MIT License. See the [LICENSE][8] file for more information.
+
+[0]: https://zephir-lang.com
+[1]: https://docs.zephir-lang.com
+[2]: https://github.com/phalcon/zephir
+[3]: https://www.facebook.com/groups/zephir.language
+[4]: https://phalcon.link/discord
+[5]: https://forum.zephir-lang.com
+[6]: https://github.com/phalcon/zephir/blob/master/CODE_OF_CONDUCT.md
+[7]: https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md
+[8]: https://github.com/phalcon/zephir/blob/master/LICENSE
