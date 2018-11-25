@@ -62,18 +62,39 @@ install:
 
 before_script:
   - .ci/build-test-ext.sh
-  # https://github.com/phalcon/zephir/pull/1537
-  - echo 'variables_order=EGPCS' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  # https://github.com/phalcon/zephir/pull/1654
-  - echo 'enable_dl=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  # https://github.com/phalcon/zephir/issues/1713
-  - echo 'allow_url_include=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - echo 'allow_url_fopen=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - |
+      # Setting up PHP
+
+      # Changes for https://github.com/phalcon/zephir/pull/1537
+      echo 'variables_order=EGPCS' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+      # Changes for https://github.com/phalcon/zephir/pull/1654
+      echo 'enable_dl=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+      # Changes for https://github.com/phalcon/zephir/issues/1713
+      echo 'allow_url_include=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+      echo 'allow_url_fopen=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
   - zephir --ansi
-  - php -d extension=ext/modules/test.so vendor/bin/simple-phpunit --colors=always --testsuite "Extension Test Suite"
-  - php -d extension=ext/modules/test.so vendor/bin/simple-phpunit --colors=always --testsuite "Zephir Test Suite"
+  - |
+      if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
+        extension_test_suite="Extension Test Suite (any PHP version)"
+      else
+        extension_test_suite="Extension Test Suite (PHP >= 7.0.0)"
+      fi
+
+      php \
+        -d extension=ext/modules/test.so \
+        vendor/bin/simple-phpunit \
+        --colors=always \
+        --testsuite "$extension_test_suite"
+
+      php \
+        -d extension=ext/modules/test.so \
+        vendor/bin/simple-phpunit \
+        --colors=always \
+        --testsuite "$extension_test_suite"
 
 after_success:
   - .ci/after-success.sh
