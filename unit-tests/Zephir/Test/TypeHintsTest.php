@@ -67,19 +67,19 @@ class TypeHintsTest extends KernelTestCase
         $this->assertSame(
             implode(PHP_EOL, file('expected_args2.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/args.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_args2.c and ext/typehints/args.zep.h are identical.'
+            'Failed asserting that expected_args2.h and ext/typehints/args.zep.h are identical.'
         );
 
         $this->assertSame(
             implode(PHP_EOL, file('expected_retval2.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/retval.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_retval2.c and ext/typehints/retval.zep.h are identical.'
+            'Failed asserting that expected_retval2.h and ext/typehints/retval.zep.h are identical.'
         );
 
         $this->assertSame(
             implode(PHP_EOL, file('expected_both2.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/both.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_both2.c and ext/typehints/both.zep.h are identical.'
+            'Failed asserting that expected_both2.h and ext/typehints/both.zep.h are identical.'
         );
     }
 
@@ -97,19 +97,19 @@ class TypeHintsTest extends KernelTestCase
         $this->assertSame(
             implode(PHP_EOL, file('expected_args3.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/args.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_args3.c and ext/typehints/args.zep.h are identical.'
+            'Failed asserting that expected_args3.h and ext/typehints/args.zep.h are identical.'
         );
 
         $this->assertSame(
             implode(PHP_EOL, file('expected_retval3.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/retval.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_retval3.c and ext/typehints/retval.zep.h are identical.'
+            'Failed asserting that expected_retval3.h and ext/typehints/retval.zep.h are identical.'
         );
 
         $this->assertSame(
             implode(PHP_EOL, file('expected_both3.h', FILE_IGNORE_NEW_LINES)),
             implode(PHP_EOL, file('ext/typehints/both.zep.h', FILE_IGNORE_NEW_LINES)),
-            'Failed asserting that expected_both3.c and ext/typehints/both.zep.h are identical.'
+            'Failed asserting that expected_both3.h and ext/typehints/both.zep.h are identical.'
         );
     }
 

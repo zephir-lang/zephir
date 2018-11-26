@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Zephir.
  *
@@ -18,12 +16,25 @@ use Test\Mcall;
 
 class MCallTest extends TestCase
 {
-    public function testOptionalParameterBooleanException()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForOptionalBoolean()
     {
         $t = new Mcall();
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'start' must be of the type bool");
 
         $t->optionalParameterBoolean('test');
+    }
+
+    /** @test */
+    public function shouldThrowTypeErrorForOptionalBoolean()
+    {
+        $t = new Mcall();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'start' must be of the type bool");
+
+        $t->optionalParameterBoolean([]);
     }
 }

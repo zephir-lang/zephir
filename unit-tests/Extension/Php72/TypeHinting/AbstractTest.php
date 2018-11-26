@@ -9,24 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Extension\TypeHinting;
+namespace Extension\Php72\TypeHinting;
 
-use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestCase;
 use TestConcreteClass;
 
 class AbstractTest extends TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass()
-    {
-        if (\PHP_VERSION_ID < 70200) {
-            throw new SkippedTestError('Scalar type hints are available since PHP 7.2');
-        }
-    }
-
     /**
      * @test
      * @issue https://github.com/phalcon/zephir/issues/1667
