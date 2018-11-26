@@ -18,12 +18,29 @@ use Test\Mcall;
 
 class MCallTest extends TestCase
 {
-    public function testOptionalParameterBooleanException()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForOptionalBoolean()
     {
         $t = new Mcall();
 
         $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Argument 1 passed to Test\Mcall::optionalParameterBoolean() must be of the type bool, string given'
+        );
 
         $t->optionalParameterBoolean('test');
+    }
+
+    /** @test */
+    public function shouldThrowTypeErrorForOptionalBoolean()
+    {
+        $t = new Mcall();
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(
+            'Argument 1 passed to Test\Mcall::optionalParameterBoolean() must be of the type bool, array given'
+        );
+
+        $t->optionalParameterBoolean([]);
     }
 }

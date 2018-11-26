@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Zephir.
  *
@@ -18,38 +16,46 @@ use Test\Oo\OoParams;
 
 class OoParamsStrictTest extends TestCase
 {
-    public function testSetStrictAgeException1()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForInt1()
     {
         $t = new OoParams();
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'age' must be of the type int");
 
         $t->setStrictAge(17.0);
     }
 
-    public function testSetStrictAgeException2()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForInt2()
     {
         $t = new OoParams();
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'age' must be of the type int");
 
         $t->setStrictAge('17');
     }
 
-    public function testSetStrictAverageException2()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForDouble()
     {
         $t = new OoParams();
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'average' must be of the type double");
 
         $t->setStrictAverage('17');
     }
 
-    public function testSetStrictNameException()
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForString()
     {
         $t = new OoParams();
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'name' must be of the type string");
 
         $t->setStrictName(1234);
     }
