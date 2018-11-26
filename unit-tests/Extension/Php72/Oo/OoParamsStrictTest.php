@@ -19,13 +19,16 @@ use Test\Oo\OoParams;
 class OoParamsStrictTest extends TestCase
 {
     /** @test */
-    public function shouldThrowInvalidArgumentExceptionForInt1()
+    public function shouldThrowTypeErrorForInt1()
     {
         $t = new OoParams();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Oo\OoParams::setStrictAge() must be of the type int, float given'
+        $this->expectExceptionMessageRegExp(
+            // PHP 7.3 : int
+            // PHP 7.2 : integer
+            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictAge\(\) '.
+            'must be of the type int(eger)?, float given/'
         );
 
         $t->setStrictAge(17.0);
@@ -37,8 +40,11 @@ class OoParamsStrictTest extends TestCase
         $t = new OoParams();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Oo\OoParams::setStrictAge() must be of the type int, string given'
+        $this->expectExceptionMessageRegExp(
+            // PHP 7.3 : int
+            // PHP 7.2 : integer
+            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictAge\(\) '.
+            'must be of the type int(eger)?, string given/'
         );
 
         $t->setStrictAge('17');
@@ -63,10 +69,24 @@ class OoParamsStrictTest extends TestCase
         $t = new OoParams();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Oo\OoParams::setStrictName() must be of the type string, int given'
+        $this->expectExceptionMessageRegExp(
+            // PHP 7.3 : int
+            // PHP 7.2 : integer
+            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictName\(\) '.
+            'must be of the type string, int(eger)? given/'
         );
 
         $t->setStrictName(1234);
+    }
+
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForCallFromZephirLand()
+    {
+        $t = new OoParams();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'name' must be of the type string");
+
+        $t->setStrictNameFromZephirLand();
     }
 }

@@ -50,6 +50,17 @@ class OoParamsStrictTest extends TestCase
     }
 
     /** @test */
+    public function shouldThrowInvalidArgumentExceptionForInt()
+    {
+        $t = new OoParams();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'average' must be of the type double");
+
+        $t->setStrictAverage(17);
+    }
+
+    /** @test */
     public function shouldThrowInvalidArgumentExceptionForString()
     {
         $t = new OoParams();
@@ -58,5 +69,16 @@ class OoParamsStrictTest extends TestCase
         $this->expectExceptionMessage("Parameter 'name' must be of the type string");
 
         $t->setStrictName(1234);
+    }
+
+    /** @test */
+    public function shouldThrowInvalidArgumentExceptionForCallFromZephirLand()
+    {
+        $t = new OoParams();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'name' must be of the type string");
+
+        $t->setStrictNameFromZephirLand();
     }
 }
