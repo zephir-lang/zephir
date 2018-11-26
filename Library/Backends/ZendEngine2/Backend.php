@@ -1317,7 +1317,15 @@ class Backend extends BaseBackend
         if (\count($conditions)) {
             $codePrinter->output('if (UNEXPECTED('.implode(' && ', $conditions).')) {');
             $codePrinter->increaseLevel();
-            $codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \''.$var['name'].'\' must be a '.$type.'") TSRMLS_CC);');
+
+            $exceptionMessage = sprintf('SL("Parameter \'%s\' must be of the type %s")', $var['name'], $type);
+            $codePrinter->output(
+                sprintf(
+                    'zephir_throw_exception_string(spl_ce_InvalidArgumentException, %s TSRMLS_CC);',
+                    $exceptionMessage
+                )
+            );
+
             $codePrinter->output('RETURN_MM_NULL();');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
