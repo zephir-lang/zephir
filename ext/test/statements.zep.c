@@ -184,7 +184,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
@@ -250,7 +250,7 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be a int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);

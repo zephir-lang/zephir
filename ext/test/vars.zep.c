@@ -135,7 +135,7 @@ PHP_METHOD(Test_Vars, test88Issue) {
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be a string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
@@ -182,7 +182,7 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be a string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
