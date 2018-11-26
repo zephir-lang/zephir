@@ -19,26 +19,32 @@ use Test\Mcall;
 class MCallTest extends TestCase
 {
     /** @test */
-    public function shouldThrowInvalidArgumentExceptionForOptionalBoolean()
+    public function shouldThrowTypeErrorForOptionalBoolean1()
     {
         $t = new Mcall();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Mcall::optionalParameterBoolean() must be of the type bool, string given'
+        $this->expectExceptionMessageRegExp(
+            // PHP 7.3 : bool
+            // PHP 7.2 : boolean
+            '/Argument 1 passed to Test\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, string given/'
         );
 
         $t->optionalParameterBoolean('test');
     }
 
     /** @test */
-    public function shouldThrowTypeErrorForOptionalBoolean()
+    public function shouldThrowTypeErrorForOptionalBoolean2()
     {
         $t = new Mcall();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Mcall::optionalParameterBoolean() must be of the type bool, array given'
+        $this->expectExceptionMessageRegExp(
+            // PHP 7.3 : bool
+            // PHP 7.2 : boolean
+            '/Argument 1 passed to Test\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, array given/'
         );
 
         $t->optionalParameterBoolean([]);
