@@ -54,6 +54,5 @@ services:
         arguments:
           - '@monolog.logger'
 
-  compiler.log.formatter:
-    class: Monolog\Formatter\LineFormatter
-    arguments: ["%%level_name%%: %%message%%\n"]
+  compiler_log_formatter:
+    class: Zephir\Logger\Formatter\CompilerFormatter
