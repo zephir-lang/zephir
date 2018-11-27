@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * BinaryOperator
+ * BinaryOperator.
  *
  * Allows to manually build a binary operator AST node
  */
@@ -116,27 +116,26 @@ class BinaryOperator extends AbstractOperator
     // x [{expr}]
     const OPERATOR_ACCESS_ARRAY = 'array-access';
 
-
     private $operator;
     private $leftExpression;
     private $rightExpression;
 
     /**
-     * @param null $operator
+     * @param null                 $operator
      * @param AbstractBuilder|null $leftExpression
      * @param AbstractBuilder|null $rightExpression
      */
     public function __construct($operator = null, AbstractBuilder $leftExpression = null, AbstractBuilder $rightExpression = null)
     {
-        if ($operator !== null) {
+        if (null !== $operator) {
             $this->setOperator($operator);
         }
 
-        if ($leftExpression !== null) {
+        if (null !== $leftExpression) {
             $this->setLeftExpression($leftExpression);
         }
 
-        if ($rightExpression !== null) {
+        if (null !== $rightExpression) {
             $this->setRightExpression($rightExpression);
         }
     }
@@ -151,11 +150,13 @@ class BinaryOperator extends AbstractOperator
 
     /**
      * @param string $operator
+     *
      * @return BinaryOperator
      */
     public function setOperator($operator)
     {
         $this->operator = $operator;
+
         return $this;
     }
 
@@ -169,11 +170,13 @@ class BinaryOperator extends AbstractOperator
 
     /**
      * @param AbstractBuilder $leftExpression
+     *
      * @return BinaryOperator
      */
     public function setLeftExpression(AbstractBuilder $leftExpression)
     {
         $this->leftExpression = $leftExpression;
+
         return $this;
     }
 
@@ -187,11 +190,13 @@ class BinaryOperator extends AbstractOperator
 
     /**
      * @param AbstractBuilder $rightExpression
+     *
      * @return BinaryOperator
      */
     public function setRightExpression(AbstractBuilder $rightExpression)
     {
         $this->rightExpression = $rightExpression;
+
         return $this;
     }
 
@@ -200,10 +205,10 @@ class BinaryOperator extends AbstractOperator
      */
     protected function preBuild()
     {
-        return array(
-            'type'  => $this->getOperator(),
-            'left'  => $this->getLeftExpression(),
-            'right' => $this->getRightExpression()
-        );
+        return [
+            'type' => $this->getOperator(),
+            'left' => $this->getLeftExpression(),
+            'right' => $this->getRightExpression(),
+        ];
     }
 }

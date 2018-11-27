@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,11 +12,9 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\RuntimeException
+ * Zephir\Exception\RuntimeException.
  *
  * Exception thrown if an error which can only be found on runtime occurs.
- *
- * @package Zephir\Exception
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {

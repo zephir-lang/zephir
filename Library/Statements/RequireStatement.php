@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -16,7 +16,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * RequireStatement
+ * RequireStatement.
  *
  * Require statement is used to execute PHP scripts in a given path
  */
@@ -24,17 +24,18 @@ class RequireStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws \Zephir\Exception\CompilerException
+     *
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $expression = array(
+        $expression = [
             'type' => 'require',
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
-            'char' => $this->statement['char']
-        );
+            'char' => $this->statement['char'],
+        ];
 
         $expr = new Expression($expression);
         $expr->setExpectReturn(false, null);

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Types;
 
 /**
- * IstringType
+ * IstringType.
  *
  * Encapsulates built-in methods for the "istring" type
  */

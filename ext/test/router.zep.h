@@ -40,7 +40,11 @@ PHP_METHOD(Test_Router, getRouteById);
 PHP_METHOD(Test_Router, getRouteByName);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router___construct, 0, 0, 0)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, defaultRoutes, _IS_BOOL, 0)
+#else
+	ZEND_ARG_INFO(0, defaultRoutes)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_setdi, 0, 0, 1)

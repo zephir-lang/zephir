@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension\Globals;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals\Post;
-use Zephir\Support\TestCase;
 
 class PostTest extends TestCase
 {

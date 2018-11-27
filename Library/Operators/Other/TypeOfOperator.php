@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,15 +11,15 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Expression;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Operators\BaseOperator;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Operators\BaseOperator;
 
 /**
- * TypeOf
+ * TypeOf.
  *
  * Obtains the type of a dynamic variable
  */
@@ -28,8 +28,10 @@ class TypeOfOperator extends BaseOperator
     /**
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -37,8 +39,9 @@ class TypeOfOperator extends BaseOperator
             throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
         }
 
-        $functionCall = BuilderFactory::getInstance()->statements()->functionCall('gettype', array($expression['left']));
+        $functionCall = BuilderFactory::getInstance()->statements()->functionCall('gettype', [$expression['left']]);
         $expression = new Expression($functionCall->build());
+
         return $expression->compile($compilationContext);
     }
 }

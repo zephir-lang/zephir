@@ -1,6 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Mcall;
-use Zephir\Support\TestCase;
 
 class MCallTest extends TestCase
 {
@@ -29,27 +29,6 @@ class MCallTest extends TestCase
     public function assertNumberOfRequiredParameters($number)
     {
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
-    }
-
-    private function getReflection()
-    {
-        if (is_null($this->reflection)) {
-            return $this->reflection = new \ReflectionClass('\Test\Mcall');
-        }
-
-        return $this->reflection;
-    }
-
-    /**
-     * @return \ReflectionParameter
-     */
-    protected function getMethodFirstParameter()
-    {
-        $backtrace = debug_backtrace();
-        $methodInfo = $this->reflection->getMethod($this->getName());
-        $parameters = $methodInfo->getParameters();
-
-        return $parameters[0];
     }
 
     public function testCall()
@@ -113,28 +92,6 @@ class MCallTest extends TestCase
         $this->assertFalse($t->optionalParameterBoolean(false));
     }
 
-    public function testOptionalParameterBooleanException()
-    {
-        $t = new Mcall();
-
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $except = '\InvalidArgumentException';
-        } elseif (version_compare(PHP_VERSION, '7.2.0', '>=')) {
-            $except = '\TypeError';
-        }
-
-        if (isset($except)) {
-            if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-                version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-                $this->setExpectedException($except);
-            } else {
-                $this->expectException($except);
-            }
-        }
-
-        $t->optionalParameterBoolean('test');
-    }
-
     /**
      * @test
      */
@@ -146,8 +103,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParamWithDefaultEmptyArray(), array());
-        $this->assertSame($t->arrayParamWithDefaultEmptyArray(array(1)), array(1));
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray(), []);
+        $this->assertSame($t->arrayParamWithDefaultEmptyArray([1]), [1]);
     }
 
     /**
@@ -161,8 +118,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParamWithDefaultNullValue(), array());
-        $this->assertSame($t->arrayParamWithDefaultNullValue(array(1)), array(1));
+        $this->assertSame($t->arrayParamWithDefaultNullValue(), []);
+        $this->assertSame($t->arrayParamWithDefaultNullValue([1]), [1]);
     }
 
     /**
@@ -176,8 +133,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($t->arrayParam(array()), array());
-        $this->assertSame($t->arrayParam(array(1, 2, 3)), array(1, 2, 3));
+        $this->assertSame($t->arrayParam([]), []);
+        $this->assertSame($t->arrayParam([1, 2, 3]), [1, 2, 3]);
     }
 
     /**
@@ -206,5 +163,25 @@ class MCallTest extends TestCase
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
+
+    /**
+     * @return \ReflectionParameter
+     */
+    protected function getMethodFirstParameter()
+    {
+        $methodInfo = $this->reflection->getMethod($this->getName());
+        $parameters = $methodInfo->getParameters();
+
+        return $parameters[0];
+    }
+
+    private function getReflection()
+    {
+        if (null === $this->reflection) {
+            return $this->reflection = new \ReflectionClass('\Test\Mcall');
+        }
+
+        return $this->reflection;
     }
 }

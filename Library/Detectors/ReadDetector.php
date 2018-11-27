@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,7 @@ namespace Zephir\Detectors;
 use Zephir\Variable;
 
 /**
- * ReadDetector
+ * ReadDetector.
  *
  * Detects if a variable is used in a given expression context
  * Since zvals are collected between executions to the same section of code
@@ -35,17 +35,17 @@ class ReadDetector
             $variable = substr($variable, 0, $pos);
         }
 
-        if ($expression['type'] == 'variable') {
+        if ('variable' == $expression['type']) {
             if ($variable == $expression['value']) {
                 return true;
             }
         }
 
-        if ($expression['type'] == 'fcall' || $expression['type'] == 'mcall' || $expression['type'] == 'scall') {
+        if ('fcall' == $expression['type'] || 'mcall' == $expression['type'] || 'scall' == $expression['type']) {
             if (isset($expression['parameters'])) {
                 foreach ($expression['parameters'] as $parameter) {
-                    if (is_array($parameter['parameter'])) {
-                        if ($parameter['parameter']['type'] == 'variable') {
+                    if (\is_array($parameter['parameter'])) {
+                        if ('variable' == $parameter['parameter']['type']) {
                             if ($variable == $parameter['parameter']['value']) {
                                 return true;
                             }
@@ -56,16 +56,16 @@ class ReadDetector
         }
 
         if (isset($expression['left'])) {
-            if (is_array($expression['left'])) {
-                if ($this->detect($variable, $expression['left']) === true) {
+            if (\is_array($expression['left'])) {
+                if (true === $this->detect($variable, $expression['left'])) {
                     return true;
                 }
             }
         }
 
         if (isset($expression['right'])) {
-            if (is_array($expression['right'])) {
-                if ($this->detect($variable, $expression['right']) === true) {
+            if (\is_array($expression['right'])) {
+                if (true === $this->detect($variable, $expression['right'])) {
                     return true;
                 }
             }

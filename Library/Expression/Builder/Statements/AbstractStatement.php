@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,8 +14,7 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class AbstractStatement
- * @package Zephir\Expression\Builder\Statements
+ * Class AbstractStatement.
  */
 abstract class AbstractStatement extends AbstractBuilder
 {

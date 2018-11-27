@@ -15,8 +15,7 @@
        "vendor"
     ],
     "files": [
-        "LICENSE",
-        "autoload.php"
+        "LICENSE"
     ],
     "blacklist": [
         "unit-tests",
@@ -43,9 +42,17 @@
             "in": "vendor",
             "name": "*.php",
             "exclude": [
-                "doc",
-                "test",
+                "CHANGELOG",
+                "CONTRIBUTING",
+                "README",
                 "Tests",
+                "behat",
+                "bin",
+                "build",
+                "doc",
+                "docs",
+                "fixtures",
+                "test",
                 "tests"
             ]
         }

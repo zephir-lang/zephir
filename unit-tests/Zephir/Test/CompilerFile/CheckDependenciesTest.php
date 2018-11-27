@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,27 +11,36 @@
 
 namespace Zephir\Test\CompilerFile;
 
-use Zephir\Config;
+use Psr\Log\Test\TestLogger;
+use Zephir\AliasManager;
 use Zephir\Compiler;
 use Zephir\CompilerFile;
-use Zephir\Backends\ZendEngine2\Backend;
-use Zephir\Support\TestCase;
-use Zephir\Parser\Manager;
-use Zephir\Logger;
+use Zephir\Config;
+use Zephir\FileSystem\FileSystemInterface;
+use Zephir\Test\KernelTestCase;
 
-class CheckDependenciesTest extends TestCase
+class CheckDependenciesTest extends KernelTestCase
 {
     public function testExtendsClassThatDoesNotExist()
     {
-        /** @var Logger $logger */
-        $logger = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
+        self::bootKernel(['config_files' => [__DIR__.'/../../../config.yml']]);
 
-        /** @var Manager $manager */
-        $manager = $this->getMockBuilder(Manager::class)->disableOriginalConstructor()->getMock();
+        $logger = new TestLogger();
 
-        $config = new Config();
-        $compiler = new Compiler($config, $logger, new Backend($config), $manager);
-        $compilerFile = new CompilerFile('myClass', 'myClass.zep', $config, $logger);
+        /**
+         * @var Compiler
+         * @var Config              $config
+         * @var FileSystemInterface $fs
+         */
+        $compiler = self::$kernel->getContainer()->get(Compiler::class);
+        $config = self::$kernel->getContainer()->get(Config::class);
+        $fs = self::$kernel->getContainer()->get(FileSystemInterface::class);
+
+        $compilerFile = new CompilerFile($config, new AliasManager(), $fs);
+
+        $compilerFile->setClassName('myClass');
+        $compilerFile->setFilePath('myClass.zep');
+        $compilerFile->setLogger($logger);
 
         $compilerFile->preCompileInterface(
             'myNamespace',
@@ -39,8 +48,12 @@ class CheckDependenciesTest extends TestCase
             null
         );
 
-        $logger->expects($this->once())->method('warning');
-
         $compilerFile->checkDependencies($compiler);
+
+        $this->assertTrue(
+            $logger->hasWarning(
+                'Cannot locate class "doesNotExist" when extending interface "myNamespace\myClass"'
+            )
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * BinaryOperatorBuilder
+ * BinaryOperatorBuilder.
  *
  * Allows to manually build a binary operator AST node
  */
@@ -27,14 +27,14 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
     protected $char;
 
     /**
-     * BinaryOperatorBuilder constructor
+     * BinaryOperatorBuilder constructor.
      *
-     * @param string $operator
+     * @param string  $operator
      * @param Builder $leftExpression
      * @param Builder $rightExpression
-     * @param string $file
-     * @param int $line
-     * @param string $char
+     * @param string  $file
+     * @param int     $line
+     * @param string  $char
      */
     public function __construct($operator, $leftExpression, $rightExpression, $file = null, $line = 0, $char = 0)
     {
@@ -47,19 +47,19 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        return array(
-            'type'       => $this->operator,
-            'left'       => $this->leftExpression->get(),
-            'right'      => $this->rightExpression->get(),
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
-        );
+        return [
+            'type' => $this->operator,
+            'left' => $this->leftExpression->get(),
+            'right' => $this->rightExpression->get(),
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char,
+        ];
     }
 }

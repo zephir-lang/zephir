@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class CblockTest extends TestCase
 {

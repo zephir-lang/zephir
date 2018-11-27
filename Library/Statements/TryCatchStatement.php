@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,7 +18,7 @@ use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
 
 /**
- * TryCatchStatement
+ * TryCatchStatement.
  *
  * Try/Catch statement the same as in PHP
  */
@@ -31,11 +31,11 @@ class TryCatchStatement extends StatementAbstract
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        $compilationContext->insideTryCatch++;
+        ++$compilationContext->insideTryCatch;
         $currentTryCatch = ++$compilationContext->currentTryCatch;
 
         $codePrinter->outputBlankLine();
-        $codePrinter->output('/* try_start_' . $currentTryCatch . ': */');
+        $codePrinter->output('/* try_start_'.$currentTryCatch.': */');
         $codePrinter->outputBlankLine();
 
         if (isset($this->statement['statements'])) {
@@ -44,17 +44,17 @@ class TryCatchStatement extends StatementAbstract
         }
 
         $codePrinter->outputBlankLine();
-        $codePrinter->output('try_end_' . $currentTryCatch . ':');
+        $codePrinter->output('try_end_'.$currentTryCatch.':');
 
-        /**
+        /*
          * If 'try' is the latest statement add a 'dummy' statement to avoid compilation errors
          */
         $codePrinter->outputBlankLine();
 
-        $compilationContext->insideTryCatch--;
+        --$compilationContext->insideTryCatch;
 
         if (isset($this->statement['catches'])) {
-            /**
+            /*
              * Check if there was an exception
              */
             $codePrinter->output('if (EG(exception)) {');
@@ -64,12 +64,12 @@ class TryCatchStatement extends StatementAbstract
             $compilationContext->backend->copyOnWrite($exc_var, 'EG(exception)', $compilationContext);
 
             $exprBuilder = BuilderFactory::getInstance();
-            $ifs         = array();
+            $ifs = [];
 
             foreach ($this->statement['catches'] as $catch) {
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
-                    if ($variable->getType() != 'variable') {
+                    if ('variable' != $variable->getType()) {
                         throw new CompilerException('Only dynamic variables can be used to catch exceptions', $catch['exception']);
                     }
                 } else {
@@ -77,24 +77,24 @@ class TryCatchStatement extends StatementAbstract
                 }
 
                 if ($compilationContext->backend->isZE3()) {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&' . $variable->getName() . ', &' . $exc_var->getName() . ');');
+                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&'.$variable->getName().', &'.$exc_var->getName().');');
                 } else {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(' . $variable->getName() . ', ' . $exc_var->getName() . ');');
+                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT('.$variable->getName().', '.$exc_var->getName().');');
                 }
 
-                /**
+                /*
                  * @TODO, use a builder here
                  */
                 $variable->setIsInitialized(true, $compilationContext);
                 $variable->setMustInitNull(true);
 
-                /**
+                /*
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
-                    $assignExceptVar = $exprBuilder->statements()->let(array(
-                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName()))
-                    ));
+                    $assignExceptVar = $exprBuilder->statements()->let([
+                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName())),
+                    ]);
 
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(
@@ -105,19 +105,19 @@ class TryCatchStatement extends StatementAbstract
                             )
                         )
                         ->setStatements($exprBuilder->statements()->block(array_merge(
-                            array(
+                            [
                                 $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
-                                 $assignExceptionVarStmt
-                            ),
-                            isset($catch['statements']) ? $catch['statements'] : array()
+                                $assignExceptionVarStmt,
+                            ],
+                            isset($catch['statements']) ? $catch['statements'] : []
                         )));
                 }
             }
 
             $primaryIf = $ifs[0];
-            $lastIf    = $ifs[0];
-            for ($i=1; $i<count($ifs); ++$i) {
-                $lastIf->setElseStatements($exprBuilder->statements()->block(array($ifs[$i])));
+            $lastIf = $ifs[0];
+            for ($i = 1; $i < \count($ifs); ++$i) {
+                $lastIf->setElseStatements($exprBuilder->statements()->block([$ifs[$i]]));
                 $lastIf = $ifs[$i];
             }
 

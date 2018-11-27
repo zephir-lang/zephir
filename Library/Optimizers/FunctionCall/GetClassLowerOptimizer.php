@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * GetClassLowerOptimizer
+ * GetClassLowerOptimizer.
  *
  * Optimizes calls to 'get_class_lower' using internal function
  */
 class GetClassLowerOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,19 +39,19 @@ class GetClassLowerOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $numberParameters = count($expression['parameters']);
-        if ($numberParameters != 1) {
+        $numberParameters = \count($expression['parameters']);
+        if (1 != $numberParameters) {
             throw new CompilerException("'get_class_lower' only accepts one parameters", $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
         $context->headersManager->add('kernel/object');
@@ -63,7 +65,7 @@ class GetClassLowerOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->codePrinter->output('zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', 1 TSRMLS_CC);');
+        $context->codePrinter->output('zephir_get_class('.$symbol.', '.$resolvedParams[0].', 1 TSRMLS_CC);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

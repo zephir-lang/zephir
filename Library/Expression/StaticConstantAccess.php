@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,12 +14,12 @@ namespace Zephir\Expression;
 use Zephir\ClassConstant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
 /**
- * StaticConstantAccess
+ * StaticConstantAccess.
  *
  * Resolves class constants
  */
@@ -36,7 +36,7 @@ class StaticConstantAccess
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
@@ -48,9 +48,9 @@ class StaticConstantAccess
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -58,25 +58,26 @@ class StaticConstantAccess
     }
 
     /**
-     * Access a static constant class
+     * Access a static constant class.
      *
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
+     * @throws CompilerException|Exception
+     *
      * @return CompiledExpression
-     * @throws Exception|CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $compiler = &$compilationContext->compiler;
         $className = $expression['left']['value'];
-        $constant  = $expression['right']['value'];
+        $constant = $expression['right']['value'];
 
-        /**
+        /*
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
+        if (!\in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -84,18 +85,18 @@ class StaticConstantAccess
                 if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+                    throw new CompilerException("Cannot locate class '".$className."'", $expression['left']);
                 }
             }
         } else {
-            if (in_array($className, ['self', 'static', 'this'])) {
+            if (\in_array($className, ['self', 'static', 'this'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
-                if ($className == 'parent') {
+                if ('parent' == $className) {
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot find constant called "' . $constant . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $expression);
+                        throw new CompilerException('Cannot find constant called "'.$constant.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $expression);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -103,7 +104,7 @@ class StaticConstantAccess
             }
         }
 
-        /**
+        /*
          * Constants are resolved to their values at compile time
          * so we need to check that they effectively do exist
          */
@@ -118,11 +119,11 @@ class StaticConstantAccess
             );
         }
 
-        /**
+        /*
          * We can optimize the reading of constants by avoiding query their value every time
          */
         if (!$compilationContext->config->get('static-constant-class-folding', 'optimizations')) {
-            /**
+            /*
              * Resolves the symbol that expects the value
              */
             if ($this->expecting) {
@@ -136,17 +137,18 @@ class StaticConstantAccess
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
             }
 
-            /**
+            /*
              * Variable that receives property accesses must be polymorphic
              */
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+                throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign class constants', $expression);
             }
 
             $symbolVariable->setDynamicTypes('undefined');
 
             $compilationContext->headersManager->add('kernel/object');
-            $compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ', SS("' . $constant . '") TSRMLS_CC);');
+            $compilationContext->codePrinter->output('zephir_get_class_constant('.$symbolVariable->getName().', '.$classDefinition->getClassEntry($compilationContext).', SS("'.$constant.'") TSRMLS_CC);');
+
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
@@ -158,8 +160,8 @@ class StaticConstantAccess
             $type = $constantDefinition->getValueType();
         } else {
             $value = $constantDefinition;
-            $type = gettype($value);
-            if ($type == 'integer') {
+            $type = \gettype($value);
+            if ('integer' == $type) {
                 $type = 'int';
             }
         }
@@ -173,11 +175,15 @@ class StaticConstantAccess
             case 'null':
                 break;
             default:
-                $compilationContext->logger->warning($constantDefinition->getName(), 'nonexistent-constant', $expression);
+                $compilationContext->logger->warning(
+                    $constantDefinition->getName(),
+                    ['nonexistent-constant', $expression]
+                );
+
                 return new CompiledExpression('null', null, $expression);
         }
 
-        /**
+        /*
          * Return the value as a literal expression
          */
         return new CompiledExpression($type, $value, $expression);

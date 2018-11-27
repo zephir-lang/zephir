@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,25 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * IsPhpVersionOptimizer
+ * IsPhpVersionOptimizer.
  *
  * Checks if PHP has a specific version
  */
 class IsPhpVersionOptimizer extends OptimizerAbstract
 {
     protected $allowedTypes = [
-        'string'    => true,
-        'int'       => true,
-        'long'      => true,
-        'double'    => true,
-        'uint'      => true,
-        'ulong'     => true,
-        'istring'   => true
+        'string' => true,
+        'int' => true,
+        'long' => true,
+        'double' => true,
+        'uint' => true,
+        'ulong' => true,
+        'istring' => true,
     ];
 
     /**
@@ -44,11 +44,11 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-            throw new CompilerException("This function requires parameters", $expression);
+            throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (count($expression['parameters']) != 1) {
-            throw new CompilerException("This function only requires one parameter", $expression);
+        if (1 != \count($expression['parameters'])) {
+            throw new CompilerException('This function only requires one parameter', $expression);
         }
 
         $variableType = $expression['parameters'][0]['parameter']['type'];
@@ -58,11 +58,11 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
         }
 
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $expression['parameters'][0]['parameter']['value'], $matches);
-        if (!count($matches)) {
-            throw new CompilerException("Could not parse PHP version", $expression);
+        if (!\count($matches)) {
+            throw new CompilerException('Could not parse PHP version', $expression);
         }
 
-        $minorVersion   = 0;
+        $minorVersion = 0;
         $releaseVersion = 0;
 
         $majorVersion = $matches['major'] * 10000;
@@ -75,7 +75,7 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
             $releaseVersion = $matches['patch'];
         }
 
-        $versionId = intval($majorVersion + $minorVersion + $releaseVersion);
+        $versionId = (int) ($majorVersion + $minorVersion + $releaseVersion);
 
         return new CompiledExpression('bool', 'zephir_is_php_version('.$versionId.')', $expression);
     }

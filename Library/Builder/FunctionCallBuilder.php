@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * FunctionCallBuilder
+ * FunctionCallBuilder.
  *
  * Allows to manually build a function call AST node
  */
@@ -31,14 +31,14 @@ class FunctionCallBuilder
     protected $char;
 
     /**
-     * FunctionCallBuilder construct
+     * FunctionCallBuilder construct.
      *
      * @param string $name
-     * @param array $parameters
-     * @param int $type
+     * @param array  $parameters
+     * @param int    $type
      * @param string $file
-     * @param int $line
-     * @param int $char
+     * @param int    $line
+     * @param int    $char
      */
     public function __construct($name, $parameters, $type = 1, $file = null, $line = 0, $char = 0)
     {
@@ -55,14 +55,14 @@ class FunctionCallBuilder
      */
     public function get()
     {
-        return array(
-            'type'       => 'fcall',
-            'name'       => $this->name,
-            'call-type'  => $this->type,
+        return [
+            'type' => 'fcall',
+            'name' => $this->name,
+            'call-type' => $this->type,
             'parameters' => $this->parameters,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
-        );
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char,
+        ];
     }
 }

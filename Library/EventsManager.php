@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,19 +12,17 @@
 namespace Zephir;
 
 /**
- * Class EventsManager
- *
- * @package Zephir
+ * Class EventsManager.
  */
 class EventsManager
 {
     /**
      * @var array
      */
-    private $listeners = array();
+    private $listeners = [];
 
     /**
-     * Attaches a listener to a specific event type
+     * Attaches a listener to a specific event type.
      *
      * @param $event
      * @param $callback
@@ -32,22 +30,22 @@ class EventsManager
     public function listen($event, $callback)
     {
         if (!isset($this->listeners[$event])) {
-            $this->listeners[$event] = array();
+            $this->listeners[$event] = [];
         }
 
         $this->listeners[$event][] = $callback;
     }
 
     /**
-     * Triggers an event for the specified event type
+     * Triggers an event for the specified event type.
      *
      * @param $event
      * @param array $param
      */
-    public function dispatch($event, array $param = array())
+    public function dispatch($event, array $param = [])
     {
         foreach ($this->listeners[$event] as $listener) {
-            call_user_func_array($listener, $param);
+            \call_user_func_array($listener, $param);
         }
     }
 }

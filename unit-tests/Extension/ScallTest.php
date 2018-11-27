@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Scall;
 use Test\Scallparent;
-use Zephir\Support\TestCase;
 
 class ScallTest extends TestCase
 {
@@ -50,7 +50,8 @@ class ScallTest extends TestCase
 
     /**
      * @test
-     * @link https://github.com/phalcon/zephir/issues/1622
+     *
+     * @see https://github.com/phalcon/zephir/issues/1622
      */
     public function shouldReturnInterpolatedMethodFromZephir()
     {
@@ -60,7 +61,8 @@ class ScallTest extends TestCase
 
     /**
      * @test
-     * @link https://github.com/phalcon/zephir/issues/1622
+     *
+     * @see https://github.com/phalcon/zephir/issues/1622
      */
     public function shouldEchoInterpolatedMethodFromZephir()
     {

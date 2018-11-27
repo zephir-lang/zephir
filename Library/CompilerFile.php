@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,84 +11,102 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Zephir\Compiler\FileInterface;
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
-use Zephir\Parser\ParseException;
+use Zephir\Exception\ParseException;
+use Zephir\FileSystem\FileSystemInterface;
 
 /**
- * Zephir\CompilerFile
+ * Zephir\CompilerFile.
  *
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
- *
- * @package Zephir
  */
-class CompilerFile implements FileInterface, InjectionAwareInterface
+final class CompilerFile implements FileInterface
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
+    use LoggerAwareTrait;
+
+    /** @var string */
+    private $namespace;
+
+    /** @var string */
+    private $className;
+
+    /** @var string */
+    private $filePath;
+
+    /** @var bool */
+    private $external = false;
+
+    /**
+     * Original internal representation (IR) of the file.
+     *
+     * @var array
+     */
+    private $ir;
+
+    private $originalNode;
+
+    private $compiledFile;
+
+    /** @var ClassDefinition */
+    private $classDefinition;
+
+    /** @var FunctionDefinition[] */
+    private $functionDefinitions = [];
+
+    /** @var array */
+    private $headerCBlocks = [];
+
+    /** @var Config */
+    private $config;
+
+    /** @var AliasManager */
+    private $aliasManager;
+
+    /** @var FileSystemInterface */
+    private $filesystem;
+
+    /**
+     * CompilerFile constructor.
+     *
+     * @param Config              $config
+     * @param AliasManager        $aliasManager
+     * @param FileSystemInterface $filesystem
+     */
+    public function __construct(
+        Config $config,
+        AliasManager $aliasManager,
+        FileSystemInterface $filesystem
+    ) {
+        $this->config = $config;
+        $this->logger = new NullLogger();
+        $this->aliasManager = $aliasManager;
+        $this->filesystem = $filesystem;
     }
 
     /**
-     * Namespace of the
+     * @internal
+     *
+     * @param string $filePath
      */
-    protected $namespace;
-
-    protected $className;
-
-    protected $filePath;
-
-    protected $external = false;
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
+    }
 
     /**
-     * Original internal representation (IR) of the file
-     */
-    protected $ir;
-
-    protected $originalNode;
-
-    protected $compiledFile;
-
-    /** @var ClassDefinition */
-    protected $classDefinition;
-
-    /** @var FunctionDefinition[] */
-    protected $functionDefinitions = [];
-
-    /** @var array */
-    protected $headerCBlocks;
-
-    /** @var Config */
-    protected $config = null;
-
-    /** @var Logger */
-    protected $logger = null;
-
-    /** @var AliasManager */
-    protected $aliasManager;
-
-    /**
-     * CompilerFile constructor
+     * @internal
      *
      * @param string $className
-     * @param string $filePath
-     * @param Config $config
-     * @param Logger $logger
      */
-    public function __construct($className, $filePath, Config $config, Logger $logger)
+    public function setClassName($className)
     {
-        $this->__DiInject();
-
         $this->className = $className;
-        $this->filePath = $filePath;
-        $this->headerCBlocks = [];
-        $this->config = $config;
-        $this->logger = $logger;
-        $this->aliasManager = new AliasManager();
     }
 
     /**
@@ -99,6 +117,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     public function getClassDefinition()
     {
         $this->classDefinition->setAliasManager($this->aliasManager);
+
         return $this->classDefinition;
     }
 
@@ -108,9 +127,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Sets if the class belongs to an external dependency or not
+     * Sets if the class belongs to an external dependency or not.
      *
-     * @param boolean $external
+     * @param bool $external
      */
     public function setIsExternal($external)
     {
@@ -128,11 +147,11 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Adds a function to the function definitions
+     * Adds a function to the function definitions.
      *
-     * @param Compiler $compiler
+     * @param Compiler           $compiler
      * @param FunctionDefinition $func
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -141,7 +160,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $compiler->addFunction($func, $statement);
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
-            throw new CompilerException("Function '" . $func->getName() . "' was defined more than one time (in the same file)", $statement);
+            throw new CompilerException(
+                sprintf("Function '%s' was defined more than one time (in the same file)", $func->getName()),
+                $statement
+            );
         }
         $this->functionDefinitions[$funcName] = $func;
     }
@@ -149,77 +171,80 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     /**
      * Compiles the file generating a JSON intermediate representation.
      *
-     * @param  Compiler $compiler
-     * @return array
+     * @param Compiler $compiler
      *
-     * @throws IllegalStateException
      * @throws ParseException
+     * @throws IllegalStateException if the intermediate representation is not of type 'array'
+     *
+     * @return array
      */
     public function genIR(Compiler $compiler)
     {
         $normalizedPath = $this->filesystem->normalizePath($this->filePath);
 
         // TODO: JS => JSON
-        $compilePath = Zephir::VERSION . "/{$normalizedPath}.js";
+        $compilePath = "{$normalizedPath}.js";
         $zepRealPath = realpath($this->filePath);
 
         if ($this->filesystem->exists($compilePath)) {
             $modificationTime = $this->filesystem->modificationTime($compilePath);
             if ($modificationTime < filemtime($zepRealPath)) {
                 $this->filesystem->delete($compilePath);
-                if ($this->filesystem->exists($compilePath . '.php') != false) {
-                    $this->filesystem->delete($compilePath . '.php');
+                if (false != $this->filesystem->exists($compilePath.'.php')) {
+                    $this->filesystem->delete($compilePath.'.php');
                 }
             }
         }
 
         $ir = null;
-        if ($this->filesystem->exists($compilePath) == false) {
+        if (false == $this->filesystem->exists($compilePath)) {
             $parser = $compiler->getParserManager()->getParser();
             $ir = $parser->parse($zepRealPath);
             $this->filesystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
         }
 
-        if ($this->filesystem->exists($compilePath . '.php') == false) {
+        if (false == $this->filesystem->exists($compilePath.'.php')) {
             if (empty($ir)) {
                 $ir = json_decode($this->filesystem->read($compilePath), true);
             }
 
-            if (is_array($ir) == false) {
-                throw new IllegalStateException(
-                    sprintf(
-                        'Generating the intermediate representation for the file "%s" was failed.',
-                        realpath($this->filePath)
-                    )
-                );
-            }
-
-            $data = '<?php return ' . var_export($ir, true) . ';';
-            $this->filesystem->write($compilePath . '.php', $data);
+            $data = '<?php return '.var_export($ir, true).';';
+            $this->filesystem->write($compilePath.'.php', $data);
         }
 
-        return $this->filesystem->requireFile($compilePath . '.php');
+        $contents = $this->filesystem->requireFile($compilePath.'.php');
+
+        if (false == \is_array($contents)) {
+            throw new IllegalStateException(
+                sprintf(
+                    'Generating the intermediate representation for the file "%s" was failed.',
+                    realpath($this->filePath)
+                )
+            );
+        }
+
+        return $contents;
     }
 
     /**
-     * Compiles the class/interface contained in the file
+     * Compiles the class/interface contained in the file.
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $classStatement
+     * @param string             $namespace
+     * @param array              $classStatement
      */
     public function compileClass(CompilationContext $compilationContext, $namespace, $classStatement)
     {
         $classDefinition = $this->classDefinition;
 
-        /**
+        /*
          * Do the compilation
          */
         $classDefinition->compile($compilationContext);
     }
 
     /**
-     * Compiles a function
+     * Compiles a function.
      *
      * @param CompilationContext $compilationContext
      * @param FunctionDefinition $functionDefinition
@@ -232,33 +257,33 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $compilationContext->currentMethod = $functionDefinition;
 
         $codePrinter = $compilationContext->codePrinter;
-        $codePrinter->output('PHP_FUNCTION(' . $functionDefinition->getInternalName() . ') {');
+        $codePrinter->output('PHP_FUNCTION('.$functionDefinition->getInternalName().') {');
         $functionDefinition->compile($compilationContext);
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
 
-        /** Restore */
+        /* Restore */
         $compilationContext->classDefinition = $bakClassDefinition;
         $compilationContext->currentMethod = null;
     }
 
     /**
-     * Compiles a comment as a top-level statement
+     * Compiles a comment as a top-level statement.
      *
      * @param CompilationContext $compilationContext
-     * @param array $topStatement
+     * @param array              $topStatement
      */
     public function compileComment(CompilationContext $compilationContext, $topStatement)
     {
-        $compilationContext->codePrinter->output('/' . $topStatement['value'] . '/');
+        $compilationContext->codePrinter->output('/'.$topStatement['value'].'/');
     }
 
     /**
-     * Creates a definition for an interface
+     * Creates a definition for an interface.
      *
      * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param array  $topStatement
+     * @param array  $docblock
      */
     public function preCompileInterface($namespace, $topStatement, $docblock)
     {
@@ -274,14 +299,14 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
         $classDefinition->setType('interface');
 
-        if (is_array($docblock)) {
-            $classDefinition->setDocBlock($docblock["value"]);
+        if (\is_array($docblock)) {
+            $classDefinition->setDocBlock($docblock['value']);
         }
 
         if (isset($topStatement['definition'])) {
             $definition = $topStatement['definition'];
 
-            /**
+            /*
              * Register constants
              */
             if (isset($definition['constants'])) {
@@ -295,7 +320,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 }
             }
 
-            /**
+            /*
              * Register methods
              */
             if (isset($definition['methods'])) {
@@ -319,165 +344,12 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Creates the property shortcuts.
-     *
-     * @param  array           $property
-     * @param  ClassDefinition $classDefinition
-     * @return void
-     *
-     * @throws CompilerException
-     */
-    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
-    {
-        foreach ($property['shortcuts'] as $shortcut) {
-            if (substr($property['name'], 0, 1) == '_') {
-                $name = substr($property['name'], 1);
-            } else {
-                $name = $property['name'];
-            }
-
-            $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
-            $returnsType = [];
-
-            if ($docBlock) {
-                $docBlockParser = new DocblockParser('/' . $docBlock .'/');
-                $docBlockParsed = $docBlockParser->parse();
-
-                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
-                    $returnsType = array_map(function ($type) {
-                        return ($type = trim($type)) == 'mixed' ? 'variable' : $type;
-                    }, (array)explode('|', $annotations[0]->getString()));
-                }
-
-                // Clear annotations
-                $docBlockParsed->setAnnotations([]);
-                $docBlock = $docBlockParsed->generate();
-            }
-
-            switch ($shortcut['name']) {
-                case 'get':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        array('public'),
-                        'get' . camelize($name),
-                        null,
-                        new StatementsBlock(array(
-                            array(
-                                'type' => 'return',
-                                'expr' => array(
-                                    'type' => 'property-access',
-                                    'left' => array(
-                                        'type' => 'variable',
-                                        'value' => 'this'
-                                    ),
-                                    'right' => array(
-                                        'type' => 'variable',
-                                        'value' => $property['name']
-                                    )
-                                )
-                            )
-                        )),
-                        $docBlock,
-                        $this->createReturnsType($returnsType, true),
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                case 'set':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        array('public'),
-                        'set' . camelize($name),
-                        new ClassMethodParameters(array(
-                            array(
-                                'type' => 'parameter',
-                                'name' => $name,
-                                'const' => 0,
-                                'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
-                                'mandatory' => 0
-                            )
-                        )),
-                        new StatementsBlock(array(
-                            array(
-                                'type' => 'let',
-                                'assignments' => array(
-                                    array(
-                                        'assign-type' => 'object-property',
-                                        'operator' => 'assign',
-                                        'variable' => 'this',
-                                        'property' => $property['name'],
-                                        'expr' => array(
-                                            'type' => 'variable',
-                                            'value' => $name,
-                                            'file'  => $property['file'],
-                                            'line'  => $property['line'],
-                                            'char'  => $property['char']
-                                        ),
-                                        'file'  => $property['file'],
-                                        'line'  => $property['line'],
-                                        'char'  => $property['char']
-                                    )
-                                )
-                            ),
-                            array(
-                                'type' => 'return',
-                                'expr' => array(
-                                    'type'  => 'variable',
-                                    'value' => 'this',
-                                    'file'  => $property['file'],
-                                    'line'  => $property['line'],
-                                    'char'  => $property['char']
-                                )
-                            )
-                        )),
-                        $docBlock,
-                        null,
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                case 'toString':
-                case '__toString':
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        array('public'),
-                        '__toString',
-                        null,
-                        new StatementsBlock(array(
-                            array(
-                                'type' => 'return',
-                                'expr' => array(
-                                    'type' => 'property-access',
-                                    'left' => array(
-                                        'type' => 'variable',
-                                        'value' => 'this'
-                                    ),
-                                    'right' => array(
-                                        'type' => 'variable',
-                                        'value' => $property['name']
-                                    )
-                                )
-                            )
-                        )),
-                        $docBlock,
-                        $this->createReturnsType(array('string')),
-                        $shortcut
-                    ), $shortcut);
-                    break;
-
-                default:
-                    throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
-            }
-        }
-    }
-
-    /**
-     * Creates a definition for a class
+     * Creates a definition for a class.
      *
      * @param CompilationContext $compilationContext
-     * @param string $namespace
-     * @param array $topStatement
-     * @param array $docblock
+     * @param string             $namespace
+     * @param array              $topStatement
+     * @param array              $docblock
      */
     public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
     {
@@ -503,8 +375,8 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             $classDefinition->setIsFinal($topStatement['final']);
         }
 
-        if (is_array($docblock)) {
-            $classDefinition->setDocBlock($docblock["value"]);
+        if (\is_array($docblock)) {
+            $classDefinition->setDocBlock($docblock['value']);
         }
 
         if (isset($topStatement['definition'])) {
@@ -512,7 +384,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
             if (isset($definition['properties'])) {
                 foreach ($definition['properties'] as $property) {
-                    /**
+                    /*
                      * Add property to the definition
                      */
                     $classDefinition->addProperty(new ClassProperty(
@@ -524,7 +396,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                         $property
                     ));
 
-                    /**
+                    /*
                      * Check and process shortcuts
                      */
                     if (isset($property['shortcuts'])) {
@@ -533,7 +405,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 }
             }
 
-            /**
+            /*
              * Register constants
              */
             if (isset($definition['constants'])) {
@@ -546,7 +418,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                 }
             }
 
-            /**
+            /*
              * Register methods
              */
             if (isset($definition['methods'])) {
@@ -567,58 +439,56 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
         $this->classDefinition = $classDefinition;
 
-        /**
+        /*
          * Assign current class definition to the compilation context
          */
         $compilationContext->classDefinition = $classDefinition;
 
-        /**
+        /*
          * Run pre-compilation passes
          */
         $classDefinition->preCompile($compilationContext);
     }
 
     /**
-     * Pre-compiles a Zephir file. Generates the IR and perform basic validations
+     * Pre-compiles a Zephir file.
+     *
+     * Generates the IR and perform basic validations.
      *
      * @param Compiler $compiler
+     *
      * @throws ParseException
      * @throws CompilerException
-     * @throws Exception
      */
     public function preCompile(Compiler $compiler)
     {
         $ir = $this->genIR($compiler);
 
-        if (!is_array($ir)) {
-            throw new Exception("Cannot parse file: " . realpath($this->filePath));
-        }
-
-        if (isset($ir['type']) && $ir['type'] == 'error') {
+        if (isset($ir['type']) && 'error' == $ir['type']) {
             throw new ParseException($ir['message'], $ir);
         }
 
         /**
-         * Compilation context stores common objects required by compilation entities
+         * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
 
-        /**
+        /*
          * Set global compiler in the compilation context
          */
         $compilationContext->compiler = $compiler;
 
-        /**
+        /*
          * Set global config in the compilation context
          */
         $compilationContext->config = $this->config;
 
-        /**
+        /*
          * Set global logger in the compilation context
          */
         $compilationContext->logger = $this->logger;
 
-        /**
+        /*
          * Alias manager
          */
         $compilationContext->aliasManager = $this->aliasManager;
@@ -626,19 +496,23 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $compilationContext->backend = $compiler->backend;
 
         /**
-         * Traverse the top level statements looking for the namespace
+         * Traverse the top level statements looking for the namespace.
          */
         $namespace = null;
+
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'namespace':
-                    if ($namespace !== null) {
-                        throw new CompilerException("The namespace must be defined just one time", $topStatement);
+                    if (null !== $namespace) {
+                        throw new CompilerException('The namespace must be defined just one time', $topStatement);
                     }
                     $namespace = $topStatement['name'];
                     $this->namespace = $namespace;
                     if (!preg_match('/^[A-Z]/', $namespace)) {
-                        throw new CompilerException("Namespace '" . $namespace . "' must be in camelized-form", $topStatement);
+                        throw new CompilerException(
+                            "Namespace '{$namespace}' must be in camelized-form",
+                            $topStatement
+                        );
                     }
                     break;
 
@@ -647,13 +521,28 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     break;
 
                 case 'function':
-                    /* Just do the precompilation of the function */
+                    $statements = null;
+                    if (isset($topStatement['statements'])) {
+                        $statements = new StatementsBlock($topStatement['statements']);
+                    }
+
+                    $parameters = null;
+                    if (isset($topStatement['parameters'])) {
+                        $parameters = new ClassMethodParameters($topStatement['parameters']);
+                    }
+
+                    $returnType = null;
+                    if (isset($topStatement['return-type'])) {
+                        $returnType = $topStatement['return-type'];
+                    }
+
+                    // Just do the precompilation of the function
                     $functionDefinition = new FunctionDefinition(
                         $namespace,
                         $topStatement['name'],
-                        isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
-                        isset($topStatement['statements']) ? new StatementsBlock($topStatement['statements']) : null,
-                        isset($topStatement['return-type']) ? $topStatement['return-type'] : null,
+                        $parameters,
+                        $statements,
+                        $returnType,
                         $topStatement
                     );
                     $functionDefinition->preCompile($compilationContext);
@@ -663,17 +552,18 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$namespace) {
-            throw new CompilerException("A namespace is required", $topStatement);
+            throw new CompilerException('A namespace is required', isset($topStatement) ? $topStatement : null);
         }
 
-        /* Set namespace and flag as global, if before namespace declaration */
+        // Set namespace and flag as global, if before namespace declaration
         foreach ($this->functionDefinitions as $funcDef) {
-            if ($funcDef->getNamespace() == null) {
+            if (null == $funcDef->getNamespace()) {
                 $funcDef->setGlobal(true);
-                $funcDef->setNamespace($compiler->getConfig()->get('namespace'));
+                $funcDef->setNamespace($this->config->get('namespace'));
             }
         }
 
+        $name = null;
         $class = false;
         $interface = false;
         $lastComment = null;
@@ -682,7 +572,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'class':
                     if ($class || $interface) {
-                        throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
+                        throw new CompilerException(
+                            'More than one class/interface defined in the same file',
+                            $topStatement
+                        );
                     }
                     $class = true;
                     $name = $topStatement['name'];
@@ -693,7 +586,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'interface':
                     if ($class || $interface) {
-                        throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
+                        throw new CompilerException(
+                            'More than one class/interface defined in the same file',
+                            $topStatement
+                        );
                     }
                     $interface = true;
                     $name = $topStatement['name'];
@@ -704,7 +600,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'use':
                     if ($interface || $class) {
-                        throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
+                        throw new CompilerException(
+                            'Aliasing must be done before declaring any class or interface',
+                            $topStatement
+                        );
                     }
                     $this->aliasManager->add($topStatement);
                     break;
@@ -716,15 +615,28 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         if (!$class && !$interface) {
-            throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
+            throw new CompilerException(
+                'Every file must contain at least a class or an interface',
+                isset($topStatement) ? $topStatement : null
+            );
         }
 
         if (!$this->external) {
-            $expectedPath = strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $name) . '.zep';
+            $expectedPath = strtolower(
+                str_replace('\\', \DIRECTORY_SEPARATOR, $namespace).\DIRECTORY_SEPARATOR.$name.'.zep'
+            );
+
             if (strtolower($this->filePath) != $expectedPath) {
-                $className = $namespace . '\\' . $name;
-                $message = 'Unexpected class name ' . $className . ' in file: ' . $this->filePath . ', expected: ' . $expectedPath;
-                throw new CompilerException($message);
+                $className = $namespace.'\\'.$name;
+
+                throw new CompilerException(
+                    sprintf(
+                        "Unexpected class name '%s' in file: '%s', expected: '%s'",
+                        $className,
+                        $this->filePath,
+                        $expectedPath
+                    )
+                );
             }
         }
 
@@ -743,7 +655,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Returns the path to the compiled file
+     * Returns the path to the compiled file.
      *
      * @return string
      */
@@ -753,7 +665,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Check dependencies
+     * Check dependencies.
      *
      * @param Compiler $compiler
      */
@@ -763,7 +675,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
         $extendedClass = $classDefinition->getExtendsClass();
         if ($extendedClass) {
-            if ($classDefinition->getType() == 'class') {
+            if ('class' == $classDefinition->getType()) {
                 if ($compiler->isClass($extendedClass)) {
                     $extendedDefinition = $compiler->getClassDefinition($extendedClass);
                     $classDefinition->setExtendsClassDefinition($extendedDefinition);
@@ -774,7 +686,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending class "%s"',
+                                $extendedClass,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             } else {
@@ -788,7 +708,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending interface "%s"',
+                                $extendedClass,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             }
@@ -807,7 +735,15 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        $this->logger->warning('Cannot locate class "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->originalNode);
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Cannot locate class "%s" when extending interface "%s"',
+                                $interface,
+                                $classDefinition->getCompleteName()
+                            ),
+                            ['nonexistent-class', $this->originalNode]
+                        );
                     }
                 }
             }
@@ -819,10 +755,11 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
-     * Compiles the file
+     * Compiles the file.
      *
-     * @param Compiler $compiler
+     * @param Compiler       $compiler
      * @param StringsManager $stringsManager
+     *
      * @throws CompilerException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
@@ -831,7 +768,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             throw new CompilerException('IR related to compiled file is missing');
         }
 
-        /**
+        /*
          * External classes should not be compiled as part of the extension
          */
         if ($this->external) {
@@ -839,26 +776,26 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         }
 
         /**
-         * Compilation context stores common objects required by compilation entities
+         * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
 
-        /**
+        /*
          * Set global compiler in the compilation context
          */
         $compilationContext->compiler = $compiler;
 
-        /**
+        /*
          * Set global config in the compilation context
          */
         $compilationContext->config = $this->config;
 
-        /**
+        /*
          * Set global logger in the compilation context
          */
         $compilationContext->logger = $this->logger;
 
-        /**
+        /*
          * Set global strings manager
          */
         $compilationContext->stringsManager = $stringsManager;
@@ -866,18 +803,18 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $compilationContext->backend = $compiler->backend;
 
         /**
-         * Headers manager
+         * Headers manager.
          */
         $headersManager = new HeadersManager();
         $compilationContext->headersManager = $headersManager;
 
         /**
-         * Main code-printer for the file
+         * Main code-printer for the file.
          */
         $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
 
-        /**
+        /*
          * Alias manager
          */
         $compilationContext->aliasManager = $this->aliasManager;
@@ -891,7 +828,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             switch ($topStatement['type']) {
                 case 'class':
                     if ($interface || $class) {
-                        throw new CompilerException("More than one class defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
                     $class = true;
                     $this->compileClass($compilationContext, $this->namespace, $topStatement);
@@ -899,7 +836,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
                 case 'interface':
                     if ($interface || $class) {
-                        throw new CompilerException("More than one class defined in the same file", $topStatement);
+                        throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
                     $class = true;
                     $this->compileClass($compilationContext, $this->namespace, $topStatement);
@@ -922,6 +859,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         $classDefinition = $this->classDefinition;
         if (!$classDefinition) {
             $this->ir = null;
+
             return;
         }
 
@@ -929,20 +867,20 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
 
         $completeName = $classDefinition->getCompleteName();
 
-        $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
+        $path = str_replace('\\', \DIRECTORY_SEPARATOR, strtolower($completeName));
 
-        $filePath = 'ext/' . $path . '.zep.c';
-        $filePathHeader = 'ext/' . $path . '.zep.h';
+        $filePath = 'ext/'.$path.'.zep.c';
+        $filePathHeader = 'ext/'.$path.'.zep.h';
 
-        if (strpos($path, DIRECTORY_SEPARATOR)) {
-            $dirname = dirname($filePath);
+        if (strpos($path, \DIRECTORY_SEPARATOR)) {
+            $dirname = \dirname($filePath);
             if (!is_dir($dirname)) {
                 mkdir($dirname, 0755, true);
             }
         }
 
         if ($codePrinter) {
-            /**
+            /*
              * If the file does not exists we create it for the first time
              */
             if (!file_exists($filePath)) {
@@ -951,10 +889,9 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
                     file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
                 }
             } else {
-
                 /**
                  * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
-                 * thus avoiding unnecessary recompilations
+                 * thus avoiding unnecessary recompilations.
                  */
                 $output = $codePrinter->getOutput();
                 $hash = $this->filesystem->getHashFile('md5', $filePath, true);
@@ -972,10 +909,10 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
             }
         }
 
-        /**
+        /*
          * Add to file compiled
          */
-        $this->compiledFile = $path . '.c';
+        $this->compiledFile = $path.'.c';
         $this->ir = null;
     }
 
@@ -983,59 +920,48 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     {
         $classDefinition = $this->classDefinition;
 
-        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+        $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code  = '' . PHP_EOL;
-        $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
-        $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
-        $code .= '#endif' . PHP_EOL;
-        $code .= '' . PHP_EOL;
+        $code = ''.PHP_EOL;
+        $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
+        $code .= '#include "'.$separators.'ext_config.h"'.PHP_EOL;
+        $code .= '#endif'.PHP_EOL;
+        $code .= ''.PHP_EOL;
 
-        $code .= '#include <php.h>' . PHP_EOL;
-        $code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
-        $code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
-        $code .= '' . PHP_EOL;
+        $code .= '#include <php.h>'.PHP_EOL;
+        $code .= '#include "'.$separators.'php_ext.h"'.PHP_EOL;
+        $code .= '#include "'.$separators.'ext.h"'.PHP_EOL;
+        $code .= ''.PHP_EOL;
 
-        if ($classDefinition->getType() == 'class') {
-            $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
-            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
-            $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
+        if ('class' == $classDefinition->getType()) {
+            $code .= '#include <Zend/zend_operators.h>'.PHP_EOL;
+            $code .= '#include <Zend/zend_exceptions.h>'.PHP_EOL;
+            $code .= '#include <Zend/zend_interfaces.h>'.PHP_EOL;
         } else {
-            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+            $code .= '#include <Zend/zend_exceptions.h>'.PHP_EOL;
         }
-        $code .= '' . PHP_EOL;
+        $code .= ''.PHP_EOL;
 
-        $code .= '#include "kernel/main.h"' . PHP_EOL;
+        $code .= '#include "kernel/main.h"'.PHP_EOL;
 
-        if ($classDefinition->getType() == 'class') {
+        if ('class' == $classDefinition->getType()) {
             foreach ($compilationContext->headersManager->get() as $header => $one) {
-                $code .= '#include "' . $header . '.h"' . PHP_EOL;
+                $code .= '#include "'.$header.'.h"'.PHP_EOL;
             }
         }
 
-        if (count($this->headerCBlocks) > 0) {
-            $code .= implode($this->headerCBlocks, PHP_EOL) . PHP_EOL;
+        if (\count($this->headerCBlocks) > 0) {
+            $code .= implode($this->headerCBlocks, PHP_EOL).PHP_EOL;
         }
 
-        /**
+        /*
          * Prepend the required files to the header
          */
         $compilationContext->codePrinter->preOutput($code);
     }
 
     /**
-     * Transform class/interface name to FQN format
-     *
-     * @param string $name
-     * @return string
-     */
-    protected function getFullName($name)
-    {
-        return fqcn($name, $this->namespace, $this->aliasManager);
-    }
-
-    /**
-     * Returns the path to the source file
+     * Returns the path to the source file.
      *
      * @return string
      */
@@ -1045,10 +971,181 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
     }
 
     /**
+     * Creates the property shortcuts.
+     *
+     * @param array           $property
+     * @param ClassDefinition $classDefinition
+     *
+     * @throws CompilerException
+     */
+    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
+    {
+        foreach ($property['shortcuts'] as $shortcut) {
+            if ('_' == substr($property['name'], 0, 1)) {
+                $name = substr($property['name'], 1);
+            } else {
+                $name = $property['name'];
+            }
+
+            $docBlock = null;
+            if (isset($shortcut['docblock'])) {
+                $docBlock = $shortcut['docblock'];
+            } elseif (isset($property['docblock'])) {
+                $docBlock = $property['docblock'];
+            }
+
+            $returnsType = [];
+
+            if ($docBlock) {
+                $docBlockParser = new DocblockParser('/'.$docBlock.'/');
+                $docBlockParsed = $docBlockParser->parse();
+
+                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
+                    $returnsType = array_map(function ($type) {
+                        return 'mixed' == ($type = trim($type)) ? 'variable' : $type;
+                    }, (array) explode('|', $annotations[0]->getString()));
+                }
+
+                // Clear annotations
+                $docBlockParsed->setAnnotations([]);
+                $docBlock = $docBlockParsed->generate();
+            }
+
+            switch ($shortcut['name']) {
+                case 'get':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        'get'.camelize($name),
+                        null,
+                        new StatementsBlock([
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'property-access',
+                                    'left' => [
+                                        'type' => 'variable',
+                                        'value' => 'this',
+                                    ],
+                                    'right' => [
+                                        'type' => 'variable',
+                                        'value' => $property['name'],
+                                    ],
+                                ],
+                            ],
+                        ]),
+                        $docBlock,
+                        $this->createReturnsType($returnsType, true),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                case 'set':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        'set'.camelize($name),
+                        new ClassMethodParameters([
+                            [
+                                'type' => 'parameter',
+                                'name' => $name,
+                                'const' => 0,
+                                'data-type' => 1 == \count($returnsType) ? $returnsType[0] : 'variable',
+                                'mandatory' => 0,
+                            ],
+                        ]),
+                        new StatementsBlock([
+                            [
+                                'type' => 'let',
+                                'assignments' => [
+                                    [
+                                        'assign-type' => 'object-property',
+                                        'operator' => 'assign',
+                                        'variable' => 'this',
+                                        'property' => $property['name'],
+                                        'expr' => [
+                                            'type' => 'variable',
+                                            'value' => $name,
+                                            'file' => $property['file'],
+                                            'line' => $property['line'],
+                                            'char' => $property['char'],
+                                        ],
+                                        'file' => $property['file'],
+                                        'line' => $property['line'],
+                                        'char' => $property['char'],
+                                    ],
+                                ],
+                            ],
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'variable',
+                                    'value' => 'this',
+                                    'file' => $property['file'],
+                                    'line' => $property['line'],
+                                    'char' => $property['char'],
+                                ],
+                            ],
+                        ]),
+                        $docBlock,
+                        null,
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                case 'toString':
+                case '__toString':
+                    $classDefinition->addMethod(new ClassMethod(
+                        $classDefinition,
+                        ['public'],
+                        '__toString',
+                        null,
+                        new StatementsBlock([
+                            [
+                                'type' => 'return',
+                                'expr' => [
+                                    'type' => 'property-access',
+                                    'left' => [
+                                        'type' => 'variable',
+                                        'value' => 'this',
+                                    ],
+                                    'right' => [
+                                        'type' => 'variable',
+                                        'value' => $property['name'],
+                                    ],
+                                ],
+                            ],
+                        ]),
+                        $docBlock,
+                        $this->createReturnsType(['string']),
+                        $shortcut
+                    ), $shortcut);
+                    break;
+
+                default:
+                    throw new CompilerException("Unknown shortcut '".$shortcut['name']."'", $shortcut);
+            }
+        }
+    }
+
+    /**
+     * Transform class/interface name to FQN format.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getFullName($name)
+    {
+        return fqcn($name, $this->namespace, $this->aliasManager);
+    }
+
+    /**
      * Create returns type list.
      *
-     * @param  array $types
-     * @param  bool  $annotated
+     * @param array $types
+     * @param bool  $annotated
+     *
      * @return array
      */
     protected function createReturnsType(array $types, $annotated = false)
@@ -1062,7 +1159,7 @@ class CompilerFile implements FileInterface, InjectionAwareInterface
         foreach ($types as $type) {
             $list[] = [
                 'type' => $annotated ? 'return-type-annotation' : 'return-type-paramater',
-                'data-type' => $type == 'mixed' ? 'variable' : $type,
+                'data-type' => 'mixed' == $type ? 'variable' : $type,
                 'mandatory' => false,
             ];
         }

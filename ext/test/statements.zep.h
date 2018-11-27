@@ -11,24 +11,44 @@ PHP_METHOD(Test_Statements, test544Issue);
 PHP_METHOD(Test_Statements, test544IssueWithVariable);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_statements_testelseif, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_statements_testelseif1, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_statements_testelseif2, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 	ZEND_ARG_INFO(0, total)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_statements_test544issue, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, step, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, step)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_statements_test544issuewithvariable, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, step, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, step)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_statements_method_entry) {

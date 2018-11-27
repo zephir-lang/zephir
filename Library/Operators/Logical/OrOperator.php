@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,10 +12,10 @@
 namespace Zephir\Operators\Logical;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Statements\LetStatement;
-use Zephir\Exception\CompilerException;
-use Zephir\CompiledExpression;
 
 class OrOperator extends LogicalBaseOperator
 {
@@ -26,11 +26,11 @@ class OrOperator extends LogicalBaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new \Exception("Missing left part of the expression");
+            throw new \Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception("Missing right part of the expression");
+            throw new \Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -38,7 +38,7 @@ class OrOperator extends LogicalBaseOperator
         $left = $leftExpr->compile($compilationContext);
 
         /**
-         * This variable is used to check if the compound and expression is evaluated as true or false
+         * This variable is used to check if the compound and expression is evaluated as true or false.
          */
         $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
 
@@ -49,22 +49,22 @@ class OrOperator extends LogicalBaseOperator
             case 'double':
             case 'uint':
             case 'uchar':
-                $assignExprLeft = array(
-                    'type'  => $left->getType(),
+                $assignExprLeft = [
+                    'type' => $left->getType(),
                     'value' => $left->getCode(),
-                );
+                ];
                 break;
             case 'variable':
-                $assignExprLeft = array(
-                    'type'  => 'variable',
+                $assignExprLeft = [
+                    'type' => 'variable',
                     'value' => $left->getCode(),
-                );
+                ];
                 break;
             case 'null':
-                $assignExprLeft = array(
-                    'type'  => 'null',
-                    'value' => null
-                );
+                $assignExprLeft = [
+                    'type' => 'null',
+                    'value' => null,
+                ];
                 break;
         }
 
@@ -73,12 +73,12 @@ class OrOperator extends LogicalBaseOperator
         }
 
         /**
-         * Create an implicit 'let' operation to update the evaluated left operator
+         * Create an implicit 'let' operation to update the evaluated left operator.
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
@@ -86,12 +86,12 @@ class OrOperator extends LogicalBaseOperator
                     'file' => $expression['left']['file'],
                     'line' => $expression['left']['line'],
                     'char' => $expression['left']['char'],
-                )
-            )
-        ));
+                ],
+            ],
+        ]);
         $statement->compile($compilationContext);
 
-        $compilationContext->codePrinter->output('if (!(' . $flagVariable->getName() . ')) {');
+        $compilationContext->codePrinter->output('if (!('.$flagVariable->getName().')) {');
 
         $compilationContext->codePrinter->increaseLevel();
 
@@ -106,22 +106,22 @@ class OrOperator extends LogicalBaseOperator
             case 'double':
             case 'uint':
             case 'uchar':
-                $assignExprRight = array(
-                    'type'  => $right->getType(),
+                $assignExprRight = [
+                    'type' => $right->getType(),
                     'value' => $right->getCode(),
-                );
+                ];
                 break;
             case 'variable':
-                $assignExprRight = array(
-                    'type'  => 'variable',
+                $assignExprRight = [
+                    'type' => 'variable',
                     'value' => $right->getCode(),
-                );
+                ];
                 break;
             case 'null':
-                $assignExprRight = array(
-                    'type'  => 'null',
-                    'value' => null
-                );
+                $assignExprRight = [
+                    'type' => 'null',
+                    'value' => null,
+                ];
                 break;
         }
 
@@ -130,12 +130,12 @@ class OrOperator extends LogicalBaseOperator
         }
 
         /**
-         * Create an implicit 'let' operation to update the evaluated right operator
+         * Create an implicit 'let' operation to update the evaluated right operator.
          */
-        $statement = new LetStatement(array(
+        $statement = new LetStatement([
             'type' => 'let',
-            'assignments' => array(
-                array(
+            'assignments' => [
+                [
                     'assign-type' => 'variable',
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
@@ -143,9 +143,9 @@ class OrOperator extends LogicalBaseOperator
                     'file' => $expression['right']['file'],
                     'line' => $expression['right']['line'],
                     'char' => $expression['right']['char'],
-                )
-            )
-        ));
+                ],
+            ],
+        ]);
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();

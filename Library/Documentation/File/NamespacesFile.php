@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -28,20 +28,20 @@ class NamespacesFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "namespaces.phtml";
+        return 'namespaces.phtml';
     }
 
     public function getData()
     {
-        return array(
-            "namespaceAccessor" => $this->namespaceAccessor,
-            "namespacesTree" => $this->namespaceAccessor->getNamespaceTree(),
-            "namespaces" => $this->namespaceAccessor->getByNamespace()
-        );
+        return [
+            'namespaceAccessor' => $this->namespaceAccessor,
+            'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
+            'namespaces' => $this->namespaceAccessor->getByNamespace(),
+        ];
     }
 
     public function getOutputFile()
     {
-        return "namespaces.html";
+        return 'namespaces.html';
     }
 }

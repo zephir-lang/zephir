@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -20,8 +20,7 @@ use Zephir\Expression\Builder\Operators\RawOperator;
 use Zephir\Expression\Builder\Operators\UnaryOperator;
 
 /**
- * Class OperatorsFactory
- * @package Zephir\Expression\Builder
+ * Class OperatorsFactory.
  */
 class OperatorsFactory
 {
@@ -37,8 +36,9 @@ class OperatorsFactory
     }
 
     /**
-     * @param null $variable
+     * @param null                 $variable
      * @param AbstractBuilder|null $expression
+     *
      * @return AssignVariableOperator
      */
     public function assignVariable($variable = null, AbstractBuilder $expression = null)
@@ -47,9 +47,10 @@ class OperatorsFactory
     }
 
     /**
-     * @param null $variable
-     * @param null $property
+     * @param null                 $variable
+     * @param null                 $property
      * @param AbstractBuilder|null $expression
+     *
      * @return AssignPropertyOperator
      */
     public function assignProperty($variable = null, $property = null, AbstractBuilder $expression = null)
@@ -61,9 +62,10 @@ class OperatorsFactory
     }
 
     /**
-     * @param null $variable
-     * @param null $property
+     * @param null                 $variable
+     * @param null                 $property
      * @param AbstractBuilder|null $expression
+     *
      * @return AssignPropertyOperator
      */
     public function assignStaticProperty($variable = null, $property = null, AbstractBuilder $expression = null)
@@ -75,9 +77,10 @@ class OperatorsFactory
     }
 
     /**
-     * @param null $operator
+     * @param null                 $operator
      * @param AbstractBuilder|null $leftExpression
      * @param AbstractBuilder|null $rightExpression
+     *
      * @return BinaryOperator
      */
     public function binary($operator = null, AbstractBuilder $leftExpression = null, AbstractBuilder $rightExpression = null)
@@ -86,8 +89,9 @@ class OperatorsFactory
     }
 
     /**
-     * @param string|null $operator
+     * @param string|null          $operator
      * @param AbstractBuilder|null $expression
+     *
      * @return UnaryOperator
      */
     public function unary($operator = null, AbstractBuilder $expression = null)
@@ -98,33 +102,36 @@ class OperatorsFactory
     /**
      * @param $type
      * @param AbstractBuilder $expression
+     *
      * @return RawOperator
      */
     public function cast($type, AbstractBuilder $expression)
     {
-        return $this->raw(array(
-           'type'   => BinaryOperator::OPERATOR_CAST,
-           'left'   => $type,
-           'right'  => $expression
-        ));
+        return $this->raw([
+            'type' => BinaryOperator::OPERATOR_CAST,
+            'left' => $type,
+            'right' => $expression,
+        ]);
     }
 
     /**
      * @param $type
      * @param AbstractBuilder $expression
+     *
      * @return RawOperator
      */
     public function hint($type, AbstractBuilder $expression)
     {
-        return $this->raw(array(
-            'type'   => BinaryOperator::OPERATOR_TYPE_HINT,
-            'left'   => $type,
-            'right'  => $expression
-        ));
+        return $this->raw([
+            'type' => BinaryOperator::OPERATOR_TYPE_HINT,
+            'left' => $type,
+            'right' => $expression,
+        ]);
     }
 
     /**
      * @param array $expression
+     *
      * @return RawOperator
      */
     public function raw(array $expression)

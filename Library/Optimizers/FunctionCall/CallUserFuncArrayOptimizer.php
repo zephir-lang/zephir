@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,21 +13,22 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CallUserFuncArrayOptimizer
+ * CallUserFuncArrayOptimizer.
  *
  * Optimizer for 'call_user_func_array'
  */
 class CallUserFuncArrayOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -36,11 +37,11 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -48,14 +49,14 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
             }
         } else {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
             $symbolVariable->initVariant($context);
         }
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
@@ -64,7 +65,7 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/fcall');
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
@@ -74,7 +75,7 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,8 +12,7 @@
 namespace Zephir;
 
 /**
- * Class Exception for backward compatibility after migrating to namespaces
- * @package Zephir
+ * Class Exception for backward compatibility after migrating to namespaces.
  */
 class Exception extends \Exception
 {

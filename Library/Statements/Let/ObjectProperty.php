@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,64 +12,67 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
-use Zephir\CompiledExpression;
 
 /**
- * ObjectProperty
+ * ObjectProperty.
  *
  * Adds/Updates an array index
  */
 class ObjectProperty
 {
     /**
-     * Compiles foo->x = {expr}
+     * Compiles foo->x = {expr}.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
+            throw new CompilerException("Variable type '".$symbolVariable->getType()."' cannot be used as object", $statement);
         }
 
         $propertyName = $statement['property'];
         $className = $compilationContext->classDefinition->getCompleteName();
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '" . $className . "::" . $propertyName . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate static property '".$className.'::'.$propertyName."' because it is not initialized", $statement);
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
+            throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' as an object', $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /**
+        /*
          * Trying to use a non-object dynamic variable as object
          */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object'))) {
-            $compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
+        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object'])) {
+            $compilationContext->logger->warning(
+                'Possible attempt to update property on non-object dynamic property',
+                ['non-valid-objectupdate', $statement]
+            );
         }
 
-        /**
+        /*
          * Try to check if property is implemented on related object
          */
-        if ($variable == 'this') {
+        if ('this' == $variable) {
             if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
-                throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $className . "'", $statement);
+                throw new CompilerException("Property '".$propertyName."' is not defined on class '".$className."'", $statement);
             }
         }
 
@@ -105,7 +108,7 @@ class ObjectProperty
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignLong($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                         $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
-                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
+                        $codePrinter->output($functionName.'('.$compilationContext->backend->getVariableCode($tempVariable).', '.$compilationContext->backend->getVariableCode($resolvedVariable).')');
                         break;
 
                     case 'assign':
@@ -114,7 +117,7 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+                        throw new CompilerException("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
                 }
 
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
@@ -126,11 +129,11 @@ class ObjectProperty
                 switch ($statement['operator']) {
                     case 'assign':
                         $tempVariable->initNonReferenced($compilationContext);
-                        $compilationContext->backend->assignLong($tempVariable, '\'' . $resolvedExpr->getBooleanCode() . '\'', $compilationContext);
+                        $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getBooleanCode().'\'', $compilationContext);
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+                        throw new CompilerException("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
                 }
 
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
@@ -158,7 +161,7 @@ class ObjectProperty
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignDouble($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                         $compilationContext->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $compilationContext);
-                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($tempVariable) . ', ' . $compilationContext->backend->getVariableCode($resolvedVariable) . ')');
+                        $codePrinter->output($functionName.'('.$compilationContext->backend->getVariableCode($tempVariable).', '.$compilationContext->backend->getVariableCode($resolvedVariable).')');
                         break;
 
                     case 'assign':
@@ -167,7 +170,7 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+                        throw new CompilerException("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
                 }
 
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
@@ -175,7 +178,7 @@ class ObjectProperty
                 break;
 
             case 'string':
-                if ($compilationContext->backend->getName() == 'ZendEngine2') {
+                if ('ZendEngine2' == $compilationContext->backend->getName()) {
                     $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
                 } else {
                     $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, false);
@@ -183,11 +186,11 @@ class ObjectProperty
 
                 switch ($statement['operator']) {
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$tempVariable->getName().', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
                         break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
-                        if ($compilationContext->backend->getName() == 'ZendEngine2') {
+                        if ('ZendEngine2' == $compilationContext->backend->getName()) {
                             $tempVariable->initNonReferenced($compilationContext);
                         } else {
                             $tempVariable->initVariant($compilationContext);
@@ -205,7 +208,7 @@ class ObjectProperty
                 break;
 
             case 'bool':
-                $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                $codePrinter->output('if ('.$resolvedExpr->getBooleanCode().') {');
                 $codePrinter->increaseLevel();
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'true', $compilationContext);
                 $codePrinter->decreaseLevel();
@@ -248,7 +251,7 @@ class ObjectProperty
                         break;
 
                     case 'bool':
-                        $codePrinter->output('if (' . $variableVariable->getName() . ') {');
+                        $codePrinter->output('if ('.$variableVariable->getName().') {');
                         $codePrinter->increaseLevel();
                         $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'true', $compilationContext);
                         $codePrinter->decreaseLevel();
@@ -269,12 +272,12 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 }

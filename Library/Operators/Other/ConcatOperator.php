@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -19,16 +19,114 @@ use Zephir\Operators\BaseOperator;
 use function Zephir\add_slashes;
 
 /**
- * ConcatOperator
+ * ConcatOperator.
  *
  * Perform concatenations and optimizations
  */
 class ConcatOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * Performs concat compilation.
+     *
+     * @param array              $expression
      * @param CompilationContext $compilationContext
-     * @param boolean $isFullString
+     *
+     * @return CompiledExpression
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
+        if (!isset($expression['left'])) {
+            throw new CompilerException('Missing left part of the expression', $expression);
+        }
+
+        if (!isset($expression['right'])) {
+            throw new CompilerException('Missing right part of the expression', $expression);
+        }
+
+        $compilationContext->headersManager->add('kernel/concat');
+
+        /**
+         * Try to optimize the concatenation.
+         */
+        $optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
+        if (\is_array($optimized)) {
+            if (!$isFullString) {
+                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+            } else {
+                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
+            }
+
+            $expected->setDynamicTypes('string');
+            $expectedCode = $compilationContext->backend->getVariableCode($expected);
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_'.strtoupper($optimized[0]).'('.$expectedCode.', '.$optimized[1].');');
+
+            return new CompiledExpression('variable', $expected->getName(), $expression);
+        }
+
+        /**
+         * If the expression cannot be optimized, fall back to the standard compilation.
+         */
+        $leftExpr = new Expression($expression['left']);
+        switch ($expression['left']['type']) {
+            case 'array-access':
+            case 'property-access':
+                $leftExpr->setReadOnly(true);
+                break;
+
+            default:
+                $leftExpr->setReadOnly($this->readOnly);
+                break;
+        }
+        $left = $leftExpr->compile($compilationContext);
+
+        if ('variable' == $left->getType()) {
+            $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['right']);
+            $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
+        }
+
+        $rightExpr = new Expression($expression['right']);
+        switch ($expression['left']['type']) {
+            case 'array-access':
+            case 'property-access':
+                $rightExpr->setReadOnly(true);
+                break;
+
+            default:
+                $rightExpr->setReadOnly($this->readOnly);
+                break;
+        }
+        $right = $rightExpr->compile($compilationContext);
+
+        if ('variable' == $right->getType()) {
+            $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
+            $variableRight = $compilationContext->backend->getVariableCode($variableRight);
+        }
+
+        $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
+
+        if ('string' == $left->getType() && 'variable' == $right->getType()) {
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_SV('.$expectedCode.', "'.$left->getCode().'", '.$variableRight.');');
+        }
+
+        if ('variable' == $left->getType() && 'string' == $right->getType()) {
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_VS('.$expectedCode.', '.$variableLeft.', "'.$right->getCode().'");');
+        }
+
+        if ('variable' == $left->getType() && 'variable' == $right->getType()) {
+            $compilationContext->codePrinter->output('zephir_concat_function('.$expectedCode.', '.$variableLeft.', '.$variableRight.');');
+        }
+
+        $expected->setDynamicTypes('string');
+
+        return new CompiledExpression('variable', $expected->getName(), $expression);
+    }
+
+    /**
+     * @param array              $expression
+     * @param CompilationContext $compilationContext
+     * @param bool               $isFullString
+     *
      * @return array
      */
     private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)
@@ -37,10 +135,10 @@ class ConcatOperator extends BaseOperator
 
         $isFullString = true;
 
-        $parts = array();
+        $parts = [];
         while ($expression && isset($expression['left'])) {
             $parts[] = $expression['right'];
-            if ($expression['left']['type'] == 'concat') {
+            if ('concat' == $expression['left']['type']) {
                 $expression = $expression['left'];
             } else {
                 $parts[] = $expression['left'];
@@ -53,7 +151,7 @@ class ConcatOperator extends BaseOperator
         }
 
         $key = '';
-        $concatParts = array();
+        $concatParts = [];
         $parts = array_reverse($parts);
         foreach ($parts as $part) {
             $expr = new Expression($part);
@@ -94,123 +192,30 @@ class ConcatOperator extends BaseOperator
                             break;
 
                         default:
-                            throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
+                            throw new CompilerException('Variable type: '.$variable->getType().' cannot be used in concat operation', $compiledExpr->getOriginal());
                     }
                     break;
 
                 case 'string':
                     $key .= 's';
-                    $concatParts[] = '"' . add_slashes($compiledExpr->getCode()) . '"';
+                    $concatParts[] = '"'.add_slashes($compiledExpr->getCode()).'"';
                     break;
 
                 case 'int':
                 case 'long':
                     $key .= 'v';
                     $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
-                    $compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
-                    $concatParts[] = '&' . $tempVariable->getName();
+                    $compilationContext->codePrinter->output('ZVAL_LONG(&'.$tempVariable->getName().', '.$compiledExpr->getCode().');');
+                    $concatParts[] = '&'.$tempVariable->getName();
                     break;
 
                 default:
-                    throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
+                    throw new CompilerException('Variable type: '.$compiledExpr->getType().' cannot be used in concat operation', $compiledExpr->getOriginal());
             }
         }
 
         $compilationContext->stringsManager->addConcatKey($key);
-        return array($key, join(', ', $concatParts));
-    }
 
-    /**
-     * Performs concat compilation.
-     *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
-     * @return CompiledExpression
-     */
-    public function compile($expression, CompilationContext $compilationContext)
-    {
-        if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
-        }
-
-        if (!isset($expression['right'])) {
-            throw new CompilerException("Missing right part of the expression", $expression);
-        }
-
-        $compilationContext->headersManager->add('kernel/concat');
-
-        /**
-         * Try to optimize the concatenation
-         */
-        $optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
-        if (is_array($optimized)) {
-            if (!$isFullString) {
-                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
-            } else {
-                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
-            }
-
-            $expected->setDynamicTypes('string');
-            $expectedCode = $compilationContext->backend->getVariableCode($expected);
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expectedCode . ', ' . $optimized[1] . ');');
-            return new CompiledExpression('variable', $expected->getName(), $expression);
-        }
-
-        /**
-         * If the expression cannot be optimized, fall back to the standard compilation
-         */
-        $leftExpr = new Expression($expression['left']);
-        switch ($expression['left']['type']) {
-            case 'array-access':
-            case 'property-access':
-                $leftExpr->setReadOnly(true);
-                break;
-
-            default:
-                $leftExpr->setReadOnly($this->readOnly);
-                break;
-        }
-        $left = $leftExpr->compile($compilationContext);
-
-        if ($left->getType() == 'variable') {
-            $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['right']);
-            $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
-        }
-
-        $rightExpr = new Expression($expression['right']);
-        switch ($expression['left']['type']) {
-            case 'array-access':
-            case 'property-access':
-                $rightExpr->setReadOnly(true);
-                break;
-
-            default:
-                $rightExpr->setReadOnly($this->readOnly);
-                break;
-        }
-        $right = $rightExpr->compile($compilationContext);
-
-        if ($right->getType() == 'variable') {
-            $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
-            $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-        }
-
-        $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
-        $expectedCode = $compilationContext->backend->getVariableCode($expected);
-
-        if ($left->getType() == 'string' && $right->getType() == 'variable') {
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_SV(' . $expectedCode . ', "' . $left->getCode() . '", ' . $variableRight . ');');
-        }
-
-        if ($left->getType() == 'variable' && $right->getType() == 'string') {
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_VS(' . $expectedCode . ', ' . $variableLeft . ', "' . $right->getCode() . '");');
-        }
-
-        if ($left->getType() == 'variable' && $right->getType() == 'variable') {
-            $compilationContext->codePrinter->output('zephir_concat_function(' . $expectedCode . ', ' . $variableLeft . ', ' . $variableRight . ');');
-        }
-
-        $expected->setDynamicTypes('string');
-        return new CompiledExpression('variable', $expected->getName(), $expression);
+        return [$key, implode(', ', $concatParts)];
     }
 }

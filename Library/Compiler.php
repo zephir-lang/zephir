@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,161 +11,154 @@
 
 namespace Zephir;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
+use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Exception\CompilerException;
-use Zephir\Di\ContainerAwareTrait;
-use Zephir\Di\InjectionAwareInterface;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\NotImplementedException;
+use Zephir\Exception\ParseException;
+use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
-use Zephir\Parser\Manager;
-use Zephir\Parser\ParseException;
+use Zephir\FileSystem\FileSystemInterface;
 
-/**
- * Zephir\Compiler
- *
- * The main compiler.
- *
- * @package Zephir
- */
-class Compiler implements InjectionAwareInterface
+final class Compiler
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
+    use LoggerAwareTrait;
 
-    public $parserCompiled = false;
-
-    /**
-     * @var BaseBackend
-     */
+    /** @var BaseBackend */
     public $backend;
 
-    /**
-     * @var FunctionDefinition[]
-     */
+    /** @var FunctionDefinition[] */
     public $functionDefinitions = [];
 
-    /**
-     * @var CompilerFile[]
-     */
+    /** @var CompilerFile[] */
     protected $files = [];
 
-    /**
-     * @var array|string[]
-     */
+    /** @var string[] */
     protected $anonymousFiles = [];
 
     /**
-     * Additional initializer code
-     * used for static property initialization
+     * Additional initializer code.
+     * Used for static property initialization.
+     *
      * @var array
      */
     protected $internalInitializers = [];
 
-    /**
-     * @var ClassDefinition[]
-     */
+    /** @var ClassDefinition[] */
     protected $definitions = [];
 
-    /**
-     * @var array|string[]
-     */
+    /** @var string[] */
     protected $compiledFiles = [];
 
-    /**
-     *
-     */
     protected $constants = [];
 
-    /**
-     * Extension globals
-     *
-     * @var array
-     */
     protected $globals = [];
 
-    /**
-     * External dependencies
-     *
-     * @var array
-     */
     protected $externalDependencies = [];
 
-    /**
-     * @var StringsManager
-     */
-    protected $stringManager;
-
-    /**
-     * @var FcallManagerInterface
-     */
-    protected $fcallManager;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
-     * @var \ReflectionClass[]
-     */
+    /** @var \ReflectionClass[] */
     protected static $internalDefinitions = [];
 
-    /**
-     * @var boolean
-     */
     protected static $loadedPrototypes = false;
 
-    /**
-     * @var array
-     */
     protected $extraFiles = [];
 
-    /**
-     * The Zephir Parser Manager
-     * @var Manager
-     */
-    protected $parserManager;
+    /** @var Config */
+    private $config;
+
+    /** @var Parser\Manager */
+    private $parserManager;
+
+    /** @var StringsManager */
+    private $stringManager;
+
+    /** @var FcallManagerInterface */
+    private $fcallManager;
+
+    /** @var string|null */
+    private $prototypesPath;
+
+    /** @var string|null */
+    private $optimizersPath;
+
+    /** @var string|null */
+    private $templatesPath;
+
+    /** @var FileSystemInterface */
+    private $filesystem;
+
+    /** @var CompilerFileFactory */
+    private $compilerFileFactory;
 
     /**
-     * The Zephir base directory.
-     * @var string
-     */
-    private $baseDir;
-
-    /**
-     * Compiler constructor
+     * Compiler constructor.
      *
-     * @param Config      $config
-     * @param Logger      $logger
-     * @param BaseBackend $backend
-     * @param Manager     $manager
+     * @param Config              $config
+     * @param BaseBackend         $backend
+     * @param Parser\Manager      $manager
+     * @param FileSystemInterface $filesystem
+     * @param CompilerFileFactory $compilerFileFactory
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
-    public function __construct(Config $config, Logger $logger, BaseBackend $backend, Manager $manager)
-    {
-        $this->__DiInject();
-
+    public function __construct(
+        Config $config,
+        BaseBackend $backend,
+        Parser\Manager $manager,
+        FileSystemInterface $filesystem,
+        CompilerFileFactory $compilerFileFactory
+    ) {
         $this->config = $config;
-        $this->logger = $logger;
         $this->backend = $backend;
+        $this->parserManager = $manager;
+        $this->filesystem = $filesystem;
+        $this->compilerFileFactory = $compilerFileFactory;
+        $this->logger = new NullLogger();
+
         $this->stringManager = $this->backend->getStringsManager();
         $this->fcallManager = $this->backend->getFcallManager();
-        $this->checkRequires();
 
-        $this->parserManager = $manager;
+        $this->assertRequiredExtensionsIsPresent();
+    }
+
+    /**
+     * @internal
+     *
+     * @param string $prototypesPath
+     */
+    public function setPrototypesPath($prototypesPath)
+    {
+        $this->prototypesPath = $prototypesPath;
+    }
+
+    /**
+     * @internal
+     *
+     * @param string $optimizersPath
+     */
+    public function setOptimizersPath($optimizersPath)
+    {
+        $this->optimizersPath = $optimizersPath;
+    }
+
+    /**
+     * @internal
+     *
+     * @param string $templatesPath
+     */
+    public function setTemplatesPath($templatesPath)
+    {
+        $this->templatesPath = $templatesPath;
     }
 
     /**
      * Gets the Zephir Parser Manager.
      *
-     * @return Manager
+     * @deprecated
+     *
+     * @return Parser\Manager
      */
     public function getParserManager()
     {
@@ -175,11 +168,10 @@ class Compiler implements InjectionAwareInterface
     /**
      * Adds a function to the function definitions.
      *
-     * @param  FunctionDefinition $func
-     * @param  array $statement
-     * @return void
+     * @param FunctionDefinition $func
+     * @param array              $statement
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
      */
     public function addFunction(FunctionDefinition $func, $statement = null)
     {
@@ -187,7 +179,7 @@ class Compiler implements InjectionAwareInterface
         if (isset($this->functionDefinitions[$funcName])) {
             // @todo Cover by test
             throw new CompilerException(
-                "Function '" . $func->getCompleteName() . "' was defined more than one time",
+                "Function '".$func->getCompleteName()."' was defined more than one time",
                 $statement
             );
         }
@@ -196,91 +188,25 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Pre-compiles classes creating a CompilerFile definition
-     *
-     * @param string $filePath
-     *
-     * @throws \Zephir\Exception\CompilerException
-     * @throws IllegalStateException
-     * @throws ParseException
-     */
-    protected function preCompile($filePath)
-    {
-        if (!$this->parserManager->isAvailable()) {
-            throw new IllegalStateException($this->parserManager->requirements());
-        }
-
-        if (preg_match('#\.zep$#', $filePath)) {
-            $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
-            $className = preg_replace('#.zep$#', '', $className);
-
-            $className = join('\\', array_map(function ($i) {
-                return ucfirst($i);
-            }, explode('\\', $className)));
-
-            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
-            $this->files[$className]->preCompile($this);
-
-            $this->definitions[$className] = $this->files[$className]->getClassDefinition();
-        }
-    }
-
-    /**
-     * Recursively pre-compiles all sources found in the given path
-     *
-     * @param string $path
-     *
-     * @throws CompilerException
-     */
-    protected function recursivePreCompile($path)
-    {
-        if (!is_string($path)) {
-            throw new CompilerException('Invalid compilation path' . var_export($path, true));
-        }
-
-        /**
-         * Pre compile all files
-         */
-        $files = [];
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        /**
-         * @var $item \SplFileInfo
-         */
-        foreach ($iterator as $item) {
-            if (!$item->isDir()) {
-                $files[] = $item->getPathname();
-            }
-        }
-
-        sort($files, SORT_STRING);
-        foreach ($files as $file) {
-            $this->preCompile($file);
-        }
-    }
-
-    /**
-     * Loads a class definition in an external dependency
+     * Loads a class definition in an external dependency.
      *
      * @param string $className
      * @param string $location
-     * @return boolean
-     * @throws \Zephir\Exception\CompilerException
-     * @throws Exception
+     *
+     * @throws CompilerException
      * @throws ParseException
+     *
+     * @return bool
      */
     public function loadExternalClass($className, $location)
     {
-        $filePath = $location . DIRECTORY_SEPARATOR .
-                    strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.zep';
+        $filePath = $location.\DIRECTORY_SEPARATOR.
+                    strtolower(str_replace('\\', \DIRECTORY_SEPARATOR, $className)).'.zep';
 
         /**
-         * Fix the class name
+         * Fix the class name.
          */
-        $className = join('\\', array_map(function ($i) {
+        $className = implode('\\', array_map(function ($i) {
             return ucfirst($i);
         }, explode('\\', $className)));
 
@@ -292,36 +218,39 @@ class Compiler implements InjectionAwareInterface
             return false;
         }
 
-        $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
-        $this->files[$className]->setIsExternal(true);
-        $this->files[$className]->preCompile($this);
+        $compilerFile = $this->compilerFileFactory->create($className, $filePath);
+        $compilerFile->setIsExternal(true);
+        $compilerFile->preCompile($this);
 
-        $this->definitions[$className] = $this->files[$className]->getClassDefinition();
+        $this->files[$className] = $compilerFile;
+        $this->definitions[$className] = $compilerFile->getClassDefinition();
+
         return true;
     }
 
     /**
-     * Allows to check if a class is part of the compiled extension
+     * Allows to check if a class is part of the compiled extension.
      *
      * @param string $className
-     * @return boolean
+     *
+     * @return bool
      */
     public function isClass($className)
     {
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
-                if ($value->getType() == 'class') {
+                if ('class' == $value->getType()) {
                     return true;
                 }
             }
         }
 
-        /**
+        /*
          * Try to autoload the class from an external dependency
          */
-        if (count($this->externalDependencies)) {
+        if (\count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
-                if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
+                if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
                 }
             }
@@ -331,28 +260,28 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Allows to check if an interface is part of the compiled extension
+     * Allows to check if an interface is part of the compiled extension.
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isInterface($className)
     {
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
-                if ($value->getType() == 'interface') {
+                if ('interface' == $value->getType()) {
                     return true;
                 }
             }
         }
 
-        /**
+        /*
          * Try to autoload the class from an external dependency
          */
-        if (count($this->externalDependencies)) {
+        if (\count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
-                if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
+                if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
                 }
             }
@@ -362,31 +291,31 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Allows to check if a class is part of PHP
+     * Allows to check if a class is part of PHP.
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundledClass($className)
     {
-        return class_exists($className, false);
+        return \class_exists($className, false);
     }
 
     /**
-     * Allows to check if a interface is part of PHP
+     * Allows to check if a interface is part of PHP.
      *
      * @param string $className
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundledInterface($className)
     {
-        return interface_exists($className, false);
+        return \interface_exists($className, false);
     }
 
     /**
-     * Returns class the class definition from a given class name
+     * Returns class the class definition from a given class name.
      *
      * @param string $className
      *
@@ -404,10 +333,10 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Inserts an anonymous class definition in the compiler
+     * Inserts an anonymous class definition in the compiler.
      *
      * @param CompilerFileAnonymous $file
-     * @param ClassDefinition $classDefinition
+     * @param ClassDefinition       $classDefinition
      */
     public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition)
     {
@@ -416,7 +345,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns class the class definition from a given class name
+     * Returns class the class definition from a given class name.
      *
      * @param string $className
      *
@@ -433,106 +362,11 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Copies the base kernel to the extension destination
-     *
-     * @todo
-     * @deprecated
-     *
-     * @param        $src
-     * @param        $dest
-     * @param string $pattern
-     * @param mixed  $callback
-     *
-     * @return bool
-     */
-    protected function recursiveProcess($src, $dest, $pattern = null, $callback = "copy")
-    {
-        $success = true;
-        $iterator = new \DirectoryIterator($src);
-        foreach ($iterator as $item) {
-            $pathName = $item->getPathname();
-            if (!is_readable($pathName)) {
-                $this->logger->output('File is not readable :' . $pathName);
-                continue;
-            }
-
-            $fileName = $item->getFileName();
-
-            if ($item->isDir()) {
-                if ($fileName != '.' && $fileName != '..' && $fileName != '.libs') {
-                    if (!is_dir($dest . DIRECTORY_SEPARATOR . $fileName)) {
-                        mkdir($dest . DIRECTORY_SEPARATOR . $fileName, 0755, true);
-                    }
-                    $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
-                }
-            } elseif (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-                $path = $dest . DIRECTORY_SEPARATOR . $fileName;
-                $success = $success && call_user_func($callback, $pathName, $path);
-            }
-        }
-
-        return $success;
-    }
-
-    /**
-     * Recursively deletes files in a specified location
-     *
-     * @param string $path Directory to deletes files
-     * @param string $mask Regular expression to deletes files
-     *
-     * @return void
-     */
-    protected function recursiveDeletePath($path, $mask)
-    {
-        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
-            $this->logger->output("Directory {$path} does not exist or it is not readable. Skip...");
-            return;
-        }
-
-        $objects = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        foreach ($objects as $name => $object) {
-            if (preg_match($mask, $name)) {
-                @unlink($name);
-            }
-        }
-    }
-
-    /**
-     * Registers C-constants as PHP constants from a C-file
-     *
-     * @param array $constantsSources
-     *
-     * @throws Exception
-     */
-    protected function loadConstantsSources($constantsSources)
-    {
-        foreach ($constantsSources as $constantsSource) {
-            if (!file_exists($constantsSource)) {
-                throw new Exception("File '" . $constantsSource . "' with constants definitions");
-            }
-
-            foreach (file($constantsSource) as $line) {
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
-                    $this->constants[$matches[1]] = ['int', $matches[2]];
-                    continue;
-                }
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
-                    $this->constants[$matches[1]] = ['char', $matches[3]];
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks if $name is a Zephir constant
+     * Checks if $name is a Zephir constant.
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function isConstant($name)
     {
@@ -540,7 +374,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns a Zephir Constant by its name
+     * Returns a Zephir Constant by its name.
      *
      * @param string $name
      */
@@ -550,7 +384,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Sets extensions globals
+     * Sets extensions globals.
      *
      * @param array $globals
      */
@@ -562,11 +396,11 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Checks if a specific extension global is defined
+     * Checks if a specific extension global is defined.
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function isExtensionGlobal($name)
     {
@@ -574,7 +408,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns a extension global by its name
+     * Returns a extension global by its name.
      *
      * @param string $name
      *
@@ -586,22 +420,23 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns GCC flags for current compilation
+     * Returns GCC flags for current compilation.
      *
-     * @param boolean $development
+     * @param bool $development
+     *
      * @return string
      */
     public function getGccFlags($development = false)
     {
-        if ($this->environment->isWindows()) {
+        if (is_windows()) {
             // TODO
             return '';
         }
 
         $gccFlags = getenv('CFLAGS');
 
-        if (!is_string($gccFlags)) {
-            if ($development == false) {
+        if (!\is_string($gccFlags)) {
+            if (false == $development) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
                     $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
@@ -617,32 +452,24 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns the php include directories returned by php-config
+     * Returns the php include directories returned by php-config.
      *
      * @return string
      */
     public function getPhpIncludeDirs()
     {
-        // TODO: Add Windows support
-        if (!$this->environment->isWindows()) {
-            $this->filesystem->system(
-                'php-config --includes',
-                'stdout',
-                escapeshellcmd(Zephir::VERSION) . '/php-includes'
-            );
-        }
+        $this->filesystem->system('php-config --includes', 'stdout', 'php-includes');
 
-        return trim($this->filesystem->read(Zephir::VERSION . '/php-includes'));
+        return trim($this->filesystem->read('php-includes'));
     }
 
     /**
      * Pre-compile headers to speed up compilation.
-     *
-     * @return void
      */
     public function preCompileHeaders()
     {
-        if ($this->environment->isWindows()) {
+        if (is_windows()) {
+            // TODO: Add Windows support
             return;
         }
 
@@ -663,37 +490,39 @@ class Compiler implements InjectionAwareInterface
                     $file->getBaseName()
                 );
 
-                if (!file_exists($path . '.gch') || filemtime($path) > filemtime($path . '.gch')) {
-                    $this->filesystem->system($command, 'stdout', escapeshellcmd(Zephir::VERSION) . '/compile-header');
+                if (!file_exists($path.'.gch') || filemtime($path) > filemtime($path.'.gch')) {
+                    $this->filesystem->system($command, 'stdout', 'compile-header');
                 }
             }
         }
     }
 
     /**
-     * Generates the C sources from Zephir without compiling them
+     * Generates the C sources from Zephir without compiling them.
      *
-     * @param  bool $fromGenerate
-     * @return bool
+     * @param bool $fromGenerate
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function generate($fromGenerate = false)
     {
         /**
-         * Get global namespace
+         * Get global namespace.
          */
         $namespace = $this->checkDirectory();
 
         /**
-         * Check whether there are external dependencies
+         * Check whether there are external dependencies.
          */
         $externalDependencies = $this->config->get('external-dependencies');
-        if (is_array($externalDependencies)) {
+        if (\is_array($externalDependencies)) {
             foreach ($externalDependencies as $dependencyNs => $location) {
                 if (!file_exists($location)) {
                     throw new CompilerException(
-                        'Location of dependency "' .
-                        $dependencyNs .
+                        'Location of dependency "'.
+                        $dependencyNs.
                         '" does not exist. Check the config.json for more information'
                     );
                 }
@@ -702,17 +531,17 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
-        /**
+        /*
          * Round 1. pre-compile all files in memory
          */
-        $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
-        if (!count($this->files)) {
+        $this->recursivePreCompile(str_replace('\\', \DIRECTORY_SEPARATOR, $namespace));
+        if (!\count($this->files)) {
             throw new Exception(
                 "Zephir files to compile couldn't be found. Did you add a first class to the extension?"
             );
         }
 
-        /**
+        /*
          * Round 2. Check 'extends' and 'implements' dependencies
          */
         foreach ($this->files as $compileFile) {
@@ -720,7 +549,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * Sort the files by dependency ranking
+         * Sort the files by dependency ranking.
          */
         $files = [];
         $rankedFiles = [];
@@ -738,66 +567,77 @@ class Compiler implements InjectionAwareInterface
         $this->files = $files;
 
         /**
-         * Convert C-constants into PHP constants
+         * Convert C-constants into PHP constants.
          */
         $constantsSources = $this->config->get('constants-sources');
-        if (is_array($constantsSources)) {
+        if (\is_array($constantsSources)) {
             $this->loadConstantsSources($constantsSources);
         }
 
         /**
-         * Set extension globals
+         * Set extension globals.
          */
         $globals = $this->config->get('globals');
-        if (is_array($globals)) {
+        if (\is_array($globals)) {
             $this->setExtensionGlobals($globals);
         }
 
-        /**
+        /*
          * Load function optimizers
          */
-        if (self::$loadedPrototypes === false) {
-            FunctionCall::addOptimizerDir($this->environment->getPath('Library/Optimizers/FunctionCall'));
+        if (false === self::$loadedPrototypes) {
+            $optimizersPath = $this->optimizersPath;
+            if (empty($optimizersPath)) {
+                // fallback
+                $optimizersPath = __DIR__;
+            }
 
-            $optimizerDirs = $this->config->get('optimizer-dirs');
-            if (is_array($optimizerDirs)) {
-                foreach ($optimizerDirs as $directory) {
+            FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
+
+            $customOptimizersPaths = $this->config->get('optimizer-dirs');
+            if (\is_array($customOptimizersPaths)) {
+                foreach ($customOptimizersPaths as $directory) {
                     FunctionCall::addOptimizerDir(realpath($directory));
                 }
             }
 
-            $prototypes = $this->environment->getPrototypesPath();
+            $prototypesPath = $this->prototypesPath;
+            if (empty($prototypesPath)) {
+                // fallback
+                $prototypesPath = \dirname(__DIR__).'/prototypes';
+            }
 
-            if (is_dir($prototypes) && is_readable($prototypes)) {
-                /**
-                 * Load additional extension prototypes
-                 * @var $file \DirectoryIterator
+            if (is_dir($prototypesPath) && is_readable($prototypesPath)) {
+                /*
+                 * Load additional extension prototypes.
+                 *
+                 * @var \DirectoryIterator
                  */
-                foreach (new \DirectoryIterator($prototypes) as $file) {
+                foreach (new \DirectoryIterator($prototypesPath) as $file) {
                     if ($file->isDir() || $file->isDot()) {
                         continue;
                     }
 
                     // Do not use $file->getRealPath() because it does not work inside phar
-                    $realPath =  $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
+                    $realPath = $file->getPath().\DIRECTORY_SEPARATOR.$file->getFilename();
 
                     $extension = $file->getBasename(".{$file->getExtension()}");
-                    if (!extension_loaded($extension)) {
+                    if (!\extension_loaded($extension)) {
                         require_once $realPath;
                     }
                 }
             }
 
             /**
-             * Load customer additional extension prototypes
+             * Load customer additional extension prototypes.
              */
             $prototypeDirs = $this->config->get('prototype-dir');
-            if (is_array($prototypeDirs)) {
+            if (\is_array($prototypeDirs)) {
                 foreach ($prototypeDirs as $prototype => $prototypeDir) {
-                    /**
+                    /*
                      * Check if the extension is installed
                      */
-                    if (!extension_loaded($prototype)) {
+                    if (!\extension_loaded($prototype)) {
                         $prototypeRealpath = realpath($prototypeDir);
                         if ($prototypeRealpath) {
                             foreach (new \DirectoryIterator($prototypeRealpath) as $file) {
@@ -814,13 +654,13 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * Round 3. Compile all files to C sources
+         * Round 3. Compile all files to C sources.
          */
         $files = [];
 
-        $hash = "";
+        $hash = '';
         foreach ($this->files as $compileFile) {
-            /**
+            /*
              * Only compile classes in the local extension, ignore external classes
              */
             if (!$compileFile->isExternal()) {
@@ -830,20 +670,20 @@ class Compiler implements InjectionAwareInterface
                 $methods = [];
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
-                    $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                    $methods[] = '['.$method->getName().':'.implode('-', $method->getVisibility()).']';
                     if ($method->isInitializer() && $method->isStatic()) {
-                        $this->internalInitializers[] = "\t" . $method->getName() . '(TSRMLS_C);';
+                        $this->internalInitializers[] = "\t".$method->getName().'(TSRMLS_C);';
                     }
                 }
 
                 $files[] = $compiledFile;
 
-                $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() .
-                        '[' . join('|', $methods) . ']';
+                $hash .= '|'.$compiledFile.':'.$classDefinition->getClassEntry().
+                        '['.implode('|', $methods).']';
             }
         }
 
-        /**
+        /*
          * Round 3.2. Compile anonymous classes
          */
         foreach ($this->anonymousFiles as $compileFile) {
@@ -853,32 +693,32 @@ class Compiler implements InjectionAwareInterface
             $methods = [];
             $classDefinition = $compileFile->getClassDefinition();
             foreach ($classDefinition->getMethods() as $method) {
-                $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                $methods[] = '['.$method->getName().':'.implode('-', $method->getVisibility()).']';
             }
 
             $files[] = $compiledFile;
 
-            $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
+            $hash .= '|'.$compiledFile.':'.$classDefinition->getClassEntry().'['.implode('|', $methods).']';
         }
 
         $hash = md5($hash);
         $this->compiledFiles = $files;
 
         /**
-         * Round 3.3. Load extra C-sources
+         * Round 3.3. Load extra C-sources.
          */
         $extraSources = $this->config->get('extra-sources');
-        if (is_array($extraSources)) {
+        if (\is_array($extraSources)) {
             $this->extraFiles = $extraSources;
         } else {
             $this->extraFiles = [];
         }
 
         /**
-         * Round 3.4. Load extra classes sources
+         * Round 3.4. Load extra classes sources.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (is_array($extraClasses)) {
+        if (\is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['source'])) {
                     $this->extraFiles[] = $value['source'];
@@ -887,34 +727,34 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
+         * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files.
          */
-        $namespace      = str_replace('\\', '_', $namespace);
-        $extensionName  = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
+        $namespace = str_replace('\\', '_', $namespace);
+        $extensionName = $this->config->get('extension-name');
+        if (empty($extensionName) || !\is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
-        $needConfigure  = $this->createConfigFiles($extensionName);
+        $needConfigure = $this->createConfigFiles($extensionName);
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        /**
+        /*
          * When a new file is added or removed we need to run configure again
          */
         if (!$fromGenerate) {
-            if (!$this->filesystem->exists(Zephir::VERSION . '/compiled-files-sum')) {
+            if (!$this->filesystem->exists('compiled-files-sum')) {
                 $needConfigure = true;
-                $this->filesystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
+                $this->filesystem->write('compiled-files-sum', $hash);
             } else {
-                if ($this->filesystem->read(Zephir::VERSION . '/compiled-files-sum') != $hash) {
+                if ($this->filesystem->read('compiled-files-sum') != $hash) {
                     $needConfigure = true;
-                    $this->filesystem->write(Zephir::VERSION . '/compiled-files-sum', $hash);
+                    $this->filesystem->write('compiled-files-sum', $hash);
                 }
             }
         }
 
-        /**
+        /*
          * Round 5. Generate concatenation functions
          */
         $this->stringManager->genConcatCode();
@@ -928,61 +768,63 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Compiles the extension without installing it
+     * Compiles the extension without installing it.
      *
      * @param bool $development
      *
-     * @throws Exception|CompilerException
+     * @throws CompilerException|Exception
      */
     public function compile($development = false)
     {
         /**
-         * Get global namespace
+         * Get global namespace.
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
-        $extensionName  = $this->config->get('extension-name');
-        if (empty($extensionName) || !is_string($extensionName)) {
+        $extensionName = $this->config->get('extension-name');
+        if (empty($extensionName) || !\is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
         $needConfigure = $this->generate(false);
 
         if ($needConfigure) {
-            if ($this->environment->isWindows()) {
+            if (is_windows()) {
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-                $releaseFolder = $this->environment->getWindowsReleaseDir();
+                $releaseFolder = windows_release_dir();
                 if (file_exists($releaseFolder)) {
-                    exec('rd /s /q ' . $releaseFolder, $output, $exit);
+                    exec('rd /s /q '.$releaseFolder, $output, $exit);
                 }
-                $this->logger->output('Preparing for PHP compilation...');
+                $this->logger->info('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
                 /**
-                 * fix until patch hits all supported PHP builds
-                 * @link https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
+                 * fix until patch hits all supported PHP builds.
+                 *
+                 * @see https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
                  */
-                $fixMarker = "/* zephir_phpize_fix */";
+                $fixMarker = '/* zephir_phpize_fix */';
 
                 $configureFile = file_get_contents('ext\\configure.js');
                 $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
                 $hasChanged = false;
 
-                if (strpos($configureFile, $fixMarker) === false) {
-                    $configureFile = $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile;
+                if (false === strpos($configureFile, $fixMarker)) {
+                    $configureFile = $fixMarker.PHP_EOL.implode($configureFix, PHP_EOL).PHP_EOL.$configureFile;
                     $hasChanged = true;
                 }
 
                 /* fix php's broken phpize patching ... */
                 $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
                 $pos = strpos($configureFile, $marker);
-                if ($pos !== false) {
-                    $spMarker = "if (MODE_PHPIZE) {";
+                if (false !== $pos) {
+                    $spMarker = 'if (MODE_PHPIZE) {';
                     $sp = strpos($configureFile, $spMarker, $pos - 200);
-                    if ($sp === false) {
-                        throw new CompilerException("outofdate... phpize seems broken again");
+                    if (false === $sp) {
+                        throw new CompilerException('outofdate... phpize seems broken again');
                     }
-                    $configureFile = substr($configureFile, 0, $sp) . 'if (false) {' . substr($configureFile, $sp + strlen($spMarker));
+                    $configureFile = substr($configureFile, 0, $sp).
+                        'if (false) {'.substr($configureFile, $sp + \strlen($spMarker));
                     $hasChanged = true;
                 }
 
@@ -990,41 +832,41 @@ class Compiler implements InjectionAwareInterface
                     file_put_contents('ext\\configure.js', $configureFile);
                 }
 
-                $this->logger->output('Preparing configuration file...');
-                exec('cd ext && configure --enable-' . $extensionName);
+                $this->logger->info('Preparing configuration file...');
+                exec('cd ext && configure --enable-'.$extensionName);
             } else {
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
 
-                $this->logger->output('Preparing for PHP compilation...');
+                $this->logger->info('Preparing for PHP compilation...');
                 exec('cd ext && phpize', $output, $exit);
 
-                $this->logger->output('Preparing configuration file...');
+                $this->logger->info('Preparing configuration file...');
 
                 $gccFlags = $this->getGccFlags($development);
 
                 exec(
-                    'cd ext && export CC="gcc" && export CFLAGS="' .
-                    $gccFlags .
-                    '" && ./configure --enable-' .
+                    'cd ext && export CC="gcc" && export CFLAGS="'.
+                    $gccFlags.
+                    '" && ./configure --enable-'.
                     $extensionName
                 );
             }
         }
 
         $currentDir = getcwd();
-        $this->logger->output('Compiling...');
-        if ($this->environment->isWindows()) {
+        $this->logger->info('Compiling...');
+        if (is_windows()) {
             exec(
-                'cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' .
-                $currentDir . '\compile.log',
+                'cd ext && nmake 2>'.$currentDir.'\compile-errors.log 1>'.
+                $currentDir.'\compile.log',
                 $output,
                 $exit
             );
         } else {
             $this->preCompileHeaders();
             exec(
-                'cd ext && (make -s -j2 2>' . $currentDir . '/compile-errors.log 1>' .
-                $currentDir .
+                'cd ext && (make -s -j2 2>'.$currentDir.'/compile-errors.log 1>'.
+                $currentDir.
                 '/compile.log)',
                 $output,
                 $exit
@@ -1035,9 +877,8 @@ class Compiler implements InjectionAwareInterface
     /**
      * Generate a HTML API.
      *
-     * @param  array $options
-     * @param  bool  $fromGenerate
-     * @return void
+     * @param array $options
+     * @param bool  $fromGenerate
      *
      * @throws ConfigException
      * @throws Exception
@@ -1048,18 +889,23 @@ class Compiler implements InjectionAwareInterface
             $this->generate();
         }
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger, $options);
-        $documentator->setContainer($this->container);
+        $templatesPath = $this->templatesPath;
+        if (null === $templatesPath) {
+            // fallback
+            $templatesPath = \dirname(__DIR__).'/templates';
+        }
 
-        $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
+        $documentator = new Documentation($this->files, $this->config, $templatesPath, $options);
+        $documentator->setLogger($this->logger);
+
+        $this->logger->info('Generating API into '.$documentator->getOutputDirectory());
         $documentator->build();
     }
 
     /**
      * Generate IDE stubs.
      *
-     * @param  bool $fromGenerate
-     * @return void
+     * @param bool $fromGenerate
      *
      * @throws Exception
      */
@@ -1069,7 +915,7 @@ class Compiler implements InjectionAwareInterface
             $this->generate();
         }
 
-        $this->logger->output('Generating stubs...');
+        $this->logger->info('Generating stubs...');
         $stubsGenerator = new Stubs\Generator($this->files, $this->config);
 
         $path = $this->config->get('path', 'stubs');
@@ -1084,8 +930,7 @@ class Compiler implements InjectionAwareInterface
      *
      * TODO: Move to the separated installer
      *
-     * @param  bool $development
-     * @return void
+     * @param bool $development
      *
      * @throws Exception
      * @throws NotImplementedException
@@ -1097,7 +942,7 @@ class Compiler implements InjectionAwareInterface
         $namespace = str_replace('\\', '_', $this->checkDirectory());
         $currentDir = getcwd();
 
-        if ($this->environment->isWindows()) {
+        if (is_windows()) {
             throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
         }
 
@@ -1115,14 +960,14 @@ class Compiler implements InjectionAwareInterface
 
         $this->compile($development);
 
-        $this->logger->output('Installing...');
+        $this->logger->info('Installing...');
 
         $gccFlags = $this->getGccFlags($development);
 
         $command = strtr(
             // TODO: Sort out with sudo
-            'cd ext && export CC="gcc" && export CFLAGS=":cflags" && ' .
-            'make 2>> ":stderr" 1>> ":stdout" && ' .
+            'cd ext && export CC="gcc" && export CFLAGS=":cflags" && '.
+            'make 2>> ":stderr" 1>> ":stdout" && '.
             'sudo make install 2>> ":stderr" 1>> ":stdout"',
             [
                 ':cflags' => $gccFlags,
@@ -1131,51 +976,27 @@ class Compiler implements InjectionAwareInterface
             ]
         );
 
-        $this->logger->output($command);
+        $this->logger->info($command);
         exec($command, $output, $exit);
 
-        $fileName = $this->getConfig()->get('extension-name') ?: $namespace;
+        $fileName = $this->config->get('extension-name') ?: $namespace;
 
-        if (file_exists("{$currentDir}/ext/modules/{$fileName}.so") == false) {
+        if (false == file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
             throw new CompilerException(
-                "Internal extension compilation failed. Check compile-errors.log for more information."
+                'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
         }
     }
 
     /**
-     * Process config.w32 sections
-     *
-     * @param array $sources
-     * @param string $project
-     * @return array
-     */
-    protected function processAddSources($sources, $project)
-    {
-        $groupSources = [];
-        foreach ($sources as $source) {
-            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
-            if (!isset($groupSources[$dirName])) {
-                $groupSources[$dirName] = [];
-            }
-            $groupSources[$dirName][] = basename($source);
-        }
-        $groups = [];
-        foreach ($groupSources as $dirname => $files) {
-            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/' . $dirname . '", "' .
-                        join(' ', $files) . '", "' . $project . '");';
-        }
-        return $groups;
-    }
-
-    /**
-     * Create config.m4 and config.w32 for the extension
+     * Create config.m4 and config.w32 for the extension.
      *
      * @param string $project
      *
      * @throws Exception
+     *
      * @return bool true if need to run configure
-     * TODO: move this to backend?
+     *              TODO: move this to backend?
      */
     public function createConfigFiles($project)
     {
@@ -1189,7 +1010,7 @@ class Compiler implements InjectionAwareInterface
             throw new Exception("Template config.w32 doesn't exist");
         }
 
-        if ($project == 'zend') {
+        if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
             $safeProject = $project;
@@ -1200,7 +1021,7 @@ class Compiler implements InjectionAwareInterface
         }, $this->compiledFiles);
 
         /**
-         * If export-classes is enabled all headers are copied to include/php/ext
+         * If export-classes is enabled all headers are copied to include/php/ext.
          */
         $exportClasses = $this->config->get('export-classes', 'extra');
         if ($exportClasses) {
@@ -1208,7 +1029,7 @@ class Compiler implements InjectionAwareInterface
                 return str_replace('.c', '.zep.h', $file);
             }, $this->compiledFiles);
         } else {
-            $compiledHeaders = ['php_' . strtoupper($project) . '.h'];
+            $compiledHeaders = ['php_'.strtoupper($project).'.h'];
         }
 
         /*
@@ -1219,15 +1040,15 @@ class Compiler implements InjectionAwareInterface
         $contentM4 = $this->generatePackageDependenciesM4($contentM4);
 
         /**
-         * Generate config.m4
+         * Generate config.m4.
          */
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
-            '%PROJECT_LOWER%'        => strtolower($project),
-            '%PROJECT_UPPER%'        => strtoupper($project),
-            '%PROJECT_CAMELIZE%'     => ucfirst($project),
-            '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
-            '%HEADERS_COMPILED%'     => implode(" ", $compiledHeaders),
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%FILES_COMPILED%' => implode("\n\t", $compiledFiles),
+            '%HEADERS_COMPILED%' => implode(' ', $compiledHeaders),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
@@ -1240,13 +1061,13 @@ class Compiler implements InjectionAwareInterface
         file_put_contents_ex($contentM4, 'ext/config.m4');
 
         /**
-         * Generate config.w32
+         * Generate config.w32.
          */
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
-            '%PROJECT_LOWER%'        => strtolower($project),
-            '%PROJECT_UPPER%'        => strtoupper($project),
-            '%FILES_COMPILED%'       => implode(
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%FILES_COMPILED%' => implode(
                 "\r\n\t",
                 $this->processAddSources($compiledFiles, strtolower($project))
             ),
@@ -1263,7 +1084,7 @@ class Compiler implements InjectionAwareInterface
         $needConfigure = file_put_contents_ex($contentW32, 'ext/config.w32');
 
         /**
-         * php_ext.h
+         * php_ext.h.
          */
         $content = $this->backend->getTemplateFileContents('php_ext.h');
         if (empty($content)) {
@@ -1271,7 +1092,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1281,7 +1102,7 @@ class Compiler implements InjectionAwareInterface
         file_put_contents_ex($content, 'ext/php_ext.h');
 
         /**
-         * ext.h
+         * ext.h.
          */
         $content = $this->backend->getTemplateFileContents('ext.h');
         if (empty($content)) {
@@ -1289,7 +1110,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1299,7 +1120,7 @@ class Compiler implements InjectionAwareInterface
         file_put_contents_ex($content, 'ext/ext.h');
 
         /**
-         * ext_config.h
+         * ext_config.h.
          */
         $content = $this->backend->getTemplateFileContents('ext_config.h');
         if (empty($content)) {
@@ -1307,7 +1128,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1317,7 +1138,7 @@ class Compiler implements InjectionAwareInterface
         file_put_contents_ex($content, 'ext/ext_config.h');
 
         /**
-         * ext_clean
+         * ext_clean.
          */
         $content = $this->backend->getTemplateFileContents('clean');
         if (empty($content)) {
@@ -1329,7 +1150,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * ext_install
+         * ext_install.
          */
         $content = $this->backend->getTemplateFileContents('install');
         if (empty($content)) {
@@ -1337,7 +1158,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1352,11 +1173,12 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Process extension globals
+     * Process extension globals.
      *
      * @param string $namespace
      *
      * @throws Exception
+     *
      * @return array
      */
     public function processExtensionGlobals($namespace)
@@ -1367,10 +1189,10 @@ class Compiler implements InjectionAwareInterface
         $initEntries = [];
 
         /**
-         * Generate the extensions globals declaration
+         * Generate the extensions globals declaration.
          */
         $globals = $this->config->get('globals');
-        if (is_array($globals)) {
+        if (\is_array($globals)) {
             $structures = [];
             $variables = [];
             foreach ($globals as $name => $global) {
@@ -1382,45 +1204,45 @@ class Compiler implements InjectionAwareInterface
                 }
             }
 
-            /**
+            /*
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
                 if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
-                    throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
+                    throw new Exception("Struct name: '".$structureName."' contains invalid characters");
                 }
 
-                $structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName, $structureName);
+                $structBuilder = new Code\Builder\Struct('_zephir_struct_'.$structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
                     if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
-                        throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
+                        throw new Exception("Struct field name: '".$field."' contains invalid characters");
                     }
 
                     $structBuilder->addProperty($field, $global);
 
                     $isModuleGlobal = (int) !empty($global['module']);
-                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace) . PHP_EOL;
+                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace).PHP_EOL;
                     $initEntries[] = $structBuilder->getInitEntry($field, $global, $namespace);
                 }
 
-                $globalStruct .= $structBuilder . PHP_EOL;
+                $globalStruct .= $structBuilder.PHP_EOL;
             }
 
             $globalCode = PHP_EOL;
             foreach ($structures as $structureName => $internalStructure) {
-                $globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' .
-                                $structureName . ';' . PHP_EOL . PHP_EOL;
+                $globalCode .= "\t".'zephir_struct_'.$structureName.' '.
+                                $structureName.';'.PHP_EOL.PHP_EOL;
             }
-            /**
+            /*
              * Process single variables
              */
             foreach ($variables as $name => $global) {
                 if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
-                    throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+                    throw new Exception("Extension global variable name: '".$name."' contains invalid characters");
                 }
 
                 if (!isset($global['default'])) {
-                    throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+                    throw new Exception("Extension global variable name: '".$name."' contains invalid characters");
                 }
 
                 $isModuleGlobal = (int) !empty($global['module']);
@@ -1431,10 +1253,10 @@ class Compiler implements InjectionAwareInterface
                     case 'boolean':
                     case 'bool':
                         $type = 'zend_bool';
-                        if ($global['default'] === true) {
-                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 1;' . PHP_EOL;
+                        if (true === $global['default']) {
+                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 1;'.PHP_EOL;
                         } else {
-                            $globalsDefault[$isModuleGlobal][] = "\t" . $namespace . '_globals->' . $name . ' = 0;' . PHP_EOL;
+                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 0;'.PHP_EOL;
                         }
                         break;
 
@@ -1443,23 +1265,23 @@ class Compiler implements InjectionAwareInterface
                     case 'long':
                     case 'double':
                         $globalsDefault[$isModuleGlobal][]
-                            = "\t" . $namespace . '_globals->' . $name . ' = ' .
-                            $global['default'] . ';' . PHP_EOL;
+                            = "\t".$namespace.'_globals->'.$name.' = '.
+                            $global['default'].';'.PHP_EOL;
                         break;
 
                     case 'char':
                     case 'uchar':
                         $globalsDefault[$isModuleGlobal][]
-                            = "\t" . $namespace . '_globals->' . $name . ' = \'' .
-                            $global['default'] . '\';' . PHP_EOL;
+                            = "\t".$namespace.'_globals->'.$name.' = \''.
+                            $global['default'].'\';'.PHP_EOL;
                         break;
                     default:
                         throw new Exception(
-                            "Unknown type '" . $global['type'] . "' for extension global '" . $name . "'"
+                            "Unknown type '".$global['type']."' for extension global '".$name."'"
                         );
                 }
 
-                $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
+                $globalCode .= "\t".$type.' '.$name.';'.PHP_EOL.PHP_EOL;
                 $iniEntry = [];
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
@@ -1481,18 +1303,18 @@ class Compiler implements InjectionAwareInterface
                     case 'boolean':
                     case 'bool':
                         $initEntries[] =
-                        'STD_PHP_INI_BOOLEAN("' .
-                        $iniName .
-                        '", "' .
-                        (int) ($global['default'] === true) .
-                        '", ' .
-                        $scope .
-                        ', OnUpdateBool, ' .
-                        $name .
-                        ', zend_' .
-                        $namespace .
-                        '_globals, ' .
-                        $namespace . '_globals)';
+                        'STD_PHP_INI_BOOLEAN("'.
+                        $iniName.
+                        '", "'.
+                        (int) (true === $global['default']).
+                        '", '.
+                        $scope.
+                        ', OnUpdateBool, '.
+                        $name.
+                        ', zend_'.
+                        $namespace.
+                        '_globals, '.
+                        $namespace.'_globals)';
                         break;
                 }
             }
@@ -1504,7 +1326,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generates phpinfo() sections showing information about the extension
+     * Generates phpinfo() sections showing information about the extension.
      *
      * @return string
      */
@@ -1513,30 +1335,30 @@ class Compiler implements InjectionAwareInterface
         $phpinfo = '';
 
         $info = $this->config->get('info');
-        if (is_array($info)) {
+        if (\is_array($info)) {
             foreach ($info as $table) {
-                $phpinfo .= "\t" . 'php_info_print_table_start();' . PHP_EOL;
+                $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
                 if (isset($table['header'])) {
                     $headerArray = [];
                     foreach ($table['header'] as $header) {
-                        $headerArray[] = '"' . htmlentities($header) . '"';
+                        $headerArray[] = '"'.htmlentities($header).'"';
                     }
 
-                    $phpinfo .= "\t" . 'php_info_print_table_header(' . count($headerArray) . ', ' .
-                            join(', ', $headerArray) . ');' . PHP_EOL;
+                    $phpinfo .= "\t".'php_info_print_table_header('.\count($headerArray).', '.
+                            implode(', ', $headerArray).');'.PHP_EOL;
                 }
                 if (isset($table['rows'])) {
                     foreach ($table['rows'] as $row) {
                         $rowArray = [];
                         foreach ($row as $field) {
-                            $rowArray[] = '"' . htmlentities($field) . '"';
+                            $rowArray[] = '"'.htmlentities($field).'"';
                         }
 
-                        $phpinfo .= "\t" . 'php_info_print_table_row(' . count($rowArray) . ', ' .
-                                join(', ', $rowArray) . ');' . PHP_EOL;
+                        $phpinfo .= "\t".'php_info_print_table_row('.\count($rowArray).', '.
+                                implode(', ', $rowArray).');'.PHP_EOL;
                     }
                 }
-                $phpinfo .= "\t" . 'php_info_print_table_end();' . PHP_EOL;
+                $phpinfo .= "\t".'php_info_print_table_end();'.PHP_EOL;
             }
         }
 
@@ -1546,8 +1368,9 @@ class Compiler implements InjectionAwareInterface
     /**
      * Process extension code injection.
      *
-     * @param  array  $entries
-     * @param  string $section
+     * @param array  $entries
+     * @param string $section
+     *
      * @return array
      */
     public function processCodeInjection(array $entries, $section = 'request')
@@ -1558,10 +1381,10 @@ class Compiler implements InjectionAwareInterface
         if (isset($entries[$section])) {
             foreach ($entries[$section] as $entry) {
                 if (isset($entry['code']) && !empty($entry['code'])) {
-                    $codes[] = $entry['code'] . ';';
+                    $codes[] = $entry['code'].';';
                 }
                 if (isset($entry['include']) && !empty($entry['include'])) {
-                    $includes[] = "#include \"" . $entry['include'] . "\"";
+                    $includes[] = '#include "'.$entry['include'].'"';
                 }
             }
         }
@@ -1570,7 +1393,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Adds an external dependency to the compiler
+     * Adds an external dependency to the compiler.
      *
      * @param string $namespace
      * @param string $location
@@ -1580,14 +1403,18 @@ class Compiler implements InjectionAwareInterface
         $this->externalDependencies[$namespace] = $location;
     }
 
-    public function calculateDependencies($files, $_dependency = null)
+    /**
+     * @param CompilerFile[] $files
+     * @param null           $_dependency
+     */
+    public function calculateDependencies(array $files, $_dependency = null)
     {
-        /**
+        /*
          * Classes are ordered according to a dependency ranking
          * Classes with higher rank, need to be initialized first
          * We first build a dependency tree and then set the rank accordingly
          */
-        if ($_dependency == null) {
+        if (null == $_dependency) {
             $dependencyTree = [];
             foreach ($files as $file) {
                 if (!$file->isExternal()) {
@@ -1596,13 +1423,14 @@ class Compiler implements InjectionAwareInterface
                 }
             }
 
-            /* Make sure the dependencies are loaded first (recursively) */
+            // Make sure the dependencies are loaded first (recursively)
             foreach ($dependencyTree as $className => $dependencies) {
                 foreach ($dependencies as $dependency) {
                     $dependency->increaseDependencyRank(0);
                     $this->calculateDependencies($dependencyTree, $dependency);
                 }
             }
+
             return;
         }
 
@@ -1616,20 +1444,22 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Create project.c and project.h according to the current extension
+     * Create project.c and project.h according to the current extension.
+     *
+     * TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
      *
      * @param string $project
      *
      * @throws Exception
-     * @return boolean
-     * TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
+     *
+     * @return bool
      */
     public function createProjectFiles($project)
     {
         $needConfigure = $this->checkKernelFiles();
 
         /**
-         * project.c
+         * project.c.
          */
         $content = $this->backend->getTemplateFileContents('project.c');
         if (empty($content)) {
@@ -1646,7 +1476,7 @@ class Compiler implements InjectionAwareInterface
         $glbDestructors = '';
         $files = array_merge($this->files, $this->anonymousFiles);
 
-        /**
+        /*
          * Round 1. Calculate the dependency rank
          */
         $this->calculateDependencies($files);
@@ -1657,7 +1487,7 @@ class Compiler implements InjectionAwareInterface
         $interfaceEntries = [];
         $interfaceInits = [];
 
-        /**
+        /*
          * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
          */
         foreach ($files as $file) {
@@ -1666,26 +1496,26 @@ class Compiler implements InjectionAwareInterface
                 $classDefinition = $file->getClassDefinition();
                 if ($classDefinition) {
                     $dependencyRank = $classDefinition->getDependencyRank();
-                    if ($classDefinition->getType() == 'class') {
+                    if ('class' == $classDefinition->getType()) {
                         if (!isset($classInits[$dependencyRank])) {
                             $classEntries[$dependencyRank] = [];
                             $classInits[$dependencyRank] = [];
                         }
                         $classEntries[$dependencyRank][] =
-                            'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+                            'zend_class_entry *'.$classDefinition->getClassEntry().';';
                         $classInits[$dependencyRank][] =
-                            'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' .
-                             $classDefinition->getName() . ');';
+                            'ZEPHIR_INIT('.$classDefinition->getCNamespace().'_'.
+                             $classDefinition->getName().');';
                     } else {
                         if (!isset($interfaceInits[$dependencyRank])) {
                             $interfaceEntries[$dependencyRank] = [];
                             $interfaceInits[$dependencyRank] = [];
                         }
                         $interfaceEntries[$dependencyRank][] =
-                            'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+                            'zend_class_entry *'.$classDefinition->getClassEntry().';';
                         $interfaceInits[$dependencyRank][] =
-                            'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' .
-                            $classDefinition->getName() . ');';
+                            'ZEPHIR_INIT('.$classDefinition->getCNamespace().'_'.
+                            $classDefinition->getName().');';
                     }
                 }
             }
@@ -1720,142 +1550,142 @@ class Compiler implements InjectionAwareInterface
             $completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
         }
 
-        /**
+        /*
          * Round 3. Process extension globals
          */
         list($globalCode, $globalStruct, $globalsDefault, $initEntries) = $this->processExtensionGlobals($project);
-        if ($project == 'zend') {
+        if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
             $safeProject = $project;
         }
 
         /**
-         * Round 4. Process extension info
+         * Round 4. Process extension info.
          */
         $phpInfo = $this->processExtensionInfo();
 
-        /**
+        /*
          * Round 5. Generate Function entries (FE)
          */
         list($feHeader, $feEntries) = $this->generateFunctionInformation();
 
         /**
-         * Check if there are module/request/global destructors
+         * Check if there are module/request/global destructors.
          */
         $destructors = $this->config->get('destructors');
-        if (is_array($destructors)) {
+        if (\is_array($destructors)) {
             $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
-            $includes .= PHP_EOL . $invokeRequestDestructors[0];
+            $includes .= PHP_EOL.$invokeRequestDestructors[0];
             $reqDestructors = $invokeRequestDestructors[1];
 
             $invokePostRequestDestructors = $this->processCodeInjection($destructors, 'post-request');
-            $includes .= PHP_EOL . $invokePostRequestDestructors[0];
+            $includes .= PHP_EOL.$invokePostRequestDestructors[0];
             $prqDestructors = $invokePostRequestDestructors[1];
 
             $invokeModuleDestructors = $this->processCodeInjection($destructors, 'module');
-            $includes .= PHP_EOL . $invokeModuleDestructors[0];
+            $includes .= PHP_EOL.$invokeModuleDestructors[0];
             $modDestructors = $invokeModuleDestructors[1];
 
             $invokeGlobalsDestructors = $this->processCodeInjection($destructors, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsDestructors[0];
+            $includes .= PHP_EOL.$invokeGlobalsDestructors[0];
             $glbDestructors = $invokeGlobalsDestructors[1];
         }
 
         /**
-         * Check if there are module/request/global initializers
+         * Check if there are module/request/global initializers.
          */
         $initializers = $this->config->get('initializers');
-        if (is_array($initializers)) {
+        if (\is_array($initializers)) {
             $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
-            $includes .= PHP_EOL . $invokeRequestInitializers[0];
+            $includes .= PHP_EOL.$invokeRequestInitializers[0];
             $reqInitializers = $invokeRequestInitializers[1];
 
             $invokeModuleInitializers = $this->processCodeInjection($initializers, 'module');
-            $includes .= PHP_EOL . $invokeModuleInitializers[0];
+            $includes .= PHP_EOL.$invokeModuleInitializers[0];
             $modInitializers = $invokeModuleInitializers[1];
 
             $invokeGlobalsInitializers = $this->processCodeInjection($initializers, 'globals');
-            $includes .= PHP_EOL . $invokeGlobalsInitializers[0];
+            $includes .= PHP_EOL.$invokeGlobalsInitializers[0];
             $glbInitializers = $invokeGlobalsInitializers[1];
         }
 
         /**
-         * Append extra details
+         * Append extra details.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (is_array($extraClasses)) {
+        if (\is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['init'])) {
-                    $completeClassInits[] = 'ZEPHIR_INIT(' . $value['init'] . ')';
+                    $completeClassInits[] = 'ZEPHIR_INIT('.$value['init'].')';
                 }
 
                 if (isset($value['entry'])) {
-                    $completeClassEntries[] = 'zend_class_entry *' . $value['entry'] . ';';
+                    $completeClassEntries[] = 'zend_class_entry *'.$value['entry'].';';
                 }
             }
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
-            '%PROJECT_LOWER%'       => strtolower($project),
-            '%PROJECT_UPPER%'       => strtoupper($project),
-            '%PROJECT_CAMELIZE%'    => ucfirst($project),
-            '%CLASS_ENTRIES%'       => implode(
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%CLASS_ENTRIES%' => implode(
                 PHP_EOL,
                 array_merge($completeInterfaceEntries, $completeClassEntries)
             ),
-            '%CLASS_INITS%'         => implode(
-                PHP_EOL . "\t",
+            '%CLASS_INITS%' => implode(
+                PHP_EOL."\t",
                 array_merge($completeInterfaceInits, $completeClassInits)
             ),
-            '%INIT_GLOBALS%'        => implode(
-                PHP_EOL . "\t",
-                array_merge((array)$globalsDefault[0], [$glbInitializers])
+            '%INIT_GLOBALS%' => implode(
+                PHP_EOL."\t",
+                array_merge((array) $globalsDefault[0], [$glbInitializers])
             ),
             '%INIT_MODULE_GLOBALS%' => $globalsDefault[1],
-            '%DESTROY_GLOBALS%'     => $glbDestructors,
-            '%EXTENSION_INFO%'      => $phpInfo,
-            '%EXTRA_INCLUDES%'      => implode(
+            '%DESTROY_GLOBALS%' => $glbDestructors,
+            '%EXTENSION_INFO%' => $phpInfo,
+            '%EXTRA_INCLUDES%' => implode(
                 PHP_EOL,
                 array_unique(explode(PHP_EOL, $includes))
             ),
-            '%MOD_INITIALIZERS%'    => $modInitializers,
-            '%MOD_DESTRUCTORS%'     => $modDestructors,
-            '%REQ_INITIALIZERS%'    => implode(
-                PHP_EOL . "\t",
+            '%MOD_INITIALIZERS%' => $modInitializers,
+            '%MOD_DESTRUCTORS%' => $modDestructors,
+            '%REQ_INITIALIZERS%' => implode(
+                PHP_EOL."\t",
                 array_merge($this->internalInitializers, [$reqInitializers])
             ),
-            '%REQ_DESTRUCTORS%'     => $reqDestructors,
+            '%REQ_DESTRUCTORS%' => $reqDestructors,
             '%POSTREQ_DESTRUCTORS%' => empty($prqDestructors) ? '' : implode(
                 PHP_EOL,
                 [
                     '#define ZEPHIR_POST_REQUEST 1',
-                    'static PHP_PRSHUTDOWN_FUNCTION(' . strtolower($project) . ')',
+                    'static PHP_PRSHUTDOWN_FUNCTION('.strtolower($project).')',
                     '{',
-                    "\t" . implode(
-                        PHP_EOL . "\t",
+                    "\t".implode(
+                        PHP_EOL."\t",
                         explode(PHP_EOL, $prqDestructors)
                     ),
-                    '}'
+                    '}',
                 ]
             ),
-            '%FE_HEADER%'           => $feHeader,
-            '%FE_ENTRIES%'          => $feEntries,
-            '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
+            '%FE_HEADER%' => $feHeader,
+            '%FE_ENTRIES%' => $feEntries,
+            '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL."\t", $initEntries),
         ];
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        /**
+        /*
          * Round 5. Generate and place the entry point of the project
          */
-        file_put_contents_ex($content, 'ext/' . $safeProject . '.c');
+        file_put_contents_ex($content, 'ext/'.$safeProject.'.c');
         unset($content);
 
         /**
-         * Round 6. Generate the project main header
+         * Round 6. Generate the project main header.
          */
         $content = $this->backend->getTemplateFileContents('project.h');
         if (empty($content)) {
@@ -1865,38 +1695,38 @@ class Compiler implements InjectionAwareInterface
         $includeHeaders = [];
         foreach ($this->compiledFiles as $file) {
             if ($file) {
-                $fileH = str_replace(".c", ".zep.h", $file);
-                $include = '#include "' . $fileH . '"';
+                $fileH = str_replace('.c', '.zep.h', $file);
+                $include = '#include "'.$fileH.'"';
                 $includeHeaders[] = $include;
             }
         }
 
         /**
-         * Append extra headers
+         * Append extra headers.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (is_array($extraClasses)) {
+        if (\is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['header'])) {
-                    $include = '#include "' . $value['header'] . '"';
+                    $include = '#include "'.$value['header'].'"';
                     $includeHeaders[] = $include;
                 }
             }
         }
 
         $toReplace = [
-            '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders)
+            '%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders),
         ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/'.$safeProject.'.h');
         unset($content);
 
         /**
-         * Round 7. Create php_project.h
+         * Round 7. Create php_project.h.
          */
         $content = $this->backend->getTemplateFileContents('php_project.h');
         if (empty($content)) {
@@ -1904,24 +1734,24 @@ class Compiler implements InjectionAwareInterface
         }
 
         $toReplace = [
-            '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
-            '%PROJECT_LOWER%'            => strtolower($project),
-            '%PROJECT_UPPER%'            => strtoupper($project),
-            '%PROJECT_EXTNAME%'          => strtolower($project),
-            '%PROJECT_NAME%'             => utf8_decode($this->config->get('name')),
-            '%PROJECT_AUTHOR%'           => utf8_decode($this->config->get('author')),
-            '%PROJECT_VERSION%'          => utf8_decode($this->config->get('version')),
-            '%PROJECT_DESCRIPTION%'      => utf8_decode($this->config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
-            '%EXTENSION_GLOBALS%'        => $globalCode,
-            '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_EXTNAME%' => strtolower($project),
+            '%PROJECT_NAME%' => utf8_decode($this->config->get('name')),
+            '%PROJECT_AUTHOR%' => utf8_decode($this->config->get('author')),
+            '%PROJECT_VERSION%' => utf8_decode($this->config->get('version')),
+            '%PROJECT_DESCRIPTION%' => utf8_decode($this->config->get('description')),
+            '%PROJECT_ZEPVERSION%' => Zephir::VERSION,
+            '%EXTENSION_GLOBALS%' => $globalCode,
+            '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct,
         ];
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/php_' . $safeProject . '.h');
+        file_put_contents_ex($content, 'ext/php_'.$safeProject.'.h');
         unset($content);
 
         return $needConfigure;
@@ -1932,7 +1762,7 @@ class Compiler implements InjectionAwareInterface
         $headerPrinter = new CodePrinter();
         $entryPrinter = new CodePrinter();
 
-        /**
+        /*
          * Specifying Argument Information
          */
         foreach ($this->functionDefinitions as $func) {
@@ -1946,7 +1776,7 @@ class Compiler implements InjectionAwareInterface
             $funcName = $func->getInternalName();
             $argInfoName = $func->getArgInfoName();
 
-            $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
+            $headerPrinter->output('PHP_FUNCTION('.$funcName.');');
 
             $argInfo->setBooleanDefinition($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
             $argInfo->setRichFormat($this->backend->isZE3());
@@ -1966,14 +1796,14 @@ class Compiler implements InjectionAwareInterface
 
             if ($func->isGlobal()) {
                 $entryPrinter->output(
-                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')'
+                    'ZEND_NAMED_FE('.$func->getName().', ZEND_FN('.$funcName.'), '.$paramData.')'
                 );
             } else {
                 $entryPrinter->output(
-                    'ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", '.
-                    $func->getName() .
-                    ', ZEND_FN('. $funcName . '), ' .
-                    $paramData . ')'
+                    'ZEND_NS_NAMED_FE("'.str_replace('\\', '\\\\', $func->getNamespace()).'", '.
+                    $func->getName().
+                    ', ZEND_FN('.$funcName.'), '.
+                    $paramData.')'
                 );
             }
         }
@@ -1983,9 +1813,9 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Check if the project must be phpized again
+     * Check if the project must be phpized again.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkIfPhpized()
     {
@@ -1993,27 +1823,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Returns the internal logger
-     *
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Returns the internal config
-     *
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * Returns a short user path
+     * Returns a short user path.
      *
      * @param string $path
      *
@@ -2021,21 +1831,22 @@ class Compiler implements InjectionAwareInterface
      */
     public static function getShortUserPath($path)
     {
-        return str_replace('\\', '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path));
+        return str_replace('\\', '/', str_replace(getcwd().\DIRECTORY_SEPARATOR, '', $path));
     }
 
     /**
-     * Generate package-dependencies config for m4
+     * Generate package-dependencies config for m4.
      *
-     * @param $contentM4
-     * @throws Exception
-     * @return string
      * TODO: Move the template depending part to backend?
+     *
+     * @param string $contentM4
+     *
+     * @return string
      */
     public function generatePackageDependenciesM4($contentM4)
     {
         $packageDependencies = $this->config->get('package-dependencies');
-        if (is_array($packageDependencies)) {
+        if (\is_array($packageDependencies)) {
             $pkgconfigM4 = $this->backend->getTemplateFileContents('pkg-config.m4');
             $pkgconfigCheckM4 = $this->backend->getTemplateFileContents('pkg-config-check.m4');
             $extraCFlags = '';
@@ -2045,9 +1856,9 @@ class Compiler implements InjectionAwareInterface
 
                 $operator = '=';
                 $operatorCmd = '--exact-version';
-                $ar = explode("=", $version);
-                if (count($ar) == 1) {
-                    if ($version == '*') {
+                $ar = explode('=', $version);
+                if (1 == \count($ar)) {
+                    if ('*' == $version) {
                         $version = '0.0.0';
                         $operator = '>=';
                         $operatorCmd = '--atleast-version';
@@ -2071,10 +1882,10 @@ class Compiler implements InjectionAwareInterface
                 }
 
                 $toReplace = [
-                    '%PACKAGE_LOWER%'        => strtolower($pkg),
-                    '%PACKAGE_UPPER%'        => strtoupper($pkg),
-                    '%PACKAGE_REQUESTED_VERSION%'        => $operator . ' ' . $version,
-                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd . '=' . $version,
+                    '%PACKAGE_LOWER%' => strtolower($pkg),
+                    '%PACKAGE_UPPER%' => strtoupper($pkg),
+                    '%PACKAGE_REQUESTED_VERSION%' => $operator.' '.$version,
+                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%' => $operatorCmd.'='.$version,
                 ];
 
                 foreach ($toReplace as $mark => $replace) {
@@ -2082,7 +1893,7 @@ class Compiler implements InjectionAwareInterface
                 }
 
                 $pkgconfigM4 .= $pkgM4Buf;
-                $extraCFlags .= '$PHP_' . strtoupper($pkg) . '_INCS ';
+                $extraCFlags .= '$PHP_'.strtoupper($pkg).'_INCS ';
             }
             $contentM4 = str_replace('%PROJECT_EXTRA_CFLAGS%', '%PROJECT_EXTRA_CFLAGS% '.$extraCFlags, $contentM4);
 
@@ -2092,41 +1903,238 @@ class Compiler implements InjectionAwareInterface
         }
 
         $contentM4 = str_replace('%PROJECT_PACKAGE_DEPENDENCIES%', '', $contentM4);
+
         return $contentM4;
     }
 
     /**
-     * Check require extensions orther when build your extension.
+     * Pre-compiles classes creating a CompilerFile definition.
      *
-     * @return void
+     * @param string $filePath
      *
-     * @throws Exception
+     * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws ParseException
      */
-    protected function checkRequires()
+    protected function preCompile($filePath)
     {
-        $extensionRequires = $this->config->get("extensions", "requires");
-        if ($extensionRequires) {
-            $collectionError = PHP_EOL . "\tCould not load extension : ";
-            foreach ($extensionRequires as $key => $value) {
-                if (!extension_loaded($value)) {
-                    $collectionError .= $value . ", ";
-                }
+        if (!$this->parserManager->isAvailable()) {
+            throw new IllegalStateException($this->parserManager->requirements());
+        }
+
+        if (preg_match('#\.zep$#', $filePath)) {
+            $className = str_replace(\DIRECTORY_SEPARATOR, '\\', $filePath);
+            $className = preg_replace('#.zep$#', '', $className);
+
+            $className = implode('\\', array_map(function ($i) {
+                return ucfirst($i);
+            }, explode('\\', $className)));
+
+            $compilerFile = $this->compilerFileFactory->create($className, $filePath);
+            $compilerFile->preCompile($this);
+
+            $this->files[$className] = $compilerFile;
+            $this->definitions[$className] = $compilerFile->getClassDefinition();
+        }
+    }
+
+    /**
+     * Recursively pre-compiles all sources found in the given path.
+     *
+     * @param string $path
+     *
+     * @throws CompilerException
+     */
+    protected function recursivePreCompile($path)
+    {
+        if (!\is_string($path)) {
+            throw new CompilerException('Invalid compilation path'.var_export($path, true));
+        }
+
+        /**
+         * Pre compile all files.
+         */
+        $files = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        /*
+         * @var \SplFileInfo
+         */
+        foreach ($iterator as $item) {
+            if (!$item->isDir()) {
+                $files[] = $item->getPathname();
+            }
+        }
+
+        sort($files, SORT_STRING);
+        foreach ($files as $file) {
+            $this->preCompile($file);
+        }
+    }
+
+    /**
+     * Copies the base kernel to the extension destination.
+     *
+     * @todo
+     *
+     * @deprecated
+     *
+     * @param $src
+     * @param $dest
+     * @param string $pattern
+     * @param mixed  $callback
+     *
+     * @return bool
+     */
+    protected function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
+    {
+        $success = true;
+        $iterator = new \DirectoryIterator($src);
+        foreach ($iterator as $item) {
+            $pathName = $item->getPathname();
+            if (!is_readable($pathName)) {
+                $this->logger->warning('File is not readable :'.$pathName);
+                continue;
             }
 
-            if ($collectionError != PHP_EOL . "\tCould not load extension : ") {
-                $collectionError .= PHP_EOL . "\tYou must add extensions above before build this extension";
-                throw new Exception($collectionError);
+            $fileName = $item->getFileName();
+
+            if ($item->isDir()) {
+                if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
+                    if (!is_dir($dest.\DIRECTORY_SEPARATOR.$fileName)) {
+                        mkdir($dest.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    }
+                    $this->recursiveProcess($pathName, $dest.\DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
+                }
+            } elseif (!$pattern || ($pattern && 1 === preg_match($pattern, $fileName))) {
+                $path = $dest.\DIRECTORY_SEPARATOR.$fileName;
+                $success = $success && \call_user_func($callback, $pathName, $path);
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * Recursively deletes files in a specified location.
+     *
+     * @deprecated
+     *
+     * @param string $path Directory to deletes files
+     * @param string $mask Regular expression to deletes files
+     */
+    protected function recursiveDeletePath($path, $mask)
+    {
+        if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
+            $this->logger->warning("Directory '{$path}' is not readable. Skip...");
+
+            return;
+        }
+
+        $objects = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($objects as $name => $object) {
+            if (preg_match($mask, $name)) {
+                @unlink($name);
             }
         }
     }
 
     /**
-     * Checks if a file must be copied
+     * Registers C-constants as PHP constants from a C-file.
+     *
+     * @param array $constantsSources
+     *
+     * @throws Exception
+     */
+    protected function loadConstantsSources($constantsSources)
+    {
+        foreach ($constantsSources as $constantsSource) {
+            if (!file_exists($constantsSource)) {
+                throw new Exception("File '".$constantsSource."' with constants definitions");
+            }
+
+            foreach (file($constantsSource) as $line) {
+                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
+                    $this->constants[$matches[1]] = ['int', $matches[2]];
+                    continue;
+                }
+                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
+                    $this->constants[$matches[1]] = ['char', $matches[3]];
+                }
+            }
+        }
+    }
+
+    /**
+     * Process config.w32 sections.
+     *
+     * @param array  $sources
+     * @param string $project
+     *
+     * @return array
+     */
+    protected function processAddSources($sources, $project)
+    {
+        $groupSources = [];
+        foreach ($sources as $source) {
+            $dirName = str_replace(\DIRECTORY_SEPARATOR, '/', \dirname($source));
+            if (!isset($groupSources[$dirName])) {
+                $groupSources[$dirName] = [];
+            }
+            $groupSources[$dirName][] = basename($source);
+        }
+        $groups = [];
+        foreach ($groupSources as $dirname => $files) {
+            $groups[] = 'ADD_SOURCES(configure_module_dirname + "/'.$dirname.'", "'.
+                        implode(' ', $files).'", "'.$project.'");';
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Ensure that required extensions is present.
+     *
+     * @throws RuntimeException
+     */
+    protected function assertRequiredExtensionsIsPresent()
+    {
+        $extensionRequires = $this->config->get('extensions', 'requires');
+        if (true === empty($extensionRequires)) {
+            return;
+        }
+
+        $extensions = [];
+        foreach ($extensionRequires as $key => $value) {
+            if (false === \extension_loaded($value)) {
+                $extensions[] = $value;
+            }
+        }
+
+        if (false === empty($extensions)) {
+            throw new RuntimeException(
+                \sprintf(
+                    'Could not load extension: %s. You must add extensions above before build this extension.',
+                    \implode(', ', $extensions)
+                )
+            );
+        }
+    }
+
+    /**
+     * Checks if a file must be copied.
      *
      * @param string $src
      * @param string $dst
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkKernelFile($src, $dst)
     {
@@ -2142,14 +2150,15 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Checks which files in the base kernel must be copied
+     * Checks which files in the base kernel must be copied.
      *
-     * @return boolean
      * @throws Exception
+     *
+     * @return bool
      */
     protected function checkKernelFiles()
     {
-        $kernelPath = 'ext' . DIRECTORY_SEPARATOR . 'kernel';
+        $kernelPath = 'ext'.\DIRECTORY_SEPARATOR.'kernel';
 
         if (!file_exists($kernelPath)) {
             if (!mkdir($kernelPath, 0775, true)) {
@@ -2168,12 +2177,12 @@ class Compiler implements InjectionAwareInterface
         );
 
         if (!$configured) {
-            $this->logger->output("\nCleaning old kernel files...");
+            $this->logger->info('Cleaning old kernel files...');
             $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
 
             @mkdir($kernelPath);
 
-            $this->logger->output('Copying new kernel files...');
+            $this->logger->info('Copying new kernel files...');
             $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
         }
 
@@ -2181,10 +2190,11 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Checks if the current directory is a valid Zephir project
+     * Checks if the current directory is a valid Zephir project.
+     *
+     * @throws Exception
      *
      * @return string
-     * @throws Exception
      */
     protected function checkDirectory()
     {
@@ -2192,50 +2202,50 @@ class Compiler implements InjectionAwareInterface
         if (!$namespace) {
             // TODO: Add more user friendly message.
             // For example assume if the user call the command from the wrong dir
-            throw new Exception("Extension namespace cannot be loaded");
+            throw new Exception('Extension namespace cannot be loaded');
         }
 
-        if (!is_string($namespace)) {
-            throw new Exception("Extension namespace is invalid");
+        if (!\is_string($namespace)) {
+            throw new Exception('Extension namespace is invalid');
         }
 
         if (!$this->filesystem->isInitialized()) {
             $this->filesystem->initialize();
         }
 
-        if (!$this->filesystem->exists(Zephir::VERSION)) {
+        if (!$this->filesystem->exists('.')) {
             if (!$this->checkIfPhpized()) {
-                $this->logger->output(
+                $this->logger->info(
                     'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project'
                 );
             }
 
-            $this->filesystem->makeDirectory(Zephir::VERSION);
+            $this->filesystem->makeDirectory('.');
         }
 
         return $namespace;
     }
 
     /**
-     * Returns current GCC version
+     * Returns current GCC version.
      *
      * @return string
      */
     protected function getGccVersion()
     {
-        if ($this->environment->isWindows()) {
+        if (is_windows()) {
             return '0.0.0';
         }
 
-        if ($this->filesystem->exists(Zephir::VERSION . '/gcc-version')) {
-            return $this->filesystem->read(Zephir::VERSION . '/gcc-version');
+        if ($this->filesystem->exists('gcc-version')) {
+            return $this->filesystem->read('gcc-version');
         }
 
-        $this->filesystem->system('gcc -dumpversion', 'stdout', escapeshellcmd(Zephir::VERSION) . '/gcc-version');
-        $lines = $this->filesystem->file(Zephir::VERSION . '/gcc-version');
+        $this->filesystem->system('gcc -dumpversion', 'stdout', 'gcc-version');
+        $lines = $this->filesystem->file('gcc-version');
         $lines = array_filter($lines);
 
-        $lastLine = $lines[count($lines) - 1];
+        $lastLine = $lines[\count($lines) - 1];
         if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
             return $matches[0];
         }

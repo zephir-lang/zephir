@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,7 @@ namespace Zephir;
 use Zephir\Exception\CompilerException;
 
 /**
- * Zephir\ClassMethodParameters
+ * Zephir\ClassMethodParameters.
  *
  * Represents the parameters defined in a method
  */
@@ -27,7 +27,8 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
     /**
      * ClassMethodParameters constructor.
      *
-     * @param  array $parameters
+     * @param array $parameters
+     *
      * @throws CompilerException
      */
     public function __construct(array $parameters)
@@ -35,7 +36,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
         foreach ($parameters as $parameter) {
             if (isset($parameter['reference']) && $parameter['reference']) {
                 throw new CompilerException(
-                    'Zephir not support reference parameters for now. ' .
+                    'Zephir not support reference parameters for now. '.
                     'Stay tuned for https://github.com/phalcon/zephir/issues/203',
                     $parameter
                 );
@@ -46,7 +47,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
     }
 
     /**
-     * Return internal parameters
+     * Return internal parameters.
      *
      * @return array
      */
@@ -60,7 +61,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
      */
     public function count()
     {
-        return count($this->parameters);
+        return \count($this->parameters);
     }
 
     public function rewind()
@@ -85,7 +86,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
 
     public function next()
     {
-        $this->position++;
+        ++$this->position;
     }
 
     public function offsetExists($offset)

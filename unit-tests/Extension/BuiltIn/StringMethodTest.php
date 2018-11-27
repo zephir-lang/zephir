@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,13 +11,18 @@
 
 namespace Extension\BuiltIn;
 
+use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\TestCase;
 use Test\BuiltIn\StringMethods;
-use Zephir\Support\TestCase;
 
 class StringMethodTest extends TestCase
 {
     /**
      * @dataProvider providerCamelize
+     *
+     * @param mixed $actual
+     * @param mixed $expected
+     * @param mixed $delimiter
      */
     public function testCamelize($actual, $expected, $delimiter)
     {
@@ -28,18 +33,26 @@ class StringMethodTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage The second argument passed to the camelize() must be a string containing at least one character
+     *
+     * @param mixed $delimiter
      */
     public function testCamelizeWrongSecondParam($delimiter)
     {
-        $t = new StringMethods();
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'The second argument passed to the camelize() must be a string containing at least one character'
+        );
 
+        $t = new StringMethods();
         $t->camelize('CameLiZe', $delimiter);
     }
 
     /**
      * @dataProvider providerUnCamelize
+     *
+     * @param mixed $actual
+     * @param mixed $expected
+     * @param mixed $delimiter
      */
     public function testUnCamelize($actual, $expected, $delimiter)
     {
@@ -50,11 +63,16 @@ class StringMethodTest extends TestCase
 
     /**
      * @dataProvider providerCamelizeWrongSecondParam
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Second argument passed to the uncamelize() must be a string of one character
+     *
+     * @param mixed $delimiter
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
     {
+        $this->expectException(Warning::class);
+        $this->expectExceptionMessage(
+            'Second argument passed to the uncamelize() must be a string of one character'
+        );
+
         $t = new StringMethods();
 
         $t->uncamelize('CameLiZe', $delimiter);
@@ -124,7 +142,7 @@ class StringMethodTest extends TestCase
 
         $shuffled = $t->getShuffled('hello world');
         $this->assertNotEquals('hello world', $shuffled);
-        $this->assertSame(strlen('hello world'), strlen($shuffled));
+        $this->assertSame(\strlen('hello world'), \strlen($shuffled));
 
         $this->assertSame('olleh', $t->getReversed('hello'));
     }
@@ -132,58 +150,61 @@ class StringMethodTest extends TestCase
     public function testParsers()
     {
         $t = new StringMethods();
+
+        // TODO: Do we still need this?
         // $this->assertSame(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
-        $this->assertSame(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
+
+        $this->assertSame(['foo', 'bar', 'baz'], $t->getParsedCsv('foo,bar,"baz"'));
     }
 
     public function providerCamelize()
     {
         return [
-            ["=_camelize",      '=Camelize', "_" ],
-            ["camelize",        'Camelize',  "_" ],
-            ["came_li_ze",      'CameLiZe',  "_" ],
-            ["came_li_ze",      'CameLiZe',  null],
-            ["came#li#ze",      'CameLiZe',  "#" ],
-            ["came li ze",      'CameLiZe',  " " ],
-            ["came.li^ze",      'CameLiZe',  ".^"],
-            ["c_a-m_e-l_i-z_e", 'CAMELIZE',  "-_"],
-            ["c_a-m_e-l_i-z_e", 'CAMELIZE',  null],
-            ["came.li.ze",      'CameLiZe',  "." ],
-            ["came-li-ze",      'CameLiZe',  "-" ],
-            ["c+a+m+e+l+i+z+e", 'CAMELIZE',  "+" ],
+            ['=_camelize',      '=Camelize', '_'],
+            ['camelize',        'Camelize',  '_'],
+            ['came_li_ze',      'CameLiZe',  '_'],
+            ['came_li_ze',      'CameLiZe',  null],
+            ['came#li#ze',      'CameLiZe',  '#'],
+            ['came li ze',      'CameLiZe',  ' '],
+            ['came.li^ze',      'CameLiZe',  '.^'],
+            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  '-_'],
+            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  null],
+            ['came.li.ze',      'CameLiZe',  '.'],
+            ['came-li-ze',      'CameLiZe',  '-'],
+            ['c+a+m+e+l+i+z+e', 'CAMELIZE',  '+'],
         ];
     }
 
     public function providerUnCamelize()
     {
         return [
-            ["=Camelize", '=_camelize',      "_" ],
-            ["Camelize",  'camelize',        "_" ],
-            ["Camelize",  'camelize',        null],
-            ["CameLiZe",  'came_li_ze',      "_" ],
-            ["CameLiZe",  'came#li#ze',      "#" ],
-            ["CameLiZe",  'came li ze',      " " ],
-            ["CameLiZe",  'came.li.ze',      "." ],
-            ["CameLiZe",  'came-li-ze',      "-" ],
-            ["CAMELIZE",  'c/a/m/e/l/i/z/e', "/" ],
+            ['=Camelize', '=_camelize',      '_'],
+            ['Camelize',  'camelize',        '_'],
+            ['Camelize',  'camelize',        null],
+            ['CameLiZe',  'came_li_ze',      '_'],
+            ['CameLiZe',  'came#li#ze',      '#'],
+            ['CameLiZe',  'came li ze',      ' '],
+            ['CameLiZe',  'came.li.ze',      '.'],
+            ['CameLiZe',  'came-li-ze',      '-'],
+            ['CAMELIZE',  'c/a/m/e/l/i/z/e', '/'],
         ];
     }
 
     public function providerCamelizeWrongSecondParam()
     {
         return [
-            [""                         ],
-            [true                       ],
-            [false                      ],
-            [1                          ],
-            [0                          ],
-            [[]                         ],
+            [''],
+            [true],
+            [false],
+            [1],
+            [0],
+            [[]],
             [
                 function () {
-                    return "-";
-                }
+                    return '-';
+                },
             ],
-            [new \stdClass              ],
+            [new \stdClass()],
         ];
     }
 }

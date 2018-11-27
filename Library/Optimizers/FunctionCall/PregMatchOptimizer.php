@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,17 +14,15 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Variable;
 
 /**
- * Zephir\Optimizers\FunctionCall\PregMatchOptimizer
+ * Zephir\Optimizers\FunctionCall\PregMatchOptimizer.
  *
  * Optimizes calls to 'preg_match' using internal function.
- *
- * @package Zephir\Optimizers\FunctionCall
  */
 class PregMatchOptimizer extends OptimizerAbstract
 {
@@ -33,30 +31,31 @@ class PregMatchOptimizer extends OptimizerAbstract
     /**
      * {@inheritdoc}
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
-     * @return CompiledExpression
+     * @param array              $expression
+     * @param Call               $call
+     * @param CompilationContext $context
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || count($expression['parameters']) < 2) {
+        if (!isset($expression['parameters']) || \count($expression['parameters']) < 2) {
             throw new CompilerException(
                 sprintf(
                     'preg_match() expects at least 2 parameters, %d given',
-                    isset($expression['parameters']) ? count($expression['parameters']) : 0
+                    isset($expression['parameters']) ? \count($expression['parameters']) : 0
                 ),
                 $expression
             );
         }
 
-        if (count($expression['parameters']) > 5) {
+        if (\count($expression['parameters']) > 5) {
             throw new CompilerException(
                 sprintf(
                     'preg_match() expects at most 5 parameters, %d given',
-                    count($expression['parameters'])
+                    \count($expression['parameters'])
                 ),
                 $expression
             );
@@ -65,13 +64,12 @@ class PregMatchOptimizer extends OptimizerAbstract
         $matches = $this->createMatches($expression, $context);
         list($flags, $offset) = $this->processOptionals($expression, $call, $context);
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException(
                 'Returned values by functions can only be assigned to variant variables',
@@ -79,6 +77,7 @@ class PregMatchOptimizer extends OptimizerAbstract
             );
         }
 
+        // zephir_preg_match
         $context->headersManager->add('kernel/string');
 
         try {
@@ -115,12 +114,13 @@ class PregMatchOptimizer extends OptimizerAbstract
      *
      *     preg_match(pattern, subject, matches, flags, offset)
      *
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
-     * @return array
+     * @param array              $expression
+     * @param Call               $call
+     * @param CompilationContext $context
      *
-     * @throws \Zephir\Exception\CompilerException
+     * @throws CompilerException
+     *
+     * @return array
      */
     private function processOptionals(array &$expression, Call $call, CompilationContext $context)
     {
@@ -128,13 +128,13 @@ class PregMatchOptimizer extends OptimizerAbstract
         $offset = null;
 
         $offsetParamOffset = 4;
-        if (isset($expression['parameters'][4]) && $expression['parameters'][4]['parameter']['type'] === 'int') {
-            $offset = $expression['parameters'][4]['parameter']['value'] . ' ';
+        if (isset($expression['parameters'][4]) && 'int' === $expression['parameters'][4]['parameter']['type']) {
+            $offset = $expression['parameters'][4]['parameter']['value'].' ';
             unset($expression['parameters'][4]);
         }
 
-        if (isset($expression['parameters'][3]) && $expression['parameters'][3]['parameter']['type'] === 'int') {
-            $flags = $expression['parameters'][3]['parameter']['value'] . ' ';
+        if (isset($expression['parameters'][3]) && 'int' === $expression['parameters'][3]['parameter']['type']) {
+            $flags = $expression['parameters'][3]['parameter']['value'].' ';
             $offsetParamOffset = 3;
             unset($expression['parameters'][3]);
         }
@@ -142,24 +142,24 @@ class PregMatchOptimizer extends OptimizerAbstract
         try {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            if ($offset === null && isset($resolvedParams[$offsetParamOffset])) {
+            if (null === $offset && isset($resolvedParams[$offsetParamOffset])) {
                 $context->headersManager->add('kernel/operators');
-                $offset = 'zephir_get_intval(' . $resolvedParams[$offsetParamOffset] . ') ';
+                $offset = 'zephir_get_intval('.$resolvedParams[$offsetParamOffset].') ';
             }
 
-            if ($flags === null && isset($resolvedParams[3])) {
+            if (null === $flags && isset($resolvedParams[3])) {
                 $context->headersManager->add('kernel/operators');
-                $flags = 'zephir_get_intval(' . $resolvedParams[3] . ') ';
+                $flags = 'zephir_get_intval('.$resolvedParams[3].') ';
             }
         } catch (Exception $e) {
             throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
         }
 
-        if ($flags === null) {
+        if (null === $flags) {
             $flags = '0 ';
         }
 
-        if ($offset === null) {
+        if (null === $offset) {
             $offset = '0 ';
         }
 
@@ -171,8 +171,8 @@ class PregMatchOptimizer extends OptimizerAbstract
      *
      *     preg_match(pattern, subject, matches)
      *
-     * @param  array              $expression
-     * @param  CompilationContext $context
+     * @param array              $expression
+     * @param CompilationContext $context
      *
      * @return Variable
      */
@@ -181,7 +181,7 @@ class PregMatchOptimizer extends OptimizerAbstract
         if (isset($expression['parameters'][2])) {
             $type = $expression['parameters'][2]['parameter']['type'];
 
-            if ($type !== 'variable') {
+            if ('variable' !== $type) {
                 throw new CompilerException('Only variables can be passed by reference', $expression);
             }
 
@@ -194,7 +194,7 @@ class PregMatchOptimizer extends OptimizerAbstract
                 );
             }
 
-            if (!in_array($variable->getType(), ['variable', 'array'], true)) {
+            if (!\in_array($variable->getType(), ['variable', 'array'], true)) {
                 throw new CompilerException(
                     sprintf(
                         "The '%s' variable must be either a variable or an array, got %s",
@@ -205,7 +205,7 @@ class PregMatchOptimizer extends OptimizerAbstract
                 );
             }
 
-            if ($variable->isInitialized() == false) {
+            if (false == $variable->isInitialized()) {
                 $variable->initVariant($context);
                 $variable->setIsInitialized(true, $context);
             }

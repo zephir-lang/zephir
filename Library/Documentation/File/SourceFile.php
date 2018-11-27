@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -22,7 +22,7 @@ class SourceFile extends ClassFile
 
     public function getTemplateName()
     {
-        return "source.phtml";
+        return 'source.phtml';
     }
 
     public function getOutputFile()

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,17 +11,18 @@
 
 namespace Zephir\Expression;
 
-use Zephir\ClassMethod;
-use Zephir\Variable;
-use Zephir\ClassMethodParameters;
-use Zephir\CompiledExpression;
-use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
+use Zephir\Exception\CompilerException;
+use Zephir\StatementsBlock;
+use Zephir\Variable;
 
 /**
- * Closure
+ * Closure.
  *
  * Creates an anonymous function within the extension simulating a closure
  */
@@ -43,15 +44,15 @@ class Closure
     protected $expectingVariable;
 
     /**
-     * Unique closure ID
+     * Unique closure ID.
      */
     protected static $id = 0;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param boolean $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -61,9 +62,9 @@ class Closure
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -71,27 +72,26 @@ class Closure
     }
 
     /**
-     * Creates a closure
+     * Creates a closure.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
-            self::$id . '__closure'
+            self::$id.'__closure'
         );
 
         $classDefinition->setIsFinal(true);
 
-        $compilerFile = new CompilerFileAnonymous(
-            $classDefinition,
-            $compilationContext->config,
-            $compilationContext->logger
-        );
+        $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config);
+        $compilerFile->setLogger($compilationContext->logger);
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
@@ -104,12 +104,12 @@ class Closure
         if (isset($expression['right'])) {
             $block = $expression['right'];
         } else {
-            $block = array();
+            $block = [];
         }
 
         $classMethod = new ClassMethod(
             $classDefinition,
-            array('public', 'final'),
+            ['public', 'final'],
             '__invoke',
             $parameters,
             new StatementsBlock($block),
@@ -134,7 +134,7 @@ class Closure
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
-        self::$id++;
+        ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

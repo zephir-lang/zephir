@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,25 +11,27 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Exception\CompilerException;
-use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * RangeExclusive
+ * RangeExclusive.
  *
  * Exclusive range operator
  */
 class RangeExclusiveOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -44,13 +46,14 @@ class RangeExclusiveOperator extends BaseOperator
         $exprBuilder = BuilderFactory::getInstance();
 
         /**
-         * Implicit type coercing
+         * Implicit type coercing.
          */
         $castBuilder = $exprBuilder->operators()->cast('array', $exprBuilder->statements()
-            ->functionCall('range', array($expression['left'], $expression['right'])));
+            ->functionCall('range', [$expression['left'], $expression['right']]));
 
         $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->readOnly);
+
         return $expression->compile($compilationContext);
     }
 }

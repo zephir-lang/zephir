@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,24 +11,19 @@
 
 namespace Zephir\Test\Command;
 
-use League\Container\Container;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use Symfony\Component\Console\Tester\CommandTester;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zephir\Application;
-use Zephir\Command\CompileCommand;
-use Zephir\Di\Singleton;
-use Zephir\FileSystem\HardDisk;
-use Zephir\Support\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
+use Zephir\Config;
+use Zephir\Console\Application;
+use Zephir\FileSystem\FileSystemInterface;
+use Zephir\Test\KernelTestCase;
 use function Zephir\unlink_recursive;
 
 /**
- * Zephir\Test\Command\CompileCommandTest
- *
- * @package Zephir\Test\CompilerFile
+ * Zephir\Test\Command\CompileCommandTest.
  */
-class CompileCommandTest extends TestCase
+class CompileCommandTest extends KernelTestCase
 {
     /**
      * Common directory.
@@ -39,37 +34,33 @@ class CompileCommandTest extends TestCase
 
     /**
      * Store the current directory before to be change.
-     *
-     * @return void
      */
     public function setUp()
     {
         $this->pwd = getcwd();
-        Singleton::reset();
     }
 
     /**
      * Restore current directory, and clean config.json.
-     *
-     * @return void
      */
     public function tearDown()
     {
         if (getcwd() !== $this->pwd) {
-            if (file_exists(getcwd() . '/.temp')) {
-                unlink_recursive(getcwd() . '/.temp');
+            $dotZephir = \dirname(\dirname(self::$kernel->getCacheDir()));
+            if (file_exists($dotZephir)) {
+                unlink_recursive($dotZephir);
             }
 
-            if (file_exists(getcwd() . '/ext')) {
-                unlink_recursive(getcwd() . '/ext');
+            if (file_exists(getcwd().'/ext')) {
+                unlink_recursive(getcwd().'/ext');
             }
 
-            if (file_exists(getcwd() . '/compile.log')) {
-                unlink(getcwd() . '/compile.log');
+            if (file_exists(getcwd().'/compile.log')) {
+                unlink(getcwd().'/compile.log');
             }
 
-            if (file_exists(getcwd() . '/compile-errors.log')) {
-                unlink(getcwd() . '/compile-errors.log');
+            if (file_exists(getcwd().'/compile-errors.log')) {
+                unlink(getcwd().'/compile-errors.log');
             }
 
             chdir($this->pwd);
@@ -87,18 +78,22 @@ class CompileCommandTest extends TestCase
     public function shouldDetermineDevOption($flag, $cflags)
     {
         // TODO: Create a test for Windows
-        if (\strtoupper(\substr(PHP_OS, 0, 3)) === 'WIN') {
+        if ('WIN' === \strtoupper(\substr(PHP_OS, 0, 3))) {
             $this->markTestSkipped(
                 'This test currently works on Linux systems only'
             );
         }
 
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/devmode');
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/devmode');
 
-        $container = $this->createContainer(getcwd());
+        self::bootKernel();
 
-        $application = new Application(ZEPHIRPATH, $container);
-        $application->add(new CompileCommand());
+        $container = self::$kernel->getContainer();
+
+        $application = $container->get(Application::class);
+
+        $compilerFs = $container->get(FileSystemInterface::class);
+        $compilerFs->setBasePath(self::$kernel->getCacheDir());
 
         $this->muteOutput($container);
 
@@ -108,7 +103,7 @@ class CompileCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                $flag     => true,
+                $flag => true,
             ],
             ['verbosity' => OutputInterface::VERBOSITY_QUIET]
         );
@@ -125,33 +120,10 @@ class CompileCommandTest extends TestCase
     }
 
     /**
-     * @param  Container $container
-     * @return void
+     * @param ContainerInterface $container
      */
-    protected function muteOutput(Container $container)
+    protected function muteOutput(ContainerInterface $container)
     {
-        $container->get('config')->set('silent', true);
-    }
-
-    /**
-     * Create internal Zephir's container.
-     *
-     * @param  $basePath
-     * @return Container
-     */
-    protected function createContainer($basePath)
-    {
-        $container = new Container();
-
-        $filesystem = function () use ($basePath) {
-            $adapter = new Local($basePath);
-            return new HardDisk(
-                new Filesystem($adapter, ['visibility' => 'public'])
-            );
-        };
-
-        $container->share('filesystem', $filesystem);
-
-        return $container;
+        $container->get(Config::class)->set('silent', true);
     }
 }

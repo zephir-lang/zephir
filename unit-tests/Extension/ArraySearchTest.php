@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\ArraySearch;
-use Zephir\Support\TestCase;
 
 class ArraySearchTest extends TestCase
 {
@@ -24,8 +24,8 @@ class ArraySearchTest extends TestCase
     {
         $t = new ArraySearch();
 
-        $needle   = 'value';
-        $haystack = [".", "/", "0", "1", "2", "3", "4", "value", "OtherValue"];
+        $needle = 'value';
+        $haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
 
         $this->assertEquals(7, $t->simpleSearch($needle, $haystack));
     }

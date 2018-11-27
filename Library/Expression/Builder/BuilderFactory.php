@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,9 +15,7 @@ use Zephir\Expression\Builder\Factory\OperatorsFactory;
 use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 /**
- * Zephir\Expression\Builder\BuilderFactory
- *
- * @package Zephir\Expression\Builder
+ * Zephir\Expression\Builder\BuilderFactory.
  */
 class BuilderFactory
 {
@@ -68,31 +66,34 @@ class BuilderFactory
 
     /**
      * @param $name
+     *
      * @return RawExpression
      */
     public function variable($name)
     {
-        return $this->raw(array(
-            'type'  => 'variable',
-            'value' => $name
-        ));
+        return $this->raw([
+            'type' => 'variable',
+            'value' => $name,
+        ]);
     }
 
     /**
      * @param $type
      * @param null $value
+     *
      * @return RawExpression
      */
     public function literal($type, $value = null)
     {
-        return $this->raw(array(
-            'type'  => $type,
-            'value' => $value
-        ));
+        return $this->raw([
+            'type' => $type,
+            'value' => $value,
+        ]);
     }
 
     /**
      * @param $expression
+     *
      * @return RawExpression
      */
     public function raw($expression)

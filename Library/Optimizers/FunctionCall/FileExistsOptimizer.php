@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FileExistsOptimizer
+ * FileExistsOptimizer.
  *
  * Optimizes calls to 'file_exists' using internal function
  */
 class FileExistsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     *
      * @throws CompilerException
+     *
+     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,13 +39,14 @@ class FileExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('bool', '(zephir_file_exists(' . $resolvedParams[0] . ' TSRMLS_CC) == SUCCESS)', $expression);
+
+        return new CompiledExpression('bool', '(zephir_file_exists('.$resolvedParams[0].' TSRMLS_CC) == SUCCESS)', $expression);
     }
 }

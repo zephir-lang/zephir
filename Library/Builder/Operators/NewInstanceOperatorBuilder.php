@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * NewInstanceOperatorBuilder
+ * NewInstanceOperatorBuilder.
  *
  * Allows to manually build a 'new instance' operator AST node
  */
@@ -41,24 +41,25 @@ class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        $parameters = array();
+        $parameters = [];
         foreach ($this->parameters as $parameter) {
             $parameters[] = $parameter->get();
         }
-        return array(
-            'type'       => 'new',
-            'class'      => $this->className,
+
+        return [
+            'type' => 'new',
+            'class' => $this->className,
             'parameters' => $parameters,
-            'dynamic'    => $this->dynamic,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
-        );
+            'dynamic' => $this->dynamic,
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char,
+        ];
     }
 }

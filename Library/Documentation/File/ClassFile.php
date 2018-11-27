@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,8 +12,8 @@
 namespace Zephir\Documentation\File;
 
 use Zephir\ClassDefinition;
-use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
+use Zephir\Documentation\AbstractFile;
 
 class ClassFile extends AbstractFile
 {
@@ -23,7 +23,6 @@ class ClassFile extends AbstractFile
     protected $class;
 
     /**
-     *
      * @var CompilerFile
      */
     protected $compilerFile;
@@ -36,35 +35,33 @@ class ClassFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "class.phtml";
+        return 'class.phtml';
     }
 
     public function getData()
     {
         $nsPieces = explode('\\', $this->class->getNamespace());
 
-        $nsPatches = array();
-        $nsStr = "";
+        $nsPatches = [];
+        $nsStr = '';
 
         foreach ($nsPieces as $n) {
-            if (strlen($nsStr) > 0) {
-                $nsStr.= '\\';
+            if (\strlen($nsStr) > 0) {
+                $nsStr .= '\\';
             }
-            $nsStr.= $n;
+            $nsStr .= $n;
             $nsPatches[$n] = $nsStr;
         }
 
-        return array(
-
-            "classDefinition" => $this->class,
-            "compilerFile"    => $this->compilerFile,
-            "className" => $this->class->getName(),
-            "classNamespace" => $this->class->getNamespace(),
-            "fullName"  => $this->class->getCompleteName(),
-            "methods"   => $this->class->getMethods(),
-            "namespacePieces" => $nsPatches
-
-        );
+        return [
+            'classDefinition' => $this->class,
+            'compilerFile' => $this->compilerFile,
+            'className' => $this->class->getName(),
+            'classNamespace' => $this->class->getNamespace(),
+            'fullName' => $this->class->getCompleteName(),
+            'methods' => $this->class->getMethods(),
+            'namespacePieces' => $nsPatches,
+        ];
     }
 
     public function getOutputFile()

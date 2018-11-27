@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,11 +12,9 @@
 namespace Zephir\Variable;
 
 /**
- * Zephir\Variable\Globals
+ * Zephir\Variable\Globals.
  *
  * Represents a central knowledge base on global variables.
- *
- * @package Zephir\Variable
  */
 class Globals
 {
@@ -63,24 +61,26 @@ class Globals
 
     /**
      * Names of superglobal variables.
+     *
      * @var array
      */
     protected $superglobals = [
-        self::GET     => 1,
-        self::POST    => 1,
-        self::ENV     => 1,
-        self::COOKIE  => 1,
-        self::SERVER  => 1,
+        self::GET => 1,
+        self::POST => 1,
+        self::ENV => 1,
+        self::COOKIE => 1,
+        self::SERVER => 1,
         self::SESSION => 1,
         self::REQUEST => 1,
-        self::FILES   => 1,
+        self::FILES => 1,
     ];
 
     /**
-     * Checks if a variable is a superglobal
+     * Checks if a variable is a superglobal.
      *
      * @param string $name
-     * @return boolean
+     *
+     * @return bool
      */
     public function isSuperGlobal($name)
     {

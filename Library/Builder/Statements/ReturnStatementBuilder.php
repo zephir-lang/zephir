@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * ReturnStatementBuilder
+ * ReturnStatementBuilder.
  *
  * Allows to manually build a 'return' statement AST node
  */
@@ -21,7 +21,7 @@ class ReturnStatementBuilder extends AbstractStatementBuilder
     private $expr;
 
     /**
-     * ReturnStatementBuilder constructor
+     * ReturnStatementBuilder constructor.
      *
      * @param mixed $expr
      */
@@ -35,9 +35,9 @@ class ReturnStatementBuilder extends AbstractStatementBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'return',
-            'expr' => $this->expr->get()
-        );
+            'expr' => $this->expr->get(),
+        ];
     }
 }

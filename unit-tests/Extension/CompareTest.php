@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Compare;
-use Zephir\Support\TestCase;
 
 class CompareTest extends TestCase
 {
     public function testLess()
     {
-        $t = new Compare;
+        $t = new Compare();
 
         $this->assertTrue($t->isLessInt(1, 2));
         $this->assertTrue($t->isLessDouble(1.1, 1.2));
@@ -27,7 +27,7 @@ class CompareTest extends TestCase
 
     public function testGreaterEqual()
     {
-        $t = new Compare;
+        $t = new Compare();
 
         $this->assertTrue($t->isGreaterEqual(3, 2));
         $this->assertTrue($t->isGreaterEqual(2, 2));
@@ -36,7 +36,7 @@ class CompareTest extends TestCase
 
     public function testConst()
     {
-        $t = new Compare;
+        $t = new Compare();
 
         $this->assertTrue($t->isLessThenPi(3.12));
         $this->assertTrue($t->isMoreThenPi(3.15));
@@ -44,7 +44,7 @@ class CompareTest extends TestCase
 
     public function testVarWithStringEquals()
     {
-        $t = new Compare;
+        $t = new Compare();
 
         $this->assertSame('NOK', $t->testVarWithStringEquals('wrong testing'));
         $this->assertSame('NOK', $t->testVarWithStringEquals('another testing'));
@@ -62,7 +62,6 @@ class CompareTest extends TestCase
         $this->assertTrue($t->testNullEqualsVar(null));
         $this->assertFalse($t->testNullEqualsVar(1));
     }
-
 
     public function testNotEquals()
     {

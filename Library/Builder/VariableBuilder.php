@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * VariableBuilder
+ * VariableBuilder.
  *
  * Allows to manually build a variable AST node
  */
@@ -26,15 +26,15 @@ class VariableBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'variable',
-            'value' => $this->name
-        );
+            'value' => $this->name,
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,7 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
 /**
- * ContinueStatement
+ * ContinueStatement.
  *
  * Continue statement
  */
@@ -23,6 +23,7 @@ class ContinueStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * IfStatementBuilder
+ * IfStatementBuilder.
  *
  * Allows to manually build a 'let' statement AST node
  */
@@ -33,9 +33,9 @@ class LetStatementBuilder extends AbstractStatementBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'let',
-            'assignments' => array(array_merge(array('expr' => $this->expr), $this->assignments))
-        );
+            'assignments' => [array_merge(['expr' => $this->expr], $this->assignments)],
+        ];
     }
 }

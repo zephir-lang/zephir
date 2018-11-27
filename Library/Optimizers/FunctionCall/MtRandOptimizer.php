@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * MtRandOptimizer
+ * MtRandOptimizer.
  *
  * Optimizes calls to 'mt_rand' using internal function
  */
 class MtRandOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     *
      * @throws CompilerException
+     *
+     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,7 +39,7 @@ class MtRandOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
@@ -45,6 +47,7 @@ class MtRandOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/operators');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('long', 'zephir_mt_rand(zephir_get_intval(' . $resolvedParams[0] . '), zephir_get_intval(' . $resolvedParams[1] . ') TSRMLS_CC)', $expression);
+
+        return new CompiledExpression('long', 'zephir_mt_rand(zephir_get_intval('.$resolvedParams[0].'), zephir_get_intval('.$resolvedParams[1].') TSRMLS_CC)', $expression);
     }
 }

@@ -3,12 +3,12 @@ namespace Test\BuiltIn;
 
 class StringMethods
 {
-	public function camelize(string str, var delimiter = null)
+	public function camelize(string str, var delimiter = null) -> string
 	{
 		return str->camelize(delimiter);
 	}
 
-	public function uncamelize(string str, var delimiter = null)
+	public function uncamelize(string str, var delimiter = null) -> string
 	{
 		return str->uncamelize(delimiter);
 	}

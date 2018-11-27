@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * CallStaticStatement
+ * CallStaticStatement.
  *
  * Allows to manually build a static function call AST node
  */
@@ -21,25 +21,25 @@ class CallStaticStatement extends AbstractStatement
     private $class;
     private $method;
     private $arguments;
-    private $dynamicClass     = false;
-    private $dynamicMethod    = false;
+    private $dynamicClass = false;
+    private $dynamicMethod = false;
 
     /**
-     * @param null $class
-     * @param null $method
+     * @param null       $class
+     * @param null       $method
      * @param array|null $parameters
      */
     public function __construct($class = null, $method = null, array $parameters = null)
     {
-        if ($class !== null) {
+        if (null !== $class) {
             $this->setClass($class);
         }
 
-        if ($method !== null) {
+        if (null !== $method) {
             $this->setMethod($method);
         }
 
-        if ($parameters !== null) {
+        if (null !== $parameters) {
             $this->setArguments($parameters);
         }
     }
@@ -54,11 +54,13 @@ class CallStaticStatement extends AbstractStatement
 
     /**
      * @param mixed $class
+     *
      * @return CallStaticStatement
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -72,11 +74,13 @@ class CallStaticStatement extends AbstractStatement
 
     /**
      * @param mixed $method
+     *
      * @return CallStaticStatement
      */
     public function setMethod($method)
     {
         $this->method = $method;
+
         return $this;
     }
 
@@ -90,16 +94,18 @@ class CallStaticStatement extends AbstractStatement
 
     /**
      * @param mixed $arguments
+     *
      * @return CallStaticStatement
      */
     public function setArguments($arguments)
     {
         $this->arguments = $arguments;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDynamicClass()
     {
@@ -107,17 +113,19 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param boolean $dynamicClass
+     * @param bool $dynamicClass
+     *
      * @return CallStaticStatement
      */
     public function setDynamicClass($dynamicClass)
     {
         $this->dynamicClass = $dynamicClass;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDynamicMethod()
     {
@@ -125,12 +133,14 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param boolean $dynamicMethod
+     * @param bool $dynamicMethod
+     *
      * @return CallStaticStatement
      */
     public function setDynamicMethod($dynamicMethod)
     {
         $this->dynamicMethod = $dynamicMethod;
+
         return $this;
     }
 
@@ -141,20 +151,19 @@ class CallStaticStatement extends AbstractStatement
     {
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
-                if (!is_array($argument) || !isset($argument['parameter'])) {
-                    $argument = array('parameter' => $argument);
+                if (!\is_array($argument) || !isset($argument['parameter'])) {
+                    $argument = ['parameter' => $argument];
                 }
             }
         }
 
-        return array(
-            'type'           => 'scall',
-            'class'          => $this->getClass(),
-            'name'           => $this->getMethod(),
-            'parameters'     => $arguments,
-            'dynamic-class'  => $this->isDynamicClass(),
-            'dynamic'        => $this->isDynamicMethod(),
-
-        );
+        return [
+            'type' => 'scall',
+            'class' => $this->getClass(),
+            'name' => $this->getMethod(),
+            'parameters' => $arguments,
+            'dynamic-class' => $this->isDynamicClass(),
+            'dynamic' => $this->isDynamicMethod(),
+        ];
     }
 }

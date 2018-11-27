@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * UnaryOperatorBuilder
+ * UnaryOperatorBuilder.
  *
  * Allows to manually build a unary operator AST node
  */
@@ -38,24 +38,24 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        if (is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
+        if (\is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
             $expr = $this->leftExpression->get();
         } else {
             $expr = $this->leftExpression;
         }
 
-        return array(
-            'type'       => $this->operator,
-            'left'       => $expr,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
-        );
+        return [
+            'type' => $this->operator,
+            'left' => $expr,
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char,
+        ];
     }
 }

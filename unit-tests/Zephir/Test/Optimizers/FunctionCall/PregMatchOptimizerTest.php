@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,19 +12,19 @@
 namespace Zephir\Test\Optimizers\FunctionCall;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Optimizers\FunctionCall\PregMatchOptimizer;
-use Zephir\Support\TestCase;
 use Zephir\SymbolTable;
 use Zephir\Variable;
 
 class PregMatchOptimizerTest extends TestCase
 {
-    /** @var MockObject|Call */
+    /** @var Call|MockObject */
     protected $callMock;
 
-    /** @var MockObject|CompilationContext */
+    /** @var CompilationContext|MockObject */
     protected $contextMock;
 
     /** @var MockObject|SymbolTable */
@@ -104,9 +104,9 @@ class PregMatchOptimizerTest extends TestCase
 
         $expression = [
             'parameters' => [
-                0 => [ /* skip */ ],
-                1 => [ /* skip */ ],
-                2 => ['parameter' => ['type'  => 'int']]
+                0 => [/* skip */],
+                1 => [/* skip */],
+                2 => ['parameter' => ['type' => 'int']],
             ],
         ];
 
@@ -121,6 +121,7 @@ class PregMatchOptimizerTest extends TestCase
      * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage Cannot mutate variable 'matches' because it wasn't defined
+     *
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -130,9 +131,9 @@ class PregMatchOptimizerTest extends TestCase
 
         $expression = [
             'parameters' => [
-                0 => [ /* skip */ ],
-                1 => [ /* skip */ ],
-                2 => ['parameter' => ['type'  => 'variable', 'value' => 'matches']]
+                0 => [/* skip */],
+                1 => [/* skip */],
+                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']],
             ],
         ];
 
@@ -158,6 +159,7 @@ class PregMatchOptimizerTest extends TestCase
      * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage The 'matches' variable must be either a variable or an array, got Ooops
+     *
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
@@ -167,9 +169,9 @@ class PregMatchOptimizerTest extends TestCase
 
         $expression = [
             'parameters' => [
-                0 => [ /* skip */ ],
-                1 => [ /* skip */ ],
-                2 => ['parameter' => ['type'  => 'variable', 'value' => 'matches']]
+                0 => [/* skip */],
+                1 => [/* skip */],
+                2 => ['parameter' => ['type' => 'variable', 'value' => 'matches']],
             ],
         ];
 

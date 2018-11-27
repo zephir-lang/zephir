@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,6 +11,7 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\ACos;
 use Test\Optimizers\ASin;
 use Test\Optimizers\Cos;
@@ -18,7 +19,6 @@ use Test\Optimizers\Ldexp;
 use Test\Optimizers\Sin;
 use Test\Optimizers\Sqrt;
 use Test\Optimizers\Tan;
-use Zephir\Support\TestCase;
 
 class MathTest extends TestCase
 {
@@ -140,6 +140,6 @@ class MathTest extends TestCase
         $this->assertSame(tan(2), $t->testVarParameter(2));
         $this->assertSame(tan(3), $t->testVarParameter(3));
         $this->assertSame(tan(4), $t->testVarParameter(4));
-        $this->assertSame(tan(0), $t->testVarParameter("0"));
+        $this->assertSame(tan(0), $t->testVarParameter('0'));
     }
 }

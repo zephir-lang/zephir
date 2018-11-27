@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * BranchManager
+ * BranchManager.
  *
  * Records every branch created within a method allowing analyze conditional variable assignment
  */
@@ -29,7 +29,7 @@ class BranchManager
     protected $rootBranch;
 
     /**
-     * Sets the current active branch in the manager
+     * Sets the current active branch in the manager.
      *
      * @param Branch $branch
      */
@@ -45,16 +45,16 @@ class BranchManager
         $branch->setUniqueId($this->uniqueId);
         $branch->setLevel($this->level);
 
-        $this->level++;
-        $this->uniqueId++;
+        ++$this->level;
+        ++$this->uniqueId;
 
-        if ($branch->getType() == Branch::TYPE_ROOT) {
+        if (Branch::TYPE_ROOT == $branch->getType()) {
             $this->setRootBranch($branch);
         }
     }
 
     /**
-     * Removes a branch from the branch manager
+     * Removes a branch from the branch manager.
      *
      * @param Branch $branch
      */
@@ -62,13 +62,13 @@ class BranchManager
     {
         $parentBranch = $branch->getParentBranch();
         $this->currentBranch = $parentBranch;
-        $this->level--;
+        --$this->level;
     }
 
     /**
-     * Returns the active branch in the manager
+     * Returns the active branch in the manager.
      *
-     * @return null|Branch
+     * @return Branch|null
      */
     public function getCurrentBranch()
     {
@@ -86,7 +86,7 @@ class BranchManager
     }
 
     /**
-     * @return null|Branch
+     * @return Branch|null
      */
     public function getRootBranch()
     {

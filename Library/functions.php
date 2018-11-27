@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,14 +12,17 @@
 namespace Zephir;
 
 use Zephir\Exception\InvalidArgumentException;
+use const INFO_GENERAL;
+use const PHP_INT_SIZE;
+use const PHP_OS;
+use const PHP_ZTS;
 
 /**
  * Attempts to remove recursively the directory with all subdirectories and files.
  *
  * A E_WARNING level error will be generated on failure.
  *
- * @param  string $path
- * @return void
+ * @param string $path
  */
 function unlink_recursive($path)
 {
@@ -41,7 +44,8 @@ function unlink_recursive($path)
 /**
  * Camelize a string.
  *
- * @param  string $string
+ * @param string $string
+ *
  * @return string
  */
 function camelize($string)
@@ -49,11 +53,11 @@ function camelize($string)
     return \str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string)));
 }
 
-
 /**
  * Prepares a class name to be used as a C-string.
  *
- * @param  string $className
+ * @param string $className
+ *
  * @return string
  */
 function escape_class($className)
@@ -64,18 +68,19 @@ function escape_class($className)
 /**
  * Prepares a string to be used as a C-string.
  *
- * @param  string $string
+ * @param string $string
+ *
  * @return string
  */
 function add_slashes($string)
 {
-    $newstr = "";
+    $newstr = '';
     $after = null;
     $length = \strlen($string);
 
-    for ($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; ++$i) {
         $ch = \substr($string, $i, 1);
-        if ($i != ($length -1)) {
+        if ($i != ($length - 1)) {
             $after = \substr($string, $i + 1, 1);
         } else {
             $after = null;
@@ -83,33 +88,33 @@ function add_slashes($string)
 
         switch ($ch) {
             case '"':
-                $newstr .= "\\" . '"';
+                $newstr .= '\\'.'"';
                 break;
             case "\n":
-                $newstr .= "\\" . 'n';
+                $newstr .= '\\'.'n';
                 break;
             case "\t":
-                $newstr .= "\\" . 't';
+                $newstr .= '\\'.'t';
                 break;
             case "\r":
-                $newstr .= "\\" . 'r';
+                $newstr .= '\\'.'r';
                 break;
             case "\v":
-                $newstr .= "\\" . 'v';
+                $newstr .= '\\'.'v';
                 break;
             case '\\':
                 switch ($after) {
-                    case "n":
-                    case "v":
-                    case "t":
-                    case "r":
+                    case 'n':
+                    case 'v':
+                    case 't':
+                    case 'r':
                     case '"':
-                    case "\\":
-                        $newstr .= $ch . $after;
-                        $i++;
+                    case '\\':
+                        $newstr .= $ch.$after;
+                        ++$i;
                         break;
                     default:
-                        $newstr .= "\\\\";
+                        $newstr .= '\\\\';
                         break;
                 }
                 break;
@@ -117,25 +122,27 @@ function add_slashes($string)
                 $newstr .= $ch;
         }
     }
+
     return $newstr;
 }
 
 /**
- * Transform class/interface name to FQN format
+ * Transform class/interface name to FQN format.
  *
  * @param string       $className
  * @param string       $currentNamespace
  * @param AliasManager $aliasManager
+ *
  * @return string
  */
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 {
-    if (\is_string($className) == false) {
-        throw new InvalidArgumentException('Class name must be a string, got ' . \gettype($className));
+    if (false == \is_string($className)) {
+        throw new InvalidArgumentException('Class name must be a string, got '.\gettype($className));
     }
 
     // Absolute class/interface name
-    if ($className[0] === '\\') {
+    if ('\\' === $className[0]) {
         return \substr($className, 1);
     }
 
@@ -144,7 +151,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
     if (false !== $firstSepPos) {
         $baseName = \substr($className, 0, $firstSepPos);
         if ($aliasManager && $aliasManager->isAlias($baseName)) {
-            return $aliasManager->getAlias($baseName) . '\\' . \substr($className, $firstSepPos + 1);
+            return $aliasManager->getAlias($baseName).'\\'.\substr($className, $firstSepPos + 1);
         }
     } elseif ($aliasManager && $aliasManager->isAlias($className)) {
         return $aliasManager->getAlias($className);
@@ -152,7 +159,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 
     // Relative class/interface name
     if ($currentNamespace) {
-        return $currentNamespace . '\\' . $className;
+        return $currentNamespace.'\\'.$className;
     }
 
     return $className;
@@ -161,8 +168,9 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 /**
  * Checks if the content of the file on the disk is the same as the content.
  *
- * @param  string $content
- * @param  string $path
+ * @param string $content
+ * @param string $path
+ *
  * @return bool
  */
 function file_put_contents_ex($content, $path)
@@ -173,12 +181,95 @@ function file_put_contents_ex($content, $path)
 
         if ($contentMd5 != $existingMd5) {
             \file_put_contents($path, $content);
+
             return true;
         }
     } else {
         \file_put_contents($path, $content);
+
         return true;
     }
 
     return false;
+}
+
+/**
+ * Checks if currently running under MS Windows.
+ *
+ * @return bool
+ */
+function is_windows()
+{
+    return 'WIN' === \strtoupper(\substr(PHP_OS, 0, 3));
+}
+
+/**
+ * Checks if currently running under macOs.
+ *
+ * @return bool
+ */
+function is_macos()
+{
+    return 'DARWIN' === \strtoupper(\substr(PHP_OS, 0, 6));
+}
+
+/**
+ * Checks if currently running under BSD based OS.
+ *
+ * @see   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
+ *
+ * @return bool
+ */
+function is_bsd()
+{
+    return false !== \stristr(\strtolower(PHP_OS), 'bsd');
+}
+
+/**
+ * Checks if current PHP is thread safe.
+ *
+ * @return bool
+ */
+function is_zts()
+{
+    if (\defined('PHP_ZTS') && PHP_ZTS == 1) {
+        return true;
+    }
+
+    \ob_start();
+    \phpinfo(INFO_GENERAL);
+
+    return (bool) \preg_match('/Thread\s*Safety\s*enabled/i', \strip_tags(\ob_get_clean()));
+}
+
+/**
+ * Resolves Windows release folder.
+ *
+ * @return string
+ */
+function windows_release_dir()
+{
+    if (is_zts()) {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return 'ext\\Release_TS';
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return 'ext\\x64\\Release_TS';
+        } else {
+            // fallback
+            return 'ext\\Release_TS';
+        }
+    } else {
+        if (PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return 'ext\\Release';
+        } elseif (PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return 'ext\\x64\\Release';
+        } else {
+            // fallback
+            return 'ext\\Release';
+        }
+    }
 }

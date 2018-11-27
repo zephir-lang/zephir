@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,21 +11,21 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\CreateArray;
-use Zephir\Support\TestCase;
 
 class CreateArrayTest extends TestCase
 {
     public function testCreateArrayNoSize()
     {
-        $t = new CreateArray;
-        $this->assertSame(count($t->createNoSize()), 0);
+        $t = new CreateArray();
+        $this->assertSame(\count($t->createNoSize()), 0);
     }
 
     public function testCreateArraySize()
     {
-        $t = new CreateArray;
-        $this->assertSame(count($t->createSize(3)), 3);
-        $this->assertSame(count($t->createSize(10)), 10);
+        $t = new CreateArray();
+        $this->assertSame(\count($t->createSize(3)), 3);
+        $this->assertSame(\count($t->createSize(10)), 10);
     }
 }

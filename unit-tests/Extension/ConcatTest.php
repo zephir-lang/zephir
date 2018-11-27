@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Concat;
-use Zephir\Support\TestCase;
 
 class ConcatTest extends TestCase
 {
@@ -21,27 +21,27 @@ class ConcatTest extends TestCase
     {
         $t = new Concat();
 
-        $this->assertSame(null, $t->getTestProperty());
+        $this->assertNull($t->getTestProperty());
 
-        $t->testConcatBySelfProperty("test");
-        $this->assertSame("test", $t->getTestProperty());
+        $t->testConcatBySelfProperty('test');
+        $this->assertSame('test', $t->getTestProperty());
 
-        $t->testConcatBySelfProperty(" string");
-        $this->assertSame("test string", $t->getTestProperty());
+        $t->testConcatBySelfProperty(' string');
+        $this->assertSame('test string', $t->getTestProperty());
     }
 
     /** @test */
     public function shouldAppendVariableToString()
     {
         $t = new Concat();
-        $this->assertSame("appendtest", $t->testConcat1());
+        $this->assertSame('appendtest', $t->testConcat1());
     }
 
     /** @test */
     public function shouldConcatenateVariableWithString()
     {
         $t = new Concat();
-        $this->assertSame("appendotherappendother", $t->testConcat2());
+        $this->assertSame('appendotherappendother', $t->testConcat2());
     }
 
     /**
@@ -51,6 +51,6 @@ class ConcatTest extends TestCase
     public function shouldConcatenateStringsSimilarToIntegersNumbers()
     {
         $t = new Concat();
-        $this->assertSame("21", $t->testConcat3());
+        $this->assertSame('21', $t->testConcat3());
     }
 }

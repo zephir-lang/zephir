@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -20,19 +20,19 @@ class NamespaceHelper
     protected $endNamespace;
     protected $parentName;
 
-    protected $classes = array();
-    protected $namespaces = array();
+    protected $classes = [];
+    protected $namespaces = [];
 
     public function __construct($fullNamespace)
     {
         $this->fullNamespace = $fullNamespace;
 
-        $ex = explode("\\", $fullNamespace);
-        $this->endNamespace = $ex[count($ex) - 1];
+        $ex = explode('\\', $fullNamespace);
+        $this->endNamespace = $ex[\count($ex) - 1];
 
         array_pop($ex);
 
-        $this->parentName = implode("\\", $ex);
+        $this->parentName = implode('\\', $ex);
     }
 
     public function addClass(CompilerFile $c)
@@ -40,7 +40,7 @@ class NamespaceHelper
         $this->classes[] = $c;
     }
 
-    public function addNamespace(NamespaceHelper $n)
+    public function addNamespace(self $n)
     {
         if (!isset($this->namespaces[$n->getFullNamespace()])) {
             $this->namespaces[$n->getFullNamespace()] = $n;

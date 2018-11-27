@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,16 +11,16 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class Issue1521Test extends TestCase
 {
     public function testIssue1521()
     {
-        $t      = new \Test\Issue1521();
+        $t = new \Test\Issue1521();
         $actual = $t->test();
 
-        $this->assertTrue("0" === $actual['zero']);
-        $this->assertTrue("0818217122" === $actual['merchantNumber']);
+        $this->assertTrue('0' === $actual['zero']);
+        $this->assertTrue('0818217122' === $actual['merchantNumber']);
     }
 }

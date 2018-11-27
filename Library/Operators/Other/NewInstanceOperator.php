@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -20,7 +20,7 @@ use Zephir\Operators\BaseOperator;
 use function Zephir\escape_class;
 
 /**
- * NewInstance
+ * NewInstance.
  *
  * Creates a new instance of a class
  */
@@ -29,43 +29,48 @@ class NewInstanceOperator extends BaseOperator
     protected $literalOnly = false;
 
     /**
-     * Creates a new instance
+     * Creates a new instance.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
-     * @return CompiledExpression
+     *
      * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * Resolves the symbol that expects the value
          */
         $this->literalOnly = false;
         $symbolVariable = $this->getExpectedNonLiteral($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Objects can only be instantiated into dynamic variables", $expression);
+            throw new CompilerException('Objects can only be instantiated into dynamic variables', $expression);
         }
 
         if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot use non-heap variable to store new instance", $expression);
+            throw new CompilerException('Cannot use non-heap variable to store new instance', $expression);
         }
 
-        if ($symbolVariable->getName() != 'return_value') {
-            if ($symbolVariable->hasDifferentDynamicType(array('unknown', 'undefined', 'object', 'null'))) {
-                $compilationContext->logger->warning('Possible attempt to use non-object in "new" operator', 'non-valid-new', $expression);
+        if ('return_value' != $symbolVariable->getName()) {
+            if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
+                $compilationContext->logger->warning(
+                    'Possible attempt to use non-object in "new" operator',
+                    ['non-valid-new', $expression]
+                );
             }
         }
 
-        /**
+        /*
          * Mark variables as dynamic objects
          */
         $symbolVariable->setDynamicTypes('object');
 
         $dynamic = false;
-        if ($expression['class'] == 'self' || $expression['class'] == 'static') {
+        if ('self' == $expression['class'] || 'static' == $expression['class']) {
             $className = $compilationContext->classDefinition->getCompleteName();
         } else {
             $className = $expression['class'];
@@ -76,18 +81,18 @@ class NewInstanceOperator extends BaseOperator
         }
 
         if (!$className) {
-            throw new CompilerException("A class name is required to instantiate the object", $expression);
+            throw new CompilerException('A class name is required to instantiate the object', $expression);
         }
 
         /**
-         * stdclass doesn't have constructors
+         * stdclass doesn't have constructors.
          */
         $lowerClassName = strtolower($className);
-        $isStdClass = $lowerClassName === 'stdclass' || $lowerClassName === '\stdclass';
+        $isStdClass = 'stdclass' === $lowerClassName || '\stdclass' === $lowerClassName;
 
         if ($isStdClass) {
-            if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
-                throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
+            if (isset($expression['parameters']) && \count($expression['parameters']) > 0) {
+                throw new CompilerException('stdclass does not receive parameters in its constructor', $expression);
             }
 
             $compilationContext->backend->initObject($symbolVariable, null, $compilationContext);
@@ -98,7 +103,7 @@ class NewInstanceOperator extends BaseOperator
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
             }
 
-            /**
+            /*
              * Classes inside the same extension
              */
             if ($classDefinition) {
@@ -106,16 +111,16 @@ class NewInstanceOperator extends BaseOperator
                 $symbolVariable->setClassTypes($className);
                 $symbolVariable->setAssociatedClass($classDefinition);
             } else {
-                /**
+                /*
                  * Classes outside the extension
                  */
                 if ($dynamic) {
                     $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
                     if ($classNameVariable->isNotVariableAndString()) {
-                        throw new CompilerException("Only dynamic/string variables can be used in new operator. " . $classNameVariable->getName(), $expression);
+                        throw new CompilerException('Only dynamic/string variables can be used in new operator. '.$classNameVariable->getName(), $expression);
                     }
 
-                    /**
+                    /*
                      * Use a safe string version of the variable to avoid segfaults
                      */
                     $compilationContext->headersManager->add('kernel/object');
@@ -126,14 +131,17 @@ class NewInstanceOperator extends BaseOperator
                     $safeSymbol = $compilationContext->backend->getVariableCode($safeSymbolVariable);
                     $classNameSymbol = $compilationContext->backend->getVariableCode($classNameVariable);
 
-                    $compilationContext->codePrinter->output('zephir_fetch_safe_class(' . $safeSymbol .', ' . $classNameSymbol .');');
-                    $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbol . '), Z_STRLEN_P(' . $safeSymbol . ')';
+                    $compilationContext->codePrinter->output('zephir_fetch_safe_class('.$safeSymbol.', '.$classNameSymbol.');');
+                    $classNameToFetch = 'Z_STRVAL_P('.$safeSymbol.'), Z_STRLEN_P('.$safeSymbol.')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();
                 } else {
                     if (!class_exists($className, false)) {
-                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', "nonexistent-class", $expression);
-                        $classNameToFetch = 'SL("' . escape_class($className) . '")';
+                        $compilationContext->logger->warning(
+                            'Class "'.$className.'" does not exist at compile time',
+                            ['nonexistent-class', $expression]
+                        );
+                        $classNameToFetch = 'SL("'.escape_class($className).'")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
@@ -151,7 +159,7 @@ class NewInstanceOperator extends BaseOperator
 
                         $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if (!$classEntry) {
-                            $classNameToFetch = 'SL("' . escape_class($className) . '")';
+                            $classNameToFetch = 'SL("'.escape_class($className).'")';
                             $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                             $classEntry = $zendClassEntry->getName();
                         } else {
@@ -165,12 +173,12 @@ class NewInstanceOperator extends BaseOperator
             }
         }
 
-        /**
+        /*
          * Mark variable initialized
          */
         $symbolVariable->setIsInitialized(true, $compilationContext);
 
-        /**
+        /*
          * Don't check the constructor for stdclass instances
          */
         if ($isStdClass) {
@@ -180,49 +188,49 @@ class NewInstanceOperator extends BaseOperator
         /**
          * Call the constructor
          * For classes in the same extension we check if the class does implement a constructor
-         * For external classes we always assume the class does implement a constructor
+         * For external classes we always assume the class does implement a constructor.
          */
         $callConstructor = false;
         if ($compilationContext->compiler->isClass($className)) {
             $classDefinition = $compilationContext->compiler->getClassDefinition($className);
 
-            if ($classDefinition->getType() != 'class') {
-                throw new CompilerException("Only classes can be instantiated", $expression);
+            if ('class' != $classDefinition->getType()) {
+                throw new CompilerException('Only classes can be instantiated', $expression);
             }
 
-            $callConstructor = $classDefinition->hasMethod("__construct");
+            $callConstructor = $classDefinition->hasMethod('__construct');
         } else {
             if ($compilationContext->compiler->isBundledClass($className)) {
                 $classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
-                $callConstructor = $classDefinition->hasMethod("__construct");
+                $callConstructor = $classDefinition->hasMethod('__construct');
             }
         }
 
         /* @TODO use the MethodBuilder here */
         if (isset($expression['parameters'])) {
-            $callExpr = new Expression(array(
-                'variable'   => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
-                'name'       => '__construct',
+            $callExpr = new Expression([
+                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name' => '__construct',
                 'parameters' => $expression['parameters'],
-                'call-type'  => MethodCall::CALL_NORMAL,
-                'file'       => $expression['file'],
-                'line'       => $expression['line'],
-                'char'       => $expression['char'],
-                'check'      => $callConstructor
-            ));
-        } else {
-            $callExpr = new Expression(array(
-                'variable'  => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
-                'name'      => '__construct',
                 'call-type' => MethodCall::CALL_NORMAL,
-                'file'      => $expression['file'],
-                'line'      => $expression['line'],
-                'char'      => $expression['char'],
-                'check'     => $callConstructor
-            ));
+                'file' => $expression['file'],
+                'line' => $expression['line'],
+                'char' => $expression['char'],
+                'check' => $callConstructor,
+            ]);
+        } else {
+            $callExpr = new Expression([
+                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name' => '__construct',
+                'call-type' => MethodCall::CALL_NORMAL,
+                'file' => $expression['file'],
+                'line' => $expression['line'],
+                'char' => $expression['char'],
+                'check' => $callConstructor,
+            ]);
         }
 
-        /**
+        /*
          * If we are certain that there is a constructor we call it, otherwise we checked it at runtime.
          */
         if ($callConstructor) {

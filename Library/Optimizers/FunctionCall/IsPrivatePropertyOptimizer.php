@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,25 +14,25 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Zephir\Optimizers\FunctionCall\IsPrivatePropertyOptimizer
+ * Zephir\Optimizers\FunctionCall\IsPrivatePropertyOptimizer.
  *
  * Allows to fastly check if a property has private visibility
  */
 class IsPrivatePropertyOptimizer extends OptimizerAbstract
 {
     /**
-     * @param  array              $expression
-     * @param  Call               $call
-     * @param  CompilationContext $context
-     *
-     * @return bool|CompiledExpression
+     * @param array              $expression
+     * @param Call               $call
+     * @param CompilationContext $context
      *
      * @throws CompilerException
+     *
+     * @return bool|CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -40,7 +40,7 @@ class IsPrivatePropertyOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
@@ -48,7 +48,8 @@ class IsPrivatePropertyOptimizer extends OptimizerAbstract
 
         try {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            return new CompiledExpression('bool', 'zephir_is_private_prop(' . $resolvedParams[0] . ')', $expression);
+
+            return new CompiledExpression('bool', 'zephir_is_private_prop('.$resolvedParams[0].')', $expression);
         } catch (Exception $e) {
             throw  new CompilerException($e->getMessage(), $expression);
         }

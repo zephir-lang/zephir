@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,61 +12,65 @@
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
-use Zephir\CompiledExpression;
 
 /**
- * ObjectDynamicProperty
+ * ObjectDynamicProperty.
  *
  * Updates object properties dynamically
  */
 class ObjectDynamicStringProperty
 {
     /**
-     * Compiles foo->{"x"} = {expr}
+     * Compiles foo->{"x"} = {expr}.
      *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
+     *
      * @throws CompilerException
      * @throws \Exception
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
-            throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
+        if ('variable' != $symbolVariable->getType()) {
+            throw new CompilerException("Variable type '".$symbolVariable->getType()."' cannot be used as object", $statement);
         }
 
         $propertyName = $statement['property'];
 
-        if (!is_string($propertyName)) {
-            throw new CompilerException("Expected string to update object property, ".gettype($propertyName)." received", $statement);
+        if (!\is_string($propertyName)) {
+            throw new CompilerException('Expected string to update object property, '.\gettype($propertyName).' received', $statement);
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
+            throw new CompilerException("Cannot mutate static property '".$compilationContext->classDefinition->getCompleteName().'::'.$propertyName."' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
-            throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
+        if ('variable' != $symbolVariable->getType()) {
+            throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' as an object', $statement);
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /**
+        /*
          * Trying to use a non-object dynamic variable as object
          */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
-            $compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
+        if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
+            $compilationContext->logger->warning(
+                'Possible attempt to update property on non-object dynamic property',
+                ['non-valid-objectupdate', $statement]
+            );
         }
 
         $compilationContext->headersManager->add('kernel/object');
@@ -90,12 +94,12 @@ class ObjectDynamicStringProperty
                 break;
 
             case 'bool':
-                if ($resolvedExpr->getBooleanCode() == '1') {
+                if ('1' == $resolvedExpr->getBooleanCode()) {
                     $value = 'true';
-                } elseif ($resolvedExpr->getBooleanCode() == '0') {
+                } elseif ('0' == $resolvedExpr->getBooleanCode()) {
                     $value = 'false';
                 } else {
-                    throw new \Exception("?");
+                    throw new \Exception('?');
                 }
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $value, $compilationContext);
                 break;
@@ -141,12 +145,12 @@ class ObjectDynamicStringProperty
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
         }
     }
 }

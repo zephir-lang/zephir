@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * BranchGraph
+ * BranchGraph.
  *
  * Represents a group of branch nodes
  */
@@ -23,7 +23,7 @@ class BranchGraph
     protected $branchMap;
 
     /**
-     * Adds a leaf to the branch tree
+     * Adds a leaf to the branch tree.
      *
      * @param Branch $branch
      */
@@ -54,7 +54,7 @@ class BranchGraph
     }
 
     /**
-     * Returns the tree's root node
+     * Returns the tree's root node.
      *
      * @return BranchGraphNode
      */

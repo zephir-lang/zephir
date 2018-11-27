@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,9 +12,7 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\ExceptionInterface
- *
- * @package Zephir\Exception
+ * Zephir\Exception\ExceptionInterface.
  */
 interface ExceptionInterface
 {

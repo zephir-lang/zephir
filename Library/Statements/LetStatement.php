@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,32 +12,32 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Statements\Let\Variable as LetVariable;
-use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 use Zephir\Statements\Let\ArrayIndex as LetArrayIndex;
 use Zephir\Statements\Let\ArrayIndexAppend as LetArrayIndexAppend;
-use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
+use Zephir\Statements\Let\Decr as LetDecr;
+use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
+use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
+use Zephir\Statements\Let\Incr as LetIncr;
 use Zephir\Statements\Let\ObjectDynamicProperty as LetObjectDynamicProperty;
 use Zephir\Statements\Let\ObjectDynamicStringProperty as LetObjectDynamicStringProperty;
+use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
 use Zephir\Statements\Let\ObjectPropertyAppend as LetObjectPropertyAppend;
 use Zephir\Statements\Let\ObjectPropertyArrayIndex as LetObjectPropertyArrayIndex;
 use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArrayIndexAppend;
-use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\ObjectPropertyDecr as LetObjectPropertyDecr;
+use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\StaticProperty as LetStaticProperty;
 use Zephir\Statements\Let\StaticPropertyAppend as LetStaticPropertyAppend;
 use Zephir\Statements\Let\StaticPropertyArrayIndex as LetStaticPropertyArrayIndex;
 use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArrayIndexAppend;
-use Zephir\Statements\Let\Decr as LetDecr;
-use Zephir\Statements\Let\Incr as LetIncr;
-use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
-use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
+use Zephir\Statements\Let\Variable as LetVariable;
+use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 
 /**
- * LetStatement
+ * LetStatement.
  *
  * Let statement is used to assign variables
  */
@@ -45,7 +45,8 @@ class LetStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws \Zephir\Exception\CompilerException
+     *
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -55,7 +56,7 @@ class LetStatement extends StatementAbstract
         foreach ($statement['assignments'] as $assignment) {
             $variable = $assignment['variable'];
 
-            /**
+            /*
              * Get the symbol from the symbol table if necessary
              */
             switch ($assignment['assign-type']) {
@@ -81,7 +82,7 @@ class LetStatement extends StatementAbstract
                     break;
             }
 
-            /**
+            /*
              * Incr/Decr assignments don't require an expression
              */
             if (isset($assignment['expr'])) {
@@ -91,7 +92,7 @@ class LetStatement extends StatementAbstract
                     case 'variable':
                         if (!$readDetector->detect($variable, $assignment['expr'])) {
                             if (isset($assignment['operator'])) {
-                                if ($assignment['operator'] == 'assign') {
+                                if ('assign' == $assignment['operator']) {
                                     $expr->setExpectReturn(true, $symbolVariable);
                                 }
                             } else {
@@ -99,7 +100,7 @@ class LetStatement extends StatementAbstract
                             }
                         } else {
                             if (isset($assignment['operator'])) {
-                                if ($assignment['operator'] == 'assign') {
+                                if ('assign' == $assignment['operator']) {
                                     $expr->setExpectReturn(true);
                                 }
                             } else {
@@ -119,11 +120,11 @@ class LetStatement extends StatementAbstract
 
                 $resolvedExpr = $expr->compile($compilationContext);
 
-                /**
+                /*
                  * Bad implemented operators could return values different than objects
                  */
-                if (!is_object($resolvedExpr)) {
-                    throw new CompilerException("Resolved expression is not valid", $assignment['expr']);
+                if (!\is_object($resolvedExpr)) {
+                    throw new CompilerException('Resolved expression is not valid', $assignment['expr']);
                 }
             }
 
@@ -131,7 +132,7 @@ class LetStatement extends StatementAbstract
                 $variable = $symbolVariable->getName();
             }
 
-            /**
+            /*
              * There are four types of assignments
              */
             switch ($assignment['assign-type']) {
@@ -236,7 +237,7 @@ class LetStatement extends StatementAbstract
                     break;
 
                 default:
-                    throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
+                    throw new CompilerException('Unknown assignment: '.$assignment['assign-type'], $assignment);
             }
         }
     }

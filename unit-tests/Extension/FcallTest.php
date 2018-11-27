@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Fcall;
 use Test\Oo\PropertyAccess;
-use Zephir\Support\TestCase;
 
 class FcallTest extends TestCase
 {
@@ -34,6 +34,7 @@ class FcallTest extends TestCase
 
     /**
      * @dataProvider getArgsDataProvider
+     *
      * @param mixed $param1
      * @param mixed $param2
      */
@@ -41,6 +42,31 @@ class FcallTest extends TestCase
     {
         $t = new Fcall();
         $this->assertSame([$param1, $param2], $t->testFunctionGetArgs($param1, $param2));
+    }
+
+    /**
+     * @test
+     * @dataProvider getArgsDataProvider
+     *
+     * @param mixed $param1
+     * @param mixed $param2
+     */
+    public function shouldGetArgsUsingAllExtraParams($param1, $param2)
+    {
+        $t = new Fcall();
+        $this->assertSame([$param1, $param2], $t->testFunctionGetArgsAllExtra($param1, $param2));
+    }
+
+    /**
+     * @test
+     * @dataProvider getArgsDataProvider
+     *
+     * @param mixed $param1
+     * @param mixed $param2
+     */
+    public function shouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2)
+    {
+        $this->assertSame([$param1, $param2], Fcall::testStaticFunctionGetArgsAllExtra($param1, $param2));
     }
 
     public function getArgsDataProvider()
@@ -56,6 +82,19 @@ class FcallTest extends TestCase
         ];
     }
 
+    /** @test */
+    public function shouldGedDesiredArgUsingAllExtraParams()
+    {
+        $t = new Fcall();
+        $this->assertSame([true, false], $t->testFunctionGetArgAllExtra(true, false));
+    }
+
+    /** @test */
+    public function shouldGedDesiredArgUsingAllExtraParamsAndStaticFunction()
+    {
+        $this->assertSame([true, false], Fcall::testStaticFunctionGetArgAllExtra(true, false));
+    }
+
     public function testArrayFill()
     {
         $t = new Fcall();
@@ -67,11 +106,11 @@ class FcallTest extends TestCase
 
     public function testFunctionDeclaration()
     {
-        $this->assertSame("aaaaa", \Test\zephir_namespaced_method_test("a"));
+        $this->assertSame('aaaaa', \Test\zephir_namespaced_method_test('a'));
         $this->assertTrue(\Test\test_call_relative_object_hint(new PropertyAccess()));
         $this->assertTrue(\Test\test_call_object_hint(new PropertyAccess()));
 
-        $this->assertSame("ab", zephir_global_method_test("ab/c"));
+        $this->assertSame('ab', zephir_global_method_test('ab/c'));
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));
         $this->assertInstanceOf(\stdClass::class, \zephir_global_method_with_type_casting(new \stdClass()));

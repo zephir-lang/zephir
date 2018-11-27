@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * MergeAppendOptimizer
+ * MergeAppendOptimizer.
  *
  * Optimizes calls to 'merge_append' using internal function
  */
 class MergeAppendOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,11 +39,11 @@ class MergeAppendOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -49,7 +51,8 @@ class MergeAppendOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/array');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_merge_append(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+        $context->codePrinter->output('zephir_merge_append('.$resolvedParams[0].', '.$resolvedParams[1].');');
+
         return new CompiledExpression('null', null, $expression);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,11 +18,9 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\StaticPropertyAccess
+ * Zephir\Expression\StaticPropertyAccess.
  *
  * Resolves class static properties
- *
- * @package Zephir\Expression
  */
 class StaticPropertyAccess
 {
@@ -35,9 +33,9 @@ class StaticPropertyAccess
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param boolean $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -47,9 +45,9 @@ class StaticPropertyAccess
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -57,10 +55,11 @@ class StaticPropertyAccess
     }
 
     /**
-     * Access a static property
+     * Access a static property.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -69,11 +68,11 @@ class StaticPropertyAccess
         $compiler = $compilationContext->compiler;
         $property = $expression['right']['value'];
 
-        /**
+        /*
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, array('self', 'static', 'parent'))) {
+        if (!\in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -81,18 +80,18 @@ class StaticPropertyAccess
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+                    throw new CompilerException("Cannot locate class '".$className."'", $expression['left']);
                 }
             }
         } else {
-            if (in_array($className, array('self', 'static'))) {
+            if (\in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
-                if ($className == 'parent') {
+                if ('parent' == $className) {
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot access static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $expression);
+                        throw new CompilerException('Cannot access static property "'.$property.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $expression);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -101,34 +100,34 @@ class StaticPropertyAccess
         }
 
         if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
+            throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $expression);
         }
 
         /** @var $propertyDefinition ClassProperty */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $expression);
+            throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $expression);
         }
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $expression);
+                throw new CompilerException("Cannot access private static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $expression);
             }
         }
 
         if ($propertyDefinition->isProtected()) {
             if ($classDefinition != $compilationContext->classDefinition && $classDefinition != $compilationContext->classDefinition->getExtendsClassDefinition()) {
-                throw new CompilerException("Cannot access protected static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $expression);
+                throw new CompilerException("Cannot access protected static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $expression);
             }
         }
 
-        /**
+        /*
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                if ($symbolVariable->getName() == 'return_value') {
+                if ('return_value' == $symbolVariable->getName()) {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
                 }
             } else {
@@ -138,11 +137,11 @@ class StaticPropertyAccess
             $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
         }
 
-        /**
+        /*
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign class constants', $expression);
         }
 
         $symbolVariable->setDynamicTypes('undefined');
@@ -151,7 +150,7 @@ class StaticPropertyAccess
 
         $readOnly = $this->readOnly;
         if (!$readOnly) {
-            if ($symbolVariable->getName() != 'return_value') {
+            if ('return_value' != $symbolVariable->getName()) {
                 $symbolVariable->observeVariant($compilationContext);
             }
         }

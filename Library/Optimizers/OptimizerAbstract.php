@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,22 +13,17 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Di\InjectionAwareInterface;
-use Zephir\Di\ContainerAwareTrait;
 
 /**
- * Class OptimizerAbstract
+ * Class OptimizerAbstract.
  */
-abstract class OptimizerAbstract implements InjectionAwareInterface
+abstract class OptimizerAbstract
 {
-    use ContainerAwareTrait {
-        ContainerAwareTrait::__construct as protected __DiInject;
-    }
-
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return mixed
      */
     abstract public function optimize(array $expression, Call $call, CompilationContext $context);

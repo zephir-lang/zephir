@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -9,25 +9,24 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Zephir;
 
 /**
- * FunctionDefinition
+ * FunctionDefinition.
  *
  * Represents a function (method)
  */
 class FunctionDefinition extends ClassMethod
 {
     /**
-     * The namespace of the function
+     * The namespace of the function.
      */
     private $namespace;
 
     /**
-     * Whether the function is declared in a global or namespaced scope
+     * Whether the function is declared in a global or namespaced scope.
      *
-     * @var boolean
+     * @var bool
      */
     private $isGlobal;
 
@@ -41,12 +40,13 @@ class FunctionDefinition extends ClassMethod
 
         if ($returnType['void']) {
             $this->void = true;
+
             return;
         }
 
         if (isset($returnType['list'])) {
-            $types = array();
-            $castTypes = array();
+            $types = [];
+            $castTypes = [];
             foreach ($returnType['list'] as $returnTypeItem) {
                 if (isset($returnTypeItem['cast'])) {
                     if (isset($returnTypeItem['cast']['collection'])) {
@@ -57,22 +57,22 @@ class FunctionDefinition extends ClassMethod
                     $types[$returnTypeItem['data-type']] = $returnTypeItem;
                 }
             }
-            if (count($castTypes)) {
-                $types['object'] = array();
+            if (\count($castTypes)) {
+                $types['object'] = [];
                 $this->returnClassTypes = $castTypes;
             }
-            if (count($types)) {
+            if (\count($types)) {
                 $this->returnTypes = $types;
             }
         }
     }
 
     /**
-     * Get the internal name used in generated C code
+     * Get the internal name used in generated C code.
      */
     public function getInternalName()
     {
-        return ($this->isGlobal() ? 'g_' : 'f_') . str_replace('\\', '_', $this->namespace) . '_' . $this->getName();
+        return ($this->isGlobal() ? 'g_' : 'f_').str_replace('\\', '_', $this->namespace).'_'.$this->getName();
     }
 
     public function isGlobal()
@@ -102,6 +102,6 @@ class FunctionDefinition extends ClassMethod
 
     public function getVisibility()
     {
-        return array();
+        return [];
     }
 }

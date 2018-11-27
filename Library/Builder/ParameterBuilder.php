@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * ParameterBuilder
+ * ParameterBuilder.
  *
  * Allows to manually build a call parameters AST nodes
  */
@@ -26,14 +26,14 @@ class ParameterBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        return array(
-            'parameter' => $this->value->get()
-        );
+        return [
+            'parameter' => $this->value->get(),
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,26 +11,28 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\Exception\CompilerException;
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 class MinusOperator extends BaseOperator
 {
     /**
-     * Compile expression
+     * Compile expression.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
-     * @return CompiledExpression
+     *
      * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression");
+            throw new CompilerException('Missing left part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -57,16 +59,17 @@ class MinusOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $compilationContext->codePrinter->output('zephir_negate(' . $compilationContext->backend->getVariableCode($variable) . ' TSRMLS_CC);');
+                        $compilationContext->codePrinter->output('zephir_negate('.$compilationContext->backend->getVariableCode($variable).' TSRMLS_CC);');
+
                         return new CompiledExpression('variable', $variable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
+                        throw new CompilerException("Cannot operate minus with variable of '".$left->getType()."' type");
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
+                throw new CompilerException("Cannot operate minus with '".$left->getType()."' type");
         }
     }
 }

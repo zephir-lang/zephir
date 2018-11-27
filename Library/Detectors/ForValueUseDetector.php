@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,14 +12,14 @@
 namespace Zephir\Detectors;
 
 /**
- * ForValueUseDetector
+ * ForValueUseDetector.
  *
  * Detects whether the traversed variable is modified within the 'for's block
  */
 class ForValueUseDetector extends WriteDetector
 {
     /**
-     * ForValueUseDetector constructor
+     * ForValueUseDetector constructor.
      *
      * Initialize detector with safe defaults
      */

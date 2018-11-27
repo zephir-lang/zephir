@@ -1,18 +1,27 @@
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 define('MSGPACK_CLASS_OPT_PHPONLY', -1001);
 
 /**
- * \MessagePackUnpacker
+ * \MessagePackUnpacker.
  *
- * @link https://github.com/msgpack/msgpack-php
+ * @see https://github.com/msgpack/msgpack-php
  */
 class MessagePackUnpacker
 {
     /**
      * MessagePackUnpacker constructor.
      *
-     * @param boolean $opt
+     * @param bool $opt
      */
     public function __construct($opt = null)
     {
@@ -26,8 +35,8 @@ class MessagePackUnpacker
     }
 
     /**
-     * @param integer $option
-     * @param boolean $value
+     * @param int  $option
+     * @param bool $value
      */
     public function setOption($option, $value)
     {
@@ -42,7 +51,7 @@ class MessagePackUnpacker
 
     /**
      * @param string $str
-     * @param integer $offset
+     * @param int    $offset
      */
     public function execute($str = null, &$offset = null)
     {
@@ -61,24 +70,24 @@ class MessagePackUnpacker
 }
 
 /**
- * \MessagePack
+ * \MessagePack.
  *
- * @link https://github.com/msgpack/msgpack-php
+ * @see https://github.com/msgpack/msgpack-php
  */
 class MessagePack
 {
     /**
      * MessagePack constructor.
      *
-     * @param boolean $opt
+     * @param bool $opt
      */
     public function __construct($opt = null)
     {
     }
 
     /**
-     * @param integer $option
-     * @param boolean $value
+     * @param int  $option
+     * @param bool $value
      */
     public function setOption($option, $value)
     {
@@ -86,6 +95,7 @@ class MessagePack
 
     /**
      * @param mixed $value
+     *
      * @return string
      */
     public function pack($value)
@@ -94,7 +104,8 @@ class MessagePack
 
     /**
      * @param string $str
-     * @param mixed $object
+     * @param mixed  $object
+     *
      * @return mixed
      */
     public function unpack($str, $object = null)
@@ -111,33 +122,36 @@ class MessagePack
 
 /**
  * @param mixed $value
+ *
  * @return string
  */
-function msgpack_pack($value) {
-
+function msgpack_pack($value)
+{
 }
 
 /**
  * @param string $str
+ *
  * @return mixed
  */
-function msgpack_unpack($str) {
-
+function msgpack_unpack($str)
+{
 }
-
 
 /**
  * @param mixed $value
+ *
  * @return string
  */
-function msgpack_serialize($value) {
-
+function msgpack_serialize($value)
+{
 }
 
 /**
  * @param string $str
+ *
  * @return mixed
  */
-function msgpack_unserialize($str) {
-
+function msgpack_unserialize($str)
+{
 }

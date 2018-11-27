@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,12 +12,12 @@
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
-use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 
 /**
- * ClassProperty
+ * ClassProperty.
  *
  * Represents a property class
  */
@@ -39,13 +39,12 @@ class ClassProperty
     protected $original;
 
     /**
-     *
      * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param string $name
-     * @param mixed $defaultValue
-     * @param string $docBlock
-     * @param array $original
+     * @param array           $visibility
+     * @param string          $name
+     * @param mixed           $defaultValue
+     * @param string          $docBlock
+     * @param array           $original
      */
     public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
     {
@@ -58,15 +57,15 @@ class ClassProperty
         $this->docblock = $docBlock;
         $this->original = $original;
 
-        if (!is_array($this->defaultValue)) {
-            $this->defaultValue = array();
+        if (!\is_array($this->defaultValue)) {
+            $this->defaultValue = [];
             $this->defaultValue['type'] = 'null';
             $this->defaultValue['value'] = null;
         }
     }
 
     /**
-     * Returns the class definition where the method was declared
+     * Returns the class definition where the method was declared.
      *
      * @return ClassDefinition
      */
@@ -76,7 +75,7 @@ class ClassProperty
     }
 
     /**
-     * Returns the property name
+     * Returns the property name.
      *
      * @return string
      */
@@ -90,8 +89,8 @@ class ClassProperty
      */
     public function getValue()
     {
-        if ($this->defaultValue['type'] == 'array') {
-            $result = array();
+        if ('array' == $this->defaultValue['type']) {
+            $result = [];
 
             foreach ($this->original['default']['left'] as $key) {
                 $result[] = $key['value']['value'];
@@ -117,36 +116,37 @@ class ClassProperty
     }
 
     /**
-     * Checks for visibility congruence
+     * Checks for visibility congruence.
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $name
-     * @param array $original
+     * @param array  $original
      *
      * @throws CompilerException
      */
     public function checkVisibility($visibility, $name, $original)
     {
-        if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
         }
-        if (in_array('public', $visibility) && in_array('private', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'private' at the same time", $original);
         }
-        if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'protected' and 'private' at the same time", $original);
         }
     }
 
     /**
-     * Returns the C-visibility accessors for the model
+     * Returns the C-visibility accessors for the model.
+     *
+     * @throws Exception
      *
      * @return string
-     * @throws Exception
      */
     public function getVisibilityAccessor()
     {
-        $modifiers = array();
+        $modifiers = [];
 
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
@@ -167,14 +167,15 @@ class ClassProperty
                     break;
 
                 default:
-                    throw new Exception("Unknown modifier " . $visibility);
+                    throw new Exception('Unknown modifier '.$visibility);
             }
         }
-        return join('|', array_keys($modifiers));
+
+        return implode('|', array_keys($modifiers));
     }
 
     /**
-     * Returns the docblock related to the property
+     * Returns the docblock related to the property.
      *
      * @return string
      */
@@ -184,43 +185,219 @@ class ClassProperty
     }
 
     /**
-     * Checks whether the variable is static
+     * Checks whether the variable is static.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
-        return in_array('static', $this->visibility);
+        return \in_array('static', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is public
+     * Checks whether the variable is public.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
-        return in_array('public', $this->visibility);
+        return \in_array('public', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is protected
+     * Checks whether the variable is protected.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
-        return in_array('protected', $this->visibility);
+        return \in_array('protected', $this->visibility);
     }
 
     /**
-     * Checks whether the variable is private
+     * Checks whether the variable is private.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
-        return in_array('private', $this->visibility);
+        return \in_array('private', $this->visibility);
+    }
+
+    /**
+     * Produce the code to register a property.
+     *
+     * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        switch ($this->defaultValue['type']) {
+            case 'long':
+            case 'int':
+            case 'string':
+            case 'double':
+            case 'bool':
+                $this->declareProperty($compilationContext, $this->defaultValue['type'], $this->defaultValue['value']);
+                break;
+
+            case 'array':
+            case 'empty-array':
+                $this->initializeArray($compilationContext);
+                // no break
+            case 'null':
+                $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
+                break;
+
+            case 'static-constant-access':
+                $expression = new Expression($this->defaultValue);
+                $compiledExpression = $expression->compile($compilationContext);
+
+                $this->declareProperty($compilationContext, $compiledExpression->getType(), $compiledExpression->getCode());
+                break;
+
+            default:
+                throw new CompilerException('Unknown default type: '.$this->defaultValue['type'], $this->original);
+        }
+    }
+
+    /**
+     * Removes all initialization statements related to this property.
+     *
+     * @param array $statements
+     */
+    protected function removeInitializationStatements(&$statements)
+    {
+        foreach ($statements as $index => $statement) {
+            if (!$this->isStatic()) {
+                if ($statement['expr']['left']['right']['value'] == $this->name) {
+                    unset($statements[$index]);
+                }
+            } else {
+                if ($statement['assignments'][0]['property'] == $this->name) {
+                    unset($statements[$index]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return $this|ExpressionLetStatement
+     */
+    protected function getLetStatement()
+    {
+        $exprBuilder = BuilderFactory::getInstance();
+
+        if ($this->isStatic()) {
+            $className = '\\'.$this->classDefinition->getCompleteName();
+            $expr = $exprBuilder->raw($this->original['default']);
+
+            return $exprBuilder->statements()->let([
+                $exprBuilder->operators()
+                    ->assignStaticProperty($className, $this->name, $expr)
+                    ->setFile($this->original['default']['file'])
+                    ->setLine($this->original['default']['line'])
+                    ->setChar($this->original['default']['char']),
+            ]);
+        }
+
+        $lsb = $exprBuilder->statements()->let([
+            $exprBuilder->operators()
+                ->assignProperty('this', $this->name, $exprBuilder->raw($this->original['default']))
+                ->setFile($this->original['default']['file'])
+                ->setLine($this->original['default']['line'])
+                ->setChar($this->original['default']['char']),
+        ]);
+
+        return $exprBuilder->statements()->ifX()
+            ->setCondition(
+                $exprBuilder->operators()->binary(
+                    BinaryOperator::OPERATOR_EQUALS,
+                    $exprBuilder->operators()->binary(
+                        BinaryOperator::OPERATOR_ACCESS_PROPERTY,
+                        $exprBuilder->variable('this'),
+                        $exprBuilder->literal(Types::STRING, $this->name)
+                    ),
+                    $exprBuilder->literal(Types::NULL_)
+                )
+            )
+            ->setStatements($exprBuilder->statements()->block([$lsb]));
+    }
+
+    /**
+     * @param $value
+     *
+     * @return bool|string
+     */
+    protected function getBooleanCode($value)
+    {
+        if ($value && ('true' == $value || true === $value)) {
+            return '1';
+        } else {
+            if ('false' == $value || false === $value) {
+                return '0';
+            }
+        }
+
+        return (bool) $value;
+    }
+
+    /**
+     * Declare class property with default value.
+     *
+     * @param CompilationContext $compilationContext
+     * @param string             $type
+     * @param $value
+     *
+     * @throws CompilerException
+     */
+    protected function declareProperty(CompilationContext $compilationContext, $type, $value)
+    {
+        $codePrinter = $compilationContext->codePrinter;
+
+        if (\is_object($value)) {
+            return;
+        }
+
+        $classEntry = $compilationContext->classDefinition->getClassEntry();
+
+        switch ($type) {
+            case 'long':
+            case 'int':
+                $codePrinter->output('zend_declare_property_long('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+                break;
+
+            case 'double':
+                $codePrinter->output('zend_declare_property_double('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+                break;
+
+            case 'bool':
+                $codePrinter->output('zend_declare_property_bool('.$classEntry.', SL("'.$this->getName().'"), '.$this->getBooleanCode($value).', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+                break;
+
+            case Types::CHAR:
+            case Types::STRING:
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',
+                        $classEntry,
+                        $this->getName(),
+                        add_slashes($value),
+                        $this->getVisibilityAccessor()
+                    )
+                );
+                break;
+
+            case 'array':
+            case 'empty-array':
+            case 'null':
+                $codePrinter->output('zend_declare_property_null('.$classEntry.', SL("'.$this->getName().'"), '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+                break;
+
+            default:
+                throw new CompilerException('Unknown default type: '.$type, $this->original);
+        }
     }
 
     private function initializeArray($compilationContext)
@@ -252,9 +429,9 @@ class ClassProperty
 
                 $this->removeInitializationStatements($statements);
                 if ($needLetStatementAdded) {
-                    $newStatements = array();
+                    $newStatements = [];
 
-                    /**
+                    /*
                      * Start from let statement
                      */
                     $newStatements[] = $letStatement;
@@ -269,12 +446,12 @@ class ClassProperty
                 }
             } else {
                 $statementsBlockBuilder = BuilderFactory::getInstance()->statements()
-                    ->block(array($this->getLetStatement()));
+                    ->block([$this->getLetStatement()]);
                 $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->build()));
                 $classDefinition->updateMethod($constructMethod);
             }
         } else {
-            $statements = array();
+            $statements = [];
             if ($constructParentMethod) {
                 $statements = $constructParentMethod->getStatementsBlock()->getStatements();
             }
@@ -287,179 +464,6 @@ class ClassProperty
             } else {
                 $classDefinition->addInitMethod($statementsBlock);
             }
-        }
-    }
-
-    /**
-     * Produce the code to register a property
-     *
-     * @param CompilationContext $compilationContext
-     * @throws CompilerException
-     */
-    public function compile(CompilationContext $compilationContext)
-    {
-        switch ($this->defaultValue['type']) {
-            case 'long':
-            case 'int':
-            case 'string':
-            case 'double':
-            case 'bool':
-                $this->declareProperty($compilationContext, $this->defaultValue['type'], $this->defaultValue['value']);
-                break;
-
-            case 'array':
-            case 'empty-array':
-                $this->initializeArray($compilationContext);
-                //continue
-
-            case 'null':
-                $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
-                break;
-
-            case 'static-constant-access':
-                $expression = new Expression($this->defaultValue);
-                $compiledExpression = $expression->compile($compilationContext);
-
-                $this->declareProperty($compilationContext, $compiledExpression->getType(), $compiledExpression->getCode());
-                break;
-
-            default:
-                throw new CompilerException('Unknown default type: ' . $this->defaultValue['type'], $this->original);
-        }
-    }
-
-    /**
-     * Removes all initialization statements related to this property
-     *
-     * @param array $statements
-     */
-    protected function removeInitializationStatements(&$statements)
-    {
-        foreach ($statements as $index => $statement) {
-            if (!$this->isStatic()) {
-                if ($statement['expr']['left']['right']['value'] == $this->name) {
-                    unset($statements[$index]);
-                }
-            } else {
-                if ($statement['assignments'][0]['property'] == $this->name) {
-                    unset($statements[$index]);
-                }
-            }
-        }
-    }
-
-    /**
-     * @return $this|ExpressionLetStatement
-     */
-    protected function getLetStatement()
-    {
-        $exprBuilder = BuilderFactory::getInstance();
-
-        if ($this->isStatic()) {
-            $className = '\\' . $this->classDefinition->getCompleteName();
-            $expr      = $exprBuilder->raw($this->original['default']);
-            return $exprBuilder->statements()->let(array(
-                $exprBuilder->operators()
-                    ->assignStaticProperty($className, $this->name, $expr)
-                    ->setFile($this->original['default']['file'])
-                    ->setLine($this->original['default']['line'])
-                    ->setChar($this->original['default']['char'])
-            ));
-        }
-
-        $lsb = $exprBuilder->statements()->let(array(
-            $exprBuilder->operators()
-                ->assignProperty('this', $this->name, $exprBuilder->raw($this->original['default']))
-                ->setFile($this->original['default']['file'])
-                ->setLine($this->original['default']['line'])
-                ->setChar($this->original['default']['char'])
-        ));
-
-        return $exprBuilder->statements()->ifX()
-            ->setCondition(
-                $exprBuilder->operators()->binary(
-                    BinaryOperator::OPERATOR_EQUALS,
-                    $exprBuilder->operators()->binary(
-                        BinaryOperator::OPERATOR_ACCESS_PROPERTY,
-                        $exprBuilder->variable('this'),
-                        $exprBuilder->literal(Types::STRING, $this->name)
-                    ),
-                    $exprBuilder->literal(Types::NULL_)
-                )
-            )
-            ->setStatements($exprBuilder->statements()->block(array($lsb)));
-    }
-
-    /**
-     * @param $value
-     * @return bool|string
-     */
-    protected function getBooleanCode($value)
-    {
-        if ($value && ($value == 'true' || $value === true)) {
-            return '1';
-        } else {
-            if ($value == 'false' || $value === false) {
-                return '0';
-            }
-        }
-
-        return (boolean) $value;
-    }
-
-    /**
-     * Declare class property with default value
-     *
-     * @param CompilationContext $compilationContext
-     * @param string $type
-     * @param $value
-     * @throws CompilerException
-     */
-    protected function declareProperty(CompilationContext $compilationContext, $type, $value)
-    {
-        $codePrinter = $compilationContext->codePrinter;
-
-        if (is_object($value)) {
-            return;
-        }
-
-        $classEntry = $compilationContext->classDefinition->getClassEntry();
-
-        switch ($type) {
-            case 'long':
-            case 'int':
-                $codePrinter->output("zend_declare_property_long(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
-                break;
-
-            case 'double':
-                $codePrinter->output("zend_declare_property_double(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
-                break;
-
-            case 'bool':
-                $codePrinter->output("zend_declare_property_bool(" . $classEntry . ", SL(\"" . $this->getName() . "\"), ".$this->getBooleanCode($value).", " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
-                break;
-
-            case Types::CHAR:
-            case Types::STRING:
-                $codePrinter->output(
-                    sprintf(
-                        'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',
-                        $classEntry,
-                        $this->getName(),
-                        add_slashes($value),
-                        $this->getVisibilityAccessor()
-                    )
-                );
-                break;
-
-            case 'array':
-            case 'empty-array':
-            case 'null':
-                $codePrinter->output("zend_declare_property_null(" . $classEntry . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccessor() . " TSRMLS_CC);");
-                break;
-
-            default:
-                throw new CompilerException('Unknown default type: ' . $type, $this->original);
         }
     }
 }

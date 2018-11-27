@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,24 +11,26 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * Likely
+ * Likely.
  *
  * Adds a branch prediction hint when evaluating an expression
  */
 class LikelyOperator extends BaseOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
-     * @return CompiledExpression
+     *
      * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -40,23 +42,24 @@ class LikelyOperator extends BaseOperator
         $leftExpr->setReadOnly(true);
         $left = $leftExpr->compile($compilationContext);
 
-        if ($left->getType() == 'bool') {
-            return new CompiledExpression('bool', 'EXPECTED(' . $left->getCode() . ')', $expression);
+        if ('bool' == $left->getType()) {
+            return new CompiledExpression('bool', 'EXPECTED('.$left->getCode().')', $expression);
         }
 
-        if ($left->getType() == 'variable') {
+        if ('variable' == $left->getType()) {
             $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
             switch ($variable->getType()) {
                 case 'bool':
-                    return new CompiledExpression('bool', 'EXPECTED(' . $variable->getName() . ')', $expression);
+                    return new CompiledExpression('bool', 'EXPECTED('.$variable->getName().')', $expression);
 
                 default:
                     $compilationContext->headersManager->add('kernel/operators');
                     $symbol = $compilationContext->backend->getVariableCode($variable);
-                    return new CompiledExpression('bool', 'UNEXPECTED(zephir_is_true(' . $symbol . '))', $expression);
+
+                    return new CompiledExpression('bool', 'UNEXPECTED(zephir_is_true('.$symbol.'))', $expression);
             }
         }
 
-        throw new CompilerException("Cannot use expression type: '" . $left->getType() . "' in 'likely' operator", $expression['left']);
+        throw new CompilerException("Cannot use expression type: '".$left->getType()."' in 'likely' operator", $expression['left']);
     }
 }

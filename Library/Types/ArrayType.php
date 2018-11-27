@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -17,7 +17,7 @@ use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
- * ArrayType
+ * ArrayType.
  *
  * Defines methods of the built-in array type
  */
@@ -26,7 +26,7 @@ class ArrayType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public $methodMap = array(
+    public $methodMap = [
         'join' => 'join',
         'reversed' => 'array_reverse',
         'rev' => 'array_reverse',
@@ -70,7 +70,7 @@ class ArrayType extends AbstractType
         'shuffle' => 'shuffle',
         'tojson' => 'json_encode',
         'reduce' => 'array_reduce',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -81,29 +81,17 @@ class ArrayType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getNumberParam($methodName)
-    {
-        if ($methodName == "map") {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    /**
-     * Transforms calls to method "join" to function calls to "join"
+     * Transforms calls to method "join" to function calls to "join".
      *
-     * @param object $caller
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
+     *
      * @return bool|\Zephir\CompiledExpression
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-
         $functionCall = BuilderFactory::getInstance()->statements()
             ->functionCall('join', $expression['parameters'])
             ->addArgument($caller)
@@ -114,5 +102,17 @@ class ArrayType extends AbstractType
         $expression = new Expression($functionCall->build());
 
         return $expression->compile($compilationContext);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNumberParam($methodName)
+    {
+        if ('map' == $methodName) {
+            return 1;
+        }
+
+        return 0;
     }
 }

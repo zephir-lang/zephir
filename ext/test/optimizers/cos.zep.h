@@ -11,7 +11,11 @@ PHP_METHOD(Test_Optimizers_Cos, testIntParameter);
 PHP_METHOD(Test_Optimizers_Cos, testVarParameter);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_optimizers_cos_testintparameter, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, a)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_optimizers_cos_testvarparameter, 0, 0, 1)

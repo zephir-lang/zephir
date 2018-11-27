@@ -16,6 +16,8 @@ if [ -z ${CI+x} ] || [ "$CI" != "true" ]; then
 	exit 1
 fi
 
+pecl channel-update pecl.php.net
+
 printf "\n" | pecl install --force psr
 
 php_vernum="$(php-config --vernum)"

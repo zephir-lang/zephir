@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class CharsTest extends TestCase
 {
@@ -19,15 +19,15 @@ class CharsTest extends TestCase
     {
         $t = new \Test\Chars();
 
-        $this->assertSame(chr($t->sumChars1()), 'a');
-        $this->assertSame(chr($t->sumChars2('A')), 'a');
+        $this->assertSame(\chr($t->sumChars1()), 'a');
+        $this->assertSame(\chr($t->sumChars2('A')), 'a');
     }
 
     public function testDiffChars()
     {
         $t = new \Test\Chars();
 
-        $this->assertSame(chr($t->diffChars1()), 'A');
-        $this->assertSame(chr($t->diffChars2('a')), 'A');
+        $this->assertSame(\chr($t->diffChars1()), 'A');
+        $this->assertSame(\chr($t->diffChars2('a')), 'A');
     }
 }

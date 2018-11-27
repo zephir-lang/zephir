@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,50 +11,25 @@
 
 namespace Zephir\Parser;
 
-use Zephir\Logger;
-use Zephir\Parser;
-
-/**
- * Zephir\Parser\Manager
- */
 class Manager
 {
     const MINIMUM_PARSER_VERSION = '1.1.0';
 
     /**
-     * Zephir Parser
+     * Zephir Parser.
+     *
      * @var Parser
      */
     protected $parser;
 
     /**
-     * Is the Zephir Parser enabled
-     * @var bool
-     */
-    protected $parserEnabled = false;
-
-    /**
-     * Should we recompile the Zephir Parser
-     * @var bool
-     */
-    protected $forceCompileParser = false;
-
-    /**
-     * The Zephir Logger
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * Manager constructor.
      *
      * @param Parser $parser The Zephir Parser
-     * @param Logger $logger The Zephir Logger
      */
-    public function __construct(Parser $parser, Logger $logger)
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
-        $this->logger = $logger;
     }
 
     /**
@@ -79,7 +54,7 @@ class Manager
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getParserVersion()
     {
@@ -88,7 +63,7 @@ class Manager
 
     public function requirements()
     {
-        $temlate = <<<EOF
+        $template = <<<EOF
 
 
 ────────────────────────────────────────────────────────────
@@ -103,9 +78,9 @@ EOF;
         if ($this->parser->isAvailable()) {
             $add = sprintf("Minimum required Zephir Parser version: %s\n", self::MINIMUM_PARSER_VERSION);
         } else {
-            $add = "";
+            $add = '';
         }
 
-        return sprintf($temlate, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
+        return sprintf($template, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
     }
 }

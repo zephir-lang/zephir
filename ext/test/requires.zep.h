@@ -26,7 +26,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_requires_setcontent, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_requires_rendertemplate, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, templatePath, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, templatePath)
+#endif
 	ZEND_ARG_INFO(0, params)
 ZEND_END_ARG_INFO()
 

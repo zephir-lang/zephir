@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,16 +12,13 @@
 namespace Zephir\FileSystem;
 
 use League\Flysystem;
-use Zephir\Exception\RuntimeException;
 use Zephir\Exception\InvalidArgumentException;
-use Zephir\Zephir;
+use Zephir\Exception\RuntimeException;
 
 /**
- * Zephir\FileSystem\HardDisk
+ * Zephir\FileSystem\HardDisk.
  *
  * Uses the standard hard-disk as filesystem for temporary operations.
- *
- * @package Zephir\FileSystem
  */
 final class HardDisk implements FileSystemInterface
 {
@@ -34,22 +31,35 @@ final class HardDisk implements FileSystemInterface
     /** @var bool */
     private $initialized = false;
 
+    /** @var string|null */
+    private $basePath;
+
     /**
-     * HardDisk constructor
+     * HardDisk constructor.
      *
-     * @param  Flysystem\FilesystemInterface $filesystem
-     * @param  string                        $localPath
+     * @param Flysystem\FilesystemInterface $filesystem
+     * @param string                        $localPath
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = '.temp')
+    public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = 'IR')
     {
         $this->filesystem = $filesystem;
-        $this->localPath = trim($localPath, '\\/');
+        $this->localPath = \trim($localPath, '\\/');
 
         if (empty($this->localPath)) {
             throw new InvalidArgumentException('The temporary container can not be empty.');
         }
+    }
+
+    /**
+     * @internal
+     *
+     * @param string|null $basePath
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = \rtrim($basePath, '\\/');
     }
 
     /**
@@ -65,14 +75,12 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @return void
-     *
      * @throws RuntimeException
      */
     public function initialize()
     {
-        if ($this->exists($this->localPath) == false) {
-            if ($this->filesystem->createDir($this->localPath) == false) {
+        if (false == $this->exists($this->localPath)) {
+            if (false == $this->filesystem->createDir($this->localPath)) {
                 throw new RuntimeException(
                     'Unable to create a local storage for temporary filesystem operations.'
                 );
@@ -85,110 +93,128 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return bool
      */
     public function exists($path)
     {
-        return $this->filesystem->has($this->localPath . "/{$path}");
+        if ('.' === $path || empty($path)) {
+            $path = $this->localPath;
+        } else {
+            $path = "{$this->localPath}/{$path}";
+        }
+
+        return $this->filesystem->has($path);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return bool
      */
     public function makeDirectory($path)
     {
-        return $this->filesystem->createDir($this->localPath . "/{$path}");
+        if ('.' === $path || empty($path)) {
+            $path = $this->localPath;
+        } else {
+            $path = "{$this->localPath}/{$path}";
+        }
+
+        return $this->filesystem->createDir($path);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @return array
+     * @param string $path
      *
      * @throws Flysystem\FileNotFoundException
+     *
+     * @return array
      */
     public function file($path)
     {
-        $contents = $this->filesystem->read($this->localPath . "/{$path}");
+        $contents = $this->filesystem->read($this->localPath."/{$path}");
 
-        return preg_split("/\r\n|\n|\r/", $contents);
+        return \preg_split("/\r\n|\n|\r/", $contents);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
      *
      * @throws Flysystem\FileNotFoundException
      */
     public function modificationTime($path)
     {
-        return (int) $this->filesystem->getTimestamp($this->localPath . "/{$path}");
+        return (int) $this->filesystem->getTimestamp($this->localPath."/{$path}");
     }
 
     /**
      * Writes data from a temporary entry.
      *
-     * @param  string $path
-     * @return string
+     * @param string $path
      *
      * @throws Flysystem\FileNotFoundException
+     *
+     * @return string
      */
     public function read($path)
     {
-        return (string) $this->filesystem->read($this->localPath . "/{$path}");
+        return (string) $this->filesystem->read($this->localPath."/{$path}");
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @return void
+     * @param string $path
      *
      * @throws Flysystem\FileNotFoundException
      */
     public function delete($path)
     {
-        $this->filesystem->delete($this->localPath . "/{$path}");
+        $this->filesystem->delete($this->localPath."/{$path}");
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
-     * @param  string $contents
-     * @return void
+     * @param string $path
+     * @param string $contents
      *
      * @throws Flysystem\FileExistsException
      */
     public function write($path, $contents)
     {
-        $this->filesystem->write($this->localPath . "/{$path}", $contents);
+        $this->filesystem->write($this->localPath."/{$path}", $contents);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param  string $command
-     * @param  string $descriptor
-     * @param  string $destination
-     *
-     * @return void
+     * @param string $command
+     * @param string $descriptor
+     * @param string $destination
      */
     public function system($command, $descriptor, $destination)
     {
+        // fallback
+        $redirect = "{$this->localPath}/{$destination}";
+        if (false == empty($this->basePath)) {
+            $redirect = "{$this->basePath}/{$this->localPath}/{$destination}";
+        }
+
         switch ($descriptor) {
             default:
             case 'stdout':
-                system($command . ' > ' . realpath($this->localPath) . "/{$destination}");
+                \system("{$command} > {$redirect}");
                 break;
             case 'stderr':
-                system($command . ' 2> ' . realpath($this->localPath) . "/{$destination}");
+                \system("{$command} 2> {$redirect}");
                 break;
         }
     }
@@ -196,23 +222,25 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return mixed
+     *
+     * @throws Flysystem\FileNotFoundException
      */
     public function requireFile($path)
     {
-        // Another possible approach:
-        //
-        // $code = $this->filesystem->read($this->localPath . "/{$path}");
-        // return eval(str_replace('<?php ', '', $code));
+        if (false == empty($this->basePath)) {
+            return require "{$this->basePath}/{$this->localPath}/{$path}";
+        }
 
-        return require $this->localPath . "/{$path}";
+        $code = $this->filesystem->read($this->localPath."/{$path}");
+
+        return eval(\str_replace('<?php ', '', $code));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return void
      *
      * @throws Flysystem\RootViolationException
      */
@@ -227,35 +255,37 @@ final class HardDisk implements FileSystemInterface
      * This function does not perform operations in the temporary
      * directory but it caches the results to avoid reprocessing.
      *
-     * @param  string  $algorithm
-     * @param  string  $sourceFile
-     * @param  boolean $useCache
-     * @return string
+     * @param string $algorithm
+     * @param string $sourceFile
+     * @param bool   $useCache
      *
      * @throws Flysystem\FileExistsException
      * @throws Flysystem\FileNotFoundException
+     *
+     * @return string
      */
     public function getHashFile($algorithm, $sourceFile, $useCache = false)
     {
-        if ($useCache == false) {
-            return hash_file($algorithm, $sourceFile);
+        if (false === $useCache) {
+            return \hash_file($algorithm, $sourceFile);
         }
 
-        $cacheFile = sprintf(
-            '%s/%s/%s.%s',
+        $cacheFile = \sprintf(
+            '%s/%s.%s',
             $this->localPath,
-            Zephir::VERSION,
             $this->normalizePath($sourceFile),
             $algorithm
         );
 
-        if ($this->filesystem->has($cacheFile) == false) {
-            $contents = hash_file($algorithm, $sourceFile);
+        if (false === $this->filesystem->has($cacheFile)) {
+            $contents = \hash_file($algorithm, $sourceFile);
             $this->filesystem->write($cacheFile, $contents);
+
             return $contents;
-        } elseif ($this->filesystem->getTimestamp($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
-            $contents = hash_file($algorithm, $sourceFile);
+        } elseif (\filemtime($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
+            $contents = \hash_file($algorithm, $sourceFile);
             $this->filesystem->update($cacheFile, $contents);
+
             return $contents;
         } else {
             return $this->filesystem->read($cacheFile);
@@ -265,11 +295,12 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return string
      */
     public function normalizePath($path)
     {
-        return str_replace(['\\', ':', '/'], '_', $path);
+        return \str_replace(['\\', ':', '/'], '_', $path);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir;
 
 /**
- * CodePrinter
+ * CodePrinter.
  *
  * Buffers code, making it look pretty
  */
@@ -27,77 +27,77 @@ class CodePrinter
     protected $currentPrints = 0;
 
     /**
-     * Adds a line to the output without the automatic line feed
+     * Adds a line to the output without the automatic line feed.
      *
      * @param string $code
      */
     public function outputNoLineFeed($code)
     {
         $this->lastLine = $code;
-        $this->code .= str_repeat("\t", $this->level) . $code;
+        $this->code .= str_repeat("\t", $this->level).$code;
     }
 
     /**
-     * Add code to the output at the beginning
+     * Add code to the output at the beginning.
      *
      * @param string $code
      */
     public function preOutput($code)
     {
         $this->lastLine = $code;
-        $this->code = str_repeat("\t", $this->level) . $code . PHP_EOL . $this->code;
-        $this->currentPrints++;
+        $this->code = str_repeat("\t", $this->level).$code.PHP_EOL.$this->code;
+        ++$this->currentPrints;
     }
 
     /**
-     * Adds a line to the output without the automatic line feed
+     * Adds a line to the output without the automatic line feed.
      *
      * @param string $code
      */
     public function preOutputNoLineFeed($code)
     {
         $this->lastLine = $code;
-        $this->code = str_repeat("\t", $this->level) . $code . $this->code;
+        $this->code = str_repeat("\t", $this->level).$code.$this->code;
     }
 
     /**
-     * Adds code to the output without the indentation level
+     * Adds code to the output without the indentation level.
      *
      * @param string $code
      */
     public function preOutputNoLevel($code)
     {
         $this->lastLine = $code;
-        $this->code = $code . PHP_EOL . $this->code;
-        $this->currentPrints++;
+        $this->code = $code.PHP_EOL.$this->code;
+        ++$this->currentPrints;
     }
 
     /**
-     * Add code to the output without indentation
+     * Add code to the output without indentation.
      *
      * @param string $code
      */
     public function outputNoIndent($code)
     {
         $this->lastLine = $code;
-        $this->code .= $code . PHP_EOL;
-        $this->currentPrints++;
+        $this->code .= $code.PHP_EOL;
+        ++$this->currentPrints;
     }
 
     /**
-     * Add code to the output
+     * Add code to the output.
      *
      * @param string $code
      */
     public function output($code)
     {
         $this->lastLine = $code;
-        $this->code .= str_repeat("\t", $this->level) . $code . PHP_EOL;
-        $this->currentPrints++;
+        $this->code .= str_repeat("\t", $this->level).$code.PHP_EOL;
+        ++$this->currentPrints;
     }
 
     /**
-     * Adds a comment to the output with indentation level
+     * Adds a comment to the output with indentation level.
      *
      * @param $docblock
      * @param bool $replaceTab
@@ -105,51 +105,51 @@ class CodePrinter
     public function outputDocBlock($docblock, $replaceTab = true)
     {
         $code = '';
-        $docblock = '/' . $docblock . '/';
+        $docblock = '/'.$docblock.'/';
 
         foreach (explode("\n", $docblock) as $line) {
             if ($replaceTab) {
-                $code .= str_repeat("\t", $this->level) . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+                $code .= str_repeat("\t", $this->level).preg_replace('/^[ \t]+/', ' ', $line).PHP_EOL;
             } else {
-                $code .= $line . PHP_EOL;
+                $code .= $line.PHP_EOL;
             }
         }
 
         $this->lastLine = $code;
         $this->code .= $code;
-        $this->currentPrints++;
+        ++$this->currentPrints;
     }
 
     /**
-     * Adds code to the output without the indentation level
+     * Adds code to the output without the indentation level.
      *
      * @param string $code
      */
     public function outputNoLevel($code)
     {
         $this->lastLine = $code;
-        $this->code .= $code . PHP_EOL;
-        $this->currentPrints++;
+        $this->code .= $code.PHP_EOL;
+        ++$this->currentPrints;
     }
 
     /**
      * Adds a blank line to the output
      * Optionally controlling if the blank link must be added if the
-     * previous line added isn't one blank line too
+     * previous line added isn't one blank line too.
      *
-     * @param boolean $ifPrevNotBlank
+     * @param bool $ifPrevNotBlank
      */
     public function preOutputBlankLine($ifPrevNotBlank = false)
     {
         if (!$ifPrevNotBlank) {
-            $this->code = PHP_EOL . $this->code;
+            $this->code = PHP_EOL.$this->code;
             $this->lastLine = PHP_EOL;
-            $this->currentPrints++;
+            ++$this->currentPrints;
         } else {
             if (trim($this->lastLine)) {
-                $this->code = PHP_EOL . $this->code;
+                $this->code = PHP_EOL.$this->code;
                 $this->lastLine = PHP_EOL;
-                $this->currentPrints++;
+                ++$this->currentPrints;
             }
         }
     }
@@ -157,39 +157,39 @@ class CodePrinter
     /**
      * Adds a blank line to the output
      * Optionally controlling if the blank link must be added if the
-     * previous line added isn't one blank line too
+     * previous line added isn't one blank line too.
      *
-     * @param boolean $ifPrevNotBlank
+     * @param bool $ifPrevNotBlank
      */
     public function outputBlankLine($ifPrevNotBlank = false)
     {
         if (!$ifPrevNotBlank) {
             $this->code .= PHP_EOL;
             $this->lastLine = PHP_EOL;
-            $this->currentPrints++;
+            ++$this->currentPrints;
         } else {
             if (trim($this->lastLine)) {
                 $this->code .= PHP_EOL;
                 $this->lastLine = PHP_EOL;
-                $this->currentPrints++;
+                ++$this->currentPrints;
             }
         }
     }
 
     /**
-     * Increase the indentation level
+     * Increase the indentation level.
      */
     public function increaseLevel()
     {
-        $this->level++;
+        ++$this->level;
     }
 
     /**
-     * Decrease the indentation level
+     * Decrease the indentation level.
      */
     public function decreaseLevel()
     {
-        $this->level--;
+        --$this->level;
     }
 
     public function setLevel($level)
@@ -198,7 +198,7 @@ class CodePrinter
     }
 
     /**
-     * Returns the output in the buffer
+     * Returns the output in the buffer.
      *
      * @return string
      */
@@ -208,7 +208,7 @@ class CodePrinter
     }
 
     /**
-     * Returns an approximate number of lines printed by the CodePrinter
+     * Returns an approximate number of lines printed by the CodePrinter.
      *
      * @return int
      */
@@ -218,7 +218,7 @@ class CodePrinter
     }
 
     /**
-     * Frees memory used within the code
+     * Frees memory used within the code.
      */
     public function clear()
     {
@@ -229,8 +229,9 @@ class CodePrinter
 
     public function duplicate()
     {
-        $printer = new CodePrinter();
+        $printer = new self();
         $printer->setLevel($this->level);
+
         return $printer;
     }
 }

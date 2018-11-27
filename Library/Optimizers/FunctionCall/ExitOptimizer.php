@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,27 +13,29 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * ExitOptimizer
+ * ExitOptimizer.
  *
  * Optimizes calls to 'exit' using internal function
  */
 class ExitOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (isset($expression['parameters']) && count($expression['parameters']) > 1) {
+        if (isset($expression['parameters']) && \count($expression['parameters']) > 1) {
             return false;
         }
 
@@ -47,8 +49,9 @@ class ExitOptimizer extends OptimizerAbstract
         } else {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
             $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
-            $context->codePrinter->output('zephir_exit(' . $resolvedParams[0] .');');
+            $context->codePrinter->output('zephir_exit('.$resolvedParams[0].');');
         }
+
         return new CompiledExpression('void ', '', $expression);
     }
 }

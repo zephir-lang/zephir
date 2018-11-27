@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,13 +11,11 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Globals;
-use Zephir\Support\TestCase;
 
 /**
- * Extension\GlobalsTest
- *
- * @package Extension
+ * Extension\GlobalsTest.
  */
 class GlobalsTest extends TestCase
 {
@@ -59,7 +57,7 @@ class GlobalsTest extends TestCase
     {
         $t = new Globals();
 
-        $t->setCharValue("B");
+        $t->setCharValue('B');
         $this->assertSame(66, $t->getDefaultGlobals7());
     }
 

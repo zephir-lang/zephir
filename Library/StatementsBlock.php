@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -9,30 +9,28 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Zephir;
 
-use Zephir\Statements\DeclareStatement;
-use Zephir\Statements\IfStatement;
-use Zephir\Statements\ForStatement;
-use Zephir\Statements\WhileStatement;
-use Zephir\Statements\EchoStatement;
-use Zephir\Statements\LetStatement;
-use Zephir\Statements\RequireStatement;
-use Zephir\Statements\ReturnStatement;
-use Zephir\Statements\FetchStatement;
-use Zephir\Statements\ThrowStatement;
-use Zephir\Statements\LoopStatement;
+use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
+use Zephir\Statements\DeclareStatement;
 use Zephir\Statements\DoWhileStatement;
+use Zephir\Statements\EchoStatement;
+use Zephir\Statements\ForStatement;
+use Zephir\Statements\IfStatement;
+use Zephir\Statements\LetStatement;
+use Zephir\Statements\LoopStatement;
+use Zephir\Statements\RequireStatement;
+use Zephir\Statements\ReturnStatement;
 use Zephir\Statements\SwitchStatement;
+use Zephir\Statements\ThrowStatement;
 use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
-use Zephir\Passes\MutateGathererPass;
+use Zephir\Statements\WhileStatement;
 
 /**
- * StatementsBlock
+ * StatementsBlock.
  *
  * This represents a single basic block in Zephir. A statements block is simply a container of instructions that execute sequentially.
  */
@@ -51,7 +49,7 @@ class StatementsBlock
     protected $lastStatement;
 
     /**
-     * StatementsBlock constructor
+     * StatementsBlock constructor.
      *
      * @param array $statements
      */
@@ -61,36 +59,39 @@ class StatementsBlock
     }
 
     /**
-     * Sets whether the statements blocks belongs to a loop
+     * Sets whether the statements blocks belongs to a loop.
      *
-     * @param boolean $loop
+     * @param bool $loop
+     *
      * @return StatementsBlock
      */
     public function isLoop($loop)
     {
         $this->loop = $loop;
+
         return $this;
     }
 
     /**
      * @param CompilationContext $compilationContext
-     * @param boolean $unreachable
-     * @param int $branchType
+     * @param bool               $unreachable
+     * @param int                $branchType
+     *
      * @return Branch
      */
     public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN)
     {
         $compilationContext->codePrinter->increaseLevel();
-        $compilationContext->currentBranch++;
+        ++$compilationContext->currentBranch;
 
         /**
-         * Create a new branch
+         * Create a new branch.
          */
         $currentBranch = new Branch();
         $currentBranch->setType($branchType);
         $currentBranch->setUnreachable($unreachable);
 
-        /**
+        /*
          * Activate branch in the branch manager
          */
         $compilationContext->branchManager->addBranch($currentBranch);
@@ -99,36 +100,55 @@ class StatementsBlock
 
         $statements = $this->statements;
 
-        /**
+        /*
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
             array_push($compilationContext->cycleBlocks, $this);
         }
 
+        $where = '';
+        if ($compilationContext->classDefinition) {
+            $where = sprintf(
+                'in %s',
+                $compilationContext->classDefinition->getCompleteName()
+            );
+
+            if ($compilationContext->currentMethod) {
+                $where .= sprintf('::%s', $compilationContext->currentMethod->getName());
+            }
+        }
+
         foreach ($statements as $statement) {
-            /**
+            /*
              * Generate GDB hints
+             * @todo
              */
             if ($this->debug) {
                 if (isset($statement['file'])) {
-                    if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
-                        $compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "' . $statement['file'] . '"');
+                    if ('declare' != $statement['type'] && 'comment' != $statement['type']) {
+                        $compilationContext->codePrinter->outputNoIndent('#line '.$statement['line'].' "'.$statement['file'].'"');
                     }
                 }
             }
 
-            /**
+            /*
              * Show warnings if code is generated when the 'unreachable state' is 'on'
              */
-            if ($this->unreachable === true) {
+            if (true === $this->unreachable) {
                 switch ($statement['type']) {
                     case 'echo':
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expressions'][0]);
+                        $compilationContext->logger->warning(
+                            sprintf('Unreachable code %s', $where),
+                            ['unreachable-code', $statement['expressions'][0]]
+                        );
                         break;
 
                     case 'let':
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['assignments'][0]);
+                        $compilationContext->logger->warning(
+                            sprintf('Unreachable code %s', $where),
+                            ['unreachable-code', $statement['assignments'][0]]
+                        );
                         break;
 
                     case 'fetch':
@@ -143,14 +163,23 @@ class StatementsBlock
                     case 'return':
                     case 'c-block':
                         if (isset($statement['expr'])) {
-                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expr']);
+                            $compilationContext->logger->warning(
+                                sprintf('Unreachable code %s', $where),
+                                ['unreachable-code', $statement['expr']]
+                            );
                         } else {
-                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
+                            $compilationContext->logger->warning(
+                                sprintf('Unreachable code %s', $where),
+                                ['unreachable-code', $statement]
+                            );
                         }
                         break;
 
                     default:
-                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
+                        $compilationContext->logger->warning(
+                            sprintf('Unreachable code %s', $where),
+                            ['unreachable-code', $statement]
+                        );
                 }
             }
 
@@ -244,7 +273,7 @@ class StatementsBlock
                     $expr = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
                     $compiledExpression = $expr->compile($compilationContext);
-                    $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
+                    $compilationContext->codePrinter->output($compiledExpression->getCode().';');
                     break;
 
                 case 'mcall':
@@ -268,7 +297,7 @@ class StatementsBlock
                         case 'char':
                         case 'uchar':
                         case 'bool':
-                            $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
+                            $compilationContext->codePrinter->output($compiledExpression->getCode().';');
                             break;
                     }
                     break;
@@ -289,22 +318,22 @@ class StatementsBlock
                     break;
 
                 default:
-                    throw new Exception('Unsupported statement: ' . $statement['type']);
+                    throw new Exception('Unsupported statement: '.$statement['type']);
             }
 
-            if ($statement['type'] != 'comment') {
+            if ('comment' != $statement['type']) {
                 $this->lastStatement = $statement;
             }
         }
 
-        /**
+        /*
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
             array_pop($compilationContext->cycleBlocks);
         }
 
-        /**
+        /*
          * Traverses temporal variables created in a specific branch
          * marking them as idle
          */
@@ -312,14 +341,14 @@ class StatementsBlock
 
         $compilationContext->branchManager->removeBranch($currentBranch);
 
-        $compilationContext->currentBranch--;
+        --$compilationContext->currentBranch;
         $compilationContext->codePrinter->decreaseLevel();
 
         return $currentBranch;
     }
 
     /**
-     * Returns the statements in the block
+     * Returns the statements in the block.
      *
      * @return array
      */
@@ -329,7 +358,7 @@ class StatementsBlock
     }
 
     /**
-     * Setter for statements
+     * Setter for statements.
      *
      * @param array $statements
      */
@@ -339,7 +368,7 @@ class StatementsBlock
     }
 
     /**
-     * Returns the type of the last statement executed
+     * Returns the type of the last statement executed.
      *
      * @return string
      */
@@ -349,7 +378,7 @@ class StatementsBlock
     }
 
     /**
-     * Returns the last statement executed
+     * Returns the last statement executed.
      *
      * @return array
      */
@@ -359,39 +388,41 @@ class StatementsBlock
     }
 
     /**
-     * Returns the last line in the last statement
+     * Returns the last line in the last statement.
      */
     public function getLastLine()
     {
         if (!$this->lastStatement) {
-            $this->lastStatement = $this->statements[count($this->statements) - 1];
+            $this->lastStatement = $this->statements[\count($this->statements) - 1];
         }
     }
 
     /**
-     * Checks whether the block is empty or not
+     * Checks whether the block is empty or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
-        return count($this->statements) == 0;
+        return 0 == \count($this->statements);
     }
 
     /**
-     * Create/Returns a mutate gatherer pass for this block
+     * Create/Returns a mutate gatherer pass for this block.
      *
-     * @param boolean $pass
+     * @param bool $pass
+     *
      * @return MutateGathererPass
      */
     public function getMutateGatherer($pass = false)
     {
         if (!$this->mutateGatherer) {
-            $this->mutateGatherer = new MutateGathererPass;
+            $this->mutateGatherer = new MutateGathererPass();
         }
         if ($pass) {
             $this->mutateGatherer->pass($this);
         }
+
         return $this->mutateGatherer;
     }
 }

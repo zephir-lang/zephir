@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Class StrtokOptimizer
+ * Class StrtokOptimizer.
  *
  * Optimizes calls to 'strtok' using internal function
  */
 class StrtokOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     *
      * @throws CompilerException
+     *
+     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,11 +39,11 @@ class StrtokOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
-        if (count($expression['parameters']) == 1) {
+        if (1 == \count($expression['parameters'])) {
             return new CompiledExpression('bool', 'false', $expression);
         }
 

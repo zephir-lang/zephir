@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\StatementsBlock;
 use Zephir\Optimizers\EvalExpression;
-use Zephir\Branch;
+use Zephir\StatementsBlock;
 
 /**
- * SwitchStatement
+ * SwitchStatement.
  *
  * Switch statement, the same as in PHP/C
  */
@@ -33,7 +33,7 @@ class SwitchStatement extends StatementAbstract
 
         $codePrinter = $compilationContext->codePrinter;
 
-        $compilationContext->insideSwitch++;
+        ++$compilationContext->insideSwitch;
 
         $exprEval = new Expression($exprRaw);
         $exprEval->setReadOnly(true);
@@ -45,90 +45,90 @@ class SwitchStatement extends StatementAbstract
             $codePrinter->output('do {');
             $compilationContext->codePrinter->increaseLevel();
 
-            if ($resolvedExpr->getType() != 'variable') {
+            if ('variable' != $resolvedExpr->getType()) {
                 /**
-                 * Create a temporary variable
+                 * Create a temporary variable.
                  */
                 $tempVariable = $compilationContext->symbolTable->getTempVariable($resolvedExpr->getType(), $compilationContext);
 
                 /**
-                 * Simulate an assignment to the temporary variable
+                 * Simulate an assignment to the temporary variable.
                  */
-                $statement = new LetStatement(array(
+                $statement = new LetStatement([
                     'type' => 'let',
-                    'assignments' => array(
-                        array(
+                    'assignments' => [
+                        [
                             'assign-type' => 'variable',
                             'operator' => 'assign',
                             'variable' => $tempVariable->getName(),
-                            'expr' => array(
+                            'expr' => [
                                 'type' => $resolvedExpr->getType(),
                                 'value' => $resolvedExpr->getCode(),
                                 'file' => $exprRaw['file'],
                                 'line' => $exprRaw['line'],
-                                'char' => $exprRaw['char']
-                            ),
+                                'char' => $exprRaw['char'],
+                            ],
                             'file' => $exprRaw['file'],
                             'line' => $exprRaw['line'],
-                            'char' => $exprRaw['char']
-                        )
-                    )
-                ));
+                            'char' => $exprRaw['char'],
+                        ],
+                    ],
+                ]);
                 $statement->compile($compilationContext);
             } else {
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
 
             $clauses = $this->normalizeClauses($this->statement['clauses']);
-            $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
+            $tempLeft = ['type' => 'variable', 'value' => $tempVariable->getRealName()];
 
             /**
              * In the first round we group case clauses that have block statements
-             * with the ones that does not have one
+             * with the ones that does not have one.
              */
-            $blocks = array();
-            $exprStack = array();
+            $blocks = [];
+            $exprStack = [];
             $defaultBlock = null;
             foreach ($clauses as $clause) {
-                if ($clause['type'] == 'case') {
-                    $expr = array(
+                if ('case' == $clause['type']) {
+                    $expr = [
                         'type' => 'equals',
                         'left' => $tempLeft,
-                        'right' => $clause['expr']
-                    );
+                        'right' => $clause['expr'],
+                    ];
                     if (!isset($clause['statements'])) {
                         $exprStack[] = $expr;
                     } else {
                         $exprStack[] = $expr;
-                        $blocks[] = array(
+                        $blocks[] = [
                             'expr' => $exprStack,
-                            'block' => $clause['statements']
-                        );
-                        $exprStack = array();
+                            'block' => $clause['statements'],
+                        ];
+                        $exprStack = [];
                     }
                 } else {
-                    if ($clause['type'] == 'default') {
+                    if ('default' == $clause['type']) {
                         $defaultBlock = $clause['statements'];
                     }
                 }
             }
 
-            /**
+            /*
              * In the second round we generate the conditions with their blocks
              * grouping 'cases' without a statement block using an 'or'
              */
             foreach ($blocks as $block) {
                 $expressions = $block['expr'];
 
-                if (count($expressions) == 1) {
+                if (1 == \count($expressions)) {
                     $condition = $evalExpr->optimize($expressions[0], $compilationContext);
-                    $codePrinter->output('if (' . $condition . ') {');
+                    $codePrinter->output('if ('.$condition.') {');
                 } else {
-                    $orConditions = array();
+                    $orConditions = [];
                     foreach ($expressions as $expression) {
                         $orConditions[] = $evalExpr->optimize($expression, $compilationContext);
                     }
-                    $codePrinter->output('if (' . join(' || ', $orConditions) . ') {');
+                    $codePrinter->output('if ('.implode(' || ', $orConditions).') {');
                 }
 
                 if (isset($block['block'])) {
@@ -142,7 +142,7 @@ class SwitchStatement extends StatementAbstract
 
             $compilationContext->codePrinter->decreaseLevel();
 
-            /**
+            /*
              * The default block is resolved at the end of the 'switch'
              */
             if ($defaultBlock) {
@@ -150,7 +150,7 @@ class SwitchStatement extends StatementAbstract
                 $st->compile($compilationContext);
             }
 
-            $compilationContext->insideSwitch--;
+            --$compilationContext->insideSwitch;
 
             $codePrinter->output('} while(0);');
             $codePrinter->outputBlankLine();
@@ -160,17 +160,17 @@ class SwitchStatement extends StatementAbstract
     public function normalizeClauses($clauses)
     {
         foreach ($clauses as $defaultIndex => $clause) {
-            if ($clause['type'] == 'default') {
+            if ('default' == $clause['type']) {
                 break;
             }
         }
 
-        if ($defaultIndex === count($clauses) - 1) {
+        if ($defaultIndex === \count($clauses) - 1) {
             return $clauses;
         }
 
-        $emptyClausesBeforeDefault = array();
-        for ($i = $defaultIndex - 1; $i >= 0; $i--) {
+        $emptyClausesBeforeDefault = [];
+        for ($i = $defaultIndex - 1; $i >= 0; --$i) {
             $clause = $clauses[$i];
             if (isset($clause['statements'])) {
                 break;

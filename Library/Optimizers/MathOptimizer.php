@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -17,23 +17,25 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 
 /**
- * Class OptimizerAbstract
+ * Class OptimizerAbstract.
  */
 abstract class MathOptimizer extends OptimizerAbstract
 {
     /**
-     * Gets function name
+     * Gets function name.
      *
      * @return string
      */
     abstract public function getFunctionName();
 
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -41,16 +43,16 @@ abstract class MathOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) > 1) {
+        if (\count($expression['parameters']) > 1) {
             return false;
         }
 
-        /**
+        /*
          * Resolve parameters as vars
          */
         $call->getResolvedParams($expression['parameters'], $context, $expression);
         /**
-         * Get CompiledExpression(s) for resolved var(s)
+         * Get CompiledExpression(s) for resolved var(s).
          */
         $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
         $compiledExpression = $resolvedParams[0];
@@ -62,6 +64,7 @@ abstract class MathOptimizer extends OptimizerAbstract
             case 'ulong':
             case 'double':
                 $context->headersManager->add('math');
+
                 return $this->passNativeFCall($compiledExpression, $expression);
                 break;
             case 'variable':
@@ -73,13 +76,15 @@ abstract class MathOptimizer extends OptimizerAbstract
                     case 'ulong':
                     case 'double':
                         $context->headersManager->add('math');
+
                         return $this->passNativeFCall($compiledExpression, $expression);
                         break;
                     case 'variable':
                         $context->headersManager->add('kernel/math');
+
                         return new CompiledExpression(
                             'double',
-                            'zephir_' . $this->getFunctionName() . '(' . $context->backend->getVariableCode($variable) . ' TSRMLS_CC)',
+                            'zephir_'.$this->getFunctionName().'('.$context->backend->getVariableCode($variable).' TSRMLS_CC)',
                             $expression
                         );
                         break;
@@ -92,14 +97,15 @@ abstract class MathOptimizer extends OptimizerAbstract
 
     /**
      * @param CompiledExpression $compiledExpression
-     * @param array $expression
+     * @param array              $expression
+     *
      * @return CompiledExpression
      */
     protected function passNativeFCall($compiledExpression, $expression)
     {
         return new CompiledExpression(
             'double',
-            $this->getFunctionName() . '(' . $compiledExpression->getCode() . ')',
+            $this->getFunctionName().'('.$compiledExpression->getCode().')',
             $expression
         );
     }

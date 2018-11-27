@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,7 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
 /**
- * BreakStatement
+ * BreakStatement.
  *
  * Break statement
  */
@@ -23,7 +23,8 @@ class BreakStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws \Zephir\Exception\CompilerException
+     *
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {

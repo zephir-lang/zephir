@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class VarsTest extends TestCase
 {
@@ -23,15 +23,15 @@ class VarsTest extends TestCase
         $this->setOutputCallback(
             function ($output) {
                 /* To prevent differences between PHP version */
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
         $this->expectOutputString(
-            'array(3){' .
-            '[0]=>int(1)' .
-            '[1]=>string(5)"world"' .
-            '[2]=>bool(false)}' .
+            'array(3){'.
+            '[0]=>int(1)'.
+            '[1]=>string(5)"world"'.
+            '[2]=>bool(false)}'.
             'string(5)"hello"'
         );
 
@@ -46,8 +46,8 @@ class VarsTest extends TestCase
     public function testVarDumpWithTwoParams()
     {
         $this->expectOutputString(
-            'float(3.1)' . "\n" .
-            'bool(true)' . "\n"
+            'float(3.1)'."\n".
+            'bool(true)'."\n"
         );
 
         $t = new \Test\Vars();
@@ -62,26 +62,26 @@ class VarsTest extends TestCase
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
         $this->expectOutputString(
-            'float(3.1)' .
-            'bool(true)' .
+            'float(3.1)'.
+            'bool(true)'.
             'array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}'
         );
 
         $t = new \Test\Vars();
 
-        $t->testVarDump3param(3.1, true, array(1, 2, 3));
+        $t->testVarDump3param(3.1, true, [1, 2, 3]);
     }
 
     public function testVarExport()
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
@@ -98,10 +98,10 @@ class VarsTest extends TestCase
         $t = new \Test\Vars();
 
         $this->expectOutputString(
-            'string(3) "foo"' . "\n" .
-            'string(3) "bar"' . "\n" .
-            "'foo'" .
-            "'bar'" .
+            'string(3) "foo"'."\n".
+            'string(3) "bar"'."\n".
+            "'foo'".
+            "'bar'".
             "'bar'"
         );
 
@@ -113,35 +113,35 @@ class VarsTest extends TestCase
     public function testVarDumpAndCountOptimizer()
     {
         $this->expectOutputString(
-            'int(5)' . "\n" .
+            'int(5)'."\n".
             '5'
         );
 
         $t = new \Test\Vars();
-        $t->testCountOptimizerVarDumpAndExport(array(1, 2, 3, 4, 5));
+        $t->testCountOptimizerVarDumpAndExport([1, 2, 3, 4, 5]);
     }
 
     public function testArrayTypeVarDumpAndExport()
     {
         $this->setOutputCallback(
             function ($output) {
-                return str_replace(array("\n", ' '), '', $output);
+                return str_replace(["\n", ' '], '', $output);
             }
         );
 
         $this->expectOutputString(
-            'array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}' .
+            'array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}'.
             'array(0=>1,1=>2,2=>3,)'
         );
 
         $t = new \Test\Vars();
-        $t->testArrayTypeVarDumpAndExport(array(1, 2, 3));
+        $t->testArrayTypeVarDumpAndExport([1, 2, 3]);
     }
 
     public function testIntVarDump()
     {
         $this->expectOutputString(
-            'int(1)' . "\n" .
+            'int(1)'."\n".
             '1'
         );
 
@@ -151,14 +151,14 @@ class VarsTest extends TestCase
 
     public function testDoubleVarDump()
     {
-        if (PHP_VERSION_ID < 70000) {
+        if (\PHP_VERSION_ID < 70000) {
             $this->expectOutputString(
-                'float(1)' . "\n" .
+                'float(1)'."\n".
                 '1'
             );
         } else {
             $this->expectOutputString(
-                'float(1)' . "\n" .
+                'float(1)'."\n".
                 '1.0'
             );
         }
@@ -170,7 +170,7 @@ class VarsTest extends TestCase
     public function testBoolVarDump()
     {
         $this->expectOutputString(
-            'bool(true)' . "\n" .
+            'bool(true)'."\n".
             'true'
         );
 

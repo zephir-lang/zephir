@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Zephir\Operators\Logical;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * LogicalBaseOperator
+ * LogicalBaseOperator.
  *
  * This is the base operator for logical operators
  */
@@ -27,11 +27,11 @@ class LogicalBaseOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression", $expression);
+            throw new CompilerException('Missing left part of the expression', $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new CompilerException("Missing right part of the expression", $expression);
+            throw new CompilerException('Missing right part of the expression', $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -46,38 +46,39 @@ class LogicalBaseOperator extends BaseOperator
             case 'int':
                 switch ($right->getType()) {
                     case 'int':
-                        return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                        return new CompiledExpression('int', '('.$left->getCode().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                     case 'double':
-                        return new CompiledExpression('double', '((double) ' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                        return new CompiledExpression('double', '((double) '.$left->getCode().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getBooleanCode() . ')', $expression);
+                        return new CompiledExpression('int', '('.$left->getCode().' '.$this->operator.' '.$right->getBooleanCode().')', $expression);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'double':
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableCode = $compilationContext->backend->getVariableCode($variableRight);
-                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . '))', $expression);
+
+                                return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' zephir_is_true('.$variableCode.'))', $expression);
 
                             default:
-                                throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+                                throw new CompilerException("Cannot compare variable('int') with variable('".$variableRight->getType()."')", $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot compare 'int' with '" . $right->getType() . "'", $expression);
+                        throw new CompilerException("Cannot compare 'int' with '".$right->getType()."'", $expression);
                 }
                 break;
 
@@ -85,57 +86,58 @@ class LogicalBaseOperator extends BaseOperator
                 switch ($right->getType()) {
                     case 'int':
                     case 'double':
-                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ((' . $right->getCode() . ') ? 1 : 0))', $expression);
+                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->bitOperator.' (('.$right->getCode().') ? 1 : 0))', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->bitOperator.' '.$right->getBooleanCode().')', $expression);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'double':
-                                return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                             case 'variable':
                                 $variableCode = $compilationContext->backend->getVariableCode($variableRight);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . '))', $expression);
+
+                                return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->operator.' zephir_is_true('.$variableCode.'))', $expression);
 
                             default:
-                                throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+                                throw new CompilerException("Cannot add variable('int') with variable('".$variableRight->getType()."')", $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Cannot compare 'bool' with '" . $right->getType() . "'", $expression);
+                        throw new CompilerException("Cannot compare 'bool' with '".$right->getType()."'", $expression);
                 }
                 break;
             case 'double':
                 switch ($right->getType()) {
                     case 'int':
-                        return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                        return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                     case 'double':
-                        return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                        return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getBooleanCode() . ')', $expression);
+                        return new CompiledExpression('bool', '('.$left->getCode().' '.$this->operator.' '.$right->getBooleanCode().')', $expression);
 
                     default:
-                        throw new CompilerException("Cannot compare 'double' with '" . $right->getType() . "'", $expression);
+                        throw new CompilerException("Cannot compare 'double' with '".$right->getType()."'", $expression);
                 }
                 break;
 
             case 'string':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between strings", $expression);
+                        throw new CompilerException('Operation is not supported between strings', $expression);
                 }
                 break;
 
@@ -145,143 +147,147 @@ class LogicalBaseOperator extends BaseOperator
                     case 'int':
                         switch ($right->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
                                     case 'int':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                                     case 'double':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . '))', $expression);
+
+                                        return new CompiledExpression('int', '('.$variableLeft->getName().' '.$this->operator.' zephir_is_true('.$variableCode.'))', $expression);
 
                                     default:
-                                        throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+                                        throw new CompilerException("Cannot compare variable('int') with variable('".$variableRight->getType()."')", $expression);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
+                                throw new CompilerException("Cannot compare variable('int') with '".$right->getType()."'", $expression);
                         }
                         break;
 
                     case 'bool':
                         switch ($right->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $right->getCode() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->bitOperator.' '.$right->getBooleanCode().')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
                                     case 'int':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->bitOperator . ' ' . $variableRight->getName() . ')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->bitOperator.' '.$variableRight->getName().')', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . '))', $expression);
+
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' zephir_is_true('.$variableCode.'))', $expression);
 
                                     default:
-                                        throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+                                        throw new CompilerException("Cannot compare variable('int') with variable('".$variableRight->getType()."')", $expression);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
+                                throw new CompilerException("Cannot compare variable('int') with '".$right->getType()."'", $expression);
                         }
                         break;
 
                     case 'double':
                         switch ($right->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->operator . ' ' . $right->getCode(), $expression);
+                                return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'double':
-                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->operator . ' ' . $right->getCode(), $expression);
+                                return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->bitOperator . '' . $right->getBooleanCode(), $expression);
+                                return new CompiledExpression('bool', $variableLeft->getName().' '.$this->bitOperator.''.$right->getBooleanCode(), $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
                                     case 'int':
-                                        return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->operator . '  (double) ' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.'  (double) '.$variableRight->getName(), $expression);
 
                                     case 'double':
-                                        return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->operator . '  ' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.'  '.$variableRight->getName(), $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->bitOperator . '' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$this->bitOperator.''.$variableRight->getName(), $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . ')', $expression);
+
+                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.' zephir_is_true('.$variableCode.')', $expression);
 
                                     default:
-                                        throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
+                                        throw new CompilerException("Cannot compare variable('double') with variable('".$variableRight->getType()."')", $expression);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
+                                throw new CompilerException("Cannot compare variable('int') with '".$right->getType()."'", $expression);
                         }
                         break;
 
                     case 'string':
                         switch ($right->getType()) {
                             case 'int':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->operator . ' ' . $right->getCode(), $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'double':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->operator . ' ' . $right->getCode(), $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->bitOperator . '' . $right->getBooleanCode(), $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->bitOperator.''.$right->getBooleanCode(), $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
                                     case 'int':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->operator . ' ' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' '.$variableRight->getName(), $expression);
 
                                     case 'double':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->operator . '  ' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.'  '.$variableRight->getName(), $expression);
 
                                     case 'string':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->operator . ' (' . $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . '))', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' ('.$variableRight->getName().' && Z_STRLEN_P('.$variableRight->getName().'))', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->bitOperator . ' ' . $variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->bitOperator.' '.$variableRight->getName(), $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->operator . ' zephir_is_true(' . $variableCode . ')', $expression);
+
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.' '.$this->operator.' zephir_is_true('.$variableCode.')', $expression);
 
                                     default:
-                                        throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
+                                        throw new CompilerException("Cannot compare variable('double') with variable('".$variableRight->getType()."')", $expression);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
+                                throw new CompilerException("Cannot compare variable('int') with '".$right->getType()."'", $expression);
                         }
                         break;
 
@@ -296,7 +302,8 @@ class LogicalBaseOperator extends BaseOperator
                                 $op1 = $variableLeftCode;
                                 $op2 = $right->getCode();
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
+
+                                return new CompiledExpression('bool', 'zephir_is_true('.$op1.') '.$op.' '.$op2, $expression);
 
                             /* a && 1 */
                             case 'bool':
@@ -305,7 +312,8 @@ class LogicalBaseOperator extends BaseOperator
                                 $op1 = $variableLeftCode;
                                 $op2 = $right->getCode();
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
+
+                                return new CompiledExpression('bool', 'zephir_is_true('.$op1.') '.$op.' '.$op2, $expression);
 
                             /* a(var) && a(x) */
                             case 'variable':
@@ -315,12 +323,14 @@ class LogicalBaseOperator extends BaseOperator
                                     /* a(var) && a(int) */
                                     case 'int':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->operator . ' ' . $variableRightCode, $expression);
+
+                                        return new CompiledExpression('bool', 'zephir_is_true('.$variableLeftCode.') '.$this->operator.' '.$variableRightCode, $expression);
 
                                     /* a(var) && a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->operator . ' ' . $variableRightCode, $expression);
+
+                                        return new CompiledExpression('bool', 'zephir_is_true('.$variableLeftCode.') '.$this->operator.' '.$variableRightCode, $expression);
 
                                     /* a(var) && a(var) */
                                     case 'variable':
@@ -330,29 +340,30 @@ class LogicalBaseOperator extends BaseOperator
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         if ($expected->isLocalOnly()) {
-                                            $compilationContext->codePrinter->output('add_function(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+                                            $compilationContext->codePrinter->output('add_function(&'.$expected->getName().', '.$op1.', '.$op2.' TSRMLS_CC);');
                                         } else {
-                                            $compilationContext->codePrinter->output('add_function(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+                                            $compilationContext->codePrinter->output('add_function('.$expected->getName().', '.$op1.', '.$op2.' TSRMLS_CC);');
                                         }
+
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
 
                                     default:
-                                        throw new CompilerException("Cannot compare 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
+                                        throw new CompilerException("Cannot compare 'variable' with variable ('".$variableRight->getType()."')", $expression);
                                 }
                                 break;
 
                             default:
-                                throw new CompilerException("Cannot compare 'variable' with '" . $right->getType() . "'", $expression);
+                                throw new CompilerException("Cannot compare 'variable' with '".$right->getType()."'", $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
+                        throw new CompilerException("Unknown '".$variableLeft->getType()."'", $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
+                throw new CompilerException('Unsupported type: '.$left->getType(), $expression);
         }
     }
 }

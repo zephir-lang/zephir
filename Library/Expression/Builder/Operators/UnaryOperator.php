@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * UnaryOperator
+ * UnaryOperator.
  *
  * Allows to manually build a unary operator AST node
  */
@@ -63,16 +63,16 @@ class UnaryOperator extends AbstractOperator
     private $expression;
 
     /**
-     * @param null $operator
+     * @param null                 $operator
      * @param AbstractBuilder|null $expression
      */
     public function __construct($operator = null, AbstractBuilder $expression = null)
     {
-        if ($operator !== null) {
+        if (null !== $operator) {
             $this->setOperator($operator);
         }
 
-        if ($expression !== null) {
+        if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
@@ -87,11 +87,13 @@ class UnaryOperator extends AbstractOperator
 
     /**
      * @param $operator
+     *
      * @return $this
      */
     public function setOperator($operator)
     {
         $this->operator = $operator;
+
         return $this;
     }
 
@@ -105,11 +107,13 @@ class UnaryOperator extends AbstractOperator
 
     /**
      * @param AbstractBuilder $expression
+     *
      * @return $this
      */
     public function setExpression(AbstractBuilder $expression)
     {
         $this->expression = $expression;
+
         return $this;
     }
 
@@ -118,9 +122,9 @@ class UnaryOperator extends AbstractOperator
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'type' => $this->getOperator(),
             'left' => $this->getExpression(),
-        );
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,11 +12,8 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\ValidationException
- *
- * @package Zephir\Exception
+ * Zephir\Exception\ValidationException.
  */
 class ValidationException extends InvalidArgumentException
 {
-    use ExceptionExtraAwareTrait;
 }

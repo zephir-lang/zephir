@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Expression\Builder;
 
 /**
- * RawExpression
+ * RawExpression.
  *
  * Allows to use a raw expression in a builder
  */
@@ -25,7 +25,7 @@ class RawExpression extends AbstractBuilder
      */
     public function __construct($expression = null)
     {
-        if ($expression !== null) {
+        if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
@@ -40,11 +40,13 @@ class RawExpression extends AbstractBuilder
 
     /**
      * @param $expr
+     *
      * @return $this
      */
     public function setExpression($expr)
     {
         $this->expression = $expr;
+
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,16 +18,17 @@ use Zephir\Optimizers\OptimizerAbstract;
 use function Zephir\add_slashes;
 
 /**
- * MethodExistsOptimizer
+ * MethodExistsOptimizer.
  *
  * Optimizes calls to 'method_exists' using internal function
  */
 class MethodExistsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -36,11 +37,11 @@ class MethodExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
-        if ($expression['parameters'][1]['parameter']['type'] == 'string') {
+        if ('string' == $expression['parameters'][1]['parameter']['type']) {
             $str = add_slashes($expression['parameters'][1]['parameter']['value']);
             unset($expression['parameters'][1]);
         }
@@ -51,9 +52,9 @@ class MethodExistsOptimizer extends OptimizerAbstract
         /* TODO: Solve this macro stuff better, move to backend */
         $macro = $context->backend->isZE3() ? 'SL' : 'SS';
         if (isset($str)) {
-            return new CompiledExpression('bool', '(zephir_method_exists_ex(' . $resolvedParams[0] . ', '. $macro . '("' . strtolower($str) . '") TSRMLS_CC) == SUCCESS)', $expression);
+            return new CompiledExpression('bool', '(zephir_method_exists_ex('.$resolvedParams[0].', '.$macro.'("'.strtolower($str).'") TSRMLS_CC) == SUCCESS)', $expression);
         }
 
-        return new CompiledExpression('bool', '(zephir_method_exists(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC)  == SUCCESS)', $expression);
+        return new CompiledExpression('bool', '(zephir_method_exists('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)  == SUCCESS)', $expression);
     }
 }

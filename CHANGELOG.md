@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.11.7] - 2018-11-27
+### Changed
+- The cache directory, formerly known as `.temp`, used for temporary operations was moved to
+  the new `.zephir` directory. The algorithm for calculating cache path is as follows:
+  `%CWD%/.zephir/%HASH%/cache/IR` where `%CWD%` is the current working directory and `%HASH%`
+  means a hash calculated from the current Zephir version, environment and configuration
+- The compiler's messages was divided into streams. Thus, now it is possible to redirect compiler's
+  output as follows: `zephir generate 2> errors.log 1> /dev/null`
+- Fixed type hints for scalar arguments for PHP < 7.2
+  [#1658](https://github.com/phalcon/zephir/pull/1658)
+- Coloring the compiler messages in the terminal is temporarily disabled
+
+### Fixed
+- Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
+
 ## [0.11.6] - 2018-11-19
 ### Fixed
 - Fixed incorrect behavior of `require` statement for ZendEngine3
@@ -29,6 +44,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed regression introduced in the 0.10.12 related to `require` file using protocols
   [#1713](https://github.com/phalcon/zephir/issues/1713)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.6...HEAD
+## [0.11.3] - 2018-11-13
+### Changed
+- Remove legacy installers and provide a common way to install Zephir
+  [#1714](https://github.com/phalcon/zephir/issues/1714). Supported installation strategies are:
+  - Install as a global application (using `composer global require`)
+  - Install as a PHAR file. (this feature currently in the testing phase and not released officially)
+  - Install as a Git clone (using `git clone` and `composer install` inside cloned project)
+  - Install as a project's dependency (using `composer require`)
+
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.7...HEAD
+[0.11.7]: https://github.com/phalcon/zephir/compare/0.11.6...0.11.7
 [0.11.6]: https://github.com/phalcon/zephir/compare/0.11.4...0.11.6
 [0.11.4]: https://github.com/phalcon/zephir/compare/0.11.3...0.11.4
+[0.11.3]: https://github.com/phalcon/zephir/compare/0.11.2...0.11.3

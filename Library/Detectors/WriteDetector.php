@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Detectors;
 
 /**
- * WriteDetector
+ * WriteDetector.
  *
  * Detects whether a variable is mutated in a given context
  * If a variable is not modified in a local context (method block) we can avoid allocate
@@ -22,35 +22,36 @@ namespace Zephir\Detectors;
  */
 class WriteDetector
 {
-    protected $detectionFlags = 0;
-
-    protected $mutations = array();
-
     const DETECT_NONE = 0;
 
     const DETECT_PARAM_PASS = 1;
 
-    const DETECT_ARRAY_USE  = 2;
+    const DETECT_ARRAY_USE = 2;
 
     const DETECT_VALUE_IN_ASSIGNMENT = 4;
 
-    const DETECT_ALL  = 255;
+    const DETECT_ALL = 255;
+    protected $detectionFlags = 0;
+
+    protected $mutations = [];
 
     /**
-     * Do the detection pass on a single variable
+     * Do the detection pass on a single variable.
      *
      * @param string $variable
-     * @param array $statements
-     * @return boolean
+     * @param array  $statements
+     *
+     * @return bool
      */
     public function detect($variable, array $statements)
     {
         $this->passStatementBlock($statements);
+
         return $this->getNumberOfMutations($variable) > 0;
     }
 
     /**
-     * Sets detection flags
+     * Sets detection flags.
      *
      * @param int $flags
      */
@@ -60,25 +61,28 @@ class WriteDetector
     }
 
     /**
-     * Increase the number of mutations a variable has inside a statement block
+     * Increase the number of mutations a variable has inside a statement block.
      *
      * @param string $variable
+     *
      * @return ForValueUseDetector
      */
     public function increaseMutations($variable)
     {
         if (isset($this->mutations[$variable])) {
-            $this->mutations[$variable]++;
+            ++$this->mutations[$variable];
         } else {
             $this->mutations[$variable] = 1;
         }
+
         return $this;
     }
 
     /**
-     * Returns the number of assignment instructions that mutated a variable
+     * Returns the number of assignment instructions that mutated a variable.
      *
      * @param string $variable
+     *
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -86,11 +90,12 @@ class WriteDetector
         if (isset($this->mutations[$variable])) {
             return $this->mutations[$variable];
         }
+
         return 0;
     }
 
     /**
-     * Pass let statements
+     * Pass let statements.
      *
      * @param array $statement
      */
@@ -101,9 +106,9 @@ class WriteDetector
                 $this->passExpression($assignment['expr']);
             }
             $this->increaseMutations($assignment['variable']);
-            if (($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT) == self::DETECT_VALUE_IN_ASSIGNMENT) {
+            if (self::DETECT_VALUE_IN_ASSIGNMENT == ($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT)) {
                 if (isset($assignment['expr'])) {
-                    if ($assignment['expr']['type'] == 'variable') {
+                    if ('variable' == $assignment['expr']['type']) {
                         $this->increaseMutations($assignment['expr']['value']);
                         break;
                     }
@@ -113,7 +118,7 @@ class WriteDetector
     }
 
     /**
-     * Pass call expressions
+     * Pass call expressions.
      *
      * @param array $expression
      */
@@ -121,8 +126,8 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                $usePass = ($this->detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
-                if ($usePass && $parameter['parameter']['type'] == 'variable') {
+                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
+                if ($usePass && 'variable' == $parameter['parameter']['type']) {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -132,15 +137,15 @@ class WriteDetector
     }
 
     /**
-     * Pass array expressions
+     * Pass array expressions.
      *
      * @param array $expression
      */
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            $usePass = ($this->detectionFlags & self::DETECT_ARRAY_USE) == self::DETECT_ARRAY_USE;
-            if ($usePass && $item['value']['type'] == 'variable') {
+            $usePass = self::DETECT_ARRAY_USE == ($this->detectionFlags & self::DETECT_ARRAY_USE);
+            if ($usePass && 'variable' == $item['value']['type']) {
                 $this->increaseMutations($item['value']['value']);
             } else {
                 $this->passExpression($item['value']);
@@ -149,7 +154,7 @@ class WriteDetector
     }
 
     /**
-     * Pass "new" expressions
+     * Pass "new" expressions.
      *
      * @param array $expression
      */
@@ -157,8 +162,8 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                $usePass = ($this->detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
-                if ($usePass && $parameter['parameter']['type'] == 'variable') {
+                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
+                if ($usePass && 'variable' == $parameter['parameter']['type']) {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -168,21 +173,21 @@ class WriteDetector
     }
 
     /**
-     * Pass "declare" statement
+     * Pass "declare" statement.
      *
      * @param array $statement
      */
     public function declareVariables(array $statement)
     {
         if (isset($statement['data-type'])) {
-            if ($statement['data-type'] != 'variable') {
+            if ('variable' != $statement['data-type']) {
                 return;
             }
         }
 
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
+                if ('string' == $variable['expr']['type'] || 'empty-array' == $variable['expr']['type'] || 'array' == $variable['expr']['type']) {
                     continue;
                 }
             }
@@ -191,9 +196,8 @@ class WriteDetector
         }
     }
 
-
     /**
-     * Pass expressions
+     * Pass expressions.
      *
      * @param array $expression
      */
@@ -309,7 +313,7 @@ class WriteDetector
     }
 
     /**
-     * Pass statement block
+     * Pass statement block.
      *
      * @param array $statements
      */
@@ -432,14 +436,14 @@ class WriteDetector
                     break;
 
                 case 'unset':
-                    if ($statement['expr']['type'] == "array-access") {
-                        if ($statement['expr']['left']['type'] == 'variable') {
+                    if ('array-access' == $statement['expr']['type']) {
+                        if ('variable' == $statement['expr']['left']['type']) {
                             $this->increaseMutations($statement['expr']['left']['value']);
                         }
                     } else {
-                        if ($statement['expr']['type'] == "list") {
-                            if ($statement['expr']['left']['type'] == 'array-access') {
-                                if ($statement['expr']['left']['left']['type'] == 'variable') {
+                        if ('list' == $statement['expr']['type']) {
+                            if ('array-access' == $statement['expr']['left']['type']) {
+                                if ('variable' == $statement['expr']['left']['left']['type']) {
                                     $this->increaseMutations($statement['expr']['left']['left']['value']);
                                 }
                             }

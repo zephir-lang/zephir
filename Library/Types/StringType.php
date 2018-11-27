@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,9 +12,10 @@
 namespace Zephir\Types;
 
 /**
- * StringType
+ * StringType.
  *
  * Encapsulates built-in methods for the "string" type
+ *
  * @TODO explode, join, replace
  */
 class StringType extends AbstractType
@@ -22,7 +23,7 @@ class StringType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public $methodMap = array(
+    public $methodMap = [
         'index' => 'strpos',
         'trim' => 'trim',
         'trimleft' => 'ltrim',
@@ -49,7 +50,7 @@ class StringType extends AbstractType
         'htmlspecialchars' => 'htmlspecialchars',
         'camelize' => 'camelize',
         'uncamelize' => 'uncamelize',
-    );
+    ];
 
     /**
      * {@inheritdoc}

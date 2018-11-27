@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Zephir;
 
+use Zephir\Cache\ClassEntryCache;
 use Zephir\Cache\FunctionCache;
 use Zephir\Cache\MethodCache;
 use Zephir\Cache\StaticMethodCache;
-use Zephir\Cache\ClassEntryCache;
 use Zephir\Passes\CallGathererPass;
 
 /**
- * CacheManager
+ * CacheManager.
  *
  * Creates and manages function, method and class entries caches
  */
@@ -50,7 +50,7 @@ class CacheManager
     protected $gatherer;
 
     /**
-     * Sets the CallGathererPass
+     * Sets the CallGathererPass.
      *
      * @param CallGathererPass $gatherer
      */
@@ -60,7 +60,7 @@ class CacheManager
     }
 
     /**
-     * Creates or returns an existing class entry cache
+     * Creates or returns an existing class entry cache.
      *
      * @return ClassEntryCache
      */
@@ -69,11 +69,12 @@ class CacheManager
         if (!$this->classEntryCache) {
             $this->classEntryCache = new ClassEntryCache();
         }
+
         return $this->classEntryCache;
     }
 
     /**
-     * Creates or returns an existing function cache
+     * Creates or returns an existing function cache.
      *
      * @return FunctionCache
      */
@@ -87,7 +88,7 @@ class CacheManager
     }
 
     /**
-     * Creates or returns an existing method cache
+     * Creates or returns an existing method cache.
      *
      * @return MethodCache
      */
@@ -101,7 +102,7 @@ class CacheManager
     }
 
     /**
-     * Creates or returns an existing method cache
+     * Creates or returns an existing method cache.
      *
      * @return StaticMethodCache
      */

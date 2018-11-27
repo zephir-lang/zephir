@@ -2,17 +2,17 @@ namespace Test\Oo;
 
 class DeprecatedMethods
 {
-    public deprecated function deprecatedMethod()
+    public deprecated function publicDeprecated()
     {
         return true;
     }
 
     public function normalMethod()
     {
-        return this->privateDepricatedMethod();
+        return this->privateDeprecated();
     }
 
-    private deprecated function privateDepricatedMethod()
+    private deprecated function privateDeprecated()
     {
         return true;
     }

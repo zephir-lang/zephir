@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
+use Zephir\Documentation\AbstractFile;
 use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceFile extends AbstractFile
@@ -23,7 +23,6 @@ class NamespaceFile extends AbstractFile
     protected $namespaceHelper;
 
     /**
-     *
      * @var CompilerFile
      */
     protected $compilerFile;
@@ -35,18 +34,16 @@ class NamespaceFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "namespace.phtml";
+        return 'namespace.phtml';
     }
 
     public function getData()
     {
-        return array(
-
-            "namespaceHelper" => $this->namespaceHelper,
-            "subNamespaces" => $this->namespaceHelper->getNamespaces(),
-            "subClasses" => $this->namespaceHelper->getClasses(),
-
-        );
+        return [
+            'namespaceHelper' => $this->namespaceHelper,
+            'subNamespaces' => $this->namespaceHelper->getNamespaces(),
+            'subClasses' => $this->namespaceHelper->getClasses(),
+        ];
     }
 
     public function getOutputFile()

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,77 +11,59 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\MethodArgs;
-use Zephir\Support\TestCase;
 
 class MethodArgsTest extends TestCase
 {
     public function testCallable()
     {
-        $t = new MethodArgs;
+        $t = new MethodArgs();
         $callback = function () {
         };
-        $t->setCallable($callback);
 
+        $t->setCallable($callback);
         $this->assertSame($callback, $t->a);
 
         $t->setCallableStrict($callback);
-
         $this->assertSame($callback, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setCallableStrict(true);
     }
 
     public function testObject()
     {
-        $t = new MethodArgs;
-        $obj = new \stdClass;
+        $t = new MethodArgs();
+        $obj = new \stdClass();
 
         $t->setObject($obj);
-
         $this->assertSame($obj, $t->a);
 
         $t->setObjectStrict($obj);
-
         $this->assertSame($obj, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setObjectStrict(true);
     }
 
     public function testResource()
     {
-        $t = new MethodArgs;
-        $t->setResourceStrict(STDIN);
+        $t = new MethodArgs();
 
+        $t->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $t->a);
 
-        if (!method_exists('PHPUnit_Runner_Version', 'id') ||
-            version_compare(\PHPUnit_Runner_Version::id(), '5.2.0', '<')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->expectException('\Exception');
-        }
+        $this->expectException('\Exception');
 
         $t->setResourceStrict(true);
     }
 
     public function testMethodOptionalValueWithDefaultStaticConstantAccess()
     {
-        $t = new MethodArgs;
+        $t = new MethodArgs();
         $this->assertSame('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 
         $this->assertSame(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());

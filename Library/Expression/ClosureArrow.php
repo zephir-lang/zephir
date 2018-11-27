@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,52 +11,52 @@
 
 namespace Zephir\Expression;
 
-use Zephir\ClassMethod;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\ClassMethodParameters;
-use Zephir\CompiledExpression;
-use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\StatementsBlock;
 
 /**
- * ClosureArrow
+ * ClosureArrow.
  *
  * Creates an anonymous function within the extension simulating a closure using the arrow syntax
  */
 class ClosureArrow extends Closure
 {
     /**
-     * Creates a closure
+     * Creates a closure.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
-            self::$id . '__closure'
+            self::$id.'__closure'
         );
 
         $classDefinition->setIsFinal(true);
 
-        $compilerFile = new CompilerFileAnonymous(
-            $classDefinition,
-            $compilationContext->config,
-            $compilationContext->logger
-        );
+        $compilerFile = new CompilerFileAnonymous($classDefinition, $compilationContext->config);
+        $compilerFile->setLogger($compilationContext->logger);
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
         /**
-         * Builds parameters using the only parameter available
+         * Builds parameters using the only parameter available.
          */
-        $parameters = new ClassMethodParameters(array(
-            array(
+        $parameters = new ClassMethodParameters([
+            [
                 'type' => 'parameter',
                 'name' => $expression['left']['value'],
                 'const' => 0,
@@ -66,20 +66,20 @@ class ClosureArrow extends Closure
                 'file' => $expression['left']['file'],
                 'line' => $expression['left']['line'],
                 'char' => $expression['left']['char'],
-            ),
-        ));
+            ],
+        ]);
 
         $exprBuilder = BuilderFactory::getInstance();
-        $statementBlockBuilder = $exprBuilder->statements()->block(array(
+        $statementBlockBuilder = $exprBuilder->statements()->block([
             $exprBuilder->statements()
-                ->returnX($exprBuilder->raw($expression['right']))
-        ));
+                ->returnX($exprBuilder->raw($expression['right'])),
+        ]);
 
         $block = $statementBlockBuilder->build();
 
         $classMethod = new ClassMethod(
             $classDefinition,
-            array('public', 'final'),
+            ['public', 'final'],
             '__invoke',
             $parameters,
             new StatementsBlock($block),
@@ -104,7 +104,7 @@ class ClosureArrow extends Closure
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
-        self::$id++;
+        ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,15 +11,15 @@
 
 namespace Extension\Oo;
 
+use PHPUnit\Framework\TestCase;
 use Test\Oo\Scopes\PrivateScopeTester;
-use Zephir\Support\TestCase;
 
 class PrivateScopeTest extends TestCase
 {
     /** @test */
     public function shouldCallPrivateMethod()
     {
-        if (PHP_VERSION_ID < 50600) {
+        if (\PHP_VERSION_ID < 50600) {
             $this->markTestSkipped(
                 "Calling parent's private methods from the child's public ones doesn't provided for PHP < 5.6"
             );

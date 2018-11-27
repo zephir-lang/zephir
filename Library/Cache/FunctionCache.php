@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -16,7 +16,7 @@ use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
 
 /**
- * FunctionCache
+ * FunctionCache.
  *
  * Calls in Zephir implement monomorphic and polymorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
@@ -36,12 +36,12 @@ use Zephir\Passes\CallGathererPass;
  */
 class FunctionCache
 {
-    protected $cache = array();
+    protected $cache = [];
 
     protected $gatherer;
 
     /**
-     * FunctionCache constructor
+     * FunctionCache constructor.
      *
      * @param CallGathererPass $gatherer
      */
@@ -51,19 +51,19 @@ class FunctionCache
     }
 
     /**
-     * Retrieves/Creates a function cache for a function call
+     * Retrieves/Creates a function cache for a function call.
      *
-     * @param string $functionName
-     * @param Call $call
+     * @param string             $functionName
+     * @param Call               $call
      * @param CompilationContext $compilationContext
-     * @param boolean $exists
+     * @param bool               $exists
      *
      * @return string
      */
     public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
     {
         if (isset($this->cache[$functionName])) {
-            return $this->cache[$functionName] . ', ' . SlotsCache::getExistingFunctionSlot($functionName);
+            return $this->cache[$functionName].', '.SlotsCache::getExistingFunctionSlot($functionName);
         }
 
         if (!$exists) {
@@ -78,7 +78,7 @@ class FunctionCache
             if ($gatherer) {
                 $number = $gatherer->getNumberOfFunctionCalls($functionName);
                 if ($number <= 1) {
-                    return 'NULL, ' . $cacheSlot;
+                    return 'NULL, '.$cacheSlot;
                 }
             }
         }
@@ -87,13 +87,13 @@ class FunctionCache
             $functionCacheVariable = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
             $functionCacheVariable->setMustInitNull(true);
             $functionCacheVariable->setReusable(false);
-            $functionCache = '&' . $functionCacheVariable->getName();
+            $functionCache = '&'.$functionCacheVariable->getName();
         } else {
             $functionCache = 'NULL';
         }
 
         $this->cache[$functionName] = $functionCache;
 
-        return $functionCache . ', ' . $cacheSlot;
+        return $functionCache.', '.$cacheSlot;
     }
 }

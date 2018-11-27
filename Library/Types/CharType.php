@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -27,19 +27,20 @@ class CharType extends AbstractType
     }
 
     /**
-     * Transforms calls to method "toHex" to sprintf('%X') call
+     * Transforms calls to method "toHex" to sprintf('%X') call.
      *
-     * @param object $caller
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
+     *
      * @return bool|mixed|\Zephir\CompiledExpression
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
         $exprBuilder = BuilderFactory::getInstance();
         $functionCall = $exprBuilder->statements()
-            ->functionCall('zephir_string_to_hex', array($caller))
+            ->functionCall('zephir_string_to_hex', [$caller])
             ->setFile($expression['file'])
             ->setLine($expression['line'])
             ->setChar($expression['char']);

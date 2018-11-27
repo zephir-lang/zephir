@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\InstanceOff;
-use Zephir\Support\TestCase;
 
 class InstanceOffTest extends TestCase
 {
@@ -38,20 +38,20 @@ class InstanceOffTest extends TestCase
     {
         $t = new InstanceOff();
 
-        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator(array())));
+        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator([])));
         $this->assertTrue($t->testInstanceOf4(new \ArrayObject()));
 
         $this->assertFalse($t->testInstanceOf4(1));
         $this->assertFalse($t->testInstanceOf4(1.25));
         $this->assertFalse($t->testInstanceOf4(true));
         $this->assertFalse($t->testInstanceOf4(false));
-        $this->assertFalse($t->testInstanceOf4("test"));
-        $this->assertFalse($t->testInstanceOf4(array()));
-        $this->assertFalse($t->testInstanceOf4(new \StdClass));
+        $this->assertFalse($t->testInstanceOf4('test'));
+        $this->assertFalse($t->testInstanceOf4([]));
+        $this->assertFalse($t->testInstanceOf4(new \StdClass()));
     }
 
     /**
-     * @link https://github.com/phalcon/zephir/issues/776
+     * @see https://github.com/phalcon/zephir/issues/776
      */
     public function testInstanceOf5()
     {
@@ -59,11 +59,11 @@ class InstanceOffTest extends TestCase
 
         $this->assertTrue($t->testInstanceOf5($t));
 
-        /**
+        /*
          * Cannot test instance of for not objects
          * @link https://github.com/phalcon/zephir/issues/822
          */
 
-        $this->assertFalse($t->testInstanceOf5(new \StdClass));
+        $this->assertFalse($t->testInstanceOf5(new \StdClass()));
     }
 }

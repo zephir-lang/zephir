@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,11 +12,22 @@
 namespace Zephir;
 
 /**
- * Zephir\Zephir
- *
- * @package Zephir
+ * Zephir\Zephir.
  */
 final class Zephir
 {
-    const VERSION = '0.11.6-$Id$';
+    const VERSION = '0.11.7-$Id$';
+
+    const RELEASE_DATE = '$release-date$';
+
+    const LOGO = <<<'ASCII'
+ _____              __    _
+/__  /  ___  ____  / /_  (_)____
+  / /  / _ \/ __ \/ __ \/ / ___/
+ / /__/  __/ /_/ / / / / / /
+/____/\___/ .___/_/ /_/_/_/
+         /_/
+
+
+ASCII;
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,15 +11,15 @@
 
 namespace Zephir\Optimizers;
 
+use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Branch;
 use Zephir\Variable;
 
 /**
- * EvalExpression
+ * EvalExpression.
  *
  * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while' statements
  */
@@ -29,56 +29,60 @@ class EvalExpression
 
     protected $unreachableElse = null;
 
-    protected $usedVariables = array();
+    protected $usedVariables = [];
 
     /**
-     * Skips the not operator by recursively optimizing the expression at its right
+     * Skips the not operator by recursively optimizing the expression at its right.
      *
-     * @param array $expr
+     * @param array              $expr
      * @param CompilationContext $compilationContext
      *
      * @return bool|string
      */
     public function optimizeNot($expr, CompilationContext $compilationContext)
     {
-        /**
+        /*
          * Compile the expression negating the evaluated expression
          */
-        if ($expr['type'] == 'not') {
+        if ('not' == $expr['type']) {
             $conditions = $this->optimize($expr['left'], $compilationContext);
-            if ($conditions !== false) {
-                if ($this->unreachable !== null) {
+            if (false !== $conditions) {
+                if (null !== $this->unreachable) {
                     $this->unreachable = !$this->unreachable;
                 }
-                if ($this->unreachableElse !== null) {
+                if (null !== $this->unreachableElse) {
                     $this->unreachableElse = !$this->unreachableElse;
                 }
-                return '!(' . $conditions . ')';
+
+                return '!('.$conditions.')';
             }
         }
+
         return false;
     }
 
     /**
-     * Optimizes expressions
+     * Optimizes expressions.
      *
      * @param $exprRaw
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return bool|string
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize($exprRaw, CompilationContext $compilationContext)
     {
         $conditions = $this->optimizeNot($exprRaw, $compilationContext);
 
-        if ($conditions !== false) {
+        if (false !== $conditions) {
             return $conditions;
         }
 
-        /**
+        /*
          * Discard first level parentheses
          */
-        if ($exprRaw['type'] == 'list') {
+        if ('list' == $exprRaw['type']) {
             $expr = new Expression($exprRaw['left']);
         } else {
             $expr = new Expression($exprRaw);
@@ -88,19 +92,20 @@ class EvalExpression
         $expr->setEvalMode(true);
         $compiledExpression = $expr->compile($compilationContext);
 
-        /**
+        /*
          * Possible corrupted expression?
          */
-        if (!is_object($compiledExpression)) {
-            throw new CompilerException('Corrupted expression: ' . $exprRaw['type'], $exprRaw);
+        if (!\is_object($compiledExpression)) {
+            throw new CompilerException('Corrupted expression: '.$exprRaw['type'], $exprRaw);
         }
 
-        /**
+        /*
          * Generate the condition according to the value returned by the evaluated expression
          */
         switch ($compiledExpression->getType()) {
             case 'null':
                 $this->unreachable = true;
+
                 return '0';
 
             case 'int':
@@ -110,12 +115,13 @@ class EvalExpression
             case 'double':
                 $code = $compiledExpression->getCode();
                 if (is_numeric($code)) {
-                    if ($code == '1') {
+                    if ('1' == $code) {
                         $this->unreachableElse = true;
                     } else {
                         $this->unreachable = true;
                     }
                 }
+
                 return $code;
 
             case 'char':
@@ -124,25 +130,26 @@ class EvalExpression
 
             case 'bool':
                 $code = $compiledExpression->getBooleanCode();
-                if ($code == '1') {
+                if ('1' == $code) {
                     $this->unreachableElse = true;
                 } else {
-                    if ($code == '0') {
+                    if ('0' == $code) {
                         $this->unreachable = true;
                     }
                 }
+
                 return $code;
 
             case 'variable':
                 $variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
                 $possibleValue = $variableRight->getPossibleValue();
-                if (is_object($possibleValue)) {
+                if (\is_object($possibleValue)) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
-                        /**
+                        /*
                          * Check if the possible value was assigned in the root branch
                          */
-                        if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
+                        if (Branch::TYPE_ROOT == $possibleValueBranch->getType()) {
                             if ($possibleValue instanceof LiteralCompiledExpression) {
                                 switch ($possibleValue->getType()) {
                                     case 'null':
@@ -150,7 +157,7 @@ class EvalExpression
                                         break;
 
                                     case 'bool':
-                                        if ($possibleValue->getBooleanCode() == '0') {
+                                        if ('0' == $possibleValue->getBooleanCode()) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -158,7 +165,7 @@ class EvalExpression
                                         break;
 
                                     case 'int':
-                                        if (!intval($possibleValue->getCode())) {
+                                        if (!(int) ($possibleValue->getCode())) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -166,7 +173,7 @@ class EvalExpression
                                         break;
 
                                     case 'double':
-                                        if (!floatval($possibleValue->getCode())) {
+                                        if (!(float) ($possibleValue->getCode())) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -183,7 +190,7 @@ class EvalExpression
 
                 $this->usedVariables[] = $variableRight->getName();
 
-                /**
+                /*
                  * Evaluate the variable
                  */
                 switch ($variableRight->getType()) {
@@ -197,7 +204,8 @@ class EvalExpression
 
                     case 'string':
                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
-                        return '!(' . $compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false) . ') && Z_STRLEN_P(' . $variableRightCode . ')';
+
+                        return '!('.$compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false).') && Z_STRLEN_P('.$variableRightCode.')';
 
                     case 'bool':
                         return $variableRight->getName();
@@ -208,22 +216,23 @@ class EvalExpression
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
-                        return 'zephir_is_true(' . $variableRightCode . ')';
+
+                        return 'zephir_is_true('.$variableRightCode.')';
 
                     default:
-                        throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
+                        throw new CompilerException("Variable can't be evaluated ".$variableRight->getType(), $exprRaw);
                 }
                 break;
 
             default:
-                throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
+                throw new CompilerException('Expression '.$compiledExpression->getType()." can't be evaluated", $exprRaw);
         }
     }
 
     /**
-     * Checks if the evaluation produce unreachable code
+     * Checks if the evaluation produce unreachable code.
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnreachable()
     {
@@ -231,9 +240,9 @@ class EvalExpression
     }
 
     /**
-     * Checks if the evaluation not produce unreachable code
+     * Checks if the evaluation not produce unreachable code.
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnreachableElse()
     {
@@ -241,7 +250,7 @@ class EvalExpression
     }
 
     /**
-     * Returns the variable evaluated by the EvalExpression
+     * Returns the variable evaluated by the EvalExpression.
      *
      * @return Variable
      */

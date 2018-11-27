@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,52 +13,80 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FuncGetArgOptimizer
+ * Zephir\Optimizers\FunctionCall\FuncGetArgOptimizer.
  *
- * Optimizes calls to 'func_get_arg' using internal function
+ * Optimizes calls to 'func_get_arg' using internal function.
  */
 class FuncGetArgOptimizer extends OptimizerAbstract
 {
-
     /**
+     * {@inheritdoc}
      *
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
+     *
+     * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (! isset($expression['parameters']) || count($expression['parameters']) != 1) {
-            return false;
+        if (!isset($expression['parameters']) || 1 != \count($expression['parameters'])) {
+            throw new CompilerException(
+                sprintf(
+                    'func_get_arg() expects at exactly 1 parameter, %d given',
+                    isset($expression['parameters']) ? \count($expression['parameters']) : 0
+                ),
+                $expression
+            );
         }
 
+        /*
+         * Process the expected symbol to be returned
+         */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables.',
+                $expression
+            );
         }
 
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
 
-        $symbol         = $context->backend->getVariableCode($symbolVariable);
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->headersManager->add('kernel/main');
-        if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_get_arg(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . '));');
-        } else {
-            $context->codePrinter->output('zephir_get_arg(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . ') TSRMLS_CC);');
+        try {
+            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+
+            // zephir_get_intval
+            $context->headersManager->add('kernel/operators');
+
+            // zephir_get_arg
+            $context->headersManager->add('kernel/main');
+
+            if ($context->backend->isZE3()) {
+                $template = 'zephir_get_arg(%s, zephir_get_intval(%s));';
+            } else {
+                $template = 'zephir_get_arg(%s, zephir_get_intval(%s) TSRMLS_CC);';
+            }
+
+            $context->codePrinter->output(sprintf($template, $symbol, $resolvedParams[0]));
+
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        } catch (Exception $e) {
+            throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
         }
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

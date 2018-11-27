@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,53 +14,52 @@ namespace Zephir;
 use Zephir\Statements\StatementAbstract;
 
 /**
- * Branch
+ * Branch.
  *
  * Represents every branch within a method
  */
 class Branch
 {
+    const TYPE_ROOT = 0;
+
+    const TYPE_CONDITIONAL_TRUE = 1;
+
+    const TYPE_CONDITIONAL_FALSE = 2;
+
+    const TYPE_LOOP_INFINITE = 3;
+
+    const TYPE_LOOP_CONDITIONAL = 4;
+
+    const TYPE_SWITCH = 5;
+
+    const TYPE_EXTERNAL = 6;
+
+    const TYPE_UNKNOWN = 7;
     protected $parentBranch;
 
     protected $level = -1;
 
-    /** @var  StatementAbstract|null */
+    /** @var StatementAbstract|null */
     protected $relatedStatement;
 
     protected $type;
 
     protected $unreachable;
 
-    const TYPE_ROOT              = 0;
-
-    const TYPE_CONDITIONAL_TRUE  = 1;
-
-    const TYPE_CONDITIONAL_FALSE = 2;
-
-    const TYPE_LOOP_INFINITE     = 3;
-
-    const TYPE_LOOP_CONDITIONAL  = 4;
-
-    const TYPE_SWITCH            = 5;
-
-    const TYPE_EXTERNAL          = 6;
-
-    const TYPE_UNKNOWN           = 7;
-
     private $uniqueId;
 
     /**
-     * Set the branch's parent
+     * Set the branch's parent.
      *
      * @param Branch $parentBranch
      */
-    public function setParentBranch(Branch $parentBranch)
+    public function setParentBranch(self $parentBranch)
     {
         $this->parentBranch = $parentBranch;
     }
 
     /**
-     * Returns the branch's parent
+     * Returns the branch's parent.
      *
      * @return Branch
      */
@@ -70,7 +69,7 @@ class Branch
     }
 
     /**
-     * Set the type of branch. One of the TYPE_* constants
+     * Set the type of branch. One of the TYPE_* constants.
      *
      * @param int $type
      */
@@ -80,7 +79,7 @@ class Branch
     }
 
     /**
-     * Returns the branch type
+     * Returns the branch type.
      *
      * @return int
      */
@@ -90,9 +89,9 @@ class Branch
     }
 
     /**
-     * Sets if the branch is unreachable
+     * Sets if the branch is unreachable.
      *
-     * @param boolean $unreachable
+     * @param bool $unreachable
      */
     public function setUnreachable($unreachable)
     {
@@ -141,7 +140,6 @@ class Branch
 
     /**
      * @param StatementAbstract $relatedStatement
-     * @return void
      */
     public function setRelatedStatement(StatementAbstract $relatedStatement)
     {

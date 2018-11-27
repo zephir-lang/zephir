@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,21 +11,22 @@
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
-use Zephir\Passes\LocalContextPass;
-use Zephir\Passes\StaticTypeInference;
-use Zephir\Passes\CallGathererPass;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception\CompilerException;
+use Zephir\Passes\CallGathererPass;
+use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\StaticTypeInference;
 
 /**
- * ClassMethod
+ * ClassMethod.
  *
  * Represents a class method
  */
 class ClassMethod
 {
+    public $optimizable = true;
     /** @var ClassDefinition */
     protected $classDefinition;
 
@@ -50,77 +51,77 @@ class ClassMethod
     protected $parsedDocblock;
 
     /**
-     * Types returned by the method
+     * Types returned by the method.
      *
      * @var array
      */
     protected $returnTypes = [];
 
     /**
-     * Raw-types returned by the method
+     * Raw-types returned by the method.
      *
      * @var array
      */
     protected $returnTypesRaw = [];
 
     /**
-     * Class type hints returned by the method
+     * Class type hints returned by the method.
      */
-    protected $returnClassTypes = array();
+    protected $returnClassTypes = [];
 
     /**
-     * Whether the variable is void
+     * Whether the variable is void.
      *
-     * @var boolean
+     * @var bool
      */
     protected $void = false;
 
     /**
-     * Whether the method is public or not
+     * Whether the method is public or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isPublic = true;
 
     /**
-     * Whether the method is static or not
+     * Whether the method is static or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isStatic = false;
 
     /**
-     * Whether the method is final or not
+     * Whether the method is final or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isFinal = false;
 
     /**
-     * Whether the method is abstract or not
+     * Whether the method is abstract or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isAbstract = false;
 
     /**
-     * Whether the method is internal or not
+     * Whether the method is internal or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isInternal = false;
 
     /**
-     * Whether the method is bundled with PHP or not
+     * Whether the method is bundled with PHP or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isBundled = false;
 
     /**
-     * Whether the method is an initializer or not
+     * Whether the method is an initializer or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isInitializer = false;
 
@@ -128,30 +129,28 @@ class ClassMethod
     protected $expression;
 
     /**
-     * LocalContextPass
+     * LocalContextPass.
      *
      * @var LocalContextPass
      */
     protected $localContext;
 
     /**
-     * Static Type Inference Pass
+     * Static Type Inference Pass.
      *
      * @var StaticTypeInference
      */
     protected $typeInference;
 
     /**
-     * Call Gatherer Pass
+     * Call Gatherer Pass.
      *
      * @var CallGathererPass
      */
     protected $callGathererPass;
 
-    public $optimizable = true;
-
     /**
-     * ClassMethod constructor
+     * ClassMethod constructor.
      *
      * @param ClassDefinition            $classDefinition
      * @param array                      $visibility
@@ -188,12 +187,13 @@ class ClassMethod
     public function setReturnTypes(array $returnType = null)
     {
         $this->returnTypesRaw = $returnType;
-        if ($returnType === null) {
+        if (null === $returnType) {
             return;
         }
 
         if (isset($returnType['void']) && $returnType['void']) {
             $this->void = true;
+
             return;
         }
 
@@ -215,12 +215,12 @@ class ClassMethod
             }
         }
 
-        if (count($castTypes)) {
+        if (\count($castTypes)) {
             $types['object'] = [];
             $this->returnClassTypes = $castTypes;
         }
 
-        if (count($types)) {
+        if (\count($types)) {
             $this->returnTypes = $types;
         }
     }
@@ -239,7 +239,7 @@ class ClassMethod
     }
 
     /**
-     * Getter for statements block
+     * Getter for statements block.
      *
      * @return StatementsBlock $statements Statements block
      */
@@ -249,7 +249,7 @@ class ClassMethod
     }
 
     /**
-     * Setter for statements block
+     * Setter for statements block.
      *
      * @param StatementsBlock $statementsBlock
      */
@@ -259,9 +259,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is empty
+     * Checks whether the method is empty.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -269,66 +269,67 @@ class ClassMethod
     }
 
     /**
-     * Checks for visibility congruence
+     * Checks for visibility congruence.
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $name
-     * @param array $original
+     * @param array  $original
+     *
      * @throws CompilerException
      */
     public function checkVisibility(array $visibility, $name, array $original = null)
     {
-        if (count($visibility) > 1) {
-            if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\count($visibility) > 1) {
+            if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('private', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'private' at the same time", $original);
             }
 
-            if (in_array('protected', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('protected', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'public' at the same time", $original);
             }
         }
 
-        if ($name == '__construct') {
-            if (in_array('static', $visibility)) {
+        if ('__construct' == $name) {
+            if (\in_array('static', $visibility)) {
                 throw new CompilerException("Constructors cannot be 'static'", $original);
             }
         } else {
-            if ($name == '__destruct') {
-                if (in_array('static', $visibility)) {
+            if ('__destruct' == $name) {
+                if (\in_array('static', $visibility)) {
                     throw new CompilerException("Destructors cannot be 'static'", $original);
                 }
             }
         }
 
-        if (is_array($visibility)) {
-            $this->isAbstract = in_array('abstract', $visibility);
-            $this->isStatic = in_array('static', $visibility);
-            $this->isFinal = in_array('final', $visibility);
-            $this->isPublic = in_array('public', $visibility);
-            $this->isInternal = in_array('internal', $visibility);
+        if (\is_array($visibility)) {
+            $this->isAbstract = \in_array('abstract', $visibility);
+            $this->isStatic = \in_array('static', $visibility);
+            $this->isFinal = \in_array('final', $visibility);
+            $this->isPublic = \in_array('public', $visibility);
+            $this->isInternal = \in_array('internal', $visibility);
         }
     }
 
     /**
-     * Sets if the method is internal or not
+     * Sets if the method is internal or not.
      *
-     * @param boolean $static
+     * @param bool $static
      */
     public function setIsStatic($static)
     {
@@ -336,9 +337,9 @@ class ClassMethod
     }
 
     /**
-     * Sets if the method is internal or not
+     * Sets if the method is internal or not.
      *
-     * @param boolean $internal
+     * @param bool $internal
      */
     public function setIsInternal($internal)
     {
@@ -346,9 +347,9 @@ class ClassMethod
     }
 
     /**
-     * Sets if the method is bundled or not
+     * Sets if the method is bundled or not.
      *
-     * @param boolean $bundled
+     * @param bool $bundled
      */
     public function setIsBundled($bundled)
     {
@@ -356,9 +357,9 @@ class ClassMethod
     }
 
     /**
-     * Sets if the method is an initializer or not
+     * Sets if the method is an initializer or not.
      *
-     * @param boolean $initializer
+     * @param bool $initializer
      */
     public function setIsInitializer($initializer)
     {
@@ -366,7 +367,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the class definition where the method was declared
+     * Returns the class definition where the method was declared.
      *
      * @return ClassDefinition|null
      */
@@ -377,7 +378,7 @@ class ClassMethod
 
     /**
      * Generate internal method's based on the equivalent PHP methods,
-     * allowing bypassing php userspace for internal method calls
+     * allowing bypassing php userspace for internal method calls.
      *
      * @param CompilationContext $compilationContext
      *
@@ -390,7 +391,7 @@ class ClassMethod
         }
         $classDefinition = $this->getClassDefinition();
         /* Skip for closures */
-        if ($this->getName() == '__invoke' || $classDefinition->isInterface()) {
+        if ('__invoke' == $this->getName() || $classDefinition->isInterface()) {
             return $this;
         }
         if (!$this->isInternal() && !$classDefinition->isBundled()) {
@@ -401,16 +402,16 @@ class ClassMethod
             if ($this->isConstructor()) {
                 return $this;
             }
-            $optimizedName = $this->getName() . '_zephir_internal_call';
+            $optimizedName = $this->getName().'_zephir_internal_call';
 
-            $visibility = array('internal');
+            $visibility = ['internal'];
 
             $statements = null;
             if ($this->statements) {
                 $statements = new StatementsBlock(json_decode(json_encode($this->statements->getStatements()), true));
             }
 
-            $optimizedMethod = new ClassMethod(
+            $optimizedMethod = new self(
                 $classDefinition,
                 $visibility,
                 $optimizedName,
@@ -430,16 +431,17 @@ class ClassMethod
 
     public function getOptimizedMethod()
     {
-        $optimizedName = $this->getName() . '_zephir_internal_call';
+        $optimizedName = $this->getName().'_zephir_internal_call';
         $optimizedMethod = $this->classDefinition->getMethod($optimizedName, false);
         if (!$optimizedMethod || !$this->optimizable) {
             return $this;
         }
+
         return $optimizedMethod;
     }
 
     /**
-     * Sets the method name
+     * Sets the method name.
      *
      * @param string $name
      */
@@ -449,7 +451,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the method name
+     * Returns the method name.
      *
      * @return string
      */
@@ -459,7 +461,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the raw docblock
+     * Returns the raw docblock.
      *
      * @return string
      */
@@ -469,43 +471,46 @@ class ClassMethod
     }
 
     /**
-     * Returns the parsed docblock
+     * Returns the parsed docblock.
      *
      * @return Docblock
      */
     public function getParsedDocBlock()
     {
         if (!$this->parsedDocblock) {
-            if (strlen($this->docblock) > 0) {
-                $parser = new DocblockParser("/" . $this->docblock ."/");
+            if (\strlen($this->docblock) > 0) {
+                $parser = new DocblockParser('/'.$this->docblock.'/');
                 $this->parsedDocblock = $parser->parse();
             } else {
                 return null;
             }
         }
+
         return $this->parsedDocblock;
     }
 
     /**
-     * the starting line of the method in the source file
+     * the starting line of the method in the source file.
+     *
      * @return mixed
      */
     public function getLine()
     {
-        return $this->expression["line"];
+        return $this->expression['line'];
     }
 
     /**
-     * the ending line of the method in the source file
+     * the ending line of the method in the source file.
+     *
      * @return mixed
      */
     public function getLastLine()
     {
-        return $this->expression["last-line"];
+        return $this->expression['last-line'];
     }
 
     /**
-     * Returns the parameters
+     * Returns the parameters.
      *
      * @return ClassMethodParameters
      */
@@ -515,17 +520,17 @@ class ClassMethod
     }
 
     /**
-     * Checks if the method has return-type or cast hints
+     * Checks if the method has return-type or cast hints.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasReturnTypes()
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             return true;
         }
 
-        if (count($this->returnClassTypes)) {
+        if (\count($this->returnClassTypes)) {
             return true;
         }
 
@@ -533,14 +538,15 @@ class ClassMethod
     }
 
     /**
-     * Checks whether at least one return type hint is null compatible
+     * Checks whether at least one return type hint is null compatible.
      *
      * @param string $type
-     * @return boolean
+     *
+     * @return bool
      */
     public function areReturnTypesNullCompatible($type = null)
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'null':
@@ -548,18 +554,20 @@ class ClassMethod
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Checks whether at least one return type hint is integer compatible
+     * Checks whether at least one return type hint is integer compatible.
      *
      * @param string $type
-     * @return boolean
+     *
+     * @return bool
      */
     public function areReturnTypesIntCompatible($type = null)
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'int':
@@ -572,18 +580,20 @@ class ClassMethod
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Checks whether at least one return type hint is double compatible
+     * Checks whether at least one return type hint is double compatible.
      *
      * @param string $type
-     * @return boolean
+     *
+     * @return bool
      */
     public function areReturnTypesDoubleCompatible($type = null)
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'double':
@@ -591,18 +601,20 @@ class ClassMethod
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Checks whether at least one return type hint is integer compatible
+     * Checks whether at least one return type hint is integer compatible.
      *
      * @param string $type
-     * @return boolean
+     *
+     * @return bool
      */
     public function areReturnTypesBoolCompatible($type = null)
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'bool':
@@ -610,18 +622,20 @@ class ClassMethod
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Checks whether at least one return type hint is integer compatible
+     * Checks whether at least one return type hint is integer compatible.
      *
      * @param string $type
-     * @return boolean
+     *
+     * @return bool
      */
     public function areReturnTypesStringCompatible($type = null)
     {
-        if (count($this->returnTypes)) {
+        if (\count($this->returnTypes)) {
             foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'string':
@@ -629,11 +643,12 @@ class ClassMethod
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Returned type hints by the method
+     * Returned type hints by the method.
      *
      * @return array
      */
@@ -643,7 +658,7 @@ class ClassMethod
     }
 
     /**
-     * Returned class-type hints by the method
+     * Returned class-type hints by the method.
      *
      * @return array
      */
@@ -653,74 +668,80 @@ class ClassMethod
     }
 
     /**
-     * Returns the number of parameters the method has
+     * Returns the number of parameters the method has.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasParameters()
     {
-        if (is_object($this->parameters)) {
-            return count($this->parameters->getParameters()) > 0;
+        if (\is_object($this->parameters)) {
+            return \count($this->parameters->getParameters()) > 0;
         }
+
         return false;
     }
 
     /**
-     * Returns the number of parameters the method has
+     * Returns the number of parameters the method has.
      *
      * @return int
      */
     public function getNumberOfParameters()
     {
-        if (is_object($this->parameters)) {
-            return count($this->parameters->getParameters());
+        if (\is_object($this->parameters)) {
+            return \count($this->parameters->getParameters());
         }
+
         return 0;
     }
 
     /**
-     * Returns the number of required parameters the method has
+     * Returns the number of required parameters the method has.
      *
      * @return int
      */
     public function getNumberOfRequiredParameters()
     {
-        if (is_object($this->parameters)) {
+        if (\is_object($this->parameters)) {
             $parameters = $this->parameters->getParameters();
-            if (count($parameters)) {
+            if (\count($parameters)) {
                 $required = 0;
                 foreach ($parameters as $parameter) {
                     if (!isset($parameter['default'])) {
-                        $required++;
+                        ++$required;
                     }
                 }
+
                 return $required;
             }
         }
+
         return 0;
     }
 
     /**
-     * Returns the number of required parameters the method has
+     * Returns the number of required parameters the method has.
      *
      * @return string
      */
     public function getInternalParameters()
     {
-        if (is_object($this->parameters)) {
+        if (\is_object($this->parameters)) {
             $parameters = $this->parameters->getParameters();
-            if (count($parameters)) {
-                return count($parameters) . ', ...';
+            if (\count($parameters)) {
+                return \count($parameters).', ...';
             }
         }
-        return "";
+
+        return '';
     }
 
     /**
-     * Checks whether the method has a specific modifier
+     * Checks whether the method has a specific modifier.
      *
      * @param string $modifier
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasModifier($modifier)
     {
@@ -729,11 +750,12 @@ class ClassMethod
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Returns method visibility modifiers
+     * Returns method visibility modifiers.
      *
      * @return array
      */
@@ -744,18 +766,19 @@ class ClassMethod
 
     public function isDeprecated()
     {
-        return !empty($this->visibility) && in_array('deprecated', $this->visibility, true);
+        return !empty($this->visibility) && \in_array('deprecated', $this->visibility, true);
     }
 
     /**
-     * Returns the C-modifier flags
+     * Returns the C-modifier flags.
+     *
+     * @throws Exception
      *
      * @return string
-     * @throws Exception
      */
     public function getModifiers()
     {
-        $modifiers = array();
+        $modifiers = [];
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
                 case 'public':
@@ -796,25 +819,25 @@ class ClassMethod
                     break;
 
                 default:
-                    throw new Exception('Unknown modifier "' . $visibility . '"');
+                    throw new Exception('Unknown modifier "'.$visibility.'"');
             }
         }
 
-        if ($this->name == '__construct') {
+        if ('__construct' == $this->name) {
             $modifiers['ZEND_ACC_CTOR'] = true;
         } else {
-            if ($this->name == '__destruct') {
+            if ('__destruct' == $this->name) {
                 $modifiers['ZEND_ACC_DTOR'] = true;
             }
         }
 
-        return join('|', array_keys($modifiers));
+        return implode('|', array_keys($modifiers));
     }
 
     /**
-     * Checks if the method must not return any value
+     * Checks if the method must not return any value.
      *
-     * @return boolean
+     * @return bool
      */
     public function isVoid()
     {
@@ -822,48 +845,51 @@ class ClassMethod
     }
 
     /**
-     * Checks if the method is inline
+     * Checks if the method is inline.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInline()
     {
-        if (is_array($this->visibility)) {
-            return in_array('inline', $this->visibility);
+        if (\is_array($this->visibility)) {
+            return \in_array('inline', $this->visibility);
         }
+
         return false;
     }
 
     /**
-     * Checks if the method is private
+     * Checks if the method is private.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
-        if (is_array($this->visibility)) {
-            return in_array('private', $this->visibility);
+        if (\is_array($this->visibility)) {
+            return \in_array('private', $this->visibility);
         }
+
         return false;
     }
 
     /**
-     * Checks if the method is protected
+     * Checks if the method is protected.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
-        if (is_array($this->visibility)) {
-            return in_array('protected', $this->visibility);
+        if (\is_array($this->visibility)) {
+            return \in_array('protected', $this->visibility);
         }
+
         return false;
     }
 
     /**
-     * Checks if the method is public
+     * Checks if the method is public.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -881,9 +907,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is static
+     * Checks whether the method is static.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -891,9 +917,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is final
+     * Checks whether the method is final.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
@@ -901,9 +927,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is internal
+     * Checks whether the method is internal.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInternal()
     {
@@ -911,9 +937,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is bundled
+     * Checks whether the method is bundled.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBundled()
     {
@@ -921,9 +947,9 @@ class ClassMethod
     }
 
     /**
-     * Checks whether the method is an initializer
+     * Checks whether the method is an initializer.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInitializer()
     {
@@ -931,27 +957,27 @@ class ClassMethod
     }
 
     /**
-     * Check whether the current method is a constructor
+     * Check whether the current method is a constructor.
      *
-     * @return boolean
+     * @return bool
      */
     public function isConstructor()
     {
-        return $this->name == '__construct';
+        return '__construct' == $this->name;
     }
 
     /**
-     * Checks if method is a shortcut
+     * Checks if method is a shortcut.
      *
      * @return bool
      */
     public function isShortcut()
     {
-        return $this->expression && $this->expression['type'] == 'shortcut';
+        return $this->expression && 'shortcut' == $this->expression['type'];
     }
 
     /**
-     * Return shortcut method name
+     * Return shortcut method name.
      *
      * @return mixed
      */
@@ -961,7 +987,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the local context pass information
+     * Returns the local context pass information.
      *
      * @return LocalContextPass
      */
@@ -971,7 +997,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the static type inference pass information
+     * Returns the static type inference pass information.
      *
      * @return StaticTypeInference
      */
@@ -981,7 +1007,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the call gatherer pass information
+     * Returns the call gatherer pass information.
      *
      * @return CallGathererPass
      */
@@ -991,10 +1017,10 @@ class ClassMethod
     }
 
     /**
-     * Replace macros
+     * Replace macros.
      *
      * @param SymbolTable $symbolTable
-     * @param string $containerCode
+     * @param string      $containerCode
      *
      * @return mixed
      */
@@ -1021,18 +1047,21 @@ class ClassMethod
             $containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
             $containerCode = str_replace('RETURN_MM_MEMBER', 'RETURN_MEMBER', $containerCode);
             $containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
-            $containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);' . PHP_EOL . '/s', '', $containerCode);
+            $containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);'.PHP_EOL.'/s', '', $containerCode);
         }
+
         return $containerCode;
     }
 
     /**
-     * Assigns a default value
+     * Assigns a default value.
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
-     * @return string
+     *
      * @throws CompilerException
+     *
+     * @return string
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext)
     {
@@ -1042,11 +1071,11 @@ class ClassMethod
             $dataType = 'variable';
         }
 
-        /**
+        /*
          * Class-Hinted parameters only can be null?
          */
         if (isset($parameter['cast'])) {
-            if ($parameter['default']['type'] != 'null') {
+            if ('null' != $parameter['default']['type']) {
                 throw new CompilerException('Class-Hinted parameters only can have "null" as default parameter', $parameter);
             }
         }
@@ -1058,7 +1087,7 @@ class ClassMethod
         $compilationContext->codePrinter = $codePrinter;
 
         $paramVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
-        /**
+        /*
          * @todo Refactoring this place, move to one - static-constant-access
          */
         switch ($dataType) {
@@ -1069,7 +1098,8 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
+                         *
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
@@ -1077,33 +1107,34 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-                        if ($compiledExpression->getType() != 'int') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(int)", $parameter);
+                        if ('int' != $compiledExpression->getType()) {
+                            throw new CompilerException('Default parameter value type: '.$compiledExpression->getType().' cannot be assigned to variable(int)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
 
                         $compilationContext->codePrinter = $oldCodePrinter;
+
                         return $this->assignDefaultValue($parameter, $compilationContext);
                         break;
 
                     case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
+                        $codePrinter->output($parameter['name'].' = 0;');
                         break;
 
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
+                        $codePrinter->output($parameter['name'].' = '.$parameter['default']['value'].';');
                         break;
 
                     case 'double':
-                        $codePrinter->output($parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';');
+                        $codePrinter->output($parameter['name'].' = (int) '.$parameter['default']['value'].';');
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+                        throw new CompilerException('Default parameter value type: '.$parameter['default']['type'].' cannot be assigned to variable(int)', $parameter);
                 }
                 break;
 
@@ -1111,7 +1142,8 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
+                         *
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
@@ -1119,34 +1151,34 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-
-                        if ($compiledExpression->getType() != 'double') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(double)", $parameter);
+                        if ('double' != $compiledExpression->getType()) {
+                            throw new CompilerException('Default parameter value type: '.$compiledExpression->getType().' cannot be assigned to variable(double)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
 
                         $compilationContext->codePrinter = $oldCodePrinter;
+
                         return $this->assignDefaultValue($parameter, $compilationContext);
                         break;
 
                     case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
+                        $codePrinter->output($parameter['name'].' = 0;');
                         break;
 
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $codePrinter->output($parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';');
+                        $codePrinter->output($parameter['name'].' = (double) '.$parameter['default']['value'].';');
                         break;
 
                     case 'double':
-                        $codePrinter->output($parameter['name'] . ' = ' . $parameter['default']['value'] . ';');
+                        $codePrinter->output($parameter['name'].' = '.$parameter['default']['value'].';');
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
+                        throw new CompilerException('Default parameter value type: '.$parameter['default']['type'].' cannot be assigned to variable(double)', $parameter);
                 }
                 break;
 
@@ -1154,7 +1186,8 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
+                         *
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
@@ -1162,32 +1195,32 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-
-                        if ($compiledExpression->getType() != 'bool') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(bool)", $parameter);
+                        if ('bool' != $compiledExpression->getType()) {
+                            throw new CompilerException('Default parameter value type: '.$compiledExpression->getType().' cannot be assigned to variable(bool)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
 
                         $compilationContext->codePrinter = $oldCodePrinter;
+
                         return $this->assignDefaultValue($parameter, $compilationContext);
                         break;
 
                     case 'null':
-                        $codePrinter->output($parameter['name'] . ' = 0;');
+                        $codePrinter->output($parameter['name'].' = 0;');
                         break;
 
                     case 'bool':
-                        if ($parameter['default']['value'] == 'true') {
-                            $codePrinter->output($parameter['name'] . ' = 1;');
+                        if ('true' == $parameter['default']['value']) {
+                            $codePrinter->output($parameter['name'].' = 1;');
                         } else {
-                            $codePrinter->output($parameter['name'] . ' = 0;');
+                            $codePrinter->output($parameter['name'].' = 0;');
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
+                        throw new CompilerException('Default parameter value type: '.$parameter['default']['type'].' cannot be assigned to variable(bool)', $parameter);
                 }
                 break;
 
@@ -1198,7 +1231,8 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
+                         *
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
@@ -1206,14 +1240,15 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-                        if ($compiledExpression->getType() != 'string') {
-                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(string)", $parameter);
+                        if ('string' != $compiledExpression->getType()) {
+                            throw new CompilerException('Default parameter value type: '.$compiledExpression->getType().' cannot be assigned to variable(string)', $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
                         $parameter['default']['value'] = $compiledExpression->getCode();
 
                         $compilationContext->codePrinter = $oldCodePrinter;
+
                         return $this->assignDefaultValue($parameter, $compilationContext);
                         break;
 
@@ -1258,7 +1293,7 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(array)", $parameter);
+                        throw new CompilerException('Default parameter value type: '.$parameter['default']['type'].' cannot be assigned to variable(array)', $parameter);
                 }
                 break;
 
@@ -1267,7 +1302,8 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
+                         *
                          * @todo Rewrite all to codePrinter
                          */
                         $expression = new Expression($parameter['default']);
@@ -1278,6 +1314,7 @@ class ClassMethod
                         $parameter['default']['value'] = $compiledExpression->getCode();
 
                         $compilationContext->codePrinter = $oldCodePrinter;
+
                         return $this->assignDefaultValue($parameter, $compilationContext);
                         break;
 
@@ -1312,7 +1349,7 @@ class ClassMethod
                     case 'bool':
                         $expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
                         if ($expectedMutations < 2) {
-                            if ($parameter['default']['value'] == 'true') {
+                            if ('true' == $parameter['default']['value']) {
                                 $compilationContext->backend->assignZval($paramVariable, $compilationContext->backend->resolveValue('true', $compilationContext), $compilationContext);
                             } else {
                                 $compilationContext->backend->assignZval($paramVariable, $compilationContext->backend->resolveValue('false', $compilationContext), $compilationContext);
@@ -1320,7 +1357,7 @@ class ClassMethod
                         } else {
                             $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->headersManager->add('kernel/memory');
-                            if ($parameter['default']['value'] == 'true') {
+                            if ('true' == $parameter['default']['value']) {
                                 $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('true', $compilationContext), $compilationContext);
                             } else {
                                 $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('false', $compilationContext), $compilationContext);
@@ -1347,27 +1384,30 @@ class ClassMethod
                         break;
 
                     default:
-                        throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
+                        throw new CompilerException('Default parameter value type: '.$parameter['default']['type'].' cannot be assigned to variable(variable)', $parameter);
                 }
                 break;
 
             default:
-                throw new CompilerException("Default parameter type: " . $dataType, $parameter);
+                throw new CompilerException('Default parameter type: '.$dataType, $parameter);
         }
 
         $compilationContext->codePrinter = $oldCodePrinter;
+
         return $codePrinter->getOutput();
     }
 
     /**
-     * Assigns a zval value to a static low-level type
+     * Assigns a zval value to a static low-level type.
      *
      * @todo rewrite this to build ifs and throw from builders
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
-     * @return string
+     *
      * @throws CompilerException
+     *
+     * @return string
      */
     public function checkStrictType(array $parameter, CompilationContext $compilationContext)
     {
@@ -1387,16 +1427,19 @@ class ClassMethod
         $compilationContext->backend->checkStrictType($dataType, $parameter, $compilationContext);
 
         $compilationContext->codePrinter = $oldCodePrinter;
+
         return $codePrinter->getOutput();
     }
 
     /**
-     * Assigns a zval value to a static low-level type
+     * Assigns a zval value to a static low-level type.
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
-     * @return string
+     *
      * @throws CompilerException
+     *
+     * @return string
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext)
     {
@@ -1406,12 +1449,12 @@ class ClassMethod
             $dataType = 'variable';
         }
 
-        if (in_array($dataType, array('variable', 'callable', 'object', 'resource'))) {
+        if (\in_array($dataType, ['variable', 'callable', 'object', 'resource'])) {
             return;
         }
 
         $compilationContext->headersManager->add('kernel/operators');
-        $parameterVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'] . '_param', $compilationContext);
+        $parameterVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'].'_param', $compilationContext);
         $parameterCode = $compilationContext->backend->getVariableCode($parameterVariable);
         $inputParamVar = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
         $inputParamCode = $compilationContext->backend->getVariableCode($inputParamVar);
@@ -1420,35 +1463,37 @@ class ClassMethod
             case 'uint':
             case 'long':
             case 'ulong':
-                return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameterCode . ');' . PHP_EOL;
+                return "\t".$parameter['name'].' = zephir_get_intval('.$parameterCode.');'.PHP_EOL;
 
             case 'char':
-                return "\t" . $parameter['name'] . ' = zephir_get_charval(' . $parameterCode . ');' . PHP_EOL;
+                return "\t".$parameter['name'].' = zephir_get_charval('.$parameterCode.');'.PHP_EOL;
 
             case 'bool':
-                return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameterCode . ');' . PHP_EOL;
+                return "\t".$parameter['name'].' = zephir_get_boolval('.$parameterCode.');'.PHP_EOL;
 
             case 'double':
-                return "\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameterCode . ');' . PHP_EOL;
+                return "\t".$parameter['name'].' = zephir_get_doubleval('.$parameterCode.');'.PHP_EOL;
 
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                return "\t" . 'zephir_get_strval(' . $inputParamCode . ', ' . $parameterCode . ');' . PHP_EOL;
+
+                return "\t".'zephir_get_strval('.$inputParamCode.', '.$parameterCode.');'.PHP_EOL;
 
             case 'array':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                return "\t" . 'zephir_get_arrval(' . $inputParamCode . ', ' . $parameterCode . ');' . PHP_EOL;
+
+                return "\t".'zephir_get_arrval('.$inputParamCode.', '.$parameterCode.');'.PHP_EOL;
 
             default:
-                throw new CompilerException("Parameter type: " . $dataType, $parameter);
+                throw new CompilerException('Parameter type: '.$dataType, $parameter);
         }
     }
 
     /**
-     * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods
+     * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods.
      *
      * @param CompilationContext $compilationContext
-     * @return null
+     *
      * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext)
@@ -1457,10 +1502,10 @@ class ClassMethod
         $typeInference = null;
         $callGathererPass = null;
 
-        if (is_object($this->statements)) {
+        if (\is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
 
-            /**
+            /*
              * This pass checks for zval variables than can be potentially
              * used without allocating memory and track it
              * these variables are stored in the stack
@@ -1470,7 +1515,7 @@ class ClassMethod
                 $localContext->pass($this->statements);
             }
 
-            /**
+            /*
              * This pass tries to infer types for dynamic variables
              * replacing them by low level variables
              */
@@ -1483,7 +1528,7 @@ class ClassMethod
                 }
             }
 
-            /**
+            /*
              * This pass counts how many times a specific
              */
             if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
@@ -1498,39 +1543,39 @@ class ClassMethod
     }
 
     /**
-     * Compiles the method
+     * Compiles the method.
      *
      * @param CompilationContext $compilationContext
-     * @return null
+     *
      * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
-        /**
+        /*
          * Set the method currently being compiled
          */
         $compilationContext->currentMethod = $this;
 
-        /**
+        /*
          * Initialize the method warm-up to null
          */
         $compilationContext->methodWarmUp = null;
 
         /**
-         * Assign pre-made compilation passes
+         * Assign pre-made compilation passes.
          */
         $localContext = $this->localContext;
         $typeInference = $this->typeInference;
         $callGathererPass = $this->callGathererPass;
 
         /**
-         * Initialization of parameters happens in a fictitious external branch
+         * Initialization of parameters happens in a fictitious external branch.
          */
         $branch = new Branch();
         $branch->setType(Branch::TYPE_EXTERNAL);
 
         /**
-         * BranchManager helps to create graphs of conditional/loop/root/jump branches
+         * BranchManager helps to create graphs of conditional/loop/root/jump branches.
          */
         $branchManager = new BranchManager();
         $branchManager->addBranch($branch);
@@ -1538,7 +1583,7 @@ class ClassMethod
         $compilationContext->branchManager = $branchManager;
 
         /**
-         * Every method has its own symbol table
+         * Every method has its own symbol table.
          */
         $symbolTable = new SymbolTable($compilationContext);
         if ($localContext) {
@@ -1546,11 +1591,11 @@ class ClassMethod
         }
 
         /**
-         * Parameters has an additional extra mutation
+         * Parameters has an additional extra mutation.
          */
         $parameters = $this->parameters;
         if ($localContext) {
-            if (is_object($parameters)) {
+            if (\is_object($parameters)) {
                 foreach ($parameters->getParameters() as $parameter) {
                     $localContext->increaseMutations($parameter['name']);
                 }
@@ -1558,56 +1603,56 @@ class ClassMethod
         }
 
         /**
-         * Cache Manager manages function calls, method calls and class entries caches
+         * Cache Manager manages function calls, method calls and class entries caches.
          */
         $cacheManager = new CacheManager();
         $cacheManager->setGatherer($callGathererPass);
 
-        $compilationContext->cacheManager  = $cacheManager;
+        $compilationContext->cacheManager = $cacheManager;
         $compilationContext->typeInference = $typeInference;
-        $compilationContext->symbolTable   = $symbolTable;
+        $compilationContext->symbolTable = $symbolTable;
 
         $oldCodePrinter = $compilationContext->codePrinter;
 
         /**
-         * Change the code printer to a single method instance
+         * Change the code printer to a single method instance.
          */
         $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
 
-        /**
+        /*
          * Set an empty function cache
          */
         $compilationContext->functionCache = null;
 
-        /**
+        /*
          * Reset try/catch and loop counter
          */
         $compilationContext->insideCycle = 0;
         $compilationContext->insideTryCatch = 0;
         $compilationContext->currentTryCatch = 0;
 
-        if (is_object($parameters)) {
+        if (\is_object($parameters)) {
             /**
-             * Round 1. Create variables in parameters in the symbol table
+             * Round 1. Create variables in parameters in the symbol table.
              */
-            $classCastChecks = array();
-            $substituteVars = array();
+            $classCastChecks = [];
+            $substituteVars = [];
             foreach ($parameters->getParameters() as $parameter) {
-                /**
+                /*
                  * Change dynamic variables to low level types
                  */
                 if ($typeInference) {
                     if (isset($parameter['data-type'])) {
-                        if ($parameter['data-type'] == 'variable') {
+                        if ('variable' == $parameter['data-type']) {
                             $type = $typeInference->getInferedType($parameter['name']);
-                            if (is_string($type)) {
+                            if (\is_string($type)) {
                                 /* promote polymorphic parameters to low level types */
                             }
                         }
                     } else {
                         $type = $typeInference->getInferedType($parameter['name']);
-                        if (is_string($type)) {
+                        if (\is_string($type)) {
                             /* promote polymorphic parameters to low level types */
                         }
                     }
@@ -1625,18 +1670,18 @@ class ClassMethod
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             if ($compilationContext->backend->isZE3()) {
                                 $symbol->setIsDoublePointer(true);
-                                $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'] . '_sub', $compilationContext);
+                                $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'].'_sub', $compilationContext);
                             }
                             break;
 
                         default:
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
-                            $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
+                            $symbolParam = $symbolTable->addVariable('variable', $parameter['name'].'_param', $compilationContext);
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             if ($compilationContext->backend->isZE3()) {
                                 $symbolParam->setIsDoublePointer(true);
                             }
-                            if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
+                            if ('string' == $parameter['data-type'] || 'array' == $parameter['data-type']) {
                                 $symbol->setMustInitNull(true);
                             }
                             break;
@@ -1651,40 +1696,40 @@ class ClassMethod
                     $substituteVar->increaseUses();
                 }
 
-                /**
+                /*
                  * Some parameters can be read-only
                  */
                 if (isset($parameter['const']) && $parameter['const']) {
                     $symbol->setReadOnly(true);
-                    if (is_object($symbolParam)) {
+                    if (\is_object($symbolParam)) {
                         $symbolParam->setReadOnly(true);
                     }
                 }
 
-                if (is_object($symbolParam)) {
-                    /**
+                if (\is_object($symbolParam)) {
+                    /*
                      * Parameters are marked as 'external'
                      */
                     $symbolParam->setIsExternal(true);
 
-                    /**
+                    /*
                      * Assuming they're initialized
                      */
                     $symbolParam->setIsInitialized(true, $compilationContext);
 
-                    /**
+                    /*
                      * Initialize auxiliary parameter zvals to null
                      */
                     $symbolParam->setMustInitNull(true);
 
-                    /**
+                    /*
                      * Increase uses
                      */
                     $symbolParam->increaseUses();
                 } else {
                     if (isset($parameter['default'])) {
                         if (isset($parameter['data-type'])) {
-                            if ($parameter['data-type'] == 'variable') {
+                            if ('variable' == $parameter['data-type']) {
                                 $symbol->setMustInitNull(true);
                             }
                         } else {
@@ -1693,31 +1738,31 @@ class ClassMethod
                     }
                 }
 
-                /**
+                /*
                  * Original node where the variable was declared
                  */
                 $symbol->setOriginal($parameter);
 
-                /**
+                /*
                  * Parameters are marked as 'external'
                  */
                 $symbol->setIsExternal(true);
 
-                /**
+                /*
                  * Assuming they're initialized
                  */
                 $symbol->setIsInitialized(true, $compilationContext);
 
-                /**
+                /*
                  * Variables with class/type must be objects across the execution
                  */
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                    $classCastChecks[] = array($symbol, $parameter);
+                    $classCastChecks[] = [$symbol, $parameter];
                 } else {
                     if (isset($parameter['data-type'])) {
-                        if ($parameter['data-type'] == 'variable') {
+                        if ('variable' == $parameter['data-type']) {
                             $symbol->setDynamicTypes('undefined');
                         }
                     } else {
@@ -1729,39 +1774,39 @@ class ClassMethod
 
         $compilationContext->backend->onPreCompile($this, $compilationContext);
 
-        /**
+        /*
          * Compile the block of statements if any
          */
-        if (is_object($this->statements)) {
+        if (\is_object($this->statements)) {
             if ($this->hasModifier('static')) {
                 $compilationContext->staticContext = true;
             } else {
                 $compilationContext->staticContext = false;
             }
 
-            /**
+            /*
              * Compile the statements block as a 'root' branch
              */
             $this->statements->compile($compilationContext, false, Branch::TYPE_ROOT);
         }
 
         /**
-         * Initialize variable default values
+         * Initialize variable default values.
          */
         $initVarCode = $compilationContext->backend->initializeVariableDefaults($symbolTable->getVariables(), $compilationContext);
 
         /**
-         * Fetch parameters from vm-top
+         * Fetch parameters from vm-top.
          */
-        $initCode = "";
-        $code = "";
-        if (is_object($parameters)) {
+        $initCode = '';
+        $code = '';
+        if (\is_object($parameters)) {
             /**
-             * Round 2. Fetch the parameters in the method
+             * Round 2. Fetch the parameters in the method.
              */
-            $params = array();
-            $requiredParams = array();
-            $optionalParams = array();
+            $params = [];
+            $requiredParams = [];
+            $optionalParams = [];
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
@@ -1777,7 +1822,7 @@ class ClassMethod
                     case 'resource':
                     case 'variable':
                         if (!$this->isInternal()) {
-                            $params[] = '&' . $parameter['name'];
+                            $params[] = '&'.$parameter['name'];
                         } else {
                             $params[] = $parameter['name'];
                         }
@@ -1785,29 +1830,29 @@ class ClassMethod
 
                     default:
                         if (!$this->isInternal()) {
-                            $params[] = '&' . $parameter['name'] . '_param';
+                            $params[] = '&'.$parameter['name'].'_param';
                         } else {
-                            $params[] = $parameter['name'] . '_param';
+                            $params[] = $parameter['name'].'_param';
                         }
                         break;
                 }
 
                 if (isset($parameter['default'])) {
                     $optionalParams[] = $parameter;
-                    $numberOptionalParams++;
+                    ++$numberOptionalParams;
                 } else {
                     $requiredParams[] = $parameter;
-                    $numberRequiredParams++;
+                    ++$numberRequiredParams;
                 }
             }
 
             /**
              * Pass the write detector to the method statement block to check if the parameter
-             * variable is modified so as do the proper separation
+             * variable is modified so as do the proper separation.
              */
-            $parametersToSeparate = array();
-            if (is_object($this->statements)) {
-                /**
+            $parametersToSeparate = [];
+            if (\is_object($this->statements)) {
+                /*
                  * If local context is not available
                  */
                 if (!$localContext) {
@@ -1843,7 +1888,7 @@ class ClassMethod
                 }
             }
 
-            /**
+            /*
              * Initialize required parameters
              */
             foreach ($requiredParams as $parameter) {
@@ -1859,8 +1904,8 @@ class ClassMethod
                     $dataType = 'variable';
                 }
 
-                if ($dataType != 'variable') {
-                    /**
+                if ('variable' != $dataType) {
+                    /*
                      * Assign value from zval to low level type
                      */
                     if ($mandatory) {
@@ -1877,13 +1922,13 @@ class ClassMethod
                     case 'callable':
                         if (isset($parametersToSeparate[$parameter['name']])) {
                             $symbolTable->mustGrownStack(true);
-                            $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
+                            $initCode .= "\t".'ZEPHIR_SEPARATE_PARAM('.$parameter['name'].');'.PHP_EOL;
                         }
                         break;
                 }
             }
 
-            /**
+            /*
              * Initialize optional parameters
              */
             foreach ($optionalParams as $parameter) {
@@ -1908,41 +1953,41 @@ class ClassMethod
                         break;
 
                     default:
-                        $name = $parameter['name'] . '_param';
+                        $name = $parameter['name'].'_param';
                         break;
                 }
 
                 /**
-                 * Assign the default value according to the variable's type
+                 * Assign the default value according to the variable's type.
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
-                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($targetVar, $compilationContext, false, false) . PHP_EOL;
+                $initCode .= "\t".$compilationContext->backend->ifVariableValueUndefined($targetVar, $compilationContext, false, false).PHP_EOL;
 
                 if ($compilationContext->backend->isZE3()) {
                     if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                         $substituteVar = $substituteVars[$parameter['name']];
-                        $initCode .= "\t\t" . $targetVar->getName() . ' = &' . $substituteVar->getName() . ';' . PHP_EOL;
+                        $initCode .= "\t\t".$targetVar->getName().' = &'.$substituteVar->getName().';'.PHP_EOL;
                     }
                 }
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
-                if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
-                    $initCode .= "\t" . '} else {' . PHP_EOL;
+                if (isset($parametersToSeparate[$name]) || 'variable' != $dataType) {
+                    $initCode .= "\t".'} else {'.PHP_EOL;
                     if (isset($parametersToSeparate[$name])) {
-                        $initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+                        $initCode .= "\t\t".'ZEPHIR_SEPARATE_PARAM('.$name.');'.PHP_EOL;
                     } else {
                         if ($mandatory) {
                             $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
                         } else {
-                            $initCode .= "\t" . $this->assignZvalValue($parameter, $compilationContext);
+                            $initCode .= "\t".$this->assignZvalValue($parameter, $compilationContext);
                         }
                     }
                 }
 
-                $initCode .= "\t" . '}' . PHP_EOL;
+                $initCode .= "\t".'}'.PHP_EOL;
             }
 
-            /**
+            /*
              * Fetch the parameters to zval pointers
              */
             $codePrinter->preOutputBlankLine();
@@ -1950,9 +1995,9 @@ class ClassMethod
             if (!$this->isInternal()) {
                 $compilationContext->headersManager->add('kernel/memory');
                 if ($symbolTable->getMustGrownStack()) {
-                    $code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+                    $code .= "\t".'zephir_fetch_params(1, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 } else {
-                    $code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+                    $code .= "\t".'zephir_fetch_params(0, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 }
             } else {
                 foreach ($params as $param) {
@@ -1961,39 +2006,39 @@ class ClassMethod
                     $realCodePrinter = $compilationContext->codePrinter;
                     $compilationContext->codePrinter = $tempCodePrinter;
                     $paramVar = $compilationContext->symbolTable->getVariableForRead($param, $compilationContext);
-                    $compilationContext->backend->assignZval($paramVar, $param . '_ext', $compilationContext);
-                    $code .= "\t" . $tempCodePrinter->getOutput() . PHP_EOL;
+                    $compilationContext->backend->assignZval($paramVar, $param.'_ext', $compilationContext);
+                    $code .= "\t".$tempCodePrinter->getOutput().PHP_EOL;
                     $compilationContext->codePrinter = $realCodePrinter;
                 }
             }
             $code .= PHP_EOL;
         }
 
-        $code .= $initCode . $initVarCode;
+        $code .= $initCode.$initVarCode;
         $codePrinter->preOutput($code);
 
-        /**
+        /*
          * Fetch used superglobals
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
             if ($variable->isSuperGlobal()) {
                 $globalVar = $symbolTable->getVariable($name);
-                $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
+                $codePrinter->preOutput("\t".$compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
         }
 
-        /**
+        /*
          * Grow the stack if needed
          */
         if ($symbolTable->getMustGrownStack()) {
             $compilationContext->headersManager->add('kernel/memory');
-            $codePrinter->preOutput("\t" . 'ZEPHIR_MM_GROW();');
+            $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
         }
 
         /**
-         * Check if there are unused variables
+         * Check if there are unused variables.
          */
-        $usedVariables = array();
+        $usedVariables = [];
         $classDefinition = $this->getClassDefinition();
         if ($classDefinition) {
             $completeName = $classDefinition->getCompleteName();
@@ -2003,74 +2048,86 @@ class ClassMethod
 
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
-                if ($variable->isExternal() == false) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                if (false == $variable->isExternal()) {
+                    $compilationContext->logger->warning(
+                        'Variable "'.$variable->getName().'" declared but not used in '.$completeName.'::'.$this->getName(),
+                        ['unused-variable', $variable->getOriginal()]
+                    );
                     continue;
                 }
-                $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable-external", $variable->getOriginal());
+                $compilationContext->logger->warning(
+                    'Variable "'.$variable->getName().'" declared but not used in '.$completeName.'::'.$this->getName(),
+                    ['unused-variable-external', $variable->getOriginal()]
+                );
             }
 
-            if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
+            if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
                 $type = $variable->getType();
                 if (!isset($usedVariables[$type])) {
-                    $usedVariables[$type] = array();
+                    $usedVariables[$type] = [];
                 }
                 $usedVariables[$type][] = $variable;
             }
         }
 
-        /**
+        /*
          * Check if there are assigned but not used variables
          * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
-            if ($variable->isExternal() == true || $variable->isTemporal()) {
+            if (true == $variable->isExternal() || $variable->isTemporal()) {
                 continue;
             }
 
-            if ($variable->getName() == 'this_ptr' || $variable->getName() == 'return_value' || $variable->getName() == 'return_value_ptr' || $variable->getName() == 'ZEPHIR_LAST_CALL_STATUS') {
+            if ('this_ptr' == $variable->getName() || 'return_value' == $variable->getName() || 'return_value_ptr' == $variable->getName() || 'ZEPHIR_LAST_CALL_STATUS' == $variable->getName()) {
                 continue;
             }
 
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
-                if (is_array($node)) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $node);
+                if (\is_array($node)) {
+                    $compilationContext->logger->warning(
+                        'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
+                        ['unused-variable', $node]
+                    );
                 } else {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                    $compilationContext->logger->warning(
+                        'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
+                        ['unused-variable', $variable->getOriginal()]
+                    );
                 }
             }
         }
 
-        if (count($usedVariables)) {
+        if (\count($usedVariables)) {
             $codePrinter->preOutputBlankLine();
         }
 
         /**
-         * Generate the variable definition for variables used
+         * Generate the variable definition for variables used.
          */
         $initCode = "\t".implode(PHP_EOL."\t", $compilationContext->backend->declareVariables($this, $usedVariables, $compilationContext));
         if ($initCode) {
             $codePrinter->preOutput($initCode);
         }
 
-        /**
+        /*
          * Finalize the method compilation
          */
-        if (is_object($this->statements)) {
+        if (\is_object($this->statements)) {
             /**
              * If the last statement is not a 'return' or 'throw' we need to
-             * restore the memory stack if needed
+             * restore the memory stack if needed.
              */
             $lastType = $this->statements->getLastStatementType();
 
-            if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
+            if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+                    $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
                 }
 
-                /**
+                /*
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
                  */
                 if ($this->hasReturnTypes()) {
@@ -2085,11 +2142,11 @@ class ClassMethod
         $compilationContext->backend->onPostCompile($this, $compilationContext);
 
         /**
-         * Remove macros that grow/restore the memory frame stack if it wasn't used
+         * Remove macros that grow/restore the memory frame stack if it wasn't used.
          */
         $code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
 
-        /**
+        /*
          * Restore the compilation context
          */
         $oldCodePrinter->output($code);
@@ -2105,24 +2162,25 @@ class ClassMethod
     }
 
     /**
-     * Simple method to check if one of the paths are returning the right expected type
+     * Simple method to check if one of the paths are returning the right expected type.
      *
      * @param array $statement
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasChildReturnStatementType($statement)
     {
-        if (!isset($statement['statements']) || !is_array($statement['statements'])) {
+        if (!isset($statement['statements']) || !\is_array($statement['statements'])) {
             return false;
         }
 
-        if ($statement['type'] == 'if') {
+        if ('if' == $statement['type']) {
             $ret = false;
 
             $statements = $statement['statements'];
             foreach ($statements as $item) {
                 $type = isset($item['type']) ? $item['type'] : null;
-                if ($type == 'return' || $type == 'throw') {
+                if ('return' == $type || 'throw' == $type) {
                     $ret = true;
                 } else {
                     $ret = $this->hasChildReturnStatementType($item);
@@ -2136,7 +2194,7 @@ class ClassMethod
             $statements = $statement['else_statements'];
             foreach ($statements as $item) {
                 $type = isset($item['type']) ? $item['type'] : null;
-                if ($type == 'return' || $type == 'throw') {
+                if ('return' == $type || 'throw' == $type) {
                     return true;
                 } else {
                     return $this->hasChildReturnStatementType($item);
@@ -2146,7 +2204,7 @@ class ClassMethod
             $statements = $statement['statements'];
             foreach ($statements as $item) {
                 $type = isset($item['type']) ? $item['type'] : null;
-                if ($type == 'return' || $type == 'throw') {
+                if ('return' == $type || 'throw' == $type) {
                     return true;
                 } else {
                     return $this->hasChildReturnStatementType($item);
@@ -2163,18 +2221,20 @@ class ClassMethod
     public function getInternalName()
     {
         $classDefinition = $this->getClassDefinition();
-        return 'zep_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '_' . $this->getName();
+
+        return 'zep_'.$classDefinition->getCNamespace().'_'.$classDefinition->getName().'_'.$this->getName();
     }
 
     /**
      * Returns arginfo name for current method.
      *
-     * @param  ClassDefinition|null $classDefinition
+     * @param ClassDefinition|null $classDefinition
+     *
      * @return string
      */
     public function getArgInfoName(ClassDefinition $classDefinition = null)
     {
-        if ($classDefinition != null) {
+        if (null != $classDefinition) {
             return sprintf(
                 'arginfo_%s_%s_%s',
                 strtolower($classDefinition->getCNamespace()),
@@ -2208,7 +2268,7 @@ class ClassMethod
      */
     public function isReturnTypesHintDetermined()
     {
-        if (count($this->returnTypes) == 0 || $this->isVoid()) {
+        if (0 == \count($this->returnTypes) || $this->isVoid()) {
             return false;
         }
 
@@ -2220,7 +2280,7 @@ class ClassMethod
                     return false;
             }
 
-            if (isset($definition['type']) && $definition['type'] === 'return-type-annotation') {
+            if (isset($definition['type']) && 'return-type-annotation' === $definition['type']) {
                 if ($this->areReturnTypesBoolCompatible() ||
                     $this->areReturnTypesDoubleCompatible() ||
                     $this->areReturnTypesIntCompatible() ||
@@ -2231,7 +2291,7 @@ class ClassMethod
                     continue;
                 }
 
-                /**
+                /*
                  * @todo Probable we should detect return type more more carefully.
                  * It is hard to process return type from the annotations at this time.
                  * Thus we just return false here.
@@ -2251,12 +2311,12 @@ class ClassMethod
     public function areReturnTypesCompatible()
     {
         // null | T1 | T2
-        if (count($this->returnTypes) > 2) {
+        if (\count($this->returnTypes) > 2) {
             return false;
         }
 
         // T1 | T2
-        if (count($this->returnTypes) == 2 && !isset($this->returnTypes['null'])) {
+        if (2 == \count($this->returnTypes) && !isset($this->returnTypes['null'])) {
             return false;
         }
 

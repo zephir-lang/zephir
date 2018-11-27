@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension\Integral;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class RegexDNATest extends TestCase
 {
@@ -20,12 +20,12 @@ class RegexDNATest extends TestCase
         $t = new \Test\RegexDNA();
 
         ob_start();
-        $t->process(dirname(__DIR__) . '/../fixtures/regexdna/input.txt');
+        $t->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(
             $content,
-            file_get_contents(dirname(__DIR__) . '/../fixtures/regexdna/output.txt')
+            file_get_contents(\dirname(__DIR__).'/../fixtures/regexdna/output.txt')
         );
     }
 }

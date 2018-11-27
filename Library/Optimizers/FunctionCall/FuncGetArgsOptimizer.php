@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,34 +13,36 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FuncGetArgsOptimizer
+ * FuncGetArgsOptimizer.
  *
  * Optimizes calls to 'func_get_args' using internal function
  */
 class FuncGetArgsOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     *
      * @throws CompilerException
+     *
+     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
         if ($call->mustInitSymbolVariable()) {
@@ -49,10 +51,11 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/main');
         if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_get_args(' . $symbol . ');');
+            $context->codePrinter->output('zephir_get_args('.$symbol.');');
         } else {
-            $context->codePrinter->output('zephir_get_args(' . $symbol . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_get_args('.$symbol.' TSRMLS_CC);');
         }
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

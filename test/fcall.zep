@@ -145,7 +145,27 @@ class Fcall
 		return func_get_args();
 	}
 
-	public function testFunctionGetArg(var param1, var param2)
+	public function testFunctionGetArgsAllExtra() -> array
+	{
+		return func_get_args();
+	}
+
+	public static function testStaticFunctionGetArgsAllExtra() -> array
+	{
+		return func_get_args();
+	}
+
+	public function testFunctionGetArg(var param1, var param2) -> array
+	{
+		return [func_get_arg(0), func_get_arg(1)];
+	}
+
+	public function testFunctionGetArgAllExtra() -> array
+	{
+		return [func_get_arg(0), func_get_arg(1)];
+	}
+
+	public static function testStaticFunctionGetArgAllExtra() -> array
 	{
 		return [func_get_arg(0), func_get_arg(1)];
 	}

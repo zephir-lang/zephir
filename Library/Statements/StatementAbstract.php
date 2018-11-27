@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,9 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Optimizers\EvalExpression;
 
 /**
- * Zephir\Statements\StatementAbstract
- *
- * @package Zephir\Statements
+ * Zephir\Statements\StatementAbstract.
  */
 abstract class StatementAbstract
 {
@@ -31,7 +29,7 @@ abstract class StatementAbstract
     protected static $uniqueGenerator;
 
     /**
-     * StatementAbstract construct
+     * StatementAbstract construct.
      *
      * @param array $statement
      */
@@ -41,7 +39,7 @@ abstract class StatementAbstract
     }
 
     /**
-     * Generates a uniqueId for those instructions that need it
+     * Generates a uniqueId for those instructions that need it.
      *
      * @return int
      */
@@ -50,11 +48,12 @@ abstract class StatementAbstract
         if (!$this->uniqueId) {
             $this->uniqueId = self::$uniqueGenerator++;
         }
+
         return $this->uniqueId;
     }
 
     /**
-     * @return null|EvalExpression
+     * @return EvalExpression|null
      */
     public function getEvalExpression()
     {
@@ -62,7 +61,7 @@ abstract class StatementAbstract
     }
 
     /**
-     * Compiles the statement
+     * Compiles the statement.
      *
      * @param CompilationContext $compilationContext
      */

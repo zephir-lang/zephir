@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -24,26 +24,26 @@ class Sitemap extends AbstractFile
     {
         $this->classes = $classList;
         $this->namespaces = $namespaceList;
-        $this->baseUrl = rtrim($baseUrl, "/") . "/";
+        $this->baseUrl = rtrim($baseUrl, '\\/').\DIRECTORY_SEPARATOR;
         $this->baseDir = $baseDir;
     }
 
     public function getTemplateName()
     {
-        return $this->baseDir . "/templates/Api/sitemap.php";
+        return $this->baseDir.'/Api/sitemap.php';
     }
 
     public function getData()
     {
         return [
-            "classes"    => $this->classes,
-            "namespaces" => $this->namespaces,
-            "baseUrl"    => $this->baseUrl,
+            'classes' => $this->classes,
+            'namespaces' => $this->namespaces,
+            'baseUrl' => $this->baseUrl,
         ];
     }
 
     public function getOutputFile()
     {
-        return "sitemap.xml";
+        return 'sitemap.xml';
     }
 }

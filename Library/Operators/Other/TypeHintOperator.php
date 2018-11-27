@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,16 +11,14 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Expression;
-use Zephir\CompiledExpression;
 use Zephir\CompilationContext;
-use Zephir\Operators\BaseOperator;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * Zephir\Operators\Other\TypeHintOperator
- *
- * @package Zephir\Operators\Other
+ * Zephir\Operators\Other\TypeHintOperator.
  */
 class TypeHintOperator extends BaseOperator
 {
@@ -41,8 +39,10 @@ class TypeHintOperator extends BaseOperator
      *
      * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -50,7 +50,7 @@ class TypeHintOperator extends BaseOperator
         $expr->setReadOnly(true);
         $resolved = $expr->compile($compilationContext);
 
-        if ($resolved->getType() != 'variable') {
+        if ('variable' != $resolved->getType()) {
             throw new CompilerException('Type-Hints only can be applied to dynamic variables.', $expression);
         }
 

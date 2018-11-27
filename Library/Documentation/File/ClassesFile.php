@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -28,18 +28,18 @@ class ClassesFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "classes.phtml";
+        return 'classes.phtml';
     }
 
     public function getData()
     {
-        return array(
-            "classes" => $this->classes,
-        );
+        return [
+            'classes' => $this->classes,
+        ];
     }
 
     public function getOutputFile()
     {
-        return "classes.html";
+        return 'classes.html';
     }
 }

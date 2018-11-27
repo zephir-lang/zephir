@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\Substr;
-use Zephir\Support\TestCase;
 
 class SubstrTest extends TestCase
 {
@@ -20,10 +20,10 @@ class SubstrTest extends TestCase
     {
         $t = new Substr();
 
-        $strings_array = array(null, '', 12345, 'abcdef', '123abc', '_123abc');
-        $results1 = array(false, false, '2345', 'bcdef', '23abc', '123abc');
-        $results2 = array(false, false, '12345', 'abcdef', '123abc', '_123abc');
-        $results3 = array(false, false, '45', 'ef', 'bc', 'bc');
+        $strings_array = [null, '', 12345, 'abcdef', '123abc', '_123abc'];
+        $results1 = [false, false, '2345', 'bcdef', '23abc', '123abc'];
+        $results2 = [false, false, '12345', 'abcdef', '123abc', '_123abc'];
+        $results3 = [false, false, '45', 'ef', 'bc', 'bc'];
 
         $c = 0;
         foreach ($strings_array as $str) {

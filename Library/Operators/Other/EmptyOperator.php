@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * Empty
+ * Empty.
  *
  * Checks if a variable is empty string or null
  */
@@ -27,8 +27,10 @@ class EmptyOperator extends BaseOperator
     /**
      * @param $expression
      * @param CompilationContext $compilationContext
-     * @return CompiledExpression
+     *
      * @throws CompilerException
+     *
+     * @return CompiledExpression
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -42,7 +44,7 @@ class EmptyOperator extends BaseOperator
         $leftExpr->setReadOnly(true);
         $left = $leftExpr->compile($compilationContext);
 
-        if ($left->getType() != 'variable' && $left->getType() != 'array') {
+        if ('variable' != $left->getType() && 'array' != $left->getType()) {
             throw new CompilerException("'empty' operand only can be a variable", $expression['left']);
         }
 
@@ -51,6 +53,6 @@ class EmptyOperator extends BaseOperator
             throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
         }
 
-        return new CompiledExpression('bool', 'ZEPHIR_IS_EMPTY(' . $compilationContext->backend->getVariableCode($variableLeft) . ')', $expression);
+        return new CompiledExpression('bool', 'ZEPHIR_IS_EMPTY('.$compilationContext->backend->getVariableCode($variableLeft).')', $expression);
     }
 }

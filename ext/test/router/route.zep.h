@@ -39,7 +39,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_via, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_extractnamedparams, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, pattern, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, pattern)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_reconfigure, 0, 0, 1)

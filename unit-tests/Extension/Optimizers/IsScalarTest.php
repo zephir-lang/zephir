@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension\Optimizers;
 
+use PHPUnit\Framework\TestCase;
 use Test\Optimizers\IsScalar;
-use Zephir\Support\TestCase;
 
 class IsScalarTest extends TestCase
 {
@@ -40,8 +40,8 @@ class IsScalarTest extends TestCase
         $this->assertTrue($t->testVarParameter(''));
         $this->assertTrue($t->testVarParameter('test string'));
 
-        $this->assertFalse($t->testVarParameter(array()));
-        $this->assertFalse($t->testVarParameter(array(1,2,3,4,5)));
+        $this->assertFalse($t->testVarParameter([]));
+        $this->assertFalse($t->testVarParameter([1, 2, 3, 4, 5]));
         $this->assertFalse($t->testVarParameter($this));
         $this->assertFalse(
             $t->testVarParameter(

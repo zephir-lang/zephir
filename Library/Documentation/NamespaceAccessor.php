@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,6 @@ namespace Zephir\Documentation;
 class NamespaceAccessor
 {
     /**
-     *
      * @var \Zephir\CompilerFile[]
      */
     protected $classes;
@@ -24,7 +23,6 @@ class NamespaceAccessor
     protected $byNamespace;
 
     /**
-     *
      * @param \Zephir\CompilerFile[] $files
      */
     public function __construct($files)
@@ -33,7 +31,6 @@ class NamespaceAccessor
     }
 
     /**
-     *
      * @return NamespaceHelper[]
      */
     public function getByNamespace()
@@ -48,22 +45,22 @@ class NamespaceAccessor
 
     public function build()
     {
-        $byNamespace = array();
-        $tree = array();
+        $byNamespace = [];
+        $tree = [];
 
         foreach ($this->classes as $className => $class) {
-            $ns = explode("\\", $class->getClassDefinition()->getNamespace());
-            $actualStr = "";
+            $ns = explode('\\', $class->getClassDefinition()->getNamespace());
+            $actualStr = '';
             foreach ($ns as $n) {
-                if (strlen($actualStr) > 0) {
+                if (\strlen($actualStr) > 0) {
                     $previous = $byNamespace[$actualStr];
-                    $actualStr.= "\\";
+                    $actualStr .= '\\';
                     $isRoot = false;
                 } else {
                     $previous = null;
                     $isRoot = true;
                 }
-                $actualStr.= $n;
+                $actualStr .= $n;
 
                 if (!isset($byNamespace[$actualStr])) {
                     $byNamespace[$actualStr] = new NamespaceHelper($actualStr);

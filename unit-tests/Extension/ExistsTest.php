@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Exists;
-use Zephir\Support\TestCase;
 
 class ExistsTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ExistsTest extends TestCase
 
         $this->assertTrue($t->testMethodExists($t, 'testMethodExists'));
 
-        $this->assertTrue($t->testFileExists(__DIR__ . '/../fixtures/exists.php'));
-        $this->assertFalse($t->testFileExists(__DIR__ . '/php/existsxxxx.php'));
+        $this->assertTrue($t->testFileExists(__DIR__.'/../fixtures/exists.php'));
+        $this->assertFalse($t->testFileExists(__DIR__.'/php/existsxxxx.php'));
     }
 }

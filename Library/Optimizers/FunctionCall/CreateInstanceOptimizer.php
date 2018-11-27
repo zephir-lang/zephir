@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,45 +13,47 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CreateInstanceOptimizer
+ * CreateInstanceOptimizer.
  *
  * Built-in function that creates new instances of objects from its class name
  */
 class CreateInstanceOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-            throw new CompilerException("This function requires parameters", $expression);
+            throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (count($expression['parameters']) != 1) {
-            throw new CompilerException("This function only requires one parameter", $expression);
+        if (1 != \count($expression['parameters'])) {
+            throw new CompilerException('This function only requires one parameter', $expression);
         }
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
-        /**
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
@@ -65,13 +67,14 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-         /**
+
+        /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
 
         $call->checkTempParameters($context);
         $call->addCallStatusOrJump($context);

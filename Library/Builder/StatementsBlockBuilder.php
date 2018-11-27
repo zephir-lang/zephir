@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * StatementsBlockBuilder
+ * StatementsBlockBuilder.
  *
  * Allows to manually build a statements block AST node
  */
@@ -29,14 +29,14 @@ class StatementsBlockBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
         if (!$this->raw) {
-            $statements = array();
+            $statements = [];
 
             foreach ($this->statements as $statement) {
                 $statements[] = $statement->get();

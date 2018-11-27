@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -9,13 +9,10 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Zephir;
 
 /**
- * Zephir\TypeAwareInterface
- *
- * @package Zephir
+ * Zephir\TypeAwareInterface.
  */
 interface TypeAwareInterface
 {

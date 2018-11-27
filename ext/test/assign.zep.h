@@ -380,7 +380,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign41, 0, 1, 
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign41, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -388,7 +392,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign42, 0, 1, 
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign42, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -396,7 +404,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign43, 0, 1, 
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign43, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -404,7 +416,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign44, 0, 1, 
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign44, 0, 1, IS_LONG, NULL, 0)
 #endif
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, num)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray4, 0, 0, 1)
@@ -412,7 +428,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray4, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray5, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, index, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, index)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray8, 0, 0, 1)
@@ -420,11 +440,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray8, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray9, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
+#else
+	ZEND_ARG_INFO(0, index)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray10, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, index, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, index)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray11, 0, 0, 1)

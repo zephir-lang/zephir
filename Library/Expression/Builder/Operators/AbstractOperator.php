@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,8 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class AbstractOperator
- * @package Zephir\Expression\Builder\Operators
+ * Class AbstractOperator.
  */
 abstract class AbstractOperator extends AbstractBuilder
 {

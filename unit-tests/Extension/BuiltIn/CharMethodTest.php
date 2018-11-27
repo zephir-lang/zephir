@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension\BuiltIn;
 
+use PHPUnit\Framework\TestCase;
 use Test\BuiltIn\CharMethods;
-use Zephir\Support\TestCase;
 
 class CharMethodTest extends TestCase
 {

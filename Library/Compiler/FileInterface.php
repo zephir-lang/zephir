@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,9 +12,10 @@
 namespace Zephir\Compiler;
 
 use Zephir\ClassDefinition;
+use Zephir\Compiler;
 
 /**
- * FileInterface
+ * FileInterface.
  *
  * Provides a common interface for compiler files
  */
@@ -33,4 +34,20 @@ interface FileInterface
      * @return ClassDefinition
      */
     public function getClassDefinition();
+
+    /**
+     * Pre-compiles a Zephir file.
+     *
+     * Generates the IR and perform basic validations.
+     *
+     * @param Compiler $compiler
+     */
+    public function preCompile(Compiler $compiler);
+
+    /**
+     * Sets if the class belongs to an external dependency or not.
+     *
+     * @param bool $external
+     */
+    public function setIsExternal($external);
 }

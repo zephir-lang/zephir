@@ -427,9 +427,9 @@ Function Expand-Item7zip {
 
 	$Result = (& 7z x "$Archive" "-o$Destination" -aoa -bd -y -r)
 
-	$7zipExitCode = $LASTEXITCODE
-	If ($7zipExitCode -ne 0) {
-		Throw "An error occurred while unzipping [$Archive] to [$Destination]. 7Zip Exit Code was [$7zipExitCode]"
+	If ($LastExitCode -ne 0) {
+		Write-Host "An error occurred while unzipping [$Archive] to [$Destination]. Error code was: ${LastExitCode}"
+		Exit $LastExitCode
 	}
 }
 

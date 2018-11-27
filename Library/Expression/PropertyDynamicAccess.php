@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -19,11 +19,9 @@ use Zephir\Variable;
 use function Zephir\add_slashes;
 
 /**
- * Zephir\Expression\PropertyDynamicAccess
+ * Zephir\Expression\PropertyDynamicAccess.
  *
  * Resolves expressions that read properties with a dynamic variable as property
- *
- * @package Zephir\Expression
  */
 class PropertyDynamicAccess
 {
@@ -33,14 +31,14 @@ class PropertyDynamicAccess
 
     protected $expectingVariable;
 
-    /**@var boolean */
+    /** @var bool */
     protected $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param boolean $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -50,9 +48,9 @@ class PropertyDynamicAccess
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -60,9 +58,9 @@ class PropertyDynamicAccess
     }
 
     /**
-     * Sets whether the expression must be resolved in "noisy" mode
+     * Sets whether the expression must be resolved in "noisy" mode.
      *
-     * @param boolean $noisy
+     * @param bool $noisy
      */
     public function setNoisy($noisy)
     {
@@ -70,10 +68,11 @@ class PropertyDynamicAccess
     }
 
     /**
-     * Resolves the access to a property in an object
+     * Resolves the access to a property in an object.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -90,11 +89,11 @@ class PropertyDynamicAccess
                     case 'variable':
                         break;
                     default:
-                        throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+                        throw new CompilerException('Variable type: '.$variableVariable->getType().' cannot be used as object', $propertyAccess['left']);
                 }
                 break;
             default:
-                throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+                throw new CompilerException('Cannot use expression: '.$exprVariable->getType().' as an object', $propertyAccess['left']);
         }
 
         switch ($propertyAccess['right']['type']) {
@@ -105,16 +104,16 @@ class PropertyDynamicAccess
                 $propertyVariable = null;
                 break;
             default:
-                throw new CompilerException("Variable type: " . $propertyAccess['right']['type'] . " cannot be used as object", $propertyAccess['left']);
+                throw new CompilerException('Variable type: '.$propertyAccess['right']['type'].' cannot be used as object', $propertyAccess['left']);
         }
 
-        /**
+        /*
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                if ($symbolVariable->getName() != 'return_value') {
+                if ('return_value' != $symbolVariable->getName()) {
                     $symbolVariable->observeVariant($compilationContext);
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
@@ -124,14 +123,14 @@ class PropertyDynamicAccess
             }
         }
 
-        /**
+        /*
          * Variable that receives a property value must be polymorphic
          */
         if ($symbolVariable && !$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
         }
 
-        /**
+        /*
          * At this point, we don't know the exact dynamic type fetched from the property
          */
         $symbolVariable->setDynamicTypes('undefined');
@@ -140,7 +139,6 @@ class PropertyDynamicAccess
 
         $property = $propertyVariable ? $propertyVariable : add_slashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext, false);
-
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

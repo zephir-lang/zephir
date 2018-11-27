@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,9 +11,9 @@
 
 namespace Extension\Properties;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ProtectedPropertiesTEst extends TestCase
+class ProtectedPropertiesTest extends TestCase
 {
     public function testAssertations()
     {
@@ -27,7 +27,7 @@ class ProtectedPropertiesTEst extends TestCase
         $this->assertSame($t->getSomeDouble(), 10.25);
         $this->assertSame($t->getSomeString(), 'test');
 
-        $t->setSomeVar(($rand = rand(1, 1000)*100));
+        $t->setSomeVar(($rand = rand(1, 1000) * 100));
         $this->assertSame($t->getSomeVar(), $rand);
     }
 }

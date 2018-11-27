@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,28 +14,12 @@ namespace Zephir\Documentation\Annotation;
 use Zephir\Documentation\Annotation;
 
 /**
- * A link annotation that looks like  `(@)link uri text`
- *
+ * A link annotation that looks like  `(@)link uri text`.
  */
 class Link extends Annotation
 {
     protected $uri;
     protected $linkText;
-
-
-    protected function parseContent()
-    {
-        $spaceIndex = strpos($this->string, " ");
-
-        if (false !== $spaceIndex) {
-            $this->uri = substr($this->string, 0, $spaceIndex);
-            $this->linkText = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->uri = $this->string;
-        }
-
-        $this->contentParsed = true;
-    }
 
     public function getUri()
     {
@@ -53,5 +37,19 @@ class Link extends Annotation
         }
 
         return $this->linkText;
+    }
+
+    protected function parseContent()
+    {
+        $spaceIndex = strpos($this->string, ' ');
+
+        if (false !== $spaceIndex) {
+            $this->uri = substr($this->string, 0, $spaceIndex);
+            $this->linkText = substr($this->string, $spaceIndex + 1);
+        } else {
+            $this->uri = $this->string;
+        }
+
+        $this->contentParsed = true;
     }
 }

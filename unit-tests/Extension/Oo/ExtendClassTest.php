@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,16 +12,16 @@
 namespace Extension\Oo;
 
 use PDO;
+use PHPUnit\Framework\TestCase;
 use Test\Integration\Psr\Http\Message\MessageInterfaceEx;
 use Test\Oo\ConcreteStatic;
 use Test\Oo\ExtendPdoClass;
-use Zephir\Support\TestCase;
 
 class ExtendClassTest extends TestCase
 {
     public function testPDOExtending()
     {
-        if (!extension_loaded('pdo')) {
+        if (!\extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extension is not loaded');
         }
 
@@ -43,8 +43,8 @@ class ExtendClassTest extends TestCase
      */
     public function shouldExtendMiddlewareInterface()
     {
-        if (!extension_loaded('psr')) {
-            $this->markTestSkipped("The psr extension is not loaded");
+        if (!\extension_loaded('psr')) {
+            $this->markTestSkipped('The psr extension is not loaded');
         }
 
         $this->assertTrue(

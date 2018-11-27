@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * Abstract class for builders
+ * Abstract class for builders.
  */
 abstract class AbstractOperatorBuilder
 {

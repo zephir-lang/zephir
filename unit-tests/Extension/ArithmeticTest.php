@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ArithmeticTest extends TestCase
 {
@@ -87,7 +87,7 @@ class ArithmeticTest extends TestCase
         $this->assertTrue($this->class->less1());
         $this->assertFalse($this->class->less2());
 
-        /**
+        /*
          * X < 5
          */
         $this->assertFalse($this->class->less3(100));
@@ -95,7 +95,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->less3(5));
         $this->assertTrue($this->class->less3(4));
 
-        /**
+        /*
          * X < 5.0
          */
         $this->assertFalse($this->class->less4(100));
@@ -109,7 +109,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->greater1());
         $this->assertTrue($this->class->greater2());
 
-        /**
+        /*
          * X > 5
          */
         $this->assertTrue($this->class->greater3(100));
@@ -117,7 +117,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->greater3(5));
         $this->assertFalse($this->class->greater3(4));
 
-        /**
+        /*
          * X > 5.0
          */
         $this->assertTrue($this->class->greater4(100));
@@ -255,7 +255,7 @@ class ArithmeticTest extends TestCase
         $this->assertSame($this->class->letStatementVarMinus(-1), 1);
         $this->assertSame($this->class->letStatementVarMinus(true), -true);
         $this->assertSame($this->class->letStatementVarMinus(false), -false);
-        $this->assertSame($this->class->letStatementVarMinus(""), @-"");
+        $this->assertSame($this->class->letStatementVarMinus(''), @-'');
         $this->assertTrue($this->class->letStatementBoolMinus(-1)); // it is zend_bool not zend_var
         $this->assertTrue($this->class->letStatementBoolMinus(1));
         $this->assertTrue($this->class->letStatementBoolMinus(true));

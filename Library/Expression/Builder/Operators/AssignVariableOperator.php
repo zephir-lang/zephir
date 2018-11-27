@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,8 +14,7 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * Class AssignVariableOperator
- * @package Zephir\Builder\Operators
+ * Class AssignVariableOperator.
  */
 class AssignVariableOperator extends AbstractOperator
 {
@@ -40,26 +39,24 @@ class AssignVariableOperator extends AbstractOperator
     // %=
     const OPERATOR_MOD = 'mod-assign';
 
-
     private $variable;
     private $operator = self::OPERATOR_ASSIGN;
     private $expression;
 
     /**
-     * @param null $variable
+     * @param null                 $variable
      * @param AbstractBuilder|null $expression
      */
     public function __construct($variable = null, AbstractBuilder $expression = null)
     {
-        if ($variable !== null) {
+        if (null !== $variable) {
             $this->setVariable($variable);
         }
 
-        if ($expression !== null) {
+        if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
-
 
     /**
      * @return string
@@ -71,11 +68,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param string $variable
+     *
      * @return $this
      */
     public function setVariable($variable)
     {
         $this->variable = $variable;
+
         return $this;
     }
 
@@ -89,11 +88,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param $operator
+     *
      * @return $this
      */
     public function setOperator($operator)
     {
         $this->operator = $operator;
+
         return $this;
     }
 
@@ -107,11 +108,13 @@ class AssignVariableOperator extends AbstractOperator
 
     /**
      * @param $expression
+     *
      * @return $this
      */
     public function setExpression($expression)
     {
         $this->expression = $expression;
+
         return $this;
     }
 
@@ -120,11 +123,11 @@ class AssignVariableOperator extends AbstractOperator
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'assign-type' => 'variable',
-            'variable'    => $this->getVariable(),
-            'operator'    => $this->getOperator(),
-            'expr'        => $this->getExpression()
-        );
+            'variable' => $this->getVariable(),
+            'operator' => $this->getOperator(),
+            'expr' => $this->getExpression(),
+        ];
     }
 }

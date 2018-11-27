@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Exception;
 use Test\Exceptions;
-use Zephir\Support\TestCase;
 
 class ExceptionsTest extends TestCase
 {
@@ -68,7 +68,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Test
      */
     public function testExceptionString()
@@ -78,7 +78,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage t
      */
     public function testExceptionChar()
@@ -88,7 +88,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage 123
      */
     public function testExceptionInt()
@@ -98,7 +98,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage 123.123
      */
     public function testExceptionDouble()
@@ -108,7 +108,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Hello, Zephir
      */
     public function testExceptionSprintf()
@@ -118,7 +118,7 @@ class ExceptionsTest extends TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Framework Phalcon written using Zephir
      */
     public function testExceptionConcat()
@@ -142,38 +142,38 @@ class ExceptionsTest extends TestCase
     {
         $t = new Exceptions();
         try {
-            $t->testMultiException("test", new Exception("Some Exception"));
+            $t->testMultiException('test', new Exception('Some Exception'));
         } catch (Exception $e) {
-            $this->assertSame($e->getMessage(), "Some Exception");
+            $this->assertSame($e->getMessage(), 'Some Exception');
         }
         $t->internalExceptionCallable = function () {
             return false;
         };
         try {
-            $value = $t->testMultiException("test", new Exception("Some Exception"));
-            $this->assertSame($value, "test");
+            $value = $t->testMultiException('test', new Exception('Some Exception'));
+            $this->assertSame($value, 'test');
         } catch (Exception $e) {
-            $this->assertSame(true, false);
+            $this->assertTrue(false);
         }
         try {
-            $t->testMultiException("test", new \Exception("Some Exception"));
+            $t->testMultiException('test', new \Exception('Some Exception'));
         } catch (\Exception $e) {
-            $this->assertSame($e->getMessage(), "Some Exception");
+            $this->assertSame($e->getMessage(), 'Some Exception');
         }
         $t->exceptionCallable = function () {
             return false;
         };
         try {
-            $t->testMultiException("test", new \Exception("Some Exception"));
-            $this->assertSame($value, "test");
+            $t->testMultiException('test', new \Exception('Some Exception'));
+            $this->assertSame($value, 'test');
         } catch (\Exception $e) {
-            $this->assertSame(true, false);
+            $this->assertTrue(false);
         }
     }
 
     public function testIssue1325()
     {
-        $t   = new Exceptions();
+        $t = new Exceptions();
         $res = $t->issue1325();
         $this->assertSame(1, $res);
     }

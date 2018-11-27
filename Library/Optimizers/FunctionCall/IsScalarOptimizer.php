@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -17,18 +17,19 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * IsScalarOptimizer
+ * IsScalarOptimizer.
  *
  * Optimizes calls to 'is_scalar' using internal function
  *
- * @link http://php.net/manual/en/function.is-scalar.php
+ * @see http://php.net/manual/en/function.is-scalar.php
  */
 class IsScalarOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -37,11 +38,12 @@ class IsScalarOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (1 != \count($expression['parameters'])) {
             return false;
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('bool', 'zephir_is_scalar(' . $resolvedParams[0] . ')', $expression);
+
+        return new CompiledExpression('bool', 'zephir_is_scalar('.$resolvedParams[0].')', $expression);
     }
 }

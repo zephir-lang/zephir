@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,14 +11,14 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Statements;
-use Zephir\Support\TestCase;
 
 class StatementsTest extends TestCase
 {
     public function testElseIf()
     {
-        $t = new Statements;
+        $t = new Statements();
         $this->assertSame('more', $t->testElseIf(10));
         $this->assertSame('equal', $t->testElseIf(0));
         $this->assertSame('-1', $t->testElseIf(-1));
@@ -27,7 +27,7 @@ class StatementsTest extends TestCase
 
     public function testElseIf1()
     {
-        $t = new Statements;
+        $t = new Statements();
         $this->assertSame('equal', $t->testElseIf1(10));
         $this->assertSame('less', $t->testElseIf1(5));
         $this->assertSame('else', $t->testElseIf1(11));
@@ -35,7 +35,7 @@ class StatementsTest extends TestCase
 
     public function testElseIf2()
     {
-        $t = new Statements;
+        $t = new Statements();
         $this->assertSame('equal', $t->testElseIf2(10, 10));
         $this->assertSame('less', $t->testElseIf2(5, 10));
         $this->assertSame('else', $t->testElseIf2(11, 10));
@@ -43,7 +43,7 @@ class StatementsTest extends TestCase
 
     public function test544Issue()
     {
-        $t = new Statements;
+        $t = new Statements();
 
         $this->assertSame('====>...............................................................................................', $t->test544Issue(5));
         $this->assertSame('====================================================================================================', $t->test544Issue(100));

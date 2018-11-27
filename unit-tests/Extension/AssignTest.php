@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,23 +11,24 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Assign;
-use Zephir\Support\TestCase;
 
 class AssignTest extends TestCase
 {
     /**
      * @dataProvider variableAssignProvider
      * @test
-     * @param mixed $expected
+     *
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignment($expected, $test, $testParams = null)
     {
         $t = new Assign();
 
-        $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+        $this->assertSame($expected, \call_user_func([$t, $test], $testParams));
     }
 
     public function variableAssignProvider()
@@ -35,10 +36,10 @@ class AssignTest extends TestCase
         $arry = [
             'a' => [
                 'b_key' => 'b_val',
-                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]],
             ],
             's' => 1,
-            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']]
+            1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']],
         ];
 
         return [
@@ -92,18 +93,19 @@ class AssignTest extends TestCase
     /**
      * @dataProvider propertyAssignProvider
      * @test
-     * @param mixed $expected
+     *
+     * @param mixed  $expected
      * @param string $test
-     * @param mixed $testParams
+     * @param mixed  $testParams
      */
     public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {
         $t = new Assign();
 
-        if (gettype($testParams) === "array") {
-            $this->assertSame($expected, call_user_func_array([$t, $test], $testParams));
+        if ('array' === \gettype($testParams)) {
+            $this->assertSame($expected, \call_user_func_array([$t, $test], $testParams));
         } else {
-            $this->assertSame($expected, call_user_func([$t, $test], $testParams));
+            $this->assertSame($expected, \call_user_func([$t, $test], $testParams));
         }
     }
 
@@ -112,10 +114,10 @@ class AssignTest extends TestCase
         $arry = [
             'a' => [
                 'b_key' => 'b_val',
-                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]]
+                'b' => ['d_key' => 'd_val', 'c' => ['d' => ['e' => 'f']]],
             ],
             1 => [2 => [3 => 4, 5 => 6, 'abc' => 'abc']],
-            's' => 1
+            's' => 1,
         ];
 
         return [
@@ -133,8 +135,8 @@ class AssignTest extends TestCase
             [['test_index' => 'value'],   'testArrayVarAssign2', ['test_index', 'value']],
             [$arry,                       'testPropertyArray14'],
             [$arry,                       'testStaticPropertyArrayMulti4'],
-            [["test", 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
-            [["a" => true, "b" => false], 'testArrayBoolExpressionAssign'],
+            [['test', 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
+            [['a' => true, 'b' => false], 'testArrayBoolExpressionAssign'],
         ];
     }
 
@@ -142,7 +144,7 @@ class AssignTest extends TestCase
     {
         $t = new Assign();
 
-        /**
+        /*
          * @see LetStatement::_assignArrayIndexSingle();
          */
         $this->assertTrue(!isset($_POST['test_index']));

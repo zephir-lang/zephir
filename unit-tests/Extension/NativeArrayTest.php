@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\NativeArray;
-use Zephir\Support\TestCase;
 
 class NativeArrayTest extends TestCase
 {
@@ -24,19 +24,19 @@ class NativeArrayTest extends TestCase
         $this->assertSame([1.1, 2.2, 3.3], $t->testArray3());
         $this->assertSame([false, true, false], $t->testArray4());
         $this->assertSame([null, null, null], $t->testArray5());
-        $this->assertSame(["x", "y", "z"], $t->testArray6());
+        $this->assertSame(['x', 'y', 'z'], $t->testArray6());
         $this->assertSame([1, 2, 3], $t->testArray7());
         $this->assertSame([1.0, 2.0, 3.0], $t->testArray8());
         $this->assertSame([true, false, true], $t->testArray9());
-        $this->assertSame(["hello1",  "hello2",  "hello3"], $t->testArray10());
+        $this->assertSame(['hello1',  'hello2',  'hello3'], $t->testArray10());
         $this->assertSame([[1, 2, 3], [4, 5, 6]], $t->testArray11());
         $this->assertSame([[[1, 2, 3]]], $t->testArray12());
-        $this->assertSame([1 => "hello1", 2 => "hello2", 3 => "hello3"], $t->testArray13());
-        $this->assertSame(["hello1" => 1, "hello2" => 2, "hello3" => 3], $t->testArray14());
-        $this->assertSame(["hello1" => true, "hello2" => false, "hello3" => true], $t->testArray15());
-        $this->assertSame(["hello1" => 1.0, "hello2" => 2.0, "hello3" => 3.0], $t->testArray16());
-        $this->assertSame(["hello1" => null, "hello2" => null, "hello3" => null], $t->testArray17());
-        $this->assertSame(["hello1" => "a", "hello2" => "b", "hello3" => "c"], $t->testArray18());
+        $this->assertSame([1 => 'hello1', 2 => 'hello2', 3 => 'hello3'], $t->testArray13());
+        $this->assertSame(['hello1' => 1, 'hello2' => 2, 'hello3' => 3], $t->testArray14());
+        $this->assertSame(['hello1' => true, 'hello2' => false, 'hello3' => true], $t->testArray15());
+        $this->assertSame(['hello1' => 1.0, 'hello2' => 2.0, 'hello3' => 3.0], $t->testArray16());
+        $this->assertSame(['hello1' => null, 'hello2' => null, 'hello3' => null], $t->testArray17());
+        $this->assertSame(['hello1' => 'a', 'hello2' => 'b', 'hello3' => 'c'], $t->testArray18());
         $this->assertSame([0 => true, 1 => false, 2 => true], $t->testArray19());
         $this->assertSame([0 => 1.0, 1 => 2.0, 2 => 3.0], $t->testArray20());
         $this->assertSame([0 => null, 1 => null, 2 => null], $t->testArray21());
@@ -58,10 +58,10 @@ class NativeArrayTest extends TestCase
     public function testArrayMultipleAccess()
     {
         $t = new NativeArray();
-        $this->assertSame("a", $t->testArrayMultipleAccess1());
-        $this->assertSame("b", $t->testArrayMultipleAccess2());
-        $this->assertSame("b", $t->testArrayMultipleAccess3());
-        $this->assertSame("b", $t->testArrayMultipleAccess4());
+        $this->assertSame('a', $t->testArrayMultipleAccess1());
+        $this->assertSame('b', $t->testArrayMultipleAccess2());
+        $this->assertSame('b', $t->testArrayMultipleAccess3());
+        $this->assertSame('b', $t->testArrayMultipleAccess4());
         $this->assertSame(0, $t->testArrayMultipleAccess5());
     }
 
@@ -71,7 +71,7 @@ class NativeArrayTest extends TestCase
         $this->assertSame([4, 2, 3], $t->testArrayUpdate1());
         $this->assertSame([4, 2, 3], $t->testArrayUpdate2());
         $this->assertSame([4, 5, 3], $t->testArrayUpdate3());
-        $this->assertSame(["a" => 4, "b" => 2, "c" => 3], $t->testArrayUpdate4());
+        $this->assertSame(['a' => 4, 'b' => 2, 'c' => 3], $t->testArrayUpdate4());
     }
 
     public function testMultipleArrayUpdate()
@@ -121,38 +121,38 @@ class NativeArrayTest extends TestCase
         $t = new NativeArray();
         $t->issue743a([42 => []]);
 
-        $expected = [42 => ["str" => "ok"]];
+        $expected = [42 => ['str' => 'ok']];
         $this->assertSame($expected, $t->issue743a([42 => []]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => null]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => 42.7]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => 42]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => true]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => "bad"]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => []]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => ["hey"]]]));
-        $this->assertSame($expected, $t->issue743a([42 => ["str" => new \stdClass()]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => null]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => 42.7]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => 42]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => true]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => 'bad']]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => []]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => ['hey']]]));
+        $this->assertSame($expected, $t->issue743a([42 => ['str' => new \stdClass()]]));
 
-        $expected = ["str" => [42 => "ok"]];
-        $this->assertSame($expected, $t->issue743b(["str" => []]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => null]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => 42.7]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => 42]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => true]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => "bad"]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => []]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => ["hey"]]]));
-        $this->assertSame($expected, $t->issue743b(["str" => [42 => new \stdClass()]]));
+        $expected = ['str' => [42 => 'ok']];
+        $this->assertSame($expected, $t->issue743b(['str' => []]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => null]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => 42.7]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => 42]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => true]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => 'bad']]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => []]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => ['hey']]]));
+        $this->assertSame($expected, $t->issue743b(['str' => [42 => new \stdClass()]]));
 
-        $expected = ["str" => ["hey" => "ok"]];
-        $this->assertSame($expected, $t->issue743c(["str" => []]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => null]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => 42.7]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => 42]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => true]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => "bad"]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => []]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => ["hey"]]]));
-        $this->assertSame($expected, $t->issue743c(["str" => ["hey" => new \stdClass()]]));
+        $expected = ['str' => ['hey' => 'ok']];
+        $this->assertSame($expected, $t->issue743c(['str' => []]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => null]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => 42.7]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => 42]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => true]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => 'bad']]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => []]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => ['hey']]]));
+        $this->assertSame($expected, $t->issue743c(['str' => ['hey' => new \stdClass()]]));
     }
 
     public function testIssue709()

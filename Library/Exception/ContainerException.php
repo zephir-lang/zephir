@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,9 +14,7 @@ namespace Zephir\Exception;
 use Psr\Container\ContainerExceptionInterface;
 
 /**
- * Zephir\Exception\ContainerException
- *
- * @package Zephir\Exception
+ * Zephir\Exception\ContainerException.
  */
 class ContainerException extends RuntimeException implements ContainerExceptionInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,50 +12,54 @@
 namespace Zephir;
 
 /**
- * Class HeadersManager
+ * Class HeadersManager.
  *
  * Manages the c-headers that must be added to a file
  */
 class HeadersManager
 {
     /**
-     * Insert the header at the beginning of the header list
+     * Insert the header at the beginning of the header list.
      */
     const POSITION_FIRST = 1;
 
     /**
-     * Insert the header at the end of the header list
+     * Insert the header at the end of the header list.
      */
     const POSITION_LAST = 2;
 
     /**
-     * List of headers
+     * List of headers.
+     *
      * @var array
      */
-    protected $headers = array();
+    protected $headers = [];
 
     /**
-     * List of headers
+     * List of headers.
+     *
      * @var array
      */
-    protected $headersFirst = array();
+    protected $headersFirst = [];
 
     /**
-     * List of headers
+     * List of headers.
+     *
      * @var array
      */
-    protected $headersLast = array();
+    protected $headersLast = [];
 
     /**
-     * Adds a header path to the manager
+     * Adds a header path to the manager.
      *
      * @param string $path
-     * @param int $position
+     * @param int    $position
+     *
      * @throws \InvalidArgumentException
      */
     public function add($path, $position = 0)
     {
-        if (!is_string($path)) {
+        if (!\is_string($path)) {
             throw new \InvalidArgumentException('$path must be only string type');
         }
 
@@ -76,7 +80,7 @@ class HeadersManager
     }
 
     /**
-     * Returns a set of headers merged
+     * Returns a set of headers merged.
      *
      * @return array
      */

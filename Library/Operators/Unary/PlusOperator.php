@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,26 +11,28 @@
 
 namespace Zephir\Operators\Unary;
 
-use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
-use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 class PlusOperator extends BaseOperator
 {
     /**
-     * Compile expression
+     * Compile expression.
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Missing left part of the expression");
+            throw new CompilerException('Missing left part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -43,7 +45,7 @@ class PlusOperator extends BaseOperator
             case 'long':
             case 'ulong':
             case 'double':
-                return new CompiledExpression($left->getType(), '+' . $left->getCode(), $expression);
+                return new CompiledExpression($left->getType(), '+'.$left->getCode(), $expression);
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariable($left->getCode());
@@ -53,18 +55,18 @@ class PlusOperator extends BaseOperator
                     case 'long':
                     case 'ulong':
                     case 'double':
-                        return new CompiledExpression($variable->getType(), '+' . $variable->getName(), $expression);
+                        return new CompiledExpression($variable->getType(), '+'.$variable->getName(), $expression);
 
                     case 'variable':
                         return new CompiledExpression('variable', $variable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot operate plus with variable of '" . $left->getType() . "' type");
+                        throw new CompilerException("Cannot operate plus with variable of '".$left->getType()."' type");
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot operate plus with '" . $left->getType() . "' type");
+                throw new CompilerException("Cannot operate plus with '".$left->getType()."' type");
         }
     }
 }

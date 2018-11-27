@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,8 +12,7 @@
 namespace Zephir\Expression\Builder;
 
 /**
- * Class AbstractBuilder
- * @package Zephir\Builder
+ * Class AbstractBuilder.
  */
 abstract class AbstractBuilder
 {
@@ -23,8 +22,9 @@ abstract class AbstractBuilder
 
     /**
      * @param string $file
-     * @param int $line
-     * @param null $char
+     * @param int    $line
+     * @param null   $char
+     *
      * @return $this
      */
     public function setParseInfo($file, $line, $char = null)
@@ -32,7 +32,7 @@ abstract class AbstractBuilder
         $this->setFile($file);
         $this->setLine($line);
 
-        if ($char !== null) {
+        if (null !== $char) {
             $this->setChar($char);
         }
 
@@ -41,11 +41,13 @@ abstract class AbstractBuilder
 
     /**
      * @param string $file
+     *
      * @return AbstractBuilder
      */
     public function setFile($file)
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -59,11 +61,13 @@ abstract class AbstractBuilder
 
     /**
      * @param string $line
+     *
      * @return AbstractBuilder
      */
     public function setLine($line)
     {
         $this->line = $line;
+
         return $this;
     }
 
@@ -77,11 +81,13 @@ abstract class AbstractBuilder
 
     /**
      * @param int $char
+     *
      * @return AbstractBuilder
      */
     public function setChar($char)
     {
         $this->char = $char;
+
         return $this;
     }
 
@@ -111,15 +117,15 @@ abstract class AbstractBuilder
     {
         $expression = $this->preBuild();
 
-        if (!isset($expression['file']) && (($file = $this->getFile()) && $file !== null)) {
+        if (!isset($expression['file']) && (($file = $this->getFile()) && null !== $file)) {
             $expression['file'] = $file;
         }
 
-        if (!isset($expression['line']) && (($line = $this->getLine()) && $line !== null)) {
+        if (!isset($expression['line']) && (($line = $this->getLine()) && null !== $line)) {
             $expression['line'] = $line;
         }
 
-        if (!isset($expression['char']) && (($char = $this->getChar()) && $char !== null)) {
+        if (!isset($expression['char']) && (($char = $this->getChar()) && null !== $char)) {
             $expression['char'] = $char;
         }
 
@@ -133,11 +139,12 @@ abstract class AbstractBuilder
 
     /**
      * @param $expr
+     *
      * @return array
      */
     protected function resolve($expr)
     {
-        if (is_array($expr)) {
+        if (\is_array($expr)) {
             foreach ($expr as &$value) {
                 if (!is_scalar($value)) {
                     $value = $this->resolve($value);
@@ -147,7 +154,7 @@ abstract class AbstractBuilder
             return $expr;
         }
 
-        if (is_object($expr) && $expr instanceof AbstractBuilder) {
+        if (\is_object($expr) && $expr instanceof self) {
             return $expr->build();
         }
 

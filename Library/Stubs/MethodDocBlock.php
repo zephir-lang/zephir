@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,7 +15,8 @@ use Zephir\AliasManager;
 use Zephir\ClassMethod;
 
 /**
- * Stubs Generator
+ * Stubs Generator.
+ *
  * @todo: Merge class with documentation generator
  */
 class MethodDocBlock extends DocBlock
@@ -59,7 +60,7 @@ class MethodDocBlock extends DocBlock
         if ($returnTypes) {
             foreach ($returnTypes as $type) {
                 if (isset($type['data-type'])) {
-                    $return[] = $type['data-type'] == 'variable' ? 'mixed' : $type['data-type'];
+                    $return[] = 'variable' == $type['data-type'] ? 'mixed' : $type['data-type'];
                 }
             }
         }
@@ -68,7 +69,7 @@ class MethodDocBlock extends DocBlock
         if ($returnClassTypes) {
             foreach ($returnClassTypes as $key => $returnClassType) {
                 if ($this->aliasManager->isAlias($returnClassType)) {
-                    $returnClassTypes[$key] = "\\" . $this->aliasManager->getAlias($returnClassType);
+                    $returnClassTypes[$key] = '\\'.$this->aliasManager->getAlias($returnClassType);
                 }
             }
 
@@ -84,14 +85,14 @@ class MethodDocBlock extends DocBlock
                         continue;
                     }
 
-                    $key  = $returnType['cast']['value'];
+                    $key = $returnType['cast']['value'];
                     $type = $key;
 
                     if ($this->aliasManager->isAlias($type)) {
-                        $type = "\\" . $this->aliasManager->getAlias($type);
+                        $type = '\\'.$this->aliasManager->getAlias($type);
                     }
 
-                    $return[$key] = $type . '[]';
+                    $return[$key] = $type.'[]';
                 }
             }
         }
@@ -106,7 +107,7 @@ class MethodDocBlock extends DocBlock
         $lines = [];
 
         foreach ($this->lines as $line) {
-            if (preg_match('#^@(param|return|var) +(.*)$#', $line, $matches) === 0) {
+            if (0 === preg_match('#^@(param|return|var) +(.*)$#', $line, $matches)) {
                 $lines[] = $line;
             } else {
                 list(, $docType, $tokens) = $matches;
@@ -114,18 +115,18 @@ class MethodDocBlock extends DocBlock
                 $tokens = preg_split('/\s+/', $tokens, 3);
                 $type = $tokens[0];
 
-                if ($docType == 'var' && $this->shortcutName == 'set') {
+                if ('var' == $docType && 'set' == $this->shortcutName) {
                     $docType = 'param';
                     $name = array_keys($this->parameters);
                     $name = $name[0];
-                } elseif ($docType == 'var' && $this->shortcutName == 'get') {
+                } elseif ('var' == $docType && 'get' == $this->shortcutName) {
                     $docType = 'return';
                 } else {
-                    $name = isset($tokens[1]) ? '$' . trim($tokens[1], '$') : '';
+                    $name = isset($tokens[1]) ? '$'.trim($tokens[1], '$') : '';
                 }
 
                 // TODO: there must be a better way
-                if (strpos($type, 'Phalcon\\') === 0) {
+                if (0 === strpos($type, 'Phalcon\\')) {
                     $type = str_replace('Phalcon\\', '\Phalcon\\', $type);
                 }
 
@@ -133,10 +134,10 @@ class MethodDocBlock extends DocBlock
 
                 switch ($docType) {
                     case 'param':
-                        $this->parameters[$name] = array($type, $description);
+                        $this->parameters[$name] = [$type, $description];
                         break;
                     case 'return':
-                        $this->return = array($type, $description);
+                        $this->return = [$type, $description];
                         break;
                 }
             }
@@ -149,8 +150,8 @@ class MethodDocBlock extends DocBlock
     {
         list($type, $description) = $this->return;
 
-        $return = $type . ' ' . $description;
-        $this->lines[] = '@return ' . trim($return, ' ');
+        $return = $type.' '.$description;
+        $this->lines[] = '@return '.trim($return, ' ');
     }
 
     private function parseMethodParameters(ClassMethod $method)
@@ -165,12 +166,12 @@ class MethodDocBlock extends DocBlock
         foreach ($method->getParameters() as $parameter) {
             if (isset($parameter['cast'])) {
                 if ($aliasManager->isAlias($parameter['cast']['value'])) {
-                    $type = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
+                    $type = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
                 } else {
                     $type = $parameter['cast']['value'];
                 }
             } elseif (isset($parameter['data-type'])) {
-                if ($parameter['data-type'] == 'variable') {
+                if ('variable' == $parameter['data-type']) {
                     $type = 'mixed';
                 } else {
                     $type = $parameter['data-type'];
@@ -178,7 +179,7 @@ class MethodDocBlock extends DocBlock
             } else {
                 $type = 'mixed';
             }
-            $this->parameters['$' . trim($parameter['name'], '$')] = array($type, '');
+            $this->parameters['$'.trim($parameter['name'], '$')] = [$type, ''];
         }
     }
 
@@ -187,8 +188,8 @@ class MethodDocBlock extends DocBlock
         foreach ($this->parameters as $name => $parameter) {
             list($type, $description) = $parameter;
 
-            $param = $type . ' ' . $name . ' ' . $description;
-            $this->lines[] = '@param ' . trim($param, ' ');
+            $param = $type.' '.$name.' '.$description;
+            $this->lines[] = '@param '.trim($param, ' ');
         }
 
         if ($this->deprecated) {

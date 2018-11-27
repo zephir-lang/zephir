@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+if (!file_exists(__DIR__.'/Library')) {
+    exit(0);
+}
+
+$header = <<<'EOF'
+This file is part of the Zephir.
+
+(c) Zephir Team <team@zephir-lang.com>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+EOF;
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__)
+    ->append([__FILE__])
+    ->exclude([
+        'ext',
+        'ide',
+        'templates/ZendEngine2',
+        'templates/ZendEngine3',
+    ]);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setFinder($finder)
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        '@PHPUnit48Migration:risky' => true,
+        'php_unit_no_expectation_annotation' => false,
+        'array_syntax' => ['syntax' => 'short'],
+        'fopen_flags' => false,
+        'ordered_imports' => ['sortAlgorithm' => 'alpha'],
+        'protected_to_private' => false,
+        'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
+    ]);

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,27 +12,25 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * CallMethodStatement
+ * CallMethodStatement.
  *
  * Allows to manually build a method call AST node
  */
 class CallMethodStatement extends CallFunctionStatement
 {
-
     private $variable;
 
-
     /**
-     * @param null $variable
-     * @param null $name
+     * @param null       $variable
+     * @param null       $name
      * @param array|null $parameters
-     * @param int $type
+     * @param int        $type
      */
     public function __construct($variable = null, $name = null, array $parameters = null, $type = self::TYPE_CALL_DIRECT)
     {
         parent::__construct($name, $parameters, $type);
 
-        if ($name !== null) {
+        if (null !== $name) {
             $this->setVariable($variable);
         }
     }
@@ -47,11 +45,13 @@ class CallMethodStatement extends CallFunctionStatement
 
     /**
      * @param $variable
+     *
      * @return $this
      */
     public function setVariable($variable)
     {
         $this->variable = $variable;
+
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,7 +14,7 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * LoopBreakPass
+ * LoopBreakPass.
  *
  * This pass checks if the statement block related to a 'loop' loop has at least a 'break'
  * statement disallowing full infinite loops
@@ -24,7 +24,7 @@ class LoopBreakPass
     protected $hasBreak = false;
 
     /**
-     * Do the compilation pass
+     * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */

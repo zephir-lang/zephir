@@ -13,19 +13,19 @@ return [
     'class' => [
         'namespace' => 'Zephir\Stubs',
         'className' => 'Stubs',
-        'classShortName' => 'get'
+        'classShortName' => 'get',
     ],
     'method' => [
         'visibility' => ['public'],
-        'name'       => 'testMethodWithFullDocBlock',
+        'name' => 'testMethodWithFullDocBlock',
         'parameters' => [
             ['data-type' => 'int', 'name' => 'val1'],
             ['data-type' => 'string', 'name' => 'val2'],
             ['data-type' => 'array', 'name' => '$val3'],
         ],
         'statements' => [],
-        'docblock'   => null,
+        'docblock' => null,
         'returnType' => null,
-        'expression' => null
-    ]
+        'expression' => null,
+    ],
 ];

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -39,32 +39,32 @@ class DocBlock
     {
         $this->indent = $indent;
         $lines = explode("\n", trim($source));
-        $count = count($lines);
+        $count = \count($lines);
 
         foreach ($lines as $i => $line) {
             $line = preg_replace('#^([\s\t]+)?/?([*]+)([\s\t]+)?$#im', '', rtrim($line));
             $line = preg_replace('#^([\s\t]+)?([*]+)([\s\t]+)?/?$#im', '', rtrim($line));
 
-            if (($i === 0 || $i === $count - 1) && empty($line)) {
+            if ((0 === $i || $i === $count - 1) && empty($line)) {
                 continue;
             }
 
             $cleaned = trim($line, "\t*\0 ");
             $cleaned = str_replace('$$', '$', $cleaned);
 
-            if (strpos($cleaned, '@') === 0) {
+            if (0 === strpos($cleaned, '@')) {
                 $this->lines[] = $line = $cleaned;
             } else {
                 $line = preg_replace('#([\s\t]+)?[*]#', '', $line);
-                $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * ' . $line);
+                $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * '.$line);
                 $line = preg_replace('#[*]([\s\t]){1,}$#', '*', $line);
                 $line = preg_replace('#\t#', $indent, $line);
 
-                $this->lines[] = array_pop($this->lines) . "\n{$this->indent}" . $line;
+                $this->lines[] = array_pop($this->lines)."\n{$this->indent}".$line;
             }
         }
 
-        if (!empty($this->lines) && strpos(trim($this->lines[0], "\t*\0 "), '@') !== 0) {
+        if (!empty($this->lines) && 0 !== strpos(trim($this->lines[0], "\t*\0 "), '@')) {
             $description = array_shift($this->lines);
             $description = explode("\n", $description);
 
@@ -72,7 +72,7 @@ class DocBlock
             $empty = 0;
             foreach ($description as $i => $line) {
                 if (preg_match('#^([\s\t]+)?[*]([\s\t]+)?$#', $line)) {
-                    $empty++;
+                    ++$empty;
                 } else {
                     $empty = 0;
                 }
@@ -85,7 +85,7 @@ class DocBlock
             }
 
             $reversed = array_reverse($cleaned);
-            if (empty($reversed[0]) || trim($reversed[0], "\t*\0 ") === '') {
+            if (empty($reversed[0]) || '' === trim($reversed[0], "\t*\0 ")) {
                 unset($reversed[0]);
             }
 
@@ -114,9 +114,9 @@ class DocBlock
                 $doc .= "\n$indent *";
             }
 
-            $doc .= "\n" . implode("\n", $lines);
+            $doc .= "\n".implode("\n", $lines);
         }
 
-        return $doc === '' ? '' : "$indent/**$doc\n$indent */";
+        return '' === $doc ? '' : "$indent/**$doc\n$indent */";
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,18 +11,18 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Config;
-use Zephir\Exception;
-use Zephir\CompilerFile;
 use Zephir\ClassDefinition;
+use Zephir\CompilerFile;
+use Zephir\Config;
 use Zephir\Documentation;
+use Zephir\Exception;
 
 class Template
 {
     protected $template;
     protected $data;
     protected $nestedLevel;
-    protected $pathToRoot = "./";
+    protected $pathToRoot = './';
     protected $themeOptions;
     protected $theme;
     /**
@@ -34,7 +34,7 @@ class Template
     {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
-            throw new Exception("Recursive inclusion detected in theme creation");
+            throw new Exception('Recursive inclusion detected in theme creation');
         }
 
         $this->theme = $theme;
@@ -43,8 +43,24 @@ class Template
         $this->nestedLevel = $nestedLevel;
     }
 
+    private function __getTemplatePath($fileName)
+    {
+        if ('/' == $fileName[0] || 0 === strpos($fileName, 'phar://')) {
+            return $fileName;
+        }
+
+        $inputFilename = $this->theme->getThemePathExtendsAware($fileName);
+
+        if (!file_exists($inputFilename)) {
+            throw new Exception("Template not found : $inputFilename");
+        }
+
+        return $inputFilename;
+    }
+
     /**
-     * set a variable that will be accessible in the template
+     * set a variable that will be accessible in the template.
+     *
      * @param $name
      * @param $value
      */
@@ -54,8 +70,10 @@ class Template
     }
 
     /**
-     * get a variable set with setVar()
+     * get a variable set with setVar().
+     *
      * @param $name
+     *
      * @return bool
      */
     public function getVar($name)
@@ -64,7 +82,8 @@ class Template
     }
 
     /**
-     * find the value in the project configuration (e.g the version)
+     * find the value in the project configuration (e.g the version).
+     *
      * @param string $name the name of the config to get
      */
     public function projectConfig($name)
@@ -77,16 +96,18 @@ class Template
     }
 
     /**
-     * find the value of an option of the theme
+     * find the value of an option of the theme.
+     *
      * @param string $name the name of the option to get
      */
     public function themeOption($name)
     {
-        return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null ;
+        return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null;
     }
 
     /**
-     * set the config of the project (it usually wraps the version, the theme config, etc...)
+     * set the config of the project (it usually wraps the version, the theme config, etc...).
+     *
      * @param array $projectConfig
      */
     public function setProjectConfig($projectConfig)
@@ -95,7 +116,8 @@ class Template
     }
 
     /**
-     * add theme options to make them available during the render phase
+     * add theme options to make them available during the render phase.
+     *
      * @param array $themeOptions
      */
     public function setThemeOptions($themeOptions)
@@ -104,21 +126,22 @@ class Template
     }
 
     /**
-     * get a value from the theme config (theme.json file placed inside the theme directory)
+     * get a value from the theme config (theme.json file placed inside the theme directory).
      */
     public function getAssets()
     {
-        $css = $this->theme->getThemeInfoExtendAware("css");
-        $js = $this->theme->getThemeInfoExtendAware("javascript");
+        $css = $this->theme->getThemeInfoExtendAware('css');
+        $js = $this->theme->getThemeInfoExtendAware('javascript');
 
-        return array(
-            "css" => $css,
-            "javascript"  => $js
-        );
+        return [
+            'css' => $css,
+            'javascript' => $js,
+        ];
     }
 
     /**
-     * the path to root for the hyperlink in the templates
+     * the path to root for the hyperlink in the templates.
+     *
      * @param string $pathToRoot
      */
     public function setPathToRoot($pathToRoot)
@@ -127,17 +150,18 @@ class Template
     }
 
     /**
-     * Generate an url relative to the current directory
+     * Generate an url relative to the current directory.
      *
      * @param string $url the url we want to reach
+     *
      * @return string the relative path to the url
      */
     public function url($url)
     {
-        if (is_string($url)) {
-            if ($url{0} == "/") {
-                return $this->getPathToRoot() . ltrim($url, "/");
-            } elseif (is_string($url)) {
+        if (\is_string($url)) {
+            if ('/' == $url[0]) {
+                return $this->getPathToRoot().ltrim($url, '/');
+            } elseif (\is_string($url)) {
                 return $url;
             }
         } elseif ($url instanceof ClassDefinition) {
@@ -146,7 +170,7 @@ class Template
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
         }
 
-        return "";
+        return '';
     }
 
     /**
@@ -159,7 +183,7 @@ class Template
 
     public function asset($name)
     {
-        return $this->getPathToRoot() . "asset/" . rtrim($name);
+        return $this->getPathToRoot().'asset/'.rtrim($name);
     }
 
     public function write($outputFile)
@@ -175,32 +199,17 @@ class Template
         }
         $path = $this->__getTemplatePath($this->template);
         ob_start();
-        include($path);
+        include $path;
         $content = ob_get_clean();
 
         return $content;
     }
 
-    private function __getTemplatePath($fileName)
+    public function partial($fileName, array $data = [])
     {
-        if ("/" == $fileName{0} || strpos($fileName, 'phar://') === 0) {
-            return $fileName;
-        }
+        $newLevel = $this->nestedLevel + 1;
 
-        $inputFilename = $this->theme->getThemePathExtendsAware($fileName);
-
-        if (!file_exists($inputFilename)) {
-            throw new Exception("Template not found : $inputFilename");
-        }
-
-        return $inputFilename;
-    }
-
-    public function partial($fileName, array $data = array())
-    {
-        $newLevel = $this->nestedLevel+1;
-
-        $template = new Template($this->theme, array_merge($this->data, $data), $fileName, $newLevel);
+        $template = new self($this->theme, array_merge($this->data, $data), $fileName, $newLevel);
         $template->setPathToRoot($this->getPathToRoot());
         $template->setThemeOptions($this->themeOptions);
         $template->setProjectConfig($this->projectConfig);

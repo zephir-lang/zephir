@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ExitDieTest extends TestCase
 {
@@ -20,19 +20,17 @@ class ExitDieTest extends TestCase
 
     /**
      * {@inheritdoc}
-     *
-     * @return void
      */
     public function setUp()
     {
-        $this->phpBinary = constant('PHP_BINARY');
+        $this->phpBinary = \constant('PHP_BINARY');
         /* If we use phpdbg, you need to add options -qrr */
-        if (defined('PHP_SAPI') && constant('PHP_SAPI') == 'phpdbg') {
+        if (\defined('PHP_SAPI') && 'phpdbg' == \constant('PHP_SAPI')) {
             $this->phpBinary .= ' -qrr';
         }
 
         $this->phpBinary .= " -d 'enable_dl=true'";
-        $extension = realpath( __DIR__ . '/../../ext/modules/test.so');
+        $extension = realpath(__DIR__.'/../../ext/modules/test.so');
 
         if (file_exists($extension)) {
             $this->phpBinary .= sprintf(" -d 'extension=%s'", $extension);
@@ -44,7 +42,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthoutAnyMessage()
     {
-        $testfile = __DIR__ . '/../fixtures/exit.php';
+        $testfile = __DIR__.'/../fixtures/exit.php';
         $command = "$this->phpBinary $testfile";
         $output = [];
 
@@ -66,7 +64,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthProvidedStatusMessage()
     {
-        $testfile = __DIR__ . '/../fixtures/exit_string.php';
+        $testfile = __DIR__.'/../fixtures/exit_string.php';
         $statusMessage = 'Hello World';
         $command = "$this->phpBinary $testfile \"$statusMessage\"";
         $output = [];
@@ -89,7 +87,7 @@ class ExitDieTest extends TestCase
     /** @test */
     public function shouldExitWthProvidedStatusCode()
     {
-        $testfile = __DIR__ . '/../fixtures/exit_int.php';
+        $testfile = __DIR__.'/../fixtures/exit_int.php';
         $statusCode = 220;
         $command = "$this->phpBinary $testfile $statusCode";
         $output = [];

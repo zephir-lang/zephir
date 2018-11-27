@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * LetStatement
+ * LetStatement.
  *
  * Allows to manually build a 'let' statement AST node
  */
@@ -25,7 +25,7 @@ class LetStatement extends AbstractStatement
      */
     public function __construct(array $assignments = null)
     {
-        if ($assignments !== null) {
+        if (null !== $assignments) {
             $this->setAssignments($assignments);
         }
     }
@@ -40,21 +40,25 @@ class LetStatement extends AbstractStatement
 
     /**
      * @param array $assignments
+     *
      * @return $this
      */
     public function setAssignments($assignments)
     {
         $this->assignments = $assignments;
+
         return $this;
     }
 
     /**
      * @param mixed $assignment
+     *
      * @return $this
      */
     public function addAssignment($assignment)
     {
         $this->assignments[] = $assignment;
+
         return $this;
     }
 
@@ -63,9 +67,9 @@ class LetStatement extends AbstractStatement
      */
     protected function preBuild()
     {
-        return array(
+        return [
             'type' => 'let',
-            'assignments' => $this->getAssignments()
-        );
+            'assignments' => $this->getAssignments(),
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TypeoffTest extends TestCase
 {
@@ -73,8 +73,8 @@ class TypeoffTest extends TestCase
         $this->assertSame('integer', $t->testUnknownTypeOf(5));
         $this->assertSame('boolean', $t->testUnknownTypeOf(true));
         $this->assertSame('double', $t->testUnknownTypeOf(5.5));
-        $this->assertSame('array', $t->testUnknownTypeOf(array()));
-        $this->assertSame('object', $t->testUnknownTypeOf(new \stdClass));
+        $this->assertSame('array', $t->testUnknownTypeOf([]));
+        $this->assertSame('object', $t->testUnknownTypeOf(new \stdClass()));
         $this->assertSame('NULL', $t->testUnknownTypeOf(null));
     }
 }

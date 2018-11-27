@@ -17,7 +17,7 @@ gcov_report=${project_root}/unit-tests/output/lcov.info
 phpunit_report=${project_root}/unit-tests/output/clover.xml
 
 if [ -z ${COLLECT_COVERAGE+x} ] || [ "$COLLECT_COVERAGE" != "true" ]; then
-	printf "Uploading reports is not enabled.\nSkip uploading reports to Codecov.\n"
+	printf "Uploading coverage data is not enabled.\nSkip uploading reports to Codecov.\n"
 	exit 0
 fi
 

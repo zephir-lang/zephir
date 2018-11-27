@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,9 +11,9 @@
 
 namespace Extension;
 
+use PHPUnit\Framework\TestCase;
 use Test\Constants;
 use Test\Oo\ConstantsInterface;
-use Zephir\Support\TestCase;
 
 class ConstantsTest extends TestCase
 {
@@ -51,8 +51,8 @@ class ConstantsTest extends TestCase
         $this->assertTrue($this->test->getPropertyC3());
         $this->assertSame($this->test->getPropertyC4(), 10);
         $this->assertSame($this->test->getPropertyC5(), 10.25);
-        $this->assertSame($this->test->getPropertyC6(), "test");
-        $this->assertSame($this->test->getPropertyC9(), "some-value");
+        $this->assertSame($this->test->getPropertyC6(), 'test');
+        $this->assertSame($this->test->getPropertyC9(), 'some-value');
     }
 
     public function testConstantsRead()
@@ -66,10 +66,10 @@ class ConstantsTest extends TestCase
     public function testEnvConstants()
     {
         $phpVersion = $this->test->testPHPVersionEnvConstant();
-        $this->assertTrue(is_string($phpVersion) && !empty($phpVersion));
+        $this->assertTrue(\is_string($phpVersion) && !empty($phpVersion));
 
         $phpVersion = $this->test->testPHPVersionEnvConstantInExpValue();
-        $this->assertTrue(is_string($phpVersion) && !empty($phpVersion));
+        $this->assertTrue(\is_string($phpVersion) && !empty($phpVersion));
     }
 
     public function testMagickConstants()
@@ -85,11 +85,12 @@ class ConstantsTest extends TestCase
     }
 
     /**
-     * Test Constant declaration as String
+     * Test Constant declaration as String.
      *
      * @author Alexnder Andriiako <AlexNDR@phalconphp.com>
+     *
      * @since 2017-08-09
-     * @link https://github.com/phalcon/zephir/issues/1571
+     * @see https://github.com/phalcon/zephir/issues/1571
      */
     public function testStringDelimiterAsConstDoubleQuoted()
     {

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Operators;
 
 /**
- * CastOperatorBuilder
+ * CastOperatorBuilder.
  *
  * Allows to manually build a 'cast' operator AST node
  */
@@ -26,8 +26,8 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
      * @param $left
      * @param $right
      * @param null $file
-     * @param int $line
-     * @param int $char
+     * @param int  $line
+     * @param int  $char
      */
     public function __construct($left, $right, $file = null, $line = 0, $char = 0)
     {
@@ -39,19 +39,19 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
     }
 
     /**
-     * Returns a builder definition
+     * Returns a builder definition.
      *
      * @return array
      */
     public function get()
     {
-        return array(
-            'type'       => 'cast',
-            'left'       => $this->leftOperand,
-            'right'      => $this->rightOperand->get(),
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'char'       => $this->char
-        );
+        return [
+            'type' => 'cast',
+            'left' => $this->leftOperand,
+            'right' => $this->rightOperand->get(),
+            'file' => $this->file,
+            'line' => $this->line,
+            'char' => $this->char,
+        ];
     }
 }

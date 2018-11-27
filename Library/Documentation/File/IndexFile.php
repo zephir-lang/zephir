@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -28,20 +28,20 @@ class IndexFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "index.phtml";
+        return 'index.phtml';
     }
 
     public function getData()
     {
-        return array(
-            "namespaceAccessor" => $this->namespaceAccessor,
-            "namespacesTree" => $this->namespaceAccessor->getNamespaceTree(),
-            "namespaces" => $this->namespaceAccessor->getByNamespace()
-        );
+        return [
+            'namespaceAccessor' => $this->namespaceAccessor,
+            'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
+            'namespaces' => $this->namespaceAccessor->getByNamespace(),
+        ];
     }
 
     public function getOutputFile()
     {
-        return "index.html" ;
+        return 'index.html';
     }
 }

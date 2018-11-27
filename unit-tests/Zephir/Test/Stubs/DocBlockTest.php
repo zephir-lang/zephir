@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Zephir\Test\Stubs;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\Stubs\DocBlock;
-use Zephir\Support\TestCase;
 
 class DocBlockTest extends TestCase
 {
@@ -20,7 +20,7 @@ class DocBlockTest extends TestCase
     {
         $docBlock = new DocBlock('');
 
-        $this->assertSame('', (string)$docBlock);
+        $this->assertSame('', (string) $docBlock);
     }
 
     public function testDescription()
@@ -40,7 +40,7 @@ DOC;
 
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocs()
@@ -59,7 +59,7 @@ DOC;
 DOC;
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocWithDescription()
@@ -80,7 +80,7 @@ DOC;
 
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocWithCodeBloc()
@@ -127,7 +127,7 @@ DOC;
 
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocWithScalarParams()
@@ -179,7 +179,7 @@ DOC;
 DOC;
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocWithVariousDocBlockTags()
@@ -218,7 +218,7 @@ DOC;
 DOC;
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 
     public function testPhpDocWithDoubleDollarSymbols()
@@ -236,6 +236,6 @@ DOC;
 DOC;
         $docBlock = new DocBlock($doc);
 
-        $this->assertSame($expected, (string)$docBlock);
+        $this->assertSame($expected, (string) $docBlock);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,17 +11,17 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\Exception;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception;
+use Zephir\Exception\CompilerException;
+use Zephir\Expression;
+use Zephir\Operators\BaseOperator;
 
 /**
- * NewTypeInstance
+ * NewTypeInstance.
  *
  * Creates a value of the specified type with parameters
  */
@@ -30,12 +30,14 @@ class NewInstanceTypeOperator extends BaseOperator
     protected $literalOnly = false;
 
     /**
-     * Executes the operator
+     * Executes the operator.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException
+     *
      * @return CompiledExpression
-     * @throws \Zephir\Exception\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -55,7 +57,7 @@ class NewInstanceTypeOperator extends BaseOperator
                 break;
 
             default:
-                throw new CompilerException("Cannot build instance of type", $expression);
+                throw new CompilerException('Cannot build instance of type', $expression);
         }
 
         $builder = new FunctionCallBuilder(
@@ -68,7 +70,7 @@ class NewInstanceTypeOperator extends BaseOperator
         );
 
         /**
-         * Implicit type coercing
+         * Implicit type coercing.
          */
         $castBuilder = new CastOperatorBuilder($expression['internal-type'], $builder);
 

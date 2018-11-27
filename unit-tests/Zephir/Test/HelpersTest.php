@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Zephir\Test;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 use function Zephir\camelize;
 use function Zephir\escape_class;
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,30 +18,28 @@ use Zephir\Expression;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\PropertyAccess
+ * Zephir\Expression\PropertyAccess.
  *
  * Resolves expressions that read properties
- *
- * @package Zephir\Expression
  */
 class PropertyAccess
 {
-    /** @var boolean */
+    /** @var bool */
     protected $expecting = true;
 
-    /** @var boolean */
+    /** @var bool */
     protected $readOnly = false;
 
     protected $expectingVariable;
 
-    /** @var boolean */
+    /** @var bool */
     protected $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value
+     * create a temporary value or ignore the return value.
      *
-     * @param boolean $expecting
+     * @param bool     $expecting
      * @param Variable $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
@@ -51,9 +49,9 @@ class PropertyAccess
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only
+     * Sets if the result of the evaluated expression is read only.
      *
-     * @param boolean $readOnly
+     * @param bool $readOnly
      */
     public function setReadOnly($readOnly)
     {
@@ -61,9 +59,9 @@ class PropertyAccess
     }
 
     /**
-     * Sets whether the expression must be resolved in "noisy" mode
+     * Sets whether the expression must be resolved in "noisy" mode.
      *
-     * @param boolean $noisy
+     * @param bool $noisy
      */
     public function setNoisy($noisy)
     {
@@ -71,10 +69,11 @@ class PropertyAccess
     }
 
     /**
-     * Resolves the access to a property in an object
+     * Resolves the access to a property in an object.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -93,12 +92,12 @@ class PropertyAccess
                         break;
 
                     default:
-                        throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+                        throw new CompilerException('Variable type: '.$variableVariable->getType().' cannot be used as object', $propertyAccess['left']);
                 }
                 break;
 
             default:
-                throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+                throw new CompilerException('Cannot use expression: '.$exprVariable->getType().' as an object', $propertyAccess['left']);
         }
 
         $property = $propertyAccess['right']['value'];
@@ -107,18 +106,18 @@ class PropertyAccess
         $classDefinition = null;
         $currentClassDefinition = $compilationContext->classDefinition;
 
-        /**
+        /*
          * If the property is accessed on 'this', we check if the method does exist
          */
-        if ($variableVariable->getRealName() == 'this') {
+        if ('this' == $variableVariable->getRealName()) {
             $classDefinition = $currentClassDefinition;
             if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
+                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $expression);
             }
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
-            /**
+            /*
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -129,11 +128,11 @@ class PropertyAccess
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $expression);
+                        throw new CompilerException('Cannot locate class definition for class: '.$classType, $expression);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $expression);
+                        throw new CompilerException("Class '".$classType."' does not have a property called: '".$property."'", $expression);
                     }
 
                     $propertyDefinition = $classDefinition->getProperty($property);
@@ -141,17 +140,17 @@ class PropertyAccess
             }
         }
 
-        /**
+        /*
          * Having a proper propertyDefinition we can check if the property is readable
          * according to its modifiers
          */
         if ($propertyDefinition) {
             if ($propertyDefinition->isStatic()) {
-                throw new CompilerException("Attempt to access static property '" . $property . "' as non static", $expression);
+                throw new CompilerException("Attempt to access static property '".$property."' as non static", $expression);
             }
 
             if (!$propertyDefinition->isPublic()) {
-                /**
+                /*
                  * Protected variables only can be read in the class context
                  * where they were declared
                  */
@@ -159,7 +158,7 @@ class PropertyAccess
                     if ($propertyDefinition->isPrivate()) {
                         $declarationDefinition = $propertyDefinition->getClassDefinition();
                         if ($declarationDefinition !== $currentClassDefinition) {
-                            throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
+                            throw new CompilerException("Attempt to access private property '".$property."' outside of its declared class context: '".$declarationDefinition->getCompleteName()."'", $expression);
                         }
                     }
                 } else {
@@ -168,7 +167,7 @@ class PropertyAccess
                         if ($propertyDefinition->isPrivate()) {
                             $declarationDefinition = $propertyDefinition->getClassDefinition();
                             if ($declarationDefinition !== $currentClassDefinition) {
-                                throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
+                                throw new CompilerException("Attempt to access private property '".$property."' outside of its declared class context: '".$declarationDefinition->getCompleteName()."'", $expression);
                             }
                         }
                     }
@@ -177,7 +176,7 @@ class PropertyAccess
         }
 
         /**
-         * Resolves the symbol that expects the value
+         * Resolves the symbol that expects the value.
          */
         $readOnly = false;
         $makeSymbolVariable = false;
@@ -185,15 +184,15 @@ class PropertyAccess
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
 
-                /**
+                /*
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
-                if ($symbolVariable->getName() != 'return_value') {
+                if ('return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
-                    if ($line === false || ($line > 0 && $line < $expression['line'])) {
+                    if (false === $line || ($line > 0 && $line < $expression['line'])) {
                         $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-                        if ($numberMutations == 1) {
+                        if (1 == $numberMutations) {
                             if ($symbolVariable->getNumberMutations() == $numberMutations) {
                                 $symbolVariable->setMemoryTracked(false);
                                 $readOnly = true;
@@ -202,11 +201,11 @@ class PropertyAccess
                     }
                 }
 
-                /**
+                /*
                  * Variable is not read only or it wasn't promoted
                  */
                 if (!$readOnly) {
-                    if ($symbolVariable->getName() != 'return_value') {
+                    if ('return_value' != $symbolVariable->getName()) {
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
@@ -235,20 +234,19 @@ class PropertyAccess
             }
         }
 
-        /**
+        /*
          * Variable that receives a property value must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
         }
 
-        /**
+        /*
          * At this point, we don't know the exact dynamic type fetched from the property
          */
         $symbolVariable->setDynamicTypes('undefined');
 
         $compilationContext->headersManager->add('kernel/object');
-
 
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, $readOnly, $compilationContext, $useOptimized);
 

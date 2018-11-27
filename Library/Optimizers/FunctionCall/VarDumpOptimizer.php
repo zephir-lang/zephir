@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -18,16 +18,17 @@ use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
 
 /**
- * VarDumpOptimizer
+ * VarDumpOptimizer.
  *
  * Optimizes calls to 'var_dump' using internal function
  */
 class VarDumpOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
      * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
@@ -42,7 +43,7 @@ class VarDumpOptimizer extends OptimizerAbstract
         foreach ($resolvedParams as $resolvedParam) {
             $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
             if (!$variable || !$variable->isVariable()) {
-                /**
+                /*
                  * Complex expressions require a temporary variable
                  */
                 switch ($resolvedParam->getType()) {
@@ -57,36 +58,36 @@ class VarDumpOptimizer extends OptimizerAbstract
                 $variable = $context->symbolTable->addTemp($type, $context);
                 $variable->initVariant($context);
 
-                $statement = new LetStatement(array(
+                $statement = new LetStatement([
                     'type' => 'let',
-                    'assignments' => array(
-                        array(
+                    'assignments' => [
+                        [
                             'assign-type' => $type,
                             'variable' => $variable->getName(),
                             'operator' => 'assign',
-                            'expr' => array(
-                                'type'  => $resolvedParam->getType(),
+                            'expr' => [
+                                'type' => $resolvedParam->getType(),
                                 'value' => $resolvedParam->getCode(),
-                                'file'  => $expression['file'],
-                                'line'  => $expression['line'],
-                                'char'  => $expression['char'],
-                            ),
-                            'file'  => $expression['file'],
-                            'line'  => $expression['line'],
-                            'char'  => $expression['char'],
-                        )
-                    )
-                ));
+                                'file' => $expression['file'],
+                                'line' => $expression['line'],
+                                'char' => $expression['char'],
+                            ],
+                            'file' => $expression['file'],
+                            'line' => $expression['line'],
+                            'char' => $expression['char'],
+                        ],
+                    ],
+                ]);
                 $statement->compile($context);
             } else {
                 /**
-                 * This mark the variable as used
+                 * This mark the variable as used.
                  */
                 $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
             }
 
             $symbol = $context->backend->getVariableCodePointer($variable);
-            $context->codePrinter->output('zephir_var_dump(' . $symbol . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_var_dump('.$symbol.' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

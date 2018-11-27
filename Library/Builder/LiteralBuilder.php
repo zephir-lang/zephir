@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder;
 
 /**
- * LiteralBuilder
+ * LiteralBuilder.
  *
  * Allows to manually build a literal expressions AST nodes
  */
@@ -30,9 +30,9 @@ class LiteralBuilder
 
     public function get()
     {
-        return array(
-            'type'  => $this->type,
-            'value' => $this->value
-        );
+        return [
+            'type' => $this->type,
+            'value' => $this->value,
+        ];
     }
 }

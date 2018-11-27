@@ -5,8 +5,9 @@
 #
 # https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
 
-.temp/
+.zephir/
 .libs/
+.phpunit/
 ide/
 doc/
 vendor/
@@ -24,6 +25,8 @@ composer.lock
 
 phpunit.xml
 phpcs.xml
+.php_cs
+.php_cs.cache
 
 zephir.phar
 box.json

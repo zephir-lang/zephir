@@ -158,7 +158,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 	zephir_fetch_params(0, 1, 0, &age_param);
 
 	if (UNEXPECTED(Z_TYPE_P(age_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int") TSRMLS_CC);
 		RETURN_NULL();
 	}
 	age = Z_LVAL_P(age_param);
@@ -178,13 +178,30 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 	zephir_fetch_params(0, 1, 0, &average_param);
 
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be a double") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double") TSRMLS_CC);
 		RETURN_NULL();
 	}
 	average = Z_DVAL_P(average_param);
 
 
 	RETURN_DOUBLE(average);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictNameFromZephirLand) {
+
+	zval _0;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZVAL_LONG(&_0, 12345);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "setstrictname", NULL, 0, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
@@ -200,7 +217,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	zephir_fetch_params(1, 1, 0, &name_param);
 
 	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {

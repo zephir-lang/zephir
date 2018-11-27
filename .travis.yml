@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 php:
   - 'master'
@@ -30,6 +28,7 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.local/opt
+    - .phpunit
 
 env:
   global:
@@ -38,11 +37,23 @@ env:
     - COLLECT_COVERAGE=true
     - BOX_VERSION=3.3.1
     - PATH="${HOME}/bin:${PATH}"
+    - SYMFONY_PHPUNIT_VERSION=5.7.27
 
 before_install:
-  - if [ ! -z "${GITHUB_TOKEN}" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; echo "Add Github token"; fi
-  - ulimit -c unlimited -S
-  - mkdir -p ${HOME}/bin
+  - |
+      # General settins
+      set -e
+      stty cols 120
+      ulimit -c unlimited -S
+
+      export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
+
+      if [ ! -z "${GITHUB_TOKEN}" ]; then
+        composer config github-oauth.github.com ${GITHUB_TOKEN}
+        printf "Add Github token\n"
+      fi
+
+      [ -d ~/bin ] || mkdir ~/bin
 
 install:
   - .ci/install-prereqs.sh
@@ -55,18 +66,32 @@ install:
 
 before_script:
   - .ci/build-test-ext.sh
-  # https://github.com/phalcon/zephir/pull/1537
-  - echo 'variables_order=EGPCS' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  # https://github.com/phalcon/zephir/pull/1654
-  - echo 'enable_dl=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  # https://github.com/phalcon/zephir/issues/1713
-  - echo 'allow_url_include=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - echo 'allow_url_fopen=1' >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
   - zephir --ansi
-  - vendor/bin/phpcs
-  - php -d extension=ext/modules/test.so unit-tests/phpunit
+  - |
+      if [ "$(php-config --vernum)" -lt "70000" ]; then
+        test_suite="Extension_Php56"
+      elif [ "$(php-config --vernum)" -lt "70200" ]; then
+        test_suite="Extension_Php70"
+      else
+        test_suite="Extension_Php72"
+      fi
+
+      php \
+        -d extension=ext/modules/test.so \
+        vendor/bin/simple-phpunit \
+        --colors=always \
+        --bootstrap unit-tests/ext-bootstrap.php \
+        --testsuite $test_suite
+
+  - |
+      php \
+        -d extension=ext/modules/test.so \
+        vendor/bin/simple-phpunit \
+        --colors=always \
+        --testsuite Zephir
 
 after_success:
   - .ci/after-success.sh
@@ -76,7 +101,30 @@ jobs:
     - stage: Static Code Analysis
       php: 7.2
       env:
-        - CHECK=bashisms
+        - CHECK=php-cs-fixer
+        - COLLECT_COVERAGE=false
+      install:
+        - wget --no-clobber -O $HOME/bin/php-cs-fixer https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+      before_script:
+        - chmod +x $HOME/bin/php-cs-fixer
+      script:
+        - php-cs-fixer --diff --dry-run -v fix
+
+    - stage: Static Code Analysis
+      php: 7.2
+      env:
+        - CHECK=PHP_CodeSniffer
+        - COLLECT_COVERAGE=false
+      install:
+        - wget --no-clobber -O $HOME/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+      before_script:
+        - chmod +x $HOME/bin/phpcs
+      script:
+        - phpcs
+    - stage: Static Code Analysis
+      php: 7.2
+      env:
+        - CHECK=checkbashisms
         - COLLECT_COVERAGE=false
       install: true
       before_script: true

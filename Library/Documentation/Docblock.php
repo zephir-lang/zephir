@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Documentation;
 
 /**
- * Annotation
+ * Annotation.
  *
  * A parsed Annotation
  */
@@ -26,12 +26,20 @@ class Docblock
     /**
      * @var Annotation[]
      */
-    protected $annotations = array();
+    protected $annotations = [];
 
     /**
      * @var string
      */
     protected $summary;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->generate();
+    }
 
     /**
      * @return string
@@ -59,16 +67,18 @@ class Docblock
 
     /**
      * @param string $type the annotation name you want to get
+     *
      * @return Annotation[] an array containing the annotations matching the name
      */
     public function getAnnotationsByType($type)
     {
-        $annotations = array();
+        $annotations = [];
         foreach ($this->annotations as $an) {
             if ($an->getName() == $type) {
                 $annotations[] = $an;
             }
         }
+
         return $annotations;
     }
 
@@ -112,34 +122,26 @@ class Docblock
         $docBlock = '**';
 
         if ($summary = $this->getSummary()) {
-            $docBlock.= PHP_EOL . ' * ' . $summary;
+            $docBlock .= PHP_EOL.' * '.$summary;
         }
 
         if ($description = $this->getDescription()) {
-            $docBlock.= PHP_EOL . ' *';
-            $docBlock.= PHP_EOL . ' *';
+            $docBlock .= PHP_EOL.' *';
+            $docBlock .= PHP_EOL.' *';
 
-            foreach ((array)explode("\n", $description) as $line) {
-                $docBlock.= PHP_EOL . ' * ' . trim($line);
+            foreach ((array) explode("\n", $description) as $line) {
+                $docBlock .= PHP_EOL.' * '.trim($line);
             }
 
-            $docBlock.= PHP_EOL . ' *';
+            $docBlock .= PHP_EOL.' *';
         }
 
         if ($annotations = $this->getAnnotations()) {
             foreach ($annotations as $annotation) {
-                $docBlock.= PHP_EOL . ' * @' . $annotation->getName() . ' ' . $annotation->getString();
+                $docBlock .= PHP_EOL.' * @'.$annotation->getName().' '.$annotation->getString();
             }
         }
 
-        return $docBlock . PHP_EOL . ' *';
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->generate();
+        return $docBlock.PHP_EOL.' *';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -14,9 +14,7 @@ namespace Zephir\Exception;
 use Zephir\TypeAwareInterface;
 
 /**
- * Zephir\Exception\IllegalOperationException
- *
- * @package Zephir\Compiler
+ * Zephir\Exception\IllegalOperationException.
  */
 class IllegalOperationException extends CompilerException
 {
@@ -25,7 +23,7 @@ class IllegalOperationException extends CompilerException
      *
      * @param array              $statement The statement
      * @param TypeAwareInterface $type      Operator type
-     * @param array|null         $extra     Extra info [optional].
+     * @param array|null         $extra     extra info [optional]
      */
     public function __construct(array $statement, TypeAwareInterface $type, array $extra = null)
     {

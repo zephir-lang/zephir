@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,8 +11,8 @@
 
 namespace Zephir\Test;
 
+use PHPUnit\Framework\TestCase;
 use Zephir\Config;
-use Zephir\Support\TestCase;
 
 class ConfigTest extends TestCase
 {
@@ -30,6 +30,18 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Restore current directory, and clean config.json.
+     */
+    public function tearDown()
+    {
+        if (getcwd() != $this->pwd) {
+            chdir($this->pwd);
+        }
+
+        $this->cleanTmpConfigFile();
+    }
+
+    /**
      * Test when we have a bad config.json file.
      *
      * @expectedException \Zephir\Exception
@@ -38,7 +50,7 @@ class ConfigTest extends TestCase
      */
     public function testConstructWithBadConfigFile()
     {
-        chdir(ZEPHIRPATH . '/unit-tests/fixtures/badconfig');
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/badconfig');
         new Config();
     }
 
@@ -86,24 +98,12 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Restore current directory, and clean config.json.
-     */
-    public function tearDown()
-    {
-        if (getcwd() != $this->pwd) {
-            chdir($this->pwd);
-        }
-
-        $this->cleanTmpConfigFile();
-    }
-
-    /**
      * Clean config.json file into tmp dir.
      */
     private function cleanTmpConfigFile()
     {
         /* clean config.json into tmp dir */
-        $tmpConfigFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'config.json';
+        $tmpConfigFile = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'config.json';
 
         if (file_exists($tmpConfigFile)) {
             unlink($tmpConfigFile);

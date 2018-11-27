@@ -13,11 +13,11 @@ return [
     'class' => [
         'namespace' => 'Zephir\Stubs',
         'className' => 'Stubs',
-        'classShortName' => 'get'
+        'classShortName' => 'get',
     ],
     'method' => [
         'visibility' => ['public', 'final'],
-        'name'       => 'scalarInputAgrs',
+        'name' => 'scalarInputAgrs',
         'parameters' => [
             ['data-type' => 'int', 'name' => 'val1'],
             ['data-type' => 'bool', 'name' => 'val2'],
@@ -25,8 +25,8 @@ return [
             ['data-type' => 'double', 'name' => 'val4'],
         ],
         'statements' => [],
-        'docblock'   => "Test function scalarInputArgs(int val1, bool val2, string val3, double val4)\n with return Integer\n @return int",
+        'docblock' => "Test function scalarInputArgs(int val1, bool val2, string val3, double val4)\n with return Integer\n @return int",
         'returnType' => null,
-        'expression' => null
-    ]
+        'expression' => null,
+    ],
 ];

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension\Oo;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class OoParamsTest extends TestCase
 {
@@ -41,8 +41,8 @@ class OoParamsTest extends TestCase
         $this->assertSame($t->setEnabled('1'), true);
         $this->assertSame($t->setEnabled('0'), false);
 
-        $this->assertSame($t->setList(array(1, 2, 3, 4, 5)), array(1, 2, 3, 4, 5));
-        $this->assertSame($t->setList(array()), array());
+        $this->assertSame($t->setList([1, 2, 3, 4, 5]), [1, 2, 3, 4, 5]);
+        $this->assertSame($t->setList([]), []);
     }
 
     public function setObjectClassCast()

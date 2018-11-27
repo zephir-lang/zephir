@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -15,9 +15,9 @@ use Exception;
 
 class ConfigException extends Exception
 {
-    public function __construct($message = "", $code = 0, Exception $previous = null)
+    public function __construct($message = '', $code = 0, Exception $previous = null)
     {
-        $message .= PHP_EOL . "Please see http://zephir-lang.com/config.html for more information";
+        $message .= PHP_EOL.'Please see http://zephir-lang.com/config.html for more information';
 
         parent::__construct($message, $code, $previous);
     }

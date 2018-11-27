@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -9,33 +9,27 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Zephir;
 
 /**
- * MethodCallWarmUp
+ * MethodCallWarmUp.
  *
  * List of methods that require warm up
  */
 class MethodCallWarmUp
 {
-    /**
-     *
-     */
-    private $warmUps = array();
+    private $warmUps = [];
 
     /**
-     *
-     *
      * @param ClassDefinition $classDefinition
-     * @param ClassMethod $method
+     * @param ClassMethod     $method
      */
     public function add(ClassDefinition $classDefinition, ClassMethod $method)
     {
-        $this->warmUps[] = array(
+        $this->warmUps[] = [
             $classDefinition,
-            $method
-        );
+            $method,
+        ];
     }
 
     public function get()

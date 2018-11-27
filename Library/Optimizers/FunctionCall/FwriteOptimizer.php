@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -13,23 +13,25 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * FwriteOptimizer
+ * FwriteOptimizer.
  *
  * Optimizes calls to 'fwrite' using internal function
  */
 class FwriteOptimizer extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @throws CompilerException
+     *
      * @return bool|CompiledExpression|mixed
-     * @throws \Zephir\Exception\CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -37,13 +39,13 @@ class FwriteOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (2 != \count($expression['parameters'])) {
             return false;
         }
 
         $context->headersManager->add('kernel/file');
 
-        /**
+        /*
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -51,7 +53,7 @@ class FwriteOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable();
         if ($symbolVariable) {
             if ($symbolVariable->isNotVariableAndString()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
             }
         }
 
@@ -61,10 +63,11 @@ class FwriteOptimizer extends OptimizerAbstract
                 $symbolVariable->initVariant($context);
             }
             $symbol = $context->backend->getVariableCode($symbolVariable);
-            $context->codePrinter->output('zephir_fwrite(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fwrite('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {
-            $context->codePrinter->output('zephir_fwrite(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fwrite(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

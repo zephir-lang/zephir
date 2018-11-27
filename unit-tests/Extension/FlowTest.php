@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FlowTest extends TestCase
 {
@@ -33,7 +33,7 @@ class FlowTest extends TestCase
         $this->assertSame($t->testIf13(), -12);
         $this->assertSame($t->testIf14(), 74);
         $this->assertSame($t->testIf15(), 89);
-        $this->assertTrue($t->testIf16(array()));
+        $this->assertTrue($t->testIf16([]));
         $this->assertTrue($t->testIf16(''));
         $this->assertTrue($t->testIf16(null));
         $this->assertFalse($t->testIf16(' '));
@@ -65,13 +65,13 @@ class FlowTest extends TestCase
         $this->assertSame($t->testWhile13(), 5);
 
         $this->assertSame(
-            $t->testWhileNextTest(array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-            array(1, 2, 3, 4, 5, 6, 7, 8, 9)
+            $t->testWhileNextTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+            [1, 2, 3, 4, 5, 6, 7, 8, 9]
         );
 
         $this->assertSame(
-            $t->testWhileDoNextTest(array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-            array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+            $t->testWhileDoNextTest([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         );
     }
 
@@ -80,7 +80,7 @@ class FlowTest extends TestCase
         $t = new \Test\Flow();
         $this->assertSame($t->testFor1(), 10);
         $this->assertSame($t->testFor2(), 6.0);
-        $this->assertSame($t->testFor3(), array(4, 3, 2, 1));
+        $this->assertSame($t->testFor3(), [4, 3, 2, 1]);
         $this->assertSame($t->testFor4(), 55);
         $this->assertSame($t->testFor5(), 55);
         $this->assertSame($t->testFor6(), 55);
@@ -96,17 +96,17 @@ class FlowTest extends TestCase
 
         $this->assertSame(
             $t->testFor16(),
-            array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 8, 8 => 9, 9 => 10)
+            [0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 8, 8 => 9, 9 => 10]
         );
 
         $this->assertSame(
             $t->testFor17(),
-            array(0 => 10, 1 => 9, 2 => 8, 3 => 7, 4 => 6, 5 => 5, 6 => 4, 7 => 3, 8 => 2, 9 => 1)
+            [0 => 10, 1 => 9, 2 => 8, 3 => 7, 4 => 6, 5 => 5, 6 => 4, 7 => 3, 8 => 2, 9 => 1]
         );
 
         $this->assertSame(
             $t->testFor18(),
-            array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 8, 8 => 9, 9 => 10)
+            [0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 8, 8 => 9, 9 => 10]
         );
 
         $this->assertSame($t->testFor19(), 25);

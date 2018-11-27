@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -12,7 +12,7 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * ThrowStatementBuilder
+ * ThrowStatementBuilder.
  *
  * Allows to manually build a 'throw' statement AST node
  */
@@ -21,7 +21,7 @@ class ThrowStatementBuilder extends AbstractStatementBuilder
     private $expr;
 
     /**
-     * ThrowStatementBuilder constructor
+     * ThrowStatementBuilder constructor.
      *
      * @param mixed $expr
      */
@@ -35,9 +35,9 @@ class ThrowStatementBuilder extends AbstractStatementBuilder
      */
     public function get()
     {
-        return array(
+        return [
             'type' => 'throw',
-            'expr' => $this->expr->get()
-        );
+            'expr' => $this->expr->get(),
+        ];
     }
 }

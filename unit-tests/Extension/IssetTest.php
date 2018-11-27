@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,17 +11,17 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class IssetTest extends TestCase
 {
-    public $b = "a";
-    private $test2 = "b";
+    public $b = 'a';
+    private $test2 = 'b';
 
     public function testIssetArray()
     {
         $t = new \Test\IssetTest();
-        $testArray = array('a', 'abc' => 'def', 'gef' => '123');
+        $testArray = ['a', 'abc' => 'def', 'gef' => '123'];
         $this->assertTrue($t->testIssetArray1($testArray, 'abc'));
         $this->assertTrue(!$t->testIssetArray2($testArray, 12));
         $this->assertTrue($t->testIssetArray3($testArray, 'gef'));
@@ -43,7 +43,7 @@ class IssetTest extends TestCase
         $t = new \Test\IssetTest();
         $this->assertTrue($t->testIssetDynamicProperty1());
         $this->assertTrue(!$t->testIssetDynamicProperty2($this));
-        $this->s = array('a' => 'true');
+        $this->s = ['a' => 'true'];
         $this->assertTrue($t->testIssetDynamicProperty2($this));
     }
 }

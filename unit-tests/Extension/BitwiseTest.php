@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,7 +11,7 @@
 
 namespace Extension;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class BitwiseTest extends TestCase
 {
@@ -123,7 +123,7 @@ class BitwiseTest extends TestCase
         $this->assertSame($t->testBitwiseNot(666), -667);
         $this->assertSame($t->testBitwiseAndNot(5, 4), 1);
 
-        /**
+        /*
          * Bitwise XOR
          * @issue https://github.com/phalcon/zephir/issues/1581
          */

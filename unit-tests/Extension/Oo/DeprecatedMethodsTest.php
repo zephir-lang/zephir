@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Zephir.
  *
  * (c) Zephir Team <team@zephir-lang.com>
@@ -11,26 +11,28 @@
 
 namespace Extension\Oo;
 
-use Zephir\Support\TestCase;
+use PHPUnit\Framework\TestCase;
 use Test\Oo\DeprecatedMethods;
 
 class DeprecatedMethodsTest extends TestCase
 {
     /**
-     * @expectedException \PHPUnit_Framework_Error_Deprecated
+     * @group legacy
+     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
     public function testPublicMethodThrowsDeprecatedWarning()
     {
-        $test = new DeprecatedMethods;
-        $test->deprecatedMethod();
+        $test = new DeprecatedMethods();
+        $test->publicDeprecated();
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Deprecated
+     * @group legacy
+     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
     public function testPrivateMethodThrowsDeprecatedWarning()
     {
-        $test = new DeprecatedMethods;
+        $test = new DeprecatedMethods();
         $test->normalMethod();
     }
 }
