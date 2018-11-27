@@ -39,16 +39,15 @@ platform:
     - x86
     - x64
 
-#branches:
-#  only:
-#    - master
-#    - development
+branches:
+  only:
+    - master
+    - development
 
 init:
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "development") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
 
 install:
-    - git submodule update --init --recursive
     - ps: Import-Module .\.ci\appveyor.psm1
     - ps: AppendSessionPath
     - ps: SetupPhpVersionString
@@ -69,17 +68,17 @@ build_script:
     - '"%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" %ARCH%'
     - '%PHP_SDK_PATH%\bin\phpsdk_setvars'
     - cd %APPVEYOR_BUILD_FOLDER%
-    - 'zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable'
+    - zephir compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
     - cd %APPVEYOR_BUILD_FOLDER%\ext
     - nmake 2> compile-errors.log 1> compile.log
     - ps: EnableExtension
 
 test_script:
-    - SET X=0
     - cd %APPVEYOR_BUILD_FOLDER%
+    - SET X=0
     - php phpunit install
-    - php phpunit install --testsuite --bootstrap unit-tests\ext-bootstrap.php Extension_Php72 || SET X=!errorlevel!
-    - php phpunit install --testsuite Zephir || SET X=!errorlevel!
+    - php phpunit --bootstrap %APPVEYOR_BUILD_FOLDER%\unit-tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
+    - php phpunit --testsuite Zephir || SET X=!errorlevel!
     - exit %X%
 
 on_success:
