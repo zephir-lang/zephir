@@ -178,7 +178,172 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testintcastfromvariabl
 #endif
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_cast_testcastfileresourcetointeger, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromfloat, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromfloat, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablefloat, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablefloat, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfrombooleantrue, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfrombooleantrue, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfrombooleanfalse, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfrombooleanfalse, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablebooleantrue, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablebooleantrue, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablebooleanfalse, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablebooleanfalse, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablenull, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablenull, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromnull, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromnull, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariableemptyarray, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariableemptyarray, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromemptyarray, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromemptyarray, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablearray, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablearray, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromarray, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromarray, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromstdclass, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromstdclass, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablestdclass, 0, 0, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testfloatcastfromvariablestdclass, 0, 0, IS_DOUBLE, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfrominttrue1, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfrominttrue1, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfrominttrue2, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfrominttrue2, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromintfalse, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromintfalse, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromobject, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromobject, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromemptyarray, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromemptyarray, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromarray, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromarray, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromnull, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testbooleancastfromnull, 0, 0, _IS_BOOL, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcaststdintointeger, 0, 0, IS_LONG, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcaststdintointeger, 0, 0, IS_LONG, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcaststdouttointeger, 0, 0, IS_LONG, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcaststdouttointeger, 0, 0, IS_LONG, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcastfileresourcetointeger, 0, 1, IS_LONG, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testcastfileresourcetointeger, 0, 1, IS_LONG, NULL, 0)
+#endif
 	ZEND_ARG_INFO(0, fileName)
 ZEND_END_ARG_INFO()
 
@@ -200,27 +365,27 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testIntCastFromArray, arginfo_test_cast_testintcastfromarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromStdClass, arginfo_test_cast_testintcastfromstdclass, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromVariableStdClass, arginfo_test_cast_testintcastfromvariablestdclass, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromFloat, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableFloat, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromBooleanTrue, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromBooleanFalse, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanTrue, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanFalse, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableNull, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromNull, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableEmptyArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromEmptyArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromStdClass, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testFloatCastFromVariableStdClass, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromIntTrue1, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromIntTrue2, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromIntFalse, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromObject, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromEmptyArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testBooleanCastFromNull, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromFloat, arginfo_test_cast_testfloatcastfromfloat, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableFloat, arginfo_test_cast_testfloatcastfromvariablefloat, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromBooleanTrue, arginfo_test_cast_testfloatcastfrombooleantrue, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromBooleanFalse, arginfo_test_cast_testfloatcastfrombooleanfalse, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanTrue, arginfo_test_cast_testfloatcastfromvariablebooleantrue, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanFalse, arginfo_test_cast_testfloatcastfromvariablebooleanfalse, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableNull, arginfo_test_cast_testfloatcastfromvariablenull, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromNull, arginfo_test_cast_testfloatcastfromnull, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableEmptyArray, arginfo_test_cast_testfloatcastfromvariableemptyarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromEmptyArray, arginfo_test_cast_testfloatcastfromemptyarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableArray, arginfo_test_cast_testfloatcastfromvariablearray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromArray, arginfo_test_cast_testfloatcastfromarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromStdClass, arginfo_test_cast_testfloatcastfromstdclass, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableStdClass, arginfo_test_cast_testfloatcastfromvariablestdclass, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromIntTrue1, arginfo_test_cast_testbooleancastfrominttrue1, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromIntTrue2, arginfo_test_cast_testbooleancastfrominttrue2, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromIntFalse, arginfo_test_cast_testbooleancastfromintfalse, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromObject, arginfo_test_cast_testbooleancastfromobject, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromEmptyArray, arginfo_test_cast_testbooleancastfromemptyarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromArray, arginfo_test_cast_testbooleancastfromarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testBooleanCastFromNull, arginfo_test_cast_testbooleancastfromnull, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromInt, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromFloat, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromFalse, NULL, ZEND_ACC_PUBLIC)
@@ -230,8 +395,8 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testObjectCastFromArray, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromEmptyString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromString, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testCastStdinToInteger, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Cast, testCastStdoutToInteger, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testCastStdinToInteger, arginfo_test_cast_testcaststdintointeger, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testCastStdoutToInteger, arginfo_test_cast_testcaststdouttointeger, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testCastFileResourceToInteger, arginfo_test_cast_testcastfileresourcetointeger, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
