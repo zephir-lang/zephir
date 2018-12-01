@@ -49,6 +49,8 @@ class LifeCycleTest extends KernelTestCase
 
             chdir($this->pwd);
         }
+
+        parent::tearDown();
     }
 
     /** @test */

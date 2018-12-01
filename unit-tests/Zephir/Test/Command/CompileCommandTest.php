@@ -63,6 +63,8 @@ class CompileCommandTest extends KernelTestCase
 
             chdir($this->pwd);
         }
+
+        parent::tearDown();
     }
 
     /**

@@ -655,7 +655,7 @@ final class Compiler
                                     continue;
                                 }
 
-                                require $file->getRealPath();
+                                require_once $file->getRealPath();
                             }
                         }
                     }

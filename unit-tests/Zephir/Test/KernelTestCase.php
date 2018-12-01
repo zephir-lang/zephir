@@ -13,6 +13,8 @@ namespace Zephir\Test;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Zephir\Config;
 use Zephir\DependencyInjection\ZephirKernel;
@@ -31,6 +33,8 @@ class KernelTestCase extends BaseTestCase
      * @param array $options Kernel configuration
      *
      * @return KernelInterface A KernelInterface instance
+     *
+     * @throws \RuntimeException
      */
     protected static function createKernel(array $options = [])
     {
@@ -74,6 +78,9 @@ class KernelTestCase extends BaseTestCase
      * Do not output messages from the Zephir compiler.
      *
      * @param ContainerInterface $container
+     *
+     * @throws ServiceCircularReferenceException
+     * @throws ServiceNotFoundException
      */
     protected function muteOutput(ContainerInterface $container)
     {
