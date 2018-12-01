@@ -71,6 +71,10 @@ class RetVal {
 		return _var;
 	}
 
+	public function retval_array() -> array {
+		return [];
+	}
+
 	public function retval_retval() -> <RetVal> {
 		var _var;
 		let _var = new RetVal;
@@ -106,6 +110,10 @@ class RetVal {
 	}
 
 	public function retval_nullable_char() -> char | null {
+		return null;
+	}
+
+	public function retval_nullable_array() -> array | null {
 		return null;
 	}
 

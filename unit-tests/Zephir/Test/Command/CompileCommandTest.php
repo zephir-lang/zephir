@@ -11,10 +11,8 @@
 
 namespace Zephir\Test\Command;
 
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Zephir\Config;
 use Zephir\Console\Application;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Test\KernelTestCase;
@@ -117,13 +115,5 @@ class CompileCommandTest extends KernelTestCase
             ['--no-dev', '-O2 -fvisibility=hidden -Wparentheses( -flto)? -DZEPHIR_RELEASE=1'],
             ['--dev', '-O0 -g3'],
         ];
-    }
-
-    /**
-     * @param ContainerInterface $container
-     */
-    protected function muteOutput(ContainerInterface $container)
-    {
-        $container->get(Config::class)->set('silent', true);
     }
 }
