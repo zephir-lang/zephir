@@ -457,8 +457,9 @@ final class CompilerFile implements FileInterface
      *
      * @param Compiler $compiler
      *
-     * @throws ParseException
      * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws ParseException
      */
     public function preCompile(Compiler $compiler)
     {
@@ -698,6 +699,7 @@ final class CompilerFile implements FileInterface
                     }
                 }
             } else {
+                // Is $extendedClass is part of the compiled extension
                 if ($compiler->isInterface($extendedClass)) {
                     $extendedDefinition = $compiler->getClassDefinition($extendedClass);
                     $classDefinition->setExtendsClassDefinition($extendedDefinition);

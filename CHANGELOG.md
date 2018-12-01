@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed compilation error with inheritance of prototype interfaces
+  [#1758](https://github.com/phalcon/zephir/issues/1758)
 
 ## [0.11.7] - 2018-11-27
 ### Changed
