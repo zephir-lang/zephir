@@ -135,6 +135,29 @@ final class Compiler
     }
 
     /**
+     * Resolves path to the internal prototypes.
+     *
+     * @return string
+     *
+     * @throws IllegalStateException in case of absence internal prototypes directory
+     */
+    private function reslovePrototypesPath()
+    {
+        $prototypesPath = $this->prototypesPath;
+
+        // fallback
+        if (empty($prototypesPath)) {
+            $prototypesPath = \dirname(__DIR__).'/prototypes';
+        }
+
+        if (!\is_dir($prototypesPath) || !\is_readable($prototypesPath)) {
+            throw new IllegalStateException('Unable to resolve internal prototypes directory.');
+        }
+
+        return $prototypesPath;
+    }
+
+    /**
      * @internal
      *
      * @param string $optimizersPath
@@ -142,6 +165,29 @@ final class Compiler
     public function setOptimizersPath($optimizersPath)
     {
         $this->optimizersPath = $optimizersPath;
+    }
+
+    /**
+     * Resolves path to the internal optimizers.
+     *
+     * @return string
+     *
+     * @throws IllegalStateException in case of absence internal optimizers directory
+     */
+    private function resolveOptimizersPath()
+    {
+        $optimizersPath = $this->optimizersPath;
+
+        // fallback
+        if (empty($optimizersPath)) {
+            $optimizersPath = __DIR__.'/Optimizers';
+        }
+
+        if (!\is_dir($optimizersPath) || !\is_readable($optimizersPath)) {
+            throw new IllegalStateException('Unable to resolve internal optimizers directory.');
+        }
+
+        return $optimizersPath;
     }
 
     /**
@@ -533,9 +579,10 @@ final class Compiler
             foreach ($externalDependencies as $dependencyNs => $location) {
                 if (!file_exists($location)) {
                     throw new CompilerException(
-                        'Location of dependency "'.
-                        $dependencyNs.
-                        '" does not exist. Check the config.json for more information'
+                        sprintf(
+                            'Location of dependency "%s" does not exist. Check the config.json for more information.',
+                            $dependencyNs
+                        )
                     );
                 }
 
@@ -598,12 +645,7 @@ final class Compiler
          * Load function optimizers
          */
         if (false === self::$loadedPrototypes) {
-            $optimizersPath = $this->optimizersPath;
-            if (empty($optimizersPath)) {
-                // fallback
-                $optimizersPath = __DIR__;
-            }
-
+            $optimizersPath = $this->resolveOptimizersPath();
             FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
 
             $customOptimizersPaths = $this->config->get('optimizer-dirs');
@@ -613,28 +655,21 @@ final class Compiler
                 }
             }
 
-            $prototypesPath = $this->prototypesPath;
-            if (empty($prototypesPath)) {
-                // fallback
-                $prototypesPath = \dirname(__DIR__).'/prototypes';
-            }
+            /*
+             * Load additional extension prototypes.
+             */
+            $prototypesPath = $this->reslovePrototypesPath();
+            foreach (new \DirectoryIterator($prototypesPath) as $file) {
+                if ($file->isDir() || $file->isDot()) {
+                    continue;
+                }
 
-            if (is_dir($prototypesPath) && is_readable($prototypesPath)) {
-                /*
-                 * Load additional extension prototypes.
-                 */
-                foreach (new \DirectoryIterator($prototypesPath) as $file) {
-                    if ($file->isDir() || $file->isDot()) {
-                        continue;
-                    }
+                // Do not use $file->getRealPath() because it does not work inside phar
+                $realPath = "{$file->getPath()}/{$file->getFilename()}";
+                $extension = $file->getBasename(".{$file->getExtension()}");
 
-                    // Do not use $file->getRealPath() because it does not work inside phar
-                    $realPath = $file->getPath().\DIRECTORY_SEPARATOR.$file->getFilename();
-
-                    $extension = $file->getBasename(".{$file->getExtension()}");
-                    if (!\extension_loaded($extension)) {
-                        require_once $realPath;
-                    }
+                if (!\extension_loaded($extension)) {
+                    require_once $realPath;
                 }
             }
 
