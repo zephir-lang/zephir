@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.11.8] - 2018-12-01
 ### Fixed
 - Fixed compilation error with inheritance of prototype interfaces
   [#1758](https://github.com/phalcon/zephir/issues/1758)
@@ -56,8 +57,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - Install as a Git clone (using `git clone` and `composer install` inside cloned project)
   - Install as a project's dependency (using `composer require`)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.7...HEAD
+## [0.11.2] - 2018-11-11
+### Added
+- Introduced an ability to pack project into one `zephir.phar` file (for PHP 7.1 and later)
+
+### Changed
+- Composer now is a mandatory dependency
+- Improved Zephir's Compiler error reporting
+
+### Removed
+- PHP 5.5 no longer supported
+
+### Fixed
+- Correct return types hint check
+
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.8...HEAD
+[0.11.8]: https://github.com/phalcon/zephir/compare/0.11.7...0.11.8
 [0.11.7]: https://github.com/phalcon/zephir/compare/0.11.6...0.11.7
 [0.11.6]: https://github.com/phalcon/zephir/compare/0.11.4...0.11.6
 [0.11.4]: https://github.com/phalcon/zephir/compare/0.11.3...0.11.4
 [0.11.3]: https://github.com/phalcon/zephir/compare/0.11.2...0.11.3
+[0.11.2]: https://github.com/phalcon/zephir/compare/0.11.1...0.11.2
