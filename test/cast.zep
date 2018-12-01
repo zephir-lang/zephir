@@ -115,68 +115,68 @@ class Cast
 
 	/** To float cast */
 
-	public function testFloatCastFromFloat()
+	public function testFloatCastFromFloat() -> float
 	{
 		return (float) 5.0;
 	}
 
-	public function testFloatCastFromVariableFloat()
+	public function testFloatCastFromVariableFloat() -> float
 	{
 		var a = 5.0;
 		return (float) a;
 	}
 
-	public function testFloatCastFromBooleanTrue()
+	public function testFloatCastFromBooleanTrue() -> float
 	{
 		return (float) true;
 	}
 
-	public function testFloatCastFromBooleanFalse()
+	public function testFloatCastFromBooleanFalse() -> float
 	{
 		return (float) false;
 	}
 
-	public function testFloatCastFromVariableBooleanTrue()
+	public function testFloatCastFromVariableBooleanTrue() -> float
 	{
 		var a = true;
 		return (float) a;
 	}
 
-	public function testFloatCastFromVariableBooleanFalse()
+	public function testFloatCastFromVariableBooleanFalse() -> float
 	{
 		var a = false;
 		return (float) a;
 	}
 
-	public function testFloatCastFromVariableNull()
+	public function testFloatCastFromVariableNull() -> float
 	{
 		var a = null;
 		return (float) a;
 	}
 
-	public function testFloatCastFromNull()
+	public function testFloatCastFromNull() -> float
 	{
 		return (float) null;
 	}
 
-	public function testFloatCastFromVariableEmptyArray()
+	public function testFloatCastFromVariableEmptyArray() -> float
 	{
 		var a = [];
 		return (float) a;
 	}
 
-	public function testFloatCastFromEmptyArray()
+	public function testFloatCastFromEmptyArray() -> float
 	{
 		return (float) [];
 	}
 
-	public function testFloatCastFromVariableArray()
+	public function testFloatCastFromVariableArray() -> float
 	{
 		var a = [1, 2, 3, 4];
 		return (float) a;
 	}
 
-	public function testFloatCastFromArray()
+	public function testFloatCastFromArray() -> float
 	{
 		return (float) [1, 2, 3, 4];
 	}
@@ -185,7 +185,7 @@ class Cast
 	 * Notice: Object of class stdClass could not be converted to int
 	 * @return int 1
 	 */
-	public function testFloatCastFromStdClass()
+	public function testFloatCastFromStdClass() -> float
 	{
 		return (float) (new \StdClass);
 	}
@@ -194,7 +194,7 @@ class Cast
 	 * Notice: Object of class stdClass could not be converted to int
 	 * @return int 1
 	 */
-	public function testFloatCastFromVariableStdClass()
+	public function testFloatCastFromVariableStdClass() -> float
 	{
 		var a;
 		let a = new \StdClass;
@@ -203,41 +203,41 @@ class Cast
 
 	/** To boolean cast */
 
-	public function testBooleanCastFromIntTrue1()
+	public function testBooleanCastFromIntTrue1() -> boolean
 	{
 		return (boolean) 1;
 	}
 
-	public function testBooleanCastFromIntTrue2()
+	public function testBooleanCastFromIntTrue2() -> boolean
 	{
 		return (boolean) 1000;
 	}
 
-	public function testBooleanCastFromIntFalse()
+	public function testBooleanCastFromIntFalse() -> boolean
 	{
 		return (boolean) 0;
 	}
 
-	public function testBooleanCastFromObject()
+	public function testBooleanCastFromObject() -> boolean
 	{
 		var simpleObject;
 		let simpleObject = new \StdClass();
 		return (boolean) simpleObject;
 	}
 
-	public function testBooleanCastFromEmptyArray()
+	public function testBooleanCastFromEmptyArray() -> boolean
 	{
 		var a = [];
 		return (boolean) a;
 	}
 
-	public function testBooleanCastFromArray()
+	public function testBooleanCastFromArray() -> boolean
 	{
 		var a = [1, 2, 3, 4];
 		return (boolean) a;
 	}
 
-	public function testBooleanCastFromNull()
+	public function testBooleanCastFromNull() -> boolean
 	{
 		var a = null;
 		return (boolean) a;
@@ -245,52 +245,52 @@ class Cast
 
 	/** To object cast */
 
-	public function testObjectCastFromInt()
+	public function testObjectCastFromInt() -> var
 	{
 		return (object) 5;
 	}
 
-	public function testObjectCastFromFloat()
+	public function testObjectCastFromFloat() -> var
 	{
 		return (object) 5.0;
 	}
 
-	public function testObjectCastFromFalse()
+	public function testObjectCastFromFalse() -> var
 	{
 		return (object) false;
 	}
 
-	public function testObjectCastFromTrue()
+	public function testObjectCastFromTrue() -> var
 	{
 		return (object) true;
 	}
 
-	public function testObjectCastFromNull()
+	public function testObjectCastFromNull() -> var
 	{
 		return (object) null;
 	}
 
-	public function testObjectCastFromEmptyArray()
+	public function testObjectCastFromEmptyArray() -> var
 	{
 		return (object) [];
 	}
 
-	public function testObjectCastFromArray()
+	public function testObjectCastFromArray() -> var
 	{
 		return (object) [1, 2, 3, 4];
 	}
 
-	public function testObjectCastFromEmptyString()
+	public function testObjectCastFromEmptyString() -> var
 	{
 		return (object) "";
 	}
 
-	public function testObjectCastFromString()
+	public function testObjectCastFromString() -> var
 	{
 		return (object) "test string";
 	}
 
-	public function testCastStdinToInteger()
+	public function testCastStdinToInteger() -> int
 	{
 		var handle;
 		let handle = STDIN;
@@ -298,12 +298,12 @@ class Cast
 		return (int) handle;
 	}
 
-	public function testCastStdoutToInteger()
+	public function testCastStdoutToInteger() -> int
 	{
 		return (int) STDOUT;
 	}
 
-	public function testCastFileResourceToInteger(var fileName)
+	public function testCastFileResourceToInteger(var fileName) -> int
 	{
 		var id;
 
