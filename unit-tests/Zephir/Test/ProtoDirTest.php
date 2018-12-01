@@ -49,6 +49,8 @@ class ProtoDirTest extends KernelTestCase
 
             chdir($this->pwd);
         }
+
+        parent::tearDown();
     }
 
     /**
@@ -57,6 +59,12 @@ class ProtoDirTest extends KernelTestCase
      */
     public function shouldGenerateValidCodeWithInheritanceOfPrototypeInterfaces()
     {
+        if (\PHP_VERSION_ID < 70000) {
+            $this->markTestSkipped(
+                'This test is designed to use for PHP < 7.0.0'
+            );
+        }
+
         $this->generate('ZendEngine3');
 
         $this->assertSame(
@@ -81,6 +89,12 @@ class ProtoDirTest extends KernelTestCase
         $this->muteOutput($container);
 
         $compiler = $container->get(Compiler::class);
+
+        $reflection = new \ReflectionClass(Compiler::class);
+        $loadedPrototypes = $reflection->getProperty('loadedPrototypes');
+        $loadedPrototypes->setAccessible(true);
+        $loadedPrototypes->setValue($compiler, false);
+
         $compiler->generate(true);
     }
 }

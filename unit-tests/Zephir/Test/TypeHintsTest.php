@@ -49,6 +49,8 @@ class TypeHintsTest extends KernelTestCase
 
             chdir($this->pwd);
         }
+
+        parent::tearDown();
     }
 
     /** @test */

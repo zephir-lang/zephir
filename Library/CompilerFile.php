@@ -699,7 +699,7 @@ final class CompilerFile implements FileInterface
                     }
                 }
             } else {
-                // Is $extendedClass is part of the compiled extension
+                // Whether the $extendedClass is part of the compiled extension
                 if ($compiler->isInterface($extendedClass)) {
                     $extendedDefinition = $compiler->getClassDefinition($extendedClass);
                     $classDefinition->setExtendsClassDefinition($extendedDefinition);
