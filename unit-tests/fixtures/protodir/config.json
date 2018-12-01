@@ -1,0 +1,53 @@
+{
+    "namespace": "protodir",
+    "name": "protodir",
+    "description": "",
+    "author": "",
+    "version": "0.0.1",
+    "verbose": false,
+    "requires": {
+        "extensions": []
+    },
+    "stubs": {
+        "stubs-run-after-generate": false
+    },
+    "warnings": {
+        "unused-variable": false,
+        "unused-variable-external": false,
+        "possible-wrong-parameter": false,
+        "possible-wrong-parameter-undefined": false,
+        "nonexistent-function": false,
+        "nonexistent-class": false,
+        "non-valid-isset": false,
+        "non-array-update": false,
+        "non-valid-objectupdate": false,
+        "non-valid-fetch": false,
+        "invalid-array-index": false,
+        "non-array-append": false,
+        "invalid-return-type": false,
+        "unreachable-code": false,
+        "nonexistent-constant": false,
+        "not-supported-magic-constant": false,
+        "non-valid-decrement": false,
+        "non-valid-increment": false,
+        "non-valid-clone": false,
+        "non-valid-new": false,
+        "non-array-access": false,
+        "invalid-reference": false,
+        "invalid-typeof-comparison": false,
+        "conditional-initialization": false
+    },
+    "optimizations": {
+        "static-type-inference": true,
+        "static-type-inference-second-pass": true,
+        "local-context-pass": true,
+        "constant-folding": true,
+        "static-constant-class-folding": true,
+        "call-gatherer-pass": true,
+        "check-invalid-reads": false,
+        "internal-call-transformation": false
+    },
+    "prototype-dir": {
+        "fake": "prototypes/fake"
+    }
+}

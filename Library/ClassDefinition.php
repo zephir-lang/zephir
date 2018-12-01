@@ -20,7 +20,7 @@ use Zephir\Exception\CompilerException;
  *
  * Represents a class/interface and their properties and methods.
  */
-class ClassDefinition
+final class ClassDefinition
 {
     /** @var string */
     protected $namespace;
@@ -49,11 +49,11 @@ class ClassDefinition
     /** @var bool */
     protected $external = false;
 
-    /** @var ClassDefinition */
+    /** @var ClassDefinitionRuntime|ClassDefinition */
     protected $extendsClassDefinition;
 
     /** @var ClassDefinition[] */
-    protected $implementedInterfaceDefinitions;
+    protected $implementedInterfaceDefinitions = [];
 
     /** @var ClassProperty[] */
     protected $properties = [];
@@ -350,7 +350,7 @@ class ClassDefinition
     /**
      * Sets the class definition for the extended class.
      *
-     * @param $classDefinition
+     * @param ClassDefinitionRuntime|ClassDefinition $classDefinition
      */
     public function setExtendsClassDefinition($classDefinition)
     {
@@ -360,7 +360,7 @@ class ClassDefinition
     /**
      * Returns the class definition related to the extended class.
      *
-     * @return ClassDefinition
+     * @return ClassDefinition|ClassDefinitionRuntime
      */
     public function getExtendsClassDefinition()
     {
@@ -401,18 +401,13 @@ class ClassDefinition
     public function getDependencies()
     {
         $dependencies = [];
-        if ($this->extendsClassDefinition) {
-            $classDefinition = $this->extendsClassDefinition;
-            if (method_exists($classDefinition, 'increaseDependencyRank')) {
-                $dependencies[] = $classDefinition;
-            }
+        if ($this->extendsClassDefinition && $this->extendsClassDefinition instanceof self) {
+            $dependencies[] = $this->extendsClassDefinition;
         }
 
-        if ($this->implementedInterfaceDefinitions) {
-            foreach ($this->implementedInterfaceDefinitions as $interfaceDefinition) {
-                if (method_exists($interfaceDefinition, 'increaseDependencyRank')) {
-                    $dependencies[] = $interfaceDefinition;
-                }
+        foreach ($this->implementedInterfaceDefinitions as $interfaceDefinition) {
+            if ($interfaceDefinition instanceof self) {
+                $dependencies[] = $interfaceDefinition;
             }
         }
 
@@ -699,10 +694,23 @@ class ClassDefinition
         }
 
         $extendsClassDefinition = $this->getExtendsClassDefinition();
-        if ($extendsClassDefinition instanceof self) {
+        if ($extendsClassDefinition instanceof ClassDefinitionRuntime) {
+            try {
+                $extendsClassDefinition = $this->compiler->getInternalClassDefinition(
+                    $extendsClassDefinition->getName()
+                );
+            } catch (\ReflectionException $e) {
+                // Do nothing
+                return false;
+            }
+        }
+
+        while ($extendsClassDefinition instanceof self) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return true;
             }
+
+            $extendsClassDefinition = $extendsClassDefinition->getExtendsClassDefinition();
         }
 
         return false;
@@ -868,14 +876,32 @@ class ClassDefinition
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
-                throw new CompilerException('Class '.$classDefinition->getCompleteName().' must implement a method called: "'.$method->getName().'" as requirement of interface: "'.$interfaceDefinition->getCompleteName().'"');
+                throw new CompilerException(
+                    sprintf(
+                        'Class %s must implement a method called: "%s" as requirement of interface: "%s"',
+                        $classDefinition->getCompleteName(),
+                        $method->getName(),
+                        $interfaceDefinition->getCompleteName()
+                    )
+                );
             }
 
-            if ($method->hasParameters()) {
-                $implementedMethod = $classDefinition->getMethod($method->getName());
-                if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()) {
-                    throw new CompilerException('Class '.$classDefinition->getCompleteName().'::'.$method->getName().'() does not have the same number of required parameters in interface: "'.$interfaceDefinition->getCompleteName().'"');
-                }
+            if (!$method->hasParameters()) {
+                continue;
+            }
+
+            $implementedMethod = $classDefinition->getMethod($method->getName());
+            if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() ||
+                $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()
+            ) {
+                throw new CompilerException(
+                    sprintf(
+                        'Method %s::%s() does not have the same number of required parameters in interface: "%s"',
+                        $classDefinition->getCompleteName(),
+                        $method->getName(),
+                        $interfaceDefinition->getCompleteName()
+                    )
+                );
             }
         }
     }
@@ -1008,12 +1034,12 @@ class ClassDefinition
          */
         $compilationContext->classDefinition = $this;
 
-        /**
+        /*
          * Get the global codePrinter.
          */
         $codePrinter = $compilationContext->codePrinter;
 
-        /**
+        /*
          * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class.
          */
         $initClassName = $this->getCNamespace().'_'.$this->getName();
@@ -1022,7 +1048,7 @@ class ClassDefinition
 
         $codePrinter->increaseLevel();
 
-        /**
+        /*
          * Method entry.
          */
         $methods = &$this->methods;
@@ -1052,7 +1078,7 @@ class ClassDefinition
             }
         }
 
-        /**
+        /*
          * Register the class with extends + interfaces.
          */
         $classExtendsDefinition = null;
@@ -1082,8 +1108,6 @@ class ClassDefinition
 
         /*
          * Compile properties.
-         *
-         * @var ClassProperty
          */
         foreach ($this->getProperties() as $property) {
             $docBlock = $property->getDocBlock();
@@ -1102,8 +1126,6 @@ class ClassDefinition
 
         /*
          * Compile constants.
-         *
-         * @var ClassConstant
          */
         foreach ($this->getConstants() as $constant) {
             $docBlock = $constant->getDocBlock();
@@ -1142,9 +1164,25 @@ class ClassDefinition
 
                 if (!$classEntry) {
                     if ($compiler->isClass($interface)) {
-                        throw new CompilerException('Cannot locate interface '.$interface.' when implementing interfaces on '.$this->getCompleteName().'. '.$interface.' is currently a class', $this->originalNode);
+                        throw new CompilerException(
+                            sprintf(
+                                'Cannot locate interface %s when implementing interfaces on %s. '.
+                                '%s is currently a class',
+                                $interface,
+                                $this->getCompleteName(),
+                                $interface
+                            ),
+                            $this->originalNode
+                        );
                     } else {
-                        throw new CompilerException('Cannot locate interface '.$interface.' when implementing interfaces on '.$this->getCompleteName(), $this->originalNode);
+                        throw new CompilerException(
+                            sprintf(
+                                'Cannot locate interface %s when implementing interfaces on %s',
+                                $interface,
+                                $this->getCompleteName()
+                            ),
+                            $this->originalNode
+                        );
                     }
                 }
 
