@@ -12,7 +12,9 @@
 namespace Zephir\Test;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Zephir\Config;
 use Zephir\DependencyInjection\ZephirKernel;
 
 class KernelTestCase extends BaseTestCase
@@ -66,5 +68,15 @@ class KernelTestCase extends BaseTestCase
         } else {
             return new static::$class($env, $debug);
         }
+    }
+
+    /**
+     * Do not output messages from the Zephir compiler.
+     *
+     * @param ContainerInterface $container
+     */
+    protected function muteOutput(ContainerInterface $container)
+    {
+        $container->get(Config::class)->set('silent', true);
     }
 }
