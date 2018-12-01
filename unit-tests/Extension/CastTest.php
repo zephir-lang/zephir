@@ -16,6 +16,9 @@ use Test\Cast;
 
 class CastTest extends TestCase
 {
+    /**
+     * @var Cast
+     */
     private $test;
 
     public function setUp()
@@ -64,21 +67,21 @@ class CastTest extends TestCase
 
     public function testFloatCast()
     {
-        $this->assertSame($this->test->testFloatCastFromFloat(), 5.0);
-        $this->assertSame($this->test->testFloatCastFromBooleanTrue(), 1.0);
-        $this->assertSame($this->test->testFloatCastFromBooleanFalse(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromNull(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromEmptyArray(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromArray(), 1.0);
-        $this->assertSame($this->test->testFloatCastFromStdClass(), 1.0);
+        $this->assertSame(5.0, $this->test->testFloatCastFromFloat());
+        $this->assertSame(1.0, $this->test->testFloatCastFromBooleanTrue());
+        $this->assertSame(0.0, $this->test->testFloatCastFromBooleanFalse());
+        $this->assertSame(0.0, $this->test->testFloatCastFromNull());
+        $this->assertSame(0.0, $this->test->testFloatCastFromEmptyArray());
+        $this->assertSame(1.0, $this->test->testFloatCastFromArray());
+        $this->assertSame(1.0, $this->test->testFloatCastFromStdClass());
 
-        $this->assertSame($this->test->testFloatCastFromVariableFloat(), 5.0);
-        $this->assertSame($this->test->testFloatCastFromVariableBooleanTrue(), 1.0);
-        $this->assertSame($this->test->testFloatCastFromVariableBooleanFalse(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromVariableNull(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromVariableEmptyArray(), 0.0);
-        $this->assertSame($this->test->testFloatCastFromVariableArray(), 1.0);
-        $this->assertSame($this->test->testFloatCastFromVariableStdClass(), 1.0);
+        $this->assertSame(5.0, $this->test->testFloatCastFromVariableFloat());
+        $this->assertSame(1.0, $this->test->testFloatCastFromVariableBooleanTrue());
+        $this->assertSame(0.0, $this->test->testFloatCastFromVariableBooleanFalse());
+        $this->assertSame(0.0, $this->test->testFloatCastFromVariableNull());
+        $this->assertSame(0.0, $this->test->testFloatCastFromVariableEmptyArray());
+        $this->assertSame(1.0, $this->test->testFloatCastFromVariableArray());
+        $this->assertSame(1.0, $this->test->testFloatCastFromVariableStdClass());
     }
 
     public function testBooleanCast()
@@ -103,28 +106,5 @@ class CastTest extends TestCase
         $this->assertEquals((object) [1, 2, 3, 4], $this->test->testObjectCastFromArray());
         $this->assertEquals((object) '', $this->test->testObjectCastFromEmptyString());
         $this->assertEquals((object) 'test string', $this->test->testObjectCastFromString());
-    }
-
-    /**
-     * Test cases for Issue 1524
-     * Casting Resource to Integer must always return int value of Resource Id.
-     *
-     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
-     */
-    public function testResourceCast()
-    {
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $this->markTestSkipped(
-                'Cast Resource to integer not implemented for ZendEngine 2.'
-            );
-        }
-
-        $file = fopen(__DIR__.'/../fixtures/exists.php', 'r');
-
-        $this->assertEquals((int) STDIN, $this->test->testCastStdinToInteger());
-        $this->assertEquals((int) STDOUT, $this->test->testCastStdoutToInteger());
-        $this->assertEquals((int) $file, $this->test->testCastFileResourceToInteger($file));
-
-        fclose($file);
     }
 }

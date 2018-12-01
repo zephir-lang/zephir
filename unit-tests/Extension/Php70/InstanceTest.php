@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Extension;
+namespace Extension\Php70;
 
 use PHPUnit\Framework\TestCase;
 use Test\Instance;
@@ -18,10 +18,11 @@ class InstanceTest extends TestCase
 {
     /**
      * @test
-     * @issue https://github.com/phalcon/zephir/issues/1339
+     * @expectedException \Error
+     * @expectedExceptionMessage Cannot instantiate abstract class TestAbstractClass
      */
-    public function shouldCreateAnInstanceUsingMoreThan10Parameters()
+    public function shouldThrowErrorOnInstantiateAbstractClass()
     {
-        $this->assertInstanceOf(Instance::class, Instance::testIssue1339());
+        Instance::testInstanceCreate(\TestAbstractClass::class);
     }
 }
