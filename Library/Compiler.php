@@ -16,6 +16,7 @@ use Psr\Log\NullLogger;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
+use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\NotImplementedException;
 use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
@@ -58,7 +59,7 @@ final class Compiler
 
     protected $externalDependencies = [];
 
-    /** @var \ReflectionClass[] */
+    /** @var ClassDefinition[] */
     protected static $internalDefinitions = [];
 
     protected static $loadedPrototypes = false;
@@ -193,10 +194,11 @@ final class Compiler
      * @param string $className
      * @param string $location
      *
-     * @throws CompilerException
-     * @throws ParseException
-     *
      * @return bool
+     *
+     * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws ParseException
      */
     public function loadExternalClass($className, $location)
     {
@@ -218,6 +220,7 @@ final class Compiler
             return false;
         }
 
+        /** @var CompilerFile|CompilerFileAnonymous $compilerFile */
         $compilerFile = $this->compilerFileFactory->create($className, $filePath);
         $compilerFile->setIsExternal(true);
         $compilerFile->preCompile($this);
@@ -265,6 +268,10 @@ final class Compiler
      * @param string $className
      *
      * @return bool
+     *
+     * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws ParseException
      */
     public function isInterface($className)
     {
@@ -350,6 +357,8 @@ final class Compiler
      * @param string $className
      *
      * @return ClassDefinition
+     *
+     * @throws \ReflectionException
      */
     public function getInternalClassDefinition($className)
     {
@@ -502,18 +511,21 @@ final class Compiler
      *
      * @param bool $fromGenerate
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws CompilerException
+     * @throws Exception
+     * @throws IllegalStateException
+     * @throws InvalidArgumentException
      */
     public function generate($fromGenerate = false)
     {
-        /**
+        /*
          * Get global namespace.
          */
         $namespace = $this->checkDirectory();
 
-        /**
+        /*
          * Check whether there are external dependencies.
          */
         $externalDependencies = $this->config->get('external-dependencies');
@@ -548,7 +560,7 @@ final class Compiler
             $compileFile->checkDependencies($this);
         }
 
-        /**
+        /*
          * Sort the files by dependency ranking.
          */
         $files = [];
@@ -566,7 +578,7 @@ final class Compiler
         }
         $this->files = $files;
 
-        /**
+        /*
          * Convert C-constants into PHP constants.
          */
         $constantsSources = $this->config->get('constants-sources');
@@ -574,7 +586,7 @@ final class Compiler
             $this->loadConstantsSources($constantsSources);
         }
 
-        /**
+        /*
          * Set extension globals.
          */
         $globals = $this->config->get('globals');
@@ -610,8 +622,6 @@ final class Compiler
             if (is_dir($prototypesPath) && is_readable($prototypesPath)) {
                 /*
                  * Load additional extension prototypes.
-                 *
-                 * @var \DirectoryIterator
                  */
                 foreach (new \DirectoryIterator($prototypesPath) as $file) {
                     if ($file->isDir() || $file->isDot()) {
@@ -640,10 +650,12 @@ final class Compiler
                     if (!\extension_loaded($prototype)) {
                         $prototypeRealpath = realpath($prototypeDir);
                         if ($prototypeRealpath) {
-                            foreach (new \DirectoryIterator($prototypeRealpath) as $file) {
-                                if (!$file->isDir()) {
-                                    require $file->getRealPath();
+                            foreach (new \RecursiveDirectoryIterator($prototypeRealpath) as $file) {
+                                if ($file->isDir()) {
+                                    continue;
                                 }
+
+                                require $file->getRealPath();
                             }
                         }
                     }
@@ -1912,9 +1924,7 @@ final class Compiler
      *
      * @param string $filePath
      *
-     * @throws CompilerException
      * @throws IllegalStateException
-     * @throws ParseException
      */
     protected function preCompile($filePath)
     {
@@ -1943,26 +1953,31 @@ final class Compiler
      *
      * @param string $path
      *
-     * @throws CompilerException
+     * @throws IllegalStateException
+     * @throws InvalidArgumentException
      */
     protected function recursivePreCompile($path)
     {
-        if (!\is_string($path)) {
-            throw new CompilerException('Invalid compilation path'.var_export($path, true));
+        if (!\is_dir($path)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "An invalid path was passed to the compiler. Unable to obtain the '%s%s%s' directory.",
+                    getcwd(),
+                    \DIRECTORY_SEPARATOR,
+                    $path
+                )
+            );
         }
 
-        /**
+        /*
          * Pre compile all files.
          */
-        $files = [];
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        /*
-         * @var \SplFileInfo
-         */
+        $files = [];
         foreach ($iterator as $item) {
             if (!$item->isDir()) {
                 $files[] = $item->getPathname();
