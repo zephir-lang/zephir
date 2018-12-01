@@ -11,9 +11,7 @@
 
 namespace Zephir\Test;
 
-use Psr\Container\ContainerInterface;
 use Zephir\Compiler;
-use Zephir\Config;
 use Zephir\FileSystem\FileSystemInterface;
 use function Zephir\unlink_recursive;
 
@@ -93,13 +91,5 @@ class LifeCycleTest extends KernelTestCase
         /** @var Compiler $compiler */
         $compiler = $container->get(Compiler::class);
         $compiler->createProjectFiles('lifecycle');
-    }
-
-    /**
-     * @param ContainerInterface $container
-     */
-    protected function muteOutput(ContainerInterface $container)
-    {
-        $container->get(Config::class)->set('silent', true);
     }
 }
