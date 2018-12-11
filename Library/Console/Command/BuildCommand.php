@@ -79,8 +79,8 @@ final class BuildCommand extends Command
      */
     protected function getDevelopmentModeHelp()
     {
-        return <<<EOT
-A meta command that just calls <info>generate</info>, <info>compile</info> and <info>install</info> commands.
+        return <<<'EOT'
+This is a meta command that just calls the <info>generate</info>, <info>compile</info> and <info>install</info> commands.
 
 Using <comment>--dev</comment> option will force building and installing the extension in development mode
 (debug symbols and no optimizations). An extension compiled with debugging symbols means
