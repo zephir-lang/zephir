@@ -19,7 +19,7 @@ use Zephir\Config;
  */
 final class CompilerFormatter extends LineFormatter
 {
-    const SIMPLE_FORMAT = "%level_name%: %message% in %file% on line %line% %type%\n";
+    const SIMPLE_FORMAT = " %level_name%: %message% in %file% on line %line% %type%\n";
 
     /**
      * @var Config
@@ -95,18 +95,51 @@ final class CompilerFormatter extends LineFormatter
             $output = str_replace('%type%', $this->stringify($vars['type']), $output);
         }
 
-        unset($vars['context']);
+        $output = $this->replacePlaceholders($vars, $output);
+        $output = $this->cleanExtraPlaceholders($output);
 
+        return $output;
+    }
+
+    private function replacePlaceholders(array $vars, $output)
+    {
         // WARNING -> Warning
-        $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
-
-        foreach ($vars as $var => $val) {
-            if (false !== strpos($output, '%'.$var.'%')) {
-                $output = str_replace('%'.$var.'%', $this->stringify($val), $output);
-            }
+        if (array_key_exists('level_name', $vars)) {
+            $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
         }
 
-        // remove leftover %extra.xxx% and %context.xxx% if any
+        foreach ($vars as $var => $val) {
+            $placeholder = '%'.$var.'%';
+            $realValue = $this->stringify($val);
+
+            if (false === strpos($output, $placeholder)) {
+                continue;
+            }
+
+            // Strip level name from entries like "Info: Installing..."
+            if ('%level_name%' === $placeholder) {
+                switch ($realValue) {
+                    case 'Debug':
+                    case 'Info':
+                        $output = str_replace('%level_name%: ', '', $output);
+                        continue 2;
+                }
+            }
+
+            $output = str_replace('%'.$var.'%', $realValue, $output);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Remove leftover %extra.xxx% and %context.xxx% (if any)
+     *
+     * @param  string $output
+     * @return string
+     */
+    private function cleanExtraPlaceholders($output)
+    {
         if (false !== strpos($output, '%')) {
             $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
             $output = preg_replace('/ %type%\n/', "\n", $output);
