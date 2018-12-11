@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Fixed compilation error with inheritance of prototype interfaces
   [#1758](https://github.com/phalcon/zephir/issues/1758)
+- Fixed compilation error when a new file is added or removed to the project
+  [#1776](https://github.com/phalcon/zephir/issues/1776)
 
 ## [0.11.7] - 2018-11-27
 ### Changed

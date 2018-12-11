@@ -790,12 +790,13 @@ final class Compiler
          * When a new file is added or removed we need to run configure again
          */
         if (!$fromGenerate) {
-            if (!$this->filesystem->exists('compiled-files-sum')) {
+            if (false === $this->filesystem->exists('compiled-files-sum')) {
                 $needConfigure = true;
                 $this->filesystem->write('compiled-files-sum', $hash);
             } else {
                 if ($this->filesystem->read('compiled-files-sum') != $hash) {
                     $needConfigure = true;
+                    $this->filesystem->delete('compiled-files-sum');
                     $this->filesystem->write('compiled-files-sum', $hash);
                 }
             }
