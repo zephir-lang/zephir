@@ -133,9 +133,10 @@ final class CompilerFormatter extends LineFormatter
     }
 
     /**
-     * Remove leftover %extra.xxx% and %context.xxx% (if any)
+     * Remove leftover %extra.xxx% and %context.xxx% (if any).
      *
-     * @param  string $output
+     * @param string $output
+     *
      * @return string
      */
     private function cleanExtraPlaceholders($output)
