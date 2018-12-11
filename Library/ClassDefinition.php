@@ -14,6 +14,7 @@ namespace Zephir;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Zephir\ClassDefinition.
@@ -583,15 +584,17 @@ final class ClassDefinition
      * @param string $constantName
      *
      * @return bool|ClassConstant
+     *
+     * @throws InvalidArgumentException
      */
     public function getConstant($constantName)
     {
         if (!\is_string($constantName)) {
-            throw new \InvalidArgumentException('$constantName must be string type');
+            throw new InvalidArgumentException('$constantName must be string type');
         }
 
         if (empty($constantName)) {
-            throw new \InvalidArgumentException('$constantName must not be empty: '.$constantName);
+            throw new InvalidArgumentException('$constantName must not be empty: '.$constantName);
         }
 
         if (isset($this->constants[$constantName])) {

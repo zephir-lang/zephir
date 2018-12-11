@@ -96,7 +96,14 @@ class StaticConstantAccess
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot find constant called "'.$constant.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $expression);
+                        throw new CompilerException(
+                            sprintf(
+                                'Cannot find constant called "%s" on parent because class %s does not extend any class',
+                                $constant,
+                                $classDefinition->getCompleteName()
+                            ),
+                            $expression
+                        );
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -131,23 +138,42 @@ class StaticConstantAccess
                     $symbolVariable = $this->expectingVariable;
                     $symbolVariable->initVariant($compilationContext);
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                        'variable',
+                        $compilationContext,
+                        $expression
+                    );
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
             }
 
             /*
              * Variable that receives property accesses must be polymorphic
              */
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign class constants', $expression);
+                throw new CompilerException(
+                    'Cannot use variable: '.$symbolVariable->getType().' to assign class constants',
+                    $expression
+                );
             }
 
             $symbolVariable->setDynamicTypes('undefined');
 
             $compilationContext->headersManager->add('kernel/object');
-            $compilationContext->codePrinter->output('zephir_get_class_constant('.$symbolVariable->getName().', '.$classDefinition->getClassEntry($compilationContext).', SS("'.$constant.'") TSRMLS_CC);');
+
+            $compilationContext->codePrinter->output(
+                sprintf(
+                    'zephir_get_class_constant(%s, %s, SS("%s") TSRMLS_CC);',
+                    $symbolVariable->getName(),
+                    $classDefinition->getClassEntry($compilationContext),
+                    $constant
+                )
+            );
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
