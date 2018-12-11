@@ -1023,9 +1023,13 @@ final class Compiler
             ]
         );
 
-        $this->logger->info($command);
-        exec($command, $output, $exit);
+        array_map(function ($entry) {
+            if (!empty($entry)) {
+                $this->logger->debug(trim($entry));
+            }
+        }, explode('&&', $command));
 
+        exec($command, $output, $exit);
         $fileName = $this->config->get('extension-name') ?: $namespace;
 
         if (false == file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
