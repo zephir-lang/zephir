@@ -12,6 +12,7 @@
 namespace Zephir\FileSystem;
 
 use League\Flysystem;
+use Zephir\Exception\FileSystemException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
 
@@ -242,11 +243,20 @@ final class HardDisk implements FileSystemInterface
     /**
      * {@inheritdoc}
      *
+     * @throws FileSystemException
      * @throws Flysystem\RootViolationException
      */
     public function clean()
     {
-        $this->filesystem->deleteDir($this->localPath);
+        try {
+            $this->filesystem->deleteDir($this->localPath);
+        } catch (\ErrorException $e) {
+            // For reasons beyond our control, the actual owner of the directory
+            // contents may not be the same as the current user. Therefore we need
+            // to catch ErrorException and throw an expected exception with informing
+            // the current user.
+            throw new FileSystemException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
