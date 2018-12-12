@@ -13,6 +13,8 @@ namespace Zephir\Test\Command;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Zephir\Console\Application;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Test\KernelTestCase;
@@ -90,25 +92,31 @@ class CompileCommandTest extends KernelTestCase
 
         $container = self::$kernel->getContainer();
 
-        $application = $container->get(Application::class);
+        try {
+            $application = $container->get(Application::class);
 
-        $compilerFs = $container->get(FileSystemInterface::class);
-        $compilerFs->setBasePath(self::$kernel->getCacheDir());
+            $compilerFs = $container->get(FileSystemInterface::class);
+            $compilerFs->setBasePath(self::$kernel->getCacheDir());
 
-        $this->muteOutput($container);
+            $this->muteOutput($container);
 
-        $command = $application->find('compile');
-        $commandTester = new CommandTester($command);
+            $command = $application->find('compile');
+            $commandTester = new CommandTester($command);
 
-        $commandTester->execute(
-            [
-                'command' => $command->getName(),
-                $flag => true,
-            ],
-            ['verbosity' => OutputInterface::VERBOSITY_QUIET]
-        );
+            $commandTester->execute(
+                [
+                    'command' => 'compile',
+                    $flag => true,
+                ],
+                ['verbosity' => OutputInterface::VERBOSITY_QUIET]
+            );
 
-        $this->assertRegexp("/CFLAGS='{$cflags}'/", file_get_contents('ext/config.nice'));
+            $this->assertRegexp("/CFLAGS='{$cflags}'/", file_get_contents('ext/config.nice'));
+        } catch (ServiceCircularReferenceException $e) {
+            $this->fail($e->getMessage());
+        } catch (ServiceNotFoundException $e) {
+            $this->fail($e->getMessage());
+        }
     }
 
     public function devModeProvider()
