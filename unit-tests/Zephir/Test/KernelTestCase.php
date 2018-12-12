@@ -78,12 +78,15 @@ class KernelTestCase extends BaseTestCase
      * Do not output messages from the Zephir compiler.
      *
      * @param ContainerInterface $container
-     *
-     * @throws ServiceCircularReferenceException
-     * @throws ServiceNotFoundException
      */
     protected function muteOutput(ContainerInterface $container)
     {
-        $container->get(Config::class)->set('silent', true);
+        try {
+            $container->get(Config::class)->set('silent', true);
+        } catch (ServiceCircularReferenceException $e) {
+            $this->fail($e->getMessage());
+        } catch (ServiceNotFoundException $e) {
+            $this->fail($e->getMessage());
+        }
     }
 }
