@@ -63,7 +63,7 @@ final class FullCleanCommand extends Command
                 sprintf(
                     "For reasons beyond Zephir's control, a filesystem error has occurred. ".
                     'Please note: On Linux/Unix systems the current user must have the delete and execute '.
-                    'permissions on the internal cache directory,  For more information see chmod(1). '.
+                    'permissions on the internal cache directory,  For more information see chmod(1) and chown(1). '.
                     'System error was: %s',
                     $e->getMessage()
                 )
