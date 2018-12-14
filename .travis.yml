@@ -70,28 +70,7 @@ before_script:
 
 script:
   - zephir --ansi
-  - |
-      if [ "$(php-config --vernum)" -lt "70000" ]; then
-        test_suite="Extension_Php56"
-      elif [ "$(php-config --vernum)" -lt "70200" ]; then
-        test_suite="Extension_Php70"
-      else
-        test_suite="Extension_Php72"
-      fi
-
-      php \
-        -d extension=ext/modules/test.so \
-        vendor/bin/simple-phpunit \
-        --colors=always \
-        --bootstrap unit-tests/ext-bootstrap.php \
-        --testsuite $test_suite
-
-  - |
-      php \
-        -d extension=ext/modules/test.so \
-        vendor/bin/simple-phpunit \
-        --colors=always \
-        --testsuite Zephir
+  - .ci/run-tests.sh
 
 after_success:
   - .ci/after-success.sh
