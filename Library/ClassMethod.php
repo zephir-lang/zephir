@@ -15,6 +15,7 @@ use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
+use Zephir\FunctionLike\ReturnType;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
@@ -27,54 +28,41 @@ use Zephir\Passes\StaticTypeInference;
 class ClassMethod
 {
     public $optimizable = true;
-    /** @var ClassDefinition */
+
+    /**
+     * @var ClassDefinition
+     */
     protected $classDefinition;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $visibility;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $name;
 
-    /** @var ClassMethodParameters|null */
+    /**
+     * @var ClassMethodParameters|null
+     */
     protected $parameters;
 
-    /** @var StatementsBlock|null */
+    /**
+     * @var StatementsBlock|null
+     */
     protected $statements;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     protected $docblock;
 
     /**
      * @var Documentation\Docblock
      */
     protected $parsedDocblock;
-
-    /**
-     * Types returned by the method.
-     *
-     * @var array
-     */
-    protected $returnTypes = [];
-
-    /**
-     * Raw-types returned by the method.
-     *
-     * @var array
-     */
-    protected $returnTypesRaw = [];
-
-    /**
-     * Class type hints returned by the method.
-     */
-    protected $returnClassTypes = [];
-
-    /**
-     * Whether the variable is void.
-     *
-     * @var bool
-     */
-    protected $void = false;
 
     /**
      * Whether the method is public or not.
@@ -160,6 +148,8 @@ class ClassMethod
      * @param string|null                $docblock
      * @param array|null                 $returnType
      * @param array|null                 $original
+     *
+     * @throws CompilerException
      */
     public function __construct(
         ClassDefinition $classDefinition,
@@ -181,18 +171,38 @@ class ClassMethod
         $this->docblock = $docblock;
         $this->expression = $original;
 
-        $this->setReturnTypes($returnType);
+        $this->createReturnTypes($returnType);
     }
 
-    public function setReturnTypes(array $returnType = null)
+    /**
+     * @var ReturnType\Collection
+     */
+    protected $returnTypes;
+
+    /**
+     * Create the method return types.
+     *
+     * @param array|null $returnType
+     */
+    protected function createReturnTypes(array $returnType = null)
     {
-        $this->returnTypesRaw = $returnType;
+        $this->returnTypes = new ReturnType\Collection();
+
         if (null === $returnType) {
             return;
         }
 
-        if (isset($returnType['void']) && $returnType['void']) {
-            $this->void = true;
+        $factory = new ReturnType\Factory();
+
+        if (isset($returnType[T_VOID]) && $returnType[T_VOID]) {
+            $this->returnTypes->attach(
+                $factory->createVoid($returnType),
+                [
+                    'file' => isset($returnType['file']) ? $returnType['file'] : 'unknown',
+                    'line' => isset($returnType['line']) ? $returnType['line'] : 0,
+                    'char' => isset($returnType['char']) ? $returnType['char'] : 0,
+                ]
+            );
 
             return;
         }
@@ -201,41 +211,31 @@ class ClassMethod
             return;
         }
 
-        $types = [];
-        $castTypes = [];
-
         foreach ($returnType['list'] as $returnTypeItem) {
-            if (isset($returnTypeItem['cast'])) {
-                if (isset($returnTypeItem['cast']['collection'])) {
-                    continue;
-                }
-                $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-            } else {
-                $types[$returnTypeItem['data-type']] = $returnTypeItem;
-            }
-        }
-
-        if (\count($castTypes)) {
-            $types['object'] = [];
-            $this->returnClassTypes = $castTypes;
-        }
-
-        if (\count($types)) {
-            $this->returnTypes = $types;
+            $this->returnTypes->attach(
+                $factory->create($returnTypeItem),
+                [
+                    'file' => isset($returnTypeItem['file']) ? $returnTypeItem['file'] : 'unknown',
+                    'line' => isset($returnTypeItem['line']) ? $returnTypeItem['line'] : 0,
+                    'char' => isset($returnTypeItem['char']) ? $returnTypeItem['char'] : 0,
+                ]
+            );
         }
     }
 
     /**
-     * @return array
+     * Gets the method return types.
+     *
+     * @return ReturnType\Collection
      */
-    public function getReturnTypesRaw()
+    public function getReturnTypes()
     {
-        return $this->returnTypesRaw;
+        return $this->returnTypes;
     }
 
-    public function hasReturnTypesRaw()
+    public function setReturnTypes(ReturnType\Collection $returnTypes)
     {
-        return !empty($this->returnTypesRaw);
+        $this->returnTypes = $returnTypes;
     }
 
     /**
@@ -520,154 +520,6 @@ class ClassMethod
     }
 
     /**
-     * Checks if the method has return-type or cast hints.
-     *
-     * @return bool
-     */
-    public function hasReturnTypes()
-    {
-        if (\count($this->returnTypes)) {
-            return true;
-        }
-
-        if (\count($this->returnClassTypes)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether at least one return type hint is null compatible.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function areReturnTypesNullCompatible($type = null)
-    {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'null':
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether at least one return type hint is integer compatible.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function areReturnTypesIntCompatible($type = null)
-    {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'int':
-                    case 'uint':
-                    case 'char':
-                    case 'uchar':
-                    case 'long':
-                    case 'ulong':
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether at least one return type hint is double compatible.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function areReturnTypesDoubleCompatible($type = null)
-    {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'double':
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether at least one return type hint is integer compatible.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function areReturnTypesBoolCompatible($type = null)
-    {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'bool':
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether at least one return type hint is integer compatible.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function areReturnTypesStringCompatible($type = null)
-    {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'string':
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returned type hints by the method.
-     *
-     * @return array
-     */
-    public function getReturnTypes()
-    {
-        return $this->returnTypes;
-    }
-
-    /**
-     * Returned class-type hints by the method.
-     *
-     * @return array
-     */
-    public function getReturnClassTypes()
-    {
-        return $this->returnClassTypes;
-    }
-
-    /**
      * Returns the number of parameters the method has.
      *
      * @return bool
@@ -832,16 +684,6 @@ class ClassMethod
         }
 
         return implode('|', array_keys($modifiers));
-    }
-
-    /**
-     * Checks if the method must not return any value.
-     *
-     * @return bool
-     */
-    public function isVoid()
-    {
-        return $this->void;
     }
 
     /**
@@ -2130,7 +1972,7 @@ class ClassMethod
                 /*
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
                  */
-                if ($this->hasReturnTypes()) {
+                if ($this->returnTypes->count()) {
                     throw new CompilerException(
                         'Reached end of the method without returning a valid type specified in the return-type hints',
                         $this->expression['return-type']
@@ -2234,7 +2076,7 @@ class ClassMethod
      */
     public function getArgInfoName(ClassDefinition $classDefinition = null)
     {
-        if (null != $classDefinition) {
+        if (null !== $classDefinition) {
             return sprintf(
                 'arginfo_%s_%s_%s',
                 strtolower($classDefinition->getCNamespace()),
@@ -2244,82 +2086,5 @@ class ClassMethod
         }
 
         return sprintf('arginfo_%s', strtolower($this->getInternalName()));
-    }
-
-    /**
-     * Is method have determined return type hint.
-     *
-     * This method is used to generate:
-     *
-     * - ZEND_BEGIN_ARG_INFO_EX
-     * - ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
-     *
-     * Examples:
-     *
-     * - FALSE: function foo() -> void;
-     * - TRUE: function foo() -> null;
-     * - TRUE: function foo() -> bool|string|..;
-     * - TRUE: function foo() -> <\stdClass>;
-     * - FALSE: function foo();
-     * - FALSE: function foo() -> var;
-     * - FALSE: function foo() -> resource|callable;
-     *
-     * @return bool
-     */
-    public function isReturnTypesHintDetermined()
-    {
-        if (0 == \count($this->returnTypes) || $this->isVoid()) {
-            return false;
-        }
-
-        foreach ($this->returnTypes as $returnType => $definition) {
-            switch ($returnType) {
-                case 'variable':
-                case 'callable':
-                case 'resource':
-                    return false;
-            }
-
-            if (isset($definition['type']) && 'return-type-annotation' === $definition['type']) {
-                if ($this->areReturnTypesBoolCompatible() ||
-                    $this->areReturnTypesDoubleCompatible() ||
-                    $this->areReturnTypesIntCompatible() ||
-                    $this->areReturnTypesNullCompatible() ||
-                    $this->areReturnTypesStringCompatible() ||
-                    array_key_exists('array', $this->getReturnTypes())
-                ) {
-                    continue;
-                }
-
-                /*
-                 * @todo Probable we should detect return type more more carefully.
-                 * It is hard to process return type from the annotations at this time.
-                 * Thus we just return false here.
-                 */
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if the method have compatible return types.
-     *
-     * @return bool
-     */
-    public function areReturnTypesCompatible()
-    {
-        // null | T1 | T2
-        if (\count($this->returnTypes) > 2) {
-            return false;
-        }
-
-        // T1 | T2
-        if (2 == \count($this->returnTypes) && !isset($this->returnTypes['null'])) {
-            return false;
-        }
-
-        return true;
     }
 }

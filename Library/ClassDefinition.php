@@ -1328,10 +1328,12 @@ final class ClassDefinition
 
             foreach ($methods as $method) {
                 if ('class' == $this->getType()) {
-                    if (!$method->isInternal()) {
+                    if (false == $method->isInternal()) {
+                        $returnTypes = $method->getReturnTypes();
+
                         $richFormat = $this->compiler->backend->isZE3() &&
-                            $method->isReturnTypesHintDetermined() &&
-                            $method->areReturnTypesCompatible();
+                            $returnTypes->areReturnTypesWellKnown() &&
+                            $returnTypes->areReturnTypesCompatible();
 
                         if ($richFormat || $method->hasParameters()) {
                             $codePrinter->output(
@@ -1357,9 +1359,11 @@ final class ClassDefinition
                         }
                     }
                 } else {
+                    $returnTypes = $method->getReturnTypes();
+
                     $richFormat = $this->compiler->backend->isZE3() &&
-                            $method->isReturnTypesHintDetermined() &&
-                            $method->areReturnTypesCompatible();
+                        $returnTypes->areReturnTypesWellKnown() &&
+                        $returnTypes->areReturnTypesCompatible();
 
                     if ($method->isStatic()) {
                         if ($richFormat || $method->hasParameters()) {

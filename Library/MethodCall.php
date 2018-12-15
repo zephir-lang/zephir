@@ -352,25 +352,32 @@ class MethodCall extends Call
         if ($isExpecting) {
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
-                    if ($method->isVoid()) {
-                        throw new CompilerException("Method '".$classDefinition->getCompleteName().'::'.$expression['name']."' is marked as 'void' and it does not return anything", $expression);
-                    }
-
-                    $returnClassTypes = $method->getReturnClassTypes();
-
-                    if (null !== $returnClassTypes) {
-                        $symbolVariable->setDynamicTypes('object');
-                        foreach ($returnClassTypes as &$returnClassType) {
-                            $returnClassType = $compilationContext->getFullName($returnClassType);
-                        }
-                        $symbolVariable->setClassTypes($returnClassTypes);
+                    if ($method->getReturnTypes()->onlyVoid()) {
+                        throw new CompilerException(
+                            sprintf(
+                                "Method '%s::%s' is marked as '%s' and it does not return anything",
+                                $classDefinition->getCompleteName(),
+                                $expression['name'],
+                                T_VOID
+                            ),
+                            $expression
+                        );
                     }
 
                     $returnTypes = $method->getReturnTypes();
-                    if (null !== $returnTypes) {
-                        foreach ($returnTypes as $dataType => $returnType) {
-                            $symbolVariable->setDynamicTypes($dataType);
-                        }
+                    $classTypes = [];
+
+                    $returnClassTypes = $returnTypes->getObjectLikeReturnTypes();
+                    foreach ($returnClassTypes as $classType) {
+                        $classTypes = $compilationContext->getFullName($classType->getValue());
+                    }
+
+                    if (!empty($classTypes)) {
+                        $symbolVariable->setClassTypes($classTypes);
+                    }
+
+                    foreach ($returnTypes->getRealReturnTypes() as $returnType) {
+                        $symbolVariable->setDynamicTypes($returnType->getDataType());
                     }
                 }
             }

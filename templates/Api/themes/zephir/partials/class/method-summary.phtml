@@ -4,27 +4,24 @@
  */
 
 $allTypes = [];
-$_lClasses = $method->getReturnClassTypes();
+$_lClasses = $method->getReturnTypes()->getObjectLikeReturnTypes();
 
 foreach ($_lClasses as $c) {
-    if ($c{0} == "\\") {
-        $allTypes[] = substr($c,1);
+    $val = $c->getValue();
+    if ($val{0} == "\\") {
+        $allTypes[] = substr($val,1);
     } else {
-        $_lFullClassName = $classNamespace . "\\" . $c;
+        $_lFullClassName = $classNamespace . "\\" . $val;
         $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
 
         $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
     }
 }
 
-$types = $method->getReturnTypes();
+$types = $method->getReturnTypes()->getRealReturnTypes();
 
-if ($types && count($types)>0 ) {
-    foreach ($types as $type) {
-        if ($type && isset($type["data-type"])) {
-            $allTypes[] =  $type["data-type"];
-        }
-    }
+foreach ($types as $type) {
+    $allTypes[] =  $type->getDataType();
 }
 
 $docblock = $method->getParsedDocblock();

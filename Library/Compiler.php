@@ -1838,9 +1838,11 @@ final class Compiler
             /** Generate FE's */
             $paramData = 'NULL';
 
+            $returnTypes = $func->getReturnTypes();
+
             $richFormat = $this->backend->isZE3() &&
-                $func->isReturnTypesHintDetermined() &&
-                $func->areReturnTypesCompatible();
+                $returnTypes->areReturnTypesWellKnown() &&
+                $returnTypes->areReturnTypesCompatible();
 
             if ($richFormat || $func->hasParameters()) {
                 $paramData = $argInfoName;

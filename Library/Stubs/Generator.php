@@ -18,6 +18,11 @@ use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Exception;
+use const Zephir\T_ARRAY;
+use const Zephir\T_BOOL;
+use const Zephir\T_FLOAT;
+use const Zephir\T_INT;
+use const Zephir\T_STRING;
 
 /**
  * Stubs Generator.
@@ -267,36 +272,42 @@ EOF;
         }
 
         $return = '';
-        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
+        $returnTypes = $method->getReturnTypes();
+        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $returnTypes->count()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
-                $return = key($method->getReturnClassTypes());
+            $objects = $returnTypes->getObjectLikeReturnTypes();
+            if (1 == \count($objects)) {
+                $return = $objects[0]->getValue();
                 ++$supported;
             }
 
-            if ($method->areReturnTypesIntCompatible()) {
-                $return = 'int';
-                ++$supported;
-            }
-            if ($method->areReturnTypesDoubleCompatible()) {
-                $return = 'float';
-                ++$supported;
-            }
-            if ($method->areReturnTypesBoolCompatible()) {
-                $return = 'bool';
-                ++$supported;
-            }
-            if ($method->areReturnTypesStringCompatible()) {
-                $return = 'string';
-                ++$supported;
-            }
-            if (array_key_exists('array', $method->getReturnTypes())) {
-                $return = 'array';
+            if ($returnTypes->areReturnTypesIntCompatible()) {
+                $return = T_INT;
                 ++$supported;
             }
 
-            if ($method->areReturnTypesNullCompatible()) {
+            if ($returnTypes->areReturnTypesDoubleCompatible()) {
+                $return = T_FLOAT;
+                ++$supported;
+            }
+
+            if ($returnTypes->areReturnTypesBoolCompatible()) {
+                $return = T_BOOL;
+                ++$supported;
+            }
+
+            if ($returnTypes->areReturnTypesStringCompatible()) {
+                $return = T_STRING;
+                ++$supported;
+            }
+
+            if ($returnTypes->areReturnTypesArrayCompatible()) {
+                $return = T_ARRAY;
+                ++$supported;
+            }
+
+            if ($returnTypes->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
                     $return = '?'.$return;
                 } else {
@@ -313,8 +324,14 @@ EOF;
             $return = ': '.$return;
         }
 
-        $function = trim($modifier.' function', ' ').' ';
-        $methodBody = $indent.$function.$method->getName().'('.implode(', ', $parameters).')'.$return;
+        $methodBody = sprintf(
+            '%s%s %s(%s)%s',
+            $indent,
+            trim($modifier.' function', ' '),
+            $method->getName(),
+            implode(', ', $parameters),
+            $return
+        );
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';

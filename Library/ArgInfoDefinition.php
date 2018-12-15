@@ -74,10 +74,9 @@ class ArgInfoDefinition
      */
     public function render()
     {
-        if ($this->richFormat &&
-            $this->method->isReturnTypesHintDetermined() &&
-            $this->method->areReturnTypesCompatible()
-        ) {
+        $returnTypes = $this->method->getReturnTypes();
+
+        if ($this->richFormat && $returnTypes->areReturnTypesWellKnown() && $returnTypes->areReturnTypesCompatible()) {
             $this->richRenderStart();
 
             if (false == $this->hasParameters()) {
@@ -105,13 +104,11 @@ class ArgInfoDefinition
 
     private function richRenderStart()
     {
-        if (array_key_exists('object', $this->method->getReturnTypes())) {
-            $class = 'NULL';
+        $returnTypes = $this->method->getReturnTypes();
 
-            if (1 == \count($this->method->getReturnClassTypes())) {
-                $class = key($this->method->getReturnClassTypes());
-                $class = escape_class($this->compilationContext->getFullName($class));
-            }
+        if ($returnTypes->areReturnTypesObjectCompatible()) {
+            $class = $returnTypes->getObjectLikeReturnTypes()[0]->getValue();
+            $class = escape_class($this->compilationContext->getFullName($class));
 
             $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
             $this->codePrinter->output(
@@ -121,18 +118,19 @@ class ArgInfoDefinition
                     (int) $this->returnByRef,
                     $this->method->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->method->areReturnTypesNullCompatible()
+                    (int) $this->method->getReturnTypes()->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#else');
             $this->codePrinter->output(
                 sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
+                    "/* %s */\n".'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
+                    json_encode($this->method->getReturnTypes()),
                     $this->name,
                     (int) $this->returnByRef,
                     $this->method->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->method->areReturnTypesNullCompatible()
+                    (int) $this->method->getReturnTypes()->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#endif');
@@ -148,7 +146,7 @@ class ArgInfoDefinition
                 (int) $this->returnByRef,
                 $this->method->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->method->areReturnTypesNullCompatible()
+                (int) $this->method->getReturnTypes()->areReturnTypesNullCompatible()
             )
         );
 
@@ -161,7 +159,7 @@ class ArgInfoDefinition
                 (int) $this->returnByRef,
                 $this->method->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->method->areReturnTypesNullCompatible()
+                (int) $this->method->getReturnTypes()->areReturnTypesNullCompatible()
             )
         );
 
@@ -325,23 +323,25 @@ class ArgInfoDefinition
 
     private function getReturnType()
     {
-        if ($this->method->areReturnTypesIntCompatible()) {
+        $returnTypes = $this->method->getReturnTypes();
+
+        if ($returnTypes->areReturnTypesIntCompatible()) {
             return 'IS_LONG';
         }
 
-        if ($this->method->areReturnTypesDoubleCompatible()) {
+        if ($returnTypes->areReturnTypesDoubleCompatible()) {
             return 'IS_DOUBLE';
         }
 
-        if ($this->method->areReturnTypesBoolCompatible()) {
+        if ($returnTypes->areReturnTypesBoolCompatible()) {
             return '_IS_BOOL';
         }
 
-        if ($this->method->areReturnTypesStringCompatible()) {
+        if ($returnTypes->areReturnTypesStringCompatible()) {
             return 'IS_STRING';
         }
 
-        if (array_key_exists('array', $this->method->getReturnTypes())) {
+        if ($returnTypes->areReturnTypesArrayCompatible()) {
             return 'IS_ARRAY';
         }
 

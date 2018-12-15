@@ -30,41 +30,21 @@ class FunctionDefinition extends ClassMethod
      */
     private $isGlobal;
 
-    public function __construct($namespace, $name, $parameters, StatementsBlock $statements = null, $returnType = null, array $original = null)
-    {
+    public function __construct(
+        $namespace,
+        $name,
+        $parameters,
+        StatementsBlock $statements = null,
+        array $returnType = null,
+        array $original = null
+    ) {
         $this->namespace = $namespace;
         $this->name = $name;
         $this->parameters = $parameters;
         $this->statements = $statements;
         $this->expression = $original;
 
-        if ($returnType['void']) {
-            $this->void = true;
-
-            return;
-        }
-
-        if (isset($returnType['list'])) {
-            $types = [];
-            $castTypes = [];
-            foreach ($returnType['list'] as $returnTypeItem) {
-                if (isset($returnTypeItem['cast'])) {
-                    if (isset($returnTypeItem['cast']['collection'])) {
-                        continue;
-                    }
-                    $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-                } else {
-                    $types[$returnTypeItem['data-type']] = $returnTypeItem;
-                }
-            }
-            if (\count($castTypes)) {
-                $types['object'] = [];
-                $this->returnClassTypes = $castTypes;
-            }
-            if (\count($types)) {
-                $this->returnTypes = $types;
-            }
-        }
+        $this->createReturnTypes($returnType);
     }
 
     /**

@@ -13,7 +13,20 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
+use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
+use const Zephir\T_BOOL;
+use const Zephir\T_CHAR;
+use const Zephir\T_DOUBLE;
+use const Zephir\T_INT;
+use const Zephir\T_ISTRING;
+use const Zephir\T_LONG;
+use const Zephir\T_NULL;
+use const Zephir\T_STRING;
+use const Zephir\T_UCHAR;
+use const Zephir\T_UINT;
+use const Zephir\T_ULONG;
+use const Zephir\T_VARIABLE;
 use function Zephir\add_slashes;
 
 /**
@@ -27,6 +40,7 @@ class ReturnStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws CompilerException
+     * @throws InvalidTypeException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -41,8 +55,11 @@ class ReturnStatement extends StatementAbstract
                 throw new CompilerException('Constructors cannot return values', $statement['expr']);
             }
 
-            if ($currentMethod->isVoid()) {
-                throw new CompilerException("Method is marked as 'void' and it must not return any value", $statement['expr']);
+            if ($currentMethod->getReturnTypes()->onlyVoid()) {
+                throw new CompilerException(
+                    "Method is marked as 'void' and it must not return any value",
+                    $statement['expr']
+                );
             }
 
             /*
@@ -58,7 +75,13 @@ class ReturnStatement extends StatementAbstract
                             $property = $statement['expr']['right']['value'];
                             $classDefinition = $compilationContext->classDefinition;
                             if (!$classDefinition->hasProperty($property)) {
-                                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement['expr']['right']);
+                                throw new CompilerException(
+                                    sprintf(
+                                        "Class '%s' does not have a property called: '%s'",
+                                        $classDefinition->getCompleteName(),
+                                        $property
+                                    ),
+                                    $statement['expr']['right']);
                             }
 
                             $compilationContext->headersManager->add('kernel/object');
@@ -83,70 +106,87 @@ class ReturnStatement extends StatementAbstract
             /*
              * Here we check if the variable returns a compatible type according to its type hints
              */
-            if ($currentMethod->hasReturnTypes()) {
+            $returnTypes = $currentMethod->getReturnTypes();
+            if ($returnTypes->count()) {
                 switch ($resolvedExpr->getType()) {
-                    case 'null':
-                        if (!$currentMethod->areReturnTypesNullCompatible()) {
-                            throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                    case T_NULL:
+                        if (false == $returnTypes->areReturnTypesNullCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'char':
-                    case 'uchar':
-                        if (!$currentMethod->areReturnTypesIntCompatible()) {
-                            throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                    case T_INT:
+                    case T_UINT:
+                    case T_LONG:
+                    case T_ULONG:
+                    case T_CHAR:
+                    case T_UCHAR:
+                        if (false == $returnTypes->areReturnTypesIntCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case 'bool':
-                        if (!$currentMethod->areReturnTypesBoolCompatible()) {
-                            throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                    case T_BOOL:
+                        if (false == $returnTypes->areReturnTypesBoolCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case 'double':
-                        if (!$currentMethod->areReturnTypesDoubleCompatible()) {
-                            throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                    case T_DOUBLE:
+                        if (false == $returnTypes->areReturnTypesDoubleCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case 'string':
-                        if (!$currentMethod->areReturnTypesStringCompatible()) {
-                            throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                    case T_STRING:
+                    case T_ISTRING:
+                        if (false == $returnTypes->areReturnTypesStringCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case 'variable':
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
+                    case T_VARIABLE:
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
+                            $resolvedExpr->getCode(),
+                            $compilationContext,
+                            $statement['expr']
+                        );
+
                         switch ($symbolVariable->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'char':
-                            case 'uchar':
-                                if (!$currentMethod->areReturnTypesIntCompatible()) {
-                                    throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                            case T_INT:
+                            case T_UINT:
+                            case T_LONG:
+                            case T_ULONG:
+                            case T_CHAR:
+                            case T_UCHAR:
+                                if (false == $returnTypes->areReturnTypesIntCompatible()) {
+                                    throw new CompilerException(
+                                        sprintf(
+                                            'Returning type: %s but '.
+                                            'this type is not compatible with return-type hints declared in the method',
+                                            $resolvedExpr->getType()
+                                        ),
+                                        $statement['expr']
+                                    );
                                 }
                                 break;
 
-                            case 'double':
-                                if (!$currentMethod->areReturnTypesDoubleCompatible()) {
-                                    throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                            case T_DOUBLE:
+                                if (false == $returnTypes->areReturnTypesDoubleCompatible()) {
+                                    throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
-                            case 'string':
-                                if (!$currentMethod->areReturnTypesStringCompatible()) {
-                                    throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                            case T_STRING:
+                            case T_ISTRING:
+                                if (false == $returnTypes->areReturnTypesStringCompatible()) {
+                                    throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
-                            case 'bool':
-                                if (!$currentMethod->areReturnTypesBoolCompatible()) {
-                                    throw new CompilerException('Returning type: '.$resolvedExpr->getType().' but this type is not compatible with return-type hints declared in the method', $statement['expr']);
+                            case T_BOOL:
+                                if (false == $returnTypes->areReturnTypesBoolCompatible()) {
+                                    throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
@@ -158,28 +198,29 @@ class ReturnStatement extends StatementAbstract
             }
 
             switch ($resolvedExpr->getType()) {
-                case 'null':
+                case T_NULL:
                     $codePrinter->output('RETURN_MM_NULL();');
                     break;
 
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'char':
-                case 'uchar':
+                case T_INT:
+                case T_UINT:
+                case T_LONG:
+                case T_ULONG:
+                case T_CHAR:
+                case T_UCHAR:
                     $codePrinter->output('RETURN_MM_LONG('.$resolvedExpr->getCode().');');
                     break;
 
-                case 'bool':
+                case T_BOOL:
                     $codePrinter->output('RETURN_MM_BOOL('.$resolvedExpr->getBooleanCode().');');
                     break;
 
-                case 'double':
+                case T_DOUBLE:
                     $codePrinter->output('RETURN_MM_DOUBLE('.$resolvedExpr->getCode().');');
                     break;
 
-                case 'string':
-                case 'istring':
+                case T_STRING:
+                case T_ISTRING:
                     $compilationContext->backend->returnString(
                         add_slashes($resolvedExpr->getCode()),
                         $compilationContext
@@ -200,24 +241,25 @@ class ReturnStatement extends StatementAbstract
                     }
 
                     switch ($symbolVariable->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'char':
-                        case 'uchar':
+                        case T_INT:
+                        case T_UINT:
+                        case T_LONG:
+                        case T_ULONG:
+                        case T_CHAR:
+                        case T_UCHAR:
                             $codePrinter->output('RETURN_MM_LONG('.$symbolVariable->getName().');');
                             break;
 
-                        case 'double':
+                        case T_DOUBLE:
                             $codePrinter->output('RETURN_MM_DOUBLE('.$symbolVariable->getName().');');
                             break;
 
-                        case 'string':
+                        case T_STRING:
                         case 'array':
                             $codePrinter->output('RETURN_CTOR('.$compilationContext->backend->getVariableCode($symbolVariable).');');
                             break;
 
-                        case 'bool':
+                        case T_BOOL:
                             $codePrinter->output('RETURN_MM_BOOL('.$symbolVariable->getName().');');
                             break;
 

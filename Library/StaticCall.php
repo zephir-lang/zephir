@@ -222,19 +222,21 @@ class StaticCall extends Call
         if ($isExpecting) {
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
-                    $returnClassTypes = $method->getReturnClassTypes();
-                    if (null !== $returnClassTypes) {
-                        $symbolVariable->setDynamicTypes('object');
-                        foreach ($returnClassTypes as $classType) {
-                            $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
-                        }
+                    $returnTypes = $method->getReturnTypes();
+                    $classTypes = [];
+
+                    $returnClassTypes = $returnTypes->getObjectLikeReturnTypes();
+                    foreach ($returnClassTypes as $classType) {
+                        $classTypes[] = $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
                     }
 
-                    $returnTypes = $method->getReturnTypes();
-                    if (null !== $returnTypes) {
-                        foreach ($returnTypes as $dataType => $returnType) {
-                            $symbolVariable->setDynamicTypes($dataType);
-                        }
+                    if (!empty($classTypes)) {
+                        $symbolVariable->setDynamicTypes('object');
+                        $symbolVariable->setClassTypes($classTypes);
+                    }
+
+                    foreach ($returnTypes->getRealReturnTypes() as $returnType) {
+                        $symbolVariable->setDynamicTypes($returnType->getDataType());
                     }
                 }
             }

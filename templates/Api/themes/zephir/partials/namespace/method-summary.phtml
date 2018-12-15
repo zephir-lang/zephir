@@ -9,28 +9,18 @@
     <div class="method-return">
 
         <?php
+            $allTypes = [];
+            $classes = [];
 
-            $allTypes = array();
-
-            if($method->getReturnClassTypes()){
-                $allTypes = array_merge($allTypes,$method->getReturnClassTypes());
-
+            foreach ($method->getReturnTypes()->getObjectLikeReturnTypes() as $type) {
+                $allTypes[] = $type->getValue();
             }
 
-
-            $types = $method->getReturnTypes();
-
-            if($types && count($types)>0 ){
-
-                foreach($types as $type){
-
-                    if($type && isset($type["data-type"]))
-                        $allTypes[] =  $type["data-type"];
-                }
+            foreach ($method->getReturnTypes()->getRealReturnTypes() as $type) {
+                $allTypes[] = $type->getDataType();
             }
 
-            echo implode("|",$allTypes);
-
+            echo implode(' | ', \array_unique($allTypes, \SORT_STRING));
         ?>
 
     </div>

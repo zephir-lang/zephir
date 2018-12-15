@@ -13,6 +13,8 @@ namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
 use Zephir\ClassMethod;
+use const Zephir\T_MIXED;
+use const Zephir\T_VARIABLE;
 
 /**
  * Stubs Generator.
@@ -57,45 +59,26 @@ class MethodDocBlock extends DocBlock
         $return = [];
         $returnTypes = $method->getReturnTypes();
 
-        if ($returnTypes) {
-            foreach ($returnTypes as $type) {
-                if (isset($type['data-type'])) {
-                    $return[] = 'variable' == $type['data-type'] ? 'mixed' : $type['data-type'];
-                }
+        foreach ($returnTypes->getRealReturnTypes() as $returnType) {
+            $dataType = $returnType->getDataType();
+            $return[] = T_VARIABLE == $dataType ? T_MIXED : $dataType;
+        }
+
+        foreach ($returnTypes->getCastHintedReturnTypes() as $returnType) {
+            $value = $returnType->getValue();
+
+            if ($this->aliasManager->isAlias($value)) {
+                $value = '\\'.$this->aliasManager->getAlias($value);
+            }
+
+            if ($returnType->isCollection()) {
+                $return[] = sprintf('%s[]', $value);
+            } else {
+                $return[] = sprintf('%s', $value);
             }
         }
 
-        $returnClassTypes = $method->getReturnClassTypes();
-        if ($returnClassTypes) {
-            foreach ($returnClassTypes as $key => $returnClassType) {
-                if ($this->aliasManager->isAlias($returnClassType)) {
-                    $returnClassTypes[$key] = '\\'.$this->aliasManager->getAlias($returnClassType);
-                }
-            }
-
-            $return = array_merge($return, $returnClassTypes);
-        }
-
-        if ($method->hasReturnTypesRaw()) {
-            $returnClassTypes = $method->getReturnTypesRaw();
-
-            if (!empty($returnClassTypes['list'])) {
-                foreach ($returnClassTypes['list'] as $returnType) {
-                    if (empty($returnType['cast']) || !$returnType['collection']) {
-                        continue;
-                    }
-
-                    $key = $returnType['cast']['value'];
-                    $type = $key;
-
-                    if ($this->aliasManager->isAlias($type)) {
-                        $type = '\\'.$this->aliasManager->getAlias($type);
-                    }
-
-                    $return[$key] = $type.'[]';
-                }
-            }
-        }
+        $return = array_unique($return, \SORT_STRING);
 
         if (!empty($return)) {
             $this->return = [implode('|', $return), ''];
