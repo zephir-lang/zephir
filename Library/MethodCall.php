@@ -244,8 +244,11 @@ class MethodCall extends Call
                         $numberImplemented = 0;
                         $compiler = $compilationContext->compiler;
                         foreach ($classTypes as $type) {
-                            if ($compiler->isClass($type) || $compiler->isInterface($type) ||
-                                $compiler->isBundledClass($type) || $compiler->isBundledInterface($type)) {
+                            if ($compiler->isClass($type) ||
+                                $compiler->isInterface($type) ||
+                                $compiler->isBundledClass($type) ||
+                                $compiler->isBundledInterface($type)
+                            ) {
                                 if ($compiler->isClass($type) || $compiler->isInterface($type)) {
                                     $classDefinition = $compiler->getClassDefinition($type);
                                 } else {
@@ -416,6 +419,7 @@ class MethodCall extends Call
         /*
          * Mark references
          */
+        $params = [];
         if (isset($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression, isset($method) ? $method : null);
             if (\count($references)) {
@@ -539,8 +543,6 @@ class MethodCall extends Call
                     }
                 }
             }
-        } else {
-            $params = [];
         }
 
         // Add the last call status to the current symbol table
@@ -562,11 +564,14 @@ class MethodCall extends Call
                 $method = $realMethod[1];
                 $isInternal = $realMethod[1]->isInternal();
                 if ($isInternal && $realMethod[0] > 1) {
-                    throw new CompilerException("Cannot resolve method: '".$expression['name']."' in polymorphic variable", $expression);
+                    throw new CompilerException(
+                        sprintf("Cannot resolve method: '%s' in polymorphic variable", $expression['name']),
+                        $expression
+                    );
                 }
             }
 
-            if (!$isInternal) {
+            if (false == $isInternal) {
                 // Check if the method call can have an inline cache
                 $methodCache = $compilationContext->cacheManager->getMethodCache();
 
@@ -576,7 +581,14 @@ class MethodCall extends Call
                     $variableVariable
                 );
 
-                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $methodName, $cachePointer, \count($params) ? $params : null, $compilationContext);
+                $compilationContext->backend->callMethod(
+                    $isExpecting ? $symbolVariable : null,
+                    $variableVariable,
+                    $methodName,
+                    $cachePointer,
+                    \count($params) ? $params : null,
+                    $compilationContext
+                );
             } else {
                 //TODO: also move to backend
                 if ($isExpecting) {
@@ -602,16 +614,25 @@ class MethodCall extends Call
         } else {
             if (self::CALL_DYNAMIC == $type) {
                 switch ($variableMethod->getType()) {
-                    case 'string':
-                    case 'variable':
+                    case Types::T_STRING:
+                    case Types::T_VARIABLE:
                         break;
                     default:
-                        throw new Exception('Cannot use variable type: '.$variableMethod->getType().' as method caller');
+                        throw new Exception(
+                            sprintf('Cannot use variable type: %s as method caller', $variableMethod->getType())
+                        );
                 }
 
                 $cachePointer = 'NULL, 0';
 
-                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $variableMethod, $cachePointer, \count($params) ? $params : null, $compilationContext);
+                $compilationContext->backend->callMethod(
+                    $isExpecting ? $symbolVariable : null,
+                    $variableVariable,
+                    $variableMethod,
+                    $cachePointer,
+                    \count($params) ? $params : null,
+                    $compilationContext
+                );
             }
         }
 
