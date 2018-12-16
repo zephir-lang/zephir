@@ -113,7 +113,9 @@ class ClassMethod
      */
     protected $isInitializer = false;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     protected $expression;
 
     /**

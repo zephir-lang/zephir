@@ -180,8 +180,7 @@ final class Collection extends SplObjectStorage
             ->either(new Specification\StringCompatible())
             ->either(new Specification\IsBool())
             ->either(new Specification\IsDouble())
-            ->either(new Specification\IsNull())
-            ->either(new Specification\IsVoid());
+            ->either(new Specification\IsNull());
 
         $found = $this->getTypesBySpecification($spec);
 
