@@ -400,7 +400,7 @@ final class CompilerFile implements FileInterface
                      * Check and process shortcuts
                      */
                     if (isset($property['shortcuts'])) {
-                        $this->_processShorcuts($property, $classDefinition);
+                        $this->processShortcuts($property, $classDefinition);
                     }
                 }
             }
@@ -980,7 +980,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
+    protected function processShortcuts(array $property, ClassDefinition $classDefinition)
     {
         foreach ($property['shortcuts'] as $shortcut) {
             if ('_' == substr($property['name'], 0, 1)) {
