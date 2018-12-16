@@ -38,6 +38,8 @@ final class Collection extends SplObjectStorage
             );
         }
 
+        parent::attach($returnType, $definition);
+
         return $this;
     }
 
@@ -164,7 +166,7 @@ final class Collection extends SplObjectStorage
 
         $found = $this->getTypesBySpecification($spec);
 
-        return 0 == \count($found);
+        return \count($found) == $this->count();
     }
 
     /**
