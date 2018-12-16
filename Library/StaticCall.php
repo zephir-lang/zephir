@@ -196,7 +196,7 @@ class StaticCall extends Call
                 $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
             } else {
                 if (\in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
-                    $this->call(strtoupper($className), $methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+                    $this->call($className, $methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
                 } else {
                     if ('parent' == $className) {
                         $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, isset($method) ? $method : null);
@@ -271,9 +271,20 @@ class StaticCall extends Call
      * @param CompilationContext $compilationContext
      * @param ClassMethod        $method
      */
-    protected function call($context, $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
-    {
-        if (!\in_array($context, ['SELF', 'STATIC'])) {
+    protected function call(
+        $context,
+        $methodName,
+        array $expression,
+        $symbolVariable,
+        $mustInit,
+        $isExpecting,
+        ClassDefinition $classDefinition,
+        CompilationContext $compilationContext,
+        ClassMethod $method
+    ) {
+        $context = strtoupper(trim($context));
+
+        if (!\in_array($context, ['SELF', 'STATIC'], true)) {
             $context = 'SELF';
         }
 
@@ -294,22 +305,18 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        /**
+        /*
          * Check if the  method call can have an inline cache.
          */
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
         $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null, false);
 
+        $params = [];
         if (isset($expression['parameters']) && \count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
-        $isInternal = false;
-        if (isset($method)) {
-            $isInternal = $method->isInternal();
-        }
+        $isInternal = isset($method) ? $method->isInternal() : false;
 
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
@@ -317,7 +324,7 @@ class StaticCall extends Call
 
         $paramCount = \count($params);
         $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
-        if (!$isInternal) {
+        if (false == $isInternal) {
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_'.$context.'("'.$methodName.'", '.$cachePointer.$paramsStr.');');
