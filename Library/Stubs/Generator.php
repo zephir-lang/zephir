@@ -269,7 +269,7 @@ EOF;
 
         $return = '';
         $returnTypes = $method->getReturnTypes();
-        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $returnTypes->count()) {
+        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $returnTypes->hasReturnTypes()) {
             $supported = 0;
 
             $objects = $returnTypes->getObjectLikeReturnTypes();

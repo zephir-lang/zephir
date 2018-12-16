@@ -44,6 +44,16 @@ final class Collection extends SplObjectStorage
     }
 
     /**
+     * Checks if the collection has return-type or cast hints.
+     *
+     * @return bool
+     */
+    public function hasReturnTypes()
+    {
+        return $this->count() > 0;
+    }
+
+    /**
      * Gets all return types satisfied by specification.
      *
      * @param SpecificationInterface $spec
@@ -151,7 +161,7 @@ final class Collection extends SplObjectStorage
      */
     public function areReturnTypesWellKnown()
     {
-        if (0 == $this->count()) {
+        if ($this->hasReturnTypes() == false) {
             return false;
         }
 
@@ -257,7 +267,7 @@ final class Collection extends SplObjectStorage
 
     private function isSatisfiedByTypeSpec(SpecificationInterface $spec)
     {
-        if (0 == $this->count()) {
+        if ($this->hasReturnTypes() == false) {
             return false;
         }
 

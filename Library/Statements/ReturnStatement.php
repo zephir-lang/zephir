@@ -96,7 +96,7 @@ class ReturnStatement extends StatementAbstract
              * Here we check if the variable returns a compatible type according to its type hints
              */
             $returnTypes = $currentMethod->getReturnTypes();
-            if ($returnTypes->count()) {
+            if ($returnTypes->hasReturnTypes()) {
                 switch ($resolvedExpr->getType()) {
                     case Types::T_NULL:
                         if (false == $returnTypes->areReturnTypesNullCompatible()) {
