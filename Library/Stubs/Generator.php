@@ -18,11 +18,7 @@ use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Exception;
-use const Zephir\T_ARRAY;
-use const Zephir\T_BOOL;
-use const Zephir\T_FLOAT;
-use const Zephir\T_INT;
-use const Zephir\T_STRING;
+use Zephir\Types;
 
 /**
  * Stubs Generator.
@@ -283,27 +279,27 @@ EOF;
             }
 
             if ($returnTypes->areReturnTypesIntCompatible()) {
-                $return = T_INT;
+                $return = Types::T_INT;
                 ++$supported;
             }
 
             if ($returnTypes->areReturnTypesDoubleCompatible()) {
-                $return = T_FLOAT;
+                $return = Types::T_FLOAT;
                 ++$supported;
             }
 
             if ($returnTypes->areReturnTypesBoolCompatible()) {
-                $return = T_BOOL;
+                $return = Types::T_BOOL;
                 ++$supported;
             }
 
             if ($returnTypes->areReturnTypesStringCompatible()) {
-                $return = T_STRING;
+                $return = Types::T_STRING;
                 ++$supported;
             }
 
             if ($returnTypes->areReturnTypesArrayCompatible()) {
-                $return = T_ARRAY;
+                $return = Types::T_ARRAY;
                 ++$supported;
             }
 
@@ -354,12 +350,12 @@ EOF;
     protected function wrapPHPValue($parameter)
     {
         switch ($parameter['default']['type']) {
-            case 'null':
-                return 'null';
+            case Types::T_NULL:
+                return Types::T_NULL;
                 break;
 
-            case 'string':
-            case 'char':
+            case Types::T_STRING:
+            case Types::T_CHAR:
                 return '\''.addslashes($parameter['default']['value']).'\'';
                 break;
 
@@ -367,7 +363,7 @@ EOF;
                 return 'array()';
                 break;
 
-            case 'array':
+            case Types::T_ARRAY:
                 $parameters = [];
 
                 foreach ($parameter['default']['left'] as $value) {
@@ -393,9 +389,9 @@ EOF;
                 return $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
                 break;
 
-            case 'int':
-            case 'double':
-            case 'bool':
+            case Types::T_INT:
+            case Types::T_DOUBLE:
+            case Types::T_BOOL:
                 return $parameter['default']['value'];
                 break;
 

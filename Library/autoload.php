@@ -45,7 +45,7 @@ $autoloaders = [
 ];
 
 foreach ($autoloaders as $file) {
-    if (false == \class_exists('Composer\Autoload\ClassLoader', false) && \file_exists($file)) {
+    if (\file_exists($file)) {
         include_once $file;
         break;
     }

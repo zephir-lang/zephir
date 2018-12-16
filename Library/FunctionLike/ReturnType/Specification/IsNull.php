@@ -12,7 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_NULL;
+use Zephir\Types;
 
 final class IsNull extends ReturnType\CompositeSpecification
 {
@@ -25,6 +25,6 @@ final class IsNull extends ReturnType\CompositeSpecification
      */
     public function isSatisfiedBy(ReturnType\TypeInterface $type)
     {
-        return $type->isReal() && T_NULL == $type->getDataType();
+        return $type->isReal() && Types::T_NULL == $type->getDataType();
     }
 }

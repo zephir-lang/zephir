@@ -12,8 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_ISTRING;
-use const Zephir\T_STRING;
+use Zephir\Types;
 
 final class StringCompatible extends ReturnType\CompositeSpecification
 {
@@ -31,8 +30,8 @@ final class StringCompatible extends ReturnType\CompositeSpecification
         }
 
         switch ($type->getDataType()) {
-            case T_STRING:
-            case T_ISTRING:
+            case Types::T_STRING:
+            case Types::T_ISTRING:
                 return true;
             default:
                 return false;

@@ -13,8 +13,7 @@ namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
 use Zephir\ClassMethod;
-use const Zephir\T_MIXED;
-use const Zephir\T_VARIABLE;
+use Zephir\Types;
 
 /**
  * Stubs Generator.
@@ -61,7 +60,7 @@ class MethodDocBlock extends DocBlock
 
         foreach ($returnTypes->getRealReturnTypes() as $returnType) {
             $dataType = $returnType->getDataType();
-            $return[] = T_VARIABLE == $dataType ? T_MIXED : $dataType;
+            $return[] = Types::T_VARIABLE == $dataType ? Types::T_MIXED : $dataType;
         }
 
         foreach ($returnTypes->getCastHintedReturnTypes() as $returnType) {

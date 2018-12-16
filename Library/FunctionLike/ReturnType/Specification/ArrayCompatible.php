@@ -12,7 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_ARRAY;
+use Zephir\Types;
 
 final class ArrayCompatible extends ReturnType\CompositeSpecification
 {
@@ -26,7 +26,7 @@ final class ArrayCompatible extends ReturnType\CompositeSpecification
     public function isSatisfiedBy(ReturnType\TypeInterface $type)
     {
         if ($type->isReal()) {
-            return T_ARRAY == $type->getDataType();
+            return Types::T_ARRAY == $type->getDataType();
         }
 
         return $type->isCollection();

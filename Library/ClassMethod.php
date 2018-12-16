@@ -194,7 +194,7 @@ class ClassMethod
 
         $factory = new ReturnType\Factory();
 
-        if (isset($returnType[T_VOID]) && $returnType[T_VOID]) {
+        if (isset($returnType[Types::T_VOID]) && $returnType[Types::T_VOID]) {
             $this->returnTypes->attach(
                 $factory->createVoid($returnType),
                 [

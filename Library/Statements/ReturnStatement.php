@@ -15,18 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
-use const Zephir\T_BOOL;
-use const Zephir\T_CHAR;
-use const Zephir\T_DOUBLE;
-use const Zephir\T_INT;
-use const Zephir\T_ISTRING;
-use const Zephir\T_LONG;
-use const Zephir\T_NULL;
-use const Zephir\T_STRING;
-use const Zephir\T_UCHAR;
-use const Zephir\T_UINT;
-use const Zephir\T_ULONG;
-use const Zephir\T_VARIABLE;
+use Zephir\Types;
 use function Zephir\add_slashes;
 
 /**
@@ -109,43 +98,43 @@ class ReturnStatement extends StatementAbstract
             $returnTypes = $currentMethod->getReturnTypes();
             if ($returnTypes->count()) {
                 switch ($resolvedExpr->getType()) {
-                    case T_NULL:
+                    case Types::T_NULL:
                         if (false == $returnTypes->areReturnTypesNullCompatible()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case T_INT:
-                    case T_UINT:
-                    case T_LONG:
-                    case T_ULONG:
-                    case T_CHAR:
-                    case T_UCHAR:
+                    case Types::T_INT:
+                    case Types::T_UINT:
+                    case Types::T_LONG:
+                    case Types::T_ULONG:
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
                         if (false == $returnTypes->areReturnTypesIntCompatible()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case T_BOOL:
+                    case Types::T_BOOL:
                         if (false == $returnTypes->areReturnTypesBoolCompatible()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case T_DOUBLE:
+                    case Types::T_DOUBLE:
                         if (false == $returnTypes->areReturnTypesDoubleCompatible()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case T_STRING:
-                    case T_ISTRING:
+                    case Types::T_STRING:
+                    case Types::T_ISTRING:
                         if (false == $returnTypes->areReturnTypesStringCompatible()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
-                    case T_VARIABLE:
+                    case Types::T_VARIABLE:
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
                             $compilationContext,
@@ -153,12 +142,12 @@ class ReturnStatement extends StatementAbstract
                         );
 
                         switch ($symbolVariable->getType()) {
-                            case T_INT:
-                            case T_UINT:
-                            case T_LONG:
-                            case T_ULONG:
-                            case T_CHAR:
-                            case T_UCHAR:
+                            case Types::T_INT:
+                            case Types::T_UINT:
+                            case Types::T_LONG:
+                            case Types::T_ULONG:
+                            case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 if (false == $returnTypes->areReturnTypesIntCompatible()) {
                                     throw new CompilerException(
                                         sprintf(
@@ -171,26 +160,26 @@ class ReturnStatement extends StatementAbstract
                                 }
                                 break;
 
-                            case T_DOUBLE:
+                            case Types::T_DOUBLE:
                                 if (false == $returnTypes->areReturnTypesDoubleCompatible()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
-                            case T_STRING:
-                            case T_ISTRING:
+                            case Types::T_STRING:
+                            case Types::T_ISTRING:
                                 if (false == $returnTypes->areReturnTypesStringCompatible()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
-                            case T_BOOL:
+                            case Types::T_BOOL:
                                 if (false == $returnTypes->areReturnTypesBoolCompatible()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
-                            case 'variable':
+                            case Types::T_ARRAY:
                                 break;
                         }
                         break;
@@ -198,36 +187,36 @@ class ReturnStatement extends StatementAbstract
             }
 
             switch ($resolvedExpr->getType()) {
-                case T_NULL:
+                case Types::T_NULL:
                     $codePrinter->output('RETURN_MM_NULL();');
                     break;
 
-                case T_INT:
-                case T_UINT:
-                case T_LONG:
-                case T_ULONG:
-                case T_CHAR:
-                case T_UCHAR:
+                case Types::T_INT:
+                case Types::T_UINT:
+                case Types::T_LONG:
+                case Types::T_ULONG:
+                case Types::T_CHAR:
+                case Types::T_UCHAR:
                     $codePrinter->output('RETURN_MM_LONG('.$resolvedExpr->getCode().');');
                     break;
 
-                case T_BOOL:
+                case Types::T_BOOL:
                     $codePrinter->output('RETURN_MM_BOOL('.$resolvedExpr->getBooleanCode().');');
                     break;
 
-                case T_DOUBLE:
+                case Types::T_DOUBLE:
                     $codePrinter->output('RETURN_MM_DOUBLE('.$resolvedExpr->getCode().');');
                     break;
 
-                case T_STRING:
-                case T_ISTRING:
+                case Types::T_STRING:
+                case Types::T_ISTRING:
                     $compilationContext->backend->returnString(
                         add_slashes($resolvedExpr->getCode()),
                         $compilationContext
                     );
                     break;
 
-                case 'array':
+                case Types::T_ARRAY:
                     if ('return_value' != $resolvedExpr->getCode()) {
                         $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
                     } else {
@@ -235,35 +224,35 @@ class ReturnStatement extends StatementAbstract
                     }
                     break;
 
-                case 'variable':
+                case Types::T_VARIABLE:
                     if (!isset($symbolVariable)) {
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
                     }
 
                     switch ($symbolVariable->getType()) {
-                        case T_INT:
-                        case T_UINT:
-                        case T_LONG:
-                        case T_ULONG:
-                        case T_CHAR:
-                        case T_UCHAR:
+                        case Types::T_INT:
+                        case Types::T_UINT:
+                        case Types::T_LONG:
+                        case Types::T_ULONG:
+                        case Types::T_CHAR:
+                        case Types::T_UCHAR:
                             $codePrinter->output('RETURN_MM_LONG('.$symbolVariable->getName().');');
                             break;
 
-                        case T_DOUBLE:
+                        case Types::T_DOUBLE:
                             $codePrinter->output('RETURN_MM_DOUBLE('.$symbolVariable->getName().');');
                             break;
 
-                        case T_STRING:
-                        case 'array':
+                        case Types::T_STRING:
+                        case Types::T_ARRAY:
                             $codePrinter->output('RETURN_CTOR('.$compilationContext->backend->getVariableCode($symbolVariable).');');
                             break;
 
-                        case T_BOOL:
+                        case Types::T_BOOL:
                             $codePrinter->output('RETURN_MM_BOOL('.$symbolVariable->getName().');');
                             break;
 
-                        case 'variable':
+                        case Types::T_VARIABLE:
                             if ('this_ptr' == $symbolVariable->getName()) {
                                 $codePrinter->output('RETURN_THIS();');
                             } else {

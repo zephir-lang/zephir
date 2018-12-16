@@ -358,7 +358,7 @@ class MethodCall extends Call
                                 "Method '%s::%s' is marked as '%s' and it does not return anything",
                                 $classDefinition->getCompleteName(),
                                 $expression['name'],
-                                T_VOID
+                                Types::T_VOID
                             ),
                             $expression
                         );

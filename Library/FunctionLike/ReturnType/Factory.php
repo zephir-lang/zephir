@@ -11,7 +11,7 @@
 
 namespace Zephir\FunctionLike\ReturnType;
 
-use const Zephir\T_VOID;
+use Zephir\Types;
 
 final class Factory
 {
@@ -41,7 +41,7 @@ final class Factory
      */
     public function createVoid(array $ir)
     {
-        return $this->createReal(T_VOID, $ir);
+        return $this->createReal(Types::T_VOID, $ir);
     }
 
     /**

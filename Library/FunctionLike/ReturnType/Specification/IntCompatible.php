@@ -12,12 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_CHAR;
-use const Zephir\T_INT;
-use const Zephir\T_LONG;
-use const Zephir\T_UCHAR;
-use const Zephir\T_UINT;
-use const Zephir\T_ULONG;
+use Zephir\Types;
 
 final class IntCompatible extends ReturnType\CompositeSpecification
 {
@@ -35,12 +30,12 @@ final class IntCompatible extends ReturnType\CompositeSpecification
         }
 
         switch ($type->getDataType()) {
-            case T_INT:
-            case T_UINT:
-            case T_CHAR:
-            case T_UCHAR:
-            case T_LONG:
-            case T_ULONG:
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
+            case Types::T_LONG:
+            case Types::T_ULONG:
                 return true;
             default:
                 return false;

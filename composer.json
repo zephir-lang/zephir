@@ -64,8 +64,7 @@
             "Zephir\\": "Library"
         },
         "files": [
-            "Library/functions.php",
-            "Library/types.php"
+            "Library/functions.php"
         ]
     },
     "autoload-dev": {

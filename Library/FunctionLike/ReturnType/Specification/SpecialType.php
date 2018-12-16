@@ -12,11 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_CALLABLE;
-use const Zephir\T_NULL;
-use const Zephir\T_OBJECT;
-use const Zephir\T_RESOURCE;
-use const Zephir\T_VARIABLE;
+use Zephir\Types;
 
 final class SpecialType extends ReturnType\CompositeSpecification
 {
@@ -34,11 +30,11 @@ final class SpecialType extends ReturnType\CompositeSpecification
         }
 
         switch ($type->getDataType()) {
-            case T_OBJECT:
-            case T_RESOURCE:
-            case T_NULL:
-            case T_VARIABLE:
-            case T_CALLABLE:
+            case Types::T_OBJECT:
+            case Types::T_RESOURCE:
+            case Types::T_NULL:
+            case Types::T_VARIABLE:
+            case Types::T_CALLABLE:
                 return true;
             default:
                 return false;

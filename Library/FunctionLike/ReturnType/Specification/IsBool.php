@@ -12,7 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_BOOL;
+use Zephir\Types;
 
 final class IsBool extends ReturnType\CompositeSpecification
 {
@@ -25,6 +25,6 @@ final class IsBool extends ReturnType\CompositeSpecification
      */
     public function isSatisfiedBy(ReturnType\TypeInterface $type)
     {
-        return $type->isReal() && T_BOOL == $type->getDataType();
+        return $type->isReal() && Types::T_BOOL == $type->getDataType();
     }
 }

@@ -12,7 +12,7 @@
 namespace Zephir\FunctionLike\ReturnType\Specification;
 
 use Zephir\FunctionLike\ReturnType;
-use const Zephir\T_VOID;
+use Zephir\Types;
 
 final class IsVoid extends ReturnType\CompositeSpecification
 {
@@ -25,6 +25,6 @@ final class IsVoid extends ReturnType\CompositeSpecification
      */
     public function isSatisfiedBy(ReturnType\TypeInterface $type)
     {
-        return $type->isReal() && T_VOID == $type->getDataType();
+        return $type->isReal() && Types::T_VOID == $type->getDataType();
     }
 }
