@@ -209,6 +209,9 @@ final class Collection extends SplObjectStorage
             // bool
             (int) $this->areReturnTypesBoolCompatible() +
 
+            // istring | string
+            (int) $this->areReturnTypesStringCompatible() +
+
             // double
             (int) $this->areReturnTypesDoubleCompatible();
 
