@@ -1327,10 +1327,10 @@ final class ClassDefinition
             );
 
             foreach ($methods as $method) {
+                $returnTypes = $method->getReturnTypes();
+
                 if ('class' == $this->getType()) {
                     if (false == $method->isInternal()) {
-                        $returnTypes = $method->getReturnTypes();
-
                         $richFormat = $this->compiler->backend->isZE3() &&
                             $returnTypes->areReturnTypesWellKnown() &&
                             $returnTypes->areReturnTypesCompatible();
@@ -1359,8 +1359,6 @@ final class ClassDefinition
                         }
                     }
                 } else {
-                    $returnTypes = $method->getReturnTypes();
-
                     $richFormat = $this->compiler->backend->isZE3() &&
                         $returnTypes->areReturnTypesWellKnown() &&
                         $returnTypes->areReturnTypesCompatible();
