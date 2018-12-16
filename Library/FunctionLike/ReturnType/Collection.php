@@ -50,7 +50,15 @@ final class Collection extends SplObjectStorage
      */
     public function hasReturnTypes()
     {
-        return $this->count() > 0;
+        if (0 == $this->count()) {
+            return false;
+        }
+
+        if ($this->onlyVoid()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -161,7 +169,7 @@ final class Collection extends SplObjectStorage
      */
     public function areReturnTypesWellKnown()
     {
-        if ($this->hasReturnTypes() == false) {
+        if (0 == $this->count()) {
             return false;
         }
 
@@ -267,7 +275,7 @@ final class Collection extends SplObjectStorage
 
     private function isSatisfiedByTypeSpec(SpecificationInterface $spec)
     {
-        if ($this->hasReturnTypes() == false) {
+        if (0 == $this->count()) {
             return false;
         }
 

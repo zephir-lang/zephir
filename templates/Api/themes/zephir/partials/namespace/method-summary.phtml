@@ -12,12 +12,12 @@
             $allTypes = [];
             $classes = [];
 
-            foreach ($method->getReturnTypes()->getObjectLikeReturnTypes() as $type) {
-                $allTypes[] = $type->getValue();
+            foreach ($method->getReturnTypes()->getObjectLikeReturnTypes() as $classType) {
+                $allTypes[] = $classType->getValue();
             }
 
-            foreach ($method->getReturnTypes()->getRealReturnTypes() as $type) {
-                $allTypes[] = $type->getDataType();
+            foreach ($method->getReturnTypes()->getRealReturnTypes() as $realType) {
+                $allTypes[] = $realType->getDataType();
             }
 
             echo implode(' | ', \array_unique($allTypes, \SORT_STRING));

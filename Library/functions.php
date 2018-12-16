@@ -127,7 +127,7 @@ function add_slashes($string)
 }
 
 /**
- * Transform class/interface name to FQN format.
+ * Transform class/interface name to FQCN format.
  *
  * @param string       $className
  * @param string       $currentNamespace
@@ -138,7 +138,15 @@ function add_slashes($string)
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 {
     if (false == \is_string($className)) {
-        throw new InvalidArgumentException('Class name must be a string, got '.\gettype($className));
+        if (\is_object($className)) {
+            $wrong = 'instance of ' . \get_class($className);
+        } else {
+            $wrong = \gettype($className);
+        }
+
+        throw new InvalidArgumentException(
+            sprintf('Class name must be a string, got %s', $wrong)
+        );
     }
 
     // Absolute class/interface name

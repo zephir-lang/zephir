@@ -227,7 +227,9 @@ class StaticCall extends Call
 
                     $returnClassTypes = $returnTypes->getObjectLikeReturnTypes();
                     foreach ($returnClassTypes as $classType) {
-                        $classTypes[] = $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
+                        $classTypes[] = $symbolVariable->setClassTypes(
+                            $compilationContext->getFullName($classType->getValue())
+                        );
                     }
 
                     if (!empty($classTypes)) {
@@ -235,8 +237,8 @@ class StaticCall extends Call
                         $symbolVariable->setClassTypes($classTypes);
                     }
 
-                    foreach ($returnTypes->getRealReturnTypes() as $returnType) {
-                        $symbolVariable->setDynamicTypes($returnType->getDataType());
+                    foreach ($returnTypes->getRealReturnTypes() as $realType) {
+                        $symbolVariable->setDynamicTypes($realType->getDataType());
                     }
                 }
             }

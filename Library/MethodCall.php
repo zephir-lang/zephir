@@ -243,23 +243,23 @@ class MethodCall extends Call
                     if (\count($classTypes)) {
                         $numberImplemented = 0;
                         $compiler = $compilationContext->compiler;
-                        foreach ($classTypes as $classType) {
-                            if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
-                                $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
-                                if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
-                                    $classDefinition = $compiler->getClassDefinition($classType);
+                        foreach ($classTypes as $type) {
+                            if ($compiler->isClass($type) || $compiler->isInterface($type) ||
+                                $compiler->isBundledClass($type) || $compiler->isBundledInterface($type)) {
+                                if ($compiler->isClass($type) || $compiler->isInterface($type)) {
+                                    $classDefinition = $compiler->getClassDefinition($type);
                                 } else {
-                                    $classDefinition = $compiler->getInternalClassDefinition($classType);
+                                    $classDefinition = $compiler->getInternalClassDefinition($type);
                                 }
 
                                 if (!$classDefinition) {
-                                    throw new CompilerException('Cannot locate class definition for class '.$classType, $expression);
+                                    throw new CompilerException('Cannot locate class definition for class '.$type, $expression);
                                 }
 
                                 if (!$classDefinition->hasMethod($methodName)) {
                                     if (!$classDefinition->isInterface()) {
                                         if (1 == \count($classTypes)) {
-                                            throw new CompilerException("Class '".$classType."' does not implement method: '".$expression['name']."'", $expression);
+                                            throw new CompilerException("Class '".$type."' does not implement method: '".$expression['name']."'", $expression);
                                         }
                                     }
                                     continue;
@@ -320,7 +320,7 @@ class MethodCall extends Call
                             } else {
                                 ++$numberImplemented;
                                 $compilationContext->logger->warning(
-                                    'Class "'.$classType.'" does not exist at compile time',
+                                    'Class "'.$type.'" does not exist at compile time',
                                     ['nonexistent-class', $expression]
                                 );
                             }
@@ -376,8 +376,8 @@ class MethodCall extends Call
                         $symbolVariable->setClassTypes($classTypes);
                     }
 
-                    foreach ($returnTypes->getRealReturnTypes() as $returnType) {
-                        $symbolVariable->setDynamicTypes($returnType->getDataType());
+                    foreach ($returnTypes->getRealReturnTypes() as $realType) {
+                        $symbolVariable->setDynamicTypes($realType->getDataType());
                     }
                 }
             }
