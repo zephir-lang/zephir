@@ -134,7 +134,7 @@ class ArgInfoDefinition
                     (int) $this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->functionLike->getReturnTypes()->areReturnTypesNullCompatible()
+                    (int) $returnTypes->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#else');
@@ -145,7 +145,7 @@ class ArgInfoDefinition
                     (int) $this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->functionLike->getReturnTypes()->areReturnTypesNullCompatible()
+                    (int) $returnTypes->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#endif');
@@ -161,7 +161,7 @@ class ArgInfoDefinition
                 (int) $this->returnByRef,
                 $this->functionLike->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->functionLike->getReturnTypes()->areReturnTypesNullCompatible()
+                (int) $returnTypes->areReturnTypesNullCompatible()
             )
         );
 
@@ -174,7 +174,7 @@ class ArgInfoDefinition
                 (int) $this->returnByRef,
                 $this->functionLike->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->functionLike->getReturnTypes()->areReturnTypesNullCompatible()
+                (int) $returnTypes->areReturnTypesNullCompatible()
             )
         );
 
