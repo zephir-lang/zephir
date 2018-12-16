@@ -159,6 +159,7 @@ final class Collection extends SplObjectStorage
             (new Specification\ObjectLike())
             ->either(new Specification\ArrayCompatible())
             ->either(new Specification\IntCompatible())
+            ->either(new Specification\StringCompatible())
             ->either(new Specification\IsBool())
             ->either(new Specification\IsDouble())
             ->either(new Specification\IsNull())
@@ -193,7 +194,8 @@ final class Collection extends SplObjectStorage
         }
 
         // <Class> | <Class_1[]> | <Class_1[]> | <Class_n[]>
-        if ($this->isSatisfiedByTypeSpec(new Specification\IsCollection()) && \count($classes) > 0) {
+        $collections = $this->getTypesBySpecification(new Specification\IsCollection());
+        if (\count($collections) > 0 && \count($classes) > 0) {
             return false;
         }
 
@@ -209,6 +211,16 @@ final class Collection extends SplObjectStorage
 
             // double
             (int) $this->areReturnTypesDoubleCompatible();
+
+        // <Class_1> | <T1> | <T2> | <Tn>
+        if (\count($classes) > 0 && $summ > 0) {
+            return false;
+        }
+
+        // <Class_1[]> | <T1> | <T2> | <Tn>
+        if (\count($collections) > 0 && $summ > 0) {
+            return false;
+        }
 
         // T1 | T2 | ... Tn | null
         // T1 | T2 | ... Tn
