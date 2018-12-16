@@ -187,20 +187,20 @@ final class Collection extends SplObjectStorage
             return true;
         }
 
-        // <Class_1> | <Class_2> | <Class_n>
+        // <Class_1> | <Class_2> | ... | <Class_n>
         $classes = $this->getObjectLikeReturnTypes();
         if (\count($classes) > 1) {
             return false;
         }
 
-        // <Class> | <Class_1[]> | <Class_1[]> | <Class_n[]>
+        // <Class> | <Class_1[]> | <Class_1[]> | ... | <Class_n[]>
         $collections = $this->getTypesBySpecification(new Specification\IsCollection());
         if (\count($collections) > 0 && \count($classes) > 0) {
             return false;
         }
 
         $summ =
-            // array | <Class_1[]> | <Class_2[]> | <Class_n[]>
+            // array | <Class_1[]> | <Class_2[]> | ... | <Class_n[]>
             (int) $this->areReturnTypesArrayCompatible() +
 
             // char | uchar | int | uint | long | ulong
@@ -212,18 +212,13 @@ final class Collection extends SplObjectStorage
             // double
             (int) $this->areReturnTypesDoubleCompatible();
 
-        // <Class_1> | <T1> | <T2> | <Tn>
+        // <Class_1> | <T1> | <T2> | ... | <Tn>
         if (\count($classes) > 0 && $summ > 0) {
             return false;
         }
 
-        // <Class_1[]> | <T1> | <T2> | <Tn>
-        if (\count($collections) > 0 && $summ > 0) {
-            return false;
-        }
-
-        // T1 | T2 | ... Tn | null
-        // T1 | T2 | ... Tn
+        // T1 | T2 | ... | Tn | null
+        // T1 | T2 | ... | Tn
         return 1 == $summ;
     }
 
