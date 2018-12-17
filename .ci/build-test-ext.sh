@@ -19,8 +19,9 @@ zephir clean 2>&1 || exit 1
 zephir fullclean 2>&1 || exit 1
 
 # TODO: Export ZFLAGS and process by Config class
-ZFLAGS="-Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
-ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
+ZFLAGS=""
+# ZFLAGS="${ZFLAGS} -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
+# ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
 
 zephir generate ${ZFLAGS} 2>&1 || exit 1
 zephir stubs ${ZFLAGS} 2>&1 || exit 1
