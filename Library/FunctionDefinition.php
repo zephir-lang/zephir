@@ -30,8 +30,14 @@ class FunctionDefinition extends ClassMethod
      */
     private $isGlobal;
 
-    public function __construct($namespace, $name, $parameters, StatementsBlock $statements = null, $returnType = null, array $original = null)
-    {
+    public function __construct(
+        $namespace,
+        $name,
+        $parameters,
+        StatementsBlock $statements = null,
+        $returnType = null,
+        array $original = null
+    ) {
         $this->namespace = $namespace;
         $this->name = $name;
         $this->parameters = $parameters;
