@@ -2101,9 +2101,10 @@ class ClassMethod
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (\is_array($node)) {
+                    $expression = isset($node['expr']) ? $node['expr'] : $node;
                     $compilationContext->logger->warning(
                         'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
-                        ['unused-variable', $node]
+                        ['unused-variable', $expression]
                     );
                 } else {
                     $compilationContext->logger->warning(
