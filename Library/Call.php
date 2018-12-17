@@ -472,16 +472,28 @@ class Call
                         case 'variable':
                             $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $types[] = $parameterVariable->getType();
-                            $dynamicTypes[] = $parameterVariable->getDynamicTypes();
+                            $dynamicTypes = array_unique(
+                                array_merge(
+                                    $dynamicTypes,
+                                    array_keys($parameterVariable->getDynamicTypes())
+                                ),
+                                \SORT_STRING
+                            );
                             break;
 
                         default:
-                            throw new CompilerException('Cannot use variable type: '.$parameterVariable->getType().' as parameter', $expression);
+                            throw new CompilerException(
+                                'Cannot use variable type: '.$parameterVariable->getType().' as parameter',
+                                $expression
+                            );
                     }
                     break;
 
                 default:
-                    throw new CompilerException('Cannot use value type: '.$compiledExpression->getType().' as parameter', $expression);
+                    throw new CompilerException(
+                        'Cannot use value type: '.$compiledExpression->getType().' as parameter',
+                        $expression
+                    );
             }
         }
 
@@ -663,12 +675,18 @@ class Call
                             break;
 
                         default:
-                            throw new CompilerException('Cannot use variable type: '.$parameterVariable->getType().' as parameter', $expression);
+                            throw new CompilerException(
+                                'Cannot use variable type: '.$parameterVariable->getType().' as parameter',
+                                $expression
+                            );
                     }
                     break;
 
                 default:
-                    throw new CompilerException('Cannot use value type: '.$compiledExpression->getType().' as parameter', $expression);
+                    throw new CompilerException(
+                        'Cannot use value type: '.$compiledExpression->getType().' as parameter',
+                        $expression
+                    );
             }
         }
 
