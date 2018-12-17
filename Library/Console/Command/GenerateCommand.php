@@ -16,7 +16,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
+use Zephir\Exception\CompilerException;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Zephir\Console\Command\GenerateCommand.
@@ -47,8 +50,27 @@ final class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->generate(true);
+        $io = new SymfonyStyle($input, $output);
+
+        try {
+            // TODO: Move all the stuff from the compiler
+            $this->compiler->generate(true);
+        } catch (InvalidArgumentException $e) {
+            $io->error(
+                sprintf(
+                    'Internal error: %s at %s:%d',
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                )
+            );
+
+            return 1;
+        } catch (CompilerException $e) {
+            $io->error($e->getMessage());
+
+            return 1;
+        }
 
         return 0;
     }
