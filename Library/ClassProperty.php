@@ -317,9 +317,9 @@ class ClassProperty
                     $exprBuilder->operators()->binary(
                         BinaryOperator::OPERATOR_ACCESS_PROPERTY,
                         $exprBuilder->variable('this'),
-                        $exprBuilder->literal(Types::STRING, $this->name)
+                        $exprBuilder->literal(Types::T_STRING, $this->name)
                     ),
-                    $exprBuilder->literal(Types::NULL_)
+                    $exprBuilder->literal(Types::T_NULL)
                 )
             )
             ->setStatements($exprBuilder->statements()->block([$lsb]));
@@ -376,8 +376,8 @@ class ClassProperty
                 $codePrinter->output('zend_declare_property_bool('.$classEntry.', SL("'.$this->getName().'"), '.$this->getBooleanCode($value).', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
                 break;
 
-            case Types::CHAR:
-            case Types::STRING:
+            case Types::T_CHAR:
+            case Types::T_STRING:
                 $codePrinter->output(
                     sprintf(
                         'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',

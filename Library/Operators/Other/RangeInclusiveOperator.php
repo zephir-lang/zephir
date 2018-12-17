@@ -48,7 +48,7 @@ class RangeInclusiveOperator extends BaseOperator
         /**
          * Implicit type coercing.
          */
-        $castBuilder = $exprBuilder->operators()->cast(Types::ARRAY_, $exprBuilder->statements()
+        $castBuilder = $exprBuilder->operators()->cast(Types::T_ARRAY, $exprBuilder->statements()
             ->functionCall('range', [$expression['left'], $expression['right']]));
 
         $expression = new Expression($castBuilder->build());
