@@ -573,7 +573,6 @@ class MethodCall extends Call
                 if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
-                    //$typeInference = $method->getStaticTypeInferencePass();
 
                     foreach ($method->getParameters() as $n => $parameter) {
                         if (isset($parameter['data-type'])) {
@@ -591,7 +590,7 @@ class MethodCall extends Call
                                     $classDefinition->getCompleteName(),
                                     $method->getName(),
                                     $parameter['name'],
-                                    $resolvedDynamicTypes[$n],
+                                    $resolvedTypes[$n],
                                     $parameter['data-type']
                                 );
 
@@ -679,12 +678,12 @@ class MethodCall extends Call
                                             if ('undefined' == $resolvedDynamicTypes[$n]) {
                                                 $compilationContext->logger->warning(
                                                     sprintf(
-                                                        'Passing possible incorrect type for parameter: %s::%s, '.
-                                                        'passing: %s, expecting: %s',
+                                                        'Passing possible incorrect type for parameter: %s::%s(%s), '.
+                                                        'passing: undefined, expecting: %s',
                                                         $classDefinition->getCompleteName(),
-                                                        $parameter[$n]['name'],
-                                                        $resolvedDynamicTypes[$n],
-                                                        $parameter[$n]['data-type']
+                                                        $method->getName(),
+                                                        $parameter['name'],
+                                                        $parameter['data-type']
                                                     ),
                                                     ['possible-wrong-parameter-undefined', $expression]
                                                 );
