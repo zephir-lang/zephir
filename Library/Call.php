@@ -472,12 +472,9 @@ class Call
                         case 'variable':
                             $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $types[] = $parameterVariable->getType();
-                            $dynamicTypes = array_unique(
-                                array_merge(
-                                    $dynamicTypes,
-                                    array_keys($parameterVariable->getDynamicTypes())
-                                ),
-                                \SORT_STRING
+                            $dynamicTypes = array_merge(
+                                $dynamicTypes,
+                                array_keys($parameterVariable->getDynamicTypes())
                             );
                             break;
 
