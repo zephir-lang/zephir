@@ -11,16 +11,26 @@
 
 namespace Zephir;
 
-/**
- * Constants for types.
- *
- * Class Types
- */
-class Types
+final class Types
 {
-    const CHAR = 'char';
-    const STRING = 'string';
-    const NULL_ = 'null';
-    const ARRAY_ = 'array';
-    const INTEGER = 'int';
+    const T_INT = 'int';
+    const T_UINT = 'uint';
+    const T_CHAR = 'char';
+    const T_UCHAR = 'uchar';
+    const T_LONG = 'long';
+    const T_ULONG = 'ulong';
+    const T_DOUBLE = 'double';
+    const T_FLOAT = 'float';
+    const T_NULL = 'null';
+    const T_BOOL = 'bool';
+    const T_STRING = 'string';
+    const T_ISTRING = 'istring';
+    const T_VOID = 'void';
+    const T_VARIABLE = 'variable';
+    const T_MIXED = 'mixed';
+    const T_ARRAY = 'array';
+    const T_OBJECT = 'object';
+    const T_CALLABLE = 'callable';
+    const T_RESOURCE = 'resource';
+    const T_UNDEFINED = 'undefined';
 }
