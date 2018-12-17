@@ -267,8 +267,17 @@ class StaticCall extends Call
      * @param CompilationContext $compilationContext
      * @param ClassMethod        $method
      */
-    protected function call($context, $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
-    {
+    protected function call(
+        $context,
+        $methodName,
+        array $expression,
+        $symbolVariable,
+        $mustInit,
+        $isExpecting,
+        ClassDefinition $classDefinition,
+        CompilationContext $compilationContext,
+        ClassMethod $method
+    ) {
         if (!\in_array($context, ['SELF', 'STATIC'])) {
             $context = 'SELF';
         }

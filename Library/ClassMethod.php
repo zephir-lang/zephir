@@ -27,22 +27,35 @@ use Zephir\Passes\StaticTypeInference;
 class ClassMethod
 {
     public $optimizable = true;
-    /** @var ClassDefinition */
+
+    /**
+     * @var ClassDefinition
+     */
     protected $classDefinition;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $visibility;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $name;
 
-    /** @var ClassMethodParameters|null */
+    /**
+     * @var ClassMethodParameters|null
+     */
     protected $parameters;
 
-    /** @var StatementsBlock|null */
+    /**
+     * @var StatementsBlock|null
+     */
     protected $statements;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     protected $docblock;
 
     /**
@@ -125,7 +138,9 @@ class ClassMethod
      */
     protected $isInitializer = false;
 
-    /** @var array|null */
+    /**
+     * @var array|null
+     */
     protected $expression;
 
     /**

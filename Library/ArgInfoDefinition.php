@@ -16,43 +16,59 @@ namespace Zephir;
  */
 class ArgInfoDefinition
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $returnByRef = false;
 
-    /** @var ClassMethod */
-    private $method;
+    /**
+     * @var ClassMethod|FunctionDefinition
+     */
+    private $functionLike;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $name = '';
 
-    /** @var ClassMethodParameters|null */
+    /**
+     * @var ClassMethodParameters|null
+     */
     private $parameters;
 
-    /** @var CodePrinter */
+    /**
+     * @var CodePrinter
+     */
     private $codePrinter;
 
-    /** @var CompilationContext */
+    /**
+     * @var CompilationContext
+     */
     private $compilationContext;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $booleanDefinition = '_IS_BOOL';
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $richFormat = true;
 
     public function __construct(
         $name,
-        ClassMethod $method,
+        ClassMethod $functionLike,
         CodePrinter $codePrinter,
         CompilationContext $compilationContext,
         $returnByRef = false
     ) {
-        $this->method = $method;
+        $this->functionLike = $functionLike;
         $this->codePrinter = $codePrinter;
         $this->compilationContext = $compilationContext;
 
         $this->name = $name;
-        $this->parameters = $this->method->getParameters();
+        $this->parameters = $this->functionLike->getParameters();
 
         $this->returnByRef = $returnByRef;
     }
@@ -75,8 +91,8 @@ class ArgInfoDefinition
     public function render()
     {
         if ($this->richFormat &&
-            $this->method->isReturnTypesHintDetermined() &&
-            $this->method->areReturnTypesCompatible()
+            $this->functionLike->isReturnTypesHintDetermined() &&
+            $this->functionLike->areReturnTypesCompatible()
         ) {
             $this->richRenderStart();
 
@@ -90,7 +106,7 @@ class ArgInfoDefinition
                     'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
                     $this->name,
                     (int) $this->returnByRef,
-                    $this->method->getNumberOfRequiredParameters()
+                    $this->functionLike->getNumberOfRequiredParameters()
                 )
             );
         }
@@ -105,11 +121,11 @@ class ArgInfoDefinition
 
     private function richRenderStart()
     {
-        if (array_key_exists('object', $this->method->getReturnTypes())) {
+        if (array_key_exists('object', $this->functionLike->getReturnTypes())) {
             $class = 'NULL';
 
-            if (1 == \count($this->method->getReturnClassTypes())) {
-                $class = key($this->method->getReturnClassTypes());
+            if (1 == \count($this->functionLike->getReturnClassTypes())) {
+                $class = key($this->functionLike->getReturnClassTypes());
                 $class = escape_class($this->compilationContext->getFullName($class));
             }
 
@@ -119,9 +135,9 @@ class ArgInfoDefinition
                     'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)',
                     $this->name,
                     (int) $this->returnByRef,
-                    $this->method->getNumberOfRequiredParameters(),
+                    $this->functionLike->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->method->areReturnTypesNullCompatible()
+                    (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#else');
@@ -130,9 +146,9 @@ class ArgInfoDefinition
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
                     $this->name,
                     (int) $this->returnByRef,
-                    $this->method->getNumberOfRequiredParameters(),
+                    $this->functionLike->getNumberOfRequiredParameters(),
                     $class,
-                    (int) $this->method->areReturnTypesNullCompatible()
+                    (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#endif');
@@ -146,9 +162,9 @@ class ArgInfoDefinition
                 'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
                 $this->name,
                 (int) $this->returnByRef,
-                $this->method->getNumberOfRequiredParameters(),
+                $this->functionLike->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->method->areReturnTypesNullCompatible()
+                (int) $this->functionLike->areReturnTypesNullCompatible()
             )
         );
 
@@ -159,9 +175,9 @@ class ArgInfoDefinition
                 'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, NULL, %d)',
                 $this->name,
                 (int) $this->returnByRef,
-                $this->method->getNumberOfRequiredParameters(),
+                $this->functionLike->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int) $this->method->areReturnTypesNullCompatible()
+                (int) $this->functionLike->areReturnTypesNullCompatible()
             )
         );
 
@@ -325,23 +341,23 @@ class ArgInfoDefinition
 
     private function getReturnType()
     {
-        if ($this->method->areReturnTypesIntCompatible()) {
+        if ($this->functionLike->areReturnTypesIntCompatible()) {
             return 'IS_LONG';
         }
 
-        if ($this->method->areReturnTypesDoubleCompatible()) {
+        if ($this->functionLike->areReturnTypesDoubleCompatible()) {
             return 'IS_DOUBLE';
         }
 
-        if ($this->method->areReturnTypesBoolCompatible()) {
+        if ($this->functionLike->areReturnTypesBoolCompatible()) {
             return '_IS_BOOL';
         }
 
-        if ($this->method->areReturnTypesStringCompatible()) {
+        if ($this->functionLike->areReturnTypesStringCompatible()) {
             return 'IS_STRING';
         }
 
-        if (array_key_exists('array', $this->method->getReturnTypes())) {
+        if (array_key_exists('array', $this->functionLike->getReturnTypes())) {
             return 'IS_ARRAY';
         }
 

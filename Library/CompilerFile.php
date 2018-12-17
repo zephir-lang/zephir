@@ -30,16 +30,24 @@ final class CompilerFile implements FileInterface
 {
     use LoggerAwareTrait;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $namespace;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $className;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $filePath;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $external = false;
 
     /**
@@ -53,22 +61,34 @@ final class CompilerFile implements FileInterface
 
     private $compiledFile;
 
-    /** @var ClassDefinition */
+    /**
+     * @var ClassDefinition
+     */
     private $classDefinition;
 
-    /** @var FunctionDefinition[] */
+    /**
+     * @var FunctionDefinition[]
+     */
     private $functionDefinitions = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $headerCBlocks = [];
 
-    /** @var Config */
+    /**
+     * @var Config
+     */
     private $config;
 
-    /** @var AliasManager */
+    /**
+     * @var AliasManager
+     */
     private $aliasManager;
 
-    /** @var FileSystemInterface */
+    /**
+     * @var FileSystemInterface
+     */
     private $filesystem;
 
     /**
@@ -400,7 +420,7 @@ final class CompilerFile implements FileInterface
                      * Check and process shortcuts
                      */
                     if (isset($property['shortcuts'])) {
-                        $this->_processShorcuts($property, $classDefinition);
+                        $this->processShortcuts($property, $classDefinition);
                     }
                 }
             }
@@ -980,7 +1000,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
+    protected function processShortcuts(array $property, ClassDefinition $classDefinition)
     {
         foreach ($property['shortcuts'] as $shortcut) {
             if ('_' == substr($property['name'], 0, 1)) {
