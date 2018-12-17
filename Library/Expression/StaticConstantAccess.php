@@ -202,7 +202,7 @@ class StaticConstantAccess
                 break;
             default:
                 $compilationContext->logger->warning(
-                    $constantDefinition->getName(),
+                    "Constant '".$constantDefinition->getName()."' does not exist at compile time",
                     ['nonexistent-constant', $expression]
                 );
 
