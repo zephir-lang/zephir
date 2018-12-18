@@ -11,6 +11,8 @@
 
 namespace Zephir\Types;
 
+use Zephir\Types;
+
 /**
  * IntType.
  *
@@ -43,6 +45,6 @@ class IntType extends AbstractType
      */
     public function getTypeName()
     {
-        return 'int';
+        return Types::T_INT;
     }
 }

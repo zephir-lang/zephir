@@ -11,6 +11,8 @@
 
 namespace Zephir\Types;
 
+use Zephir\Types;
+
 /**
  * DoubleType.
  *
@@ -43,6 +45,6 @@ class DoubleType extends AbstractType
      */
     public function getTypeName()
     {
-        return 'double';
+        return Types::T_DOUBLE;
     }
 }
