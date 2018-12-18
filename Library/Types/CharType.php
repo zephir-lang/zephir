@@ -15,6 +15,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Types;
 
 class CharType extends AbstractType
 {
@@ -23,7 +24,7 @@ class CharType extends AbstractType
      */
     public function getTypeName()
     {
-        return 'char';
+        return Types::T_CHAR;
     }
 
     /**

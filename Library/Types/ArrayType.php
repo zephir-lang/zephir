@@ -15,6 +15,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Types;
 
 /**
  * ArrayType.
@@ -77,7 +78,7 @@ class ArrayType extends AbstractType
      */
     public function getTypeName()
     {
-        return 'array';
+        return Types::T_ARRAY;
     }
 
     /**

@@ -11,6 +11,8 @@
 
 namespace Zephir\Types;
 
+use Zephir\Types;
+
 /**
  * StringType.
  *
@@ -57,6 +59,6 @@ class StringType extends AbstractType
      */
     public function getTypeName()
     {
-        return 'string';
+        return Types::T_STRING;
     }
 }

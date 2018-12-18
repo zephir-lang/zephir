@@ -39,8 +39,14 @@ abstract class AbstractType
      *
      * @return bool|\Zephir\CompiledExpression
      */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
+    public function invokeMethod(
+        $methodName,
+        $caller,
+        CompilationContext
+        $compilationContext,
+        Call $call,
+        array $expression
+    ) {
         /*
          * Checks first whether the method exist in the array type definition
          */
@@ -86,7 +92,10 @@ abstract class AbstractType
             return $expression->compile($compilationContext);
         }
 
-        throw new CompilerException(sprintf('Method "%s" is not a built-in method of type "%s"', $methodName, $this->getTypeName()), $expression);
+        throw new CompilerException(
+            sprintf('Method "%s" is not a built-in method of type "%s"', $methodName, $this->getTypeName()),
+            $expression
+        );
     }
 
     /**
