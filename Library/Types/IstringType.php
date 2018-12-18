@@ -11,6 +11,8 @@
 
 namespace Zephir\Types;
 
+use Zephir\Types;
+
 /**
  * IstringType.
  *
@@ -23,6 +25,6 @@ class IstringType extends StringType
      */
     public function getTypeName()
     {
-        return 'istring';
+        return Types::T_ISTRING;
     }
 }

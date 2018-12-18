@@ -21,6 +21,7 @@ final class Types
     const T_ULONG = 'ulong';
     const T_DOUBLE = 'double';
     const T_FLOAT = 'float';
+    const T_NUMBER = 'number';
     const T_NULL = 'null';
     const T_BOOL = 'bool';
     const T_STRING = 'string';
@@ -32,5 +33,6 @@ final class Types
     const T_OBJECT = 'object';
     const T_CALLABLE = 'callable';
     const T_RESOURCE = 'resource';
+    const T_ITERABLE = 'iterable';
     const T_UNDEFINED = 'undefined';
 }
