@@ -75,6 +75,10 @@ class RetVal {
 		return [];
 	}
 
+	public function retval_collection() -> <RetVal[]> {
+		return [];
+	}
+
 	public function retval_retval() -> <RetVal> {
 		var _var;
 		let _var = new RetVal;
