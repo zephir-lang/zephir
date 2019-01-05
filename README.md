@@ -1,5 +1,5 @@
 <p align="center"><a href="https://zephir-lang.com" target="_blank">
-    <img src="https://zephir-lang.com/images/logo-105x36.svg" height="100" alt="Zephir"/>
+    <img src="https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg" height="100" alt="Zephir"/>
 </a></p>
 
 <p align="center">
