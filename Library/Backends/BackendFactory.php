@@ -58,8 +58,8 @@ final class BackendFactory
             // Overriding backend using env var provided only for
             // testing purposes and may be removed in the future.
             // You SHOULD NOT rely on this possibility.
-            if (\getenv('ZEPHIR_BACKEND')) {
-                $backend = $backend = \getenv('ZEPHIR_BACKEND');
+            if (getenv('ZEPHIR_BACKEND')) {
+                $backend = $backend = getenv('ZEPHIR_BACKEND');
             } elseif ($this->container->has('ZEPHIR_BACKEND')) {
                 $backend = $this->container->get('ZEPHIR_BACKEND');
             }
@@ -71,8 +71,8 @@ final class BackendFactory
 
         $className = "Zephir\\Backends\\{$backend}\\Backend";
 
-        if (!\class_exists($className)) {
-            throw new IllegalStateException(\sprintf('Backend class "%s" doesn\'t exist.', $backend));
+        if (!class_exists($className)) {
+            throw new IllegalStateException(sprintf('Backend class "%s" doesn\'t exist.', $backend));
         }
 
         return $className;

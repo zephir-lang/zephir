@@ -80,7 +80,7 @@ class CompileCommandTest extends KernelTestCase
     public function shouldDetermineDevOption($flag, $cflags)
     {
         // TODO: Create a test for Windows
-        if ('WIN' === \strtoupper(\substr(PHP_OS, 0, 3))) {
+        if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
             $this->markTestSkipped(
                 'This test currently works on Linux systems only'
             );

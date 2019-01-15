@@ -11,11 +11,11 @@
 
 namespace Zephir;
 
-use Zephir\Exception\InvalidArgumentException;
 use const INFO_GENERAL;
 use const PHP_INT_SIZE;
 use const PHP_OS;
 use const PHP_ZTS;
+use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Attempts to remove recursively the directory with all subdirectories and files.
@@ -26,18 +26,18 @@ use const PHP_ZTS;
  */
 function unlink_recursive($path)
 {
-    if (\is_dir($path)) {
-        $objects = \array_diff(\scandir($path), ['.', '..']);
+    if (is_dir($path)) {
+        $objects = array_diff(scandir($path), ['.', '..']);
 
         foreach ($objects as $object) {
-            if (\is_dir("{$path}/{$object}")) {
+            if (is_dir("{$path}/{$object}")) {
                 unlink_recursive("{$path}/{$object}");
             } else {
-                \unlink("{$path}/{$object}");
+                unlink("{$path}/{$object}");
             }
         }
 
-        \rmdir($path);
+        rmdir($path);
     }
 }
 
@@ -50,7 +50,7 @@ function unlink_recursive($path)
  */
 function camelize($string)
 {
-    return \str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string)));
+    return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
 }
 
 /**
@@ -62,7 +62,7 @@ function camelize($string)
  */
 function escape_class($className)
 {
-    return \str_replace('\\', '\\\\', $className);
+    return str_replace('\\', '\\\\', $className);
 }
 
 /**
@@ -79,9 +79,9 @@ function add_slashes($string)
     $length = \strlen($string);
 
     for ($i = 0; $i < $length; ++$i) {
-        $ch = \substr($string, $i, 1);
+        $ch = substr($string, $i, 1);
         if ($i != ($length - 1)) {
-            $after = \substr($string, $i + 1, 1);
+            $after = substr($string, $i + 1, 1);
         } else {
             $after = null;
         }
@@ -143,15 +143,15 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 
     // Absolute class/interface name
     if ('\\' === $className[0]) {
-        return \substr($className, 1);
+        return substr($className, 1);
     }
 
     // If class/interface name not begin with \ maybe a alias or a sub-namespace
-    $firstSepPos = \strpos($className, '\\');
+    $firstSepPos = strpos($className, '\\');
     if (false !== $firstSepPos) {
-        $baseName = \substr($className, 0, $firstSepPos);
+        $baseName = substr($className, 0, $firstSepPos);
         if ($aliasManager && $aliasManager->isAlias($baseName)) {
-            return $aliasManager->getAlias($baseName).'\\'.\substr($className, $firstSepPos + 1);
+            return $aliasManager->getAlias($baseName).'\\'.substr($className, $firstSepPos + 1);
         }
     } elseif ($aliasManager && $aliasManager->isAlias($className)) {
         return $aliasManager->getAlias($className);
@@ -175,17 +175,17 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
  */
 function file_put_contents_ex($content, $path)
 {
-    if (\file_exists($path)) {
-        $contentMd5 = \md5($content);
-        $existingMd5 = \md5_file($path);
+    if (file_exists($path)) {
+        $contentMd5 = md5($content);
+        $existingMd5 = md5_file($path);
 
         if ($contentMd5 != $existingMd5) {
-            \file_put_contents($path, $content);
+            file_put_contents($path, $content);
 
             return true;
         }
     } else {
-        \file_put_contents($path, $content);
+        file_put_contents($path, $content);
 
         return true;
     }
@@ -200,7 +200,7 @@ function file_put_contents_ex($content, $path)
  */
 function is_windows()
 {
-    return 'WIN' === \strtoupper(\substr(PHP_OS, 0, 3));
+    return 'WIN' === strtoupper(substr(PHP_OS, 0, 3));
 }
 
 /**
@@ -210,7 +210,7 @@ function is_windows()
  */
 function is_macos()
 {
-    return 'DARWIN' === \strtoupper(\substr(PHP_OS, 0, 6));
+    return 'DARWIN' === strtoupper(substr(PHP_OS, 0, 6));
 }
 
 /**
@@ -222,7 +222,7 @@ function is_macos()
  */
 function is_bsd()
 {
-    return false !== \stristr(\strtolower(PHP_OS), 'bsd');
+    return false !== stristr(strtolower(PHP_OS), 'bsd');
 }
 
 /**
@@ -236,10 +236,10 @@ function is_zts()
         return true;
     }
 
-    \ob_start();
-    \phpinfo(INFO_GENERAL);
+    ob_start();
+    phpinfo(INFO_GENERAL);
 
-    return (bool) \preg_match('/Thread\s*Safety\s*enabled/i', \strip_tags(\ob_get_clean()));
+    return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
 }
 
 /**

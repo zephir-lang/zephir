@@ -11,9 +11,9 @@
 
 namespace Zephir;
 
-\set_error_handler(
+set_error_handler(
     static function ($code, $message, $file = '', $line = -1) {
-        if (\error_reporting() & $code) {
+        if (error_reporting() & $code) {
             throw new \ErrorException($message, 0, $code, (string) $file, $line);
         }
     }

@@ -11,12 +11,12 @@
 
 namespace Zephir\Operators\Other;
 
+use function Zephir\add_slashes;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
-use function Zephir\add_slashes;
 
 /**
  * ConcatOperator.

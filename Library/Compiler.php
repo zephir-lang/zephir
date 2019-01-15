@@ -150,7 +150,7 @@ final class Compiler
             $prototypesPath = \dirname(__DIR__).'/prototypes';
         }
 
-        if (!\is_dir($prototypesPath) || !\is_readable($prototypesPath)) {
+        if (!is_dir($prototypesPath) || !is_readable($prototypesPath)) {
             throw new IllegalStateException('Unable to resolve internal prototypes directory.');
         }
 
@@ -183,7 +183,7 @@ final class Compiler
             $optimizersPath = __DIR__.'/Optimizers';
         }
 
-        if (!\is_dir($optimizersPath) || !\is_readable($optimizersPath)) {
+        if (!is_dir($optimizersPath) || !is_readable($optimizersPath)) {
             throw new IllegalStateException('Unable to resolve internal optimizers directory.');
         }
 
@@ -352,7 +352,7 @@ final class Compiler
      */
     public function isBundledClass($className)
     {
-        return \class_exists($className, false);
+        return class_exists($className, false);
     }
 
     /**
@@ -364,7 +364,7 @@ final class Compiler
      */
     public function isBundledInterface($className)
     {
-        return \interface_exists($className, false);
+        return interface_exists($className, false);
     }
 
     /**
@@ -1998,7 +1998,7 @@ final class Compiler
      */
     protected function recursivePreCompile($path)
     {
-        if (!\is_dir($path)) {
+        if (!is_dir($path)) {
             throw new InvalidArgumentException(
                 sprintf(
                     "An invalid path was passed to the compiler. Unable to obtain the '%s%s%s' directory.",
@@ -2175,9 +2175,9 @@ final class Compiler
 
         if (false === empty($extensions)) {
             throw new RuntimeException(
-                \sprintf(
+                sprintf(
                     'Could not load extension: %s. You must add extensions above before build this extension.',
-                    \implode(', ', $extensions)
+                    implode(', ', $extensions)
                 )
             );
         }

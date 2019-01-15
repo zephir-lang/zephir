@@ -40,7 +40,7 @@ class EnvTest extends TestCase
     {
         $tester = new Env();
 
-        if ('WIN' === \strtoupper(\substr(PHP_OS, 0, 3))) {
+        if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
             $var = 'USERNAME';
         } else {
             $var = 'USER';

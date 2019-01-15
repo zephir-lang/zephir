@@ -65,18 +65,18 @@ final class InitCommand extends Command
         $this->config->set('namespace', $namespace);
         $this->config->set('name', $namespace);
 
-        if (!\is_dir($namespace)) {
-            \mkdir($namespace, 0755);
+        if (!is_dir($namespace)) {
+            mkdir($namespace, 0755);
         }
 
         chdir($namespace);
-        if (!\is_dir($namespace)) {
-            \mkdir($namespace, 0755);
+        if (!is_dir($namespace)) {
+            mkdir($namespace, 0755);
         }
 
         // Create 'kernel'
-        if (!\is_dir('ext/kernel')) {
-            \mkdir('ext/kernel', 0755, true);
+        if (!is_dir('ext/kernel')) {
+            mkdir('ext/kernel', 0755, true);
         }
 
         // Copy the latest kernel files
@@ -112,7 +112,7 @@ final class InitCommand extends Command
             throw new RuntimeException('Not enough arguments (missing: "namespace").');
         }
 
-        $namespace = \strtolower(\preg_replace('/[^0-9a-zA-Z]/', '', $namespace));
+        $namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $namespace));
 
         // If sanitizing returns an empty string
         if (empty($namespace)) {
@@ -139,7 +139,7 @@ final class InitCommand extends Command
 
         foreach ($iterator as $item) {
             $pathName = $item->getPathname();
-            if (!\is_readable($pathName)) {
+            if (!is_readable($pathName)) {
                 $this->logger->error('File is not readable :'.$pathName);
                 continue;
             }
@@ -148,12 +148,12 @@ final class InitCommand extends Command
 
             if ($item->isDir()) {
                 if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
-                    if (!\is_dir($dst.\DIRECTORY_SEPARATOR.$fileName)) {
-                        \mkdir($dst.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    if (!is_dir($dst.\DIRECTORY_SEPARATOR.$fileName)) {
+                        mkdir($dst.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
                     $this->recursiveProcess($pathName, $dst.\DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
-            } elseif (!$pattern || ($pattern && 1 === \preg_match($pattern, $fileName))) {
+            } elseif (!$pattern || ($pattern && 1 === preg_match($pattern, $fileName))) {
                 $path = $dst.\DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && \call_user_func($callback, $pathName, $path);
             }

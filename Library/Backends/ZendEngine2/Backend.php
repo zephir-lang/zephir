@@ -11,6 +11,7 @@
 
 namespace Zephir\Backends\ZendEngine2;
 
+use function Zephir\add_slashes;
 use Zephir\BaseBackend;
 use Zephir\ClassMethod;
 use Zephir\CodePrinter;
@@ -21,7 +22,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
-use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine2\Backend.

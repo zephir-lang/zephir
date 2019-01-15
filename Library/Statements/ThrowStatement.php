@@ -11,13 +11,13 @@
 
 namespace Zephir\Statements;
 
+use function Zephir\add_slashes;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use function Zephir\add_slashes;
 use function Zephir\fqcn;
 
 /**

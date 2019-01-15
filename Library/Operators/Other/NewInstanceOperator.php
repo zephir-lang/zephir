@@ -13,11 +13,11 @@ namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use function Zephir\escape_class;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
 use Zephir\Operators\BaseOperator;
-use function Zephir\escape_class;
 
 /**
  * NewInstance.
