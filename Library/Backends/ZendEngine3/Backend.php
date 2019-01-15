@@ -11,6 +11,7 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
+use function Zephir\add_slashes;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
@@ -22,7 +23,6 @@ use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
-use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend.

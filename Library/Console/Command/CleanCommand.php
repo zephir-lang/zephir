@@ -52,9 +52,9 @@ final class CleanCommand extends Command
             $this->filesystem->clean();
 
             if (is_windows()) {
-                \system('cd ext && nmake clean-all');
+                system('cd ext && nmake clean-all');
             } else {
-                \system('cd ext && make clean > /dev/null');
+                system('cd ext && make clean > /dev/null');
             }
         } catch (FileSystemException $e) {
             $io->error(

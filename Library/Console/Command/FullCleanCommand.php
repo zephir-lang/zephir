@@ -52,10 +52,10 @@ final class FullCleanCommand extends Command
         try {
             if (0 === $command->run(new ArrayInput($arguments), $output)) {
                 if (is_windows()) {
-                    \system('cd ext && phpize --clean');
+                    system('cd ext && phpize --clean');
                 } else {
-                    \system('cd ext && phpize --clean > /dev/null');
-                    \system('cd ext && ./clean > /dev/null');
+                    system('cd ext && phpize --clean > /dev/null');
+                    system('cd ext && ./clean > /dev/null');
                 }
             }
         } catch (FileSystemException $e) {

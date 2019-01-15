@@ -42,9 +42,9 @@ final class Application extends BaseApplication
      */
     public function getVersion()
     {
-        $version = \explode('-', parent::getVersion());
+        $version = explode('-', parent::getVersion());
 
-        if (isset($version[1]) && 0 === \strpos($version[1], '$')) {
+        if (isset($version[1]) && 0 === strpos($version[1], '$')) {
             return "{$version[0]}-source";
         }
 
@@ -61,8 +61,8 @@ final class Application extends BaseApplication
         $version = explode('-', $this->getVersion());
         $commit = "({$version[1]})";
 
-        return \trim(
-            \sprintf(
+        return trim(
+            sprintf(
                 '%s <info>%s</info> by <comment>Andres Gutierrez</comment> and <comment>Serghei Iakovlev</comment> %s',
                 $this->getName(),
                 $version[0],

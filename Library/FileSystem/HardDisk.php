@@ -46,7 +46,7 @@ final class HardDisk implements FileSystemInterface
     public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = 'IR')
     {
         $this->filesystem = $filesystem;
-        $this->localPath = \trim($localPath, '\\/');
+        $this->localPath = trim($localPath, '\\/');
 
         if (empty($this->localPath)) {
             throw new InvalidArgumentException('The temporary container can not be empty.');
@@ -60,7 +60,7 @@ final class HardDisk implements FileSystemInterface
      */
     public function setBasePath($basePath)
     {
-        $this->basePath = \rtrim($basePath, '\\/');
+        $this->basePath = rtrim($basePath, '\\/');
     }
 
     /**
@@ -140,7 +140,7 @@ final class HardDisk implements FileSystemInterface
     {
         $contents = $this->filesystem->read($this->localPath."/{$path}");
 
-        return \preg_split("/\r\n|\n|\r/", $contents);
+        return preg_split("/\r\n|\n|\r/", $contents);
     }
 
     /**
@@ -212,10 +212,10 @@ final class HardDisk implements FileSystemInterface
         switch ($descriptor) {
             default:
             case 'stdout':
-                \system("{$command} > {$redirect}");
+                system("{$command} > {$redirect}");
                 break;
             case 'stderr':
-                \system("{$command} 2> {$redirect}");
+                system("{$command} 2> {$redirect}");
                 break;
         }
     }
@@ -237,7 +237,7 @@ final class HardDisk implements FileSystemInterface
 
         $code = $this->filesystem->read($this->localPath."/{$path}");
 
-        return eval(\str_replace('<?php ', '', $code));
+        return eval(str_replace('<?php ', '', $code));
     }
 
     /**
@@ -277,10 +277,10 @@ final class HardDisk implements FileSystemInterface
     public function getHashFile($algorithm, $sourceFile, $useCache = false)
     {
         if (false === $useCache) {
-            return \hash_file($algorithm, $sourceFile);
+            return hash_file($algorithm, $sourceFile);
         }
 
-        $cacheFile = \sprintf(
+        $cacheFile = sprintf(
             '%s/%s.%s',
             $this->localPath,
             $this->normalizePath($sourceFile),
@@ -288,12 +288,12 @@ final class HardDisk implements FileSystemInterface
         );
 
         if (false === $this->filesystem->has($cacheFile)) {
-            $contents = \hash_file($algorithm, $sourceFile);
+            $contents = hash_file($algorithm, $sourceFile);
             $this->filesystem->write($cacheFile, $contents);
 
             return $contents;
-        } elseif (\filemtime($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
-            $contents = \hash_file($algorithm, $sourceFile);
+        } elseif (filemtime($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
+            $contents = hash_file($algorithm, $sourceFile);
             $this->filesystem->update($cacheFile, $contents);
 
             return $contents;
@@ -311,6 +311,6 @@ final class HardDisk implements FileSystemInterface
      */
     public function normalizePath($path)
     {
-        return \str_replace(['\\', ':', '/'], '_', $path);
+        return str_replace(['\\', ':', '/'], '_', $path);
     }
 }

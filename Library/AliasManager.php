@@ -31,7 +31,7 @@ final class AliasManager
             if (isset($alias['alias'])) {
                 $this->aliases[$alias['alias']] = $alias['name'];
             } else {
-                $parts = \explode('\\', $alias['name']);
+                $parts = explode('\\', $alias['name']);
                 $implicitAlias = $parts[\count($parts) - 1];
                 $this->aliases[$implicitAlias] = $alias['name'];
             }

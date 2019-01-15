@@ -64,6 +64,6 @@ class Parser
             throw new ParseException('Unable to read source file to parse.');
         }
 
-        return \zephir_parse_file($content, $filePath);
+        return zephir_parse_file($content, $filePath);
     }
 }

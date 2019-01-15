@@ -77,9 +77,9 @@ final class ZephirKernel extends Kernel
     public function getCacheDir()
     {
         // allows container rebuild when config or version changes
-        $hash = Zephir::VERSION.$this->environment.\serialize($this->extraConfigFiles);
+        $hash = Zephir::VERSION.$this->environment.serialize($this->extraConfigFiles);
 
-        return $this->startedDirectory.'/.zephir/'.\substr(\md5($hash), 0, 16).'/cache';
+        return $this->startedDirectory.'/.zephir/'.substr(md5($hash), 0, 16).'/cache';
     }
 
     /**
@@ -90,9 +90,9 @@ final class ZephirKernel extends Kernel
     public function getLogDir()
     {
         // allows container rebuild when config or version changes
-        $hash = Zephir::VERSION.$this->environment.\serialize($this->extraConfigFiles);
+        $hash = Zephir::VERSION.$this->environment.serialize($this->extraConfigFiles);
 
-        return $this->startedDirectory.'/.zephir/'.\substr(\md5($hash), 0, 16).'/logs';
+        return $this->startedDirectory.'/.zephir/'.substr(md5($hash), 0, 16).'/logs';
     }
 
     /**
