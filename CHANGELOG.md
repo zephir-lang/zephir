@@ -77,10 +77,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Correct return types hint check
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.8...HEAD
+## [0.11.1] - 2018-10-19
+### Added
+- Initial support of PHP 7.3
+- Add type hints for scalar arguments and return values in Zend Engine 3
+
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.9...HEAD
+[0.11.9]: https://github.com/phalcon/zephir/compare/0.11.8...0.11.9
 [0.11.8]: https://github.com/phalcon/zephir/compare/0.11.7...0.11.8
 [0.11.7]: https://github.com/phalcon/zephir/compare/0.11.6...0.11.7
 [0.11.6]: https://github.com/phalcon/zephir/compare/0.11.4...0.11.6
 [0.11.4]: https://github.com/phalcon/zephir/compare/0.11.3...0.11.4
 [0.11.3]: https://github.com/phalcon/zephir/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/phalcon/zephir/compare/0.11.1...0.11.2
+[0.11.1]: https://github.com/phalcon/zephir/compare/0.11.0...0.11.1
