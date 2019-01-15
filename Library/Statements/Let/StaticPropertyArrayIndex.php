@@ -76,7 +76,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
             throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
         }
 
-        /** @var $propertyDefinition ClassProperty */
+        /** @var ClassProperty $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
             throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);
