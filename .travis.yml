@@ -41,7 +41,7 @@ env:
 
 before_install:
   - |
-      # General settins
+      # General settings
       set -e
       stty cols 120
       ulimit -c unlimited -S
@@ -100,6 +100,7 @@ jobs:
         - chmod +x $HOME/bin/phpcs
       script:
         - phpcs
+
     - stage: Static Code Analysis
       php: 7.2
       env:
