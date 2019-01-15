@@ -44,5 +44,5 @@ return PhpCsFixer\Config::create()
         'fopen_flags' => false,
         'ordered_imports' => ['sortAlgorithm' => 'alpha'],
         'protected_to_private' => false,
-        'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
+        'phpdoc_var_annotation_correct_order' => true,
     ]);

@@ -103,7 +103,7 @@ class StaticPropertyAccess
             throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $expression);
         }
 
-        /** @var $propertyDefinition ClassProperty */
+        /** @var ClassProperty $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
             throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $expression);
