@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.11.9] - 2019-01-15
+- Fixed `zend_closure` declaration to reflect PHP 7.3 changes.
+
 ## [0.11.8] - 2018-12-01
 ### Fixed
 - Fixed compilation error with inheritance of prototype interfaces

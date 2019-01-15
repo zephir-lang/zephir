@@ -164,6 +164,7 @@ class StaticTypeInference
                 break;
 
             default:
+                // TODO: Find the reason
                 echo 'StaticTypeInference=', $currentType, ' ', $type, PHP_EOL;
                 break;
         }
