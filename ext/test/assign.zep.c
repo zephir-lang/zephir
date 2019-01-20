@@ -2220,8 +2220,8 @@ PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 	ZEPHIR_INIT_VAR(&elements);
 	zephir_create_array(&elements, 3, 0 TSRMLS_CC);
 	add_assoc_long_ex(&elements, SL("abc"), 1);
-	add_index_long(&elements, 131072, 131079);
-	add_index_long(&elements, 131073, 131080);
+	add_index_long(&elements, 14, 7);
+	add_index_long(&elements, 15, 8);
 	ZEPHIR_MM_RESTORE();
 
 }

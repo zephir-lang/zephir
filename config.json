@@ -1,8 +1,8 @@
 {
     "namespace": "test",
-    "name": "Test Extension",
-    "description": "Description test for<br\/>Test Extension",
-    "author": "Zephir Team",
+    "name": "Zephir Test Extension",
+    "description": "<b>Zephir</b> - is a high level <strong>Programming Language</strong> that eases the creation and maintainability of extensions for PHP.",
+    "author": "Zephir Team and contributors",
     "version": "1.0.0",
     "verbose": true,
 
@@ -88,7 +88,7 @@
         },
         "test.my_setting_1": {
             "type": "bool",
-            "default": true
+            "default": false
         },
         "test.my_setting_2": {
             "type": "int",
@@ -97,39 +97,55 @@
         "test.my_setting_3": {
             "type": "double",
             "default": 7.5
+        },
+        "orm.cache_level": {
+            "type": "int",
+            "default": 3
+        },
+        "orm.cache_enable": {
+            "type": "bool",
+            "default": true
+        },
+        "zephir.superpower": {
+            "type": "bool",
+            "default": true,
+            "ini-entry": {
+                "name": "zephir.superpower",
+                "scope": "PHP_INI_ALL"
+            }
         }
     },
 
     "info": [
         {
             "header": [
-                "Directive",
+                "Zephir support",
                 "Value"
             ],
             "rows": [
                 [
-                    "setting1",
-                    "value1"
+                    "Lifecycle hooks",
+                    "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks. Normally, Zephir's own hooks into these events will cover all the setup and tear down your extension will need, but if you find that you need to do something more, there are a few options you can use to pass your own code into these same hooks."
                 ],
                 [
-                    "setting2",
-                    "value2"
+                    "Static Analysis",
+                    "Zephir's compiler provides static analysis of the compiled code."
                 ]
             ]
         },
         {
             "header": [
-                "Directive",
+                "Zephir test variable",
                 "Value"
             ],
             "rows": [
                 [
-                    "setting3",
-                    "value3"
+                    "Extension",
+                    "Installed"
                 ],
                 [
-                    "setting4",
-                    "value4"
+                    "NFR",
+                    "Contributions are welcome!"
                 ]
             ]
         }
