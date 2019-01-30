@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# This file is part of the Phalcon Framework.
+# This file is part of the Zephir.
 #
-# (c) Phalcon Team <team@phalconphp.com>
+# (c) Zephir Team <team@zephir-lang.com>
 #
 # For the full copyright and license information, please view the
-# LICENSE.txt file that was distributed with this source code.
+# LICENSE file that was distributed with this source code.
 
 # -e	Exit immediately if a command exits with a non-zero status.
 # -u	Treat unset variables as an error when substituting.
