@@ -23,11 +23,13 @@ PHP_INI="$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
 
 : ${ZEPHIR_PARSER_VERSION:=master}
 
-# {{{ install latest psr
+# {{{ Install psr extension
+printf "Install psr extension\n"
 printf "\n" | pecl install --force psr 1> /dev/null
 # }}}
 
-# {{{ install zephir_parser
+# {{{ Install Zephir Parser
+printf "Install Zephir Parser\n"
 git clone -b "${ZEPHIR_PARSER_VERSION}" --depth 1 -q https://github.com/phalcon/php-zephir-parser
 cd php-zephir-parser
 $(phpenv which phpize)
@@ -37,7 +39,8 @@ make --silent install
 echo 'extension="zephir_parser.so"' > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir_parser.ini"
 # }}}
 
-# {{{ install box
+# {{{ Install Box
+printf "Install Box\n"
 if [ "${PHP_VERNUM}" -ge "70100" ]; then
 	printf "PHP version number is ${PHP_VERNUM}\nDownloading humbug/box...\n"
 	wget \
