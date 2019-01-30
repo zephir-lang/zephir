@@ -197,6 +197,7 @@ PHP_FUNCTION(f_TypeHints_retval_nullable_string);
 PHP_FUNCTION(f_TypeHints_retval_nullable_boolean);
 PHP_FUNCTION(f_TypeHints_retval_nullable_char);
 PHP_FUNCTION(f_TypeHints_retval_object_or_scalar);
+PHP_FUNCTION(f_TypeHints_retval_array_of_objects);
 
 zend_function_entry php_typehints_functions[] = {
 	ZEND_NS_NAMED_FE("TypeHints", args, ZEND_FN(f_TypeHints_args), arginfo_f_typehints_args)
@@ -219,6 +220,7 @@ ZEND_NS_NAMED_FE("TypeHints", retval_nullable_string, ZEND_FN(f_TypeHints_retval
 ZEND_NS_NAMED_FE("TypeHints", retval_nullable_boolean, ZEND_FN(f_TypeHints_retval_nullable_boolean), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_nullable_char, ZEND_FN(f_TypeHints_retval_nullable_char), NULL)
 ZEND_NS_NAMED_FE("TypeHints", retval_object_or_scalar, ZEND_FN(f_TypeHints_retval_object_or_scalar), NULL)
+ZEND_NS_NAMED_FE("TypeHints", retval_array_of_objects, ZEND_FN(f_TypeHints_retval_array_of_objects), NULL)
 ZEND_FE_END
 
 };

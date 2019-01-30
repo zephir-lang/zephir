@@ -44,7 +44,7 @@ final class Collection extends SplObjectStorage
             $wrong = \is_object($returnType) ? 'instance of '.\get_class($returnType) : \gettype($returnType);
 
             throw new InvalidArgumentException(
-                \sprintf('Expecting an instance of %s, got %s', TypeInterface::class, $wrong)
+                sprintf('Expecting an instance of %s, got %s', TypeInterface::class, $wrong)
             );
         }
 
