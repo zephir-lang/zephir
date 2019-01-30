@@ -46,7 +46,9 @@ before_install:
       stty cols 120
       ulimit -c unlimited -S
 
+      # Export build/test environment variables
       export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
+      export PHP_VERNUM="$(php-config --vernum)"
 
       if [ ! -z "${GITHUB_TOKEN}" ]; then
         composer config github-oauth.github.com ${GITHUB_TOKEN}
