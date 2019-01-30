@@ -15,7 +15,6 @@ addons:
     packages:
       - gdb
       - lcov
-      - devscripts
 
 matrix:
   fast_finish: true
@@ -56,6 +55,9 @@ before_install:
       fi
 
       [ -d ~/bin ] || mkdir ~/bin
+
+      # turn the detached message off
+      git config --global advice.detachedHead false
 
 install:
   - .ci/install-prereqs.sh
@@ -102,16 +104,6 @@ jobs:
         - chmod +x $HOME/bin/phpcs
       script:
         - phpcs
-
-    - stage: Static Code Analysis
-      php: 7.2
-      env:
-        - CHECK=checkbashisms
-        - COLLECT_COVERAGE=false
-      install: true
-      before_script: true
-      script:
-        - /usr/bin/checkbashisms $(pwd)/.ci/*.sh
 
 notifications:
   email: false
