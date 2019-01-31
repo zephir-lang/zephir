@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Array of object as return type is reported to PHP as type, not array
+  [#1779](https://github.com/phalcon/zephir/issues/1779)
 
 ## [0.11.9] - 2019-01-15
-- Fixed `zend_closure` declaration to reflect PHP 7.3 changes.
+- Fixed `zend_closure` declaration to reflect PHP 7.3 changes
 
 ## [0.11.8] - 2018-12-01
 ### Fixed
@@ -82,6 +85,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial support of PHP 7.3
 - Add type hints for scalar arguments and return values in Zend Engine 3
 
+### Added
+- Add type hints for scalar arguments and return values in ZendEngine 3
+  [1656](https://github.com/phalcon/zephir/issues/1656)
+- Allow extension to be loaded prior to the tests
+
+## [0.11.0] - 2018-08-05
+### Fixed
+- Fixed [Copy-On-Write](https://en.wikipedia.org/wiki/Copy-on-write) violation for arrays zvals
+- Fixed some testing settings
+  [5deb64a](https://github.com/phalcon/zephir/commit/5deb64a8a1c7c18d45ce1a5a55667c499e2c284f)
+- Fixed casting resource to int (only ZendEngine 3)
+  [#1524](https://github.com/phalcon/zephir/issues/1524)
+
 [Unreleased]: https://github.com/phalcon/zephir/compare/0.11.9...HEAD
 [0.11.9]: https://github.com/phalcon/zephir/compare/0.11.8...0.11.9
 [0.11.8]: https://github.com/phalcon/zephir/compare/0.11.7...0.11.8
@@ -91,3 +107,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [0.11.3]: https://github.com/phalcon/zephir/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/phalcon/zephir/compare/0.11.1...0.11.2
 [0.11.1]: https://github.com/phalcon/zephir/compare/0.11.0...0.11.1
+[0.11.0]: https://github.com/phalcon/zephir/compare/0.10.12...0.11.0
