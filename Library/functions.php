@@ -171,8 +171,7 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
  * @param string $content
  * @param string $path
  *
- * @return int|bool The function returns the number of bytes that were written to the file,
- *                  or false on failure.
+ * @return int|bool
  */
 function file_put_contents_ex($content, $path)
 {
