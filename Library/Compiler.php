@@ -1221,7 +1221,7 @@ final class Compiler
             chmod('ext/install', 0755);
         }
 
-        return $needConfigure;
+        return (bool) $needConfigure;
     }
 
     /**
