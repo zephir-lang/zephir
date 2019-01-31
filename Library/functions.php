@@ -171,7 +171,8 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
  * @param string $content
  * @param string $path
  *
- * @return bool
+ * @return int|bool The function returns the number of bytes that were written to the file,
+ *                  or false on failure.
  */
 function file_put_contents_ex($content, $path)
 {
@@ -180,14 +181,10 @@ function file_put_contents_ex($content, $path)
         $existingMd5 = md5_file($path);
 
         if ($contentMd5 != $existingMd5) {
-            file_put_contents($path, $content);
-
-            return true;
+            return file_put_contents($path, $content);
         }
     } else {
-        file_put_contents($path, $content);
-
-        return true;
+        return file_put_contents($path, $content);
     }
 
     return false;
