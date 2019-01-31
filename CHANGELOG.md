@@ -83,14 +83,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.11.1] - 2018-10-19
 ### Added
 - Initial support of PHP 7.3
-- Add type hints for scalar arguments and return values in Zend Engine 3
 
+## [0.11.0] - 2018-08-05
 ### Added
 - Add type hints for scalar arguments and return values in ZendEngine 3
   [1656](https://github.com/phalcon/zephir/issues/1656)
 - Allow extension to be loaded prior to the tests
 
-## [0.11.0] - 2018-08-05
 ### Fixed
 - Fixed [Copy-On-Write](https://en.wikipedia.org/wiki/Copy-on-write) violation for arrays zvals
 - Fixed some testing settings
