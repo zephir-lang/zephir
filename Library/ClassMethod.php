@@ -15,6 +15,7 @@ use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
+use Zephir\FunctionLike\ReturnType;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
@@ -81,13 +82,6 @@ class ClassMethod
      * Class type hints returned by the method.
      */
     protected $returnClassTypes = [];
-
-    /**
-     * Whether the variable is void.
-     *
-     * @var bool
-     */
-    protected $void = false;
 
     /**
      * Whether the method is public or not.
@@ -165,6 +159,11 @@ class ClassMethod
     protected $callGathererPass;
 
     /**
+     * @var ReturnType\Collection
+     */
+    protected $returnTypesCollection;
+
+    /**
      * ClassMethod constructor.
      *
      * @param ClassDefinition            $classDefinition
@@ -201,18 +200,28 @@ class ClassMethod
 
     public function setReturnTypes(array $returnType = null)
     {
-        $this->returnTypesRaw = $returnType;
+        $this->returnTypesCollection = new ReturnType\Collection();
+
         if (null === $returnType) {
             return;
         }
 
+        $this->returnTypesRaw = $returnType;
+
+        $returnTypeFactory = new ReturnType\Factory();
+
+        // Whether the variable is void.
         if (isset($returnType['void']) && $returnType['void']) {
-            $this->void = true;
+            $type = $returnTypeFactory->createVoid($returnType);
+            $this->returnTypesCollection->attach($type, $returnType);
 
             return;
         }
 
         if (!isset($returnType['list'])) {
+            $type = $returnTypeFactory->createRealType(Types::T_UNDEFINED, $returnType);
+            $this->returnTypesCollection->attach($type, $returnType);
+
             return;
         }
 
@@ -220,11 +229,26 @@ class ClassMethod
         $castTypes = [];
 
         foreach ($returnType['list'] as $returnTypeItem) {
+            if (empty($returnTypeItem)) {
+                $type = $returnTypeFactory->createRealType(Types::T_UNDEFINED, $returnTypeItem);
+                $this->returnTypesCollection->attach($type, $returnTypeItem);
+
+                continue;
+            }
+
             if (isset($returnTypeItem['cast'])) {
                 if (isset($returnTypeItem['cast']['collection'])) {
+                    // This feature currently is not supported.
+                    // See initial commit with this restriction:
+                    // https://github.com/phalcon/zephir/commit/c6d6b127ed822ed163670ad7cf95a05246ec3490
                     continue;
                 }
+            }
 
+            $type = $returnTypeFactory->create($returnTypeItem);
+            $this->returnTypesCollection->attach($type, $returnTypeItem);
+
+            if (isset($returnTypeItem['cast'])) {
                 if (isset($returnTypeItem['collection']) && $returnTypeItem['collection']) {
                     $types['array'] = [
                         'type' => 'return-type-parameter',
@@ -445,11 +469,11 @@ class ClassMethod
                 $this->parameters,
                 $statements,
                 $this->docblock,
-                null,
+                $this->returnTypes,
                 $this->expression
             );
+
             $optimizedMethod->typeInference = $this->typeInference;
-            $optimizedMethod->setReturnTypes($this->returnTypes);
             $classDefinition->addMethod($optimizedMethod);
         }
 
@@ -868,7 +892,7 @@ class ClassMethod
      */
     public function isVoid()
     {
-        return $this->void;
+        return $this->returnTypesCollection->onlyVoid();
     }
 
     /**

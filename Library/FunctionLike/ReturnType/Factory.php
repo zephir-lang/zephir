@@ -29,10 +29,13 @@ final class Factory
             );
         }
 
-        return $this->createCastHint(
-            isset($ir['cast']['type']) ? $ir['cast']['type'] : Types::T_UNDEFINED,
-            $ir
-        );
+        if (isset($ir['collection']) && $ir['collection']) {
+            $dataType = Types::T_ARRAY;
+        } else {
+            $dataType = isset($ir['cast']['type']) ? $ir['cast']['type'] : Types::T_UNDEFINED;
+        }
+
+        return $this->createCastHint($dataType, $ir);
     }
 
     /**
@@ -51,7 +54,7 @@ final class Factory
      *
      * @return TypeInterface|RealType
      */
-    protected function createRealType($dataType, array $ir)
+    public function createRealType($dataType, array $ir)
     {
         return new RealType(
             $dataType,
@@ -66,7 +69,7 @@ final class Factory
      *
      * @return TypeInterface|CastHint
      */
-    protected function createCastHint($dataType, array $ir)
+    public function createCastHint($dataType, array $ir)
     {
         return new CastHint(
             $dataType,

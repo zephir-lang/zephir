@@ -1024,7 +1024,9 @@ final class CompilerFile implements FileInterface
 
                 if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
                     $returnsType = array_map(function ($type) {
-                        return 'mixed' == ($type = trim($type)) ? 'variable' : $type;
+                        $type = trim(strtolower($type));
+
+                        return 'mixed' === $type ? 'variable' : $type;
                     }, (array) explode('|', $annotations[0]->getString()));
                 }
 
@@ -1181,8 +1183,8 @@ final class CompilerFile implements FileInterface
         foreach ($types as $type) {
             $list[] = [
                 'type' => $annotated ? 'return-type-annotation' : 'return-type-paramater',
-                'data-type' => 'mixed' == $type ? 'variable' : $type,
-                'mandatory' => false,
+                'data-type' => 'mixed' === $type ? 'variable' : $type,
+                'mandatory' => 0,
             ];
         }
 
