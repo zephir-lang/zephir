@@ -577,15 +577,7 @@ class ClassMethod
      */
     public function hasReturnTypes()
     {
-        if (\count($this->returnTypes)) {
-            return true;
-        }
-
-        if (\count($this->returnClassTypes)) {
-            return true;
-        }
-
-        return false;
+        return $this->returnTypesCollection->hasReturnTypes();
     }
 
     /**
@@ -892,7 +884,7 @@ class ClassMethod
      */
     public function isVoid()
     {
-        return $this->returnTypesCollection->onlyVoid();
+        return $this->returnTypesCollection->justVoid();
     }
 
     /**

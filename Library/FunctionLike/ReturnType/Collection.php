@@ -60,15 +60,7 @@ final class Collection extends SplObjectStorage
      */
     public function hasReturnTypes()
     {
-        if (0 == $this->count()) {
-            return false;
-        }
-
-        if ($this->onlyVoid()) {
-            return false;
-        }
-
-        return true;
+        return $this->count() && !$this->justVoid();
     }
 
     /**
@@ -175,7 +167,7 @@ final class Collection extends SplObjectStorage
     /**
      * Checks if the collection has only void.
      */
-    public function onlyVoid()
+    public function justVoid()
     {
         return $this->isSatisfiedByTypeSpec(new Specification\IsVoid()) && 1 == $this->count();
     }

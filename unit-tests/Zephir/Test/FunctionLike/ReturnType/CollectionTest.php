@@ -73,13 +73,13 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection();
 
-        $this->assertFalse($collection->onlyVoid());
+        $this->assertFalse($collection->justVoid());
 
         $collection->attach(new RealType(Types::T_VOID));
-        $this->assertTrue($collection->onlyVoid());
+        $this->assertTrue($collection->justVoid());
 
         $collection->attach(new RealType(Types::T_INT));
-        $this->assertFalse($collection->onlyVoid());
+        $this->assertFalse($collection->justVoid());
     }
 
     /** @test */
