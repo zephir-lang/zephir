@@ -589,16 +589,7 @@ class ClassMethod
      */
     public function areReturnTypesNullCompatible($type = null)
     {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'null':
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->returnTypesCollection->areReturnTypesNullCompatible();
     }
 
     /**
