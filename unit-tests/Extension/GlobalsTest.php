@@ -19,7 +19,6 @@ use Test\Globals;
  */
 class GlobalsTest extends TestCase
 {
-
     /** @var Test\Globals $test */
     private $test;
 
@@ -94,7 +93,7 @@ class GlobalsTest extends TestCase
 
     public function shouldSetGlobalExtensionOrmCacheLevel()
     {
-        $test->setGlobalsOrmCacheLevel("cahe_level_3");
+        $test->setGlobalsOrmCacheLevel('cahe_level_3');
 
         $this->assertSame($test->getGlobalsOrmCacheLevel(), 'cache_level_3');
     }
