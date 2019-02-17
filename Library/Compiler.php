@@ -1340,7 +1340,7 @@ final class Compiler
                 }
 
                 if (!isset($iniEntry['name'])) {
-                    $iniName = $name;
+                    $iniName = $namespace.'.'.$name;
                 } else {
                     $iniName = $iniEntry['name'];
                 }
