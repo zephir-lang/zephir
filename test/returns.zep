@@ -36,4 +36,10 @@ class Returns
 	{
 		return "Return back";
 	}
+
+	public function testIssue1660() -> bool
+	{
+		bool $return_value = true;
+		return $return_value;
+	}
 }

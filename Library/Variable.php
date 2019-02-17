@@ -176,8 +176,9 @@ class Variable implements TypeAwareInterface
 
         if (\in_array($type, ['callable', 'object', 'resource'], true)) {
             $type = 'variable';
+        } else if ('return_value' == $name) {
+            $type = 'variable';
         }
-
         $this->type = $type;
         $this->name = $name;
         $this->branch = $branch;
