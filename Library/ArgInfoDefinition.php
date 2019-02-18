@@ -121,7 +121,7 @@ class ArgInfoDefinition
 
     private function richRenderStart()
     {
-        if (array_key_exists('object', $this->functionLike->getReturnTypes())) {
+        if (\array_key_exists('object', $this->functionLike->getReturnTypes())) {
             $class = 'NULL';
 
             if (1 == \count($this->functionLike->getReturnClassTypes())) {
@@ -357,7 +357,7 @@ class ArgInfoDefinition
             return 'IS_STRING';
         }
 
-        if (array_key_exists('array', $this->functionLike->getReturnTypes())) {
+        if (\array_key_exists('array', $this->functionLike->getReturnTypes())) {
             return 'IS_ARRAY';
         }
 
