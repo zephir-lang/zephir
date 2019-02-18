@@ -2314,7 +2314,7 @@ class ClassMethod
                     $this->areReturnTypesIntCompatible() ||
                     $this->areReturnTypesNullCompatible() ||
                     $this->areReturnTypesStringCompatible() ||
-                    array_key_exists('array', $this->getReturnTypes())
+                    \array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
                 }

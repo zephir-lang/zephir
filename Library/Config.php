@@ -214,7 +214,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function offsetExists($key)
     {
-        return isset($this->container[$key]) || array_key_exists($key, $this->container);
+        return isset($this->container[$key]) || \array_key_exists($key, $this->container);
     }
 
     /**
@@ -237,7 +237,7 @@ class Config implements \ArrayAccess, \JsonSerializable
             return null;
         }
 
-        if (isset($this->container[$namespace][$key]) || array_key_exists($key, $this->container[$namespace])) {
+        if (isset($this->container[$namespace][$key]) || \array_key_exists($key, $this->container[$namespace])) {
             return $this->container[$namespace][$key];
         }
 
@@ -262,7 +262,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         $namespace = key($key);
         $key = current($key);
 
-        if (!array_key_exists($namespace, $this->container)) {
+        if (!\array_key_exists($namespace, $this->container)) {
             $this->container[$namespace] = [];
         }
 
