@@ -167,7 +167,7 @@ PHP_METHOD(Test_Globals, setBoolValue) {
 
 }
 
-PHP_METHOD(Test_Globals, setGlobalsOrmCacheLevel) {
+PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
 
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
@@ -182,12 +182,15 @@ PHP_METHOD(Test_Globals, setGlobalsOrmCacheLevel) {
 
 }
 
-PHP_METHOD(Test_Globals, getGlobalsOrmCaheLevel) {
+/**
+ * @return mixed
+ */
+PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCaheLevel) {
 
 	zval *this_ptr = getThis();
 
 
-	ZEPHIR_GLOBAL(orm).cache_level;
+	RETURN_LONG(ZEPHIR_GLOBAL(orm).cache_level);
 
 }
 

@@ -79,13 +79,16 @@ class Globals
 		globals_set("my_setting_1", value);
 	}
 
-	public function setGlobalsOrmCacheLevel(value) -> void
+	public function setDefaultGlobalsOrmCacheLevel(value) -> void
 	{
 		globals_set("orm.cache_level", value);
 	}
 
-	public function getGlobalsOrmCaheLevel()
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultGlobalsOrmCaheLevel()
 	{
-		globals_get("orm.cache_level");
+		return globals_get("orm.cache_level");
 	}
 }
