@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -15,6 +15,7 @@ use const INFO_GENERAL;
 use const PHP_INT_SIZE;
 use const PHP_OS;
 use const PHP_ZTS;
+use const SCANDIR_SORT_ASCENDING;
 use Zephir\Exception\InvalidArgumentException;
 
 /**
@@ -27,7 +28,7 @@ use Zephir\Exception\InvalidArgumentException;
 function unlink_recursive($path)
 {
     if (is_dir($path)) {
-        $objects = array_diff(scandir($path), ['.', '..']);
+        $objects = array_diff(scandir($path, SCANDIR_SORT_ASCENDING), ['.', '..']);
 
         foreach ($objects as $object) {
             if (is_dir("{$path}/{$object}")) {
@@ -79,9 +80,9 @@ function add_slashes($string)
     $length = \strlen($string);
 
     for ($i = 0; $i < $length; ++$i) {
-        $ch = substr($string, $i, 1);
-        if ($i != ($length - 1)) {
-            $after = substr($string, $i + 1, 1);
+        $ch = $string[$i];
+        if ($i !== ($length - 1)) {
+            $after = $string[$i + 1];
         } else {
             $after = null;
         }
@@ -137,7 +138,7 @@ function add_slashes($string)
  */
 function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 {
-    if (false == \is_string($className)) {
+    if (!\is_string($className)) {
         throw new InvalidArgumentException('Class name must be a string, got '.\gettype($className));
     }
 
@@ -179,7 +180,7 @@ function file_put_contents_ex($content, $path)
         $contentMd5 = md5($content);
         $existingMd5 = md5_file($path);
 
-        if ($contentMd5 != $existingMd5) {
+        if ($contentMd5 !== $existingMd5) {
             return file_put_contents($path, $content);
         }
     } else {
@@ -196,7 +197,7 @@ function file_put_contents_ex($content, $path)
  */
 function is_windows()
 {
-    return 'WIN' === strtoupper(substr(PHP_OS, 0, 3));
+    return 0 === stripos(PHP_OS, 'WIN');
 }
 
 /**
@@ -206,7 +207,7 @@ function is_windows()
  */
 function is_macos()
 {
-    return 'DARWIN' === strtoupper(substr(PHP_OS, 0, 6));
+    return 0 === stripos(PHP_OS, 'DARWIN');
 }
 
 /**
@@ -218,7 +219,7 @@ function is_macos()
  */
 function is_bsd()
 {
-    return false !== stristr(strtolower(PHP_OS), 'bsd');
+    return false !== stripos(PHP_OS, 'BSD');
 }
 
 /**
@@ -228,7 +229,7 @@ function is_bsd()
  */
 function is_zts()
 {
-    if (\defined('PHP_ZTS') && PHP_ZTS == 1) {
+    if (\defined('PHP_ZTS') && PHP_ZTS === 1) {
         return true;
     }
 
@@ -249,23 +250,27 @@ function windows_release_dir()
         if (PHP_INT_SIZE === 4) {
             // 32-bit version of PHP
             return 'ext\\Release_TS';
-        } elseif (PHP_INT_SIZE === 8) {
+        }
+
+        if (PHP_INT_SIZE === 8) {
             // 64-bit version of PHP
             return 'ext\\x64\\Release_TS';
-        } else {
-            // fallback
-            return 'ext\\Release_TS';
         }
-    } else {
-        if (PHP_INT_SIZE === 4) {
-            // 32-bit version of PHP
-            return 'ext\\Release';
-        } elseif (PHP_INT_SIZE === 8) {
-            // 64-bit version of PHP
-            return 'ext\\x64\\Release';
-        } else {
-            // fallback
-            return 'ext\\Release';
-        }
+
+        // fallback
+        return 'ext\\Release_TS';
     }
+
+    if (PHP_INT_SIZE === 4) {
+        // 32-bit version of PHP
+        return 'ext\\Release';
+    }
+
+    if (PHP_INT_SIZE === 8) {
+        // 64-bit version of PHP
+        return 'ext\\x64\\Release';
+    }
+
+    // fallback
+    return 'ext\\Release';
 }

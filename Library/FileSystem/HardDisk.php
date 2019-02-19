@@ -5,16 +5,18 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\FileSystem;
 
 use League\Flysystem;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\FileSystemException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
+use Zephir\Zephir;
 
 /**
  * Zephir\FileSystem\HardDisk.
@@ -43,7 +45,7 @@ final class HardDisk implements FileSystemInterface
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = 'IR')
+    public function __construct(Flysystem\FilesystemInterface $filesystem, $localPath = Zephir::VERSION)
     {
         $this->filesystem = $filesystem;
         $this->localPath = trim($localPath, '\\/');
@@ -80,12 +82,10 @@ final class HardDisk implements FileSystemInterface
      */
     public function initialize()
     {
-        if (false == $this->exists($this->localPath)) {
-            if (false == $this->filesystem->createDir($this->localPath)) {
-                throw new RuntimeException(
-                    'Unable to create a local storage for temporary filesystem operations.'
-                );
-            }
+        if ((false === $this->exists($this->localPath)) && false === $this->filesystem->createDir($this->localPath)) {
+            throw new RuntimeException(
+                'Unable to create a local storage for temporary filesystem operations.'
+            );
         }
 
         $this->initialized = true;
@@ -132,15 +132,19 @@ final class HardDisk implements FileSystemInterface
      *
      * @param string $path
      *
-     * @throws Flysystem\FileNotFoundException
+     * @throws CompilerException
      *
      * @return array
      */
     public function file($path)
     {
-        $contents = $this->filesystem->read($this->localPath."/{$path}");
+        try {
+            $contents = $this->filesystem->read($this->localPath."/{$path}");
 
-        return preg_split("/\r\n|\n|\r/", $contents);
+            return preg_split("/\r\n|\n|\r/", $contents);
+        } catch (Flysystem\FileNotFoundException $e) {
+            throw new CompilerException($e->getMessage(), null, $e->getCode(), $e);
+        }
     }
 
     /**
@@ -212,10 +216,10 @@ final class HardDisk implements FileSystemInterface
         switch ($descriptor) {
             default:
             case 'stdout':
-                system("{$command} > {$redirect}");
+                system("{$command} > ".escapeshellarg($redirect));
                 break;
             case 'stderr':
-                system("{$command} 2> {$redirect}");
+                system("{$command} 2> ".escapeshellarg($redirect));
                 break;
         }
     }

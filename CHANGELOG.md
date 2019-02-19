@@ -5,13 +5,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Moved internal cache and logs to the user's home directory.
+  - On macOS Zephir will use `XDG` if it is possible, otherwise `$HOME/Library`
+  - On Windows Zephir will use `LOCALAPPDATA` if it is possible, otherwise home dir as a base path
+  - In any other cases, e.g. Linux, BSD and so on, Zephir will use `XDG`if it is possible,
+    otherwise `$HOME/.local` and `$HOME/.cache`
+- Per project cache used for temporary operations was moved to `%CWD%/.zephir/%VERSION%`
+  where `%CWD%` is the current working directory and `%VERSION%` is the current Zephir version e.g. `0.11.8-4495e75`
+
 ### Fixed
 - Array of object as return type is reported to PHP as type, not array
   [#1779](https://github.com/phalcon/zephir/issues/1779)
 - Use namespace as a prefix for ini name [#1604](https://github.com/phalcon/zephir/issues/1604)
 - Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
-- Fixed a bug when accessing super-global variables that do not exist (for PHP >= 7.0 )
+- Fixed a bug when accessing super-global variables that do not exist (only for PHP >= 7.0 )
   [#1775](https://github.com/phalcon/zephir/issues/1775)
+- Fixed incorrect behavior during work with ArrayAccess [1061](https://github.com/phalcon/zephir/issues/1061),
+  [1400](https://github.com/phalcon/zephir/issues/1400)
 
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
