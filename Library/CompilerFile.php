@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -787,7 +787,7 @@ final class CompilerFile implements FileInterface
     public function compile(Compiler $compiler, StringsManager $stringsManager)
     {
         if (!$this->ir) {
-            throw new CompilerException('IR related to compiled file is missing');
+            throw new CompilerException('Unable to locate the intermediate representation of the compiled file');
         }
 
         /*

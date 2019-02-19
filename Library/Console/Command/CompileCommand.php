@@ -16,7 +16,9 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
+use Zephir\Exception\CompilerException;
 
 /**
  * Zephir\Console\Command\CompileCommand.
@@ -50,10 +52,18 @@ final class CompileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->compile(
-            $this->isDevelopmentModeEnabled($input)
-        );
+        $io = new SymfonyStyle($input, $output);
+
+        try {
+            // TODO: Move all the stuff from the compiler
+            $this->compiler->compile(
+                $this->isDevelopmentModeEnabled($input)
+            );
+        } catch (CompilerException $e) {
+            $io->error($e->getMessage());
+
+            return 1;
+        }
 
         return 0;
     }
