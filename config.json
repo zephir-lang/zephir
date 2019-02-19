@@ -1,7 +1,7 @@
 {
     "namespace": "test",
-    "name": "Zephir Test Extension",
-    "description": "<b>Zephir</b> - is a high level <strong>Programming Language</strong> that eases the creation and maintainability of extensions for PHP.",
+    "name": "Test Extension",
+    "description": "Description <b>test</b> for<br\/>Test Extension.",
     "author": "Zephir Team and contributors",
     "version": "1.0.0",
     "verbose": true,
@@ -70,9 +70,13 @@
             "type": "bool",
             "default": true,
             "ini-entry": {
-                "name": "test.my_setting_1",
+                "name": "ini-entry.my_setting_1",
                 "scope": "PHP_INI_ALL"
             }
+        },
+        "test_setting_1": {
+            "type": "bool",
+            "default": true
         },
         "my_setting_2": {
             "type": "int",
@@ -86,15 +90,15 @@
             "type": "char",
             "default": "A"
         },
-        "test.my_setting_1": {
+        "db.my_setting_1": {
             "type": "bool",
             "default": false
         },
-        "test.my_setting_2": {
+        "db.my_setting_2": {
             "type": "int",
             "default": 100
         },
-        "test.my_setting_3": {
+        "db.my_setting_3": {
             "type": "double",
             "default": 7.5
         },
@@ -106,11 +110,11 @@
             "type": "bool",
             "default": true
         },
-        "zephir.superpower": {
+        "extension.test_ini_variable": {
             "type": "bool",
             "default": true,
             "ini-entry": {
-                "name": "zephir.superpower",
+                "name": "extension.test_ini_variable",
                 "scope": "PHP_INI_ALL"
             }
         }
@@ -119,23 +123,23 @@
     "info": [
         {
             "header": [
-                "Zephir support",
+                "Test Extension support",
                 "Value"
             ],
             "rows": [
                 [
                     "Lifecycle hooks",
-                    "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks. Normally, Zephir's own hooks into these events will cover all the setup and tear down your extension will need, but if you find that you need to do something more, there are a few options you can use to pass your own code into these same hooks."
+                    "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks."
                 ],
                 [
                     "Static Analysis",
-                    "Zephir's compiler provides static analysis of the compiled code."
+                    "Test extensions' compiler provides static analysis of the compiled code."
                 ]
             ]
         },
         {
             "header": [
-                "Zephir test variable",
+                "Test variable",
                 "Value"
             ],
             "rows": [
