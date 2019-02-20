@@ -109,4 +109,14 @@ class ConfigTest extends TestCase
             unlink($tmpConfigFile);
         }
     }
+
+    /** @test */
+    public function directiveShowsWithoutDuplicatedNamespace()
+    {
+        $config = new Config();
+        $config->set('ext.some_key', 'some_value', 'test');
+
+        $this->assertSame($config->get('ext.some_key', 'test'), 'some_value');
+        $this->assertSame($config->get('test.my_setting_1', 'test'), null);
+    }
 }
