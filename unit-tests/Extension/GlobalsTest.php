@@ -91,11 +91,10 @@ class GlobalsTest extends TestCase
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
-    /** @test */
     public function shouldSetGlobalExtensionOrmCacheLevel()
     {
-        $this->test->setDefaultGlobalsOrmCacheLevel('cache_level_3');
+        $test->setGlobalsOrmCacheLevel('cahe_level_3');
 
-        $this->assertSame('cache_level_3', $this->test->getDefaultGlobalsOrmCacheLevel());
+        $this->assertSame($test->getGlobalsOrmCacheLevel(), 'cache_level_3');
     }
 }
