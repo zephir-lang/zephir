@@ -17,10 +17,8 @@ class ExtensionInfoTest extends TestCase
 {
     /**
      * @see config.json for Directive keys
-     *
-     * @return array
      */
-    public function directiveProvider()
+    public function directiveProvider(): array
     {
         return [
             ['Test Extension => enabled', true],
@@ -39,11 +37,8 @@ class ExtensionInfoTest extends TestCase
     /**
      * @dataProvider directiveProvider()
      * @test
-     *
-     * @param string $var
-     * @param bool   $contains
      */
-    public function shouldBeWithoutDuplicatesNamespace($var, $contains)
+    public function shouldBeWithoutDuplicatesNamespace(string $var, bool $contains)
     {
         ob_start();
 
