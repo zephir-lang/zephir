@@ -10,27 +10,18 @@
 
 #include "kernel/globals.h"
 
-#define PHP_TEST_NAME        "Zephir Test Extension"
+#define PHP_TEST_NAME        "Test Extension"
 #define PHP_TEST_VERSION     "1.0.0"
 #define PHP_TEST_EXTNAME     "test"
-#define PHP_TEST_AUTHOR      "Zephir Team and contributors"
+#define PHP_TEST_AUTHOR      "Zephir Team"
 #define PHP_TEST_ZEPVERSION  "0.11.9-$Id$"
-#define PHP_TEST_DESCRIPTION "<b>Zephir</b> - is a high level <strong>Programming Language</strong> that eases the creation and maintainability of extensions for PHP."
+#define PHP_TEST_DESCRIPTION "Description test for<br/>Test Extension"
 
 typedef struct _zephir_struct_test { 
 	zend_bool my_setting_1;
 	int my_setting_2;
 	double my_setting_3;
 } zephir_struct_test;
-
-typedef struct _zephir_struct_orm { 
-	int cache_level;
-	zend_bool cache_enable;
-} zephir_struct_orm;
-
-typedef struct _zephir_struct_zephir { 
-	zend_bool superpower;
-} zephir_struct_zephir;
 
 
 
@@ -59,10 +50,6 @@ ZEND_BEGIN_MODULE_GLOBALS(test)
 
 	
 	zephir_struct_test test;
-
-	zephir_struct_orm orm;
-
-	zephir_struct_zephir zephir;
 
 	zend_bool my_setting_1;
 

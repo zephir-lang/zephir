@@ -19,83 +19,75 @@ use Test\Globals;
  */
 class GlobalsTest extends TestCase
 {
-
-    /** @var Test\Globals $test */
-    private $test;
-
-    public function setUp()
-    {
-        $this->test = new Globals();
-    }
-
     /** @test */
     public function shouldGetGlobalExtensionSettings()
     {
-        $this->assertFalse($this->test->getDefaultGlobals1());
+        $t = new Globals();
 
-        $this->assertTrue($this->test->getDefaultGlobals4());
+        $this->assertTrue($t->getDefaultGlobals1());
+        $this->assertTrue($t->getDefaultGlobals4());
 
-        $this->assertSame(100, $this->test->getDefaultGlobals2());
-        $this->assertSame(7.5, $this->test->getDefaultGlobals3());
-        $this->assertSame(10, $this->test->getDefaultGlobals5());
-        $this->assertSame(15.2, $this->test->getDefaultGlobals6());
-        $this->assertSame(65, $this->test->getDefaultGlobals7());
+        $this->assertSame(100, $t->getDefaultGlobals2());
+        $this->assertSame(7.5, $t->getDefaultGlobals3());
+        $this->assertSame(10, $t->getDefaultGlobals5());
+        $this->assertSame(15.2, $t->getDefaultGlobals6());
+        $this->assertSame(65, $t->getDefaultGlobals7());
     }
 
     /** @test */
     public function shouldSetGlobalExtensionSetting()
     {
-        $this->test->setBoolValueUsingDotNotation(false);
+        $t = new Globals();
 
-        $this->assertFalse($this->test->getDefaultGlobals1());
+        $t->setBoolValueUsingDotNotation(false);
+        $this->assertFalse($t->getDefaultGlobals1());
     }
 
     /** @test */
     public function setIntValueUsingDotNotation()
     {
-        $this->test->setIntValueUsingDotNotation(900);
+        $t = new Globals();
 
-        $this->assertSame(900, $this->test->getDefaultGlobals2());
+        $t->setIntValueUsingDotNotation(900);
+        $this->assertSame(900, $t->getDefaultGlobals2());
     }
 
     /** @test */
     public function setCharValueUsingString()
     {
-        $this->test->setCharValue('B');
+        $t = new Globals();
 
-        $this->assertSame(66, $this->test->getDefaultGlobals7());
+        $t->setCharValue('B');
+        $this->assertSame(66, $t->getDefaultGlobals7());
     }
 
     /** @test */
     public function setCharValueUsingInt()
     {
-        $this->test->setCharValue(90);
+        $t = new Globals();
 
-        $this->assertSame(90, $this->test->getDefaultGlobals7());
+        $t->setCharValue(90);
+        $this->assertSame(90, $t->getDefaultGlobals7());
     }
 
     /** @test */
     public function setBoolValueUsingInt()
     {
-        $this->test->setBoolValue(0);
+        $t = new Globals();
 
-        $this->assertFalse($this->test->getDefaultGlobals4());
+        $t->setBoolValue(0);
+        $this->assertFalse($t->getDefaultGlobals4());
     }
 
     /** @test */
     public function setBoolValueUsingBool()
     {
-        $this->test->setBoolValue(true);
-        $this->assertTrue($this->test->getDefaultGlobals4());
+        $t = new Globals();
 
-        $this->test->setBoolValue(false);
-        $this->assertFalse($this->test->getDefaultGlobals4());
-    }
+        $t->setBoolValue(true);
+        $this->assertTrue($t->getDefaultGlobals4());
 
-    public function shouldSetGlobalExtensionOrmCacheLevel()
-    {
-        $test->setGlobalsOrmCacheLevel("cahe_level_3");
-
-        $this->assertSame($test->getGlobalsOrmCacheLevel(), 'cache_level_3');
+        $t->setBoolValue(false);
+        $this->assertFalse($t->getDefaultGlobals4());
     }
 }
