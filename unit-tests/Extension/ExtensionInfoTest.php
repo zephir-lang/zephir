@@ -38,7 +38,7 @@ class ExtensionInfoTest extends TestCase
     {
         ob_start();
         phpinfo(INFO_MODULES);
-        $phpinfo = ob_get_contents();
+        $phpinfo = ob_get_contents() ;
         ob_end_clean() ;
 
         if ($contains) {
