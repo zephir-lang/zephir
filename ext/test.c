@@ -205,14 +205,13 @@ zend_class_entry *test_vars_ce;
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
 PHP_INI_BEGIN()
-	STD_PHP_INI_BOOLEAN("test.db.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, db.my_setting_1, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("test.test.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, test.my_setting_1, zend_test_globals, test_globals)
 	
 	
 	
 	STD_PHP_INI_BOOLEAN("test.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_test_globals, test_globals)
-	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_test_globals, test_globals)
-	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_test_globals, test_globals)
-	STD_PHP_INI_BOOLEAN("test.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("zephir.superpower", "1", PHP_INI_ALL, OnUpdateBool, zephir.superpower, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("test.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_test_globals, test_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(test)
@@ -434,13 +433,12 @@ static void php_zephir_init_globals(zend_test_globals *test_globals TSRMLS_DC)
 	memset(test_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
 	
-	test_globals->db.my_setting_2 = 100;
-	test_globals->db.my_setting_3 = 7.5;
+	test_globals->test.my_setting_2 = 100;
+	test_globals->test.my_setting_3 = 7.5;
 	test_globals->orm.cache_level = 3;
 
 
 	test_globals->my_setting_1 = 1;
-	test_globals->test_setting_1 = 1;
 	test_globals->my_setting_2 = 10;
 	test_globals->my_setting_3 = 15.2;
 	test_globals->my_setting_4 = 'A';
@@ -495,12 +493,12 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_TEST_ZEPVERSION);
 	php_info_print_table_end();
 		php_info_print_table_start();
-	php_info_print_table_header(2, "Test Extension support", "Value");
-	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
+	php_info_print_table_header(2, "Zephir support", "Value");
+	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks. Normally, Zephir's own hooks into these events will cover all the setup and tear down your extension will need, but if you find that you need to do something more, there are a few options you can use to pass your own code into these same hooks.");
+	php_info_print_table_row(2, "Static Analysis", "Zephir's compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
-	php_info_print_table_header(2, "Test variable", "Value");
+	php_info_print_table_header(2, "Zephir test variable", "Value");
 	php_info_print_table_row(2, "Extension", "Installed");
 	php_info_print_table_row(2, "NFR", "Contributions are welcome!");
 	php_info_print_table_end();

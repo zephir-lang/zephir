@@ -23,81 +23,6 @@ ZEPHIR_INIT_CLASS(Test_Globals) {
 
 }
 
-PHP_METHOD(Test_Globals, setBoolValueUsingDotNotation) {
-
-	zval *value, value_sub;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&value_sub);
-
-	zephir_fetch_params(0, 1, 0, &value);
-
-
-
-	ZEPHIR_GLOBAL(db).my_setting_1 = zend_is_true(value);
-
-}
-
-PHP_METHOD(Test_Globals, setIntValueUsingDotNotation) {
-
-	zval *value, value_sub;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&value_sub);
-
-	zephir_fetch_params(0, 1, 0, &value);
-
-
-
-	ZEPHIR_GLOBAL(db).my_setting_2 = Z_LVAL_P(value);
-
-}
-
-PHP_METHOD(Test_Globals, setCharValue) {
-
-	zval *value, value_sub;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&value_sub);
-
-	zephir_fetch_params(0, 1, 0, &value);
-
-
-
-	ZEPHIR_GLOBAL(my_setting_4) = (Z_TYPE_P(value) == IS_STRING ? (Z_STRLEN_P(value) ? Z_STRVAL_P(value)[0] : NULL) : Z_LVAL_P(value));
-
-}
-
-PHP_METHOD(Test_Globals, setBoolValue) {
-
-	zval *value, value_sub;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&value_sub);
-
-	zephir_fetch_params(0, 1, 0, &value);
-
-
-
-	ZEPHIR_GLOBAL(my_setting_1) = zend_is_true(value);
-
-}
-
-PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
-
-	zval *value, value_sub;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&value_sub);
-
-	zephir_fetch_params(0, 1, 0, &value);
-
-
-
-	ZEPHIR_GLOBAL(orm).cache_level = Z_LVAL_P(value);
-
-}
-
 /**
  * @return mixed
  */
@@ -106,7 +31,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_BOOL(ZEPHIR_GLOBAL(db).my_setting_1);
+	RETURN_BOOL(ZEPHIR_GLOBAL(test).my_setting_1);
 
 }
 
@@ -118,7 +43,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_LONG(ZEPHIR_GLOBAL(db).my_setting_2);
+	RETURN_LONG(ZEPHIR_GLOBAL(test).my_setting_2);
 
 }
 
@@ -130,7 +55,7 @@ PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_DOUBLE(ZEPHIR_GLOBAL(db).my_setting_3);
+	RETURN_DOUBLE(ZEPHIR_GLOBAL(test).my_setting_3);
 
 }
 
@@ -179,6 +104,81 @@ PHP_METHOD(Test_Globals, getDefaultGlobals7) {
 
 
 	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_4));
+
+}
+
+PHP_METHOD(Test_Globals, setBoolValueUsingDotNotation) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	ZEPHIR_GLOBAL(test).my_setting_1 = zend_is_true(value);
+
+}
+
+PHP_METHOD(Test_Globals, setIntValueUsingDotNotation) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	ZEPHIR_GLOBAL(test).my_setting_2 = Z_LVAL_P(value);
+
+}
+
+PHP_METHOD(Test_Globals, setCharValue) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	ZEPHIR_GLOBAL(my_setting_4) = (Z_TYPE_P(value) == IS_STRING ? (Z_STRLEN_P(value) ? Z_STRVAL_P(value)[0] : NULL) : Z_LVAL_P(value));
+
+}
+
+PHP_METHOD(Test_Globals, setBoolValue) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	ZEPHIR_GLOBAL(my_setting_1) = zend_is_true(value);
+
+}
+
+PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	ZEPHIR_GLOBAL(orm).cache_level = Z_LVAL_P(value);
 
 }
 
