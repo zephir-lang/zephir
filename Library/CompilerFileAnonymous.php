@@ -51,7 +51,7 @@ final class CompilerFileAnonymous implements FileInterface
      * @param ClassDefinition $classDefinition
      * @param Config          $config
      */
-    public function __construct(ClassDefinition $classDefinition, Config $config, CompilationContext $context)
+    public function __construct(ClassDefinition $classDefinition, Config $config, CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
