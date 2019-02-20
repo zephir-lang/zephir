@@ -87,7 +87,7 @@ class Globals
 	/**
 	 * @return mixed
 	 */
-	public function getDefaultGlobalsOrmCacheLevel()
+	public function getDefaultGlobalsOrmCaheLevel()
 	{
 		return globals_get("orm.cache_level");
 	}

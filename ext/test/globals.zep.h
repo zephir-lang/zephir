@@ -15,7 +15,7 @@ PHP_METHOD(Test_Globals, setIntValueUsingDotNotation);
 PHP_METHOD(Test_Globals, setCharValue);
 PHP_METHOD(Test_Globals, setBoolValue);
 PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel);
-PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCacheLevel);
+PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCaheLevel);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setboolvalueusingdotnotation, 0, 0, 1)
 	ZEND_ARG_INFO(0, value)
@@ -50,6 +50,6 @@ ZEPHIR_INIT_FUNCS(test_globals_method_entry) {
 	PHP_ME(Test_Globals, setCharValue, arginfo_test_globals_setcharvalue, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Globals, setBoolValue, arginfo_test_globals_setboolvalue, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Globals, setDefaultGlobalsOrmCacheLevel, arginfo_test_globals_setdefaultglobalsormcachelevel, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Globals, getDefaultGlobalsOrmCacheLevel, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Globals, getDefaultGlobalsOrmCaheLevel, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

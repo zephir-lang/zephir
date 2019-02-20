@@ -185,7 +185,7 @@ PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
 /**
  * @return mixed
  */
-PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCacheLevel) {
+PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCaheLevel) {
 
 	zval *this_ptr = getThis();
 
