@@ -143,13 +143,12 @@ class Struct
     }
 
     /**
-     * Process Globals for phpinfo() page.
-     *
+     * Process Globals for phpinfo() page
      * @see https://docs.zephir-lang.com/en/0.10/globals
      *
-     * @param mixed $name      - global-name
-     * @param mixed $global    - global structure (type, default...)
-     * @param mixed $namespace - global namespace
+     * @param mixed $name       - global-name
+     * @param mixed $global     - global structure (type, default...)
+     * @param mixed $namespace  - global namespace
      *
      * @return string
      */
@@ -164,7 +163,7 @@ class Struct
 
         if (!isset($iniEntry['name'])) {
             $iniName = $namespace.'.'.$structName;
-        //$iniName = $structName;
+            //$iniName = $structName;
         } else {
             $iniName = $iniEntry['name'];
         }
