@@ -1,6 +1,6 @@
 language: php
 php:
-  - 'master'
+  - '7.4snapshot'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -19,7 +19,7 @@ addons:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: 'master'
+    - php: '7.4snapshot'
 
 cache:
   apt: true
