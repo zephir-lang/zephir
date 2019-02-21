@@ -238,6 +238,7 @@ class Backend extends BackendZendEngine2
 
         if ($variable->isSuperGlobal()) {
             $groupVariables[] = $variable->getName();
+
             return;
         }
 
