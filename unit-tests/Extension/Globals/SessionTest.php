@@ -12,7 +12,6 @@
 namespace Extension\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\Session\Base;
 use Test\Globals\Session\Child;
 
 class SessionTest extends TestCase
@@ -81,23 +80,5 @@ class SessionTest extends TestCase
         unset($tester->bar);
 
         $this->assertSame([], $_SESSION);
-    }
-
-    /**
-     * @test
-     *
-     * @see https://github.com/phalcon/zephir/issues/1775
-     */
-    public function shouldAccessToTheSession()
-    {
-        unset($_SESSION);
-        $this->assertFalse(isset($_SESSION));
-
-        $t = new Base();
-        $t->set('foo', 'bar');
-
-        $this->assertTrue(isset($_SESSION));
-        /* @noinspection PhpUndefinedVariableInspection */
-        $this->assertSame(['foo' => 'bar'], $_SESSION);
     }
 }
