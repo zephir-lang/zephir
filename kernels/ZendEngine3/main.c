@@ -101,7 +101,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 					ZVAL_COPY_VALUE(arr, gv);
 					Z_SET_REFCOUNT_P(arr, 1);
 				} else {
-					array_init(arr);
+					ZVAL_DUP(arr, gv);
 					zend_hash_update(&EG(symbol_table), str, arr);
 				}
 				zend_string_release(str);
