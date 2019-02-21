@@ -85,6 +85,7 @@ class SessionTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1775
      */
     public function shouldAccessToTheSession()
@@ -96,7 +97,7 @@ class SessionTest extends TestCase
         $t->set('foo', 'bar');
 
         $this->assertTrue(isset($_SESSION));
-        /** @noinspection PhpUndefinedVariableInspection */
+        /* @noinspection PhpUndefinedVariableInspection */
         $this->assertSame(['foo' => 'bar'], $_SESSION);
     }
 }
