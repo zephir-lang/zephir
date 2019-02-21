@@ -11,6 +11,16 @@
 # -u	Treat unset variables as an error when substituting.
 set -eu
 
+# This allows the configuration of the executable path as follows:
+#     ZEPHIR_COMPILER_BIN=zephir.phar .ci/build-test-ext.sh
+#     ZEPHIR_COMPILER_BIN=./zephir .ci/build-test-ext.sh
+: ${ZEPHIR_COMPILER_BIN:=zephir}
+
+project_root=$(readlink -enq "$(dirname $0)/../")
+gcov_report=${project_root}/unit-tests/output/lcov.info
+
+alias zephir="${ZEPHIR_COMPILER_BIN}"
+
 project_root=$(readlink -enq "$(dirname $0)/../")
 
 gcov_report=${project_root}/unit-tests/output/lcov.info
