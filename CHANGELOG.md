@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Array of object as return type is reported to PHP as type, not array
   [#1779](https://github.com/phalcon/zephir/issues/1779)
+- Use namespace as a prefix for ini name [#1604](https://github.com/phalcon/zephir/issues/1604)
+- Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
 
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
@@ -18,7 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1758](https://github.com/phalcon/zephir/issues/1758)
 - Fixed compilation error when a new file is added or removed to the project
   [#1776](https://github.com/phalcon/zephir/issues/1776)
-- Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
 
 ## [0.11.7] - 2018-11-27
 ### Changed
