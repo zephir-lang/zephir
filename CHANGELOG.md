@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1779](https://github.com/phalcon/zephir/issues/1779)
 - Use namespace as a prefix for ini name [#1604](https://github.com/phalcon/zephir/issues/1604)
 - Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
+- Fixed a bug when accessing super-global variables that do not exist [#1775](https://github.com/phalcon/zephir/issues/1775)
 
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
