@@ -27,11 +27,12 @@ ZEPHIR_INIT_CLASS(Test_Globals_Env) {
 
 PHP_METHOD(Test_Globals_Env, read) {
 
-	zval *name_param = NULL, *_ENV, _0;
+	zval *name_param = NULL, _ENV, _0;
 	zval name;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&_ENV);
 	ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -41,7 +42,7 @@ PHP_METHOD(Test_Globals_Env, read) {
 	zephir_get_strval(&name, name_param);
 
 
-	zephir_array_fetch(&_0, _ENV, &name, PH_NOISY | PH_READONLY, "test/globals/env.zep", 8 TSRMLS_CC);
+	zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY | PH_READONLY, "test/globals/env.zep", 8 TSRMLS_CC);
 	RETURN_CTOR(&_0);
 
 }
