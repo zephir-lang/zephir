@@ -1,6 +1,6 @@
 language: php
 php:
-  - '7.4snapshot'
+#  - '7.4snapshot'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -18,8 +18,8 @@ addons:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: '7.4snapshot'
+#  allow_failures:
+#    - php: '7.4snapshot'
 
 cache:
   apt: true
@@ -75,6 +75,7 @@ before_script:
 script:
   - zephir --ansi
   - .ci/run-tests.sh
+  - (cd unit-tests/sharness && make)
 
 after_success:
   - .ci/after-success.sh

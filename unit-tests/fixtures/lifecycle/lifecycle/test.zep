@@ -1,0 +1,5 @@
+namespace Lifecycle;
+
+class Test
+{
+}

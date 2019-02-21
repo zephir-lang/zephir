@@ -26,7 +26,7 @@
 #include "setup_funcs.h"
 #include "prep_funcs.h"
 
-
+zend_class_entry *lifecycle_test_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(lifecycle)
 
@@ -38,7 +38,7 @@ static PHP_MINIT_FUNCTION(lifecycle)
 {
 	REGISTER_INI_ENTRIES();
 	zephir_module_init();
-	
+	ZEPHIR_INIT(Lifecycle_Test);
 	ext_setup_module();
 	ext_prep_module();
 	return SUCCESS;
