@@ -26,7 +26,8 @@ class MCallDynamicTest extends TestCase
 
     /**
      * @test
-     * @link https://github.com/phalcon/zephir/issues/1751
+     *
+     * @see https://github.com/phalcon/zephir/issues/1751
      */
     public function callAnonymousFunctionWithContext()
     {
