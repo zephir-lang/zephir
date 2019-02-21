@@ -5,6 +5,9 @@
 
 namespace Test;
 
+
+use Test\Mcall\Caller;
+
 class McallDynamic
 {
 	public function testMethod1()
@@ -22,5 +25,19 @@ class McallDynamic
 		var realMethod;
 		let realMethod = "test" . method;
 		return this->{realMethod}();
+	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1751
+	 */
+	public function testCallAnonymousFunctionWithContext() -> var
+	{
+		var result;
+
+		let result = Caller::start(function () {
+			 return Caller::perform();
+		});
+
+		return result;
 	}
 }
