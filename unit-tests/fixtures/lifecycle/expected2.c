@@ -31,7 +31,7 @@
 #include "setup_funcs.h"
 #include "prep_funcs.h"
 
-
+zend_class_entry *lifecycle_test_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(lifecycle)
 
@@ -58,7 +58,7 @@ static PHP_MINIT_FUNCTION(lifecycle)
 	setlocale(LC_ALL, "C");
 #endif
 	REGISTER_INI_ENTRIES();
-	
+	ZEPHIR_INIT(Lifecycle_Test);
 	ext_setup_module();
 	ext_prep_module();
 
