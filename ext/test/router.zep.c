@@ -203,9 +203,11 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, getRewriteUri) {
 
-	zval *_GET, *_SERVER, url, urlParts, realUri, _0;
+	zval _GET, _SERVER, url, urlParts, realUri, _0;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&_GET);
+	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&urlParts);
 	ZVAL_UNDEF(&realUri);
@@ -218,14 +220,14 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	zephir_read_property(&_0, this_ptr, SL("_uriSource"), PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_OBS_VAR(&url);
-		if (zephir_array_isset_string_fetch(&url, _GET, SL("_url"), 0)) {
+		if (zephir_array_isset_string_fetch(&url, &_GET, SL("_url"), 0)) {
 			if (!(zephir_is_true(&url))) {
 				RETURN_CCTOR(&url);
 			}
 		}
 	} else {
 		ZEPHIR_OBS_NVAR(&url);
-		if (zephir_array_isset_string_fetch(&url, _SERVER, SL("REQUEST_URI"), 0)) {
+		if (zephir_array_isset_string_fetch(&url, &_SERVER, SL("REQUEST_URI"), 0)) {
 			ZEPHIR_INIT_VAR(&urlParts);
 			zephir_fast_explode_str(&urlParts, SL("?"), &url, LONG_MAX TSRMLS_CC);
 			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY | PH_READONLY, "test/router.zep", 142 TSRMLS_CC);

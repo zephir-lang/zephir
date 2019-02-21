@@ -2190,18 +2190,19 @@ PHP_METHOD(Test_Assign, testArrayProperty) {
  */
 PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 
-	zval *index, index_sub, *value, value_sub, *_POST;
+	zval *index, index_sub, *value, value_sub, _POST;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_POST);
 
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params(0, 2, 0, &index, &value);
 
 
 
-	zephir_array_update_zval(_POST, index, value, PH_COPY | PH_SEPARATE);
+	zephir_array_update_zval(&_POST, index, value, PH_COPY | PH_SEPARATE);
 
 }
 
@@ -2268,9 +2269,10 @@ PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign) {
  */
 PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 
-	zval *_GET, v, _0, _1, _2, _3;
+	zval _GET, v, _0, _1, _2, _3;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&_GET);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -2284,17 +2286,17 @@ PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 	ZVAL_STRING(&v, "stest2");
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "stest");
-	zephir_array_update_string(_GET, SL("steststr"), &_0, PH_COPY | PH_SEPARATE);
-	zephir_array_update_string(_GET, SL("steststr2"), &v, PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&_GET, SL("steststr"), &_0, PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&_GET, SL("steststr2"), &v, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
-	zephir_array_update_string(_GET, SL("stestint"), &_1, PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&_GET, SL("stestint"), &_1, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_LONG(&_2, 2);
-	zephir_array_update_string(_GET, SL("stestint2"), &_2, PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&_GET, SL("stestint2"), &_2, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "testval");
-	zephir_array_update_zval(_GET, &v, &_3, PH_COPY | PH_SEPARATE);
+	zephir_array_update_zval(&_GET, &v, &_3, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 
 }
