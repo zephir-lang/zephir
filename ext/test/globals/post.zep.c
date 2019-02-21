@@ -32,11 +32,12 @@ ZEPHIR_INIT_CLASS(Test_Globals_Post) {
  */
 PHP_METHOD(Test_Globals_Post, hasValue) {
 
-	zval *name_param = NULL, *_POST;
+	zval *name_param = NULL, _POST;
 	zval name;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&_POST);
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SL("_POST"));
@@ -45,7 +46,7 @@ PHP_METHOD(Test_Globals_Post, hasValue) {
 	zephir_get_strval(&name, name_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset(_POST, &name));
+	RETURN_MM_BOOL(zephir_array_isset(&_POST, &name));
 
 }
 
