@@ -6,7 +6,7 @@ test_description="Test generate commands"
 
 # Skip all remaining tests if prerequisite is not met.
 if test $PHP_VERSION_ID -lt 70000; then
-	skip_all='skipping geneartion tests, these tests are designed to use for PHP < 7.0.0'
+	skip_all='skipping geneartion tests, these tests are designed to use for PHP > 7.0.0'
 	test_done
 fi
 
