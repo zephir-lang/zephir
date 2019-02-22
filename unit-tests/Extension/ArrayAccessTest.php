@@ -17,7 +17,7 @@ class ArrayAccessTest extends TestCase
 {
     public function testTest()
     {
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             $arrtest = new \Test\ArrayAccessTest();
 
             $this->assertTrue($arrtest->exits('one'));
