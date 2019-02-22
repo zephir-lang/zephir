@@ -95,7 +95,8 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {};
+		zval exist;
+		ZVAL_UNDEF(&exist);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			ZEPHIR_CALL_METHOD(fetched, (zval *)arr, "offsetget", NULL, 0, index);
@@ -163,7 +164,8 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 	zval *zv;
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {}, offset = {};
+		zval exist, offset;
+		ZVAL_UNDEF(&exist);
 		ZVAL_STRINGL(&offset, index, index_length);
 
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
@@ -201,9 +203,9 @@ int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long 
 	
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {}, offset = {};
+		zval exist, offset;
+		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
-
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			ZEPHIR_CALL_METHOD(fetched, (zval *)arr, "offsetget", NULL, 0, &offset);
@@ -242,8 +244,8 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {};
-
+		zval exist;
+		ZVAL_UNDEF(&exist);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
 		if (zend_is_true(&exist)) {
 			return 1;
@@ -283,9 +285,9 @@ int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index
 {
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {}, offset = {};
+		zval exist, offset;
+		ZVAL_UNDEF(&exist);
 		ZVAL_STRINGL(&offset, index, index_length);
-
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
@@ -304,11 +306,10 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 {
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-		zval exist = {}, offset = {};
+		zval exist, offset;
+		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
-
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
-
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			return 1;
 		}
@@ -327,9 +328,7 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
-
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetunset", NULL, 0, index);
-
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			return 1;
 		}
@@ -445,7 +444,6 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		ZEPHIR_CALL_METHOD(return_value, arr, "offsetget", NULL, 0, index);
-
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 			return SUCCESS;
 		}
@@ -632,7 +630,15 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 	HashTable *ht;
 	zval *ret = NULL;
 
-	if (Z_TYPE_P(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, index, value);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (2)");
 		return FAILURE;
 	}
@@ -688,7 +694,18 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 int zephir_array_update_string(zval *arr, const char *index, uint index_length, zval *value, int flags)
 {
 
-	if (Z_TYPE_P(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_STRINGL(&offset, index, index_length);
+		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, &offset, value);
+		zval_ptr_dtor(&offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (3)");
 		return FAILURE;
 	}
@@ -711,7 +728,17 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 
 int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
 {
-	if (Z_TYPE_P(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_LONG(&offset, index);
+		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, &offset, value);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
 	}
