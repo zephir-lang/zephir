@@ -732,11 +732,24 @@ class Backend extends BackendZendEngine2
         /**
          * Create a temporary zval to fetch the items from the hash.
          */
+        $compilationContext->headersManager->add('kernel/fcall');
+        $compilationContext->symbolTable->mustGrownStack(true);
+        if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->branchManager->getCurrentBranch());
+            $callStatus->setIsInitialized(true, $compilationContext);
+            $callStatus->increaseUses();
+            $callStatus->setReadOnly(true);
+            $compilationContext->symbolTable->addRawVariable($callStatus);
+        }
         $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
         $tempVariable->setIsDoublePointer(true);
+        $tempValidVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
         $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('zephir_is_iterable('.$this->getVariableCode($exprVariable).', '.$duplicateHash.', "'.Compiler::getShortUserPath($statement['file']).'", '.$statement['line'].');');
+
+        $codePrinter->output('if (Z_TYPE_P('.$this->getVariableCode($exprVariable).') == IS_ARRAY) {');
+        $codePrinter->increaseLevel();
 
         $macro = null;
         $reverse = $statement['reverse'] ? 'REVERSE_' : '';
@@ -802,6 +815,52 @@ class Backend extends BackendZendEngine2
         }
 
         $codePrinter->output('} ZEND_HASH_FOREACH_END();');
+        $codePrinter->decreaseLevel();
+
+        $codePrinter->output('} else {');
+        $codePrinter->increaseLevel();
+
+        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, '.$this->getVariableCode($exprVariable).', "rewind", NULL, 0);');
+        $codePrinter->output('zephir_check_call_status();');
+
+        $codePrinter->output('while (1) {');
+        $codePrinter->increaseLevel();
+
+        $codePrinter->output('ZEPHIR_CALL_METHOD(&'.$tempValidVariable->getName().', '.$this->getVariableCode($exprVariable).', "valid", NULL, 0);');
+        $codePrinter->output('zephir_check_call_status();');
+        $codePrinter->output('if (!zend_is_true(&'.$tempValidVariable->getName().')) {');
+        $codePrinter->increaseLevel();
+        $codePrinter->output('break;');
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+
+        if (isset($keyVariable)) {
+            $codePrinter->output('ZEPHIR_CALL_METHOD('.$this->getVariableCode($keyVariable).', '.$this->getVariableCode($exprVariable).', "key", NULL, 0);');
+            $codePrinter->output('zephir_check_call_status();');
+        }
+
+        if (isset($variable)) {
+            $codePrinter->output('ZEPHIR_CALL_METHOD('.$this->getVariableCode($variable).', '.$this->getVariableCode($exprVariable).', "current", NULL, 0);');
+            $codePrinter->output('zephir_check_call_status();');
+        }
+
+        if (isset($statement['statements'])) {
+            $statementBlock->isLoop(true);
+            if (isset($statement['key'])) {
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            }
+            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+            $statementBlock->compile($compilationContext);
+        }
+
+        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, '.$this->getVariableCode($exprVariable).', "next", NULL, 0);');
+        $codePrinter->output('zephir_check_call_status();');
+
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
+
+        $codePrinter->decreaseLevel();
+        $codePrinter->output('}');
 
         /* Since we do not observe, still do cleanup */
         if (isset($variable)) {

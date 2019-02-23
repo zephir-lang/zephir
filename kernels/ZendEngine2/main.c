@@ -301,7 +301,9 @@ int zephir_is_scalar(zval *var) {
  */
 int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse) {
 
-	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_iterator))) {
+		return 1;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
 
