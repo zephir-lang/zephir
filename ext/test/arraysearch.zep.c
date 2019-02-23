@@ -51,7 +51,7 @@ PHP_METHOD(Test_ArraySearch, simpleSearch) {
 
 
 	ZVAL_BOOL(&_0, (strict ? 1 : 0));
-	ZEPHIR_RETURN_CALL_FUNCTION("array_search", NULL, 3, needle, &haystack, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_search", NULL, 4, needle, &haystack, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -102,7 +102,7 @@ PHP_METHOD(Test_ArraySearch, searchUsingArrayInsideZephir) {
 	zephir_array_fast_append(&itoA64, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "value");
-	ZEPHIR_CALL_FUNCTION(&pos, "array_search", NULL, 3, &_0, &itoA64);
+	ZEPHIR_CALL_FUNCTION(&pos, "array_search", NULL, 4, &_0, &itoA64);
 	zephir_check_call_status();
 	RETURN_CCTOR(&pos);
 

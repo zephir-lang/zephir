@@ -200,25 +200,25 @@ PHP_METHOD(Test_Statements, test544Issue) {
 		unfilledWidth = (((zephir_get_numberval(&_4$$3) - 1)) - filledWidth);
 		zephir_read_property(&_5$$3, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_6$$3, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 19, &_5$$3, &_6$$3);
+		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 20, &_5$$3, &_6$$3);
 		zephir_check_call_status();
 		zephir_read_property(&_6$$3, this_ptr, SL("arrow"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_9$$3, this_ptr, SL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_10$$3, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 19, &_9$$3, &_10$$3);
+		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 20, &_9$$3, &_10$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_7$$3, &_6$$3, &_11$$3);
 		RETURN_MM();
 	} else if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
 		zephir_read_property(&_12$$4, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_13$$4, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 19, &_12$$4, &_13$$4);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 20, &_12$$4, &_13$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
 		zephir_read_property(&_14$$5, this_ptr, SL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_15$$5, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 19, &_14$$5, &_15$$5);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 20, &_14$$5, &_15$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -265,25 +265,25 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 		unfilledWidth = (((zephir_get_numberval(&_2$$3) - 1)) - filledWidth);
 		zephir_read_property(&_3$$3, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_4$$3, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 19, &_3$$3, &_4$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 20, &_3$$3, &_4$$3);
 		zephir_check_call_status();
 		zephir_read_property(&_4$$3, this_ptr, SL("arrow"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_7$$3, this_ptr, SL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_8$$3, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 19, &_7$$3, &_8$$3);
+		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 20, &_7$$3, &_8$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_5$$3, &_4$$3, &_9$$3);
 		RETURN_MM();
 	} else if (step == totalSteps) {
 		zephir_read_property(&_10$$4, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_11$$4, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 19, &_10$$4, &_11$$4);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 20, &_10$$4, &_11$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
 		zephir_read_property(&_12$$5, this_ptr, SL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_13$$5, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 19, &_12$$5, &_13$$5);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 20, &_12$$5, &_13$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}

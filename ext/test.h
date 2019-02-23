@@ -19,6 +19,8 @@
 #include "test/ooimpl/zbeginning.zep.h"
 #include "test/properties/publicproperties.zep.h"
 #include "test/arithmetic.zep.h"
+#include "test/arrayaccessobj.zep.h"
+#include "test/arrayaccesstest.zep.h"
 #include "test/arrayobject.zep.h"
 #include "test/arraysearch.zep.h"
 #include "test/assign.zep.h"
