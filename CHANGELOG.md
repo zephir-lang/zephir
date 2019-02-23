@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.11.10] - 2019-02-23
 ### Changed
 - Moved internal cache and logs to the user's home directory.
   - On macOS Zephir will use `XDG` if it is possible, otherwise `$HOME/Library`
@@ -12,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - In any other cases, e.g. Linux, BSD and so on, Zephir will use `XDG`if it is possible,
     otherwise `$HOME/.local` and `$HOME/.cache`
 - Per project cache used for temporary operations was moved to `%CWD%/.zephir/%VERSION%`
-  where `%CWD%` is the current working directory and `%VERSION%` is the current Zephir version e.g. `0.11.8-4495e75`
+  where `%CWD%` is the current working directory and `%VERSION%` is the current Zephir version e.g. `0.11.10-4a825b8`
 
 ### Fixed
 - Array of object as return type is reported to PHP as type, not array
@@ -97,12 +99,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.11.1] - 2018-10-19
 ### Added
-- Initial support of PHP 7.3
+- Initial support of PHP 7.3 (ported from the 0.10.x branch)
 
 ## [0.11.0] - 2018-08-05
 ### Added
 - Add type hints for scalar arguments and return values in ZendEngine 3
   [1656](https://github.com/phalcon/zephir/issues/1656)
+
+## [0.10.14] - 2018-11-20
+### Fixed
+- Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
+  (backported from the upstream)
+
+## [0.10.13] - 2018-11-18
+### Fixed
+- Fixed regression introduced in the 0.10.12 related to `require` file using protocols
+  [#1713](https://github.com/phalcon/zephir/issues/1713) (backported from the upstream)
+- Fixed incorrect behavior of `require` statement for ZendEngine3
+  [#1621](https://github.com/phalcon/zephir/issues/1621)
+  [#1403](https://github.com/phalcon/zephir/issues/1403)
+  [#1428](https://github.com/phalcon/zephir/pull/1428)
+  (backported from the upstream)
+
+## [0.10.12] - 2018-10-19
+### Added
+- Initial support of PHP 7.3
+
+## [0.10.11] - 2018-08-05
+### Added
 - Allow extension to be loaded prior to the tests
 
 ### Fixed
@@ -111,8 +135,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [5deb64a](https://github.com/phalcon/zephir/commit/5deb64a8a1c7c18d45ce1a5a55667c499e2c284f)
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
-
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.9...HEAD
+  
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.10...HEAD
+[0.11.10]: https://github.com/phalcon/zephir/compare/0.11.9...0.11.10
 [0.11.9]: https://github.com/phalcon/zephir/compare/0.11.8...0.11.9
 [0.11.8]: https://github.com/phalcon/zephir/compare/0.11.7...0.11.8
 [0.11.7]: https://github.com/phalcon/zephir/compare/0.11.6...0.11.7
@@ -121,4 +146,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [0.11.3]: https://github.com/phalcon/zephir/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/phalcon/zephir/compare/0.11.1...0.11.2
 [0.11.1]: https://github.com/phalcon/zephir/compare/0.11.0...0.11.1
-[0.11.0]: https://github.com/phalcon/zephir/compare/0.10.12...0.11.0
+[0.11.0]: https://github.com/phalcon/zephir/compare/0.10.14...0.11.0
+[0.10.14]: https://github.com/phalcon/zephir/compare/0.10.13...0.10.4
+[0.10.13]: https://github.com/phalcon/zephir/compare/0.10.12...0.10.13
+[0.10.12]: https://github.com/phalcon/zephir/compare/0.10.11...0.10.12
+[0.10.11]: https://github.com/phalcon/zephir/compare/0.10.10...0.10.11
