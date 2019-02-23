@@ -724,12 +724,12 @@ class Backend extends BackendZendEngine2
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
     {
-        /**
+        /*
          * Create a hash table and hash pointer temporary variables.
          */
         //$arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
         //$arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
-        /**
+        /*
          * Create a temporary zval to fetch the items from the hash.
          */
         $compilationContext->headersManager->add('kernel/fcall');
