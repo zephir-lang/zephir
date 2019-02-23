@@ -53,7 +53,7 @@ PHP_METHOD(Test_TryTest, testThrow2) {
 	ZVAL_STRING(&message, "error");
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, zend_exception_get_default(TSRMLS_C));
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 26, &message);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 27, &message);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "test/trytest.zep", 16 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -94,7 +94,7 @@ PHP_METHOD(Test_TryTest, testTry2) {
 		object_init_ex(&_0$$3, zend_exception_get_default(TSRMLS_C));
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 26, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 27, &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "test/trytest.zep", 27 TSRMLS_CC);
 		goto try_end_1;
@@ -126,7 +126,7 @@ PHP_METHOD(Test_TryTest, testTry3) {
 		object_init_ex(&_0$$3, zend_exception_get_default(TSRMLS_C));
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 26, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 27, &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "test/trytest.zep", 34 TSRMLS_CC);
 		goto try_end_1;
@@ -178,7 +178,7 @@ PHP_METHOD(Test_TryTest, testTry4) {
 			object_init_ex(&_0$$4, zend_exception_get_default(TSRMLS_C));
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 26, &_1$$4);
+			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 27, &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "test/trytest.zep", 46 TSRMLS_CC);
 			goto try_end_1;
@@ -188,7 +188,7 @@ PHP_METHOD(Test_TryTest, testTry4) {
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 78, &_3$$5);
+			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 79, &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "test/trytest.zep", 48 TSRMLS_CC);
 			goto try_end_1;
@@ -247,7 +247,7 @@ PHP_METHOD(Test_TryTest, testTry5) {
 			object_init_ex(&_0$$4, zend_exception_get_default(TSRMLS_C));
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 26, &_1$$4);
+			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 27, &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "test/trytest.zep", 63 TSRMLS_CC);
 			goto try_end_1;
@@ -257,7 +257,7 @@ PHP_METHOD(Test_TryTest, testTry5) {
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 78, &_3$$5);
+			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 79, &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "test/trytest.zep", 65 TSRMLS_CC);
 			goto try_end_1;
@@ -315,7 +315,7 @@ PHP_METHOD(Test_TryTest, testTry6) {
 			object_init_ex(&_0$$4, zend_exception_get_default(TSRMLS_C));
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 26, &_1$$4);
+			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 27, &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "test/trytest.zep", 80 TSRMLS_CC);
 			goto try_end_1;
@@ -325,7 +325,7 @@ PHP_METHOD(Test_TryTest, testTry6) {
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 78, &_3$$5);
+			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 79, &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "test/trytest.zep", 82 TSRMLS_CC);
 			goto try_end_1;
@@ -382,7 +382,7 @@ PHP_METHOD(Test_TryTest, testTry7) {
 			object_init_ex(&_0$$4, zend_exception_get_default(TSRMLS_C));
 			ZEPHIR_INIT_VAR(&_1$$4);
 			ZVAL_STRING(&_1$$4, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 26, &_1$$4);
+			ZEPHIR_CALL_METHOD(NULL, &_0$$4, "__construct", NULL, 27, &_1$$4);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_0$$4, "test/trytest.zep", 99 TSRMLS_CC);
 			goto try_end_1;
@@ -392,7 +392,7 @@ PHP_METHOD(Test_TryTest, testTry7) {
 			object_init_ex(&_2$$5, spl_ce_RuntimeException);
 			ZEPHIR_INIT_VAR(&_3$$5);
 			ZVAL_STRING(&_3$$5, "error!");
-			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 78, &_3$$5);
+			ZEPHIR_CALL_METHOD(NULL, &_2$$5, "__construct", NULL, 79, &_3$$5);
 			zephir_check_call_status_or_jump(try_end_1);
 			zephir_throw_exception_debug(&_2$$5, "test/trytest.zep", 101 TSRMLS_CC);
 			goto try_end_1;
@@ -438,7 +438,7 @@ PHP_METHOD(Test_TryTest, testTry8) {
 		object_init_ex(&_0$$3, zend_exception_get_default(TSRMLS_C));
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "error 1!");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 26, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 27, &_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		zephir_throw_exception_debug(&_0$$3, "test/trytest.zep", 111 TSRMLS_CC);
 		goto try_end_1;
@@ -486,7 +486,7 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", NULL, 79);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", NULL, 80);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 
@@ -520,7 +520,7 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", NULL, 80);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", NULL, 81);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched");
 

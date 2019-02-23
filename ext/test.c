@@ -53,6 +53,8 @@ zend_class_entry *test_7__closure_ce;
 zend_class_entry *test_8__closure_ce;
 zend_class_entry *test_9__closure_ce;
 zend_class_entry *test_arithmetic_ce;
+zend_class_entry *test_arrayaccessobj_ce;
+zend_class_entry *test_arrayaccesstest_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_arraysearch_ce;
 zend_class_entry *test_assign_ce;
@@ -240,6 +242,8 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_Scopes_HasPrivateMethod);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_Arithmetic);
+	ZEPHIR_INIT(Test_ArrayAccessObj);
+	ZEPHIR_INIT(Test_ArrayAccessTest);
 	ZEPHIR_INIT(Test_ArrayObject);
 	ZEPHIR_INIT(Test_ArraySearch);
 	ZEPHIR_INIT(Test_Assign);

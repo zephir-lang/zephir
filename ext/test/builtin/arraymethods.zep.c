@@ -79,7 +79,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 4, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 5, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
 
@@ -112,7 +112,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	zephir_create_closure_ex(&_1, NULL, test_0__closure_ce, SL("__invoke"));
-	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 5, &_1, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 6, &_1, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
 

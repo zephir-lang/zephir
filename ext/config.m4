@@ -24,6 +24,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/ooimpl/zbeginning.zep.c
 	test/properties/publicproperties.zep.c
 	test/arithmetic.zep.c
+	test/arrayaccessobj.zep.c
+	test/arrayaccesstest.zep.c
 	test/arrayobject.zep.c
 	test/arraysearch.zep.c
 	test/assign.zep.c
