@@ -583,11 +583,9 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is null compatible.
      *
-     * @param string $type
-     *
      * @return bool
      */
-    public function areReturnTypesNullCompatible($type = null)
+    public function areReturnTypesNullCompatible()
     {
         return $this->returnTypesCollection->areReturnTypesNullCompatible();
     }
@@ -595,90 +593,41 @@ class ClassMethod
     /**
      * Checks whether at least one return type hint is integer compatible.
      *
-     * @param string $type
-     *
      * @return bool
      */
-    public function areReturnTypesIntCompatible($type = null)
+    public function areReturnTypesIntCompatible()
     {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'int':
-                    case 'uint':
-                    case 'char':
-                    case 'uchar':
-                    case 'long':
-                    case 'ulong':
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->returnTypesCollection->areReturnTypesIntCompatible();
     }
 
     /**
      * Checks whether at least one return type hint is double compatible.
      *
-     * @param string $type
-     *
      * @return bool
      */
-    public function areReturnTypesDoubleCompatible($type = null)
+    public function areReturnTypesDoubleCompatible()
     {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'double':
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->returnTypesCollection->areReturnTypesDoubleCompatible();
     }
 
     /**
      * Checks whether at least one return type hint is integer compatible.
      *
-     * @param string $type
-     *
      * @return bool
      */
-    public function areReturnTypesBoolCompatible($type = null)
+    public function areReturnTypesBoolCompatible()
     {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'bool':
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->returnTypesCollection->areReturnTypesBoolCompatible();
     }
 
     /**
      * Checks whether at least one return type hint is integer compatible.
      *
-     * @param string $type
-     *
      * @return bool
      */
-    public function areReturnTypesStringCompatible($type = null)
+    public function areReturnTypesStringCompatible()
     {
-        if (\count($this->returnTypes)) {
-            foreach ($this->returnTypes as $returnType => $definition) {
-                switch ($returnType) {
-                    case 'string':
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->returnTypesCollection->areReturnTypesStringCompatible();
     }
 
     /**
