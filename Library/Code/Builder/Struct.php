@@ -143,24 +143,29 @@ class Struct
     }
 
     /**
-     * @param mixed $name
-     * @param mixed $global
-     * @param mixed $namespace
+     * Process Globals for phpinfo() page.
      *
-     * @return string
+     * @see https://docs.zephir-lang.com/latest/en/globals
+     *
+     * @param mixed $name      - global-name
+     * @param mixed $global    - global structure (type, default...)
+     * @param mixed $namespace - global namespace
      */
     public function getInitEntry($name, $global, $namespace)
     {
         $iniEntry = [];
+        $structName = $this->simpleName.'.'.$name;
+
         if (isset($global['ini-entry'])) {
             $iniEntry = $global['ini-entry'];
         }
-        $structName = $this->simpleName.'.'.$name;
+
         if (!isset($iniEntry['name'])) {
             $iniName = $namespace.'.'.$structName;
         } else {
             $iniName = $iniEntry['name'];
         }
+
         if (!isset($iniEntry['scope'])) {
             $scope = 'PHP_INI_ALL';
         } else {

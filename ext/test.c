@@ -42,6 +42,7 @@ zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_oo_scopes_hasprivatemethod_ce;
 zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_0__closure_ce;
+zend_class_entry *test_10__closure_ce;
 zend_class_entry *test_1__closure_ce;
 zend_class_entry *test_2__closure_ce;
 zend_class_entry *test_3__closure_ce;
@@ -52,6 +53,8 @@ zend_class_entry *test_7__closure_ce;
 zend_class_entry *test_8__closure_ce;
 zend_class_entry *test_9__closure_ce;
 zend_class_entry *test_arithmetic_ce;
+zend_class_entry *test_arrayaccessobj_ce;
+zend_class_entry *test_arrayaccesstest_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_arraysearch_ce;
 zend_class_entry *test_assign_ce;
@@ -107,6 +110,7 @@ zend_class_entry *test_issue1521_ce;
 zend_class_entry *test_issues_ce;
 zend_class_entry *test_json_ce;
 zend_class_entry *test_logical_ce;
+zend_class_entry *test_mcall_caller_ce;
 zend_class_entry *test_mcall_ce;
 zend_class_entry *test_mcallchained_ce;
 zend_class_entry *test_mcalldynamic_ce;
@@ -205,10 +209,14 @@ zend_class_entry *test_vars_ce;
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
 PHP_INI_BEGIN()
-	STD_PHP_INI_BOOLEAN("test.test.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test.my_setting_1, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("test.db.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, db.my_setting_1, zend_test_globals, test_globals)
 	
 	
-	STD_PHP_INI_BOOLEAN("test.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_test_globals, test_globals)
+	
+	STD_PHP_INI_BOOLEAN("test.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_test_globals, test_globals)
+	STD_PHP_INI_BOOLEAN("test.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_test_globals, test_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(test)
@@ -234,6 +242,8 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_Scopes_HasPrivateMethod);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_Arithmetic);
+	ZEPHIR_INIT(Test_ArrayAccessObj);
+	ZEPHIR_INIT(Test_ArrayAccessTest);
 	ZEPHIR_INIT(Test_ArrayObject);
 	ZEPHIR_INIT(Test_ArraySearch);
 	ZEPHIR_INIT(Test_Assign);
@@ -293,6 +303,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_McallChained);
 	ZEPHIR_INIT(Test_McallDynamic);
 	ZEPHIR_INIT(Test_McallInternal);
+	ZEPHIR_INIT(Test_Mcall_Caller);
 	ZEPHIR_INIT(Test_MethodAbstract);
 	ZEPHIR_INIT(Test_MethodArgs);
 	ZEPHIR_INIT(Test_NativeArray);
@@ -384,6 +395,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_UseTest);
 	ZEPHIR_INIT(Test_Vars);
 	ZEPHIR_INIT(test_0__closure);
+	ZEPHIR_INIT(test_10__closure);
 	ZEPHIR_INIT(test_1__closure);
 	ZEPHIR_INIT(test_2__closure);
 	ZEPHIR_INIT(test_3__closure);
@@ -430,9 +442,13 @@ static void php_zephir_init_globals(zend_test_globals *test_globals TSRMLS_DC)
 	memset(test_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
 	
-	test_globals->test.my_setting_2 = 100;
-	test_globals->test.my_setting_3 = 7.5;
+	test_globals->db.my_setting_2 = 100;
+	test_globals->db.my_setting_3 = 7.5;
+	test_globals->orm.cache_level = 3;
+
+
 	test_globals->my_setting_1 = 1;
+	test_globals->test_setting_1 = 1;
 	test_globals->my_setting_2 = 10;
 	test_globals->my_setting_3 = 15.2;
 	test_globals->my_setting_4 = 'A';
@@ -487,14 +503,14 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_TEST_ZEPVERSION);
 	php_info_print_table_end();
 		php_info_print_table_start();
-	php_info_print_table_header(2, "Directive", "Value");
-	php_info_print_table_row(2, "setting1", "value1");
-	php_info_print_table_row(2, "setting2", "value2");
+	php_info_print_table_header(2, "Test Extension support", "Value");
+	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
-	php_info_print_table_header(2, "Directive", "Value");
-	php_info_print_table_row(2, "setting3", "value3");
-	php_info_print_table_row(2, "setting4", "value4");
+	php_info_print_table_header(2, "Test variable", "Value");
+	php_info_print_table_row(2, "Extension", "Installed");
+	php_info_print_table_row(2, "NFR", "Contributions are welcome!");
 	php_info_print_table_end();
 
 	DISPLAY_INI_ENTRIES();

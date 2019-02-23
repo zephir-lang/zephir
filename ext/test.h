@@ -19,6 +19,8 @@
 #include "test/ooimpl/zbeginning.zep.h"
 #include "test/properties/publicproperties.zep.h"
 #include "test/arithmetic.zep.h"
+#include "test/arrayaccessobj.zep.h"
+#include "test/arrayaccesstest.zep.h"
 #include "test/arrayobject.zep.h"
 #include "test/arraysearch.zep.h"
 #include "test/assign.zep.h"
@@ -78,6 +80,7 @@
 #include "test/json.zep.h"
 #include "test/logical.zep.h"
 #include "test/mcall.zep.h"
+#include "test/mcall/caller.zep.h"
 #include "test/mcallchained.zep.h"
 #include "test/mcalldynamic.zep.h"
 #include "test/mcallinternal.zep.h"
@@ -182,5 +185,6 @@
 #include "test/7__closure.zep.h"
 #include "test/8__closure.zep.h"
 #include "test/9__closure.zep.h"
+#include "test/10__closure.zep.h"
 
 #endif

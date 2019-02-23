@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Test\KernelTestCase;
+use Zephir\Zephir;
 
 class HardDiskTest extends KernelTestCase
 {
@@ -58,7 +59,7 @@ class HardDiskTest extends KernelTestCase
         $flysystem
             ->expects($this->once())
             ->method('deleteDir')
-            ->with('IR')
+            ->with(Zephir::VERSION)
             ->willThrowException($exception);
 
         $reflection = new \ReflectionClass($compilerFs);

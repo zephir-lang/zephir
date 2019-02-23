@@ -32,7 +32,7 @@ setx php_devpack "c:\path-to-extracted-devpack"
 
 ## Installation of Zephir
 
-- Clone/Download the repostiory and set the path as below
+- Clone/Download the repository and set the path as below
 ```cmd
 setx path "%path%;c:\path-to-zephir\bin"
 ```

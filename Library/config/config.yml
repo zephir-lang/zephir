@@ -6,6 +6,7 @@ parameters:
   optimizers_path: "%kernel.root_dir%/Optimizers"
   kernels_path: "%kernel.project_dir%/kernels"
   templates_path: "%kernel.project_dir%/templates"
+  local_cache_path: "%kernel.local_cache_dir%"
 
 monolog:
   handlers:
@@ -28,7 +29,7 @@ oneup_flysystem:
   adapters:
     compiler_adapter:
       local:
-        directory: "%kernel.cache_dir%"
+        directory: "%local_cache_path%"
   filesystems:
     compiler_local:
       adapter: compiler_adapter

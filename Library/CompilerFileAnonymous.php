@@ -25,6 +25,9 @@ final class CompilerFileAnonymous implements FileInterface
 {
     use LoggerAwareTrait;
 
+    /** @var CompilationContext */
+    protected $context;
+
     /** @var string */
     protected $namespace;
 
@@ -48,10 +51,11 @@ final class CompilerFileAnonymous implements FileInterface
      * @param ClassDefinition $classDefinition
      * @param Config          $config
      */
-    public function __construct(ClassDefinition $classDefinition, Config $config)
+    public function __construct(ClassDefinition $classDefinition, Config $config, CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
+        $this->context = $context;
         $this->logger = new NullLogger();
     }
 
@@ -152,6 +156,12 @@ final class CompilerFileAnonymous implements FileInterface
          */
         $compilationContext = new CompilationContext();
 
+        if ($this->context) {
+            $compilationContext->aliasManager = $this->context->aliasManager;
+        } else {
+            $compilationContext->aliasManager = new AliasManager();
+        }
+
         /*
          * Set global compiler in the compilation context
          */
@@ -185,11 +195,6 @@ final class CompilerFileAnonymous implements FileInterface
          */
         $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
-
-        /*
-         * Alias manager
-         */
-        $compilationContext->aliasManager = new AliasManager();
 
         $codePrinter->outputBlankLine();
 

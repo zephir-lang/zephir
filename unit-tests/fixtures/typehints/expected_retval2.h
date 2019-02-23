@@ -16,6 +16,8 @@ PHP_METHOD(TypeHints_RetVal, retval_int);
 PHP_METHOD(TypeHints_RetVal, retval_long);
 PHP_METHOD(TypeHints_RetVal, retval_double);
 PHP_METHOD(TypeHints_RetVal, retval_array);
+PHP_METHOD(TypeHints_RetVal, retval_array_of_objects);
+PHP_METHOD(TypeHints_RetVal, retval_collection);
 PHP_METHOD(TypeHints_RetVal, retval_retval);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_int);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_uint);
@@ -43,6 +45,8 @@ ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, retval_long, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_double, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_array, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_array_of_objects, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_collection, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_retval, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_int, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_uint, NULL, ZEND_ACC_PUBLIC)

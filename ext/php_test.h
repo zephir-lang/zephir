@@ -13,15 +13,24 @@
 #define PHP_TEST_NAME        "Test Extension"
 #define PHP_TEST_VERSION     "1.0.0"
 #define PHP_TEST_EXTNAME     "test"
-#define PHP_TEST_AUTHOR      "Zephir Team"
-#define PHP_TEST_ZEPVERSION  "0.11.9-$Id$"
-#define PHP_TEST_DESCRIPTION "Description test for<br/>Test Extension"
+#define PHP_TEST_AUTHOR      "Zephir Team and contributors"
+#define PHP_TEST_ZEPVERSION  "0.11.10-$Id$"
+#define PHP_TEST_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
-typedef struct _zephir_struct_test { 
+typedef struct _zephir_struct_db { 
 	zend_bool my_setting_1;
 	int my_setting_2;
 	double my_setting_3;
-} zephir_struct_test;
+} zephir_struct_db;
+
+typedef struct _zephir_struct_orm { 
+	int cache_level;
+	zend_bool cache_enable;
+} zephir_struct_orm;
+
+typedef struct _zephir_struct_extension { 
+	zend_bool test_ini_variable;
+} zephir_struct_extension;
 
 
 
@@ -49,9 +58,15 @@ ZEND_BEGIN_MODULE_GLOBALS(test)
 	unsigned int recursive_lock;
 
 	
-	zephir_struct_test test;
+	zephir_struct_db db;
+
+	zephir_struct_orm orm;
+
+	zephir_struct_extension extension;
 
 	zend_bool my_setting_1;
+
+	zend_bool test_setting_1;
 
 	int my_setting_2;
 

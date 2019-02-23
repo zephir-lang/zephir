@@ -75,6 +75,15 @@ class RetVal {
 		return [];
 	}
 
+    /** @link https://github.com/phalcon/zephir/issues/1779 */
+    public function retval_array_of_objects() -> <\stdClass[]> {
+		return [];
+	}
+
+	public function retval_collection() -> <RetVal[]> {
+		return [];
+	}
+
 	public function retval_retval() -> <RetVal> {
 		var _var;
 		let _var = new RetVal;
@@ -208,4 +217,9 @@ function retval_nullable_char() -> char | null {
 
 function retval_object_or_scalar() -> <\stdClass> | bool {
     return false;
+}
+
+/** @link https://github.com/phalcon/zephir/issues/1779 */
+function retval_array_of_objects() -> <\stdClass[]> {
+    return [];
 }

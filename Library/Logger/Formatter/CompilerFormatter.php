@@ -104,7 +104,7 @@ final class CompilerFormatter extends LineFormatter
     private function replacePlaceholders(array $vars, $output)
     {
         // WARNING -> Warning
-        if (array_key_exists('level_name', $vars)) {
+        if (\array_key_exists('level_name', $vars)) {
             $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
         }
 

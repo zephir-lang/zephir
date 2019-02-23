@@ -61,7 +61,6 @@ class Backend extends BackendZendEngine2
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isDoublePointer() ||
-            $variable->isSuperGlobal() ||
             \in_array($variable->getName(), ['this_ptr', 'return_value']) ||
             \in_array($variable->getType(), ['int', 'long'])) {
             return $variable->getName();
@@ -217,7 +216,7 @@ class Backend extends BackendZendEngine2
     {
         $isComplex = ('variable' == $type || 'string' == $type || 'array' == $type || 'resource' == $type || 'callable' == $type || 'object' == $type);
 
-        if ($isComplex && !$variable->isDoublePointer() && !$variable->isSuperGlobal()) { /* && $variable->mustInitNull() */
+        if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
             switch ($variable->getRealname()) {
                 case '__$null':
@@ -237,7 +236,13 @@ class Backend extends BackendZendEngine2
             return;
         }
 
-        if ($variable->isDoublePointer() || $variable->isSuperGlobal()) {
+        if ($variable->isSuperGlobal()) {
+            $groupVariables[] = $variable->getName();
+
+            return;
+        }
+
+        if ($variable->isDoublePointer()) {
             /* Double pointers for ZE3 are used as zval * */
             $ptr = $isComplex ? $pointer : $pointer.$pointer;
             if ($variable->mustInitNull()) {

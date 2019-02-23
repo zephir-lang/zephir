@@ -1,86 +1,48 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # This file is part of the Zephir.
 #
 # (c) Zephir Team <team@zephir-lang.com>
 #
-# For the full copyright and license information, please view the LICENSE
-# file that was distributed with this source code.
+# For the full copyright and license information, please view the
+# LICENSE file that was distributed with this source code.
 
 # -e	Exit immediately if a command exits with a non-zero status.
 # -u	Treat unset variables as an error when substituting.
 set -eu
 
-if [ -z ${CI+x} ] || [ "$CI" != "true" ]; then
-	printf "This script is designed to run inside a CI container only.\nAborting.\n"
+# Ensure that this is being run inside a CI container
+if [ "${CI}" != "true" ];
+then
+	>&2 echo "This script is designed to run inside a CI container only."
+	>&2 echo "Aborting."
 	exit 1
 fi
 
-pecl channel-update pecl.php.net
+PHP_INI="$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
 
-printf "\n" | pecl install --force psr
+: ${ZEPHIR_PARSER_VERSION:=master}
 
-php_vernum="$(php-config --vernum)"
+# {{{ Install psr extension
+printf "Install psr extension\n"
+printf "\n" | pecl install --force psr 1> /dev/null
+# }}}
 
-install_ext_from_src () {
-	pkgname=$1
-	source=$2
-	cfgflags=$3
-	downloaddir="${HOME}/.cache/${pkgname}/${pkgname}-${php_vernum}"
-	prefix="${HOME}/.local/opt/${pkgname}/${pkgname}-${php_vernum}"
-	libdir="${prefix}/lib"
+# {{{ Install Zephir Parser
+printf "Install Zephir Parser\n"
+git clone -b "${ZEPHIR_PARSER_VERSION}" --depth 1 -q https://github.com/phalcon/php-zephir-parser
+cd php-zephir-parser
+$(phpenv which phpize)
+./configure --silent --with-php-config=$(phpenv which php-config) --enable-zephir_parser
+make --silent -j"$(getconf _NPROCESSORS_ONLN)"
+make --silent install
+echo 'extension="zephir_parser.so"' > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir_parser.ini"
+# }}}
 
-	if [ ! -f "${libdir}/${pkgname}.so" ]; then
-		if [ ! -d `dirname ${downloaddir}` ]; then
-			mkdir -p `dirname ${downloaddir}`
-		fi
-
-		cd `dirname ${downloaddir}`
-
-		if [ ! -d "${pkgname}-${php_vernum}" ]; then
-			git clone --depth=1 -v -b master "${source}" "${pkgname}-${php_vernum}"
-		fi
-
-		if [ ! -f "${pkgname}-${php_vernum}/config.m4" ]; then
-			printf "Unable to locate ${pkgname}-${php_vernum}/config.m4 file.\nAborting.\n"
-			exit 1
-		fi
-
-		if [ ! -d "${downloaddir}" ]; then
-			printf "Unable to locate ${pkgname} source.\nAborting.\n"
-			exit 1
-		fi
-
-		if [ ! -d "${libdir}" ]; then
-			mkdir -p "${libdir}"
-		fi
-
-		cd "${downloaddir}"
-		phpize
-		printf "\n" | ./configure "${cfgflags}"
-
-		make --silent -j"$(getconf _NPROCESSORS_ONLN)"
-		make --silent install
-
-		if [ -f `$(phpenv which php-config) --extension-dir`/${pkgname}.so ]; then
-			cp `$(phpenv which php-config) --extension-dir`/${pkgname}.so "${libdir}/${pkgname}.so"
-		elif [ -f "${downloaddir}/modules/${pkgname}.so" ]; then
-			cp "${downloaddir}/modules/${pkgname}.so" "${libdir}/${pkgname}.so"
-		fi
-	fi
-
-	if [ ! -x "${libdir}/${pkgname}.so" ]; then
-		printf "Unable to locate ${libdir}/${pkgname}.so.\nAborting.\n"
-		exit 1
-	fi
-
-	echo "extension=${libdir}/${pkgname}.so" > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/${pkgname}.ini"
-}
-
-install_ext_from_src "zephir_parser" "https://github.com/phalcon/php-zephir-parser" ""
-
-if [ "${php_vernum}" -ge "70100" ]; then
-	printf "PHP version number is ${php_vernum}\nDownloading humbug/box...\n"
+# {{{ Install Box
+printf "Install Box\n"
+if [ "${PHP_VERNUM}" -ge "70100" ]; then
+	printf "PHP version number is ${PHP_VERNUM}\nDownloading humbug/box...\n"
 	wget \
 		"https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
 		--quiet \
@@ -90,3 +52,11 @@ if [ "${php_vernum}" -ge "70100" ]; then
 
 	box --version
 fi
+# }}}
+
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noet sw=4 ts=4 fdm=marker
+# vim<600: noet sw=4 ts=4

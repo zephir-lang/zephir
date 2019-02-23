@@ -1863,7 +1863,7 @@ PHP_METHOD(Test_NativeArray, issue709) {
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 50, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 51, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY | PH_READONLY, "test/nativearray.zep", 624 TSRMLS_CC);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);

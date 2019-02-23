@@ -28,12 +28,13 @@ ZEPHIR_INIT_CLASS(Test_Globals_Session_Base) {
 
 PHP_METHOD(Test_Globals_Session_Base, set) {
 
-	zval *index_param = NULL, *value, value_sub, *_SESSION;
+	zval *index_param = NULL, *value, value_sub, _SESSION;
 	zval index;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&index);
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_SESSION);
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
@@ -42,19 +43,20 @@ PHP_METHOD(Test_Globals_Session_Base, set) {
 	zephir_get_strval(&index, index_param);
 
 
-	zephir_array_update_zval(_SESSION, &index, value, PH_COPY | PH_SEPARATE);
-	RETVAL_ZVAL(_SESSION, 1, 0);
+	zephir_array_update_zval(&_SESSION, &index, value, PH_COPY | PH_SEPARATE);
+	RETVAL_ZVAL(&_SESSION, 1, 0);
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Globals_Session_Base, remove) {
 
-	zval *index_param = NULL, *_SESSION;
+	zval *index_param = NULL, _SESSION;
 	zval index;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&index);
+	ZVAL_UNDEF(&_SESSION);
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
@@ -63,7 +65,7 @@ PHP_METHOD(Test_Globals_Session_Base, remove) {
 	zephir_get_strval(&index, index_param);
 
 
-	zephir_array_unset(_SESSION, &index, PH_SEPARATE);
+	zephir_array_unset(&_SESSION, &index, PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -115,9 +117,10 @@ PHP_METHOD(Test_Globals_Session_Base, removeSessionData) {
 
 	zend_string *_3;
 	zend_ulong _2;
-	zval *_SESSION, key, _0, *_1;
+	zval _SESSION, key, _0, *_1;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&_SESSION);
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&_0);
 
@@ -125,8 +128,8 @@ PHP_METHOD(Test_Globals_Session_Base, removeSessionData) {
 	zephir_get_global(&_SESSION, SL("_SESSION"));
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_is_iterable(_SESSION, 1, "test/globals/session/base.zep", 36);
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(_SESSION), _2, _3, _1)
+	zephir_is_iterable(&_SESSION, 1, "test/globals/session/base.zep", 36);
+	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_SESSION), _2, _3, _1)
 	{
 		ZEPHIR_INIT_NVAR(&key);
 		if (_3 != NULL) { 
@@ -136,11 +139,11 @@ PHP_METHOD(Test_Globals_Session_Base, removeSessionData) {
 		}
 		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_COPY(&_0, _1);
-		zephir_array_unset(_SESSION, &key, PH_SEPARATE);
+		zephir_array_unset(&_SESSION, &key, PH_SEPARATE);
 	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&key);
-	RETVAL_ZVAL(_SESSION, 1, 0);
+	RETVAL_ZVAL(&_SESSION, 1, 0);
 	RETURN_MM();
 
 }

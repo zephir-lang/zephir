@@ -16,6 +16,8 @@ PHP_METHOD(TypeHints_RetVal, retval_int);
 PHP_METHOD(TypeHints_RetVal, retval_long);
 PHP_METHOD(TypeHints_RetVal, retval_double);
 PHP_METHOD(TypeHints_RetVal, retval_array);
+PHP_METHOD(TypeHints_RetVal, retval_array_of_objects);
+PHP_METHOD(TypeHints_RetVal, retval_collection);
 PHP_METHOD(TypeHints_RetVal, retval_retval);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_int);
 PHP_METHOD(TypeHints_RetVal, retval_nullable_uint);
@@ -82,6 +84,20 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_array, 0, 0, IS_ARRAY, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_array, 0, 0, IS_ARRAY, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_array_of_objects, 0, 0, IS_ARRAY, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_array_of_objects, 0, 0, IS_ARRAY, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_collection, 0, 0, IS_ARRAY, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_typehints_retval_retval_collection, 0, 0, IS_ARRAY, NULL, 0)
 #endif
 ZEND_END_ARG_INFO()
 
@@ -169,6 +185,8 @@ ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, retval_long, arginfo_typehints_retval_retval_long, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_double, arginfo_typehints_retval_retval_double, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_array, arginfo_typehints_retval_retval_array, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_array_of_objects, arginfo_typehints_retval_retval_array_of_objects, ZEND_ACC_PUBLIC)
+	PHP_ME(TypeHints_RetVal, retval_collection, arginfo_typehints_retval_retval_collection, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_retval, arginfo_typehints_retval_retval_retval, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_int, arginfo_typehints_retval_retval_nullable_int, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_uint, arginfo_typehints_retval_retval_nullable_uint, ZEND_ACC_PUBLIC)

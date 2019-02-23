@@ -45,12 +45,12 @@ PHP_METHOD(Test_Requires_External3, req) {
 
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 58);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 59);
 	zephir_check_call_status();
 	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 59);
+	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 60);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, requires, "setcontent", NULL, 0, &_0);
 	zephir_check_call_status();

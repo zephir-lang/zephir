@@ -1,6 +1,6 @@
 language: php
 php:
-  - 'master'
+#  - '7.4snapshot'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -15,12 +15,11 @@ addons:
     packages:
       - gdb
       - lcov
-      - devscripts
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: 'master'
+#  allow_failures:
+#    - php: '7.4snapshot'
 
 cache:
   apt: true
@@ -46,7 +45,9 @@ before_install:
       stty cols 120
       ulimit -c unlimited -S
 
+      # Export build/test environment variables
       export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
+      export PHP_VERNUM="$(php-config --vernum)"
 
       if [ ! -z "${GITHUB_TOKEN}" ]; then
         composer config github-oauth.github.com ${GITHUB_TOKEN}
@@ -54,6 +55,9 @@ before_install:
       fi
 
       [ -d ~/bin ] || mkdir ~/bin
+
+      # turn the detached message off
+      git config --global advice.detachedHead false
 
 install:
   - .ci/install-prereqs.sh
@@ -71,6 +75,7 @@ before_script:
 script:
   - zephir --ansi
   - .ci/run-tests.sh
+  - (cd unit-tests/sharness && make)
 
 after_success:
   - .ci/after-success.sh
@@ -100,16 +105,6 @@ jobs:
         - chmod +x $HOME/bin/phpcs
       script:
         - phpcs
-
-    - stage: Static Code Analysis
-      php: 7.2
-      env:
-        - CHECK=checkbashisms
-        - COLLECT_COVERAGE=false
-      install: true
-      before_script: true
-      script:
-        - /usr/bin/checkbashisms $(pwd)/.ci/*.sh
 
 notifications:
   email: false

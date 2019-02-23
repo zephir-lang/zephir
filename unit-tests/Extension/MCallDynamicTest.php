@@ -16,10 +16,23 @@ use Test\McallDynamic;
 
 class MCallDynamicTest extends TestCase
 {
-    public function testCallDynamic()
+    /** @test */
+    public function callDynamic()
     {
         $a = new McallDynamic();
-        $this->assertSame($a->method1(), 1);
-        $this->assertSame($a->testMagicCall1(), 2);
+        $this->assertSame(1, $a->method1());
+        $this->assertSame(2, $a->testMagicCall1());
+    }
+
+    /**
+     * @test
+     *
+     * @see https://github.com/phalcon/zephir/issues/1751
+     */
+    public function callAnonymousFunctionWithContext()
+    {
+        $t = new McallDynamic();
+
+        $this->assertSame('Caller:perform', $t->testCallAnonymousFunctionWithContext());
     }
 }

@@ -21,7 +21,7 @@ services:
     calls:
     - method: setBasePath
       arguments:
-        - '%kernel.cache_dir%'
+        - '%local_cache_path%'
 
   Zephir\Config:
     factory: 'Zephir\Config::fromServer'

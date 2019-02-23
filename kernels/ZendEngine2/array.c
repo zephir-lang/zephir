@@ -25,7 +25,9 @@
 #include <php.h>
 #include "php_ext.h"
 #include <ext/standard/php_array.h>
+#include <Zend/zend.h>
 #include <Zend/zend_hash.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -33,6 +35,8 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/backtrace.h"
+#include "kernel/object.h"
+#include "kernel/fcall.h"
 
 static zval zephir_get_current_key_w(const HashTable *hash_table, HashPosition *hash_position)
 {
@@ -71,7 +75,23 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index, int r
 	zval **val;
 	int result;
 
-	if (Z_TYPE_P(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL;
+		ZEPHIR_CALL_METHODW(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && exist && zend_is_true(exist)) {
+			ZEPHIR_CALL_METHODW(fetched, (zval *)arr, "offsetget", NULL, 0, index);
+
+			return 1;
+		}
+
+		*fetched = ZEPHIR_GLOBAL(global_null);
+		if (!readonly) {
+			Z_ADDREF_P(*fetched);
+		}
+
+		return 0;
+	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		*fetched = ZEPHIR_GLOBAL(global_null);
 		if (!readonly) {
 			Z_ADDREF_P(*fetched);
@@ -127,7 +147,24 @@ int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index
 
 	zval **zv;
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL, offset;
+		ZVAL_STRINGL(&offset, index, index_length, 1);
+		ZEPHIR_CALL_METHODW(&exist, arr, "offsetexists", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && exist && zend_is_true(exist)) {
+			ZEPHIR_CALL_METHODW(fetched, arr, "offsetget", NULL, 0, &offset);
+
+			return 1;
+		}
+
+		*fetched = ZEPHIR_GLOBAL(global_null);
+		if (!readonly) {
+			Z_ADDREF_P(*fetched);
+		}
+
+		return 0;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*fetched = *zv;
 			if (!readonly) {
@@ -153,7 +190,24 @@ int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index
 
 	zval **zv;
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL, offset;
+		ZVAL_LONG(&offset, index);
+		ZEPHIR_CALL_METHODW(&exist, arr, "offsetexists", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(exist)) {
+			ZEPHIR_CALL_METHODW(fetched, arr, "offsetget", NULL, 0, &offset);
+
+			return 1;
+		}
+
+		*fetched = ZEPHIR_GLOBAL(global_null);
+		if (!readonly) {
+			Z_ADDREF_P(*fetched);
+		}
+
+		return 0;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_index_find(Z_ARRVAL_P(arr), index, (void**)&zv) == SUCCESS) {
 			*fetched = *zv;
 			if (!readonly) {
@@ -183,8 +237,19 @@ int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index
 int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index) {
 
 	HashTable *h;
+	TSRMLS_FETCH();
+	if (UNEXPECTED(!arr)) {
+		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL;
+		ZEPHIR_CALL_METHODW(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
+		if (zend_is_true(exist)) {
+			return 1;
+		}
 
-	if (UNEXPECTED(!arr || Z_TYPE_P(arr) != IS_ARRAY)) {
+		return 0;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
 
@@ -238,7 +303,18 @@ int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index
  */
 int ZEPHIR_FASTCALL zephir_array_isset_quick_string(const zval *arr, const char *index, uint index_length, unsigned long key) {
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL, offset;
+		ZVAL_STRINGL(&offset, index, index_length - 1, 1);
+		ZEPHIR_CALL_METHODW(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && exist && zend_is_true(exist)) {
+			return 1;
+		}
+
+		return 0;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_quick_exists(Z_ARRVAL_P(arr), index, index_length, key);
 	}
 
@@ -255,7 +331,18 @@ int ZEPHIR_FASTCALL zephir_array_isset_quick_string(const zval *arr, const char 
  */
 int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index) {
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval *exist = NULL, offset;
+		ZVAL_LONG(&offset, index);
+		ZEPHIR_CALL_METHODW(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && exist && zend_is_true(exist)) {
+			return 1;
+		}
+
+		return 0;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_index_exists(Z_ARRVAL_P(arr), index);
 	}
 
@@ -276,8 +363,17 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 int ZEPHIR_FASTCALL zephir_array_unset(zval **arr, zval *index, int flags) {
 
 	HashTable *ht;
+	TSRMLS_FETCH();
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetunset", NULL, 0, index);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		return FAILURE;
 	}
 
@@ -304,7 +400,7 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval **arr, zval *index, int flags) {
 
 		default:
 			zend_error(E_WARNING, "Illegal offset type");
-			return 0;
+			return FAILURE;
 	}
 }
 
@@ -320,7 +416,18 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval **arr, zval *index, int flags) {
  */
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval **arr, const char *index, uint index_length, int flags) {
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_STRINGL(&offset, index, index_length - 1, 1);
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetunset", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return 1;
+		}
+
+		return 0;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		return 0;
 	}
 
@@ -342,7 +449,18 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval **arr, const char *index, uin
  */
 int ZEPHIR_FASTCALL zephir_array_unset_long(zval **arr, unsigned long index, int flags) {
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_LONG(&offset, index);
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetunset", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return 1;
+		}
+
+		return 0;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		return 0;
 	}
 
@@ -448,8 +566,17 @@ int zephir_array_append_string(zval **arr, char *value, uint value_length, int s
 int zephir_array_update_zval(zval **arr, zval *index, zval **value, int flags) {
 
 	HashTable *ht;
+	TSRMLS_FETCH();
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetset", NULL, 0, index, *value);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (2)");
 		return FAILURE;
 	}
@@ -607,7 +734,18 @@ int zephir_array_update_zval_long(zval **arr, zval *index, long value, int flags
  */
 int zephir_array_update_quick_string(zval **arr, const char *index, uint index_length, unsigned long key, zval **value, int flags){
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_STRINGL(&offset, index, index_length - 1, 1);
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetset", NULL, 0, &offset, *value);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (3)");
 		return FAILURE;
 	}
@@ -749,7 +887,7 @@ int zephir_array_update_string_string(zval **arr, const char *index, uint index_
 	zval *zvalue;
 
 	ALLOC_INIT_ZVAL(zvalue);
-	ZVAL_STRINGL(zvalue, value, value_length, 1);
+	ZVAL_STRINGL(zvalue, value, value_length - 1, 1);
 
 	return zephir_array_update_string(arr, index, index_length, &zvalue, flags);
 }
@@ -773,7 +911,18 @@ int zephir_array_update_string_string(zval **arr, const char *index, uint index_
  */
 int zephir_array_update_long(zval **arr, unsigned long index, zval **value, int flags ZEPHIR_DEBUG_PARAMS){
 
-	if (Z_TYPE_PP(arr) != IS_ARRAY) {
+	TSRMLS_FETCH();
+	if (UNEXPECTED(Z_TYPE_PP(arr) == IS_OBJECT && zephir_instance_of_ev(*arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_LONG(&offset, index);
+		ZEPHIR_CALL_METHODW(NULL, *arr, "offsetset", NULL, 0, &offset, *value);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_PP(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
 	}
@@ -821,7 +970,21 @@ int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int flags ZE
 	ulong uidx = 0;
 	char *sidx = NULL;
 
-	if (Z_TYPE_P(arr) == IS_ARRAY) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((const zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		*return_value = NULL;
+		ZEPHIR_CALL_METHODW(return_value, arr, "offsetget", NULL, 0, index);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		*return_value = ZEPHIR_GLOBAL(global_null);
+		if ((flags & PH_READONLY) != PH_READONLY) {
+			Z_ADDREF_PP(return_value);
+		}
+
+		return FAILURE;
+	} else if (Z_TYPE_P(arr) == IS_ARRAY) {
 		ht = Z_ARRVAL_P(arr);
 		switch (Z_TYPE_P(index)) {
 			case IS_NULL:
@@ -897,7 +1060,23 @@ int zephir_array_fetch_quick_string(zval **return_value, zval *arr, const char *
 
 	zval **zv;
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((const zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_STRINGL(&offset, index, index_length - 1, 1);
+		*return_value = NULL;
+		ZEPHIR_CALL_METHODW(return_value, arr, "offsetget", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		*return_value = ZEPHIR_GLOBAL(global_null);
+		if ((flags & PH_READONLY) != PH_READONLY) {
+			Z_ADDREF_PP(return_value);
+		}
+
+		return FAILURE;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*return_value = *zv;
 			if ((flags & PH_READONLY) != PH_READONLY) {
@@ -960,7 +1139,23 @@ int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index,
 
 	zval **zv;
 
-	if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((const zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess TSRMLS_CC))) {
+		zend_long ZEPHIR_LAST_CALL_STATUS;
+		zval offset;
+		ZVAL_LONG(&offset, index);
+		*return_value = NULL;
+		ZEPHIR_CALL_METHODW(return_value, arr, "offsetget", NULL, 0, &offset);
+		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+			return SUCCESS;
+		}
+
+		*return_value = ZEPHIR_GLOBAL(global_null);
+		if ((flags & PH_READONLY) != PH_READONLY) {
+			Z_ADDREF_PP(return_value);
+		}
+
+		return FAILURE;
+	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_index_find(Z_ARRVAL_P(arr), index, (void**)&zv) == SUCCESS) {
 			*return_value = *zv;
 			if ((flags & PH_READONLY) != PH_READONLY) {

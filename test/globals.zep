@@ -3,12 +3,41 @@ namespace Test;
 
 class Globals
 {
+	/* Set Default Properties */
+
+	 public function setBoolValueUsingDotNotation(value) -> void
+	{
+		globals_set("db.my_setting_1", value);
+	}
+
+	public function setIntValueUsingDotNotation(value) -> void
+	{
+		globals_set("db.my_setting_2", value);
+	}
+
+	public function setCharValue(value) -> void
+	{
+		globals_set("my_setting_4", value);
+	}
+
+	public function setBoolValue(value) -> void
+	{
+		globals_set("my_setting_1", value);
+	}
+
+	public function setDefaultGlobalsOrmCacheLevel(value) -> void
+	{
+		globals_set("orm.cache_level", value);
+	}
+
+	/* Get Default Properties */
+
 	/**
 	 * @return mixed
 	 */
 	public function getDefaultGlobals1()
 	{
-		return globals_get("test.my_setting_1");
+		return globals_get("db.my_setting_1");
 	}
 
 	/**
@@ -16,7 +45,7 @@ class Globals
 	 */
 	public function getDefaultGlobals2()
 	{
-		return globals_get("test.my_setting_2");
+		return globals_get("db.my_setting_2");
 	}
 
 	/**
@@ -24,7 +53,7 @@ class Globals
 	 */
 	public function getDefaultGlobals3()
 	{
-		return globals_get("test.my_setting_3");
+		return globals_get("db.my_setting_3");
 	}
 
 	/**
@@ -59,23 +88,11 @@ class Globals
 		return globals_get("my_setting_4");
 	}
 
-	public function setBoolValueUsingDotNotation(value) -> void
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultGlobalsOrmCacheLevel()
 	{
-		globals_set("test.my_setting_1", value);
-	}
-
-	public function setIntValueUsingDotNotation(value) -> void
-	{
-		globals_set("test.my_setting_2", value);
-	}
-
-	public function setCharValue(value) -> void
-	{
-		globals_set("my_setting_4", value);
-	}
-
-	public function setBoolValue(value) -> void
-	{
-		globals_set("my_setting_1", value);
+		return globals_get("orm.cache_level");
 	}
 }

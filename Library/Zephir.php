@@ -16,7 +16,7 @@ namespace Zephir;
  */
 final class Zephir
 {
-    const VERSION = '0.11.9-$Id$';
+    const VERSION = '0.11.10-$Id$';
 
     const RELEASE_DATE = '$release-date$';
 

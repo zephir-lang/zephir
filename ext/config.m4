@@ -24,6 +24,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/ooimpl/zbeginning.zep.c
 	test/properties/publicproperties.zep.c
 	test/arithmetic.zep.c
+	test/arrayaccessobj.zep.c
+	test/arrayaccesstest.zep.c
 	test/arrayobject.zep.c
 	test/arraysearch.zep.c
 	test/assign.zep.c
@@ -83,6 +85,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/json.zep.c
 	test/logical.zep.c
 	test/mcall.zep.c
+	test/mcall/caller.zep.c
 	test/mcallchained.zep.c
 	test/mcalldynamic.zep.c
 	test/mcallinternal.zep.c
@@ -186,7 +189,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/6__closure.zep.c
 	test/7__closure.zep.c
 	test/8__closure.zep.c
-	test/9__closure.zep.c "
+	test/9__closure.zep.c
+	test/10__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
 	PHP_SUBST(TEST_SHARED_LIBADD)
 

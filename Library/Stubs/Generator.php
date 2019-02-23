@@ -270,7 +270,7 @@ EOF;
         if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
+            if (\array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -291,7 +291,7 @@ EOF;
                 $return = 'string';
                 ++$supported;
             }
-            if (array_key_exists('array', $method->getReturnTypes())) {
+            if (\array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
                 ++$supported;
             }

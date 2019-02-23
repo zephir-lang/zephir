@@ -34,10 +34,10 @@ final class Compiler
     public $functionDefinitions = [];
 
     /** @var CompilerFile[] */
-    protected $files = [];
+    private $files = [];
 
     /** @var string[] */
-    protected $anonymousFiles = [];
+    private $anonymousFiles = [];
 
     /**
      * Additional initializer code.
@@ -45,26 +45,26 @@ final class Compiler
      *
      * @var array
      */
-    protected $internalInitializers = [];
+    private $internalInitializers = [];
 
     /** @var ClassDefinition[] */
-    protected $definitions = [];
+    private $definitions = [];
 
     /** @var string[] */
-    protected $compiledFiles = [];
+    private $compiledFiles = [];
 
-    protected $constants = [];
+    private $constants = [];
 
-    protected $globals = [];
+    private $globals = [];
 
-    protected $externalDependencies = [];
+    private $externalDependencies = [];
 
     /** @var ClassDefinition[] */
-    protected static $internalDefinitions = [];
+    private static $internalDefinitions = [];
 
-    protected static $loadedPrototypes = false;
+    private static $loadedPrototypes = false;
 
-    protected $extraFiles = [];
+    private $extraFiles = [];
 
     /** @var Config */
     private $config;
@@ -254,9 +254,7 @@ final class Compiler
         /**
          * Fix the class name.
          */
-        $className = implode('\\', array_map(function ($i) {
-            return ucfirst($i);
-        }, explode('\\', $className)));
+        $className = implode('\\', array_map('ucfirst', explode('\\', $className)));
 
         if (isset($this->files[$className])) {
             return true;
@@ -287,10 +285,8 @@ final class Compiler
     public function isClass($className)
     {
         foreach ($this->definitions as $key => $value) {
-            if (!strcasecmp($key, $className)) {
-                if ('class' == $value->getType()) {
-                    return true;
-                }
+            if (!strcasecmp($key, $className) && 'class' === $value->getType()) {
+                return true;
             }
         }
 
@@ -322,10 +318,8 @@ final class Compiler
     public function isInterface($className)
     {
         foreach ($this->definitions as $key => $value) {
-            if (!strcasecmp($key, $className)) {
-                if ('interface' == $value->getType()) {
-                    return true;
-                }
+            if (!strcasecmp($key, $className) && 'interface' === $value->getType()) {
+                return true;
             }
         }
 
@@ -491,7 +485,7 @@ final class Compiler
         $gccFlags = getenv('CFLAGS');
 
         if (!\is_string($gccFlags)) {
-            if (false == $development) {
+            if (false === $development) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
                     $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
@@ -833,7 +827,7 @@ final class Compiler
             $extensionName = $namespace;
         }
 
-        $needConfigure = $this->generate(false);
+        $needConfigure = $this->generate();
 
         if ($needConfigure) {
             if (is_windows()) {
@@ -1033,7 +1027,7 @@ final class Compiler
         exec($command, $output, $exit);
         $fileName = $this->config->get('extension-name') ?: $namespace;
 
-        if (false == file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
+        if (false === file_exists("{$currentDir}/ext/modules/{$fileName}.so")) {
             throw new CompilerException(
                 'Internal extension compilation failed. Check compile-errors.log for more information.'
             );
@@ -1221,7 +1215,7 @@ final class Compiler
             chmod('ext/install', 0755);
         }
 
-        return $needConfigure;
+        return (bool) $needConfigure;
     }
 
     /**
@@ -1340,7 +1334,7 @@ final class Compiler
                 }
 
                 if (!isset($iniEntry['name'])) {
-                    $iniName = $name;
+                    $iniName = $namespace.'.'.$name;
                 } else {
                     $iniName = $iniEntry['name'];
                 }
@@ -1966,7 +1960,7 @@ final class Compiler
      *
      * @throws IllegalStateException
      */
-    protected function preCompile($filePath)
+    private function preCompile($filePath)
     {
         if (!$this->parserManager->isAvailable()) {
             throw new IllegalStateException($this->parserManager->requirements());
@@ -1976,9 +1970,7 @@ final class Compiler
             $className = str_replace(\DIRECTORY_SEPARATOR, '\\', $filePath);
             $className = preg_replace('#.zep$#', '', $className);
 
-            $className = implode('\\', array_map(function ($i) {
-                return ucfirst($i);
-            }, explode('\\', $className)));
+            $className = implode('\\', array_map('ucfirst', explode('\\', $className)));
 
             $compilerFile = $this->compilerFileFactory->create($className, $filePath);
             $compilerFile->preCompile($this);
@@ -1996,7 +1988,7 @@ final class Compiler
      * @throws IllegalStateException
      * @throws InvalidArgumentException
      */
-    protected function recursivePreCompile($path)
+    private function recursivePreCompile($path)
     {
         if (!is_dir($path)) {
             throw new InvalidArgumentException(
@@ -2044,7 +2036,7 @@ final class Compiler
      *
      * @return bool
      */
-    protected function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
+    private function recursiveProcess($src, $dest, $pattern = null, $callback = 'copy')
     {
         $success = true;
         $iterator = new \DirectoryIterator($src);
@@ -2081,7 +2073,7 @@ final class Compiler
      * @param string $path Directory to deletes files
      * @param string $mask Regular expression to deletes files
      */
-    protected function recursiveDeletePath($path, $mask)
+    private function recursiveDeletePath($path, $mask)
     {
         if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
             $this->logger->warning("Directory '{$path}' is not readable. Skip...");
@@ -2108,7 +2100,7 @@ final class Compiler
      *
      * @throws Exception
      */
-    protected function loadConstantsSources($constantsSources)
+    private function loadConstantsSources($constantsSources)
     {
         foreach ($constantsSources as $constantsSource) {
             if (!file_exists($constantsSource)) {
@@ -2135,7 +2127,7 @@ final class Compiler
      *
      * @return array
      */
-    protected function processAddSources($sources, $project)
+    private function processAddSources($sources, $project)
     {
         $groupSources = [];
         foreach ($sources as $source) {
@@ -2159,7 +2151,7 @@ final class Compiler
      *
      * @throws RuntimeException
      */
-    protected function assertRequiredExtensionsIsPresent()
+    private function assertRequiredExtensionsIsPresent()
     {
         $extensionRequires = $this->config->get('extensions', 'requires');
         if (true === empty($extensionRequires)) {
@@ -2191,7 +2183,7 @@ final class Compiler
      *
      * @return bool
      */
-    protected function checkKernelFile($src, $dst)
+    private function checkKernelFile($src, $dst)
     {
         if (preg_match('#kernels/ZendEngine[2-9]/concat\.#', $src)) {
             return true;
@@ -2211,7 +2203,7 @@ final class Compiler
      *
      * @return bool
      */
-    protected function checkKernelFiles()
+    private function checkKernelFiles()
     {
         $kernelPath = 'ext'.\DIRECTORY_SEPARATOR.'kernel';
 
@@ -2251,7 +2243,7 @@ final class Compiler
      *
      * @return string
      */
-    protected function checkDirectory()
+    private function checkDirectory()
     {
         $namespace = $this->config->get('namespace');
         if (!$namespace) {
@@ -2286,7 +2278,7 @@ final class Compiler
      *
      * @return string
      */
-    protected function getGccVersion()
+    private function getGccVersion()
     {
         if (is_windows()) {
             return '0.0.0';
@@ -2301,7 +2293,7 @@ final class Compiler
         $lines = array_filter($lines);
 
         $lastLine = $lines[\count($lines) - 1];
-        if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
+        if (preg_match('/\d+\.\d+\.\d+/', $lastLine, $matches)) {
             return $matches[0];
         }
 

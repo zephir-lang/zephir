@@ -1,8 +1,8 @@
 {
     "namespace": "test",
     "name": "Test Extension",
-    "description": "Description test for<br\/>Test Extension",
-    "author": "Zephir Team",
+    "description": "Description <b>test</b> for<br\/>Test Extension.",
+    "author": "Zephir Team and contributors",
     "version": "1.0.0",
     "verbose": true,
 
@@ -70,9 +70,13 @@
             "type": "bool",
             "default": true,
             "ini-entry": {
-                "name": "test.my_setting_1",
+                "name": "ini-entry.my_setting_1",
                 "scope": "PHP_INI_ALL"
             }
+        },
+        "test_setting_1": {
+            "type": "bool",
+            "default": true
         },
         "my_setting_2": {
             "type": "int",
@@ -86,50 +90,66 @@
             "type": "char",
             "default": "A"
         },
-        "test.my_setting_1": {
+        "db.my_setting_1": {
             "type": "bool",
-            "default": true
+            "default": false
         },
-        "test.my_setting_2": {
+        "db.my_setting_2": {
             "type": "int",
             "default": 100
         },
-        "test.my_setting_3": {
+        "db.my_setting_3": {
             "type": "double",
             "default": 7.5
+        },
+        "orm.cache_level": {
+            "type": "int",
+            "default": 3
+        },
+        "orm.cache_enable": {
+            "type": "bool",
+            "default": true
+        },
+        "extension.test_ini_variable": {
+            "type": "bool",
+            "default": true,
+            "ini-entry": {
+                "name": "extension.test_ini_variable",
+                "scope": "PHP_INI_ALL"
+            }
         }
     },
 
     "info": [
         {
             "header": [
-                "Directive",
+                "Test Extension support",
                 "Value"
             ],
             "rows": [
                 [
-                    "setting1",
-                    "value1"
+                    "Lifecycle hooks",
+                    "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks."
                 ],
                 [
-                    "setting2",
-                    "value2"
+                    "Static Analysis",
+                    "Test extensions' compiler provides static analysis of the compiled code."
                 ]
             ]
         },
         {
             "header": [
-                "Directive",
+                "Test variable",
                 "Value"
             ],
             "rows": [
                 [
-                    "setting3",
-                    "value3"
+                    "Extension",
+                    "Installed"
                 ],
                 [
-                    "setting4",
-                    "value4"
+                    "NFR",
+                    "Contributions are welcome!"
                 ]
             ]
         }

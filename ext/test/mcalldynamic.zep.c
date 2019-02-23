@@ -16,6 +16,7 @@
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/concat.h"
+#include "kernel/object.h"
 
 
 /**
@@ -78,6 +79,30 @@ PHP_METHOD(Test_McallDynamic, __call) {
 	ZEPHIR_RETURN_CALL_METHOD_ZVAL(this_ptr, &realMethod, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/1751
+ */
+PHP_METHOD(Test_McallDynamic, testCallAnonymousFunctionWithContext) {
+
+	zval result, _1;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_0 = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&result);
+	ZVAL_UNDEF(&_1);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	zephir_create_closure_ex(&_1, NULL, test_10__closure_ce, SL("__invoke"));
+	ZEPHIR_CALL_CE_STATIC(&result, test_mcall_caller_ce, "start", &_0, 0, &_1);
+	zephir_check_call_status();
+	RETURN_CCTOR(&result);
 
 }
 

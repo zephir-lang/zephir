@@ -138,7 +138,7 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(&_1$$3, SL("controller"), 1);
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", &_3, 61, &_2$$3, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", &_3, 62, &_2$$3, &_1$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_0$$3, PH_SEPARATE, "test/router.zep", 89);
 		ZEPHIR_INIT_NVAR(&_2$$3);
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(&_4$$3, SL("params"), 3);
 		ZEPHIR_INIT_VAR(&_5$$3);
 		ZVAL_STRING(&_5$$3, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#");
-		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_3, 61, &_5$$3, &_4$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_3, 62, &_5$$3, &_4$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_2$$3, PH_SEPARATE, "test/router.zep", 95);
 	}
@@ -203,9 +203,11 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, getRewriteUri) {
 
-	zval *_GET, *_SERVER, url, urlParts, realUri, _0;
+	zval _GET, _SERVER, url, urlParts, realUri, _0;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&_GET);
+	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&urlParts);
 	ZVAL_UNDEF(&realUri);
@@ -218,14 +220,14 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	zephir_read_property(&_0, this_ptr, SL("_uriSource"), PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_OBS_VAR(&url);
-		if (zephir_array_isset_string_fetch(&url, _GET, SL("_url"), 0)) {
+		if (zephir_array_isset_string_fetch(&url, &_GET, SL("_url"), 0)) {
 			if (!(zephir_is_true(&url))) {
 				RETURN_CCTOR(&url);
 			}
 		}
 	} else {
 		ZEPHIR_OBS_NVAR(&url);
-		if (zephir_array_isset_string_fetch(&url, _SERVER, SL("REQUEST_URI"), 0)) {
+		if (zephir_array_isset_string_fetch(&url, &_SERVER, SL("REQUEST_URI"), 0)) {
 			ZEPHIR_INIT_VAR(&urlParts);
 			zephir_fast_explode_str(&urlParts, SL("?"), &url, LONG_MAX TSRMLS_CC);
 			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY | PH_READONLY, "test/router.zep", 142 TSRMLS_CC);
@@ -822,7 +824,7 @@ PHP_METHOD(Test_Router, add) {
 
 	ZEPHIR_INIT_VAR(&route);
 	object_init_ex(&route, test_router_route_ce);
-	ZEPHIR_CALL_METHOD(NULL, &route, "__construct", NULL, 61, pattern, paths, httpMethods);
+	ZEPHIR_CALL_METHOD(NULL, &route, "__construct", NULL, 62, pattern, paths, httpMethods);
 	zephir_check_call_status();
 	zephir_update_property_array_append(this_ptr, SL("_routes"), &route TSRMLS_CC);
 	RETURN_CCTOR(&route);
