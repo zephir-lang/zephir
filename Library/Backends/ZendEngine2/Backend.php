@@ -1264,8 +1264,7 @@ class Backend extends BaseBackend
 
         $codePrinter->output('while (1) {');
         $codePrinter->increaseLevel();
-
-		$compilationContext->headersManager->add('kernel/operators');
+        $compilationContext->headersManager->add('kernel/operators');
 
         $codePrinter->output('ZEPHIR_CALL_METHOD(&'.$tempValidVariable->getName().', '.$this->getVariableCode($exprVariable).', "valid", NULL, 0);');
         $codePrinter->output('zephir_check_call_status();');
