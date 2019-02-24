@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Objects are not traversable with foreach
+  [#1818](https://github.com/phalcon/zephir/issues/1818)
+  [#1595](https://github.com/phalcon/zephir/issues/1595)
 
 ## [0.11.10] - 2019-02-23
 ### Changed
@@ -23,8 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
 - Fixed a bug when accessing super-global variables that do not exist (only for PHP >= 7.0 )
   [#1775](https://github.com/phalcon/zephir/issues/1775)
-- Fixed incorrect behavior during work with ArrayAccess [1061](https://github.com/phalcon/zephir/issues/1061),
-  [1400](https://github.com/phalcon/zephir/issues/1400)
+- Fixed incorrect behavior during work with ArrayAccess [#1061](https://github.com/phalcon/zephir/issues/1061),
+  [#1400](https://github.com/phalcon/zephir/issues/1400)
 
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
