@@ -214,7 +214,7 @@ class NativeArray
             $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
         $oldSymbolVariable = $symbolVariable;
-        if ($symbolVariable->geVariantInits() >= 1) {
+        if ($this->expectingVariable && $symbolVariable->geVariantInits() >= 1) {
             $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
 			$symbolVariable->initVariant($compilationContext);
             $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
@@ -446,7 +446,8 @@ class NativeArray
         }
 
         if ($oldSymbolVariable->getName() != $symbolVariable->getName()) {
-		    $codePrinter->output('ZVAL_COPY_VALUE('.$compilationContext->backend->getVariableCode($oldSymbolVariable).', '.$compilationContext->backend->getVariableCode($symbolVariable).');');
+			$oldSymbolVariable->initVariant($compilationContext);
+		    $codePrinter->output('ZVAL_COPY('.$compilationContext->backend->getVariableCode($oldSymbolVariable).', '.$compilationContext->backend->getVariableCode($symbolVariable).');');
             $symbolVariable = $oldSymbolVariable;
         }
         return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
