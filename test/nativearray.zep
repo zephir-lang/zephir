@@ -2,6 +2,8 @@ namespace Test;
 
 class NativeArray
 {
+	protected prefixes = [];
+
 	public function testArray1() -> array
 	{
 		var a;
@@ -627,5 +629,23 @@ class NativeArray
 			}
 		}
 		return works;
+	}
+
+	public function Issue1140(string prefix, string baseDir)
+	{
+		if !isset this->prefixes[prefix] {
+		    let this->prefixes[prefix] = [];
+		}
+		array_push(this->prefixes[prefix], baseDir);
+		return this->prefixes;
+	}
+
+	public function Issue1159()
+	{
+		var myvar;
+		let myvar = 1;
+
+		let myvar = [myvar];
+		return myvar;
 	}
 }

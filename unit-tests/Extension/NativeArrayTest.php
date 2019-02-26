@@ -160,4 +160,16 @@ class NativeArrayTest extends TestCase
         $t = new NativeArray();
         $this->assertTrue($t->Issue709());
     }
+
+    public function testIssue1140()
+    {
+        $t = new NativeArray();
+        $this->assertSame(['phalcon' => '/var/www/html/phalcon'], $t->Issue1140('phalcon', '/var/www/html/phalcon'));
+    }
+
+    public function testIssue1159()
+    {
+        $t = new NativeArray();
+        $this->assertSame([1], $t->Issue1159());
+    }
 }

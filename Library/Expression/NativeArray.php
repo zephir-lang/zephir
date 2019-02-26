@@ -447,7 +447,7 @@ class NativeArray
 
         if ($oldSymbolVariable->getName() != $symbolVariable->getName()) {
 			$oldSymbolVariable->initVariant($compilationContext);
-		    $codePrinter->output('ZVAL_COPY('.$compilationContext->backend->getVariableCode($oldSymbolVariable).', '.$compilationContext->backend->getVariableCode($symbolVariable).');');
+		    $codePrinter->output('ZEPHIR_CPY_WRT('.$compilationContext->backend->getVariableCode($oldSymbolVariable).', '.$compilationContext->backend->getVariableCode($symbolVariable).');');
             $symbolVariable = $oldSymbolVariable;
         }
         return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
