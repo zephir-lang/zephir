@@ -692,8 +692,7 @@ class Backend extends BackendZendEngine2
             $context->codePrinter->output('zephir_update_property_array_append('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$resolveValue.');');
         }
         if (\is_object($value) && $value instanceof Variable && $value->isTemporal()) {
-            $context->codePrinter->output('zval_ptr_dtor('.$resolveValue.');');
-            $context->codePrinter->output('ZVAL_UNDEF('.$resolveValue.');');
+            $value->initVariant($context);
         }
     }
 
