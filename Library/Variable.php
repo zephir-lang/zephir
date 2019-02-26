@@ -791,6 +791,16 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Get the number of times the variable has been initialized.
+     *
+     * @return int
+     */
+    public function geVariantInits()
+    {
+        return $this->variantInits;
+    }
+
+    /**
      * Increase the number of times the variable has been initialized.
      */
     public function increaseVariantIfNull()

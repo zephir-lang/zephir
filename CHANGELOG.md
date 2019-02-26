@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.11.11] - 2019-02-26
+### Fixed
+- Objects are not traversable with foreach
+  [#1818](https://github.com/phalcon/zephir/issues/1818)
+  [#1595](https://github.com/phalcon/zephir/issues/1595)
+- Recursion for array_push on PHP 7 [#1140](https://github.com/phalcon/zephir/issues/1140)
+- Invalid array initialization [#1159](https://github.com/phalcon/zephir/issues/1159)
+
 ## [0.11.10] - 2019-02-23
 ### Changed
 - Moved internal cache and logs to the user's home directory.
@@ -23,8 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed calling anonymous functions by resolving context [#1751](https://github.com/phalcon/zephir/issues/1751)
 - Fixed a bug when accessing super-global variables that do not exist (only for PHP >= 7.0 )
   [#1775](https://github.com/phalcon/zephir/issues/1775)
-- Fixed incorrect behavior during work with ArrayAccess [1061](https://github.com/phalcon/zephir/issues/1061),
-  [1400](https://github.com/phalcon/zephir/issues/1400)
+- Fixed incorrect behavior during work with ArrayAccess [#1061](https://github.com/phalcon/zephir/issues/1061),
+  [#1400](https://github.com/phalcon/zephir/issues/1400)
 
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
@@ -136,7 +144,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
   
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.10...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.11...HEAD
+[0.11.11]: https://github.com/phalcon/zephir/compare/0.11.10...0.11.11
 [0.11.10]: https://github.com/phalcon/zephir/compare/0.11.9...0.11.10
 [0.11.9]: https://github.com/phalcon/zephir/compare/0.11.8...0.11.9
 [0.11.8]: https://github.com/phalcon/zephir/compare/0.11.7...0.11.8
