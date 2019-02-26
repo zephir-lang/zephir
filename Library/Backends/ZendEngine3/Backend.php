@@ -683,6 +683,19 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('zend_update_static_property('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
     }
 
+    public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
+    {
+        $resolveValue = $this->resolveValue($value, $context);
+        if (isset($key)) {
+            $context->codePrinter->output('zephir_update_property_array('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$this->getVariableCode($key).', '.$resolveValue.');');
+        } else {
+            $context->codePrinter->output('zephir_update_property_array_append('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$resolveValue.');');
+        }
+        if (\is_object($value) && $value instanceof Variable && $value->isTemporal()) {
+            $value->initVariant($context);
+        }
+    }
+
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
     {
         $paramStr = null != $params ? ', '.implode(', ', $params) : '';

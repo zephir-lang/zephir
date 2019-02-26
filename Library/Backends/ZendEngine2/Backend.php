@@ -1107,11 +1107,14 @@ class Backend extends BaseBackend
 
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
     {
-        $value = $this->resolveValue($value, $context);
+        $resolveValue = $this->resolveValue($value, $context);
         if (isset($key)) {
-            $context->codePrinter->output('zephir_update_property_array('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$this->getVariableCode($key).', '.$value.' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_update_property_array('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$this->getVariableCode($key).', '.$resolveValue.' TSRMLS_CC);');
         } else {
-            $context->codePrinter->output('zephir_update_property_array_append('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$value.' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_update_property_array_append('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$resolveValue.' TSRMLS_CC);');
+        }
+        if (\is_object($value) && $value instanceof Variable && $value->isTemporal()) {
+            $value->initVariant($context);
         }
     }
 

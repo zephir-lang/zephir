@@ -180,7 +180,6 @@ class NativeArray
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                $symbolVariable->initVariant($compilationContext);
                 if ('variable' != $symbolVariable->getType() && 'array' != $symbolVariable->getType()) {
                     throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' as an array', $expression);
                 }
@@ -191,16 +190,19 @@ class NativeArray
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('array', $compilationContext, $expression);
         }
 
-        /*+
-         * Mark the variable as an array
-         */
-        $symbolVariable->setDynamicTypes('array');
-
-        $codePrinter = $compilationContext->codePrinter;
-
         if (!isset($expression['left'])) {
+            if ($this->expectingVariable) {
+                $symbolVariable->initVariant($compilationContext);
+            }
+            /*+
+             * Mark the variable as an array
+             */
+            $symbolVariable->setDynamicTypes('array');
+
             return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
         }
+
+        $codePrinter = $compilationContext->codePrinter;
 
         $compilationContext->headersManager->add('kernel/array');
 
@@ -212,8 +214,22 @@ class NativeArray
         if ($arrayLength >= 33 && \function_exists('gmp_nextprime')) {
             $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
-        $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
-
+        $oldSymbolVariable = $symbolVariable;
+        if ($this->expectingVariable && $symbolVariable->geVariantInits() >= 1) {
+            $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+            $symbolVariable->initVariant($compilationContext);
+            $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
+            $symbolVariable->setDynamicTypes('array');
+        } else {
+            if ($this->expectingVariable) {
+                $symbolVariable->initVariant($compilationContext);
+            }
+            /*+
+             * Mark the variable as an array
+             */
+            $symbolVariable->setDynamicTypes('array');
+            $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
+        }
         foreach ($expression['left'] as $item) {
             if (isset($item['key'])) {
                 $key = null;
