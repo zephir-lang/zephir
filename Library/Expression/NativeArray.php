@@ -198,6 +198,7 @@ class NativeArray
              * Mark the variable as an array
              */
             $symbolVariable->setDynamicTypes('array');
+
             return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
         }
 
@@ -216,9 +217,8 @@ class NativeArray
         $oldSymbolVariable = $symbolVariable;
         if ($this->expectingVariable && $symbolVariable->geVariantInits() >= 1) {
             $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
-			$symbolVariable->initVariant($compilationContext);
+            $symbolVariable->initVariant($compilationContext);
             $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
-
             $symbolVariable->setDynamicTypes('array');
         } else {
             if ($this->expectingVariable) {
