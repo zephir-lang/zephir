@@ -445,11 +445,6 @@ class NativeArray
             }
         }
 
-        if ($oldSymbolVariable->getName() != $symbolVariable->getName()) {
-			$oldSymbolVariable->initVariant($compilationContext);
-		    $codePrinter->output('ZEPHIR_CPY_WRT('.$compilationContext->backend->getVariableCode($oldSymbolVariable).', '.$compilationContext->backend->getVariableCode($symbolVariable).');');
-            $symbolVariable = $oldSymbolVariable;
-        }
         return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
     }
 }

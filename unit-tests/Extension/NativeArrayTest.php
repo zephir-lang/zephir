@@ -164,7 +164,7 @@ class NativeArrayTest extends TestCase
     public function testIssue1140()
     {
         $t = new NativeArray();
-        $this->assertSame(['phalcon' => '/var/www/html/phalcon'], $t->Issue1140('phalcon', '/var/www/html/phalcon'));
+        $this->assertSame(['phalcon' => ['/var/www/html/phalcon']], $t->Issue1140('phalcon', '/var/www/html/phalcon'));
     }
 
     public function testIssue1159()
