@@ -7,7 +7,7 @@ namespace Test;
 
 class Instanceoff
 {
-	public function testInstanceOf1() -> boll
+	public function testInstanceOf1() -> bool
 	{
 		var a;
 		let a = new \stdClass();
@@ -37,7 +37,7 @@ class Instanceoff
 		return false;
 	}
 
-	public function testInstanceOf5(var a) -> boll
+	public function testInstanceOf5(var a) -> bool
 	{
 		if a instanceof this {
 			return true;
