@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Compilation error for instanceof [#1828](https://github.com/phalcon/zephir/issues/1828)
 
 ## [0.11.11] - 2019-02-26
 ### Fixed
@@ -143,7 +145,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [5deb64a](https://github.com/phalcon/zephir/commit/5deb64a8a1c7c18d45ce1a5a55667c499e2c284f)
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
-  
+
 [Unreleased]: https://github.com/phalcon/zephir/compare/0.11.11...HEAD
 [0.11.11]: https://github.com/phalcon/zephir/compare/0.11.10...0.11.11
 [0.11.10]: https://github.com/phalcon/zephir/compare/0.11.9...0.11.10

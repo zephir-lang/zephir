@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Operators\Other;
@@ -107,7 +107,7 @@ class InstanceOfOperator extends BaseOperator
                                 }
                             }
                         } else {
-                            $code = 'Z_STRVAL_P('.$resolvedVariable.'), Z_STRLEN_P('.$resolvedVariable.')';
+                            $code = $this->prepareBackendSpecificCode($resolvedVariable, $context);
                         }
                         break;
 
@@ -118,7 +118,7 @@ class InstanceOfOperator extends BaseOperator
                         $tempVariable->setMustInitNull(true);
                         $tempVariableName = $tempVariable->getName();
                         $context->codePrinter->output('zephir_get_strval('.$tempVariableName.', '.$resolvedVariable.');');
-                        $code = 'Z_STRVAL_P('.$tempVariableName.'), Z_STRLEN_P('.$tempVariableName.')';
+                        $code = $this->prepareBackendSpecificCode($tempVariableName, $context);
                         break;
 
                     default:
@@ -134,5 +134,13 @@ class InstanceOfOperator extends BaseOperator
         }
 
         return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.' TSRMLS_CC)', $expression);
+    }
+
+    private function prepareBackendSpecificCode($variable, CompilationContext $context)
+    {
+        return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
+            ':name' => $variable,
+            ':p' => $context->backend->isZE3() ? '&' : '',
+        ]);
     }
 }
