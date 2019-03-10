@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -131,6 +132,66 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf6) {
 		zephir_check_call_status();
 	}
 	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_instanceoff_ce TSRMLS_CC));
+
+}
+
+PHP_METHOD(Test_Instanceoff, testInstanceOf7) {
+
+	zval *test, test_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&test_sub);
+
+	zephir_fetch_params(0, 1, 0, &test);
+
+
+
+	RETURN_BOOL(zephir_instance_of_ev(test, test_instanceoff_ce TSRMLS_CC));
+
+}
+
+PHP_METHOD(Test_Instanceoff, testInstanceOf8) {
+
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *test_param = NULL, a;
+	zval test;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&test);
+	ZVAL_UNDEF(&a);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &test_param);
+
+	zephir_get_strval(&test, test_param);
+
+
+	ZEPHIR_INIT_VAR(&a);
+	object_init_ex(&a, test_instanceoff_ce);
+	if (zephir_has_constructor(&a TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
+		zephir_check_call_status();
+	}
+	RETURN_MM_BOOL(zephir_is_instance_of(&a, Z_STRVAL_P(&test), Z_STRLEN_P(&test) TSRMLS_CC));
+
+}
+
+PHP_METHOD(Test_Instanceoff, testInstanceOf9) {
+
+	zval test;
+	zval *a, a_sub, *test_param = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&a_sub);
+	ZVAL_UNDEF(&test);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &test_param);
+
+	zephir_get_strval(&test, test_param);
+
+
+	RETURN_MM_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test), Z_STRLEN_P(&test) TSRMLS_CC));
 
 }
 
