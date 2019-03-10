@@ -76,8 +76,9 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
      */
-    public function testInstanceOf7()
+    public function instanceOf7()
     {
         $t = new InstanceOff();
 
@@ -87,8 +88,9 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
      */
-    public function testInstanceOf8()
+    public function instanceOf8()
     {
         $t = new InstanceOff();
 
@@ -98,8 +100,9 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
      */
-    public function testInstanceOf9()
+    public function instanceOf9()
     {
         $t = new InstanceOff();
 
