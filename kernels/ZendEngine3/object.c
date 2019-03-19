@@ -570,15 +570,8 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 
 	ZVAL_STRINGL(&property, property_name, property_length);
 
-	if (Z_REFCOUNTED_P(value)) {
-		if (Z_REFCOUNT_P(value) > 1) {
-			if (!Z_ISREF_P(value)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, value);
-				Z_TRY_DELREF_P(value);
-				ZVAL_COPY_VALUE(value, &new_zv);
-			}
-		}
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		SEPARATE_ARRAY(value);
 	} else {
 		Z_TRY_ADDREF_P(value);
 	}
