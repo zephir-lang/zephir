@@ -572,8 +572,6 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 
 	if (Z_TYPE_P(value) == IS_ARRAY) {
 		SEPARATE_ARRAY(value);
-	} else {
-		Z_TRY_ADDREF_P(value);
 	}
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
