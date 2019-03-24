@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -16,7 +16,7 @@ namespace Zephir;
  */
 final class Zephir
 {
-    const VERSION = '0.11.11-$Id$';
+    const VERSION = '0.11.12-$Id$';
 
     const RELEASE_DATE = '$release-date$';
 

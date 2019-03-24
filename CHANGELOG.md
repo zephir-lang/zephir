@@ -5,12 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.11.12] - 2019-03-24
 ### Fixed
 - Compilation error for instanceof [#1828](https://github.com/phalcon/zephir/issues/1828)
+- Fixed `array_shift` behavior to mimicry PHP's "change by reference"
+  [#1831](https://github.com/phalcon/zephir/issues/1831)
+- Fixed reference counting while changing object's properties that are arrays
+  [#1833](https://github.com/phalcon/zephir/pull/1833)
 
 ## [0.11.11] - 2019-02-26
 ### Fixed
-- Objects are not traversable with foreach
+- Objects are not traversable with `foreach`
   [#1818](https://github.com/phalcon/zephir/issues/1818)
   [#1595](https://github.com/phalcon/zephir/issues/1595)
 - Recursion for array_push on PHP 7 [#1140](https://github.com/phalcon/zephir/issues/1140)
@@ -146,7 +152,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.11...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.12...HEAD
+[0.11.12]: https://github.com/phalcon/zephir/compare/0.11.11...0.11.12
 [0.11.11]: https://github.com/phalcon/zephir/compare/0.11.10...0.11.11
 [0.11.10]: https://github.com/phalcon/zephir/compare/0.11.9...0.11.10
 [0.11.9]: https://github.com/phalcon/zephir/compare/0.11.8...0.11.9
