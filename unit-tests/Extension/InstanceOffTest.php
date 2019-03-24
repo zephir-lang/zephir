@@ -47,7 +47,7 @@ class InstanceOffTest extends TestCase
         $this->assertFalse($t->testInstanceOf4(false));
         $this->assertFalse($t->testInstanceOf4('test'));
         $this->assertFalse($t->testInstanceOf4([]));
-        $this->assertFalse($t->testInstanceOf4(new \StdClass()));
+        $this->assertFalse($t->testInstanceOf4(new \stdClass()));
     }
 
     /**
@@ -64,6 +64,49 @@ class InstanceOffTest extends TestCase
          * @link https://github.com/phalcon/zephir/issues/822
          */
 
-        $this->assertFalse($t->testInstanceOf5(new \StdClass()));
+        $this->assertFalse($t->testInstanceOf5(new \stdClass()));
+    }
+
+    public function testInstanceOf6()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf6());
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
+     */
+    public function instanceOf7()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf7($t));
+        $this->assertFalse($t->testInstanceOf7(new \stdClass()));
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
+     */
+    public function instanceOf8()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf8('\\Test\\InstanceOff'));
+        $this->assertFalse($t->testInstanceOf8('\\stdClass'));
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1828
+     * @test
+     */
+    public function instanceOf9()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf9($t, '\\Test\\InstanceOff'));
+        $this->assertFalse($t->testInstanceOf9($t, '\\stdClass'));
     }
 }

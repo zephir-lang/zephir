@@ -69,7 +69,7 @@ PHP_METHOD(Test_Unsettest, addValueToProperty) {
 
 
 
-	zephir_update_property_array(this_ptr, SL("property"), key, value TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("property"), key, value);
 
 }
 

@@ -60,9 +60,9 @@ PHP_METHOD(Test_ArrayAccessObj, offsetSet) {
 
 
 	if (Z_TYPE_P(offset) == IS_NULL) {
-		zephir_update_property_array_append(this_ptr, SL("test"), value TSRMLS_CC);
+		zephir_update_property_array_append(this_ptr, SL("test"), value);
 	} else {
-		zephir_update_property_array(this_ptr, SL("test"), offset, value TSRMLS_CC);
+		zephir_update_property_array(this_ptr, SL("test"), offset, value);
 	}
 
 }

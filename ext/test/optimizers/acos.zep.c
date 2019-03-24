@@ -37,7 +37,7 @@ PHP_METHOD(Test_Optimizers_ACos, testInt) {
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 12, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 13, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -55,7 +55,7 @@ PHP_METHOD(Test_Optimizers_ACos, testVar) {
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 12, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 13, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -72,7 +72,7 @@ PHP_METHOD(Test_Optimizers_ACos, testIntValue1) {
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 12, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 13, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -93,7 +93,7 @@ PHP_METHOD(Test_Optimizers_ACos, testIntParameter) {
 
 
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 12, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 13, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -112,7 +112,7 @@ PHP_METHOD(Test_Optimizers_ACos, testVarParameter) {
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 12, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 13, a);
 	zephir_check_call_status();
 	RETURN_MM();
 

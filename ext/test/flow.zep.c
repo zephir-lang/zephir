@@ -743,13 +743,13 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 	array_init(&returnValue);
 	while (1) {
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 40, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 41, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(&_0))) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 41, variable);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 42, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "test/flow.zep", 420);
 	}
@@ -777,11 +777,11 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	do {
-		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 41, variable);
+		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 42, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "test/flow.zep", 430);
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 40, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 41, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(&_2));
@@ -791,13 +791,14 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 
 PHP_METHOD(Test_Flow, testFor1) {
 
-	zend_long c = 0;
-	zval v, b, _0, *_1;
+	zval v, b, _0, *_1, _2;
+	zend_long ZEPHIR_LAST_CALL_STATUS, c = 0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 
 	ZEPHIR_MM_GROW();
 
@@ -817,12 +818,29 @@ PHP_METHOD(Test_Flow, testFor1) {
 	ZVAL_LONG(&_0, 4);
 	zephir_array_fast_append(&b, &_0);
 	zephir_is_iterable(&b, 0, "test/flow.zep", 443);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&b), _1)
-	{
-		ZEPHIR_INIT_NVAR(&v);
-		ZVAL_COPY(&v, _1);
-		c += zephir_get_numberval(&v);
-	} ZEND_HASH_FOREACH_END();
+	if (Z_TYPE_P(&b) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&b), _1)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _1);
+			c += zephir_get_numberval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &b, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &b, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, &b, "current", NULL, 0);
+			zephir_check_call_status();
+				c += zephir_get_numberval(&v);
+			ZEPHIR_CALL_METHOD(NULL, &b, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(c);
 
@@ -830,16 +848,18 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 PHP_METHOD(Test_Flow, testFor2) {
 
-	zend_string *_3;
-	zend_ulong _2;
+	zend_string *_4;
+	zend_ulong _3;
 	double c = 0;
-	zval v, k, b, _0, *_1;
+	zval v, k, b, _0, *_1, _2;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 
 	ZEPHIR_MM_GROW();
 
@@ -859,18 +879,37 @@ PHP_METHOD(Test_Flow, testFor2) {
 	ZVAL_LONG(&_0, 4);
 	zephir_array_fast_append(&b, &_0);
 	zephir_is_iterable(&b, 0, "test/flow.zep", 453);
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&b), _2, _3, _1)
-	{
-		ZEPHIR_INIT_NVAR(&k);
-		if (_3 != NULL) { 
-			ZVAL_STR_COPY(&k, _3);
-		} else {
-			ZVAL_LONG(&k, _2);
+	if (Z_TYPE_P(&b) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&b), _3, _4, _1)
+		{
+			ZEPHIR_INIT_NVAR(&k);
+			if (_4 != NULL) { 
+				ZVAL_STR_COPY(&k, _4);
+			} else {
+				ZVAL_LONG(&k, _3);
+			}
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _1);
+			c += zephir_get_numberval(&k);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &b, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &b, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&k, &b, "key", NULL, 0);
+			zephir_check_call_status();
+			ZEPHIR_CALL_METHOD(&v, &b, "current", NULL, 0);
+			zephir_check_call_status();
+				c += zephir_get_numberval(&k);
+			ZEPHIR_CALL_METHOD(NULL, &b, "next", NULL, 0);
+			zephir_check_call_status();
 		}
-		ZEPHIR_INIT_NVAR(&v);
-		ZVAL_COPY(&v, _1);
-		c += zephir_get_numberval(&k);
-	} ZEND_HASH_FOREACH_END();
+	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
 	RETURN_MM_DOUBLE(c);
@@ -879,13 +918,15 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 PHP_METHOD(Test_Flow, testFor3) {
 
-	zval v, b, c, _0, *_1;
+	zval v, b, c, _0, *_1, _2;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 
 	ZEPHIR_MM_GROW();
 
@@ -906,12 +947,29 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZVAL_LONG(&_0, 4);
 	zephir_array_fast_append(&b, &_0);
 	zephir_is_iterable(&b, 0, "test/flow.zep", 464);
-	ZEND_HASH_REVERSE_FOREACH_VAL(Z_ARRVAL_P(&b), _1)
-	{
-		ZEPHIR_INIT_NVAR(&v);
-		ZVAL_COPY(&v, _1);
-		zephir_array_append(&c, &v, PH_SEPARATE, "test/flow.zep", 462);
-	} ZEND_HASH_FOREACH_END();
+	if (Z_TYPE_P(&b) == IS_ARRAY) {
+		ZEND_HASH_REVERSE_FOREACH_VAL(Z_ARRVAL_P(&b), _1)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _1);
+			zephir_array_append(&c, &v, PH_SEPARATE, "test/flow.zep", 462);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &b, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &b, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, &b, "current", NULL, 0);
+			zephir_check_call_status();
+				zephir_array_append(&c, &v, PH_SEPARATE, "test/flow.zep", 462);
+			ZEPHIR_CALL_METHOD(NULL, &b, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CCTOR(&c);
 
@@ -1634,11 +1692,13 @@ PHP_METHOD(Test_Flow, testFor24) {
 
 	zval _0;
 	zval b;
-	zval a, _1, *_2;
+	zval a, _1, *_2, _3;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 
@@ -1661,12 +1721,29 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZVAL_LONG(&_1, 'd');
 	zephir_array_fast_append(&_0, &_1);
 	zephir_is_iterable(&_0, 0, "test/flow.zep", 674);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
-	{
-		ZEPHIR_INIT_NVAR(&a);
-		ZVAL_COPY(&a, _2);
-		zephir_concat_self(&b, &a TSRMLS_CC);
-	} ZEND_HASH_FOREACH_END();
+	if (Z_TYPE_P(&_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+		{
+			ZEPHIR_INIT_NVAR(&a);
+			ZVAL_COPY(&a, _2);
+			zephir_concat_self(&b, &a TSRMLS_CC);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_3)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&a, &_0, "current", NULL, 0);
+			zephir_check_call_status();
+				zephir_concat_self(&b, &a TSRMLS_CC);
+			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
 	ZEPHIR_INIT_NVAR(&a);
 	RETURN_CTOR(&b);
 
@@ -1732,11 +1809,13 @@ PHP_METHOD(Test_Flow, testFor31) {
 PHP_METHOD(Test_Flow, testFor32) {
 
 	long sum;
-	zval *e, e_sub, v, *_0;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *e, e_sub, v, *_0, _1;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&e_sub);
 	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_1);
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
@@ -1745,12 +1824,29 @@ PHP_METHOD(Test_Flow, testFor32) {
 
 	sum = 0;
 	zephir_is_iterable(e, 0, "test/flow.zep", 703);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(e), _0)
-	{
-		ZEPHIR_INIT_NVAR(&v);
-		ZVAL_COPY(&v, _0);
-		sum += zephir_get_numberval(&v);
-	} ZEND_HASH_FOREACH_END();
+	if (Z_TYPE_P(e) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(e), _0)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _0);
+			sum += zephir_get_numberval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, e, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_1, e, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_1)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, e, "current", NULL, 0);
+			zephir_check_call_status();
+				sum += zephir_get_numberval(&v);
+			ZEPHIR_CALL_METHOD(NULL, e, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
 

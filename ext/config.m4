@@ -26,6 +26,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/arithmetic.zep.c
 	test/arrayaccessobj.zep.c
 	test/arrayaccesstest.zep.c
+	test/arrayiterator.zep.c
+	test/arrayiteratortest.zep.c
 	test/arrayobject.zep.c
 	test/arraysearch.zep.c
 	test/assign.zep.c

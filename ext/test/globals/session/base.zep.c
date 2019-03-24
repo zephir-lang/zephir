@@ -115,32 +115,53 @@ PHP_METHOD(Test_Globals_Session_Base, __unset) {
 
 PHP_METHOD(Test_Globals_Session_Base, removeSessionData) {
 
-	zend_string *_3;
-	zend_ulong _2;
-	zval _SESSION, key, _0, *_1;
+	zend_string *_4;
+	zend_ulong _3;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval _SESSION, key, _0, *_1, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_SESSION);
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_is_iterable(&_SESSION, 1, "test/globals/session/base.zep", 36);
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_SESSION), _2, _3, _1)
-	{
-		ZEPHIR_INIT_NVAR(&key);
-		if (_3 != NULL) { 
-			ZVAL_STR_COPY(&key, _3);
-		} else {
-			ZVAL_LONG(&key, _2);
+	if (Z_TYPE_P(&_SESSION) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_SESSION), _3, _4, _1)
+		{
+			ZEPHIR_INIT_NVAR(&key);
+			if (_4 != NULL) { 
+				ZVAL_STR_COPY(&key, _4);
+			} else {
+				ZVAL_LONG(&key, _3);
+			}
+			ZEPHIR_INIT_NVAR(&_0);
+			ZVAL_COPY(&_0, _1);
+			zephir_array_unset(&_SESSION, &key, PH_SEPARATE);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_SESSION, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &_SESSION, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&key, &_SESSION, "key", NULL, 0);
+			zephir_check_call_status();
+			ZEPHIR_CALL_METHOD(&_0, &_SESSION, "current", NULL, 0);
+			zephir_check_call_status();
+				zephir_array_unset(&_SESSION, &key, PH_SEPARATE);
+			ZEPHIR_CALL_METHOD(NULL, &_SESSION, "next", NULL, 0);
+			zephir_check_call_status();
 		}
-		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_COPY(&_0, _1);
-		zephir_array_unset(&_SESSION, &key, PH_SEPARATE);
-	} ZEND_HASH_FOREACH_END();
+	}
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_NVAR(&key);
 	RETVAL_ZVAL(&_SESSION, 1, 0);

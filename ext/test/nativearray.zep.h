@@ -75,6 +75,9 @@ PHP_METHOD(Test_NativeArray, issue743a);
 PHP_METHOD(Test_NativeArray, issue743b);
 PHP_METHOD(Test_NativeArray, issue743c);
 PHP_METHOD(Test_NativeArray, issue709);
+PHP_METHOD(Test_NativeArray, Issue1140);
+PHP_METHOD(Test_NativeArray, Issue1159);
+zend_object *zephir_init_properties_Test_NativeArray(zend_class_entry *class_type TSRMLS_DC);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_nativearray_testarray1, 0, 0, IS_ARRAY, 0)
@@ -586,6 +589,19 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_nativearray_issue709, 0, 0,
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue1140, 0, 0, 2)
+#if PHP_VERSION_ID >= 70200
+	ZEND_ARG_TYPE_INFO(0, prefix, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, prefix)
+#endif
+#if PHP_VERSION_ID >= 70200
+	ZEND_ARG_TYPE_INFO(0, baseDir, IS_STRING, 0)
+#else
+	ZEND_ARG_INFO(0, baseDir)
+#endif
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testArray1, arginfo_test_nativearray_testarray1, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testArray2, arginfo_test_nativearray_testarray2, ZEND_ACC_PUBLIC)
@@ -659,5 +675,7 @@ ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, issue743b, arginfo_test_nativearray_issue743b, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, issue743c, arginfo_test_nativearray_issue743c, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, issue709, arginfo_test_nativearray_issue709, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, Issue1140, arginfo_test_nativearray_issue1140, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, Issue1159, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
