@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - PHP 5.x is no longer supported
 
+### Changed
+- The minimal Zephir Parser version is 1.3.0
+
 ## [0.11.12] - 2019-03-24
 ### Fixed
 - Compilation error for instanceof [#1828](https://github.com/phalcon/zephir/issues/1828)

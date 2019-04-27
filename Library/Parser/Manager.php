@@ -13,7 +13,8 @@ namespace Zephir\Parser;
 
 class Manager
 {
-    const MINIMUM_PARSER_VERSION = '1.1.0';
+    const MINIMUM_PARSER_VERSION = '1.3.0';
+    const PARSER_HOME_PAGE = 'https://github.com/phalcon/php-zephir-parser';
 
     /**
      * Zephir Parser.
@@ -71,7 +72,7 @@ class Manager
   Note: Zephir no longer distributed with internal parser.
   %s
   To install latest stable Zephir Parser please refer to:
-  https://github.com/phalcon/php-zephir-parser
+  %s
 ────────────────────────────────────────────────────────────
 EOF;
 
@@ -81,6 +82,11 @@ EOF;
             $add = '';
         }
 
-        return sprintf($template, $this->parser->isAvailable() ? 'is outdated' : 'is not loaded', $add);
+        return sprintf(
+            $template,
+            $this->parser->isAvailable() ? 'is outdated' : 'is not loaded',
+            $add,
+            self::PARSER_HOME_PAGE
+        );
     }
 }
