@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Removed
+- PHP 5.x is no longer supported
 
 ## [0.11.12] - 2019-03-24
 ### Fixed
