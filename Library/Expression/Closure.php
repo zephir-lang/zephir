@@ -107,6 +107,24 @@ class Closure
             $block = [];
         }
 
+        $staticVariables = [];
+        if (isset($expression['use']) && \is_array($expression['use'])) {
+            foreach ($expression['use'] as $parameter) {
+                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable($parameter['name']);
+            }
+        }
+
+        foreach ($staticVariables as $var) {
+            $classDefinition->addProperty(new \Zephir\ClassProperty(
+                $classDefinition,
+                ['public', 'static'],
+                $var->getName(),
+                null,
+                null,
+                null
+            ));
+        }
+
         $classMethod = new ClassMethod(
             $classDefinition,
             ['public', 'final'],
@@ -115,7 +133,8 @@ class Closure
             new StatementsBlock($block),
             null,
             null,
-            $expression
+            $expression,
+            $staticVariables
         );
         $classDefinition->addMethod($classMethod, $block);
 
@@ -133,7 +152,36 @@ class Closure
 
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
-
+        $compilationContext->headersManager->add('kernel/object');
+        foreach ($staticVariables as $var) {
+            if ('variable' == $var->getType() || 'array' == $var->getType()) {
+                $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $var, $compilationContext);
+            } else {
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                switch ($var->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'char':
+                    case 'uchar':
+                        $compilationContext->backend->assignLong($tempVariable, $var, $compilationContext);
+                        break;
+                    case 'double':
+                        $compilationContext->backend->assignDouble($tempVariable, $var, $compilationContext);
+                        break;
+                    case 'bool':
+                        $compilationContext->backend->assignBool($tempVariable, $var, $compilationContext);
+                        break;
+                    case 'string':
+                        $compilationContext->backend->assignString($tempVariable, $var, $compilationContext);
+                        break;
+                    default:
+                        break;
+                }
+                $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $tempVariable, $compilationContext);
+            }
+        }
         ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

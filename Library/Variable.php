@@ -204,6 +204,16 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Sets the type of variable.
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
      * Returns the type of variable.
      *
      * @return string
@@ -1039,6 +1049,16 @@ class Variable implements TypeAwareInterface
     public function isSuperGlobal()
     {
         return $this->isExternal && $this->globalsManager->isSuperGlobal($this->name);
+    }
+
+    /**
+     * Checks if a variable is a local static.
+     *
+     * @return bool
+     */
+    public function isLocalSatic()
+    {
+        return $this->isExternal && $this->localOnly;
     }
 
     /**
