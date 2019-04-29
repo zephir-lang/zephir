@@ -144,6 +144,11 @@ class ClassMethod
     protected $expression;
 
     /**
+     * @var array|null
+     */
+    protected $staticVariables;
+
+    /**
      * LocalContextPass.
      *
      * @var LocalContextPass
@@ -184,7 +189,8 @@ class ClassMethod
         StatementsBlock $statements = null,
         $docblock = null,
         array $returnType = null,
-        array $expression = null
+        array $expression = null,
+        array $staticVariables = null
     ) {
         $this->checkVisibility($visibility, $name, $expression);
 
@@ -195,6 +201,7 @@ class ClassMethod
         $this->statements = $statements;
         $this->docblock = $docblock;
         $this->expression = $expression;
+        $this->staticVariables = $staticVariables;
 
         $this->setReturnTypes($returnType);
     }
@@ -1600,7 +1607,6 @@ class ClassMethod
          */
         $branch = new Branch();
         $branch->setType(Branch::TYPE_EXTERNAL);
-
         /**
          * BranchManager helps to create graphs of conditional/loop/root/jump branches.
          */
@@ -1615,6 +1621,16 @@ class ClassMethod
         $symbolTable = new SymbolTable($compilationContext);
         if ($localContext) {
             $symbolTable->setLocalContext($localContext);
+        }
+
+        if ($this->staticVariables) {
+            foreach ($this->staticVariables as $var) {
+                $localVar = clone $var;
+                $localVar->setIsExternal(true);
+                $localVar->setLocalOnly(true);
+                $localVar->setType('variable');
+                $symbolTable->addRawVariable($localVar);
+            }
         }
 
         /**
@@ -2044,6 +2060,7 @@ class ClassMethod
         $code .= $initCode.$initVarCode;
         $codePrinter->preOutput($code);
 
+        $compilationContext->headersManager->add('kernel/object');
         /*
          * Fetch used superglobals
          */
@@ -2051,6 +2068,18 @@ class ClassMethod
             if ($variable->isSuperGlobal()) {
                 $globalVar = $symbolTable->getVariable($name);
                 $codePrinter->preOutput("\t".$compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
+            }
+            if ($variable->isLocalSatic()) {
+                $staticVar = $symbolTable->getVariable($name);
+
+                $codePrinter->preOutput(sprintf(
+                    "\t".'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                    $staticVar->isDoublePointer() ? '' : '&',
+                    $staticVar->getName(),
+                    $this->classDefinition->getClassEntry(),
+                    $staticVar->getName(),
+                    ''
+                ));
             }
         }
 
