@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added initial support of "use" keyword in closures
+  [#888](https://github.com/phalcon/zephir/issues/888),
+  [#1848](https://github.com/phalcon/zephir/issues/1848)
+
 ### Removed
 - PHP 5.x is no longer supported
 
