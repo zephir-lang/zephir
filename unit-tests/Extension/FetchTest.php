@@ -75,4 +75,9 @@ class FetchTest extends TestCase
             ['three', [3], true],
         ];
     }
+
+    public function testFetch7()
+    {
+        $this->assertSame(self::$test->testFetchArray7(['params' => [], 'params']), []);
+    }
 }

@@ -7,6 +7,7 @@ namespace Test;
 
 class FetchTest
 {
+	protected fetchedArray = [];
 
 	protected values { set, get };
 
@@ -52,6 +53,15 @@ class FetchTest
 	public function testFetchObject2(var a, var b)
 	{
 		return fetch a, a->{b};
+	}
+
+	public function testFetchArray7(var a, var b)
+	{
+		var params;
+		if fetch params, a[b] {
+			let this->fetchedArray = params;
+		}
+		return this->fetchedArray;
 	}
 
 	public function testFetchPost(var b)
