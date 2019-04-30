@@ -62,7 +62,7 @@ class FetchTest
 			let this->_params = params;
 		}
 
-		return this->fetchedArray;
+		return this->_params;
 	}
 
 	public function testFetchPost(var b)
