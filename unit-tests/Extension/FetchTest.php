@@ -72,4 +72,9 @@ class FetchTest extends \PHPUnit_Framework_TestCase
     {
         self::$test = null;
     }
+
+    public function testFetch7()
+    {
+        $this->assertSame(self::$test->testFetchArray7(['params' => [], 'params']), []);
+    }
 }
