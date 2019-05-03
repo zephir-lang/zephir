@@ -11,4 +11,6 @@ if "%PHP_PEAR_PHP_BIN%" neq "" (
 	set PHPBIN=%PHP_PEAR_PHP_BIN%
 ) else set PHPBIN=php
 
-"%PHPBIN%" "zephir" %*
+SET mypath=%~dp0
+echo %mypath:~0,-1%
+"%PHPBIN%" "%mypath%\zephir" %*
