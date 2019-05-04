@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - The minimal Zephir Parser version is 1.3.0
+- Improved Zephir runner for Windows [#1857](https://github.com/phalcon/zephir/pull/1857)
 
 ## [0.11.12] - 2019-03-24
 ### Fixed
