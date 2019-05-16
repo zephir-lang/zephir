@@ -17,6 +17,7 @@
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_ExtendPdoClass) {

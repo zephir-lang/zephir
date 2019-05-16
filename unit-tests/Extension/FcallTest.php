@@ -15,6 +15,10 @@ use PHPUnit\Framework\TestCase;
 use Test\Fcall;
 use Test\Oo\PropertyAccess;
 
+class UserExample extends PropertyAccess
+{
+}
+
 class FcallTest extends TestCase
 {
     public function testCall()
@@ -114,5 +118,13 @@ class FcallTest extends TestCase
 
         $this->assertInstanceOf(\stdClass::class, \Test\zephir_namespaced_method_with_type_casting(new \stdClass()));
         $this->assertInstanceOf(\stdClass::class, zephir_global_method_with_type_casting(new \stdClass()));
+    }
+
+    public function testIssue1851()
+    {
+        $example = new UserExample();
+        $example->setPrivateVariable('test');
+
+        $this->assertSame('test', $example->getPrivateVariable());
     }
 }

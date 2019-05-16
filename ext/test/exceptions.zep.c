@@ -13,11 +13,11 @@
 
 #include "kernel/main.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/concat.h"
-#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Exceptions) {

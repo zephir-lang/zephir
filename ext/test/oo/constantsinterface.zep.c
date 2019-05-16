@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_ConstantsInterface) {

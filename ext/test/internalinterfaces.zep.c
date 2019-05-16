@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_InternalInterfaces) {

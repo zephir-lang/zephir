@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Closures) {
@@ -89,6 +90,24 @@ PHP_METHOD(Test_Closures, arrow2) {
 
 
 	zephir_create_closure_ex(return_value, NULL, test_7__closure_ce, SL("__invoke"));
+	return;
+
+}
+
+PHP_METHOD(Test_Closures, testUseCommand) {
+
+	zval _0;
+	zend_long abc;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+
+	abc = 1;
+	zephir_create_closure_ex(return_value, NULL, test_8__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, abc);
+	zend_update_static_property(test_8__closure_ce, ZEND_STRL("abc"), &_0);
 	return;
 
 }

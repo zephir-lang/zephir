@@ -15,6 +15,7 @@
 #include "kernel/string.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
+#include "kernel/object.h"
 #include "kernel/fcall.h"
 
 
