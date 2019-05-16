@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Test\Fcall;
 use Test\Oo\PropertyAccess;
 
-class UserExample extends \Test\Oo\PropertyAccess {}
+class UserExample extends PropertyAccess {}
 
 class FcallTest extends TestCase
 {

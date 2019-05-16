@@ -188,5 +188,6 @@
 #include "test/8__closure.zep.h"
 #include "test/9__closure.zep.h"
 #include "test/10__closure.zep.h"
+#include "test/11__closure.zep.h"
 
 #endif

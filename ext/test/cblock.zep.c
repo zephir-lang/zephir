@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 
 // top statement before namespace, add to after headers
 #define MAX_FACTOR 10

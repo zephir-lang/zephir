@@ -13,11 +13,11 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
-#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_NativeArray) {

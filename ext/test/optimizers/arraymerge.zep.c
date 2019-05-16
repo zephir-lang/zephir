@@ -15,6 +15,7 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Optimizers_ArrayMerge) {

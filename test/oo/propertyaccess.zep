@@ -11,6 +11,8 @@ class PropertyAccess
 
 	protected b;
 
+	private privateVariable;
+
 	public function __construct()
 	{
 		var test, test1;
@@ -24,5 +26,17 @@ class PropertyAccess
 		let this->b = this->a->test2;
 
 		let test1 = this->a;
+	}
+
+	public Function setPrivatevariable(value)
+	{
+		let this->privateVariable = value;
+
+		return this;
+	}
+
+	public Function getPrivatevariable()
+	{
+		return this->privateVariable;
 	}
 }
