@@ -122,7 +122,7 @@ class FcallTest extends TestCase
 
     public function testIssue1851()
     {
-        $example = new UserExample;
+        $example = new UserExample();
         $example->setPrivateVariable('test');
 
         $this->assertSame('test', $example->getPrivateVariable());
