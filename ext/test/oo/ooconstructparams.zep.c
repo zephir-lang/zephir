@@ -40,7 +40,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 

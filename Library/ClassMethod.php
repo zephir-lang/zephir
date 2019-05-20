@@ -1978,11 +1978,7 @@ class ClassMethod
 
             if (!$this->isInternal()) {
                 $compilationContext->headersManager->add('kernel/memory');
-                if ($symbolTable->getMustGrownStack()) {
-                    $code .= "\t".'zephir_fetch_params(1, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
-                } else {
-                    $code .= "\t".'zephir_fetch_params(0, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
-                }
+                $code .= "\t".'zephir_fetch_params(1, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
             } else {
                 foreach ($params as $param) {
                     /* TODO: Migrate all this code to codeprinter, get rid of temp code printer */

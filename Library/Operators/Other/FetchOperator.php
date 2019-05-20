@@ -49,19 +49,8 @@ class FetchOperator extends BaseOperator
             /*
              * @todo use a read detector here
              */
-            $readOnly = false;
+            $readOnly = true;
             $line = max($compilationContext->symbolTable->getLastCallLine(), $compilationContext->symbolTable->getLastUnsetLine());
-            if (false === $line || ($line > 0 && $line < $expression['line'])) {
-                $numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
-                if (1 == $numberMutations) {
-                    if (1 == $variable->getNumberMutations()) {
-                        $variable->setIsInitialized(true, $compilationContext);
-                        $variable->setMemoryTracked(false);
-                        $variable->setDynamicTypes('undefined');
-                        $readOnly = true;
-                    }
-                }
-            }
 
             if (!$readOnly || 'array-access' != $expression['right']['type']) {
                 $variable->setIsInitialized(true, $compilationContext);

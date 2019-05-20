@@ -226,7 +226,7 @@ PHP_METHOD(Test_Quantum, harmos) {
 					zephir_array_fetch_long(&_22$$6, &_19$$6, 0, PH_NOISY | PH_READONLY, "test/quantum.zep", 51 TSRMLS_CC);
 					mul_function(&_29$$6, &_27$$6, &_22$$6 TSRMLS_CC);
 					zephir_add_function(&_28$$6, &_25$$6, &_29$$6);
-					zephir_array_update_multi(&psr, &_28$$6 TSRMLS_CC, SL("ll"), 2, i, 1);
+					zephir_array_update_multi(&psr, &_28$$6, SL("ll"), 2, i, 1);
 					zephir_array_fetch_long(&_22$$6, &psr, i, PH_NOISY | PH_READONLY, "test/quantum.zep", 53 TSRMLS_CC);
 					zephir_array_fetch_long(&_26$$6, &_22$$6, 0, PH_NOISY | PH_READONLY, "test/quantum.zep", 53 TSRMLS_CC);
 					zephir_array_fetch_long(&_30$$6, &psr, i, PH_NOISY | PH_READONLY, "test/quantum.zep", 53 TSRMLS_CC);
@@ -256,9 +256,9 @@ PHP_METHOD(Test_Quantum, harmos) {
 					}
 					j = _35$$5;
 					ZVAL_LONG(&_37$$7, 0);
-					zephir_array_update_multi(&psr, &_37$$7 TSRMLS_CC, SL("ll"), 2, 0, 1);
+					zephir_array_update_multi(&psr, &_37$$7, SL("ll"), 2, 0, 1);
 					ZVAL_LONG(&_37$$7, 0);
-					zephir_array_update_multi(&psr, &_37$$7 TSRMLS_CC, SL("ll"), 2, 751, 1);
+					zephir_array_update_multi(&psr, &_37$$7, SL("ll"), 2, 751, 1);
 					zephir_array_fetch_long(&_38$$7, &psi, j, PH_NOISY | PH_READONLY, "test/quantum.zep", 58 TSRMLS_CC);
 					zephir_array_fetch_long(&_39$$7, &_38$$7, 0, PH_NOISY | PH_READONLY, "test/quantum.zep", 58 TSRMLS_CC);
 					zephir_array_fetch_long(&_40$$7, &paramater, 2, PH_NOISY | PH_READONLY, "test/quantum.zep", 58 TSRMLS_CC);
@@ -286,7 +286,7 @@ PHP_METHOD(Test_Quantum, harmos) {
 					zephir_array_fetch_long(&_42$$7, &_39$$7, 1, PH_NOISY | PH_READONLY, "test/quantum.zep", 59 TSRMLS_CC);
 					mul_function(&_49$$7, &_47$$7, &_42$$7 TSRMLS_CC);
 					zephir_sub_function(&_48$$7, &_45$$7, &_49$$7);
-					zephir_array_update_multi(&psi, &_48$$7 TSRMLS_CC, SL("ll"), 2, j, 1);
+					zephir_array_update_multi(&psi, &_48$$7, SL("ll"), 2, j, 1);
 				}
 			}
 			_50$$5 = n == 0;
@@ -318,10 +318,10 @@ PHP_METHOD(Test_Quantum, harmos) {
 				}
 				zephir_array_fetch_long(&_57$$10, &psi, j, PH_NOISY | PH_READONLY, "test/quantum.zep", 76 TSRMLS_CC);
 				zephir_array_fetch_long(&_58$$10, &_57$$10, 1, PH_NOISY | PH_READONLY, "test/quantum.zep", 76 TSRMLS_CC);
-				zephir_array_update_multi(&psi, &_58$$10 TSRMLS_CC, SL("ll"), 2, j, 0);
+				zephir_array_update_multi(&psi, &_58$$10, SL("ll"), 2, j, 0);
 				zephir_array_fetch_long(&_58$$10, &psr, j, PH_NOISY | PH_READONLY, "test/quantum.zep", 77 TSRMLS_CC);
 				zephir_array_fetch_long(&_59$$10, &_58$$10, 1, PH_NOISY | PH_READONLY, "test/quantum.zep", 77 TSRMLS_CC);
-				zephir_array_update_multi(&psr, &_59$$10 TSRMLS_CC, SL("ll"), 2, j, 0);
+				zephir_array_update_multi(&psr, &_59$$10, SL("ll"), 2, j, 0);
 				j++;
 			}
 		}

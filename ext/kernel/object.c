@@ -687,6 +687,8 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 			separated = 1;
 		}
 
+		ZEPHIR_SEPARATE(value);
+
 		va_start(ap, types_count);
 		zephir_array_update_multi_ex(&tmp, value, types, types_length, types_count, ap);
 		va_end(ap);
@@ -862,6 +864,8 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 		array_init(&tmp);
 		separated = 1;
 	}
+
+	ZEPHIR_SEPARATE(value);
 
 	va_start(ap, types_count);
 	zephir_array_update_multi_ex(&tmp, value, types, types_length, types_count, ap);

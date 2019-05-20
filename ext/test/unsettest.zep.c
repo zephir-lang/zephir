@@ -50,7 +50,7 @@ PHP_METHOD(Test_Unsettest, has) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &key);
+	zephir_fetch_params(1, 1, 0, &key);
 
 
 
@@ -68,7 +68,7 @@ PHP_METHOD(Test_Unsettest, addValueToProperty) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &key, &value);
+	zephir_fetch_params(1, 2, 0, &key, &value);
 
 
 
@@ -86,7 +86,7 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &key);
+	zephir_fetch_params(1, 1, 0, &key);
 
 
 

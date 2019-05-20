@@ -231,7 +231,8 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		} else { \
 			use_copy_right = zephir_make_printable_zval(right, &right_tmp); \
 			if (use_copy_right) { \
-				ZEPHIR_MM_ZVAL_STRINGL(left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
+				ZVAL_COPY_VALUE(left, &right_tmp); \
+				zephir_memory_observe(&zephir_memory, left); \
 			} \
 		} \
 	}

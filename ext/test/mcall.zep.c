@@ -71,7 +71,7 @@ PHP_METHOD(Test_Mcall, testMethod4) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -89,7 +89,7 @@ PHP_METHOD(Test_Mcall, testMethod5) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -107,7 +107,7 @@ PHP_METHOD(Test_Mcall, testMethod6) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -470,7 +470,7 @@ PHP_METHOD(Test_Mcall, testMethod19) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params(1, 2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -530,7 +530,7 @@ PHP_METHOD(Test_Mcall, testMethod21) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params(1, 2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -591,7 +591,7 @@ PHP_METHOD(Test_Mcall, optionalRequereString) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param);
 
-	zephir_fetch_params(0, 1, 0, &param_param);
+	zephir_fetch_params(1, 1, 0, &param_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be of the type string") TSRMLS_CC);
@@ -660,7 +660,7 @@ PHP_METHOD(Test_Mcall, optionalParameterInt) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &param_param);
+	zephir_fetch_params(1, 0, 1, &param_param);
 
 	if (!param_param) {
 		param = 2;
@@ -682,7 +682,7 @@ PHP_METHOD(Test_Mcall, optionalParameterVar) {
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
 
-	zephir_fetch_params(0, 0, 1, &param);
+	zephir_fetch_params(1, 0, 1, &param);
 
 	if (!param) {
 		param = &param_sub;
@@ -702,7 +702,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolTrue) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &param_param);
+	zephir_fetch_params(1, 0, 1, &param_param);
 
 	if (!param_param) {
 		param = 1;
@@ -723,7 +723,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolFalse) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &param_param);
+	zephir_fetch_params(1, 0, 1, &param_param);
 
 	if (!param_param) {
 		param = 0;
@@ -744,7 +744,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &start_param);
+	zephir_fetch_params(1, 0, 1, &start_param);
 
 	if (!start_param) {
 		start = 1;
@@ -769,7 +769,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &value_param);
+	zephir_fetch_params(1, 0, 1, &value_param);
 
 	if (!value_param) {
 		value = 0;
@@ -861,7 +861,7 @@ PHP_METHOD(Test_Mcall, objectParamCastStdClass) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params(1, 1, 0, &param);
 
 
 
@@ -877,7 +877,7 @@ PHP_METHOD(Test_Mcall, objectParamCastOoParam) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params(1, 1, 0, &param);
 
 
 

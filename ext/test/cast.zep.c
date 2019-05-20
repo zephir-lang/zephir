@@ -780,7 +780,7 @@ PHP_METHOD(Test_Cast, testCastFileResourceToInteger) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&fileName_sub);
 
-	zephir_fetch_params(0, 1, 0, &fileName);
+	zephir_fetch_params(1, 1, 0, &fileName);
 
 
 

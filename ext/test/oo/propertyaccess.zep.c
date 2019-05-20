@@ -105,7 +105,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 

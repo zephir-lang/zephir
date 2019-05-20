@@ -39,10 +39,10 @@ PHP_METHOD(Test_FetchTest, setValues) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&values_sub);
 
-	zephir_fetch_params(0, 1, 0, &values);
+	zephir_fetch_params(1, 1, 0, &values);
 
 
-
+	RC_DUMP(values);
 	zephir_update_property_zval(this_ptr, SL("values"), values);
 	RETURN_MM_THIS();
 
@@ -68,17 +68,17 @@ PHP_METHOD(Test_FetchTest, testFetchArray1) {
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&c);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, b, 1 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, b, 1));
 
 }
 
 PHP_METHOD(Test_FetchTest, testFetchArray2) {
 
-	zval *a = NULL, a_sub, *b, b_sub;
+	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
 	ZEPHIR_MM_GROW();
@@ -90,7 +90,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray2) {
 	ZEPHIR_SEPARATE_PARAM(a);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, b, 1));
 
 }
 
@@ -104,19 +104,19 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&c);
 
-	zephir_fetch_params(0, 2, 0, &a, &b_param);
+	zephir_fetch_params(1, 2, 0, &a, &b_param);
 
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1));
 
 }
 
 PHP_METHOD(Test_FetchTest, testFetchArray4) {
 
 	zend_long b;
-	zval *a = NULL, a_sub, *b_param = NULL;
+	zval *a, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
 
 	ZEPHIR_MM_GROW();
@@ -128,7 +128,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray4) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_long_fetch(a, a, b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_long_fetch(a, a, b, 1));
 
 }
 
@@ -148,14 +148,14 @@ PHP_METHOD(Test_FetchTest, testFetchArray5) {
 	zephir_get_strval(&b, b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 1 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 1));
 
 }
 
 PHP_METHOD(Test_FetchTest, testFetchArray6) {
 
 	zval b;
-	zval *a = NULL, a_sub, *b_param = NULL;
+	zval *a, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
 
 	ZEPHIR_MM_GROW();
@@ -168,7 +168,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray6) {
 	zephir_get_strval(&b, b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b, 1));
 
 }
 
@@ -219,11 +219,11 @@ PHP_METHOD(Test_FetchTest, testFetchPost) {
 	ZVAL_UNDEF(&c);
 
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params(0, 1, 0, &b);
+	zephir_fetch_params(1, 1, 0, &b);
 
 
 
-	if (!(zephir_array_isset_fetch(&c, &_POST, b, 1 TSRMLS_CC))) {
+	if (!(zephir_array_isset_fetch(&c, &_POST, b, 1))) {
 		RETURN_MM_BOOL(0);
 	}
 	RETURN_MM_CTOR(&c);
@@ -277,9 +277,9 @@ PHP_METHOD(Test_FetchTest, getValue) {
 	zephir_get_strval(&name, name_param);
 
 
-	if (!(zephir_array_isset_fetch(&value, &_POST, &name, 0 TSRMLS_CC))) {
+	if (!(zephir_array_isset_fetch(&value, &_POST, &name, 1))) {
 		zephir_read_property(&_0$$3, this_ptr, SL("values"), PH_NOISY_CC | PH_READONLY);
-		if (!(zephir_array_isset_fetch(&value, &_0$$3, &name, 0 TSRMLS_CC))) {
+		if (!(zephir_array_isset_fetch(&value, &_0$$3, &name, 1))) {
 			RETURN_MM_NULL();
 		}
 	}

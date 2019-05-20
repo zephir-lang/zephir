@@ -123,7 +123,7 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
+	zephir_fetch_params(1, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
 
 	x1 = zephir_get_doubleval(x1_param);
 	y1 = zephir_get_doubleval(y1_param);

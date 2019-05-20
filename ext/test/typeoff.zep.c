@@ -210,7 +210,7 @@ PHP_METHOD(Test_Typeoff, testCallableTypeOf) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&cb_sub);
 
-	zephir_fetch_params(0, 1, 0, &cb);
+	zephir_fetch_params(1, 1, 0, &cb);
 
 
 

@@ -195,7 +195,7 @@ PHP_METHOD(Test_Vars, testVarDump2param) {
 	ZVAL_UNDEF(&p1_sub);
 	ZVAL_UNDEF(&p2_sub);
 
-	zephir_fetch_params(0, 2, 0, &p1, &p2);
+	zephir_fetch_params(1, 2, 0, &p1, &p2);
 
 
 
@@ -215,7 +215,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 	ZVAL_UNDEF(&p2_sub);
 	ZVAL_UNDEF(&p3_sub);
 
-	zephir_fetch_params(0, 3, 0, &p1, &p2, &p3);
+	zephir_fetch_params(1, 3, 0, &p1, &p2, &p3);
 
 
 

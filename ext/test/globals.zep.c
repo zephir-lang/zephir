@@ -32,7 +32,7 @@ PHP_METHOD(Test_Globals, setBoolValueUsingDotNotation) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Globals, setIntValueUsingDotNotation) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 
@@ -66,7 +66,7 @@ PHP_METHOD(Test_Globals, setCharValue) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 
@@ -83,7 +83,7 @@ PHP_METHOD(Test_Globals, setBoolValue) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 
@@ -100,7 +100,7 @@ PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params(1, 1, 0, &value);
 
 
 

@@ -84,7 +84,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf4) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf5) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -141,7 +141,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf7) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&test_sub);
 
-	zephir_fetch_params(0, 1, 0, &test);
+	zephir_fetch_params(1, 1, 0, &test);
 
 
 

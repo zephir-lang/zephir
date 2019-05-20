@@ -41,7 +41,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray1) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -58,7 +58,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b_param);
+	zephir_fetch_params(1, 2, 0, &a, &b_param);
 
 	b = zephir_get_intval(b_param);
 
@@ -94,7 +94,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray4) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -110,7 +110,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray5) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -126,7 +126,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty1) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -143,7 +143,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -159,7 +159,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 

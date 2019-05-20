@@ -71,7 +71,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolTrue) {
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$true, 1);
 
-	zephir_fetch_params(0, 1, 0, &property_param);
+	zephir_fetch_params(1, 1, 0, &property_param);
 
 	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string") TSRMLS_CC);
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolFalse) {
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$false, 0);
 
-	zephir_fetch_params(0, 1, 0, &property_param);
+	zephir_fetch_params(1, 1, 0, &property_param);
 
 	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string") TSRMLS_CC);
@@ -218,7 +218,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 	ZVAL_UNDEF(&property);
 	ZVAL_NULL(&__$null);
 
-	zephir_fetch_params(0, 1, 0, &property_param);
+	zephir_fetch_params(1, 1, 0, &property_param);
 
 	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string") TSRMLS_CC);
@@ -382,7 +382,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value);
 
-	zephir_fetch_params(0, 1, 0, &value_param);
+	zephir_fetch_params(1, 1, 0, &value_param);
 
 	if (UNEXPECTED(Z_TYPE_P(value_param) != IS_STRING && Z_TYPE_P(value_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be of the type string") TSRMLS_CC);

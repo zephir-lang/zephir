@@ -124,7 +124,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&position_sub);
 
-	zephir_fetch_params(0, 1, 0, &position);
+	zephir_fetch_params(1, 1, 0, &position);
 
 
 
@@ -148,7 +148,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetExists) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
 
@@ -163,7 +163,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetGet) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
 
@@ -179,7 +179,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetSet) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &offset, &value);
+	zephir_fetch_params(1, 2, 0, &offset, &value);
 
 
 
@@ -194,7 +194,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetUnset) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
 

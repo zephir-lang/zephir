@@ -73,7 +73,7 @@ PHP_METHOD(Test_Oo_OoParams, setAge) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params(1, 1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
@@ -90,7 +90,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params(1, 1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
@@ -125,7 +125,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &enabled_param);
+	zephir_fetch_params(1, 1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
@@ -160,7 +160,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params(1, 1, 0, &age_param);
 
 	if (UNEXPECTED(Z_TYPE_P(age_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int") TSRMLS_CC);
@@ -181,7 +181,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params(1, 1, 0, &average_param);
 
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double") TSRMLS_CC);
@@ -220,7 +220,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 
-	zephir_fetch_params(0, 1, 0, &name_param);
+	zephir_fetch_params(1, 1, 0, &name_param);
 
 	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string") TSRMLS_CC);
@@ -245,7 +245,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &enabled_param);
+	zephir_fetch_params(1, 1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
@@ -280,7 +280,7 @@ PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &age_param);
+	zephir_fetch_params(1, 0, 1, &age_param);
 
 	if (!age_param) {
 		age = 25;
@@ -301,7 +301,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &average_param);
+	zephir_fetch_params(1, 0, 1, &average_param);
 
 	if (!average_param) {
 		average = (double) 25;
@@ -344,7 +344,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &enabled_param);
+	zephir_fetch_params(1, 0, 1, &enabled_param);
 
 	if (!enabled_param) {
 		enabled = 0;
@@ -388,7 +388,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params(1, 1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
@@ -405,7 +405,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params(1, 1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
@@ -422,7 +422,7 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params(1, 1, 0, &obj);
 
 
 
@@ -438,7 +438,7 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params(1, 1, 0, &obj);
 
 
 
@@ -454,7 +454,7 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params(1, 1, 0, &obj);
 
 
 
@@ -470,7 +470,7 @@ PHP_METHOD(Test_Oo_OoParams, setObjectClassCast) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&parameter_sub);
 
-	zephir_fetch_params(0, 1, 0, &parameter);
+	zephir_fetch_params(1, 1, 0, &parameter);
 
 
 

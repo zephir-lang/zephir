@@ -50,7 +50,7 @@ PHP_METHOD(Test_Chars, sumChars2) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &ch_param);
+	zephir_fetch_params(1, 1, 0, &ch_param);
 
 	ch = zephir_get_charval(ch_param);
 
@@ -82,7 +82,7 @@ PHP_METHOD(Test_Chars, diffChars2) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &ch_param);
+	zephir_fetch_params(1, 1, 0, &ch_param);
 
 	ch = zephir_get_charval(ch_param);
 

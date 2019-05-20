@@ -311,7 +311,7 @@ PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
 
-	zephir_fetch_params(0, 2, 0, &param1, &param2);
+	zephir_fetch_params(1, 2, 0, &param1, &param2);
 
 
 
@@ -474,7 +474,7 @@ PHP_FUNCTION(g_test_zephir_global_method_with_type_casting) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&variable_sub);
 
-	zephir_fetch_params(0, 1, 0, &variable);
+	zephir_fetch_params(1, 1, 0, &variable);
 
 
 
@@ -513,7 +513,7 @@ PHP_FUNCTION(f_Test_test_call_relative_object_hint) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -527,7 +527,7 @@ PHP_FUNCTION(f_Test_zephir_namespaced_method_with_type_casting) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&variable_sub);
 
-	zephir_fetch_params(0, 1, 0, &variable);
+	zephir_fetch_params(1, 1, 0, &variable);
 
 
 
@@ -541,7 +541,7 @@ PHP_FUNCTION(f_Test_test_call_object_hint) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 

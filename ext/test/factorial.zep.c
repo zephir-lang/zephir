@@ -36,7 +36,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &n_param);
+	zephir_fetch_params(1, 1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
 

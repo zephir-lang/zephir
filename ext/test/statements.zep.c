@@ -91,7 +91,7 @@ PHP_METHOD(Test_Statements, testElseIf) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -116,7 +116,7 @@ PHP_METHOD(Test_Statements, testElseIf1) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -141,7 +141,7 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&total_sub);
 
-	zephir_fetch_params(0, 2, 0, &num_param, &total);
+	zephir_fetch_params(1, 2, 0, &num_param, &total);
 
 	num = zephir_get_intval(num_param);
 

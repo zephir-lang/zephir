@@ -68,7 +68,7 @@ PHP_METHOD(Test_Scall, testMethod4) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -86,7 +86,7 @@ PHP_METHOD(Test_Scall, testMethod5) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -104,7 +104,7 @@ PHP_METHOD(Test_Scall, testMethod6) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
@@ -384,7 +384,7 @@ PHP_METHOD(Test_Scall, testMethod16) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params(1, 2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);

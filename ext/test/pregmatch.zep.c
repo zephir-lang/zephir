@@ -158,7 +158,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
 
-	zephir_fetch_params(0, 3, 0, &pattern, &subject, &matches);
+	zephir_fetch_params(1, 3, 0, &pattern, &subject, &matches);
 
 
 
@@ -178,7 +178,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
 	ZVAL_UNDEF(&matches_sub);
 	ZVAL_UNDEF(&flags_sub);
 
-	zephir_fetch_params(0, 4, 0, &pattern, &subject, &matches, &flags);
+	zephir_fetch_params(1, 4, 0, &pattern, &subject, &matches, &flags);
 
 
 
@@ -199,7 +199,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 	ZVAL_UNDEF(&flags_sub);
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 5, 0, &pattern, &subject, &matches, &flags, &offset);
+	zephir_fetch_params(1, 5, 0, &pattern, &subject, &matches, &flags, &offset);
 
 
 

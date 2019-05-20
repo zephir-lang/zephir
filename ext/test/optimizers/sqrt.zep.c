@@ -96,7 +96,7 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntParameter) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params(1, 1, 0, &a_param);
 
 	a = zephir_get_intval(a_param);
 
@@ -114,7 +114,7 @@ PHP_METHOD(Test_Optimizers_Sqrt, testVarParameter) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 

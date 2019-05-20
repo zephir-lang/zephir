@@ -42,7 +42,7 @@ PHP_METHOD(Test_Exception, testRuntimePropertyFetch) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&message);
 
-	zephir_fetch_params(0, 1, 0, &message_param);
+	zephir_fetch_params(1, 1, 0, &message_param);
 
 	if (UNEXPECTED(Z_TYPE_P(message_param) != IS_STRING && Z_TYPE_P(message_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'message' must be of the type string") TSRMLS_CC);

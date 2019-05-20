@@ -48,7 +48,7 @@ PHP_METHOD(Test_Instance, __construct) {
 	ZVAL_UNDEF(&a10_sub);
 	ZVAL_UNDEF(&a11_sub);
 
-	zephir_fetch_params(0, 11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
+	zephir_fetch_params(1, 11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
 
 
 

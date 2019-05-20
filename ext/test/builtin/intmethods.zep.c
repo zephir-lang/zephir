@@ -166,7 +166,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -207,7 +207,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -226,7 +226,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -245,7 +245,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 

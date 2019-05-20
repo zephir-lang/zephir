@@ -33,7 +33,7 @@ PHP_METHOD(test_9__closure, __invoke) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&x_sub);
 
-	zephir_fetch_params(0, 1, 0, &x);
+	zephir_fetch_params(1, 1, 0, &x);
 
 
 

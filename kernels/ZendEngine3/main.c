@@ -109,6 +109,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	}
 
 	array_init(arr);
+	Z_TRY_ADDREF_P(arr);
 	if (!(&EG(symbol_table))) {
 		symbol_table = zend_rebuild_symbol_table();
 	} else {

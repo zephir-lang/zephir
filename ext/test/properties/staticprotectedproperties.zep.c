@@ -69,7 +69,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeVar) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someVar_sub);
 
-	zephir_fetch_params(0, 1, 0, &someVar);
+	zephir_fetch_params(1, 1, 0, &someVar);
 
 
 
@@ -110,7 +110,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeNull) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params(1, 1, 0, &param);
 
 
 

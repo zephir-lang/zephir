@@ -75,7 +75,7 @@ PHP_METHOD(Test_ScallExternal, testMethod3) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params(1, 2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);

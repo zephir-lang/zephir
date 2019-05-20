@@ -45,7 +45,7 @@ PHP_METHOD(Test_MethodArgs, setCallable) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -62,7 +62,7 @@ PHP_METHOD(Test_MethodArgs, setObject) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
@@ -79,7 +79,7 @@ PHP_METHOD(Test_MethodArgs, setCallableStrict) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 	if (UNEXPECTED(zephir_is_callable(a TSRMLS_CC) != 1)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable") TSRMLS_CC);
@@ -100,7 +100,7 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_OBJECT)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object") TSRMLS_CC);
@@ -121,7 +121,7 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params(1, 1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_RESOURCE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource") TSRMLS_CC);
@@ -145,7 +145,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&method_sub);
 
-	zephir_fetch_params(0, 0, 1, &method);
+	zephir_fetch_params(1, 0, 1, &method);
 
 	if (!method) {
 		method = &method_sub;
@@ -195,7 +195,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &parameter_param);
+	zephir_fetch_params(1, 0, 1, &parameter_param);
 
 	if (!parameter_param) {
 		parameter = 1.32;
@@ -220,7 +220,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &parameter_param);
+	zephir_fetch_params(1, 0, 1, &parameter_param);
 
 	if (!parameter_param) {
 		parameter = 1;
@@ -245,7 +245,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 0, 1, &parameter_param);
+	zephir_fetch_params(1, 0, 1, &parameter_param);
 
 	if (!parameter_param) {
 		parameter = 12345;

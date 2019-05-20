@@ -40,7 +40,7 @@ PHP_METHOD(Test_Requires, requireExternal1) {
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &path);
+	zephir_fetch_params(1, 1, 0, &path);
 
 
 
@@ -60,7 +60,7 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&path_sub);
 
-	zephir_fetch_params(0, 1, 0, &path);
+	zephir_fetch_params(1, 1, 0, &path);
 
 
 
@@ -107,7 +107,7 @@ PHP_METHOD(Test_Requires, setContent) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&content_sub);
 
-	zephir_fetch_params(0, 1, 0, &content);
+	zephir_fetch_params(1, 1, 0, &content);
 
 
 

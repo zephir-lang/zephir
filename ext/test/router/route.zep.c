@@ -191,7 +191,7 @@ PHP_METHOD(Test_Router_Route, via) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&httpMethods_sub);
 
-	zephir_fetch_params(0, 1, 0, &httpMethods);
+	zephir_fetch_params(1, 1, 0, &httpMethods);
 
 
 
@@ -585,7 +585,7 @@ PHP_METHOD(Test_Router_Route, setName) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name_sub);
 
-	zephir_fetch_params(0, 1, 0, &name);
+	zephir_fetch_params(1, 1, 0, &name);
 
 
 
@@ -610,7 +610,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&callback_sub);
 
-	zephir_fetch_params(0, 1, 0, &callback);
+	zephir_fetch_params(1, 1, 0, &callback);
 
 
 
@@ -771,7 +771,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&httpMethods_sub);
 
-	zephir_fetch_params(0, 1, 0, &httpMethods);
+	zephir_fetch_params(1, 1, 0, &httpMethods);
 
 
 
@@ -813,7 +813,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&hostname_sub);
 
-	zephir_fetch_params(0, 1, 0, &hostname);
+	zephir_fetch_params(1, 1, 0, &hostname);
 
 
 
@@ -853,7 +853,7 @@ PHP_METHOD(Test_Router_Route, convert) {
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
 
-	zephir_fetch_params(0, 2, 0, &name, &converter);
+	zephir_fetch_params(1, 2, 0, &name, &converter);
 
 
 

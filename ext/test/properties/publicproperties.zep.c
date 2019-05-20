@@ -100,7 +100,7 @@ PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someGetterSetterArray_sub);
 
-	zephir_fetch_params(0, 1, 0, &someGetterSetterArray);
+	zephir_fetch_params(1, 1, 0, &someGetterSetterArray);
 
 
 

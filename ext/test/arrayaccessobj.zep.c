@@ -56,7 +56,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetSet) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &offset, &value);
+	zephir_fetch_params(1, 2, 0, &offset, &value);
 
 
 
@@ -78,7 +78,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetExists) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
 
@@ -96,7 +96,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetUnset) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
 

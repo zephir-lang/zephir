@@ -35,7 +35,7 @@ PHP_METHOD(Test_Operator, testIdentical) {
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
 
-	zephir_fetch_params(0, 2, 0, &param1, &param2);
+	zephir_fetch_params(1, 2, 0, &param1, &param2);
 
 
 
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Operator, testIdenticalVarFalse) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params(1, 1, 0, &param);
 
 
 
@@ -94,7 +94,7 @@ PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params(1, 1, 0, &param);
 
 
 

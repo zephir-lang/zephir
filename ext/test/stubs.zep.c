@@ -91,7 +91,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlock) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&intOrString_sub);
 
-	zephir_fetch_params(0, 1, 1, &intOrString, &number_param);
+	zephir_fetch_params(1, 1, 1, &intOrString, &number_param);
 
 	if (!number_param) {
 		number = 1;
@@ -122,7 +122,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlockDeclared) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&intOrString_sub);
 
-	zephir_fetch_params(0, 1, 1, &intOrString, &number_param);
+	zephir_fetch_params(1, 1, 1, &intOrString, &number_param);
 
 	if (!number_param) {
 		number = 1;

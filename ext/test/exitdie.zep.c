@@ -35,7 +35,7 @@ PHP_METHOD(Test_ExitDie, testExit) {
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
 
-	zephir_fetch_params(0, 0, 1, &param);
+	zephir_fetch_params(1, 0, 1, &param);
 
 	if (!param) {
 		param = &param_sub;
@@ -62,7 +62,7 @@ PHP_METHOD(Test_ExitDie, testDie) {
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
 
-	zephir_fetch_params(0, 0, 1, &param);
+	zephir_fetch_params(1, 0, 1, &param);
 
 	if (!param) {
 		param = &param_sub;

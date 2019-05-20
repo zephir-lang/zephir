@@ -939,16 +939,16 @@ class Backend extends BaseBackend
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch('.$code.', SL("'.$resolvedExpr->getCode().'"), '.$flags.')', $expression);
             } elseif (\in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
-                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.' TSRMLS_CC)', $expression);
+                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.')', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
         }
 
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
-            return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.' TSRMLS_CC)', $expression);
+            return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
         } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType()) {
-            return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.' TSRMLS_CC)', $expression);
+            return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
         }
         throw new CompilerException('arrayIssetFetch ['.$resolvedExpr->getType().']', $expression);
     }
@@ -1028,7 +1028,6 @@ class Backend extends BaseBackend
     {
         $name = $globalVar->getName();
         $output = strtr('zephir_get_global(&:name, SL(":name"));', [':name' => $name]);
-
         if ($useCodePrinter) {
             $compilationContext->codePrinter->output($output);
         }

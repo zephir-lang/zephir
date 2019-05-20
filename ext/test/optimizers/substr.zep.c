@@ -35,7 +35,7 @@ PHP_METHOD(Test_Optimizers_Substr, testTwoArguments) {
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 
-	zephir_fetch_params(0, 2, 0, &str, &start);
+	zephir_fetch_params(1, 2, 0, &str, &start);
 
 
 
@@ -54,7 +54,7 @@ PHP_METHOD(Test_Optimizers_Substr, testThreeArguments) {
 	ZVAL_UNDEF(&start_sub);
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 3, 0, &str, &start, &offset);
+	zephir_fetch_params(1, 3, 0, &str, &start, &offset);
 
 
 

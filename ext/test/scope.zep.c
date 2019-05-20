@@ -47,7 +47,7 @@ PHP_METHOD(Test_Scope, getDyStr) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &g_param);
+	zephir_fetch_params(1, 1, 0, &g_param);
 
 	g = zephir_get_intval(g_param);
 

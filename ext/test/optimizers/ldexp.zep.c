@@ -129,7 +129,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntParameter) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	zephir_fetch_params(0, 2, 0, &x_param, &exponent_param);
+	zephir_fetch_params(1, 2, 0, &x_param, &exponent_param);
 
 	x = zephir_get_intval(x_param);
 	exponent = zephir_get_intval(exponent_param);
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVarParameter) {
 	ZVAL_UNDEF(&x_sub);
 	ZVAL_UNDEF(&exponent_sub);
 
-	zephir_fetch_params(0, 2, 0, &x, &exponent);
+	zephir_fetch_params(1, 2, 0, &x, &exponent);
 
 
 

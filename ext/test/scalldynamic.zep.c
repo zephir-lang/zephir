@@ -67,7 +67,7 @@ PHP_METHOD(Test_ScallDynamic, selfDynamicCall1) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&methodName_sub);
 
-	zephir_fetch_params(0, 1, 0, &methodName);
+	zephir_fetch_params(1, 1, 0, &methodName);
 
 
 

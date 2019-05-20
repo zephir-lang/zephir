@@ -74,7 +74,7 @@ PHP_METHOD(Test_Properties_PropertyArray, setOtherArray) {
 	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&arr_sub);
 
-	zephir_fetch_params(0, 1, 0, &arr);
+	zephir_fetch_params(1, 1, 0, &arr);
 
 
 
