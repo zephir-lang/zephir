@@ -33,12 +33,12 @@ ZEPHIR_INIT_CLASS(Test_McallInternal) {
 void zep_Test_McallInternal_a(int ht, zval *return_value, zval *this_ptr, int return_value_used) {
 
 	zval _0;
-		ZVAL_UNDEF(&_0);
-
+	
 	ZEPHIR_MM_GROW();
+	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "hello");
+
+	ZEPHIR_MM_ZVAL_STRING(&_0, "hello");
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
 
 }
@@ -46,7 +46,9 @@ void zep_Test_McallInternal_a(int ht, zval *return_value, zval *this_ptr, int re
 void zep_Test_McallInternal_b(int ht, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext ) {
 
 	zval *a, a_sub, *b, b_sub;
-		ZVAL_UNDEF(&a_sub);
+	
+	ZEPHIR_MM_GROW();
+	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
 	a = a_ext;
@@ -63,6 +65,8 @@ void zep_Test_McallInternal_c(int ht, zval *return_value, zval *this_ptr, int re
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
+	
+	ZEPHIR_MM_GROW();
 
 	a_param = a_param_ext;
 
@@ -73,7 +77,7 @@ void zep_Test_McallInternal_c(int ht, zval *return_value, zval *this_ptr, int re
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_LONG((a + b));
+	RETURN_MM_LONG((a + b));
 
 }
 
@@ -82,12 +86,11 @@ PHP_METHOD(Test_McallInternal, e) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "hello");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "hello");
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
 
 }
@@ -99,9 +102,9 @@ PHP_METHOD(Test_McallInternal, d) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 
 	a = 0;
 	_2 = 1000000;
@@ -135,9 +138,9 @@ PHP_METHOD(Test_McallInternal, f) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 
 	a = 0;
 	_2 = 1000000;
@@ -171,11 +174,11 @@ PHP_METHOD(Test_McallInternal, g) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
 
-	ZEPHIR_MM_GROW();
 
 	a = 0;
 	_2 = 1000;
@@ -207,6 +210,8 @@ void zep_Test_McallInternal_other(int ht, zval *return_value, zval *this_ptr, in
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
+	
+	ZEPHIR_MM_GROW();
 
 	a_param = a_param_ext;
 
@@ -217,7 +222,7 @@ void zep_Test_McallInternal_other(int ht, zval *return_value, zval *this_ptr, in
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_DOUBLE(zephir_safe_div_long_long(a, b TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_safe_div_long_long(a, b TSRMLS_CC));
 
 }
 
@@ -230,11 +235,11 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
 
-	ZEPHIR_MM_GROW();
 
 	p = (double) (0);
 	i = 0;

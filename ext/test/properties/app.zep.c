@@ -34,8 +34,9 @@ PHP_METHOD(Test_Properties_App, getInstance) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "instance");
+	RETURN_MM_MEMBER(getThis(), "instance");
 
 }
 
@@ -46,9 +47,9 @@ PHP_METHOD(Test_Properties_App, __construct) {
 	zephir_fcall_cache_entry *_1 = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_CE_STATIC(&_0, test_properties_staticprivateproperties_ce, "getinstance", &_1, 0);
 	zephir_check_call_status();

@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/string.h"
 
 
@@ -35,13 +35,14 @@ PHP_METHOD(Test_Logical, testAnd1) {
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((0) ? 1 : 0);
 	}
-	RETURN_BOOL(_0);
+	RETURN_MM_BOOL(_0);
 
 }
 
@@ -50,13 +51,14 @@ PHP_METHOD(Test_Logical, testAnd2) {
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((1.5 != 0.0) ? 1 : 0);
 	}
-	RETURN_BOOL(_0);
+	RETURN_MM_BOOL(_0);
 
 }
 
@@ -65,6 +67,7 @@ PHP_METHOD(Test_Logical, testAnd3) {
 	zend_bool _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
@@ -75,7 +78,7 @@ PHP_METHOD(Test_Logical, testAnd3) {
 	if (_1) {
 		_1 = (('A') ? 1 : 0);
 	}
-	RETURN_BOOL(_1);
+	RETURN_MM_BOOL(_1);
 
 }
 
@@ -84,6 +87,7 @@ PHP_METHOD(Test_Logical, testAnd4) {
 	zend_bool _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((1) ? 1 : 0);
@@ -94,7 +98,7 @@ PHP_METHOD(Test_Logical, testAnd4) {
 	if (_1) {
 		_1 = 0;
 	}
-	RETURN_BOOL(_1);
+	RETURN_MM_BOOL(_1);
 
 }
 
@@ -105,6 +109,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 	zval *a, a_sub, *b_param = NULL, _1$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
 
@@ -119,9 +124,9 @@ PHP_METHOD(Test_Logical, testAnd9) {
 	}
 	if (_0) {
 		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY | PH_READONLY, "test/logical.zep", 35 TSRMLS_CC);
-		RETURN_CTORW(&_1$$3);
+		RETURN_MM_CTOR(&_1$$3);
 	}
-	RETURN_NULL();
+	RETURN_MM_NULL();
 
 }
 
@@ -130,13 +135,14 @@ PHP_METHOD(Test_Logical, testOr1) {
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
 	if (!(_0)) {
 		_0 = ((1) ? 1 : 0);
 	}
-	RETURN_BOOL(_0);
+	RETURN_MM_BOOL(_0);
 
 }
 
@@ -145,13 +151,14 @@ PHP_METHOD(Test_Logical, testOr2) {
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
 	if (!(_0)) {
 		_0 = 1;
 	}
-	RETURN_BOOL(_0);
+	RETURN_MM_BOOL(_0);
 
 }
 
@@ -161,6 +168,7 @@ PHP_METHOD(Test_Logical, testMixed1) {
 	zend_long first = 0, second = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	first = 0;
@@ -178,6 +186,7 @@ PHP_METHOD(Test_Logical, testMixed1) {
 	} else {
 		php_printf("%s", "wrong");
 	}
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -187,6 +196,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 	zval *match, match_sub, *minLength, minLength_sub, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&match_sub);
 	ZVAL_UNDEF(&minLength_sub);
 	ZVAL_UNDEF(&_2);
@@ -205,9 +215,9 @@ PHP_METHOD(Test_Logical, testMixed2) {
 		_1 = ZEPHIR_LE_LONG(minLength, zephir_fast_strlen_ev(&_2));
 	}
 	if (_1) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	}
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 }
 
@@ -216,6 +226,7 @@ PHP_METHOD(Test_Logical, testMixed3) {
 	zend_bool a = 0, b = 0, _0, _1, _2, _3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	_0 = ((0) ? 1 : 0);
@@ -236,7 +247,7 @@ PHP_METHOD(Test_Logical, testMixed3) {
 		_3 = ((1) ? 1 : 0);
 	}
 	b = _3;
-	RETURN_BOOL(a == b);
+	RETURN_MM_BOOL(a == b);
 
 }
 
@@ -246,6 +257,7 @@ PHP_METHOD(Test_Logical, testMixed4) {
 	zend_bool a, b, _0, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -265,7 +277,7 @@ PHP_METHOD(Test_Logical, testMixed4) {
 		}
 		_1 = _2;
 	}
-	RETURN_BOOL(_1);
+	RETURN_MM_BOOL(_1);
 
 }
 

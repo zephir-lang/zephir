@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_References) {
@@ -27,6 +28,7 @@ PHP_METHOD(Test_References, assignByRef) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }

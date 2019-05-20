@@ -30,13 +30,14 @@ PHP_METHOD(test_7__closure, __invoke) {
 	zval *x, x_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&x_sub);
 
 	zephir_fetch_params(0, 1, 0, &x);
 
 
 
-	RETURN_LONG((((zephir_get_numberval(x) + 100)) + ((zephir_get_numberval(x) * 150))));
+	RETURN_MM_LONG((((zephir_get_numberval(x) + 100)) + ((zephir_get_numberval(x) * 150))));
 
 }
 

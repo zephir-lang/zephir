@@ -317,7 +317,7 @@ class StaticCall extends Call
         }
 
         if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         $paramCount = \count($params);
@@ -486,7 +486,7 @@ class StaticCall extends Call
         }
 
         if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         $paramCount = \count($params);
@@ -575,7 +575,7 @@ class StaticCall extends Call
         $classEntry = $classEntryVariable->getName();
 
         if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         if (!\count($params)) {
@@ -666,7 +666,7 @@ class StaticCall extends Call
         }
 
         if ($symbolVariable) {
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         if (!\count($params)) {

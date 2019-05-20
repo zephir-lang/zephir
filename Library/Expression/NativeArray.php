@@ -252,9 +252,9 @@ class NativeArray
                             case 'bool':
                                 $compilationContext->headersManager->add('kernel/array');
                                 if ('true' == $resolvedExpr->getCode()) {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_SEPARATE');
                                 } else {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_SEPARATE');
                                 }
                                 break;
 
@@ -263,13 +263,13 @@ class NativeArray
                                 break;
 
                             case 'null':
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_SEPARATE');
                                 break;
 
                             case 'array':
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY | PH_SEPARATE');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_SEPARATE');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }
@@ -298,20 +298,20 @@ class NativeArray
 
                             case 'bool':
                                 if ('true' == $resolvedExpr->getCode()) {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_SEPARATE');
                                 } else {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_SEPARATE');
                                 }
                                 break;
 
                             case 'null':
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_SEPARATE');
                                 break;
 
                             case 'array':
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_SEPARATE');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }
@@ -345,7 +345,7 @@ class NativeArray
 
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
+                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_SEPARATE');
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }

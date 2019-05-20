@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -30,8 +31,9 @@ PHP_METHOD(Test_Oo_OoDynamicB, execute) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("B");
+	RETURN_MM_STRING("B");
 
 }
 
@@ -39,8 +41,9 @@ PHP_METHOD(Test_Oo_OoDynamicB, execute2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("BB");
+	RETURN_MM_STRING("BB");
 
 }
 

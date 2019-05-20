@@ -186,7 +186,7 @@ class ObjectProperty
 
                 switch ($statement['operator']) {
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&'.$tempVariable->getName().', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
+                        $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_STR(&'.$tempVariable->getName().', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1);');
                         break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */

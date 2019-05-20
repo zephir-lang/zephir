@@ -29,12 +29,14 @@ PHP_METHOD(test_4__closure, __invoke) {
 	zval *param1, param1_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param1_sub);
 
 	zephir_fetch_params(0, 1, 0, &param1);
 
 
 
+	ZEPHIR_MM_RESTORE();
 
 }
 

@@ -32,11 +32,11 @@ PHP_METHOD(Test_Globals_Env, read) {
 	zval name;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 	ZVAL_UNDEF(&_ENV);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_get_global(&_ENV, SL("_ENV"));
 	zephir_fetch_params(1, 1, 0, &name_param);
 
@@ -44,7 +44,7 @@ PHP_METHOD(Test_Globals_Env, read) {
 
 
 	zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY | PH_READONLY, "test/globals/env.zep", 8 TSRMLS_CC);
-	RETURN_CTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 

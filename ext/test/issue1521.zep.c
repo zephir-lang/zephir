@@ -32,12 +32,12 @@ PHP_METHOD(Test_Issue1521, test) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 2, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 2, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	add_assoc_stringl_ex(&_0, SL("merchantNumber"), SL("0818217122"));
 	add_assoc_stringl_ex(&_0, SL("zero"), SL("0"));
 	zephir_update_property_zval(this_ptr, SL("params"), &_0);

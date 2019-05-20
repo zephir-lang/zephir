@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -30,6 +31,7 @@ PHP_METHOD(Test_Oo_OoConstruct, __construct) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }

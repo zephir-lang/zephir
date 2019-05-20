@@ -33,12 +33,12 @@ PHP_METHOD(Test_ArrayAccessObj, __construct) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	add_assoc_long_ex(&_0, SL("one"), 1);
 	add_assoc_long_ex(&_0, SL("two"), 2);
 	add_assoc_long_ex(&_0, SL("three"), 3);
@@ -52,6 +52,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetSet) {
 	zval *offset, offset_sub, *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
@@ -64,6 +65,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetSet) {
 	} else {
 		zephir_update_property_array(this_ptr, SL("test"), offset, value);
 	}
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -72,6 +74,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetExists) {
 	zval *offset, offset_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -80,7 +83,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetExists) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
-	RETURN_BOOL(zephir_array_isset(&_0, offset));
+	RETURN_MM_BOOL(zephir_array_isset(&_0, offset));
 
 }
 
@@ -89,6 +92,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetUnset) {
 	zval *offset, offset_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -98,6 +102,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetUnset) {
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, offset, PH_SEPARATE);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -106,17 +111,16 @@ PHP_METHOD(Test_ArrayAccessObj, offsetGet) {
 	zval *offset, offset_sub, _0, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &offset);
 
 
 
-	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset(&_1, offset)) {
 		zephir_read_property(&_2, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
@@ -124,7 +128,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetGet) {
 	} else {
 		ZVAL_NULL(&_0);
 	}
-	RETURN_CCTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 

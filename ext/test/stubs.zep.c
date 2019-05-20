@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -53,8 +53,9 @@ PHP_METHOD(Test_Stubs, testDockBlockAndReturnType) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propString");
+	RETURN_MM_MEMBER(getThis(), "propString");
 
 }
 
@@ -67,8 +68,9 @@ PHP_METHOD(Test_Stubs, testDocBlockAndReturnTypeDeclared) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propStringProtected");
+	RETURN_MM_MEMBER(getThis(), "propStringProtected");
 
 }
 
@@ -86,6 +88,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlock) {
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&intOrString_sub);
 
 	zephir_fetch_params(0, 1, 1, &intOrString, &number_param);
@@ -97,7 +100,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlock) {
 	}
 
 
-	RETURN_LONG(number);
+	RETURN_MM_LONG(number);
 
 }
 
@@ -116,6 +119,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlockDeclared) {
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&intOrString_sub);
 
 	zephir_fetch_params(0, 1, 1, &intOrString, &number_param);
@@ -127,7 +131,7 @@ PHP_METHOD(Test_Stubs, testMixedInputParamsDocBlockDeclared) {
 	}
 
 
-	RETURN_LONG(number);
+	RETURN_MM_LONG(number);
 
 }
 

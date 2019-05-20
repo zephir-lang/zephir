@@ -33,9 +33,9 @@ PHP_METHOD(Test_FunctionExists, testWithPassedName) {
 	zval func;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&func);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &func_param);
 
 	zephir_get_strval(&func, func_param);
@@ -52,6 +52,7 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&func);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
@@ -60,45 +61,34 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&functions);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
-	ZEPHIR_INIT_VAR(&functions);
-	zephir_create_array(&functions, 8, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "substr");
+	ZEPHIR_MM_ADD_ENTRY(&result);
+	zephir_create_array(&functions, 8, 0);
+	ZEPHIR_MM_ADD_ENTRY(&functions);
+	ZEPHIR_MM_ZVAL_STRING(&_0, "substr");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "cubstr");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "cubstr");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "ucfirst");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "ucfirst");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "bcfirst");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "bcfirst");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "stripos");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "stripos");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "ktripos");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "ktripos");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "trim");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "trim");
 	zephir_array_fast_append(&functions, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "prim");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "prim");
 	zephir_array_fast_append(&functions, &_0);
 	zephir_is_iterable(&functions, 0, "test/functionexists.zep", 31);
 	if (Z_TYPE_P(&functions) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&functions), _1)
 		{
-			ZEPHIR_INIT_NVAR(&func);
-			ZVAL_COPY(&func, _1);
-			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZEPHIR_CPY_WRT(&func, _1);
 			ZVAL_BOOL(&_3$$3, (zephir_function_exists(&func TSRMLS_CC)  == SUCCESS));
-			zephir_array_update_zval(&result, &func, &_3$$3, PH_COPY | PH_SEPARATE);
+			zephir_array_update_zval(&result, &func, &_3$$3, PH_SEPARATE);
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &functions, "rewind", NULL, 0);
@@ -111,15 +101,13 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 			}
 			ZEPHIR_CALL_METHOD(&func, &functions, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_INIT_NVAR(&_4$$4);
 				ZVAL_BOOL(&_4$$4, (zephir_function_exists(&func TSRMLS_CC)  == SUCCESS));
-				zephir_array_update_zval(&result, &func, &_4$$4, PH_COPY | PH_SEPARATE);
+				zephir_array_update_zval(&result, &func, &_4$$4, PH_SEPARATE);
 			ZEPHIR_CALL_METHOD(NULL, &functions, "next", NULL, 0);
 			zephir_check_call_status();
 		}
 	}
-	ZEPHIR_INIT_NVAR(&func);
-	RETURN_CTOR(&result);
+	RETURN_MM_CTOR(&result);
 
 }
 
@@ -127,8 +115,9 @@ PHP_METHOD(Test_FunctionExists, testWithString) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL((zephir_function_exists_ex(SL("substr") TSRMLS_CC) == SUCCESS));
+	RETURN_MM_BOOL((zephir_function_exists_ex(SL("substr") TSRMLS_CC) == SUCCESS));
 
 }
 

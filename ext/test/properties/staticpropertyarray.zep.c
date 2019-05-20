@@ -43,29 +43,26 @@ void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D)
 
 	zval _1;
 	zval _0;
-		ZVAL_UNDEF(&_0);
+	
+	ZEPHIR_MM_GROW();
+	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 4, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_1);
+	zephir_create_array(&_0, 4, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 4);
 	zephir_array_fast_append(&_0, &_1);
-	zend_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someArray"), &_0);
-	ZEPHIR_INIT_NVAR(&_1);
+	zephir_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someArray"), &_0);
 	array_init(&_1);
-	zend_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
+	ZEPHIR_MM_ADD_ENTRY(&_1);
+	zephir_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
 	ZEPHIR_MM_RESTORE();
 
 }

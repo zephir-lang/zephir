@@ -66,6 +66,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 	zval *someVar, someVar_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someVar_sub);
 
 	zephir_fetch_params(0, 1, 0, &someVar);
@@ -73,7 +74,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 
 	zephir_update_property_zval(this_ptr, SL("someVar"), someVar);
-	RETURN_THISW();
+	RETURN_MM_THIS();
 
 }
 
@@ -81,8 +82,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someVar");
+	RETURN_MM_MEMBER(getThis(), "someVar");
 
 }
 
@@ -90,8 +92,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNull) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someNull");
+	RETURN_MM_MEMBER(getThis(), "someNull");
 
 }
 
@@ -100,6 +103,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 	zval *param, param_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 
 	zephir_fetch_params(0, 1, 0, &param);
@@ -107,6 +111,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 
 	zephir_update_property_zval(this_ptr, SL("someNull"), param);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -114,8 +119,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNullInitial) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someNullInitial");
+	RETURN_MM_MEMBER(getThis(), "someNullInitial");
 
 }
 
@@ -123,8 +129,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeFalse) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someFalse");
+	RETURN_MM_MEMBER(getThis(), "someFalse");
 
 }
 
@@ -132,8 +139,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeTrue) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someTrue");
+	RETURN_MM_MEMBER(getThis(), "someTrue");
 
 }
 
@@ -141,8 +149,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeInteger) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someInteger");
+	RETURN_MM_MEMBER(getThis(), "someInteger");
 
 }
 
@@ -150,8 +159,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someDouble");
+	RETURN_MM_MEMBER(getThis(), "someDouble");
 
 }
 
@@ -159,8 +169,9 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeString) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someString");
+	RETURN_MM_MEMBER(getThis(), "someString");
 
 }
 

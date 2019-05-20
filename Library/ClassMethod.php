@@ -1051,43 +1051,6 @@ class ClassMethod
     }
 
     /**
-     * Replace macros.
-     *
-     * @param SymbolTable $symbolTable
-     * @param string      $containerCode
-     *
-     * @return mixed
-     */
-    public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)
-    {
-        if (!$symbolTable->getMustGrownStack()) {
-            $containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_STR', 'ZEPHIR_THROW_EXCEPTION_STRW', $containerCode);
-            $containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_DEBUG_STR', 'ZEPHIR_THROW_EXCEPTION_DEBUG_STRW', $containerCode);
-            $containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_ZVAL', 'ZEPHIR_THROW_EXCEPTION_ZVALW', $containerCode);
-            $containerCode = str_replace('RETURN_THIS', 'RETURN_THISW', $containerCode);
-            $containerCode = str_replace('RETURN_LCTOR', 'RETURN_LCTORW', $containerCode);
-            $containerCode = str_replace('RETURN_CTOR', 'RETURN_CTORW', $containerCode);
-            $containerCode = str_replace('RETURN_NCTOR', 'RETURN_NCTORW', $containerCode);
-            $containerCode = str_replace('RETURN_CCTOR', 'RETURN_CCTORW', $containerCode);
-            $containerCode = str_replace('RETURN_MM_NULL', 'RETURN_NULL', $containerCode);
-            $containerCode = str_replace('RETURN_MM_BOOL', 'RETURN_BOOL', $containerCode);
-            $containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
-            $containerCode = str_replace('RETURN_MM_TRUE', 'RETURN_TRUE', $containerCode);
-            $containerCode = str_replace('RETURN_MM_STRING', 'RETURN_STRING', $containerCode);
-            $containerCode = str_replace('RETURN_MM_LONG', 'RETURN_LONG', $containerCode);
-            $containerCode = str_replace('RETURN_MM_DOUBLE', 'RETURN_DOUBLE', $containerCode);
-            $containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
-            $containerCode = str_replace('RETURN_MM_EMPTY_STRING', 'RETURN_MM_EMPTY_STRING', $containerCode);
-            $containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
-            $containerCode = str_replace('RETURN_MM_MEMBER', 'RETURN_MEMBER', $containerCode);
-            $containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
-            $containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);'.PHP_EOL.'/s', '', $containerCode);
-        }
-
-        return $containerCode;
-    }
-
-    /**
      * Assigns a default value.
      *
      * @param array              $parameter
@@ -1287,12 +1250,10 @@ class ClassMethod
                         break;
 
                     case 'null':
-                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->assignString($paramVariable, null, $compilationContext);
                         break;
 
                     case 'string':
-                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->assignString(
                             $paramVariable,
                             add_slashes($parameter['default']['value']),
@@ -1312,17 +1273,13 @@ class ClassMethod
                 break;
 
             case 'array':
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
                     case 'null':
-                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
                         break;
 
                     case 'empty-array':
                     case 'array':
-                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
                         break;
 
@@ -1356,23 +1313,14 @@ class ClassMethod
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->headersManager->add('kernel/memory');
-                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignLong($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'double':
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->headersManager->add('kernel/memory');
-                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignDouble($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'string':
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->headersManager->add('kernel/memory');
-                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignString(
                             $paramVariable,
                             add_slashes($parameter['default']['value']),
@@ -1389,8 +1337,6 @@ class ClassMethod
                                 $compilationContext->backend->assignZval($paramVariable, $compilationContext->backend->resolveValue('false', $compilationContext), $compilationContext);
                             }
                         } else {
-                            $compilationContext->symbolTable->mustGrownStack(true);
-                            $compilationContext->headersManager->add('kernel/memory');
                             if ('true' == $parameter['default']['value']) {
                                 $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('true', $compilationContext), $compilationContext);
                             } else {
@@ -1404,16 +1350,11 @@ class ClassMethod
                         if ($expectedMutations < 2) {
                             $compilationContext->backend->assignZval($symbolVariable, $compilationContext->backend->resolveValue('null', $compilationContext), $compilationContext);
                         } else {
-                            $compilationContext->symbolTable->mustGrownStack(true);
-                            $compilationContext->headersManager->add('kernel/memory');
                             $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('null', $compilationContext), $compilationContext);
                         }
                         break;
 
                     case 'empty-array':
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->headersManager->add('kernel/memory');
-                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->initArray($symbolVariable, $compilationContext, null);
                         break;
 
@@ -2086,10 +2027,8 @@ class ClassMethod
         /*
          * Grow the stack if needed
          */
-        if ($symbolTable->getMustGrownStack()) {
-            $compilationContext->headersManager->add('kernel/memory');
-            $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
-        }
+        $compilationContext->headersManager->add('kernel/memory');
+        // $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
 
         /**
          * Check if there are unused variables.
@@ -2179,10 +2118,7 @@ class ClassMethod
             $lastType = $this->statements->getLastStatementType();
 
             if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
-                if ($symbolTable->getMustGrownStack()) {
-                    $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
-                }
+                 $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
 
                 /*
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
@@ -2198,15 +2134,10 @@ class ClassMethod
 
         $compilationContext->backend->onPostCompile($this, $compilationContext);
 
-        /**
-         * Remove macros that grow/restore the memory frame stack if it wasn't used.
-         */
-        $code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
-
         /*
          * Restore the compilation context
          */
-        $oldCodePrinter->output($code);
+        $oldCodePrinter->output($codePrinter->getOutput());
         $compilationContext->codePrinter = $oldCodePrinter;
 
         $compilationContext->branchManager = null;

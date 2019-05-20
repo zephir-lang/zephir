@@ -33,7 +33,6 @@ zend_object_iterator *zephir_get_iterator(zval *iterator);
 		if (UNEXPECTED(EG(exception) != NULL)) { \
 			return; \
 		} \
-		ZEPHIR_INIT_NVAR(var); \
 		if (Z_ISREF_P(var)) { \
 			ZVAL_DUP(var, Z_REFVAL_P(var)); \
 		} else { \

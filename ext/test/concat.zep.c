@@ -33,11 +33,12 @@ PHP_METHOD(Test_Concat, getTestProperty) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	zephir_read_static_property_ce(&_0, test_concat_ce, SL("testProperty"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTORW(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 
@@ -47,20 +48,19 @@ PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 	zval title;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&title);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &title_param);
 
 	zephir_get_strval(&title, title_param);
 
 
-	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, test_concat_ce, SL("testProperty"), PH_NOISY_CC);
 	SEPARATE_ZVAL_IF_NOT_REF(&title);
 	zephir_concat_function(&title, &_0, &title);
-	zend_update_static_property(test_concat_ce, ZEND_STRL("testProperty"), &title);
+	zephir_update_static_property(test_concat_ce, ZEND_STRL("testProperty"), &title);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -70,17 +70,16 @@ PHP_METHOD(Test_Concat, testConcat1) {
 	zval url, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&url);
-	ZVAL_STRING(&url, "test");
-	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&url, "test");
 	ZEPHIR_CONCAT_SV(&_0, "append", &url);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_CPY_WRT(&url, &_0);
-	RETURN_CCTOR(&url);
+	RETURN_MM_CTOR(&url);
 
 }
 
@@ -90,24 +89,23 @@ PHP_METHOD(Test_Concat, testConcat2) {
 	zval url, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&url);
-	ZVAL_STRING(&url, "test");
-	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&url, "test");
 	ZEPHIR_CONCAT_SVS(&_0, "append", &url, "other");
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_CPY_WRT(&url, &_0);
-	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SS(&_1, "append", "other");
+	ZEPHIR_MM_ADD_ENTRY(&_1);
 	ZEPHIR_CPY_WRT(&url, &_1);
-	ZEPHIR_INIT_LNVAR(_0);
 	ZEPHIR_CONCAT_SSV(&_0, "append", "other", &url);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_CPY_WRT(&url, &_0);
-	RETURN_CCTOR(&url);
+	RETURN_MM_CTOR(&url);
 
 }
 
@@ -119,17 +117,15 @@ PHP_METHOD(Test_Concat, testConcat3) {
 	zval a, b;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "1");
-	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "2");
-	zephir_concat_self(&b, &a TSRMLS_CC);
-	RETURN_CCTOR(&b);
+	ZEPHIR_MM_ZVAL_STRING(&a, "1");
+	ZEPHIR_MM_ZVAL_STRING(&b, "2");
+	ZEPHIR_MM_CONCAT_SELF(&b, &a);
+	RETURN_MM_CTOR(&b);
 
 }
 

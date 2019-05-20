@@ -13,10 +13,10 @@
 
 #include "kernel/main.h"
 #include "kernel/string.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -37,17 +37,17 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
-	RETURN_CTOR(&_2);
+	RETURN_MM_CTOR(&_2);
 
 }
 
@@ -58,17 +58,17 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString2) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, -24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
-	RETURN_CTOR(&_2);
+	RETURN_MM_CTOR(&_2);
 
 }
 
@@ -79,17 +79,17 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString3) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
-	RETURN_CTOR(&_2);
+	RETURN_MM_CTOR(&_2);
 
 }
 

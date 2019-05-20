@@ -35,6 +35,7 @@ PHP_METHOD(Test_Compare, isLessInt) {
 	zend_long a, b;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -42,7 +43,7 @@ PHP_METHOD(Test_Compare, isLessInt) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_BOOL(a < b);
+	RETURN_MM_BOOL(a < b);
 
 }
 
@@ -52,6 +53,7 @@ PHP_METHOD(Test_Compare, isGreaterEqual) {
 	zend_long a, b;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -59,7 +61,7 @@ PHP_METHOD(Test_Compare, isGreaterEqual) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_BOOL(a >= b);
+	RETURN_MM_BOOL(a >= b);
 
 }
 
@@ -69,6 +71,7 @@ PHP_METHOD(Test_Compare, isLessDouble) {
 	double a, b;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -76,7 +79,7 @@ PHP_METHOD(Test_Compare, isLessDouble) {
 	b = zephir_get_doubleval(b_param);
 
 
-	RETURN_BOOL(a < b);
+	RETURN_MM_BOOL(a < b);
 
 }
 
@@ -86,13 +89,14 @@ PHP_METHOD(Test_Compare, isLessThenPi) {
 	double a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &a_param);
 
 	a = zephir_get_doubleval(a_param);
 
 
-	RETURN_BOOL(a < 3.14);
+	RETURN_MM_BOOL(a < 3.14);
 
 }
 
@@ -102,13 +106,14 @@ PHP_METHOD(Test_Compare, isMoreThenPi) {
 	double a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &a_param);
 
 	a = zephir_get_doubleval(a_param);
 
 
-	RETURN_BOOL(3.14 < a);
+	RETURN_MM_BOOL(3.14 < a);
 
 }
 
@@ -121,9 +126,9 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 	zval str;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &str_param);
 
 	if (UNEXPECTED(Z_TYPE_P(str_param) != IS_STRING && Z_TYPE_P(str_param) != IS_NULL)) {
@@ -133,29 +138,24 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 	if (EXPECTED(Z_TYPE_P(str_param) == IS_STRING)) {
 		zephir_get_strval(&str, str_param);
 	} else {
-		ZEPHIR_INIT_VAR(&str);
-		ZVAL_EMPTY_STRING(&str);
+		ZEPHIR_MM_ZVAL_EMPTY_STRING(&str);
 	}
 
 
 	if (ZEPHIR_IS_STRING_IDENTICAL(&str, "wrong testing")) {
-		ZEPHIR_INIT_NVAR(&str);
-		ZVAL_STRING(&str, "NOK");
+		ZEPHIR_MM_ZVAL_STRING(&str, "NOK");
 	} else {
 		if (ZEPHIR_IS_STRING_IDENTICAL(&str, "another testing")) {
-			ZEPHIR_INIT_NVAR(&str);
-			ZVAL_STRING(&str, "NOK");
+			ZEPHIR_MM_ZVAL_STRING(&str, "NOK");
 		} else {
 			if (ZEPHIR_IS_STRING_IDENTICAL(&str, "testing")) {
-				ZEPHIR_INIT_NVAR(&str);
-				ZVAL_STRING(&str, "OK");
+				ZEPHIR_MM_ZVAL_STRING(&str, "OK");
 			} else {
-				ZEPHIR_INIT_NVAR(&str);
-				ZVAL_STRING(&str, "NOK");
+				ZEPHIR_MM_ZVAL_STRING(&str, "NOK");
 			}
 		}
 	}
-	RETURN_CTOR(&str);
+	RETURN_MM_CTOR(&str);
 
 }
 
@@ -164,6 +164,7 @@ PHP_METHOD(Test_Compare, testVarEqualsNull) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -171,9 +172,9 @@ PHP_METHOD(Test_Compare, testVarEqualsNull) {
 
 
 	if (Z_TYPE_P(a) == IS_NULL) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	}
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 }
 
@@ -182,6 +183,7 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -189,9 +191,9 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 
 
 	if (Z_TYPE_P(a) == IS_NULL) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	}
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 }
 
@@ -200,10 +202,11 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 5;
-	RETURN_BOOL(0 != a);
+	RETURN_MM_BOOL(0 != a);
 
 }
 
@@ -212,10 +215,11 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroInt) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 5;
-	RETURN_BOOL(0 != a);
+	RETURN_MM_BOOL(0 != a);
 
 }
 
@@ -224,10 +228,11 @@ PHP_METHOD(Test_Compare, testNotIdenticalZeroLong) {
 	long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 5;
-	RETURN_BOOL(0 != a);
+	RETURN_MM_BOOL(0 != a);
 
 }
 

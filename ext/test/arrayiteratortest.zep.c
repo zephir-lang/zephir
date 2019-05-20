@@ -34,14 +34,13 @@ PHP_METHOD(Test_ArrayIteratorTest, test) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, test_arrayiterator_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 4);
 	zephir_check_call_status();
@@ -49,14 +48,12 @@ PHP_METHOD(Test_ArrayIteratorTest, test) {
 	if (Z_TYPE_P(&arr) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&arr), _2, _3, _0)
 		{
-			ZEPHIR_INIT_NVAR(&k);
 			if (_3 != NULL) { 
 				ZVAL_STR_COPY(&k, _3);
 			} else {
 				ZVAL_LONG(&k, _2);
 			}
-			ZEPHIR_INIT_NVAR(&v);
-			ZVAL_COPY(&v, _0);
+			ZEPHIR_CPY_WRT(&v, _0);
 			ZEPHIR_CONCAT_VV(return_value, &k, &v);
 			RETURN_MM();
 		} ZEND_HASH_FOREACH_END();
@@ -79,8 +76,6 @@ PHP_METHOD(Test_ArrayIteratorTest, test) {
 			zephir_check_call_status();
 		}
 	}
-	ZEPHIR_INIT_NVAR(&v);
-	ZEPHIR_INIT_NVAR(&k);
 
 }
 

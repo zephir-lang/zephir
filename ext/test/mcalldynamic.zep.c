@@ -34,8 +34,9 @@ PHP_METHOD(Test_McallDynamic, testMethod1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(1);
+	RETURN_MM_LONG(1);
 
 }
 
@@ -45,10 +46,10 @@ PHP_METHOD(Test_McallDynamic, testMagicCall1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
@@ -65,17 +66,17 @@ PHP_METHOD(Test_McallDynamic, __call) {
 	zval *method, method_sub, *arguments, arguments_sub, realMethod;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&method_sub);
 	ZVAL_UNDEF(&arguments_sub);
 	ZVAL_UNDEF(&realMethod);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &method, &arguments);
 
 
 
-	ZEPHIR_INIT_VAR(&realMethod);
 	ZEPHIR_CONCAT_SV(&realMethod, "test", method);
+	ZEPHIR_MM_ADD_ENTRY(&realMethod);
 	ZEPHIR_RETURN_CALL_METHOD_ZVAL(this_ptr, &realMethod, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -92,17 +93,16 @@ PHP_METHOD(Test_McallDynamic, testCallAnonymousFunctionWithContext) {
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	zephir_create_closure_ex(&_1, NULL, test_11__closure_ce, SL("__invoke"));
+	ZEPHIR_MM_ADD_ENTRY(&_1);
 	ZEPHIR_CALL_CE_STATIC(&result, test_mcall_caller_ce, "start", &_0, 0, &_1);
 	zephir_check_call_status();
-	RETURN_CCTOR(&result);
+	RETURN_MM_CTOR(&result);
 
 }
 

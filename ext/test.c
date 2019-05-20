@@ -419,7 +419,6 @@ static PHP_MINIT_FUNCTION(test)
 static PHP_MSHUTDOWN_FUNCTION(test)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -431,12 +430,6 @@ static PHP_MSHUTDOWN_FUNCTION(test)
 static void php_zephir_init_globals(zend_test_globals *test_globals TSRMLS_DC)
 {
 	test_globals->initialized = 0;
-
-	/* Memory options */
-	test_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	test_globals->active_symbol_table = NULL;
 
 	/* Cache Enabled */
 	test_globals->cache_enabled = 1;
@@ -479,7 +472,11 @@ static PHP_RINIT_FUNCTION(test)
 	test_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(test_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(test_globals_ptr TSRMLS_CC);
+
+	test_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
+	zend_hash_init(test_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
+
+	test_globals_ptr->initialized = 1;
 
 		zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 	
@@ -489,7 +486,6 @@ static PHP_RINIT_FUNCTION(test)
 static PHP_RSHUTDOWN_FUNCTION(test)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
 	return SUCCESS;
 }
 

@@ -17,26 +17,26 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Test_MethodAbstract) {
+ZEPHIR_INIT_CLASS(test_11__closure) {
 
-	ZEPHIR_REGISTER_CLASS(Test, MethodAbstract, test, methodabstract, test_methodabstract_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
+	ZEPHIR_REGISTER_CLASS(test, 11__closure, test, 11__closure, test_11__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_class_implements(test_methodabstract_ce TSRMLS_CC, 1, test_methodinterface_ce);
 	return SUCCESS;
 
 }
 
-PHP_METHOD(Test_MethodAbstract, testInterfaceMetho) {
+PHP_METHOD(test_11__closure, __invoke) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
 
 	ZEPHIR_MM_GROW();
 
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testmethod", NULL, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC(test_mcall_caller_ce, "perform", &_0, 0);
 	zephir_check_call_status();
-	ZEPHIR_MM_RESTORE();
+	RETURN_MM();
 
 }
 

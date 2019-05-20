@@ -37,11 +37,11 @@ PHP_METHOD(Test_Requires_External3, req) {
 	zval *path, path_sub, *requires, requires_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&requires_sub);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &path, &requires);
 
 

@@ -113,49 +113,19 @@ extern zend_string* i_self;
 	}
 
 /** Return zval with always ctor */
-#define RETURN_CTOR(var)        \
+#define RETURN_MM_CTOR(var)     \
 	do {                        \
 		RETVAL_ZVAL(var, 1, 0); \
 		ZEPHIR_MM_RESTORE();    \
 		return;                 \
 	} while (0)
 
-/** Return zval with always ctor, without restoring the memory stack */
-#define RETURN_CTORW(var)       \
-	do {                        \
-		RETVAL_ZVAL(var, 1, 0); \
-		return;                 \
-	} while (0)
-
-/** Return zval checking if it's needed to ctor */
-#define RETURN_CCTOR(v)            \
-	do {                           \
-		ZVAL_DUP(return_value, v); \
-		ZEPHIR_MM_RESTORE();       \
-		return;                    \
-	} while (0)
-
-/** Return zval checking if it's needed to ctor, without restoring the memory stack  */
-#define RETURN_CCTORW(v)           \
-	do {                           \
-		ZVAL_DUP(return_value, v); \
-		return;                    \
-	} while (0)
-
-/** Return zval with always ctor, without restoring the memory stack */
-#define RETURN_THISW() \
-	RETURN_ZVAL(getThis(), 1, 0);
-
 /** Return this pointer */
-#define RETURN_THIS() { \
+#define RETURN_MM_THIS() { \
 		RETVAL_ZVAL(getThis(), 1, 0); \
 	} \
 	ZEPHIR_MM_RESTORE(); \
 	return;
-
-#define RETURN_LCTORW(var) RETURN_CCTORW(var);
-
-#define RETURN_LCTOR(var) RETURN_CCTOR(var);
 
 /**
  * Returns a zval in an object member
@@ -259,11 +229,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 /** Low overhead parse/fetch parameters */
 #define zephir_fetch_params(memory_grow, required_params, optional_params, ...) \
 	if (zephir_fetch_parameters(ZEND_NUM_ARGS(), required_params, optional_params, __VA_ARGS__) == FAILURE) { \
-		if (memory_grow) { \
-			RETURN_MM_NULL(); \
-		} else { \
-			RETURN_NULL(); \
-		} \
+		RETURN_MM_NULL(); \
 	}
 
 #define ZEPHIR_CREATE_OBJECT(obj, class_type) \

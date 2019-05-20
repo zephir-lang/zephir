@@ -437,14 +437,6 @@ int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint
 
 	ZVAL_UNDEF(&rv);
 
-#ifndef ZEPHIR_RELEASE
-	if (return_value_ptr != NULL && Z_TYPE_P(return_value_ptr) > IS_NULL) {
-		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
-		zephir_print_backtrace();
-		abort();
-	}
-#endif
-
 	zval f;
 	ZVAL_STRINGL(&f, func_name, func_length);
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, &f, rvp, cache_entry, cache_slot, param_count, params);
@@ -501,14 +493,6 @@ int zephir_call_class_method_aparams(zval *return_value, zend_class_entry *ce, z
 	uint param_count, zval **params)
 {
 	int status;
-
-#ifndef ZEPHIR_RELEASE
-	if (return_value != NULL && Z_TYPE_P(return_value) > IS_NULL) {
-		fprintf(stderr, "%s: *return_value must be IS_NULL or IS_UNDEF\n", __func__);
-		zephir_print_backtrace();
-		abort();
-	}
-#endif
 
 	if (object && Z_TYPE_P(object) != IS_OBJECT) {
 		zephir_throw_exception_format(spl_ce_RuntimeException, "Trying to call method %s on a non-object", method_name);

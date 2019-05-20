@@ -32,9 +32,9 @@ PHP_METHOD(Test_Optimizers_ASin, testInt) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
@@ -50,9 +50,9 @@ PHP_METHOD(Test_Optimizers_ASin, testVar) {
 	zend_long ZEPHIR_LAST_CALL_STATUS, a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
@@ -68,9 +68,9 @@ PHP_METHOD(Test_Optimizers_ASin, testIntValue1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 12, &_0);
@@ -85,9 +85,9 @@ PHP_METHOD(Test_Optimizers_ASin, testIntParameter) {
 	zend_long a, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
 
 	a = zephir_get_intval(a_param);
@@ -106,9 +106,9 @@ PHP_METHOD(Test_Optimizers_ASin, testVarParameter) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);
 
 

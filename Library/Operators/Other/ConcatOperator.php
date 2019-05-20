@@ -59,7 +59,7 @@ class ConcatOperator extends BaseOperator
             $expected->setDynamicTypes('string');
             $expectedCode = $compilationContext->backend->getVariableCode($expected);
             $compilationContext->codePrinter->output('ZEPHIR_CONCAT_'.strtoupper($optimized[0]).'('.$expectedCode.', '.$optimized[1].');');
-
+            $expected->addMemoryEntry($compilationContext);
             return new CompiledExpression('variable', $expected->getName(), $expression);
         }
 
@@ -116,8 +116,8 @@ class ConcatOperator extends BaseOperator
         if ('variable' == $left->getType() && 'variable' == $right->getType()) {
             $compilationContext->codePrinter->output('zephir_concat_function('.$expectedCode.', '.$variableLeft.', '.$variableRight.');');
         }
-
         $expected->setDynamicTypes('string');
+        $expected->addMemoryEntry($compilationContext);
 
         return new CompiledExpression('variable', $expected->getName(), $expression);
     }

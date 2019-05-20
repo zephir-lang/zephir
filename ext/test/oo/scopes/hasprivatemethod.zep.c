@@ -30,8 +30,8 @@ PHP_METHOD(Test_Oo_Scopes_HasPrivateMethod, callPrivateMethod) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "isprivate", NULL, 1);
 	zephir_check_call_status();
@@ -43,8 +43,9 @@ PHP_METHOD(Test_Oo_Scopes_HasPrivateMethod, isPrivate) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("isPrivate");
+	RETURN_MM_STRING("isPrivate");
 
 }
 

@@ -44,7 +44,6 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 	%MOD_DESTRUCTORS%
-	zephir_deinitialize_memory(TSRMLS_C);
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -56,12 +55,6 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
 {
 	%PROJECT_LOWER%_globals->initialized = 0;
-
-	/* Memory options */
-	%PROJECT_LOWER%_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	%PROJECT_LOWER%_globals->active_symbol_table = NULL;
 
 	/* Cache Enabled */
 	%PROJECT_LOWER%_globals->cache_enabled = 1;
@@ -92,7 +85,11 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
+
+	%PROJECT_LOWER%_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
+	zend_hash_init(%PROJECT_LOWER%_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
+
+	%PROJECT_LOWER%_globals_ptr->initialized = 1;
 
 	%REQ_INITIALIZERS%
 	return SUCCESS;
@@ -101,7 +98,6 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 	%REQ_DESTRUCTORS%
-	zephir_deinitialize_memory(TSRMLS_C);
 	return SUCCESS;
 }
 

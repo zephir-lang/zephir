@@ -112,6 +112,7 @@ class ObjectDynamicProperty
             case 'empty-array':
                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $codePrinter->output('array_init('.$tempVariable->getName().');');
+                $tempVariable->addMemoryEntry($context);
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
                 break;
 

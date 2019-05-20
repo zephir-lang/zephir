@@ -31,9 +31,9 @@ PHP_METHOD(Test_Mcall_Caller, start) {
 	zval *f, f_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&f_sub);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &f);
 
 
@@ -48,8 +48,9 @@ PHP_METHOD(Test_Mcall_Caller, perform) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("Caller:perform");
+	RETURN_MM_STRING("Caller:perform");
 
 }
 

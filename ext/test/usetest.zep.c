@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_UseTest) {
@@ -31,9 +31,10 @@ PHP_METHOD(Test_UseTest, createInstance) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	object_init(return_value);
-	return;
+	RETURN_MM();
 
 }
 
@@ -41,6 +42,7 @@ PHP_METHOD(Test_UseTest, count) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -51,8 +53,8 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
@@ -72,8 +74,8 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Strings"), ZEND_FETCH_CLASS_AUTO);
@@ -93,8 +95,8 @@ PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);

@@ -107,7 +107,7 @@ class Reference
             case 'string':
             case 'ulong':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_STRING('.$tempVar->getName().', "'.$exprCompiled->getCode().'", 1);');
+                $codePrinter->output('ZEPHIR_MM_ZVAL_STRING('.$tempVar->getName().', "'.$exprCompiled->getCode().'", 1);');
 
                 return $tempVar;
 

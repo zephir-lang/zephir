@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/array.h"
 #include "kernel/memory.h"
+#include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 
@@ -32,6 +32,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 	zend_long x = 0, y = 0, n = 0, z = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	z = 0;
@@ -46,7 +47,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 		x = y;
 		y = z;
 	}
-	RETURN_LONG(z);
+	RETURN_MM_LONG(z);
 
 }
 
@@ -55,6 +56,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 	double x = 0, y = 0, n = 0, z = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	z = 0.0;
@@ -69,7 +71,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 		x = y;
 		y = z;
 	}
-	RETURN_DOUBLE(z);
+	RETURN_MM_DOUBLE(z);
 
 }
 
@@ -79,20 +81,18 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	zval fib, a, b, c, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&fib);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&fib);
-	zephir_create_array(&fib, 2, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&fib, 2, 0);
+	ZEPHIR_MM_ADD_ENTRY(&fib);
 	ZVAL_LONG(&_0, 0);
 	zephir_array_fast_append(&fib, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&fib, &_0);
 	i = 2;
@@ -105,12 +105,11 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		j = (i - 2);
 		zephir_array_fetch_long(&a, &fib, k, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 51 TSRMLS_CC);
 		zephir_array_fetch_long(&b, &fib, j, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 52 TSRMLS_CC);
-		ZEPHIR_INIT_NVAR(&c);
 		zephir_add_function(&c, &a, &b);
-		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		zephir_array_update_long(&fib, i, &c, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		i++;
 	}
-	RETURN_CCTOR(&fib);
+	RETURN_MM_CTOR(&fib);
 
 }
 
@@ -120,20 +119,18 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	zval fib, _0, _1$$3, _2$$3, _3$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&fib);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&fib);
-	zephir_create_array(&fib, 2, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&fib, 2, 0);
+	ZEPHIR_MM_ADD_ENTRY(&fib);
 	ZVAL_LONG(&_0, 0);
 	zephir_array_fast_append(&fib, &_0);
-	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&fib, &_0);
 	i = 2;
@@ -144,12 +141,11 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 		}
 		zephir_array_fetch_long(&_1$$3, &fib, (i - 1), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
 		zephir_array_fetch_long(&_2$$3, &fib, (i - 2), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
-		ZEPHIR_INIT_LNVAR(_3$$3);
 		zephir_add_function(&_3$$3, &_1$$3, &_2$$3);
-		zephir_array_update_long(&fib, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+		zephir_array_update_long(&fib, i, &_3$$3, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		i++;
 	}
-	RETURN_CCTOR(&fib);
+	RETURN_MM_CTOR(&fib);
 
 }
 
@@ -160,11 +156,11 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0$$6);
 	ZVAL_UNDEF(&_1$$6);
 	ZVAL_UNDEF(&_3$$6);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
@@ -196,11 +192,11 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0$$6);
 	ZVAL_UNDEF(&_1$$6);
 	ZVAL_UNDEF(&_3$$6);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);

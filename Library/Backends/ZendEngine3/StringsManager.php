@@ -137,12 +137,12 @@ class StringsManager extends BaseStringsManager
             $code .= "\t\t".'if (Z_TYPE_P(result) != IS_STRING) {'.PHP_EOL;
             $code .= "\t\t\t".'use_copy = zend_make_printable_zval(result, &result_copy);'.PHP_EOL;
             $code .= "\t\t\t".'if (use_copy) {'.PHP_EOL;
-            $code .= "\t\t\t\t".'ZEPHIR_CPY_WRT_CTOR(result, (&result_copy));'.PHP_EOL;
+            $code .= "\t\t\t\t".'ZVAL_DUP(result, (&result_copy));'.PHP_EOL;
             $code .= "\t\t\t".'}'.PHP_EOL;
             $code .= "\t\t".'}'.PHP_EOL.PHP_EOL;
             $code .= "\t\t".'offset = Z_STRLEN_P(result);'.PHP_EOL;
             $code .= "\t\t".'length += offset;'.PHP_EOL;
-            $code .= "\t\t".'Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);'.PHP_EOL;
+            $code .= "\t\t".'ZVAL_STR(result, zend_string_realloc(Z_STR_P(result), length, 0));'.PHP_EOL;
             $code .= ''.PHP_EOL;
             $code .= "\t".'} else {'.PHP_EOL;
             $code .= "\t\t".'ZVAL_STR(result, zend_string_alloc(length, 0));'.PHP_EOL;

@@ -39,6 +39,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, count) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -47,6 +48,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, current) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -55,6 +57,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, key) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -63,6 +66,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, next) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -71,6 +75,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, rewind) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -79,6 +84,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, valid) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -87,6 +93,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, getInnerIterator) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -95,6 +102,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, getChildren) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -103,6 +111,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, hasChildren) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -112,6 +121,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 	zval *position, position_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&position_sub);
 
 	zephir_fetch_params(0, 1, 0, &position);
@@ -125,6 +135,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, getIterator) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -134,6 +145,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetExists) {
 	zval *offset, offset_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
 	zephir_fetch_params(0, 1, 0, &offset);
@@ -148,6 +160,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetGet) {
 	zval *offset, offset_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
 	zephir_fetch_params(0, 1, 0, &offset);
@@ -162,6 +175,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetSet) {
 	zval *offset, offset_sub, *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
@@ -177,6 +191,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetUnset) {
 	zval *offset, offset_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&offset_sub);
 
 	zephir_fetch_params(0, 1, 0, &offset);
@@ -190,6 +205,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, serialize) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -200,9 +216,9 @@ PHP_METHOD(Test_Oo_OoNativeImplements, unserialize) {
 	zval serialized;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&serialized);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &serialized_param);
 
 	zephir_get_strval(&serialized, serialized_param);

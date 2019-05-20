@@ -36,6 +36,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -45,6 +46,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
 	zephir_update_property_zval(this_ptr, SL("b"), b);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -52,8 +54,9 @@ PHP_METHOD(Test_Oo_OoConstructParams, getA) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "a");
+	RETURN_MM_MEMBER(getThis(), "a");
 
 }
 
@@ -61,8 +64,9 @@ PHP_METHOD(Test_Oo_OoConstructParams, getB) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "b");
+	RETURN_MM_MEMBER(getThis(), "b");
 
 }
 

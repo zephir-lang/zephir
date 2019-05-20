@@ -32,6 +32,7 @@ PHP_METHOD(Test_Exists, testClassExists) {
 	zval *className, className_sub, *autoload_param = NULL, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -45,7 +46,7 @@ PHP_METHOD(Test_Exists, testClassExists) {
 
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
-	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0)  TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_class_exists(className, zephir_is_true(&_0)  TSRMLS_CC));
 
 }
 
@@ -55,6 +56,7 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 	zval *interfaceName, interfaceName_sub, *autoload_param = NULL, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&interfaceName_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -68,7 +70,7 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
-	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0)  TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0)  TSRMLS_CC));
 
 }
 
@@ -77,6 +79,7 @@ PHP_METHOD(Test_Exists, testMethodExists) {
 	zval *obj, obj_sub, *methodName, methodName_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&methodName_sub);
 
@@ -84,7 +87,7 @@ PHP_METHOD(Test_Exists, testMethodExists) {
 
 
 
-	RETURN_BOOL((zephir_method_exists(obj, methodName TSRMLS_CC)  == SUCCESS));
+	RETURN_MM_BOOL((zephir_method_exists(obj, methodName TSRMLS_CC)  == SUCCESS));
 
 }
 
@@ -93,13 +96,14 @@ PHP_METHOD(Test_Exists, testFileExists) {
 	zval *fileName, fileName_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&fileName_sub);
 
 	zephir_fetch_params(0, 1, 0, &fileName);
 
 
 
-	RETURN_BOOL((zephir_file_exists(fileName TSRMLS_CC) == SUCCESS));
+	RETURN_MM_BOOL((zephir_file_exists(fileName TSRMLS_CC) == SUCCESS));
 
 }
 

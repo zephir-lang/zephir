@@ -59,7 +59,7 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/memory');
 
-        $context->codePrinter->output('zephir_create_symbol_table(TSRMLS_C);');
+        $context->backend->createSymbolTable($context);
         $context->codePrinter->output('');
 
         return new CompiledExpression('null', null, $expression);

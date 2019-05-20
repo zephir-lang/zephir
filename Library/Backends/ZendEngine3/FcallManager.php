@@ -11,7 +11,6 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
@@ -19,8 +18,46 @@ use function Zephir\file_put_contents_ex;
 /**
  * Zephir\Backends\ZendEngine3\FcallManager.
  */
-class FcallManager extends ZE2FcallManager implements FcallManagerInterface
+class FcallManager implements FcallManagerInterface
 {
+    protected $requiredMacros = [];
+
+    public function macroIsRequired($macro)
+    {
+        return isset($this->requiredMacros[$macro]);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param bool $static
+     * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     * @param int  $paramCount
+     *
+     * @return string
+     */
+    public function getMacro($static, $doReturn, $paramCount)
+    {
+        /*
+        $scopes = array('', 'STATIC');
+        $modes = array('CALL_INTERNAL_METHOD_P', 'RETURN_CALL_INTERNAL_METHOD_P', 'CALL_INTERNAL_METHOD_NORETURN_P');
+        */
+        $scope = $static ? 'STATIC' : '';
+        $mode = 'CALL_INTERNAL_METHOD_NORETURN_P';
+        if ($doReturn) {
+            $mode = 'RETURN_CALL_INTERNAL_METHOD_P';
+            if (2 === $doReturn) {
+                $mode = 'CALL_INTERNAL_METHOD_P';
+            }
+        }
+        $macroName = 'ZEPHIR_'.($scope ? $scope.'_' : '').$mode.$paramCount;
+        if (!$this->macroIsRequired($macroName)) {
+            $this->requiredMacros[$macroName] = [$scope, $mode, $paramCount];
+        }
+
+        return $macroName;
+    }
+
     public function genFcallCode()
     {
         $codePrinter = new CodePrinter();
@@ -49,7 +86,7 @@ class FcallManager extends ZE2FcallManager implements FcallManagerInterface
             if ('CALL_INTERNAL_METHOD_P' == $mode) {
                 $retValueUsed = '1';
                 $retParam = 'return_value_ptr';
-                $initStatements[] = 'ZEPHIR_INIT_NVAR((return_value_ptr)); \\';
+                $initStatements[] = 'ZEPHIR_INIT_VAR((return_value_ptr)); \\';
             }
             $objParam = $scope ? 'scope_ce, ' : 'object, ';
             $macroName = $name.'('.($retParam ? $retParam.', ' : '').$objParam.'method'.$paramsStr.')';

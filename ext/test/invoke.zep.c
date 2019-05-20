@@ -32,13 +32,11 @@ PHP_METHOD(Test_Invoke, __construct) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_STRING(&_0, "aaa");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "aaa");
 	zephir_update_property_zval(this_ptr, SL("a"), &_0);
 	ZEPHIR_MM_RESTORE();
 
@@ -49,12 +47,13 @@ PHP_METHOD(Test_Invoke, __invoke) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	zephir_read_property(&_0, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_gettype(return_value, &_0 TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -64,11 +63,10 @@ PHP_METHOD(Test_Invoke, test) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&func);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&func);
 	object_init_ex(&func, test_invoke_ce);
 	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 44);
 	zephir_check_call_status();

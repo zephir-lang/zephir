@@ -36,8 +36,8 @@ PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	object_init_ex(return_value, test_oo_ooparams_ce);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
@@ -53,8 +53,8 @@ PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	object_init_ex(return_value, test_oo_oodynamica_ce);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
@@ -71,13 +71,14 @@ PHP_METHOD(Test_Oo_OoParams, setAge) {
 	zend_long age;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
 
-	RETURN_LONG(age);
+	RETURN_MM_LONG(age);
 
 }
 
@@ -87,13 +88,14 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 	double average;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
 
-	RETURN_DOUBLE(average);
+	RETURN_MM_DOUBLE(average);
 
 }
 
@@ -103,15 +105,15 @@ PHP_METHOD(Test_Oo_OoParams, setName) {
 	zval name;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name_param);
 
 	zephir_get_strval(&name, name_param);
 
 
-	RETURN_CTOR(&name);
+	RETURN_MM_CTOR(&name);
 
 }
 
@@ -121,13 +123,14 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 	zend_bool enabled;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
 
-	RETURN_BOOL(enabled);
+	RETURN_MM_BOOL(enabled);
 
 }
 
@@ -137,15 +140,15 @@ PHP_METHOD(Test_Oo_OoParams, setList) {
 	zval someList;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someList);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &someList_param);
 
 	zephir_get_arrval(&someList, someList_param);
 
 
-	RETURN_CTOR(&someList);
+	RETURN_MM_CTOR(&someList);
 
 }
 
@@ -155,17 +158,18 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 	zend_long age;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
 	if (UNEXPECTED(Z_TYPE_P(age_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int") TSRMLS_CC);
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
 	age = Z_LVAL_P(age_param);
 
 
-	RETURN_LONG(age);
+	RETURN_MM_LONG(age);
 
 }
 
@@ -175,17 +179,18 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 	double average;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double") TSRMLS_CC);
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
 	average = Z_DVAL_P(average_param);
 
 
-	RETURN_DOUBLE(average);
+	RETURN_MM_DOUBLE(average);
 
 }
 
@@ -195,9 +200,9 @@ PHP_METHOD(Test_Oo_OoParams, setStrictNameFromZephirLand) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 12345);
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "setstrictname", NULL, 0, &_0);
@@ -212,10 +217,10 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	zval name;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &name_param);
+	zephir_fetch_params(0, 1, 0, &name_param);
 
 	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string") TSRMLS_CC);
@@ -224,12 +229,11 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {
 		zephir_get_strval(&name, name_param);
 	} else {
-		ZEPHIR_INIT_VAR(&name);
-		ZVAL_EMPTY_STRING(&name);
+		ZEPHIR_MM_ZVAL_EMPTY_STRING(&name);
 	}
 
 
-	RETURN_CTOR(&name);
+	RETURN_MM_CTOR(&name);
 
 }
 
@@ -239,13 +243,14 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 	zend_bool enabled;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
 
-	RETURN_BOOL(enabled);
+	RETURN_MM_BOOL(enabled);
 
 }
 
@@ -255,15 +260,15 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 	zval someList;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someList);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &someList_param);
 
-	ZEPHIR_OBS_COPY_OR_DUP(&someList, someList_param);
+	ZEPHIR_CPY_WRT(&someList, someList_param);
 
 
-	RETURN_CTOR(&someList);
+	RETURN_MM_CTOR(&someList);
 
 }
 
@@ -273,6 +278,7 @@ PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
 	zend_long age;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &age_param);
 
@@ -283,7 +289,7 @@ PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
 	}
 
 
-	RETURN_LONG(age);
+	RETURN_MM_LONG(age);
 
 }
 
@@ -293,6 +299,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 	double average;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &average_param);
 
@@ -303,7 +310,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 	}
 
 
-	RETURN_DOUBLE(average);
+	RETURN_MM_DOUBLE(average);
 
 }
 
@@ -313,20 +320,19 @@ PHP_METHOD(Test_Oo_OoParams, setNameDefault) {
 	zval name;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &name_param);
 
 	if (!name_param) {
-		ZEPHIR_INIT_VAR(&name);
-		ZVAL_STRING(&name, "peter");
+		ZEPHIR_MM_ZVAL_STRING(&name, "peter");
 	} else {
 		zephir_get_strval(&name, name_param);
 	}
 
 
-	RETURN_CTOR(&name);
+	RETURN_MM_CTOR(&name);
 
 }
 
@@ -336,6 +342,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 	zend_bool enabled;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &enabled_param);
 
@@ -346,7 +353,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 	}
 
 
-	RETURN_BOOL(enabled);
+	RETURN_MM_BOOL(enabled);
 
 }
 
@@ -356,20 +363,20 @@ PHP_METHOD(Test_Oo_OoParams, setListDefault) {
 	zval someList;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&someList);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &someList_param);
 
 	if (!someList_param) {
-		ZEPHIR_INIT_VAR(&someList);
 		array_init(&someList);
+		ZEPHIR_MM_ADD_ENTRY(&someList);
 	} else {
 		zephir_get_arrval(&someList, someList_param);
 	}
 
 
-	RETURN_CTOR(&someList);
+	RETURN_MM_CTOR(&someList);
 
 }
 
@@ -379,13 +386,14 @@ PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 	zend_long age;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
 
-	RETURN_LONG(age);
+	RETURN_MM_LONG(age);
 
 }
 
@@ -395,13 +403,14 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 	double average;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
 
-	RETURN_DOUBLE(average);
+	RETURN_MM_DOUBLE(average);
 
 }
 
@@ -410,14 +419,14 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 	zval *obj, obj_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
 
 
 
-	RETVAL_ZVAL(obj, 1, 0);
-	return;
+	RETURN_MM_CTOR(obj);
 
 }
 
@@ -426,14 +435,14 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 	zval *obj, obj_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
 
 
 
-	RETVAL_ZVAL(obj, 1, 0);
-	return;
+	RETURN_MM_CTOR(obj);
 
 }
 
@@ -442,14 +451,14 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 	zval *obj, obj_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&obj_sub);
 
 	zephir_fetch_params(0, 1, 0, &obj);
 
 
 
-	RETVAL_ZVAL(obj, 1, 0);
-	return;
+	RETURN_MM_CTOR(obj);
 
 }
 
@@ -458,14 +467,14 @@ PHP_METHOD(Test_Oo_OoParams, setObjectClassCast) {
 	zval *parameter, parameter_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&parameter_sub);
 
 	zephir_fetch_params(0, 1, 0, &parameter);
 
 
 
-	RETVAL_ZVAL(parameter, 1, 0);
-	return;
+	RETURN_MM_CTOR(parameter);
 
 }
 

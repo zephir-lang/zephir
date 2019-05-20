@@ -12,9 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/memory.h"
 #include "kernel/object.h"
 #include "math.h"
 
@@ -33,10 +33,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -45,7 +45,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 8, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -55,15 +55,15 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, -5);
 	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 8, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -73,10 +73,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -85,7 +85,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "decbin", NULL, 9, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -95,10 +95,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -107,7 +107,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "dechex", NULL, 10, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -117,10 +117,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -129,7 +129,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "decoct", NULL, 11, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -139,22 +139,21 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 	zend_long num, exp;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &num_param, &exp_param);
 
 	num = zephir_get_intval(num_param);
 	exp = zephir_get_intval(exp_param);
 
 
-	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_1, num);
 	ZVAL_LONG(&_2, exp);
 	zephir_pow_function(&_0, &_1, &_2);
-	RETURN_CCTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 
@@ -164,6 +163,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &num_param);
@@ -172,7 +172,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(sqrt(num));
+	RETURN_MM_DOUBLE(sqrt(num));
 
 }
 
@@ -182,10 +182,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getExp) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -194,7 +194,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getExp) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -204,6 +204,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &num_param);
@@ -212,7 +213,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(sin(num));
+	RETURN_MM_DOUBLE(sin(num));
 
 }
 
@@ -222,6 +223,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &num_param);
@@ -230,7 +232,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(cos(num));
+	RETURN_MM_DOUBLE(cos(num));
 
 }
 
@@ -240,6 +242,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &num_param);
@@ -248,7 +251,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(tan(num));
+	RETURN_MM_DOUBLE(tan(num));
 
 }
 
@@ -258,10 +261,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -270,7 +273,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "asin", NULL, 12, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -280,10 +283,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -292,7 +295,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "acos", NULL, 13, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -302,10 +305,10 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
@@ -314,7 +317,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 14, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -324,13 +327,13 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 	zend_long num, base, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &num_param, &base_param);
 
 	num = zephir_get_intval(num_param);
@@ -345,13 +348,13 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 		ZVAL_LONG(&_0$$3, num);
 		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 15, &_0$$3);
 		zephir_check_call_status();
-		RETURN_CCTOR(&_1$$3);
+		RETURN_MM_CTOR(&_1$$3);
 	}
 	ZVAL_LONG(&_2, num);
 	ZVAL_LONG(&_3, base);
 	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 15, &_2, &_3);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_4);
+	RETURN_MM_CTOR(&_4);
 
 }
 

@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_ConstantsInterface) {
@@ -32,8 +33,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_NULL();
+	RETURN_MM_NULL();
 
 }
 
@@ -41,8 +43,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 }
 
@@ -50,8 +53,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(1);
+	RETURN_MM_BOOL(1);
 
 }
 
@@ -59,8 +63,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(10);
+	RETURN_MM_LONG(10);
 
 }
 
@@ -68,8 +73,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant5) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_DOUBLE(10.25);
+	RETURN_MM_DOUBLE(10.25);
 
 }
 
@@ -77,8 +83,9 @@ PHP_METHOD(Test_Oo_ConstantsInterface, testReadInterfaceConstant6) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("test");
+	RETURN_MM_STRING("test");
 
 }
 

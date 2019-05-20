@@ -73,6 +73,7 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 
 /** Static properties */
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags);
+int zephir_update_static_property(zend_class_entry *ce, const char *property, zend_uint property_length, zval *value);
 int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const char *property, zend_uint property_length, zval *value, const char *types, int types_length, int types_count, ...);
 
 /** Create closures */
@@ -91,7 +92,6 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 		if (Z_TYPE_P(var) == IS_STRING) { \
 			ZEPHIR_CPY_WRT(destination, var); \
 		} else { \
-			ZEPHIR_INIT_NVAR(destination); \
 			ZVAL_STRING(destination, "<undefined class>"); \
 		} \
 	}

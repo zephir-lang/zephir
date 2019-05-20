@@ -32,9 +32,9 @@ PHP_METHOD(Test_EvalTest, evalCode) {
 	zval code;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&code);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &code_param);
 
 	zephir_get_strval(&code, code_param);

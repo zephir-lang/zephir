@@ -32,11 +32,10 @@ PHP_METHOD(Test_ArrayAccessTest, exits) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&arr);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, test_arrayaccessobj_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
@@ -50,17 +49,16 @@ PHP_METHOD(Test_ArrayAccessTest, get) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, test_arrayaccessobj_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
 	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "test/arrayaccesstest.zep", 18 TSRMLS_CC);
-	RETURN_CTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 

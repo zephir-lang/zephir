@@ -36,6 +36,7 @@ PHP_METHOD(Test_Geometry, run) {
 	zval list;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&list);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
@@ -46,7 +47,6 @@ PHP_METHOD(Test_Geometry, run) {
 	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&_8$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
 
 	zephir_get_arrval(&list, list_param);
@@ -82,6 +82,7 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 	zval list;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&list);
 	ZVAL_UNDEF(&item);
 	ZVAL_UNDEF(&_1$$3);
@@ -89,7 +90,6 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
 
 	zephir_get_arrval(&list, list_param);
@@ -101,7 +101,6 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 		if (!(i < count)) {
 			break;
 		}
-		ZEPHIR_OBS_NVAR(&item);
 		zephir_array_fetch_long(&item, &list, i, PH_NOISY, "test/geometry.zep", 22 TSRMLS_CC);
 		zephir_array_fetch_long(&_1$$3, &item, 0, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
 		zephir_array_fetch_long(&_2$$3, &item, 1, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
@@ -121,6 +120,7 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 	double x1, y1, x2, y2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
@@ -132,7 +132,7 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 
 
 	ZVAL_DOUBLE(&_0, ((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2)))));
-	RETURN_DOUBLE(sqrt(((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2))))));
+	RETURN_MM_DOUBLE(sqrt(((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2))))));
 
 }
 

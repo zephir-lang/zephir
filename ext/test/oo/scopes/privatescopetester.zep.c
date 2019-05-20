@@ -31,8 +31,8 @@ PHP_METHOD(Test_Oo_Scopes_PrivateScopeTester, run) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callprivatemethod", NULL, 0);
 	zephir_check_call_status();

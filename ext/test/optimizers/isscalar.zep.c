@@ -30,12 +30,13 @@ PHP_METHOD(Test_Optimizers_IsScalar, testIntVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	RETURN_BOOL(zephir_is_scalar(&_0));
+	RETURN_MM_BOOL(zephir_is_scalar(&_0));
 
 }
 
@@ -45,12 +46,13 @@ PHP_METHOD(Test_Optimizers_IsScalar, testDoubleVar) {
 	double a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = (double) (1);
 	ZVAL_DOUBLE(&_0, a);
-	RETURN_BOOL(zephir_is_scalar(&_0));
+	RETURN_MM_BOOL(zephir_is_scalar(&_0));
 
 }
 
@@ -60,12 +62,13 @@ PHP_METHOD(Test_Optimizers_IsScalar, testBoolVar) {
 	zend_bool a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 1;
 	ZVAL_BOOL(&_0, (a ? 1 : 0));
-	RETURN_BOOL(zephir_is_scalar(&_0));
+	RETURN_MM_BOOL(zephir_is_scalar(&_0));
 
 }
 
@@ -74,12 +77,11 @@ PHP_METHOD(Test_Optimizers_IsScalar, testStringVar) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "test string");
+	ZEPHIR_MM_ZVAL_STRING(&a, "test string");
 	RETURN_MM_BOOL(zephir_is_scalar(&a));
 
 }
@@ -89,12 +91,12 @@ PHP_METHOD(Test_Optimizers_IsScalar, testEmptyArrayVar) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
+	ZEPHIR_MM_ADD_ENTRY(&a);
 	RETURN_MM_BOOL(zephir_is_scalar(&a));
 
 }
@@ -105,12 +107,13 @@ PHP_METHOD(Test_Optimizers_IsScalar, testVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	RETURN_BOOL(zephir_is_scalar(&_0));
+	RETURN_MM_BOOL(zephir_is_scalar(&_0));
 
 }
 
@@ -119,13 +122,14 @@ PHP_METHOD(Test_Optimizers_IsScalar, testVarParameter) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_BOOL(zephir_is_scalar(a));
+	RETURN_MM_BOOL(zephir_is_scalar(a));
 
 }
 

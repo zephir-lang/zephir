@@ -12,10 +12,10 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -36,19 +36,19 @@ PHP_METHOD(Test_Range, inclusive1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
 	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 62, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
-	RETURN_CTOR(&_3);
+	RETURN_MM_CTOR(&_3);
 
 }
 
@@ -59,19 +59,19 @@ PHP_METHOD(Test_Range, exclusive1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
 	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 62, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
-	RETURN_CTOR(&_3);
+	RETURN_MM_CTOR(&_3);
 
 }
 

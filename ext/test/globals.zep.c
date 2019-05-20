@@ -29,6 +29,7 @@ PHP_METHOD(Test_Globals, setBoolValueUsingDotNotation) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -36,6 +37,7 @@ PHP_METHOD(Test_Globals, setBoolValueUsingDotNotation) {
 
 
 	ZEPHIR_GLOBAL(db).my_setting_1 = zend_is_true(value);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -44,6 +46,7 @@ PHP_METHOD(Test_Globals, setIntValueUsingDotNotation) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -51,6 +54,7 @@ PHP_METHOD(Test_Globals, setIntValueUsingDotNotation) {
 
 
 	ZEPHIR_GLOBAL(db).my_setting_2 = Z_LVAL_P(value);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -59,6 +63,7 @@ PHP_METHOD(Test_Globals, setCharValue) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -66,6 +71,7 @@ PHP_METHOD(Test_Globals, setCharValue) {
 
 
 	ZEPHIR_GLOBAL(my_setting_4) = (Z_TYPE_P(value) == IS_STRING ? (Z_STRLEN_P(value) ? Z_STRVAL_P(value)[0] : NULL) : Z_LVAL_P(value));
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -74,6 +80,7 @@ PHP_METHOD(Test_Globals, setBoolValue) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -81,6 +88,7 @@ PHP_METHOD(Test_Globals, setBoolValue) {
 
 
 	ZEPHIR_GLOBAL(my_setting_1) = zend_is_true(value);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -89,6 +97,7 @@ PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -96,6 +105,7 @@ PHP_METHOD(Test_Globals, setDefaultGlobalsOrmCacheLevel) {
 
 
 	ZEPHIR_GLOBAL(orm).cache_level = Z_LVAL_P(value);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -106,8 +116,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(ZEPHIR_GLOBAL(db).my_setting_1);
+	RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).my_setting_1);
 
 }
 
@@ -118,8 +129,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(ZEPHIR_GLOBAL(db).my_setting_2);
+	RETURN_MM_LONG(ZEPHIR_GLOBAL(db).my_setting_2);
 
 }
 
@@ -130,8 +142,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_DOUBLE(ZEPHIR_GLOBAL(db).my_setting_3);
+	RETURN_MM_DOUBLE(ZEPHIR_GLOBAL(db).my_setting_3);
 
 }
 
@@ -142,8 +155,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(ZEPHIR_GLOBAL(my_setting_1));
+	RETURN_MM_BOOL(ZEPHIR_GLOBAL(my_setting_1));
 
 }
 
@@ -154,8 +168,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals5) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_2));
+	RETURN_MM_LONG(ZEPHIR_GLOBAL(my_setting_2));
 
 }
 
@@ -166,8 +181,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals6) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_DOUBLE(ZEPHIR_GLOBAL(my_setting_3));
+	RETURN_MM_DOUBLE(ZEPHIR_GLOBAL(my_setting_3));
 
 }
 
@@ -178,8 +194,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobals7) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_4));
+	RETURN_MM_LONG(ZEPHIR_GLOBAL(my_setting_4));
 
 }
 
@@ -190,8 +207,9 @@ PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCacheLevel) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(ZEPHIR_GLOBAL(orm).cache_level);
+	RETURN_MM_LONG(ZEPHIR_GLOBAL(orm).cache_level);
 
 }
 

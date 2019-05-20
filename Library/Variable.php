@@ -770,6 +770,18 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Add variable to memory entry
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function addMemoryEntry(CompilationContext $compilationContext)
+    {
+        if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
+            $compilationContext->codePrinter->output('ZEPHIR_MM_ADD_ENTRY('.$compilationContext->backend->getVariableCode($this).');');
+        }
+    }
+
+    /**
      * Skips variable initialization.
      *
      * @param int $numberSkips
@@ -831,11 +843,6 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        /*
-         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
-         * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
-         * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
-         */
         if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
             if (false === $this->initBranch) {
                 $this->initBranch = $compilationContext->currentBranch;
@@ -847,25 +854,16 @@ class Variable implements TypeAwareInterface
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->backend->initVar($this, $compilationContext, true, true);
                 } else {
                     if ($this->variantInits > 0) {
-                        if (0 === $this->initBranch) {
-                            $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR('.$this->getName().');');
-                        } else {
+                        if ($this->initBranch) {
                             $this->mustInitNull = true;
-                            $compilationContext->backend->initVar($this, $compilationContext, true, true);
                         }
-                    } else {
-                        $compilationContext->backend->initVar($this, $compilationContext);
                     }
                 }
             } else {
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_NVAR('.$this->getName().');');
-                } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
                 }
             }
 
@@ -887,11 +885,6 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        /*
-         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
-         * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
-         * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
-         */
         if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
             if (false === $this->initBranch) {
                 $this->initBranch = $compilationContext->currentBranch;
@@ -942,16 +935,10 @@ class Variable implements TypeAwareInterface
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_LNVAR('.$this->getName().');');
-                } else {
-                    $compilationContext->backend->initVar($this, $compilationContext);
                 }
             } else {
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_LNVAR('.$this->getName().');');
-                } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
                 }
             }
             ++$this->variantInits;
@@ -983,9 +970,6 @@ class Variable implements TypeAwareInterface
 
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
-                $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR('.$symbol.');');
-            } else {
-                $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR('.$symbol.');');
             }
 
             ++$this->variantInits;
@@ -1012,15 +996,6 @@ class Variable implements TypeAwareInterface
                 $this->initBranch = $compilationContext->currentBranch;
             }
 
-            $compilationContext->headersManager->add('kernel/memory');
-            $compilationContext->symbolTable->mustGrownStack(true);
-            /**
-             * TODO: Do we need this?
-             * $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');.
-             *
-             * TODO: What about else?
-             * $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
-             */
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
             }

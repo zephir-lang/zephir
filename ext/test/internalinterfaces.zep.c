@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_InternalInterfaces) {
@@ -29,6 +30,7 @@ PHP_METHOD(Test_InternalInterfaces, count) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }

@@ -42,6 +42,7 @@ PHP_METHOD(Test_MethodArgs, setCallable) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -49,6 +50,7 @@ PHP_METHOD(Test_MethodArgs, setCallable) {
 
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -57,6 +59,7 @@ PHP_METHOD(Test_MethodArgs, setObject) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -64,6 +67,7 @@ PHP_METHOD(Test_MethodArgs, setObject) {
 
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -72,17 +76,19 @@ PHP_METHOD(Test_MethodArgs, setCallableStrict) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 	if (UNEXPECTED(zephir_is_callable(a TSRMLS_CC) != 1)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable") TSRMLS_CC);
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
 
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -91,17 +97,19 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_OBJECT)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object") TSRMLS_CC);
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
 
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -110,17 +118,19 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_RESOURCE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource") TSRMLS_CC);
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
 
 
 	zephir_update_property_zval(this_ptr, SL("a"), a);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -132,20 +142,18 @@ PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 	zval *method = NULL, method_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&method_sub);
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 0, 1, &method);
+	zephir_fetch_params(0, 0, 1, &method);
 
 	if (!method) {
 		method = &method_sub;
-		ZEPHIR_INIT_VAR(method);
-		ZVAL_STRING(method, "get");
+		ZEPHIR_MM_ZVAL_STRING(method, "get");
 	}
 
 
-	RETVAL_ZVAL(method, 1, 0);
-	RETURN_MM();
+	RETURN_MM_CTOR(method);
 
 }
 
@@ -159,20 +167,19 @@ PHP_METHOD(Test_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 	zval parameter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&parameter);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &parameter_param);
 
 	if (!parameter_param) {
-		ZEPHIR_INIT_VAR(&parameter);
-		ZVAL_STRING(&parameter, "get");
+		ZEPHIR_MM_ZVAL_STRING(&parameter, "get");
 	} else {
 		zephir_get_strval(&parameter, parameter_param);
 	}
 
 
-	RETURN_CTOR(&parameter);
+	RETURN_MM_CTOR(&parameter);
 
 }
 
@@ -186,6 +193,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 	double parameter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &parameter_param);
 
@@ -196,7 +204,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 	}
 
 
-	RETURN_DOUBLE(parameter);
+	RETURN_MM_DOUBLE(parameter);
 
 }
 
@@ -210,6 +218,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 	zend_bool parameter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &parameter_param);
 
@@ -220,7 +229,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 	}
 
 
-	RETURN_BOOL(parameter);
+	RETURN_MM_BOOL(parameter);
 
 }
 
@@ -234,6 +243,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 	zend_long parameter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 0, 1, &parameter_param);
 
@@ -244,7 +254,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 	}
 
 
-	RETURN_LONG(parameter);
+	RETURN_MM_LONG(parameter);
 
 }
 

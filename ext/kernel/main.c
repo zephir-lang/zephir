@@ -90,24 +90,19 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	zval *gv;
 	zend_array *symbol_table;
 	zend_bool jit_initialization = PG(auto_globals_jit);
-	zend_string *str = zend_string_init(global, global_length, 0);
 
 	if (jit_initialization) {
-		zend_is_auto_global(str);
+		zend_is_auto_global_str((char *)global, global_length);
 	}
 
 	if (&EG(symbol_table)) {
-		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
-			ZVAL_DEREF(gv);
+		if ((gv = zend_hash_str_find(&EG(symbol_table), global, global_length)) != NULL) {
+			if (EXPECTED(Z_TYPE_P(gv) == IS_REFERENCE)) {
+				gv = Z_REFVAL_P(gv);
+			}
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
-				if (Z_REFCOUNTED_P(gv)) {
-					ZVAL_COPY_VALUE(arr, gv);
-					Z_SET_REFCOUNT_P(arr, 1);
-				} else {
-					ZVAL_DUP(arr, gv);
-					zend_hash_update(&EG(symbol_table), str, arr);
-				}
-				zend_string_release(str);
+				ZVAL_DUP(arr, gv);
+				zend_hash_str_update(&EG(symbol_table), global, global_length, arr);
 				return SUCCESS;
 			}
 		}
@@ -119,9 +114,8 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	} else {
 		symbol_table = &EG(symbol_table);
 	}
-	zend_hash_update(symbol_table, str, arr);
+	zend_hash_str_update(symbol_table, global, global_length, arr);
 
-	zend_string_release(str);
 	return FAILURE;
 }
 

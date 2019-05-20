@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Properties_PrivateProperties) {
@@ -62,8 +63,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeNull) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someNull");
+	RETURN_MM_MEMBER(getThis(), "someNull");
 
 }
 
@@ -71,8 +73,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeNullInitial) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someNullInitial");
+	RETURN_MM_MEMBER(getThis(), "someNullInitial");
 
 }
 
@@ -80,8 +83,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeFalse) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someFalse");
+	RETURN_MM_MEMBER(getThis(), "someFalse");
 
 }
 
@@ -89,8 +93,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeTrue) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someTrue");
+	RETURN_MM_MEMBER(getThis(), "someTrue");
 
 }
 
@@ -98,8 +103,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeInteger) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someInteger");
+	RETURN_MM_MEMBER(getThis(), "someInteger");
 
 }
 
@@ -107,8 +113,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeDouble) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someDouble");
+	RETURN_MM_MEMBER(getThis(), "someDouble");
 
 }
 
@@ -116,8 +123,9 @@ PHP_METHOD(Test_Properties_PrivateProperties, getSomeString) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "someString");
+	RETURN_MM_MEMBER(getThis(), "someString");
 
 }
 

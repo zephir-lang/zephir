@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_ConcreteStatic) {
@@ -29,8 +29,9 @@ PHP_METHOD(Test_Oo_ConcreteStatic, parentFunction) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("ConcreteStatic:parentFunction");
+	RETURN_MM_STRING("ConcreteStatic:parentFunction");
 
 }
 
@@ -39,8 +40,8 @@ PHP_METHOD(Test_Oo_ConcreteStatic, childFunction) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	ZEPHIR_RETURN_CALL_SELF("parentfunction", NULL, 0);
 	zephir_check_call_status();

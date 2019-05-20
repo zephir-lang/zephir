@@ -34,6 +34,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 	zend_long n, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &n_param);
 
@@ -58,7 +59,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 			result *= i;
 		}
 	}
-	RETURN_LONG(result);
+	RETURN_MM_LONG(result);
 
 }
 
@@ -69,17 +70,16 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
 
-	ZEPHIR_INIT_VAR(&_0);
 	_1 = num == 0;
 	if (!(_1)) {
 		_1 = num == 1;
@@ -92,7 +92,7 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 		zephir_check_call_status();
 		ZVAL_LONG(&_0, (num * zephir_get_numberval(&_2)));
 	}
-	RETURN_CCTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 

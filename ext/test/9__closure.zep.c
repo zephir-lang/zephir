@@ -30,6 +30,7 @@ PHP_METHOD(test_9__closure, __invoke) {
 	zval *x, x_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&x_sub);
 
 	zephir_fetch_params(0, 1, 0, &x);
@@ -37,7 +38,7 @@ PHP_METHOD(test_9__closure, __invoke) {
 
 
 	mul_function(return_value, x, x TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 

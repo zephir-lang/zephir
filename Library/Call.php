@@ -635,10 +635,10 @@ class Call
                         case 'uchar':
                             if ('ZendEngine2' == $compilationContext->backend->getName()) {
                                 $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1, 1);');
+                                $codePrinter->output('ZEPHIR_MM_ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1, 1);');
                             } else {
                                 $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1);');
+                                $codePrinter->output('ZEPHIR_MM_ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1);');
                             }
                             $this->temporalVariables[] = $parameterVariable;
                             $params[] = '&'.$parameterVariable->getName();

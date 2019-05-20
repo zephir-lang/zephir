@@ -36,22 +36,19 @@ PHP_METHOD(Test_ArrayIterator, __construct) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRING(&_1, "one");
+	zephir_create_array(&_0, 3, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&_1, "one");
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_STRING(&_1, "two");
+	ZEPHIR_MM_ZVAL_STRING(&_1, "two");
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_STRING(&_1, "three");
+	ZEPHIR_MM_ZVAL_STRING(&_1, "three");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(this_ptr, SL("test"), &_0);
 	ZEPHIR_INIT_ZVAL_NREF(_2);
@@ -66,12 +63,14 @@ PHP_METHOD(Test_ArrayIterator, rewind) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_update_property_zval(this_ptr, SL("position"), &_0);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -80,17 +79,16 @@ PHP_METHOD(Test_ArrayIterator, current) {
 	zval _0, _1, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&_2);
 	zephir_read_property(&_2, this_ptr, SL("position"), PH_NOISY_CC);
 	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "test/arrayiterator.zep", 22 TSRMLS_CC);
-	RETURN_CTOR(&_1);
+	RETURN_MM_CTOR(&_1);
 
 }
 
@@ -98,8 +96,9 @@ PHP_METHOD(Test_ArrayIterator, key) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "position");
+	RETURN_MM_MEMBER(getThis(), "position");
 
 }
 
@@ -107,8 +106,10 @@ PHP_METHOD(Test_ArrayIterator, next) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("position") TSRMLS_CC));
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -117,13 +118,14 @@ PHP_METHOD(Test_ArrayIterator, valid) {
 	zval _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, SL("position"), PH_NOISY_CC | PH_READONLY);
-	RETURN_BOOL(zephir_array_isset(&_0, &_1));
+	RETURN_MM_BOOL(zephir_array_isset(&_0, &_1));
 
 }
 

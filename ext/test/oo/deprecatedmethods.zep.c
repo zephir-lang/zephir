@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_DeprecatedMethods) {
@@ -29,8 +29,9 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, publicDeprecated) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(1);
+	RETURN_MM_BOOL(1);
 
 }
 
@@ -39,8 +40,8 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 56);
 	zephir_check_call_status();
@@ -52,8 +53,9 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, privateDeprecated) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(1);
+	RETURN_MM_BOOL(1);
 
 }
 

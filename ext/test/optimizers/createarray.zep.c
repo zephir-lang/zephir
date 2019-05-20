@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/array.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Optimizers_CreateArray) {
@@ -31,10 +31,11 @@ PHP_METHOD(Test_Optimizers_CreateArray, createNoSize) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
-	zephir_create_array(return_value, 0, 1 TSRMLS_CC);
-	return;
+	zephir_create_array(return_value, 0, 1);
+	RETURN_MM();
 
 }
 
@@ -44,6 +45,7 @@ PHP_METHOD(Test_Optimizers_CreateArray, createSize) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &n_param);
@@ -52,8 +54,8 @@ PHP_METHOD(Test_Optimizers_CreateArray, createSize) {
 
 
 	ZVAL_LONG(&_0, n);
-	zephir_create_array(return_value, zephir_get_intval(&_0), 1 TSRMLS_CC);
-	return;
+	zephir_create_array(return_value, zephir_get_intval(&_0), 1);
+	RETURN_MM();
 
 }
 

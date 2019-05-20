@@ -210,7 +210,7 @@ final class ReturnStatement extends StatementAbstract
 
                 case Types::T_ARRAY:
                     if ('return_value' != $resolvedExpr->getCode()) {
-                        $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
+                        $codePrinter->output('RETURN_MM_CTOR('.$resolvedExpr->getCode().');');
                     } else {
                         $codePrinter->output('RETURN_MM();');
                     }
@@ -243,7 +243,7 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_ISTRING:
                         case Types::T_ARRAY:
                             $codePrinter->output(
-                                'RETURN_CTOR('.$compilationContext->backend->getVariableCode($symbolVariable).');'
+                                'RETURN_MM_CTOR('.$compilationContext->backend->getVariableCode($symbolVariable).');'
                             );
                             break;
 
@@ -253,14 +253,14 @@ final class ReturnStatement extends StatementAbstract
 
                         case Types::T_VARIABLE:
                             if ('this_ptr' == $symbolVariable->getName()) {
-                                $codePrinter->output('RETURN_THIS();');
+                                $codePrinter->output('RETURN_MM_THIS();');
                             } else {
                                 if ('return_value' != $symbolVariable->getName()) {
                                     if (!$symbolVariable->isExternal()) {
                                         if ($symbolVariable->isLocalOnly()) {
                                             $codePrinter->output(
                                                 sprintf(
-                                                    'RETURN_LCTOR(%s);',
+                                                    'RETURN_MM_CTOR(%s);',
                                                     $compilationContext->backend->getVariableCode($symbolVariable)
                                                 )
                                             );
@@ -268,14 +268,14 @@ final class ReturnStatement extends StatementAbstract
                                             if (!$symbolVariable->isMemoryTracked()) {
                                                 $codePrinter->output(
                                                     sprintf(
-                                                        'RETURN_CTOR(%s);',
+                                                        'RETURN_MM_CTOR(%s);',
                                                         $compilationContext->backend->getVariableCode($symbolVariable)
                                                     )
                                                 );
                                             } else {
                                                 $codePrinter->output(
                                                     sprintf(
-                                                        'RETURN_CCTOR(%s);',
+                                                        'RETURN_MM_CTOR(%s);',
                                                         $compilationContext->backend->getVariableCode($symbolVariable)
                                                     )
                                                 );
@@ -284,11 +284,10 @@ final class ReturnStatement extends StatementAbstract
                                     } else {
                                         $codePrinter->output(
                                             sprintf(
-                                                'RETVAL_ZVAL(%s, 1, 0);',
+                                                'RETURN_MM_CTOR(%s);',
                                                 $compilationContext->backend->getVariableCode($symbolVariable)
                                             )
                                         );
-                                        $codePrinter->output('RETURN_MM();');
                                     }
                                 } else {
                                     $codePrinter->output('RETURN_MM();');

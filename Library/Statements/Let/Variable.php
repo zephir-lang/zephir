@@ -572,7 +572,7 @@ class Variable
                         $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         break;
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
+                        $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_STR(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -590,7 +590,7 @@ class Variable
                         }
                         break;
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
+                        $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_STR(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1);');
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr);
@@ -611,7 +611,7 @@ class Variable
 
                     case 'concat-assign':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
+                        $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_STR(&'.$variable.', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1);');
                         break;
 
                     default:
@@ -636,7 +636,7 @@ class Variable
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self_long(&'.$variable.', '.$itemVariable->getName().' TSRMLS_CC);');
+                                $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_LONG(&'.$variable.', '.$itemVariable->getName().');');
                                 break;
 
                             default:
@@ -656,7 +656,7 @@ class Variable
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self_char(&'.$variable.', '.$itemVariable->getName().' TSRMLS_CC);');
+                                $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_CHAR(&'.$variable.', '.$itemVariable->getName().');');
                                 break;
 
                             default:
@@ -1100,7 +1100,7 @@ class Variable
 
                     case 'concat-assign':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output('zephir_concat_self_str(&'.$variable.', SL("'.$resolvedExpr->getCode().'") TSRMLS_CC);');
+                        $codePrinter->output('ZEPHIR_MM_CONCAT_SELF_STR(&'.$variable.', SL("'.$resolvedExpr->getCode().'"));');
                         break;
 
                     default:

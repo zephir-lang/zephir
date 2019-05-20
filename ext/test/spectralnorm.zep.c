@@ -38,21 +38,19 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 	zval *i, i_sub, *j, j_sub, _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&i_sub);
 	ZVAL_UNDEF(&j_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &i, &j);
 
 
 
-	ZEPHIR_INIT_VAR(&_0);
 	zephir_add_function(&_0, i, j);
-	ZEPHIR_SINIT_VAR(_1);
 	zephir_add_function(&_1, i, j);
-	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * (zephir_get_numberval(&_1) + 1)), 2 TSRMLS_CC) + zephir_get_numberval(i)) + (double) (1)) TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * ((zephir_get_numberval(&_1) + 1))), 2 TSRMLS_CC) + zephir_get_numberval(i)) + (double) (1)) TSRMLS_CC));
 
 }
 
@@ -64,6 +62,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
@@ -74,7 +73,6 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_12$$4);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 
 	n = zephir_get_intval(n_param);
@@ -116,7 +114,6 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					ZVAL_LONG(&_7$$4, j);
 					ZEPHIR_CALL_METHOD(&_10$$4, u, "offsetget", &_11, 0, &_7$$4);
 					zephir_check_call_status();
-					ZEPHIR_INIT_LNVAR(_12$$4);
 					mul_function(&_12$$4, &_6$$4, &_10$$4 TSRMLS_CC);
 					t += zephir_get_numberval(&_12$$4);
 				}
@@ -139,6 +136,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
@@ -149,7 +147,6 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_12$$4);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 
 	n = zephir_get_intval(n_param);
@@ -191,7 +188,6 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					ZVAL_LONG(&_7$$4, j);
 					ZEPHIR_CALL_METHOD(&_10$$4, u, "offsetget", &_11, 0, &_7$$4);
 					zephir_check_call_status();
-					ZEPHIR_INIT_LNVAR(_12$$4);
 					mul_function(&_12$$4, &_6$$4, &_10$$4 TSRMLS_CC);
 					t += zephir_get_numberval(&_12$$4);
 				}
@@ -212,12 +208,12 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 	zval *n, n_sub, *u, u_sub, *v, v_sub, *w, w_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&w_sub);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 4, 0, &n, &u, &v, &w);
 
 
@@ -238,6 +234,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&u);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&w);
@@ -251,7 +248,6 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	ZVAL_UNDEF(&_19$$5);
 	ZVAL_UNDEF(&_20$$5);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
@@ -259,17 +255,14 @@ PHP_METHOD(Test_SpectralNorm, process) {
 
 	vv = 0;
 	vBv = 0;
-	ZEPHIR_INIT_VAR(&u);
 	object_init_ex(&u, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &u, "__construct", NULL, 77, &_0);
 	zephir_check_call_status();
-	ZEPHIR_INIT_VAR(&v);
 	object_init_ex(&v, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &v, "__construct", NULL, 77, &_0);
 	zephir_check_call_status();
-	ZEPHIR_INIT_VAR(&w);
 	object_init_ex(&w, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &w, "__construct", NULL, 77, &_0);
@@ -344,7 +337,6 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZVAL_LONG(&_16$$5, i);
 			ZEPHIR_CALL_METHOD(&_18$$5, &v, "offsetget", &_17, 80, &_16$$5);
 			zephir_check_call_status();
-			ZEPHIR_INIT_LNVAR(_19$$5);
 			mul_function(&_19$$5, &_15$$5, &_18$$5 TSRMLS_CC);
 			vBv += zephir_get_numberval(&_19$$5);
 			ZVAL_LONG(&_16$$5, i);
@@ -353,7 +345,6 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZVAL_LONG(&_16$$5, i);
 			ZEPHIR_CALL_METHOD(&_18$$5, &v, "offsetget", &_17, 80, &_16$$5);
 			zephir_check_call_status();
-			ZEPHIR_INIT_LNVAR(_20$$5);
 			mul_function(&_20$$5, &_15$$5, &_18$$5 TSRMLS_CC);
 			vv += zephir_get_numberval(&_20$$5);
 		}

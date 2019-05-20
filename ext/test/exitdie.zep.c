@@ -31,6 +31,7 @@ PHP_METHOD(Test_ExitDie, testExit) {
 	zval *param = NULL, param_sub, __$null;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
 
@@ -43,9 +44,12 @@ PHP_METHOD(Test_ExitDie, testExit) {
 
 
 	if (ZEPHIR_IS_EMPTY(param)) {
+		ZEPHIR_MM_RESTORE();
 		zephir_exit_empty();
 	}
+	ZEPHIR_MM_RESTORE();
 	zephir_exit(param);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -54,6 +58,7 @@ PHP_METHOD(Test_ExitDie, testDie) {
 	zval *param = NULL, param_sub, __$null;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
 
@@ -66,9 +71,12 @@ PHP_METHOD(Test_ExitDie, testDie) {
 
 
 	if (ZEPHIR_IS_EMPTY(param)) {
+		ZEPHIR_MM_RESTORE();
 		zephir_exit_empty();
 	}
+	ZEPHIR_MM_RESTORE();
 	zephir_exit(param);
+	ZEPHIR_MM_RESTORE();
 
 }
 

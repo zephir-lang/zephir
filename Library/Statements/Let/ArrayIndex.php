@@ -219,7 +219,7 @@ class ArrayIndex
         $realSymbolVariable = $symbolVariable;
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
-        $flags = 'PH_COPY | PH_SEPARATE';
+        $flags = 'PH_SEPARATE';
 
         $compilationContext->headersManager->add('kernel/array');
 

@@ -30,13 +30,12 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDIN) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
-	RETURN_CCTOR(&a);
+	RETURN_MM_CTOR(&a);
 
 }
 
@@ -45,13 +44,12 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDOUT) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDOUT");
-	RETURN_CCTOR(&a);
+	RETURN_MM_CTOR(&a);
 
 }
 
@@ -60,13 +58,12 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDERR) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDERR");
-	RETURN_CCTOR(&a);
+	RETURN_MM_CTOR(&a);
 
 }
 
@@ -75,16 +72,14 @@ PHP_METHOD(Test_ResourceTest, testTypeOffResource) {
 	zval a, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
-	ZEPHIR_INIT_VAR(&_0);
 	zephir_gettype(&_0, &a TSRMLS_CC);
-	RETURN_CCTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 
@@ -93,11 +88,10 @@ PHP_METHOD(Test_ResourceTest, testIsResource) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	RETURN_MM_BOOL(Z_TYPE_P(&a) == IS_RESOURCE);
 
@@ -109,12 +103,11 @@ PHP_METHOD(Test_ResourceTest, testFunctionsForSTDIN) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZVAL_LONG(&_0, 1);
 	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 66, &a, &_0);

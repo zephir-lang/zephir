@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "math.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/math.h"
 
 
@@ -33,12 +33,13 @@ PHP_METHOD(Test_Optimizers_Sin, testInt) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 4;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sin(a));
+	RETURN_MM_DOUBLE(sin(a));
 
 }
 
@@ -48,12 +49,13 @@ PHP_METHOD(Test_Optimizers_Sin, testVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 4;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sin(a));
+	RETURN_MM_DOUBLE(sin(a));
 
 }
 
@@ -62,11 +64,12 @@ PHP_METHOD(Test_Optimizers_Sin, testIntValue1) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 4);
-	RETURN_DOUBLE(sin(4));
+	RETURN_MM_DOUBLE(sin(4));
 
 }
 
@@ -75,11 +78,12 @@ PHP_METHOD(Test_Optimizers_Sin, testIntValue2) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 16);
-	RETURN_DOUBLE(sin(16));
+	RETURN_MM_DOUBLE(sin(16));
 
 }
 
@@ -89,6 +93,7 @@ PHP_METHOD(Test_Optimizers_Sin, testIntParameter) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &a_param);
@@ -97,7 +102,7 @@ PHP_METHOD(Test_Optimizers_Sin, testIntParameter) {
 
 
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sin(a));
+	RETURN_MM_DOUBLE(sin(a));
 
 }
 
@@ -106,13 +111,14 @@ PHP_METHOD(Test_Optimizers_Sin, testVarParameter) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_DOUBLE(zephir_sin(a TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_sin(a TSRMLS_CC));
 
 }
 

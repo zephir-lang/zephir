@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(test_8__closure) {
@@ -31,11 +32,12 @@ PHP_METHOD(test_8__closure, __invoke) {
 	zval abc;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&abc);
 
 	zephir_read_static_property_ce(&abc, test_8__closure_ce, SL("abc"), PH_NOISY_CC);
 
-	RETURN_LONG((zephir_get_numberval(&abc) + 1));
+	RETURN_MM_LONG((zephir_get_numberval(&abc) + 1));
 
 }
 

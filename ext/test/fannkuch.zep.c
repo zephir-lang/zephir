@@ -40,6 +40,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 	zend_long n, maxFlipsCount, permCount, checksum, i = 0, j = 0, flipsCount = 0, k = 0, r = 0, k2 = 0, _1, _2, _6$$4, _7$$4, _12$$8, _13$$8;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&perm);
 	ZVAL_UNDEF(&perm0);
 	ZVAL_UNDEF(&perm1);
@@ -57,7 +58,6 @@ PHP_METHOD(Test_Fannkuch, process) {
 	ZVAL_UNDEF(&_18$$13);
 	ZVAL_UNDEF(&_19$$13);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
@@ -66,12 +66,12 @@ PHP_METHOD(Test_Fannkuch, process) {
 	maxFlipsCount = 0;
 	permCount = 0;
 	checksum = 0;
-	ZEPHIR_INIT_VAR(&perm);
 	array_init(&perm);
-	ZEPHIR_INIT_VAR(&perm1);
+	ZEPHIR_MM_ADD_ENTRY(&perm);
 	array_init(&perm1);
-	ZEPHIR_INIT_VAR(&count);
+	ZEPHIR_MM_ADD_ENTRY(&perm1);
 	array_init(&count);
+	ZEPHIR_MM_ADD_ENTRY(&count);
 	_2 = n;
 	_1 = 0;
 	_0 = 0;
@@ -86,9 +86,8 @@ PHP_METHOD(Test_Fannkuch, process) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
-			zephir_array_update_long(&perm1, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			zephir_array_update_long(&perm1, i, &_3$$3, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		}
 	}
 	r = n;
@@ -100,9 +99,8 @@ PHP_METHOD(Test_Fannkuch, process) {
 			if (!(r != 1)) {
 				break;
 			}
-			ZEPHIR_INIT_NVAR(&_4$$6);
 			ZVAL_LONG(&_4$$6, r);
-			zephir_array_update_long(&count, (r - 1), &_4$$6, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			zephir_array_update_long(&count, (r - 1), &_4$$6, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			r--;
 		}
 		_7$$4 = n;
@@ -120,7 +118,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 				}
 				i = _6$$4;
 				zephir_array_fetch_long(&_8$$7, &perm1, i, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 43 TSRMLS_CC);
-				zephir_array_update_long(&perm, i, &_8$$7, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+				zephir_array_update_long(&perm, i, &_8$$7, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			}
 		}
 		flipsCount = 0;
@@ -130,7 +128,6 @@ PHP_METHOD(Test_Fannkuch, process) {
 			if (!(!ZEPHIR_IS_LONG(&_9$$4, 0))) {
 				break;
 			}
-			ZEPHIR_OBS_NVAR(&_10$$8);
 			zephir_array_fetch_long(&_10$$8, &perm, 0, PH_NOISY, "test/fannkuch.zep", 49 TSRMLS_CC);
 			k = zephir_get_intval(&_10$$8);
 			k2 = (long) (((zephir_safe_div_long_long(((k + 1)), 2 TSRMLS_CC)) - (double) (1)));
@@ -150,8 +147,8 @@ PHP_METHOD(Test_Fannkuch, process) {
 					i = _12$$8;
 					zephir_array_fetch_long(&temp, &perm, i, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 51 TSRMLS_CC);
 					zephir_array_fetch_long(&_14$$9, &perm, (k - i), PH_NOISY | PH_READONLY, "test/fannkuch.zep", 51 TSRMLS_CC);
-					zephir_array_update_long(&perm, i, &_14$$9, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-					zephir_array_update_long(&perm, (k - i), &temp, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+					zephir_array_update_long(&perm, i, &_14$$9, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+					zephir_array_update_long(&perm, (k - i), &temp, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 				}
 			}
 			flipsCount++;
@@ -166,14 +163,11 @@ PHP_METHOD(Test_Fannkuch, process) {
 		}
 		while (1) {
 			if (r == n) {
-				zephir_create_array(return_value, 3, 0 TSRMLS_CC);
-				ZEPHIR_INIT_NVAR(&_15$$14);
+				zephir_create_array(return_value, 3, 0);
 				ZVAL_LONG(&_15$$14, checksum);
 				zephir_array_fast_append(return_value, &_15$$14);
-				ZEPHIR_INIT_NVAR(&_15$$14);
 				ZVAL_LONG(&_15$$14, n);
 				zephir_array_fast_append(return_value, &_15$$14);
-				ZEPHIR_INIT_NVAR(&_15$$14);
 				ZVAL_LONG(&_15$$14, maxFlipsCount);
 				zephir_array_fast_append(return_value, &_15$$14);
 				RETURN_MM();
@@ -186,14 +180,13 @@ PHP_METHOD(Test_Fannkuch, process) {
 				}
 				j = (i + 1);
 				zephir_array_fetch_long(&_16$$15, &perm1, j, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 78 TSRMLS_CC);
-				zephir_array_update_long(&perm1, i, &_16$$15, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+				zephir_array_update_long(&perm1, i, &_16$$15, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 				i = j;
 			}
-			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			zephir_array_update_long(&perm1, r, &perm0, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			zephir_array_fetch_long(&_17$$13, &count, r, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 82 TSRMLS_CC);
-			ZEPHIR_INIT_NVAR(&_18$$13);
 			ZVAL_LONG(&_18$$13, (zephir_get_numberval(&_17$$13) - 1));
-			zephir_array_update_long(&count, r, &_18$$13, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+			zephir_array_update_long(&count, r, &_18$$13, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 			zephir_array_fetch_long(&_19$$13, &count, r, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 83 TSRMLS_CC);
 			if (ZEPHIR_GT_LONG(&_19$$13, 0)) {
 				break;

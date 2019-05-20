@@ -23,14 +23,6 @@ ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
 
 	int initialized;
 
-	/* Memory */
-	zephir_memory_entry *start_memory; /**< The first preallocated frame */
-	zephir_memory_entry *end_memory; /**< The last preallocate frame */
-	zephir_memory_entry *active_memory; /**< The current memory frame */
-
-	/* Virtual Symbol Tables */
-	zephir_symbol_table *active_symbol_table;
-
 	/** Function cache */
 	HashTable *fcache;
 

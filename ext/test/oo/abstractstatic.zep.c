@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Oo_AbstractStatic) {
@@ -27,9 +28,10 @@ PHP_METHOD(Test_Oo_AbstractStatic, getCalledClass) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_get_called_class(return_value TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 

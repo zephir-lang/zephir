@@ -75,11 +75,27 @@
 
 #define ZEPHIR_STRING_OFFSET(op1, index) ((index >= 0 && index < Z_STRLEN_P(op1)) ? Z_STRVAL_P(op1)[index] : '\0')
 
+#define ZEPHIR_MM_CONCAT_SELF(left, right) \
+	zephir_concat_self(left, right); \
+	ZEPHIR_MM_ADD_ENTRY(left);
+
+#define ZEPHIR_MM_CONCAT_SELF_STR(left, right, right_length) \
+	zephir_concat_self_str(left, right, right_length); \
+	ZEPHIR_MM_ADD_ENTRY(left);
+
+#define ZEPHIR_MM_CONCAT_SELF_CHAR(left, right) \
+	zephir_concat_self_char(left, right); \
+	ZEPHIR_MM_ADD_ENTRY(left);
+
+#define ZEPHIR_MM_CONCAT_SELF_LONG(left, right) \
+	zephir_concat_self_long(left, right); \
+	ZEPHIR_MM_ADD_ENTRY(left);
+
 /* concatenation */
 void zephir_concat_self(zval *left, zval *right);
 void zephir_concat_self_str(zval *left, const char *right, int right_length);
-void zephir_concat_self_long(zval *left, const long right);
 void zephir_concat_self_char(zval *left, unsigned char right);
+void zephir_concat_self_long(zval *left, const long right);
 
 /** Strict comparing */
 int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length);
@@ -156,8 +172,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define zephir_add_function(result, left, right) fast_add_function(result, left, right)
 #define zephir_sub_function(result, left, right) sub_function(result, left, right)
 #define zephir_pow_function(result, op1, op2) pow_function(result, op1, op2)
-#define zephir_increment(var) increment_function(var)
-#define zephir_decrement(var) decrement_function(var)
+#define zephir_increment(var) \
+	Z_TRY_ADDREF_P(var); \
+	increment_function(var)
+#define zephir_decrement(var) \
+	Z_TRY_ADDREF_P(var); \
+	decrement_function(var)
 
 #define ZEPHIR_ADD_ASSIGN(z, v)  \
 	{  \
@@ -207,13 +227,11 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		int use_copy_right; \
 		zval right_tmp; \
 		if (Z_TYPE_P(right) == IS_STRING) { \
-			ZEPHIR_CPY_WRT(left, right); \
+			ZVAL_COPY_VALUE(left, right); \
 		} else { \
 			use_copy_right = zephir_make_printable_zval(right, &right_tmp); \
 			if (use_copy_right) { \
-				ZEPHIR_INIT_NVAR(left); \
-				ZVAL_STRINGL(left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
-				zval_ptr_dtor(&right_tmp); \
+				ZEPHIR_MM_ZVAL_STRINGL(left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
 			} \
 		} \
 	}
@@ -221,9 +239,8 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define zephir_get_arrval(returnValue, passValue) \
 	{ \
 		if (Z_TYPE_P(passValue) == IS_ARRAY) { \
-			ZEPHIR_CPY_WRT(returnValue, passValue); \
+			ZVAL_COPY_VALUE(returnValue, passValue); \
 		} else { \
-			ZEPHIR_INIT_NVAR(returnValue); \
 			array_init_size(returnValue, 0); \
 		} \
 	}

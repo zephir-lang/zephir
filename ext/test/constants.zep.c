@@ -85,8 +85,9 @@ PHP_METHOD(Test_Constants, getPropWsVarsGet) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propWsVarsGet");
+	RETURN_MM_MEMBER(getThis(), "propWsVarsGet");
 
 }
 
@@ -94,8 +95,9 @@ PHP_METHOD(Test_Constants, getPropertyC1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC1");
+	RETURN_MM_MEMBER(getThis(), "propertyC1");
 
 }
 
@@ -103,8 +105,9 @@ PHP_METHOD(Test_Constants, getPropertyC2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC2");
+	RETURN_MM_MEMBER(getThis(), "propertyC2");
 
 }
 
@@ -112,8 +115,9 @@ PHP_METHOD(Test_Constants, getPropertyC3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC3");
+	RETURN_MM_MEMBER(getThis(), "propertyC3");
 
 }
 
@@ -121,8 +125,9 @@ PHP_METHOD(Test_Constants, getPropertyC4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC4");
+	RETURN_MM_MEMBER(getThis(), "propertyC4");
 
 }
 
@@ -130,8 +135,9 @@ PHP_METHOD(Test_Constants, getPropertyC5) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC5");
+	RETURN_MM_MEMBER(getThis(), "propertyC5");
 
 }
 
@@ -139,8 +145,9 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC6");
+	RETURN_MM_MEMBER(getThis(), "propertyC6");
 
 }
 
@@ -148,8 +155,9 @@ PHP_METHOD(Test_Constants, getPropertyC7) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC7");
+	RETURN_MM_MEMBER(getThis(), "propertyC7");
 
 }
 
@@ -157,8 +165,9 @@ PHP_METHOD(Test_Constants, getPropertyC8) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC8");
+	RETURN_MM_MEMBER(getThis(), "propertyC8");
 
 }
 
@@ -168,8 +177,9 @@ PHP_METHOD(Test_Constants, getPropertyC9) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propertyC9");
+	RETURN_MM_MEMBER(getThis(), "propertyC9");
 
 }
 
@@ -177,8 +187,9 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(3);
+	RETURN_MM_LONG(3);
 
 }
 
@@ -186,8 +197,9 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(10);
+	RETURN_MM_LONG(10);
 
 }
 
@@ -195,8 +207,9 @@ PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(10);
+	RETURN_MM_LONG(10);
 
 }
 
@@ -204,8 +217,9 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(10);
+	RETURN_MM_LONG(10);
 
 }
 
@@ -213,9 +227,10 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
-	return;
+	RETURN_MM();
 
 }
 
@@ -223,8 +238,9 @@ PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("Test\\Constants");
+	RETURN_MM_STRING("Test\\Constants");
 
 }
 
@@ -232,8 +248,9 @@ PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("Constants:testMethodMagicConstant");
+	RETURN_MM_STRING("Constants:testMethodMagicConstant");
 
 }
 
@@ -241,8 +258,9 @@ PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("testFunctionMagicConstant");
+	RETURN_MM_STRING("testFunctionMagicConstant");
 
 }
 
@@ -250,8 +268,9 @@ PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("Test");
+	RETURN_MM_STRING("Test");
 
 }
 
@@ -259,8 +278,9 @@ PHP_METHOD(Test_Constants, testDirConstant) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_NULL();
+	RETURN_MM_NULL();
 
 }
 
@@ -269,13 +289,12 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "PHP_VERSION");
-	RETURN_CCTOR(&a);
+	RETURN_MM_CTOR(&a);
 
 }
 
@@ -289,13 +308,12 @@ PHP_METHOD(Test_Constants, testStringDelimiterConstantDoubleQuoted) {
 	zval delimiter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&delimiter);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&delimiter);
-	ZVAL_STRING(&delimiter, ".");
-	RETURN_CCTOR(&delimiter);
+	ZEPHIR_MM_ZVAL_STRING(&delimiter, ".");
+	RETURN_MM_CTOR(&delimiter);
 
 }
 
@@ -304,13 +322,12 @@ PHP_METHOD(Test_Constants, testStringConstantWithVars) {
 	zval property;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&property);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&property);
-	ZVAL_STRING(&property, "$SOME/CSRF/KEY$");
-	RETURN_CCTOR(&property);
+	ZEPHIR_MM_ZVAL_STRING(&property, "$SOME/CSRF/KEY$");
+	RETURN_MM_CTOR(&property);
 
 }
 
@@ -318,8 +335,9 @@ PHP_METHOD(Test_Constants, testStringPropertyWithVarsAssigned) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propWsVarsAssigned");
+	RETURN_MM_MEMBER(getThis(), "propWsVarsAssigned");
 
 }
 
@@ -327,8 +345,9 @@ PHP_METHOD(Test_Constants, testStringPropertyWithVarsGet) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "propWsVarsGet");
+	RETURN_MM_MEMBER(getThis(), "propWsVarsGet");
 
 }
 

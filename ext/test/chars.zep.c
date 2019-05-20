@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -33,11 +33,12 @@ PHP_METHOD(Test_Chars, sumChars1) {
 	char ch, chlower = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	ch = 'A';
 	chlower = (ch + 32);
-	RETURN_LONG(chlower);
+	RETURN_MM_LONG(chlower);
 
 }
 
@@ -47,6 +48,7 @@ PHP_METHOD(Test_Chars, sumChars2) {
 	char ch, chlower = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &ch_param);
 
@@ -54,7 +56,7 @@ PHP_METHOD(Test_Chars, sumChars2) {
 
 
 	chlower = (ch + 32);
-	RETURN_LONG(chlower);
+	RETURN_MM_LONG(chlower);
 
 }
 
@@ -63,11 +65,12 @@ PHP_METHOD(Test_Chars, diffChars1) {
 	char ch, chlower = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	ch = 'a';
 	chlower = (ch - 32);
-	RETURN_LONG(chlower);
+	RETURN_MM_LONG(chlower);
 
 }
 
@@ -77,6 +80,7 @@ PHP_METHOD(Test_Chars, diffChars2) {
 	char ch, chlower = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &ch_param);
 
@@ -84,7 +88,7 @@ PHP_METHOD(Test_Chars, diffChars2) {
 
 
 	chlower = (ch - 32);
-	RETURN_LONG(chlower);
+	RETURN_MM_LONG(chlower);
 
 }
 

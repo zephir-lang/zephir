@@ -222,15 +222,6 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     abstract public function getVariableCode(Variable $variable);
 
-    /**
-     * Get a double pointer to the variable.
-     *
-     * @param Variable $variable
-     *
-     * @return string
-     */
-    abstract public function getVariableCodePointer(Variable $variable);
-
     abstract public function resolveValue($value, CompilationContext $context, $usePointer = false);
 
     public static function getActiveBackend()

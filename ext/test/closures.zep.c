@@ -28,9 +28,10 @@ PHP_METHOD(Test_Closures, simple1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_1__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -38,9 +39,10 @@ PHP_METHOD(Test_Closures, simple2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_2__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -48,9 +50,10 @@ PHP_METHOD(Test_Closures, simple3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_3__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -58,9 +61,10 @@ PHP_METHOD(Test_Closures, simple4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_4__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -68,9 +72,10 @@ PHP_METHOD(Test_Closures, simple5) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_5__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -78,9 +83,10 @@ PHP_METHOD(Test_Closures, arrow1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_6__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -88,9 +94,10 @@ PHP_METHOD(Test_Closures, arrow2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_create_closure_ex(return_value, NULL, test_7__closure_ce, SL("__invoke"));
-	return;
+	RETURN_MM();
 
 }
 
@@ -100,6 +107,7 @@ PHP_METHOD(Test_Closures, testUseCommand) {
 	zend_long abc;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
@@ -107,8 +115,8 @@ PHP_METHOD(Test_Closures, testUseCommand) {
 	zephir_create_closure_ex(return_value, NULL, test_8__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, abc);
-	zend_update_static_property(test_8__closure_ce, ZEND_STRL("abc"), &_0);
-	return;
+	zephir_update_static_property(test_8__closure_ce, ZEND_STRL("abc"), &_0);
+	RETURN_MM();
 
 }
 

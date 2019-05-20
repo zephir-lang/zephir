@@ -39,11 +39,11 @@ PHP_METHOD(Test_Bench_Foo, emptyForInRange) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -61,7 +61,6 @@ PHP_METHOD(Test_Bench_Foo, emptyForInRange) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 		}
 	}
@@ -76,12 +75,12 @@ PHP_METHOD(Test_Bench_Foo, readStatic) {
 	zval *n, n_sub, x, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&x);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -99,9 +98,7 @@ PHP_METHOD(Test_Bench_Foo, readStatic) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_OBS_NVAR(&x);
 			zephir_read_static_property_ce(&x, test_bench_foo_ce, SL("a"), PH_NOISY_CC);
 		}
 	}
@@ -116,12 +113,12 @@ PHP_METHOD(Test_Bench_Foo, writeStatic) {
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -139,11 +136,10 @@ PHP_METHOD(Test_Bench_Foo, writeStatic) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
 			ZVAL_LONG(&_3$$3, 0);
-			zend_update_static_property(test_bench_foo_ce, ZEND_STRL("a"), &_3$$3);
+			zephir_update_static_property(test_bench_foo_ce, ZEND_STRL("a"), &_3$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -157,11 +153,11 @@ PHP_METHOD(Test_Bench_Foo, issetStatic) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -179,7 +175,6 @@ PHP_METHOD(Test_Bench_Foo, issetStatic) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			x = (0 == 0);
 		}
@@ -195,12 +190,12 @@ PHP_METHOD(Test_Bench_Foo, emptyStatic) {
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -218,9 +213,7 @@ PHP_METHOD(Test_Bench_Foo, emptyStatic) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_OBS_NVAR(&_3$$3);
 			zephir_read_static_property_ce(&_3$$3, test_bench_foo_ce, SL("a"), PH_NOISY_CC);
 			x = ZEPHIR_IS_EMPTY(&_3$$3);
 		}
@@ -236,12 +229,12 @@ PHP_METHOD(Test_Bench_Foo, readProp) {
 	zval *n, n_sub, x, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&x);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -259,7 +252,6 @@ PHP_METHOD(Test_Bench_Foo, readProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			zephir_read_property(&x, this_ptr, SL("b"), PH_NOISY_CC | PH_READONLY);
 		}
@@ -275,12 +267,12 @@ PHP_METHOD(Test_Bench_Foo, writeProp) {
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -298,7 +290,6 @@ PHP_METHOD(Test_Bench_Foo, writeProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
 			ZVAL_LONG(&_3$$3, 0);
@@ -316,13 +307,13 @@ PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 	zval *n, n_sub, i, _2, _3$$3, _4$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -340,9 +331,7 @@ PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZVAL_LONG(&_4$$3, 2);
 			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
 			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3)
@@ -376,11 +365,11 @@ PHP_METHOD(Test_Bench_Foo, postIncProp) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -398,7 +387,6 @@ PHP_METHOD(Test_Bench_Foo, postIncProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("b") TSRMLS_CC));
 		}
@@ -414,11 +402,11 @@ PHP_METHOD(Test_Bench_Foo, postDecProp) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -436,7 +424,6 @@ PHP_METHOD(Test_Bench_Foo, postDecProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			RETURN_ON_FAILURE(zephir_property_decr(this_ptr, SL("b") TSRMLS_CC));
 		}
@@ -452,11 +439,11 @@ PHP_METHOD(Test_Bench_Foo, issetProp) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -474,7 +461,6 @@ PHP_METHOD(Test_Bench_Foo, issetProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			x = zephir_isset_property(this_ptr, SL("b"));
 		}
@@ -490,12 +476,12 @@ PHP_METHOD(Test_Bench_Foo, emptyProp) {
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -513,9 +499,7 @@ PHP_METHOD(Test_Bench_Foo, emptyProp) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_OBS_NVAR(&_3$$3);
 			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
 			x = ZEPHIR_IS_EMPTY(&_3$$3);
 		}
@@ -528,6 +512,7 @@ PHP_METHOD(Test_Bench_Foo, g) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -540,11 +525,11 @@ PHP_METHOD(Test_Bench_Foo, call) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -562,7 +547,6 @@ PHP_METHOD(Test_Bench_Foo, call) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_CALL_METHOD(NULL, this_ptr, "g", &_3, 0);
 			zephir_check_call_status();
@@ -576,6 +560,7 @@ PHP_METHOD(Test_Bench_Foo, staticMethod) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 }
@@ -584,8 +569,9 @@ PHP_METHOD(Test_Bench_Foo, staticMethod1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_BOOL(1);
+	RETURN_MM_BOOL(1);
 
 }
 
@@ -597,11 +583,11 @@ PHP_METHOD(Test_Bench_Foo, scall) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -619,7 +605,6 @@ PHP_METHOD(Test_Bench_Foo, scall) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_CALL_SELF(NULL, "staticmethod", &_3, 0);
 			zephir_check_call_status();
@@ -637,11 +622,11 @@ PHP_METHOD(Test_Bench_Foo, scallWithReturnTrue) {
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -659,7 +644,6 @@ PHP_METHOD(Test_Bench_Foo, scallWithReturnTrue) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_CALL_SELF(NULL, "staticmethod1", &_3, 0);
 			zephir_check_call_status();
@@ -676,12 +660,12 @@ PHP_METHOD(Test_Bench_Foo, readConst) {
 	zval *n, n_sub, i, x, _2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&x);
 	ZVAL_UNDEF(&_2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
 
 
@@ -699,9 +683,7 @@ PHP_METHOD(Test_Bench_Foo, readConst) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			ZEPHIR_INIT_NVAR(&x);
 			ZVAL_LONG(&x, 0);
 		}
 	}

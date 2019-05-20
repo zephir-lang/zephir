@@ -31,6 +31,7 @@ PHP_METHOD(Test_Optimizers_Substr, testTwoArguments) {
 	zval *str, str_sub, *start, start_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 
@@ -39,7 +40,7 @@ PHP_METHOD(Test_Optimizers_Substr, testTwoArguments) {
 
 
 	zephir_substr(return_value, str, zephir_get_intval(start), 0, ZEPHIR_SUBSTR_NO_LENGTH);
-	return;
+	RETURN_MM();
 
 }
 
@@ -48,6 +49,7 @@ PHP_METHOD(Test_Optimizers_Substr, testThreeArguments) {
 	zval *str, str_sub, *start, start_sub, *offset, offset_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 	ZVAL_UNDEF(&offset_sub);
@@ -57,7 +59,7 @@ PHP_METHOD(Test_Optimizers_Substr, testThreeArguments) {
 
 
 	zephir_substr(return_value, str, zephir_get_intval(start), zephir_get_intval(offset), 0);
-	return;
+	RETURN_MM();
 
 }
 

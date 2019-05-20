@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "math.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/math.h"
 
 
@@ -33,12 +33,13 @@ PHP_METHOD(Test_Optimizers_Tan, testInt) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 0;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(tan(a));
+	RETURN_MM_DOUBLE(tan(a));
 
 }
 
@@ -48,12 +49,13 @@ PHP_METHOD(Test_Optimizers_Tan, testVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 0;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(tan(a));
+	RETURN_MM_DOUBLE(tan(a));
 
 }
 
@@ -63,12 +65,13 @@ PHP_METHOD(Test_Optimizers_Tan, testVar2) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(tan(a));
+	RETURN_MM_DOUBLE(tan(a));
 
 }
 
@@ -77,11 +80,12 @@ PHP_METHOD(Test_Optimizers_Tan, testIntValue1) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 1);
-	RETURN_DOUBLE(tan(1));
+	RETURN_MM_DOUBLE(tan(1));
 
 }
 
@@ -90,11 +94,12 @@ PHP_METHOD(Test_Optimizers_Tan, testIntValue2) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 2);
-	RETURN_DOUBLE(tan(2));
+	RETURN_MM_DOUBLE(tan(2));
 
 }
 
@@ -104,6 +109,7 @@ PHP_METHOD(Test_Optimizers_Tan, testIntParameter) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &a_param);
@@ -112,7 +118,7 @@ PHP_METHOD(Test_Optimizers_Tan, testIntParameter) {
 
 
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(tan(a));
+	RETURN_MM_DOUBLE(tan(a));
 
 }
 
@@ -121,13 +127,14 @@ PHP_METHOD(Test_Optimizers_Tan, testVarParameter) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_DOUBLE(zephir_tan(a TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_tan(a TSRMLS_CC));
 
 }
 

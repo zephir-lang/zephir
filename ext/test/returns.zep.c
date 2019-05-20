@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Returns) {
@@ -29,8 +29,9 @@ PHP_METHOD(Test_Returns, testReturnCast1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG((int) 5.0);
+	RETURN_MM_LONG((int) 5.0);
 
 }
 
@@ -38,8 +39,9 @@ PHP_METHOD(Test_Returns, testReturnCast2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(1);
+	RETURN_MM_LONG(1);
 
 }
 
@@ -47,8 +49,9 @@ PHP_METHOD(Test_Returns, testReturnCast3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_LONG(0);
+	RETURN_MM_LONG(0);
 
 }
 
@@ -56,11 +59,12 @@ PHP_METHOD(Test_Returns, testReturnCast4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	if (1) {
-		RETURN_LONG(1);
+		RETURN_MM_LONG(1);
 	} else {
-		RETURN_LONG(0);
+		RETURN_MM_LONG(0);
 	}
 
 }
@@ -71,9 +75,9 @@ PHP_METHOD(Test_Returns, returnWithParameter) {
 	zval parameter;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&parameter);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &parameter_param);
 
 	zephir_get_strval(&parameter, parameter_param);
@@ -87,8 +91,9 @@ PHP_METHOD(Test_Returns, returnWithoutParameter) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("Return back");
+	RETURN_MM_STRING("Return back");
 
 }
 

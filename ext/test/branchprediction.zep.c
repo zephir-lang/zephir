@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -32,11 +32,12 @@ PHP_METHOD(Test_BranchPrediction, testLikely1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	if (EXPECTED(1 == 1)) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	} else {
-		RETURN_BOOL(0);
+		RETURN_MM_BOOL(0);
 	}
 
 }
@@ -46,6 +47,7 @@ PHP_METHOD(Test_BranchPrediction, testLikely2) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -53,9 +55,9 @@ PHP_METHOD(Test_BranchPrediction, testLikely2) {
 
 
 	if (EXPECTED(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	} else {
-		RETURN_BOOL(0);
+		RETURN_MM_BOOL(0);
 	}
 
 }
@@ -64,11 +66,12 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	if (EXPECTED(1 == 1)) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	} else {
-		RETURN_BOOL(0);
+		RETURN_MM_BOOL(0);
 	}
 
 }
@@ -78,6 +81,7 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely2) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
@@ -85,9 +89,9 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely2) {
 
 
 	if (EXPECTED(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
-		RETURN_BOOL(1);
+		RETURN_MM_BOOL(1);
 	} else {
-		RETURN_BOOL(0);
+		RETURN_MM_BOOL(0);
 	}
 
 }

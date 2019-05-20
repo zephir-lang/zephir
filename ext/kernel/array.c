@@ -36,6 +36,7 @@
 #include "kernel/backtrace.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/debug.h"
 
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int initialize)
 {
@@ -96,17 +97,20 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			ZEPHIR_CALL_METHOD(fetched, (zval *)arr, "offsetget", NULL, 0, index);
-
-			return 1;
+			ret = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
-
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		ZVAL_NULL(fetched);
 
@@ -165,6 +169,9 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist, offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZVAL_STRINGL(&offset, index, index_length);
 
@@ -172,13 +179,13 @@ int zephir_array_isset_string_fetch(zval *fetched, const zval *arr, char *index,
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			ZEPHIR_CALL_METHOD(fetched, (zval *)arr, "offsetget", NULL, 0, &offset);
-
-			return 1;
+			ret = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
-
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
 			zephir_ensure_array(zv);
@@ -204,18 +211,21 @@ int zephir_array_isset_long_fetch(zval *fetched, const zval *arr, unsigned long 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist, offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
 			ZEPHIR_CALL_METHOD(fetched, (zval *)arr, "offsetget", NULL, 0, &offset);
-
-			return 1;
+			ret = 1;
+		} else {
+			ZVAL_NULL(fetched);
 		}
 
-		ZVAL_NULL(fetched);
-
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
 			zephir_ensure_array(zv);
@@ -245,13 +255,17 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, index);
 		if (zend_is_true(&exist)) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
@@ -286,15 +300,19 @@ int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist, offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZVAL_STRINGL(&offset, index, index_length);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_str_exists(Z_ARRVAL_P(arr), index, index_length);
 	}
@@ -307,14 +325,18 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev((zval *)arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval exist, offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_UNDEF(&exist);
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD(&exist, (zval *)arr, "offsetexists", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE && zend_is_true(&exist)) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		return zend_hash_index_exists(Z_ARRVAL_P(arr), index);
 	}
@@ -328,12 +350,16 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetunset", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
@@ -375,14 +401,18 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_STRINGL(&offset, index, index_length);
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetunset", NULL, 0, &offset);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
@@ -399,14 +429,18 @@ int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetunset", NULL, 0, &offset);
 
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return 1;
+			ret = 1;
 		}
 
-		return 0;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		return 0;
 	}
@@ -426,10 +460,9 @@ int zephir_array_append(zval *arr, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
 	}
 
 	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
-		SEPARATE_ZVAL_IF_NOT_REF(arr);
+		ZEPHIR_SEPARATE(value);
 	}
 
-	Z_TRY_ADDREF_P(value);
 	return add_next_index_zval(arr, value);
 }
 
@@ -443,12 +476,17 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZEPHIR_CALL_METHOD(return_value, arr, "offsetget", NULL, 0, index);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) == IS_ARRAY) {
 		ht = Z_ARRVAL_P(arr);
 		switch (Z_TYPE_P(index)) {
@@ -520,14 +558,19 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_STRINGL(&offset, index, index_length);
 		ZEPHIR_CALL_METHOD(return_value, arr, "offsetget", NULL, 0, &offset);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_str_find(Z_ARRVAL_P(arr), index, index_length)) != NULL) {
 
@@ -563,13 +606,18 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD(return_value, arr, "offsetget", NULL, 0, &offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (EXPECTED(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
 
@@ -632,12 +680,17 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, index, value);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (2)");
 		return FAILURE;
@@ -648,14 +701,10 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 		//Z_TRY_DELREF_P(value); //?
 		ZVAL_DUP(&new_zv, value);
 		value = &new_zv;
-	}
-
-	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
-		SEPARATE_ZVAL_IF_NOT_REF(arr);
-	}
-
-	if ((flags & PH_COPY) == PH_COPY) {
+	} else if ((flags & PH_COPY) == PH_COPY) {
 		Z_TRY_ADDREF_P(value);
+	} else if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		ZEPHIR_SEPARATE(value);
 	}
 
 	ht = Z_ARRVAL_P(arr);
@@ -697,14 +746,19 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_STRINGL(&offset, index, index_length);
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, &offset, value);
 		zval_ptr_dtor(&offset);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array (3)");
 		return FAILURE;
@@ -717,12 +771,9 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 		value = &new_value;
 	} else if ((flags & PH_COPY) == PH_COPY) {
 		Z_TRY_ADDREF_P(value);
+	} else if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		ZEPHIR_SEPARATE(value);
 	}
-
-	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
-		SEPARATE_ZVAL_IF_NOT_REF(arr);
-	}
-
 	return zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value) ? SUCCESS : FAILURE;
 }
 
@@ -731,13 +782,18 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 		zend_long ZEPHIR_LAST_CALL_STATUS;
 		zval offset;
+		int ret = 0;
+
+		ZEPHIR_MM_GROW();
 		ZVAL_LONG(&offset, index);
 		ZEPHIR_CALL_METHOD(NULL, arr, "offsetset", NULL, 0, &offset, value);
 		if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
-			return SUCCESS;
+			ret = SUCCESS;
+		} else {
+			ret = FAILURE;
 		}
-
-		return FAILURE;
+		ZEPHIR_MM_RESTORE();
+		return ret;
 	} else if (Z_TYPE_P(arr) != IS_ARRAY) {
 		zend_error(E_WARNING, "Cannot use a scalar value as an array in %s on line %d", file, line);
 		return FAILURE;
@@ -750,10 +806,8 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 		value = &new_value;
 	} else if ((flags & PH_COPY) == PH_COPY) {
 		Z_TRY_ADDREF_P(value);
-	}
-
-	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
-		SEPARATE_ZVAL_IF_NOT_REF(arr);
+	} else if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		ZEPHIR_SEPARATE(value);
 	}
 
 	return zend_hash_index_update(Z_ARRVAL_P(arr), index, value) ? SUCCESS : FAILURE;
@@ -832,7 +886,6 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 		return;
 	}
 	p = Z_ARRVAL_P(arr);
-
 	for (i = 0; i < types_length; ++i) {
 		zval fetched;
 		ZVAL_UNDEF(&fetched);
@@ -852,13 +905,16 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 				old_l[i] = l;
 				if (zephir_array_isset_string_fetch(&fetched, &pzv, s, l, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
+						re_update = !Z_REFCOUNTED(fetched) || (Z_REFCOUNT(fetched) > 1 && !Z_IMMUTABLE(fetched));
+						if (re_update) {
+							ZEPHIR_SEPARATE_ARRAY(&fetched);
+							zephir_array_update_string(&pzv, s, l, &fetched, 0);
+						}
 						if (i == (types_length - 1)) {
-							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
-							zephir_array_update_string(&pzv, s, l, value, PH_COPY | PH_SEPARATE);
+							zephir_array_update_string(&pzv, s, l, value, PH_SEPARATE);
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
@@ -866,19 +922,13 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
-					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
 					if (i == (types_length - 1)) {
-						zephir_array_update_string(&pzv, s, l, value, PH_COPY | PH_SEPARATE);
+						zephir_array_update_string(&pzv, s, l, value, PH_SEPARATE);
 						p = Z_ARRVAL(pzv);
 					} else {
 						array_init(&tmp);
-						zephir_array_update_string(&pzv, s, l, &tmp, PH_SEPARATE);
-						p = Z_ARRVAL(pzv);
-						if (re_update) {
-							wrap_tmp = 1;
-						} else {
-							p = Z_ARRVAL(tmp);
-						}
+						zephir_array_update_string(&pzv, s, l, &tmp, 0);
+						p = Z_ARRVAL(tmp);
 					}
 				}
 				break;
@@ -888,13 +938,17 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 				old_ll[i] = ll;
 				if (zephir_array_isset_long_fetch(&fetched, &pzv, ll, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
+						re_update = !Z_REFCOUNTED(fetched) || (Z_REFCOUNT(fetched) > 1 && !Z_IMMUTABLE(fetched));
+						if (re_update) {
+							ZEPHIR_SEPARATE_ARRAY(&fetched);
+							zephir_array_update_long(&pzv, ll, &fetched, 0 ZEPHIR_DEBUG_PARAMS_DUMMY);
+						}
 						if (i == (types_length - 1)) {
 							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
-							zephir_array_update_long(&pzv, ll, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+							zephir_array_update_long(&pzv, ll, value, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
@@ -902,19 +956,13 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
-					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
 					if (i == (types_length - 1)) {
-						zephir_array_update_long(&pzv, ll, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+						zephir_array_update_long(&pzv, ll, value, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 						p = Z_ARRVAL(pzv);
 					} else {
 						array_init(&tmp);
-						zephir_array_update_long(&pzv, ll, &tmp, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-						p = Z_ARRVAL(pzv);
-						if (re_update) {
-							wrap_tmp = 1;
-						} else {
-							p = Z_ARRVAL(tmp);
-						}
+						zephir_array_update_long(&pzv, ll, &tmp, 0 ZEPHIR_DEBUG_PARAMS_DUMMY);
+						p = Z_ARRVAL(tmp);
 					}
 				}
 				break;
@@ -924,13 +972,17 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 				old_item[i] = item;
 				if (zephir_array_isset_fetch(&fetched, &pzv, item, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
+						re_update = !Z_REFCOUNTED(fetched) || (Z_REFCOUNT(fetched) > 1 && !Z_IMMUTABLE(fetched));
+						if (re_update) {
+							ZEPHIR_SEPARATE_ARRAY(&fetched);
+							zephir_array_update_zval(&pzv, item, &fetched, 0);
+						}
 						if (i == (types_length - 1)) {
 							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
-							zephir_array_update_zval(&pzv, item, value, PH_COPY | PH_SEPARATE);
+							zephir_array_update_zval(&pzv, item, value, PH_SEPARATE);
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
-							Z_TRY_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
@@ -938,65 +990,21 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
-					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
 					if (i == (types_length - 1)) {
-						zephir_array_update_zval(&pzv, item, value, PH_COPY | PH_SEPARATE);
+						zephir_array_update_zval(&pzv, item, value, PH_SEPARATE);
 						p = Z_ARRVAL(pzv);
 					} else {
 						array_init(&tmp);
-						zephir_array_update_zval(&pzv, item, &tmp, PH_SEPARATE);
-						p = Z_ARRVAL(pzv);
-						if (re_update) {
-							wrap_tmp = 1;
-						} else {
-							p = Z_ARRVAL(tmp);
-						}
+						zephir_array_update_zval(&pzv, item, &tmp, 0);
+						p = Z_ARRVAL(tmp);
 					}
 				}
 				break;
 
 			case 'a':
-				re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
 				zephir_array_append(&pzv, value, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 				p = Z_ARRVAL(pzv);
 				break;
-		}
-
-		if (re_update) {
-			for (j = i - 1; j >= 0; j--) {
-				zval old_pzv;
-
-				if (!re_update) {
-					break;
-				}
-
-				ZVAL_ARR(&pzv, old_p[j]);
-				re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
-
-				if (j == i - 1) {
-					ZVAL_ARR(&old_pzv, p);
-				} else {
-					ZVAL_ARR(&old_pzv, old_p[j + 1]);
-				}
-
-				switch (old_type[j])
-				{
-					case 's':
-						zephir_array_update_string(&pzv, old_s[j], old_l[j], &old_pzv, PH_SEPARATE);
-						break;
-					case 'l':
-						zephir_array_update_long(&pzv, old_ll[j], &old_pzv, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-						break;
-					case 'z':
-						zephir_array_update_zval(&pzv, old_item[j], &old_pzv, PH_SEPARATE);
-						break;
-				}
-				old_p[j] = Z_ARRVAL(pzv);
-				if (wrap_tmp) {
-					p = Z_ARRVAL(tmp);
-					wrap_tmp = 0;
-				}
-			}
 		}
 
 		if (i != (types_length - 1)) {
@@ -1009,8 +1017,6 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 {
 	va_list ap;
 	va_start(ap, types_count);
-	SEPARATE_ZVAL_IF_NOT_REF(arr);
-
 	zephir_array_update_multi_ex(arr, value, types, types_length, types_count, ap);
 	va_end(ap);
 

@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -32,8 +32,9 @@ PHP_METHOD(Test_ScallDynamic, testMethod1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello public");
+	RETURN_MM_STRING("hello public");
 
 }
 
@@ -41,8 +42,9 @@ PHP_METHOD(Test_ScallDynamic, testMethod2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello protected");
+	RETURN_MM_STRING("hello protected");
 
 }
 
@@ -50,8 +52,9 @@ PHP_METHOD(Test_ScallDynamic, testMethod3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello private");
+	RETURN_MM_STRING("hello private");
 
 }
 
@@ -61,13 +64,14 @@ PHP_METHOD(Test_ScallDynamic, selfDynamicCall1) {
 	zval *methodName, methodName_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&methodName_sub);
 
 	zephir_fetch_params(0, 1, 0, &methodName);
 
 
 
-	return;
+	RETURN_MM();
 
 }
 

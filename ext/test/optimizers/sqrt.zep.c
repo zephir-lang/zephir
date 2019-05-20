@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "math.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/math.h"
 
 
@@ -33,12 +33,13 @@ PHP_METHOD(Test_Optimizers_Sqrt, testInt) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 4;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sqrt(a));
+	RETURN_MM_DOUBLE(sqrt(a));
 
 }
 
@@ -48,12 +49,13 @@ PHP_METHOD(Test_Optimizers_Sqrt, testVar) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	a = 4;
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sqrt(a));
+	RETURN_MM_DOUBLE(sqrt(a));
 
 }
 
@@ -62,11 +64,12 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntValue1) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 4);
-	RETURN_DOUBLE(sqrt(4));
+	RETURN_MM_DOUBLE(sqrt(4));
 
 }
 
@@ -75,11 +78,12 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntValue2) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 
 	ZVAL_LONG(&_0, 16);
-	RETURN_DOUBLE(sqrt(16));
+	RETURN_MM_DOUBLE(sqrt(16));
 
 }
 
@@ -89,6 +93,7 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntParameter) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &a_param);
@@ -97,7 +102,7 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntParameter) {
 
 
 	ZVAL_LONG(&_0, a);
-	RETURN_DOUBLE(sqrt(a));
+	RETURN_MM_DOUBLE(sqrt(a));
 
 }
 
@@ -106,13 +111,14 @@ PHP_METHOD(Test_Optimizers_Sqrt, testVarParameter) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_DOUBLE(zephir_sqrt(a TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_sqrt(a TSRMLS_CC));
 
 }
 

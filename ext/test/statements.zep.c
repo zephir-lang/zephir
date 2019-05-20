@@ -52,6 +52,7 @@ PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 	zval result1, result2, result3, result4, _0, _1, _2, _3, _4, _5, _6, _7;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&result1);
 	ZVAL_UNDEF(&result2);
 	ZVAL_UNDEF(&result3);
@@ -65,23 +66,18 @@ PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_7);
 
-	ZEPHIR_MM_GROW();
 
 	zephir_read_property(&_0, this_ptr, SL("tmp2"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, SL("tmp1"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_INIT_VAR(&result1);
 	zephir_fast_strpos(&result1, &_0, &_1, 0 );
 	zephir_read_property(&_2, this_ptr, SL("tmp2"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_3, this_ptr, SL("tmp1"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_INIT_VAR(&result2);
 	zephir_fast_strpos(&result2, &_2, &_3, 0 );
 	zephir_read_property(&_4, this_ptr, SL("tmp2"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_5, this_ptr, SL("tmp1"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_INIT_VAR(&result3);
 	zephir_fast_strpos(&result3, &_4, &_5, 0 );
 	zephir_read_property(&_6, this_ptr, SL("tmp2"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_7, this_ptr, SL("tmp1"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_INIT_VAR(&result4);
 	zephir_fast_strpos(&result4, &_6, &_7, 0 );
 	ZEPHIR_MM_RESTORE();
 
@@ -93,6 +89,7 @@ PHP_METHOD(Test_Statements, testElseIf) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
@@ -100,13 +97,13 @@ PHP_METHOD(Test_Statements, testElseIf) {
 
 
 	if (num > 0) {
-		RETURN_STRING("more");
+		RETURN_MM_STRING("more");
 	} else if (num == 0) {
-		RETURN_STRING("equal");
+		RETURN_MM_STRING("equal");
 	} else if (num == -1) {
-		RETURN_STRING("-1");
+		RETURN_MM_STRING("-1");
 	} else {
-		RETURN_STRING("less");
+		RETURN_MM_STRING("less");
 	}
 
 }
@@ -117,6 +114,7 @@ PHP_METHOD(Test_Statements, testElseIf1) {
 	zend_long num, total;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
@@ -125,11 +123,11 @@ PHP_METHOD(Test_Statements, testElseIf1) {
 
 	total = 10;
 	if (num < total) {
-		RETURN_STRING("less");
+		RETURN_MM_STRING("less");
 	} else if (num == total) {
-		RETURN_STRING("equal");
+		RETURN_MM_STRING("equal");
 	} else {
-		RETURN_STRING("else");
+		RETURN_MM_STRING("else");
 	}
 
 }
@@ -140,6 +138,7 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&total_sub);
 
 	zephir_fetch_params(0, 2, 0, &num_param, &total);
@@ -148,11 +147,11 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 
 
 	if (ZEPHIR_GT_LONG(total, num)) {
-		RETURN_STRING("less");
+		RETURN_MM_STRING("less");
 	} else if (ZEPHIR_IS_LONG(total, num)) {
-		RETURN_STRING("equal");
+		RETURN_MM_STRING("equal");
 	} else {
-		RETURN_STRING("else");
+		RETURN_MM_STRING("else");
 	}
 
 }
@@ -164,6 +163,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	zend_long step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2$$3);
@@ -180,7 +180,6 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	ZVAL_UNDEF(&_14$$5);
 	ZVAL_UNDEF(&_15$$5);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
@@ -232,6 +231,7 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	zend_long step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0, totalSteps = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
@@ -246,7 +246,6 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	ZVAL_UNDEF(&_12$$5);
 	ZVAL_UNDEF(&_13$$5);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {

@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/math.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Optimizers_Ldexp) {
@@ -32,6 +32,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testInt) {
 	zend_long x, exponent;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -40,7 +41,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testInt) {
 	exponent = 3;
 	ZVAL_LONG(&_0, x);
 	ZVAL_LONG(&_1, exponent);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -51,6 +52,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDoubleInt) {
 	double x;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -59,7 +61,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDoubleInt) {
 	exponent = 3;
 	ZVAL_DOUBLE(&_0, x);
 	ZVAL_LONG(&_1, exponent);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -69,6 +71,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDouble) {
 	double x, exponent;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -77,7 +80,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testDouble) {
 	exponent = 3.0;
 	ZVAL_DOUBLE(&_0, x);
 	ZVAL_DOUBLE(&_1, exponent);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -87,6 +90,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVar) {
 	zend_long x, exponent;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -95,7 +99,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVar) {
 	exponent = 3;
 	ZVAL_LONG(&_0, x);
 	ZVAL_LONG(&_1, exponent);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -104,13 +108,14 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntValue1) {
 	zval _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
 
 	ZVAL_LONG(&_0, 2);
 	ZVAL_LONG(&_1, 3);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -120,6 +125,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntParameter) {
 	zend_long x, exponent;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
@@ -131,7 +137,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testIntParameter) {
 
 	ZVAL_LONG(&_0, x);
 	ZVAL_LONG(&_1, exponent);
-	RETURN_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(&_0, &_1 TSRMLS_CC));
 
 }
 
@@ -140,6 +146,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVarParameter) {
 	zval *x, x_sub, *exponent, exponent_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&x_sub);
 	ZVAL_UNDEF(&exponent_sub);
 
@@ -147,7 +154,7 @@ PHP_METHOD(Test_Optimizers_Ldexp, testVarParameter) {
 
 
 
-	RETURN_DOUBLE(zephir_ldexp(x, exponent TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_ldexp(x, exponent TSRMLS_CC));
 
 }
 

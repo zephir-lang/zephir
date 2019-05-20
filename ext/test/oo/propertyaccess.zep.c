@@ -40,6 +40,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&test);
 	ZVAL_UNDEF(&test1);
 	ZVAL_UNDEF(&_1);
@@ -54,25 +55,18 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_6);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&test);
 	object_init(&test);
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 5, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRING(&_1, "1");
+	zephir_create_array(&_0, 5, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&_1, "1");
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 5);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_DOUBLE(&_1, 6.00);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(&test, SL("test"), &_0);
@@ -82,19 +76,15 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_read_property(&_4, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 22 TSRMLS_CC);
 	zephir_update_property_zval(&test, SL("test3"), &_5);
-	ZEPHIR_INIT_VAR(&_6);
-	zephir_create_array(&_6, 4, 0 TSRMLS_CC);
+	zephir_create_array(&_6, 4, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_6);
 	zephir_read_property(&_7, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&_8);
 	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "test/oo/propertyaccess.zep", 23 TSRMLS_CC);
 	zephir_array_fast_append(&_6, &_8);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_6, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 2);
 	zephir_array_fast_append(&_6, &_1);
-	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_6, &_1);
 	zephir_update_property_zval(&test, SL("test3"), &_6);
@@ -112,6 +102,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 
 	zephir_fetch_params(0, 1, 0, &value);
@@ -119,7 +110,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
 
 
 	zephir_update_property_zval(this_ptr, SL("privateVariable"), value);
-	RETURN_THISW();
+	RETURN_MM_THIS();
 
 }
 
@@ -127,8 +118,9 @@ PHP_METHOD(Test_Oo_PropertyAccess, getPrivatevariable) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_MEMBER(getThis(), "privateVariable");
+	RETURN_MM_MEMBER(getThis(), "privateVariable");
 
 }
 

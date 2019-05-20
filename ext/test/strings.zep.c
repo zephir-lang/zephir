@@ -34,11 +34,11 @@ PHP_METHOD(Test_Strings, camelize) {
 	zval str;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
 
 	zephir_get_strval(&str, str_param);
@@ -59,11 +59,11 @@ PHP_METHOD(Test_Strings, uncamelize) {
 	zval str;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
 
 	zephir_get_strval(&str, str_param);
@@ -83,6 +83,7 @@ PHP_METHOD(Test_Strings, testTrim) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -90,7 +91,7 @@ PHP_METHOD(Test_Strings, testTrim) {
 
 
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -99,6 +100,7 @@ PHP_METHOD(Test_Strings, testRtrim) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -106,7 +108,7 @@ PHP_METHOD(Test_Strings, testRtrim) {
 
 
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_RIGHT TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -115,6 +117,7 @@ PHP_METHOD(Test_Strings, testLtrim) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -122,7 +125,7 @@ PHP_METHOD(Test_Strings, testLtrim) {
 
 
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_LEFT TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -131,6 +134,7 @@ PHP_METHOD(Test_Strings, testTrim2Params) {
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -139,7 +143,7 @@ PHP_METHOD(Test_Strings, testTrim2Params) {
 
 
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_BOTH TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -148,6 +152,7 @@ PHP_METHOD(Test_Strings, testRtrim2Params) {
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -156,7 +161,7 @@ PHP_METHOD(Test_Strings, testRtrim2Params) {
 
 
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_RIGHT TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -165,6 +170,7 @@ PHP_METHOD(Test_Strings, testLtrim2Params) {
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
 
@@ -173,7 +179,7 @@ PHP_METHOD(Test_Strings, testLtrim2Params) {
 
 
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_LEFT TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -182,6 +188,7 @@ PHP_METHOD(Test_Strings, testImplode) {
 	zval *glue, glue_sub, *pieces, pieces_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&glue_sub);
 	ZVAL_UNDEF(&pieces_sub);
 
@@ -190,7 +197,7 @@ PHP_METHOD(Test_Strings, testImplode) {
 
 
 	zephir_fast_join(return_value, glue, pieces TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -199,6 +206,7 @@ PHP_METHOD(Test_Strings, testStrpos) {
 	zval *haystack, haystack_sub, *needle, needle_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
 
@@ -207,7 +215,7 @@ PHP_METHOD(Test_Strings, testStrpos) {
 
 
 	zephir_fast_strpos(return_value, haystack, needle, 0 );
-	return;
+	RETURN_MM();
 
 }
 
@@ -217,6 +225,7 @@ PHP_METHOD(Test_Strings, testStrposOffset) {
 	zval *haystack, haystack_sub, *needle, needle_sub, *offset_param = NULL, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
@@ -228,7 +237,7 @@ PHP_METHOD(Test_Strings, testStrposOffset) {
 
 	ZVAL_LONG(&_0, offset);
 	zephir_fast_strpos(return_value, haystack, needle, zephir_get_intval(&_0) );
-	return;
+	RETURN_MM();
 
 }
 
@@ -237,6 +246,7 @@ PHP_METHOD(Test_Strings, testExplode) {
 	zval *delimiter, delimiter_sub, *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_UNDEF(&str_sub);
 
@@ -245,7 +255,7 @@ PHP_METHOD(Test_Strings, testExplode) {
 
 
 	zephir_fast_explode(return_value, delimiter, str, LONG_MAX TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -254,6 +264,7 @@ PHP_METHOD(Test_Strings, testExplodeStr) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -261,7 +272,7 @@ PHP_METHOD(Test_Strings, testExplodeStr) {
 
 
 	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -271,6 +282,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 	zval *str, str_sub, *limit_param = NULL, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -281,7 +293,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 	ZVAL_LONG(&_0, limit);
 	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0)  TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -291,6 +303,7 @@ PHP_METHOD(Test_Strings, testSubstr) {
 	zval *str, str_sub, *from_param = NULL, *len_param = NULL, _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -304,7 +317,7 @@ PHP_METHOD(Test_Strings, testSubstr) {
 	ZVAL_LONG(&_0, from);
 	ZVAL_LONG(&_1, len);
 	zephir_substr(return_value, str, zephir_get_intval(&_0), zephir_get_intval(&_1), 0);
-	return;
+	RETURN_MM();
 
 }
 
@@ -314,6 +327,7 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 	zval *str, str_sub, *from_param = NULL, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -324,7 +338,7 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 
 	ZVAL_LONG(&_0, from);
 	zephir_substr(return_value, str, zephir_get_intval(&_0), 0, ZEPHIR_SUBSTR_NO_LENGTH);
-	return;
+	RETURN_MM();
 
 }
 
@@ -333,6 +347,7 @@ PHP_METHOD(Test_Strings, testSubstr3) {
 	zval *str, str_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 
@@ -342,7 +357,7 @@ PHP_METHOD(Test_Strings, testSubstr3) {
 
 	ZVAL_LONG(&_0, -1);
 	zephir_substr(return_value, str, -1 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
-	return;
+	RETURN_MM();
 
 }
 
@@ -351,6 +366,7 @@ PHP_METHOD(Test_Strings, testSubstr4) {
 	zval *str, str_sub, _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
@@ -362,7 +378,7 @@ PHP_METHOD(Test_Strings, testSubstr4) {
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, -1);
 	zephir_substr(return_value, str, 0 , -1 , 0);
-	return;
+	RETURN_MM();
 
 }
 
@@ -371,6 +387,7 @@ PHP_METHOD(Test_Strings, testAddslashes) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -378,7 +395,7 @@ PHP_METHOD(Test_Strings, testAddslashes) {
 
 
 	zephir_addslashes(return_value, str TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 }
 
@@ -387,6 +404,7 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -394,7 +412,7 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 
 
 	zephir_stripslashes(return_value, str);
-	return;
+	RETURN_MM();
 
 }
 
@@ -403,6 +421,7 @@ PHP_METHOD(Test_Strings, testStripcslashes) {
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str_sub);
 
 	zephir_fetch_params(0, 1, 0, &str);
@@ -410,7 +429,7 @@ PHP_METHOD(Test_Strings, testStripcslashes) {
 
 
 	zephir_stripcslashes(return_value, str);
-	return;
+	RETURN_MM();
 
 }
 
@@ -419,6 +438,7 @@ PHP_METHOD(Test_Strings, testHashEquals) {
 	zval *str1, str1_sub, *str2, str2_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&str1_sub);
 	ZVAL_UNDEF(&str2_sub);
 
@@ -426,7 +446,7 @@ PHP_METHOD(Test_Strings, testHashEquals) {
 
 
 
-	RETURN_BOOL(zephir_hash_equals(str1, str2));
+	RETURN_MM_BOOL(zephir_hash_equals(str1, str2));
 
 }
 
@@ -434,8 +454,9 @@ PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("\n            Hello world\n        ");
+	RETURN_MM_STRING("\n            Hello world\n        ");
 
 }
 
@@ -443,8 +464,10 @@ PHP_METHOD(Test_Strings, testEchoMultilineString) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%s", "\n            Hello world\n        ");
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -453,12 +476,11 @@ PHP_METHOD(Test_Strings, testTrimMultilineString) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "\n            Hello world\n        ");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "\n            Hello world\n        ");
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	RETURN_MM();
 
@@ -469,12 +491,11 @@ PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 	zval _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\\'\n        ");
+	ZEPHIR_MM_ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\\'\n        ");
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	RETURN_MM();
 
@@ -484,8 +505,9 @@ PHP_METHOD(Test_Strings, testInternedString1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello");
+	RETURN_MM_STRING("hello");
 
 }
 
@@ -494,16 +516,14 @@ PHP_METHOD(Test_Strings, testInternedString2) {
 	zval _0, _1;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_INIT_VAR(&_1);
-	ZVAL_STRING(&_1, " hello ");
+	ZEPHIR_MM_ZVAL_STRING(&_1, " hello ");
 	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
-	RETURN_CCTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 
@@ -516,6 +536,7 @@ PHP_METHOD(Test_Strings, strToHex) {
 	zval value, ret;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value);
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&_0);
@@ -523,30 +544,27 @@ PHP_METHOD(Test_Strings, strToHex) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_5$$3);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value_param);
 
 	zephir_get_strval(&value, value_param);
 
 
 	i = 0;
-	ZEPHIR_INIT_VAR(&ret);
-	ZVAL_STRING(&ret, "");
+	ZEPHIR_MM_ZVAL_STRING(&ret, "");
 	while (1) {
 		if (!(i < zephir_fast_strlen_ev(&value))) {
 			break;
 		}
 		_1$$3 = ZEPHIR_STRING_OFFSET(&value, i);
-		ZEPHIR_INIT_NVAR(&_2$$3);
-		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
+		ZEPHIR_MM_ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 81, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 10, &_3$$3);
 		zephir_check_call_status();
-		zephir_concat_self(&ret, &_5$$3 TSRMLS_CC);
+		ZEPHIR_MM_CONCAT_SELF(&ret, &_5$$3);
 		i++;
 	}
-	RETURN_CTOR(&ret);
+	RETURN_MM_CTOR(&ret);
 
 }
 
@@ -558,6 +576,7 @@ PHP_METHOD(Test_Strings, issue1267) {
 	zval *value = NULL, value_sub, x, _0, _2, _3, _4, _6, _7;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&x);
 	ZVAL_UNDEF(&_0);
@@ -568,39 +587,30 @@ PHP_METHOD(Test_Strings, issue1267) {
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value);
 
 	ZEPHIR_SEPARATE_PARAM(value);
 
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_INIT_VAR(&_1);
-	zephir_create_array(&_1, 3, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_2);
-	ZVAL_STRING(&_2, "\\");
+	zephir_create_array(&_1, 3, 0);
+	ZEPHIR_MM_ADD_ENTRY(&_1);
+	ZEPHIR_MM_ZVAL_STRING(&_2, "\\");
 	zephir_array_fast_append(&_1, &_2);
-	ZEPHIR_INIT_NVAR(&_2);
-	ZVAL_STRING(&_2, "\"");
+	ZEPHIR_MM_ZVAL_STRING(&_2, "\"");
 	zephir_array_fast_append(&_1, &_2);
-	ZEPHIR_INIT_NVAR(&_2);
-	ZVAL_STRING(&_2, "'");
+	ZEPHIR_MM_ZVAL_STRING(&_2, "'");
 	zephir_array_fast_append(&_1, &_2);
-	ZEPHIR_INIT_NVAR(&_2);
-	ZVAL_STRING(&_2, "");
+	ZEPHIR_MM_ZVAL_STRING(&_2, "");
 	zephir_fast_str_replace(&_0, &_1, &_2, value TSRMLS_CC);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 513);
 	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 82, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
-	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 83, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
-	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_6);
 	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 83, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);

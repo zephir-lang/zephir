@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/concat.h"
 #include "kernel/memory.h"
+#include "kernel/concat.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
@@ -32,8 +32,9 @@ PHP_METHOD(Test_Scope, getStr) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("internal_string");
+	RETURN_MM_STRING("internal_string");
 
 }
 
@@ -43,6 +44,7 @@ PHP_METHOD(Test_Scope, getDyStr) {
 	zend_long g;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
 	zephir_fetch_params(0, 1, 0, &g_param);
@@ -50,10 +52,9 @@ PHP_METHOD(Test_Scope, getDyStr) {
 	g = zephir_get_intval(g_param);
 
 
-	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, g);
 	ZEPHIR_CONCAT_SV(return_value, "internal_", &_0);
-	return;
+	RETURN_MM();
 
 }
 
@@ -64,21 +65,19 @@ PHP_METHOD(Test_Scope, test1) {
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&k$$3);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&ret);
-	ZVAL_STRING(&ret, "");
+	ZEPHIR_MM_ZVAL_STRING(&ret, "");
 	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 70);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
-		ZEPHIR_INIT_VAR(&k$$3);
-		ZVAL_STRING(&k$$3, "test");
-		zephir_concat_self(&ret, &k$$3 TSRMLS_CC);
+		ZEPHIR_MM_ZVAL_STRING(&k$$3, "test");
+		ZEPHIR_MM_CONCAT_SELF(&ret, &k$$3);
 	}
 	ZEPHIR_CONCAT_VV(return_value, &ret, &k);
 	RETURN_MM();
@@ -92,17 +91,16 @@ PHP_METHOD(Test_Scope, test2) {
 	zend_long p, _1, _2, p$$3;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 
-	ZEPHIR_MM_GROW();
 
 	p = 15;
-	ZEPHIR_INIT_VAR(&k);
-	ZVAL_STRING(&k, "");
+	ZEPHIR_MM_ZVAL_STRING(&k, "");
 	_2 = 3;
 	_1 = 0;
 	_0 = 0;
@@ -116,18 +114,15 @@ PHP_METHOD(Test_Scope, test2) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
 			p$$3 = 66;
-			ZEPHIR_SINIT_NVAR(_3$$3);
 			ZVAL_LONG(&_3$$3, ((zephir_get_numberval(&c) * p$$3)));
-			ZEPHIR_INIT_LNVAR(_4$$3);
 			ZEPHIR_CONCAT_VVS(&_4$$3, &k, &_3$$3, "_");
+			ZEPHIR_MM_ADD_ENTRY(&_4$$3);
 			ZEPHIR_CPY_WRT(&k, &_4$$3);
 		}
 	}
-	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(&_5);
+	zephir_create_array(return_value, 2, 0);
 	ZVAL_LONG(&_5, p);
 	zephir_array_fast_append(return_value, &_5);
 	zephir_array_fast_append(return_value, &k);
@@ -143,14 +138,13 @@ PHP_METHOD(Test_Scope, test3) {
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&str$$3);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&k);
-	ZVAL_STRING(&k, "");
+	ZEPHIR_MM_ZVAL_STRING(&k, "");
 	_2 = 3;
 	_1 = 0;
 	_0 = 0;
@@ -164,14 +158,13 @@ PHP_METHOD(Test_Scope, test3) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
 			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 71, &c);
 			zephir_check_call_status();
-			zephir_concat_self(&k, &str$$3 TSRMLS_CC);
+			ZEPHIR_MM_CONCAT_SELF(&k, &str$$3);
 		}
 	}
-	RETURN_CCTOR(&k);
+	RETURN_MM_CTOR(&k);
 
 }
 

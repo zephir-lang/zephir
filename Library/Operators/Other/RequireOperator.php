@@ -67,14 +67,16 @@ class RequireOperator extends BaseOperator
         $codePrinter = $compilationContext->codePrinter;
 
         if ($symbolVariable) {
-            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
             $codePrinter->output('if (zephir_require_zval_ret('.$symbol.', '.$exprVar.' TSRMLS_CC) == FAILURE) {');
+            $codePrinter->output("\t".'RETURN_MM_NULL();');
+            $codePrinter->output('}');
+            $symbolVariable->addMemoryEntry($compilationContext);
         } else {
             $codePrinter->output('if (zephir_require_zval('.$exprVar.' TSRMLS_CC) == FAILURE) {');
+            $codePrinter->output("\t".'RETURN_MM_NULL();');
+            $codePrinter->output('}');
         }
-        $codePrinter->output("\t".'RETURN_MM_NULL();');
-        $codePrinter->output('}');
 
         if ($symbolVariable) {
             return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

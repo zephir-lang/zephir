@@ -37,6 +37,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray1) {
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -44,7 +45,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray1) {
 
 
 
-	RETURN_BOOL(zephir_array_isset(a, b));
+	RETURN_MM_BOOL(zephir_array_isset(a, b));
 
 }
 
@@ -54,6 +55,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 	zval *a, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
@@ -61,7 +63,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_BOOL(zephir_array_isset_long(a, b));
+	RETURN_MM_BOOL(zephir_array_isset_long(a, b));
 
 }
 
@@ -71,10 +73,10 @@ PHP_METHOD(Test_IssetTest, testIssetArray3) {
 	zval *a, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
 
 	zephir_get_strval(&b, b_param);
@@ -89,13 +91,14 @@ PHP_METHOD(Test_IssetTest, testIssetArray4) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_BOOL(zephir_array_isset_long(a, 0));
+	RETURN_MM_BOOL(zephir_array_isset_long(a, 0));
 
 }
 
@@ -104,13 +107,14 @@ PHP_METHOD(Test_IssetTest, testIssetArray5) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_BOOL(zephir_array_isset_string(a, SL("a")));
+	RETURN_MM_BOOL(zephir_array_isset_string(a, SL("a")));
 
 }
 
@@ -119,13 +123,14 @@ PHP_METHOD(Test_IssetTest, testIssetProperty1) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_BOOL(zephir_isset_property(a, SL("b")));
+	RETURN_MM_BOOL(zephir_isset_property(a, SL("b")));
 
 }
 
@@ -134,6 +139,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
@@ -141,7 +147,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 
 
 
-	RETURN_BOOL(zephir_isset_property_zval(a, b TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_isset_property_zval(a, b TSRMLS_CC));
 
 }
 
@@ -150,13 +156,14 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a_sub);
 
 	zephir_fetch_params(0, 1, 0, &a);
 
 
 
-	RETURN_BOOL((0 == 0));
+	RETURN_MM_BOOL((0 == 0));
 
 }
 
@@ -165,11 +172,10 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 	zval g;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&g);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_OBS_VAR(&g);
 	zephir_read_property(&g, this_ptr, SL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
@@ -183,15 +189,14 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 	zval *inp, inp_sub, g;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&inp_sub);
 	ZVAL_UNDEF(&g);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &inp);
 
 
 
-	ZEPHIR_OBS_VAR(&g);
 	zephir_read_property(&g, inp, SL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
@@ -204,18 +209,19 @@ zend_object *zephir_init_properties_Test_IssetTest(zend_class_entry *class_type 
 
 		zval _1$$3;
 	zval _0;
-		ZVAL_UNDEF(&_0);
+	
+	ZEPHIR_MM_GROW();
+	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 
-		ZEPHIR_MM_GROW();
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		zephir_read_property(&_0, this_ptr, SL("s"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZEPHIR_INIT_VAR(&_1$$3);
-			zephir_create_array(&_1$$3, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_1$$3, 1, 0);
+			ZEPHIR_MM_ADD_ENTRY(&_1$$3);
 			add_assoc_stringl_ex(&_1$$3, SL("a"), SL("true"));
 			zephir_update_property_zval(this_ptr, SL("s"), &_1$$3);
 		}

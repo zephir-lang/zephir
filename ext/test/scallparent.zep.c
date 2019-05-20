@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -32,8 +32,9 @@ PHP_METHOD(Test_ScallParent, testMethod1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello parent public");
+	RETURN_MM_STRING("hello parent public");
 
 }
 
@@ -41,8 +42,9 @@ PHP_METHOD(Test_ScallParent, testMethod2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello parent protected");
+	RETURN_MM_STRING("hello parent protected");
 
 }
 
@@ -51,8 +53,8 @@ PHP_METHOD(Test_ScallParent, testCallStatic) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-
 	ZEPHIR_MM_GROW();
+
 
 	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL, 0);
 	zephir_check_call_status();
@@ -64,8 +66,9 @@ PHP_METHOD(Test_ScallParent, testMethodStatic) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_STRING("hello ScallParent");
+	RETURN_MM_STRING("hello ScallParent");
 
 }
 

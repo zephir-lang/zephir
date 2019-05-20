@@ -36,19 +36,19 @@ PHP_METHOD(Test_Requires, requireExternal1) {
 	zval *path, path_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &path);
+	zephir_fetch_params(0, 1, 0, &path);
 
 
 
-	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
 	if (zephir_require_zval_ret(&_0, path TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	RETURN_CCTOR(&_0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 
@@ -57,6 +57,7 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 	zval *path, path_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&path_sub);
 
 	zephir_fetch_params(0, 1, 0, &path);
@@ -64,9 +65,9 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 
 
 	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
-		RETURN_NULL();
+		RETURN_MM_NULL();
 	}
-	RETURN_BOOL(1);
+	RETURN_MM_BOOL(1);
 
 }
 
@@ -76,19 +77,17 @@ PHP_METHOD(Test_Requires, requireExternal3) {
 	zval *path, path_sub, external3, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&external3);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
 
 
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_symbol_table(TSRMLS_C);
+	zephir_create_symbol_table(&zephir_memory);
 	
-	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, test_requires_external3_ce);
 	if (zephir_has_constructor(&external3 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
@@ -105,6 +104,7 @@ PHP_METHOD(Test_Requires, setContent) {
 	zval *content, content_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&content_sub);
 
 	zephir_fetch_params(0, 1, 0, &content);
@@ -112,6 +112,7 @@ PHP_METHOD(Test_Requires, setContent) {
 
 
 	zephir_update_property_zval(this_ptr, SL("content"), content);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -124,6 +125,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 	zval templatePath;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&templatePath);
 	ZVAL_UNDEF(&params_sub);
 	ZVAL_UNDEF(&_0);
@@ -134,7 +136,6 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 	ZVAL_UNDEF(&_5$$4);
 	ZVAL_UNDEF(&_6$$5);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &templatePath_param, &params);
 
 	if (UNEXPECTED(Z_TYPE_P(templatePath_param) != IS_STRING && Z_TYPE_P(templatePath_param) != IS_NULL)) {
@@ -144,27 +145,23 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 	if (EXPECTED(Z_TYPE_P(templatePath_param) == IS_STRING)) {
 		zephir_get_strval(&templatePath, templatePath_param);
 	} else {
-		ZEPHIR_INIT_VAR(&templatePath);
-		ZVAL_EMPTY_STRING(&templatePath);
+		ZEPHIR_MM_ZVAL_EMPTY_STRING(&templatePath);
 	}
 
 
-	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_symbol_table(TSRMLS_C);
+	zephir_create_symbol_table(&zephir_memory);
 	
 	if (Z_TYPE_P(params) == IS_ARRAY) {
 		zephir_is_iterable(params, 0, "test/requires.zep", 47);
 		if (Z_TYPE_P(params) == IS_ARRAY) {
 			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(params), _3$$3, _4$$3, _1$$3)
 			{
-				ZEPHIR_INIT_NVAR(&key);
 				if (_4$$3 != NULL) { 
 					ZVAL_STR_COPY(&key, _4$$3);
 				} else {
 					ZVAL_LONG(&key, _3$$3);
 				}
-				ZEPHIR_INIT_NVAR(&value);
-				ZVAL_COPY(&value, _1$$3);
+				ZEPHIR_CPY_WRT(&value, _1$$3);
 				ZEPHIR_CPY_WRT(&_5$$4, &value);
 				if (zephir_set_symbol(&key, &_5$$4 TSRMLS_CC) == FAILURE) {
 					return;
@@ -191,14 +188,12 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 				zephir_check_call_status();
 			}
 		}
-		ZEPHIR_INIT_NVAR(&value);
-		ZEPHIR_INIT_NVAR(&key);
 	}
-	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_7);
 	if (zephir_require_zval_ret(&_7, &templatePath TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	RETURN_CCTOR(&_7);
+	ZEPHIR_MM_ADD_ENTRY(&_7);
+	RETURN_MM_CTOR(&_7);
 
 }
 

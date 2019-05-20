@@ -11,10 +11,11 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
+use Zephir\BaseBackend;
 use function Zephir\add_slashes;
-use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
+use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -27,7 +28,7 @@ use Zephir\Variable;
 /**
  * Zephir\Backends\ZendEngine3\Backend.
  */
-class Backend extends BackendZendEngine2
+class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine3';
 
@@ -69,14 +70,6 @@ class Backend extends BackendZendEngine2
         return '&'.$variable->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getVariableCodePointer(Variable $variable)
-    {
-        return $this->getVariableCode($variable);
-    }
-
     public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
     {
         $code = '(Z_TYPE_P('.$this->getVariableCode($variable).') == IS_TRUE)';
@@ -105,7 +98,100 @@ class Backend extends BackendZendEngine2
                 return ['*', 'zend_string'];
         }
 
-        list($pointer, $code) = parent::getTypeDefinition($type);
+        $code = null;
+        $pointer = null;
+        switch ($type) {
+            case 'int':
+                $code = 'zend_long';
+                break;
+
+            case 'uint':
+                $code = 'zend_ulong';
+                break;
+
+            case 'char':
+                $code = 'char';
+                break;
+
+            case 'uchar':
+                $code = 'unsigned char';
+                break;
+
+            case 'long':
+                $code = 'long';
+                break;
+
+            case 'ulong':
+                $code = 'unsigned long';
+                break;
+
+            case 'bool':
+                $code = 'zend_bool';
+                break;
+
+            case 'double':
+                $code = 'double';
+                break;
+
+            case 'string':
+            case 'variable':
+            case 'array':
+            case 'null':
+                $pointer = '*';
+                $code = 'zval';
+                break;
+
+            case 'HashTable':
+                $pointer = '*';
+                $code = 'HashTable';
+                break;
+
+            case 'HashPosition':
+                $code = 'HashPosition';
+                break;
+
+            case 'zend_class_entry':
+                $pointer = '*';
+                $code = 'zend_class_entry';
+                break;
+
+            case 'zend_function':
+                $pointer = '*';
+                $code = 'zend_function';
+                break;
+
+            case 'zend_object_iterator':
+                $pointer = '*';
+                $code = 'zend_object_iterator';
+                break;
+
+            case 'zend_property_info':
+                $pointer = '*';
+                $code = 'zend_property_info';
+                break;
+
+            case 'zephir_fcall_cache_entry':
+                $pointer = '*';
+                $code = 'zephir_fcall_cache_entry';
+                break;
+
+            case 'static_zephir_fcall_cache_entry':
+                $pointer = '*';
+                $code = 'zephir_fcall_cache_entry';
+                break;
+
+            case 'static_zend_class_entry':
+                $pointer = '*';
+                $code = 'zend_class_entry';
+                break;
+
+            case 'zephir_ce_guard':
+                $code = 'zend_bool';
+                break;
+
+            default:
+                throw new CompilerException('Unsupported type in declare: '.$type);
+        }
 
         return [$pointer, $code];
     }
@@ -332,6 +418,176 @@ class Backend extends BackendZendEngine2
         }
     }
 
+    public function declareVariables($method, $typeToVariables, CompilationContext $compilationContext)
+    {
+        $varInitCode = [];
+        $additionalCode = ($method ? $this->onPreInitVar($method, $compilationContext) : '').PHP_EOL."\t".'ZEPHIR_MM_GROW();';
+
+        foreach ($typeToVariables as $type => $variables) {
+            list($pointer, $code) = $this->getTypeDefinition($type);
+            $code .= ' ';
+            $groupVariables = [];
+
+            /*
+             * @var Variable[]
+             */
+            foreach ($variables as $variable) {
+                $nextCode = $this->generateInitCode($groupVariables, $type, $pointer, $variable);
+                if ($nextCode && $additionalCode) {
+                    $additionalCode .= PHP_EOL.$nextCode;
+                } else {
+                    $additionalCode .= $nextCode;
+                }
+            }
+
+            $varInitCode[] = $code.implode(', ', $groupVariables).';';
+        }
+        /* Keep order consistent with previous zephir versions (BC-only) */
+        $varInitCode = array_reverse($varInitCode);
+        if ($additionalCode) {
+            $varInitCode[] = $additionalCode;
+        }
+
+        return $varInitCode;
+    }
+
+    public function initializeVariableDefaults($variables, CompilationContext $compilationContext)
+    {
+        $codePrinter = new CodePrinter();
+        $codePrinter->increaseLevel();
+        $oldCodePrinter = $compilationContext->codePrinter;
+        $compilationContext->codePrinter = $codePrinter;
+
+        /* Initialize default values in dynamic variables */
+        foreach ($variables as $variable) {
+            /*
+             * Initialize 'dynamic' variables with default values
+             */
+            if ('variable' == $variable->getType()) {
+                if ($variable->getNumberUses() > 0) {
+                    if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
+                        $defaultValue = $variable->getDefaultInitValue();
+                        if (\is_array($defaultValue)) {
+                            switch ($defaultValue['type']) {
+                                case 'int':
+                                case 'uint':
+                                case 'long':
+                                    $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'bool':
+                                    $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'char':
+                                case 'uchar':
+                                    if (\strlen($defaultValue['value']) > 2) {
+                                        if (\strlen($defaultValue['value']) > 10) {
+                                            throw new CompilerException("Invalid char literal: '".substr($defaultValue['value'], 0, 10)."...'", $defaultValue);
+                                        } else {
+                                            throw new CompilerException("Invalid char literal: '".$defaultValue['value']."'", $defaultValue);
+                                        }
+                                    }
+                                    $compilationContext->backend->assignLong($variable, '\''.$defaultValue['value'].'\'', $compilationContext);
+                                    break;
+
+                                case 'null':
+                                    $compilationContext->backend->assignNull($variable, $compilationContext);
+                                    break;
+
+                                case 'double':
+                                    $compilationContext->backend->assignDouble($variable, $defaultValue['value'], $compilationContext);
+                                    break;
+
+                                case 'string':
+                                    $compilationContext->backend->assignString(
+                                        $variable,
+                                        add_slashes($defaultValue['value']),
+                                        $compilationContext
+                                    );
+                                    break;
+
+                                case 'array':
+                                case 'empty-array':
+                                    $compilationContext->backend->initArray($variable, $compilationContext, null);
+                                    break;
+
+                                default:
+                                    throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
+                            }
+                        }
+                    }
+                }
+                continue;
+            }
+
+            /*
+             * Initialize 'string' variables with default values
+             */
+            if ('string' == $variable->getType()) {
+                if ($variable->getNumberUses() > 0) {
+                    $defaultValue = $variable->getDefaultInitValue();
+                    if (\is_array($defaultValue)) {
+                        switch ($defaultValue['type']) {
+                            case 'string':
+                                $compilationContext->backend->assignString(
+                                    $variable,
+                                    add_slashes($defaultValue['value']),
+                                    $compilationContext
+                                );
+                                break;
+
+                            case 'null':
+                                $compilationContext->backend->assignString($variable, null, $compilationContext);
+                                break;
+
+                            default:
+                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
+                        }
+                    }
+                }
+                continue;
+            }
+
+            /*
+             * Initialize 'array' variables with default values
+             */
+            if ('array' == $variable->getType()) {
+                if ($variable->getNumberUses() > 0) {
+                    $defaultValue = $variable->getDefaultInitValue();
+                    if (\is_array($defaultValue)) {
+                        switch ($defaultValue['type']) {
+                            case 'null':
+                                $compilationContext->backend->assignNull($variable, $compilationContext);
+                                break;
+
+                            case 'array':
+                            case 'empty-array':
+                                $compilationContext->backend->initArray($variable, $compilationContext, null);
+                                break;
+
+                            default:
+                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
+                        }
+                    }
+                }
+            }
+        }
+        $compilationContext->codePrinter = $oldCodePrinter;
+
+        return $codePrinter->getOutput();
+    }
+
+    public function initVar(Variable $variable, CompilationContext $context, $useCodePrinter = true, $second = false)
+    {
+        $code = 'ZEPHIR_INIT_VAR('.$this->getVariableCode($variable).');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($code);
+        }
+
+        return $code;
+    }
+
     /**
      * Returns the signature of an internal method.
      */
@@ -379,7 +635,32 @@ class Backend extends BackendZendEngine2
     /* Assign value to variable */
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = null)
     {
-        return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, null);
+        return $this->assignHelper('ZEPHIR_MM_ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, null);
+    }
+
+    public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
+    {
+        return $this->assignHelper('ZVAL_LONG', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
+    }
+
+    public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
+    {
+        return $this->assignHelper('ZVAL_DOUBLE', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
+    }
+
+    public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
+    {
+        return $this->assignHelper('ZVAL_BOOL', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
+    }
+
+    public function assignNull(Variable $variable, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = 'ZVAL_NULL('.$this->getVariableCode($variable).');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
     }
 
     /**
@@ -395,10 +676,17 @@ class Backend extends BackendZendEngine2
         if (!$variable->isDoublePointer()) {
             $context->symbolTable->mustGrownStack(true);
             $symbolVariable = $this->getVariableCode($variable);
-            $context->codePrinter->output('ZEPHIR_OBS_COPY_OR_DUP('.$symbolVariable.', '.$code.');');
+            $context->codePrinter->output('ZEPHIR_CPY_WRT('.$symbolVariable.', '.$code.');');
         } else {
             $context->codePrinter->output($variable->getName().' = '.$code.';');
         }
+    }
+
+    public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context)
+    {
+        $variable = $this->getVariableCode($variable);
+        $itemVariable = $this->getVariableCode($itemVariable);
+        $context->codePrinter->output('ZEPHIR_MM_CONCAT_SELF('.$variable.', '.$itemVariable.');');
     }
 
     public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
@@ -406,10 +694,29 @@ class Backend extends BackendZendEngine2
         return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, null);
     }
 
+    public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
+    {
+        if (!isset($size)) {
+            $output = 'array_init('.$this->getVariableCode($variable).');';
+        } else {
+            $output = 'zephir_create_array('.$this->getVariableCode($variable).', '.$size.', 0);';
+        }
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+            $variable->addMemoryEntry($context);
+        }
+        if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName()) {
+            $output .= PHP_EOL.'ZEPHIR_MM_ADD_ENTRY('.$this->getVariableCode($variable).');';
+        }
+
+        return $output;
+    }
+
     public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
     {
         $symbol = $this->getVariableCode($variable);
         $context->codePrinter->output('zephir_create_closure_ex('.$symbol.', NULL, '.$classDefinition->getClassEntry().', SL("__invoke"));');
+        $variable->addMemoryEntry($context);
     }
 
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
@@ -432,7 +739,7 @@ class Backend extends BackendZendEngine2
         if ('null' == $value) {
             if (!isset($key)) {
                 $value = $this->resolveValue('null', $context);
-                $context->codePrinter->output('zephir_array_append('.$this->getVariableCode($variable).', '.$value.', PH_SEPARATE, "'.Compiler::getShortUserPath($statement['file']).'", '.$statement['line'].');');
+                $context->codePrinter->output('zephir_array_append('.$this->getVariableCode($variable).', '.$value.', 0, "'.Compiler::getShortUserPath($statement['file']).'", '.$statement['line'].');');
 
                 return;
             }
@@ -500,27 +807,150 @@ class Backend extends BackendZendEngine2
         return $output;
     }
 
+    public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null)
+    {
+        $value = $this->resolveValue($value, $compilationContext, true);
+        if (!isset($flags)) {
+            $flags = 'PH_SEPARATE';
+        }
+
+        if ($key instanceof Variable) {
+            switch ($key->getType()) {
+                case 'string':
+                case 'variable':
+                    $compilationContext->codePrinter->output('zephir_array_update_zval('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($key).', '.$value.', '.$flags.');');
+                    break;
+
+                case 'int':
+                case 'uint':
+                case 'long':
+                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCode($symbolVariable).', '.$key->getName().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
+                    break;
+
+                default:
+                    throw new CompilerException('updateArray: Found a variable with unsupported type '.$key->getType());
+            }
+        } elseif ($key instanceof CompiledExpression) {
+            switch ($key->getType()) {
+                case 'string':
+                    $compilationContext->codePrinter->output('zephir_array_update_string('.$this->getVariableCode($symbolVariable).', SL("'.$key->getCode().'"), '.$value.', '.$flags.');');
+                    break;
+
+                case 'int':
+                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCode($symbolVariable).', '.$key->getCode().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
+                    break;
+
+                case 'variable':
+                    $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key->getCode()), $value, $compilationContext, $flags);
+                    break;
+
+                default:
+                    throw new CompilerException('updateArray: Found an expression with unsupported type '.$key->getType());
+            }
+        } else {
+            throw new CompilerException('?');
+        }
+    }
+
+    public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true)
+    {
+        $variableAccess = $this->getVariableCode($variable);
+        if (!isset($ce)) {
+            $output = 'object_init('.$variableAccess.');';
+        } else {
+            $output = 'object_init_ex('.$variableAccess.', '.$ce.');';
+        }
+
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
+    public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true)
+    {
+        $context->headersManager->add('kernel/array');
+        $isVariable = $index instanceof Variable;
+
+        switch ($index->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $type = 'long';
+                break;
+
+            /* Types which map to the same */
+            case 'variable':
+            case 'string':
+                $type = $index->getType();
+                break;
+
+            default:
+                throw new CompilerException(
+                    sprintf('Variable type: %s cannot be used as array index without cast', $index->getType()),
+                    $arrayAccess['right']
+                );
+        }
+        if ($isVariable && \in_array($index->getType(), ['variable', 'string'])) {
+            $output = 'zephir_array_fetch('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].' TSRMLS_CC);';
+        } else {
+            if ($isVariable) {
+                $indexAccess = $this->getVariableCode($index);
+            } else {
+                $indexAccess = $index->getCode();
+                if ('string' == $type) {
+                    $indexAccess = 'SL("'.$indexAccess.'")';
+                }
+            }
+            $output = 'zephir_array_fetch_'.$type.'('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$indexAccess.', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].' TSRMLS_CC);';
+        }
+
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
     public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
     {
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string('.$this->getVariableCode($var).', SL("'.$resolvedExpr->getCode().'"))', $expression);
+            } else {
+                return new CompiledExpression('bool', 'zephir_array_isset_long('.$this->getVariableCode($var).', '.$resolvedExpr->getCode().')', $expression);
             }
         }
 
-        return parent::arrayIsset($var, $resolvedExpr, $expression, $context);
+        if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
+            return new CompiledExpression('bool', 'zephir_array_isset_long('.$this->getVariableCode($var).', '.$this->getVariableCode($resolvedExpr).')', $expression);
+        } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType()) {
+            return new CompiledExpression('bool', 'zephir_array_isset('.$this->getVariableCode($var).', '.$this->getVariableCode($resolvedExpr).')', $expression);
+        }
+
+        throw new CompilerException('['.$resolvedExpr->getType().']', $expression);
     }
 
     public function arrayIssetFetch(Variable $target, Variable $var, $resolvedExpr, $flags, $expression, CompilationContext $context)
     {
+        $code = $this->getVariableCode($target).', '.$this->getVariableCode($var);
         if (!($resolvedExpr instanceof Variable)) {
-            $code = $this->getVariableCode($target).', '.$this->getVariableCode($var);
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch('.$code.', SL("'.$resolvedExpr->getCode().'"), '.$flags.')', $expression);
+            } elseif (\in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
+                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.' TSRMLS_CC)', $expression);
+            } else {
+                $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
         }
 
-        return parent::arrayIssetFetch($target, $var, $resolvedExpr, $flags, $expression, $context);
+        if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
+            return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.' TSRMLS_CC)', $expression);
+        } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType()) {
+            return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.' TSRMLS_CC)', $expression);
+        }
+        throw new CompilerException('arrayIssetFetch ['.$resolvedExpr->getType().']', $expression);
     }
 
     public function propertyIsset(Variable $var, $key, CompilationContext $context)
@@ -531,14 +961,67 @@ class Backend extends BackendZendEngine2
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
-        $variableCode = $this->getVariableCodePointer($variable);
-        if ('string' == $exprIndex->getType()) {
-            $context->codePrinter->output('zephir_array_unset_string('.$variableCode.', SL("'.$exprIndex->getCode().'"), '.$flags.');');
+        $variableCode = $this->getVariableCode($variable);
+        switch ($exprIndex->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $context->codePrinter->output('zephir_array_unset_long('.$variableCode.', '.$exprIndex->getCode().', '.$flags.');');
+                break;
 
-            return;
+            case 'string':
+                $context->codePrinter->output('zephir_array_unset_string('.$variableCode.', SL("'.$exprIndex->getCode().'"), '.$flags.');');
+                break;
+
+            case 'variable':
+                $variableIndex = $context->symbolTable->getVariableForRead($exprIndex->getCode(), $context, $exprIndex->getOriginal());
+                $indexCode = $this->getVariableCode($variableIndex);
+                switch ($variableIndex->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                        $context->codePrinter->output('zephir_array_unset_long('.$variableCode.', '.$indexCode.', '.$flags.');');
+                        break;
+
+                    case 'string':
+                    case 'variable':
+                        $context->codePrinter->output('zephir_array_unset('.$variableCode.', '.$indexCode.', '.$flags.');');
+                        break;
+
+                    default:
+                        throw new CompilerException('Variable type: '.$variableIndex->getType().' cannot be used as array index without cast', $expression['right']);
+                }
+                break;
+
+            default:
+                throw new CompilerException('Cannot use expression: '.$exprIndex->getType().' as array index without cast', $expression['right']);
         }
+    }
 
-        parent::arrayUnset($variable, $exprIndex, $flags, $context);
+    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+
+        $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
+        $varCode = $this->getVariableCode($variable);
+        $compilationContext->codePrinter->output('zephir_array_update_multi('.$varCode.', '.$symbol.' TSRMLS_CC, SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
+    }
+
+    public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+
+        $compilationContext->codePrinter->output('zephir_update_property_array_multi('.$variable->getName().', SL("'.$propertyName.'"), '.$valueVariable.' TSRMLS_CC, SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
+    }
+
+    public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+
+        $offsetStr = $offsetItems ? ', '.implode(', ', $offsetItems) : '';
+        $compilationContext->codePrinter->output('zephir_update_static_property_array_multi_ce('.$classEntry.', SL("'.$propertyName.'"), '.$valueVariable.' TSRMLS_CC, SL("'.$keys.'"), '.$numberParams.$offsetStr.');');
     }
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
@@ -680,7 +1163,7 @@ class Backend extends BackendZendEngine2
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
     {
         $value = $this->resolveValue($value, $context);
-        $context->codePrinter->output('zend_update_static_property('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
+        $context->codePrinter->output('zephir_update_static_property('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
     }
 
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
@@ -694,6 +1177,11 @@ class Backend extends BackendZendEngine2
         if (\is_object($value) && $value instanceof Variable && $value->isTemporal()) {
             $value->initVariant($context);
         }
+    }
+
+    public function checkConstructor(Variable $var, CompilationContext $context)
+    {
+        $context->codePrinter->output('if (zephir_has_constructor('.$this->getVariableCode($var).' TSRMLS_CC)) {');
     }
 
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
@@ -716,6 +1204,36 @@ class Backend extends BackendZendEngine2
         }
     }
 
+    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = [], $cache = 'NULL', $cacheSlot = 0)
+    {
+        $paramStr = null != $params ? ', '.implode(', ', $params) : '';
+        if (!isset($symbolVariable)) {
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, '.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
+        } elseif ('return_value' == $symbolVariable->getName()) {
+            $context->codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION('.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
+        } else {
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
+        }
+    }
+
+    public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext)
+    {
+        $expected = $this->getVariableCode($expected);
+        $op1 = $this->getVariableCode($variableLeft);
+        $op2 = $this->getVariableCode($variableRight);
+
+        $params = ' TSRMLS_CC';
+        if ('zephir_add_function' == $zvalOperator || 'zephir_sub_function' == $zvalOperator) {
+            $params = '';
+        }
+        $compilationContext->codePrinter->output($zvalOperator.'('.$expected.', '.$op1.', '.$op2.$params.');');
+    }
+
+    public function maybeSeparate(Variable $variableTempSeparated, Variable $variable, CompilationContext $context)
+    {
+        $context->codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval('.$this->getVariableCode($variable).');');
+    }
+
     public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context)
     {
         $context->codePrinter->output('if ('.$variableTempSeparated->getName().') {');
@@ -731,17 +1249,11 @@ class Backend extends BackendZendEngine2
 
             return;
         }
-
-        return parent::copyOnWrite($target, $var, $context);
+		$context->codePrinter->output('ZEPHIR_CPY_WRT('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
     }
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
     {
-        /*
-         * Create a hash table and hash pointer temporary variables.
-         */
-        //$arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
-        //$arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
         /*
          * Create a temporary zval to fetch the items from the hash.
          */
@@ -811,7 +1323,7 @@ class Backend extends BackendZendEngine2
             $compilationContext->symbolTable->mustGrownStack(true);
             $codePrinter->increaseLevel();
             $variable->initVariant($compilationContext);
-            $codePrinter->output('ZVAL_COPY('.$this->getVariableCode($variable).', '.$this->getVariableCode($tempVariable).');');
+            $codePrinter->output('ZEPHIR_CPY_WRT('.$this->getVariableCode($variable).', '.$this->getVariableCode($tempVariable).');');
             $codePrinter->decreaseLevel();
         }
 
@@ -898,7 +1410,12 @@ class Backend extends BackendZendEngine2
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useBody = false, $useCodePrinter = true)
     {
         if ($var->isDoublePointer()) {
-            return parent::ifVariableValueUndefined($var, $context, $useBody, $useCodePrinter);
+            $body = '!'.$var->getName();
+            $output = 'if ('.$body.') {';
+            if ($useCodePrinter) {
+                $context->codePrinter->output($output);
+            }
+            return $useBody ? $body : $output;
         }
         $body = 'Z_TYPE_P('.$this->getVariableCode($var).') == IS_UNDEF';
         $output = 'if ('.$body.') {';
@@ -909,6 +1426,115 @@ class Backend extends BackendZendEngine2
         return $useBody ? $body : $output;
     }
 
+    public function checkStrictType($type, $var, CompilationContext $context)
+    {
+        $codePrinter = $context->codePrinter;
+        $conditions = [];
+
+        $inputParamVariable = $context->symbolTable->getVariableForWrite($var['name'], $context);
+        $inputParamCode = $this->getVariableCode($inputParamVariable);
+        $cond = 'Z_TYPE_P('.$inputParamCode.') != ';
+        if ($context->symbolTable->hasVariable($var['name'].'_param')) {
+            $parameterVariable = $context->symbolTable->getVariableForWrite($var['name'].'_param', $context);
+            $parameterCode = $context->backend->getVariableCode($parameterVariable);
+            $cond = 'Z_TYPE_P('.$parameterCode.') != ';
+        }
+
+        switch ($type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $conditions[] = $cond.'IS_LONG';
+                break;
+            case 'bool':
+                if (!$this->isZE3()) {
+                    $conditions[] = $cond.'IS_BOOL';
+                } else {
+                    $conditions[] = $cond.'IS_TRUE';
+                    $conditions[] = $cond.'IS_FALSE';
+                }
+                break;
+            case 'double':
+                $conditions[] = $cond.'IS_DOUBLE';
+                break;
+            case 'string':
+            case 'ulong':
+                $conditions[] = $cond.'IS_STRING';
+                $conditions[] = $cond.'IS_NULL';
+                break;
+            case 'array':
+                break;
+            case 'object':
+            case 'resource':
+                $conditions[] = $cond.'IS_'.strtoupper($type);
+                break;
+            case 'callable':
+                $conditions[] = 'zephir_is_callable('.$inputParamCode.' TSRMLS_CC) != 1';
+                break;
+            default:
+                throw new CompilerException('Unknown type '.$type);
+        }
+
+        /* Generate verification code */
+        if (\count($conditions)) {
+            $codePrinter->output('if (UNEXPECTED('.implode(' && ', $conditions).')) {');
+            $codePrinter->increaseLevel();
+
+            $exceptionMessage = sprintf('SL("Parameter \'%s\' must be of the type %s")', $var['name'], $type);
+            $codePrinter->output(
+                sprintf(
+                    'zephir_throw_exception_string(spl_ce_InvalidArgumentException, %s TSRMLS_CC);',
+                    $exceptionMessage
+                )
+            );
+
+            $codePrinter->output('RETURN_MM_NULL();');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+        }
+
+        /* Assign param */
+        switch ($type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $codePrinter->output($var['name'].' = Z_LVAL_P('.$parameterCode.');');
+                break;
+            case 'bool':
+                $codePrinter->output($var['name'].' = '.$this->getBoolCode($parameterVariable, $context, false).';');
+                break;
+            case 'double':
+                $codePrinter->output($var['name'].' = Z_DVAL_P('.$parameterCode.');');
+                break;
+            case 'string':
+            case 'ulong':
+                $context->headersManager->add('kernel/operators');
+                $codePrinter->output('if (EXPECTED(Z_TYPE_P('.$parameterCode.') == IS_STRING)) {');
+                $codePrinter->increaseLevel();
+                $targetVar = $var['name'];
+                if ($this->isZE3()) {
+                    $targetVar = '&'.$targetVar;
+                }
+                $codePrinter->output('zephir_get_strval('.$targetVar.', '.$var['name'].'_param);');
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $codePrinter->output('ZEPHIR_MM_ZVAL_EMPTY_STRING('.$inputParamCode.');');
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
+                break;
+            case 'array':
+                $context->backend->assignZval($inputParamVariable, $parameterVariable, $context);
+                break;
+            case 'object':
+            case 'resource':
+            case 'callable':
+                break;
+            default:
+                throw new CompilerException('Unknown type: '.$type);
+        }
+    }
+
     public function fetchClassEntry($str)
     {
         return 'zephir_get_internal_ce(SL("'.$str.'"))';
@@ -917,5 +1543,141 @@ class Backend extends BackendZendEngine2
     public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = true)
     {
         return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
+    }
+
+    /* Assign value to variable */
+    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    {
+        if ($value instanceof Variable) {
+            $value = $value->getName();
+        } else {
+            $value = 'ZEPHIR_MM_ZVAL_STRING' == $macro ? '"'.$value.'"' : $value;
+			$doCopy = NULL;
+        }
+
+        $copyStr = '';
+        if (true === $doCopy) {
+            $copyStr = ', 1';
+        } elseif (false === $doCopy) {
+            $copyStr = ', 0';
+        } elseif (isset($doCopy)) {
+            $copyStr = ', '.$doCopy;
+        }
+
+        $output = $macro.'('.$variableName.', '.$value.$copyStr.');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
+    protected function returnHelper($macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    {
+        if ($value instanceof Variable) {
+            $value = $value->getName();
+        } else {
+            $value = 'RETURN_MM_STRING' == $macro ? '"'.$value.'"' : $value;
+        }
+
+        $copyStr = '';
+        if (true === $doCopy) {
+            $copyStr = ', 1';
+        } elseif (false === $doCopy) {
+            $copyStr = ', 0';
+        } elseif (isset($doCopy)) {
+            $copyStr = ', '.$doCopy;
+        }
+
+        $output = $macro.'('.$value.$copyStr.');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Resolve expressions.
+     *
+     * @param CompiledExpression[]|string[] $offsetExprs
+     * @param CompilationContext            $compilationContext
+     *
+     * @throws CompilerException
+     *
+     * @return array
+     */
+    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
+    {
+        $keys = '';
+        $offsetItems = [];
+        $numberParams = 0;
+
+        foreach ($offsetExprs as $offsetExpr) {
+            if ('a' == $offsetExpr) {
+                $keys .= 'a';
+                ++$numberParams;
+                continue;
+            }
+            switch ($offsetExpr->getType()) {
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                    $keys .= 'l';
+                    $offsetItems[] = $offsetExpr->getCode();
+                    ++$numberParams;
+                    break;
+
+                case 'string':
+                    $keys .= 's';
+                    $offsetItems[] = 'SL("'.$offsetExpr->getCode().'")';
+                    $numberParams += 2;
+                    break;
+
+                case 'variable':
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                        $offsetExpr->getCode(),
+                        $compilationContext,
+                        null
+                    );
+
+                    switch ($variableIndex->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                            $keys .= 'l';
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            ++$numberParams;
+                            break;
+                        case 'string':
+                        case 'variable':
+                            $keys .= 'z';
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
+                            ++$numberParams;
+                            break;
+                        default:
+                            throw new CompilerException(
+                                sprintf('Variable: %s cannot be used as array index', $variableIndex->getType()),
+                                $offsetExpr->getOriginal()
+                            );
+                    }
+                    break;
+
+                default:
+                    throw new CompilerException(
+                        sprintf('Value: %s cannot be used as array index', $offsetExpr->getType()),
+                        $offsetExpr->getOriginal()
+                    );
+            }
+        }
+
+        return [$keys, $offsetItems, $numberParams];
+    }
+
+    public function createSymbolTable(CompilationContext $context)
+    {
+        $context->codePrinter->output('zephir_create_symbol_table(&zephir_memory);');
     }
 }

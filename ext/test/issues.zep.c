@@ -32,6 +32,7 @@ PHP_METHOD(Test_Issues, setAdapter) {
 	zval *adapter, adapter_sub;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&adapter_sub);
 
 	zephir_fetch_params(0, 1, 0, &adapter);
@@ -39,6 +40,7 @@ PHP_METHOD(Test_Issues, setAdapter) {
 
 
 	zephir_update_property_zval(this_ptr, SL("adapter"), adapter);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -48,10 +50,10 @@ PHP_METHOD(Test_Issues, someMethod) {
 	zval *methodName, methodName_sub, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&methodName_sub);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &methodName);
 
 
@@ -67,8 +69,10 @@ PHP_METHOD(Test_Issues, test) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%s", "test");
+	ZEPHIR_MM_RESTORE();
 
 }
 

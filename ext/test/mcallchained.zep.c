@@ -34,8 +34,9 @@ PHP_METHOD(Test_McallChained, testMethod1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_THISW();
+	RETURN_MM_THIS();
 
 }
 
@@ -43,8 +44,9 @@ PHP_METHOD(Test_McallChained, testMethod2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_THISW();
+	RETURN_MM_THIS();
 
 }
 
@@ -52,8 +54,9 @@ PHP_METHOD(Test_McallChained, testMethod3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
-	RETURN_THISW();
+	RETURN_MM_THIS();
 
 }
 
@@ -63,9 +66,9 @@ PHP_METHOD(Test_McallChained, testChained1) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod1", NULL, 0);
 	zephir_check_call_status();
@@ -81,10 +84,10 @@ PHP_METHOD(Test_McallChained, testChained2) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod1", NULL, 0);
 	zephir_check_call_status();
@@ -102,10 +105,10 @@ PHP_METHOD(Test_McallChained, testChained3) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 51);
 	zephir_check_call_status();
@@ -123,10 +126,10 @@ PHP_METHOD(Test_McallChained, testChained4) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	ZEPHIR_MM_GROW();
 
 	zephir_update_property_zval(this_ptr, SL("temp"), this_ptr);
 	zephir_read_property(&_0, this_ptr, SL("temp"), PH_NOISY_CC | PH_READONLY);

@@ -82,6 +82,7 @@ void zephir_throw_exception_string_debug(zend_class_entry *ce, const char *messa
 	int ZEPHIR_LAST_CALL_STATUS = 0;
 	zend_class_entry *default_exception_ce;
 
+	ZEPHIR_MM_GROW();
 	object_init_ex(&object, ce);
 
 	ZVAL_STRINGL(&msg, message, message_len);
@@ -99,6 +100,7 @@ void zephir_throw_exception_string_debug(zend_class_entry *ce, const char *messa
 	}
 
 	zval_ptr_dtor(&msg);
+	ZEPHIR_MM_RESTORE();
 }
 
 /**
@@ -109,6 +111,7 @@ void zephir_throw_exception_string(zend_class_entry *ce, const char *message, ze
 	zval object, msg;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
 
+	ZEPHIR_MM_GROW();
 	object_init_ex(&object, ce);
 
 	ZVAL_STRINGL(&msg, message, message_len);
@@ -120,6 +123,7 @@ void zephir_throw_exception_string(zend_class_entry *ce, const char *message, ze
 	}
 
 	zval_ptr_dtor(&msg);
+	ZEPHIR_MM_RESTORE();
 }
 
 /**
@@ -132,6 +136,7 @@ void zephir_throw_exception_format(zend_class_entry *ce, const char *format, ...
 	char *buffer;
 	va_list args;
 
+	ZEPHIR_MM_GROW();
 	object_init_ex(&object, ce);
 
 	va_start(args, format);
@@ -148,4 +153,5 @@ void zephir_throw_exception_format(zend_class_entry *ce, const char *format, ...
 	}
 
 	zval_ptr_dtor(&msg);
+	ZEPHIR_MM_RESTORE();
 }

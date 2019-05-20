@@ -33,24 +33,22 @@ PHP_METHOD(Test_Properties_StaticPrivateProperties, getInstance) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&localInstance);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_OBS_VAR(&localInstance);
 	zephir_read_static_property_ce(&localInstance, test_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC);
 	if (UNEXPECTED(Z_TYPE_P(&localInstance) != IS_OBJECT)) {
-		ZEPHIR_INIT_NVAR(&localInstance);
 		object_init_ex(&localInstance, test_properties_staticprivateproperties_ce);
 		if (zephir_has_constructor(&localInstance TSRMLS_CC)) {
 			ZEPHIR_CALL_METHOD(NULL, &localInstance, "__construct", NULL, 0);
 			zephir_check_call_status();
 		}
-		zend_update_static_property(test_properties_staticprivateproperties_ce, ZEND_STRL("instance"), &localInstance);
+		zephir_update_static_property(test_properties_staticprivateproperties_ce, ZEND_STRL("instance"), &localInstance);
 	}
 	zephir_read_static_property_ce(&_0, test_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC | PH_READONLY);
-	RETURN_CTOR(&_0);
+	RETURN_MM_CTOR(&_0);
 
 }
 

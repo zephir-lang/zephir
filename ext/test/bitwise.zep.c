@@ -34,12 +34,13 @@ PHP_METHOD(Test_Bitwise, intAnd) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a & b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -48,11 +49,12 @@ PHP_METHOD(Test_Bitwise, int2And) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (a & 2);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -61,10 +63,11 @@ PHP_METHOD(Test_Bitwise, intAndSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 0;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -73,12 +76,13 @@ PHP_METHOD(Test_Bitwise, boolAnd) {
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
 	c = (((a & b)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -87,11 +91,12 @@ PHP_METHOD(Test_Bitwise, bool2And) {
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	c = (((a & 2)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -100,11 +105,12 @@ PHP_METHOD(Test_Bitwise, bool3And) {
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (((a & 0)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -113,10 +119,11 @@ PHP_METHOD(Test_Bitwise, boolAndSimple) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = ((0) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -125,12 +132,13 @@ PHP_METHOD(Test_Bitwise, doubleAnd) {
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = (double) (2);
 	c = (double) (((int) (a) & (int) (b)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -139,12 +147,13 @@ PHP_METHOD(Test_Bitwise, double2And) {
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1.0;
 	b = 2.0;
 	c = (double) (((int) (a) & (int) (b)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -153,10 +162,11 @@ PHP_METHOD(Test_Bitwise, doubleAndSimple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -165,10 +175,11 @@ PHP_METHOD(Test_Bitwise, doubleAnd2Simple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (0.0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -177,12 +188,13 @@ PHP_METHOD(Test_Bitwise, varAnd) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a & b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -191,10 +203,11 @@ PHP_METHOD(Test_Bitwise, varAndSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 0;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -204,12 +217,13 @@ PHP_METHOD(Test_Bitwise, intDoubleAnd) {
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = 2;
 	c = ((int) (a) &  b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -218,10 +232,11 @@ PHP_METHOD(Test_Bitwise, intDoubleAndSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 0;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -231,12 +246,13 @@ PHP_METHOD(Test_Bitwise, doubleIntAnd) {
 	zend_long b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = 2;
 	c = (double) (((int) (a) &  b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -245,10 +261,11 @@ PHP_METHOD(Test_Bitwise, doubleIntAndSimple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -257,12 +274,13 @@ PHP_METHOD(Test_Bitwise, varIntAnd) {
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a & b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -271,12 +289,13 @@ PHP_METHOD(Test_Bitwise, intVarAnd) {
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (b & a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -286,17 +305,14 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 	zval a, b, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "1");
-	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "2");
-	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&a, "1");
+	ZEPHIR_MM_ZVAL_STRING(&b, "2");
 	zephir_bitwise_and_function(&_0, &b, &a TSRMLS_CC);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -309,12 +325,11 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2And) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "1");
+	ZEPHIR_MM_ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b & (int) (zephir_get_numberval(&a)));
 	RETURN_MM_LONG(c);
@@ -326,10 +341,11 @@ PHP_METHOD(Test_Bitwise, complexAnd) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -338,10 +354,11 @@ PHP_METHOD(Test_Bitwise, complex2And) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 & 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -350,10 +367,11 @@ PHP_METHOD(Test_Bitwise, complex3And) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 &((1.0) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -362,13 +380,12 @@ PHP_METHOD(Test_Bitwise, complex4And) {
 	zval c;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&c);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) & 1));
-	RETURN_CCTOR(&c);
+	RETURN_MM_CTOR(&c);
 
 }
 
@@ -377,10 +394,11 @@ PHP_METHOD(Test_Bitwise, complex5And) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (1 & 1);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -389,10 +407,11 @@ PHP_METHOD(Test_Bitwise, complex6And) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 &((1) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -402,12 +421,13 @@ PHP_METHOD(Test_Bitwise, complex7And) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a & b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -417,12 +437,13 @@ PHP_METHOD(Test_Bitwise, complex9And) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (b & a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -433,12 +454,13 @@ PHP_METHOD(Test_Bitwise, complex10And) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b & a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -449,12 +471,13 @@ PHP_METHOD(Test_Bitwise, complex11And) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (double) ((b & a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -464,12 +487,13 @@ PHP_METHOD(Test_Bitwise, complex12And) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b & a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -479,12 +503,13 @@ PHP_METHOD(Test_Bitwise, complex13And) {
 	zend_bool a = 0, b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -494,12 +519,13 @@ PHP_METHOD(Test_Bitwise, complex14And) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -510,12 +536,13 @@ PHP_METHOD(Test_Bitwise, complex15And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2.0;
 	c = ((((int) (b) &  a)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -525,12 +552,13 @@ PHP_METHOD(Test_Bitwise, complex16And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2.0;
 	c = (double) (((int) (b) &  a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -541,12 +569,13 @@ PHP_METHOD(Test_Bitwise, complex17And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a & b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -557,13 +586,14 @@ PHP_METHOD(Test_Bitwise, complex18And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((a & (b & (int) (d))));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -574,13 +604,14 @@ PHP_METHOD(Test_Bitwise, complex19And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((a & ((int) (d) & b)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -591,13 +622,14 @@ PHP_METHOD(Test_Bitwise, complex20And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) (((int) (d) & ((int) (d) & ((int) (d) & (int) (d)))));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -608,13 +640,14 @@ PHP_METHOD(Test_Bitwise, complex21And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
 	c = (double) ((b & ((int) (d) & (b & ((int) (d) & ((int) (d) & (b & ((int) (d) & b))))))));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -624,13 +657,14 @@ PHP_METHOD(Test_Bitwise, complex22And) {
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = (long) (2.0);
 	d = (double) ((a & b));
 	c = (double) ((b & ((int) (d) & ((int) (d) & ((int) (d) & ((int) (d) & (b & ((int) (d) &  b))))))));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -641,12 +675,13 @@ PHP_METHOD(Test_Bitwise, complex23And) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
-	RETURN_DOUBLE(d);
+	RETURN_MM_DOUBLE(d);
 
 }
 
@@ -656,12 +691,13 @@ PHP_METHOD(Test_Bitwise, complex24And) {
 	zend_long a = 0, d = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (1 & (a & ((int) (0) & b)));
-	RETURN_LONG(d);
+	RETURN_MM_LONG(d);
 
 }
 
@@ -670,12 +706,13 @@ PHP_METHOD(Test_Bitwise, intOr) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a | b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -684,11 +721,12 @@ PHP_METHOD(Test_Bitwise, int2Or) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (a | 2);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -697,10 +735,11 @@ PHP_METHOD(Test_Bitwise, intOrSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 3;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -709,12 +748,13 @@ PHP_METHOD(Test_Bitwise, boolOr) {
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = ((2) ? 1 : 0);
 	c = (((a | b)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -723,11 +763,12 @@ PHP_METHOD(Test_Bitwise, bool2Or) {
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	c = (((a | 2)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -736,11 +777,12 @@ PHP_METHOD(Test_Bitwise, bool3Or) {
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (((a | 0)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -749,11 +791,12 @@ PHP_METHOD(Test_Bitwise, bool4Or) {
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (((a | 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -762,10 +805,11 @@ PHP_METHOD(Test_Bitwise, boolOrSimple) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = ((3) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -774,12 +818,13 @@ PHP_METHOD(Test_Bitwise, doubleOr) {
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = (double) (2);
 	c = (double) (((int) (a) | (int) (b)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -788,12 +833,13 @@ PHP_METHOD(Test_Bitwise, double2Or) {
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1.0;
 	b = 2.0;
 	c = (double) (((int) (a) | (int) (b)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -802,10 +848,11 @@ PHP_METHOD(Test_Bitwise, doubleOrSimple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (3);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -814,10 +861,11 @@ PHP_METHOD(Test_Bitwise, doubleOr2Simple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (3.0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -826,12 +874,13 @@ PHP_METHOD(Test_Bitwise, varOr) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a | b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -840,10 +889,11 @@ PHP_METHOD(Test_Bitwise, varOrSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 3;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -853,12 +903,13 @@ PHP_METHOD(Test_Bitwise, intDoubleOr) {
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = 2;
 	c = ((int) (a) |  b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -867,10 +918,11 @@ PHP_METHOD(Test_Bitwise, intDoubleOrSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 3.0;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -880,12 +932,13 @@ PHP_METHOD(Test_Bitwise, doubleIntOr) {
 	zend_long b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = (double) (1);
 	b = 2;
 	c = (double) (((int) (a) |  b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -894,10 +947,11 @@ PHP_METHOD(Test_Bitwise, doubleIntOrSimple) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (3.0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -906,12 +960,13 @@ PHP_METHOD(Test_Bitwise, varIntOr) {
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a | b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -920,12 +975,13 @@ PHP_METHOD(Test_Bitwise, intVarOr) {
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (b | a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -935,17 +991,14 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 	zval a, b, _0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "1");
-	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "2");
-	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_MM_ZVAL_STRING(&a, "1");
+	ZEPHIR_MM_ZVAL_STRING(&b, "2");
 	zephir_bitwise_or_function(&_0, &b, &a TSRMLS_CC);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -958,12 +1011,11 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2Or) {
 	zval a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&a);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&a);
-	ZVAL_STRING(&a, "1");
+	ZEPHIR_MM_ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b | (int) (zephir_get_numberval(&a)));
 	RETURN_MM_LONG(c);
@@ -975,10 +1027,11 @@ PHP_METHOD(Test_Bitwise, complexOr) {
 	double c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (double) (3.0);
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -987,10 +1040,11 @@ PHP_METHOD(Test_Bitwise, complex2Or) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 | 1)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -999,10 +1053,11 @@ PHP_METHOD(Test_Bitwise, complex3Or) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 |((1.0) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -1011,13 +1066,12 @@ PHP_METHOD(Test_Bitwise, complex4Or) {
 	zval c;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&c);
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) | 1));
-	RETURN_CCTOR(&c);
+	RETURN_MM_CTOR(&c);
 
 }
 
@@ -1026,10 +1080,11 @@ PHP_METHOD(Test_Bitwise, complex5Or) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (1 | 1);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1038,10 +1093,11 @@ PHP_METHOD(Test_Bitwise, complex6Or) {
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = (((1 |((1) ? 1 : 0))) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -1051,12 +1107,13 @@ PHP_METHOD(Test_Bitwise, complex7Or) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a | b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1066,12 +1123,13 @@ PHP_METHOD(Test_Bitwise, complex9Or) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (b | a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1082,12 +1140,13 @@ PHP_METHOD(Test_Bitwise, complex10Or) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b | a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1098,12 +1157,13 @@ PHP_METHOD(Test_Bitwise, complex11Or) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (double) ((b | a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1113,12 +1173,13 @@ PHP_METHOD(Test_Bitwise, complex12Or) {
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b | a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1128,12 +1189,13 @@ PHP_METHOD(Test_Bitwise, complex13Or) {
 	zend_bool a = 0, b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1143,12 +1205,13 @@ PHP_METHOD(Test_Bitwise, complex14Or) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1159,12 +1222,13 @@ PHP_METHOD(Test_Bitwise, complex15Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2.0;
 	c = ((((int) (b) |  a)) ? 1 : 0);
-	RETURN_BOOL(c);
+	RETURN_MM_BOOL(c);
 
 }
 
@@ -1174,12 +1238,13 @@ PHP_METHOD(Test_Bitwise, complex16Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2.0;
 	c = (double) (((int) (b) |  a));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1190,12 +1255,13 @@ PHP_METHOD(Test_Bitwise, complex17Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a | b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1206,13 +1272,14 @@ PHP_METHOD(Test_Bitwise, complex18Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((a | b) | (int) (d)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1223,13 +1290,14 @@ PHP_METHOD(Test_Bitwise, complex19Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((a | (int) (d)) | b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1240,13 +1308,14 @@ PHP_METHOD(Test_Bitwise, complex20Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) (((((int) (d) | (int) (d)) | (int) (d)) | (int) (d)));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1257,13 +1326,14 @@ PHP_METHOD(Test_Bitwise, complex21Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
 	c = (double) ((((((((b | (int) (d)) | b) | (int) (d)) | (int) (d)) | b) | (int) (d)) | b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1273,13 +1343,14 @@ PHP_METHOD(Test_Bitwise, complex22Or) {
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = (long) (2.0);
 	d = (double) ((a | b));
 	c = (double) ((((((((b | (int) (d)) | (int) (d)) | (int) (d)) | (int) (d)) | b) | (int) (d)) | b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -1290,12 +1361,13 @@ PHP_METHOD(Test_Bitwise, complex23Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
-	RETURN_DOUBLE(d);
+	RETURN_MM_DOUBLE(d);
 
 }
 
@@ -1306,12 +1378,13 @@ PHP_METHOD(Test_Bitwise, complex24Or) {
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((((1 | a) | 0) | b));
-	RETURN_DOUBLE(d);
+	RETURN_MM_DOUBLE(d);
 
 }
 
@@ -1320,12 +1393,13 @@ PHP_METHOD(Test_Bitwise, intShiftLeft) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a << b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1334,11 +1408,12 @@ PHP_METHOD(Test_Bitwise, int2ShiftLeft) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (a << 2);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1347,10 +1422,11 @@ PHP_METHOD(Test_Bitwise, intShiftLeftSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 4;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1359,12 +1435,13 @@ PHP_METHOD(Test_Bitwise, intShiftRight) {
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	b = 2;
 	c = (a >> b);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1373,11 +1450,12 @@ PHP_METHOD(Test_Bitwise, int2ShiftRight) {
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 1;
 	c = (a >> 2);
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1386,10 +1464,11 @@ PHP_METHOD(Test_Bitwise, intShiftRightSimple) {
 	zend_long c = 0;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	c = 0;
-	RETURN_LONG(c);
+	RETURN_MM_LONG(c);
 
 }
 
@@ -1399,13 +1478,14 @@ PHP_METHOD(Test_Bitwise, testBitwiseNot) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &a_param);
 
 	a = zephir_get_intval(a_param);
 
 
-	RETURN_LONG(~a);
+	RETURN_MM_LONG(~a);
 
 }
 
@@ -1415,6 +1495,7 @@ PHP_METHOD(Test_Bitwise, testBitwiseAndNot) {
 	zend_long a, b;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
@@ -1422,7 +1503,7 @@ PHP_METHOD(Test_Bitwise, testBitwiseAndNot) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_LONG((a & ~b));
+	RETURN_MM_LONG((a & ~b));
 
 }
 
@@ -1432,13 +1513,14 @@ PHP_METHOD(Test_Bitwise, getInt) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	zephir_fetch_params(0, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
 
-	RETURN_LONG(num);
+	RETURN_MM_LONG(num);
 
 }
 
@@ -1451,11 +1533,11 @@ PHP_METHOD(Test_Bitwise, testbitwiseXor) {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&j);
 
-	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 123);
 	ZEPHIR_CALL_METHOD(&i, this_ptr, "getint", NULL, 0, &_0);

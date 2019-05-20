@@ -32,10 +32,10 @@ PHP_METHOD(Test_Optimizers_ArrayMerge, mergeTwoRequiredArrays) {
 	zval arr1, arr2;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&arr1);
 	ZVAL_UNDEF(&arr2);
 
-	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &arr1_param, &arr2_param);
 
 	zephir_get_arrval(&arr1, arr1_param);

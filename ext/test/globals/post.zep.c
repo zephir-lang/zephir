@@ -37,10 +37,10 @@ PHP_METHOD(Test_Globals_Post, hasValue) {
 	zval name;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 	ZVAL_UNDEF(&name);
 	ZVAL_UNDEF(&_POST);
 
-	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params(1, 1, 0, &name_param);
 

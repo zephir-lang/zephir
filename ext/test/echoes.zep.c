@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -30,8 +31,10 @@ PHP_METHOD(Test_Echoes, testEcho1) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%d", 1);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -39,8 +42,10 @@ PHP_METHOD(Test_Echoes, testEcho2) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%f", 1.0);
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -48,8 +53,10 @@ PHP_METHOD(Test_Echoes, testEcho3) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%s", 1 ? "1": "");
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -57,8 +64,10 @@ PHP_METHOD(Test_Echoes, testEcho4) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%s", 0 ? "1": "");
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -66,8 +75,10 @@ PHP_METHOD(Test_Echoes, testEcho5) {
 
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 	php_printf("%s", "hello");
+	ZEPHIR_MM_RESTORE();
 
 }
 

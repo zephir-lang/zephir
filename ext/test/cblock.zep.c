@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 // top statement before namespace, add to after headers
 #define MAX_FACTOR 10
@@ -49,13 +50,14 @@ PHP_METHOD(Test_Cblock, testCblock1) {
 	zend_long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 0;
 	
 			a = MAX_FACTOR;
 		
-	RETURN_LONG(a);
+	RETURN_MM_LONG(a);
 
 }
 
@@ -64,13 +66,14 @@ PHP_METHOD(Test_Cblock, testCblock2) {
 	long a;
 	zval *this_ptr = getThis();
 
+	ZEPHIR_MM_GROW();
 
 
 	a = 0;
 	
 			a = fibonacci(MAX_FACTOR);
 		
-	RETURN_LONG(a);
+	RETURN_MM_LONG(a);
 
 }
 
