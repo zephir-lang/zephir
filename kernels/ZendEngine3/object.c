@@ -540,7 +540,6 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 {
 	zend_class_entry *ce, *old_scope;
 	zval property, new_value;
-	int separated;
 
 #if PHP_VERSION_ID >= 70100
 	old_scope = EG(fake_scope);
@@ -572,12 +571,12 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
-	separated = (Z_TYPE_P(value) == IS_ARRAY);
 	ZEPHIR_SEPARATE(value);
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
 	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
 	zval_ptr_dtor(&property);
+	Z_TRY_DELREF_P(value);
 
 #if PHP_VERSION_ID >= 70100
 	EG(fake_scope) = old_scope;
@@ -616,12 +615,9 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 		if (Z_TYPE(tmp) != IS_ARRAY) {
 			array_init(&tmp);
 			separated = 1;
-		} else {
-			ZVAL_ARR(&tmp, zend_array_dup(Z_ARR_P(&tmp)));
-			separated = 1;
 		}
 
-		ZEPHIR_SEPARATE_ARRAY(value);
+		ZEPHIR_SEPARATE(value);
 
 		if (Z_TYPE_P(index) == IS_STRING) {
 			zend_symtable_str_update(Z_ARRVAL(tmp), Z_STRVAL_P(index), Z_STRLEN_P(index), value);
@@ -633,7 +629,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, &tmp);
-			//zval_ptr_dtor(&tmp);
+			Z_TRY_DELREF_P(&tmp);
 		}
 	}
 
@@ -660,17 +656,14 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 	if (Z_TYPE(tmp) != IS_ARRAY) {
 		array_init(&tmp);
 		separated = 1;
-	} else {
-		ZVAL_ARR(&tmp, zend_array_dup(Z_ARR_P(&tmp)));
-		separated = 1;
 	}
 
-	ZEPHIR_SEPARATE_ARRAY(value);
+	ZEPHIR_SEPARATE(value);
 	add_next_index_zval(&tmp, value);
 
 	if (separated) {
 		zephir_update_property_zval(object, property, property_length, &tmp);
-		//zval_ptr_dtor(&tmp);
+		Z_TRY_DELREF_P(&tmp);
 	}
 
 	return SUCCESS;
@@ -848,8 +841,8 @@ int zephir_update_static_property(zend_class_entry *ce, const char *property, ze
 	int separated;
 
 	ZEPHIR_SEPARATE(value);
-
 	zend_update_static_property(ce, property, property_length, value);
+	Z_TRY_DELREF_P(value);
 
 	return SUCCESS;
 }
