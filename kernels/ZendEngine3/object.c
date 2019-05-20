@@ -685,9 +685,6 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 		if (Z_TYPE(tmp) != IS_ARRAY) {
 			array_init(&tmp);
 			separated = 1;
-		} else {
-			ZVAL_ARR(&tmp, zend_array_dup(Z_ARR_P(&tmp)));
-			separated = 1;
 		}
 
 		va_start(ap, types_count);
@@ -696,7 +693,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, &tmp);
-			//zval_ptr_dtor(&tmp);
+			zval_ptr_dtor(&tmp);
 		}
 	}
 
@@ -864,9 +861,6 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	if (Z_TYPE(tmp) != IS_ARRAY) {
 		array_init(&tmp);
 		separated = 1;
-	} else {
-		ZVAL_ARR(&tmp, zend_array_dup(Z_ARR_P(&tmp)));
-		separated = 1;
 	}
 
 	va_start(ap, types_count);
@@ -875,6 +869,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 
 	if (separated) {
 		zend_update_static_property(ce, property, property_length, &tmp);
+		Z_TRY_DELREF_P(&tmp);
 	}
 
 	return SUCCESS;

@@ -1004,7 +1004,7 @@ class Backend extends BaseBackend
 
         $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
         $varCode = $this->getVariableCode($variable);
-        $compilationContext->codePrinter->output('zephir_array_update_multi('.$varCode.', '.$symbol.' TSRMLS_CC, SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
+        $compilationContext->codePrinter->output('zephir_array_update_multi('.$varCode.', '.$symbol.', SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
     }
 
     public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
@@ -1012,7 +1012,7 @@ class Backend extends BaseBackend
         list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
 
-        $compilationContext->codePrinter->output('zephir_update_property_array_multi('.$variable->getName().', SL("'.$propertyName.'"), '.$valueVariable.' TSRMLS_CC, SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
+        $compilationContext->codePrinter->output('zephir_update_property_array_multi('.$variable->getName().', SL("'.$propertyName.'"), '.$valueVariable.', SL("'.$keys.'"), '.$numberParams.', '.implode(', ', $offsetItems).');');
     }
 
     public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)

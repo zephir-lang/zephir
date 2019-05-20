@@ -102,9 +102,6 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 		if (Z_TYPE_P(z) == IS_ARRAY) { \
 			zval *_zv = (z);								\
 			zend_array *_arr = Z_ARR_P(_zv);				\
-			if (Z_REFCOUNT_P(z) > 1) {						\
-				zval_ptr_dtor(z);							\
-			}												\
 			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
 		}													\
 	} while (0)
@@ -114,9 +111,6 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 		if (Z_TYPE_P(z) == IS_ARRAY) { \
 			zval *_zv = (z);								\
 			zend_array *_arr = Z_ARR_P(_zv);				\
-			if (Z_REFCOUNT_P(z) > 1) {						\
-				zval_ptr_dtor(z);							\
-			}												\
 			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
 		} else {											\
 			Z_TRY_ADDREF_P(z);								\
