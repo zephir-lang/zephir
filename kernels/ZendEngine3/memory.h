@@ -93,19 +93,12 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 	ZVAL_NULL(z);
 
 #define ZEPHIR_CPY_WRT(d, v) \
-	ZEPHIR_SEPARATE(v); \
-	ZVAL_COPY_VALUE(d, v); \
-	zephir_memory_observe(&zephir_memory, d);
+	ZVAL_COPY_VALUE(d, v);
 
 #define ZEPHIR_SEPARATE_ARRAY(z) \
 	do { \
 		if (Z_TYPE_P(z) == IS_ARRAY) { \
 			zval *_zv = (z);								\
-			if (Z_REFCOUNT_P(_zv) > 1) {					\
-				if (Z_REFCOUNTED_P(_zv)) {					\
-					Z_DELREF_P(_zv);						\
-				}											\
-			}												\
 			zend_array *_arr = Z_ARR_P(_zv);				\
 			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
 		}													\
@@ -115,11 +108,6 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 	do { \
 		if (Z_TYPE_P(z) == IS_ARRAY) {						\
 			zval *_zv = (z);								\
-			if (Z_REFCOUNT_P(_zv) > 1) {					\
-				if (Z_REFCOUNTED_P(_zv)) {					\
-					Z_DELREF_P(_zv);						\
-				}											\
-			}												\
 			zend_array *_arr = Z_ARR_P(_zv);				\
 			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
 		} else {											\
@@ -130,7 +118,7 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	do { \
 		zval *orig_ptr = z;\
-		SEPARATE_ZVAL(orig_ptr); \
+		SEPARATE_ARG_IF_REF(orig_ptr); \
 	} while (0)
 
 void zephir_create_symbol_table(zephir_memory_def *zephir_memory_ptr);

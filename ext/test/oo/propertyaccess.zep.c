@@ -56,7 +56,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZVAL_UNDEF(&_6);
 
 
-	object_init(&test);
+	object_init(&test);ZEPHIR_MM_ADD_ENTRY(&test);
 	zephir_create_array(&_0, 5, 0);
 	ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_MM_ZVAL_STRING(&_1, "1");

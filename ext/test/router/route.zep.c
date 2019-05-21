@@ -475,7 +475,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZVAL_NULL(&moduleName);
 			ZVAL_NULL(&controllerName);
 			ZVAL_NULL(&actionName);
-			zephir_fast_explode_str(&parts, SL("::"), paths, LONG_MAX TSRMLS_CC);
+			zephir_fast_explode_str(&parts, SL("::"), paths, LONG_MAX);
+			ZEPHIR_MM_ADD_ENTRY(&parts);
 			do {
 				_0$$5 = zephir_fast_count_int(&parts TSRMLS_CC);
 				if (_0$$5 == 3) {

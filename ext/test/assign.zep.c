@@ -651,7 +651,7 @@ PHP_METHOD(Test_Assign, testAssign40) {
 	ZVAL_UNDEF(&b);
 
 
-	object_init(&b);
+	object_init(&b);ZEPHIR_MM_ADD_ENTRY(&b);
 	array_init(&a);
 	ZEPHIR_MM_ADD_ENTRY(&a);
 	ZEPHIR_MM_ZVAL_STRING(&a, "123");

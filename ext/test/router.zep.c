@@ -131,7 +131,7 @@ PHP_METHOD(Test_Router, __construct) {
 	array_init(&routes);
 	ZEPHIR_MM_ADD_ENTRY(&routes);
 	if (defaultRoutes == 1) {
-		object_init_ex(&_0$$3, test_router_route_ce);
+		object_init_ex(&_0$$3, test_router_route_ce);ZEPHIR_MM_ADD_ENTRY(&_0$$3);
 		zephir_create_array(&_1$$3, 1, 0);
 		ZEPHIR_MM_ADD_ENTRY(&_1$$3);
 		add_assoc_long_ex(&_1$$3, SL("controller"), 1);
@@ -139,7 +139,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", &_3, 67, &_2$$3, &_1$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_0$$3, PH_SEPARATE, "test/router.zep", 89);
-		object_init_ex(&_2$$3, test_router_route_ce);
+		object_init_ex(&_2$$3, test_router_route_ce);ZEPHIR_MM_ADD_ENTRY(&_2$$3);
 		zephir_create_array(&_4$$3, 3, 0);
 		ZEPHIR_MM_ADD_ENTRY(&_4$$3);
 		add_assoc_long_ex(&_4$$3, SL("controller"), 1);
@@ -225,7 +225,8 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 		}
 	} else {
 		if (zephir_array_isset_string_fetch(&url, &_SERVER, SL("REQUEST_URI"), 1)) {
-			zephir_fast_explode_str(&urlParts, SL("?"), &url, LONG_MAX TSRMLS_CC);
+			zephir_fast_explode_str(&urlParts, SL("?"), &url, LONG_MAX);
+			ZEPHIR_MM_ADD_ENTRY(&urlParts);
 			zephir_array_fetch_long(&realUri, &urlParts, 0, PH_NOISY | PH_READONLY, "test/router.zep", 142 TSRMLS_CC);
 			if (!(zephir_is_true(&realUri))) {
 				RETURN_MM_CTOR(&realUri);
@@ -926,7 +927,8 @@ PHP_METHOD(Test_Router, handle) {
 			ZVAL_LONG(&_26$$92, 1);
 			zephir_substr(&strParams, &paramsStr, 1 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
 			if (zephir_is_true(&strParams)) {
-				zephir_fast_explode_str(&params, SL("/"), &strParams, LONG_MAX TSRMLS_CC);
+				zephir_fast_explode_str(&params, SL("/"), &strParams, LONG_MAX);
+				ZEPHIR_MM_ADD_ENTRY(&params);
 			}
 			zephir_array_unset_string(&parts, SL("params"), PH_SEPARATE);
 		}
@@ -989,7 +991,7 @@ PHP_METHOD(Test_Router, add) {
 	}
 
 
-	object_init_ex(&route, test_router_route_ce);
+	object_init_ex(&route, test_router_route_ce);ZEPHIR_MM_ADD_ENTRY(&route);
 	ZEPHIR_CALL_METHOD(NULL, &route, "__construct", NULL, 67, pattern, paths, httpMethods);
 	zephir_check_call_status();
 	zephir_update_property_array_append(this_ptr, SL("_routes"), &route);

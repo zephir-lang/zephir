@@ -36,7 +36,7 @@ PHP_METHOD(Test_ArrayAccessTest, exits) {
 	ZVAL_UNDEF(&arr);
 
 
-	object_init_ex(&arr, test_arrayaccessobj_ce);
+	object_init_ex(&arr, test_arrayaccessobj_ce);ZEPHIR_MM_ADD_ENTRY(&arr);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(zephir_array_isset_string(&arr, SL("one")));
@@ -54,7 +54,7 @@ PHP_METHOD(Test_ArrayAccessTest, get) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init_ex(&arr, test_arrayaccessobj_ce);
+	object_init_ex(&arr, test_arrayaccessobj_ce);ZEPHIR_MM_ADD_ENTRY(&arr);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
 	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "test/arrayaccesstest.zep", 18 TSRMLS_CC);

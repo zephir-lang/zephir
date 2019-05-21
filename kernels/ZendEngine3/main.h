@@ -131,7 +131,7 @@ extern zend_string* i_self;
  * Returns a zval in an object member
  */
 #define RETURN_MEMBER(object, member_name) \
-	zephir_return_property(return_value, object, SL(member_name)); \
+	zephir_read_property(return_value, object, SL(member_name), PH_NOISY | PH_COPY); \
 	return;
 
 /** Return without change return_value */
@@ -154,7 +154,7 @@ extern zend_string* i_self;
  * Returns a zval in an object member
  */
 #define RETURN_MM_MEMBER(object, member_name) \
-  zephir_return_property(return_value, object, SL(member_name)); \
+  zephir_read_property(return_value, object, SL(member_name), PH_NOISY | PH_COPY); \
   RETURN_MM();
 
 #define RETURN_ON_FAILURE(what) \

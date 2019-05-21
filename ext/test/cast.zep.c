@@ -261,7 +261,7 @@ PHP_METHOD(Test_Cast, testIntCastFromStdClass) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init(&_0);
+	object_init(&_0);ZEPHIR_MM_ADD_ENTRY(&_0);
 	RETURN_MM_LONG(zephir_get_intval(&_0));
 
 }
@@ -279,7 +279,7 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init(&a);
+	object_init(&a);ZEPHIR_MM_ADD_ENTRY(&a);
 	RETURN_MM_LONG(zephir_get_intval(&a));
 
 }
@@ -470,7 +470,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromStdClass) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init(&_0);
+	object_init(&_0);ZEPHIR_MM_ADD_ENTRY(&_0);
 	RETURN_MM_DOUBLE(zephir_get_doubleval(&_0));
 
 }
@@ -488,7 +488,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init(&a);
+	object_init(&a);ZEPHIR_MM_ADD_ENTRY(&a);
 	RETURN_MM_DOUBLE(zephir_get_doubleval(&a));
 
 }
@@ -533,7 +533,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromObject) {
 	ZVAL_UNDEF(&simpleObject);
 
 
-	object_init(&simpleObject);
+	object_init(&simpleObject);ZEPHIR_MM_ADD_ENTRY(&simpleObject);
 	RETURN_MM_BOOL(zephir_get_boolval(&simpleObject));
 
 }

@@ -707,6 +707,10 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 		ZEPHIR_SEPARATE(value);
 	}
 
+	if (Z_REFCOUNT_P(arr) > 1) {
+		ZEPHIR_SEPARATE_ARRAY(arr);
+	}
+
 	ht = Z_ARRVAL_P(arr);
 
 	switch (Z_TYPE_P(index)) {
@@ -774,6 +778,11 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 	} else if ((flags & PH_SEPARATE) == PH_SEPARATE) {
 		ZEPHIR_SEPARATE(value);
 	}
+
+	if (Z_REFCOUNT_P(arr) > 1) {
+		ZEPHIR_SEPARATE_ARRAY(arr);
+	}
+
 	return zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value) ? SUCCESS : FAILURE;
 }
 
@@ -808,6 +817,9 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 		Z_TRY_ADDREF_P(value);
 	} else if ((flags & PH_SEPARATE) == PH_SEPARATE) {
 		ZEPHIR_SEPARATE(value);
+	}
+	if (Z_REFCOUNT_P(arr) > 1) {
+		ZEPHIR_SEPARATE_ARRAY(arr);
 	}
 
 	return zend_hash_index_update(Z_ARRVAL_P(arr), index, value) ? SUCCESS : FAILURE;
@@ -1012,7 +1024,7 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 {
 	va_list ap;
 	va_start(ap, types_count);
-	ZEPHIR_SEPARATE(value);
+	Z_TRY_ADDREF_P(value);
 	zephir_array_update_multi_ex(arr, value, types, types_length, types_count, ap);
 	va_end(ap);
 

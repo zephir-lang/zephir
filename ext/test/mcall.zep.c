@@ -906,7 +906,7 @@ PHP_METHOD(Test_Mcall, testCallablePass) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init_ex(&a, test_oo_ooparams_ce);
+	object_init_ex(&a, test_oo_ooparams_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
@@ -932,7 +932,7 @@ PHP_METHOD(Test_Mcall, testCallableArrayThisMethodPass) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init_ex(&a, test_oo_ooparams_ce);
+	object_init_ex(&a, test_oo_ooparams_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
@@ -958,7 +958,7 @@ PHP_METHOD(Test_Mcall, aa) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init_ex(&a, test_mcall_ce);
+	object_init_ex(&a, test_mcall_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();

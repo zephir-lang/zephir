@@ -68,65 +68,65 @@ PHP_METHOD(Test_Instance, testIssue1339) {
 
 	zephir_create_array(&parameters, 11, 0);
 	ZEPHIR_MM_ADD_ENTRY(&parameters);
-	object_init_ex(&_0, test_arithmetic_ce);
+	object_init_ex(&_0, test_arithmetic_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_arrayobject_ce);
+	object_init_ex(&_0, test_arrayobject_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 43);
 	zephir_check_call_status();
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_assign_ce);
+	object_init_ex(&_0, test_assign_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_bitwise_ce);
+	object_init_ex(&_0, test_bitwise_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_branchprediction_ce);
+	object_init_ex(&_0, test_branchprediction_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_cast_ce);
+	object_init_ex(&_0, test_cast_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_cblock_ce);
+	object_init_ex(&_0, test_cblock_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_chars_ce);
+	object_init_ex(&_0, test_chars_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_closures_ce);
+	object_init_ex(&_0, test_closures_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_compare_ce);
+	object_init_ex(&_0, test_compare_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	zephir_array_fast_append(&parameters, &_0);
-	object_init_ex(&_0, test_concat_ce);
+	object_init_ex(&_0, test_concat_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();

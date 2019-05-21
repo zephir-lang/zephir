@@ -66,7 +66,7 @@ PHP_METHOD(Test_Exceptions, testException2) {
 
 
 	ZEPHIR_MM_ZVAL_STRING(&msg, "hello2");
-	object_init_ex(&_0, test_exception_ce);
+	object_init_ex(&_0, test_exception_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 28, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "test/exceptions.zep", 23 TSRMLS_CC);
@@ -87,7 +87,7 @@ PHP_METHOD(Test_Exceptions, testException3) {
 
 
 	ZEPHIR_MM_ZVAL_STRING(&msg, "hello3");
-	object_init_ex(&ex, test_exception_ce);
+	object_init_ex(&ex, test_exception_ce);ZEPHIR_MM_ADD_ENTRY(&ex);
 	ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 28, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&ex, "test/exceptions.zep", 31 TSRMLS_CC);
@@ -143,7 +143,7 @@ PHP_METHOD(Test_Exceptions, testException5) {
 	ZVAL_UNDEF(&_0);
 
 
-	object_init_ex(&exception, test_exception_ce);
+	object_init_ex(&exception, test_exception_ce);ZEPHIR_MM_ADD_ENTRY(&exception);
 	ZEPHIR_MM_ZVAL_STRING(&_0, "hello5");
 	ZEPHIR_CALL_METHOD(NULL, &exception, "__construct", NULL, 28, &_0);
 	zephir_check_call_status();

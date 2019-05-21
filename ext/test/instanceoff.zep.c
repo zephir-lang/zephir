@@ -38,7 +38,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init(&a);
+	object_init(&a);ZEPHIR_MM_ADD_ENTRY(&a);
 	RETURN_MM_BOOL(zephir_instance_of_ev(&a, zend_standard_class_def TSRMLS_CC));
 
 }
@@ -53,7 +53,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init_ex(&a, test_instanceoff_ce);
+	object_init_ex(&a, test_instanceoff_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
@@ -71,7 +71,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf3) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init(&a);
+	object_init(&a);ZEPHIR_MM_ADD_ENTRY(&a);
 	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_unknownclass_ce TSRMLS_CC));
 
 }
@@ -124,7 +124,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf6) {
 	ZVAL_UNDEF(&a);
 
 
-	object_init_ex(&a, test_instanceoff_ce);
+	object_init_ex(&a, test_instanceoff_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
@@ -165,7 +165,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf8) {
 	zephir_get_strval(&test, test_param);
 
 
-	object_init_ex(&a, test_instanceoff_ce);
+	object_init_ex(&a, test_instanceoff_ce);ZEPHIR_MM_ADD_ENTRY(&a);
 	if (zephir_has_constructor(&a TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();

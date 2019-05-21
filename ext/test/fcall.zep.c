@@ -457,7 +457,7 @@ PHP_FUNCTION(g_test_zephir_global_method_test) {
 
 
 
-	object_init_ex(&_0, test_fcall_ce);
+	object_init_ex(&_0, test_fcall_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();
@@ -495,7 +495,7 @@ PHP_FUNCTION(f_Test_zephir_namespaced_method_test) {
 
 
 
-	object_init_ex(&_0, test_fcall_ce);
+	object_init_ex(&_0, test_fcall_ce);ZEPHIR_MM_ADD_ENTRY(&_0);
 	if (zephir_has_constructor(&_0 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
 		zephir_check_call_status();

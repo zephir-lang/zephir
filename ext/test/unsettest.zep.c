@@ -155,7 +155,7 @@ PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 	ZVAL_UNDEF(&_1);
 
 
-	object_init(&simpleObject);
+	object_init(&simpleObject);ZEPHIR_MM_ADD_ENTRY(&simpleObject);
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 12345);
 	zephir_update_property_zval(&simpleObject, SL("property1"), &_0);

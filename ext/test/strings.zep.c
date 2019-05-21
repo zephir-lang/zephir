@@ -254,7 +254,7 @@ PHP_METHOD(Test_Strings, testExplode) {
 
 
 
-	zephir_fast_explode(return_value, delimiter, str, LONG_MAX TSRMLS_CC);
+	zephir_fast_explode(return_value, delimiter, str, LONG_MAX);
 	RETURN_MM();
 
 }
@@ -271,7 +271,7 @@ PHP_METHOD(Test_Strings, testExplodeStr) {
 
 
 
-	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX);
 	RETURN_MM();
 
 }
@@ -292,7 +292,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0)  TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0) );
 	RETURN_MM();
 
 }

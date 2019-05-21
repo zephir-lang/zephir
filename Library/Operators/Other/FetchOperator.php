@@ -129,7 +129,7 @@ class FetchOperator extends BaseOperator
                 $symbol = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
 
-                return new CompiledExpression('bool', 'zephir_fetch_property('.$symbol.', '.$evalSymbol.', SL("'.$property.'"), PH_SILENT_CC)', $expression);
+                return new CompiledExpression('bool', 'zephir_read_property('.$symbol.', '.$evalSymbol.', SL("'.$property.'"), PH_NOISY | PH_COPY)', $expression);
 
             case 'property-dynamic-access':
                 $exprVariable = new Expression($expression['right']['left']);
@@ -172,7 +172,7 @@ class FetchOperator extends BaseOperator
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
                 $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
 
-                return new CompiledExpression('bool', 'zephir_fetch_property_zval('.$symbol.', '.$evalSymbol.', '.$evalPropertySymbol.', PH_SILENT_CC)', $expression);
+                return new CompiledExpression('bool', 'zephir_read_property_zval('.$symbol.', '.$evalSymbol.', '.$evalPropertySymbol.', PH_NOISY | PH_COPY)', $expression);
 
             default:
                 throw new CompilerException('Cannot use this expression for "fetch" operators: '.$expression['right']['type'], $expression);

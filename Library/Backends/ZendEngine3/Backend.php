@@ -861,6 +861,10 @@ class Backend extends BaseBackend
             $output = 'object_init_ex('.$variableAccess.', '.$ce.');';
         }
 
+        if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName()) {
+            $output .= 'ZEPHIR_MM_ADD_ENTRY('.$variableAccess.');';
+        }
+
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }

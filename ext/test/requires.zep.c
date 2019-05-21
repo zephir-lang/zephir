@@ -88,7 +88,7 @@ PHP_METHOD(Test_Requires, requireExternal3) {
 
 	zephir_create_symbol_table(&zephir_memory);
 	
-	object_init_ex(&external3, test_requires_external3_ce);
+	object_init_ex(&external3, test_requires_external3_ce);ZEPHIR_MM_ADD_ENTRY(&external3);
 	if (zephir_has_constructor(&external3 TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
 		zephir_check_call_status();

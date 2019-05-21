@@ -40,7 +40,7 @@ PHP_METHOD(Test_Properties_StaticPrivateProperties, getInstance) {
 
 	zephir_read_static_property_ce(&localInstance, test_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC);
 	if (UNEXPECTED(Z_TYPE_P(&localInstance) != IS_OBJECT)) {
-		object_init_ex(&localInstance, test_properties_staticprivateproperties_ce);
+		object_init_ex(&localInstance, test_properties_staticprivateproperties_ce);ZEPHIR_MM_ADD_ENTRY(&localInstance);
 		if (zephir_has_constructor(&localInstance TSRMLS_CC)) {
 			ZEPHIR_CALL_METHOD(NULL, &localInstance, "__construct", NULL, 0);
 			zephir_check_call_status();

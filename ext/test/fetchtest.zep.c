@@ -42,7 +42,7 @@ PHP_METHOD(Test_FetchTest, setValues) {
 	zephir_fetch_params(1, 1, 0, &values);
 
 
-	RC_DUMP(values);
+
 	zephir_update_property_zval(this_ptr, SL("values"), values);
 	RETURN_MM_THIS();
 
@@ -186,7 +186,7 @@ PHP_METHOD(Test_FetchTest, testFetchObject1) {
 
 
 
-	RETURN_MM_BOOL(zephir_fetch_property_zval(&c, a, b, PH_SILENT_CC));
+	RETURN_MM_BOOL(zephir_read_property_zval(&c, a, b, PH_NOISY | PH_COPY));
 
 }
 
@@ -204,7 +204,7 @@ PHP_METHOD(Test_FetchTest, testFetchObject2) {
 	ZEPHIR_SEPARATE_PARAM(a);
 
 
-	RETURN_MM_BOOL(zephir_fetch_property_zval(a, a, b, PH_SILENT_CC));
+	RETURN_MM_BOOL(zephir_read_property_zval(a, a, b, PH_NOISY | PH_COPY));
 
 }
 

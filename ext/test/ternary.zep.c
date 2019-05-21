@@ -185,7 +185,8 @@ PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 	} else {
 		ZEPHIR_MM_ZVAL_STRING(&_1, "");
 	}
-	zephir_fast_explode_str(&var3, SL("_"), &_1, LONG_MAX TSRMLS_CC);
+	zephir_fast_explode_str(&var3, SL("_"), &_1, LONG_MAX);
+	ZEPHIR_MM_ADD_ENTRY(&var3);
 	RETURN_MM_CTOR(&var3);
 
 }

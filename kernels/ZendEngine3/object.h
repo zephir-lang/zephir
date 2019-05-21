@@ -53,7 +53,6 @@ int zephir_isset_property_zval(zval *object, const zval *property);
 /** Reading properties */
 int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
 int zephir_read_property_zval(zval *result, zval *object, zval *property, int silent);
-int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length);
 int zephir_fetch_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent);
 

@@ -86,12 +86,13 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
-            $context->codePrinter->output('zephir_fast_explode_str('.$symbol.', SL("'.$str.'"), '.$resolvedParams[0].', '.$limit.' TSRMLS_CC);');
-
+            $context->codePrinter->output('zephir_fast_explode_str('.$symbol.', SL("'.$str.'"), '.$resolvedParams[0].', '.$limit.');');
+            $symbolVariable->addMemoryEntry($context);
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_fast_explode('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$limit.' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_explode('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$limit.');');
+        $symbolVariable->addMemoryEntry($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -41,7 +41,7 @@ PHP_METHOD(Test_ArrayIteratorTest, test) {
 	ZVAL_UNDEF(&_1);
 
 
-	object_init_ex(&arr, test_arrayiterator_ce);
+	object_init_ex(&arr, test_arrayiterator_ce);ZEPHIR_MM_ADD_ENTRY(&arr);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 4);
 	zephir_check_call_status();
 	zephir_is_iterable(&arr, 0, "test/arrayiteratortest.zep", 12);
