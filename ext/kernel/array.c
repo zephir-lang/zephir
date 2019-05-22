@@ -698,7 +698,6 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 
 	if ((flags & PH_CTOR) == PH_CTOR) {
 		zval new_zv;
-		//Z_TRY_DELREF_P(value); //?
 		ZVAL_DUP(&new_zv, value);
 		value = &new_zv;
 	} else if ((flags & PH_COPY) == PH_COPY) {
@@ -917,14 +916,14 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 				old_l[i] = l;
 				if (zephir_array_isset_string_fetch(&fetched, &pzv, s, l, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
-						if (Z_REFCOUNT_P(&fetched) > 1) {
-							ZVAL_ARR(&fetched, zend_array_dup(Z_ARR_P(&fetched)));
-							zephir_array_update_string(&pzv, s, l, &fetched, 0);
-						}
 						if (i == (types_length - 1)) {
 							zephir_array_update_string(&pzv, s, l, value, 0);
 							p = Z_ARRVAL(pzv);
 						} else {
+							if (Z_REFCOUNT_P(&fetched) > 1) {
+								ZEPHIR_SEPARATE(&fetched);
+								zephir_array_update_string(&pzv, s, l, &fetched, 0);
+							}
 							p = Z_ARRVAL(fetched);
 						}
 						must_continue = 1;
@@ -954,7 +953,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							if (Z_REFCOUNT_P(&fetched) > 1) {
-								ZVAL_ARR(&fetched, zend_array_dup(Z_ARR_P(&fetched)));
+								ZEPHIR_SEPARATE(&fetched);
 								zephir_array_update_long(&pzv, ll, &fetched, 0 ZEPHIR_DEBUG_PARAMS_DUMMY);
 							}
 							p = Z_ARRVAL(fetched);
@@ -986,7 +985,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							if (Z_REFCOUNT_P(&fetched) > 1) {
-								ZVAL_ARR(&fetched, zend_array_dup(Z_ARR_P(&fetched)));
+								ZEPHIR_SEPARATE(&fetched);
 								zephir_array_update_zval(&pzv, item, &fetched, 0);
 							}
 							p = Z_ARRVAL(fetched);
@@ -1025,6 +1024,7 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 	va_list ap;
 	va_start(ap, types_count);
 	Z_TRY_ADDREF_P(value);
+	ZEPHIR_SEPARATE(arr);
 	zephir_array_update_multi_ex(arr, value, types, types_length, types_count, ap);
 	va_end(ap);
 
