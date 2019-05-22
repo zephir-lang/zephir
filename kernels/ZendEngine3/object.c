@@ -576,7 +576,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 			array_init(&tmp);
 			separated = 1;
 		} else if (Z_REFCOUNT_P(&tmp) > 1) {
-			ZEPHIR_SEPARATE_ARRAY(&tmp);
+			ZEPHIR_SEPARATE(&tmp);
 			separated = 2;
 		}
 
@@ -620,7 +620,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 		array_init(&tmp);
 		separated = 1;
 	} else if (Z_REFCOUNT_P(&tmp) > 1) {
-		ZEPHIR_SEPARATE_ARRAY(&tmp);
+		ZEPHIR_SEPARATE(&tmp);
 		separated = 2;
 	}
 
@@ -652,7 +652,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 			array_init(&tmp);
 			separated = 1;
 		} else if (Z_REFCOUNT_P(&tmp) > 1) {
-			ZEPHIR_SEPARATE_ARRAY(&tmp);
+			ZEPHIR_SEPARATE(&tmp);
 			separated = 2;
 		}
 
@@ -829,7 +829,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 		array_init(&tmp);
 		separated = 1;
 	} else {
-		ZEPHIR_SEPARATE_ARRAY(&tmp);
+		ZEPHIR_SEPARATE(&tmp);
 		separated = 2;
 	}
 

@@ -708,7 +708,7 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 	}
 
 	if (Z_REFCOUNT_P(arr) > 1) {
-		ZEPHIR_SEPARATE_ARRAY(arr);
+		ZEPHIR_SEPARATE(arr);
 	}
 
 	ht = Z_ARRVAL_P(arr);
@@ -780,7 +780,7 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 	}
 
 	if (Z_REFCOUNT_P(arr) > 1) {
-		ZEPHIR_SEPARATE_ARRAY(arr);
+		ZEPHIR_SEPARATE(arr);
 	}
 
 	return zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value) ? SUCCESS : FAILURE;
@@ -819,7 +819,7 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 		ZEPHIR_SEPARATE(value);
 	}
 	if (Z_REFCOUNT_P(arr) > 1) {
-		ZEPHIR_SEPARATE_ARRAY(arr);
+		ZEPHIR_SEPARATE(arr);
 	}
 
 	return zend_hash_index_update(Z_ARRVAL_P(arr), index, value) ? SUCCESS : FAILURE;

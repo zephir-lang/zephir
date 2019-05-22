@@ -95,23 +95,15 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 #define ZEPHIR_CPY_WRT(d, v) \
 	ZVAL_COPY_VALUE(d, v);
 
-#define ZEPHIR_SEPARATE_ARRAY(z) \
-	do { \
-		if (Z_TYPE_P(z) == IS_ARRAY) { \
-			zval *_zv = (z);								\
-			zend_array *_arr = Z_ARR_P(_zv);				\
-			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
-		}													\
-	} while (0)
-
 #define ZEPHIR_SEPARATE(z) \
 	do { \
-		if (Z_TYPE_P(z) == IS_ARRAY) {						\
-			zval *_zv = (z);								\
-			zend_array *_arr = Z_ARR_P(_zv);				\
-			ZVAL_ARR(_zv, zend_array_dup(_arr));			\
-		} else {											\
-			Z_TRY_ADDREF_P(z);								\
+		zval *_zv = (z); \
+		if (Z_TYPE_P(_zv) == IS_ARRAY) { \
+			ZVAL_ARR(_zv, zend_array_dup(Z_ARR_P(_zv))); \
+		} else if (Z_ISREF_P(_zv)) { \
+			ZVAL_DUP(_zv, Z_REFVAL_P(_zv)); \
+		} else if (Z_REFCOUNTED_P(_zv)) { \
+			Z_ADDREF_P(_zv); \
 		} \
 	} while (0)
 
