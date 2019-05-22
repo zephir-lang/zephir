@@ -177,6 +177,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 
 	zephir_read_property(&g, this_ptr, SL("s"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&g);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
@@ -198,6 +199,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 
 	zephir_read_property(&g, inp, SL("s"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&g);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}

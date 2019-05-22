@@ -86,7 +86,10 @@ PHP_METHOD(Test_ArrayIterator, current) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_SEPARATE(&_0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	zephir_read_property(&_2, this_ptr, SL("position"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&_2);
 	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "test/arrayiterator.zep", 22 TSRMLS_CC);
 	RETURN_MM_CTOR(&_1);
 
@@ -124,7 +127,11 @@ PHP_METHOD(Test_ArrayIterator, valid) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_SEPARATE(&_0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	zephir_read_property(&_1, this_ptr, SL("position"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_SEPARATE(&_1);
+	ZEPHIR_MM_ADD_ENTRY(&_1);
 	RETURN_MM_BOOL(zephir_array_isset(&_0, &_1));
 
 }

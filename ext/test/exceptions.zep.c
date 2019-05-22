@@ -300,7 +300,9 @@ PHP_METHOD(Test_Exceptions, testMultiException) {
 
 
 	zephir_read_property(&iexc, this_ptr, SL("internalExceptionCallable"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&iexc);
 	zephir_read_property(&exc, this_ptr, SL("exceptionCallable"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&exc);
 
 	/* try_start_1: */
 

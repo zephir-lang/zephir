@@ -52,6 +52,8 @@ PHP_METHOD(Test_Invoke, __invoke) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_SEPARATE(&_0);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	zephir_gettype(return_value, &_0 TSRMLS_CC);
 	RETURN_MM();
 

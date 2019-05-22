@@ -254,6 +254,8 @@ PHP_METHOD(Test_Bench_Foo, readProp) {
 			}
 			ZVAL_LONG(&i, _1);
 			zephir_read_property(&x, this_ptr, SL("b"), PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_SEPARATE(&x);
+			ZEPHIR_MM_ADD_ENTRY(&x);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -334,6 +336,7 @@ PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 			ZVAL_LONG(&i, _1);
 			ZVAL_LONG(&_4$$3, 2);
 			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
+			ZEPHIR_MM_ADD_ENTRY(&_3$$3);
 			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3)
 			zephir_update_property_zval(this_ptr, SL("b"), &_3$$3);
 		}
@@ -501,6 +504,7 @@ PHP_METHOD(Test_Bench_Foo, emptyProp) {
 			}
 			ZVAL_LONG(&i, _1);
 			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
+			ZEPHIR_MM_ADD_ENTRY(&_3$$3);
 			x = ZEPHIR_IS_EMPTY(&_3$$3);
 		}
 	}

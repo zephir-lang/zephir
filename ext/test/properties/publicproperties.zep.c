@@ -129,6 +129,7 @@ PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("someTrue"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&_0);
 	RETURN_MM_CTOR(&_0);
 
 }

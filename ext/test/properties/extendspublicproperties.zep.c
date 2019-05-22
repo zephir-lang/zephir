@@ -56,6 +56,8 @@ zend_object *zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		zephir_read_property(&_0, this_ptr, SL("someArrayWithSubArray"), PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_SEPARATE(&_0);
+		ZEPHIR_MM_ADD_ENTRY(&_0);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			zephir_create_array(&_1$$3, 4, 0);
 			ZEPHIR_MM_ADD_ENTRY(&_1$$3);
@@ -78,6 +80,8 @@ zend_object *zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend
 			zephir_update_property_zval(this_ptr, SL("someArrayWithSubArray"), &_1$$3);
 		}
 		zephir_read_property(&_3, this_ptr, SL("someArrayWithSpecifyKeys"), PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_SEPARATE(&_3);
+		ZEPHIR_MM_ADD_ENTRY(&_3);
 		if (Z_TYPE_P(&_3) == IS_NULL) {
 			zephir_create_array(&_4$$4, 3, 0);
 			ZEPHIR_MM_ADD_ENTRY(&_4$$4);
@@ -87,6 +91,8 @@ zend_object *zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend
 			zephir_update_property_zval(this_ptr, SL("someArrayWithSpecifyKeys"), &_4$$4);
 		}
 		zephir_read_property(&_5, this_ptr, SL("someArray"), PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_SEPARATE(&_5);
+		ZEPHIR_MM_ADD_ENTRY(&_5);
 		if (Z_TYPE_P(&_5) == IS_NULL) {
 			zephir_create_array(&_6$$5, 4, 0);
 			ZEPHIR_MM_ADD_ENTRY(&_6$$5);
@@ -101,12 +107,16 @@ zend_object *zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend
 			zephir_update_property_zval(this_ptr, SL("someArray"), &_6$$5);
 		}
 		zephir_read_property(&_8, this_ptr, SL("someEmptyArray"), PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_SEPARATE(&_8);
+		ZEPHIR_MM_ADD_ENTRY(&_8);
 		if (Z_TYPE_P(&_8) == IS_NULL) {
 			array_init(&_9$$6);
 			ZEPHIR_MM_ADD_ENTRY(&_9$$6);
 			zephir_update_property_zval(this_ptr, SL("someEmptyArray"), &_9$$6);
 		}
 		zephir_read_property(&_10, this_ptr, SL("someGetterSetterArray"), PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_SEPARATE(&_10);
+		ZEPHIR_MM_ADD_ENTRY(&_10);
 		if (Z_TYPE_P(&_10) == IS_NULL) {
 			zephir_create_array(&_11$$7, 1, 0);
 			ZEPHIR_MM_ADD_ENTRY(&_11$$7);

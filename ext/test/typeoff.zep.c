@@ -180,6 +180,7 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 	ZEPHIR_MM_ZVAL_STRING(&_0, "test string");
 	zephir_update_property_zval(this_ptr, SL("property"), &_0);
 	zephir_read_property(&_1, this_ptr, SL("property"), PH_NOISY_CC);
+	ZEPHIR_MM_ADD_ENTRY(&_1);
 	RETURN_MM_BOOL(Z_TYPE_P(&_1) == IS_STRING);
 
 }

@@ -89,7 +89,10 @@ void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_memory_def *zephir_memor
 	if (zephir_memory_ptr->active_entry) {
 		zephir_memory_entry *entry = zephir_memory_ptr->active_entry;
 		while (entry) {
-			zval_ptr_dtor(&entry->val);
+			if (Z_REFCOUNTED_P(&entry->val)) {
+				zval_ptr_dtor(&entry->val);
+				ZVAL_NULL(&entry->val);
+			}
 			zephir_memory_ptr->active_entry = entry->prev;
 			efree(entry);
 			entry = zephir_memory_ptr->active_entry;

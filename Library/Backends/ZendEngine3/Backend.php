@@ -1065,6 +1065,9 @@ class Backend extends BaseBackend
         } else {
             $context->codePrinter->output('zephir_read_property('.$symbol.', '.$variableCode.', SL("'.$property.'"), '.$flags.');');
         }
+        if (!$readOnly) {
+            $symbolVariable->addMemoryEntry($context);
+        }
     }
 
     /**
