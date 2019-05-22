@@ -499,7 +499,7 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 {
 	zend_class_entry *ce, *old_scope;
 	zval property, new_value;
-	int separated = 0;
+	zval tmp = {};
 
 #if PHP_VERSION_ID >= 70100
 	old_scope = EG(fake_scope);
@@ -531,17 +531,12 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
-
-	if (Z_COPYABLE_P(value) || Z_IMMUTABLE_P(value)) {
-		if (Z_REFCOUNT_P(value) > 1) {
-			separated = 1;
-			zval_copy_ctor_func(value);
-		}
-	}
+	ZVAL_DUP(&tmp, value);
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
-	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
+	Z_OBJ_HT_P(object)->write_property(object, &property, &tmp, 0);
 	zval_ptr_dtor(&property);
+	zval_ptr_dtor(&tmp);
 
 #if PHP_VERSION_ID >= 70100
 	EG(fake_scope) = old_scope;
