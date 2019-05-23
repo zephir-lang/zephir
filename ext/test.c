@@ -44,6 +44,7 @@ zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_0__closure_ce;
 zend_class_entry *test_10__closure_ce;
 zend_class_entry *test_11__closure_ce;
+zend_class_entry *test_12__closure_ce;
 zend_class_entry *test_1__closure_ce;
 zend_class_entry *test_2__closure_ce;
 zend_class_entry *test_3__closure_ce;
@@ -402,6 +403,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(test_0__closure);
 	ZEPHIR_INIT(test_10__closure);
 	ZEPHIR_INIT(test_11__closure);
+	ZEPHIR_INIT(test_12__closure);
 	ZEPHIR_INIT(test_1__closure);
 	ZEPHIR_INIT(test_2__closure);
 	ZEPHIR_INIT(test_3__closure);

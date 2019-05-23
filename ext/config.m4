@@ -193,7 +193,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/8__closure.zep.c
 	test/9__closure.zep.c
 	test/10__closure.zep.c
-	test/11__closure.zep.c "
+	test/11__closure.zep.c
+	test/12__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
 	PHP_SUBST(TEST_SHARED_LIBADD)
 

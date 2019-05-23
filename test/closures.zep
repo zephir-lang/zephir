@@ -56,4 +56,12 @@ class Closures
 			return abc + 1;
 		};
 	}
+
+	public function issue1860(array! abc)
+	{
+		return function () use (abc) {
+			return abc["a"];
+		};
+	}
+
 }

@@ -45,7 +45,7 @@ PHP_METHOD(Test_Functional, map1) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, test_9__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, test_10__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_FUNCTION(&_1, "array_map", NULL, 7, &_0, &a);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);

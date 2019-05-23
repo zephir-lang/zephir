@@ -99,7 +99,7 @@ PHP_METHOD(Test_McallDynamic, testCallAnonymousFunctionWithContext) {
 
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
-	zephir_create_closure_ex(&_1, NULL, test_11__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_1, NULL, test_12__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_CE_STATIC(&result, test_mcall_caller_ce, "start", &_0, 0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);

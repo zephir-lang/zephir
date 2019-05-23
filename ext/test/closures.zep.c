@@ -14,6 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Closures) {
@@ -109,6 +111,26 @@ PHP_METHOD(Test_Closures, testUseCommand) {
 	ZVAL_LONG(&_0, abc);
 	zend_update_static_property(test_8__closure_ce, ZEND_STRL("abc"), &_0);
 	return;
+
+}
+
+PHP_METHOD(Test_Closures, issue1860) {
+
+	zval *abc_param = NULL;
+	zval abc;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&abc);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &abc_param);
+
+	ZEPHIR_OBS_COPY_OR_DUP(&abc, abc_param);
+
+
+	zephir_create_closure_ex(return_value, NULL, test_9__closure_ce, SL("__invoke"));
+	zend_update_static_property(test_9__closure_ce, ZEND_STRL("abc"), &abc);
+	RETURN_MM();
 
 }
 

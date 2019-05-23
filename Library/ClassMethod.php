@@ -1628,7 +1628,6 @@ class ClassMethod
                 $localVar = clone $var;
                 $localVar->setIsExternal(true);
                 $localVar->setLocalOnly(true);
-                $localVar->setType('variable');
                 $symbolTable->addRawVariable($localVar);
             }
         }
