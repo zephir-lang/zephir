@@ -902,7 +902,7 @@ PHP_METHOD(Test_Mcall, testCallablePass) {
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, test_10__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, test_11__closure_ce, SL("__invoke"));
 	ZEPHIR_RETURN_CALL_METHOD(&a, "setcallable", NULL, 49, &_0);
 	zephir_check_call_status();
 	RETURN_MM();

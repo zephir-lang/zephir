@@ -12,8 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
+#include "kernel/array.h"
 #include "kernel/object.h"
 
 
@@ -21,23 +20,25 @@ ZEPHIR_INIT_CLASS(test_9__closure) {
 
 	ZEPHIR_REGISTER_CLASS(test, 9__closure, test, 9__closure, test_9__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
+	zend_declare_property_null(test_9__closure_ce, SL("abc"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
+
 	return SUCCESS;
 
 }
 
 PHP_METHOD(test_9__closure, __invoke) {
 
-	zval *x, x_sub;
+	zval _0;
+	zval abc;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&x_sub);
+	ZVAL_UNDEF(&abc);
+	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &x);
+	zephir_read_static_property_ce(&abc, test_9__closure_ce, SL("abc"), PH_NOISY_CC);
 
-
-
-	mul_function(return_value, x, x TSRMLS_CC);
-	return;
+	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY | PH_READONLY, "test/closures.zep", 63 TSRMLS_CC);
+	RETURN_CTORW(&_0);
 
 }
 

@@ -1628,7 +1628,7 @@ class ClassMethod
                 $localVar = clone $var;
                 $localVar->setIsExternal(true);
                 $localVar->setLocalOnly(true);
-                $localVar->setType('variable');
+                $localVar->setIsDoublePointer(false);
                 $symbolTable->addRawVariable($localVar);
             }
         }
@@ -2073,8 +2073,7 @@ class ClassMethod
                 $staticVar = $symbolTable->getVariable($name);
 
                 $codePrinter->preOutput(sprintf(
-                    "\t".'zephir_read_static_property_ce(%s%s, %s, SL("%s"), PH_NOISY_CC%s);',
-                    $staticVar->isDoublePointer() ? '' : '&',
+                    "\t".'zephir_read_static_property_ce(&%s, %s, SL("%s"), PH_NOISY_CC%s);',
                     $staticVar->getName(),
                     $this->classDefinition->getClassEntry(),
                     $staticVar->getName(),
