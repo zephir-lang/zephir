@@ -28,8 +28,7 @@ ZEPHIR_INIT_CLASS(test_9__closure) {
 
 PHP_METHOD(test_9__closure, __invoke) {
 
-	zval _0;
-	zval abc;
+	zval abc, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);

@@ -120,6 +120,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/extendpdoclass.zep.c
 	test/oo/ooconstruct.zep.c
 	test/oo/ooconstructparams.zep.c
+	test/oo/oodestruct.zep.c
 	test/oo/oodynamicb.zep.c
 	test/oo/oonativeimplements.zep.c
 	test/oo/oonoconstruct.zep.c
