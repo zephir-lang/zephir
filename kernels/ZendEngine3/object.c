@@ -572,14 +572,12 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	ZVAL_STRINGL(&property, property_name, property_length);
 	ZVAL_COPY_VALUE(&sep_value, value);
 	if (Z_TYPE(sep_value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
 		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
-			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 1)) {
-				if (Z_REFCOUNTED(sep_value)) {
-					GC_DELREF(Z_ARR(sep_value));
-				}
+			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
+				GC_DELREF(Z_ARR(sep_value));
 			}
 		}
-		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR_P(sep_value)));
 	}
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
