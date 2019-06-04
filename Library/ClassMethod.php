@@ -1628,6 +1628,8 @@ class ClassMethod
                 $localVar = clone $var;
                 $localVar->setIsExternal(true);
                 $localVar->setLocalOnly(true);
+                $localVar->setDynamicTypes($localVar->getType());
+                $localVar->setType('variable');
                 $localVar->setIsDoublePointer(false);
                 $symbolTable->addRawVariable($localVar);
             }

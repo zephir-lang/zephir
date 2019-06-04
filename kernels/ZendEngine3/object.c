@@ -538,7 +538,7 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 int zephir_update_property_zval(zval *object, const char *property_name, unsigned int property_length, zval *value)
 {
 	zend_class_entry *ce, *old_scope;
-	zval property;
+	zval property, sep_value;
 
 #if PHP_VERSION_ID >= 70100
 	old_scope = EG(fake_scope);
@@ -570,20 +570,18 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
-
-	if (Z_TYPE_P(value) == IS_ARRAY) {
-		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL_P(value)) & IS_ARRAY_IMMUTABLE))) {
-			if (UNEXPECTED(GC_REFCOUNT(Z_ARR_P(value)) > 1)) {
-				if (Z_REFCOUNTED_P(value)) {
-					GC_DELREF(Z_ARR_P(value));
-				}
+	ZVAL_COPY_VALUE(&sep_value, value);
+	if (Z_TYPE(sep_value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
+		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
+			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
+				GC_DELREF(Z_ARR(sep_value));
 			}
 		}
-		ZVAL_ARR(value, zend_array_dup(Z_ARR_P(value)));
 	}
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
-	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
+	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
 	zval_ptr_dtor(&property);
 
 #if PHP_VERSION_ID >= 70100

@@ -115,6 +115,7 @@
 #include "test/oo/extendpdoclass.zep.h"
 #include "test/oo/ooconstruct.zep.h"
 #include "test/oo/ooconstructparams.zep.h"
+#include "test/oo/oodestruct.zep.h"
 #include "test/oo/oodynamicb.zep.h"
 #include "test/oo/oonativeimplements.zep.h"
 #include "test/oo/oonoconstruct.zep.h"

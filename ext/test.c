@@ -148,6 +148,7 @@ zend_class_entry *test_oo_extend_spl_tempfileobject_ce;
 zend_class_entry *test_oo_extendpdoclass_ce;
 zend_class_entry *test_oo_ooconstruct_ce;
 zend_class_entry *test_oo_ooconstructparams_ce;
+zend_class_entry *test_oo_oodestruct_ce;
 zend_class_entry *test_oo_oodynamicb_ce;
 zend_class_entry *test_oo_oonativeimplements_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
@@ -339,6 +340,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_Extend_Spl_TempFileObject);
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoConstructParams);
+	ZEPHIR_INIT(Test_Oo_OoDestruct);
 	ZEPHIR_INIT(Test_Oo_OoDynamicB);
 	ZEPHIR_INIT(Test_Oo_OoNativeImplements);
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
