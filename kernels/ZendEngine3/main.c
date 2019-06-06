@@ -406,20 +406,10 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 {
 #if PHP_VERSION_ID >= 70100
 	int ret;
-	zend_string *key;
 
-	if (ce->type == ZEND_INTERNAL_CLASS) {
-		key = zend_string_init_interned(name, name_length, 1);
-	} else {
-		key = zend_string_init(name, name_length, 0);
-	}
-
+	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
 	ret = zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
-	
-	if (ce->type != ZEND_INTERNAL_CLASS) {
-		zend_string_release(key);
-	}
-
+	zend_string_release(key);
 	return ret;
 #else
 	if (Z_CONSTANT_P(value)) {
