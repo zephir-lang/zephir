@@ -702,6 +702,13 @@ class Memcached
     public function isPristine()
     {
     }
+
+    /**
+     * @see https://www.php.net/manual/en/memcached.setsaslauthdata.php
+     */
+    public function setSaslAuthData(string $username, string $password): void
+    {
+    }
 }
 
 class MemcachedException extends RuntimeException
