@@ -17,6 +17,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - The minimal Zephir Parser version is 1.3.0
 - Improved Zephir runner for Windows [#1857](https://github.com/phalcon/zephir/pull/1857)
 
+### Fixed
+- Fixed CLI runner for Windows
+  [#1857](https://github.com/phalcon/zephir/pull/1857)
+- Fixed segfault with fetching and opcache
+  [#1855](https://github.com/phalcon/zephir/issues/1855)
+- Extended classes can't access their private variables
+  [#1851](https://github.com/phalcon/zephir/issues/1851)
+- Incorrect usage of `zend_declare_class_constant_ex`
+  [phalcon/cphalcon#14160](https://github.com/phalcon/cphalcon/issues/14160),
+  https://bugs.php.net/bug.php?id=78121
+
 ## [0.11.12] - 2019-03-24
 ### Fixed
 - Compilation error for instanceof [#1828](https://github.com/phalcon/zephir/issues/1828)
