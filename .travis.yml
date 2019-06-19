@@ -55,8 +55,12 @@ before_install:
 
       [ -d ~/bin ] || mkdir ~/bin
 
-      # turn the detached message off
+      # Turn the detached message off
       git config --global advice.detachedHead false
+
+      # Change core dumps location
+      echo '/tmp/core.%e.%p.%t' | tee /proc/sys/kernel/core_pattern
+      sysctl kernel.core_pattern
 
 install:
   - .ci/install-prereqs.sh
@@ -78,6 +82,9 @@ script:
 
 after_success:
   - .ci/after-success.sh
+
+after_failure:
+  - .ci/after-failure.sh
 
 jobs:
   include:
