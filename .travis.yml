@@ -59,7 +59,7 @@ before_install:
       git config --global advice.detachedHead false
 
       # Change core dumps location
-      echo '/tmp/core.%e.%p.%t' | tee /proc/sys/kernel/core_pattern
+      echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
       sysctl kernel.core_pattern
 
 install:
