@@ -40,9 +40,7 @@ env:
 before_install:
   - |
       # General settings
-      set -e
       stty cols 120
-      ulimit -c unlimited -S
 
       # Export build/test environment variables
       export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
@@ -58,9 +56,9 @@ before_install:
       # Turn the detached message off
       git config --global advice.detachedHead false
 
-      # Change core dumps location
+      # Core dump settings
+      ulimit -c unlimited -S || true
       echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
-      sysctl kernel.core_pattern
 
 install:
   - .ci/install-prereqs.sh
