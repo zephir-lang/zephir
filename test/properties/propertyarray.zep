@@ -28,7 +28,7 @@ class PropertyArray
 
 	public function appendSome(var value)
 	{
-		let this->someArray[] = value;
+		let this->someArray[] = (string) value;
 	}
 
 	public function setOtherArray(arr){
