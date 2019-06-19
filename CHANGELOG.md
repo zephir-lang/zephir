@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Incorrect usage of `zend_declare_class_constant_ex`
   [phalcon/cphalcon#14160](https://github.com/phalcon/cphalcon/issues/14160),
   https://bugs.php.net/bug.php?id=78121
+- Incorrect implementation of ArrayAccess methods
+  [#1871](https://github.com/phalcon/zephir/pull/1871)
 
 ## [0.11.12] - 2019-03-24
 ### Fixed
