@@ -82,7 +82,7 @@ class redis
     }
 
     /**
-     * @link https://github.com/phpredis/phpredis#setoption
+     * @see https://github.com/phpredis/phpredis#setoption
      *
      * @param mixed $name
      * @param mixed $value
@@ -94,7 +94,7 @@ class redis
     }
 
     /**
-     * @link https://github.com/phpredis/phpredis#getoption
+     * @see https://github.com/phpredis/phpredis#getoption
      *
      * @param mixed $name
      *
