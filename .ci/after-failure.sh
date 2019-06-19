@@ -15,8 +15,6 @@ shopt -s nullglob
 
 export LC_ALL=C
 
-ls -al
-
 for i in /tmp/core.*; do
 		if [ -f "$i" -a "$(file "$i" | grep -o 'core file')" ]; then
 			gdb -q $(phpenv which php) "$i" <<EOF
