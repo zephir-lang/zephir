@@ -20,6 +20,8 @@ class PropertyArrayTest extends TestCase
     {
         $t = new PropertyArray();
         $this->assertSame([1], $t->someArray);
+        $t->appendSome('one');
+        $this->assertSame([1, 'one'], $t->someArray);
     }
 
     public function testIssues1831()

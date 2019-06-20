@@ -691,9 +691,6 @@ class Backend extends BackendZendEngine2
         } else {
             $context->codePrinter->output('zephir_update_property_array_append('.$this->getVariableCode($variable).', SL("'.$property.'"), '.$resolveValue.');');
         }
-        if (\is_object($value) && $value instanceof Variable && $value->isTemporal()) {
-            $value->initVariant($context);
-        }
     }
 
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)

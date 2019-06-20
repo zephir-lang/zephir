@@ -26,6 +26,11 @@ class PropertyArray
 		let this->someArray = [1];
 	}
 
+	public function appendSome(var value)
+	{
+		let this->someArray[] = (string) value;
+	}
+
 	public function setOtherArray(arr){
 		let this->otherArray = arr;
 	}
