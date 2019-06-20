@@ -15,8 +15,8 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/object.h"
-#include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -63,6 +63,26 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(this_ptr, SL("someArray"), &_0);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Properties_PropertyArray, appendSome) {
+
+	zval _0;
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value);
+
+
+
+	zephir_get_strval(&_0, value);
+	zephir_update_property_array_append(this_ptr, SL("someArray"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -123,7 +143,7 @@ PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 73, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
-			zephir_array_append(&headers, &info, PH_SEPARATE, "test/properties/propertyarray.zep", 46);
+			zephir_array_append(&headers, &info, PH_SEPARATE, "test/properties/propertyarray.zep", 51);
 			continue;
 		} else {
 			zephir_read_property(&_5$$5, this_ptr, SL("otherArray"), PH_NOISY_CC | PH_READONLY);

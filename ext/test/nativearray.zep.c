@@ -1910,7 +1910,6 @@ PHP_METHOD(Test_NativeArray, Issue1140) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
 		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix, &_1$$3);
-		ZEPHIR_INIT_NVAR(&_1$$3);
 	}
 	zephir_read_property(&_2, this_ptr, SL("prefixes"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch(&_3, &_2, &prefix, PH_NOISY | PH_READONLY, "test/nativearray.zep", 639 TSRMLS_CC);
