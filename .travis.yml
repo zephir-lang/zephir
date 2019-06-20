@@ -62,11 +62,14 @@ before_install:
       echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
       # Box does not work with PHP 7.4
-      [ "$(php-config --vernum)" -ge "70100" ] && [ "$(php-config --vernum)" -lt "70400" ] && export BUILD_PHAR=true
+      if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]; then
+        export BUILD_PHAR=true
+      fi
 
       # Do not collect code coverage for PHP 7.4
-      [ "$(php-config --vernum)" -ge "70400" ] && export COLLECT_COVERAGE=false
-
+      if [ "$PHP_VERNUM" -ge "70400" ]; then
+        export COLLECT_COVERAGE=false
+      fi
 install:
   - .ci/install-prereqs.sh
   - .ci/install-re2c.sh $RE2C_VERSION
