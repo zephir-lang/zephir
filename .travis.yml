@@ -66,8 +66,15 @@ install:
   - flags="--ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
   - if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then composer config platform.php 7.0.33; echo "Preparing to deploy"; fi
   - travis_retry composer install $flags
-  - if [ "$(php-config --vernum)" -ge "70100" ]; then .ci/build-phar.sh; fi
-  - if [ "$(php-config --vernum)" -lt "70100" ]; then ln -s $(pwd)/zephir ${HOME}/bin/zephir; echo "Use source"; fi
+  - |
+    # Prepare Zephir executable
+    if [ "$(php-config --vernum)" -ge "70100" ] && [ "$(php-config --vernum)" -lt "70400" ]; then
+      printf "Build Zephit PHAR\n"
+      .ci/build-phar.sh
+    else
+      printf "Use Zephir from source\n"
+      ln -s $(pwd)/zephir ${HOME}/bin/zephir
+    fi
 
 before_script:
   - .ci/build-test-ext.sh
