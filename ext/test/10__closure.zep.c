@@ -12,8 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(test_10__closure) {
@@ -26,16 +27,17 @@ ZEPHIR_INIT_CLASS(test_10__closure) {
 
 PHP_METHOD(test_10__closure, __invoke) {
 
-	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
+	zval *x, x_sub;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&x_sub);
 
-	ZEPHIR_MM_GROW();
+	zephir_fetch_params(0, 1, 0, &x);
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(test_mcall_caller_ce, "perform", &_0, 0);
-	zephir_check_call_status();
-	RETURN_MM();
+
+
+	mul_function(return_value, x, x TSRMLS_CC);
+	return;
 
 }
 

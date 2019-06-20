@@ -15,6 +15,7 @@
 #include "kernel/string.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 
@@ -538,7 +539,7 @@ PHP_METHOD(Test_Strings, strToHex) {
 		_1$$3 = ZEPHIR_STRING_OFFSET(&value, i);
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 78, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 95, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 10, &_3$$3);
 		zephir_check_call_status();
@@ -590,17 +591,17 @@ PHP_METHOD(Test_Strings, issue1267) {
 	zephir_fast_str_replace(&_0, &_1, &_2, value TSRMLS_CC);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 513);
-	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 79, value, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 96, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 80, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 97, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 80, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 97, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);

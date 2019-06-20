@@ -15,6 +15,7 @@
 #include "kernel/operators.h"
 #include "kernel/exit.h"
 #include "kernel/memory.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_ExitDie) {

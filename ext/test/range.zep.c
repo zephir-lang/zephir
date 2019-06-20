@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/object.h"
 
 
 /**
@@ -44,7 +45,7 @@ PHP_METHOD(Test_Range, inclusive1) {
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 59, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 76, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -67,7 +68,7 @@ PHP_METHOD(Test_Range, exclusive1) {
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 59, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 76, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);

@@ -19,12 +19,12 @@ PHP-Version requirements are marked using `[ ]`
     setx path "%path%;c:\path-to-php\"
     ```
 - [Install PHP SDK for PHP 5.6](http://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
-- [Install PHP SDK for PHP 7.0+](https://github.com/OSTC/php-sdk-binary-tools) 
+- [Install PHP SDK for PHP 7.0+](https://github.com/Microsoft/php-sdk-binary-tools/releases) 
 ```cmd
 setx php_sdk "c:\path-to-php-sdk"
 ```
 
-- [Download PHP Developer Pack(NTS!)](http://windows.php.net/downloads/releases/)
+- [Download PHP Developer Pack(NTS!)：***php-devel-pack-?.?.?-Win??-VC??-x??.zip***](http://windows.php.net/downloads/releases/)
 (or build it yourself with `--enable-debug --disable-zts` and `nmake build-devel` or just `nmake snap` by using the PHP-SDK)
 ```cmd
 setx php_devpack "c:\path-to-extracted-devpack"
@@ -34,7 +34,9 @@ setx php_devpack "c:\path-to-extracted-devpack"
 
 - Clone/Download the repository and set the path as below
 ```cmd
-setx path "%path%;c:\path-to-zephir\bin"
+setx path "%path%;c:\path-to-zephir"
+cd c:\path-to-zephir
+composer install
 ```
 
 ## Installation of Zephir Parser

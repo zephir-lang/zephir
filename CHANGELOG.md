@@ -6,6 +6,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.12.0] - 2019-06-20
+### Added
+- Added initial support of "use" keyword in closures
+  [#888](https://github.com/phalcon/zephir/issues/888),
+  [#1848](https://github.com/phalcon/zephir/issues/1848)
+
+### Removed
+- PHP 5.x is no longer supported
+
+### Changed
+- The minimal Zephir Parser version is 1.3.0
+
+### Fixed
+- Fixed CLI runner for Windows
+  [#1857](https://github.com/phalcon/zephir/pull/1857)
+- Fixed segfault with fetching and opcache
+  [#1855](https://github.com/phalcon/zephir/issues/1855)
+- Extended classes can't access their private variables
+  [#1851](https://github.com/phalcon/zephir/issues/1851)
+- Incorrect usage of `zend_declare_class_constant_ex`
+  [phalcon/cphalcon#14160](https://github.com/phalcon/cphalcon/issues/14160),
+  https://bugs.php.net/bug.php?id=78121
+- Incorrect implementation of ArrayAccess methods
+  [#1871](https://github.com/phalcon/zephir/pull/1871)
+
 ## [0.11.12] - 2019-03-24
 ### Fixed
 - Compilation error for instanceof [#1828](https://github.com/phalcon/zephir/issues/1828)
@@ -152,7 +177,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.11.12...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.0...HEAD
+[0.12.0]: https://github.com/phalcon/zephir/compare/0.11.12...0.12.0
 [0.11.12]: https://github.com/phalcon/zephir/compare/0.11.11...0.11.12
 [0.11.11]: https://github.com/phalcon/zephir/compare/0.11.10...0.11.11
 [0.11.10]: https://github.com/phalcon/zephir/compare/0.11.9...0.11.10

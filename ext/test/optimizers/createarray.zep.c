@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
+#include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 

@@ -120,6 +120,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/extendpdoclass.zep.c
 	test/oo/ooconstruct.zep.c
 	test/oo/ooconstructparams.zep.c
+	test/oo/oodestruct.zep.c
 	test/oo/oodynamicb.zep.c
 	test/oo/oonativeimplements.zep.c
 	test/oo/oonoconstruct.zep.c
@@ -192,7 +193,9 @@ if test "$PHP_TEST" = "yes"; then
 	test/7__closure.zep.c
 	test/8__closure.zep.c
 	test/9__closure.zep.c
-	test/10__closure.zep.c "
+	test/10__closure.zep.c
+	test/11__closure.zep.c
+	test/12__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
 	PHP_SUBST(TEST_SHARED_LIBADD)
 

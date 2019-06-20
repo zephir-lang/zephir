@@ -28,6 +28,8 @@ ZEPHIR_INIT_CLASS(Test_Oo_PropertyAccess) {
 
 	zend_declare_property_null(test_oo_propertyaccess_ce, SL("b"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
+	zend_declare_property_null(test_oo_propertyaccess_ce, SL("privateVariable"), ZEND_ACC_PRIVATE TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -75,16 +77,16 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(&test, SL("test"), &_0);
 	zephir_read_property(&_2, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 19 TSRMLS_CC);
+	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 21 TSRMLS_CC);
 	zephir_update_property_zval(&test, SL("test2"), &_3);
 	zephir_read_property(&_4, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 20 TSRMLS_CC);
+	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 22 TSRMLS_CC);
 	zephir_update_property_zval(&test, SL("test3"), &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0 TSRMLS_CC);
 	zephir_read_property(&_7, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_OBS_VAR(&_8);
-	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "test/oo/propertyaccess.zep", 21 TSRMLS_CC);
+	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "test/oo/propertyaccess.zep", 23 TSRMLS_CC);
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);
@@ -102,6 +104,31 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_update_property_zval(this_ptr, SL("b"), &_10);
 	zephir_read_property(&test1, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
+
+	zval *value, value_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+
+	zephir_fetch_params(0, 1, 0, &value);
+
+
+
+	zephir_update_property_zval(this_ptr, SL("privateVariable"), value);
+	RETURN_THISW();
+
+}
+
+PHP_METHOD(Test_Oo_PropertyAccess, getPrivatevariable) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_MEMBER(getThis(), "privateVariable");
 
 }
 

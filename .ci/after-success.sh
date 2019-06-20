@@ -21,13 +21,6 @@ if [ -z ${COLLECT_COVERAGE+x} ] || [ "$COLLECT_COVERAGE" != "true" ]; then
 	exit 0
 fi
 
-if [ ! -z ${TRAVIS+x} ] && [ "$TRAVIS" = "true" ]; then
-	if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-		printf "Collecting coverage date is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
-		exit 0
-	fi
-fi
-
 if [ $(which lcov 2>/dev/null) = "" ]; then
 	printf "lcov does not exist.\nSkip capturing coverage data.\n"
 else

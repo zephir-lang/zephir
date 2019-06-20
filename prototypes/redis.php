@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 class redis
@@ -78,6 +78,29 @@ class redis
     }
 
     public function delete($key1, $key2 = null, $key3 = null)
+    {
+    }
+
+    /**
+     * @see https://github.com/phpredis/phpredis#setoption
+     *
+     * @param mixed $name
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function setOption($name, $value)
+    {
+    }
+
+    /**
+     * @see https://github.com/phpredis/phpredis#getoption
+     *
+     * @param mixed $name
+     *
+     * @return mixed
+     */
+    public function getOption($name)
     {
     }
 }

@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
+#include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 

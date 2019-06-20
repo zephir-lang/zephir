@@ -40,8 +40,8 @@ echo 'extension="zephir_parser.so"' > "$(phpenv root)/versions/$(phpenv version-
 # }}}
 
 # {{{ Install Box
-printf "Install Box\n"
-if [ "${PHP_VERNUM}" -ge "70100" ]; then
+if [ "$BUILD_PHAR" = "true" ]; then
+	printf "Install Box\n"
 	printf "PHP version number is ${PHP_VERNUM}\nDownloading humbug/box...\n"
 	wget \
 		"https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \

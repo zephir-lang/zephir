@@ -71,13 +71,6 @@ make -j"$(getconf _NPROCESSORS_ONLN)"
 
 cd ..
 
-if [ ! -z ${TRAVIS+x} ] && [ "$TRAVIS" = "true" ]; then
-	if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-		printf "\nCollecting coverage date is disabled for PHP 5.6.\nSkip uploading reports to Codecov.\n"
-		exit $?
-	fi
-fi
-
 if [ ! -z ${COLLECT_COVERAGE+x} ] && [ "$COLLECT_COVERAGE" = "true" ]; then
 	if [  $(which lcov 2>/dev/null) = ""  ]; then
 		printf "lcov does not exist.\nSkip capturing coverage data.\n"

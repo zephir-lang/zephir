@@ -115,6 +115,7 @@
 #include "test/oo/extendpdoclass.zep.h"
 #include "test/oo/ooconstruct.zep.h"
 #include "test/oo/ooconstructparams.zep.h"
+#include "test/oo/oodestruct.zep.h"
 #include "test/oo/oodynamicb.zep.h"
 #include "test/oo/oonativeimplements.zep.h"
 #include "test/oo/oonoconstruct.zep.h"
@@ -188,5 +189,7 @@
 #include "test/8__closure.zep.h"
 #include "test/9__closure.zep.h"
 #include "test/10__closure.zep.h"
+#include "test/11__closure.zep.h"
+#include "test/12__closure.zep.h"
 
 #endif
