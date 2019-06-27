@@ -120,9 +120,7 @@ void zephir_fast_count(zval *result, zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			ZVAL_LONG(result, 1);
@@ -131,7 +129,6 @@ void zephir_fast_count(zval *result, zval *value)
 			}
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -141,7 +138,6 @@ void zephir_fast_count(zval *result, zval *value)
 			}
 			return;
 		}
-		#endif
 
 		ZVAL_LONG(result, 0);
 		return;
@@ -168,16 +164,13 @@ int zephir_fast_count_ev(zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count > 0;
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -188,7 +181,6 @@ int zephir_fast_count_ev(zval *value)
 			}
 			return 0;
 		}
-		#endif
 
 		return 0;
 	}
@@ -213,16 +205,13 @@ int zephir_fast_count_int(zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count;
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -233,7 +222,6 @@ int zephir_fast_count_int(zval *value)
 			}
 			return 0;
 		}
-		#endif
 
 		return 0;
 	}
