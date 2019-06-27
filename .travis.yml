@@ -2,7 +2,7 @@ sudo: false
 
 language: php
 php:
-  - master
+  # - master
   - '7.3'
   - '7.2'
   - '7.1'
@@ -34,10 +34,10 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
+  # allow_failures:
     # There is still memory leaks
     # and other issues like https://github.com/sebastianbergmann/phpunit/pull/3359
-    - php: 'master'
+    # - php: 'master'
 
 cache:
   apt: true
