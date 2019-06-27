@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added initial bash completion support (see zephir-autocomplete file)
 
 ## [0.12.0] - 2019-06-20
 ### Added

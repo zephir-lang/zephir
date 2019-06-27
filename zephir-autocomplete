@@ -1,0 +1,57 @@
+# Zephir Bash Completion
+#
+# This file is part of the Zephir.
+#
+# (c) Zephir Team <team@zephir-lang.com>
+#
+# For the full copyright and license information, please view
+# the LICENSE file that was distributed with this source code.
+#
+# Usage:
+#
+# 1. Copy this file to the common place:
+#
+#   cp zephir-autocomplete /etc/bash_completion.d/zephir-autocomplete
+#
+# 2. Load zephir-autocomplete from within your ~/.bash_profile
+# (or ~/.profile if you prefer):
+#
+#   if [ -f /etc/bash_completion.d/zephir-autocomplete ]; then
+#     source /etc/bash_completion.d/zephir-autocomplete
+#   fi
+#
+# 3. Restart your shell, or reload your ~/.bash_profile (or ~/.profile):
+#
+#   source ~/.bash_profile
+#
+
+_zephir_completion() {
+    local cur prev;
+    _get_comp_words_by_ref -n : cur
+
+    COMPREPLY=()
+
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    opts='api build clean compile fullclean generate help init install list stubs'
+
+    #
+    #  Only complete on the first term.
+    #
+    if [ $COMP_CWORD -eq 1 ]
+    then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+}
+
+complete -F _zephir_completion zephir
+
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# mode: shell-script
+# End:
+# vim600: noet sw=4 ts=4 ft=sh
+# vim<600: noet sw=4 ts=4 ft=sh
