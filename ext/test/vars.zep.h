@@ -19,7 +19,7 @@ PHP_METHOD(Test_Vars, testBoolVarDump);
 PHP_METHOD(Test_Vars, testGetDefinedVars);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testparam, 0, 0, 1)
-	ZEND_ARG_ARRAY_INFO(0, arr, 0)
+	ZEND_ARG_ARRAY_INFO(0, config, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testvardump2, 0, 0, 1)

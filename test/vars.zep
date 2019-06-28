@@ -2,10 +2,13 @@ namespace Test;
 
 class Vars
 {
-    public function testParam(array! arr)
+    public function testParam(array! config)
     {
-        let arr["test"]["test"] = "test";
-        return arr;
+        var k, v;
+        for k, v in config["dir"] {
+            let config["dir"][k] = realpath(v);
+        }
+	return config;
     }
 
     public function testVarDump()
