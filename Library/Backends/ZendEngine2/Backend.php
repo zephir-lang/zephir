@@ -185,6 +185,11 @@ class Backend extends BaseBackend
                 $code = 'zend_class_entry';
                 break;
 
+            case 'zephir_method_globals':
+                $pointer = '*';
+                $code = 'zephir_method_globals';
+                break;
+
             case 'zephir_ce_guard':
                 $code = 'zend_bool';
                 break;

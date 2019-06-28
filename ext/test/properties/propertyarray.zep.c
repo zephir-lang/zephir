@@ -50,6 +50,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 
 	zval _1;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -70,6 +71,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 PHP_METHOD(Test_Properties_PropertyArray, appendSome) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
@@ -94,7 +96,7 @@ PHP_METHOD(Test_Properties_PropertyArray, setOtherArray) {
 
 	ZVAL_UNDEF(&arr_sub);
 
-	zephir_fetch_params(0, 1, 0, &arr);
+	zephir_fetch_params_without_memory_grow(1, 0, &arr);
 
 
 
@@ -114,6 +116,7 @@ PHP_METHOD(Test_Properties_PropertyArray, getOtherArray) {
 PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 
 	zval info, headers, _0$$3, _2$$3, _3$$3, _5$$5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_4 = NULL, *_6 = NULL;
 	zval *this_ptr = getThis();
@@ -135,12 +138,12 @@ PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 		}
 		zephir_read_property(&_0$$3, this_ptr, SL("otherArray"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 72, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 64, &_0$$3);
 		ZEPHIR_UNREF(&_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 73, &info, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 65, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "test/properties/propertyarray.zep", 51);
@@ -148,7 +151,7 @@ PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 		} else {
 			zephir_read_property(&_5$$5, this_ptr, SL("otherArray"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 74, &_5$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 66, &_5$$5, &info);
 			ZEPHIR_UNREF(&_5$$5);
 			zephir_check_call_status();
 			break;
@@ -162,6 +165,7 @@ zend_object *zephir_init_properties_Test_Properties_PropertyArray(zend_class_ent
 
 		zval _3$$4;
 	zval _0, _2, _5, _1$$3, _4$$4, _6$$5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);

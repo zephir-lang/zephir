@@ -61,12 +61,6 @@ static void php_zephir_init_globals(zend_typehints_globals *typehints_globals TS
 {
 	typehints_globals->initialized = 0;
 
-	/* Memory options */
-	typehints_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	typehints_globals->active_symbol_table = NULL;
-
 	/* Cache Enabled */
 	typehints_globals->cache_enabled = 1;
 

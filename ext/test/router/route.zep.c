@@ -62,6 +62,7 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, *httpMethods = NULL, httpMethods_sub, __$null;
 	zval *this_ptr = getThis();
@@ -99,6 +100,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *pattern = NULL, pattern_sub, idPattern, _0$$4, _1$$4, _2$$5, _3$$5, _4$$6, _5$$6, _6$$7, _7$$7, _8$$8, _9$$8, _10$$8, _11$$9, _12$$9, _13$$9;
 	zval *this_ptr = getThis();
 
@@ -206,7 +208,7 @@ PHP_METHOD(Test_Router_Route, via) {
 
 	ZVAL_UNDEF(&httpMethods_sub);
 
-	zephir_fetch_params(0, 1, 0, &httpMethods);
+	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
 
 
 
@@ -226,6 +228,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	zend_bool notValid, _6$$12, _7$$12, _8$$12, _9$$12, _10$$12, _11$$12, _12$$12, _13$$12, _14$$12, _15$$12, _16$$12, _17$$12, _25$$18;
 	zend_long tmp = 0, cursor = 0, cursorVar = 0, marker = 0, bracketCount, parenthesesCount, foundPattern, intermediate, numberMatches;
 	char ch = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *pattern_param = NULL, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
 	zval pattern, route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
 	zval *this_ptr = getThis();
@@ -459,6 +462,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _0$$5;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, moduleName, controllerName, actionName, parts, routePaths, realClassName, namespaceName, pcrePattern, compiledPattern, extracted, _1$$10, _2$$19, _3$$19;
 	zval *this_ptr = getThis();
@@ -621,7 +625,7 @@ PHP_METHOD(Test_Router_Route, setName) {
 
 	ZVAL_UNDEF(&name_sub);
 
-	zephir_fetch_params(0, 1, 0, &name);
+	zephir_fetch_params_without_memory_grow(1, 0, &name);
 
 
 
@@ -645,7 +649,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
 
 	ZVAL_UNDEF(&callback_sub);
 
-	zephir_fetch_params(0, 1, 0, &callback);
+	zephir_fetch_params_without_memory_grow(1, 0, &callback);
 
 
 
@@ -734,6 +738,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	zend_string *_4;
 	zend_ulong _3;
 	zval reversed, path, position, _0, *_1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -804,7 +809,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
 
 	ZVAL_UNDEF(&httpMethods_sub);
 
-	zephir_fetch_params(0, 1, 0, &httpMethods);
+	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
 
 
 
@@ -844,7 +849,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
 
 	ZVAL_UNDEF(&hostname_sub);
 
-	zephir_fetch_params(0, 1, 0, &hostname);
+	zephir_fetch_params_without_memory_grow(1, 0, &hostname);
 
 
 
@@ -882,7 +887,7 @@ PHP_METHOD(Test_Router_Route, convert) {
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
 
-	zephir_fetch_params(0, 2, 0, &name, &converter);
+	zephir_fetch_params_without_memory_grow(2, 0, &name, &converter);
 
 
 

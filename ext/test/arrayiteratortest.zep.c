@@ -31,6 +31,7 @@ PHP_METHOD(Test_ArrayIteratorTest, test) {
 	zend_string *_3;
 	zend_ulong _2;
 	zval arr, k, v, *_0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

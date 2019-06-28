@@ -77,6 +77,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	zend_long i = 0, n = 0, k = 0, j = 0;
 	zval fib, a, b, c, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&fib);
@@ -118,6 +119,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 	zend_long i = 0, n = 0;
 	zval fib, _0, _1$$3, _2$$3, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&fib);
@@ -155,6 +157,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;
@@ -191,6 +194,7 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;

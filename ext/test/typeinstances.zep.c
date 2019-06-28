@@ -34,6 +34,7 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString1) {
 
 	zval _2;
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -55,6 +56,7 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString2) {
 
 	zval _2;
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -76,6 +78,7 @@ PHP_METHOD(Test_TypeInstances, testInstanceOfString3) {
 
 	zval _2;
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

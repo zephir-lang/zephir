@@ -68,7 +68,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 	ZVAL_UNDEF(&someVar_sub);
 
-	zephir_fetch_params(0, 1, 0, &someVar);
+	zephir_fetch_params_without_memory_grow(1, 0, &someVar);
 
 
 
@@ -102,7 +102,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
 
 

@@ -55,6 +55,7 @@ PHP_METHOD(Test_Exceptions, testExceptionStringEscape) {
 PHP_METHOD(Test_Exceptions, testException2) {
 
 	zval msg, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -78,6 +79,7 @@ PHP_METHOD(Test_Exceptions, testException2) {
 PHP_METHOD(Test_Exceptions, testException3) {
 
 	zval ex, msg;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -101,6 +103,7 @@ PHP_METHOD(Test_Exceptions, testException3) {
 PHP_METHOD(Test_Exceptions, getException) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -120,6 +123,7 @@ PHP_METHOD(Test_Exceptions, getException) {
 PHP_METHOD(Test_Exceptions, testException4) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -138,6 +142,7 @@ PHP_METHOD(Test_Exceptions, testException4) {
 PHP_METHOD(Test_Exceptions, testException5) {
 
 	zval exception, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -160,6 +165,7 @@ PHP_METHOD(Test_Exceptions, testException5) {
 
 PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *type_param = NULL;
 	zval type;
 	zval *this_ptr = getThis();
@@ -197,6 +203,7 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 
 PHP_METHOD(Test_Exceptions, testExceptionSprintf) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *name_param = NULL, _0, _1;
 	zval name;
@@ -224,6 +231,7 @@ PHP_METHOD(Test_Exceptions, testExceptionSprintf) {
 
 PHP_METHOD(Test_Exceptions, testExceptionConcat) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *framework_param = NULL, *language_param = NULL;
 	zval framework, language, _0;
 	zval *this_ptr = getThis();
@@ -250,6 +258,7 @@ PHP_METHOD(Test_Exceptions, testExceptionConcat) {
 PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 
 	zval e, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -285,6 +294,7 @@ PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 PHP_METHOD(Test_Exceptions, testMultiException) {
 
 	zend_bool _1$$4, _3$$7, _5$$10, _7$$13;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *returnValue, returnValue_sub, *exception, exception_sub, e, f, iexc, exc, _0, _2$$4, _4$$7, _6$$10, _8$$13;
 	zval *this_ptr = getThis();
@@ -399,6 +409,7 @@ PHP_METHOD(Test_Exceptions, testMultiException) {
 PHP_METHOD(Test_Exceptions, issue1325) {
 
 	zval e, status, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

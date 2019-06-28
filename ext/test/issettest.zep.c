@@ -40,7 +40,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray1) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 
 
 
@@ -56,7 +56,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 
 	b = zephir_get_intval(b_param);
 
@@ -67,6 +67,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray2) {
 
 PHP_METHOD(Test_IssetTest, testIssetArray3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval b;
 	zval *a, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
@@ -91,7 +92,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray4) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -106,7 +107,7 @@ PHP_METHOD(Test_IssetTest, testIssetArray5) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -121,7 +122,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty1) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -137,7 +138,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 
 
 
@@ -152,7 +153,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -163,6 +164,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 	zval g;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&g);
@@ -180,6 +182,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *inp, inp_sub, g;
 	zval *this_ptr = getThis();
 
@@ -204,6 +207,7 @@ zend_object *zephir_init_properties_Test_IssetTest(zend_class_entry *class_type 
 
 		zval _1$$3;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 

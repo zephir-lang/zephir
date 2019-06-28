@@ -32,6 +32,7 @@ ZEPHIR_INIT_CLASS(Test_Instanceoff) {
 PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -47,6 +48,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -67,6 +69,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 PHP_METHOD(Test_Instanceoff, testInstanceOf3) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -86,7 +89,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf4) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -104,7 +107,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf5) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -118,6 +121,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf5) {
 PHP_METHOD(Test_Instanceoff, testInstanceOf6) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -142,7 +146,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf7) {
 
 	ZVAL_UNDEF(&test_sub);
 
-	zephir_fetch_params(0, 1, 0, &test);
+	zephir_fetch_params_without_memory_grow(1, 0, &test);
 
 
 
@@ -152,6 +156,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf7) {
 
 PHP_METHOD(Test_Instanceoff, testInstanceOf8) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *test_param = NULL, a;
 	zval test;
@@ -178,6 +183,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf8) {
 
 PHP_METHOD(Test_Instanceoff, testInstanceOf9) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval test;
 	zval *a, a_sub, *test_param = NULL;
 	zval *this_ptr = getThis();

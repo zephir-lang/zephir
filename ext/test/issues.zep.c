@@ -34,7 +34,7 @@ PHP_METHOD(Test_Issues, setAdapter) {
 
 	ZVAL_UNDEF(&adapter_sub);
 
-	zephir_fetch_params(0, 1, 0, &adapter);
+	zephir_fetch_params_without_memory_grow(1, 0, &adapter);
 
 
 
@@ -44,6 +44,7 @@ PHP_METHOD(Test_Issues, setAdapter) {
 
 PHP_METHOD(Test_Issues, someMethod) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *methodName, methodName_sub, _0;
 	zval *this_ptr = getThis();

@@ -62,12 +62,6 @@ static void php_zephir_init_globals(zend_lifecycle_globals *lifecycle_globals TS
 {
 	lifecycle_globals->initialized = 0;
 
-	/* Memory options */
-	lifecycle_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	lifecycle_globals->active_symbol_table = NULL;
-
 	/* Cache Enabled */
 	lifecycle_globals->cache_enabled = 1;
 

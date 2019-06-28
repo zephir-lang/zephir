@@ -72,6 +72,7 @@ PHP_METHOD(Test_Optimizers_IsScalar, testBoolVar) {
 PHP_METHOD(Test_Optimizers_IsScalar, testStringVar) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -87,6 +88,7 @@ PHP_METHOD(Test_Optimizers_IsScalar, testStringVar) {
 PHP_METHOD(Test_Optimizers_IsScalar, testEmptyArrayVar) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -121,7 +123,7 @@ PHP_METHOD(Test_Optimizers_IsScalar, testVarParameter) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 

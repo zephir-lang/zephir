@@ -35,7 +35,7 @@ PHP_METHOD(Test_Exists, testClassExists) {
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 1, &className, &autoload_param);
+	zephir_fetch_params_without_memory_grow(1, 1, &className, &autoload_param);
 
 	if (!autoload_param) {
 		autoload = 1;
@@ -58,7 +58,7 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 	ZVAL_UNDEF(&interfaceName_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 1, &interfaceName, &autoload_param);
+	zephir_fetch_params_without_memory_grow(1, 1, &interfaceName, &autoload_param);
 
 	if (!autoload_param) {
 		autoload = 1;
@@ -80,7 +80,7 @@ PHP_METHOD(Test_Exists, testMethodExists) {
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&methodName_sub);
 
-	zephir_fetch_params(0, 2, 0, &obj, &methodName);
+	zephir_fetch_params_without_memory_grow(2, 0, &obj, &methodName);
 
 
 
@@ -95,7 +95,7 @@ PHP_METHOD(Test_Exists, testFileExists) {
 
 	ZVAL_UNDEF(&fileName_sub);
 
-	zephir_fetch_params(0, 1, 0, &fileName);
+	zephir_fetch_params_without_memory_grow(1, 0, &fileName);
 
 
 

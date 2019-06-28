@@ -38,6 +38,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 
 	zval _0, _6;
 	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&test);
@@ -114,7 +115,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
 
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 1, 0, &value);
+	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
 
 

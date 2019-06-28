@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Invoke) {
 PHP_METHOD(Test_Invoke, __construct) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -61,6 +62,7 @@ PHP_METHOD(Test_Invoke, __invoke) {
 PHP_METHOD(Test_Invoke, test) {
 
 	zval func;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

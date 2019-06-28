@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Geometry) {
 
 PHP_METHOD(Test_Geometry, run) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3;
@@ -76,6 +77,7 @@ PHP_METHOD(Test_Geometry, run) {
 
 PHP_METHOD(Test_Geometry, runOptimize) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, item, _1$$3, _2$$3, _3$$3, _4$$3;
@@ -123,7 +125,7 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
+	zephir_fetch_params_without_memory_grow(4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
 
 	x1 = zephir_get_doubleval(x1_param);
 	y1 = zephir_get_doubleval(y1_param);

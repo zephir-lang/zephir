@@ -284,6 +284,7 @@ PHP_METHOD(Test_Assign, testAssign19) {
 PHP_METHOD(Test_Assign, testAssign20) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -518,6 +519,7 @@ PHP_METHOD(Test_Assign, testAssign37) {
 
 	zval _1, _4;
 	zval v, arr, _0, _2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
@@ -570,6 +572,7 @@ PHP_METHOD(Test_Assign, testAssign37) {
 
 PHP_METHOD(Test_Assign, testAssign38) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, arr, _0;
 	zval *this_ptr = getThis();
 
@@ -594,6 +597,7 @@ PHP_METHOD(Test_Assign, testAssign38) {
 PHP_METHOD(Test_Assign, testAssign39) {
 
 	zval a, b, c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -619,6 +623,7 @@ PHP_METHOD(Test_Assign, testAssign39) {
 PHP_METHOD(Test_Assign, testAssign40) {
 
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -649,7 +654,7 @@ PHP_METHOD(Test_Assign, testAssign41) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -670,7 +675,7 @@ PHP_METHOD(Test_Assign, testAssign42) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -688,7 +693,7 @@ PHP_METHOD(Test_Assign, testAssign43) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -706,7 +711,7 @@ PHP_METHOD(Test_Assign, testAssign44) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -719,6 +724,7 @@ PHP_METHOD(Test_Assign, testAssign44) {
 
 PHP_METHOD(Test_Assign, testPropertyAssign1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$true, __$false, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -768,6 +774,7 @@ PHP_METHOD(Test_Assign, testPropertyAssign2) {
 	zend_bool d;
 	double b;
 	zend_long a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, __$false, c, _0;
 	zval *this_ptr = getThis();
 
@@ -826,6 +833,7 @@ PHP_METHOD(Test_Assign, testPropertyIncr1) {
 PHP_METHOD(Test_Assign, testPropertyAddAssign1) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -848,6 +856,7 @@ PHP_METHOD(Test_Assign, testPropertyAddAssign1) {
 PHP_METHOD(Test_Assign, testPropertyAddAssign2) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -906,6 +915,7 @@ PHP_METHOD(Test_Assign, testPropertyDecr) {
 PHP_METHOD(Test_Assign, testPropertySubAssign1) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -928,6 +938,7 @@ PHP_METHOD(Test_Assign, testPropertySubAssign1) {
 PHP_METHOD(Test_Assign, testPropertySubAssign2) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -950,6 +961,7 @@ PHP_METHOD(Test_Assign, testPropertySubAssign2) {
 PHP_METHOD(Test_Assign, testPropertyMulAssign1) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -972,6 +984,7 @@ PHP_METHOD(Test_Assign, testPropertyMulAssign1) {
 PHP_METHOD(Test_Assign, testPropertyMulAssign2) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -994,6 +1007,7 @@ PHP_METHOD(Test_Assign, testPropertyMulAssign2) {
 PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -1012,6 +1026,7 @@ PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 
 PHP_METHOD(Test_Assign, testPropertyArray1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$true, __$false, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1065,6 +1080,7 @@ PHP_METHOD(Test_Assign, testPropertyArray2) {
 	zval c, _0, _1;
 	double b;
 	zend_long a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -1105,6 +1121,7 @@ PHP_METHOD(Test_Assign, testPropertyArray2) {
 
 PHP_METHOD(Test_Assign, testPropertyArray3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11;
 	zval *this_ptr = getThis();
 
@@ -1164,6 +1181,7 @@ PHP_METHOD(Test_Assign, testPropertyArray3) {
 
 PHP_METHOD(Test_Assign, testPropertyArray4) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, _0, _1, _2, _3, _4;
 	zval *this_ptr = getThis();
 
@@ -1206,6 +1224,7 @@ PHP_METHOD(Test_Assign, testPropertyArray4) {
 
 PHP_METHOD(Test_Assign, testPropertyArray5) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, __$null, __$false, __$true, _0, _1, _2, _3, _4;
 	zval index;
 	zval *this_ptr = getThis();
@@ -1250,6 +1269,7 @@ PHP_METHOD(Test_Assign, testPropertyArray5) {
 
 PHP_METHOD(Test_Assign, testPropertyArray6) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -1288,6 +1308,7 @@ PHP_METHOD(Test_Assign, testPropertyArray6) {
 
 PHP_METHOD(Test_Assign, testPropertyArray7) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -1326,6 +1347,7 @@ PHP_METHOD(Test_Assign, testPropertyArray7) {
 
 PHP_METHOD(Test_Assign, testPropertyArray8) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -1368,6 +1390,7 @@ PHP_METHOD(Test_Assign, testPropertyArray8) {
 
 PHP_METHOD(Test_Assign, testPropertyArray9) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, __$null, __$false, __$true, _0, _1;
 	zend_long index;
 	zval *this_ptr = getThis();
@@ -1411,6 +1434,7 @@ PHP_METHOD(Test_Assign, testPropertyArray9) {
 
 PHP_METHOD(Test_Assign, testPropertyArray10) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, __$null, __$false, __$true, _0, _1;
 	zval index;
 	zval *this_ptr = getThis();
@@ -1455,6 +1479,7 @@ PHP_METHOD(Test_Assign, testPropertyArray10) {
 
 PHP_METHOD(Test_Assign, testPropertyArray11) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, _0, _1, _2, _3, _4;
 	zval *this_ptr = getThis();
 
@@ -1497,6 +1522,7 @@ PHP_METHOD(Test_Assign, testPropertyArray11) {
 
 PHP_METHOD(Test_Assign, testPropertyArray12) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, temp1, temp2, temp3, _0, _1, _2, _3, _4, _5, _6;
 	zval *this_ptr = getThis();
 
@@ -1552,6 +1578,7 @@ PHP_METHOD(Test_Assign, testPropertyArray12) {
 
 PHP_METHOD(Test_Assign, testPropertyArray13) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, temp1, temp2, temp3, _0, _1, _2, _3, _4, _5, _6;
 	zval *this_ptr = getThis();
 
@@ -1609,6 +1636,7 @@ PHP_METHOD(Test_Assign, testPropertyArray14) {
 
 	zval _0, _1, _3;
 	zval v, _2, _4, _5, _6;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
@@ -1662,6 +1690,7 @@ PHP_METHOD(Test_Assign, testPropertyArray14) {
 PHP_METHOD(Test_Assign, testStaticPropertyAssign1) {
 
 	zval _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _3;
 	zval *this_ptr = getThis();
 
@@ -1719,6 +1748,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign2) {
 	zval c, _0;
 	double b;
 	zend_long a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -1756,6 +1786,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign2) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArray1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1796,6 +1827,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArray1) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArray2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1836,6 +1868,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArray2) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArray3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1880,6 +1913,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArray3) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1913,6 +1947,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1953,6 +1988,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli1) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -1993,6 +2029,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli2) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -2039,6 +2076,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMulti4) {
 
 	zval _0, _1, _3;
 	zval v, _2, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
@@ -2086,6 +2124,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMulti4) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, __$true, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -2126,6 +2165,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend1) {
 
 PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, *value, value_sub, a;
 	zval *this_ptr = getThis();
 
@@ -2147,6 +2187,7 @@ PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 
 PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, *value, value_sub, _POST;
 	zval *this_ptr = getThis();
 
@@ -2168,6 +2209,7 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 
 PHP_METHOD(Test_Assign, testArrayProperty) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index, index_sub, *value, value_sub, _POST;
 	zval *this_ptr = getThis();
 
@@ -2200,7 +2242,7 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 	ZVAL_UNDEF(&_POST);
 
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params(0, 2, 0, &index, &value);
+	zephir_fetch_params_without_memory_grow(2, 0, &index, &value);
 
 
 
@@ -2214,6 +2256,7 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 
 	zval elements;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&elements);
@@ -2236,6 +2279,7 @@ PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign) {
 
 	zval str, _0, _1, _2, _3, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str);
@@ -2271,6 +2315,7 @@ PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign) {
  */
 PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval _GET, v, _0, _1, _2, _3;
 	zval *this_ptr = getThis();
 

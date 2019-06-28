@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Globals_Post) {
  */
 PHP_METHOD(Test_Globals_Post, hasValue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _POST;
 	zval name;
 	zval *this_ptr = getThis();

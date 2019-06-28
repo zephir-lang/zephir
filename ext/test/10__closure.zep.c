@@ -32,7 +32,7 @@ PHP_METHOD(test_10__closure, __invoke) {
 
 	ZVAL_UNDEF(&x_sub);
 
-	zephir_fetch_params(0, 1, 0, &x);
+	zephir_fetch_params_without_memory_grow(1, 0, &x);
 
 
 

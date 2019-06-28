@@ -35,6 +35,7 @@ zend_object *zephir_init_properties_Test_Properties_ExtendsPublicProperties(zend
 
 		zval _1$$3, _2$$3, _4$$4, _6$$5, _11$$7;
 	zval _0, _3, _5, _8, _10, _7$$5, _9$$6, _12$$7;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_5);

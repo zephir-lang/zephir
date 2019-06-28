@@ -284,6 +284,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -307,6 +308,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2And) {
 
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -360,6 +362,7 @@ PHP_METHOD(Test_Bitwise, complex3And) {
 PHP_METHOD(Test_Bitwise, complex4And) {
 
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -933,6 +936,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -956,6 +960,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCast2Or) {
 
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1009,6 +1014,7 @@ PHP_METHOD(Test_Bitwise, complex3Or) {
 PHP_METHOD(Test_Bitwise, complex4Or) {
 
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -1400,7 +1406,7 @@ PHP_METHOD(Test_Bitwise, testBitwiseNot) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 
 	a = zephir_get_intval(a_param);
 
@@ -1416,7 +1422,7 @@ PHP_METHOD(Test_Bitwise, testBitwiseAndNot) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -1433,7 +1439,7 @@ PHP_METHOD(Test_Bitwise, getInt) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -1448,6 +1454,7 @@ PHP_METHOD(Test_Bitwise, getInt) {
 PHP_METHOD(Test_Bitwise, testbitwiseXor) {
 
 	zval i, _0, j;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

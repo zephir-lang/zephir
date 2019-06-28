@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Oo) {
 PHP_METHOD(Test_Oo, testInstance1) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&o);
@@ -48,6 +49,7 @@ PHP_METHOD(Test_Oo, testInstance1) {
 PHP_METHOD(Test_Oo, testInstance2) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -66,6 +68,7 @@ PHP_METHOD(Test_Oo, testInstance2) {
 PHP_METHOD(Test_Oo, testInstance3) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -86,6 +89,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 PHP_METHOD(Test_Oo, testInstance4) {
 
 	zval o, a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -110,6 +114,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 PHP_METHOD(Test_Oo, testInstance5) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -134,6 +139,7 @@ PHP_METHOD(Test_Oo, testInstance5) {
 PHP_METHOD(Test_Oo, testInstance6) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -156,6 +162,7 @@ PHP_METHOD(Test_Oo, testInstance6) {
 PHP_METHOD(Test_Oo, testInstance7) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -178,6 +185,7 @@ PHP_METHOD(Test_Oo, testInstance7) {
 PHP_METHOD(Test_Oo, testInstance8) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -200,6 +208,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 PHP_METHOD(Test_Oo, testInstance9) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -217,6 +226,7 @@ PHP_METHOD(Test_Oo, testInstance9) {
 PHP_METHOD(Test_Oo, testInstance10) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -234,6 +244,7 @@ PHP_METHOD(Test_Oo, testInstance10) {
 PHP_METHOD(Test_Oo, testInstance11) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -256,6 +267,7 @@ PHP_METHOD(Test_Oo, testInstance11) {
 PHP_METHOD(Test_Oo, testInstance12) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -275,6 +287,7 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 	zend_class_entry *_5$$3, *_9$$4;
 	zval result, _0;
 	zval className, instance, fqcn, _1, *_2, _3, _4$$3, _6$$3, _7$$3, _8$$4, _10$$4, _11$$4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

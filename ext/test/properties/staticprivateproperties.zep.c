@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPrivateProperties) {
 PHP_METHOD(Test_Properties_StaticPrivateProperties, getInstance) {
 
 	zval localInstance, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

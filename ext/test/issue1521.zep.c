@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Issue1521) {
 PHP_METHOD(Test_Issue1521, test) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);

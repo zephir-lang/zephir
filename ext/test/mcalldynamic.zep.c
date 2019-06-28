@@ -42,6 +42,7 @@ PHP_METHOD(Test_McallDynamic, testMethod1) {
 PHP_METHOD(Test_McallDynamic, testMagicCall1) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -61,6 +62,7 @@ PHP_METHOD(Test_McallDynamic, testMagicCall1) {
 
 PHP_METHOD(Test_McallDynamic, __call) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *method, method_sub, *arguments, arguments_sub, realMethod;
 	zval *this_ptr = getThis();
@@ -88,6 +90,7 @@ PHP_METHOD(Test_McallDynamic, __call) {
 PHP_METHOD(Test_McallDynamic, testCallAnonymousFunctionWithContext) {
 
 	zval result, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();

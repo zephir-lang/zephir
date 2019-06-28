@@ -57,12 +57,6 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
 {
 	%PROJECT_LOWER%_globals->initialized = 0;
 
-	/* Memory options */
-	%PROJECT_LOWER%_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	%PROJECT_LOWER%_globals->active_symbol_table = NULL;
-
 	/* Cache Enabled */
 	%PROJECT_LOWER%_globals->cache_enabled = 1;
 

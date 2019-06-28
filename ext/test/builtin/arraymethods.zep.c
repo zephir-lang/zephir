@@ -31,6 +31,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getJoin1) {
 
 	zval _1;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -59,6 +60,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 
 	zval _1, _2;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -89,6 +91,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 
 	zval _1, _2;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

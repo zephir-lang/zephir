@@ -126,6 +126,7 @@ PHP_METHOD(Test_Arithmetic, boolSumExpression) {
 
 	zval _0, _1;
 	zend_bool a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -197,6 +198,7 @@ PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 PHP_METHOD(Test_Arithmetic, doubleSumExpression) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -216,6 +218,7 @@ PHP_METHOD(Test_Arithmetic, doubleSumVarExpression) {
 
 	zval _0, _1;
 	double a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -344,6 +347,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -367,6 +371,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -420,6 +425,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -1046,6 +1052,7 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 
 	zend_long b = 0, _0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1077,6 +1084,7 @@ PHP_METHOD(Test_Arithmetic, addSum23) {
 
 PHP_METHOD(Test_Arithmetic, addSum24) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -1379,6 +1387,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSub) {
 
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1402,6 +1411,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sub) {
 
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1455,6 +1465,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sub) {
 PHP_METHOD(Test_Arithmetic, complex4Sub) {
 
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -2081,6 +2092,7 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 
 	zend_long b = 0, _0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -2112,6 +2124,7 @@ PHP_METHOD(Test_Arithmetic, sub23) {
 
 PHP_METHOD(Test_Arithmetic, sub24) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -2147,6 +2160,7 @@ PHP_METHOD(Test_Arithmetic, mul1) {
 
 PHP_METHOD(Test_Arithmetic, mul2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -2213,7 +2227,7 @@ PHP_METHOD(Test_Arithmetic, less3) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -2228,7 +2242,7 @@ PHP_METHOD(Test_Arithmetic, less4) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -2269,7 +2283,7 @@ PHP_METHOD(Test_Arithmetic, greater3) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -2284,7 +2298,7 @@ PHP_METHOD(Test_Arithmetic, greater4) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -2327,7 +2341,7 @@ PHP_METHOD(Test_Arithmetic, letStatementBoolMinus) {
 
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 1, 0, &b);
+	zephir_fetch_params_without_memory_grow(1, 0, &b);
 
 
 
@@ -2339,6 +2353,7 @@ PHP_METHOD(Test_Arithmetic, letStatementBoolMinus) {
 
 PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b, b_sub, a;
 	zval *this_ptr = getThis();
 
