@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
+#include "kernel/fcall.h"
 #include "kernel/memory.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
@@ -31,24 +32,69 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 PHP_METHOD(Test_Vars, testParam) {
 
+	zend_string *_4;
+	zend_ulong _3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *arr_param = NULL, _0;
-	zval arr;
+	zephir_fcall_cache_entry *_6 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *config_param = NULL, k, v, _0, *_1, _2, _5$$3, _7$$4;
+	zval config;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&config);
+	ZVAL_UNDEF(&k);
+	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_5$$3);
+	ZVAL_UNDEF(&_7$$4);
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &arr_param);
+	zephir_fetch_params(1, 1, 0, &config_param);
 
-	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+	ZEPHIR_OBS_COPY_OR_DUP(&config, config_param);
 
 
-	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "test");
-	zephir_array_update_multi(&arr, &_0 TSRMLS_CC, SL("ss"), 4, SL("test"), SL("test"));
-	RETURN_CTOR(&arr);
+	zephir_array_fetch_string(&_0, &config, SL("dir"), PH_NOISY | PH_READONLY, "test/vars.zep", 8 TSRMLS_CC);
+	zephir_is_iterable(&_0, 0, "test/vars.zep", 11);
+	if (Z_TYPE_P(&_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
+		{
+			ZEPHIR_INIT_NVAR(&k);
+			if (_4 != NULL) { 
+				ZVAL_STR_COPY(&k, _4);
+			} else {
+				ZVAL_LONG(&k, _3);
+			}
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _1);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 57, &v);
+			zephir_check_call_status();
+			zephir_array_update_multi(&config, &_5$$3 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &_0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&k, &_0, "key", NULL, 0);
+			zephir_check_call_status();
+			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			zephir_check_call_status();
+				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 57, &v);
+				zephir_check_call_status();
+				zephir_array_update_multi(&config, &_7$$4 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	ZEPHIR_INIT_NVAR(&k);
+	RETURN_CTOR(&config);
 
 }
 

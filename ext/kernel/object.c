@@ -369,6 +369,14 @@ int zephir_clone(zval *destination, zval *obj)
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
+		if (Z_OBJ_HANDLER_P(object, has_property)) {
+			zval member;
+			int retval;
+			ZVAL_STRINGL(&member, property_name, property_length);
+			retval = Z_OBJ_HT_P(object)->has_property(object, &member, 2, NULL);
+			zval_ptr_dtor(&member);
+			return retval;
+		}
 		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
 			return 1;
 		}
@@ -385,6 +393,9 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		if (Z_TYPE_P(property) == IS_STRING) {
+			if (Z_OBJ_HANDLER_P(object, has_property)) {
+				return Z_OBJ_HT_P(object)->has_property(object, property, 2, NULL);
+			}
 
 			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
 				return 1;
