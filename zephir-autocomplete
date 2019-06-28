@@ -11,7 +11,7 @@
 #
 # 1. Copy this file to the common place:
 #
-#   cp zephir-autocomplete /etc/bash_completion.d/zephir-autocomplete
+#   ln -s zephir-autocomplete /etc/bash_completion.d/zephir-autocomplete
 #
 # 2. Load zephir-autocomplete from within your ~/.bash_profile
 # (or ~/.profile if you prefer):
@@ -26,24 +26,46 @@
 #
 
 _zephir_completion() {
-    local cur prev;
-    _get_comp_words_by_ref -n : cur
+	local cur prev;
+	_get_comp_words_by_ref -n : cur
 
-    COMPREPLY=()
+	COMPREPLY=()
+	prev=${COMP_WORDS[COMP_CWORD-1]}
 
-    cur=${COMP_WORDS[COMP_CWORD]}
-    prev=${COMP_WORDS[COMP_CWORD-1]}
+	local commands="api build clean compile fullclean generate help"
+	commands+=" init install list stubs"
 
-    opts='api build clean compile fullclean generate help init install list stubs'
+	#
+	# Complete the arguments to some of the commands.
+	#
+	if [ "$prev" != "zephir" ]
+	then
+		declare -a a_commands=($(echo $commands | tr " " "\n"))
 
-    #
-    #  Only complete on the first term.
-    #
-    if [ $COMP_CWORD -eq 1 ]
-    then
-        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-        return 0
-    fi
+		for i in "${a_commands[@]}"
+		do
+			if [ "$i" = "$prev" ]
+			then
+				local opts=$(zephir $prev -h --no-ansi | tr -cs '[=-=][:alpha:]_' '[\n*]' | grep '^-')
+				COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+				return 0
+			fi
+		done
+
+		return 1
+	fi
+
+	if [[ "$cur" == -* ]]
+	then
+		local opts="--help --quiet --verbose --version --ansi --no-ansi"
+		opts+=" --dumpversion"
+
+		COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
+	else
+		COMPREPLY=( $( compgen -W "${commands}" -- ${cur} ) )
+	fi
+
+	return 0
 }
 
 complete -F _zephir_completion zephir
