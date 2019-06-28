@@ -83,7 +83,7 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const ch
 #endif
 }
 
-void zephir_memory_restore_stack(zephir_method_globals *g, const char *func)
+void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func)
 {
 	size_t i;
 	zephir_memory_entry *prev, *active_memory;
