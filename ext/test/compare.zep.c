@@ -36,7 +36,7 @@ PHP_METHOD(Test_Compare, isLessInt) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -53,7 +53,7 @@ PHP_METHOD(Test_Compare, isGreaterEqual) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
@@ -70,7 +70,7 @@ PHP_METHOD(Test_Compare, isLessDouble) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_doubleval(a_param);
 	b = zephir_get_doubleval(b_param);
@@ -87,7 +87,7 @@ PHP_METHOD(Test_Compare, isLessThenPi) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 
 	a = zephir_get_doubleval(a_param);
 
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Compare, isMoreThenPi) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 
 	a = zephir_get_doubleval(a_param);
 
@@ -117,6 +117,7 @@ PHP_METHOD(Test_Compare, isMoreThenPi) {
  */
 PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL;
 	zval str;
 	zval *this_ptr = getThis();
@@ -166,7 +167,7 @@ PHP_METHOD(Test_Compare, testVarEqualsNull) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -184,7 +185,7 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 

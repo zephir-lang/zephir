@@ -50,6 +50,7 @@ ZEPHIR_INIT_CLASS(Test_Statements) {
 PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 
 	zval result1, result2, result3, result4, _0, _1, _2, _3, _4, _5, _6, _7;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&result1);
@@ -94,7 +95,7 @@ PHP_METHOD(Test_Statements, testElseIf) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -118,7 +119,7 @@ PHP_METHOD(Test_Statements, testElseIf1) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -142,7 +143,7 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 
 	ZVAL_UNDEF(&total_sub);
 
-	zephir_fetch_params(0, 2, 0, &num_param, &total);
+	zephir_fetch_params_without_memory_grow(2, 0, &num_param, &total);
 
 	num = zephir_get_intval(num_param);
 
@@ -159,6 +160,7 @@ PHP_METHOD(Test_Statements, testElseIf2) {
 
 PHP_METHOD(Test_Statements, test544Issue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_8 = NULL;
 	zval *step_param = NULL, _0, _1, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _9$$3, _10$$3, _11$$3, _12$$4, _13$$4, _14$$5, _15$$5;
 	zend_long step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0;
@@ -227,6 +229,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 
 PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_6 = NULL;
 	zval *step_param = NULL, _0, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _7$$3, _8$$3, _9$$3, _10$$4, _11$$4, _12$$5, _13$$5;
 	zend_long step, ZEPHIR_LAST_CALL_STATUS, filledWidth = 0, unfilledWidth = 0, totalSteps = 0;

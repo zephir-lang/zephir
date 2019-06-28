@@ -45,7 +45,7 @@ PHP_METHOD(Test_Scope, getDyStr) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &g_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &g_param);
 
 	g = zephir_get_intval(g_param);
 
@@ -60,6 +60,7 @@ PHP_METHOD(Test_Scope, getDyStr) {
 PHP_METHOD(Test_Scope, test1) {
 
 	zval ret, k, k$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, r;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -72,7 +73,7 @@ PHP_METHOD(Test_Scope, test1) {
 
 	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
-	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 84);
+	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 76);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
@@ -90,6 +91,7 @@ PHP_METHOD(Test_Scope, test2) {
 	zend_bool _0;
 	zval k, c, _5, _3$$3, _4$$3;
 	zend_long p, _1, _2, p$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&k);
@@ -139,6 +141,7 @@ PHP_METHOD(Test_Scope, test3) {
 
 	zend_bool _0;
 	zval k, c, str$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *this_ptr = getThis();
@@ -166,7 +169,7 @@ PHP_METHOD(Test_Scope, test3) {
 			}
 			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
-			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 85, &c);
+			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 77, &c);
 			zephir_check_call_status();
 			zephir_concat_self(&k, &str$$3 TSRMLS_CC);
 		}

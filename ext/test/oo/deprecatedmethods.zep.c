@@ -36,6 +36,7 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, publicDeprecated) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

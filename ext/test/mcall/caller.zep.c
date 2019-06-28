@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Mcall_Caller) {
 
 PHP_METHOD(Test_Mcall_Caller, start) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *f, f_sub;
 	zval *this_ptr = getThis();

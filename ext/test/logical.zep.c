@@ -108,7 +108,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
 
-	zephir_fetch_params(0, 2, 0, &a, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 
 	b = zephir_get_intval(b_param);
 
@@ -191,7 +191,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 	ZVAL_UNDEF(&minLength_sub);
 	ZVAL_UNDEF(&_2);
 
-	zephir_fetch_params(0, 2, 0, &match, &minLength);
+	zephir_fetch_params_without_memory_grow(2, 0, &match, &minLength);
 
 
 
@@ -247,7 +247,7 @@ PHP_METHOD(Test_Logical, testMixed4) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_boolval(a_param);
 	b = zephir_get_boolval(b_param);

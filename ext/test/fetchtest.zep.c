@@ -38,7 +38,7 @@ PHP_METHOD(Test_FetchTest, setValues) {
 
 	ZVAL_UNDEF(&values_sub);
 
-	zephir_fetch_params(0, 1, 0, &values);
+	zephir_fetch_params_without_memory_grow(1, 0, &values);
 
 
 
@@ -65,7 +65,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray1) {
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&c);
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 
 
 
@@ -75,6 +75,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray1) {
 
 PHP_METHOD(Test_FetchTest, testFetchArray2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a = NULL, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
@@ -101,7 +102,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&c);
 
-	zephir_fetch_params(0, 2, 0, &a, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 
 	b = zephir_get_intval(b_param);
 
@@ -112,6 +113,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 
 PHP_METHOD(Test_FetchTest, testFetchArray4) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
 	zval *a = NULL, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
@@ -132,6 +134,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray4) {
 
 PHP_METHOD(Test_FetchTest, testFetchArray5) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval b;
 	zval *a, a_sub, *b_param = NULL, c;
 	zval *this_ptr = getThis();
@@ -152,6 +155,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray5) {
 
 PHP_METHOD(Test_FetchTest, testFetchArray6) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval b;
 	zval *a = NULL, a_sub, *b_param = NULL;
 	zval *this_ptr = getThis();
@@ -173,6 +177,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray6) {
 
 PHP_METHOD(Test_FetchTest, testFetchObject1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *b, b_sub, c;
 	zval *this_ptr = getThis();
 
@@ -192,6 +197,7 @@ PHP_METHOD(Test_FetchTest, testFetchObject1) {
 
 PHP_METHOD(Test_FetchTest, testFetchObject2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a = NULL, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
@@ -219,7 +225,7 @@ PHP_METHOD(Test_FetchTest, testFetchPost) {
 	ZVAL_UNDEF(&c);
 
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params(0, 1, 0, &b);
+	zephir_fetch_params_without_memory_grow(1, 0, &b);
 
 
 
@@ -232,6 +238,7 @@ PHP_METHOD(Test_FetchTest, testFetchPost) {
 
 PHP_METHOD(Test_FetchTest, hasValue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _POST, _0$$4;
 	zval name;
 	zval *this_ptr = getThis();
@@ -261,6 +268,7 @@ PHP_METHOD(Test_FetchTest, hasValue) {
 
 PHP_METHOD(Test_FetchTest, getValue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _POST, value, _0$$3;
 	zval name;
 	zval *this_ptr = getThis();

@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Json) {
 PHP_METHOD(Test_Json, testEncodeObject) {
 
 	zval obj;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&obj);
@@ -49,6 +50,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 PHP_METHOD(Test_Json, testEncodeArray) {
 
 	zval arr, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);
@@ -75,6 +77,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 PHP_METHOD(Test_Json, testEncodeOptions) {
 
 	zval arr, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);
@@ -106,6 +109,7 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 PHP_METHOD(Test_Json, testDecodeObject) {
 
 	zval obj;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&obj);
@@ -121,6 +125,7 @@ PHP_METHOD(Test_Json, testDecodeObject) {
 
 PHP_METHOD(Test_Json, testDecodeObject2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, obj;
 	zval *this_ptr = getThis();
 
@@ -139,6 +144,7 @@ PHP_METHOD(Test_Json, testDecodeObject2) {
 PHP_METHOD(Test_Json, testDecodeArray) {
 
 	zval arr;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);

@@ -35,6 +35,7 @@ ZEPHIR_INIT_CLASS(Test_Exception) {
  */
 PHP_METHOD(Test_Exception, testRuntimePropertyFetch) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *message_param = NULL;
 	zval message;
 	zval *this_ptr = getThis();

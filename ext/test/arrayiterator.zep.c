@@ -34,6 +34,7 @@ PHP_METHOD(Test_ArrayIterator, __construct) {
 
 	zval _1, _2;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -78,6 +79,7 @@ PHP_METHOD(Test_ArrayIterator, rewind) {
 PHP_METHOD(Test_ArrayIterator, current) {
 
 	zval _0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);

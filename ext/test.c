@@ -436,12 +436,6 @@ static void php_zephir_init_globals(zend_test_globals *test_globals TSRMLS_DC)
 {
 	test_globals->initialized = 0;
 
-	/* Memory options */
-	test_globals->active_memory = NULL;
-
-	/* Virtual Symbol Tables */
-	test_globals->active_symbol_table = NULL;
-
 	/* Cache Enabled */
 	test_globals->cache_enabled = 1;
 

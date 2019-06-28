@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_McallInternal) {
 void zep_Test_McallInternal_a(int ht, zval *return_value, zval *this_ptr, int return_value_used) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 
 	ZEPHIR_MM_GROW();
@@ -80,6 +81,7 @@ void zep_Test_McallInternal_c(int ht, zval *return_value, zval *this_ptr, int re
 PHP_METHOD(Test_McallInternal, e) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -96,6 +98,7 @@ PHP_METHOD(Test_McallInternal, d) {
 
 	zval _3$$3;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -131,6 +134,7 @@ PHP_METHOD(Test_McallInternal, f) {
 
 	zval _3$$3;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, i = 0, _1, _2;
 	zval *this_ptr = getThis();
@@ -168,6 +172,7 @@ PHP_METHOD(Test_McallInternal, g) {
 	zval _3$$3, _4$$3, _5$$3;
 	zend_bool _0;
 	long i = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -227,6 +232,7 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 	zend_bool _0;
 	long i;
 	double p;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
 

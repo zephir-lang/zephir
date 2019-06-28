@@ -36,6 +36,7 @@ PHP_METHOD(Test_Bench_Foo, emptyForInRange) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
@@ -73,6 +74,7 @@ PHP_METHOD(Test_Bench_Foo, readStatic) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, x, i, _2;
 	zval *this_ptr = getThis();
 
@@ -113,6 +115,7 @@ PHP_METHOD(Test_Bench_Foo, writeStatic) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
@@ -154,6 +157,7 @@ PHP_METHOD(Test_Bench_Foo, issetStatic) {
 
 	zend_long _1;
 	zend_bool x = 0, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
@@ -192,6 +196,7 @@ PHP_METHOD(Test_Bench_Foo, emptyStatic) {
 
 	zend_long _1;
 	zend_bool x = 0, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
@@ -233,6 +238,7 @@ PHP_METHOD(Test_Bench_Foo, readProp) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, x, i, _2;
 	zval *this_ptr = getThis();
 
@@ -272,6 +278,7 @@ PHP_METHOD(Test_Bench_Foo, writeProp) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
@@ -313,6 +320,7 @@ PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3, _4$$3;
 	zval *this_ptr = getThis();
 
@@ -373,6 +381,7 @@ PHP_METHOD(Test_Bench_Foo, postIncProp) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
@@ -411,6 +420,7 @@ PHP_METHOD(Test_Bench_Foo, postDecProp) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
@@ -449,6 +459,7 @@ PHP_METHOD(Test_Bench_Foo, issetProp) {
 
 	zend_long _1;
 	zend_bool x = 0, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
@@ -487,6 +498,7 @@ PHP_METHOD(Test_Bench_Foo, emptyProp) {
 
 	zend_long _1;
 	zend_bool x = 0, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
@@ -535,6 +547,7 @@ PHP_METHOD(Test_Bench_Foo, g) {
 PHP_METHOD(Test_Bench_Foo, call) {
 
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_3 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zval *n, n_sub, i, _2;
@@ -592,6 +605,7 @@ PHP_METHOD(Test_Bench_Foo, staticMethod1) {
 PHP_METHOD(Test_Bench_Foo, scall) {
 
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *n, n_sub, i, _2;
@@ -632,6 +646,7 @@ PHP_METHOD(Test_Bench_Foo, scall) {
 PHP_METHOD(Test_Bench_Foo, scallWithReturnTrue) {
 
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1;
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *n, n_sub, i, _2;
@@ -673,6 +688,7 @@ PHP_METHOD(Test_Bench_Foo, readConst) {
 
 	zend_long _1;
 	zend_bool _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, x, _2;
 	zval *this_ptr = getThis();
 

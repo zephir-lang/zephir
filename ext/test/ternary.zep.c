@@ -34,6 +34,7 @@ ZEPHIR_INIT_CLASS(Test_Ternary) {
 PHP_METHOD(Test_Ternary, testTernary1) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -52,6 +53,7 @@ PHP_METHOD(Test_Ternary, testTernary1) {
 
 PHP_METHOD(Test_Ternary, testTernary2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b_param = NULL, _0;
 	zend_bool b;
 	zval *this_ptr = getThis();
@@ -76,6 +78,7 @@ PHP_METHOD(Test_Ternary, testTernary2) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
 	zval *this_ptr = getThis();
@@ -110,6 +113,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
 	zval *this_ptr = getThis();
@@ -145,6 +149,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -175,6 +180,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 
 	zval var2, var3, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&var2);
@@ -212,6 +218,7 @@ PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
 	zval s;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&s);
@@ -233,6 +240,7 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
 PHP_METHOD(Test_Ternary, testShortTernary) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -256,6 +264,7 @@ PHP_METHOD(Test_Ternary, testShortTernary) {
 
 PHP_METHOD(Test_Ternary, testShortTernaryComplex) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *left, left_sub, *value, value_sub, _0;
 	zval *this_ptr = getThis();
 

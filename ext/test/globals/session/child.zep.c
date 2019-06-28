@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Globals_Session_Child) {
 
 PHP_METHOD(Test_Globals_Session_Child, destroy) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

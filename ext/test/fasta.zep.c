@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Fasta) {
 PHP_METHOD(Test_Fasta, fastaRepeat) {
 
 	zval _2, _5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
 	zval seq;
 	zval *n, n_sub, *seq_param = NULL, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
@@ -154,6 +155,7 @@ PHP_METHOD(Test_Fasta, fastRandom) {
 PHP_METHOD(Test_Fasta, main) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n, n_sub, alu, iub, homoSap, _1;
 	zval *this_ptr = getThis();

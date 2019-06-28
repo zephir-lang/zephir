@@ -99,7 +99,7 @@ PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray) {
 
 	ZVAL_UNDEF(&someGetterSetterArray_sub);
 
-	zephir_fetch_params(0, 1, 0, &someGetterSetterArray);
+	zephir_fetch_params_without_memory_grow(1, 0, &someGetterSetterArray);
 
 
 
@@ -120,6 +120,7 @@ PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray) {
 PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -136,6 +137,7 @@ zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_
 
 		zval _3$$4, _4$$4, _6$$5, _8$$6;
 	zval _0, _2, _5, _7, _10, _1$$3, _9$$6, _11$$7;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);

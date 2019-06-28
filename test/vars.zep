@@ -2,6 +2,12 @@ namespace Test;
 
 class Vars
 {
+    public function testParam(array! arr)
+    {
+        let arr["test"]["test"] = "test";
+        return arr;
+    }
+
     public function testVarDump()
     {
         var a, ar;

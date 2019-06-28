@@ -67,6 +67,7 @@ PHP_METHOD(Test_Returns, testReturnCast4) {
 
 PHP_METHOD(Test_Returns, returnWithParameter) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *parameter_param = NULL;
 	zval parameter;
 	zval *this_ptr = getThis();

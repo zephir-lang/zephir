@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Functional) {
 
 PHP_METHOD(Test_Functional, map1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0, _1;
 	zval a;
@@ -54,6 +55,7 @@ PHP_METHOD(Test_Functional, map1) {
 
 PHP_METHOD(Test_Functional, map2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, *b, b_sub, _0;
 	zval a;

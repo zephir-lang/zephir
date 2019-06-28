@@ -35,6 +35,7 @@ ZEPHIR_INIT_CLASS(Test_EmptyTest) {
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -50,6 +51,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -78,6 +80,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 PHP_METHOD(Test_EmptyTest, testEmptyString) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -93,6 +96,7 @@ PHP_METHOD(Test_EmptyTest, testEmptyString) {
 PHP_METHOD(Test_EmptyTest, testNotEmptyString) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -107,6 +111,7 @@ PHP_METHOD(Test_EmptyTest, testNotEmptyString) {
 
 PHP_METHOD(Test_EmptyTest, testString) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a_param = NULL;
 	zval a;
 	zval *this_ptr = getThis();

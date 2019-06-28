@@ -34,7 +34,7 @@ PHP_METHOD(Test_Operator, testIdentical) {
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
 
-	zephir_fetch_params(0, 2, 0, &param1, &param2);
+	zephir_fetch_params_without_memory_grow(2, 0, &param1, &param2);
 
 
 
@@ -45,6 +45,7 @@ PHP_METHOD(Test_Operator, testIdentical) {
 PHP_METHOD(Test_Operator, testIdenticalIfComplex) {
 
 	zend_bool b = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *input, input_sub, a, _0;
 	zval *this_ptr = getThis();
 
@@ -76,7 +77,7 @@ PHP_METHOD(Test_Operator, testIdenticalVarFalse) {
 
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
 
 
@@ -91,7 +92,7 @@ PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
 
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
 
 
@@ -102,6 +103,7 @@ PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
 PHP_METHOD(Test_Operator, testBoolComparison) {
 
 	zend_bool var1, var2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *varTrue, varTrue_sub, *varFalse, varFalse_sub, _0;
 	zval *this_ptr = getThis();
 

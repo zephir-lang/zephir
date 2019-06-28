@@ -12,13 +12,13 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/variables.h"
-#include "kernel/object.h"
-#include "kernel/operators.h"
+#include "kernel/memory.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
+#include "kernel/variables.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Vars) {
@@ -29,8 +29,32 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 }
 
+PHP_METHOD(Test_Vars, testParam) {
+
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *arr_param = NULL, _0;
+	zval arr;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&arr);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &arr_param);
+
+	ZEPHIR_OBS_COPY_OR_DUP(&arr, arr_param);
+
+
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRING(&_0, "test");
+	zephir_array_update_multi(&arr, &_0 TSRMLS_CC, SL("ss"), 4, SL("test"), SL("test"));
+	RETURN_CTOR(&arr);
+
+}
+
 PHP_METHOD(Test_Vars, testVarDump) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, _0;
 	zval *this_ptr = getThis();
 
@@ -60,6 +84,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 
 PHP_METHOD(Test_Vars, testVarDump2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *ret, ret_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -81,6 +106,7 @@ PHP_METHOD(Test_Vars, testVarDump2) {
 
 PHP_METHOD(Test_Vars, testVarExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, ret, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -121,6 +147,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 
 PHP_METHOD(Test_Vars, test88Issue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
 	zval param1, param2;
 	zval *this_ptr = getThis();
@@ -171,6 +198,7 @@ PHP_METHOD(Test_Vars, test88Issue) {
 
 PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0;
 	zval param1, param2;
 	zval *this_ptr = getThis();
@@ -215,7 +243,7 @@ PHP_METHOD(Test_Vars, testVarDump2param) {
 	ZVAL_UNDEF(&p1_sub);
 	ZVAL_UNDEF(&p2_sub);
 
-	zephir_fetch_params(0, 2, 0, &p1, &p2);
+	zephir_fetch_params_without_memory_grow(2, 0, &p1, &p2);
 
 
 
@@ -233,7 +261,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 	ZVAL_UNDEF(&p2_sub);
 	ZVAL_UNDEF(&p3_sub);
 
-	zephir_fetch_params(0, 3, 0, &p1, &p2, &p3);
+	zephir_fetch_params_without_memory_grow(3, 0, &p1, &p2, &p3);
 
 
 
@@ -245,6 +273,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 
 PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar, testVar_sub, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -271,6 +300,7 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
 PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar_param = NULL, _0, _1;
 	zval testVar;
 	zval *this_ptr = getThis();
@@ -307,6 +337,7 @@ PHP_METHOD(Test_Vars, testIntVarDump) {
 
 	zval _0, _1;
 	zend_long a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -331,6 +362,7 @@ PHP_METHOD(Test_Vars, testDoubleVarDump) {
 
 	zval _0, _1;
 	double a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -355,6 +387,7 @@ PHP_METHOD(Test_Vars, testBoolVarDump) {
 
 	zval _0, _1;
 	zend_bool a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);

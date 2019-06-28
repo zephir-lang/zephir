@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ACos) {
 PHP_METHOD(Test_Optimizers_ACos, testInt) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a;
 	zval *this_ptr = getThis();
 
@@ -47,6 +48,7 @@ PHP_METHOD(Test_Optimizers_ACos, testInt) {
 PHP_METHOD(Test_Optimizers_ACos, testVar) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, a;
 	zval *this_ptr = getThis();
 
@@ -65,6 +67,7 @@ PHP_METHOD(Test_Optimizers_ACos, testVar) {
 PHP_METHOD(Test_Optimizers_ACos, testIntValue1) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -81,6 +84,7 @@ PHP_METHOD(Test_Optimizers_ACos, testIntValue1) {
 
 PHP_METHOD(Test_Optimizers_ACos, testIntParameter) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a_param = NULL, _0;
 	zend_long a, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -102,6 +106,7 @@ PHP_METHOD(Test_Optimizers_ACos, testIntParameter) {
 
 PHP_METHOD(Test_Optimizers_ACos, testVarParameter) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub;
 	zval *this_ptr = getThis();

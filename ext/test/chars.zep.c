@@ -48,7 +48,7 @@ PHP_METHOD(Test_Chars, sumChars2) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &ch_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
 
 	ch = zephir_get_charval(ch_param);
 
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Chars, diffChars2) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &ch_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
 
 	ch = zephir_get_charval(ch_param);
 

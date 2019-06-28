@@ -48,7 +48,7 @@ PHP_METHOD(Test_Unsettest, has) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &key);
+	zephir_fetch_params_without_memory_grow(1, 0, &key);
 
 
 
@@ -65,7 +65,7 @@ PHP_METHOD(Test_Unsettest, addValueToProperty) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &key, &value);
+	zephir_fetch_params_without_memory_grow(2, 0, &key, &value);
 
 
 
@@ -81,7 +81,7 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &key);
+	zephir_fetch_params_without_memory_grow(1, 0, &key);
 
 
 
@@ -92,6 +92,7 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 
 PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arrayParameter, arrayParameter_sub;
 	zval *this_ptr = getThis();
 
@@ -111,6 +112,7 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 
 PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arrayParameter, arrayParameter_sub, *index, index_sub;
 	zval *this_ptr = getThis();
 
@@ -142,6 +144,7 @@ PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 
 	zval simpleObject, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&simpleObject);
@@ -169,6 +172,7 @@ PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 
 PHP_METHOD(Test_Unsettest, testUnsetTypedArray) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval key;
 	zval *arr_param = NULL, *key_param = NULL;
 	zval arr;

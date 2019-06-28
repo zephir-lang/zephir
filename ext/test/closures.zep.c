@@ -116,6 +116,7 @@ PHP_METHOD(Test_Closures, testUseCommand) {
 
 PHP_METHOD(Test_Closures, issue1860) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *abc_param = NULL;
 	zval abc;
 	zval *this_ptr = getThis();

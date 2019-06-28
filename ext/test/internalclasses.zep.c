@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_InternalClasses) {
 PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 	zend_class_entry *_0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

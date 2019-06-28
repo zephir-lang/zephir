@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_FunctionExists) {
 
 PHP_METHOD(Test_FunctionExists, testWithPassedName) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *func_param = NULL;
 	zval func;
 	zval *this_ptr = getThis();
@@ -49,6 +50,7 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 
 	zval result, functions;
 	zval func, _0, *_1, _2, _3$$3, _4$$4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

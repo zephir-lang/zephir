@@ -43,6 +43,7 @@ PHP_METHOD(Test_Concat, getTestProperty) {
 
 PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *title_param = NULL, _0;
 	zval title;
 	zval *this_ptr = getThis();
@@ -68,6 +69,7 @@ PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 PHP_METHOD(Test_Concat, testConcat1) {
 
 	zval url, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&url);
@@ -88,6 +90,7 @@ PHP_METHOD(Test_Concat, testConcat2) {
 
 	zval _1;
 	zval url, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&url);
@@ -117,6 +120,7 @@ PHP_METHOD(Test_Concat, testConcat2) {
 PHP_METHOD(Test_Concat, testConcat3) {
 
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);

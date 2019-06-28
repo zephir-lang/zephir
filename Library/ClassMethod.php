@@ -2042,7 +2042,7 @@ class ClassMethod
                 if ($symbolTable->getMustGrownStack()) {
                     $code .= "\t".'zephir_fetch_params(1, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 } else {
-                    $code .= "\t".'zephir_fetch_params(0, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
+                    $code .= "\t".'zephir_fetch_params_without_memory_grow('.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 }
             } else {
                 foreach ($params as $param) {
@@ -2089,6 +2089,14 @@ class ClassMethod
          */
         if ($symbolTable->getMustGrownStack()) {
             $compilationContext->headersManager->add('kernel/memory');
+            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_METHOD_GLOBALS_PTR')) {
+                $methodGlobals = new Variable('zephir_method_globals', 'ZEPHIR_METHOD_GLOBALS_PTR', $compilationContext->branchManager->getCurrentBranch());
+                $methodGlobals->setMustInitNull(true);
+                $methodGlobals->increaseUses();
+                $methodGlobals->setReusable(false);
+                $methodGlobals->setReadOnly(true);
+                $compilationContext->symbolTable->addRawVariable($methodGlobals);
+            }
             $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
         }
 

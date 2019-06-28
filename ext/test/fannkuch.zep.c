@@ -36,6 +36,7 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 PHP_METHOD(Test_Fannkuch, process) {
 
 	zend_bool _0, _5$$4, _11$$8;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, perm, perm0, perm1, count, temp, _3$$3, _4$$6, _9$$4, _8$$7, _10$$8, _14$$9, _15$$14, _16$$15, _17$$13, _18$$13, _19$$13;
 	zend_long n, maxFlipsCount, permCount, checksum, i = 0, j = 0, flipsCount = 0, k = 0, r = 0, k2 = 0, _1, _2, _6$$4, _7$$4, _12$$8, _13$$8;
 	zval *this_ptr = getThis();

@@ -48,6 +48,7 @@ PHP_METHOD(Test_UseTest, count) {
 PHP_METHOD(Test_UseTest, testUseClass1) {
 
 	zend_class_entry *_0 = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -69,6 +70,7 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 PHP_METHOD(Test_UseTest, testUseClass2) {
 
 	zend_class_entry *_0 = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -90,6 +92,7 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 
 	zend_class_entry *_0 = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

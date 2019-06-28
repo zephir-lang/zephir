@@ -33,6 +33,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 	zend_class_entry *_1;
 	zval className, fullClassName, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -59,6 +60,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 PHP_METHOD(Test_Oo_OoDynamicA, call2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -73,6 +75,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, call2) {
 
 PHP_METHOD(Test_Oo_OoDynamicA, call1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
