@@ -7,7 +7,8 @@ php:
   - '7.0'
 
 git:
-  depth: 1
+  depth: 5
+  quiet: true
 
 addons:
   apt:
@@ -37,6 +38,7 @@ env:
     - BUILD_PHAR=false
     - PATH="${HOME}/bin:${PATH}"
     - SYMFONY_PHPUNIT_VERSION=5.7.27
+    - TRAVIS_COMMIT_LOG=`git log --format=fuller -5`
 
 before_install:
   - |
@@ -53,9 +55,6 @@ before_install:
       fi
 
       [ -d ~/bin ] || mkdir ~/bin
-
-      # Turn the detached message off
-      git config --global advice.detachedHead false
 
       # Core dump settings
       ulimit -c unlimited -S || true
@@ -113,7 +112,7 @@ jobs:
       before_script:
         - chmod +x $HOME/bin/php-cs-fixer
       script:
-        - php-cs-fixer --diff --dry-run -v fix
+        - php-cs-fixer  fix --diff --dry-run -v
 
     - stage: Static Code Analysis
       php: 7.2
@@ -129,6 +128,10 @@ jobs:
 
 notifications:
   email: false
+
+after_script:
+  - printf "$TRAVIS_COMMIT_RANGE\n"
+  - printf "$TRAVIS_COMMIT_LOG\n"
 
 before_deploy:
   - git config --global user.name cicdbot
