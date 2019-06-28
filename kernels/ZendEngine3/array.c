@@ -912,7 +912,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							re_update = !Z_REFCOUNTED(fetched) || (Z_REFCOUNT(fetched) > 1 && !Z_ISREF(fetched));
 							if (re_update) {
 								ZVAL_DUP(&tmp, &fetched);
-								zephir_array_update_string(&pzv, s, l, &tmp, 0);
+								zephir_array_update_long(&pzv, ll, &tmp, 0 ZEPHIR_DEBUG_PARAMS_DUMMY);
 								p = Z_ARRVAL(tmp);
 							} else {
 								p = Z_ARRVAL(fetched);
@@ -953,7 +953,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							re_update = !Z_REFCOUNTED(fetched) || (Z_REFCOUNT(fetched) > 1 && !Z_ISREF(fetched));
 							if (re_update) {
 								ZVAL_DUP(&tmp, &fetched);
-								zephir_array_update_string(&pzv, s, l, &tmp, 0);
+								zephir_array_update_zval(&pzv, item, &tmp, 0);
 								p = Z_ARRVAL(tmp);
 							} else {
 								p = Z_ARRVAL(fetched);
