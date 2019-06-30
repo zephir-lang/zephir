@@ -37,9 +37,6 @@ typedef struct _zephir_memory_entry {
 	size_t pointer;
 	size_t capacity;
 	zval **addresses;
-	size_t hash_pointer;
-	size_t hash_capacity;
-	zval **hash_addresses;
 #ifndef ZEPHIR_RELEASE
 	int permanent;
 	const char *func;
@@ -66,12 +63,12 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const ch
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func);
 
 #define ZEPHIR_MM_GROW()  \
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 1); \
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0); \
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 #define ZEPHIR_MM_RESTORE() \
 	zephir_memory_restore_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__); \
-	pefree(ZEPHIR_METHOD_GLOBALS_PTR, 1); \
+	pefree(ZEPHIR_METHOD_GLOBALS_PTR, 0); \
 	ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
@@ -81,7 +78,7 @@ void zephir_deinitialize_memory();
 #define zephir_dtor(x) zval_dtor(x)
 #define zephir_ptr_dtor(x) zval_ptr_dtor(x)
 
-void zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
+void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
 #define zephir_memory_observe(var) zephir_do_memory_observe(var, ZEPHIR_METHOD_GLOBALS_PTR);
 
 #define zephir_safe_zval_ptr_dtor(pzval)
