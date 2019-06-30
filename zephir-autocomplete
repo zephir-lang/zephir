@@ -1,4 +1,4 @@
-# Zephir Bash Completion
+# Zephir Bash completion
 #
 # This file is part of the Zephir.
 #
@@ -13,67 +13,55 @@
 #
 #   ln -s zephir-autocomplete /etc/bash_completion.d/zephir-autocomplete
 #
-# 2. Load zephir-autocomplete from within your ~/.bash_profile
-# (or ~/.profile if you prefer):
+# 2. Load zephir-autocomplete from within your ~/.bash_profile:
 #
 #   if [ -f /etc/bash_completion.d/zephir-autocomplete ]; then
 #     source /etc/bash_completion.d/zephir-autocomplete
 #   fi
 #
-# 3. Restart your shell, or reload your ~/.bash_profile (or ~/.profile):
+# 3. Restart your shell, or reload your ~/.bash_profile:
 #
 #   source ~/.bash_profile
 #
 
-_zephir_completion() {
-	local cur prev;
-	_get_comp_words_by_ref -n : cur
+function _zephir_completion() {
+  COMPREPLY=()
 
-	COMPREPLY=()
-	prev=${COMP_WORDS[COMP_CWORD-1]}
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local commands="api build clean compile fullclean generate help"
+  commands+=" init install list stubs"
 
-	local commands="api build clean compile fullclean generate help"
-	commands+=" init install list stubs"
+  if [[ $COMP_CWORD -gt 1 ]]
+  then
+    local prev="${COMP_WORDS[$COMP_CWORD-1]}"
+    local first="${COMP_WORDS[1]}"
 
-	#
-	# Complete the arguments to some of the commands.
-	#
-	if [ "$prev" != "zephir" ]
-	then
-		declare -a a_commands=($(echo $commands | tr " " "\n"))
+    if [[ "$cur" == -* ]]
+    then
+      declare -a a_commands=( $( echo $commands | tr " " "\n" ) )
 
-		for i in "${a_commands[@]}"
-		do
-			if [ "$i" = "$prev" ]
-			then
-				local opts=$(zephir $prev -h --no-ansi | tr -cs '[=-=][:alpha:]_' '[\n*]' | grep '^-')
-				COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-				return 0
-			fi
-		done
+      for i in "${a_commands[@]}"
+      do
+        if [ "$i" = "$first" ]
+        then
+          local opts=$( zephir $first -h --no-ansi | \
+            tr -cs '[=-=][:alpha:]_' '[\n*]' | \
+            grep '^-' )
+          COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
+        fi
+      done
+    else
+      COMPREPLY+=( $( compgen -W "namespace" -- "${cur}" ) )
+    fi
+  elif [[ "$cur" == -* ]]
+  then
+    local opts="--help --quiet --verbose --version --ansi --no-ansi"
+    opts+=" --dumpversion"
 
-		return 1
-	fi
-
-	if [[ "$cur" == -* ]]
-	then
-		local opts="--help --quiet --verbose --version --ansi --no-ansi"
-		opts+=" --dumpversion"
-
-		COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
-	else
-		COMPREPLY=( $( compgen -W "${commands}" -- ${cur} ) )
-	fi
-
-	return 0
+    COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
+  else
+    COMPREPLY=( $( compgen -W "${commands}" -- "${cur}" ) )
+  fi
 }
 
 complete -F _zephir_completion zephir
-
-# Local variables:
-# tab-width: 4
-# c-basic-offset: 4
-# mode: shell-script
-# End:
-# vim600: noet sw=4 ts=4 ft=sh
-# vim<600: noet sw=4 ts=4 ft=sh
