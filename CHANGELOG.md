@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed segfault when auto-loading class with syntax error
+  [#1885](https://github.com/phalcon/zephir/issues/1885)
 
 ## [0.12.0] - 2019-06-20
 ### Added
