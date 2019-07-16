@@ -17,7 +17,7 @@ class NewInstanceOperatorTest extends TestCase
 {
     protected $autoloadMap = [
         'Fixture\ParseErrorClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-parse-error.php',
-        'Fixture\EmptyClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-empty.php'
+        'Fixture\EmptyClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-empty.php',
     ];
 
     public function setUp()
