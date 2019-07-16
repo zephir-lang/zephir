@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class NewInstanceOperatorTest extends TestCase
 {
-
     protected $autoloadMap = [
         'Fixture\ParseErrorClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-parse-error.php',
         'Fixture\EmptyClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-empty.php'
@@ -33,7 +32,7 @@ class NewInstanceOperatorTest extends TestCase
 
     public function autoload($className)
     {
-        if(isset($this->autoloadMap[$className])) {
+        if (isset($this->autoloadMap[$className])) {
             include $this->autoloadMap[$className];
         }
     }
@@ -53,5 +52,4 @@ class NewInstanceOperatorTest extends TestCase
 
         $this->assertInstanceOf('Fixture\EmptyClass', $object);
     }
-
 }

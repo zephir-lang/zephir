@@ -13,5 +13,4 @@ namespace Fixture;
 
 class EmptyClass
 {
-
 }

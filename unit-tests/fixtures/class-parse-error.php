@@ -13,13 +13,13 @@ namespace Fixture;
 
 class ParseErrorClass
 {
-
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
-    public function syntaxError() {
+    public function syntaxError()
+    {
         echo ';
     }
-
 }
