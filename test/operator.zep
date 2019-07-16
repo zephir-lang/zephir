@@ -45,4 +45,9 @@ class Operator
 			varFalse !== var1
 	  	];
     }
+
+    public function testNewInstanceOperator(className)
+    {
+        return new {className}();
+    }
 }
