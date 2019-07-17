@@ -11,10 +11,4 @@
 
 namespace Fixture;
 
-class ParseErrorClass
-{
-    public function syntaxError()
-    {
-        echo ';
-    }
-}
+throw new \Exception();
