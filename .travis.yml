@@ -61,6 +61,9 @@ before_install:
       ulimit -c unlimited -S || true
       echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
+      # Hide "You are in 'detached HEAD' state" message
+      git config --global advice.detachedHead false
+
       # Box does not work with PHP 7.4
       if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]; then
         export BUILD_PHAR=true
