@@ -135,6 +135,12 @@ class NewInstanceOperator extends BaseOperator
                     $classNameToFetch = 'Z_STRVAL_P('.$safeSymbol.'), Z_STRLEN_P('.$safeSymbol.')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();
+
+                    $compilationContext->codePrinter->output('if(!'.$classEntry.') {');
+                    $compilationContext->codePrinter->increaseLevel();
+                    $compilationContext->codePrinter->output('RETURN_MM_NULL();');
+                    $compilationContext->codePrinter->decreaseLevel();
+                    $compilationContext->codePrinter->output('}');
                 } else {
                     if (!class_exists($className, false)) {
                         $compilationContext->logger->warning(
