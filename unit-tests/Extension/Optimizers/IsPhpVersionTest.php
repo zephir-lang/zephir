@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Optimizers;
@@ -208,11 +208,11 @@ class IsPhpVersionTest extends TestCase
     /**
      * {@inheritdoc}
      *
-     * @param \Exception|\Throwable $error
+     * @param \Throwable $error
      *
-     * @throws \Exception|\Throwable
+     * @throws \Throwable
      */
-    protected function onNotSuccessfulTest($error)
+    protected function onNotSuccessfulTest(\Throwable $error)
     {
         $phpVer = sprintf(
             'PHP_VERSION_ID:%d(%d.%d.%d)',
