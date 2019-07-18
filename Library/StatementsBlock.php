@@ -68,9 +68,12 @@ class StatementsBlock
             // testing purposes and may be removed in the future.
             // You SHOULD NOT rely on this possibility.
             $debug = getenv('ZEPHIR_DEBUG');
-        } elseif ($this->container->has('ZEPHIR_DEBUG')) {
-            $debug = $this->container->get('ZEPHIR_DEBUG');
         }
+
+        // TODO: Add container support
+        // elseif ($this->container->has('ZEPHIR_DEBUG')) {
+        //     $debug = $this->container->get('ZEPHIR_DEBUG');
+        // }
 
         $this->debug = filter_var($debug, FILTER_VALIDATE_BOOLEAN);
     }
