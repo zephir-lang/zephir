@@ -442,9 +442,17 @@ static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, con
 	zend_property_info *info;
 
 	while (ce) {
-		if ((info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length)) != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
+		info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length);
+
+#if PHP_VERSION_ID < 70400
+		if (info != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
 			return ce;
 		}
+#else
+		if (info != NULL)  {
+			return ce;
+		}
+#endif
 		ce = ce->parent;
 	}
 	return original_ce;

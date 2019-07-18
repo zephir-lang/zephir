@@ -46,7 +46,9 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 #endif
 
 	file_handle.filename = require_path;
+#if PHP_VERSION_ID < 70400
 	file_handle.free_filename = 0;
+#endif
 	file_handle.type = ZEND_HANDLE_FILENAME;
 	file_handle.opened_path = NULL;
 	file_handle.handle.fp = NULL;
