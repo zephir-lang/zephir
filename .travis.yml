@@ -65,9 +65,12 @@ before_install:
         export BUILD_PHAR=true
       fi
 
-      # Do not collect code coverage for PHP 7.4
       if [ "$PHP_VERNUM" -ge "70400" ]; then
+        # Do not collect code coverage for PHP 7.4
         export COLLECT_COVERAGE=false
+
+        # Temporary until we release parser with PHP 7.4 support
+        export ZEPHIR_PARSER_VERSION=development
       fi
 install:
   - .ci/install-prereqs.sh
