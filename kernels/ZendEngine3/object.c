@@ -382,7 +382,19 @@ int zephir_isset_property(zval *object, const char *property_name, unsigned int 
 		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
 			return 1;
 		}
-		return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), property_name, property_length);
+#if PHP_VERSION_ID >= 80000
+		return zend_hash_str_exists(
+			Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
+			property_name,
+			property_length
+		);
+#else
+		return zend_hash_str_exists(
+			Z_OBJ_HT_P(object)->get_properties(object),
+			property_name,
+			property_length
+		);
+#endif
 	}
 
 	return 0;
@@ -403,7 +415,20 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
 				return 1;
 			} else {
-				return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), Z_STRVAL_P(property), Z_STRLEN_P(property));
+
+#if PHP_VERSION_ID >= 80000
+				return zend_hash_str_exists(
+					Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
+					Z_STRVAL_P(property),
+					Z_STRLEN_P(property)
+				);
+#else
+				return zend_hash_str_exists(
+					Z_OBJ_HT_P(object)->get_properties(object),
+					Z_STRVAL_P(property),
+					Z_STRLEN_P(property)
+				);
+#endif
 			}
 		}
 	}
