@@ -64,19 +64,16 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const ch
 		zephir_memory_entry *active_memory;
 		size_t i;
 
-		active_memory = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
+		active_memory = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 0);
 
-		active_memory->addresses       = pecalloc(24, sizeof(zval*), 1);
+		active_memory->addresses       = pecalloc(24, sizeof(zval*), 0);
 		active_memory->capacity        = 24;
-		active_memory->hash_addresses  = pecalloc(8, sizeof(zval*), 1);
-		active_memory->hash_capacity   = 8;
 
 		g->active_memory = active_memory;
 	}
 
 	assert(g->active_memory != NULL);
 	assert(g->active_memory->pointer == 0);
-	assert(g->active_memory->hash_pointer == 0);
 
 #ifndef ZEPHIR_RELEASE
 	g->active_memory->func = func;
@@ -139,17 +136,6 @@ void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const
 			}
 		}
 
-		/* Check for non freed hash key zvals, mark as null to avoid string freeing */
-		for (i = 0; i < active_memory->hash_pointer; ++i) {
-			assert(active_memory->hash_addresses[i] != NULL);
-			if (!Z_REFCOUNTED_P(active_memory->hash_addresses[i])) continue;
-			if (Z_REFCOUNT_P(active_memory->hash_addresses[i]) <= 1) {
-				ZVAL_NULL(active_memory->hash_addresses[i]);
-			} else {
-				zval_copy_ctor(active_memory->hash_addresses[i]);
-			}
-		}
-
 #ifndef ZEPHIR_RELEASE
 		for (i = 0; i < active_memory->pointer; ++i) {
 			if (active_memory->addresses[i] != NULL) {
@@ -193,15 +179,11 @@ void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const
 	active_memory->func = NULL;
 #endif
 
-	if (active_memory->hash_addresses != NULL) {
-		pefree(active_memory->hash_addresses, 1);
-	}
-
 	if (active_memory->addresses != NULL) {
-		pefree(active_memory->addresses, 1);
+		pefree(active_memory->addresses, 0);
 	}
 
-	pefree(g->active_memory, 1);
+	pefree(g->active_memory, 0);
 	g->active_memory = NULL;
 
 #ifndef ZEPHIR_RELEASE
@@ -358,7 +340,7 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 	return ZEND_HASH_APPLY_KEEP;
 }
 
-void zephir_do_memory_observe(zval *var, const zephir_method_globals *g)
+void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g)
 {
 	zephir_memory_entry *frame = g->active_memory;
 #ifndef ZEPHIR_RELEASE
@@ -370,7 +352,7 @@ void zephir_do_memory_observe(zval *var, const zephir_method_globals *g)
 #endif
 
 	if (UNEXPECTED(frame->pointer == frame->capacity)) {
-		void *buf = perealloc(frame->addresses, sizeof(zval *) * (frame->capacity + 16), 1);
+		void *buf = perealloc(frame->addresses, sizeof(zval *) * (frame->capacity + 16), 0);
 		if (EXPECTED(buf != NULL)) {
 			frame->capacity += 16;
 			frame->addresses = buf;
