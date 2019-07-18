@@ -140,7 +140,7 @@ class StatementsBlock
         }
 
         foreach ($statements as $statement) {
-            /**
+            /*
              * @todo Generate GDB hints
              */
             if ($this->debug) {
