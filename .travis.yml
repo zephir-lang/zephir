@@ -37,7 +37,6 @@ env:
     - BOX_VERSION=3.3.1
     - BUILD_PHAR=false
     - PATH="${HOME}/bin:${PATH}"
-    - SYMFONY_PHPUNIT_VERSION=5.7.27
     - TRAVIS_COMMIT_LOG=`git log --format=fuller -5`
 
 before_install:

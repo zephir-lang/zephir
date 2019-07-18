@@ -1,14 +1,26 @@
 #!/usr/bin/env php
 <?php
 
+/*
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 // Cache-Id: https://github.com/symfony/phpunit-bridge/commit/66ffffcd8a6bb23aec847c8bdfb918610399499a
 
 if (!file_exists(__DIR__.'/vendor/symfony/phpunit-bridge/bin/simple-phpunit')) {
-    echo "Unable to find the `simple-phpunit` script in `vendor/symfony/phpunit-bridge/bin/`.\nPlease run `composer update` before running this command.\n";
+    echo "Unable to find the `simple-phpunit` script in `vendor/symfony/phpunit-bridge/bin/`.\n";
+    echo "Please run `composer update` before running this command.\n";
     exit(1);
 }
-if (\PHP_VERSION_ID >= 70000 && !getenv('SYMFONY_PHPUNIT_VERSION')) {
+
+if (!getenv('SYMFONY_PHPUNIT_VERSION')) {
     putenv('SYMFONY_PHPUNIT_VERSION=6.5');
 }
+
 putenv('SYMFONY_PHPUNIT_DIR='.__DIR__.'/.phpunit');
 require __DIR__.'/vendor/symfony/phpunit-bridge/bin/simple-phpunit';

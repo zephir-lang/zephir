@@ -9,13 +9,6 @@
 >
 
     <testsuites>
-        <testsuite name="Extension_Php56">
-            <!-- PHP >= 5.6 && < 7.0  -->
-            <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php70</exclude>
-            <exclude>unit-tests/Extension/Php72</exclude>
-        </testsuite>
-
         <testsuite name="Extension_Php70">
             <!-- PHP >= 7.0 && < 7.2  -->
             <directory suffix=".php">./unit-tests/Extension</directory>
