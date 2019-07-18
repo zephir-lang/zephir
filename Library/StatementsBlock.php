@@ -32,7 +32,8 @@ use Zephir\Statements\WhileStatement;
 /**
  * StatementsBlock.
  *
- * This represents a single basic block in Zephir. A statements block is simply a container of instructions that execute sequentially.
+ * This represents a single basic block in Zephir.
+ * A statements block is simply a container of instructions that execute sequentially.
  */
 class StatementsBlock
 {
@@ -59,6 +60,19 @@ class StatementsBlock
     public function __construct(array $statements)
     {
         $this->statements = $statements;
+
+        $debug = false;
+        if (getenv('ZEPHIR_DEBUG')) {
+            // Do not use this feature for typical use case.
+            // Enabling debug mode using env var provided only for
+            // testing purposes and may be removed in the future.
+            // You SHOULD NOT rely on this possibility.
+            $debug = getenv('ZEPHIR_DEBUG');
+        } elseif ($this->container->has('ZEPHIR_DEBUG')) {
+            $debug = $this->container->get('ZEPHIR_DEBUG');
+        }
+
+        $this->debug = filter_var($debug, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -123,14 +137,15 @@ class StatementsBlock
         }
 
         foreach ($statements as $statement) {
-            /*
-             * Generate GDB hints
-             * @todo
+            /**
+             * @todo Generate GDB hints
              */
             if ($this->debug) {
                 if (isset($statement['file'])) {
                     if ('declare' != $statement['type'] && 'comment' != $statement['type']) {
-                        $compilationContext->codePrinter->outputNoIndent('#line '.$statement['line'].' "'.$statement['file'].'"');
+                        $compilationContext->codePrinter->outputNoIndent(
+                            '#line '.$statement['line'].' "'.$statement['file'].'"'
+                        );
                     }
                 }
             }
