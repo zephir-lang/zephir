@@ -2180,14 +2180,14 @@ class ClassMethod
         /*
          * Finalize the method compilation
          */
-        if (\is_object($this->statements)) {
+        if (\is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed.
              */
             $lastType = $this->statements->getLastStatementType();
 
-            if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
+            if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($statement)) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');

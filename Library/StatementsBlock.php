@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -46,6 +46,9 @@ class StatementsBlock
 
     protected $mutateGatherer;
 
+    /**
+     * @var array|null
+     */
     protected $lastStatement;
 
     /**
@@ -380,21 +383,11 @@ class StatementsBlock
     /**
      * Returns the last statement executed.
      *
-     * @return array
+     * @return array|null
      */
     public function getLastStatement()
     {
         return $this->lastStatement;
-    }
-
-    /**
-     * Returns the last line in the last statement.
-     */
-    public function getLastLine()
-    {
-        if (!$this->lastStatement) {
-            $this->lastStatement = $this->statements[\count($this->statements) - 1];
-        }
     }
 
     /**
