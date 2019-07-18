@@ -114,7 +114,7 @@ jobs:
       before_script:
         - chmod +x $HOME/bin/php-cs-fixer
       script:
-        - php-cs-fixer  fix --diff --dry-run -v
+        - php-cs-fixer fix --diff --dry-run -v
 
     - stage: Static Code Analysis
       php: 7.2
