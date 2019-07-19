@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -56,6 +56,12 @@ class RequiresTest extends TestCase
      */
     public function shouldRenderTemplate()
     {
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->markTestSkipped(
+                "Does not ready for PHP >= 70400"
+            );
+        }
+
         $r = new Requires();
         $a = 1;
 
