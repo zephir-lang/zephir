@@ -3,19 +3,12 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
          backupGlobals="false"
-         bootstrap="./unit-tests/bootstrap.php"
+         bootstrap="./Library/autoload.php"
          colors="true"
          verbose="true"
 >
 
     <testsuites>
-        <testsuite name="Extension_Php56">
-            <!-- PHP >= 5.6 && < 7.0  -->
-            <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php70</exclude>
-            <exclude>unit-tests/Extension/Php72</exclude>
-        </testsuite>
-
         <testsuite name="Extension_Php70">
             <!-- PHP >= 7.0 && < 7.2  -->
             <directory suffix=".php">./unit-tests/Extension</directory>

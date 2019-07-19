@@ -1,4 +1,5 @@
-Zephir is an open source project and a volunteer effort. Contributions are welcome!
+Zephir is an open source project and a volunteer effort.
+Contributions are welcome!
 
 ## General
 
@@ -11,6 +12,11 @@ So lets respect each other and wrap code-blocks by specified tags.
 
 If you have a change or new feature in mind, please fill an [NFR](https://github.com/phalcon/zephir/wiki/NFR).
 
+## Code style conventions
+
+- PHP: PSR-1/PSR-2
+- Bash/Sh: https://github.com/icy/bash-coding-style
+
 ## Pull request procedure
 
 Pull requests should be targeted at Zephir's `master` branch.
@@ -20,9 +26,8 @@ please do two things:
 1. [Rebase](http://git-scm.com/book/en/Git-Branching-Rebasing) your
    local changes against the `master` branch. Resolve any conflicts
    that arise.
-
-2. Run the full Zephir test suite with the `./vendor/bin/phpunit` command.  You're
-   not off the hook even if you just stick to documentation; code
+2. Run the full Zephir test suite with the `./vendor/bin/phpunit` command.
+   You're not off the hook even if you just stick to documentation; code
    examples in the docs are tested as well!
 3. If your pull request fix or add some functionality - you have to **add tests**.
    That is very important. When you add tests, you are helping other developers,
@@ -30,8 +35,8 @@ please do two things:
 
 Pull requests will be treated as "review requests", and we will give
 feedback we expect to see corrected on
-[coding style](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) and
-substance before pulling.  Changes contributed via pull request should
+[coding style](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
+and substance before pulling.  Changes contributed via pull request should
 focus on a single issue at a time, like any other.  We will not accept
 pull-requests that try to "sneak" unrelated changes in.
 
@@ -45,7 +50,10 @@ please make sure the listed date range includes the current year.
 
 ## Bugs
 
-Many bugs are raised because users are not running the latest version. Please visit the download page, download/clone the latest available version (or compile it) and confirm if the issue you are experiencing is indeed a bug. When submitting bugs to the issue tracker make sure your issue includes:
+Many bugs are raised because users are not running the latest version.
+Please visit the download page, download/clone the latest available version
+(or compile it) and confirm if the issue you are experiencing is indeed a bug.
+When submitting bugs to the issue tracker make sure your issue includes:
 
  - Code to reproduce the bug
  - Your environment: OS, compiler

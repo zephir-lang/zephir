@@ -328,6 +328,9 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 			ZEPHIR_INIT_NVAR(&instance);
 			zephir_fetch_safe_class(&_4$$3, &fqcn);
 			_5$$3 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_4$$3), Z_STRLEN_P(&_4$$3), ZEND_FETCH_CLASS_AUTO);
+			if(!_5$$3) {
+				RETURN_MM_NULL();
+			}
 			object_init_ex(&instance, _5$$3);
 			if (zephir_has_constructor(&instance TSRMLS_CC)) {
 				ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
@@ -356,6 +359,9 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 				ZEPHIR_INIT_NVAR(&instance);
 				zephir_fetch_safe_class(&_8$$4, &fqcn);
 				_9$$4 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_8$$4), Z_STRLEN_P(&_8$$4), ZEND_FETCH_CLASS_AUTO);
+				if(!_9$$4) {
+					RETURN_MM_NULL();
+				}
 				object_init_ex(&instance, _9$$4);
 				if (zephir_has_constructor(&instance TSRMLS_CC)) {
 					ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);

@@ -33,11 +33,12 @@ env:
   global:
     - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.3.0"
+    # TODO: See Library/StatementsBlock.php
+    # - ZEPHIR_DEBUG=true
     - COLLECT_COVERAGE=true
     - BOX_VERSION=3.3.1
     - BUILD_PHAR=false
     - PATH="${HOME}/bin:${PATH}"
-    - SYMFONY_PHPUNIT_VERSION=5.7.27
     - TRAVIS_COMMIT_LOG=`git log --format=fuller -5`
 
 before_install:
@@ -60,14 +61,20 @@ before_install:
       ulimit -c unlimited -S || true
       echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
+      # Hide "You are in 'detached HEAD' state" message
+      git config --global advice.detachedHead false
+
       # Box does not work with PHP 7.4
       if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]; then
         export BUILD_PHAR=true
       fi
 
-      # Do not collect code coverage for PHP 7.4
       if [ "$PHP_VERNUM" -ge "70400" ]; then
+        # Do not collect code coverage for PHP 7.4
         export COLLECT_COVERAGE=false
+
+        # Temporary until we release parser with PHP 7.4 support
+        export ZEPHIR_PARSER_VERSION=development
       fi
 install:
   - .ci/install-prereqs.sh
@@ -88,6 +95,8 @@ install:
 before_script:
   - .ci/build-test-ext.sh
   - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # Does not ready yet
+  - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
 
 script:
   - zephir --ansi
@@ -112,7 +121,7 @@ jobs:
       before_script:
         - chmod +x $HOME/bin/php-cs-fixer
       script:
-        - php-cs-fixer  fix --diff --dry-run -v
+        - php-cs-fixer fix --diff --dry-run -v
 
     - stage: Static Code Analysis
       php: 7.2

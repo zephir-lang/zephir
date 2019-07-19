@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/object.h"
 #include "kernel/array.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Operator) {
@@ -143,6 +144,36 @@ PHP_METHOD(Test_Operator, testBoolComparison) {
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_IDENTICAL(varFalse, var1));
 	zephir_array_fast_append(return_value, &_0);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Operator, testNewInstanceOperator) {
+
+	zend_class_entry *_1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *className, className_sub, _0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&className_sub);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &className);
+
+
+
+	zephir_fetch_safe_class(&_0, className);
+	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
+	if(!_1) {
+		RETURN_MM_NULL();
+	}
+	object_init_ex(return_value, _1);
+	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
+		zephir_check_call_status();
+	}
 	RETURN_MM();
 
 }
