@@ -95,6 +95,8 @@ install:
 before_script:
   - .ci/build-test-ext.sh
   - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # Does not ready yet
+  - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
 
 script:
   - zephir --ansi

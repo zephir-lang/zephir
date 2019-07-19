@@ -19,12 +19,6 @@ class PrivateScopeTest extends TestCase
     /** @test */
     public function shouldCallPrivateMethod()
     {
-        if (\PHP_VERSION_ID < 50600) {
-            $this->markTestSkipped(
-                "Calling parent's private methods from the child's public ones doesn't provided for PHP < 5.6"
-            );
-        }
-
         $this->assertSame('isPrivate', (new PrivateScopeTester())->run());
     }
 }

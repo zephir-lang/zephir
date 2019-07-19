@@ -36,6 +36,12 @@ class RequiresTest extends TestCase
      */
     public function shouldRequireUsingNewSymbolTable()
     {
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->markTestSkipped(
+                "Does not ready for PHP >= 70400"
+            );
+        }
+
         $r = new Requires();
 
         $this->assertSame(
