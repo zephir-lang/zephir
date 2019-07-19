@@ -38,7 +38,7 @@ class RequiresTest extends TestCase
     {
         if (\PHP_VERSION_ID >= 70400) {
             $this->markTestSkipped(
-                "Does not ready for PHP >= 70400"
+                'Does not ready for PHP >= 70400'
             );
         }
 
@@ -58,7 +58,7 @@ class RequiresTest extends TestCase
     {
         if (\PHP_VERSION_ID >= 70400) {
             $this->markTestSkipped(
-                "Does not ready for PHP >= 70400"
+                'Does not ready for PHP >= 70400'
             );
         }
 
