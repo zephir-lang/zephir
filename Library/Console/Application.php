@@ -12,6 +12,7 @@
 namespace Zephir\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -95,21 +96,23 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @return InputDefinition
+     * @return InputDefinition An InputDefinition instance
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): InputDefinition
     {
-        $definition = parent::getDefaultInputDefinition();
+        return new InputDefinition([
+            new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-        $definition->addOption(
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version'),
+            new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
+            new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
             new InputOption(
                 'dumpversion',
                 null,
                 InputOption::VALUE_NONE,
                 "Print the Zephir version — and don't do anything else"
-            )
-        );
-
-        return $definition;
+            ),
+        ]);
     }
 }
