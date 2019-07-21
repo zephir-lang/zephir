@@ -12,6 +12,7 @@
 namespace Zephir\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -90,7 +91,14 @@ final class Application extends BaseApplication
             return 0;
         }
 
-        return parent::doRun($input, $output);
+        try {
+            return parent::doRun($input, $output);
+        } catch (CommandNotFoundException $e) {
+            $this->setCatchExceptions(false);
+            fprintf(STDERR, $e->getMessage().PHP_EOL);
+
+            return 1;
+        }
     }
 
     /**
