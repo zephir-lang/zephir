@@ -99,7 +99,7 @@ before_script:
   - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
 
 script:
-  - zephir --ansi
+  - zephir
   - .ci/run-tests.sh
   - (cd unit-tests/sharness && make)
 

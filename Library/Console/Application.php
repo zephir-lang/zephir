@@ -15,6 +15,8 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -92,6 +94,28 @@ final class Application extends BaseApplication
             $output->writeln($this->getVersion());
 
             return 0;
+        }
+
+        try {
+            // Makes ArgvInput::getFirstArgument() able to distinguish an option from an argument.
+            $input->bind($this->getDefinition());
+        } catch (ExceptionInterface $e) {
+            // Errors must be ignored, full binding/validation happens later when the command is known.
+        }
+
+        $wantsHelp = false;
+        $name = $this->getCommandName($input);
+
+        if ($name && 'help' == strtolower($name) && 2 == $_SERVER['argc']) {
+            $wantsHelp = true;
+        } elseif (!$name && true === $input->hasParameterOption(['--help', '-h'], true)) {
+            $wantsHelp = true;
+        }
+
+        if ($wantsHelp) {
+            $command = $this->find('list');
+
+            return $command->run(new ArrayInput(['command' => 'list']), $output);
         }
 
         try {
