@@ -12,12 +12,15 @@
 namespace Zephir\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zephir\Console\Command\ListCommand;
 use Zephir\Zephir;
 
 final class Application extends BaseApplication
@@ -99,6 +102,16 @@ final class Application extends BaseApplication
 
             return 1;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command[] An array of default Command instances
+     */
+    protected function getDefaultCommands()
+    {
+        return [new HelpCommand(), new ListCommand()];
     }
 
     /**
