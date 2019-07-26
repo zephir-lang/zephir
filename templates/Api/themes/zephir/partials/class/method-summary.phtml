@@ -7,7 +7,7 @@ $allTypes = [];
 $_lClasses = $method->getReturnClassTypes();
 
 foreach ($_lClasses as $c) {
-    if ($c{0} == "\\") {
+    if ('\\' == $c[0]) {
         $allTypes[] = substr($c,1);
     } else {
         $_lFullClassName = $classNamespace . "\\" . $c;
