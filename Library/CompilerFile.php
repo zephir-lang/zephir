@@ -973,7 +973,7 @@ final class CompilerFile implements FileInterface
         }
 
         if (\count($this->headerCBlocks) > 0) {
-            $code .= implode($this->headerCBlocks, PHP_EOL).PHP_EOL;
+            $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
         }
 
         /*
