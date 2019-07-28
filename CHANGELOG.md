@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Remove HAVE_SPL usage
   [phalcon/cphalcon#14215](https://github.com/phalcon/cphalcon/pull/14215)
 - Remove not used redundant command line options
+- Cleaning up redundant CLI options
 
 ### Fixed
 - Fixed segfault when auto-loading class with syntax error

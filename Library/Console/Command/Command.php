@@ -11,26 +11,11 @@
 
 namespace Zephir\Console\Command;
 
-use Symfony\Component\Console\Command\ListCommand as Command;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 
-/**
- * Zephir\Console\Command\ListCommand.
- *
- * Displays the list of all available commands for the application.
- */
-final class ListCommand extends Command
+abstract class Command extends BaseCommand
 {
     use RemoveOptionsTrait;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-        $this->setHidden(true);
-    }
 
     /**
      * {@inheritdoc}
