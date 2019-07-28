@@ -11,6 +11,7 @@
 
 namespace Zephir\Console;
 
+use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
@@ -22,6 +23,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use Zephir\Console\Command\ListCommand;
 use Zephir\Zephir;
 
@@ -84,9 +86,9 @@ final class Application extends BaseApplication
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @throws \Exception|\Throwable
-     *
      * @return int
+     *
+     * @throws Exception|Throwable
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -148,14 +150,14 @@ final class Application extends BaseApplication
         return new InputDefinition([
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
-            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version'),
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Print this help message'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
             new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
             new InputOption(
                 'dumpversion',
                 null,
                 InputOption::VALUE_NONE,
-                "Print the Zephir version — and don't do anything else"
+                "Print the version of the compiler and don't do anything else"
             ),
         ]);
     }

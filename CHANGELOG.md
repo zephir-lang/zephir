@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use local memory management
   [#1859](https://github.com/phalcon/zephir/pull/1859),
   [#1880](https://github.com/phalcon/zephir/pull/1880)
+- Rephrase help strings for common compiler options
 
 ### Removed
 - Remove HAVE_SPL usage
