@@ -50,7 +50,8 @@ final class InitCommand extends Command
         $this
             ->setName('init')
             ->setDescription('Initializes a Zephir extension')
-            ->setDefinition($this->createDefinition());
+            ->setDefinition($this->createDefinition())
+            ->setHelp(sprintf('%s.', $this->getDescription()));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

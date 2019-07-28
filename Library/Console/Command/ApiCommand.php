@@ -46,7 +46,7 @@ final class ApiCommand extends Command
             ->setName('api')
             ->setDescription('Generates a HTML API based on the classes exposed in the extension')
             ->setDefinition($this->createDefinition())
-            ->setHelp($this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

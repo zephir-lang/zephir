@@ -39,7 +39,8 @@ final class CleanCommand extends Command
     {
         $this
             ->setName('clean')
-            ->setDescription('Cleans any object files created by the extension');
+            ->setDescription('Cleans any object files created by the extension')
+            ->setHelp(sprintf('%s.', $this->getDescription()));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

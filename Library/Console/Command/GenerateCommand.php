@@ -45,7 +45,7 @@ final class GenerateCommand extends Command
             ->setName('generate')
             ->setDescription('Generates C code from the Zephir code without compiling it')
             ->setDefinition($this->createDefinition())
-            ->setHelp($this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

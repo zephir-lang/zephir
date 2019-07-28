@@ -42,7 +42,7 @@ final class StubsCommand extends Command
             ->setName('stubs')
             ->setDescription('Generates stubs that can be used in a PHP IDE')
             ->setDefinition($this->createDefinition())
-            ->setHelp($this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
