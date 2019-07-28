@@ -150,15 +150,15 @@ final class Application extends BaseApplication
         return new InputDefinition([
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Print this help message'),
-            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
-            new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
             new InputOption(
                 'dumpversion',
                 null,
                 InputOption::VALUE_NONE,
                 "Print the version of the compiler and don't do anything else"
             ),
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Print this help message'),
+            new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
         ]);
     }
 }
