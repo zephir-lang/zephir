@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Requires) {
 
 PHP_METHOD(Test_Requires, requireExternal1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *path, path_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -59,7 +60,7 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 
 	ZVAL_UNDEF(&path_sub);
 
-	zephir_fetch_params(0, 1, 0, &path);
+	zephir_fetch_params_without_memory_grow(1, 0, &path);
 
 
 
@@ -72,6 +73,7 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 
 PHP_METHOD(Test_Requires, requireExternal3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *path, path_sub, external3, _0;
 	zval *this_ptr = getThis();
@@ -86,7 +88,7 @@ PHP_METHOD(Test_Requires, requireExternal3) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_symbol_table(TSRMLS_C);
+	ZEPHIR_CREATE_SYMBOL_TABLE();
 	
 	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, test_requires_external3_ce);
@@ -107,7 +109,7 @@ PHP_METHOD(Test_Requires, setContent) {
 
 	ZVAL_UNDEF(&content_sub);
 
-	zephir_fetch_params(0, 1, 0, &content);
+	zephir_fetch_params_without_memory_grow(1, 0, &content);
 
 
 
@@ -119,6 +121,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 
 	zend_string *_4$$3;
 	zend_ulong _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *templatePath_param = NULL, *params, params_sub, _0, key, value, _7, *_1$$3, _2$$3, _5$$4, _6$$5;
 	zval templatePath;
@@ -150,7 +153,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_symbol_table(TSRMLS_C);
+	ZEPHIR_CREATE_SYMBOL_TABLE();
 	
 	if (Z_TYPE_P(params) == IS_ARRAY) {
 		zephir_is_iterable(params, 0, "test/requires.zep", 47);

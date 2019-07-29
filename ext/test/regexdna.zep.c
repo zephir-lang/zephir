@@ -36,6 +36,7 @@ ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 PHP_METHOD(Test_RegexDNA, process) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *path, path_sub, variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength, regex, codeLength, discard, _0, _1, _2, *_4, _5, _6$$3, _7$$3, _8$$4, _9$$4;

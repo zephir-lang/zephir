@@ -14,7 +14,7 @@
 #define PHP_TEST_VERSION     "1.0.0"
 #define PHP_TEST_EXTNAME     "test"
 #define PHP_TEST_AUTHOR      "Zephir Team and contributors"
-#define PHP_TEST_ZEPVERSION  "0.12.0-$Id$"
+#define PHP_TEST_ZEPVERSION  "0.12.1-$Id$"
 #define PHP_TEST_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
 typedef struct _zephir_struct_db { 
@@ -37,14 +37,6 @@ typedef struct _zephir_struct_extension {
 ZEND_BEGIN_MODULE_GLOBALS(test)
 
 	int initialized;
-
-	/* Memory */
-	zephir_memory_entry *start_memory; /**< The first preallocated frame */
-	zephir_memory_entry *end_memory; /**< The last preallocate frame */
-	zephir_memory_entry *active_memory; /**< The current memory frame */
-
-	/* Virtual Symbol Tables */
-	zephir_symbol_table *active_symbol_table;
 
 	/** Function cache */
 	HashTable *fcache;

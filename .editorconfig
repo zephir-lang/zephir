@@ -14,20 +14,16 @@ trim_trailing_whitespace = true
 [Makefile]
 indent_style             = tab
 tab_width                = 4
-trim_trailing_whitespace = false
 
-
-[*.{bat,sh,psm1,mk}]
-indent_style             = tab
-tab_width                = 4
-trim_trailing_whitespace = false
-
-[*.{c,h,awk,w32,frag,zep,lemon,re}]
+[*.{mk,c,h,awk,frag,lemon,re}]
 indent_style             = tab
 tab_width                = 4
 
 [*.md]
 trim_trailing_whitespace = false
 
-[*.yml]
+[*.{yml,sh}]
+indent_size              = 2
+
+[zephir-autocomplete]
 indent_size              = 2

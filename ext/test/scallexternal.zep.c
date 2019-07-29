@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
 PHP_METHOD(Test_ScallExternal, testCall1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -48,6 +49,7 @@ PHP_METHOD(Test_ScallExternal, testCall1) {
 
 PHP_METHOD(Test_ScallExternal, testCall2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *a, a_sub, *b, b_sub;
@@ -74,7 +76,7 @@ PHP_METHOD(Test_ScallExternal, testMethod3) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);

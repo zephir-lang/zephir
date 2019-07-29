@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -17,10 +17,10 @@ use const PHP_SAPI;
 use const PHP_VERSION;
 use const STDERR;
 
-if (version_compare('5.6.0', PHP_VERSION, '>')) {
+if (version_compare('7.0.0', PHP_VERSION, '>')) {
     fprintf(
         STDERR,
-        'This Zephir version is supported on PHP >= 5.6.0.'.PHP_EOL.
+        'This Zephir version is supported on PHP >= 7.0.0.'.PHP_EOL.
         'You are using PHP %s (%s).'.PHP_EOL,
         PHP_VERSION,
         PHP_BINARY

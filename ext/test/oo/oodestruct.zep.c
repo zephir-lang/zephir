@@ -159,6 +159,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 
 	zend_bool _30$$13;
 	zend_class_entry *_26$$11 = NULL, *_22$$12 = NULL, *_32$$14 = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_29 = NULL;
 	zend_long width, height, ZEPHIR_LAST_CALL_STATUS;
 	zval *file_param = NULL, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _28$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _25$$11, _27$$11, _21$$12, _23$$12, _24$$12, _35$$13, _36$$13, _37$$13, _38$$13, _39$$13, _40$$13, _31$$14, _33$$14, _34$$14;
@@ -385,6 +386,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 PHP_METHOD(Test_Oo_OoDestruct, __destruct) {
 
 	zval image, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -406,6 +408,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __destruct) {
 PHP_METHOD(Test_Oo_OoDestruct, check) {
 
 	zend_class_entry *_2$$4 = NULL, *_8$$5 = NULL;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, version, _0, _4, _5, _6, _10, _1$$4, _3$$4, _7$$5, _9$$5;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -478,6 +481,7 @@ PHP_METHOD(Test_Oo_OoDestruct, getVersion) {
 
 	zend_class_entry *_1$$3 = NULL;
 	zval version, info, matches, _3, _4, _0$$3, _2$$3, _5$$5, _6$$5, _7$$5, _8$$5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -519,7 +523,7 @@ PHP_METHOD(Test_Oo_OoDestruct, getVersion) {
 	zephir_check_call_status();
 	if (zephir_is_true(&_4)) {
 		ZEPHIR_INIT_NVAR(&version);
-		ZEPHIR_GET_CONSTANT(&version, "GD_VERSION");
+		ZEPHIR_MM_GET_CONSTANT(&version, "GD_VERSION");
 	} else {
 		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 70);
 		zephir_check_call_status();

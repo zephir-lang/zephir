@@ -35,6 +35,7 @@ ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 
 PHP_METHOD(Test_SpectralNorm, Ax) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *i, i_sub, *j, j_sub, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -59,6 +60,7 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 PHP_METHOD(Test_SpectralNorm, Au) {
 
 	zend_bool _0, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
@@ -134,6 +136,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 PHP_METHOD(Test_SpectralNorm, Atu) {
 
 	zend_bool _0, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
@@ -208,6 +211,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 
 PHP_METHOD(Test_SpectralNorm, AtAu) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n, n_sub, *u, u_sub, *v, v_sub, *w, w_sub;
 	zval *this_ptr = getThis();
@@ -233,6 +237,7 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 PHP_METHOD(Test_SpectralNorm, process) {
 
 	zend_bool _1, _7, _12;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_6 = NULL, *_11 = NULL, *_17 = NULL;
 	zval *n_param = NULL, u, v, w, _0, _4$$3, _5$$3, _10$$4, _15$$5, _16$$5, _18$$5, _19$$5, _20$$5;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;

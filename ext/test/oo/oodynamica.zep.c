@@ -33,6 +33,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 	zend_class_entry *_1;
 	zval className, fullClassName, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -48,6 +49,9 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 	ZEPHIR_CONCAT_SV(&fullClassName, "\\", &className);
 	zephir_fetch_safe_class(&_0, &fullClassName);
 	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
+	if(!_1) {
+		RETURN_MM_NULL();
+	}
 	object_init_ex(return_value, _1);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
@@ -59,6 +63,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 PHP_METHOD(Test_Oo_OoDynamicA, call2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -73,6 +78,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, call2) {
 
 PHP_METHOD(Test_Oo_OoDynamicA, call1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

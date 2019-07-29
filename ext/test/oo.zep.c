@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Oo) {
 PHP_METHOD(Test_Oo, testInstance1) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&o);
@@ -48,6 +49,7 @@ PHP_METHOD(Test_Oo, testInstance1) {
 PHP_METHOD(Test_Oo, testInstance2) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -66,6 +68,7 @@ PHP_METHOD(Test_Oo, testInstance2) {
 PHP_METHOD(Test_Oo, testInstance3) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -86,6 +89,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 PHP_METHOD(Test_Oo, testInstance4) {
 
 	zval o, a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -110,6 +114,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 PHP_METHOD(Test_Oo, testInstance5) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -134,6 +139,7 @@ PHP_METHOD(Test_Oo, testInstance5) {
 PHP_METHOD(Test_Oo, testInstance6) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -156,6 +162,7 @@ PHP_METHOD(Test_Oo, testInstance6) {
 PHP_METHOD(Test_Oo, testInstance7) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -178,6 +185,7 @@ PHP_METHOD(Test_Oo, testInstance7) {
 PHP_METHOD(Test_Oo, testInstance8) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -200,6 +208,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 PHP_METHOD(Test_Oo, testInstance9) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -217,6 +226,7 @@ PHP_METHOD(Test_Oo, testInstance9) {
 PHP_METHOD(Test_Oo, testInstance10) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -234,6 +244,7 @@ PHP_METHOD(Test_Oo, testInstance10) {
 PHP_METHOD(Test_Oo, testInstance11) {
 
 	zval o, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -256,6 +267,7 @@ PHP_METHOD(Test_Oo, testInstance11) {
 PHP_METHOD(Test_Oo, testInstance12) {
 
 	zval o;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
@@ -275,6 +287,7 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 	zend_class_entry *_5$$3, *_9$$4;
 	zval result, _0;
 	zval className, instance, fqcn, _1, *_2, _3, _4$$3, _6$$3, _7$$3, _8$$4, _10$$4, _11$$4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -315,6 +328,9 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 			ZEPHIR_INIT_NVAR(&instance);
 			zephir_fetch_safe_class(&_4$$3, &fqcn);
 			_5$$3 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_4$$3), Z_STRLEN_P(&_4$$3), ZEND_FETCH_CLASS_AUTO);
+			if(!_5$$3) {
+				RETURN_MM_NULL();
+			}
 			object_init_ex(&instance, _5$$3);
 			if (zephir_has_constructor(&instance TSRMLS_CC)) {
 				ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
@@ -343,6 +359,9 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 				ZEPHIR_INIT_NVAR(&instance);
 				zephir_fetch_safe_class(&_8$$4, &fqcn);
 				_9$$4 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_8$$4), Z_STRLEN_P(&_8$$4), ZEND_FETCH_CLASS_AUTO);
+				if(!_9$$4) {
+					RETURN_MM_NULL();
+				}
 				object_init_ex(&instance, _9$$4);
 				if (zephir_has_constructor(&instance TSRMLS_CC)) {
 					ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);

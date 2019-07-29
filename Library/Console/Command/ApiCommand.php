@@ -5,13 +5,12 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,7 +45,7 @@ final class ApiCommand extends Command
             ->setName('api')
             ->setDescription('Generates a HTML API based on the classes exposed in the extension')
             ->setDefinition($this->createDefinition())
-            ->setHelp($this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -21,4 +21,12 @@ test_expect_success "Life Cycle Test" '
 	test_cmp ext/lifecycle.c expected3.c
 '
 
+# See: https://github.com/phalcon/zephir/issues/1758
+test_expect_success "Should generate valid code with inheritance of prototype interfaces" '
+	cd $FIXTURESDIR/protodir &&
+	zephir fullclean 2>&1 >/dev/null &&
+	zephir generate --backend=ZendEngine3 2>&1 >/dev/null &&
+	test_cmp ext/protodir/connectionexception.zep.h connectionexception.h
+'
+
 test_done

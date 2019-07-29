@@ -290,7 +290,7 @@ PHP_METHOD(Test_Flow, testIf16) {
 
 	ZVAL_UNDEF(&a_sub);
 
-	zephir_fetch_params(0, 1, 0, &a);
+	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
 
@@ -308,7 +308,7 @@ PHP_METHOD(Test_Flow, testIf17) {
 
 	ZVAL_UNDEF(&b_sub);
 
-	zephir_fetch_params(0, 1, 0, &b);
+	zephir_fetch_params_without_memory_grow(1, 0, &b);
 
 
 
@@ -594,6 +594,7 @@ PHP_METHOD(Test_Flow, testWhile10) {
 
 	double c = 0;
 	zend_long b = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -629,6 +630,7 @@ PHP_METHOD(Test_Flow, testWhile11) {
 
 	double c = 0;
 	zend_long b = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *d, d_sub;
 	zval *this_ptr = getThis();
 
@@ -665,6 +667,7 @@ PHP_METHOD(Test_Flow, testWhile12) {
 
 	zval _0;
 	zval b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -691,6 +694,7 @@ PHP_METHOD(Test_Flow, testWhile13) {
 	zval _0;
 	zend_long a;
 	zval b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -725,6 +729,7 @@ PHP_METHOD(Test_Flow, testDoWhile1) {
 
 PHP_METHOD(Test_Flow, testWhileNextTest) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
 	zval *variable, variable_sub, returnValue, _0, _2$$3;
@@ -760,6 +765,7 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 
 PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
 	zval *variable, variable_sub, returnValue, _2, _0$$3;
@@ -793,6 +799,7 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 PHP_METHOD(Test_Flow, testFor1) {
 
 	zval v, b, _0, *_1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, c = 0;
 	zval *this_ptr = getThis();
 
@@ -853,6 +860,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	zend_ulong _3;
 	double c = 0;
 	zval v, k, b, _0, *_1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -920,6 +928,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 PHP_METHOD(Test_Flow, testFor3) {
 
 	zval v, b, c, _0, *_1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -981,6 +990,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1047,6 +1057,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1177,6 +1188,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 	zend_bool _0;
 	zend_long c = 0, d = 0, _1, _2;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1215,6 +1227,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -1249,6 +1262,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -1283,6 +1297,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -1317,6 +1332,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b);
@@ -1354,7 +1370,7 @@ PHP_METHOD(Test_Flow, testFor15) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 2, 0, &c_param, &d_param);
+	zephir_fetch_params_without_memory_grow(2, 0, &c_param, &d_param);
 
 	c = zephir_get_intval(c_param);
 	d = zephir_get_intval(d_param);
@@ -1388,6 +1404,7 @@ PHP_METHOD(Test_Flow, testFor16) {
 	zend_bool _1;
 	long _0;
 	zval a, b, c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1430,6 +1447,7 @@ PHP_METHOD(Test_Flow, testFor17) {
 	zend_bool _1;
 	long _0;
 	zval a, b, c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1472,6 +1490,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 	long _0;
 	zval c, _4$$3;
 	zend_long a = 0, b = 0, _2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&c);
@@ -1512,6 +1531,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1548,6 +1568,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1584,6 +1605,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1620,6 +1642,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1657,6 +1680,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 	zend_bool _0;
 	zval b;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1694,6 +1718,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	zval _0;
 	zval b;
 	zval a, _1, *_2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -1756,6 +1781,7 @@ PHP_METHOD(Test_Flow, testFor30) {
 	zend_long v = 0;
 	zval b;
 	zval a, _1$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1784,6 +1810,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 	zend_long k = 0, v = 0;
 	zval b;
 	zval a, _1$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1810,6 +1837,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 PHP_METHOD(Test_Flow, testFor32) {
 
 	long sum;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *e, e_sub, v, *_0, _1;
 	zval *this_ptr = getThis();
@@ -1856,6 +1884,7 @@ PHP_METHOD(Test_Flow, testFor32) {
 PHP_METHOD(Test_Flow, testFor33) {
 
 	zend_object_iterator *_0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *e, e_sub, v, result;
 	zval *this_ptr = getThis();
 
@@ -1886,6 +1915,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 PHP_METHOD(Test_Flow, testFor34) {
 
 	zend_object_iterator *_0$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *e = NULL, e_sub, __$null, v, result;
 	zval *this_ptr = getThis();
 
@@ -1928,7 +1958,7 @@ PHP_METHOD(Test_Flow, testFor35Aux) {
 
 	ZVAL_UNDEF(&hello_sub);
 
-	zephir_fetch_params(0, 1, 0, &hello);
+	zephir_fetch_params_without_memory_grow(1, 0, &hello);
 
 
 
@@ -1940,6 +1970,7 @@ PHP_METHOD(Test_Flow, testFor35) {
 
 	zend_bool _0;
 	zval i, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
@@ -1981,7 +2012,7 @@ PHP_METHOD(Test_Flow, testFor36Aux) {
 
 	ZVAL_UNDEF(&hello_sub);
 
-	zephir_fetch_params(0, 1, 0, &hello);
+	zephir_fetch_params_without_memory_grow(1, 0, &hello);
 
 
 
@@ -1995,6 +2026,7 @@ PHP_METHOD(Test_Flow, testFor36) {
 
 	zend_bool _0;
 	zval i, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_4 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zval *this_ptr = getThis();
@@ -2065,6 +2097,7 @@ PHP_METHOD(Test_Flow, testFor38) {
 	long _0;
 	zval v;
 	zend_long i, _2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
@@ -2124,6 +2157,7 @@ PHP_METHOD(Test_Flow, testFor40) {
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -2165,6 +2199,7 @@ PHP_METHOD(Test_Flow, testUnrechable1) {
 	zend_bool c;
 	double b;
 	zend_long a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);
@@ -2203,6 +2238,7 @@ PHP_METHOD(Test_Flow, testUnrechable2) {
 	zend_bool c;
 	double b;
 	zend_long a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);

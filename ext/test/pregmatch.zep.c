@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 
 	zval pattern, subject, _0, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern);
@@ -57,6 +58,7 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
 	zval pattern, subject, matches, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern);
@@ -81,6 +83,7 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
 	zval pattern, subject, matched, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern);
@@ -104,6 +107,7 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 
 	zval pattern, subject, results;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern);
@@ -126,6 +130,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 	zval pattern, subject, matches;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern);
@@ -149,6 +154,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *pattern, pattern_sub, *subject, subject_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -176,7 +182,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
 
-	zephir_fetch_params(0, 3, 0, &pattern, &subject, &matches);
+	zephir_fetch_params_without_memory_grow(3, 0, &pattern, &subject, &matches);
 
 
 
@@ -195,7 +201,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
 	ZVAL_UNDEF(&matches_sub);
 	ZVAL_UNDEF(&flags_sub);
 
-	zephir_fetch_params(0, 4, 0, &pattern, &subject, &matches, &flags);
+	zephir_fetch_params_without_memory_grow(4, 0, &pattern, &subject, &matches, &flags);
 
 
 
@@ -215,7 +221,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 	ZVAL_UNDEF(&flags_sub);
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 5, 0, &pattern, &subject, &matches, &flags, &offset);
+	zephir_fetch_params_without_memory_grow(5, 0, &pattern, &subject, &matches, &flags, &offset);
 
 
 
@@ -229,6 +235,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
  */
 PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL, *pattern_param = NULL, matches, _0;
 	zval str, pattern;
 	zval *this_ptr = getThis();
@@ -255,6 +262,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
 PHP_METHOD(Test_Pregmatch, testMatchAll) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *flags, flags_sub, text, matches, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -287,6 +295,7 @@ PHP_METHOD(Test_Pregmatch, testMatchAll) {
 PHP_METHOD(Test_Pregmatch, testMatchAllInZep) {
 
 	zval m1, m2, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();

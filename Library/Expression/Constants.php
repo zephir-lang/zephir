@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Expression;
@@ -221,7 +221,11 @@ class Constants
             throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
         }
 
-        $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
+        if ($compilationContext->symbolTable->getMustGrownStack()) {
+            $compilationContext->codePrinter->output('ZEPHIR_MM_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
+        } else {
+            $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
+        }
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }

@@ -60,6 +60,7 @@ PHP_METHOD(Test_McallChained, testMethod3) {
 PHP_METHOD(Test_McallChained, testChained1) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -78,6 +79,7 @@ PHP_METHOD(Test_McallChained, testChained1) {
 PHP_METHOD(Test_McallChained, testChained2) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -99,6 +101,7 @@ PHP_METHOD(Test_McallChained, testChained2) {
 PHP_METHOD(Test_McallChained, testChained3) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -120,6 +123,7 @@ PHP_METHOD(Test_McallChained, testChained3) {
 PHP_METHOD(Test_McallChained, testChained4) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

@@ -3,6 +3,7 @@ extern zend_class_entry *test_vars_ce;
 
 ZEPHIR_INIT_CLASS(Test_Vars);
 
+PHP_METHOD(Test_Vars, testParam);
 PHP_METHOD(Test_Vars, testVarDump);
 PHP_METHOD(Test_Vars, testVarDump2);
 PHP_METHOD(Test_Vars, testVarExport);
@@ -16,6 +17,10 @@ PHP_METHOD(Test_Vars, testIntVarDump);
 PHP_METHOD(Test_Vars, testDoubleVarDump);
 PHP_METHOD(Test_Vars, testBoolVarDump);
 PHP_METHOD(Test_Vars, testGetDefinedVars);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testparam, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, config, 0)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testvardump2, 0, 0, 1)
 	ZEND_ARG_INFO(0, ret)
@@ -67,6 +72,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testarraytypevardumpandexport, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_vars_method_entry) {
+	PHP_ME(Test_Vars, testParam, arginfo_test_vars_testparam, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testVarDump, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testVarDump2, arginfo_test_vars_testvardump2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testVarExport, NULL, ZEND_ACC_PUBLIC)

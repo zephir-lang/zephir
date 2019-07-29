@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_ExtendPdoClass) {
 PHP_METHOD(Test_Oo_ExtendPdoClass, __construct) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *dsn_param = NULL, *username_param = NULL, *password_param = NULL, *attrs = NULL, attrs_sub, _1;
 	zval dsn, username, password;

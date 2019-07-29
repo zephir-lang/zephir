@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 if (!file_exists(__DIR__.'/Library')) {
@@ -18,8 +18,8 @@ This file is part of the Zephir.
 
 (c) Zephir Team <team@zephir-lang.com>
 
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
+For the full copyright and license information, please view
+the LICENSE file that was distributed with this source code.
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
@@ -28,7 +28,6 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude([
         'ext',
         'ide',
-        'templates/ZendEngine2',
         'templates/ZendEngine3',
     ]);
 

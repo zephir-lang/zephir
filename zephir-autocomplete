@@ -1,0 +1,67 @@
+# Zephir Bash completion
+#
+# This file is part of the Zephir.
+#
+# (c) Zephir Team <team@zephir-lang.com>
+#
+# For the full copyright and license information, please view
+# the LICENSE file that was distributed with this source code.
+#
+# Usage:
+#
+# 1. Copy this file to the common place:
+#
+#   ln -s zephir-autocomplete /etc/bash_completion.d/zephir-autocomplete
+#
+# 2. Load zephir-autocomplete from within your ~/.bash_profile:
+#
+#   if [ -f /etc/bash_completion.d/zephir-autocomplete ]; then
+#     source /etc/bash_completion.d/zephir-autocomplete
+#   fi
+#
+# 3. Restart your shell, or reload your ~/.bash_profile:
+#
+#   source ~/.bash_profile
+#
+
+function _zephir_completion() {
+  COMPREPLY=()
+
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local commands="api build clean compile fullclean generate help"
+  commands+=" init install list stubs"
+
+  if [[ $COMP_CWORD -gt 1 ]]
+  then
+    local prev="${COMP_WORDS[$COMP_CWORD-1]}"
+    local first="${COMP_WORDS[1]}"
+
+    if [[ "$cur" == -* ]]
+    then
+      declare -a a_commands=( $( echo $commands | tr " " "\n" ) )
+
+      for i in "${a_commands[@]}"
+      do
+        if [ "$i" = "$first" ]
+        then
+          local opts=$( zephir $first -h --no-ansi | \
+            tr -cs '[=-=][:alpha:]_' '[\n*]' | \
+            grep '^-' )
+          COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
+        fi
+      done
+    else
+      COMPREPLY+=( $( compgen -W "namespace" -- "${cur}" ) )
+    fi
+  elif [[ "$cur" == -* ]]
+  then
+    local opts="--help --quiet --verbose --version --ansi --no-ansi"
+    opts+=" --dumpversion"
+
+    COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
+  else
+    COMPREPLY=( $( compgen -W "${commands}" -- "${cur}" ) )
+  fi
+}
+
+complete -F _zephir_completion zephir

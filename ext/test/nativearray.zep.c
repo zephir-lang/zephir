@@ -34,6 +34,7 @@ ZEPHIR_INIT_CLASS(Test_NativeArray) {
 PHP_METHOD(Test_NativeArray, testArray1) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -49,6 +50,7 @@ PHP_METHOD(Test_NativeArray, testArray1) {
 PHP_METHOD(Test_NativeArray, testArray2) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -74,6 +76,7 @@ PHP_METHOD(Test_NativeArray, testArray2) {
 PHP_METHOD(Test_NativeArray, testArray3) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -98,6 +101,7 @@ PHP_METHOD(Test_NativeArray, testArray3) {
 
 PHP_METHOD(Test_NativeArray, testArray4) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, __$true, a;
 	zval *this_ptr = getThis();
 
@@ -118,6 +122,7 @@ PHP_METHOD(Test_NativeArray, testArray4) {
 
 PHP_METHOD(Test_NativeArray, testArray5) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -138,6 +143,7 @@ PHP_METHOD(Test_NativeArray, testArray5) {
 PHP_METHOD(Test_NativeArray, testArray6) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -164,6 +170,7 @@ PHP_METHOD(Test_NativeArray, testArray7) {
 
 	zend_long a = 0, b = 0, c = 0;
 	zval d, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);
@@ -193,6 +200,7 @@ PHP_METHOD(Test_NativeArray, testArray8) {
 
 	double a = 0, b = 0, c = 0;
 	zval d, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);
@@ -222,6 +230,7 @@ PHP_METHOD(Test_NativeArray, testArray9) {
 
 	zend_bool a = 0, b = 0, c = 0;
 	zval d, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);
@@ -251,6 +260,7 @@ PHP_METHOD(Test_NativeArray, testArray10) {
 
 	zval a, b, c;
 	zval d;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&d);
@@ -278,6 +288,7 @@ PHP_METHOD(Test_NativeArray, testArray10) {
 PHP_METHOD(Test_NativeArray, testArray11) {
 
 	zval a, b, c, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -320,6 +331,7 @@ PHP_METHOD(Test_NativeArray, testArray11) {
 PHP_METHOD(Test_NativeArray, testArray12) {
 
 	zval a, b, c, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -353,6 +365,7 @@ PHP_METHOD(Test_NativeArray, testArray12) {
 PHP_METHOD(Test_NativeArray, testArray13) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -371,6 +384,7 @@ PHP_METHOD(Test_NativeArray, testArray13) {
 PHP_METHOD(Test_NativeArray, testArray14) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -388,6 +402,7 @@ PHP_METHOD(Test_NativeArray, testArray14) {
 
 PHP_METHOD(Test_NativeArray, testArray15) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -409,6 +424,7 @@ PHP_METHOD(Test_NativeArray, testArray15) {
 PHP_METHOD(Test_NativeArray, testArray16) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -426,6 +442,7 @@ PHP_METHOD(Test_NativeArray, testArray16) {
 
 PHP_METHOD(Test_NativeArray, testArray17) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -446,6 +463,7 @@ PHP_METHOD(Test_NativeArray, testArray17) {
 PHP_METHOD(Test_NativeArray, testArray18) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -463,6 +481,7 @@ PHP_METHOD(Test_NativeArray, testArray18) {
 
 PHP_METHOD(Test_NativeArray, testArray19) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -484,6 +503,7 @@ PHP_METHOD(Test_NativeArray, testArray19) {
 PHP_METHOD(Test_NativeArray, testArray20) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -501,6 +521,7 @@ PHP_METHOD(Test_NativeArray, testArray20) {
 
 PHP_METHOD(Test_NativeArray, testArray21) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -521,6 +542,7 @@ PHP_METHOD(Test_NativeArray, testArray21) {
 PHP_METHOD(Test_NativeArray, testArray22) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -540,6 +562,7 @@ PHP_METHOD(Test_NativeArray, testArray23) {
 
 	zend_long b = 0;
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -567,6 +590,7 @@ PHP_METHOD(Test_NativeArray, testArray24) {
 
 	double b = 0;
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -594,6 +618,7 @@ PHP_METHOD(Test_NativeArray, testArray25) {
 
 	zend_bool b = 0;
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -620,6 +645,7 @@ PHP_METHOD(Test_NativeArray, testArray25) {
 PHP_METHOD(Test_NativeArray, testArray26) {
 
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -642,6 +668,7 @@ PHP_METHOD(Test_NativeArray, testArray27) {
 
 	zval b;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -664,6 +691,7 @@ PHP_METHOD(Test_NativeArray, testArray28) {
 
 	zval b;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -686,6 +714,7 @@ PHP_METHOD(Test_NativeArray, testArray29) {
 
 	long b = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -704,6 +733,7 @@ PHP_METHOD(Test_NativeArray, testArray30) {
 
 	zval b;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -723,6 +753,7 @@ PHP_METHOD(Test_NativeArray, testArray30) {
 PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -750,6 +781,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 PHP_METHOD(Test_NativeArray, testArrayAccess2) {
 
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -771,6 +803,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess3) {
 
 	long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -800,6 +833,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 
 	zval c;
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -823,6 +857,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 
 	zval a, b, c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -846,6 +881,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 PHP_METHOD(Test_NativeArray, testArrayAccess6) {
 
 	zval a, b, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -872,6 +908,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess1) {
 
 	zval _0;
 	zval a, b, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -898,6 +935,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess2) {
 
 	zval _0;
 	zval a, b, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -929,6 +967,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess3) {
 
 	zval _0, _1;
 	zval a, b, _2, _3, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -966,6 +1005,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess4) {
 
 	zval _0, _1;
 	zval a, b, _2, _3, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1003,6 +1043,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess5) {
 
 	zval _0, _1;
 	zval a, b, _2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1034,6 +1075,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess5) {
 PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1063,6 +1105,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate2) {
 
 	zend_long b = 0;
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1093,6 +1136,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate3) {
 
 	zend_long b = 0;
 	zval a, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1127,6 +1171,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate3) {
 PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1150,6 +1195,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate5) {
 
 	zval _1, _2, _3;
 	zval a, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1214,6 +1260,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate5) {
 PHP_METHOD(Test_NativeArray, testArrayAppend1) {
 
 	zval _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a, _0;
 	zval *this_ptr = getThis();
 
@@ -1262,6 +1309,7 @@ PHP_METHOD(Test_NativeArray, testArrayAppend2) {
 	zend_bool d;
 	zval b;
 	zval a, c, g, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -1310,6 +1358,7 @@ PHP_METHOD(Test_NativeArray, testArrayAppend2) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1327,6 +1376,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate1) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1344,6 +1394,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate2) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate3) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1361,6 +1412,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate3) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate4) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1378,6 +1430,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate4) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate5) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1395,6 +1448,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate5) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate6) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1412,6 +1466,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate6) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate7) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -1431,6 +1486,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate7) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate8) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -1452,6 +1508,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate8) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate9) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -1473,6 +1530,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate9) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate10) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$true, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -1494,6 +1552,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate10) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate11) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a, b, c;
 	zval *this_ptr = getThis();
 
@@ -1517,6 +1576,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate11) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate12) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a, b, c, d;
 	zval *this_ptr = getThis();
 
@@ -1544,6 +1604,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate12) {
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate13) {
 
 	zval b, c, d, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, a;
 	zval *this_ptr = getThis();
 
@@ -1584,6 +1645,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate13) {
 
 PHP_METHOD(Test_NativeArray, testMultipleArrayAppend1) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a, b;
 	zval *this_ptr = getThis();
 
@@ -1606,6 +1668,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayAppend2) {
 
 	zval x;
 	zend_long b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, a;
 	zval *this_ptr = getThis();
 
@@ -1628,6 +1691,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayAppend2) {
 PHP_METHOD(Test_NativeArray, testMultipleArrayAppend3) {
 
 	zval _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$null, __$false, a, b, _0, _1, _3;
 	zval *this_ptr = getThis();
 
@@ -1677,7 +1741,7 @@ PHP_METHOD(Test_NativeArray, testArrayKeys) {
 
 	ZVAL_UNDEF(&param_sub);
 
-	zephir_fetch_params(0, 1, 0, &param);
+	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
 
 
@@ -1688,6 +1752,7 @@ PHP_METHOD(Test_NativeArray, testArrayKeys) {
 
 PHP_METHOD(Test_NativeArray, testImplodeArray) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param, param_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -1712,6 +1777,7 @@ PHP_METHOD(Test_NativeArray, testImplodeArray) {
 PHP_METHOD(Test_NativeArray, issue110) {
 
 	zval byteUnits, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&byteUnits);
@@ -1739,6 +1805,7 @@ PHP_METHOD(Test_NativeArray, issue110) {
 
 PHP_METHOD(Test_NativeArray, issue264) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *tokens_param = NULL;
 	zval tokens;
 	zval *this_ptr = getThis();
@@ -1757,6 +1824,7 @@ PHP_METHOD(Test_NativeArray, issue264) {
 
 PHP_METHOD(Test_NativeArray, issue743a) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *current743a_param = NULL, _0;
 	zval current743a;
 	zval *this_ptr = getThis();
@@ -1779,6 +1847,7 @@ PHP_METHOD(Test_NativeArray, issue743a) {
 
 PHP_METHOD(Test_NativeArray, issue743b) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *current_param = NULL, _0;
 	zval current;
 	zval *this_ptr = getThis();
@@ -1801,6 +1870,7 @@ PHP_METHOD(Test_NativeArray, issue743b) {
 
 PHP_METHOD(Test_NativeArray, issue743c) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *current_param = NULL, key, _0;
 	zval current;
 	zval *this_ptr = getThis();
@@ -1831,6 +1901,7 @@ PHP_METHOD(Test_NativeArray, issue709) {
 
 	zend_bool works, _0, _7$$3;
 	zval c, arr, _3$$3, _4$$3, _5$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_6 = NULL;
 	zval *this_ptr = getThis();
@@ -1886,6 +1957,7 @@ PHP_METHOD(Test_NativeArray, issue709) {
 
 PHP_METHOD(Test_NativeArray, Issue1140) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *prefix_param = NULL, *baseDir_param = NULL, _0, _2, _3, _1$$3;
 	zval prefix, baseDir;
@@ -1924,6 +1996,7 @@ PHP_METHOD(Test_NativeArray, Issue1140) {
 PHP_METHOD(Test_NativeArray, Issue1159) {
 
 	zval myvar, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&myvar);
@@ -1944,6 +2017,7 @@ PHP_METHOD(Test_NativeArray, Issue1159) {
 zend_object *zephir_init_properties_Test_NativeArray(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval _0, _1$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 

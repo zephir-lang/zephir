@@ -35,7 +35,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &n_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
 
@@ -65,6 +65,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 
 	zend_bool _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _2, _3;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();

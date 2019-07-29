@@ -12,13 +12,14 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/variables.h"
-#include "kernel/object.h"
-#include "kernel/operators.h"
+#include "kernel/fcall.h"
+#include "kernel/memory.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
+#include "kernel/variables.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Vars) {
@@ -29,8 +30,77 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 }
 
+PHP_METHOD(Test_Vars, testParam) {
+
+	zend_string *_4;
+	zend_ulong _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_6 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *config_param = NULL, k, v, _0, *_1, _2, _5$$3, _7$$4;
+	zval config;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&config);
+	ZVAL_UNDEF(&k);
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_5$$3);
+	ZVAL_UNDEF(&_7$$4);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &config_param);
+
+	ZEPHIR_OBS_COPY_OR_DUP(&config, config_param);
+
+
+	zephir_array_fetch_string(&_0, &config, SL("dir"), PH_NOISY | PH_READONLY, "test/vars.zep", 8 TSRMLS_CC);
+	zephir_is_iterable(&_0, 0, "test/vars.zep", 11);
+	if (Z_TYPE_P(&_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
+		{
+			ZEPHIR_INIT_NVAR(&k);
+			if (_4 != NULL) { 
+				ZVAL_STR_COPY(&k, _4);
+			} else {
+				ZVAL_LONG(&k, _3);
+			}
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _1);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 57, &v);
+			zephir_check_call_status();
+			zephir_array_update_multi(&config, &_5$$3 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		while (1) {
+			ZEPHIR_CALL_METHOD(&_2, &_0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_2)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&k, &_0, "key", NULL, 0);
+			zephir_check_call_status();
+			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			zephir_check_call_status();
+				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 57, &v);
+				zephir_check_call_status();
+				zephir_array_update_multi(&config, &_7$$4 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	ZEPHIR_INIT_NVAR(&k);
+	RETURN_CTOR(&config);
+
+}
+
 PHP_METHOD(Test_Vars, testVarDump) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, _0;
 	zval *this_ptr = getThis();
 
@@ -60,6 +130,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 
 PHP_METHOD(Test_Vars, testVarDump2) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *ret, ret_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -81,6 +152,7 @@ PHP_METHOD(Test_Vars, testVarDump2) {
 
 PHP_METHOD(Test_Vars, testVarExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, ret, _0, _1, _2;
 	zval *this_ptr = getThis();
 
@@ -121,6 +193,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 
 PHP_METHOD(Test_Vars, test88Issue) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
 	zval param1, param2;
 	zval *this_ptr = getThis();
@@ -171,6 +244,7 @@ PHP_METHOD(Test_Vars, test88Issue) {
 
 PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0;
 	zval param1, param2;
 	zval *this_ptr = getThis();
@@ -215,7 +289,7 @@ PHP_METHOD(Test_Vars, testVarDump2param) {
 	ZVAL_UNDEF(&p1_sub);
 	ZVAL_UNDEF(&p2_sub);
 
-	zephir_fetch_params(0, 2, 0, &p1, &p2);
+	zephir_fetch_params_without_memory_grow(2, 0, &p1, &p2);
 
 
 
@@ -233,7 +307,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 	ZVAL_UNDEF(&p2_sub);
 	ZVAL_UNDEF(&p3_sub);
 
-	zephir_fetch_params(0, 3, 0, &p1, &p2, &p3);
+	zephir_fetch_params_without_memory_grow(3, 0, &p1, &p2, &p3);
 
 
 
@@ -245,6 +319,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 
 PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar, testVar_sub, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -271,6 +346,7 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
 PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar_param = NULL, _0, _1;
 	zval testVar;
 	zval *this_ptr = getThis();
@@ -307,6 +383,7 @@ PHP_METHOD(Test_Vars, testIntVarDump) {
 
 	zval _0, _1;
 	zend_long a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -331,6 +408,7 @@ PHP_METHOD(Test_Vars, testDoubleVarDump) {
 
 	zval _0, _1;
 	double a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -355,6 +433,7 @@ PHP_METHOD(Test_Vars, testBoolVarDump) {
 
 	zval _0, _1;
 	zend_bool a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);

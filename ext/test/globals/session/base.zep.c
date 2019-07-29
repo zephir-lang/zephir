@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Globals_Session_Base) {
 
 PHP_METHOD(Test_Globals_Session_Base, set) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, *value, value_sub, _SESSION;
 	zval index;
 	zval *this_ptr = getThis();
@@ -52,6 +53,7 @@ PHP_METHOD(Test_Globals_Session_Base, set) {
 
 PHP_METHOD(Test_Globals_Session_Base, remove) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, _SESSION;
 	zval index;
 	zval *this_ptr = getThis();
@@ -73,6 +75,7 @@ PHP_METHOD(Test_Globals_Session_Base, remove) {
 
 PHP_METHOD(Test_Globals_Session_Base, __set) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *index_param = NULL, *value, value_sub;
 	zval index;
@@ -95,6 +98,7 @@ PHP_METHOD(Test_Globals_Session_Base, __set) {
 
 PHP_METHOD(Test_Globals_Session_Base, __unset) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *index_param = NULL;
 	zval index;
@@ -118,6 +122,7 @@ PHP_METHOD(Test_Globals_Session_Base, removeSessionData) {
 
 	zend_string *_4;
 	zend_ulong _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval _SESSION, key, _0, *_1, _2;
 	zval *this_ptr = getThis();

@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_BuiltIn_IntMethods) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -52,6 +53,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -69,6 +71,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -91,6 +94,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -113,6 +117,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -135,6 +140,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, *exp_param = NULL, _0, _1, _2;
 	zend_long num, exp;
 	zval *this_ptr = getThis();
@@ -166,7 +172,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -178,6 +184,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getExp) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -206,7 +213,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -224,7 +231,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -242,7 +249,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &num_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
@@ -254,6 +261,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -276,6 +284,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -298,6 +307,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _1;
 	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -320,6 +330,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, *base_param = NULL, _0$$3, _1$$3, _2, _3, _4;
 	zend_long num, base, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();

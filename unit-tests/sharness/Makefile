@@ -10,6 +10,7 @@
 T = $(sort $(wildcard t[0-9][0-9][0-9][0-9]-*.sh))
 LIBDIR = lib
 SHARNESSDIR = sharness
+SHARNESS = $(LIBDIR)/$(SHARNESSDIR)/sharness.sh
 AGGREGATE = $(LIBDIR)/$(SHARNESSDIR)/aggregate-results.sh
 
 PROJECTDIR=$(LIBDIR)/../../..
@@ -25,22 +26,26 @@ clean: clean-test-results
 	find $(TESTSDIR)/fixtures -name compile-errors.log -o -name compile.log | xargs rm -f
 	find $(TESTSDIR)/fixtures -name .zephir -type d | xargs rm -rf
 	find $(TESTSDIR)/fixtures -name ext -type d | xargs rm -rf
+	-rm -rf "trash "directory.*
 
 .PHONY: clean-test-results
 clean-test-results:
+	@echo "*** $@ ***"
 	-rm -rf test-results
 
 .PHONY: $(T)
 $(T): clean-test-results deps
+	@echo "*** $@ ***"
 	./$@
 
 .PHONY: aggregate
 aggregate: clean-test-results $(T)
+	@echo "*** $@ ***"
 	ls test-results/t*-*.sh.*.counts | $(AGGREGATE)
 
 .PHONY: deps
-deps: sharness $(BINS)
+deps: $(SHARNESS) $(BINS)
 
-.PHONY: sharness
-sharness:
-	lib/install-sharness.sh
+$(SHARNESS):
+	@echo "*** checking $@ ***"
+	$(LIBDIR)/install-sharness.sh

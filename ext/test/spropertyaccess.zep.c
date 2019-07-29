@@ -40,6 +40,7 @@ ZEPHIR_INIT_CLASS(Test_SPropertyAccess) {
 PHP_METHOD(Test_SPropertyAccess, __construct) {
 
 	zval _0, _1, _2, _3, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -72,6 +73,7 @@ PHP_METHOD(Test_SPropertyAccess, __construct) {
 
 PHP_METHOD(Test_SPropertyAccess, testArgumentWithUnderscore) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null;
 	zval *this_ptr = getThis();
 
@@ -100,6 +102,7 @@ PHP_METHOD(Test_SPropertyAccess, testArgumentWithUnderscore) {
 
 PHP_METHOD(Test_SPropertyAccess, testArgument) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null, _0$$3;
 	zval *this_ptr = getThis();
 

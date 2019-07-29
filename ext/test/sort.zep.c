@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Sort) {
 PHP_METHOD(Test_Sort, quick) {
 
 	zend_bool _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_8 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, length = 0, pivot = 0, item = 0, _2, _3;
 	zval *arr_param = NULL, left, right, _0, _7, _10, _11, _4$$4, _5$$5, _6$$6;

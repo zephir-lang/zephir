@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Optimizers\FunctionCall;
@@ -57,9 +57,9 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->headersManager->add('kernel/memory');
+        $context->symbolTable->mustGrownStack(true);
 
-        $context->codePrinter->output('zephir_create_symbol_table(TSRMLS_C);');
+        $context->codePrinter->output('ZEPHIR_CREATE_SYMBOL_TABLE();');
         $context->codePrinter->output('');
 
         return new CompiledExpression('null', null, $expression);

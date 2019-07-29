@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Backends\ZendEngine2;
@@ -183,6 +183,11 @@ class Backend extends BaseBackend
             case 'static_zend_class_entry':
                 $pointer = '*';
                 $code = 'zend_class_entry';
+                break;
+
+            case 'zephir_method_globals':
+                $pointer = '*';
+                $code = 'zephir_method_globals';
                 break;
 
             case 'zephir_ce_guard':

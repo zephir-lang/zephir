@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_EvalTest) {
 
 PHP_METHOD(Test_EvalTest, evalCode) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *code_param = NULL;
 	zval code;
 	zval *this_ptr = getThis();

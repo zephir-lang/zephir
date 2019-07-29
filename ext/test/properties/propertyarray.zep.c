@@ -50,6 +50,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 
 	zval _1;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -70,6 +71,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 PHP_METHOD(Test_Properties_PropertyArray, appendSome) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
@@ -94,7 +96,7 @@ PHP_METHOD(Test_Properties_PropertyArray, setOtherArray) {
 
 	ZVAL_UNDEF(&arr_sub);
 
-	zephir_fetch_params(0, 1, 0, &arr);
+	zephir_fetch_params_without_memory_grow(1, 0, &arr);
 
 
 
@@ -114,6 +116,7 @@ PHP_METHOD(Test_Properties_PropertyArray, getOtherArray) {
 PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 
 	zval info, headers, _0$$3, _2$$3, _3$$3, _5$$5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_4 = NULL, *_6 = NULL;
 	zval *this_ptr = getThis();
@@ -162,6 +165,7 @@ zend_object *zephir_init_properties_Test_Properties_PropertyArray(zend_class_ent
 
 		zval _3$$4;
 	zval _0, _2, _5, _1$$3, _4$$4, _6$$5;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);

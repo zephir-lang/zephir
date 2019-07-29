@@ -47,7 +47,7 @@ PHP_METHOD(Test_Instance, __construct) {
 	ZVAL_UNDEF(&a10_sub);
 	ZVAL_UNDEF(&a11_sub);
 
-	zephir_fetch_params(0, 11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
+	zephir_fetch_params_without_memory_grow(11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
 
 
 
@@ -57,6 +57,7 @@ PHP_METHOD(Test_Instance, __construct) {
 PHP_METHOD(Test_Instance, testIssue1339) {
 
 	zval parameters, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -152,6 +153,7 @@ PHP_METHOD(Test_Instance, testIssue1339) {
 
 PHP_METHOD(Test_Instance, testInstanceCreate) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *className_param = NULL;
 	zval className;

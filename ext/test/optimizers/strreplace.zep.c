@@ -34,6 +34,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1055) {
 
 	zval _1, _3;
 	zval _0, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -64,6 +65,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1055) {
 PHP_METHOD(Test_Optimizers_StrReplace, issue1087) {
 
 	zval filtered, sanitize, _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&filtered);
@@ -115,6 +117,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732A) {
 	zval subject;
 	zval _0;
 	zval search, replace;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&search);
@@ -171,6 +174,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732B) {
 	zval subject;
 	zval _0;
 	zval patterns, replacements;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

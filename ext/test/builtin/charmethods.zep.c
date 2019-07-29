@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_BuiltIn_CharMethods) {
 PHP_METHOD(Test_BuiltIn_CharMethods, getHex) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -48,6 +49,7 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 
 	long _0;
 	char ch = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL, o, _1$$3, _2$$3, _3$$3;
 	zval str;
 	zval *this_ptr = getThis();

@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Test_ArrayAccessObj) {
 PHP_METHOD(Test_ArrayAccessObj, __construct) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -55,7 +56,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetSet) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &offset, &value);
+	zephir_fetch_params_without_memory_grow(2, 0, &offset, &value);
 
 
 
@@ -75,7 +76,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetExists) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 
 
 
@@ -92,7 +93,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetUnset) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 
 
 
@@ -103,6 +104,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetUnset) {
 
 PHP_METHOD(Test_ArrayAccessObj, offsetGet) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *offset, offset_sub, _0, _1, _2;
 	zval *this_ptr = getThis();
 

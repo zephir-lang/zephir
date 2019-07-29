@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Requires_External3) {
 
 PHP_METHOD(Test_Requires_External3, req) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *path, path_sub, *requires, requires_sub, _0;
 	zval *this_ptr = getThis();

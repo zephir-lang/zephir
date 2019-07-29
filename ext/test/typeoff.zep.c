@@ -32,6 +32,7 @@ ZEPHIR_INIT_CLASS(Test_Typeoff) {
 PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
@@ -47,6 +48,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
@@ -110,6 +112,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 PHP_METHOD(Test_Typeoff, testNotBoolTrue) {
 
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
@@ -139,6 +142,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 PHP_METHOD(Test_Typeoff, testArrayFalse) {
 
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
@@ -154,6 +158,7 @@ PHP_METHOD(Test_Typeoff, testArrayFalse) {
 PHP_METHOD(Test_Typeoff, testArrayTrue) {
 
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
@@ -169,6 +174,7 @@ PHP_METHOD(Test_Typeoff, testArrayTrue) {
 PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -188,6 +194,7 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 
 PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *u, u_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -212,7 +219,7 @@ PHP_METHOD(Test_Typeoff, testCallableTypeOf) {
 
 	ZVAL_UNDEF(&cb_sub);
 
-	zephir_fetch_params(0, 1, 0, &cb);
+	zephir_fetch_params_without_memory_grow(1, 0, &cb);
 
 
 

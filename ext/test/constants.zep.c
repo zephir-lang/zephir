@@ -267,6 +267,7 @@ PHP_METHOD(Test_Constants, testDirConstant) {
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
@@ -274,7 +275,7 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_GET_CONSTANT(&a, "PHP_VERSION");
+	ZEPHIR_MM_GET_CONSTANT(&a, "PHP_VERSION");
 	RETURN_CCTOR(&a);
 
 }
@@ -287,6 +288,7 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 PHP_METHOD(Test_Constants, testStringDelimiterConstantDoubleQuoted) {
 
 	zval delimiter;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&delimiter);
@@ -302,6 +304,7 @@ PHP_METHOD(Test_Constants, testStringDelimiterConstantDoubleQuoted) {
 PHP_METHOD(Test_Constants, testStringConstantWithVars) {
 
 	zval property;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&property);

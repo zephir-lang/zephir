@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Globals_Env) {
 
 PHP_METHOD(Test_Globals_Env, read) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _ENV, _0;
 	zval name;
 	zval *this_ptr = getThis();

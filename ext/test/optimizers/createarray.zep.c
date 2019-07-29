@@ -46,7 +46,7 @@ PHP_METHOD(Test_Optimizers_CreateArray, createSize) {
 
 	ZVAL_UNDEF(&_0);
 
-	zephir_fetch_params(0, 1, 0, &n_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
 
 	n = zephir_get_intval(n_param);
 

@@ -114,7 +114,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 
 	ZVAL_UNDEF(&position_sub);
 
-	zephir_fetch_params(0, 1, 0, &position);
+	zephir_fetch_params_without_memory_grow(1, 0, &position);
 
 
 
@@ -136,7 +136,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetExists) {
 
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 
 
 
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetGet) {
 
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 
 
 
@@ -165,7 +165,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetSet) {
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 
-	zephir_fetch_params(0, 2, 0, &offset, &value);
+	zephir_fetch_params_without_memory_grow(2, 0, &offset, &value);
 
 
 
@@ -179,7 +179,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetUnset) {
 
 	ZVAL_UNDEF(&offset_sub);
 
-	zephir_fetch_params(0, 1, 0, &offset);
+	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 
 
 
@@ -196,6 +196,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, serialize) {
 
 PHP_METHOD(Test_Oo_OoNativeImplements, unserialize) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *serialized_param = NULL;
 	zval serialized;
 	zval *this_ptr = getThis();

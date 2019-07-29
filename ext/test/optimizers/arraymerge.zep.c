@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ArrayMerge) {
 
 PHP_METHOD(Test_Optimizers_ArrayMerge, mergeTwoRequiredArrays) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arr1_param = NULL, *arr2_param = NULL;
 	zval arr1, arr2;
 	zval *this_ptr = getThis();

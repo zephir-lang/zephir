@@ -235,7 +235,7 @@ PHP_METHOD(Test_Flow_SwitchFlow, testSwitch12) {
 	ZVAL_UNDEF(&var1_sub);
 	ZVAL_UNDEF(&var2_sub);
 
-	zephir_fetch_params(0, 2, 0, &var1, &var2);
+	zephir_fetch_params_without_memory_grow(2, 0, &var1, &var2);
 
 
 
@@ -270,7 +270,7 @@ PHP_METHOD(Test_Flow_SwitchFlow, testSwitch13) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 
 	a = zephir_get_intval(a_param);
 

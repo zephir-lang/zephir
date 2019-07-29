@@ -5,8 +5,8 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir;
@@ -2042,7 +2042,7 @@ class ClassMethod
                 if ($symbolTable->getMustGrownStack()) {
                     $code .= "\t".'zephir_fetch_params(1, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 } else {
-                    $code .= "\t".'zephir_fetch_params(0, '.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
+                    $code .= "\t".'zephir_fetch_params_without_memory_grow('.$numberRequiredParams.', '.$numberOptionalParams.', '.implode(', ', $params).');'.PHP_EOL;
                 }
             } else {
                 foreach ($params as $param) {
@@ -2089,6 +2089,14 @@ class ClassMethod
          */
         if ($symbolTable->getMustGrownStack()) {
             $compilationContext->headersManager->add('kernel/memory');
+            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_METHOD_GLOBALS_PTR')) {
+                $methodGlobals = new Variable('zephir_method_globals', 'ZEPHIR_METHOD_GLOBALS_PTR', $compilationContext->branchManager->getCurrentBranch());
+                $methodGlobals->setMustInitNull(true);
+                $methodGlobals->increaseUses();
+                $methodGlobals->setReusable(false);
+                $methodGlobals->setReadOnly(true);
+                $compilationContext->symbolTable->addRawVariable($methodGlobals);
+            }
             $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
         }
 
@@ -2172,14 +2180,14 @@ class ClassMethod
         /*
          * Finalize the method compilation
          */
-        if (\is_object($this->statements)) {
+        if (\is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed.
              */
             $lastType = $this->statements->getLastStatementType();
 
-            if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
+            if ('return' != $lastType && 'throw' != $lastType && !$this->hasChildReturnStatementType($statement)) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');

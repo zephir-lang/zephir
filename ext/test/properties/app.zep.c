@@ -42,6 +42,7 @@ PHP_METHOD(Test_Properties_App, getInstance) {
 PHP_METHOD(Test_Properties_App, __construct) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zval *this_ptr = getThis();

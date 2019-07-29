@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Test_ArraySearch) {
 /** @issue https://github.com/phalcon/zephir/issues/1609 */
 PHP_METHOD(Test_ArraySearch, simpleSearch) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zend_bool strict;
 	zval haystack;
@@ -63,6 +64,7 @@ PHP_METHOD(Test_ArraySearch, searchUsingArrayInsideZephir) {
 
 	zval _0, pos;
 	zval itoA64;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

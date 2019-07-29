@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Test_ArrayAccessTest) {
 PHP_METHOD(Test_ArrayAccessTest, exits) {
 
 	zval arr;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -47,6 +48,7 @@ PHP_METHOD(Test_ArrayAccessTest, exits) {
 PHP_METHOD(Test_ArrayAccessTest, get) {
 
 	zval arr, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 

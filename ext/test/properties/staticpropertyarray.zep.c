@@ -43,6 +43,7 @@ void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D)
 
 	zval _1;
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 

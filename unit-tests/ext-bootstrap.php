@@ -5,11 +5,11 @@
  *
  * (c) Zephir Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
-require_once __DIR__.'/bootstrap.php';
+require_once __DIR__.'/../Library/autoload.php';
 
 if (!extension_loaded('phalcon')) {
     include_once __DIR__.'/../prototypes/phalcon.php';

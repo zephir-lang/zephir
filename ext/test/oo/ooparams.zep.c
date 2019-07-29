@@ -33,6 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoParams) {
 
 PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -50,6 +51,7 @@ PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 
 PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -72,7 +74,7 @@ PHP_METHOD(Test_Oo_OoParams, setAge) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
@@ -88,7 +90,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
@@ -99,6 +101,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 
 PHP_METHOD(Test_Oo_OoParams, setName) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL;
 	zval name;
 	zval *this_ptr = getThis();
@@ -122,7 +125,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &enabled_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
@@ -133,6 +136,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 PHP_METHOD(Test_Oo_OoParams, setList) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *someList_param = NULL;
 	zval someList;
 	zval *this_ptr = getThis();
@@ -156,7 +160,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &age_param);
 
 	if (UNEXPECTED(Z_TYPE_P(age_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int") TSRMLS_CC);
@@ -176,7 +180,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double") TSRMLS_CC);
@@ -192,6 +196,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 PHP_METHOD(Test_Oo_OoParams, setStrictNameFromZephirLand) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -208,6 +213,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictNameFromZephirLand) {
 
 PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL;
 	zval name;
 	zval *this_ptr = getThis();
@@ -240,7 +246,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &enabled_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &enabled_param);
 
 	enabled = zephir_get_boolval(enabled_param);
 
@@ -251,6 +257,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *someList_param = NULL;
 	zval someList;
 	zval *this_ptr = getThis();
@@ -274,7 +281,7 @@ PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 0, 1, &age_param);
+	zephir_fetch_params_without_memory_grow(0, 1, &age_param);
 
 	if (!age_param) {
 		age = 25;
@@ -294,7 +301,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 0, 1, &average_param);
+	zephir_fetch_params_without_memory_grow(0, 1, &average_param);
 
 	if (!average_param) {
 		average = (double) 25;
@@ -309,6 +316,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
 
 PHP_METHOD(Test_Oo_OoParams, setNameDefault) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL;
 	zval name;
 	zval *this_ptr = getThis();
@@ -337,7 +345,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 0, 1, &enabled_param);
+	zephir_fetch_params_without_memory_grow(0, 1, &enabled_param);
 
 	if (!enabled_param) {
 		enabled = 0;
@@ -352,6 +360,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
 
 PHP_METHOD(Test_Oo_OoParams, setListDefault) {
 
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *someList_param = NULL;
 	zval someList;
 	zval *this_ptr = getThis();
@@ -380,7 +389,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &age_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &age_param);
 
 	age = zephir_get_intval(age_param);
 
@@ -396,7 +405,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 	zval *this_ptr = getThis();
 
 
-	zephir_fetch_params(0, 1, 0, &average_param);
+	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 
 	average = zephir_get_doubleval(average_param);
 
@@ -412,7 +421,7 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params_without_memory_grow(1, 0, &obj);
 
 
 
@@ -428,7 +437,7 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params_without_memory_grow(1, 0, &obj);
 
 
 
@@ -444,7 +453,7 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 
 	ZVAL_UNDEF(&obj_sub);
 
-	zephir_fetch_params(0, 1, 0, &obj);
+	zephir_fetch_params_without_memory_grow(1, 0, &obj);
 
 
 
@@ -460,7 +469,7 @@ PHP_METHOD(Test_Oo_OoParams, setObjectClassCast) {
 
 	ZVAL_UNDEF(&parameter_sub);
 
-	zephir_fetch_params(0, 1, 0, &parameter);
+	zephir_fetch_params_without_memory_grow(1, 0, &parameter);
 
 
 
