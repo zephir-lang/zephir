@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.12.1] - 2019-07-29
 ### Added
 - Added initial bash completion support (see `zephir-autocomplete` file)
 
@@ -198,7 +200,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.0...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.1...HEAD
+[0.12.1]: https://github.com/phalcon/zephir/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/phalcon/zephir/compare/0.11.12...0.12.0
 [0.11.12]: https://github.com/phalcon/zephir/compare/0.11.11...0.11.12
 [0.11.11]: https://github.com/phalcon/zephir/compare/0.11.10...0.11.11
