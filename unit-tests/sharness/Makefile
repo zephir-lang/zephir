@@ -44,9 +44,8 @@ aggregate: clean-test-results $(T)
 	ls test-results/t*-*.sh.*.counts | $(AGGREGATE)
 
 .PHONY: deps
-deps: sharness $(BINS)
+deps: $(SHARNESS) $(BINS)
 
-.PHONY: sharness
-$(SHARNESS): FORCE
+$(SHARNESS):
 	@echo "*** checking $@ ***"
 	$(LIBDIR)/install-sharness.sh
