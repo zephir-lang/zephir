@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [0.12.1] - 2019-07-29
+## [0.12.1] - 2019-07-30
 ### Added
 - Added initial bash completion support (see `zephir-autocomplete` file)
 
