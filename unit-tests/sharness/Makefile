@@ -26,6 +26,7 @@ clean: clean-test-results
 	find $(TESTSDIR)/fixtures -name compile-errors.log -o -name compile.log | xargs rm -f
 	find $(TESTSDIR)/fixtures -name .zephir -type d | xargs rm -rf
 	find $(TESTSDIR)/fixtures -name ext -type d | xargs rm -rf
+	-rm -rf "trash "directory.*
 
 .PHONY: clean-test-results
 clean-test-results:

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -123,7 +124,10 @@ final class Application extends BaseApplication
         try {
             return parent::doRun($input, $output);
         } catch (CommandNotFoundException $e) {
-            $this->setCatchExceptions(false);
+            fprintf(STDERR, $e->getMessage().PHP_EOL);
+
+            return 1;
+        } catch (RuntimeException $e) {
             fprintf(STDERR, $e->getMessage().PHP_EOL);
 
             return 1;
