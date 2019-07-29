@@ -10,6 +10,7 @@
 T = $(sort $(wildcard t[0-9][0-9][0-9][0-9]-*.sh))
 LIBDIR = lib
 SHARNESSDIR = sharness
+SHARNESS = $(LIBDIR)/$(SHARNESSDIR)/sharness.sh
 AGGREGATE = $(LIBDIR)/$(SHARNESSDIR)/aggregate-results.sh
 
 PROJECTDIR=$(LIBDIR)/../../..
@@ -28,19 +29,23 @@ clean: clean-test-results
 
 .PHONY: clean-test-results
 clean-test-results:
+	@echo "*** $@ ***"
 	-rm -rf test-results
 
 .PHONY: $(T)
 $(T): clean-test-results deps
+	@echo "*** $@ ***"
 	./$@
 
 .PHONY: aggregate
 aggregate: clean-test-results $(T)
+	@echo "*** $@ ***"
 	ls test-results/t*-*.sh.*.counts | $(AGGREGATE)
 
 .PHONY: deps
 deps: sharness $(BINS)
 
 .PHONY: sharness
-sharness:
-	lib/install-sharness.sh
+$(SHARNESS): FORCE
+	@echo "*** checking $@ ***"
+	$(LIBDIR)/install-sharness.sh
