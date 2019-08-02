@@ -66,7 +66,7 @@ before_install:
     git config --global advice.detachedHead false
 
     # Box does not work with PHP 7.4
-    if [ "$PHP_VERNUM" -ge "70100" ]
+    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]
     then
       export BUILD_PHAR=1
     fi
