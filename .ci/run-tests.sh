@@ -11,26 +11,20 @@
 # -u  Treat unset variables as an error when substituting.
 set -eu
 
-if [ -z ${CI+x} ] || [ "$CI" != "true" ]; then
-  >&2 printf "This script is designed to run inside a CI container only.\n"
-  >&2 printf "Aborting.\n"
-  exit 1
-fi
-
-if [ "$(php-config --vernum)" -lt "70200" ]; then
+if [ "$($(phpenv which php-config) --vernum)" -lt "70200" ]; then
   test_suite="Extension_Php70"
 else
   test_suite="Extension_Php72"
 fi
 
-php \
+"$(phpenv which php)" \
   -d extension=ext/modules/test.so \
   vendor/bin/simple-phpunit \
   --colors=always \
   --bootstrap unit-tests/ext-bootstrap.php \
   --testsuite ${test_suite}
 
-php \
+"$(phpenv which php)" \
   vendor/bin/simple-phpunit \
   --colors=always \
   --testsuite Zephir

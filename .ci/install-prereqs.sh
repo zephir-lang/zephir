@@ -12,41 +12,39 @@
 set -eu
 
 # Ensure that this is being run inside a CI container
-if [ "${CI}" != "true" ];
+if [ "${CI}" != "true" ]
 then
-  >&2 echo "This script is designed to run inside a CI container only."
-  >&2 echo "Aborting."
+  (>&2 echo "This script is designed to run inside a CI container only.")
+  (>&2 echo "Aborting.")
   exit 1
 fi
 
-PHP_INI="$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-
-: ${ZEPHIR_PARSER_VERSION:=master}
+: "${ZEPHIR_PARSER_VERSION:=master}"
 
 # Install psr extension
-printf "Install psr extension\n"
-printf "\n" | pecl install --force psr 1> /dev/null
+(>&1 echo "Install psr extension...")
+printf "\\n" | pecl install --force psr 1> /dev/null
 
 # Install Zephir Parser
-printf "Install Zephir Parser\n"
-git clone -b "${ZEPHIR_PARSER_VERSION}" --depth 1 -q https://github.com/phalcon/php-zephir-parser
+(>&1 echo "Install Zephir Parser...")
+git clone -b "$ZEPHIR_PARSER_VERSION" --depth 1 -q https://github.com/phalcon/php-zephir-parser
 cd php-zephir-parser
+# shellcheck disable=SC2091
 $(phpenv which phpize)
-./configure --silent --with-php-config=$(phpenv which php-config) --enable-zephir_parser
+./configure --silent --with-php-config="$(phpenv which php-config)" --enable-zephir_parser
 make --silent -j"$(getconf _NPROCESSORS_ONLN)"
 make --silent install
 echo 'extension="zephir_parser.so"' > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir_parser.ini"
 
 # Install Box
-if [ "$BUILD_PHAR" = "true" ]; then
-  printf "Install Box\n"
-  printf "PHP version number is ${PHP_VERNUM}\nDownloading humbug/box...\n"
+if [ "$BUILD_PHAR" -eq "1" ]
+then
+  (>&1 echo "Install Box...")
   wget \
     "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
     --quiet \
     -O "${HOME}/bin/box"
 
   chmod +x "${HOME}/bin/box"
-
   box --version
 fi
