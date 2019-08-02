@@ -50,7 +50,8 @@ before_install:
     ulimit -c unlimited -S || true
     echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
-    if [ -n "$GITHUB_TOKEN" ]; then
+    if [ -n "$GITHUB_TOKEN" ]
+    then
       composer config github-oauth.github.com "$GITHUB_TOKEN"
       echo 'Add Github token'
     fi
@@ -140,8 +141,8 @@ after_success:
   - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
 
 after_failure:
-  - "$(phpenv which php)" -v
-  - "$(phpenv which php)" -m
+  - echo "$($(phpenv which php) -v)"
+  - echo "$($(phpenv which php) -m)"
   - .ci/after-failure.sh
 
 before_deploy:
