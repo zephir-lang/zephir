@@ -16,6 +16,12 @@ set -eu
 #   ZEPHIR_BIN=./zephir .ci/build-test-ext.sh
 : "${ZEPHIR_BIN:=zephir}"
 
+# Some defaults
+: "${REPORT_COVERAGE:=0}"
+: "${CFLAGS:=}"
+: "${CXXFLAGS:=}"
+: "${LDFLAGS:=}"
+
 $ZEPHIR_BIN clean 2>&1 || exit 1
 $ZEPHIR_BIN fullclean 2>&1 || exit 1
 
@@ -24,9 +30,9 @@ ZFLAGS=""
 # ZFLAGS="${ZFLAGS} -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant"
 # ZFLAGS="${ZFLAGS} -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement"
 
-$ZEPHIR_BIN generate "$ZFLAGS" 2>&1 || exit 1
-$ZEPHIR_BIN stubs "$ZFLAGS" 2>&1 || exit 1
-$ZEPHIR_BIN api "$ZFLAGS" 2>&1 || exit 1
+$ZEPHIR_BIN generate ${ZFLAGS} 2>&1 || exit 1
+$ZEPHIR_BIN stubs ${ZFLAGS} 2>&1 || exit 1
+$ZEPHIR_BIN api ${ZFLAGS} 2>&1 || exit 1
 
 cd ext || exit 1
 
