@@ -6,7 +6,7 @@ php:
   - '7.1'
   - '7.0'
 
-dist: bionic
+dist: xenial
 
 git:
   depth: 5
