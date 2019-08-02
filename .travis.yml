@@ -66,16 +66,13 @@ before_install:
     git config --global advice.detachedHead false
 
     # Box does not work with PHP 7.4
-    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]
+    if [ "$PHP_VERNUM" -ge "70100" ]
     then
       export BUILD_PHAR=1
     fi
 
     if [ "$PHP_VERNUM" -ge "70400" ]
     then
-      # Do not collect code coverage for PHP 7.4
-      export REPORT_COVERAGE=0
-
       # Temporary until we release parser with PHP 7.4 support
       export ZEPHIR_PARSER_VERSION=development
     fi
@@ -104,8 +101,6 @@ install:
 before_script:
   - .ci/build-test-ext.sh
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
-  # Does not ready yet
-  - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
 
 script:
   - zephir
