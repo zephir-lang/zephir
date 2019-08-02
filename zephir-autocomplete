@@ -37,13 +37,14 @@ function _zephir_completion() {
 
     if [[ "$cur" == -* ]]
     then
-      declare -a a_commands=( "$( echo "$commands" | tr " " "\n" )" )
+      declare -a a_commands=( "$( echo "$commands" | tr " " "\\n" )" )
 
       for i in "${a_commands[@]}"
       do
         if [ "$i" = "$first" ]
         then
-          local opts=$( zephir "$first" -h --no-ansi | \
+          local opts
+          opts=$( zephir "$first" -h --no-ansi | \
             tr -cs '[=-=][:alpha:]_' '[\n*]' | \
             grep '^-' )
           COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
@@ -54,7 +55,8 @@ function _zephir_completion() {
     fi
   elif [[ "$cur" == -* ]]
   then
-    local opts="--help --quiet --verbose --version --ansi --no-ansi"
+    local opts
+    opts="--help --quiet --verbose --version --ansi --no-ansi"
     opts+=" --dumpversion"
 
     COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
