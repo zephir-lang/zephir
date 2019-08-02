@@ -27,7 +27,7 @@ printf "\\n" | pecl install --force psr 1> /dev/null
 
 # Install Zephir Parser
 (>&1 echo "Install Zephir Parser...")
-git clone -b "${ZEPHIR_PARSER_VERSION}" --depth 1 -q https://github.com/phalcon/php-zephir-parser
+git clone -b "$ZEPHIR_PARSER_VERSION" --depth 1 -q https://github.com/phalcon/php-zephir-parser
 cd php-zephir-parser
 # shellcheck disable=SC2091
 $(phpenv which phpize)
@@ -37,7 +37,7 @@ make --silent install
 echo 'extension="zephir_parser.so"' > "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/zephir_parser.ini"
 
 # Install Box
-if [ "$BUILD_PHAR" = "true" ]
+if [ "$BUILD_PHAR" -eq "1" ]
 then
   (>&1 echo "Install Box...")
   wget \
@@ -46,6 +46,5 @@ then
     -O "${HOME}/bin/box"
 
   chmod +x "${HOME}/bin/box"
-
   box --version
 fi

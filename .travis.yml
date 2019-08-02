@@ -41,7 +41,8 @@ env:
     - BOX_VERSION=3.3.1
     - BUILD_PHAR=0
     - PATH="${HOME}/bin:${PATH}"
-    - TRAVIS_COMMIT_LOG=`git log --format=fuller -5`
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+    - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
 
 before_install:
   - |
@@ -49,13 +50,13 @@ before_install:
     ulimit -c unlimited -S || true
     echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
-    if [ ! -z "${GITHUB_TOKEN}" ]; then
-      composer config github-oauth.github.com ${GITHUB_TOKEN}
-      printf "Add Github token\n"
+    if [ -n "$GITHUB_TOKEN" ]; then
+      composer config github-oauth.github.com "$GITHUB_TOKEN"
+      echo 'Add Github token'
     fi
 
     # Export build/test environment variables
-    export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
+    export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
     export PHP_VERNUM="$(php-config --vernum)"
 
     [ -d ~/bin ] || mkdir ~/bin
@@ -64,11 +65,13 @@ before_install:
     git config --global advice.detachedHead false
 
     # Box does not work with PHP 7.4
-    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]; then
+    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]
+    then
       export BUILD_PHAR=1
     fi
 
-    if [ "$PHP_VERNUM" -ge "70400" ]; then
+    if [ "$PHP_VERNUM" -ge "70400" ]
+    then
       # Do not collect code coverage for PHP 7.4
       export REPORT_COVERAGE=0
 
@@ -76,25 +79,30 @@ before_install:
       export ZEPHIR_PARSER_VERSION=development
     fi
 
+    if [ "$TRAVIS_PHP_VERSION" = "7.2" ]
+    then
+      echo 'Choose a suitable PHP version to build PHAR'
+      composer config platform.php 7.0.33
+    fi
+
 install:
   - .ci/install-prereqs.sh
-  - .ci/install-re2c.sh $RE2C_VERSION
-  - flags="--ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
-  - if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then composer config platform.php 7.0.33; echo "Preparing to deploy"; fi
-  - travis_retry composer install $flags
+  - .ci/install-re2c.sh "$RE2C_VERSION"
+  - travis_retry composer install "$DEFAULT_COMPOSER_FLAGS"
   - |
     # Prepare Zephir executable
-    if [ "$BUILD_PHAR" -eq 1 ]; then
-      printf "Build Zephit PHAR\n"
+    if [ "$BUILD_PHAR" -eq 1 ]
+    then
+      echo "Build Zephit PHAR"
       .ci/build-phar.sh
     else
-      printf "Use Zephir from source\n"
-      ln -s $(pwd)/zephir ${HOME}/bin/zephir
+      echo "Use Zephir from source"
+      ln -s "$(pwd)/zephir" "$HOME/bin/zephir"
     fi
 
 before_script:
   - .ci/build-test-ext.sh
-  - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
   # Does not ready yet
   - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
 
@@ -110,11 +118,11 @@ jobs:
       env:
         - REPORT_COVERAGE=0
       install:
-        - wget --no-clobber -O $HOME/bin/php-cs-fixer https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
-        - wget --no-clobber -O $HOME/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+        - wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+        - wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
       before_script:
-        - chmod +x $HOME/bin/php-cs-fixer
-        - chmod +x $HOME/bin/phpcs
+        - chmod +x "$HOME/bin/php-cs-fixer"
+        - chmod +x "$HOME/bin/phpcs"
       script:
         - phpcs
         - php-cs-fixer fix --diff --dry-run -v
@@ -132,8 +140,8 @@ after_success:
   - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
 
 after_failure:
-  - $(phpenv which php) -v
-  - $(phpenv which php) -m
+  - "$(phpenv which php)" -v
+  - "$(phpenv which php)" -m
   - .ci/after-failure.sh
 
 before_deploy:
