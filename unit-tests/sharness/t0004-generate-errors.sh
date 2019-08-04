@@ -13,6 +13,4 @@ test_expect_success "Should fail when Zephir files to compile couldn't be found"
   test_cmp $FIXTURESDIR/genfailure1 actual
 "
 
-cleanup_output "genfailure1"
-
 test_done

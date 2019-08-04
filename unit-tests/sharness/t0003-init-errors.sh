@@ -12,6 +12,4 @@ test_expect_success "Should fail when not enough arguments" "
   test_cmp expected actual
 "
 
-cleanup_output "expected actual"
-
 test_done
