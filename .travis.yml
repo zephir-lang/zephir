@@ -104,6 +104,7 @@ before_script:
   - zephir generate 2>&1 || exit 1
   - zephir stubs 2>&1 || exit 1
   - zephir api 2>&1 || exit 1
+  - zephir compile 2>&1 || exit 1
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
