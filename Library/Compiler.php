@@ -124,8 +124,8 @@ final class Compiler
         try {
             $this->assertRequiredExtensionsIsPresent();
         } catch (RuntimeException $e) {
-            fwrite(STDERR, trim($e->getMessage()) . PHP_EOL);
-            exit (1);
+            fwrite(STDERR, trim($e->getMessage()).PHP_EOL);
+            exit(1);
         }
     }
 
@@ -2172,7 +2172,7 @@ final class Compiler
         foreach ($extensionRequires as $key => $value) {
             // TODO: We'll use this as an object in the future.
             // Right not it should be a string.
-            if (!is_string($value)) {
+            if (!\is_string($value)) {
                 continue;
             }
             if (false === \extension_loaded($value)) {
