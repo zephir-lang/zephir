@@ -99,11 +99,14 @@ install:
     fi
 
 before_script:
-  - .ci/build-test-ext.sh
+  - zephir clean 2>&1 || exit 1
+  - zephir fullclean 2>&1 || exit 1
+  - zephir generate 2>&1 || exit 1
+  - zephir stubs 2>&1 || exit 1
+  - zephir api 2>&1 || exit 1
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
-  - zephir
   - .ci/run-tests.sh
   - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
 
