@@ -105,7 +105,7 @@ before_script:
 script:
   - zephir
   - .ci/run-tests.sh
-  - (cd unit-tests/sharness && make)
+  - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
 
 jobs:
   include:

@@ -7,7 +7,7 @@ source ./setup.sh
 
 regexp="'-O2 -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
 test_expect_success "Compile the extension in production mode" "
-cd $FIXTURESDIR/devmode &&
+  cd $FIXTURESDIR/devmode &&
   zephirc fullclean 2>&1 >/dev/null &&
   zephirc compile --no-dev 2>&1 >/dev/null &&
   grep -q -e \"^CFLAGS=$regexp\" ext/config.nice

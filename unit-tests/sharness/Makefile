@@ -14,7 +14,7 @@ SHARNESS = $(LIBDIR)/$(SHARNESSDIR)/sharness.sh
 AGGREGATE = $(LIBDIR)/$(SHARNESSDIR)/aggregate-results.sh
 
 PROJECTDIR=$(LIBDIR)/../../..
-TESTSDIR=$(PROJECTDIR)/unit-tests
+TESTSDIR=$(shell cd $(PROJECTDIR)/unit-tests || exit 1; pwd)
 
 BINS = $(PROJECTDIR)/zephir
 
@@ -23,11 +23,11 @@ all: aggregate
 
 .PHONY: clean
 clean: clean-test-results
-	find $(TESTSDIR)/fixtures -name compile-errors.log -o -name compile.log | xargs rm -f
-	find $(TESTSDIR)/fixtures -name .zephir -type d | xargs rm -rf
-	find $(TESTSDIR)/fixtures -name ext -type d | xargs rm -rf
-	find $(TESTSDIR)/output/* -type d | xargs rm -rf
-	find $(TESTSDIR)/output/* -type f -not -name .gitignore -delete
+	find $(TESTSDIR)/fixtures -name compile-errors.log -o -name compile.log -delete
+	find $(TESTSDIR)/fixtures -name .zephir -type d -exec rm -rf {} +
+	find $(TESTSDIR)/fixtures -name ext -type d -exec rm -rf {} +
+	find $(TESTSDIR)/output -type d -path $(TESTSDIR)/output -prune -o -exec rm -rf {} +
+	find $(TESTSDIR)/output -type f -not -name .gitignore -delete
 	-rm -rf "trash "directory.*
 
 .PHONY: clean-test-results
