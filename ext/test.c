@@ -581,10 +581,19 @@ ZEND_FE_END
 
 };
 
+static const zend_module_dep php_test_deps[] = {
+	ZEND_MOD_REQUIRED("pdo")
+	ZEND_MOD_REQUIRED("spl")
+	ZEND_MOD_REQUIRED("standard")
+	ZEND_MOD_REQUIRED("hash")
+	ZEND_MOD_REQUIRED("json")
+	ZEND_MOD_END
+};
+
 zend_module_entry test_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	NULL,
+	php_test_deps,
 	PHP_TEST_EXTNAME,
 	php_test_functions,
 	PHP_MINIT(test),
