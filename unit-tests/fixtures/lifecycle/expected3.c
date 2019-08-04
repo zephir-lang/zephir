@@ -145,10 +145,15 @@ zend_function_entry php_lifecycle_functions[] = {
 
 };
 
+static const zend_module_dep php_lifecycle_deps[] = {
+	
+	ZEND_MOD_END
+};
+
 zend_module_entry lifecycle_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	NULL,
+	php_lifecycle_deps,
 	PHP_LIFECYCLE_EXTNAME,
 	php_lifecycle_functions,
 	PHP_MINIT(lifecycle),

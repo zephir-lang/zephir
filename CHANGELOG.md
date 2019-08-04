@@ -6,24 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Introduced initial ability to generate `zend_module_deps` by using
-  `requires` from project configuration (`config.json`)
+- Introduced initial ability to generate `zend_module_deps`
+  [#1900](https://github.com/phalcon/zephir/pull/1900),
   [phalcon/cphalcon#13702](https://github.com/phalcon/cphalcon/issues/13702),
-  [phalcon/cphalcon#13794](https://github.com/phalcon/cphalcon/pull/13794).
-  To do so, add to your `config.json` configuration like this:
-  ```
-  "requires": {
-      "extensions": [
-          "module1",
-          "module2",
-          "module3"
-    ]
-  }
-  ```
-  
+  [phalcon/cphalcon#13794](https://github.com/phalcon/cphalcon/pull/13794)
 
 ### Changed
-- Write errors to stderr if available
+- Write errors compiler to stderr if available
 
 ## [0.12.1] - 2019-07-30
 ### Added
