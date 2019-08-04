@@ -121,7 +121,12 @@ final class Compiler
         $this->stringManager = $this->backend->getStringsManager();
         $this->fcallManager = $this->backend->getFcallManager();
 
-        $this->assertRequiredExtensionsIsPresent();
+        try {
+            $this->assertRequiredExtensionsIsPresent();
+        } catch (RuntimeException $e) {
+            fwrite(STDERR, trim($e->getMessage()) . PHP_EOL);
+            exit (1);
+        }
     }
 
     /**
@@ -1672,6 +1677,10 @@ final class Compiler
             }
         }
 
+        $modRequires = array_map(function ($mod) {
+            return sprintf('ZEND_MOD_REQUIRED("%s")', strtolower($mod));
+        }, $this->config->get('extensions', 'requires') ?: []);
+
         $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
             '%PROJECT_LOWER%' => strtolower($project),
@@ -1719,6 +1728,7 @@ final class Compiler
             '%FE_HEADER%' => $feHeader,
             '%FE_ENTRIES%' => $feEntries,
             '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL."\t", $initEntries),
+            '%PROJECT_DEPENDENCIES%' => implode(PHP_EOL."\t", $modRequires),
         ];
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -2160,6 +2170,11 @@ final class Compiler
 
         $extensions = [];
         foreach ($extensionRequires as $key => $value) {
+            // TODO: We'll use this as an object in the future.
+            // Right not it should be a string.
+            if (!is_string($value)) {
+                continue;
+            }
             if (false === \extension_loaded($value)) {
                 $extensions[] = $value;
             }
@@ -2168,7 +2183,7 @@ final class Compiler
         if (false === empty($extensions)) {
             throw new RuntimeException(
                 sprintf(
-                    'Could not load extension: %s. You must add extensions above before build this extension.',
+                    'Could not load extension(s): %s. You must load extensions above before build this extension.',
                     implode(', ', $extensions)
                 )
             );

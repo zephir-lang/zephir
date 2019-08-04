@@ -134,10 +134,15 @@ zend_function_entry php_%PROJECT_LOWER_SAFE%_functions[] = {
 	%FE_ENTRIES%
 };
 
+static const zend_module_dep php_%PROJECT_LOWER_SAFE%_deps[] = {
+	%PROJECT_DEPENDENCIES%
+	ZEND_MOD_END
+};
+
 zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	NULL,
+	php_%PROJECT_LOWER_SAFE%_deps,
 	PHP_%PROJECT_UPPER%_EXTNAME,
 	php_%PROJECT_LOWER_SAFE%_functions,
 	PHP_MINIT(%PROJECT_LOWER%),
