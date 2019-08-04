@@ -1,18 +1,17 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-test_description="Test init command for failures"
+# shellcheck disable=SC2034
+test_description="Test init commands"
 
-. ./setup.sh
+source ./setup.sh
 
-test_expect_success "Should fail when not enough arguments" '
-    cd $OUTPUTDIR &&
-    echo "Not enough arguments (missing: \"namespace\")." >expected &&
-    test_expect_code 1 ${PHP} ${ZEPHIR_BIN} init 2>actual &&
-    test_cmp expected actual
-'
+test_expect_success "Should fail when not enough arguments" "
+  cd $OUTPUTDIR &&
+  echo 'Not enough arguments (missing: \"namespace\").' >expected &&
+  test_expect_code 1 php $ZEPHIR_BIN init 2>actual &&
+  test_cmp expected actual
+"
 
-for f in expected actual; do
-    test -f $OUTPUTDIR/$f && rm -f $OUTPUTDIR/$f
-done
+cleanup_output "expected actual"
 
 test_done

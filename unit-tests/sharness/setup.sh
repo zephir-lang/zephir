@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # This file is part of the Zephir.
 #
 # (c) Zephir Team <team@zephir-lang.com>
@@ -8,29 +10,43 @@
 # set sharness verbosity. we set the env var directly as
 # it's too late to pass in --verbose, and --verbose is harder
 # to pass through in some cases.
+# shellcheck disable=SC2034
 test "$TEST_VERBOSE" = 1 && verbose=t
 
-SHARNESS_LIB="./lib/sharness/sharness.sh"
+readonly SHARNESS_LIB="./lib/sharness/sharness.sh"
 
-. "$SHARNESS_LIB" || {
-	echo >&2 "Cannot source: $SHARNESS_LIB"
-	echo >&2 "Please check Sharness installation."
-	exit 1
+# shellcheck source=lib/sharness/sharness.sh
+source "$SHARNESS_LIB" || {
+  echo >&2 "Cannot source: $SHARNESS_LIB"
+  echo >&2 "Please check Sharness installation."
+  exit 1
 }
 
 if test "$TEST_VERBOSE" = 1; then
-	echo '# TEST_VERBOSE='"$TEST_VERBOSE"
+  echo '# TEST_VERBOSE='"$TEST_VERBOSE"
 fi
 
+# shellcheck disable=SC2155
 export ZEPHIRDIR=$(cd "$(dirname $0)/../../../"; pwd)
+
+# shellcheck disable=SC2155
 export TESTSDIR=$(cd "$(dirname $0)/../../"; pwd)
 export FIXTURESDIR="$TESTSDIR/fixtures"
 export OUTPUTDIR="$TESTSDIR/output"
+export ZEPHIR_BIN="$ZEPHIRDIR/zephir"
+# shellcheck disable=SC2155
+export PHP_VERSION_ID=$(php -r 'echo PHP_VERSION_ID;')
 
-export ZEPHIR_BIN="${ZEPHIRDIR}/zephir"
+# shellcheck disable=SC2139
+alias zephir="php $ZEPHIR_BIN"
 
-: ${PHP:=php}
+function cleanup_output() {
+  [ -n "$1" ] || return 0
 
-export PHP_VERSION_ID=$(${PHP} -r 'echo PHP_VERSION_ID;')
-
-alias zephir="${PHP} ${ZEPHIR_BIN}"
+  for f in $1; do
+    test -f "$OUTPUTDIR/$f" && {
+      test "$TEST_VERBOSE" = 1 && (>&1 printf "rm -f %s\n" "$OUTPUTDIR/$f")
+      rm -f "$OUTPUTDIR/$f"
+    }
+  done
+}

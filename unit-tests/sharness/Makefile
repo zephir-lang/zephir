@@ -41,7 +41,7 @@ $(T): clean-test-results deps
 .PHONY: aggregate
 aggregate: clean-test-results $(T)
 	@echo "*** $@ ***"
-	ls test-results/t*-*.sh.*.counts | $(AGGREGATE)
+	find ./test-results -name 't*-*.sh.*.counts' | $(AGGREGATE)
 
 .PHONY: deps
 deps: $(SHARNESS) $(BINS)
