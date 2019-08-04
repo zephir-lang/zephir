@@ -91,7 +91,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         'namespace' => '',
         'name' => '',
         'description' => '',
-        'author' => '',
+        'author' => 'Zephir Team',
         'version' => '0.0.1',
         'verbose' => false,
         'requires' => [
