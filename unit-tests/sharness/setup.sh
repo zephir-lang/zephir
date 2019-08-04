@@ -23,30 +23,40 @@ source "$SHARNESS_LIB" || {
 }
 
 if test "$TEST_VERBOSE" = 1; then
-  echo '# TEST_VERBOSE='"$TEST_VERBOSE"
+  echo '[DEBUG] TEST_VERBOSE='"$TEST_VERBOSE"
 fi
 
 # shellcheck disable=SC2155
-export ZEPHIRDIR=$(cd "$(dirname $0)/../../../"; pwd)
+export ZEPHIRDIR=$(cd "$(dirname "$0")/../../../" || exut 1; pwd)
 
 # shellcheck disable=SC2155
-export TESTSDIR=$(cd "$(dirname $0)/../../"; pwd)
+export TESTSDIR=$(cd "$(dirname "$0")/../../" || exut 1; pwd)
 export FIXTURESDIR="$TESTSDIR/fixtures"
 export OUTPUTDIR="$TESTSDIR/output"
 export ZEPHIR_BIN="$ZEPHIRDIR/zephir"
 # shellcheck disable=SC2155
 export PHP_VERSION_ID=$(php -r 'echo PHP_VERSION_ID;')
 
+: "${PHP:=$(command -v php 2>/dev/null)}"
+
 # shellcheck disable=SC2139
-alias zephir="php $ZEPHIR_BIN"
+function zephirc() {
+  test "$TEST_VERBOSE" = 1 && (>&1 printf "[DEBUG4] %s\n" "$PHP $ZEPHIR_BIN $*")
+  eval "$PHP $ZEPHIR_BIN $*"
+}
 
 function cleanup_output() {
   [ -n "$1" ] || return 0
 
   for f in $1; do
-    test -f "$OUTPUTDIR/$f" && {
-      test "$TEST_VERBOSE" = 1 && (>&1 printf "rm -f %s\n" "$OUTPUTDIR/$f")
+    if test -f "$OUTPUTDIR/$f"
+    then
+      test "$TEST_VERBOSE" = 1 && (>&1 printf "[DEBUG2] rm -f %s\n" "$OUTPUTDIR/$f")
       rm -f "$OUTPUTDIR/$f"
-    }
+    elif test -d "$OUTPUTDIR/$f"
+    then
+      test "$TEST_VERBOSE" = 1 && (>&1 printf "[DEBUG1] rm -rf %s\n" "$OUTPUTDIR/$f")
+      rm -rf "$OUTPUTDIR/${f:?}"
+    fi
   done
 }

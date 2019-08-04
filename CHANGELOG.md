@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Write errors to stderr if available
 
 ## [0.12.1] - 2019-07-30
 ### Added
@@ -15,7 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1859](https://github.com/phalcon/zephir/pull/1859),
   [#1880](https://github.com/phalcon/zephir/pull/1880)
 - Rephrase help strings for common compiler options
-- Write errors to stderr if available
 
 ### Removed
 - Remove HAVE_SPL usage
