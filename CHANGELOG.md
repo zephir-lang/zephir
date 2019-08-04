@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1859](https://github.com/phalcon/zephir/pull/1859),
   [#1880](https://github.com/phalcon/zephir/pull/1880)
 - Rephrase help strings for common compiler options
+- Write errors to stderr if available
 
 ### Removed
 - Remove HAVE_SPL usage

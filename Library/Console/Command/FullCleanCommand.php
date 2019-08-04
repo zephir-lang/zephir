@@ -59,7 +59,7 @@ final class FullCleanCommand extends Command
                 }
             }
         } catch (FileSystemException $e) {
-            $io->error(
+            $io->getErrorStyle()->error(
                 sprintf(
                     "For reasons beyond Zephir's control, a filesystem error has occurred. ".
                     'Please note: On Linux/Unix systems the current user must have the delete and execute '.

@@ -61,15 +61,15 @@ final class InstallCommand extends Command
                 $this->isDevelopmentModeEnabled($input)
             );
         } catch (NotImplementedException $e) {
-            $io->note($e->getMessage());
+            $io->getErrorStyle()->note($e->getMessage());
 
             return 0;
         } catch (CompilerException $e) {
-            $io->error($e->getMessage());
+            $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         } catch (Exception $e) {
-            $io->error($e->getMessage());
+            $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         }

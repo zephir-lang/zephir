@@ -65,14 +65,11 @@ final class InitCommand extends Command
         $this->config->set('namespace', $namespace);
         $this->config->set('name', $namespace);
 
-        if (!is_dir($namespace)) {
-            mkdir($namespace, 0755);
+        if (!is_dir("{$namespace}/{$namespace}")) {
+            mkdir("{$namespace}/{$namespace}", 0755, true);
         }
 
         chdir($namespace);
-        if (!is_dir($namespace)) {
-            mkdir($namespace, 0755);
-        }
 
         // Create 'kernel'
         if (!is_dir('ext/kernel')) {
