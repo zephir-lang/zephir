@@ -59,7 +59,7 @@ final class CompileCommand extends Command
                 $this->isDevelopmentModeEnabled($input)
             );
         } catch (CompilerException $e) {
-            $io->error($e->getMessage());
+            $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         }

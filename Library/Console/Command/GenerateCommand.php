@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidArgumentException;
 
@@ -55,7 +56,7 @@ final class GenerateCommand extends Command
             // TODO: Move all the stuff from the compiler
             $this->compiler->generate(true);
         } catch (InvalidArgumentException $e) {
-            $io->error(
+            $io->getErrorStyle()->error(
                 sprintf(
                     'Internal error: %s at %s:%d',
                     $e->getMessage(),
@@ -66,7 +67,11 @@ final class GenerateCommand extends Command
 
             return 1;
         } catch (CompilerException $e) {
-            $io->error($e->getMessage());
+            $io->getErrorStyle()->error($e->getMessage());
+
+            return 1;
+        } catch (Exception $e) {
+            $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         }
