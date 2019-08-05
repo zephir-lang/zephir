@@ -27,4 +27,4 @@ if [ ! -f "./zephir.phar" ] || [ ! -x "./zephir.phar" ]; then
 fi
 
 mkdir -p "$HOME/bin"
-mv "./zephir.phar" "$HOME/bin/zephir"
+cp "./zephir.phar" "$HOME/bin/zephir"
