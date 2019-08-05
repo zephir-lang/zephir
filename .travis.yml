@@ -6,6 +6,8 @@ php:
   - '7.1'
   - '7.0'
 
+dist: xenial
+
 git:
   depth: 5
   quiet: true
@@ -14,7 +16,7 @@ addons:
   apt:
     packages:
       - gdb
-      - lcov
+      - shellcheck
 
 matrix:
   fast_finish: true
@@ -32,108 +34,94 @@ cache:
 env:
   global:
     - RE2C_VERSION="1.1.1"
-    - ZEPHIR_PARSER_VERSION="v1.3.0"
+    - ZEPHIR_PARSER_VERSION="v1.3.1"
     # TODO: See Library/StatementsBlock.php
     # - ZEPHIR_DEBUG=true
-    - COLLECT_COVERAGE=true
+    - REPORT_COVERAGE=1
     - BOX_VERSION=3.3.1
-    - BUILD_PHAR=false
+    - BUILD_PHAR=0
     - PATH="${HOME}/bin:${PATH}"
-    - TRAVIS_COMMIT_LOG=`git log --format=fuller -5`
+    - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
 
 before_install:
   - |
-      # General settings
-      stty cols 120
+    # Core dump settings
+    ulimit -c unlimited -S || true
+    echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
-      # Export build/test environment variables
-      export SYMFONY_PHPUNIT_DIR=$(pwd)/.phpunit
-      export PHP_VERNUM="$(php-config --vernum)"
+    if [ -n "$GITHUB_TOKEN" ]
+    then
+      composer config github-oauth.github.com "$GITHUB_TOKEN"
+      echo 'Add Github token'
+    fi
 
-      if [ ! -z "${GITHUB_TOKEN}" ]; then
-        composer config github-oauth.github.com ${GITHUB_TOKEN}
-        printf "Add Github token\n"
-      fi
+    # Export build/test environment variables
+    export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
+    export PHP_VERNUM="$(php-config --vernum)"
 
-      [ -d ~/bin ] || mkdir ~/bin
+    [ -d ~/bin ] || mkdir ~/bin
+    export DEFAULT_COMPOSER_FLAGS=("--no-interaction" "--no-ansi" "--no-progress" "--no-suggest")
 
-      # Core dump settings
-      ulimit -c unlimited -S || true
-      echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
+    # Hide "You are in 'detached HEAD' state" message
+    git config --global advice.detachedHead false
 
-      # Hide "You are in 'detached HEAD' state" message
-      git config --global advice.detachedHead false
+    # Box does not work with PHP 7.4
+    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]
+    then
+      export BUILD_PHAR=1
+    fi
 
-      # Box does not work with PHP 7.4
-      if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]; then
-        export BUILD_PHAR=true
-      fi
+    if [ "$PHP_VERNUM" -ge "70400" ]
+    then
+      # Temporary until we release parser with PHP 7.4 support
+      export ZEPHIR_PARSER_VERSION=development
+    fi
 
-      if [ "$PHP_VERNUM" -ge "70400" ]; then
-        # Do not collect code coverage for PHP 7.4
-        export COLLECT_COVERAGE=false
+    if [ "$TRAVIS_PHP_VERSION" = "7.2" ]
+    then
+      echo 'Choose a suitable PHP version to build PHAR'
+      composer config platform.php 7.0.33
+    fi
 
-        # Temporary until we release parser with PHP 7.4 support
-        export ZEPHIR_PARSER_VERSION=development
-      fi
 install:
   - .ci/install-prereqs.sh
-  - .ci/install-re2c.sh $RE2C_VERSION
-  - flags="--ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress"
-  - if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then composer config platform.php 7.0.33; echo "Preparing to deploy"; fi
-  - travis_retry composer install $flags
+  - .ci/install-re2c.sh "$RE2C_VERSION"
+  - travis_retry composer install ${DEFAULT_COMPOSER_FLAGS[*]}
   - |
     # Prepare Zephir executable
-    if [ "$BUILD_PHAR" = "true" ]; then
-      printf "Build Zephit PHAR\n"
+    if [ "$BUILD_PHAR" -eq 1 ]
+    then
+      echo "Build Zephit PHAR"
       .ci/build-phar.sh
     else
-      printf "Use Zephir from source\n"
-      ln -s $(pwd)/zephir ${HOME}/bin/zephir
+      echo "Use Zephir from source"
+      ln -s "$(pwd)/zephir" "$HOME/bin/zephir"
     fi
 
 before_script:
   - .ci/build-test-ext.sh
-  - cat .ci/travis.ini >> $(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  # Does not ready yet
-  - if [ "$PHP_VERNUM" -ge "70400" ]; then phpenv config-rm xdebug.ini || true; fi
+  - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
-  - zephir
   - .ci/run-tests.sh
-  - (cd unit-tests/sharness && make)
-
-after_success:
-  - .ci/after-success.sh
-
-after_failure:
-  - .ci/after-failure.sh
+  - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
 
 jobs:
   include:
     - stage: Static Code Analysis
-      php: 7.2
+      php: '7.2'
       env:
-        - CHECK=php-cs-fixer
-        - COLLECT_COVERAGE=false
+        - REPORT_COVERAGE=0
       install:
-        - wget --no-clobber -O $HOME/bin/php-cs-fixer https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+        - wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+        - wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
       before_script:
-        - chmod +x $HOME/bin/php-cs-fixer
-      script:
-        - php-cs-fixer fix --diff --dry-run -v
-
-    - stage: Static Code Analysis
-      php: 7.2
-      env:
-        - CHECK=PHP_CodeSniffer
-        - COLLECT_COVERAGE=false
-      install:
-        - wget --no-clobber -O $HOME/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-      before_script:
-        - chmod +x $HOME/bin/phpcs
+        - chmod +x "$HOME/bin/php-cs-fixer"
+        - chmod +x "$HOME/bin/phpcs"
       script:
         - phpcs
+        - php-cs-fixer fix --diff --dry-run -v
+        - shellcheck .ci/*.sh
 
 notifications:
   email: false
@@ -141,6 +129,15 @@ notifications:
 after_script:
   - printf "$TRAVIS_COMMIT_RANGE\n"
   - printf "$TRAVIS_COMMIT_LOG\n"
+
+after_success:
+  - .ci/after-success.sh
+  - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
+
+after_failure:
+  - echo "$($(phpenv which php) -v)"
+  - echo "$($(phpenv which php) -m)"
+  - .ci/after-failure.sh
 
 before_deploy:
   - git config --global user.name cicdbot

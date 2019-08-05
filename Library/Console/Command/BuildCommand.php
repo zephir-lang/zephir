@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Zephir\Console\Command\BuildCommand.
@@ -41,6 +42,7 @@ final class BuildCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $command = $this->getApplication()->find('install');
+        $io = new SymfonyStyle($input, $output);
 
         $arguments = [
             'command' => 'install',
@@ -50,7 +52,7 @@ final class BuildCommand extends Command
         try {
             return $command->run(new ArrayInput($arguments), $output);
         } catch (\Exception $e) {
-            $output->writeln("<error>{$e->getMessage()}</error>");
+            $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         }

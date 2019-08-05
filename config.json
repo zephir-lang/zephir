@@ -1,157 +1,167 @@
 {
-    "namespace": "test",
-    "name": "Test Extension",
-    "description": "Description <b>test</b> for<br\/>Test Extension.",
-    "author": "Zephir Team and contributors",
-    "version": "1.0.0",
-    "verbose": true,
+  "namespace": "test",
+  "name": "Test Extension",
+  "description": "Description <b>test</b> for<br\/>Test Extension.",
+  "author": "Zephir Team and contributors",
+  "version": "1.0.0",
+  "verbose": true,
 
-    "stubs": {
-        "path": "ide\/%version%\/%namespace%\/",
-        "stubs-run-after-generate": false
-    },
-
-    "api": {
-        "path"  : "doc/%version%",
-        "theme" : {
-            "name":"zephir",
-            "options" :{
-                "github":"https://github.com/user/repo",
-                "analytics":null,
-                "main_color": "#3E6496",
-                "link_color": "#3E6496",
-                "link_hover_color": "#5F9AE7"
-            }
-        }
-    },
-
-    "warnings": {
-        "unused-variable": true,
-        "unused-variable-external": false,
-        "possible-wrong-parameter": true,
-        "possible-wrong-parameter-undefined": false,
-        "nonexistent-function": true,
-        "nonexistent-class": true,
-        "non-valid-isset": true,
-        "non-array-update": true,
-        "non-valid-objectupdate": true,
-        "non-valid-fetch": true,
-        "invalid-array-index": true,
-        "non-array-append": true,
-        "invalid-return-type": true,
-        "unreachable-code": true,
-        "nonexistent-constant": true,
-        "not-supported-magic-constant": true,
-        "non-valid-decrement": true,
-        "non-valid-increment": true,
-        "non-valid-clone": true,
-        "non-valid-new": true,
-        "non-array-access": true,
-        "invalid-reference": true,
-        "invalid-typeof-comparison": true,
-        "conditional-initialization": true
-    },
-
-    "optimizations": {
-        "static-type-inference": true,
-        "static-type-inference-second-pass": true,
-        "local-context-pass": true,
-        "constant-folding": true,
-        "static-constant-class-folding": true,
-        "call-gatherer-pass": true,
-        "check-invalid-reads": false,
-        "private-internal-methods": false,
-        "public-internal-methods": false,
-        "public-internal-functions": true
-    },
-
-    "globals": {
-        "my_setting_1": {
-            "type": "bool",
-            "default": true,
-            "ini-entry": {
-                "name": "ini-entry.my_setting_1",
-                "scope": "PHP_INI_ALL"
-            }
-        },
-        "test_setting_1": {
-            "type": "bool",
-            "default": true
-        },
-        "my_setting_2": {
-            "type": "int",
-            "default": 10
-        },
-        "my_setting_3": {
-            "type": "double",
-            "default": 15.2
-        },
-        "my_setting_4": {
-            "type": "char",
-            "default": "A"
-        },
-        "db.my_setting_1": {
-            "type": "bool",
-            "default": false
-        },
-        "db.my_setting_2": {
-            "type": "int",
-            "default": 100
-        },
-        "db.my_setting_3": {
-            "type": "double",
-            "default": 7.5
-        },
-        "orm.cache_level": {
-            "type": "int",
-            "default": 3
-        },
-        "orm.cache_enable": {
-            "type": "bool",
-            "default": true
-        },
-        "extension.test_ini_variable": {
-            "type": "bool",
-            "default": true,
-            "ini-entry": {
-                "name": "extension.test_ini_variable",
-                "scope": "PHP_INI_ALL"
-            }
-        }
-    },
-
-    "info": [
-        {
-            "header": [
-                "Test Extension support",
-                "Value"
-            ],
-            "rows": [
-                [
-                    "Lifecycle hooks",
-                    "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks."
-                ],
-                [
-                    "Static Analysis",
-                    "Test extensions' compiler provides static analysis of the compiled code."
-                ]
-            ]
-        },
-        {
-            "header": [
-                "Test variable",
-                "Value"
-            ],
-            "rows": [
-                [
-                    "Extension",
-                    "Installed"
-                ],
-                [
-                    "NFR",
-                    "Contributions are welcome!"
-                ]
-            ]
-        }
+  "requires": {
+    "extensions": [
+      "PDO",
+      "SPL",
+      "standard",
+      "hash",
+      "json"
     ]
+  },
+
+  "stubs": {
+    "path": "ide\/%version%\/%namespace%\/",
+    "stubs-run-after-generate": false
+  },
+
+  "api": {
+    "path"  : "doc/%version%",
+    "theme" : {
+      "name":"zephir",
+      "options" :{
+        "github":"https://github.com/user/repo",
+        "analytics":null,
+        "main_color": "#3E6496",
+        "link_color": "#3E6496",
+        "link_hover_color": "#5F9AE7"
+      }
+    }
+  },
+
+  "warnings": {
+    "unused-variable": true,
+    "unused-variable-external": false,
+    "possible-wrong-parameter": true,
+    "possible-wrong-parameter-undefined": false,
+    "nonexistent-function": true,
+    "nonexistent-class": true,
+    "non-valid-isset": true,
+    "non-array-update": true,
+    "non-valid-objectupdate": true,
+    "non-valid-fetch": true,
+    "invalid-array-index": true,
+    "non-array-append": true,
+    "invalid-return-type": true,
+    "unreachable-code": true,
+    "nonexistent-constant": true,
+    "not-supported-magic-constant": true,
+    "non-valid-decrement": true,
+    "non-valid-increment": true,
+    "non-valid-clone": true,
+    "non-valid-new": true,
+    "non-array-access": true,
+    "invalid-reference": true,
+    "invalid-typeof-comparison": true,
+    "conditional-initialization": true
+  },
+
+  "optimizations": {
+    "static-type-inference": true,
+    "static-type-inference-second-pass": true,
+    "local-context-pass": true,
+    "constant-folding": true,
+    "static-constant-class-folding": true,
+    "call-gatherer-pass": true,
+    "check-invalid-reads": false,
+    "private-internal-methods": false,
+    "public-internal-methods": false,
+    "public-internal-functions": true
+  },
+
+  "globals": {
+    "my_setting_1": {
+      "type": "bool",
+      "default": true,
+      "ini-entry": {
+        "name": "ini-entry.my_setting_1",
+        "scope": "PHP_INI_ALL"
+      }
+    },
+    "test_setting_1": {
+      "type": "bool",
+      "default": true
+    },
+    "my_setting_2": {
+      "type": "int",
+      "default": 10
+    },
+    "my_setting_3": {
+      "type": "double",
+      "default": 15.2
+    },
+    "my_setting_4": {
+      "type": "char",
+      "default": "A"
+    },
+    "db.my_setting_1": {
+      "type": "bool",
+      "default": false
+    },
+    "db.my_setting_2": {
+      "type": "int",
+      "default": 100
+    },
+    "db.my_setting_3": {
+      "type": "double",
+      "default": 7.5
+    },
+    "orm.cache_level": {
+      "type": "int",
+      "default": 3
+    },
+    "orm.cache_enable": {
+      "type": "bool",
+      "default": true
+    },
+    "extension.test_ini_variable": {
+      "type": "bool",
+      "default": true,
+      "ini-entry": {
+        "name": "extension.test_ini_variable",
+        "scope": "PHP_INI_ALL"
+      }
+    }
+  },
+
+  "info": [
+    {
+      "header": [
+        "Test Extension support",
+        "Value"
+      ],
+      "rows": [
+        [
+          "Lifecycle hooks",
+          "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks."
+        ],
+        [
+          "Static Analysis",
+          "Test extensions' compiler provides static analysis of the compiled code."
+        ]
+      ]
+    },
+    {
+      "header": [
+        "Test variable",
+        "Value"
+      ],
+      "rows": [
+        [
+          "Extension",
+          "Installed"
+        ],
+        [
+          "NFR",
+          "Contributions are welcome!"
+        ]
+      ]
+    }
+  ]
 }

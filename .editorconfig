@@ -15,14 +15,14 @@ trim_trailing_whitespace = true
 indent_style             = tab
 tab_width                = 4
 
-[*.{mk,c,h,awk,frag,lemon,re}]
+[*.{mk,c,h,awk,bat,frag,lemon,re}]
 indent_style             = tab
 tab_width                = 4
 
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{yml,sh}]
+[*.{yml,m4,json,xml,sh}]
 indent_size              = 2
 
 [zephir-autocomplete]

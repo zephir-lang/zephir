@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.12.2] - 2019-08-05
+### Added
+- Introduced initial ability to generate `zend_module_deps`
+  [#1900](https://github.com/phalcon/zephir/pull/1900),
+  [phalcon/cphalcon#13702](https://github.com/phalcon/cphalcon/issues/13702),
+  [phalcon/cphalcon#13794](https://github.com/phalcon/cphalcon/pull/13794)
+
+### Changed
+- Write errors compiler to stderr if available
+
 ## [0.12.1] - 2019-07-30
 ### Added
 - Added initial bash completion support (see `zephir-autocomplete` file)
@@ -200,7 +210,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.1...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.2...HEAD
+[0.12.2]: https://github.com/phalcon/zephir/compare/0.12.1...0.12.2
 [0.12.1]: https://github.com/phalcon/zephir/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/phalcon/zephir/compare/0.11.12...0.12.0
 [0.11.12]: https://github.com/phalcon/zephir/compare/0.11.11...0.11.12

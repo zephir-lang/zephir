@@ -11,24 +11,20 @@
 # -u  Treat unset variables as an error when substituting.
 set -eu
 
-project_root=$(readlink -enq "$(dirname $0)/../")
-
-if [ $(command -v box 2>/dev/null) = "" ]; then
-  >&2 printf "To use this script you need to install humbug/box.\n"
-  >&2 printf "You can learn all about humbug/box on https://github.com/humbug/box.\n"
-  >&2 printf "Aborting.\n"
+if [ "$(command -v box 2>/dev/null)" = "" ]; then
+  (>&2 printf "To use this script you need to install humbug/box: %s \\n" \
+    "https://github.com/humbug/box")
+  (>&2 echo "Aborting.")
   exit 1
 fi
 
-box compile --working-dir=${project_root}
+box compile
 
-if [ ! -f "${project_root}/zephir.phar" ] || [ ! -x "${project_root}/zephir.phar" ]; then
-  >&2 printf "Something went wrong when building Zephir.\n"
-  >&2 printf "Aborting.\n"
+if [ ! -f "./zephir.phar" ] || [ ! -x "./zephir.phar" ]; then
+  (>&2 echo "Something went wrong when building zephir.phar")
+  (>&2 echo "Aborting.")
   exit 1
 fi
 
-mkdir -p ${HOME}/bin
-rm -f ${HOME}/bin/zephir
-
-ln -s "${project_root}/zephir.phar" ${HOME}/bin/zephir
+mkdir -p "$HOME/bin"
+mv "./zephir.phar" "$HOME/bin/zephir"

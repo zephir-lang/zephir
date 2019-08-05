@@ -1,23 +1,24 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
+# shellcheck disable=SC2034
 test_description="Test compile commands"
 
-. ./setup.sh
+source ./setup.sh
 
-cflags="'-O2 -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
-test_expect_success "Compile the extension in production mode" '
-	cd $FIXTURESDIR/devmode &&
-	zephir fullclean 2>&1 >/dev/null &&
-	zephir compile --no-dev 2>&1 >/dev/null &&
-	cat ext/config.nice | grep -e "^CFLAGS=$cflags"
-'
+regexp="'-O2 -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
+test_expect_success "Compile the extension in production mode" "
+  cd $FIXTURESDIR/devmode &&
+  zephirc fullclean 2>&1 >/dev/null &&
+  zephirc compile --no-dev 2>&1 >/dev/null &&
+  grep -q -e \"^CFLAGS=$regexp\" ext/config.nice
+"
 
-cflags="'-O0 -g3'"
-test_expect_success "Compile the extension in development mode" '
-	cd $FIXTURESDIR/devmode &&
-	zephir fullclean 2>&1 >/dev/null &&
-	zephir compile --dev 2>&1 >/dev/null &&
-	cat ext/config.nice | grep -e "^CFLAGS=$cflags"
-'
+regexp="'-O0 -g3'"
+test_expect_success "Compile the extension in development mode" "
+  cd $FIXTURESDIR/devmode &&
+  zephirc fullclean 2>&1 >/dev/null &&
+  zephirc compile --dev 2>&1 >/dev/null &&
+  grep -q -e \"^CFLAGS=$regexp\" ext/config.nice
+"
 
 test_done

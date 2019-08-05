@@ -1,0 +1,14 @@
+{
+  "namespace": "deps",
+  "name": "deps",
+  "version": "0.0.1",
+  "verbose": false,
+
+  "requires": {
+    "extensions": [
+      "foo",
+      "bar",
+      "baz"
+    ]
+  }
+}
