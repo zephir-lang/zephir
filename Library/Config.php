@@ -24,6 +24,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * @var bool
      */
     protected $changed = false;
+
     /**
      * Default configuration for project.
      *
@@ -90,7 +91,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         'namespace' => '',
         'name' => '',
         'description' => '',
-        'author' => '',
+        'author' => 'Zephir Team',
         'version' => '0.0.1',
         'verbose' => false,
         'requires' => [
@@ -108,7 +109,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         $this->populate();
         $this->changed = false;
 
-        $this->registerShutdownFunction();
+        register_shutdown_function([$this, 'dumpToFile']);
     }
 
     /**
@@ -325,14 +326,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     public function jsonSerialize()
     {
         return $this->container;
-    }
-
-    /**
-     * Registers shutdown function.
-     */
-    public function registerShutdownFunction()
-    {
-        register_shutdown_function([$this, 'dumpToFile']);
     }
 
     /**

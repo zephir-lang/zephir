@@ -5,7 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- Write errors to stderr if available
+### Added
+- Introduced initial ability to generate `zend_module_deps`
+  [#1900](https://github.com/phalcon/zephir/pull/1900),
+  [phalcon/cphalcon#13702](https://github.com/phalcon/cphalcon/issues/13702),
+  [phalcon/cphalcon#13794](https://github.com/phalcon/cphalcon/pull/13794)
+
+### Changed
+- Write errors compiler to stderr if available
 
 ## [0.12.1] - 2019-07-30
 ### Added

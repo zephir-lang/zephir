@@ -1,0 +1,5 @@
+namespace Deps;
+
+class Test
+{
+}

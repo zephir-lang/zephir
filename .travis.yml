@@ -103,7 +103,6 @@ before_script:
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
-  - zephir
   - .ci/run-tests.sh
   - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
 

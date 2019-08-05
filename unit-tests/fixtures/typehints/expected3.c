@@ -329,10 +329,15 @@ ZEND_FE_END
 
 };
 
+static const zend_module_dep php_typehints_deps[] = {
+	
+	ZEND_MOD_END
+};
+
 zend_module_entry typehints_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	NULL,
+	php_typehints_deps,
 	PHP_TYPEHINTS_EXTNAME,
 	php_typehints_functions,
 	PHP_MINIT(typehints),
