@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed concatenation support of strings with double numbers
+  [#1893](https://github.com/phalcon/zephir/issues/1893)
 
 ## [0.12.2] - 2019-08-05
 ### Added
