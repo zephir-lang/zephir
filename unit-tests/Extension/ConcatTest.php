@@ -53,4 +53,30 @@ class ConcatTest extends TestCase
         $t = new Concat();
         $this->assertSame('21', $t->testConcat3());
     }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1893
+     */
+    public function shouldConcatenateStringWithVarDouble()
+    {
+        $t = new Concat();
+        $this->assertSame(
+            /* @lang text */ 'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
+            $t->testConcat4(1893)
+        );
+    }
+
+    /**
+     * @test
+     * @issue https://github.com/phalcon/zephir/issues/1893
+     */
+    public function shouldConcatenateStringWithDouble()
+    {
+        $t = new Concat();
+        $this->assertSame(
+            'Concatenated string with number 18.93000001',
+            $t->testConcat5(18.93000001)
+        );
+    }
 }
