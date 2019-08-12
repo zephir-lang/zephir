@@ -50,16 +50,16 @@ class Concat
 	 */
 	public function testConcat4(var value) -> string
 	{
-	    var min, max;
-	    string query = "";
+		var min, max;
+		string query = "";
 
-        let min = value / 100 * 25,
-            max = value / 100 * 50;
+		let min = value / 100 * 25,
+			max = value / 100 * 50;
 
-        let query .= "SELECT * FROM TEST WHERE value <= " . max,
-            query .= " AND value >= " . min;
+		let query .= "SELECT * FROM TEST WHERE value <= " . max,
+			query .= " AND value >= " . min;
 
-        return query;
+		return query;
 	}
 
 	/**
@@ -67,11 +67,11 @@ class Concat
 	 */
 	public function testConcat5(double number) -> string
 	{
-	    string retval;
-	    string left = "Concatenated string with number ";
+		string retval;
+		string left = "Concatenated string with number ";
 
-        let retval = left . number;
+		let retval = left . number;
 
-        return retval;
+		return retval;
 	}
 }
