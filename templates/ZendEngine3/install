@@ -39,7 +39,7 @@ ZEPHIR_LDFLAGS=""
 test -n "$CFLAGS" && ZEPHIR_CFLAGS="CFLAGS=\"$CFLAGS\""
 test -n "$LDFLAGS" && ZEPHIR_LDFLAGS="LDFLAGS=\"$LDFLAGS\""
 
-/configure --silent --enable-%PROJECT_LOWER% "$ZEPHIR_CFLAGS" "$ZEPHIR_LDFLAGS"
+./configure --silent --enable-%PROJECT_LOWER% "$ZEPHIR_CFLAGS" "$ZEPHIR_LDFLAGS"
 
 make -s
 $sudo make -s install
