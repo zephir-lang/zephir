@@ -187,7 +187,6 @@ class ArgInfoDefinition
 
             if (false == $this->hasParameters()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
-                $this->codePrinter->outputBlankLine();
             }
 
             $this->codePrinter->output('#else');
@@ -211,6 +210,8 @@ class ArgInfoDefinition
             );
 
             $this->codePrinter->output('#endif');
+            $this->codePrinter->outputBlankLine();
+
             return;
         }
 
