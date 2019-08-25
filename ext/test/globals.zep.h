@@ -17,23 +17,68 @@ PHP_METHOD(Test_Globals, getDefaultGlobals6);
 PHP_METHOD(Test_Globals, getDefaultGlobals7);
 PHP_METHOD(Test_Globals, getDefaultGlobalsOrmCacheLevel);
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalueusingdotnotation, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalueusingdotnotation, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setboolvalueusingdotnotation, 0, 0, 1)
+#define arginfo_test_globals_setboolvalueusingdotnotation NULL
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setintvalueusingdotnotation, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setintvalueusingdotnotation, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setintvalueusingdotnotation, 0, 0, 1)
+#define arginfo_test_globals_setintvalueusingdotnotation NULL
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setcharvalue, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setcharvalue, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setcharvalue, 0, 0, 1)
+#define arginfo_test_globals_setcharvalue NULL
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalue, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalue, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setboolvalue, 0, 0, 1)
+#define arginfo_test_globals_setboolvalue NULL
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setdefaultglobalsormcachelevel, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setdefaultglobalsormcachelevel, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setdefaultglobalsormcachelevel, 0, 0, 1)
+#define arginfo_test_globals_setdefaultglobalsormcachelevel NULL
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 

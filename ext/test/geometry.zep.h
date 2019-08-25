@@ -7,7 +7,16 @@ PHP_METHOD(Test_Geometry, run);
 PHP_METHOD(Test_Geometry, runOptimize);
 PHP_METHOD(Test_Geometry, distanceStatic);
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_run, 0, 2, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_run, 0, 2, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_geometry_run, 0, 0, 2)
+#define arginfo_test_geometry_run NULL
+#endif
 	ZEND_ARG_ARRAY_INFO(0, list, 0)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
@@ -16,7 +25,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_geometry_run, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_runoptimize, 0, 2, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_runoptimize, 0, 2, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_geometry_runoptimize, 0, 0, 2)
+#define arginfo_test_geometry_runoptimize NULL
+#endif
 	ZEND_ARG_ARRAY_INFO(0, list, 0)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)

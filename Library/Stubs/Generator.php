@@ -267,8 +267,15 @@ EOF;
         }
 
         $return = '';
-        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
+        if (version_compare(PHP_VERSION, '7.0.0', '>=') && ($method->hasReturnTypes() || $method->isVoid())) {
             $supported = 0;
+
+            if ($method->isVoid()) {
+                if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                    $return = 'void';
+                    ++$supported;
+                }
+            }
 
             if (\array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
                 $return = key($method->getReturnClassTypes());

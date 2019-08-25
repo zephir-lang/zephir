@@ -21,7 +21,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_requires_requireexternal3, 0, 0, 1)
 	ZEND_ARG_INFO(0, path)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_requires_setcontent, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_requires_setcontent, 0, 1, IS_VOID, NULL, 0)
+#endif
+#else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_requires_setcontent, 0, 0, 1)
+#define arginfo_test_requires_setcontent NULL
+#endif
 	ZEND_ARG_INFO(0, content)
 ZEND_END_ARG_INFO()
 
