@@ -15,24 +15,36 @@ is a high level **Programming Language** that eases the creation and maintainabi
 Zephir extensions are exported to C code that can be compiled and optimized by major C compilers such as gcc/clang/vc++.
 Functionality is exposed to the PHP language.
 
-Documentation
--------------
+## Documentation
 * Official documentation is [located here][1]
 
-Community
----------
+## Community
 * Follow us on [GitHub][2] and [Facebook][3]
 * Get Zephir support on [Discord][4] and [Official Forums][5]
 * Read our [Code of Conduct][6]
 
-Contributing
-------------
+## Contributing
 
 Zephir is an Open Source, community-driven project. See [CONTRIBUTING.md][7]
 for details about contributions to this repository.
 
-License
--------
+## Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/phalcon#sponsor)]
+
+<a href="https://opencollective.com/phalcon/#contributors">
+<img src="https://opencollective.com/phalcon/tiers/sponsors.svg?avatarHeight=48&width=800">
+</a>
+
+## Backers
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/phalcon#backer)]
+
+<a href="https://opencollective.com/phalcon/#contributors">
+<img src="https://opencollective.com/phalcon/tiers/backers.svg?avatarHeight=48&width=800&height=200">
+</a>
+
+## License
 
 Zephir licensed under the MIT License. See the [LICENSE][8] file for more information.
 
