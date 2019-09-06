@@ -75,6 +75,17 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_call, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod, 0, 0, IS_VOID, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#else
+#define arginfo_test_bench_foo_staticmethod NULL
+#endif
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod1, 0, 0, _IS_BOOL, 0)
 #else
@@ -109,7 +120,7 @@ ZEPHIR_INIT_FUNCS(test_bench_foo_method_entry) {
 	PHP_ME(Test_Bench_Foo, emptyProp, arginfo_test_bench_foo_emptyprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, g, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, call, arginfo_test_bench_foo_call, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, staticMethod, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, staticMethod, arginfo_test_bench_foo_staticmethod, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, staticMethod1, arginfo_test_bench_foo_staticmethod1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, scall, arginfo_test_bench_foo_scall, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, scallWithReturnTrue, arginfo_test_bench_foo_scallwithreturntrue, ZEND_ACC_PUBLIC)

@@ -154,6 +154,17 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_interpolatedstaticret
 #endif
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_interpolatedstaticecho, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_interpolatedstaticecho, 0, 0, IS_VOID, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+#else
+#define arginfo_test_scall_interpolatedstaticecho NULL
+#endif
 ZEPHIR_INIT_FUNCS(test_scall_method_entry) {
 	PHP_ME(Test_Scall, testMethod1, arginfo_test_scall_testmethod1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Scall, testMethod2, arginfo_test_scall_testmethod2, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
@@ -182,6 +193,6 @@ ZEPHIR_INIT_FUNCS(test_scall_method_entry) {
 	PHP_ME(Test_Scall, testCall18, arginfo_test_scall_testcall18, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Scall, testMethodStatic, arginfo_test_scall_testmethodstatic, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
 	PHP_ME(Test_Scall, interpolatedStaticReturn, arginfo_test_scall_interpolatedstaticreturn, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Scall, interpolatedStaticEcho, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Scall, interpolatedStaticEcho, arginfo_test_scall_interpolatedstaticecho, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

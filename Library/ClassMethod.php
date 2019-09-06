@@ -2322,7 +2322,7 @@ class ClassMethod
      *
      * Examples:
      *
-     * - FALSE: function foo() -> void;
+     * - TRUE: function foo() -> void;
      * - TRUE: function foo() -> null;
      * - TRUE: function foo() -> bool|string|..;
      * - TRUE: function foo() -> <\stdClass>;
@@ -2334,7 +2334,10 @@ class ClassMethod
      */
     public function isReturnTypesHintDetermined()
     {
-        if (0 == \count($this->returnTypes) || $this->isVoid()) {
+        if ($this->isVoid()) {
+            return true;
+        }
+        if (0 == \count($this->returnTypes)) {
             return false;
         }
 
@@ -2376,6 +2379,11 @@ class ClassMethod
      */
     public function areReturnTypesCompatible()
     {
+        // void
+        if ($this->isVoid()) {
+            return true;
+        }
+
         // null | T1 | T2
         if (\count($this->returnTypes) > 2) {
             return false;
