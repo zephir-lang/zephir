@@ -137,3 +137,75 @@ PHP_METHOD(Test_Concat, testConcat3) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/1893
+ */
+PHP_METHOD(Test_Concat, testConcat4) {
+
+	zval query, _1, _3;
+	double min = 0, max = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value, value_sub, _0, _2;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&query);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value);
+
+
+
+	ZEPHIR_INIT_VAR(&query);
+	ZVAL_STRING(&query, "");
+	min = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (25));
+	max = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (50));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_DOUBLE(&_0, max);
+	ZEPHIR_INIT_VAR(&_1);
+	ZEPHIR_CONCAT_SV(&_1, "SELECT * FROM TEST WHERE value <= ", &_0);
+	zephir_concat_self(&query, &_1 TSRMLS_CC);
+	ZEPHIR_SINIT_VAR(_2);
+	ZVAL_DOUBLE(&_2, min);
+	ZEPHIR_INIT_VAR(&_3);
+	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
+	zephir_concat_self(&query, &_3 TSRMLS_CC);
+	RETURN_CTOR(&query);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/1893
+ */
+PHP_METHOD(Test_Concat, testConcat5) {
+
+	zval retval, left;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *number_param = NULL, _0;
+	double number;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&retval);
+	ZVAL_UNDEF(&left);
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &number_param);
+
+	number = zephir_get_doubleval(number_param);
+
+
+	ZEPHIR_INIT_VAR(&left);
+	ZVAL_STRING(&left, "Concatenated string with number ");
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_DOUBLE(&_0, number);
+	ZEPHIR_INIT_VAR(&retval);
+	ZEPHIR_CONCAT_VV(&retval, &left, &_0);
+	RETURN_CTOR(&retval);
+
+}
+

@@ -44,4 +44,34 @@ class Concat
 		let b .= a;
 		return b;
 	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1893
+	 */
+	public function testConcat4(var value) -> string
+	{
+		var min, max;
+		string query = "";
+
+		let min = value / 100 * 25,
+			max = value / 100 * 50;
+
+		let query .= "SELECT * FROM TEST WHERE value <= " . max,
+			query .= " AND value >= " . min;
+
+		return query;
+	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1893
+	 */
+	public function testConcat5(double number) -> string
+	{
+		string retval;
+		string left = "Concatenated string with number ";
+
+		let retval = left . number;
+
+		return retval;
+	}
 }

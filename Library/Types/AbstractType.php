@@ -13,6 +13,8 @@ namespace Zephir\Types;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
@@ -35,15 +37,14 @@ abstract class AbstractType
      * @param Call               $call
      * @param array              $expression
      *
-     * @throws CompilerException
+     * @return bool|CompiledExpression
      *
-     * @return bool|\Zephir\CompiledExpression
+     * @throws CompilerException|Exception
      */
     public function invokeMethod(
         $methodName,
         $caller,
-        CompilationContext
-        $compilationContext,
+        CompilationContext $compilationContext,
         Call $call,
         array $expression
     ) {
