@@ -5,11 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.3] - 2019-09-22
 ### Fixed
 - Fixed concatenation support of strings with double numbers
   [#1893](https://github.com/phalcon/zephir/issues/1893)
 - Fixed 'void' return type hint being ignored
   [#1908](https://github.com/phalcon/zephir/issues/1908)
+- Fixed updating array properties
+  [#1915](https://github.com/phalcon/zephir/issues/1915)
 
 ## [0.12.2] - 2019-08-05
 ### Added
@@ -215,7 +218,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.2...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.3...HEAD
+[0.12.3]: https://github.com/phalcon/zephir/compare/0.12.2...0.12.3
 [0.12.2]: https://github.com/phalcon/zephir/compare/0.12.1...0.12.2
 [0.12.1]: https://github.com/phalcon/zephir/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/phalcon/zephir/compare/0.11.12...0.12.0
