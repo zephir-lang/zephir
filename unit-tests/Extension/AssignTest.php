@@ -162,21 +162,21 @@ class AssignTest extends TestCase
 
     public function testGlobalVarAssignSERVER()
     {
-        $serverCount = count($_SERVER);
+        $serverCount = \count($_SERVER);
 
         $t = new Assign();
         $t->testAssignSuperGlobalsSERVER();
 
-        $this->assertSame($serverCount + 2, count($_SERVER));
+        $this->assertSame($serverCount + 2, \count($_SERVER));
     }
 
     public function testGlobalVarAssignGET()
     {
-        $getCount = count($_GET);
+        $getCount = \count($_GET);
 
         $t = new Assign();
         $t->testAssignSuperGlobalsGET();
 
-        $this->assertSame($getCount + 2, count($_GET));
+        $this->assertSame($getCount + 2, \count($_GET));
     }
 }
