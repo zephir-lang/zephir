@@ -143,7 +143,6 @@ after_script:
   - printf "$TRAVIS_COMMIT_LOG\n"
 
 after_success:
-  - .ci/after-success.sh
   - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
 
 after_failure:
