@@ -923,4 +923,20 @@ class Assign
 		let _GET["stestint2"] = 2;
 		let _GET[v] = "testval";
 	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1917
+	 */
+	public function testAssignSuperGlobalsSERVER()
+	{
+	    let _SERVER = array_merge(_SERVER, ["g1": "aaa", "g2": "bbb"]);
+	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/1917
+	 */
+	public function testAssignSuperGlobalsGET()
+	{
+	    let _GET = array_merge(_GET, ["g1": "aaa", "g2": "bbb"]);
+	}
 }

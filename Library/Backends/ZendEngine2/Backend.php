@@ -22,6 +22,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
+use Zephir\Variable\Globals;
 
 /**
  * Zephir\Backends\ZendEngine2\Backend.
@@ -1186,7 +1187,12 @@ class Backend extends BaseBackend
 
     public function copyOnWrite(Variable $target, $var, CompilationContext $context)
     {
-        $context->codePrinter->output('ZEPHIR_CPY_WRT('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
+        $globalsManager = new Globals();
+        if ($globalsManager->isSuperGlobal($target->getName())) {
+            $context->codePrinter->output('ZEPHIR_HASH_COPY('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
+        } else {
+            $context->codePrinter->output('ZEPHIR_CPY_WRT('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
+        }
     }
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)

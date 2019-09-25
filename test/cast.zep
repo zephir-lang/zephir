@@ -311,4 +311,66 @@ class Cast
 
 		return id;
 	}
+
+    /** To array cast */
+
+	public function testArrayCastFromVariableArray()
+    {
+        var uids = [1, "2", 3];
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableTrue()
+    {
+        var uids = true;
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableFalse()
+    {
+        var uids = false;
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableNull()
+    {
+        var uids = null;
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableInteger()
+    {
+        var uids = 1;
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableFloat()
+    {
+        var uids = 1.1;
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableString()
+    {
+        var uids = "aaa";
+        let uids = (array) uids;
+        return uids;
+    }
+
+	public function testArrayCastFromVariableStdClass()
+    {
+        var uids;
+        let uids = new \StdClass;
+        let uids->p1 = "v1";
+        let uids->p2 = "v2";
+        let uids = (array) uids;
+        return uids;
+    }
+
 }
