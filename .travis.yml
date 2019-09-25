@@ -97,12 +97,25 @@ install:
     fi
 
 before_script:
-  - .ci/build-test-ext.sh
+  - zephir clean
+  - zephir fullclean
+  - zephir generate
+  - zephir stubs
+  - zephir api
+  - |
+    # These variables is needed to produce non optimized code and use code coverage
+    LDFLAGS="--coverage"
+    CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+    CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+
+    # Export variables in the subshell to not shadow global variables
+    ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile )
+
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
   - .ci/run-tests.sh
-  - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
+  - ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
 
 jobs:
   include:
