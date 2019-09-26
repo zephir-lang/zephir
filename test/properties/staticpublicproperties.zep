@@ -39,4 +39,8 @@ class StaticPublicProperties
 	 */
 	public static someString = "test";
 
+	public static function setSomeString(val)
+	{
+		let self::someString = val;
+	}
 }
