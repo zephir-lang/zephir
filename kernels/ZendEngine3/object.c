@@ -1004,6 +1004,28 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 	return FAILURE;
 }
 
+int zephir_update_static_property_ce(zend_class_entry *ce, const char *property_name, uint32_t property_length, zval *value)
+{
+#if PHP_VERSION_ID < 70300
+	zval *property, garbage;
+	property = zend_read_static_property(ce, property_name, property_length, (zend_bool)ZEND_FETCH_CLASS_SILENT);
+	if (property) {
+		if (Z_ISREF_P(property)) {
+			ZVAL_DEREF(property);
+		}
+		if (Z_ISREF_P(value)) {
+			ZVAL_DEREF(value);
+		}
+		ZVAL_COPY_VALUE(&garbage, property);
+		ZVAL_COPY(property, value);
+		zval_ptr_dtor(&garbage);
+		return 1;
+	}
+#else
+	zend_update_static_property(ce, property_name, property_length, value);
+#endif
+}
+
 /*
  * Multiple array-offset update
  */
