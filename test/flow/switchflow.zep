@@ -161,4 +161,23 @@ class SwitchFlow
                 return 0;
         }
     }
+
+    public function testSwitch14(result_type = 1)
+    {
+        var ret;
+
+        switch (result_type) {
+            case 1:
+            case MYSQL_ASSOC:
+            case MYSQLI_ASSOC:
+                let ret = "aaa";
+                break;
+
+            default:
+                let ret = "bbb";
+                break;
+        }
+
+        return ret;
+    }
 }
