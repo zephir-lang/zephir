@@ -34,5 +34,7 @@ class SwitchFlowTest extends TestCase
         $this->assertSame(1, $t->testSwitch12(10, 6));
         $this->assertSame(0, $t->testSwitch12(6, 10));
         $this->assertSame(2, $t->testSwitch12(2, 3));
+        $this->assertSame('aaa', $t->testSwitch14(1));
+        $this->assertSame('bbb', $t->testSwitch14(99));
     }
 }
