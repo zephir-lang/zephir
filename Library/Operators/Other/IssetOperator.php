@@ -152,8 +152,6 @@ class IssetOperator extends BaseOperator
                 break;
 
             case 'property-string-access':
-                return new CompiledExpression('bool', '(0 == 0)', $left);
-
             case 'static-property-access':
                 return new CompiledExpression('bool', '(0 == 0)', $left);
 
