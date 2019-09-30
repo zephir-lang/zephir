@@ -1,0 +1,15 @@
+{
+    "namespace": "stubs",
+    "name": "stubs",
+    "description": "",
+    "author": "",
+    "version": "0.0.1",
+    "verbose": false,
+    "requires": {
+        "extensions": []
+    },
+    "stubs": {
+        "path": "ide\/%version%\/%namespace%\/",
+        "stubs-run-after-generate": true
+    }
+}

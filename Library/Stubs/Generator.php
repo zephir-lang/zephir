@@ -59,10 +59,20 @@ class Generator
     /**
      * Generates stubs.
      *
-     * @param string $path
+     * @throws Exception\LogicException
      */
-    public function generate($path)
+    public function generate()
     {
+        $path = $this->config->get('path', 'stubs');
+        if (empty($path)) {
+            throw new Exception\LogicException(
+                'The configuration parameter stubs.path is empty or not provided'
+            );
+        }
+
+        $path = str_replace('%version%', $this->config->get('version'), $path);
+        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
+
         if ('tabs' === $this->config->get('indent', 'extra')) {
             $indent = "\t";
         } else {
@@ -99,6 +109,8 @@ class Generator
      * @param ClassDefinition $class
      * @param string          $indent
      *
+     * @throws Exception\RuntimeException
+     *
      * @return string
      */
     protected function buildClass(ClassDefinition $class, $indent)
@@ -124,7 +136,9 @@ EOF;
         if ($class->getExtendsClass()) {
             $extendsClassDefinition = $class->getExtendsClassDefinition();
             if (!$extendsClassDefinition) {
-                throw new \RuntimeException('Class "'.$class->getName().'" does not have a extendsClassDefinition');
+                throw new Exception\RuntimeException(
+                    'Class "'.$class->getName().'" does not have a extendsClassDefinition'
+                );
             }
 
             $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').trim($extendsClassDefinition->getCompleteName(), '\\');
@@ -156,7 +170,13 @@ EOF;
                 continue;
             }
 
-            $source .= $this->buildMethod($method, 'interface' === $class->getType(), $indent)."\n\n";
+            $source .= $this->buildMethod(
+                $method,
+                'interface' === $class->getType(),
+                $indent
+            );
+
+            $source .= "\n\n";
         }
 
         return $source.'}'.PHP_EOL;
@@ -303,7 +323,7 @@ EOF;
                 ++$supported;
             }
 
-            if ($method->areReturnTypesNullCompatible()) {
+            if (!empty($return) && $method->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
                     $return = '?'.$return;
                 } else {
@@ -337,7 +357,7 @@ EOF;
      *
      * @param $parameter
      *
-     * @throws Exception
+     * @throws Exception\NotImplementedException
      *
      * @return string
      */
@@ -390,7 +410,9 @@ EOF;
                 break;
 
             default:
-                throw new Exception('Stubs - value with type: '.$parameter['default']['type'].' is not supported');
+                throw new Exception\NotImplementedException(
+                    'Stubs - value with type: '.$parameter['default']['type'].' is not supported'
+                );
                 break;
         }
     }
