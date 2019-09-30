@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
 use Zephir\Exception;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
 
 /**
@@ -66,7 +66,7 @@ final class GenerateCommand extends Command
             );
 
             return 1;
-        } catch (CompilerException $e) {
+        } catch (ExceptionInterface $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
