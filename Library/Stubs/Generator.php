@@ -137,7 +137,10 @@ EOF;
             $extendsClassDefinition = $class->getExtendsClassDefinition();
             if (!$extendsClassDefinition) {
                 throw new Exception\RuntimeException(
-                    'Class "'.$class->getName().'" does not have a extendsClassDefinition'
+                    sprintf(
+                        'Class "%s" does not have a extendsClassDefinition',
+                        $class->getName()
+                    )
                 );
             }
 
@@ -410,8 +413,11 @@ EOF;
                 break;
 
             default:
-                throw new Exception\NotImplementedException(
-                    'Stubs - value with type: '.$parameter['default']['type'].' is not supported'
+                throw new Exception\LogicException(
+                    sprintf(
+                        'Stubs - value with type: %s is not supported',
+                        $parameter['default']['type']
+                    )
                 );
                 break;
         }
