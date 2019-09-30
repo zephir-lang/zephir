@@ -808,7 +808,7 @@ final class Compiler
         $this->fcallManager->genFcallCode();
 
         if ($this->config->get('stubs-run-after-generate', 'stubs')) {
-            $this->stubs();
+            $this->stubs($fromGenerate);
         }
 
         return $needConfigure;
@@ -951,13 +951,30 @@ final class Compiler
 
     /**
      * Generate IDE stubs.
+     *
+     * @param bool $fromGenerate
+     *
+     * @throws Exception
      */
-    public function stubs()
+    public function stubs(bool $fromGenerate = false)
     {
+        if (!$fromGenerate) {
+            $this->generate();
+        }
+
         $this->logger->info('Generating stubs...');
 
-        $stubsGenerator = new Stubs\Generator($this->files, $this->config);
-        $stubsGenerator->generate();
+        $stubsGenerator = new Stubs\Generator($this->files);
+
+        $path = $this->config->get('path', 'stubs');
+        $path = str_replace('%version%', $this->config->get('version'), $path);
+        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
+
+        $stubsGenerator->generate(
+            $this->config->get('namespace'),
+            $path,
+            $this->config->get('indent', 'extra')
+        );
     }
 
     /**

@@ -16,7 +16,6 @@ use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
-use Zephir\Config;
 use Zephir\Exception;
 
 /**
@@ -42,44 +41,31 @@ class Generator
     protected $files;
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @param CompilerFile[] $files
-     * @param Config         $config
      */
-    public function __construct(array $files, Config $config)
+    public function __construct(array $files)
     {
         $this->files = $files;
-        $this->config = $config;
     }
 
     /**
      * Generates stubs.
      *
+     * @param string $namespace
+     * @param string $path
+     * @param string $indent
+     *
      * @throws Exception\LogicException
      */
-    public function generate()
+    public function generate(string $namespace, string $path, string $indent)
     {
-        $path = $this->config->get('path', 'stubs');
         if (empty($path)) {
             throw new Exception\LogicException(
-                'The configuration parameter stubs.path is empty or not provided'
+                'The stubs path must not be empty.'
             );
         }
 
-        $path = str_replace('%version%', $this->config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
-
-        if ('tabs' === $this->config->get('indent', 'extra')) {
-            $indent = "\t";
-        } else {
-            $indent = '    ';
-        }
-
-        $namespace = $this->config->get('namespace');
+        $indent = 'tabs' === $indent ? "\t" : '    ';
 
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();

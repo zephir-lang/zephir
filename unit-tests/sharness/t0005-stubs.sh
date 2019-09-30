@@ -9,6 +9,7 @@ source ./setup.sh
 test_expect_success "Should fail when there are no required modules" "
   cd $FIXTURESDIR/stubs/issue1922 &&
   zephirc generate --no-ansi 2>&1 >/dev/null &&
+  zephirc stubs --no-ansi 2>&1 >/dev/null &&
   test_cmp expected/Test.zep.php ide/0.0.1/Stubs/Test.zep.php
 "
 

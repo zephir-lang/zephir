@@ -5,10 +5,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-- Do not regenerate C-code before stubs generation. Now users should explicitly
-  generate C-code if needed arises before stubs generation.
-
 ### Fixed
 - Fixed IDE stubs generation to properly generate return type hint for `var | null`
   [#1922](https://github.com/phalcon/zephir/issues/1922)
