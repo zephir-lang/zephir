@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
+- Fixed IDE stubs generation to properly generate return type hint for `var | null`
+  [#1922](https://github.com/phalcon/zephir/issues/1922)
+
+### Fixed
 ## [0.12.4] - 2019-09-22
 - Fixed install template
 

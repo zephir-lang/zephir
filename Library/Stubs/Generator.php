@@ -16,7 +16,6 @@ use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
-use Zephir\Config;
 use Zephir\Exception;
 
 /**
@@ -42,34 +41,31 @@ class Generator
     protected $files;
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @param CompilerFile[] $files
-     * @param Config         $config
      */
-    public function __construct(array $files, Config $config)
+    public function __construct(array $files)
     {
         $this->files = $files;
-        $this->config = $config;
     }
 
     /**
      * Generates stubs.
      *
+     * @param string $namespace
      * @param string $path
+     * @param string $indent
+     *
+     * @throws Exception\LogicException
      */
-    public function generate($path)
+    public function generate(string $namespace, string $path, string $indent)
     {
-        if ('tabs' === $this->config->get('indent', 'extra')) {
-            $indent = "\t";
-        } else {
-            $indent = '    ';
+        if (empty($path)) {
+            throw new Exception\LogicException(
+                'The stubs path must not be empty.'
+            );
         }
 
-        $namespace = $this->config->get('namespace');
+        $indent = 'tabs' === $indent ? "\t" : '    ';
 
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
@@ -99,6 +95,8 @@ class Generator
      * @param ClassDefinition $class
      * @param string          $indent
      *
+     * @throws Exception\RuntimeException
+     *
      * @return string
      */
     protected function buildClass(ClassDefinition $class, $indent)
@@ -124,7 +122,12 @@ EOF;
         if ($class->getExtendsClass()) {
             $extendsClassDefinition = $class->getExtendsClassDefinition();
             if (!$extendsClassDefinition) {
-                throw new \RuntimeException('Class "'.$class->getName().'" does not have a extendsClassDefinition');
+                throw new Exception\RuntimeException(
+                    sprintf(
+                        'Class "%s" does not have a extendsClassDefinition',
+                        $class->getName()
+                    )
+                );
             }
 
             $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').trim($extendsClassDefinition->getCompleteName(), '\\');
@@ -156,7 +159,13 @@ EOF;
                 continue;
             }
 
-            $source .= $this->buildMethod($method, 'interface' === $class->getType(), $indent)."\n\n";
+            $source .= $this->buildMethod(
+                $method,
+                'interface' === $class->getType(),
+                $indent
+            );
+
+            $source .= "\n\n";
         }
 
         return $source.'}'.PHP_EOL;
@@ -303,7 +312,7 @@ EOF;
                 ++$supported;
             }
 
-            if ($method->areReturnTypesNullCompatible()) {
+            if (!empty($return) && $method->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
                     $return = '?'.$return;
                 } else {
@@ -337,7 +346,7 @@ EOF;
      *
      * @param $parameter
      *
-     * @throws Exception
+     * @throws Exception\NotImplementedException
      *
      * @return string
      */
@@ -390,7 +399,12 @@ EOF;
                 break;
 
             default:
-                throw new Exception('Stubs - value with type: '.$parameter['default']['type'].' is not supported');
+                throw new Exception\LogicException(
+                    sprintf(
+                        'Stubs - value with type: %s is not supported',
+                        $parameter['default']['type']
+                    )
+                );
                 break;
         }
     }
