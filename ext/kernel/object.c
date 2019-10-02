@@ -762,6 +762,23 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 		ZVAL_COPY_VALUE(&tmp, &new_zv);
 		Z_TRY_DELREF(new_zv);
 		separated = 1;
+
+		/**
+		 * class A {
+		 *     protected foo;
+		 *
+		 *     public function test() {
+		 *         let this->foo[] = 42;
+		 *     }
+		 * }
+		 *
+		 * In this case: Z_REFCOUNT(tmp) == 0
+		 */
+		if (Z_REFCOUNTED(tmp)) {
+			if (EXPECTED(Z_REFCOUNT(tmp) == 0)) {
+				Z_ADDREF(tmp);
+			}
+		}
 	}
 
 	/** Convert the value to array if not is an array */

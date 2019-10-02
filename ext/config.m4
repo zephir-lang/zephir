@@ -73,6 +73,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/globals.zep.c
 	test/globals/env.zep.c
 	test/globals/post.zep.c
+	test/globals/serverrequestfactory.zep.c
 	test/globals/session/child.zep.c
 	test/instance.zep.c
 	test/instanceoff.zep.c

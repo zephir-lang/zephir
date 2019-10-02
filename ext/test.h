@@ -68,6 +68,7 @@
 #include "test/globals.zep.h"
 #include "test/globals/env.zep.h"
 #include "test/globals/post.zep.h"
+#include "test/globals/serverrequestfactory.zep.h"
 #include "test/globals/session/child.zep.h"
 #include "test/instance.zep.h"
 #include "test/instanceoff.zep.h"

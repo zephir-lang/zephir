@@ -77,7 +77,7 @@ PHP_METHOD(Test_Instance, testIssue1339) {
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	object_init_ex(&_0, test_arrayobject_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 43);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 44);
 	zephir_check_call_status();
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
