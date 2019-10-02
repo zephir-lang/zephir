@@ -865,7 +865,7 @@ class Variable implements TypeAwareInterface
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
                 }
             }
 
@@ -951,7 +951,7 @@ class Variable implements TypeAwareInterface
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
                 }
             }
             ++$this->variantInits;
