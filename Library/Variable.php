@@ -863,7 +863,7 @@ class Variable implements TypeAwareInterface
             } else {
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_NVAR('.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
                 }
@@ -942,14 +942,14 @@ class Variable implements TypeAwareInterface
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_LNVAR('.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
                     $compilationContext->backend->initVar($this, $compilationContext);
                 }
             } else {
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_SINIT_LNVAR('.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR('.$this->getName().');');
                 }
