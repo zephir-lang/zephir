@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added initial support of "use" keyword in closures
   [#888](https://github.com/phalcon/zephir/issues/888),
   [#1848](https://github.com/phalcon/zephir/issues/1848)
+  [#1860](https://github.com/phalcon/zephir/issues/1860)
 
 ### Removed
 - PHP 5.x is no longer supported
@@ -92,6 +93,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   https://bugs.php.net/bug.php?id=78121
 - Incorrect implementation of ArrayAccess methods
   [#1871](https://github.com/phalcon/zephir/pull/1871)
+- Fixed exception on call undefined method
+  [#1863](https://github.com/phalcon/zephir/issues/1863)
 
 ## [0.11.12] - 2019-03-24
 ### Fixed
