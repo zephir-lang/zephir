@@ -842,9 +842,9 @@ class Variable implements TypeAwareInterface
             }
 
             $compilationContext->headersManager->add('kernel/memory');
+            $compilationContext->symbolTable->mustGrownStack(true);
 
             if (!$this->isLocalOnly()) {
-                $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
                     $this->mustInitNull = true;
                     $compilationContext->backend->initVar($this, $compilationContext, true, true);
@@ -938,8 +938,8 @@ class Variable implements TypeAwareInterface
             }
 
             $compilationContext->headersManager->add('kernel/memory');
+            $compilationContext->symbolTable->mustGrownStack(true);
             if (!$this->isLocalOnly()) {
-                $compilationContext->symbolTable->mustGrownStack(true);
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');

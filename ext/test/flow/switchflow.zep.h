@@ -16,6 +16,7 @@ PHP_METHOD(Test_Flow_SwitchFlow, testSwitch10);
 PHP_METHOD(Test_Flow_SwitchFlow, testSwitch11);
 PHP_METHOD(Test_Flow_SwitchFlow, testSwitch12);
 PHP_METHOD(Test_Flow_SwitchFlow, testSwitch13);
+PHP_METHOD(Test_Flow_SwitchFlow, testSwitch14);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_flow_switchflow_testswitch1, 0, 0, IS_LONG, 0)
@@ -100,6 +101,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_switchflow_testswitch13, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_switchflow_testswitch14, 0, 0, 0)
+	ZEND_ARG_INFO(0, result_type)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_flow_switchflow_method_entry) {
 	PHP_ME(Test_Flow_SwitchFlow, testSwitch1, arginfo_test_flow_switchflow_testswitch1, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow_SwitchFlow, testSwitch2, arginfo_test_flow_switchflow_testswitch2, ZEND_ACC_PUBLIC)
@@ -114,5 +119,6 @@ ZEPHIR_INIT_FUNCS(test_flow_switchflow_method_entry) {
 	PHP_ME(Test_Flow_SwitchFlow, testSwitch11, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow_SwitchFlow, testSwitch12, arginfo_test_flow_switchflow_testswitch12, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow_SwitchFlow, testSwitch13, arginfo_test_flow_switchflow_testswitch13, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow_SwitchFlow, testSwitch14, arginfo_test_flow_switchflow_testswitch14, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

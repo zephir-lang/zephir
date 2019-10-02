@@ -146,7 +146,7 @@ PHP_METHOD(Test_Bench_Foo, writeStatic) {
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
 			ZVAL_LONG(&_3$$3, 0);
-			zend_update_static_property(test_bench_foo_ce, ZEND_STRL("a"), &_3$$3);
+			zephir_update_static_property_ce(test_bench_foo_ce, ZEND_STRL("a"), &_3$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();

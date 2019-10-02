@@ -53,6 +53,14 @@ PHP_METHOD(Test_Cast, testObjectCastFromString);
 PHP_METHOD(Test_Cast, testCastStdinToInteger);
 PHP_METHOD(Test_Cast, testCastStdoutToInteger);
 PHP_METHOD(Test_Cast, testCastFileResourceToInteger);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableArray);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableTrue);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableFalse);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableNull);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableInteger);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableFloat);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableString);
+PHP_METHOD(Test_Cast, testArrayCastFromVariableStdClass);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_cast_testintcastfromfloat, 0, 0, IS_LONG, 0)
@@ -398,5 +406,13 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testCastStdinToInteger, arginfo_test_cast_testcaststdintointeger, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testCastStdoutToInteger, arginfo_test_cast_testcaststdouttointeger, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testCastFileResourceToInteger, arginfo_test_cast_testcastfileresourcetointeger, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableArray, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableTrue, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableFalse, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableNull, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableInteger, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableFloat, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableString, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testArrayCastFromVariableStdClass, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

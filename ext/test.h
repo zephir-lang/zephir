@@ -143,6 +143,7 @@
 #include "test/properties/extendspublicproperties.zep.h"
 #include "test/properties/privateproperties.zep.h"
 #include "test/properties/propertyarray.zep.h"
+#include "test/properties/propertyupdate.zep.h"
 #include "test/properties/protectedproperties.zep.h"
 #include "test/properties/staticprivateproperties.zep.h"
 #include "test/properties/staticpropertyarray.zep.h"

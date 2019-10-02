@@ -809,7 +809,7 @@ PHP_METHOD(Test_Cast, testCastStdinToInteger) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&handle);
-	ZEPHIR_MM_GET_CONSTANT(&handle, "STDIN");
+	ZEPHIR_GET_CONSTANT(&handle, "STDIN");
 	RETURN_MM_LONG(zephir_get_intval(&handle));
 
 }
@@ -825,7 +825,7 @@ PHP_METHOD(Test_Cast, testCastStdoutToInteger) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_MM_GET_CONSTANT(&_0, "STDOUT");
+	ZEPHIR_GET_CONSTANT(&_0, "STDOUT");
 	RETURN_MM_LONG(zephir_get_intval(&_0));
 
 }
@@ -844,6 +844,185 @@ PHP_METHOD(Test_Cast, testCastFileResourceToInteger) {
 
 	id = zephir_get_intval(fileName);
 	RETURN_LONG(id);
+
+}
+
+/** To array cast */
+PHP_METHOD(Test_Cast, testArrayCastFromVariableArray) {
+
+	zval _1;
+	zval uids, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	zephir_create_array(&uids, 3, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_array_fast_append(&uids, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "2");
+	zephir_array_fast_append(&uids, &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_LONG(&_0, 3);
+	zephir_array_fast_append(&uids, &_0);
+	zephir_get_arrval(&_1, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_1);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableTrue) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_BOOL(&uids, 1);
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableFalse) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_BOOL(&uids, 0);
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableNull) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_NULL(&uids);
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableInteger) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_LONG(&uids, 1);
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableFloat) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_DOUBLE(&uids, 1.1);
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableString) {
+
+	zval _0;
+	zval uids;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	ZVAL_STRING(&uids, "aaa");
+	zephir_get_arrval(&_0, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_0);
+	RETURN_CCTOR(&uids);
+
+}
+
+PHP_METHOD(Test_Cast, testArrayCastFromVariableStdClass) {
+
+	zval _1;
+	zval uids, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&uids);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&uids);
+	object_init(&uids);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "v1");
+	zephir_update_property_zval(&uids, SL("p1"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "v2");
+	zephir_update_property_zval(&uids, SL("p2"), &_0);
+	zephir_get_arrval(&_1, &uids);
+	ZEPHIR_CPY_WRT(&uids, &_1);
+	RETURN_CCTOR(&uids);
 
 }
 

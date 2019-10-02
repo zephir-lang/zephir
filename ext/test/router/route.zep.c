@@ -419,7 +419,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									zephir_array_update_zval(&matches, &item, &_28$$28, PH_COPY | PH_SEPARATE);
 								}
 							} else {
-								ZEPHIR_INIT_LNVAR(_29$$29);
+								ZEPHIR_INIT_NVAR(&_29$$29);
 								ZEPHIR_CONCAT_SVS(&_29$$29, "{", &item, "}");
 								zephir_concat_self(&route, &_29$$29 TSRMLS_CC);
 							}

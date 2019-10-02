@@ -146,7 +146,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 		}
 		zephir_array_fetch_long(&_1$$3, &fib, (i - 1), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
 		zephir_array_fetch_long(&_2$$3, &fib, (i - 2), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
-		ZEPHIR_INIT_LNVAR(_3$$3);
+		ZEPHIR_INIT_NVAR(&_3$$3);
 		zephir_add_function(&_3$$3, &_1$$3, &_2$$3);
 		zephir_array_update_long(&fib, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 		i++;

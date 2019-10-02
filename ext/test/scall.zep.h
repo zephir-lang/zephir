@@ -161,10 +161,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_interpolatedstaticech
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_scall_interpolatedstaticecho, 0, 0, IS_VOID, NULL, 0)
 #endif
 ZEND_END_ARG_INFO()
-
 #else
 #define arginfo_test_scall_interpolatedstaticecho NULL
 #endif
+
 ZEPHIR_INIT_FUNCS(test_scall_method_entry) {
 	PHP_ME(Test_Scall, testMethod1, arginfo_test_scall_testmethod1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Scall, testMethod2, arginfo_test_scall_testmethod2, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)

@@ -27,6 +27,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalueusingdo
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setboolvalueusingdotnotation, 0, 0, 1)
 #define arginfo_test_globals_setboolvalueusingdotnotation NULL
 #endif
+
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -40,6 +41,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setintvalueusingdot
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setintvalueusingdotnotation, 0, 0, 1)
 #define arginfo_test_globals_setintvalueusingdotnotation NULL
 #endif
+
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -53,6 +55,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setcharvalue, 0, 1,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setcharvalue, 0, 0, 1)
 #define arginfo_test_globals_setcharvalue NULL
 #endif
+
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -66,6 +69,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setboolvalue, 0, 1,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setboolvalue, 0, 0, 1)
 #define arginfo_test_globals_setboolvalue NULL
 #endif
+
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -79,6 +83,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_globals_setdefaultglobalsor
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_globals_setdefaultglobalsormcachelevel, 0, 0, 1)
 #define arginfo_test_globals_setdefaultglobalsormcachelevel NULL
 #endif
+
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 

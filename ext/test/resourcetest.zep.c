@@ -36,7 +36,7 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDIN) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDIN");
+	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	RETURN_CCTOR(&a);
 
 }
@@ -52,7 +52,7 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDOUT) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDOUT");
+	ZEPHIR_GET_CONSTANT(&a, "STDOUT");
 	RETURN_CCTOR(&a);
 
 }
@@ -68,7 +68,7 @@ PHP_METHOD(Test_ResourceTest, testLetStatementSTDERR) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDERR");
+	ZEPHIR_GET_CONSTANT(&a, "STDERR");
 	RETURN_CCTOR(&a);
 
 }
@@ -85,7 +85,7 @@ PHP_METHOD(Test_ResourceTest, testTypeOffResource) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDIN");
+	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_gettype(&_0, &a TSRMLS_CC);
 	RETURN_CCTOR(&_0);
@@ -103,7 +103,7 @@ PHP_METHOD(Test_ResourceTest, testIsResource) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDIN");
+	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	RETURN_MM_BOOL(Z_TYPE_P(&a) == IS_RESOURCE);
 
 }
@@ -121,9 +121,9 @@ PHP_METHOD(Test_ResourceTest, testFunctionsForSTDIN) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "STDIN");
+	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 80, &a, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 72, &a, &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

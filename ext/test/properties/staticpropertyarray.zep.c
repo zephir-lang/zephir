@@ -63,10 +63,10 @@ void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D)
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 4);
 	zephir_array_fast_append(&_0, &_1);
-	zend_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someArray"), &_0);
+	zephir_update_static_property_ce(test_properties_staticpropertyarray_ce, ZEND_STRL("someArray"), &_0);
 	ZEPHIR_INIT_NVAR(&_1);
 	array_init(&_1);
-	zend_update_static_property(test_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
+	zephir_update_static_property_ce(test_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
 	ZEPHIR_MM_RESTORE();
 
 }

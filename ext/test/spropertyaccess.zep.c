@@ -54,19 +54,19 @@ PHP_METHOD(Test_SPropertyAccess, __construct) {
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abc");
-	zend_update_static_property(test_spropertyaccess_ce, ZEND_STRL("a"), &_0);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("a"), &_0);
 	zephir_read_static_property_ce(&_0, test_spropertyaccess_ce, SL("a"), PH_NOISY_CC | PH_READONLY);
 	ZVAL_LONG(&_1, 0);
 	ZVAL_LONG(&_2, 1);
 	ZEPHIR_INIT_VAR(&_3);
 	zephir_substr(&_3, &_0, 0 , 1 , 0);
-	zend_update_static_property(test_spropertyaccess_ce, ZEND_STRL("b"), &_3);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("b"), &_3);
 	ZEPHIR_OBS_VAR(&_4);
 	zephir_read_static_property_ce(&_4, test_spropertyaccess_ce, SL("b"), PH_NOISY_CC);
-	zend_update_static_property(test_scallexternal_ce, ZEND_STRL("sproperty"), &_4);
+	zephir_update_static_property_ce(test_scallexternal_ce, ZEND_STRL("sproperty"), &_4);
 	ZEPHIR_OBS_NVAR(&_4);
 	zephir_read_static_property_ce(&_4, test_scallexternal_ce, SL("sproperty"), PH_NOISY_CC);
-	zend_update_static_property(test_spropertyaccess_ce, ZEND_STRL("b"), &_4);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("b"), &_4);
 	ZEPHIR_MM_RESTORE();
 
 }
