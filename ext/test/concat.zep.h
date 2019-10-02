@@ -28,6 +28,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_concat_testconcatbyselfprop
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_concat_testconcatbyselfproperty, 0, 0, 1)
 #define arginfo_test_concat_testconcatbyselfproperty NULL
 #endif
+
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, title, IS_STRING, 0)
 #else

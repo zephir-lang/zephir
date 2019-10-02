@@ -61,7 +61,7 @@ PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 	zephir_read_static_property_ce(&_0, test_concat_ce, SL("testProperty"), PH_NOISY_CC);
 	SEPARATE_ZVAL_IF_NOT_REF(&title);
 	zephir_concat_function(&title, &_0, &title);
-	zend_update_static_property(test_concat_ce, ZEND_STRL("testProperty"), &title);
+	zephir_update_static_property_ce(test_concat_ce, ZEND_STRL("testProperty"), &title);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -107,7 +107,7 @@ PHP_METHOD(Test_Concat, testConcat2) {
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SS(&_1, "append", "other");
 	ZEPHIR_CPY_WRT(&url, &_1);
-	ZEPHIR_INIT_LNVAR(_0);
+	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_CONCAT_SSV(&_0, "append", "other", &url);
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);

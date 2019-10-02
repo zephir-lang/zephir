@@ -94,9 +94,9 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	zephir_memory_observe(z); \
 	ZVAL_NULL(z);
 
-#define ZEPHIR_SINIT_VAR(z) ZVAL_NULL(&z);
+#define ZEPHIR_SINIT_VAR(z) ZEPHIR_INIT_VAR(&z)
 
-#define ZEPHIR_SINIT_NVAR(z) /*Z_SET_REFCOUNT_P(&z, 1)*/
+#define ZEPHIR_SINIT_NVAR(z) ZEPHIR_INIT_NVAR(&z)
 
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	ZVAL_UNDEF(&z); \

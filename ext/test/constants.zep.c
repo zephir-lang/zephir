@@ -275,7 +275,7 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
-	ZEPHIR_MM_GET_CONSTANT(&a, "PHP_VERSION");
+	ZEPHIR_GET_CONSTANT(&a, "PHP_VERSION");
 	RETURN_CCTOR(&a);
 
 }

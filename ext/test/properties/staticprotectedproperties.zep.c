@@ -110,7 +110,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeNull) {
 
 
 
-	zend_update_static_property(test_properties_staticprotectedproperties_ce, ZEND_STRL("someNull"), param);
+	zephir_update_static_property_ce(test_properties_staticprotectedproperties_ce, ZEND_STRL("someNull"), param);
 
 }
 

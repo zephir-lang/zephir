@@ -209,7 +209,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732B) {
 	zephir_array_fast_append(&replacements, &_0);
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "The quick brown fox jumped over the lazy dog.");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 71, &patterns, &replacements, &subject);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 63, &patterns, &replacements, &subject);
 	zephir_check_call_status();
 	RETURN_MM();
 

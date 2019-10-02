@@ -109,7 +109,7 @@ PHP_METHOD(Test_Closures, testUseCommand) {
 	zephir_create_closure_ex(return_value, NULL, test_8__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, abc);
-	zend_update_static_property(test_8__closure_ce, ZEND_STRL("abc"), &_0);
+	zephir_update_static_property_ce(test_8__closure_ce, ZEND_STRL("abc"), &_0);
 	return;
 
 }
@@ -130,7 +130,7 @@ PHP_METHOD(Test_Closures, issue1860) {
 
 
 	zephir_create_closure_ex(return_value, NULL, test_9__closure_ce, SL("__invoke"));
-	zend_update_static_property(test_9__closure_ce, ZEND_STRL("abc"), &abc);
+	zephir_update_static_property_ce(test_9__closure_ce, ZEND_STRL("abc"), &abc);
 	RETURN_MM();
 
 }
