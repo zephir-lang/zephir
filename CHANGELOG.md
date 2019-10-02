@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.5] - 2019-10-02
 ### Changed
 - Update `zend_update_static_property` to be compatible with PHP >= 7.3
   [#1904](https://github.com/phalcon/zephir/issues/1904)
@@ -238,7 +239,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.4...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.5...HEAD
+[0.12.5]: https://github.com/phalcon/zephir/compare/0.12.4...0.12.5
 [0.12.4]: https://github.com/phalcon/zephir/compare/0.12.3...0.12.4
 [0.12.3]: https://github.com/phalcon/zephir/compare/0.12.2...0.12.3
 [0.12.2]: https://github.com/phalcon/zephir/compare/0.12.1...0.12.2
