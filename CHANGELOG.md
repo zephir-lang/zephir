@@ -22,8 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1934](https://github.com/phalcon/zephir/issues/1934),
   [phalcon/cphalcon#14426](https://github.com/phalcon/cphalcon/issues/14426)
 
-### Fixed
 ## [0.12.4] - 2019-09-22
+### Fixed
 - Fixed install template
 
 ## [0.12.3] - 2019-09-22
