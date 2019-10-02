@@ -72,7 +72,7 @@ PHP_METHOD(Test_Invoke, test) {
 
 	ZEPHIR_INIT_VAR(&func);
 	object_init_ex(&func, test_invoke_ce);
-	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 44);
+	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 45);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(&func, NULL, 0);
 	zephir_check_call_status();

@@ -164,12 +164,12 @@ PHP_METHOD(Test_Concat, testConcat4) {
 	ZVAL_STRING(&query, "");
 	min = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (25));
 	max = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (50));
-	ZEPHIR_SINIT_VAR(_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, max);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SV(&_1, "SELECT * FROM TEST WHERE value <= ", &_0);
 	zephir_concat_self(&query, &_1 TSRMLS_CC);
-	ZEPHIR_SINIT_VAR(_2);
+	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_DOUBLE(&_2, min);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
@@ -201,7 +201,7 @@ PHP_METHOD(Test_Concat, testConcat5) {
 
 	ZEPHIR_INIT_VAR(&left);
 	ZVAL_STRING(&left, "Concatenated string with number ");
-	ZEPHIR_SINIT_VAR(_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, number);
 	ZEPHIR_INIT_VAR(&retval);
 	ZEPHIR_CONCAT_VV(&retval, &left, &_0);

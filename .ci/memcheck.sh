@@ -22,6 +22,12 @@ export USE_ZEND_ALLOC=0
 # Do not stop testing on failures
 export PHPUNIT_DONT_EXIT=1
 
+if [ "$($(phpenv which php-config) --vernum)" -lt "70200" ]; then
+  test_suite="Extension_Php70"
+else
+  test_suite="Extension_Php72"
+fi
+
 valgrind \
   --read-var-info=yes \
   --error-exitcode=1 \
@@ -32,6 +38,6 @@ valgrind \
   --run-libc-freeres=no \
   "$(phpenv which php)" \
     -d "extension=ext/modules/test.so" \
-      "unit-tests/phpunit" \
+      "vendor/bin/simple-phpunit" \
       --no-coverage \
-      --testsuite "Extension Test Suite"
+      --testsuite "$test_suite"

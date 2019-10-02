@@ -2144,7 +2144,7 @@ PHP_METHOD(Test_Flow, testFor39) {
 	ZEPHIR_MM_GROW();
 
 	i = 0;
-	ZEPHIR_SINIT_VAR(_2);
+	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "hello");
 	for (_1 = 0; _1 < Z_STRLEN_P(&_2); _1++) {
 		_0 = ZEPHIR_STRING_OFFSET(&_2, _1);
