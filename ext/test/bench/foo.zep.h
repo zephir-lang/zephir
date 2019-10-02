@@ -82,10 +82,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod, 0, 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod, 0, 0, IS_VOID, NULL, 0)
 #endif
 ZEND_END_ARG_INFO()
-
 #else
 #define arginfo_test_bench_foo_staticmethod NULL
 #endif
+
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_bench_foo_staticmethod1, 0, 0, _IS_BOOL, 0)
 #else

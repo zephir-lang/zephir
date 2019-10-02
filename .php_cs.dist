@@ -29,6 +29,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'templates/ZendEngine3',
+        'unit-tests/fixtures/stubs/issue1922',
     ]);
 
 return PhpCsFixer\Config::create()

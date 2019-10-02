@@ -73,6 +73,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/globals.zep.c
 	test/globals/env.zep.c
 	test/globals/post.zep.c
+	test/globals/serverrequestfactory.zep.c
 	test/globals/session/child.zep.c
 	test/instance.zep.c
 	test/instanceoff.zep.c
@@ -148,6 +149,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/properties/extendspublicproperties.zep.c
 	test/properties/privateproperties.zep.c
 	test/properties/propertyarray.zep.c
+	test/properties/propertyupdate.zep.c
 	test/properties/protectedproperties.zep.c
 	test/properties/staticprivateproperties.zep.c
 	test/properties/staticpropertyarray.zep.c

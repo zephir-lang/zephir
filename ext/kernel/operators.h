@@ -223,8 +223,8 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		if (Z_TYPE_P(passValue) == IS_ARRAY) { \
 			ZEPHIR_CPY_WRT(returnValue, passValue); \
 		} else { \
-			ZEPHIR_INIT_NVAR(returnValue); \
-			array_init_size(returnValue, 0); \
+			convert_to_array(passValue); \
+			ZEPHIR_CPY_WRT(returnValue, passValue); \
 		} \
 	}
 

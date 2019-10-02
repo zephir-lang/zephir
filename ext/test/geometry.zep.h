@@ -17,6 +17,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_run, 0, 2, IS_VOID
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_geometry_run, 0, 0, 2)
 #define arginfo_test_geometry_run NULL
 #endif
+
 	ZEND_ARG_ARRAY_INFO(0, list, 0)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
@@ -35,6 +36,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_geometry_runoptimize, 0, 2,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_geometry_runoptimize, 0, 0, 2)
 #define arginfo_test_geometry_runoptimize NULL
 #endif
+
 	ZEND_ARG_ARRAY_INFO(0, list, 0)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)

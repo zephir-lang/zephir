@@ -15,6 +15,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_requires_external3_req, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_requires_external3_req, 0, 0, 2)
 #define arginfo_test_requires_external3_req NULL
 #endif
+
 	ZEND_ARG_INFO(0, path)
 	ZEND_ARG_INFO(0, requires)
 ZEND_END_ARG_INFO()

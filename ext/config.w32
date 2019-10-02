@@ -18,11 +18,11 @@ if (PHP_TEST != "no") {
 	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db/query", "exception.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/oo/scopes", "hasprivatemethod.zep.c scopetesterinterface.zep.c privatescopetester.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/ooimpl", "zbeginning.zep.c abeginning.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "test");
+	ADD_SOURCES(configure_module_dirname + "/test/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/bench", "foo.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/flow", "switchflow.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/globals", "env.zep.c post.zep.c", "test");
+	ADD_SOURCES(configure_module_dirname + "/test/globals", "env.zep.c post.zep.c serverrequestfactory.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/integration/psr/http/message", "messageinterfaceex.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/mcall", "caller.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db/query/placeholder", "exception.zep.c", "test");

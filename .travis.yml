@@ -32,7 +32,6 @@ cache:
 
 env:
   global:
-    - RE2C_VERSION="1.1.1"
     - ZEPHIR_PARSER_VERSION="v1.3.1"
     # TODO: See Library/StatementsBlock.php
     # - ZEPHIR_DEBUG=true
@@ -41,6 +40,7 @@ env:
     - BUILD_PHAR=0
     - PATH="${HOME}/bin:${PATH}"
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
+    - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
 
 before_install:
   - |
@@ -84,7 +84,6 @@ before_install:
 
 install:
   - .ci/install-prereqs.sh
-  - .ci/install-re2c.sh "$RE2C_VERSION"
   - travis_retry composer install ${DEFAULT_COMPOSER_FLAGS[*]}
   - |
     # Prepare Zephir executable
@@ -98,12 +97,25 @@ install:
     fi
 
 before_script:
-  - .ci/build-test-ext.sh
+  - zephir clean
+  - zephir fullclean
+  - zephir generate
+  - zephir stubs
+  - zephir api
+  - |
+    # These variables is needed to produce non optimized code and use code coverage
+    LDFLAGS="--coverage"
+    CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+    CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+
+    # Export variables in the subshell to not shadow global variables
+    ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile )
+
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
 
 script:
   - .ci/run-tests.sh
-  - (cd unit-tests/sharness && PHP=$(phpenv which php) make)
+  - ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
 
 jobs:
   include:
@@ -126,11 +138,11 @@ notifications:
   email: false
 
 after_script:
+  - re2c --version
   - printf "$TRAVIS_COMMIT_RANGE\n"
   - printf "$TRAVIS_COMMIT_LOG\n"
 
 after_success:
-  - .ci/after-success.sh
   - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
 
 after_failure:

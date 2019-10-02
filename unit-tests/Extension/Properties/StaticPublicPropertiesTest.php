@@ -25,4 +25,15 @@ class StaticPublicPropertiesTest extends TestCase
         $this->assertSame(\Test\Properties\StaticPublicProperties::$someDouble, 10.25);
         $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, 'test');
     }
+
+    public function testIssues1904()
+    {
+        $value = &\Test\Properties\StaticPublicProperties::$someString;
+        $value = 'test1';
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        \Test\Properties\StaticPublicProperties::$someString = 'test2';
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        \Test\Properties\StaticPublicProperties::setSomeString('test3');
+        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+    }
 }

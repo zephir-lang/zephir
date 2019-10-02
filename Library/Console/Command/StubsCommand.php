@@ -15,7 +15,9 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
+use Zephir\Exception\ExceptionInterface;
 
 /**
  * Zephir\Console\Command\StubsCommand.
@@ -46,8 +48,16 @@ final class StubsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->stubs();
+        $io = new SymfonyStyle($input, $output);
+
+        try {
+            // TODO: Move all the stuff from the compiler
+            $this->compiler->stubs();
+        } catch (ExceptionInterface $e) {
+            $io->getErrorStyle()->error($e->getMessage());
+
+            return 1;
+        }
 
         return 0;
     }

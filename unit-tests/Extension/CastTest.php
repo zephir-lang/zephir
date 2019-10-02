@@ -107,4 +107,16 @@ class CastTest extends TestCase
         $this->assertEquals((object) '', $this->test->testObjectCastFromEmptyString());
         $this->assertEquals((object) 'test string', $this->test->testObjectCastFromString());
     }
+
+    public function testArrayCast()
+    {
+        $this->assertEquals((array) [1, 2, 3], $this->test->testArrayCastFromVariableArray());
+        $this->assertEquals((array) true, $this->test->testArrayCastFromVariableTrue());
+        $this->assertEquals((array) false, $this->test->testArrayCastFromVariableFalse());
+        $this->assertEquals((array) null, $this->test->testArrayCastFromVariableNull());
+        $this->assertEquals((array) 1, $this->test->testArrayCastFromVariableInteger());
+        $this->assertEquals((array) 1.1, $this->test->testArrayCastFromVariableFloat());
+        $this->assertEquals((array) 'aaa', $this->test->testArrayCastFromVariableString());
+        $this->assertEquals((array) ['p1' => 'v1', 'p2' => 'v2'], $this->test->testArrayCastFromVariableStdClass());
+    }
 }

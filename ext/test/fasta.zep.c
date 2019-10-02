@@ -81,7 +81,7 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZEPHIR_INIT_VAR(&str);
 	zephir_fast_join(&str, &seq, &_2 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_3);
-	ZEPHIR_SINIT_VAR(_4);
+	ZEPHIR_INIT_VAR(&_4);
 	mul_function(&_4, &len, &len TSRMLS_CC);
 	zephir_create_array(&_3, zephir_get_intval(&_4), 1 TSRMLS_CC);
 	zephir_get_arrval(&_5, &_3);

@@ -94,12 +94,7 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	zephir_memory_observe(z); \
 	ZVAL_NULL(z);
 
-#define ZEPHIR_SINIT_VAR(z) ZVAL_NULL(&z);
-
-#define ZEPHIR_SINIT_NVAR(z) /*Z_SET_REFCOUNT_P(&z, 1)*/
-
-#define ZEPHIR_INIT_ZVAL_NREF(z) \
-	ZVAL_UNDEF(&z); \
+#define ZEPHIR_INIT_ZVAL_NREF(z) ZVAL_UNDEF(&z);
 
 #define ZEPHIR_INIT_NVAR(z) \
 	do { \
@@ -150,6 +145,11 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 #define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
 		ZEPHIR_OBS_VAR_ONCE(z); \
 		ZVAL_COPY(z, v);
+
+#define ZEPHIR_HASH_COPY(z, v) \
+	if (Z_TYPE_P(z) == IS_ARRAY && Z_TYPE_P(v) == IS_ARRAY) { \
+		zend_hash_copy(Z_ARRVAL_P(z), Z_ARRVAL_P(v), (copy_ctor_func_t) zval_add_ref); \
+	}
 
 #define ZEPHIR_OBS_NVAR(z) \
 	if (Z_TYPE_P(z) != IS_UNDEF) { \

@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.5] - 2019-10-02
+### Changed
+- Update `zend_update_static_property` to be compatible with PHP >= 7.3
+  [#1904](https://github.com/phalcon/zephir/issues/1904)
+- Improved error handling
+
+### Fixed
+- Fixed IDE stubs generation to properly generate return type hint for `var | null`
+  [#1922](https://github.com/phalcon/zephir/issues/1922)
+- Fixed updating Super Globals [#1917](https://github.com/phalcon/zephir/issues/1917)
+- Fixed casting variables to array [#1923](https://github.com/phalcon/zephir/issues/1923)
+- Fixed work with constant which are not present
+  [#1928](https://github.com/phalcon/zephir/issues/1928)
+- Fixed access to Super Globals
+  [#1934](https://github.com/phalcon/zephir/issues/1934),
+  [phalcon/cphalcon#14426](https://github.com/phalcon/cphalcon/issues/14426)
+
 ### Fixed
 ## [0.12.4] - 2019-09-22
 - Fixed install template
@@ -56,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added initial support of "use" keyword in closures
   [#888](https://github.com/phalcon/zephir/issues/888),
   [#1848](https://github.com/phalcon/zephir/issues/1848)
+  [#1860](https://github.com/phalcon/zephir/issues/1860)
 
 ### Removed
 - PHP 5.x is no longer supported
@@ -75,6 +93,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   https://bugs.php.net/bug.php?id=78121
 - Incorrect implementation of ArrayAccess methods
   [#1871](https://github.com/phalcon/zephir/pull/1871)
+- Fixed exception on call undefined method
+  [#1863](https://github.com/phalcon/zephir/issues/1863)
 
 ## [0.11.12] - 2019-03-24
 ### Fixed
@@ -222,7 +242,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.4...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.5...HEAD
+[0.12.5]: https://github.com/phalcon/zephir/compare/0.12.4...0.12.5
 [0.12.4]: https://github.com/phalcon/zephir/compare/0.12.3...0.12.4
 [0.12.3]: https://github.com/phalcon/zephir/compare/0.12.2...0.12.3
 [0.12.2]: https://github.com/phalcon/zephir/compare/0.12.1...0.12.2

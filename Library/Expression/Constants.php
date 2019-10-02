@@ -221,11 +221,7 @@ class Constants
             throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
         }
 
-        if ($compilationContext->symbolTable->getMustGrownStack()) {
-            $compilationContext->codePrinter->output('ZEPHIR_MM_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
-        } else {
-            $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
-        }
+        $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }

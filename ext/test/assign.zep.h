@@ -93,6 +93,8 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign);
 PHP_METHOD(Test_Assign, testConstantKeyAssign);
 PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign);
 PHP_METHOD(Test_Assign, testAssignSuperGlobals);
+PHP_METHOD(Test_Assign, testAssignSuperGlobalsSERVER);
+PHP_METHOD(Test_Assign, testAssignSuperGlobalsGET);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_assign_testassign1, 0, 0, IS_LONG, 0)
@@ -586,5 +588,7 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testConstantKeyAssign, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testArrayBoolExpressionAssign, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssignSuperGlobals, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssignSuperGlobalsSERVER, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssignSuperGlobalsGET, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
