@@ -39,11 +39,11 @@
 #include <ext/standard/html.h>
 #include <ext/date/php_date.h>
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+#if defined ZEPHIR_USE_PHP_PCRE && ZEPHIR_USE_PHP_PCRE
 #include <ext/pcre/php_pcre.h>
 #endif
 
-#ifdef ZEPHIR_USE_PHP_JSON
+#if defined ZEPHIR_USE_PHP_JSON && ZEPHIR_USE_PHP_JSON
 #include <ext/json/php_json.h>
 #endif
 
@@ -1041,7 +1041,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+#if defined ZEPHIR_USE_PHP_PCRE && ZEPHIR_USE_PHP_PCRE
 
 /**
  * Execute preg-match without function lookup in the PHP userland
@@ -1150,7 +1150,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 
 #endif /* ZEPHIR_USE_PHP_PCRE */
 
-#ifdef ZEPHIR_USE_PHP_JSON
+#if defined ZEPHIR_USE_PHP_JSON && ZEPHIR_USE_PHP_JSON
 
 int zephir_json_encode(zval *return_value, zval *v, int opts)
 {
