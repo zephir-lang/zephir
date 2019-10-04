@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Fixed
 - Fixed regression introduced in `0.12.5` for those users who doesn't use
-  bundled `ext/pcre/php_pcre.h` [#1944](https://github.com/phalcon/zephir/issues/1944)
+  bundled `ext/pcre/php_pcre.h`
+  [#1944](https://github.com/phalcon/zephir/issues/1944)
+  [#1940](https://github.com/phalcon/zephir/issues/1940)
 
 ## [0.12.6] - 2019-10-03
 ### Fixed
