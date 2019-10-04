@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Create local ".zephir" only when necessary
+
 ## [0.12.8] - 2019-10-03
 ### Fixed
 - Fixed `zephir_preg_match` to use `ZVAL_NULL` instead of `ZEPHIR_NULL`

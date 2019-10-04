@@ -29,6 +29,7 @@
         "ext-mbstring": "*",
         "ext-pcre": "*",
         "ext-xml": "*",
+        "ocramius/proxy-manager": "2.0.4",
         "oneup/flysystem-bundle": "^1.14 || ^3.0",
         "symfony/cache": "3.4.*",
         "symfony/config": "3.4.*",
@@ -41,6 +42,7 @@
         "symfony/http-kernel": "3.4.*",
         "symfony/monolog-bridge": "3.4.*",
         "symfony/monolog-bundle": "3.3.*",
+        "symfony/proxy-manager-bridge": "3.4.*",
         "symfony/routing": "3.4.*",
         "symfony/yaml": "3.4.*"
     },

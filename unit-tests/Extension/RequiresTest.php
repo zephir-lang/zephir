@@ -38,10 +38,11 @@ class RequiresTest extends TestCase
     {
         $r = new Requires();
 
-        $this->assertSame(
-            'test',
-            $r->requireExternal3(__DIR__.'/../fixtures/require-me-3.php')
-        );
+        ob_start();
+        $actual = $r->requireExternal3(__DIR__.'/../fixtures/require-me-3.php');
+        ob_end_clean();
+
+        $this->assertSame('test', $actual);
     }
 
     /**
