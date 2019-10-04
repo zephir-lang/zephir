@@ -15,20 +15,20 @@ find_local_cache() {
 }
 
 test_expect_success "Shouldn't create .zephir direcory when print compiler version" "
-  cd $OUTPUTDIR &&
+  cd /tmp &&
   zephirc -V &&
   zephirc --version &&
   test_expect_code 1 find_local_cache
 "
 
 test_expect_success "Shouldn't create .zephir direcory when print compiler short version" "
-  cd $OUTPUTDIR &&
+  cd /tmp &&
   zephirc --dumpversion &&
   test_expect_code 1 find_local_cache
 "
 
 test_expect_success "Shouldn't create .zephir direcory when print compiler help" "
-  cd $OUTPUTDIR &&
+  cd /tmp &&
   zephirc &&
   zephirc help &&
   zephirc -h &&
