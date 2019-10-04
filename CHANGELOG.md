@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   bundled `ext/pcre/php_pcre.h`
   [#1944](https://github.com/phalcon/zephir/issues/1944)
   [#1940](https://github.com/phalcon/zephir/issues/1940)
+- Fixed sitemap API generator [#1940](https://github.com/phalcon/zephir/issues/1940)
 
 ## [0.12.6] - 2019-10-03
 ### Fixed
