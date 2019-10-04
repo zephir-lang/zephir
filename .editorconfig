@@ -19,9 +19,6 @@ tab_width                = 4
 indent_style             = tab
 tab_width                = 4
 
-[*.md]
-trim_trailing_whitespace = false
-
 [*.{yml,m4,json,xml,sh}]
 indent_size              = 2
 
