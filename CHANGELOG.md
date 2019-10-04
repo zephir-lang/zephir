@@ -5,10 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.7] - 2019-10-03
+### Fixed
+- Fixed regression introduced in `0.12.5` for those users who doesn't use
+  bundled `ext/pcre/php_pcre.h`
+  [#1944](https://github.com/phalcon/zephir/issues/1944)
+  [#1940](https://github.com/phalcon/zephir/issues/1940)
+- Fixed sitemap API generator [#1940](https://github.com/phalcon/zephir/issues/1940)
+
 ## [0.12.6] - 2019-10-03
 ### Fixed
 - Fixed regression introduced in `0.12.5` for those users who doesn't use
-  bundled `ext/json/php_json.h` [#1940](https://github.com/phalcon/zephir/issues/1940) 
+  bundled `ext/json/php_json.h` [#1940](https://github.com/phalcon/zephir/issues/1940)
 
 ## [0.12.5] - 2019-10-02
 ### Changed
@@ -247,7 +255,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.6...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.7...HEAD
+[0.12.7]: https://github.com/phalcon/zephir/compare/0.12.6...0.12.7
 [0.12.6]: https://github.com/phalcon/zephir/compare/0.12.5...0.12.6
 [0.12.5]: https://github.com/phalcon/zephir/compare/0.12.4...0.12.5
 [0.12.4]: https://github.com/phalcon/zephir/compare/0.12.3...0.12.4

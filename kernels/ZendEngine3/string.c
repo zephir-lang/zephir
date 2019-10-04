@@ -1,21 +1,13 @@
 /*
-  +------------------------------------------------------------------------+
-  | Zephir Language                                                        |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@zephir-lang.com so we can send you a copy immediately.      |
-  +------------------------------------------------------------------------+
-  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
-  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
-  |          Vladimir Kolesnikov <vladimir@extrememember.com>              |
-  +------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code. If you did not receive
+ * a copy of the license it is available through the world-wide-web at the
+ * following url: https://docs.zephir-lang.com/en/latest/license
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,11 +31,11 @@
 #include <ext/standard/html.h>
 #include <ext/date/php_date.h>
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+#if defined ZEPHIR_USE_PHP_PCRE && ZEPHIR_USE_PHP_PCRE
 #include <ext/pcre/php_pcre.h>
 #endif
 
-#ifdef ZEPHIR_USE_PHP_JSON
+#if defined ZEPHIR_USE_PHP_JSON && ZEPHIR_USE_PHP_JSON
 #include <ext/json/php_json.h>
 #endif
 
@@ -1041,7 +1033,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	}
 }
 
-#ifdef ZEPHIR_USE_PHP_PCRE
+#if defined ZEPHIR_USE_PHP_PCRE && ZEPHIR_USE_PHP_PCRE
 
 /**
  * Execute preg-match without function lookup in the PHP userland
@@ -1114,8 +1106,8 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	zval rv, tmp_matches;
 	zval *rvp = return_value ? return_value : &rv;
 
-	ZEPHIR_INIT_VAR(&tmp_flags);
-	ZEPHIR_INIT_VAR(&tmp_offset);
+	ZEPHIR_NULL(&tmp_flags);
+	ZEPHIR_NULL(&tmp_offset);
 
 	ZVAL_LONG(&tmp_flags, flags);
 	ZVAL_LONG(&tmp_offset, offset);
@@ -1150,7 +1142,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 
 #endif /* ZEPHIR_USE_PHP_PCRE */
 
-#ifdef ZEPHIR_USE_PHP_JSON
+#if defined ZEPHIR_USE_PHP_JSON && ZEPHIR_USE_PHP_JSON
 
 int zephir_json_encode(zval *return_value, zval *v, int opts)
 {
