@@ -41,6 +41,7 @@
         "symfony/http-kernel": "3.4.*",
         "symfony/monolog-bridge": "3.4.*",
         "symfony/monolog-bundle": "3.3.*",
+        "symfony/proxy-manager-bridge": "3.4.*",
         "symfony/routing": "3.4.*",
         "symfony/yaml": "3.4.*"
     },

@@ -23,7 +23,7 @@ use Zephir\Zephir;
  *
  * Uses the standard hard-disk as filesystem for temporary operations.
  */
-final class HardDisk implements FileSystemInterface
+class HardDisk implements FileSystemInterface
 {
     /** @var Flysystem\FilesystemInterface */
     private $filesystem;
