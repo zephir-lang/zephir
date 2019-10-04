@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Create local ".zephir" only when necessary
 
+### Removed
+- Removed no longer used `zephir_dtor` macro
+
 ## [0.12.8] - 2019-10-03
 ### Fixed
 - Fixed `zephir_preg_match` to use `ZVAL_NULL` instead of `ZEPHIR_NULL`
