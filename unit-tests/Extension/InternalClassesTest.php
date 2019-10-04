@@ -20,12 +20,20 @@ class InternalClassesTest extends TestCase
 {
     public function testStaticMethodCall()
     {
+        if (false === class_exists(Di::class)) {
+            $this->markTestSkipped('Class Phalcon\Di not found');
+        }
+
         $class = new InternalClasses();
         $this->assertSame(Di::getDefault(), $class->testStaticCall());
     }
 
     public function testStaticPropertyFetch()
     {
+        if (false === class_exists(Query::class)) {
+            $this->markTestSkipped('Class Phalcon\Mvc\Model\Query not found');
+        }
+
         $class = new InternalClasses();
         $this->assertSame(Query::TYPE_DELETE, $class->testStaticPropertyFetch());
     }
