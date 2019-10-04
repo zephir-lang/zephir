@@ -1106,8 +1106,8 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 	zval rv, tmp_matches;
 	zval *rvp = return_value ? return_value : &rv;
 
-	ZEPHIR_NULL(&tmp_flags);
-	ZEPHIR_NULL(&tmp_offset);
+	ZVAL_NULL(&tmp_flags);
+	ZVAL_NULL(&tmp_offset);
 
 	ZVAL_LONG(&tmp_flags, flags);
 	ZVAL_LONG(&tmp_offset, offset);
@@ -1183,7 +1183,7 @@ int zephir_json_encode(zval *return_value, zval *v, int opts)
 	zval zopts;
 	zval *params[2];
 
-	ZEPHIR_NULL(&zopts);
+	ZVAL_NULL(&zopts);
 	ZVAL_LONG(&zopts, opts);
 
 	params[0] = v;
@@ -1197,7 +1197,7 @@ int zephir_json_decode(zval *return_value, zval *v, zend_bool assoc)
 	zval zassoc;
 	zval *params[2];
 
-	ZEPHIR_NULL(&zassoc);
+	ZVAL_NULL(&zassoc);
 	ZVAL_BOOL(&zassoc, assoc);
 
 	params[0] = v;
