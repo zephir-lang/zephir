@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.8] - 2019-10-03
+### Fixed
+- Fixed `zephir_preg_match` to use `ZVAL_NULL` instead of `ZEPHIR_NULL`
+  [#1946](https://github.com/phalcon/zephir/issues/1946)
+
 ## [0.12.7] - 2019-10-03
 ### Fixed
 - Fixed regression introduced in `0.12.5` for those users who doesn't use
@@ -255,7 +260,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.7...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.8...HEAD
+[0.12.7]: https://github.com/phalcon/zephir/compare/0.12.8...0.12.8
 [0.12.7]: https://github.com/phalcon/zephir/compare/0.12.6...0.12.7
 [0.12.6]: https://github.com/phalcon/zephir/compare/0.12.5...0.12.6
 [0.12.5]: https://github.com/phalcon/zephir/compare/0.12.4...0.12.5
