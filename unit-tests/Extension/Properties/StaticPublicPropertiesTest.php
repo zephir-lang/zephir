@@ -33,6 +33,8 @@ class StaticPublicPropertiesTest extends TestCase
         $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
         \Test\Properties\StaticPublicProperties::$someString = 'test2';
         $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        // Disabled due to:
+        // https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340
         \Test\Properties\StaticPublicProperties::setSomeString('test3');
         $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
     }
