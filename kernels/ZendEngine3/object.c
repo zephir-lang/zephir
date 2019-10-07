@@ -1023,27 +1023,33 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 
 int zephir_update_static_property_ce(zend_class_entry *ce, const char *property_name, uint32_t property_length, zval *value)
 {
-// Disabled due to:
-// https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340
-//
-//#if PHP_VERSION_ID < 70300
-//	zval *property, garbage;
-//	property = zend_read_static_property(ce, property_name, property_length, (zend_bool)ZEND_FETCH_CLASS_SILENT);
-//	if (property) {
-//		if (Z_ISREF_P(property)) {
-//			ZVAL_DEREF(property);
-//		}
-//		if (Z_ISREF_P(value)) {
-//			ZVAL_DEREF(value);
-//		}
-//		ZVAL_COPY_VALUE(&garbage, property);
-//		ZVAL_COPY(property, value);
-//		zval_ptr_dtor(&garbage);
-//		return 1;
-//	}
-//#else
-	return zend_update_static_property(ce, property_name, property_length, value);
-//#endif
+#if PHP_VERSION_ID < 70300
+	zval *property;
+	property = zend_read_static_property(ce, property_name, property_length, (zend_bool)ZEND_FETCH_CLASS_SILENT);
+	if (property && property != value) {
+		if (Z_ISREF_P(property)) {
+			ZVAL_DEREF(property);
+			zval_dtor(property);
+			ZVAL_DEREF(value);
+			ZVAL_COPY_VALUE(property, value);
+		} else {
+			zval garbage;
+
+			ZVAL_COPY_VALUE(&garbage, property);
+			if (Z_REFCOUNTED_P(value)) {
+				Z_ADDREF_P(value);
+				if (Z_ISREF_P(value)) {
+					SEPARATE_ZVAL(value);
+				}
+			}
+			ZVAL_COPY_VALUE(property, value);
+			zval_ptr_dtor(&garbage);
+		}
+		return 1;
+	}
+#else
+	zend_update_static_property(ce, property_name, property_length, value);
+#endif
 }
 
 /*
