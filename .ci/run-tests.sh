@@ -22,13 +22,9 @@ fi
   vendor/bin/simple-phpunit \
   --colors=always \
   --bootstrap unit-tests/ext-bootstrap.php \
-  --testsuite ${test_suite} \
-  --coverage-clover "./unit-tests/output/coverage-${test_suite}.xml"
+  --testsuite ${test_suite}
 
 "$(phpenv which php)" \
   vendor/bin/simple-phpunit \
   --colors=always \
-  --testsuite Zephir \
-  --coverage-clover ./unit-tests/output/coverage-Zephir.xml
-
-exit $?
+  --testsuite Zephir
