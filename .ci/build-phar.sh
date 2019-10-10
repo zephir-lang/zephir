@@ -11,7 +11,7 @@
 # -u  Treat unset variables as an error when substituting.
 set -eu
 
-if [ "$(command -v box 2>/dev/null)" = "" ]; then
+if [ "$(command -v box 2>/dev/null || true)" = "" ]; then
   (>&2 printf "To use this script you need to install humbug/box: %s \\n" \
     "https://github.com/humbug/box")
   (>&2 echo "Aborting.")
@@ -25,6 +25,3 @@ if [ ! -f "./zephir.phar" ] || [ ! -x "./zephir.phar" ]; then
   (>&2 echo "Aborting.")
   exit 1
 fi
-
-mkdir -p "$HOME/bin"
-cp "./zephir.phar" "$HOME/bin/zephir"
