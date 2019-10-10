@@ -25,7 +25,7 @@ then
 fi
 
 # for some reason Ubuntu 18.04 on Travis CI doesn't install gdb
-function install_gcc() {
+function install_gdb() {
   if [ "${CI}" = "true" ] && [ "$(command -v gdb 2>/dev/null)" = "" ]
   then
     (>&1 echo "Install gdb...")
@@ -34,7 +34,7 @@ function install_gcc() {
 }
 
 for i in /tmp/core.php.*; do
-  install_gcc
+  install_gdb
   (>&1 printf "Found core dump file: %s\\n\\n" "$i")
   gdb -q "$(phpenv which php)" "$i" <<EOF
 set pagination 0

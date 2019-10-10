@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC2034
-test_description="Test generate IDE stubs with `use` block"
+test_description="Test generate IDE stubs with proper namespace imports"
 
 source ./setup.sh
 
 # See: https://github.com/phalcon/zephir/issues/1778
-test_expect_success "Should properly generate includes (use block)" "
+test_expect_success "Should properly namespace imports (use block)" "
   cd $FIXTURESDIR/stubs/issue1778 &&
   zephirc generate --no-ansi 2>&1 >/dev/null &&
   zephirc stubs --no-ansi 2>&1 >/dev/null &&

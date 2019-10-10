@@ -84,6 +84,16 @@ matrix:
 
     - os: linux
       compiler: gcc
+      php: '7.3'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        - SYMFONY_PHPUNIT_VERSION=7.4
+
+    - os: linux
+      compiler: gcc
       php: '7.4snapshot'
       addons:
         apt:
@@ -184,7 +194,6 @@ script:
     fi
 
 after_script:
-  - php --version
   - re2c --version
   - printf "$TRAVIS_COMMIT_RANGE\n"
   - printf "$TRAVIS_COMMIT_LOG\n"
@@ -209,4 +218,5 @@ deploy:
   on:
     tags: true
     php: '7.2'
+    condition: $BUILD_TYPE = regular
   repo: phalcon/zephir
