@@ -101,15 +101,15 @@ class Generator
      */
     protected function buildClass(ClassDefinition $class, string $indent): string
     {
-        $source  = "<?php\n\n";
-        $source .= "namespace {$class->getNamespace()};" . PHP_EOL;
+        $source = "<?php\n\n";
+        $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
         $aliases = $class->getAliasManager()->getAliases();
         if (!empty($aliases)) {
             $source .= PHP_EOL;
 
             foreach ($aliases as $alias => $fqn) {
-                $source .= 'use ' . $fqn . ';' . PHP_EOL;
+                $source .= 'use '.$fqn.';'.PHP_EOL;
             }
         }
 
@@ -117,8 +117,8 @@ class Generator
 
         $docBlock = (new DocBlock($class->getDocBlock(), ''));
 
-        if ((string)$docBlock !== '') {
-            $source .= $docBlock . PHP_EOL;
+        if ('' !== (string) $docBlock) {
+            $source .= $docBlock.PHP_EOL;
         }
 
         if ($class->isFinal()) {
