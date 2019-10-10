@@ -217,5 +217,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    php: '7.3'
+    php: '7.2'
+    condition: $BUILD_TYPE = regular
   repo: phalcon/zephir
