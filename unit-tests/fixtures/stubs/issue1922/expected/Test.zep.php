@@ -2,7 +2,6 @@
 
 namespace Stubs;
 
-
 class Test
 {
 
