@@ -84,6 +84,16 @@ matrix:
 
     - os: linux
       compiler: gcc
+      php: '7.3'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        - SYMFONY_PHPUNIT_VERSION=7.4
+
+    - os: linux
+      compiler: gcc
       php: '7.4snapshot'
       addons:
         apt:
@@ -208,5 +218,5 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    php: '7.2'
+    php: '7.3'
   repo: phalcon/zephir
