@@ -194,7 +194,6 @@ script:
     fi
 
 after_script:
-  - php --version
   - re2c --version
   - printf "$TRAVIS_COMMIT_RANGE\n"
   - printf "$TRAVIS_COMMIT_LOG\n"
