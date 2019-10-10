@@ -1,46 +1,97 @@
 language: php
-php:
-  - '7.4snapshot'
-  - '7.3'
-  - '7.2'
-  - '7.1'
-  - '7.0'
 
-dist: xenial
+branches:
+  except:
+    - /appveyor.*/
+
+notifications:
+  email: false
 
 git:
   depth: 5
   quiet: true
 
-addons:
-  apt:
-    packages:
-      - gdb
-      - shellcheck
+cache:
+  timeout: 604800
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.local/opt"
+    - "$HOME/.phpunit"
+    - "$HOME/bin"
+
+env:
+  global:
+    - BUILD_PHAR=1
+    - BUILD_TYPE=regular
+    - BOX_VERSION=3.3.1
+    - REPORT_COVERAGE=1
+    - ZEPHIR_PARSER_VERSION="v1.3.2"
+    - PATH="${HOME}/bin:${PATH}"
+    - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
+    - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
+    - SYMFONY_PHPUNIT_DIR="$HOME/.phpunit"
+    # TODO: See Library/StatementsBlock.php
+    # - ZEPHIR_DEBUG=true
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: '7.4snapshot'
 
-cache:
-  timeout: 604800
-  directories:
-    - $HOME/.composer/cache
-    - $HOME/.local/opt
-    - .phpunit
+  include:
+    - os: linux
+      compiler: gcc
+      php: '7.0'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        - BUILD_PHAR=0
+        - SYMFONY_PHPUNIT_VERSION=6.5
 
-env:
-  global:
-    - ZEPHIR_PARSER_VERSION="v1.3.1"
-    # TODO: See Library/StatementsBlock.php
-    # - ZEPHIR_DEBUG=true
-    - REPORT_COVERAGE=1
-    - BOX_VERSION=3.3.1
-    - BUILD_PHAR=0
-    - PATH="${HOME}/bin:${PATH}"
-    - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
-    - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
+    - os: linux
+      compiler: gcc
+      php: '7.1'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        - SYMFONY_PHPUNIT_VERSION=7.4
+
+    - os: linux
+      compiler: gcc
+      php: '7.2'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        - SYMFONY_PHPUNIT_VERSION=7.4
+
+    - os: linux
+      php: '7.2'
+      cache: false
+      addons:
+        apt:
+          packages:
+            - shellcheck
+      env:
+        - BUILD_PHAR=0
+        - REPORT_COVERAGE=0
+        - BUILD_TYPE=analysis
+
+    - os: linux
+      compiler: gcc
+      php: '7.4snapshot'
+      addons:
+        apt:
+          packages:
+            - gdb
+      env:
+        # TODO: Recheck
+        - BUILD_PHAR=0
 
 before_install:
   - |
@@ -48,96 +99,92 @@ before_install:
     ulimit -c unlimited -S || true
     echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
-    if [ -n "$GITHUB_TOKEN" ]
-    then
-      composer config github-oauth.github.com "$GITHUB_TOKEN"
-      echo 'Add Github token'
-    fi
-
-    # Export build/test environment variables
-    export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
-    export PHP_VERNUM="$(php-config --vernum)"
+    # To increase the GitHub rate limit we're use GitHub authentication
+    composer config github-oauth.github.com "$GITHUB_TOKEN"
 
     [ -d ~/bin ] || mkdir ~/bin
-    export DEFAULT_COMPOSER_FLAGS=("--no-interaction" "--no-ansi" "--no-progress" "--no-suggest")
 
     # Hide "You are in 'detached HEAD' state" message
     git config --global advice.detachedHead false
 
-    # Box does not work with PHP 7.4
-    if [ "$PHP_VERNUM" -ge "70100" ] && [ "$PHP_VERNUM" -lt "70400" ]
-    then
-      export BUILD_PHAR=1
-    fi
-
-    if [ "$PHP_VERNUM" -ge "70400" ]
-    then
-      # Temporary until we release parser with PHP 7.4 support
-      export ZEPHIR_PARSER_VERSION=development
-    fi
-
-    if [ "$TRAVIS_PHP_VERSION" = "7.2" ]
-    then
-      echo 'Choose a suitable PHP version to build PHAR'
+    # Choose a suitable PHP version to build PHAR (we're use PHP 7.2 for deploy)
+    if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then
       composer config platform.php 7.0.33
     fi
 
 install:
-  - .ci/install-prereqs.sh
-  - travis_retry composer install ${DEFAULT_COMPOSER_FLAGS[*]}
+  - |
+    # Install regular dependencies
+    if [ "$BUILD_TYPE" == "regular" ]; then
+      .ci/install-prereqs.sh
+      composer install --no-interaction --no-ansi --no-progress --no-suggest
+    fi
+
+  - |
+    # Install dependencies needed for static code analysis
+    if [ "$BUILD_TYPE" == "analysis" ]; then
+      if [ ! -f "$HOME/bin/php-cs-fixer" ]; then
+        wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+        chmod +x "$HOME/bin/php-cs-fixer"
+      fi
+
+      if [ ! -f "$HOME/bin/phpcs" ]; then
+        wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+        chmod +x "$HOME/bin/phpcs"
+      fi
+    fi
+
   - |
     # Prepare Zephir executable
     if [ "$BUILD_PHAR" -eq 1 ]
     then
       echo "Build Zephit PHAR"
       .ci/build-phar.sh
+      sudo ln -s "$(pwd)/zephir.phar" /usr/local/bin/zephir
     else
       echo "Use Zephir from source"
-      ln -s "$(pwd)/zephir" "$HOME/bin/zephir"
+      sudo ln -s "$(pwd)/zephir" /usr/local/bin/zephir
     fi
 
 before_script:
-  - zephir clean
-  - zephir fullclean
-  - zephir generate
-  - zephir stubs
-  - zephir api
-  - |
-    # These variables is needed to produce non optimized code and use code coverage
-    LDFLAGS="--coverage"
-    CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
-    CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
-
-    # Export variables in the subshell to not shadow global variables
-    ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile )
-
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
+  - cat "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
+  - |
+    if [ "$BUILD_TYPE" == "regular" ]; then
+      zephir clean
+      zephir fullclean
+      zephir generate
+      zephir stubs
+      zephir api
+
+      # These variables is needed to produce non optimized code and use code coverage
+      LDFLAGS="--coverage"
+      CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+      CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+
+      # Export variables in the subshell to not shadow global variables
+      ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile )
+    fi
 
 script:
-  - .ci/run-tests.sh
-  - ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
+  - |
+    # Unit and Black-box testing
+    if [ "$BUILD_TYPE" == "regular" ]; then
+      vendor/bin/simple-phpunit --version
+      .ci/run-tests.sh
+      ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
+    fi
 
-jobs:
-  include:
-    - stage: Static Code Analysis
-      php: '7.2'
-      env:
-        - REPORT_COVERAGE=0
-      install:
-        - wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
-        - wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-      before_script:
-        - chmod +x "$HOME/bin/php-cs-fixer"
-        - chmod +x "$HOME/bin/phpcs"
-      script:
-        - phpcs
-        - php-cs-fixer fix --diff --dry-run -v
-        - shellcheck .ci/*.sh
-
-notifications:
-  email: false
+  - |
+    # Static Code Analysis
+    if [ "$BUILD_TYPE" == "analysis" ]; then
+      phpcs
+      php-cs-fixer fix --diff --dry-run -v
+      shellcheck .ci/*.sh
+    fi
 
 after_script:
+  - php --version
   - re2c --version
   - printf "$TRAVIS_COMMIT_RANGE\n"
   - printf "$TRAVIS_COMMIT_LOG\n"
