@@ -101,7 +101,7 @@ class Generator
      */
     protected function buildClass(ClassDefinition $class, string $indent): string
     {
-        $source = "<?php\n\n";
+        $source = '<?php'.PHP_EOL.PHP_EOL;
         $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
         $aliases = $class->getAliasManager()->getAliases();
@@ -175,7 +175,7 @@ class Generator
                 $indent
             );
 
-            $source .= "\n\n";
+            $source .= PHP_EOL.PHP_EOL;
         }
 
         return $source.'}'.PHP_EOL;
