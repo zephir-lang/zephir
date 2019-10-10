@@ -50,15 +50,13 @@ static zend_always_inline zend_execute_data* find_symbol_table(zend_execute_data
  */
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const char *func)
 {
-	zephir_memory_entry *entry;
 	if (g->active_memory == NULL) {
 		zephir_memory_entry *active_memory;
-		size_t i;
 
 		active_memory = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 0);
 
-		active_memory->addresses       = pecalloc(24, sizeof(zval*), 0);
-		active_memory->capacity        = 24;
+		active_memory->addresses = pecalloc(24, sizeof(zval*), 0);
+		active_memory->capacity  = 24;
 
 		g->active_memory = active_memory;
 	}
@@ -74,7 +72,7 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const ch
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func)
 {
 	size_t i;
-	zephir_memory_entry *prev, *active_memory;
+	zephir_memory_entry *active_memory;
 	zephir_symbol_table *active_symbol_table;
 	zval *ptr;
 #ifndef ZEPHIR_RELEASE
@@ -200,7 +198,6 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr)
  */
 void zephir_deinitialize_memory()
 {
-	size_t i;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	if (zephir_globals_ptr->initialized != 1) {
