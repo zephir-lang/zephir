@@ -30,3 +30,5 @@ fi
   --colors=always \
   --testsuite Zephir \
   --coverage-clover ./unit-tests/output/coverage-Zephir.xml
+
+exit $?
