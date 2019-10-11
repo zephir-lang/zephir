@@ -71,18 +71,6 @@ matrix:
         - SYMFONY_PHPUNIT_VERSION=7.4
 
     - os: linux
-      php: '7.2'
-      cache: false
-      addons:
-        apt:
-          packages:
-            - shellcheck
-      env:
-        - BUILD_PHAR=0
-        - REPORT_COVERAGE=0
-        - BUILD_TYPE=analysis
-
-    - os: linux
       compiler: gcc
       php: '7.3'
       addons:
@@ -103,6 +91,17 @@ matrix:
         # TODO: Recheck
         - BUILD_PHAR=0
 
+    - os: linux
+      cache: false
+      addons:
+        apt:
+          packages:
+            - shellcheck
+      env:
+        - BUILD_PHAR=0
+        - REPORT_COVERAGE=0
+        - BUILD_TYPE=analysis
+
 before_install:
   - |
     # Core dump settings
@@ -110,9 +109,12 @@ before_install:
     echo '/tmp/core.%e.%p.%t' | sudo tee /proc/sys/kernel/core_pattern
 
     # To increase the GitHub rate limit we're use GitHub authentication
-    composer config github-oauth.github.com "$GITHUB_TOKEN"
+    if [ -n "$GITHUB_TOKEN" ]; then
+      composer config github-oauth.github.com "$GITHUB_TOKEN"
+    fi
 
-    [ -d ~/bin ] || mkdir ~/bin
+    # A common path to sore global binaries
+    [ -d "$HOME/bin" ] || mkdir "$HOME/bin"
 
     # Hide "You are in 'detached HEAD' state" message
     git config --global advice.detachedHead false
@@ -180,7 +182,6 @@ script:
   - |
     # Unit and Black-box testing
     if [ "$BUILD_TYPE" == "regular" ]; then
-      vendor/bin/simple-phpunit --version
       .ci/run-tests.sh
       ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
     fi
@@ -188,6 +189,7 @@ script:
   - |
     # Static Code Analysis
     if [ "$BUILD_TYPE" == "analysis" ]; then
+      phpenv config-rm xdebug.ini || true
       phpcs
       php-cs-fixer fix --diff --dry-run -v
       shellcheck .ci/*.sh
