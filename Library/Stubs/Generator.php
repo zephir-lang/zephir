@@ -140,7 +140,7 @@ class Generator
                 );
             }
 
-            $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').trim($extendsClassDefinition->getCompleteName(), '\\');
+            $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').$extendsClassDefinition->getCompleteName();
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
