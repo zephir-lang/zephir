@@ -140,7 +140,10 @@ class Generator
                 );
             }
 
-            $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').$extendsClassDefinition->getCompleteName();
+            $hasAliasForExtends = $class->getAliasManager()->isAlias($extendsClassDefinition->getShortName());
+
+            $source .= ' extends '.($hasAliasForExtends || $extendsClassDefinition->isBundled() ? '' : '\\');
+            $source .= $hasAliasForExtends ? $extendsClassDefinition->getShortName() : $extendsClassDefinition->getCompleteName();
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
