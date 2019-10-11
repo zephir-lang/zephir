@@ -128,6 +128,7 @@ class ObjectPropertyAppend
 
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $tempVariable->initVariant($compilationContext);
                 $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
                 $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, $tempVariable, $compilationContext);
                 if ($tempVariable->isTemporal()) {
