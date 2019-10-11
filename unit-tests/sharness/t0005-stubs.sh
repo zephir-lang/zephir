@@ -29,4 +29,12 @@ test_expect_success "Should properly generate Namespace for extends" "
   test_cmp expected/Exception.zep.php ide/0.0.1/Stubs/Exception.zep.php
 "
 
+# See: https://github.com/phalcon/zephir/issues/1907
+test_expect_success "Should properly generate Namespace for extends (slash)" "
+  cd $FIXTURESDIR/stubs/issues &&
+  zephirc generate --no-ansi 2>&1 >/dev/null &&
+  zephirc stubs --no-ansi 2>&1 >/dev/null &&
+  test_cmp expected/Issue_1907.zep.php ide/0.0.1/Stubs/Issue_1907.zep.php
+"
+
 test_done
