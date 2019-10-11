@@ -9,7 +9,7 @@
 
 namespace Stubs;
 
-use Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample;
+use Stubs\Dependency;
 
 /**
  * Test Class Example Description
@@ -23,17 +23,17 @@ use Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample;
  * $example = new Test($container, $config);
  * </code>
  */
-class Test
+class UseBlock
 {
     const PROPERTY_EXAMPLE = "test_property";
 
-    /** @var <DiInterfaceExample> */
+    /** @var <Dependency> */
     private _container;
 
     /** @var array */
     protected config;
 
-    public function __construct(<DiInterfaceExample> container, array config)
+    public function __construct(<Dependency> container, array config)
     {
         let this->_container = container;
         let this->config = config;

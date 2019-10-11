@@ -1,6 +1,6 @@
 namespace Stubs;
 
-class Test
+class Test1922
 {
     public function getVar(string! key) -> var | null
     {
