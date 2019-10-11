@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Create local `.zephir` only when necessary
 - Fixed IDE stubs generation [#1778](https://github.com/phalcon/zephir/issues/1778)
-- Disable some regression changes introduced in the version `0.12.5`
-  [#1941 (comment)](https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340),
-  [#1904](https://github.com/phalcon/zephir/issues/1904),
-  [11dc1d4](https://github.com/phalcon/zephir/commit/11dc1d4634b2d74599c53147b3733b829257c3a4),
-  [#1955](https://github.com/phalcon/zephir/pull/1955)
+- Fixed segfault on cast `IS_UNDEF` to array
+  [#1941](https://github.com/phalcon/zephir/issues/1941)
+- Disables some regression changes introduced in the version `0.12.5`
+  [#1941 (comment)](https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340)
+- Fixed memory leak on update array [#1937](https://github.com/phalcon/zephir/issues/1937)
 
 ### Removed
 - Removed no longer used `zephir_dtor` macro
