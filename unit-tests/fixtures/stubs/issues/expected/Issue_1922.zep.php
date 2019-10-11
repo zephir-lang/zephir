@@ -2,7 +2,7 @@
 
 namespace Stubs;
 
-class Test1922
+class Issue_1922
 {
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Stubs;
 
-use Stubs\Dependency;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Test Class Example Description
@@ -13,18 +13,18 @@ use Stubs\Dependency;
  *    'param' => 42
  * ];
  *
- * $example = new Test($container, $config);
+ * $example = new Issue_1778($request, $config);
  * </code>
  */
-class UseBlock
+class Issue_1778
 {
 
     const PROPERTY_EXAMPLE = 'test_property';
 
     /**
-     * @var <Dependency>
+     * @var <RequestInterface>
      */
-    private $_container;
+    private $request;
 
     /**
      * @var array
@@ -33,10 +33,10 @@ class UseBlock
 
 
     /**
-     * @param \Stubs\Dependency $container
+     * @param \Psr\Http\Message\RequestInterface $request
      * @param array $config
      */
-    public function __construct(\Stubs\Dependency $container, array $config) {}
+    public function __construct(\Psr\Http\Message\RequestInterface $request, array $config) {}
 
     /**
      * Some useful description
