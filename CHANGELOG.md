@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1907](https://github.com/phalcon/zephir/issues/1907)
 
 #### Changed
-- Added warning during the code generation if the timecop extension was detected
+- Print warning during the code generation if the `timecop` extension was detected
   [#1950](https://github.com/phalcon/zephir/issues/1950)
 
 ### Removed
