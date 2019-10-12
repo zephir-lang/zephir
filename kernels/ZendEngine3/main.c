@@ -100,8 +100,7 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
-				ZVAL_DUP(arr, gv);
-				zend_hash_update(&EG(symbol_table), str, arr);
+				ZVAL_COPY_VALUE(arr, gv);
 				zend_string_release(str);
 				return SUCCESS;
 			}
