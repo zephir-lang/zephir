@@ -2,7 +2,7 @@
 
 namespace Stubs;
 
-use Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Test Class Example Description
@@ -13,18 +13,18 @@ use Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample;
  *    'param' => 42
  * ];
  *
- * $example = new Test($container, $config);
+ * $example = new Issue_1778($request, $config);
  * </code>
  */
-class Test
+class Issue_1778
 {
 
     const PROPERTY_EXAMPLE = 'test_property';
 
     /**
-     * @var <DiInterfaceExample>
+     * @var <RequestInterface>
      */
-    private $_container;
+    private $request;
 
     /**
      * @var array
@@ -33,10 +33,10 @@ class Test
 
 
     /**
-     * @param \Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample $container
+     * @param \Psr\Http\Message\RequestInterface $request
      * @param array $config
      */
-    public function __construct(\Fixtures\Ide_Stubs\Interfaces\DiInterfaceExample $container, array $config) {}
+    public function __construct(\Psr\Http\Message\RequestInterface $request, array $config) {}
 
     /**
      * Some useful description
