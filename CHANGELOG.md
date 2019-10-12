@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Disables some regression changes introduced in the version `0.12.5`
   [#1941 (comment)](https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340)
 - Fixed memory leak on update array [#1937](https://github.com/phalcon/zephir/issues/1937)
+- Fixed IDE stubs generation for classes that extends base classes
+  [#1907](https://github.com/phalcon/zephir/issues/1907)
 
 ### Removed
 - Removed no longer used `zephir_dtor` macro
