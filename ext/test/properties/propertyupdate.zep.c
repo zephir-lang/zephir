@@ -29,14 +29,18 @@ ZEPHIR_INIT_CLASS(Test_Properties_PropertyUpdate) {
 PHP_METHOD(Test_Properties_PropertyUpdate, update1) {
 
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 
+	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "aaa");
 	zephir_update_property_array_append(this_ptr, SL("p1"), &_0);
+	ZEPHIR_MM_RESTORE();
 
 }
 

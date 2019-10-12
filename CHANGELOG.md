@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed IDE stubs generation for classes that extends base classes
   [#1907](https://github.com/phalcon/zephir/issues/1907)
 
+#### Changed
+- Print warning during the code generation if the `timecop` extension was detected
+  [#1950](https://github.com/phalcon/zephir/issues/1950)
+
 ### Removed
 - Removed no longer used `zephir_dtor` macro
 
