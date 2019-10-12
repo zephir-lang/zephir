@@ -474,7 +474,7 @@ int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, cache_slot, param_count, params);
 
 	if (status == FAILURE && !EG(exception)) {
-		zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
+		zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined function %s()", Z_TYPE_P(func_name) == IS_STRING ? Z_STRVAL_P(func_name) : "undefined");
 	} else if (EG(exception)) {
 		status = FAILURE;
 	}

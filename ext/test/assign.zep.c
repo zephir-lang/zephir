@@ -1063,6 +1063,7 @@ PHP_METHOD(Test_Assign, testPropertyArray1) {
 	ZVAL_LONG(&_1, 'A');
 	zephir_update_property_array_append(this_ptr, SL("myArray"), &_1);
 	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "hello");
 	zephir_update_property_array_append(this_ptr, SL("myArray"), &_1);
 	ZEPHIR_INIT_VAR(&_2);
