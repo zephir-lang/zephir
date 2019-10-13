@@ -182,8 +182,8 @@ script:
   - |
     # Unit and Black-box testing
     if [ "$BUILD_TYPE" == "regular" ]; then
-      .ci/run-tests.sh
-      ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
+      .ci/run-tests.sh \
+      && ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
     fi
 
   - |
