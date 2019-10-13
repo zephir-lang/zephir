@@ -1187,12 +1187,9 @@ class Backend extends BaseBackend
 
     public function copyOnWrite(Variable $target, $var, CompilationContext $context)
     {
-        $globalsManager = new Globals();
-        if ($globalsManager->isSuperGlobal($target->getName())) {
-            $context->codePrinter->output('ZEPHIR_HASH_COPY('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
-        } else {
-            $context->codePrinter->output('ZEPHIR_CPY_WRT('.$this->getVariableCode($target).', '.$this->resolveValue($var, $context).');');
-        }
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
