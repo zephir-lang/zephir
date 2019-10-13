@@ -11,6 +11,7 @@
 
 namespace Zephir\Statements\Let;
 
+use function Zephir\add_slashes;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -1095,7 +1096,7 @@ class Variable
                     case 'assign':
                         $symbolVariable->initVariant($compilationContext);
                         $symbolVariable->setDynamicTypes('string');
-                        $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
+                        $compilationContext->backend->assignString($symbolVariable, add_slashes($resolvedExpr->getCode()), $compilationContext);
                         break;
 
                     case 'concat-assign':
