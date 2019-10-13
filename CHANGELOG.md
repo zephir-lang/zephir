@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed memory leak on update array [#1937](https://github.com/phalcon/zephir/issues/1937)
 - Fixed IDE stubs generation for classes that extends base classes
   [#1907](https://github.com/phalcon/zephir/issues/1907)
+- Proper escape slashes in strings [#1495](https://github.com/phalcon/zephir/issues/1495)
 
 ### Changed
 - Print warning during the code generation if the `timecop` extension was detected
