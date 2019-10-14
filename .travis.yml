@@ -162,7 +162,10 @@ before_script:
   - cat "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
   - if [ "$BUILD_TYPE" == "regular" ]; then zephir clean; fi
   - if [ "$BUILD_TYPE" == "regular" ]; then zephir fullclean; fi
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir generate; fi
+  # We use ZEPHIR_DEBUG=0 here to collect C code coverage (instead of Zephir one).
+  # This can be convenient for projects that use Zephir as a base language, but
+  # this differs from the real picture when developing Zephir itself
+  - if [ "$BUILD_TYPE" == "regular" ]; then ZEPHIR_DEBUG=0 zephir generate; fi
   - if [ "$BUILD_TYPE" == "regular" ]; then zephir stubs; fi
   - if [ "$BUILD_TYPE" == "regular" ]; then zephir api; fi
   - |
@@ -181,7 +184,7 @@ script:
   - if [ "$BUILD_TYPE" == "regular" ]; then .ci/run-tests.sh; fi
 
   # Black-box testing
-  - if [ "$BUILD_TYPE" == "regular" ]; then ( export ZEPHIR_DEBUG=0; cd unit-tests/sharness && PHP=$(phpenv which php) make ); fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then ( cd unit-tests/sharness && ZEPHIR_DEBUG=0 PHP=$(phpenv which php) make ); fi
 
   # Static Code Analysis
   - phpenv config-rm xdebug.ini || true
