@@ -26,6 +26,6 @@ abstract class Command extends BaseCommand
     {
         parent::mergeApplicationDefinition($mergeArgs);
 
-        $this->removeOptions(['dumpversion', 'version']);
+        $this->removeOptions(['dumpversion', 'version', 'vernum']);
     }
 }

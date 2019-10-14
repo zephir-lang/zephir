@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Removed
+- Remove `--vernum` option from the help for a regular command
 
 ## [0.12.9] - 2019-10-14
 ### Added
