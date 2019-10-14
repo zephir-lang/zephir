@@ -87,21 +87,25 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
  */
 int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 {
-	zval *gv;
 	zend_array *symbol_table;
-	zend_bool jit_initialization = PG(auto_globals_jit);
 	zend_string *str = zend_string_init(global, global_length, 0);
 
-	if (jit_initialization) {
+	if (PG(auto_globals_jit)) {
 		zend_is_auto_global(str);
 	}
 
 	if (&EG(symbol_table)) {
+		zval *gv;
+
 		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
 				ZVAL_DUP(arr, gv);
 				zend_hash_update(&EG(symbol_table), str, arr);
+
+				// See: https://github.com/phalcon/zephir/pull/1965#issuecomment-541299003
+				// ZVAL_COPY_VALUE(arr, gv);
+
 				zend_string_release(str);
 				return SUCCESS;
 			}
@@ -114,9 +118,10 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 	} else {
 		symbol_table = &EG(symbol_table);
 	}
-	zend_hash_update(symbol_table, str, arr);
 
+	zend_hash_update(symbol_table, str, arr);
 	zend_string_release(str);
+
 	return FAILURE;
 }
 

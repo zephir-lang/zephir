@@ -16,6 +16,7 @@ services:
   Zephir\FileSystem\FileSystemInterface:
     class: Zephir\FileSystem\HardDisk
     public: true
+    lazy: true
     arguments:
       $filesystem: '@compiler_filesystem'
     calls:

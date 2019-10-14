@@ -99,17 +99,27 @@ class Generator
      *
      * @return string
      */
-    protected function buildClass(ClassDefinition $class, $indent)
+    protected function buildClass(ClassDefinition $class, string $indent): string
     {
-        $source = <<<EOF
-<?php
+        $source = '<?php'.PHP_EOL.PHP_EOL;
+        $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
-namespace {$class->getNamespace()};
+        $aliases = $class->getAliasManager()->getAliases();
+        if (!empty($aliases)) {
+            $source .= PHP_EOL;
 
+            foreach ($aliases as $alias => $fqn) {
+                $source .= 'use '.$fqn.';'.PHP_EOL;
+            }
+        }
 
-EOF;
+        $source .= PHP_EOL;
 
-        $source .= (new DocBlock($class->getDocBlock(), ''))."\n";
+        $docBlock = (new DocBlock($class->getDocBlock(), ''));
+
+        if ('' !== (string) $docBlock) {
+            $source .= $docBlock.PHP_EOL;
+        }
 
         if ($class->isFinal()) {
             $source .= 'final ';
@@ -130,7 +140,10 @@ EOF;
                 );
             }
 
-            $source .= ' extends '.($extendsClassDefinition->isBundled() ? '' : '\\').trim($extendsClassDefinition->getCompleteName(), '\\');
+            $hasAliasForExtends = $class->getAliasManager()->isAlias($extendsClassDefinition->getShortName());
+
+            $source .= ' extends '.($hasAliasForExtends || $extendsClassDefinition->isBundled() ? '' : '\\');
+            $source .= $hasAliasForExtends ? $extendsClassDefinition->getShortName() : $extendsClassDefinition->getCompleteName();
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
@@ -165,7 +178,7 @@ EOF;
                 $indent
             );
 
-            $source .= "\n\n";
+            $source .= PHP_EOL.PHP_EOL;
         }
 
         return $source.'}'.PHP_EOL;

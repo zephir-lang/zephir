@@ -17,6 +17,8 @@ else
   test_suite="Extension_Php72"
 fi
 
+vendor/bin/simple-phpunit --version
+
 "$(phpenv which php)" \
   -d extension=ext/modules/test.so \
   vendor/bin/simple-phpunit \

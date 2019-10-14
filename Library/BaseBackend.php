@@ -107,7 +107,22 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function getTypeDefinition($type);
 
-    abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
+    /**
+     * Checks the type of a variable using the ZendEngine constants.
+     *
+     * @param Variable           $variableVariable
+     * @param string             $operator
+     * @param string             $value
+     * @param CompilationContext $context
+     *
+     * @return string
+     */
+    abstract public function getTypeofCondition(
+        Variable $variableVariable,
+        string $operator,
+        string $value,
+        CompilationContext $context
+    ): string;
 
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 
@@ -209,7 +224,7 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function destroyIterator(Variable $iteratorVariable, CompilationContext $context);
 
-    abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
+    abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context): string;
 
     abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);
 

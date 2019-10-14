@@ -15,6 +15,7 @@ use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -24,8 +25,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Throwable;
 use Zephir\Console\Command\ListCommand;
+use Zephir\EventListener\ConsoleErrorListener;
 use Zephir\Zephir;
 
 final class Application extends BaseApplication
@@ -33,6 +36,21 @@ final class Application extends BaseApplication
     public function __construct()
     {
         parent::__construct('Zephir', Zephir::VERSION);
+
+        $this->setupEventDispatcher();
+    }
+
+    protected function setupEventDispatcher()
+    {
+        $dispatcher = new EventDispatcher();
+        $consoleErrorListener = new ConsoleErrorListener();
+
+        $dispatcher->addListener(
+            ConsoleEvents::ERROR,
+            [$consoleErrorListener, 'onCommandError']
+        );
+
+        $this->setDispatcher($dispatcher);
     }
 
     /**
@@ -47,6 +65,19 @@ final class Application extends BaseApplication
 
     /**
      * {@inheritdoc}
+     *
+     * @return string The application version
+     */
+    public function getVernum()
+    {
+        $version = explode('-', parent::getVersion());
+        $version = explode('.', $version[0]);
+
+        return $version[0].sprintf('%02s', $version[1]).sprintf('%02s', $version[2]);
+    }
+
+    /**
+     * Gets the application version as integer.
      *
      * @return string The application version
      */
@@ -93,8 +124,14 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        if (true === $input->hasParameterOption(['--dumpversion'], true)) {
+        if (true === $input->hasParameterOption(['--dumpversion', '-dumpversion'], true)) {
             $output->writeln($this->getVersion());
+
+            return 0;
+        }
+
+        if (true === $input->hasParameterOption(['--vernum'], true)) {
+            $output->writeln($this->getVernum());
 
             return 0;
         }
@@ -158,10 +195,16 @@ final class Application extends BaseApplication
                 'dumpversion',
                 null,
                 InputOption::VALUE_NONE,
-                "Print the version of the compiler and don't do anything else"
+                "Print the version of the compiler and don't do anything else (also works with a single hyphen)"
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Print this help message'),
             new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
+            new InputOption(
+                'vernum',
+                null,
+                InputOption::VALUE_NONE,
+                'Print the version of the compiler as integer'
+            ),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
         ]);
     }

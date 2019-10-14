@@ -57,7 +57,7 @@ function _zephir_completion() {
   then
     local opts
     opts="--help --quiet --verbose --version --ansi --no-ansi"
-    opts+=" --dumpversion"
+    opts+=" --dumpversion -dumpversion --vernum"
 
     COMPREPLY=( $( compgen -W "${opts}" -- "${cur}" ) )
   else

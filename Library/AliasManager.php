@@ -61,4 +61,14 @@ final class AliasManager
     {
         return $this->aliases[$alias];
     }
+
+    /**
+     * Returns key-value pair of aliases.
+     *
+     * @return array
+     */
+    public function getAliases(): array
+    {
+        return $this->aliases;
+    }
 }

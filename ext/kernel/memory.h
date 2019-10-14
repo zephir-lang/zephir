@@ -66,7 +66,6 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key *hash_key);
 void zephir_deinitialize_memory();
 
-#define zephir_dtor(x) zval_dtor(x)
 #define zephir_ptr_dtor(x) zval_ptr_dtor(x)
 
 void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
@@ -95,7 +94,7 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 			if (Z_REFCOUNT_P(z) > 1) { \
 				Z_DELREF_P(z); \
 			} else { \
-				zephir_dtor(z); \
+				zval_dtor(z); \
 			} \
 		} \
 		ZVAL_NULL(z); \
@@ -174,7 +173,7 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	do { \
-		zval *orig_ptr = z;\
+		zval *orig_ptr = z; \
 		ZEPHIR_SEPARATE(orig_ptr); \
 		/*zephir_memory_observe(orig_ptr);*/ \
 	} while (0)

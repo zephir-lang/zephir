@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.12.9] - 2019-10-14
+### Added
+- Added a single hyphen version of `dumpversion` option (just `-dumpversion`)
+- Added `--vernum` option to print compiler version as integer
+
+### Fixed
+- Create local `.zephir` only when necessary
+- Fixed IDE stubs generation [#1778](https://github.com/phalcon/zephir/issues/1778)
+- Fixed segfault on cast `IS_UNDEF` to array
+  [#1941](https://github.com/phalcon/zephir/issues/1941)
+- Disables some regression changes introduced in the version `0.12.5`
+  [#1941 (comment)](https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340)
+- Fixed memory leak on update array [#1937](https://github.com/phalcon/zephir/issues/1937)
+- Fixed IDE stubs generation for classes that extends base classes
+  [#1907](https://github.com/phalcon/zephir/issues/1907)
+- Proper escape slashes in strings [#1495](https://github.com/phalcon/zephir/issues/1495)
+
+### Changed
+- Print warning during the code generation if the `timecop` extension was detected
+  [#1950](https://github.com/phalcon/zephir/issues/1950)
+- Improved error handling to not print stack trace on PHP error `ZEPHIR_DEBUG` is not set
+
+### Removed
+- Removed no longer used `zephir_dtor` macro
+
 ## [0.12.8] - 2019-10-03
 ### Fixed
 - Fixed `zephir_preg_match` to use `ZVAL_NULL` instead of `ZEPHIR_NULL`
@@ -262,7 +288,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.8...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.9...HEAD
+[0.12.9]: https://github.com/phalcon/zephir/compare/0.12.8...0.12.9
 [0.12.8]: https://github.com/phalcon/zephir/compare/0.12.7...0.12.8
 [0.12.7]: https://github.com/phalcon/zephir/compare/0.12.6...0.12.7
 [0.12.6]: https://github.com/phalcon/zephir/compare/0.12.5...0.12.6
