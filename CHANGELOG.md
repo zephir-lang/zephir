@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added a single hyphen version of `dumpversion` option
+- Added `--vernum` option to print compiler version as integer
+
 ### Fixed
 - Create local `.zephir` only when necessary
 - Fixed IDE stubs generation [#1778](https://github.com/phalcon/zephir/issues/1778)
