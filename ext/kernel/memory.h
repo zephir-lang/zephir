@@ -173,7 +173,7 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	do { \
-		zval *orig_ptr = z;\
+		zval *orig_ptr = z; \
 		ZEPHIR_SEPARATE(orig_ptr); \
 		/*zephir_memory_observe(orig_ptr);*/ \
 	} while (0)
