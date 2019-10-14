@@ -50,6 +50,19 @@ final class Application extends BaseApplication
      *
      * @return string The application version
      */
+    public function getVernum()
+    {
+        $version = explode('-', parent::getVersion());
+        $version = explode('.', $version[0]);
+
+        return $version[0] . sprintf("%02s", $version[1]) . sprintf("%02s", $version[2]);
+    }
+
+    /**
+     * Gets the application version as integer.
+     *
+     * @return string The application version
+     */
     public function getVersion()
     {
         $version = explode('-', parent::getVersion());
@@ -93,8 +106,14 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        if (true === $input->hasParameterOption(['--dumpversion'], true)) {
+        if (true === $input->hasParameterOption(['--dumpversion', '-dumpversion'], true)) {
             $output->writeln($this->getVersion());
+
+            return 0;
+        }
+
+        if (true === $input->hasParameterOption(['--vernum'], true)) {
+            $output->writeln($this->getVernum());
 
             return 0;
         }
@@ -158,10 +177,16 @@ final class Application extends BaseApplication
                 'dumpversion',
                 null,
                 InputOption::VALUE_NONE,
-                "Print the version of the compiler and don't do anything else"
+                "Print the version of the compiler and don't do anything else (also works with a single hyphen)"
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Print this help message'),
             new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
+            new InputOption(
+                'vernum',
+                null,
+                InputOption::VALUE_NONE,
+                "Print the version of the compiler as integer"
+            ),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
         ]);
     }
