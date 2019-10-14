@@ -22,10 +22,12 @@ use Zephir\Exception\CompilerException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
-use Zephir\Variable\Globals;
 
 /**
  * Zephir\Backends\ZendEngine2\Backend.
+ *
+ * NOTE: ZendEngine2 backend is no longer supported
+ * and this class will be removed in the future.
  */
 class Backend extends BaseBackend
 {
@@ -48,11 +50,9 @@ class Backend extends BaseBackend
      */
     public function getFcallManager()
     {
-        if (!$this->fcallManager) {
-            $this->setFcallManager(new FcallManager());
-        }
-
-        return $this->fcallManager;
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     /**
@@ -60,11 +60,9 @@ class Backend extends BaseBackend
      */
     public function getVariableCodePointer(Variable $variable)
     {
-        if ($variable->isLocalOnly()) {
-            throw new CompilerException('Double pointer of local zval requested');
-        }
-
-        return '&'.$variable->getName();
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     /**
@@ -72,21 +70,16 @@ class Backend extends BaseBackend
      */
     public function getVariableCode(Variable $variable)
     {
-        if ($variable->isLocalOnly() && !\in_array($variable->getType(), ['int'])) {
-            return '&'.$variable->getName();
-        }
-
-        return $variable->getName();
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
     {
-        $output = 'Z_BVAL_P('.$this->getVariableCode($variable).')';
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-
-        return $output;
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     /**

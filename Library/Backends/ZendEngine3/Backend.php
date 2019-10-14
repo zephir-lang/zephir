@@ -72,6 +72,8 @@ class Backend extends BackendZendEngine2
 
     /**
      * {@inheritdoc}
+     *
+     * @todo Do we need this method at all?
      */
     public function getVariableCodePointer(Variable $variable)
     {
