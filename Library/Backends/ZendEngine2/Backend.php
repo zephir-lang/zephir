@@ -11,10 +11,8 @@
 
 namespace Zephir\Backends\ZendEngine2;
 
-use function Zephir\add_slashes;
 use Zephir\BaseBackend;
 use Zephir\ClassMethod;
-use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -141,137 +139,21 @@ class Backend extends BaseBackend
         );
     }
 
-    public function initializeVariableDefaults($variables, CompilationContext $compilationContext)
+    /**
+     * {@inheritdoc}
+     */
+    public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string
     {
-        $codePrinter = new CodePrinter();
-        $codePrinter->increaseLevel();
-        $oldCodePrinter = $compilationContext->codePrinter;
-        $compilationContext->codePrinter = $codePrinter;
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
+    }
 
-        /* Initialize default values in dynamic variables */
-        foreach ($variables as $variable) {
-            /*
-             * Initialize 'dynamic' variables with default values
-             */
-            if ('variable' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
-                        $defaultValue = $variable->getDefaultInitValue();
-                        if (\is_array($defaultValue)) {
-                            $compilationContext->symbolTable->mustGrownStack(true);
-                            $compilationContext->backend->initVar($variable, $compilationContext);
-                            switch ($defaultValue['type']) {
-                                case 'int':
-                                case 'uint':
-                                case 'long':
-                                    $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'bool':
-                                    $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'char':
-                                case 'uchar':
-                                    if (\strlen($defaultValue['value']) > 2) {
-                                        if (\strlen($defaultValue['value']) > 10) {
-                                            throw new CompilerException("Invalid char literal: '".substr($defaultValue['value'], 0, 10)."...'", $defaultValue);
-                                        } else {
-                                            throw new CompilerException("Invalid char literal: '".$defaultValue['value']."'", $defaultValue);
-                                        }
-                                    }
-                                    $compilationContext->backend->assignLong($variable, '\''.$defaultValue['value'].'\'', $compilationContext);
-                                    break;
-
-                                case 'null':
-                                    $compilationContext->backend->assignNull($variable, $compilationContext);
-                                    break;
-
-                                case 'double':
-                                    $compilationContext->backend->assignDouble($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'string':
-                                    $compilationContext->backend->assignString(
-                                        $variable,
-                                        add_slashes($defaultValue['value']),
-                                        $compilationContext
-                                    );
-                                    break;
-
-                                case 'array':
-                                case 'empty-array':
-                                    $compilationContext->backend->initArray($variable, $compilationContext, null);
-                                    break;
-
-                                default:
-                                    throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                            }
-                        }
-                    }
-                }
-                continue;
-            }
-
-            /*
-             * Initialize 'string' variables with default values
-             */
-            if ('string' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (\is_array($defaultValue)) {
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->backend->initVar($variable, $compilationContext);
-                        switch ($defaultValue['type']) {
-                            case 'string':
-                                $compilationContext->backend->assignString(
-                                    $variable,
-                                    add_slashes($defaultValue['value']),
-                                    $compilationContext
-                                );
-                                break;
-
-                            case 'null':
-                                $compilationContext->backend->assignString($variable, null, $compilationContext);
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                        }
-                    }
-                }
-                continue;
-            }
-
-            /*
-             * Initialize 'array' variables with default values
-             */
-            if ('array' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (\is_array($defaultValue)) {
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->backend->initVar($variable, $compilationContext);
-                        switch ($defaultValue['type']) {
-                            case 'null':
-                                $compilationContext->backend->assignNull($variable, $compilationContext);
-                                break;
-
-                            case 'array':
-                            case 'empty-array':
-                                $compilationContext->backend->initArray($variable, $compilationContext, null);
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                        }
-                    }
-                }
-            }
-        }
-        $compilationContext->codePrinter = $oldCodePrinter;
-
-        return $codePrinter->getOutput();
+    public function declareConstant($type, $name, $value, CompilationContext $context)
+    {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function declareVariables($method, $typeToVariables, CompilationContext $compilationContext)
@@ -319,79 +201,13 @@ class Backend extends BaseBackend
     }
 
     /**
-     * Returns the signature of an internal method.
+     * {@inheritdoc}
      */
-    public function getInternalSignature(ClassMethod $method, CompilationContext $context)
+    public function getInternalSignature(ClassMethod $method, CompilationContext $context): string
     {
-        if ($method->isInitializer() && !$method->isStatic()) {
-            return 'zend_object_value '.$method->getName().'(zend_class_entry *class_type TSRMLS_DC)';
-        }
-
-        if ($method->isInitializer() && $method->isStatic()) {
-            return 'void '.$method->getName().'(TSRMLS_D)';
-        }
-
-        $signatureParameters = [];
-        $parameters = $method->getParameters();
-        if (\is_object($parameters)) {
-            foreach ($parameters->getParameters() as $parameter) {
-                switch ($parameter['data-type']) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'double':
-                    case 'bool':
-                    case 'char':
-                    case 'uchar':
-                    case 'string':
-                    case 'array':
-                        $signatureParameters[] = 'zval *'.$parameter['name'].'_param_ext';
-                        break;
-
-                    default:
-                        $signatureParameters[] = 'zval *'.$parameter['name'].'_ext';
-                        break;
-                }
-            }
-        }
-
-        if (\count($signatureParameters)) {
-            return 'void '.$method->getInternalName().'(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, '.implode(', ', $signatureParameters).' TSRMLS_DC)';
-        }
-
-        return 'void '.$method->getInternalName().'(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
-    }
-
-    public function declareConstant($type, $name, $value, CompilationContext $context)
-    {
-        $ce = $context->classDefinition->getClassEntry($context);
-        $dType = null;
-        switch ($type) {
-            case 'bool':
-                $value = 'false' == $value ? '0' : 1;
-                break;
-            case 'long':
-            case 'int':
-                $dType = 'long';
-                break;
-            case 'double':
-                break;
-            case 'string':
-            case 'char':
-                if ('string' == $type || 'char' == $type) {
-                    $value = '"'.add_slashes($value).'"';
-                }
-                $dType = 'string';
-                break;
-        }
-        if (!isset($dType)) {
-            $dType = $type;
-        }
-        if ('null' == $dType) {
-            $context->codePrinter->output('zend_declare_class_constant_null('.$ce.', SL("'.$name.'") TSRMLS_CC);');
-        } else {
-            $context->codePrinter->output('zend_declare_class_constant_'.$dType.'('.$ce.', SL("'.$name.'"), '.$value.' TSRMLS_CC);');
-        }
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
