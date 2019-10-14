@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.12.9] - 2019-10-14
 ### Added
-- Added a single hyphen version of `dumpversion` option
+- Added a single hyphen version of `dumpversion` option (just `-dumpversion`)
 - Added `--vernum` option to print compiler version as integer
 
 ### Fixed
@@ -286,7 +288,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.8...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.9...HEAD
+[0.12.9]: https://github.com/phalcon/zephir/compare/0.12.8...0.12.9
 [0.12.8]: https://github.com/phalcon/zephir/compare/0.12.7...0.12.8
 [0.12.7]: https://github.com/phalcon/zephir/compare/0.12.6...0.12.7
 [0.12.6]: https://github.com/phalcon/zephir/compare/0.12.5...0.12.6
