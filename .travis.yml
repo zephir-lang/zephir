@@ -30,7 +30,7 @@ env:
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
     - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
     - SYMFONY_PHPUNIT_DIR="$HOME/.phpunit"
-    - ZEPHIR_DEBUG=true
+    - ZEPHIR_DEBUG=1
 
 matrix:
   fast_finish: true
@@ -181,7 +181,7 @@ script:
   - if [ "$BUILD_TYPE" == "regular" ]; then .ci/run-tests.sh; fi
 
   # Black-box testing
-  - if [ "$BUILD_TYPE" == "regular" ]; then ( cd unit-tests/sharness && PHP=$(phpenv which php) make ); fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then ( export ZEPHIR_DEBUG=0; cd unit-tests/sharness && PHP=$(phpenv which php) make ); fi
 
   # Static Code Analysis
   - phpenv config-rm xdebug.ini || true
