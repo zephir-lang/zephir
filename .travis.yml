@@ -161,39 +161,34 @@ install:
 before_script:
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
   - cat "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
+  - if [ "$BUILD_TYPE" == "regular" ]; then zephir clean; fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then zephir fullclean; fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then zephir generate; fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then zephir stubs; fi
+  - if [ "$BUILD_TYPE" == "regular" ]; then zephir api; fi
   - |
     if [ "$BUILD_TYPE" == "regular" ]; then
-      zephir clean
-      zephir fullclean
-      zephir generate
-      zephir stubs
-      zephir api
-
       # These variables is needed to produce non optimized code and use code coverage
       LDFLAGS="--coverage"
       CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
       CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
 
       # Export variables in the subshell to not shadow global variables
-      ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile )
+      ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
     fi
 
 script:
-  - |
-    # Unit and Black-box testing
-    if [ "$BUILD_TYPE" == "regular" ]; then
-      .ci/run-tests.sh \
-      && ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
-    fi
+  # Unit testing
+  - '[[ "$BUILD_TYPE" == "regular" ]] && .ci/run-tests.sh'
 
-  - |
-    # Static Code Analysis
-    if [ "$BUILD_TYPE" == "analysis" ]; then
-      phpenv config-rm xdebug.ini || true
-      phpcs
-      php-cs-fixer fix --diff --dry-run -v
-      shellcheck .ci/*.sh
-    fi
+  # Black-box testing
+  - '[[ "$BUILD_TYPE" == "regular" ]] && ( cd unit-tests/sharness && PHP=$(phpenv which php) make )'
+
+  # Static Code Analysis
+  - phpenv config-rm xdebug.ini || true
+  - if [ "$BUILD_TYPE" == "analysis" ]; then phpcs; fi
+  - if [ "$BUILD_TYPE" == "analysis" ]; then php-cs-fixer fix --diff --dry-run -v; fi
+  - if [ "$BUILD_TYPE" == "analysis" ]; then shellcheck .ci/*.sh; fi
 
 after_script:
   - re2c --version
