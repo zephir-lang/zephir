@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Print warning during the code generation if the `timecop` extension was detected
   [#1950](https://github.com/phalcon/zephir/issues/1950)
+- Improved error handling to not print stack trace on PHP error `ZEPHIR_DEBUG` is not set
 
 ### Removed
 - Removed no longer used `zephir_dtor` macro
