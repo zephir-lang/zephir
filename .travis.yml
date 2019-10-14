@@ -30,8 +30,6 @@ env:
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
     - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
     - SYMFONY_PHPUNIT_DIR="$HOME/.phpunit"
-    # TODO: See Library/StatementsBlock.php
-    # - ZEPHIR_DEBUG=true
 
 matrix:
   fast_finish: true

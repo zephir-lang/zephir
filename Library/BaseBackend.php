@@ -124,9 +124,27 @@ abstract class BaseBackend implements FcallAwareInterface
         CompilationContext $context
     ): string;
 
+    /**
+     * Initialize variable defaults.
+     *
+     * @param Variable[]         $variables
+     * @param CompilationContext $compilationContext
+     *
+     * @return string
+     */
+    abstract public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string;
+
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 
-    abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context);
+    /**
+     * Returns the signature of an internal method.
+     *
+     * @param ClassMethod        $method
+     * @param CompilationContext $context
+     *
+     * @return string
+     */
+    abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context): string;
 
     abstract public function checkStrictType($type, $var, CompilationContext $context);
 

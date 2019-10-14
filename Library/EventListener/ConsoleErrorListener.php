@@ -22,7 +22,7 @@ class ConsoleErrorListener
 {
     public function onCommandError(ConsoleErrorEvent $event)
     {
-        if (!\in_array(getenv('ZEPHIR_DEBUG'), ['true', 'TRUE', '1', 'on', 'ON'], true)) {
+        if (!filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
             return;
         }
 
