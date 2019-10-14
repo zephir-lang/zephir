@@ -10,7 +10,7 @@ If you are not familiar with markdown and also
 then read this. This is important, because we write code, and all our questions are about the code.
 So lets respect each other and wrap code-blocks by specified tags.
 
-If you have a change or new feature in mind, please fill an [NFR](https://github.com/phalcon/zephir/wiki/NFR).
+If you have a change or new feature in mind, please fill a New Feature Request (NFR).
 
 ## Code style conventions
 
