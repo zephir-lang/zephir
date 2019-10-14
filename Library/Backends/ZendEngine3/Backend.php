@@ -535,7 +535,7 @@ class Backend extends BackendZendEngine2
         }
         $compilationContext->codePrinter = $oldCodePrinter;
 
-        return $codePrinter->getOutput();
+        return (string) $codePrinter->getOutput();
     }
 
     public function declareConstant($type, $name, $value, CompilationContext $context)
