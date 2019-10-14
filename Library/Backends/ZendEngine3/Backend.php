@@ -11,6 +11,7 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
+use function Zephir\add_slashes;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
@@ -23,7 +24,6 @@ use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 use Zephir\Variable\Globals;
-use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend.
@@ -80,6 +80,9 @@ class Backend extends BackendZendEngine2
         return $this->getVariableCode($variable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
     {
         $code = '(Z_TYPE_P('.$this->getVariableCode($variable).') == IS_TRUE)';
@@ -98,6 +101,9 @@ class Backend extends BackendZendEngine2
         return new StringsManager();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeDefinition($type)
     {
         switch ($type) {
@@ -108,13 +114,100 @@ class Backend extends BackendZendEngine2
                 return ['*', 'zend_string'];
         }
 
-        list($pointer, $code) = parent::getTypeDefinition($type);
+        $code = null;
+        $pointer = null;
+        switch ($type) {
+            case 'int':
+                $code = 'zend_long';
+                break;
+
+            case 'uint':
+                $code = 'zend_ulong';
+                break;
+
+            case 'char':
+                $code = 'char';
+                break;
+
+            case 'uchar':
+                $code = 'unsigned char';
+                break;
+
+            case 'long':
+                $code = 'long';
+                break;
+
+            case 'ulong':
+                $code = 'unsigned long';
+                break;
+
+            case 'bool':
+            case 'zephir_ce_guard':
+                $code = 'zend_bool';
+                break;
+
+            case 'double':
+                $code = 'double';
+                break;
+
+            case 'string':
+            case 'variable':
+            case 'array':
+            case 'null':
+                $pointer = '*';
+                $code = 'zval';
+                break;
+
+            case 'HashTable':
+                $pointer = '*';
+                $code = 'HashTable';
+                break;
+
+            case 'HashPosition':
+                $code = 'HashPosition';
+                break;
+
+            case 'zend_class_entry':
+            case 'static_zend_class_entry':
+                $pointer = '*';
+                $code = 'zend_class_entry';
+                break;
+
+            case 'zend_function':
+                $pointer = '*';
+                $code = 'zend_function';
+                break;
+
+            case 'zend_object_iterator':
+                $pointer = '*';
+                $code = 'zend_object_iterator';
+                break;
+
+            case 'zend_property_info':
+                $pointer = '*';
+                $code = 'zend_property_info';
+                break;
+
+            case 'zephir_fcall_cache_entry':
+            case 'static_zephir_fcall_cache_entry':
+                $pointer = '*';
+                $code = 'zephir_fcall_cache_entry';
+                break;
+
+            case 'zephir_method_globals':
+                $pointer = '*';
+                $code = 'zephir_method_globals';
+                break;
+
+            default:
+                throw new CompilerException('Unsupported type in declare: '.$type);
+        }
 
         return [$pointer, $code];
     }
 
     /**
-     * Checks the type of a variable using the ZendEngine constants.
+     * {@inheritdoc}
      *
      * @param Variable           $variableVariable
      * @param string             $operator
@@ -125,8 +218,12 @@ class Backend extends BackendZendEngine2
      *
      * @return string
      */
-    public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
-    {
+    public function getTypeofCondition(
+        Variable $variableVariable,
+        string $operator,
+        string $value,
+        CompilationContext $context
+    ): string {
         $variableName = $this->getVariableCode($variableVariable);
 
         switch ($value) {
@@ -171,20 +268,22 @@ class Backend extends BackendZendEngine2
                 break;
 
             default:
-                throw new CompilerException('Unknown type: "'.$value.'" in typeof comparison', $expr['right']);
+                throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value));
         }
 
         return $condition;
     }
 
-    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
+    /**
+     * {@inheritdoc}
+     */
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context): string
     {
-        if ($method instanceof FunctionDefinition) {
-            return;
-        }
-        if (!$method->isInternal()) {
+        if (!$method instanceof FunctionDefinition && !$method->isInternal()) {
             return "zval *this_ptr = getThis();\n"; //TODO: think about a better way to solve this.
         }
+
+        return '';
     }
 
     public function onPreCompile(ClassMethod $method, CompilationContext $context)
@@ -217,7 +316,7 @@ class Backend extends BackendZendEngine2
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = ('variable' == $type || 'string' == $type || 'array' == $type || 'resource' == $type || 'callable' == $type || 'object' == $type);
+        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();

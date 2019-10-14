@@ -87,292 +87,58 @@ class Backend extends BaseBackend
      */
     public function getStringsManager()
     {
-        return new StringsManager();
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function getTypeDefinition($type)
     {
-        $code = null;
-        $pointer = null;
-        switch ($type) {
-            case 'int':
-                $code = 'zend_long';
-                break;
-
-            case 'uint':
-                $code = 'zend_ulong';
-                break;
-
-            case 'char':
-                $code = 'char';
-                break;
-
-            case 'uchar':
-                $code = 'unsigned char';
-                break;
-
-            case 'long':
-                $code = 'long';
-                break;
-
-            case 'ulong':
-                $code = 'unsigned long';
-                break;
-
-            case 'bool':
-                $code = 'zend_bool';
-                break;
-
-            case 'double':
-                $code = 'double';
-                break;
-
-            case 'string':
-            case 'variable':
-            case 'array':
-            case 'null':
-                $pointer = '*';
-                $code = 'zval';
-                break;
-
-            case 'HashTable':
-                $pointer = '*';
-                $code = 'HashTable';
-                break;
-
-            case 'HashPosition':
-                $code = 'HashPosition';
-                break;
-
-            case 'zend_class_entry':
-                $pointer = '*';
-                $code = 'zend_class_entry';
-                break;
-
-            case 'zend_function':
-                $pointer = '*';
-                $code = 'zend_function';
-                break;
-
-            case 'zend_object_iterator':
-                $pointer = '*';
-                $code = 'zend_object_iterator';
-                break;
-
-            case 'zend_property_info':
-                $pointer = '*';
-                $code = 'zend_property_info';
-                break;
-
-            case 'zephir_fcall_cache_entry':
-                $pointer = '*';
-                $code = 'zephir_fcall_cache_entry';
-                break;
-
-            case 'static_zephir_fcall_cache_entry':
-                $pointer = '*';
-                $code = 'zephir_fcall_cache_entry';
-                break;
-
-            case 'static_zend_class_entry':
-                $pointer = '*';
-                $code = 'zend_class_entry';
-                break;
-
-            case 'zephir_method_globals':
-                $pointer = '*';
-                $code = 'zephir_method_globals';
-                break;
-
-            case 'zephir_ce_guard':
-                $code = 'zend_bool';
-                break;
-
-            default:
-                throw new CompilerException('Unsupported type in declare: '.$type);
-        }
-
-        return [$pointer, $code];
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     /**
-     * Checks the type of a variable using the ZendEngine constants.
-     *
-     * @param Variable           $variableVariable
-     * @param string             $operator
-     * @param string             $value
-     * @param CompilationContext $context
-     *
-     * @throws CompilerException
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
-    {
-        $variableName = $this->getVariableCode($variableVariable);
-        switch ($value) {
-            case 'array':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_ARRAY';
-                break;
-
-            case 'object':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_OBJECT';
-                break;
-
-            case 'null':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_NULL';
-                break;
-
-            case 'string':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_STRING';
-                break;
-
-            case 'int':
-            case 'long':
-            case 'integer':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_LONG';
-                break;
-
-            case 'double':
-            case 'float':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_DOUBLE';
-                break;
-
-            case 'boolean':
-            case 'bool':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_BOOL';
-                break;
-
-            case 'resource':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_RESOURCE';
-                break;
-
-            case 'callable':
-                $condition = 'zephir_is_callable('.$variableName.' TSRMLS_CC) '.$operator.' 1';
-                break;
-
-            default:
-                throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value));
-        }
-
-        return $condition;
+    public function getTypeofCondition(
+        Variable $variableVariable,
+        string $operator,
+        string $value,
+        CompilationContext $context
+    ): string {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
-    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context): string
     {
-        return '';
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function onPreCompile(ClassMethod $method, CompilationContext $context)
     {
-        $codePrinter = $context->codePrinter;
-        /*
-         * Initialize the properties within create_object, handler code
-         */
-        if (preg_match('/^zephir_init_properties/', $method->getName())) {
-            $codePrinter->increaseLevel();
-            $codePrinter->output('{');
-            $codePrinter->increaseLevel();
-            $codePrinter->output('zval zthis       = zval_used_for_init;');
-            $codePrinter->output('zval *this_ptr   = &zthis;');
-            $codePrinter->output('zend_object* obj = ecalloc(1, sizeof(zend_object));');
-            $codePrinter->output('zend_object_value retval;');
-            $codePrinter->outputBlankLine();
-            $codePrinter->output('zend_object_std_init(obj, class_type TSRMLS_CC);');
-            $codePrinter->output('object_properties_init(obj, class_type);');
-            $codePrinter->output('retval.handle   = zend_objects_store_put(obj, (zend_objects_store_dtor_t)zend_objects_destroy_object, zephir_free_object_storage, NULL TSRMLS_CC);');
-            $codePrinter->output('retval.handlers = zend_get_std_object_handlers();');
-            $codePrinter->outputBlankLine();
-            $codePrinter->output('Z_TYPE(zthis)   = IS_OBJECT;');
-            $codePrinter->output('Z_OBJVAL(zthis) = retval;');
-            $codePrinter->outputBlankLine();
-            $codePrinter->decreaseLevel();
-        }
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function onPostCompile(ClassMethod $method, CompilationContext $context)
     {
-        $codePrinter = $context->codePrinter;
-        if (preg_match('/^zephir_init_properties/', $method->getName())) {
-            $codePrinter->increaseLevel();
-            $codePrinter->output('return retval;');
-            $codePrinter->decreaseLevel();
-            $codePrinter->output('}');
-            $codePrinter->decreaseLevel();
-        }
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = ('variable' == $type || 'string' == $type || 'array' == $type || 'resource' == $type || 'callable' == $type || 'object' == $type);
-        if ($isComplex && $variable->mustInitNull()) {
-            if ($variable->isLocalOnly()) {
-                $groupVariables[] = $variable->getName().' = zval_used_for_init';
-            } else {
-                if ($variable->isDoublePointer()) {
-                    $groupVariables[] = $pointer.$pointer.$variable->getName().' = NULL';
-                } else {
-                    $groupVariables[] = $pointer.$variable->getName().' = NULL';
-                }
-            }
-
-            return;
-        }
-
-        if ($variable->isLocalOnly()) {
-            $groupVariables[] = $variable->getName();
-
-            return;
-        }
-
-        if ($variable->isDoublePointer()) {
-            if ($variable->mustInitNull()) {
-                $groupVariables[] = $pointer.$pointer.$variable->getName().' = NULL';
-            } else {
-                $groupVariables[] = $pointer.$pointer.$variable->getName();
-            }
-
-            return;
-        }
-
-        $defaultValue = $variable->getDefaultInitValue();
-        if (null !== $defaultValue) {
-            switch ($type) {
-                case 'variable':
-                case 'string':
-                case 'array':
-                case 'resource':
-                case 'callable':
-                case 'object':
-                    $groupVariables[] = $pointer.$variable->getName();
-                    break;
-
-                /* @noinspection PhpMissingBreakStatementInspection */
-                case 'char':
-                    if (\strlen($defaultValue) > 4) {
-                        if (\strlen($defaultValue) > 10) {
-                            throw new CompilerException("Invalid char literal: '".substr($defaultValue, 0, 10)."...'", $variable->getOriginal());
-                        } else {
-                            throw new CompilerException("Invalid char literal: '".$defaultValue."'", $variable->getOriginal());
-                        }
-                    }
-                    /* no break */
-
-                default:
-                    $groupVariables[] = $pointer.$variable->getName().' = '.$defaultValue;
-                    break;
-            }
-
-            return;
-        }
-
-        if ($variable->mustInitNull() && $pointer) {
-            $groupVariables[] = $pointer.$variable->getName().' = NULL';
-
-            return;
-        }
-
-        $groupVariables[] = $pointer.$variable->getName();
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function initializeVariableDefaults($variables, CompilationContext $compilationContext)
