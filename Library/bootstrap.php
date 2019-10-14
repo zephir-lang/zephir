@@ -18,3 +18,13 @@ set_error_handler(
         }
     }
 );
+
+if (!\in_array(getenv('ZEPHIR_DEBUG'), ['true', 'TRUE', '1', 'on', 'ON'], true)) {
+    set_exception_handler(
+        static function (\Throwable $t) {
+            fwrite(STDERR, "[ERROR] {$t->getMessage()}".PHP_EOL);
+
+            exit(1);
+        }
+    );
+}

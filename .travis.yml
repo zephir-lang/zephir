@@ -179,10 +179,10 @@ before_script:
 
 script:
   # Unit testing
-  - '[[ "$BUILD_TYPE" == "regular" ]] && .ci/run-tests.sh'
+  - if [ "$BUILD_TYPE" == "regular" ]; then .ci/run-tests.sh; fi
 
   # Black-box testing
-  - '[[ "$BUILD_TYPE" == "regular" ]] && ( cd unit-tests/sharness && PHP=$(phpenv which php) make )'
+  - if [ "$BUILD_TYPE" == "regular" ]; then ( cd unit-tests/sharness && PHP=$(phpenv which php) make ); fi
 
   # Static Code Analysis
   - phpenv config-rm xdebug.ini || true

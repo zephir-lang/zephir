@@ -15,6 +15,7 @@ use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -24,8 +25,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Throwable;
 use Zephir\Console\Command\ListCommand;
+use Zephir\EventListener\ConsoleErrorListener;
 use Zephir\Zephir;
 
 final class Application extends BaseApplication
@@ -33,6 +36,21 @@ final class Application extends BaseApplication
     public function __construct()
     {
         parent::__construct('Zephir', Zephir::VERSION);
+
+        $this->setupEventDispatcher();
+    }
+
+    protected function setupEventDispatcher()
+    {
+        $dispatcher = new EventDispatcher();
+        $consoleErrorListener = new ConsoleErrorListener();
+
+        $dispatcher->addListener(
+            ConsoleEvents::ERROR,
+            [$consoleErrorListener, 'onCommandError']
+        );
+
+        $this->setDispatcher($dispatcher);
     }
 
     /**
@@ -55,7 +73,7 @@ final class Application extends BaseApplication
         $version = explode('-', parent::getVersion());
         $version = explode('.', $version[0]);
 
-        return $version[0] . sprintf("%02s", $version[1]) . sprintf("%02s", $version[2]);
+        return $version[0].sprintf('%02s', $version[1]).sprintf('%02s', $version[2]);
     }
 
     /**
@@ -185,7 +203,7 @@ final class Application extends BaseApplication
                 'vernum',
                 null,
                 InputOption::VALUE_NONE,
-                "Print the version of the compiler as integer"
+                'Print the version of the compiler as integer'
             ),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Print compiler version information and quit'),
         ]);
