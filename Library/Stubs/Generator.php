@@ -351,7 +351,7 @@ class Generator
             $methodBody .= ' {}';
         }
 
-        return $docBlock."\n".$methodBody;
+        return $docBlock->processMethodDocBlock()."\n".$methodBody;
     }
 
     /**

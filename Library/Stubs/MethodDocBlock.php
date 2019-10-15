@@ -41,15 +41,26 @@ class MethodDocBlock extends DocBlock
         $this->deprecated = $method->isDeprecated();
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
+        $this->classMethod = $method;
+    }
 
-        $this->parseMethodParameters($method);
+    /**
+     * Process DocBlock and Method arguments
+     *
+     * @return string
+     */
+    public function processMethodDocBlock()
+    {
+        $this->parseMethodParameters($this->classMethod);
         $this->parseLines();
-        $this->parseMethodReturnType($method);
+        $this->parseMethodReturnType($this->classMethod);
         $this->appendParametersLines();
 
         if (!empty($this->return)) {
             $this->appendReturnLine();
         }
+
+        return $this->__toString();
     }
 
     protected function parseMethodReturnType(ClassMethod $method)

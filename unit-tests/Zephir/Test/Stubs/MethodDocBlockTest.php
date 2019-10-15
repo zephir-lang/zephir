@@ -86,7 +86,7 @@ class MethodDocBlockTest extends TestCase
      */
 DOC;
 
-        $this->assertSame($expected, (string) $testDocBlock);
+        $this->assertSame($expected, $testDocBlock->processMethodDocBlock());
     }
 
     public function testMethodWithInputArgs()
@@ -107,7 +107,7 @@ DOC;
      */
 DOC;
 
-        $this->assertSame($expected, (string) $testDocBlock);
+        $this->assertSame($expected, $testDocBlock->processMethodDocBlock());
     }
 
     public function getDocBlock()
@@ -167,7 +167,7 @@ DOC;
         $baseDefinition = require ZEPHIRPATH.'/unit-tests/fixtures/base-definition.php';
         $baseDefinition['method']['parameters'][] = $parameters;
 
-        $this->assertSame($expected, (string) $this->prepareMethod($baseDefinition));
+        $this->assertSame($expected, $this->prepareMethod($baseDefinition)->processMethodDocBlock());
     }
 
     public function testMethodWithFullDocBlock()
@@ -194,6 +194,6 @@ DOC;
      */
 DOC;
 
-        $this->assertSame($expected, (string) $this->prepareMethod($testDefinition));
+        $this->assertSame($expected, $this->prepareMethod($testDefinition)->processMethodDocBlock());
     }
 }
