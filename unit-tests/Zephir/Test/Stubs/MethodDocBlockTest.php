@@ -270,7 +270,6 @@ DOC;
 
         $docblock = new MethodDocBlock($classMethod, new AliasManager(), '');
         $expected = "/**\n * {$phpDocBlock}\n */";
-        echo PHP_EOL.'EXPECTED'.PHP_EOL.$expected.PHP_EOL;
 
         $this->assertSame($expected, $docblock->processMethodDocBlock());
     }
