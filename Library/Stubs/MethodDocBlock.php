@@ -124,11 +124,18 @@ class MethodDocBlock extends DocBlock
      */
     protected function parseDocBlockParam(string $line)
     {
-        $typeMatchGroup = '?P<type>\w+(:?\s*)(:?\|(\s*)?(\w+))*';
-        $nameMatchGroup = '?P<name>[a-z_][a-z0-9_]*';
-        $dollarMatchGroup = '?<dollar>:?\$?';
+        $typehint = '\w+(:?\s*)(:?\|(\s*)?(\w+))*';
+        $identifier = '[a-z_][a-z0-9_]*';
 
-        preg_match('#@param\s+('.$typeMatchGroup.')\s*(('.$dollarMatchGroup.')?('.$nameMatchGroup.'))#i', $line, $matched);
+        preg_match(
+            sprintf(
+                '#@param\s+(?P<type>%s)\s*((?P<dollar>\$)?(?P<name>%s))#i',
+                $typehint,
+                $identifier
+            ),
+            $line,
+            $matched
+        );
 
         return $matched;
     }
@@ -146,7 +153,7 @@ class MethodDocBlock extends DocBlock
                     $this->predefinedParams[$parsedLine['name']] = true;
                 }
 
-                if ($parsedLine && isset($parsedLine['dollar'])) {
+                if ($parsedLine && '$' !== $parsedLine['dollar']) {
                     $line = str_replace($parsedLine['name'], '$'.$parsedLine['name'], $line);
                 }
 
