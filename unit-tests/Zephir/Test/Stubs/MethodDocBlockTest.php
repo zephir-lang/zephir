@@ -206,11 +206,11 @@ DOC;
         return [
             '@var' => [
                 '@var mixed',
-                '@var mixed'
+                '@var mixed',
             ],
             '@return' => [
                 '@return int',
-                '@return int'
+                '@return int',
             ],
             'with all types' => [
                 "@var string\n * @param array data\n * @return boolean",
@@ -218,19 +218,19 @@ DOC;
             ],
             'one Integer param' => [
                 '@param int magicNumber',
-                '@param int $magicNumber'
+                '@param int $magicNumber',
             ],
             'with Mixed params' => [
                 '@param int|double magicNumber',
-                '@param int|double $magicNumber'
+                '@param int|double $magicNumber',
             ],
             'with Mixed params and spaces' => [
                 '@param int | double magicNumber',
-                '@param int | double $magicNumber'
+                '@param int | double $magicNumber',
             ],
             'with Description in DocBlock' => [
                 "Test description\n * @param int | double magicNumber",
-                "Test description\n *\n * @param int | double \$magicNumber"
+                "Test description\n *\n * @param int | double \$magicNumber",
             ],
             'with many params and Exception' => [
                 // Zep
@@ -249,7 +249,7 @@ DOC;
                 " * @param array \$val3\n".
                 " * @param string \$val2 - with additional descrription\n".
                 " * @throws \Zephir\Compiler\CompilerException",
-            ]
+            ],
         ];
     }
 
