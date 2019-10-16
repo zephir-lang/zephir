@@ -76,7 +76,8 @@ class MethodDocBlockTest extends TestCase
         return new MethodDocBlock($classMethod, $aliasManager);
     }
 
-    public function testMethodWithoutInputArgs()
+    /** @test */
+    public function methodWithoutInputArgs()
     {
         $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-2.php';
         $testDocBlock = $this->prepareMethod($classDefinition);
@@ -89,7 +90,8 @@ DOC;
         $this->assertSame($expected, $testDocBlock->processMethodDocBlock());
     }
 
-    public function testMethodWithInputArgs()
+    /** @test */
+    public function methodWithInputArgs()
     {
         $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-1.php';
 
@@ -99,11 +101,11 @@ DOC;
      * Test function scalarInputArgs(int val1, bool val2, string val3, double val4)
      * with return Integer
      *
+     * @return int
      * @param int \$val1
      * @param bool \$val2
      * @param string \$val3
      * @param double \$val4
-     * @return int
      */
 DOC;
 
@@ -157,12 +159,13 @@ DOC;
     }
 
     /**
+     * @test
      * @dataProvider getDocBlock()
      *
      * @param array  $parameters
      * @param string $expected
      */
-    public function testMethodsWithDataSet(array $parameters, $expected)
+    public function methodsWithDataSet(array $parameters, $expected)
     {
         $baseDefinition = require ZEPHIRPATH.'/unit-tests/fixtures/base-definition.php';
         $baseDefinition['method']['parameters'][] = $parameters;
@@ -170,7 +173,8 @@ DOC;
         $this->assertSame($expected, $this->prepareMethod($baseDefinition)->processMethodDocBlock());
     }
 
-    public function testMethodWithFullDocBlock()
+    /** @-test */
+    public function methodWithFullDocBlock()
     {
         $docblock = "Test for full filled Method\n".
                     "with non-ordered params\n".
@@ -187,13 +191,87 @@ DOC;
      * Test for full filled Method
      * with non-ordered params
      *
-     * @throws \Zephir\Compiler\CompilerException
      * @param int \$val1
-     * @param string \$val2 - with additional descrription
      * @param array \$val3
+     * @param string \$val2 - with additional descrription
+     * @throws \Zephir\Compiler\CompilerException
      */
 DOC;
 
         $this->assertSame($expected, $this->prepareMethod($testDefinition)->processMethodDocBlock());
+    }
+
+    public function docBlockProvider(): array
+    {
+        return [
+            '@var' => [
+                '@var mixed',
+                '@var mixed'
+            ],
+            '@return' => [
+                '@return int',
+                '@return int'
+            ],
+            'with all types' => [
+                "@var string\n * @param array data\n * @return boolean",
+                "@var string\n * @param array \$data\n * @return boolean",
+            ],
+            'one Integer param' => [
+                '@param int magicNumber',
+                '@param int $magicNumber'
+            ],
+            'with Mixed params' => [
+                '@param int|double magicNumber',
+                '@param int|double $magicNumber'
+            ],
+            'with Mixed params and spaces' => [
+                '@param int | double magicNumber',
+                '@param int | double $magicNumber'
+            ],
+            'with Description in DocBlock' => [
+                "Test description\n * @param int | double magicNumber",
+                "Test description\n *\n * @param int | double \$magicNumber"
+            ],
+            'with many params and Exception' => [
+                // Zep
+                "Test for full filled Method\n".
+                "* with non-ordered params\n".
+                "*\n".
+                "* @param int \$val1\n".
+                "* @param array \$val3\n".
+                "* @param string \$val2 - with additional descrription\n".
+                "* @throws \Zephir\Compiler\CompilerException",
+                // Php
+                "Test for full filled Method\n".
+                " * with non-ordered params\n".
+                " *\n".
+                " * @param int \$val1\n".
+                " * @param array \$val3\n".
+                " * @param string \$val2 - with additional descrription\n".
+                " * @throws \Zephir\Compiler\CompilerException",
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider docBlockProvider()
+     */
+    public function shouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock)
+    {
+        $classMethod = new ClassMethod(
+            new ClassDefinition('Zephir', 'testMethod'),
+            ['public'],
+            'exampleMethodName',
+            null,
+            null,
+            "/**\n * {$zephirDocBlock}\n */"
+        );
+
+        $docblock = new MethodDocBlock($classMethod, new AliasManager(), '');
+        $expected = "/**\n * {$phpDocBlock}\n */";
+        echo PHP_EOL.'EXPECTED'.PHP_EOL.$expected.PHP_EOL;
+
+        $this->assertSame($expected, $docblock->processMethodDocBlock());
     }
 }

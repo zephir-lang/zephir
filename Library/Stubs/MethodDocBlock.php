@@ -124,14 +124,18 @@ class MethodDocBlock extends DocBlock
      */
     protected function parseDocBlockParam(string $line)
     {
-        $typehint = '\w+(:?\s*)(:?\|(\s*)?(\w+))*';
+        $doctype = 'param|return|var';
+        $typehint = '[/\/\\w]+(:?\s*\|\s*[/\/\\w]+)*';
         $identifier = '[a-z_][a-z0-9_]*';
+        $description = '\w+(:?\s*\w+)*';
 
         preg_match(
             sprintf(
-                '#@param\s+(?P<type>%s)\s*((?P<dollar>\$)?(?P<name>%s))#i',
+                '#@(?P<doctype>%s)\s+(?P<type>%s)\s*(?P<dollar>\$)?(?P<name>%s)?\s*(?P<description>%s)?#i',
+                $doctype,
                 $typehint,
-                $identifier
+                $identifier,
+                $description
             ),
             $line,
             $matched
@@ -145,51 +149,48 @@ class MethodDocBlock extends DocBlock
         $lines = [];
 
         foreach ($this->lines as $line) {
-            if (0 === preg_match('#^@(param|return|var) +(.*)$#', $line, $matches)) {
-                $parsedLine = $this->parseDocBlockParam($line);
+            $parsedLine = $this->parseDocBlockParam($line);
+            $docType = $parsedLine['doctype'] ?? null;
 
-                // remember docblock param to avoid param duplication when parse input args
-                if ($parsedLine && isset($parsedLine['name'])) {
-                    $this->predefinedParams[$parsedLine['name']] = true;
-                }
+            $dollar = $parsedLine['dollar'] ?? '';
+            $identifier = $parsedLine['name'] ?? false;
+            $description = $parsedLine['description'] ?? '';
+            $type = $parsedLine['type'] ?? '';
 
-                if ($parsedLine && '$' !== $parsedLine['dollar']) {
-                    $line = str_replace($parsedLine['name'], '$'.$parsedLine['name'], $line);
-                }
-
-                $lines[] = $line;
-            } else {
-                list(, $docType, $tokens) = $matches;
-
-                $tokens = preg_split('/\s+/', $tokens, 3);
-                $type = $tokens[0];
-
-                if ('var' == $docType && 'set' == $this->shortcutName) {
-                    $docType = 'param';
-                    $name = array_keys($this->parameters);
-                    $name = $name[0];
-                } elseif ('var' == $docType && 'get' == $this->shortcutName) {
-                    $docType = 'return';
-                } else {
-                    $name = isset($tokens[1]) ? '$'.trim($tokens[1], '$') : '';
-                }
-
-                // TODO: there must be a better way
-                if (0 === strpos($type, 'Phalcon\\')) {
-                    $type = str_replace('Phalcon\\', '\Phalcon\\', $type);
-                }
-
-                $description = isset($tokens[2]) ? $tokens[2] : '';
-
-                switch ($docType) {
-                    case 'param':
-                        $this->parameters[$name] = [$type, $description];
-                        break;
-                    case 'return':
-                        $this->return = [$type, $description];
-                        break;
-                }
+            // remember docblock @param to avoid param duplication when parse input args
+            if ($identifier) {
+                $this->predefinedParams[$identifier] = true;
             }
+
+            // remember docblock @return to avoid duplication
+            if ('return' === $docType) {
+                $this->predefinedParams['return'] = true;
+            }
+
+            if ('$' !== $dollar && $identifier) {
+                $line = str_replace($identifier, '$'.$identifier, $line);
+            }
+
+            if ('var' == $docType && 'set' == $this->shortcutName) {
+                $docType = 'param';
+                $name = array_keys($this->parameters);
+                $name = $name[0];
+            } elseif ('var' == $docType && 'get' == $this->shortcutName) {
+                $docType = 'return';
+            } else {
+                $name = $identifier ? '$'.trim($identifier, '$') : '';
+            }
+
+            switch ($docType) {
+                case 'param':
+                    $this->parameters[$name] = [$type, $description];
+                    break;
+                case 'return':
+                    $this->return = [$type, $description];
+                    break;
+            }
+
+            $lines[] = $line;
         }
 
         $this->lines = $lines;
@@ -197,10 +198,12 @@ class MethodDocBlock extends DocBlock
 
     private function appendReturnLine()
     {
-        list($type, $description) = $this->return;
+        if (!isset($this->predefinedParams['return'])) {
+            list($type, $description) = $this->return;
 
-        $return = $type.' '.$description;
-        $this->lines[] = '@return '.trim($return, ' ');
+            $return = $type.' '.$description;
+            $this->lines[] = '@return '.trim($return, ' ');
+        }
     }
 
     private function parseMethodParameters(ClassMethod $method)
