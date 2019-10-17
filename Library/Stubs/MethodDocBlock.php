@@ -122,24 +122,17 @@ class MethodDocBlock extends DocBlock
     /**
      * Parse DocBlock and returns extracted groups.
      */
-    protected function parseDocBlockParam(string $line)
+    protected function parseDocBlockParam(string $line): array
     {
-        $doctype = 'param|return|var';
-        $typehint = '[/\/\\w]+(:?\s*\|\s*[/\/\\w]+)*';
-        $identifier = '[a-z_][a-z0-9_]*';
-        $description = '\w+(:?\s*\w+)*';
+        $pattern = '~
+            @(?P<doctype>param|return|var)\s+
+            (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+)*)\s*
+            (?P<dollar>\$)?
+            (?P<name>[a-z_][a-z0-9_]*)?\s*
+            (?P<description>\w+(:?\s*\w+)*)?
+            ~xi';
 
-        preg_match(
-            sprintf(
-                '#@(?P<doctype>%s)\s+(?P<type>%s)\s*(?P<dollar>\$)?(?P<name>%s)?\s*(?P<description>%s)?#i',
-                $doctype,
-                $typehint,
-                $identifier,
-                $description
-            ),
-            $line,
-            $matched
-        );
+        preg_match($pattern, $line, $matched);
 
         return $matched;
     }
@@ -172,7 +165,9 @@ class MethodDocBlock extends DocBlock
             }
 
             if ('$' !== $dollar && $identifier) {
-                $line = str_replace($identifier, '$'.$identifier, $line);
+                // Important! Some small variable name (ex.: `a`)
+                // might be caused error while replacing it into whole string
+                $line = str_replace(' '.$identifier, ' $'.$identifier, $line);
             }
 
             if ('var' == $docType && 'set' == $this->shortcutName) {

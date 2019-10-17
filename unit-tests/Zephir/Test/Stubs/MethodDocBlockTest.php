@@ -168,6 +168,10 @@ class MethodDocBlockTest extends TestCase
                 "Test description\n * @param int | double magicNumber",
                 "Test description\n *\n * @param int | double \$magicNumber",
             ],
+            'with short variable name' => [
+                '@param string a',
+                '@param string $a',
+            ],
             'without any params' => [
                 'Zephir',
                 'Zephir',
