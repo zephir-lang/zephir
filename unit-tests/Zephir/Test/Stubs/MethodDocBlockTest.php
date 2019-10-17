@@ -142,7 +142,7 @@ class MethodDocBlockTest extends TestCase
         return [
             'with @var' => [
                 '@var mixed',
-                '@var mixed',
+                '@param mixed',
             ],
             'with @return' => [
                 '@return int',
@@ -150,7 +150,7 @@ class MethodDocBlockTest extends TestCase
             ],
             'with all types' => [
                 "@var string\n * @param array data\n * @throws \Exception\n * @return boolean",
-                "@var string\n * @param array \$data\n * @throws \Exception\n * @return boolean",
+                "@param string\n * @param array \$data\n * @throws \Exception\n * @return boolean",
             ],
             'one Integer param' => [
                 '@param int magicNumber',
@@ -177,8 +177,8 @@ class MethodDocBlockTest extends TestCase
                 'Zephir',
             ],
             'with @var in @return' => [
-                '@return var|array dataObject - some description of var',
-                '@return mixed|array $dataObject - some description of var',
+                '@return var|array - some description of var',
+                '@return mixed|array - some description of var',
             ],
             'with many params and Exception' => [
                 // Zep
@@ -186,6 +186,7 @@ class MethodDocBlockTest extends TestCase
                 "* with non-ordered params\n".
                 "*\n".
                 "* @param int \$val1\n".
+                "* @param callback callback\n".
                 "* @param array \$val3\n".
                 "* @param string \$val2 - with additional descrription\n".
                 "* @throws \Zephir\Compiler\CompilerException",
@@ -194,6 +195,7 @@ class MethodDocBlockTest extends TestCase
                 " * with non-ordered params\n".
                 " *\n".
                 " * @param int \$val1\n".
+                " * @param callback \$callback\n".
                 " * @param array \$val3\n".
                 " * @param string \$val2 - with additional descrription\n".
                 " * @throws \Zephir\Compiler\CompilerException",
@@ -217,6 +219,16 @@ class MethodDocBlockTest extends TestCase
                 " * @param bool \$val2\n".
                 " * @param string \$val3\n".
                 ' * @param double $val4',
+            ],
+            'with multiline array' => [
+                // Zep
+                "@param array | object config_zzz = [\n".
+                "*    \"test\" => \"xyz\"\n".
+                '* ]',
+                // Php
+                "@param array | object \$config_zzz = [\n".
+                " *    \"test\" => \"xyz\"\n".
+                ' * ]',
             ],
         ];
     }

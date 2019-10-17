@@ -129,7 +129,7 @@ class MethodDocBlock extends DocBlock
             (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+)*)\s*
             (?P<dollar>\$)?
             (?P<name>[a-z_][a-z0-9_]*)?\s*
-            (?P<description>.*)?
+            (?P<description>(.|\s)*)?
             ~xi';
 
         preg_match($pattern, $line, $matched);
@@ -164,10 +164,12 @@ class MethodDocBlock extends DocBlock
                 $line = str_replace($type, $mixed, $line);
             }
 
-            if ('$' !== $dollar && $identifier) {
-                // Important! Some small variable name (ex.: `a`)
-                // might be caused error while replacing it into whole string
-                $line = str_replace(' '.$identifier, ' $'.$identifier, $line);
+            if ('$' !== $dollar && $identifier && 'return' !== $docType) {
+                $line = '@'.$docType.' '.trim($type).' $'.trim($identifier.' '.$description);
+            }
+
+            if ('var' === $docType) {
+                $line = str_replace('@var', '@param', $line);
             }
 
             if ('var' == $docType && 'set' == $this->shortcutName) {
