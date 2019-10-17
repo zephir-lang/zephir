@@ -289,15 +289,18 @@ class Generator
         }
 
         $return = '';
-        if (version_compare(PHP_VERSION, '7.0.0', '>=') && ($method->hasReturnTypes() || $method->isVoid())) {
+        // Disabled due to:
+        // https://github.com/phalcon/zephir/issues/1977
+        //if (version_compare(PHP_VERSION, '7.0.0', '>=') && ($method->hasReturnTypes() || $method->isVoid())) {
+        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
             $supported = 0;
 
-            if ($method->isVoid()) {
-                if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                    $return = 'void';
-                    ++$supported;
-                }
-            }
+            //if ($method->isVoid()) {
+            //    if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+            //        $return = 'void';
+            //        ++$supported;
+            //    }
+            //}
 
             if (\array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
                 $return = key($method->getReturnClassTypes());
