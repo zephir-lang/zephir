@@ -84,7 +84,7 @@ abstract class MathOptimizer extends OptimizerAbstract
 
                         return new CompiledExpression(
                             'double',
-                            'zephir_'.$this->getFunctionName().'('.$context->backend->getVariableCode($variable).' TSRMLS_CC)',
+                            'zephir_'.$this->getFunctionName().'('.$context->backend->getVariableCode($variable).')',
                             $expression
                         );
                         break;
