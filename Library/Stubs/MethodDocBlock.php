@@ -163,8 +163,12 @@ class MethodDocBlock extends DocBlock
             }
 
             // remember docblock @return to avoid duplication
+            // also replace @var to @mixed for PHP docblock
             if ('return' === $docType) {
                 $this->predefinedParams['return'] = true;
+
+                $mixed = str_replace('var', 'mixed', $type);
+                $line = str_replace($type, $mixed, $line);
             }
 
             if ('$' !== $dollar && $identifier) {

@@ -41,8 +41,8 @@ class Issue_1778
     /**
      * Some useful description
      *
-     * @param string $key
      * @return mixed|null
+     * @param string $key
      */
     public function getVar(string $key) {}
 

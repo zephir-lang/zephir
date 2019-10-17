@@ -172,6 +172,10 @@ class MethodDocBlockTest extends TestCase
                 'Zephir',
                 'Zephir',
             ],
+            'with @var in @return' => [
+                '@return var|array dataObject - some description of var',
+                '@return mixed|array $dataObject - some description of var',
+            ],
             'with many params and Exception' => [
                 // Zep
                 "Test for full filled Method\n".
