@@ -1196,7 +1196,11 @@ final class ClassDefinition
                     $this->checkInterfaceImplements($this, $classInterfaceDefinition);
                 }
 
-                $codePrinter->output('zend_class_implements('.$this->getClassEntry().' TSRMLS_CC, 1, '.$classEntry.');');
+                $codePrinter->output(sprintf(
+                    'zend_class_implements(%s, 1, %s);',
+                    $this->getClassEntry(),
+                    $classEntry
+                ));
             }
         }
 
