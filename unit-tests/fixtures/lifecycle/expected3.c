@@ -91,8 +91,8 @@ static PHP_RINIT_FUNCTION(lifecycle)
 #endif
 	lifecycle_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(lifecycle_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(lifecycle_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(lifecycle_globals_ptr);
+	zephir_initialize_memory(lifecycle_globals_ptr);
 
 	ext_setup_request();
 	return SUCCESS;
@@ -130,8 +130,8 @@ static PHP_MINFO_FUNCTION(lifecycle)
 
 static PHP_GINIT_FUNCTION(lifecycle)
 {
-	php_zephir_init_globals(lifecycle_globals TSRMLS_CC);
-	php_zephir_init_module_globals(lifecycle_globals TSRMLS_CC);
+	php_zephir_init_globals(lifecycle_globals);
+	php_zephir_init_module_globals(lifecycle_globals);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(lifecycle)
