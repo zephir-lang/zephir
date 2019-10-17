@@ -265,7 +265,7 @@ class Backend extends BackendZendEngine2
                 break;
 
             case 'callable':
-                $condition = 'zephir_is_callable('.$variableName.' TSRMLS_CC) '.$operator.' 1';
+                $condition = 'zephir_is_callable('.$variableName.') '.$operator.' 1';
                 break;
 
             default:
