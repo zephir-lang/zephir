@@ -139,7 +139,7 @@ class IssetOperator extends BaseOperator
                             case 'string':
                                 $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
 
-                                return new CompiledExpression('bool', 'zephir_isset_property_zval('.$variableCode.', '.$indexVariableCode.' TSRMLS_CC)', $left['right']);
+                                return new CompiledExpression('bool', 'zephir_isset_property_zval('.$variableCode.', '.$indexVariableCode.')', $left['right']);
 
                             default:
                                 throw new CompilerException('['.$indexVariable->getType().']', $expression);
