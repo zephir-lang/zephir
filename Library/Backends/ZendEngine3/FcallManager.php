@@ -11,7 +11,6 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
@@ -62,7 +61,7 @@ class FcallManager implements FcallManagerInterface
     {
         $codePrinter = new CodePrinter();
 
-        $header =<<<HEAD
+        $header = <<<HEAD
 #ifndef ZEPHIR_KERNEL_FCALL_INTERNAL_H
 #define ZEPHIR_KERNEL_FCALL_INTERNAL_H
 
