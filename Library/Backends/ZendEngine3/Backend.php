@@ -658,7 +658,9 @@ class Backend extends BackendZendEngine2
     public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
     {
         $symbol = $this->getVariableCode($variable);
-        $context->codePrinter->output('zephir_create_closure_ex('.$symbol.', NULL, '.$classDefinition->getClassEntry().', SL("__invoke"));');
+        $context->codePrinter->output(
+            'zephir_create_closure_ex('.$symbol.', NULL, '.$classDefinition->getClassEntry().', SL("__invoke"));'
+        );
     }
 
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
@@ -920,7 +922,7 @@ class Backend extends BackendZendEngine2
         //TODO: maybe optimizations as well as above
         $value = $this->resolveValue($value, $context);
         if ($propertyName instanceof Variable) {
-            $context->codePrinter->output('zephir_update_property_zval_zval('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($propertyName).', '.$value.' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_update_property_zval_zval('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($propertyName).', '.$value.');');
         } else {
             $context->codePrinter->output('zephir_update_property_zval('.$this->getVariableCode($symbolVariable).', SL("'.$propertyName.'"), '.$value.');');
         }
