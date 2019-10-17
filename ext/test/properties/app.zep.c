@@ -22,7 +22,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_App) {
 	ZEPHIR_REGISTER_CLASS(Test\\Properties, App, test, properties_app, test_properties_app_method_entry, 0);
 
 	/** @var \Test\Properties\StaticPrivateProperties  */
-	zend_declare_property_null(test_properties_app_ce, SL("instance"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_app_ce, SL("instance"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 

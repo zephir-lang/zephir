@@ -22,9 +22,9 @@ ZEPHIR_INIT_CLASS(Test_Bench_Foo) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Bench, Foo, test, bench_foo, test_bench_foo_method_entry, 0);
 
-	zend_declare_property_long(test_bench_foo_ce, SL("a"), 0, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_long(test_bench_foo_ce, SL("a"), 0, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
 
-	zend_declare_property_long(test_bench_foo_ce, SL("b"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(test_bench_foo_ce, SL("b"), 0, ZEND_ACC_PUBLIC);
 
 	zephir_declare_class_constant_long(test_bench_foo_ce, SL("TEST"), 0);
 
@@ -409,7 +409,7 @@ PHP_METHOD(Test_Bench_Foo, postIncProp) {
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("b") TSRMLS_CC));
+			RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("b")));
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -448,7 +448,7 @@ PHP_METHOD(Test_Bench_Foo, postDecProp) {
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			RETURN_ON_FAILURE(zephir_property_decr(this_ptr, SL("b") TSRMLS_CC));
+			RETURN_ON_FAILURE(zephir_property_decr(this_ptr, SL("b")));
 		}
 	}
 	ZEPHIR_MM_RESTORE();

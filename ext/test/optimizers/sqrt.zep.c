@@ -112,7 +112,7 @@ PHP_METHOD(Test_Optimizers_Sqrt, testVarParameter) {
 
 
 
-	RETURN_DOUBLE(zephir_sqrt(a TSRMLS_CC));
+	RETURN_DOUBLE(zephir_sqrt(a));
 
 }
 

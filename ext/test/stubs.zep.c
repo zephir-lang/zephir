@@ -27,14 +27,14 @@ ZEPHIR_INIT_CLASS(Test_Stubs) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Stubs, test, stubs, test_stubs_method_entry, 0);
 
-	zend_declare_property_string(test_stubs_ce, SL("propString"), "Zephir public", ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_string(test_stubs_ce, SL("propString"), "Zephir public", ZEND_ACC_PUBLIC);
 
 	/** @var integer - declared in Zephir DocBlock */
-	zend_declare_property_long(test_stubs_ce, SL("propIntDeclared"), 100, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(test_stubs_ce, SL("propIntDeclared"), 100, ZEND_ACC_PUBLIC);
 
-	zend_declare_property_string(test_stubs_ce, SL("propStringProtected"), "Zephir protected", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_stubs_ce, SL("propStringProtected"), "Zephir protected", ZEND_ACC_PROTECTED);
 
-	zend_declare_property_string(test_stubs_ce, SL("propStringPrivate"), "Zephir private", ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_string(test_stubs_ce, SL("propStringPrivate"), "Zephir private", ZEND_ACC_PRIVATE);
 
 	zephir_declare_class_constant_long(test_stubs_ce, SL("INTEGER_CONST"), 1);
 

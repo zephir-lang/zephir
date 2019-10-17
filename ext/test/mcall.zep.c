@@ -606,7 +606,7 @@ PHP_METHOD(Test_Mcall, optionalRequereString) {
 	zephir_fetch_params(1, 1, 0, &param_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(param_param) == IS_STRING)) {
@@ -763,7 +763,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
 		start = 1;
 	} else {
 	if (UNEXPECTED(Z_TYPE_P(start_param) != IS_TRUE && Z_TYPE_P(start_param) != IS_FALSE)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be of the type bool") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be of the type bool"));
 		RETURN_NULL();
 	}
 	start = (Z_TYPE_P(start_param) == IS_TRUE);
@@ -787,7 +787,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
 		value = 0;
 	} else {
 	if (UNEXPECTED(Z_TYPE_P(value_param) != IS_TRUE && Z_TYPE_P(value_param) != IS_FALSE)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be of the type bool") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be of the type bool"));
 		RETURN_NULL();
 	}
 	value = (Z_TYPE_P(value_param) == IS_TRUE);
@@ -923,7 +923,7 @@ PHP_METHOD(Test_Mcall, testCallablePass) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_oo_ooparams_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -952,12 +952,12 @@ PHP_METHOD(Test_Mcall, testCallableArrayThisMethodPass) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_oo_ooparams_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 2, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 2, 0);
 	zephir_array_fast_append(&_0, this_ptr);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "bb");
@@ -981,7 +981,7 @@ PHP_METHOD(Test_Mcall, aa) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_mcall_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}

@@ -480,8 +480,8 @@ static PHP_RINIT_FUNCTION(test)
 #endif
 	test_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(test_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(test_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(test_globals_ptr);
+	zephir_initialize_memory(test_globals_ptr);
 
 		zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 	
@@ -526,8 +526,8 @@ static PHP_MINFO_FUNCTION(test)
 
 static PHP_GINIT_FUNCTION(test)
 {
-	php_zephir_init_globals(test_globals TSRMLS_CC);
-	php_zephir_init_module_globals(test_globals TSRMLS_CC);
+	php_zephir_init_globals(test_globals);
+	php_zephir_init_module_globals(test_globals);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)

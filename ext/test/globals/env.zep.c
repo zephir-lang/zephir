@@ -44,7 +44,7 @@ PHP_METHOD(Test_Globals_Env, read) {
 	zephir_get_strval(&name, name_param);
 
 
-	zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY | PH_READONLY, "test/globals/env.zep", 8 TSRMLS_CC);
+	zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY | PH_READONLY, "test/globals/env.zep", 8);
 	RETURN_CTOR(&_0);
 
 }

@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_Invoke) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Invoke, test, invoke, test_invoke_method_entry, 0);
 
-	zend_declare_property_null(test_invoke_ce, SL("a"), ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_null(test_invoke_ce, SL("a"), ZEND_ACC_PRIVATE);
 
 	return SUCCESS;
 
@@ -54,7 +54,7 @@ PHP_METHOD(Test_Invoke, __invoke) {
 
 
 	zephir_read_property(&_0, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
-	zephir_gettype(return_value, &_0 TSRMLS_CC);
+	zephir_gettype(return_value, &_0);
 	return;
 
 }

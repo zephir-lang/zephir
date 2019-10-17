@@ -20,7 +20,7 @@ ZEPHIR_INIT_CLASS(Test_InternalInterfaces) {
 
 	ZEPHIR_REGISTER_CLASS(Test, InternalInterfaces, test, internalinterfaces, test_internalinterfaces_method_entry, 0);
 
-	zend_class_implements(test_internalinterfaces_ce TSRMLS_CC, 1, spl_ce_Countable);
+	zend_class_implements(test_internalinterfaces_ce, 1, spl_ce_Countable);
 	return SUCCESS;
 
 }

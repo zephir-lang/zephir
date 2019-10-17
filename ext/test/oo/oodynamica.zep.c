@@ -44,7 +44,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&className);
-	zephir_get_called_class(&className TSRMLS_CC);
+	zephir_get_called_class(&className);
 	ZEPHIR_INIT_VAR(&fullClassName);
 	ZEPHIR_CONCAT_SV(&fullClassName, "\\", &className);
 	zephir_fetch_safe_class(&_0, &fullClassName);
@@ -53,7 +53,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 		RETURN_MM_NULL();
 	}
 	object_init_ex(return_value, _1);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}

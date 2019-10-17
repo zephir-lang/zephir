@@ -127,7 +127,7 @@ PHP_METHOD(Test_Optimizers_Tan, testVarParameter) {
 
 
 
-	RETURN_DOUBLE(zephir_tan(a TSRMLS_CC));
+	RETURN_DOUBLE(zephir_tan(a));
 
 }
 

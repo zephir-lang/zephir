@@ -25,65 +25,65 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	/**
 	 * This is a public property with no initial value
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someNull"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someNull"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with initial null value
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someNullInitial"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someNullInitial"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with initial boolean false
 	 */
-	zend_declare_property_bool(test_properties_publicproperties_ce, SL("someFalse"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_bool(test_properties_publicproperties_ce, SL("someFalse"), 0, ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with initial boolean true
 	 */
-	zend_declare_property_bool(test_properties_publicproperties_ce, SL("someTrue"), 1, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_bool(test_properties_publicproperties_ce, SL("someTrue"), 1, ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial integer value
 	 */
-	zend_declare_property_long(test_properties_publicproperties_ce, SL("someInteger"), 10, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(test_properties_publicproperties_ce, SL("someInteger"), 10, ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial double value
 	 */
-	zend_declare_property_double(test_properties_publicproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_double(test_properties_publicproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial string value
 	 */
-	zend_declare_property_string(test_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_string(test_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial array value
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArray"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * It's needed to test ide stubs
 	 * @link https://github.com/phalcon/zephir/issues/731
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArrayWithSpecifyKeys"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArrayWithSpecifyKeys"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * It's needed to test ide stubs
 	 * @link https://github.com/phalcon/zephir/issues/731
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArrayWithSubArray"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArrayWithSubArray"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromSelfConstantValue"), 123, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromSelfConstantValue"), 123, ZEND_ACC_PUBLIC);
 
-	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC);
 
 	test_properties_publicproperties_ce->create_object = zephir_init_properties_Test_Properties_PublicProperties;
 	zephir_declare_class_constant_long(test_properties_publicproperties_ce, SL("TEST_CONST"), 123);
@@ -165,21 +165,21 @@ zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_
 		zephir_read_property(&_2, this_ptr, SL("someArrayWithSubArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_2) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_3$$4);
-			zephir_create_array(&_3$$4, 4, 0 TSRMLS_CC);
+			zephir_create_array(&_3$$4, 4, 0);
 			ZEPHIR_INIT_VAR(&_4$$4);
-			zephir_create_array(&_4$$4, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_4$$4, 1, 0);
 			add_assoc_stringl_ex(&_4$$4, SL("class"), SL("alert alert-success"));
 			zephir_array_update_string(&_3$$4, SL("success"), &_4$$4, PH_COPY | PH_SEPARATE);
 			ZEPHIR_INIT_NVAR(&_4$$4);
-			zephir_create_array(&_4$$4, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_4$$4, 1, 0);
 			add_assoc_stringl_ex(&_4$$4, SL("class"), SL("alert alert-info"));
 			zephir_array_update_string(&_3$$4, SL("info"), &_4$$4, PH_COPY | PH_SEPARATE);
 			ZEPHIR_INIT_NVAR(&_4$$4);
-			zephir_create_array(&_4$$4, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_4$$4, 1, 0);
 			add_assoc_stringl_ex(&_4$$4, SL("class"), SL("alert alert-warning"));
 			zephir_array_update_string(&_3$$4, SL("warning"), &_4$$4, PH_COPY | PH_SEPARATE);
 			ZEPHIR_INIT_NVAR(&_4$$4);
-			zephir_create_array(&_4$$4, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_4$$4, 1, 0);
 			add_assoc_stringl_ex(&_4$$4, SL("class"), SL("alert alert-danger"));
 			zephir_array_update_string(&_3$$4, SL("danger"), &_4$$4, PH_COPY | PH_SEPARATE);
 			zephir_update_property_zval(this_ptr, SL("someArrayWithSubArray"), &_3$$4);
@@ -187,7 +187,7 @@ zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_
 		zephir_read_property(&_5, this_ptr, SL("someArrayWithSpecifyKeys"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_5) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_6$$5);
-			zephir_create_array(&_6$$5, 3, 0 TSRMLS_CC);
+			zephir_create_array(&_6$$5, 3, 0);
 			add_assoc_stringl_ex(&_6$$5, SL("a"), SL("A"));
 			add_assoc_stringl_ex(&_6$$5, SL("b"), SL("B"));
 			add_assoc_stringl_ex(&_6$$5, SL("c"), SL("C"));
@@ -196,7 +196,7 @@ zend_object *zephir_init_properties_Test_Properties_PublicProperties(zend_class_
 		zephir_read_property(&_7, this_ptr, SL("someArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_7) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_8$$6);
-			zephir_create_array(&_8$$6, 4, 0 TSRMLS_CC);
+			zephir_create_array(&_8$$6, 4, 0);
 			ZEPHIR_INIT_VAR(&_9$$6);
 			ZVAL_LONG(&_9$$6, 1);
 			zephir_array_fast_append(&_8$$6, &_9$$6);

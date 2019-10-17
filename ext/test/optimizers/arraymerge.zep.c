@@ -43,7 +43,7 @@ PHP_METHOD(Test_Optimizers_ArrayMerge, mergeTwoRequiredArrays) {
 	zephir_get_arrval(&arr2, arr2_param);
 
 
-	zephir_fast_array_merge(return_value, &arr1, &arr2 TSRMLS_CC);
+	zephir_fast_array_merge(return_value, &arr1, &arr2);
 	RETURN_MM();
 
 }

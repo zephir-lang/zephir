@@ -22,7 +22,7 @@ ZEPHIR_INIT_CLASS(Test_Concat) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Concat, test, concat, test_concat_method_entry, 0);
 
-	zend_declare_property_null(test_concat_ce, SL("testProperty"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_concat_ce, SL("testProperty"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 
@@ -132,7 +132,7 @@ PHP_METHOD(Test_Concat, testConcat3) {
 	ZVAL_STRING(&a, "1");
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
-	zephir_concat_self(&b, &a TSRMLS_CC);
+	zephir_concat_self(&b, &a);
 	RETURN_CCTOR(&b);
 
 }
@@ -162,18 +162,18 @@ PHP_METHOD(Test_Concat, testConcat4) {
 
 	ZEPHIR_INIT_VAR(&query);
 	ZVAL_STRING(&query, "");
-	min = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (25));
-	max = (zephir_safe_div_zval_long(value, 100 TSRMLS_CC) * (double) (50));
+	min = (zephir_safe_div_zval_long(value, 100) * (double) (25));
+	max = (zephir_safe_div_zval_long(value, 100) * (double) (50));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, max);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SV(&_1, "SELECT * FROM TEST WHERE value <= ", &_0);
-	zephir_concat_self(&query, &_1 TSRMLS_CC);
+	zephir_concat_self(&query, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_DOUBLE(&_2, min);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
-	zephir_concat_self(&query, &_3 TSRMLS_CC);
+	zephir_concat_self(&query, &_3);
 	RETURN_CTOR(&query);
 
 }

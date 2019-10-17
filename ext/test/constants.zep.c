@@ -20,30 +20,30 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	ZEPHIR_REGISTER_CLASS_EX(Test, Constants, test, constants, test_constantsparent_ce, test_constants_method_entry, 0);
 
-	zend_declare_property_string(test_constants_ce, SL("propWsVarsAssigned"), "$SOME/CSRF/KEY$", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propWsVarsAssigned"), "$SOME/CSRF/KEY$", ZEND_ACC_PROTECTED);
 
-	zend_declare_property_string(test_constants_ce, SL("propWsVarsGet"), "$SOME/CSRF/KEY$", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propWsVarsGet"), "$SOME/CSRF/KEY$", ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_constants_ce, SL("propertyC1"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_constants_ce, SL("propertyC1"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_bool(test_constants_ce, SL("propertyC2"), 0, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_bool(test_constants_ce, SL("propertyC2"), 0, ZEND_ACC_PROTECTED);
 
-	zend_declare_property_bool(test_constants_ce, SL("propertyC3"), 1, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_bool(test_constants_ce, SL("propertyC3"), 1, ZEND_ACC_PROTECTED);
 
-	zend_declare_property_long(test_constants_ce, SL("propertyC4"), 10, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_long(test_constants_ce, SL("propertyC4"), 10, ZEND_ACC_PROTECTED);
 
-	zend_declare_property_double(test_constants_ce, SL("propertyC5"), 10.25, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_double(test_constants_ce, SL("propertyC5"), 10.25, ZEND_ACC_PROTECTED);
 
-	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_constants_ce, SL("propertyC7"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_constants_ce, SL("propertyC7"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_constants_ce, SL("propertyC8"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_constants_ce, SL("propertyC8"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * @var \Phalcon\Cache\FrontendInterface
 	 */
-	zend_declare_property_string(test_constants_ce, SL("propertyC9"), "some-value", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propertyC9"), "some-value", ZEND_ACC_PROTECTED);
 
 	zephir_declare_class_constant_null(test_constants_ce, SL("C1"));
 

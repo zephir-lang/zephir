@@ -24,7 +24,7 @@ ZEPHIR_INIT_CLASS(Test_McallChained) {
 
 	ZEPHIR_REGISTER_CLASS(Test, McallChained, test, mcallchained, test_mcallchained_method_entry, 0);
 
-	zend_declare_property_null(test_mcallchained_ce, SL("temp"), ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_null(test_mcallchained_ce, SL("temp"), ZEND_ACC_PRIVATE);
 
 	return SUCCESS;
 

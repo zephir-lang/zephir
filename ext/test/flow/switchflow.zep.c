@@ -278,7 +278,7 @@ PHP_METHOD(Test_Flow_SwitchFlow, testSwitch13) {
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
 	do {
-		_2 = zephir_mt_rand(zephir_get_intval(&_0), zephir_get_intval(&_1) TSRMLS_CC);
+		_2 = zephir_mt_rand(zephir_get_intval(&_0), zephir_get_intval(&_1));
 		if (_2 == 100) {
 			RETURN_LONG(1);
 		}

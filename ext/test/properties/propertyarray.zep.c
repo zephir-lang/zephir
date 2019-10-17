@@ -29,17 +29,17 @@ ZEPHIR_INIT_CLASS(Test_Properties_PropertyArray) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_propertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_propertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a public property with an initial array value
 	 */
-	zend_declare_property_null(test_properties_propertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_propertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC);
 
 	/**
 	 * This is a protected property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_propertyarray_ce, SL("otherArray"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_propertyarray_ce, SL("otherArray"), ZEND_ACC_PROTECTED);
 
 	test_properties_propertyarray_ce->create_object = zephir_init_properties_Test_Properties_PropertyArray;
 	return SUCCESS;
@@ -59,7 +59,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 1, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 1, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
@@ -188,7 +188,7 @@ zend_object *zephir_init_properties_Test_Properties_PropertyArray(zend_class_ent
 		zephir_read_property(&_2, this_ptr, SL("someArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_2) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_3$$4);
-			zephir_create_array(&_3$$4, 4, 0 TSRMLS_CC);
+			zephir_create_array(&_3$$4, 4, 0);
 			ZEPHIR_INIT_VAR(&_4$$4);
 			ZVAL_LONG(&_4$$4, 1);
 			zephir_array_fast_append(&_3$$4, &_4$$4);

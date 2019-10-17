@@ -45,19 +45,19 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1055) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 1, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 1, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "aa");
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_VAR(&_2);
-	zephir_create_array(&_2, 1, 0 TSRMLS_CC);
+	zephir_create_array(&_2, 1, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "aaa");
 	zephir_array_fast_append(&_2, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "bla bla aa aaa askks");
 	ZEPHIR_INIT_VAR(&_3);
-	zephir_fast_str_replace(&_3, &_0, &_2, &_1 TSRMLS_CC);
+	zephir_fast_str_replace(&_3, &_0, &_2, &_1);
 	RETURN_CCTOR(&_3);
 
 }
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1087) {
 	ZEPHIR_INIT_VAR(&filtered);
 	ZVAL_STRING(&filtered, "test_test");
 	ZEPHIR_INIT_VAR(&sanitize);
-	zephir_create_array(&sanitize, 8, 0 TSRMLS_CC);
+	zephir_create_array(&sanitize, 8, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "/");
 	zephir_array_fast_append(&sanitize, &_0);
@@ -106,7 +106,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue1087) {
 	ZEPHIR_INIT_NVAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "");
-	zephir_fast_str_replace(&_0, &sanitize, &_1, &filtered TSRMLS_CC);
+	zephir_fast_str_replace(&_0, &sanitize, &_1, &filtered);
 	ZEPHIR_CPY_WRT(&filtered, &_0);
 	RETURN_CCTOR(&filtered);
 
@@ -128,7 +128,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732A) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&search);
-	zephir_create_array(&search, 5, 0 TSRMLS_CC);
+	zephir_create_array(&search, 5, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "A");
 	zephir_array_fast_append(&search, &_0);
@@ -145,7 +145,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732A) {
 	ZVAL_STRING(&_0, "E");
 	zephir_array_fast_append(&search, &_0);
 	ZEPHIR_INIT_VAR(&replace);
-	zephir_create_array(&replace, 5, 0 TSRMLS_CC);
+	zephir_create_array(&replace, 5, 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "B");
 	zephir_array_fast_append(&replace, &_0);
@@ -164,7 +164,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732A) {
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "A");
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_fast_str_replace(&_0, &search, &replace, &subject TSRMLS_CC);
+	zephir_fast_str_replace(&_0, &search, &replace, &subject);
 	RETURN_CCTOR(&_0);
 
 }
@@ -186,7 +186,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732B) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&patterns);
-	zephir_create_array(&patterns, 3, 0 TSRMLS_CC);
+	zephir_create_array(&patterns, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "/quick/");
 	zephir_array_fast_append(&patterns, &_0);
@@ -197,7 +197,7 @@ PHP_METHOD(Test_Optimizers_StrReplace, issue732B) {
 	ZVAL_STRING(&_0, "/fox/");
 	zephir_array_fast_append(&patterns, &_0);
 	ZEPHIR_INIT_VAR(&replacements);
-	zephir_create_array(&replacements, 3, 0 TSRMLS_CC);
+	zephir_create_array(&replacements, 3, 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "bear");
 	zephir_array_fast_append(&replacements, &_0);

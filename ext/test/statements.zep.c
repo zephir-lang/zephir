@@ -26,22 +26,22 @@ ZEPHIR_INIT_CLASS(Test_Statements) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Statements, test, statements, test_statements_method_entry, 0);
 
-	zend_declare_property_string(test_statements_ce, SL("tmp1"), "test", ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_string(test_statements_ce, SL("tmp1"), "test", ZEND_ACC_PUBLIC);
 
-	zend_declare_property_string(test_statements_ce, SL("tmp2"), "test string", ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_string(test_statements_ce, SL("tmp2"), "test string", ZEND_ACC_PUBLIC);
 
 	/**
 	 * @issue https://github.com/phalcon/zephir/issues/544
 	 */
-	zend_declare_property_long(test_statements_ce, SL("totalSteps"), 100, ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_long(test_statements_ce, SL("totalSteps"), 100, ZEND_ACC_PRIVATE);
 
-	zend_declare_property_long(test_statements_ce, SL("width"), 100, ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_long(test_statements_ce, SL("width"), 100, ZEND_ACC_PRIVATE);
 
-	zend_declare_property_string(test_statements_ce, SL("filledChar"), "=", ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_string(test_statements_ce, SL("filledChar"), "=", ZEND_ACC_PRIVATE);
 
-	zend_declare_property_string(test_statements_ce, SL("unfilledChar"), ".", ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_string(test_statements_ce, SL("unfilledChar"), ".", ZEND_ACC_PRIVATE);
 
-	zend_declare_property_string(test_statements_ce, SL("arrow"), ">", ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_string(test_statements_ce, SL("arrow"), ">", ZEND_ACC_PRIVATE);
 
 	return SUCCESS;
 
@@ -186,7 +186,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
@@ -197,7 +197,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	if (ZEPHIR_GT_LONG(&_0, step)) {
 		zephir_read_property(&_2$$3, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_3$$3, this_ptr, SL("totalSteps"), PH_NOISY_CC | PH_READONLY);
-		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(&_2$$3) - 1)), &_3$$3 TSRMLS_CC) * step));
+		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(&_2$$3) - 1)), &_3$$3) * step));
 		zephir_read_property(&_4$$3, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
 		unfilledWidth = (((zephir_get_numberval(&_4$$3) - 1)) - filledWidth);
 		zephir_read_property(&_5$$3, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);
@@ -253,7 +253,7 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	zephir_fetch_params(1, 1, 0, &step_param);
 
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));
 		RETURN_MM_NULL();
 	}
 	step = Z_LVAL_P(step_param);
@@ -263,7 +263,7 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	totalSteps = zephir_get_numberval(&_0);
 	if (step < totalSteps) {
 		zephir_read_property(&_1$$3, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
-		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(&_1$$3) - 1)), totalSteps TSRMLS_CC) * step));
+		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(&_1$$3) - 1)), totalSteps) * step));
 		zephir_read_property(&_2$$3, this_ptr, SL("width"), PH_NOISY_CC | PH_READONLY);
 		unfilledWidth = (((zephir_get_numberval(&_2$$3) - 1)) - filledWidth);
 		zephir_read_property(&_3$$3, this_ptr, SL("filledChar"), PH_NOISY_CC | PH_READONLY);

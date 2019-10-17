@@ -89,7 +89,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&fib);
-	zephir_create_array(&fib, 2, 0 TSRMLS_CC);
+	zephir_create_array(&fib, 2, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_array_fast_append(&fib, &_0);
@@ -104,8 +104,8 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		}
 		k = (i - 1);
 		j = (i - 2);
-		zephir_array_fetch_long(&a, &fib, k, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 51 TSRMLS_CC);
-		zephir_array_fetch_long(&b, &fib, j, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 52 TSRMLS_CC);
+		zephir_array_fetch_long(&a, &fib, k, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 51);
+		zephir_array_fetch_long(&b, &fib, j, PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 52);
 		ZEPHIR_INIT_NVAR(&c);
 		zephir_add_function(&c, &a, &b);
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
@@ -131,7 +131,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&fib);
-	zephir_create_array(&fib, 2, 0 TSRMLS_CC);
+	zephir_create_array(&fib, 2, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_array_fast_append(&fib, &_0);
@@ -144,8 +144,8 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 		if (!(i < n)) {
 			break;
 		}
-		zephir_array_fetch_long(&_1$$3, &fib, (i - 1), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
-		zephir_array_fetch_long(&_2$$3, &fib, (i - 2), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67 TSRMLS_CC);
+		zephir_array_fetch_long(&_1$$3, &fib, (i - 1), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67);
+		zephir_array_fetch_long(&_2$$3, &fib, (i - 2), PH_NOISY | PH_READONLY, "test/fibonnaci.zep", 67);
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		zephir_add_function(&_3$$3, &_1$$3, &_2$$3);
 		zephir_array_update_long(&fib, i, &_3$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);

@@ -31,27 +31,27 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoDestruct) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoDestruct, test, oo_oodestruct, test_oo_oodestruct_method_entry, 0);
 
-	zend_declare_property_bool(test_oo_oodestruct_ce, SL("checked"), 0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_bool(test_oo_oodestruct_ce, SL("checked"), 0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("file"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("file"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * Image height
 	 *
 	 * @var int
 	 */
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("height"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("height"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("image"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("image"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * Image mime type
 	 *
 	 * @var string
 	 */
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("mime"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("mime"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("realpath"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("realpath"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * Image type
@@ -60,14 +60,14 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoDestruct) {
 	 *
 	 * @var int
 	 */
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("type"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("type"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * Image width
 	 *
 	 * @var int
 	 */
-	zend_declare_property_null(test_oo_oodestruct_ce, SL("width"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_oodestruct_ce, SL("width"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -210,7 +210,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 	zephir_fetch_params(1, 1, 2, &file_param, &width_param, &height_param);
 
 	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(file_param) == IS_STRING)) {
@@ -238,7 +238,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 	}
 	zephir_update_property_zval(this_ptr, SL("file"), &file);
 	zephir_read_property(&_1, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
-	if ((zephir_file_exists(&_1 TSRMLS_CC) == SUCCESS)) {
+	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property(&_2$$4, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 58, &_2$$4);
 		zephir_check_call_status();
@@ -247,13 +247,13 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 59, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
-			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 62 TSRMLS_CC);
+			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 62);
 			zephir_update_property_zval(this_ptr, SL("width"), &_5$$5);
-			zephir_array_fetch_long(&_6$$5, &imageinfo, 1, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 63 TSRMLS_CC);
+			zephir_array_fetch_long(&_6$$5, &imageinfo, 1, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 63);
 			zephir_update_property_zval(this_ptr, SL("height"), &_6$$5);
-			zephir_array_fetch_long(&_7$$5, &imageinfo, 2, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 64 TSRMLS_CC);
+			zephir_array_fetch_long(&_7$$5, &imageinfo, 2, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 64);
 			zephir_update_property_zval(this_ptr, SL("type"), &_7$$5);
-			zephir_array_fetch_string(&_8$$5, &imageinfo, SL("mime"), PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 65 TSRMLS_CC);
+			zephir_array_fetch_string(&_8$$5, &imageinfo, SL("mime"), PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 65);
 			zephir_update_property_zval(this_ptr, SL("mime"), &_8$$5);
 		}
 		zephir_read_property(&_9$$4, this_ptr, SL("type"), PH_NOISY_CC | PH_READONLY);
@@ -300,14 +300,14 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 				_22$$12 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 				}
 				object_init_ex(&_21$$12, _22$$12);
-				if (zephir_has_constructor(&_21$$12 TSRMLS_CC)) {
+				if (zephir_has_constructor(&_21$$12)) {
 					zephir_read_property(&_23$$12, this_ptr, SL("mime"), PH_NOISY_CC | PH_READONLY);
 					ZEPHIR_INIT_VAR(&_24$$12);
 					ZEPHIR_CONCAT_SVS(&_24$$12, "Installed GD does not support ", &_23$$12, " images");
 					ZEPHIR_CALL_METHOD(NULL, &_21$$12, "__construct", NULL, 0, &_24$$12);
 					zephir_check_call_status();
 				}
-				zephir_throw_exception_debug(&_21$$12, "test/oo/oodestruct.zep", 93 TSRMLS_CC);
+				zephir_throw_exception_debug(&_21$$12, "test/oo/oodestruct.zep", 93);
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
@@ -316,13 +316,13 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 			_26$$11 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 			}
 			object_init_ex(&_25$$11, _26$$11);
-			if (zephir_has_constructor(&_25$$11 TSRMLS_CC)) {
+			if (zephir_has_constructor(&_25$$11)) {
 				ZEPHIR_INIT_VAR(&_27$$11);
 				ZVAL_STRING(&_27$$11, "Installed GD does not support such images");
 				ZEPHIR_CALL_METHOD(NULL, &_25$$11, "__construct", NULL, 0, &_27$$11);
 				zephir_check_call_status();
 			}
-			zephir_throw_exception_debug(&_25$$11, "test/oo/oodestruct.zep", 98 TSRMLS_CC);
+			zephir_throw_exception_debug(&_25$$11, "test/oo/oodestruct.zep", 98);
 			ZEPHIR_MM_RESTORE();
 			return;
 		} while(0);
@@ -341,14 +341,14 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 			_32$$14 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 			}
 			object_init_ex(&_31$$14, _32$$14);
-			if (zephir_has_constructor(&_31$$14 TSRMLS_CC)) {
+			if (zephir_has_constructor(&_31$$14)) {
 				zephir_read_property(&_33$$14, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_INIT_VAR(&_34$$14);
 				ZEPHIR_CONCAT_SV(&_34$$14, "Failed to create image from file ", &_33$$14);
 				ZEPHIR_CALL_METHOD(NULL, &_31$$14, "__construct", NULL, 0, &_34$$14);
 				zephir_check_call_status();
 			}
-			zephir_throw_exception_debug(&_31$$14, "test/oo/oodestruct.zep", 107 TSRMLS_CC);
+			zephir_throw_exception_debug(&_31$$14, "test/oo/oodestruct.zep", 107);
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
@@ -431,19 +431,19 @@ PHP_METHOD(Test_Oo_OoDestruct, check) {
 	if (zephir_is_true(&_0)) {
 		RETURN_MM_BOOL(1);
 	}
-	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info") TSRMLS_CC) == SUCCESS)))) {
+	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_1$$4);
 		if (!_2$$4) {
 		_2$$4 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 		}
 		object_init_ex(&_1$$4, _2$$4);
-		if (zephir_has_constructor(&_1$$4 TSRMLS_CC)) {
+		if (zephir_has_constructor(&_1$$4)) {
 			ZEPHIR_INIT_VAR(&_3$$4);
 			ZVAL_STRING(&_3$$4, "GD is either not installed or not enabled, check your configuration");
 			ZEPHIR_CALL_METHOD(NULL, &_1$$4, "__construct", NULL, 0, &_3$$4);
 			zephir_check_call_status();
 		}
-		zephir_throw_exception_debug(&_1$$4, "test/oo/oodestruct.zep", 146 TSRMLS_CC);
+		zephir_throw_exception_debug(&_1$$4, "test/oo/oodestruct.zep", 146);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -461,13 +461,13 @@ PHP_METHOD(Test_Oo_OoDestruct, check) {
 		_8$$5 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 		}
 		object_init_ex(&_7$$5, _8$$5);
-		if (zephir_has_constructor(&_7$$5 TSRMLS_CC)) {
+		if (zephir_has_constructor(&_7$$5)) {
 			ZEPHIR_INIT_VAR(&_9$$5);
 			ZEPHIR_CONCAT_SV(&_9$$5, "Requires GD version '2.0.1' or greater, you have ", &version);
 			ZEPHIR_CALL_METHOD(NULL, &_7$$5, "__construct", NULL, 0, &_9$$5);
 			zephir_check_call_status();
 		}
-		zephir_throw_exception_debug(&_7$$5, "test/oo/oodestruct.zep", 154 TSRMLS_CC);
+		zephir_throw_exception_debug(&_7$$5, "test/oo/oodestruct.zep", 154);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -499,19 +499,19 @@ PHP_METHOD(Test_Oo_OoDestruct, getVersion) {
 
 	ZEPHIR_MM_GROW();
 
-	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info") TSRMLS_CC) == SUCCESS)))) {
+	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		if (!_1$$3) {
 		_1$$3 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
 		}
 		object_init_ex(&_0$$3, _1$$3);
-		if (zephir_has_constructor(&_0$$3 TSRMLS_CC)) {
+		if (zephir_has_constructor(&_0$$3)) {
 			ZEPHIR_INIT_VAR(&_2$$3);
 			ZVAL_STRING(&_2$$3, "GD is either not installed or not enabled, check your configuration");
 			ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", NULL, 0, &_2$$3);
 			zephir_check_call_status();
 		}
-		zephir_throw_exception_debug(&_0$$3, "test/oo/oodestruct.zep", 171 TSRMLS_CC);
+		zephir_throw_exception_debug(&_0$$3, "test/oo/oodestruct.zep", 171);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -529,16 +529,16 @@ PHP_METHOD(Test_Oo_OoDestruct, getVersion) {
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&matches);
 		ZVAL_NULL(&matches);
-		zephir_array_fetch_string(&_5$$5, &info, SL("GD Version"), PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 182 TSRMLS_CC);
+		zephir_array_fetch_string(&_5$$5, &info, SL("GD Version"), PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 182);
 		ZEPHIR_INIT_VAR(&_6$$5);
 		ZVAL_STRING(&_6$$5, "/\\d+\\.\\d+(?:\\.\\d+)?/");
 		ZEPHIR_INIT_VAR(&_7$$5);
 		ZEPHIR_INIT_VAR(&_8$$5);
 		ZVAL_STRING(&_8$$5, "/\\d+\\.\\d+(?:\\.\\d+)?/");
-		zephir_preg_match(&_7$$5, &_8$$5, &_5$$5, &matches, 0, 0 , 0  TSRMLS_CC);
+		zephir_preg_match(&_7$$5, &_8$$5, &_5$$5, &matches, 0, 0 , 0 );
 		if (zephir_is_true(&_7$$5)) {
 			ZEPHIR_OBS_NVAR(&version);
-			zephir_array_fetch_long(&version, &matches, 0, PH_NOISY, "test/oo/oodestruct.zep", 183 TSRMLS_CC);
+			zephir_array_fetch_long(&version, &matches, 0, PH_NOISY, "test/oo/oodestruct.zep", 183);
 		}
 	}
 	RETURN_CCTOR(&version);

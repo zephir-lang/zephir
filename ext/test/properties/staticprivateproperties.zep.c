@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPrivateProperties) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Properties, StaticPrivateProperties, test, properties_staticprivateproperties, test_properties_staticprivateproperties_method_entry, 0);
 
-	zend_declare_property_null(test_properties_staticprivateproperties_ce, SL("instance"), ZEND_ACC_PRIVATE|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticprivateproperties_ce, SL("instance"), ZEND_ACC_PRIVATE|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 
@@ -44,7 +44,7 @@ PHP_METHOD(Test_Properties_StaticPrivateProperties, getInstance) {
 	if (UNEXPECTED(Z_TYPE_P(&localInstance) != IS_OBJECT)) {
 		ZEPHIR_INIT_NVAR(&localInstance);
 		object_init_ex(&localInstance, test_properties_staticprivateproperties_ce);
-		if (zephir_has_constructor(&localInstance TSRMLS_CC)) {
+		if (zephir_has_constructor(&localInstance)) {
 			ZEPHIR_CALL_METHOD(NULL, &localInstance, "__construct", NULL, 0);
 			zephir_check_call_status();
 		}

@@ -28,7 +28,7 @@ PHP_METHOD(Test_Oo_AbstractStatic, getCalledClass) {
 	zval *this_ptr = getThis();
 
 
-	zephir_get_called_class(return_value TSRMLS_CC);
+	zephir_get_called_class(return_value);
 	return;
 
 }

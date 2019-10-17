@@ -55,7 +55,7 @@ PHP_METHOD(Test_Vars, testParam) {
 	ZEPHIR_OBS_COPY_OR_DUP(&config, config_param);
 
 
-	zephir_array_fetch_string(&_0, &config, SL("dir"), PH_NOISY | PH_READONLY, "test/vars.zep", 8 TSRMLS_CC);
+	zephir_array_fetch_string(&_0, &config, SL("dir"), PH_NOISY | PH_READONLY, "test/vars.zep", 8);
 	zephir_is_iterable(&_0, 0, "test/vars.zep", 11);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
@@ -70,7 +70,7 @@ PHP_METHOD(Test_Vars, testParam) {
 			ZVAL_COPY(&v, _1);
 			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 58, &v);
 			zephir_check_call_status();
-			zephir_array_update_multi(&config, &_5$$3 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+			zephir_array_update_multi(&config, &_5$$3, SL("sz"), 3, SL("dir"), &k);
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
@@ -87,7 +87,7 @@ PHP_METHOD(Test_Vars, testParam) {
 			zephir_check_call_status();
 				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 58, &v);
 				zephir_check_call_status();
-				zephir_array_update_multi(&config, &_7$$4 TSRMLS_CC, SL("sz"), 3, SL("dir"), &k);
+				zephir_array_update_multi(&config, &_7$$4, SL("sz"), 3, SL("dir"), &k);
 			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
 			zephir_check_call_status();
 		}
@@ -114,7 +114,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "hello");
 	ZEPHIR_INIT_VAR(&ar);
-	zephir_create_array(&ar, 3, 0 TSRMLS_CC);
+	zephir_create_array(&ar, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&ar, &_0);
@@ -122,8 +122,8 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZVAL_STRING(&_0, "world");
 	zephir_array_fast_append(&ar, &_0);
 	zephir_array_fast_append(&ar, &__$false);
-	zephir_var_dump(&ar TSRMLS_CC);
-	zephir_var_dump(&a TSRMLS_CC);
+	zephir_var_dump(&ar);
+	zephir_var_dump(&a);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -145,7 +145,7 @@ PHP_METHOD(Test_Vars, testVarDump2) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, ZEPHIR_IS_LONG(ret, 1));
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -169,7 +169,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "hello");
 	ZEPHIR_INIT_VAR(&ar);
-	zephir_create_array(&ar, 3, 0 TSRMLS_CC);
+	zephir_create_array(&ar, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&ar, &_0);
@@ -179,14 +179,14 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	zephir_array_fast_append(&ar, &__$false);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CPY_WRT(&_1, &ar);
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&_1);
 	ZEPHIR_INIT_VAR(&ret);
-	zephir_var_export_ex(&ret, &ar TSRMLS_CC);
+	zephir_var_export_ex(&ret, &ar);
 	ZEPHIR_INIT_VAR(&_2);
 	ZEPHIR_CPY_WRT(&_2, &a);
-	zephir_var_export(&_2 TSRMLS_CC);
+	zephir_var_export(&_2);
 	ZEPHIR_INIT_NVAR(&ret);
-	zephir_var_export_ex(&ret, &a TSRMLS_CC);
+	zephir_var_export_ex(&ret, &a);
 	RETURN_CCTOR(&ret);
 
 }
@@ -209,7 +209,7 @@ PHP_METHOD(Test_Vars, test88Issue) {
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
@@ -228,16 +228,16 @@ PHP_METHOD(Test_Vars, test88Issue) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &param1);
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CPY_WRT(&_1, &param2);
-	zephir_var_dump(&_1 TSRMLS_CC);
+	zephir_var_dump(&_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZEPHIR_CPY_WRT(&_2, &param1);
-	zephir_var_export(&_2 TSRMLS_CC);
+	zephir_var_export(&_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CPY_WRT(&_3, &param2);
-	zephir_var_export(&_3 TSRMLS_CC);
+	zephir_var_export(&_3);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -257,7 +257,7 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
@@ -276,7 +276,7 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &param2);
-	zephir_var_export(&_0 TSRMLS_CC);
+	zephir_var_export(&_0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -293,8 +293,8 @@ PHP_METHOD(Test_Vars, testVarDump2param) {
 
 
 
-	zephir_var_dump(p1 TSRMLS_CC);
-	zephir_var_dump(p2 TSRMLS_CC);
+	zephir_var_dump(p1);
+	zephir_var_dump(p2);
 
 }
 
@@ -311,9 +311,9 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 
 
 
-	zephir_var_dump(p1 TSRMLS_CC);
-	zephir_var_dump(p2 TSRMLS_CC);
-	zephir_var_dump(p3 TSRMLS_CC);
+	zephir_var_dump(p1);
+	zephir_var_dump(p2);
+	zephir_var_dump(p3);
 
 }
 
@@ -334,12 +334,12 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZVAL_LONG(&_0, zephir_fast_count_int(testVar TSRMLS_CC));
-	zephir_var_dump(&_0 TSRMLS_CC);
+	ZVAL_LONG(&_0, zephir_fast_count_int(testVar));
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
-	ZVAL_LONG(&_1, zephir_fast_count_int(testVar TSRMLS_CC));
-	zephir_var_export(&_1 TSRMLS_CC);
+	ZVAL_LONG(&_1, zephir_fast_count_int(testVar));
+	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -368,10 +368,10 @@ PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &testVar);
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CPY_WRT(&_1, &testVar);
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -395,11 +395,11 @@ PHP_METHOD(Test_Vars, testIntVarDump) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, a);
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, a);
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -420,11 +420,11 @@ PHP_METHOD(Test_Vars, testDoubleVarDump) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_DOUBLE(&_0, a);
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_DOUBLE(&_1, a);
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -445,11 +445,11 @@ PHP_METHOD(Test_Vars, testBoolVarDump) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, a);
-	zephir_var_dump(&_0 TSRMLS_CC);
+	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_BOOL(&_1, a);
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
 
 }
