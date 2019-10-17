@@ -244,7 +244,7 @@ class Generator
      *
      * @return string
      */
-    protected function buildMethod(ClassMethod $method, $isInterface, $indent)
+    protected function buildMethod(ClassMethod $method, bool $isInterface, string $indent): string
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
 
@@ -348,10 +348,10 @@ class Generator
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
         } else {
-            $methodBody .= ' {}';
+            $methodBody .= PHP_EOL.$indent.'{'.PHP_EOL.$indent.'}';
         }
 
-        return $docBlock->processMethodDocBlock()."\n".$methodBody;
+        return $docBlock->processMethodDocBlock().PHP_EOL.$methodBody;
     }
 
     /**

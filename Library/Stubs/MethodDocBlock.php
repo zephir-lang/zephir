@@ -129,7 +129,7 @@ class MethodDocBlock extends DocBlock
             (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+)*)\s*
             (?P<dollar>\$)?
             (?P<name>[a-z_][a-z0-9_]*)?\s*
-            (?P<description>\w+(:?\s*\w+)*)?
+            (?P<description>.*)?
             ~xi';
 
         preg_match($pattern, $line, $matched);
