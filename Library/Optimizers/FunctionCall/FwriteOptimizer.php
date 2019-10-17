@@ -63,11 +63,11 @@ class FwriteOptimizer extends OptimizerAbstract
                 $symbolVariable->initVariant($context);
             }
             $symbol = $context->backend->getVariableCode($symbolVariable);
-            $context->codePrinter->output('zephir_fwrite('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fwrite('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {
-            $context->codePrinter->output('zephir_fwrite(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fwrite(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].');');
         }
 
         return new CompiledExpression('null', 'null', $expression);

@@ -47,6 +47,6 @@ class InArrayOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_fast_in_array('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_fast_in_array('.$resolvedParams[0].', '.$resolvedParams[1].')', $expression);
     }
 }

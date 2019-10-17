@@ -92,7 +92,7 @@ class PregMatchOptimizer extends OptimizerAbstract
 
             $context->codePrinter->output(
                 sprintf(
-                    'zephir_preg_match(%s, %s, %s, %s, %d, %s, %s TSRMLS_CC);',
+                    'zephir_preg_match(%s, %s, %s, %s, %d, %s, %s);',
                     $symbol,
                     $resolvedParams[0],
                     $resolvedParams[1],

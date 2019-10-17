@@ -63,7 +63,7 @@ class PrepareVirtualPathOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_prepare_virtual_path('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_prepare_virtual_path('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

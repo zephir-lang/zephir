@@ -58,14 +58,14 @@ class MicrotimeOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime('.$symbol.', NULL TSRMLS_CC);');
+            $context->codePrinter->output('zephir_microtime('.$symbol.', NULL);');
         } else {
             $symbolVariable->setDynamicTypes('double');
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_microtime('.$symbol.', '.$resolvedParams[0].');');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

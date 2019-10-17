@@ -63,11 +63,11 @@ class FilePutContentsOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_file_put_contents('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_file_put_contents('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {
-            $context->codePrinter->output('zephir_file_put_contents(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_file_put_contents(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].');');
         }
 
         return new CompiledExpression('null', 'null', $expression);

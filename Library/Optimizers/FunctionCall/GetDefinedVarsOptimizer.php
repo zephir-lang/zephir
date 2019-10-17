@@ -48,7 +48,7 @@ class GetDefinedVarsOptimizer extends OptimizerAbstract
         if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_get_defined_vars('.$symbol.');');
         } else {
-            $context->codePrinter->output('zephir_get_defined_vars('.$symbol.' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_get_defined_vars('.$symbol.');');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
