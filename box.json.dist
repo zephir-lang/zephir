@@ -47,15 +47,23 @@
                 "README",
                 "Tests",
                 "behat",
+                "ext",
                 "bin",
                 "build",
                 "doc",
                 "docs",
+                "doc-template",
                 "fixtures",
                 "test",
-                "tests"
+                "tests",
+                "test_old",
+                "vendor-bin"
             ]
         }
+    ],
+    "compression": "GZ",
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\Php"
     ],
     "replacement-sigil": "$",
     "git-commit-short": "Id"
