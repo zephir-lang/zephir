@@ -474,10 +474,10 @@ class ForStatement extends StatementAbstract
          */
         ++$compilationContext->insideCycle;
 
-        $codePrinter->output($iteratorVariable->getName().' = zephir_get_iterator('.$compilationContext->backend->getVariableCode($exprVariable).' TSRMLS_CC);');
+        $codePrinter->output($iteratorVariable->getName().' = zephir_get_iterator('.$compilationContext->backend->getVariableCode($exprVariable).');');
 
-        $codePrinter->output($iteratorVariable->getName().'->funcs->rewind('.$iteratorVariable->getName().' TSRMLS_CC);');
-        $codePrinter->output('for (;'.$iteratorVariable->getName().'->funcs->valid('.$iteratorVariable->getName().' TSRMLS_CC) == SUCCESS && !EG(exception); '.$iteratorVariable->getName().'->funcs->move_forward('.$iteratorVariable->getName().' TSRMLS_CC)) {');
+        $codePrinter->output($iteratorVariable->getName().'->funcs->rewind('.$iteratorVariable->getName().');');
+        $codePrinter->output('for (;'.$iteratorVariable->getName().'->funcs->valid('.$iteratorVariable->getName().') == SUCCESS && !EG(exception); '.$iteratorVariable->getName().'->funcs->move_forward('.$iteratorVariable->getName().' TSRMLS_CC)) {');
 
         if (isset($this->statement['key'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
