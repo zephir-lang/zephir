@@ -23,7 +23,7 @@ env:
   global:
     - BUILD_PHAR=1
     - BUILD_TYPE=regular
-    - BOX_VERSION=3.3.1
+    - BOX_VERSION=3.8.1
     - REPORT_COVERAGE=1
     - ZEPHIR_PARSER_VERSION="v1.3.2"
     - PATH="${HOME}/bin:${PATH}"
