@@ -76,42 +76,6 @@ class MethodDocBlockTest extends TestCase
         return new MethodDocBlock($classMethod, $aliasManager);
     }
 
-    /** @test */
-    public function methodWithoutInputArgs()
-    {
-        $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-2.php';
-        $testDocBlock = $this->prepareMethod($classDefinition);
-        $expected = <<<DOC
-    /**
-     * Zephir
-     */
-DOC;
-
-        $this->assertSame($expected, $testDocBlock->processMethodDocBlock());
-    }
-
-    /** @test */
-    public function methodWithInputArgs()
-    {
-        $classDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-1.php';
-
-        $testDocBlock = $this->prepareMethod($classDefinition);
-        $expected = <<<DOC
-    /**
-     * Test function scalarInputArgs(int val1, bool val2, string val3, double val4)
-     * with return Integer
-     *
-     * @return int
-     * @param int \$val1
-     * @param bool \$val2
-     * @param string \$val3
-     * @param double \$val4
-     */
-DOC;
-
-        $this->assertSame($expected, $testDocBlock->processMethodDocBlock());
-    }
-
     public function getDocBlock()
     {
         return [
@@ -173,48 +137,20 @@ DOC;
         $this->assertSame($expected, $this->prepareMethod($baseDefinition)->processMethodDocBlock());
     }
 
-    /** @-test */
-    public function methodWithFullDocBlock()
-    {
-        $docblock = "Test for full filled Method\n".
-                    "with non-ordered params\n".
-                    "@param int \$val1\n".
-                    "@param array \$val3 \n".
-                    "@param string \$val2 - with additional descrription\n".
-                    "@throws \Zephir\Compiler\CompilerException \n";
-
-        $testDefinition = require_once ZEPHIRPATH.'/unit-tests/fixtures/class-definition-3.php';
-        $testDefinition['method']['docblock'] = $docblock;
-
-        $expected = <<<DOC
-    /**
-     * Test for full filled Method
-     * with non-ordered params
-     *
-     * @param int \$val1
-     * @param array \$val3
-     * @param string \$val2 - with additional descrription
-     * @throws \Zephir\Compiler\CompilerException
-     */
-DOC;
-
-        $this->assertSame($expected, $this->prepareMethod($testDefinition)->processMethodDocBlock());
-    }
-
     public function docBlockProvider(): array
     {
         return [
-            '@var' => [
+            'with @var' => [
                 '@var mixed',
                 '@var mixed',
             ],
-            '@return' => [
+            'with @return' => [
                 '@return int',
                 '@return int',
             ],
             'with all types' => [
-                "@var string\n * @param array data\n * @return boolean",
-                "@var string\n * @param array \$data\n * @return boolean",
+                "@var string\n * @param array data\n * @throws \Exception\n * @return boolean",
+                "@var string\n * @param array \$data\n * @throws \Exception\n * @return boolean",
             ],
             'one Integer param' => [
                 '@param int magicNumber',
@@ -231,6 +167,10 @@ DOC;
             'with Description in DocBlock' => [
                 "Test description\n * @param int | double magicNumber",
                 "Test description\n *\n * @param int | double \$magicNumber",
+            ],
+            'without any params' => [
+                'Zephir',
+                'Zephir',
             ],
             'with many params and Exception' => [
                 // Zep
@@ -249,6 +189,26 @@ DOC;
                 " * @param array \$val3\n".
                 " * @param string \$val2 - with additional descrription\n".
                 " * @throws \Zephir\Compiler\CompilerException",
+            ],
+            'with function scalar input args' => [
+                // Zep
+                "Test function scalarInputArgs(int val1, bool val2, string val3, double val4)\n".
+                "* with return Integer\n".
+                "*\n".
+                "* @return int\n".
+                "* @param int \$val1\n".
+                "* @param bool \$val2\n".
+                "* @param string \$val3\n".
+                '* @param double $val4',
+                // Php
+                "Test function scalarInputArgs(int val1, bool val2, string val3, double val4)\n".
+                " * with return Integer\n".
+                " *\n".
+                " * @return int\n".
+                " * @param int \$val1\n".
+                " * @param bool \$val2\n".
+                " * @param string \$val3\n".
+                ' * @param double $val4',
             ],
         ];
     }
