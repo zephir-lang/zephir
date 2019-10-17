@@ -222,7 +222,7 @@ void zep_Test_McallInternal_other(int ht, zval *return_value, zval *this_ptr, in
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_DOUBLE(zephir_safe_div_long_long(a, b TSRMLS_CC));
+	RETURN_DOUBLE(zephir_safe_div_long_long(a, b));
 
 }
 

@@ -513,7 +513,7 @@ PHP_METHOD(Test_Scall, interpolatedStaticReturn) {
 	ZVAL_STRING(&className, "Test\\Scall");
 	ZEPHIR_INIT_VAR(&methodName);
 	ZVAL_STRING(&methodName, "testMethodStatic");
-	_0 = zephir_fetch_class(&className TSRMLS_CC);
+	_0 = zephir_fetch_class(&className);
 	ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(_0, methodName, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -539,7 +539,7 @@ PHP_METHOD(Test_Scall, interpolatedStaticEcho) {
 	ZVAL_STRING(&className, "Test\\Scall");
 	ZEPHIR_INIT_VAR(&methodName);
 	ZVAL_STRING(&methodName, "testMethodStatic");
-	_1 = zephir_fetch_class(&className TSRMLS_CC);
+	_1 = zephir_fetch_class(&className);
 	ZEPHIR_CALL_CE_STATIC_ZVAL(&_0, _1, methodName, NULL, 0);
 	zephir_check_call_status();
 	zend_print_zval(&_0, 0);

@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_Param) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, Param, test, oo_param, NULL, 0);
 
-	zend_declare_property_null(test_oo_param_ce, SL("value"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_oo_param_ce, SL("value"), ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
 

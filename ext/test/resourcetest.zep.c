@@ -87,7 +87,7 @@ PHP_METHOD(Test_ResourceTest, testTypeOffResource) {
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_gettype(&_0, &a TSRMLS_CC);
+	zephir_gettype(&_0, &a);
 	RETURN_CCTOR(&_0);
 
 }

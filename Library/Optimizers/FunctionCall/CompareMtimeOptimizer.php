@@ -52,6 +52,6 @@ class CompareMtimeOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_compare_mtime('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_compare_mtime('.$resolvedParams[0].', '.$resolvedParams[1].')', $expression);
     }
 }

@@ -470,7 +470,7 @@ class BitwiseBaseOperator extends BaseOperator
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         $expectedSymbol = $compilationContext->backend->getVariableCode($expected);
-                                        $compilationContext->codePrinter->output($this->zvalOperator.'('.$expectedSymbol.', '.$op1.', '.$op2.' TSRMLS_CC);');
+                                        $compilationContext->codePrinter->output($this->zvalOperator.'('.$expectedSymbol.', '.$op1.', '.$op2.');');
 
                                         if ($variableLeft->isTemporal()) {
                                             $variableLeft->setIdle(true);

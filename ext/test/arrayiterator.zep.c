@@ -21,11 +21,11 @@ ZEPHIR_INIT_CLASS(Test_ArrayIterator) {
 
 	ZEPHIR_REGISTER_CLASS(Test, ArrayIterator, test, arrayiterator, test_arrayiterator_method_entry, 0);
 
-	zend_declare_property_long(test_arrayiterator_ce, SL("position"), 0, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_long(test_arrayiterator_ce, SL("position"), 0, ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_arrayiterator_ce, SL("test"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_arrayiterator_ce, SL("test"), ZEND_ACC_PROTECTED);
 
-	zend_class_implements(test_arrayiterator_ce TSRMLS_CC, 1, zend_ce_iterator);
+	zend_class_implements(test_arrayiterator_ce, 1, zend_ce_iterator);
 	return SUCCESS;
 
 }
@@ -44,7 +44,7 @@ PHP_METHOD(Test_ArrayIterator, __construct) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "one");
 	zephir_array_fast_append(&_0, &_1);
@@ -91,7 +91,7 @@ PHP_METHOD(Test_ArrayIterator, current) {
 	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_OBS_VAR(&_2);
 	zephir_read_property(&_2, this_ptr, SL("position"), PH_NOISY_CC);
-	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "test/arrayiterator.zep", 22 TSRMLS_CC);
+	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "test/arrayiterator.zep", 22);
 	RETURN_CTOR(&_1);
 
 }
@@ -110,7 +110,7 @@ PHP_METHOD(Test_ArrayIterator, next) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("position") TSRMLS_CC));
+	RETURN_ON_FAILURE(zephir_property_incr(this_ptr, SL("position")));
 
 }
 

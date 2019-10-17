@@ -239,7 +239,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getTrimmed) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, " hello \t\n");
-	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_CCTOR(&_0);
 
 }
@@ -261,7 +261,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getTrimmed1) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_CCTOR(&_0);
 
 }
@@ -283,7 +283,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getLeftTrimmed) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_LEFT TSRMLS_CC);
+	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_LEFT);
 	RETURN_CCTOR(&_0);
 
 }
@@ -305,7 +305,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getRightTrimmed) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_RIGHT TSRMLS_CC);
+	zephir_fast_trim(&_0, &str, NULL , ZEPHIR_TRIM_RIGHT);
 	RETURN_CCTOR(&_0);
 
 }

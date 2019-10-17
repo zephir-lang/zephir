@@ -178,23 +178,15 @@ class ObjectProperty
                 break;
 
             case 'string':
-                if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                    $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-                } else {
-                    $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, false);
-                }
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, false);
 
                 switch ($statement['operator']) {
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&'.$tempVariable->getName().', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'")-1 TSRMLS_CC);');
+                        $codePrinter->output('zephir_concat_self_str(&'.$tempVariable->getName().', "'.$resolvedExpr->getCode().'", sizeof("'.$resolvedExpr->getCode().'") - 1);');
                         break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
-                        if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                            $tempVariable->initNonReferenced($compilationContext);
-                        } else {
-                            $tempVariable->initVariant($compilationContext);
-                        }
+                        $tempVariable->initVariant($compilationContext);
                         $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
                         break;
                 }

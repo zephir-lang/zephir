@@ -23,7 +23,7 @@ ZEPHIR_INIT_CLASS(Test_Typeoff) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Typeoff, test, typeoff, test_typeoff_method_entry, 0);
 
-	zend_declare_property_null(test_typeoff_ce, SL("property"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_typeoff_ce, SL("property"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -207,7 +207,7 @@ PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_gettype(&_0, u TSRMLS_CC);
+	zephir_gettype(&_0, u);
 	RETURN_CCTOR(&_0);
 
 }
@@ -223,7 +223,7 @@ PHP_METHOD(Test_Typeoff, testCallableTypeOf) {
 
 
 
-	RETURN_BOOL(zephir_is_callable(cb TSRMLS_CC) == 1);
+	RETURN_BOOL(zephir_is_callable(cb) == 1);
 
 }
 

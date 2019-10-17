@@ -69,7 +69,7 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
         $call->addCallStatusFlag($context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC);');
+        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
 
         $call->addCallStatusOrJump($context);
 

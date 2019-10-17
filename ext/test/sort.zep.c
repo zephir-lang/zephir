@@ -55,12 +55,12 @@ PHP_METHOD(Test_Sort, quick) {
 	zephir_get_arrval(&arr, arr_param);
 
 
-	length = zephir_fast_count_int(&arr TSRMLS_CC);
+	length = zephir_fast_count_int(&arr);
 	if (length <= 1) {
 		RETURN_CTOR(&arr);
 	}
 	ZEPHIR_OBS_VAR(&_0);
-	zephir_array_fetch_long(&_0, &arr, 0, PH_NOISY, "test/sort.zep", 18 TSRMLS_CC);
+	zephir_array_fetch_long(&_0, &arr, 0, PH_NOISY, "test/sort.zep", 18);
 	pivot = zephir_get_intval(&_0);
 	ZEPHIR_INIT_VAR(&left);
 	array_init(&left);
@@ -81,7 +81,7 @@ PHP_METHOD(Test_Sort, quick) {
 			}
 			i = _2;
 			ZEPHIR_OBS_NVAR(&_4$$4);
-			zephir_array_fetch_long(&_4$$4, &arr, i, PH_NOISY, "test/sort.zep", 23 TSRMLS_CC);
+			zephir_array_fetch_long(&_4$$4, &arr, i, PH_NOISY, "test/sort.zep", 23);
 			item = zephir_get_intval(&_4$$4);
 			if (item < pivot) {
 				ZEPHIR_INIT_NVAR(&_5$$5);
@@ -97,7 +97,7 @@ PHP_METHOD(Test_Sort, quick) {
 	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 87, &left);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_9);
-	zephir_create_array(&_9, 1, 0 TSRMLS_CC);
+	zephir_create_array(&_9, 1, 0);
 	ZEPHIR_INIT_VAR(&_10);
 	ZVAL_LONG(&_10, pivot);
 	zephir_array_fast_append(&_9, &_10);

@@ -74,7 +74,7 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		ZVAL_STRINGL(&_3$$3, &ch, 1);
 		zephir_string_to_hex(&_2$$3, &_3$$3);
-		zephir_concat_self(&o, &_2$$3 TSRMLS_CC);
+		zephir_concat_self(&o, &_2$$3);
 	}
 	RETURN_CCTOR(&o);
 

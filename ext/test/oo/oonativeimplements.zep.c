@@ -25,12 +25,12 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoNativeImplements) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoNativeImplements, test, oo_oonativeimplements, test_oo_oonativeimplements_method_entry, 0);
 
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_Countable);
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, zend_ce_iterator);
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_OuterIterator);
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_RecursiveIterator);
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_SeekableIterator);
-	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, zend_ce_aggregate);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, spl_ce_Countable);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, zend_ce_iterator);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, spl_ce_OuterIterator);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, spl_ce_RecursiveIterator);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, spl_ce_SeekableIterator);
+	zend_class_implements(test_oo_oonativeimplements_ce, 1, zend_ce_aggregate);
 	return SUCCESS;
 
 }

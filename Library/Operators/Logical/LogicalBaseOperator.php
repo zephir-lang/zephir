@@ -340,9 +340,9 @@ class LogicalBaseOperator extends BaseOperator
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         if ($expected->isLocalOnly()) {
-                                            $compilationContext->codePrinter->output('add_function(&'.$expected->getName().', '.$op1.', '.$op2.' TSRMLS_CC);');
+                                            $compilationContext->codePrinter->output('add_function(&'.$expected->getName().', '.$op1.', '.$op2.');');
                                         } else {
-                                            $compilationContext->codePrinter->output('add_function('.$expected->getName().', '.$op1.', '.$op2.' TSRMLS_CC);');
+                                            $compilationContext->codePrinter->output('add_function('.$expected->getName().', '.$op1.', '.$op2.');');
                                         }
 
                                         return new CompiledExpression('variable', $expected->getName(), $expression);

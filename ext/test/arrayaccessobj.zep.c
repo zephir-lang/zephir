@@ -21,9 +21,9 @@ ZEPHIR_INIT_CLASS(Test_ArrayAccessObj) {
 
 	ZEPHIR_REGISTER_CLASS(Test, ArrayAccessObj, test, arrayaccessobj, test_arrayaccessobj_method_entry, 0);
 
-	zend_declare_property_null(test_arrayaccessobj_ce, SL("test"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_arrayaccessobj_ce, SL("test"), ZEND_ACC_PROTECTED);
 
-	zend_class_implements(test_arrayaccessobj_ce TSRMLS_CC, 1, zend_ce_arrayaccess);
+	zend_class_implements(test_arrayaccessobj_ce, 1, zend_ce_arrayaccess);
 	return SUCCESS;
 
 }
@@ -39,7 +39,7 @@ PHP_METHOD(Test_ArrayAccessObj, __construct) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	add_assoc_long_ex(&_0, SL("one"), 1);
 	add_assoc_long_ex(&_0, SL("two"), 2);
 	add_assoc_long_ex(&_0, SL("three"), 3);
@@ -122,7 +122,7 @@ PHP_METHOD(Test_ArrayAccessObj, offsetGet) {
 	zephir_read_property(&_1, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset(&_1, offset)) {
 		zephir_read_property(&_2, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
-		zephir_array_fetch(&_0, &_2, offset, PH_NOISY, "test/arrayaccessobj.zep", 33 TSRMLS_CC);
+		zephir_array_fetch(&_0, &_2, offset, PH_NOISY, "test/arrayaccessobj.zep", 33);
 	} else {
 		ZVAL_NULL(&_0);
 	}

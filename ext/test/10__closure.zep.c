@@ -36,7 +36,7 @@ PHP_METHOD(test_10__closure, __invoke) {
 
 
 
-	mul_function(return_value, x, x TSRMLS_CC);
+	mul_function(return_value, x, x);
 	return;
 
 }

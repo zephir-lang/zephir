@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Test_Requires) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Requires, test, requires, test_requires_method_entry, 0);
 
-	zend_declare_property_null(test_requires_ce, SL("content"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_requires_ce, SL("content"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -46,7 +46,7 @@ PHP_METHOD(Test_Requires, requireExternal1) {
 
 
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
-	if (zephir_require_zval_ret(&_0, path TSRMLS_CC) == FAILURE) {
+	if (zephir_require_zval_ret(&_0, path) == FAILURE) {
 		RETURN_MM_NULL();
 	}
 	RETURN_CCTOR(&_0);
@@ -64,7 +64,7 @@ PHP_METHOD(Test_Requires, requireExternal2) {
 
 
 
-	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
+	if (zephir_require_zval(path) == FAILURE) {
 		RETURN_NULL();
 	}
 	RETURN_BOOL(1);
@@ -92,7 +92,7 @@ PHP_METHOD(Test_Requires, requireExternal3) {
 	
 	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, test_requires_external3_ce);
-	if (zephir_has_constructor(&external3 TSRMLS_CC)) {
+	if (zephir_has_constructor(&external3)) {
 		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -141,7 +141,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 	zephir_fetch_params(1, 2, 0, &templatePath_param, &params);
 
 	if (UNEXPECTED(Z_TYPE_P(templatePath_param) != IS_STRING && Z_TYPE_P(templatePath_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'templatePath' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'templatePath' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(templatePath_param) == IS_STRING)) {
@@ -169,7 +169,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 				ZEPHIR_INIT_NVAR(&value);
 				ZVAL_COPY(&value, _1$$3);
 				ZEPHIR_CPY_WRT(&_5$$4, &value);
-				if (zephir_set_symbol(&key, &_5$$4 TSRMLS_CC) == FAILURE) {
+				if (zephir_set_symbol(&key, &_5$$4) == FAILURE) {
 					return;
 				}
 			} ZEND_HASH_FOREACH_END();
@@ -187,7 +187,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 				ZEPHIR_CALL_METHOD(&value, params, "current", NULL, 0);
 				zephir_check_call_status();
 					ZEPHIR_CPY_WRT(&_6$$5, &value);
-					if (zephir_set_symbol(&key, &_6$$5 TSRMLS_CC) == FAILURE) {
+					if (zephir_set_symbol(&key, &_6$$5) == FAILURE) {
 						return;
 					}
 				ZEPHIR_CALL_METHOD(NULL, params, "next", NULL, 0);
@@ -198,7 +198,7 @@ PHP_METHOD(Test_Requires, renderTemplate) {
 		ZEPHIR_INIT_NVAR(&key);
 	}
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_7);
-	if (zephir_require_zval_ret(&_7, &templatePath TSRMLS_CC) == FAILURE) {
+	if (zephir_require_zval_ret(&_7, &templatePath) == FAILURE) {
 		RETURN_MM_NULL();
 	}
 	RETURN_CCTOR(&_7);

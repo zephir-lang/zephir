@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_MethodAbstract) {
 
 	ZEPHIR_REGISTER_CLASS(Test, MethodAbstract, test, methodabstract, test_methodabstract_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
-	zend_class_implements(test_methodabstract_ce TSRMLS_CC, 1, test_methodinterface_ce);
+	zend_class_implements(test_methodabstract_ce, 1, test_methodinterface_ce);
 	return SUCCESS;
 
 }

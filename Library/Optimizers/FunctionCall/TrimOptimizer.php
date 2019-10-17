@@ -74,7 +74,7 @@ class TrimOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_trim('.$symbol.', '.$resolvedParams[0].', '.$charlist.', '.static::$TRIM_WHERE.' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_trim('.$symbol.', '.$resolvedParams[0].', '.$charlist.', '.static::$TRIM_WHERE.');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

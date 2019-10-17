@@ -24,11 +24,11 @@ ZEPHIR_INIT_CLASS(Test_Oo_PropertyAccess) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, PropertyAccess, test, oo_propertyaccess, test_oo_propertyaccess_method_entry, 0);
 
-	zend_declare_property_null(test_oo_propertyaccess_ce, SL("a"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_propertyaccess_ce, SL("a"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_oo_propertyaccess_ce, SL("b"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_oo_propertyaccess_ce, SL("b"), ZEND_ACC_PROTECTED);
 
-	zend_declare_property_null(test_oo_propertyaccess_ce, SL("privateVariable"), ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_null(test_oo_propertyaccess_ce, SL("privateVariable"), ZEND_ACC_PRIVATE);
 
 	return SUCCESS;
 
@@ -60,7 +60,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZEPHIR_INIT_VAR(&test);
 	object_init(&test);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 5, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 5, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "1");
 	zephir_array_fast_append(&_0, &_1);
@@ -78,16 +78,16 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(&test, SL("test"), &_0);
 	zephir_read_property(&_2, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 21 TSRMLS_CC);
+	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 21);
 	zephir_update_property_zval(&test, SL("test2"), &_3);
 	zephir_read_property(&_4, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 22 TSRMLS_CC);
+	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 22);
 	zephir_update_property_zval(&test, SL("test3"), &_5);
 	ZEPHIR_INIT_VAR(&_6);
-	zephir_create_array(&_6, 4, 0 TSRMLS_CC);
+	zephir_create_array(&_6, 4, 0);
 	zephir_read_property(&_7, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_OBS_VAR(&_8);
-	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "test/oo/propertyaccess.zep", 23 TSRMLS_CC);
+	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "test/oo/propertyaccess.zep", 23);
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);

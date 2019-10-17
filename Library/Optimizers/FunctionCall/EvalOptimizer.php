@@ -69,7 +69,7 @@ class EvalOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            sprintf('zephir_eval_php(%s, %s, "%s" TSRMLS_CC);', $resolvedParams[0], $symbol, $evalContext)
+            sprintf('zephir_eval_php(%s, %s, "%s");', $resolvedParams[0], $symbol, $evalContext)
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

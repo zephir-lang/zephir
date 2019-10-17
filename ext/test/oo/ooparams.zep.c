@@ -41,7 +41,7 @@ PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 	ZEPHIR_MM_GROW();
 
 	object_init_ex(return_value, test_oo_ooparams_ce);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -59,7 +59,7 @@ PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
 	ZEPHIR_MM_GROW();
 
 	object_init_ex(return_value, test_oo_oodynamica_ce);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -163,7 +163,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 	zephir_fetch_params_without_memory_grow(1, 0, &age_param);
 
 	if (UNEXPECTED(Z_TYPE_P(age_param) != IS_LONG)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be of the type int"));
 		RETURN_NULL();
 	}
 	age = Z_LVAL_P(age_param);
@@ -183,7 +183,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be of the type double"));
 		RETURN_NULL();
 	}
 	average = Z_DVAL_P(average_param);
@@ -224,7 +224,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	zephir_fetch_params(1, 1, 0, &name_param);
 
 	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string"));
 		RETURN_MM_NULL();
 	}
 	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {

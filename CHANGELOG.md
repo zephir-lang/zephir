@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Removed
-- Remove `--vernum` option from the help for a regular command
+- Removed `--vernum` option from the help for regular commands
+- Removed `void` from the return type hint in the generated stubs
+  [#1977](https://github.com/phalcon/zephir/issues/1977)
+- Remove no longer supported TSRMLS_CC usage
+  [#1865](https://github.com/phalcon/zephir/issues/1865)
 
 ### Changed
-- Disable PHP warnings for PHP >= 7.3.0 to be able correct work with lowest versions of dependencies
+- Disabled PHP warnings for PHP >= 7.3.0 to be able correct work with lowest versions of dependencies
   [zendframework/zend-code#160](https://github.com/zendframework/zend-code/issues/160)
+- Introduced support of multiline `@param` body for generated stubs
+  [#1968](https://github.com/phalcon/zephir/issues/1968)
 
 ## [0.12.9] - 2019-10-14
 ### Added
@@ -32,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Print warning during the code generation if the `timecop` extension was detected
   [#1950](https://github.com/phalcon/zephir/issues/1950)
-- Improved error handling to not print stack trace on PHP error `ZEPHIR_DEBUG` is not set
+- Improved error handling to not print PHP stack traces if `ZEPHIR_DEBUG` is not set
 
 ### Removed
 - Removed no longer used `zephir_dtor` macro

@@ -57,6 +57,6 @@ class ClassExistsOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/object');
 
-        return new CompiledExpression('bool', 'zephir_class_exists('.$resolvedParams[0].', '.$autoload.' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_class_exists('.$resolvedParams[0].', '.$autoload.')', $expression);
     }
 }

@@ -44,6 +44,6 @@ class FeofOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_feof('.$resolvedParams[0].' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_feof('.$resolvedParams[0].')', $expression);
     }
 }

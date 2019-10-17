@@ -28,12 +28,12 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPropertyArray) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a public property with an initial array value
 	 */
-	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 
@@ -50,7 +50,7 @@ void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D)
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 4, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);

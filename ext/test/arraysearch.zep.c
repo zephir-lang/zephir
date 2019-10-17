@@ -75,7 +75,7 @@ PHP_METHOD(Test_ArraySearch, searchUsingArrayInsideZephir) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&itoA64);
-	zephir_create_array(&itoA64, 9, 0 TSRMLS_CC);
+	zephir_create_array(&itoA64, 9, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, ".");
 	zephir_array_fast_append(&itoA64, &_0);

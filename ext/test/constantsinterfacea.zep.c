@@ -19,7 +19,7 @@ ZEPHIR_INIT_CLASS(Test_ConstantsInterfaceA) {
 
 	ZEPHIR_REGISTER_CLASS(Test, ConstantsInterfaceA, test, constantsinterfacea, test_constantsinterfacea_method_entry, 0);
 
-	zend_class_implements(test_constantsinterfacea_ce TSRMLS_CC, 1, test_testinterface_ce);
+	zend_class_implements(test_constantsinterfacea_ce, 1, test_testinterface_ce);
 	return SUCCESS;
 
 }

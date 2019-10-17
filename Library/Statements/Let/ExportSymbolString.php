@@ -62,7 +62,7 @@ class ExportSymbolString
         $letStatement->compile($compilationContext);
 
         $symbol = $compilationContext->backend->getVariableCode($variable);
-        $codePrinter->output('if (zephir_set_symbol_str(SS("'.$statement['variable'].'"), '.$symbol.' TSRMLS_CC) == FAILURE) {');
+        $codePrinter->output('if (zephir_set_symbol_str(SS("'.$statement['variable'].'"), '.$symbol.') == FAILURE) {');
         $codePrinter->output('  return;');
         $codePrinter->output('}');
     }

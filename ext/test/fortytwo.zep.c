@@ -51,9 +51,9 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&box);
-	zephir_create_array(&box, 15, 0 TSRMLS_CC);
+	zephir_create_array(&box, 15, 0);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 10);
 	zephir_array_fast_append(&_0, &_1);
@@ -65,7 +65,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 8);
 	zephir_array_fast_append(&_0, &_1);
@@ -77,7 +77,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 19);
 	zephir_array_fast_append(&_0, &_1);
@@ -89,7 +89,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 6);
 	zephir_array_fast_append(&_0, &_1);
@@ -101,7 +101,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 20);
 	zephir_array_fast_append(&_0, &_1);
@@ -113,7 +113,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 9);
 	zephir_array_fast_append(&_0, &_1);
@@ -125,7 +125,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 22);
 	zephir_array_fast_append(&_0, &_1);
@@ -137,7 +137,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 18);
 	zephir_array_fast_append(&_0, &_1);
@@ -149,7 +149,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 5);
 	zephir_array_fast_append(&_0, &_1);
@@ -161,7 +161,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 16);
 	zephir_array_fast_append(&_0, &_1);
@@ -173,7 +173,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 23);
 	zephir_array_fast_append(&_0, &_1);
@@ -185,7 +185,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 12);
 	zephir_array_fast_append(&_0, &_1);
@@ -197,7 +197,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 24);
 	zephir_array_fast_append(&_0, &_1);
@@ -209,7 +209,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 11);
 	zephir_array_fast_append(&_0, &_1);
@@ -221,7 +221,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_fast_append(&box, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 3, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 11);
 	zephir_array_fast_append(&_0, &_1);
@@ -253,7 +253,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 						_4$$3 = 1;
 					}
 					i = _5$$3;
-					zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26 TSRMLS_CC);
+					zephir_array_fetch_long(&_7$$4, &side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26);
 					j += zephir_get_numberval(&_7$$4);
 				}
 			}
@@ -288,7 +288,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 							_8$$6 = 1;
 						}
 						i = _9$$6;
-						zephir_array_fetch_long(&_11$$7, &side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26 TSRMLS_CC);
+						zephir_array_fetch_long(&_11$$7, &side, i, PH_NOISY | PH_READONLY, "test/fortytwo.zep", 26);
 						j += zephir_get_numberval(&_11$$7);
 					}
 				}

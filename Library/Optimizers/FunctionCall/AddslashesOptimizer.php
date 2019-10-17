@@ -65,7 +65,7 @@ class AddslashesOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_addslashes('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_addslashes('.$symbol.', '.$resolvedParams[0].');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

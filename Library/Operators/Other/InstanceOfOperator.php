@@ -85,7 +85,7 @@ class InstanceOfOperator extends BaseOperator
                             if ('Traversable' == $className) {
                                 $symbol = $context->backend->getVariableCode($symbolVariable);
 
-                                return new CompiledExpression('bool', 'zephir_zval_is_traversable('.$symbol.' TSRMLS_CC)', $expression);
+                                return new CompiledExpression('bool', 'zephir_zval_is_traversable('.$symbol.')', $expression);
                             }
 
                             if ($context->compiler->isClass($className)) {
@@ -130,10 +130,10 @@ class InstanceOfOperator extends BaseOperator
         $context->headersManager->add('kernel/object');
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($code)) {
-            return new CompiledExpression('bool', 'zephir_is_instance_of('.$symbol.', '.$code.' TSRMLS_CC)', $expression);
+            return new CompiledExpression('bool', 'zephir_is_instance_of('.$symbol.', '.$code.')', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.')', $expression);
     }
 
     private function prepareBackendSpecificCode($variable, CompilationContext $context)

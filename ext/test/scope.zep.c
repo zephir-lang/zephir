@@ -81,7 +81,7 @@ PHP_METHOD(Test_Scope, test1) {
 	if (r == 1) {
 		ZEPHIR_INIT_VAR(&k$$3);
 		ZVAL_STRING(&k$$3, "test");
-		zephir_concat_self(&ret, &k$$3 TSRMLS_CC);
+		zephir_concat_self(&ret, &k$$3);
 	}
 	ZEPHIR_CONCAT_VV(return_value, &ret, &k);
 	RETURN_MM();
@@ -130,7 +130,7 @@ PHP_METHOD(Test_Scope, test2) {
 			ZEPHIR_CPY_WRT(&k, &_4$$3);
 		}
 	}
-	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	zephir_create_array(return_value, 2, 0);
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_LONG(&_5, p);
 	zephir_array_fast_append(return_value, &_5);
@@ -173,7 +173,7 @@ PHP_METHOD(Test_Scope, test3) {
 			ZVAL_LONG(&c, _1);
 			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 86, &c);
 			zephir_check_call_status();
-			zephir_concat_self(&k, &str$$3 TSRMLS_CC);
+			zephir_concat_self(&k, &str$$3);
 		}
 	}
 	RETURN_CCTOR(&k);

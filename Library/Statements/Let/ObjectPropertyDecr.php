@@ -100,6 +100,6 @@ class ObjectPropertyDecr
         }
 
         $compilationContext->headersManager->add('kernel/object');
-        $compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_decr('.$symbolVariable->getName().', SL("'.$property.'") TSRMLS_CC));');
+        $compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_decr('.$symbolVariable->getName().', SL("'.$property.'")));');
     }
 }

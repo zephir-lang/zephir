@@ -47,6 +47,6 @@ class FileExistsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', '(zephir_file_exists('.$resolvedParams[0].' TSRMLS_CC) == SUCCESS)', $expression);
+        return new CompiledExpression('bool', '(zephir_file_exists('.$resolvedParams[0].') == SUCCESS)', $expression);
     }
 }

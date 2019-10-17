@@ -23,39 +23,39 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticProtectedProperties) {
 	/**
 	 * This is a protected property with no initial value
 	 */
-	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someNull"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someNull"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with initial null value
 	 */
-	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someNullInitial"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someNullInitial"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with initial boolean false
 	 */
-	zend_declare_property_bool(test_properties_staticprotectedproperties_ce, SL("someFalse"), 0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_bool(test_properties_staticprotectedproperties_ce, SL("someFalse"), 0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with initial boolean true
 	 */
-	zend_declare_property_bool(test_properties_staticprotectedproperties_ce, SL("someTrue"), 1, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_bool(test_properties_staticprotectedproperties_ce, SL("someTrue"), 1, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with an initial integer value
 	 */
-	zend_declare_property_long(test_properties_staticprotectedproperties_ce, SL("someInteger"), 10, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_long(test_properties_staticprotectedproperties_ce, SL("someInteger"), 10, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with an initial double value
 	 */
-	zend_declare_property_double(test_properties_staticprotectedproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_double(test_properties_staticprotectedproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	/**
 	 * This is a protected property with an initial string value
 	 */
-	zend_declare_property_string(test_properties_staticprotectedproperties_ce, SL("someString"), "test", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_string(test_properties_staticprotectedproperties_ce, SL("someString"), "test", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
-	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someVar"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_staticprotectedproperties_ce, SL("someVar"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 
