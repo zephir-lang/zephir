@@ -102,6 +102,7 @@ zend_class_entry *test_geometry_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_globals_env_ce;
 zend_class_entry *test_globals_post_ce;
+zend_class_entry *test_globals_server_ce;
 zend_class_entry *test_globals_serverrequestfactory_ce;
 zend_class_entry *test_globals_session_child_ce;
 zend_class_entry *test_instance_ce;
@@ -296,6 +297,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Globals_Env);
 	ZEPHIR_INIT(Test_Globals_Post);
+	ZEPHIR_INIT(Test_Globals_Server);
 	ZEPHIR_INIT(Test_Globals_ServerRequestFactory);
 	ZEPHIR_INIT(Test_Globals_Session_Child);
 	ZEPHIR_INIT(Test_Instance);
