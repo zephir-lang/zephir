@@ -100,8 +100,12 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
-				ZVAL_DUP(arr, gv);
-				zend_hash_update(&EG(symbol_table), str, arr);
+				if (Z_REFCOUNTED_P(gv)) {
+					ZVAL_COPY_VALUE(arr, gv);
+				} else {
+					ZVAL_DUP(arr, gv);
+					zend_hash_update(&EG(symbol_table), str, arr);
+				}
 
 				// See: https://github.com/phalcon/zephir/pull/1965#issuecomment-541299003
 				// ZVAL_COPY_VALUE(arr, gv);
