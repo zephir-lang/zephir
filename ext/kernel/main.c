@@ -107,9 +107,6 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 					zend_hash_update(&EG(symbol_table), str, arr);
 				}
 
-				// See: https://github.com/phalcon/zephir/pull/1965#issuecomment-541299003
-				// ZVAL_COPY_VALUE(arr, gv);
-
 				zend_string_release(str);
 				return SUCCESS;
 			}

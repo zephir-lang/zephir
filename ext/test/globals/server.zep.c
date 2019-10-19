@@ -26,6 +26,9 @@ ZEPHIR_INIT_CLASS(Test_Globals_Server) {
 
 }
 
+/**
+ * @see https://github.com/phalcon/zephir/issues/1961
+ */
 PHP_METHOD(Test_Globals_Server, f1) {
 
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -40,11 +43,11 @@ PHP_METHOD(Test_Globals_Server, f1) {
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
-	zephir_array_fetch_string(&_0, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 8);
+	zephir_array_fetch_string(&_0, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 10);
 	zend_print_zval(&_0, 0);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "f2", NULL, 0);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 10);
+	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 12);
 	zend_print_zval(&_1, 0);
 	ZEPHIR_MM_RESTORE();
 
@@ -60,11 +63,14 @@ PHP_METHOD(Test_Globals_Server, f2) {
 
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
-	zephir_array_fetch_string(&_0, &_SERVER, SL("SCRIPT_NAME"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 15);
+	zephir_array_fetch_string(&_0, &_SERVER, SL("SCRIPT_NAME"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 17);
 	zend_print_zval(&_0, 0);
 
 }
 
+/**
+ * @see https://github.com/phalcon/zephir/issues/1970
+ */
 PHP_METHOD(Test_Globals_Server, check) {
 
 	zval _SERVER, _0;
@@ -75,7 +81,7 @@ PHP_METHOD(Test_Globals_Server, check) {
 
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
-	zephir_array_fetch_string(&_0, &_SERVER, SL("HTTP_USER_AGENT"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 19);
+	zephir_array_fetch_string(&_0, &_SERVER, SL("HTTP_USER_AGENT"), PH_NOISY | PH_READONLY, "test/globals/server.zep", 25);
 	RETURN_CTORW(&_0);
 
 }

@@ -36,6 +36,7 @@ class ServerTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1961
      */
     public function shouldPrintPhpSelf()
@@ -52,6 +53,7 @@ class ServerTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1961
      */
     public function shouldPrintUserAgent()

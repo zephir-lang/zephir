@@ -75,7 +75,7 @@ PHP_METHOD(Test_Scope, test1) {
 
 	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
-	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 77);
+	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 85);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
@@ -171,7 +171,7 @@ PHP_METHOD(Test_Scope, test3) {
 			}
 			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
-			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 78, &c);
+			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 86, &c);
 			zephir_check_call_status();
 			zephir_concat_self(&k, &str$$3);
 		}
