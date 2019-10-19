@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed incorrect behaviour in `zephir_get_global` if `zval` reference count <= 1
+  [#1961](https://github.com/phalcon/zephir/issues/1961)
+
 ### Removed
 - Removed `--vernum` option from the help for regular commands
 - Removed `void` from the return type hint in the generated stubs
