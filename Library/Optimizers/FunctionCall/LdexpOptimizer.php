@@ -55,7 +55,7 @@ class LdexpOptimizer extends MathOptimizer
 
         return new CompiledExpression(
             'double',
-            'zephir_'.$this->getFunctionName().'('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)',
+            'zephir_'.$this->getFunctionName().'('.$resolvedParams[0].', '.$resolvedParams[1].')',
             $expression
         );
     }

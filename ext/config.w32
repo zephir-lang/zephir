@@ -22,7 +22,7 @@ if (PHP_TEST != "no") {
 	ADD_SOURCES(configure_module_dirname + "/test/bench", "foo.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/flow", "switchflow.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/globals", "env.zep.c post.zep.c serverrequestfactory.zep.c", "test");
+	ADD_SOURCES(configure_module_dirname + "/test/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/integration/psr/http/message", "messageinterfaceex.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/mcall", "caller.zep.c", "test");
 	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db/query/placeholder", "exception.zep.c", "test");

@@ -168,7 +168,7 @@ class StaticConstantAccess
 
             $compilationContext->codePrinter->output(
                 sprintf(
-                    'zephir_get_class_constant(%s, %s, SS("%s") TSRMLS_CC);',
+                    'zephir_get_class_constant(%s, %s, SS("%s"));',
                     $symbolVariable->getName(),
                     $classDefinition->getClassEntry($compilationContext),
                     $constant

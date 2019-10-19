@@ -70,7 +70,7 @@ PHP_METHOD(Test_Oo_ExtendPdoClass, __construct) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 1, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 1, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "Test\\PdoStatement");
 	zephir_array_fast_append(&_0, &_1);

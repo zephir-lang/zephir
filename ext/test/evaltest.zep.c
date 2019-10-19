@@ -41,7 +41,7 @@ PHP_METHOD(Test_EvalTest, evalCode) {
 	zephir_get_strval(&code, code_param);
 
 
-	zephir_eval_php(&code, return_value, "test/evaltest.zep:7" TSRMLS_CC);
+	zephir_eval_php(&code, return_value, "test/evaltest.zep:7");
 	RETURN_MM();
 
 }

@@ -59,14 +59,14 @@ PHP_METHOD(Test_Geometry, run) {
 		if (!(i < count)) {
 			break;
 		}
-		zephir_array_fetch_long(&_1$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_2$$3, &_1$$3, 0, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_3$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_4$$3, &_3$$3, 1, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_5$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_6$$3, &_5$$3, 2, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_7$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
-		zephir_array_fetch_long(&_8$$3, &_7$$3, 3, PH_NOISY | PH_READONLY, "test/geometry.zep", 11 TSRMLS_CC);
+		zephir_array_fetch_long(&_1$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_2$$3, &_1$$3, 0, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_3$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_4$$3, &_3$$3, 1, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_5$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_6$$3, &_5$$3, 2, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_7$$3, &list, i, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
+		zephir_array_fetch_long(&_8$$3, &_7$$3, 3, PH_NOISY | PH_READONLY, "test/geometry.zep", 11);
 		ZEPHIR_CALL_STATIC(NULL, "distancestatic", &_0, 0, &_2$$3, &_4$$3, &_6$$3, &_8$$3);
 		zephir_check_call_status();
 		i = (i + 1);
@@ -104,11 +104,11 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 			break;
 		}
 		ZEPHIR_OBS_NVAR(&item);
-		zephir_array_fetch_long(&item, &list, i, PH_NOISY, "test/geometry.zep", 22 TSRMLS_CC);
-		zephir_array_fetch_long(&_1$$3, &item, 0, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
-		zephir_array_fetch_long(&_2$$3, &item, 1, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
-		zephir_array_fetch_long(&_3$$3, &item, 2, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
-		zephir_array_fetch_long(&_4$$3, &item, 3, PH_NOISY | PH_READONLY, "test/geometry.zep", 24 TSRMLS_CC);
+		zephir_array_fetch_long(&item, &list, i, PH_NOISY, "test/geometry.zep", 22);
+		zephir_array_fetch_long(&_1$$3, &item, 0, PH_NOISY | PH_READONLY, "test/geometry.zep", 24);
+		zephir_array_fetch_long(&_2$$3, &item, 1, PH_NOISY | PH_READONLY, "test/geometry.zep", 24);
+		zephir_array_fetch_long(&_3$$3, &item, 2, PH_NOISY | PH_READONLY, "test/geometry.zep", 24);
+		zephir_array_fetch_long(&_4$$3, &item, 3, PH_NOISY | PH_READONLY, "test/geometry.zep", 24);
 		ZEPHIR_CALL_STATIC(NULL, "distancestatic", &_0, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3);
 		zephir_check_call_status();
 		i++;

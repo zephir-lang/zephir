@@ -18,6 +18,7 @@ if [ "$(command -v box 2>/dev/null || true)" = "" ]; then
   exit 1
 fi
 
+box validate
 box compile
 
 if [ ! -f "./zephir.phar" ] || [ ! -x "./zephir.phar" ]; then

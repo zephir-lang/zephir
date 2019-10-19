@@ -76,7 +76,7 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_json_decode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
         } else {
-            $context->codePrinter->output('zephir_json_decode('.$symbol.', &('.$symbol.'), '.$resolvedParams[0].', '.$options.' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_json_decode('.$symbol.', &('.$symbol.'), '.$resolvedParams[0].', '.$options.');');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

@@ -812,7 +812,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	c = 0;
 	ZEPHIR_INIT_VAR(&b);
-	zephir_create_array(&b, 4, 0 TSRMLS_CC);
+	zephir_create_array(&b, 4, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&b, &_0);
@@ -874,7 +874,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(&b);
-	zephir_create_array(&b, 4, 0 TSRMLS_CC);
+	zephir_create_array(&b, 4, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&b, &_0);
@@ -943,7 +943,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(&c);
 	array_init(&c);
 	ZEPHIR_INIT_VAR(&b);
-	zephir_create_array(&b, 4, 0 TSRMLS_CC);
+	zephir_create_array(&b, 4, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&b, &_0);
@@ -1250,7 +1250,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_concat_self_char(&b, a TSRMLS_CC);
+			zephir_concat_self_char(&b, a);
 		}
 	}
 	RETURN_CTOR(&b);
@@ -1285,7 +1285,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_concat_self_char(&b, a TSRMLS_CC);
+			zephir_concat_self_char(&b, a);
 		}
 	}
 	RETURN_CTOR(&b);
@@ -1320,7 +1320,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_concat_self_char(&b, a TSRMLS_CC);
+			zephir_concat_self_char(&b, a);
 		}
 	}
 	RETURN_CTOR(&b);
@@ -1355,7 +1355,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_concat_self_char(&b, a TSRMLS_CC);
+			zephir_concat_self_char(&b, a);
 		}
 	}
 	RETURN_CTOR(&b);
@@ -1706,7 +1706,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 			ZEPHIR_INIT_NVAR(&a);
 			ZVAL_LONG(&a, _1);
 			_3$$3 = (char) zephir_get_intval(&a);
-			zephir_concat_self_char(&b, _3$$3 TSRMLS_CC);
+			zephir_concat_self_char(&b, _3$$3);
 		}
 	}
 	RETURN_CTOR(&b);
@@ -1733,7 +1733,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "");
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 4, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 'a');
 	zephir_array_fast_append(&_0, &_1);
@@ -1752,7 +1752,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 		{
 			ZEPHIR_INIT_NVAR(&a);
 			ZVAL_COPY(&a, _2);
-			zephir_concat_self(&b, &a TSRMLS_CC);
+			zephir_concat_self(&b, &a);
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
@@ -1765,7 +1765,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 			}
 			ZEPHIR_CALL_METHOD(&a, &_0, "current", NULL, 0);
 			zephir_check_call_status();
-				zephir_concat_self(&b, &a TSRMLS_CC);
+				zephir_concat_self(&b, &a);
 			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
 			zephir_check_call_status();
 		}
@@ -1899,9 +1899,9 @@ PHP_METHOD(Test_Flow, testFor33) {
 
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
-	_0 = zephir_get_iterator(e TSRMLS_CC);
-	_0->funcs->rewind(_0 TSRMLS_CC);
-	for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
+	_0 = zephir_get_iterator(e);
+	_0->funcs->rewind(_0);
+	for (;_0->funcs->valid(_0) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0)) {
 		{
 			ZEPHIR_ITERATOR_COPY(&v, _0);
 		}
@@ -1936,9 +1936,9 @@ PHP_METHOD(Test_Flow, testFor34) {
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	if (Z_TYPE_P(e) == IS_OBJECT) {
-		_0$$3 = zephir_get_iterator(e TSRMLS_CC);
-		_0$$3->funcs->rewind(_0$$3 TSRMLS_CC);
-		for (;_0$$3->funcs->valid(_0$$3 TSRMLS_CC) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3 TSRMLS_CC)) {
+		_0$$3 = zephir_get_iterator(e);
+		_0$$3->funcs->rewind(_0$$3);
+		for (;_0$$3->funcs->valid(_0$$3) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3)) {
 			{
 				ZEPHIR_ITERATOR_COPY(&v, _0$$3);
 			}
@@ -2016,7 +2016,7 @@ PHP_METHOD(Test_Flow, testFor36Aux) {
 
 
 
-	zephir_create_array(return_value, 1, 0 TSRMLS_CC);
+	zephir_create_array(return_value, 1, 0);
 	zephir_array_fast_append(return_value, hello);
 	return;
 
@@ -2186,7 +2186,7 @@ PHP_METHOD(Test_Flow, testFor40) {
 			ZEPHIR_INIT_NVAR(&a);
 			ZVAL_LONG(&a, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
-			ZVAL_DOUBLE(&_3$$3, zephir_sqrt(&a TSRMLS_CC));
+			ZVAL_DOUBLE(&_3$$3, zephir_sqrt(&a));
 			ZEPHIR_ADD_ASSIGN(&b, &_3$$3);
 		}
 	}

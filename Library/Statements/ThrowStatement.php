@@ -127,7 +127,7 @@ class ThrowStatement extends StatementAbstract
         $line = $statement['expr']['line'];
 
         $codePrinter->output(
-            'zephir_throw_exception_debug('.$variableCode.', "'.$file.'", '.$line.' TSRMLS_CC);'
+            'zephir_throw_exception_debug('.$variableCode.', "'.$file.'", '.$line.');'
         );
 
         if (!$compilationContext->insideTryCatch) {

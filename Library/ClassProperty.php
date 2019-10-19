@@ -350,6 +350,7 @@ class ClassProperty
      * @param string             $type
      * @param $value
      *
+     * @throws Exception
      * @throws CompilerException
      */
     protected function declareProperty(CompilationContext $compilationContext, $type, $value)
@@ -363,24 +364,48 @@ class ClassProperty
         $classEntry = $compilationContext->classDefinition->getClassEntry();
 
         switch ($type) {
-            case 'long':
-            case 'int':
-                $codePrinter->output('zend_declare_property_long('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+            case Types::T_INT:
+            case Types::T_LONG:
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_long(%s, SL("%s"), %s, %s);',
+                        $classEntry,
+                        $this->getName(),
+                        $value,
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
-            case 'double':
-                $codePrinter->output('zend_declare_property_double('.$classEntry.', SL("'.$this->getName().'"), '.$value.', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+            case Types::T_DOUBLE:
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_double(%s, SL("%s"), %s, %s);',
+                        $classEntry,
+                        $this->getName(),
+                        $value,
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
-            case 'bool':
-                $codePrinter->output('zend_declare_property_bool('.$classEntry.', SL("'.$this->getName().'"), '.$this->getBooleanCode($value).', '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+            case Types::T_BOOL:
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_bool(%s, SL("%s"), %s, %s);',
+                        $classEntry,
+                        $this->getName(),
+                        $this->getBooleanCode($value),
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
             case Types::T_CHAR:
             case Types::T_STRING:
                 $codePrinter->output(
                     sprintf(
-                        'zend_declare_property_string(%s, SL("%s"), "%s", %s TSRMLS_CC);',
+                        'zend_declare_property_string(%s, SL("%s"), "%s", %s);',
                         $classEntry,
                         $this->getName(),
                         add_slashes($value),
@@ -392,7 +417,14 @@ class ClassProperty
             case 'array':
             case 'empty-array':
             case 'null':
-                $codePrinter->output('zend_declare_property_null('.$classEntry.', SL("'.$this->getName().'"), '.$this->getVisibilityAccessor().' TSRMLS_CC);');
+                $codePrinter->output(
+                    sprintf(
+                        'zend_declare_property_null(%s, SL("%s"), %s);',
+                        $classEntry,
+                        $this->getName(),
+                        $this->getVisibilityAccessor()
+                    )
+                );
                 break;
 
             default:

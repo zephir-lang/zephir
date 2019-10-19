@@ -22,7 +22,7 @@ ZEPHIR_INIT_CLASS(Test_UseTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, UseTest, test, usetest, test_usetest_method_entry, 0);
 
-	zend_class_implements(test_usetest_ce TSRMLS_CC, 1, spl_ce_Countable);
+	zend_class_implements(test_usetest_ce, 1, spl_ce_Countable);
 	return SUCCESS;
 
 }
@@ -59,7 +59,7 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
 	}
 	object_init_ex(return_value, _0);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -81,7 +81,7 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 	_0 = zephir_fetch_class_str_ex(SL("Strings"), ZEND_FETCH_CLASS_AUTO);
 	}
 	object_init_ex(return_value, _0);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -103,7 +103,7 @@ PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
 	}
 	object_init_ex(return_value, _0);
-	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}

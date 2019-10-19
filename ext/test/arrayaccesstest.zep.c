@@ -61,7 +61,7 @@ PHP_METHOD(Test_ArrayAccessTest, get) {
 	object_init_ex(&arr, test_arrayaccessobj_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "test/arrayaccesstest.zep", 18 TSRMLS_CC);
+	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "test/arrayaccesstest.zep", 18);
 	RETURN_CTOR(&_0);
 
 }

@@ -20,7 +20,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PropertyUpdate) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Properties, PropertyUpdate, test, properties_propertyupdate, test_properties_propertyupdate_method_entry, 0);
 
-	zend_declare_property_null(test_properties_propertyupdate_ce, SL("p1"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_properties_propertyupdate_ce, SL("p1"), ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
 

@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Test_Unsettest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Unsettest, test, unsettest, test_unsettest_method_entry, 0);
 
-	zend_declare_property_null(test_unsettest_ce, SL("property"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_unsettest_ce, SL("property"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -136,7 +136,7 @@ PHP_METHOD(Test_Unsettest, testUnsetProperty) {
 	zval *this_ptr = getThis();
 
 
-	zephir_unset_property(this_ptr, "property" TSRMLS_CC);
+	zephir_unset_property(this_ptr, "property");
 	RETURN_MEMBER(getThis(), "property");
 
 }
@@ -165,7 +165,7 @@ PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 12345);
 	zephir_update_property_zval(&simpleObject, SL("property3"), &_0);
-	zephir_unset_property(&simpleObject, "property2" TSRMLS_CC);
+	zephir_unset_property(&simpleObject, "property2");
 	RETURN_CCTOR(&simpleObject);
 
 }

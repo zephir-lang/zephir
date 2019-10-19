@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Test_Requires_External3) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Requires, External3, test, requires_external3, test_requires_external3_method_entry, 0);
 
-	zend_declare_property_null(test_requires_external3_ce, SL("someVariable"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_requires_external3_ce, SL("someVariable"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Requires_External3, req) {
 
 	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 79);
 	zephir_check_call_status();
-	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
+	if (zephir_require_zval(path) == FAILURE) {
 		RETURN_MM_NULL();
 	}
 	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 80);

@@ -91,7 +91,7 @@ PHP_METHOD(Test_Strings, testTrim) {
 
 
 
-	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_BOTH);
 	return;
 
 }
@@ -107,7 +107,7 @@ PHP_METHOD(Test_Strings, testRtrim) {
 
 
 
-	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_RIGHT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_RIGHT);
 	return;
 
 }
@@ -123,7 +123,7 @@ PHP_METHOD(Test_Strings, testLtrim) {
 
 
 
-	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_LEFT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_LEFT);
 	return;
 
 }
@@ -140,7 +140,7 @@ PHP_METHOD(Test_Strings, testTrim2Params) {
 
 
 
-	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_BOTH);
 	return;
 
 }
@@ -157,7 +157,7 @@ PHP_METHOD(Test_Strings, testRtrim2Params) {
 
 
 
-	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_RIGHT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_RIGHT);
 	return;
 
 }
@@ -174,7 +174,7 @@ PHP_METHOD(Test_Strings, testLtrim2Params) {
 
 
 
-	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_LEFT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_LEFT);
 	return;
 
 }
@@ -191,7 +191,7 @@ PHP_METHOD(Test_Strings, testImplode) {
 
 
 
-	zephir_fast_join(return_value, glue, pieces TSRMLS_CC);
+	zephir_fast_join(return_value, glue, pieces);
 	return;
 
 }
@@ -246,7 +246,7 @@ PHP_METHOD(Test_Strings, testExplode) {
 
 
 
-	zephir_fast_explode(return_value, delimiter, str, LONG_MAX TSRMLS_CC);
+	zephir_fast_explode(return_value, delimiter, str, LONG_MAX);
 	return;
 
 }
@@ -262,7 +262,7 @@ PHP_METHOD(Test_Strings, testExplodeStr) {
 
 
 
-	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX);
 	return;
 
 }
@@ -282,7 +282,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0)  TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0) );
 	return;
 
 }
@@ -379,7 +379,7 @@ PHP_METHOD(Test_Strings, testAddslashes) {
 
 
 
-	zephir_addslashes(return_value, str TSRMLS_CC);
+	zephir_addslashes(return_value, str);
 	return;
 
 }
@@ -462,7 +462,7 @@ PHP_METHOD(Test_Strings, testTrimMultilineString) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "\n            Hello world\n        ");
-	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
 
 }
@@ -479,7 +479,7 @@ PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\\'\n        ");
-	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
 
 }
@@ -507,7 +507,7 @@ PHP_METHOD(Test_Strings, testInternedString2) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, " hello ");
-	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_CCTOR(&_0);
 
 }
@@ -549,7 +549,7 @@ PHP_METHOD(Test_Strings, strToHex) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 10, &_3$$3);
 		zephir_check_call_status();
-		zephir_concat_self(&ret, &_5$$3 TSRMLS_CC);
+		zephir_concat_self(&ret, &_5$$3);
 		i++;
 	}
 	RETURN_CTOR(&ret);
@@ -583,7 +583,7 @@ PHP_METHOD(Test_Strings, issue1267) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
-	zephir_create_array(&_1, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_1, 3, 0);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "\\");
 	zephir_array_fast_append(&_1, &_2);
@@ -595,7 +595,7 @@ PHP_METHOD(Test_Strings, issue1267) {
 	zephir_array_fast_append(&_1, &_2);
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_STRING(&_2, "");
-	zephir_fast_str_replace(&_0, &_1, &_2, value TSRMLS_CC);
+	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 513);
 	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 97, value, &_3);
@@ -606,12 +606,12 @@ PHP_METHOD(Test_Strings, issue1267) {
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
-	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
 	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 98, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
-	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
 
 }

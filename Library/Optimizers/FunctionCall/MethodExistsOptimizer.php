@@ -52,9 +52,9 @@ class MethodExistsOptimizer extends OptimizerAbstract
         /* TODO: Solve this macro stuff better, move to backend */
         $macro = $context->backend->isZE3() ? 'SL' : 'SS';
         if (isset($str)) {
-            return new CompiledExpression('bool', '(zephir_method_exists_ex('.$resolvedParams[0].', '.$macro.'("'.strtolower($str).'") TSRMLS_CC) == SUCCESS)', $expression);
+            return new CompiledExpression('bool', '(zephir_method_exists_ex('.$resolvedParams[0].', '.$macro.'("'.strtolower($str).'")) == SUCCESS)', $expression);
         }
 
-        return new CompiledExpression('bool', '(zephir_method_exists('.$resolvedParams[0].', '.$resolvedParams[1].' TSRMLS_CC)  == SUCCESS)', $expression);
+        return new CompiledExpression('bool', '(zephir_method_exists('.$resolvedParams[0].', '.$resolvedParams[1].')  == SUCCESS)', $expression);
     }
 }

@@ -112,7 +112,7 @@ PHP_METHOD(Test_Optimizers_Cos, testVarParameter) {
 
 
 
-	RETURN_DOUBLE(zephir_cos(a TSRMLS_CC));
+	RETURN_DOUBLE(zephir_cos(a));
 
 }
 

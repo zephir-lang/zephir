@@ -47,6 +47,6 @@ class FloorOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('double', 'zephir_floor('.$resolvedParams[0].' TSRMLS_CC)', $expression);
+        return new CompiledExpression('double', 'zephir_floor('.$resolvedParams[0].')', $expression);
     }
 }

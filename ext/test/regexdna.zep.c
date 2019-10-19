@@ -69,7 +69,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_VAR(&discard);
 	ZVAL_NULL(&discard);
 	ZEPHIR_INIT_VAR(&variants);
-	zephir_create_array(&variants, 9, 0 TSRMLS_CC);
+	zephir_create_array(&variants, 9, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "agggtaaa|tttaccct");
 	zephir_array_fast_append(&variants, &_0);
@@ -172,7 +172,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_NVAR(&discard);
 	ZVAL_NULL(&discard);
 	ZEPHIR_INIT_VAR(&contents);
-	zephir_file_get_contents(&contents, path TSRMLS_CC);
+	zephir_file_get_contents(&contents, path);
 	ZEPHIR_INIT_VAR(&initialLength);
 	ZVAL_LONG(&initialLength, zephir_fast_strlen_ev(&contents));
 	ZEPHIR_INIT_VAR(&_1);
@@ -195,7 +195,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 			ZEPHIR_INIT_NVAR(&_6$$3);
 			ZEPHIR_CONCAT_SVS(&_6$$3, "/", &regex, "/iS");
 			ZEPHIR_INIT_NVAR(&_7$$3);
-			zephir_preg_match(&_7$$3, &_6$$3, &contents, &discard, 1, 0 , 0  TSRMLS_CC);
+			zephir_preg_match(&_7$$3, &_6$$3, &contents, &discard, 1, 0 , 0 );
 			zend_print_zval(&_7$$3, 0);
 			php_printf("%c", '\n');
 		} ZEND_HASH_FOREACH_END();
@@ -215,7 +215,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 				ZEPHIR_INIT_NVAR(&_8$$4);
 				ZEPHIR_CONCAT_SVS(&_8$$4, "/", &regex, "/iS");
 				ZEPHIR_INIT_NVAR(&_9$$4);
-				zephir_preg_match(&_9$$4, &_8$$4, &contents, &discard, 1, 0 , 0  TSRMLS_CC);
+				zephir_preg_match(&_9$$4, &_8$$4, &contents, &discard, 1, 0 , 0 );
 				zend_print_zval(&_9$$4, 0);
 				php_printf("%c", '\n');
 			ZEPHIR_CALL_METHOD(NULL, &variants, "next", NULL, 0);

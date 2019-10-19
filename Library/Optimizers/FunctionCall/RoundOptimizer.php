@@ -70,7 +70,7 @@ class RoundOptimizer extends OptimizerAbstract
              */
             case 1:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', NULL, NULL TSRMLS_CC);'
+                    'zephir_round('.$symbol.', '.$resolvedParams[0].', NULL, NULL);'
                 );
                 break;
 
@@ -79,13 +79,13 @@ class RoundOptimizer extends OptimizerAbstract
              */
             case 2:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', NULL TSRMLS_CC);'
+                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', NULL);'
                 );
                 break;
 
             default:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].' TSRMLS_CC);'
+                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].');'
                 );
                 break;
         }

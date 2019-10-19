@@ -56,7 +56,7 @@ class UnsetStatement extends StatementAbstract
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 $compilationContext->headersManager->add('kernel/object');
-                $compilationContext->codePrinter->output('zephir_unset_property('.$variableCode.', "'.$expression['right']['value'].'" TSRMLS_CC);');
+                $compilationContext->codePrinter->output('zephir_unset_property('.$variableCode.', "'.$expression['right']['value'].'");');
 
                 return true;
 

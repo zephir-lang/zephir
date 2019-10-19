@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Test_FetchTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, FetchTest, test, fetchtest, test_fetchtest_method_entry, 0);
 
-	zend_declare_property_null(test_fetchtest_ce, SL("values"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_fetchtest_ce, SL("values"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 
@@ -69,7 +69,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray1) {
 
 
 
-	RETURN_BOOL(zephir_array_isset_fetch(&c, a, b, 1 TSRMLS_CC));
+	RETURN_BOOL(zephir_array_isset_fetch(&c, a, b, 1));
 
 }
 
@@ -89,7 +89,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray2) {
 
 
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, b, 0));
 
 }
 
@@ -107,7 +107,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1 TSRMLS_CC));
+	RETURN_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1));
 
 }
 
@@ -128,7 +128,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray4) {
 
 
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_long_fetch(a, a, b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_long_fetch(a, a, b, 0));
 
 }
 
@@ -149,7 +149,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray5) {
 	zephir_get_strval(&b, b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 1 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 1));
 
 }
 
@@ -171,7 +171,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray6) {
 
 
 	ZEPHIR_OBS_NVAR(a);
-	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b, 0 TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b, 0));
 
 }
 
@@ -229,7 +229,7 @@ PHP_METHOD(Test_FetchTest, testFetchPost) {
 
 
 
-	if (!(zephir_array_isset_fetch(&c, &_POST, b, 1 TSRMLS_CC))) {
+	if (!(zephir_array_isset_fetch(&c, &_POST, b, 1))) {
 		RETURN_BOOL(0);
 	}
 	RETURN_CTORW(&c);
@@ -286,10 +286,10 @@ PHP_METHOD(Test_FetchTest, getValue) {
 
 
 	ZEPHIR_OBS_VAR(&value);
-	if (!(zephir_array_isset_fetch(&value, &_POST, &name, 0 TSRMLS_CC))) {
+	if (!(zephir_array_isset_fetch(&value, &_POST, &name, 0))) {
 		ZEPHIR_OBS_NVAR(&value);
 		zephir_read_property(&_0$$3, this_ptr, SL("values"), PH_NOISY_CC | PH_READONLY);
-		if (!(zephir_array_isset_fetch(&value, &_0$$3, &name, 0 TSRMLS_CC))) {
+		if (!(zephir_array_isset_fetch(&value, &_0$$3, &name, 0))) {
 			RETURN_MM_NULL();
 		}
 	}

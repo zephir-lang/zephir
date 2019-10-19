@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_Issues) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Issues, test, issues, test_issues_method_entry, 0);
 
-	zend_declare_property_null(test_issues_ce, SL("adapter"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_issues_ce, SL("adapter"), ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 

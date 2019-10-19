@@ -41,7 +41,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init(&a);
-	RETURN_MM_BOOL(zephir_instance_of_ev(&a, zend_standard_class_def TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(&a, zend_standard_class_def));
 
 }
 
@@ -58,11 +58,11 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_instanceoff_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_instanceoff_ce TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_instanceoff_ce));
 
 }
 
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf3) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init(&a);
-	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_unknownclass_ce TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_unknownclass_ce));
 
 }
 
@@ -93,7 +93,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf4) {
 
 
 
-	if (zephir_zval_is_traversable(a TSRMLS_CC)) {
+	if (zephir_zval_is_traversable(a)) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
@@ -111,7 +111,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf5) {
 
 
 
-	if (zephir_instance_of_ev(a, test_instanceoff_ce TSRMLS_CC)) {
+	if (zephir_instance_of_ev(a, test_instanceoff_ce)) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
@@ -131,11 +131,11 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf6) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_instanceoff_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_instanceoff_ce TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(&a, test_instanceoff_ce));
 
 }
 
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf7) {
 
 
 
-	RETURN_BOOL(zephir_instance_of_ev(test, test_instanceoff_ce TSRMLS_CC));
+	RETURN_BOOL(zephir_instance_of_ev(test, test_instanceoff_ce));
 
 }
 
@@ -173,11 +173,11 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf8) {
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, test_instanceoff_ce);
-	if (zephir_has_constructor(&a TSRMLS_CC)) {
+	if (zephir_has_constructor(&a)) {
 		ZEPHIR_CALL_METHOD(NULL, &a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	RETURN_MM_BOOL(zephir_is_instance_of(&a, Z_STRVAL_P(&test), Z_STRLEN_P(&test) TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_is_instance_of(&a, Z_STRVAL_P(&test), Z_STRLEN_P(&test)));
 
 }
 
@@ -197,7 +197,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf9) {
 	zephir_get_strval(&test, test_param);
 
 
-	RETURN_MM_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test), Z_STRLEN_P(&test) TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test), Z_STRLEN_P(&test)));
 
 }
 

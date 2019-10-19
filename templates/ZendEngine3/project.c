@@ -85,8 +85,8 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 #endif
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr);
+	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr);
 
 	%REQ_INITIALIZERS%
 	return SUCCESS;
@@ -120,8 +120,8 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
-	php_zephir_init_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
-	php_zephir_init_module_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
+	php_zephir_init_globals(%PROJECT_LOWER%_globals);
+	php_zephir_init_module_globals(%PROJECT_LOWER%_globals);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)

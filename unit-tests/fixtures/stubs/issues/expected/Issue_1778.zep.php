@@ -36,14 +36,18 @@ class Issue_1778
      * @param \Psr\Http\Message\RequestInterface $request
      * @param array $config
      */
-    public function __construct(\Psr\Http\Message\RequestInterface $request, array $config) {}
+    public function __construct(\Psr\Http\Message\RequestInterface $request, array $config)
+    {
+    }
 
     /**
      * Some useful description
      *
-     * @param string $key
      * @return mixed|null
+     * @param string $key
      */
-    public function getVar(string $key) {}
+    public function getVar(string $key)
+    {
+    }
 
 }

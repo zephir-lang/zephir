@@ -53,7 +53,7 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 	zephir_add_function(&_0, i, j);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, i, j);
-	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * (zephir_get_numberval(&_1) + 1)), 2 TSRMLS_CC) + zephir_get_numberval(i)) + (double) (1)) TSRMLS_CC));
+	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * (zephir_get_numberval(&_1) + 1)), 2) + zephir_get_numberval(i)) + (double) (1))));
 
 }
 
@@ -119,7 +119,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					ZEPHIR_CALL_METHOD(&_10$$4, u, "offsetget", &_11, 0, &_7$$4);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(&_12$$4);
-					mul_function(&_12$$4, &_6$$4, &_10$$4 TSRMLS_CC);
+					mul_function(&_12$$4, &_6$$4, &_10$$4);
 					t += zephir_get_numberval(&_12$$4);
 				}
 			}
@@ -195,7 +195,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					ZEPHIR_CALL_METHOD(&_10$$4, u, "offsetget", &_11, 0, &_7$$4);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(&_12$$4);
-					mul_function(&_12$$4, &_6$$4, &_10$$4 TSRMLS_CC);
+					mul_function(&_12$$4, &_6$$4, &_10$$4);
 					t += zephir_get_numberval(&_12$$4);
 				}
 			}
@@ -350,7 +350,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZEPHIR_CALL_METHOD(&_18$$5, &v, "offsetget", &_17, 95, &_16$$5);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_19$$5);
-			mul_function(&_19$$5, &_15$$5, &_18$$5 TSRMLS_CC);
+			mul_function(&_19$$5, &_15$$5, &_18$$5);
 			vBv += zephir_get_numberval(&_19$$5);
 			ZVAL_LONG(&_16$$5, i);
 			ZEPHIR_CALL_METHOD(&_15$$5, &v, "offsetget", &_17, 95, &_16$$5);
@@ -359,12 +359,12 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZEPHIR_CALL_METHOD(&_18$$5, &v, "offsetget", &_17, 95, &_16$$5);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_20$$5);
-			mul_function(&_20$$5, &_15$$5, &_18$$5 TSRMLS_CC);
+			mul_function(&_20$$5, &_15$$5, &_18$$5);
 			vv += zephir_get_numberval(&_20$$5);
 		}
 	}
-	ZVAL_DOUBLE(&_0, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
-	RETURN_MM_DOUBLE(sqrt(zephir_safe_div_long_long(vBv, vv TSRMLS_CC)));
+	ZVAL_DOUBLE(&_0, zephir_safe_div_long_long(vBv, vv));
+	RETURN_MM_DOUBLE(sqrt(zephir_safe_div_long_long(vBv, vv)));
 
 }
 

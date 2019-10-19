@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, IssetTest, test, issettest, test_issettest_method_entry, 0);
 
-	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC);
 
 	test_issettest_ce->create_object = zephir_init_properties_Test_IssetTest;
 	return SUCCESS;
@@ -142,7 +142,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2) {
 
 
 
-	RETURN_BOOL(zephir_isset_property_zval(a, b TSRMLS_CC));
+	RETURN_BOOL(zephir_isset_property_zval(a, b));
 
 }
 
@@ -219,7 +219,7 @@ zend_object *zephir_init_properties_Test_IssetTest(zend_class_entry *class_type 
 		zephir_read_property(&_0, this_ptr, SL("s"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
-			zephir_create_array(&_1$$3, 1, 0 TSRMLS_CC);
+			zephir_create_array(&_1$$3, 1, 0);
 			add_assoc_stringl_ex(&_1$$3, SL("a"), SL("true"));
 			zephir_update_property_zval(this_ptr, SL("s"), &_1$$3);
 		}

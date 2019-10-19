@@ -72,7 +72,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCodePointer($symbolVariable);
 
-        $context->codePrinter->output('zephir_fast_str_replace('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_str_replace('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

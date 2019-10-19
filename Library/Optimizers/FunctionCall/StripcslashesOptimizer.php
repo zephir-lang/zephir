@@ -65,7 +65,7 @@ class StripcslashesOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if ('ZendEngine2' == $context->backend->getName()) {
-            $context->codePrinter->output('zephir_stripcslashes('.$symbol.', '.$resolvedParams[0].' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_stripcslashes('.$symbol.', '.$resolvedParams[0].');');
         } else {
             $context->codePrinter->output('zephir_stripcslashes('.$symbol.', '.$resolvedParams[0].');');
         }

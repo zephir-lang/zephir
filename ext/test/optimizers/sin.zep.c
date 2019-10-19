@@ -112,7 +112,7 @@ PHP_METHOD(Test_Optimizers_Sin, testVarParameter) {
 
 
 
-	RETURN_DOUBLE(zephir_sin(a TSRMLS_CC));
+	RETURN_DOUBLE(zephir_sin(a));
 
 }
 

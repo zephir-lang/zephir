@@ -33,7 +33,7 @@ PHP_METHOD(Test_Optimizers_CreateArray, createNoSize) {
 
 
 
-	zephir_create_array(return_value, 0, 1 TSRMLS_CC);
+	zephir_create_array(return_value, 0, 1);
 	return;
 
 }
@@ -52,7 +52,7 @@ PHP_METHOD(Test_Optimizers_CreateArray, createSize) {
 
 
 	ZVAL_LONG(&_0, n);
-	zephir_create_array(return_value, zephir_get_intval(&_0), 1 TSRMLS_CC);
+	zephir_create_array(return_value, zephir_get_intval(&_0), 1);
 	return;
 
 }

@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_Scopes_PrivateScopeTester) {
 
 	ZEPHIR_REGISTER_CLASS_EX(Test\\Oo\\Scopes, PrivateScopeTester, test, oo_scopes_privatescopetester, test_oo_scopes_hasprivatemethod_ce, test_oo_scopes_privatescopetester_method_entry, 0);
 
-	zend_class_implements(test_oo_scopes_privatescopetester_ce TSRMLS_CC, 1, test_oo_scopes_scopetesterinterface_ce);
+	zend_class_implements(test_oo_scopes_privatescopetester_ce, 1, test_oo_scopes_scopetesterinterface_ce);
 	return SUCCESS;
 
 }

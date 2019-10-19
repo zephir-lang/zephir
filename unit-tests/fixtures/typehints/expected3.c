@@ -90,8 +90,8 @@ static PHP_RINIT_FUNCTION(typehints)
 #endif
 	typehints_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(typehints_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(typehints_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(typehints_globals_ptr);
+	zephir_initialize_memory(typehints_globals_ptr);
 
 	
 	return SUCCESS;
@@ -125,8 +125,8 @@ static PHP_MINFO_FUNCTION(typehints)
 
 static PHP_GINIT_FUNCTION(typehints)
 {
-	php_zephir_init_globals(typehints_globals TSRMLS_CC);
-	php_zephir_init_module_globals(typehints_globals TSRMLS_CC);
+	php_zephir_init_globals(typehints_globals);
+	php_zephir_init_module_globals(typehints_globals);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(typehints)

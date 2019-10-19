@@ -79,7 +79,7 @@ class FuncGetArgOptimizer extends OptimizerAbstract
             if ($context->backend->isZE3()) {
                 $template = 'zephir_get_arg(%s, zephir_get_intval(%s));';
             } else {
-                $template = 'zephir_get_arg(%s, zephir_get_intval(%s) TSRMLS_CC);';
+                $template = 'zephir_get_arg(%s, zephir_get_intval(%s));';
             }
 
             $context->codePrinter->output(sprintf($template, $symbol, $resolvedParams[0]));

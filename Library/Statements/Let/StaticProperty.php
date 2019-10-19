@@ -196,7 +196,7 @@ class StaticProperty
                             $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
                             $propertyCache->setMustInitNull(true);
                             $propertyCache->setReusable(false);
-                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().' TSRMLS_CC);');
+                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().');');
                         } else {
                             $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                         }
@@ -212,7 +212,7 @@ class StaticProperty
                             $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
                             $propertyCache->setMustInitNull(true);
                             $propertyCache->setReusable(false);
-                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().' TSRMLS_CC);');
+                            $codePrinter->output('zephir_update_static_property_ce_cache('.$classEntry.', SL("'.$property.'"), &'.$tempVariable->getName().', &'.$propertyCache->getName().');');
                         } else {
                             $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
                         }

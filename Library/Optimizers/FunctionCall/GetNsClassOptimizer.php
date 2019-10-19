@@ -62,7 +62,7 @@ class GetNsClassOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_get_ns_class('.$symbol.', '.$resolvedParams[0].', 0 TSRMLS_CC);');
+        $context->codePrinter->output('zephir_get_ns_class('.$symbol.', '.$resolvedParams[0].', 0);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

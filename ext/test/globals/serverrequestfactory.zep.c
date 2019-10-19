@@ -140,7 +140,7 @@ PHP_METHOD(Test_Globals_ServerRequestFactory, load) {
 	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 43, &post, &globalPost);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&post, &_5);
-	zephir_create_array(return_value, 5, 0 TSRMLS_CC);
+	zephir_create_array(return_value, 5, 0);
 	zephir_array_update_string(return_value, SL("server"), &server, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("files"), &files, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("cookies"), &cookies, PH_COPY | PH_SEPARATE);

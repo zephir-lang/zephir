@@ -13,6 +13,8 @@ class Issue_1907 extends Exception implements \Throwable
 {
 
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
 }

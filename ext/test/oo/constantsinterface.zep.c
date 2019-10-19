@@ -23,7 +23,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_ConstantsInterface) {
 
 	zephir_declare_class_constant_string(test_oo_constantsinterface_ce, SL("NAMESPACENAME"), "Test\\Oo");
 
-	zend_class_implements(test_oo_constantsinterface_ce TSRMLS_CC, 1, test_testinterface_ce);
+	zend_class_implements(test_oo_constantsinterface_ce, 1, test_testinterface_ce);
 	return SUCCESS;
 
 }

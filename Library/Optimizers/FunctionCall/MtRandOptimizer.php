@@ -48,6 +48,6 @@ class MtRandOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('long', 'zephir_mt_rand(zephir_get_intval('.$resolvedParams[0].'), zephir_get_intval('.$resolvedParams[1].') TSRMLS_CC)', $expression);
+        return new CompiledExpression('long', 'zephir_mt_rand(zephir_get_intval('.$resolvedParams[0].'), zephir_get_intval('.$resolvedParams[1].'))', $expression);
     }
 }

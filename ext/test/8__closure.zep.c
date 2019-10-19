@@ -20,7 +20,7 @@ ZEPHIR_INIT_CLASS(test_8__closure) {
 
 	ZEPHIR_REGISTER_CLASS(test, 8__closure, test, 8__closure, test_8__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
-	zend_declare_property_null(test_8__closure_ce, SL("abc"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(test_8__closure_ce, SL("abc"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 

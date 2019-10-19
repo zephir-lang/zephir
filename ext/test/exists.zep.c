@@ -45,7 +45,7 @@ PHP_METHOD(Test_Exists, testClassExists) {
 
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
-	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0)  TSRMLS_CC));
+	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0) ));
 
 }
 
@@ -68,7 +68,7 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
-	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0)  TSRMLS_CC));
+	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0) ));
 
 }
 
@@ -84,7 +84,7 @@ PHP_METHOD(Test_Exists, testMethodExists) {
 
 
 
-	RETURN_BOOL((zephir_method_exists(obj, methodName TSRMLS_CC)  == SUCCESS));
+	RETURN_BOOL((zephir_method_exists(obj, methodName)  == SUCCESS));
 
 }
 
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Exists, testFileExists) {
 
 
 
-	RETURN_BOOL((zephir_file_exists(fileName TSRMLS_CC) == SUCCESS));
+	RETURN_BOOL((zephir_file_exists(fileName) == SUCCESS));
 
 }
 

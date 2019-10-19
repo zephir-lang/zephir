@@ -23,7 +23,7 @@ ZEPHIR_INIT_CLASS(Test_MethodArgs) {
 
 	ZEPHIR_REGISTER_CLASS(Test, MethodArgs, test, methodargs, test_methodargs_method_entry, 0);
 
-	zend_declare_property_null(test_methodargs_ce, SL("a"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_methodargs_ce, SL("a"), ZEND_ACC_PUBLIC);
 
 	zephir_declare_class_constant_string(test_methodargs_ce, SL("GET"), "get");
 
@@ -76,8 +76,8 @@ PHP_METHOD(Test_MethodArgs, setCallableStrict) {
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
-	if (UNEXPECTED(zephir_is_callable(a TSRMLS_CC) != 1)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable") TSRMLS_CC);
+	if (UNEXPECTED(zephir_is_callable(a) != 1)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable"));
 		RETURN_NULL();
 	}
 
@@ -96,7 +96,7 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_OBJECT)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object"));
 		RETURN_NULL();
 	}
 
@@ -115,7 +115,7 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_RESOURCE)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource") TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource"));
 		RETURN_NULL();
 	}
 

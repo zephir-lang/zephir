@@ -38,7 +38,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&obj);
-	zephir_create_array(&obj, 3, 0 TSRMLS_CC);
+	zephir_create_array(&obj, 3, 0);
 	add_assoc_stringl_ex(&obj, SL("a"), SL("hello"));
 	add_assoc_stringl_ex(&obj, SL("b"), SL("world"));
 	add_assoc_long_ex(&obj, SL("c"), 128);
@@ -59,7 +59,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&arr);
-	zephir_create_array(&arr, 3, 0 TSRMLS_CC);
+	zephir_create_array(&arr, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_array_fast_append(&arr, &_0);
@@ -87,7 +87,7 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&arr);
-	zephir_create_array(&arr, 4, 0 TSRMLS_CC);
+	zephir_create_array(&arr, 4, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "<foo>");
 	zephir_array_fast_append(&arr, &_0);

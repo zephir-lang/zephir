@@ -102,6 +102,7 @@ zend_class_entry *test_geometry_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_globals_env_ce;
 zend_class_entry *test_globals_post_ce;
+zend_class_entry *test_globals_server_ce;
 zend_class_entry *test_globals_serverrequestfactory_ce;
 zend_class_entry *test_globals_session_child_ce;
 zend_class_entry *test_instance_ce;
@@ -296,6 +297,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Globals_Env);
 	ZEPHIR_INIT(Test_Globals_Post);
+	ZEPHIR_INIT(Test_Globals_Server);
 	ZEPHIR_INIT(Test_Globals_ServerRequestFactory);
 	ZEPHIR_INIT(Test_Globals_Session_Child);
 	ZEPHIR_INIT(Test_Instance);
@@ -480,8 +482,8 @@ static PHP_RINIT_FUNCTION(test)
 #endif
 	test_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(test_globals_ptr TSRMLS_CC);
-	zephir_initialize_memory(test_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(test_globals_ptr);
+	zephir_initialize_memory(test_globals_ptr);
 
 		zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 	
@@ -526,8 +528,8 @@ static PHP_MINFO_FUNCTION(test)
 
 static PHP_GINIT_FUNCTION(test)
 {
-	php_zephir_init_globals(test_globals TSRMLS_CC);
-	php_zephir_init_module_globals(test_globals TSRMLS_CC);
+	php_zephir_init_globals(test_globals);
+	php_zephir_init_module_globals(test_globals);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)

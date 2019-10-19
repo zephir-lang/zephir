@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.10] - 2019-10-19
+### Fixed
+- Fixed incorrect behaviour in `zephir_get_global` if `zval` reference count <= 1
+  [#1961](https://github.com/phalcon/zephir/issues/1961)
+
+### Removed
+- Removed `--vernum` option from the help for regular commands
+- Removed `void` from the return type hint in the generated stubs
+  [#1977](https://github.com/phalcon/zephir/issues/1977)
+- Remove no longer supported TSRMLS_CC usage
+  [#1865](https://github.com/phalcon/zephir/issues/1865)
+
+### Changed
+- Disabled PHP warnings for PHP >= 7.3.0 to be able correct work with lowest versions of dependencies
+  [zendframework/zend-code#160](https://github.com/zendframework/zend-code/issues/160)
+- Introduced support of multiline `@param` body for generated stubs
+  [#1968](https://github.com/phalcon/zephir/issues/1968)
 
 ## [0.12.9] - 2019-10-14
 ### Added
@@ -26,7 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Print warning during the code generation if the `timecop` extension was detected
   [#1950](https://github.com/phalcon/zephir/issues/1950)
-- Improved error handling to not print stack trace on PHP error `ZEPHIR_DEBUG` is not set
+- Improved error handling to not print PHP stack traces if `ZEPHIR_DEBUG` is not set
 
 ### Removed
 - Removed no longer used `zephir_dtor` macro
@@ -288,7 +305,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.9...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.10...HEAD
+[0.12.10]: https://github.com/phalcon/zephir/compare/0.12.0...0.12.10
 [0.12.9]: https://github.com/phalcon/zephir/compare/0.12.8...0.12.9
 [0.12.8]: https://github.com/phalcon/zephir/compare/0.12.7...0.12.8
 [0.12.7]: https://github.com/phalcon/zephir/compare/0.12.6...0.12.7

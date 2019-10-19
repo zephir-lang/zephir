@@ -298,7 +298,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_bitwise_and_function(&_0, &b, &a TSRMLS_CC);
+	zephir_bitwise_and_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
 
@@ -950,7 +950,7 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_bitwise_or_function(&_0, &b, &a TSRMLS_CC);
+	zephir_bitwise_or_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
 
@@ -1470,7 +1470,7 @@ PHP_METHOD(Test_Bitwise, testbitwiseXor) {
 	ZVAL_LONG(&_0, 321);
 	ZEPHIR_CALL_METHOD(&j, this_ptr, "getint", NULL, 0, &_0);
 	zephir_check_call_status();
-	zephir_bitwise_xor_function(return_value, &i, &j TSRMLS_CC);
+	zephir_bitwise_xor_function(return_value, &i, &j);
 	RETURN_MM();
 
 }

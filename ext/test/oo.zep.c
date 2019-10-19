@@ -78,7 +78,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, test_oo_oonoconstruct_ce);
-	if (zephir_has_constructor(&o TSRMLS_CC)) {
+	if (zephir_has_constructor(&o)) {
 		ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
@@ -310,7 +310,7 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 2, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 2, 0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "OoDynamicA");
 	zephir_array_fast_append(&_0, &_1);
@@ -332,7 +332,7 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 				RETURN_MM_NULL();
 			}
 			object_init_ex(&instance, _5$$3);
-			if (zephir_has_constructor(&instance TSRMLS_CC)) {
+			if (zephir_has_constructor(&instance)) {
 				ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
 				zephir_check_call_status();
 			}
@@ -363,7 +363,7 @@ PHP_METHOD(Test_Oo, createInstancesInLoop) {
 					RETURN_MM_NULL();
 				}
 				object_init_ex(&instance, _9$$4);
-				if (zephir_has_constructor(&instance TSRMLS_CC)) {
+				if (zephir_has_constructor(&instance)) {
 					ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
 					zephir_check_call_status();
 				}

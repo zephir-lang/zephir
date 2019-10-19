@@ -48,9 +48,9 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 	ZVAL_STRING(&subject, "abcdef");
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
-	zephir_preg_match(&_1, &pattern, &subject, &_0, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(&_1, &pattern, &subject, &_0, 0, 0 , 0 );
 	ZEPHIR_INIT_VAR(&_2);
-	zephir_preg_match(return_value, &pattern, &subject, &_2, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, &pattern, &subject, &_2, 0, 0 , 0 );
 	RETURN_MM();
 
 }
@@ -75,7 +75,7 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "abcdef");
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_preg_match(&_0, &pattern, &subject, &matches, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(&_0, &pattern, &subject, &matches, 0, 0 , 0 );
 	RETURN_CCTOR(&matches);
 
 }
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 	ZVAL_STRING(&subject, "abcdef");
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&matched);
-	zephir_preg_match(&matched, &pattern, &subject, &_0, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(&matched, &pattern, &subject, &_0, 0, 0 , 0 );
 	RETURN_CCTOR(&matched);
 
 }
@@ -122,7 +122,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 	ZVAL_STRING(&subject, "abcdef");
 	ZEPHIR_INIT_VAR(&results);
 	array_init(&results);
-	zephir_preg_match(return_value, &pattern, &subject, &results, 1, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, &pattern, &subject, &results, 1, 0 , 0 );
 	RETURN_MM();
 
 }
@@ -147,7 +147,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 	ZVAL_STRING(&pattern, "/def$/");
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "abcdef");
-	zephir_preg_match(return_value, &pattern, &subject, &matches, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, &pattern, &subject, &matches, 0, 0 , 0 );
 	RETURN_MM();
 
 }
@@ -168,7 +168,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_preg_match(return_value, pattern, subject, &_0, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, pattern, subject, &_0, 0, 0 , 0 );
 	RETURN_MM();
 
 }
@@ -186,7 +186,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
 
 
 
-	zephir_preg_match(return_value, pattern, subject, matches, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, pattern, subject, matches, 0, 0 , 0 );
 	return;
 
 }
@@ -205,7 +205,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
 
 
 
-	zephir_preg_match(return_value, pattern, subject, matches, 0, zephir_get_intval(flags) , 0  TSRMLS_CC);
+	zephir_preg_match(return_value, pattern, subject, matches, 0, zephir_get_intval(flags) , 0 );
 	return;
 
 }
@@ -225,7 +225,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 
 
 
-	zephir_preg_match(return_value, pattern, subject, matches, 0, zephir_get_intval(flags) , zephir_get_intval(offset)  TSRMLS_CC);
+	zephir_preg_match(return_value, pattern, subject, matches, 0, zephir_get_intval(flags) , zephir_get_intval(offset) );
 	return;
 
 }
@@ -255,7 +255,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 	ZEPHIR_INIT_VAR(&matches);
 	ZVAL_NULL(&matches);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_preg_match(&_0, &pattern, &str, &matches, 0, 0 , 0  TSRMLS_CC);
+	zephir_preg_match(&_0, &pattern, &str, &matches, 0, 0 , 0 );
 	RETURN_CCTOR(&matches);
 
 }
@@ -287,7 +287,7 @@ PHP_METHOD(Test_Pregmatch, testMatchAll) {
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "/(test[0-9]+)/");
-	zephir_preg_match(&_1, &_2, &text, &matches, 1, zephir_get_intval(flags) , 0  TSRMLS_CC);
+	zephir_preg_match(&_1, &_2, &text, &matches, 1, zephir_get_intval(flags) , 0 );
 	RETURN_CCTOR(&matches);
 
 }
@@ -312,7 +312,7 @@ PHP_METHOD(Test_Pregmatch, testMatchAllInZep) {
 	ZVAL_LONG(&_0, 2);
 	ZEPHIR_CALL_METHOD(&m2, this_ptr, "testmatchall", &_1, 0, &_0);
 	zephir_check_call_status();
-	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, &m1);
 	zephir_array_fast_append(return_value, &m2);
 	RETURN_MM();

@@ -42,7 +42,7 @@ PHP_METHOD(Test_FunctionExists, testWithPassedName) {
 	zephir_get_strval(&func, func_param);
 
 
-	RETURN_MM_BOOL((zephir_function_exists(&func TSRMLS_CC)  == SUCCESS));
+	RETURN_MM_BOOL((zephir_function_exists(&func)  == SUCCESS));
 
 }
 
@@ -67,7 +67,7 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	ZEPHIR_INIT_VAR(&functions);
-	zephir_create_array(&functions, 8, 0 TSRMLS_CC);
+	zephir_create_array(&functions, 8, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "substr");
 	zephir_array_fast_append(&functions, &_0);
@@ -99,7 +99,7 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 			ZEPHIR_INIT_NVAR(&func);
 			ZVAL_COPY(&func, _1);
 			ZEPHIR_INIT_NVAR(&_3$$3);
-			ZVAL_BOOL(&_3$$3, (zephir_function_exists(&func TSRMLS_CC)  == SUCCESS));
+			ZVAL_BOOL(&_3$$3, (zephir_function_exists(&func)  == SUCCESS));
 			zephir_array_update_zval(&result, &func, &_3$$3, PH_COPY | PH_SEPARATE);
 		} ZEND_HASH_FOREACH_END();
 	} else {
@@ -114,7 +114,7 @@ PHP_METHOD(Test_FunctionExists, testBuiltInFunctions) {
 			ZEPHIR_CALL_METHOD(&func, &functions, "current", NULL, 0);
 			zephir_check_call_status();
 				ZEPHIR_INIT_NVAR(&_4$$4);
-				ZVAL_BOOL(&_4$$4, (zephir_function_exists(&func TSRMLS_CC)  == SUCCESS));
+				ZVAL_BOOL(&_4$$4, (zephir_function_exists(&func)  == SUCCESS));
 				zephir_array_update_zval(&result, &func, &_4$$4, PH_COPY | PH_SEPARATE);
 			ZEPHIR_CALL_METHOD(NULL, &functions, "next", NULL, 0);
 			zephir_check_call_status();
@@ -130,7 +130,7 @@ PHP_METHOD(Test_FunctionExists, testWithString) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_BOOL((zephir_function_exists_ex(SL("substr") TSRMLS_CC) == SUCCESS));
+	RETURN_BOOL((zephir_function_exists_ex(SL("substr")) == SUCCESS));
 
 }
 

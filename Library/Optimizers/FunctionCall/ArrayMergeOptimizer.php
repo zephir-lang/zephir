@@ -63,7 +63,7 @@ class ArrayMergeOptimizer extends OptimizerAbstract
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $resolveParam = $this->createParamResolver($context);
-        $context->codePrinter->output('zephir_fast_array_merge('.$symbol.', '.$resolveParam($resolvedParams[0]).', '.$resolveParam($resolvedParams[1]).' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_array_merge('.$symbol.', '.$resolveParam($resolvedParams[0]).', '.$resolveParam($resolvedParams[1]).');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
