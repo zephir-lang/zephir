@@ -509,6 +509,10 @@ final class ClassDefinition
     /**
      * Checks if a class definition has a property.
      *
+     * @todo Duplicates getProperty
+     *
+     * @deprecated
+     *
      * @param string $name
      *
      * @return bool
@@ -544,9 +548,7 @@ final class ClassDefinition
 
         $extendsClassDefinition = $this->getExtendsClassDefinition();
         if ($extendsClassDefinition) {
-            if ($extendsClassDefinition->hasProperty($propertyName)) {
-                return $extendsClassDefinition->getProperty($propertyName);
-            }
+            return $extendsClassDefinition->getProperty($propertyName);
         }
 
         return false;
