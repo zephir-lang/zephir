@@ -91,11 +91,11 @@ class SPropertyAccess
 	 */
 	public static function mutateArrayVarInsideCycle() -> array
 	{
-		var i;
+		var i, j;
 
-		for _ in range(0, 3) {
-			let i = [1];
-			let self::arrayVar = self::arrayVar + i;
+		for i in range(0, 3) {
+			let j = [i: i];
+			let self::arrayVar = self::arrayVar + j;
 		}
 
 		return self::arrayVar;
