@@ -41,9 +41,6 @@ class SPropertyAccess
 		return delimiter;
 	}
 
-	/**
-	 * @see https://github.com/phalcon/zephir/issues/1494
-	 */
 	public static function mutateStringVarInsideCycle() -> string
 	{
 		var i;
@@ -64,8 +61,8 @@ class SPropertyAccess
 		var i;
 
 		for _ in range(0, 3) {
-			let i = 2;
-			let self::intVar = self::intVar + i;
+			let i = 42;
+			let self::intVar = i;
 		}
 
 		return self::intVar;
@@ -79,16 +76,13 @@ class SPropertyAccess
 		var i;
 
 		for _ in range(0, 3) {
-			let i = 2.1;
-			let self::doubleVar = self::doubleVar + i;
+			let i = 3.14;
+			let self::doubleVar = i;
 		}
 
 		return self::doubleVar;
 	}
 
-	/**
-	 * @see https://github.com/phalcon/zephir/issues/1494
-	 */
 	public static function mutateArrayVarInsideCycle() -> array
 	{
 		var i, j;

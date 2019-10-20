@@ -32,8 +32,6 @@ class SPropertyAccessTest extends TestCase
 
     /**
      * @test
-     *
-     * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateStringVarInsideCycle()
     {
@@ -51,7 +49,7 @@ class SPropertyAccessTest extends TestCase
     public function shouldMutateIntVarInsideCycle()
     {
         $this->assertEquals(
-            8,
+            42,
             SPropertyAccess::mutateIntVarInsideCycle()
         );
     }
@@ -64,15 +62,13 @@ class SPropertyAccessTest extends TestCase
     public function shouldMutateDoubleVarInsideCycle()
     {
         $this->assertEquals(
-            8.4,
+            3.14,
             SPropertyAccess::mutateDoubleVarInsideCycle()
         );
     }
 
     /**
      * @test
-     *
-     * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateArrayVarInsideCycle()
     {
