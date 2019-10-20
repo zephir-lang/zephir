@@ -459,7 +459,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
 
                                         return new CompiledExpression(
-                                            $variableRight->getType() == 'double' ? 'double' : 'int',
+                                            'double' == $variableRight->getType() ? 'double' : 'int',
                                             sprintf(
                                                 '(zephir_get_numberval(%s) %s %s)',
                                                 $variableLeft,
