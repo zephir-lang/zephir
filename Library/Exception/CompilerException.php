@@ -36,4 +36,15 @@ class CompilerException extends RuntimeException
 
         parent::__construct($message, $code, $previous);
     }
+
+    public static function illegalOperationTypeOnStaticVariable(
+        string $operator,
+        string $dataType,
+        array $statement
+    ): self {
+        return new self(
+            "Operator '{$operator}' isn't supported for static variables and {$dataType} typed expressions",
+            $statement
+        );
+    }
 }

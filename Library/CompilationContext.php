@@ -12,6 +12,7 @@
 namespace Zephir;
 
 use Psr\Log\LoggerInterface;
+use Zephir\Exception\CompilerException;
 
 /**
  * CompilationContext.
@@ -201,11 +202,48 @@ class CompilationContext
      *
      * @return string
      */
-    public function getFullName($className)
+    public function getFullName(string $className): string
     {
         $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
         $namespace = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
         return fqcn($className, $namespace, $this->aliasManager);
+    }
+
+    /**
+     * Lookup a class from a given class name.
+     *
+     * @param string     $className
+     * @param array|null $statement
+     *
+     * @return ClassDefinition
+     */
+    public function classLookup(string $className, array $statement = null): ClassDefinition
+    {
+        if (!\in_array($className, ['self', 'static', 'parent'])) {
+            $className = $this->getFullName($className);
+            if ($this->compiler->isClass($className)) {
+                return $this->compiler->getClassDefinition($className);
+            }
+
+            throw new CompilerException("Cannot locate class '{$className}'", $statement);
+        }
+
+        if (\in_array($className, ['self', 'static'])) {
+            return $this->classDefinition;
+        }
+
+        $parent = $this->classDefinition->getExtendsClass();
+        if (!$parent instanceof ClassDefinition) {
+            throw new CompilerException(
+                sprintf(
+                    'Cannot access parent:: because class %s does not extend any class',
+                    $this->classDefinition->getCompleteName()
+                ),
+                $statement
+            );
+        }
+
+        return $this->classDefinition->getExtendsClassDefinition();
     }
 }
