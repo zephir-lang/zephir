@@ -32,6 +32,7 @@ class SPropertyAccessTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateStringVarInsideCycle()
@@ -44,6 +45,7 @@ class SPropertyAccessTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateIntVarInsideCycle()
@@ -56,6 +58,7 @@ class SPropertyAccessTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateDoubleVarInsideCycle()
@@ -68,6 +71,7 @@ class SPropertyAccessTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
     public function shouldMutateArrayVarInsideCycle()
