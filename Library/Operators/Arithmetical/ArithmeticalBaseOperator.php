@@ -454,10 +454,20 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
+                                    case 'double':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
 
-                                        return new CompiledExpression('int', '(zephir_get_numberval('.$variableLeft.') '.$this->operator.' '.$variableRight->getName().')', $expression);
+                                        return new CompiledExpression(
+                                            'double' == $variableRight->getType() ? 'double' : 'int',
+                                            sprintf(
+                                                '(zephir_get_numberval(%s) %s %s)',
+                                                $variableLeft,
+                                                $this->operator,
+                                                $variableRight->getName()
+                                            ),
+                                            $expression
+                                        );
                                         break;
 
                                     /* a(var) + a(bool) */

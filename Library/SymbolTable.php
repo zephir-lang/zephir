@@ -264,7 +264,7 @@ class SymbolTable
         if ($this->globalsManager->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
                 /**
-                 * @TODO, injecting globals, initialize to null and check first?
+                 * TODO: injecting globals, initialize to null and check first?
                  */
                 $variable = new Variable('variable', $name, $compilationContext->branchManager->getCurrentBranch());
                 $variable->setIsInitialized(true, $compilationContext);

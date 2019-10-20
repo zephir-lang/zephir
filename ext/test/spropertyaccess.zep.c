@@ -16,6 +16,8 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/operators.h"
+#include "kernel/concat.h"
+#include "kernel/array.h"
 
 
 /**
@@ -32,6 +34,14 @@ ZEPHIR_INIT_CLASS(Test_SPropertyAccess) {
 	zend_declare_property_string(test_spropertyaccess_ce, SL("delimiter"), ".", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	zend_declare_property_string(test_spropertyaccess_ce, SL("_delimiterWithUnderscore"), ".", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
+
+	zend_declare_property_string(test_spropertyaccess_ce, SL("stringVar"), "", ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
+
+	zend_declare_property_long(test_spropertyaccess_ce, SL("intVar"), 0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
+
+	zend_declare_property_double(test_spropertyaccess_ce, SL("doubleVar"), 0.0, ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
+
+	zend_declare_property_null(test_spropertyaccess_ce, SL("arrayVar"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	return SUCCESS;
 
@@ -128,6 +138,188 @@ PHP_METHOD(Test_SPropertyAccess, testArgument) {
 	}
 	RETVAL_ZVAL(delimiter, 1, 0);
 	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_SPropertyAccess, mutateStringVarInsideCycle) {
+
+	zend_long _1, _2;
+	zend_bool _0;
+	zval i, _5, _3$$3, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&i);
+	ZVAL_UNDEF(&_5);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+
+	ZEPHIR_MM_GROW();
+
+	_2 = 3;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			_1 = _1;
+			ZEPHIR_INIT_NVAR(&i);
+			ZVAL_STRING(&i, " + ");
+			ZEPHIR_OBS_NVAR(&_3$$3);
+			zephir_read_static_property_ce(&_3$$3, test_spropertyaccess_ce, SL("stringVar"), PH_NOISY_CC);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			ZEPHIR_CONCAT_VV(&_4$$3, &_3$$3, &i);
+			zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("stringVar"), &_4$$3);
+		}
+	}
+	zephir_read_static_property_ce(&_5, test_spropertyaccess_ce, SL("stringVar"), PH_NOISY_CC | PH_READONLY);
+	RETURN_CTOR(&_5);
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1494
+ */
+PHP_METHOD(Test_SPropertyAccess, mutateIntVarInsideCycle) {
+
+	zval _4, _3$$3;
+	zend_bool _0;
+	zend_long i = 0, _1, _2;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_3$$3);
+
+
+	_2 = 3;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			_1 = _1;
+			i = 42;
+			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
+			ZVAL_LONG(&_3$$3, i);
+			zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("intVar"), &_3$$3);
+		}
+	}
+	zephir_read_static_property_ce(&_4, test_spropertyaccess_ce, SL("intVar"), PH_NOISY_CC | PH_READONLY);
+	RETURN_CTORW(&_4);
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1494
+ */
+PHP_METHOD(Test_SPropertyAccess, mutateDoubleVarInsideCycle) {
+
+	zval _4, _3$$3;
+	zend_long _1, _2;
+	zend_bool _0;
+	double i = 0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_4);
+	ZVAL_UNDEF(&_3$$3);
+
+
+	_2 = 3;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			_1 = _1;
+			i = 3.14;
+			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
+			ZVAL_DOUBLE(&_3$$3, i);
+			zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("doubleVar"), &_3$$3);
+		}
+	}
+	zephir_read_static_property_ce(&_4, test_spropertyaccess_ce, SL("doubleVar"), PH_NOISY_CC | PH_READONLY);
+	RETURN_CTORW(&_4);
+
+}
+
+PHP_METHOD(Test_SPropertyAccess, mutateArrayVarInsideCycle) {
+
+	zend_long _1, _2;
+	zend_bool _0;
+	zval i, j, _5, _3$$3, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&i);
+	ZVAL_UNDEF(&j);
+	ZVAL_UNDEF(&_5);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+
+	ZEPHIR_MM_GROW();
+
+	_2 = 3;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(&i);
+			ZVAL_LONG(&i, _1);
+			ZEPHIR_INIT_NVAR(&j);
+			zephir_create_array(&j, 1, 0);
+			zephir_array_update_zval(&j, &i, &i, PH_COPY);
+			zephir_read_static_property_ce(&_3$$3, test_spropertyaccess_ce, SL("arrayVar"), PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_INIT_NVAR(&_4$$3);
+			zephir_add_function(&_4$$3, &_3$$3, &j);
+			zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("arrayVar"), &_4$$3);
+		}
+	}
+	zephir_read_static_property_ce(&_5, test_spropertyaccess_ce, SL("arrayVar"), PH_NOISY_CC | PH_READONLY);
+	RETURN_CTOR(&_5);
+
+}
+
+void zephir_init_static_properties_Test_SPropertyAccess(TSRMLS_D) {
+
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+		ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&_0);
+	array_init(&_0);
+	zephir_update_static_property_ce(test_spropertyaccess_ce, ZEND_STRL("arrayVar"), &_0);
+	ZEPHIR_MM_RESTORE();
 
 }
 

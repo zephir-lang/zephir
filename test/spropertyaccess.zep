@@ -10,6 +10,10 @@ class SPropertyAccess
 	private static b;
 	protected static delimiter = ".";
 	protected static _delimiterWithUnderscore = ".";
+	protected static stringVar = "";
+	protected static intVar = 0;
+	protected static doubleVar = 0.0;
+	protected static arrayVar = [];
 
 	public function __construct()
 	{
@@ -29,11 +33,65 @@ class SPropertyAccess
 	}
 
 	public function testArgument(var delimiter = null)
-    {
-    	if empty delimiter {
-    		let delimiter = self::delimiter;
-    	}
+	{
+		if empty delimiter {
+			let delimiter = self::delimiter;
+		}
 
-    	return delimiter;
-    }
+		return delimiter;
+	}
+
+	public static function mutateStringVarInsideCycle() -> string
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = " + ";
+			let self::stringVar = self::stringVar . i;
+		}
+
+		return self::stringVar;
+	}
+
+	/**
+	 * @see https://github.com/phalcon/zephir/issues/1494
+	 */
+	public static function mutateIntVarInsideCycle() -> int
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = 42;
+			let self::intVar = i;
+		}
+
+		return self::intVar;
+	}
+
+	/**
+	 * @see https://github.com/phalcon/zephir/issues/1494
+	 */
+	public static function mutateDoubleVarInsideCycle() -> double
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = 3.14;
+			let self::doubleVar = i;
+		}
+
+		return self::doubleVar;
+	}
+
+	public static function mutateArrayVarInsideCycle() -> array
+	{
+		var i, j;
+
+		for i in range(0, 3) {
+			let j = [i: i];
+			let self::arrayVar = self::arrayVar + j;
+		}
+
+		return self::arrayVar;
+	}
 }

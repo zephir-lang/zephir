@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed arithmetical operations with `zvals` which stores `double` numbers
+- Fixed updating `double` in `integer` static variables in the loop
+  [#1494](https://github.com/phalcon/zephir/issues/1494)
+
 ## [0.12.10] - 2019-10-19
 ### Fixed
 - Fixed incorrect behaviour in `zephir_get_global` if `zval` reference count <= 1
@@ -91,7 +96,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.12.3] - 2019-09-22
 ### Fixed
-- Fixed concatenation support of strings with double numbers
+- Fixed concatenation support of strings with `double` numbers
   [#1893](https://github.com/phalcon/zephir/issues/1893)
 - Fixed 'void' return type hint being ignored
   [#1908](https://github.com/phalcon/zephir/issues/1908)
