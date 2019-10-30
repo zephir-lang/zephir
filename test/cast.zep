@@ -7,7 +7,27 @@ namespace Test;
 
 class Cast
 {
-	/** To int cast */
+    // To char cast
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testCharCastFromChar() -> char
+    {
+        char a = 'a';
+        return (char) a;
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testCharCastFromVariableChar() -> char
+    {
+        var a = 'A';
+        return (char) a;
+    }
+
+	// To int cast
 
 	public function testIntCastFromFloat() -> int
 	{
@@ -17,6 +37,15 @@ class Cast
 	public function testIntCastFromVariableFloat() -> int
 	{
 		var a = 5.0;
+		return (int) a;
+	}
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+	public function testIntCastFromVariableChar() -> int
+	{
+		var a = 'a';
 		return (int) a;
 	}
 
@@ -113,7 +142,18 @@ class Cast
 		return (int) a;
 	}
 
-	/** To float cast */
+    // To long cast
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+	public function testLongCastFromVariableChar() -> long
+	{
+		char a = 'A';
+		return (long) a;
+	}
+
+	// To float cast
 
 	public function testFloatCastFromFloat() -> float
 	{
@@ -201,7 +241,18 @@ class Cast
 		return (float) a;
 	}
 
-	/** To boolean cast */
+    // To double cast
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+	public function testDoubleCastFromVariableChar() -> double
+	{
+		char a = 'A';
+		return (double) a;
+	}
+
+	// To boolean cast
 
 	public function testBooleanCastFromIntTrue1() -> boolean
 	{
@@ -243,7 +294,16 @@ class Cast
 		return (boolean) a;
 	}
 
-	/** To object cast */
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+	public function testBooleanCastFromVariableChar() -> boolean
+	{
+		char a = 'A';
+		return (boolean) a;
+	}
+
+	// To object cast
 
 	public function testObjectCastFromInt() -> var
 	{
@@ -312,58 +372,58 @@ class Cast
 		return id;
 	}
 
-    /** To array cast */
+    // To array cast
 
-	public function testArrayCastFromVariableArray()
+	public function testArrayCastFromVariableArray() -> array
     {
         var uids = [1, "2", 3];
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableTrue()
+	public function testArrayCastFromVariableTrue() -> array
     {
         var uids = true;
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableFalse()
+	public function testArrayCastFromVariableFalse() -> array
     {
         var uids = false;
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableNull()
+	public function testArrayCastFromVariableNull() -> array
     {
         var uids = null;
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableInteger()
+	public function testArrayCastFromVariableInteger() -> array
     {
         var uids = 1;
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableFloat()
+	public function testArrayCastFromVariableFloat() -> array
     {
         var uids = 1.1;
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableString()
+	public function testArrayCastFromVariableString() -> array
     {
         var uids = "aaa";
         let uids = (array) uids;
         return uids;
     }
 
-	public function testArrayCastFromVariableStdClass()
+	public function testArrayCastFromVariableStdClass() -> array
     {
         var uids;
         let uids = new \StdClass;
