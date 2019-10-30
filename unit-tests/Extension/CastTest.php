@@ -31,11 +31,25 @@ class CastTest extends TestCase
         $this->test = null;
     }
 
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testCharCast()
+    {
+        /*
+         * Variable types
+         */
+
+        $this->assertSame(97, $this->test->testCharCastFromChar());
+        $this->assertSame(65, $this->test->testCharCastFromVariableChar());
+    }
+
     public function testIntCast()
     {
         /*
          * Value
          */
+
         $this->assertSame(5, $this->test->testIntCastFromFloat());
         $this->assertSame(1, $this->test->testIntCastFromBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromBooleanFalse());
@@ -48,10 +62,14 @@ class CastTest extends TestCase
         /*
          * Variable types
          */
+
         $this->assertSame(5, $this->test->testIntCastFromVariableFloat());
         $this->assertSame(1, $this->test->testIntCastFromVariableBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromVariableBooleanFalse());
         $this->assertSame(0, $this->test->testIntCastFromVariableNull());
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame(97, $this->test->testIntCastFromVariableChar());
 
         $this->assertSame(0, $this->test->testIntCastFromVariableString());
         $this->assertSame((int) 'test', $this->test->testIntCastFromParameterString('test'));
@@ -63,6 +81,16 @@ class CastTest extends TestCase
         $this->assertSame(0, $this->test->testIntCastFromVariableEmptyArray());
         $this->assertSame(1, $this->test->testIntCastFromVariableArray());
         $this->assertSame(1, $this->test->testIntCastFromVariableStdClass());
+    }
+
+    public function testLongCast()
+    {
+        /*
+         * Variable types
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame(65, $this->test->testLongCastFromVariableChar());
     }
 
     public function testFloatCast()
@@ -84,15 +112,37 @@ class CastTest extends TestCase
         $this->assertSame(1.0, $this->test->testFloatCastFromVariableStdClass());
     }
 
+    public function testDoubleCast()
+    {
+        /*
+         * Variable types
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame(65, $this->test->testLongCastFromVariableChar());
+    }
+
     public function testBooleanCast()
     {
+        /*
+         * Value
+         */
+
         $this->assertTrue($this->test->testBooleanCastFromIntTrue1());
         $this->assertTrue($this->test->testBooleanCastFromIntTrue2());
         $this->assertFalse($this->test->testBooleanCastFromIntFalse());
+
+        /*
+         * Variable types
+         */
+
         $this->assertTrue($this->test->testBooleanCastFromObject());
         $this->assertFalse($this->test->testBooleanCastFromEmptyArray());
         $this->assertTrue($this->test->testBooleanCastFromArray());
         $this->assertFalse($this->test->testBooleanCastFromNull());
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertTrue($this->test->testBooleanCastFromVariableChar());
     }
 
     public function testObjectCast()
