@@ -41,7 +41,7 @@ final class AliasManager
      *
      * @return bool
      */
-    public function isAlias($alias)
+    public function isAlias(string $alias): bool
     {
         return isset($this->aliases[$alias]);
     }
@@ -53,7 +53,7 @@ final class AliasManager
      *
      * @return string
      */
-    public function getAlias($alias)
+    public function getAlias(string $alias): bool
     {
         return $this->aliases[$alias];
     }
@@ -69,11 +69,12 @@ final class AliasManager
     }
 
     /**
-     * Check if Namespace use an Aliasing in use statement
+     * Check if Namespace use an Aliasing in use statement.
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
      *
      * @param string $alias
+     *
      * @return bool
      */
     public function hasUseStatementAliased(string $alias): bool
@@ -86,7 +87,7 @@ final class AliasManager
     }
 
     /**
-     * Extract implicit alias from use statement
+     * Extract implicit alias from use statement.
      *
      * @param string $namespace - FQN or simple Class name from use statement
      *
