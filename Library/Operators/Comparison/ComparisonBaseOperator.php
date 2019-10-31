@@ -344,7 +344,7 @@ class ComparisonBaseOperator extends BaseOperator
             case 'string':
                 $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                 $variableLeftCode = $compilationContext->backend->getVariableCode($variableLeft);
-                $compilationContext->backend->assignString($variableLeft, $left->getCode(), $compilationContext, true, false);
+                $compilationContext->backend->assignString($variableLeft, $left->getCode(), $compilationContext, true);
                 switch ($right->getType()) {
                     case 'string':
                     case 'null':
