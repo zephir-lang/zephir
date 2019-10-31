@@ -28,13 +28,9 @@ final class AliasManager
     public function add(array $useStatement)
     {
         foreach ($useStatement['aliases'] as $alias) {
-            if (isset($alias['alias'])) {
-                $this->aliases[$alias['alias']] = $alias['name'];
-            } else {
-                $parts = explode('\\', $alias['name']);
-                $implicitAlias = $parts[\count($parts) - 1];
-                $this->aliases[$implicitAlias] = $alias['name'];
-            }
+            $implicitAlias = $alias['alias'] ?? $this->implicitAlias($alias['name']);
+
+            $this->aliases[$implicitAlias] = $alias['name'];
         }
     }
 
@@ -70,5 +66,36 @@ final class AliasManager
     public function getAliases(): array
     {
         return $this->aliases;
+    }
+
+    /**
+     * Check if Implicit Alias declared as Alias
+     *
+     * ex: use Events\ManagerInterface as EventsManagerInterface;
+     * @param string $alias
+     */
+    public function hasImplicitAliasUsedAsAlias(string $alias): bool
+    {
+        if ($this->isAlias($alias)) {
+            $implicitAlias = $this->implicitAlias($this->aliases[$alias]);
+
+            return $this->getAlias($alias) === $implicitAlias;
+        }
+
+        return false;
+    }
+
+    /**
+     * Extract implicit alias from use statement
+     *
+     * @param string $useStatement - FQN or simple Class name from use statement
+     *
+     * @return string
+     */
+    private function implicitAlias(string $useStatement): string
+    {
+        $parts = explode('\\', $useStatement);
+
+        return $parts[\count($parts) - 1];
     }
 }
