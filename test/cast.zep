@@ -14,8 +14,7 @@ class Cast
      */
     public function testCharCastFromChar() -> char
     {
-        char a = 'a';
-        return (char) a;
+        return (char)  'a';
     }
 
     /**
@@ -28,6 +27,14 @@ class Cast
     }
 
     // To string cast
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testStringCastChar() -> string
+    {
+        return (string) 'z';
+    }
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1988
@@ -49,6 +56,14 @@ class Cast
     {
         var a = 5.0;
         return (int) a;
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testIntCastFromChar() -> int
+    {
+        return (int) 'A';
     }
 
     /**
@@ -158,6 +173,14 @@ class Cast
     /**
      * @see https://github.com/phalcon/zephir/issues/1988
      */
+    public function testLongCastFromChar() -> long
+    {
+        return (long) 'a';
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
     public function testLongCastFromVariableChar() -> long
     {
         char a = 'A';
@@ -257,6 +280,14 @@ class Cast
     /**
      * @see https://github.com/phalcon/zephir/issues/1988
      */
+    public function testDoubleCastFromVChar() -> double
+    {
+        return (double) 'a';
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
     public function testDoubleCastFromVariableChar() -> double
     {
         char a = 'A';
@@ -303,6 +334,14 @@ class Cast
     {
         var a = null;
         return (boolean) a;
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testBooleanCastFromChar() -> boolean
+    {
+        return (boolean) 'a';
     }
 
     /**
