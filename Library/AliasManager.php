@@ -69,17 +69,17 @@ final class AliasManager
     }
 
     /**
-     * Check if Implicit Alias declared as Alias
+     * Check if Namespace use an Aliasing in use statement
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
+     *
      * @param string $alias
+     * @return bool
      */
-    public function hasImplicitAliasUsedAsAlias(string $alias): bool
+    public function hasUseStatementAliased(string $alias): bool
     {
         if ($this->isAlias($alias)) {
-            $implicitAlias = $this->implicitAlias($this->aliases[$alias]);
-
-            return $this->getAlias($alias) === $implicitAlias;
+            return $alias !== $this->implicitAlias($this->getAlias($alias));
         }
 
         return false;
@@ -88,13 +88,13 @@ final class AliasManager
     /**
      * Extract implicit alias from use statement
      *
-     * @param string $useStatement - FQN or simple Class name from use statement
+     * @param string $namespace - FQN or simple Class name from use statement
      *
      * @return string
      */
-    private function implicitAlias(string $useStatement): string
+    private function implicitAlias(string $namespace): string
     {
-        $parts = explode('\\', $useStatement);
+        $parts = explode('\\', $namespace);
 
         return $parts[\count($parts) - 1];
     }
