@@ -133,8 +133,11 @@ class SymbolTable
      *
      * @return Variable
      */
-    public function addVariable(string $type, string $name, CompilationContext $compilationContext): Variable
-    {
+    public function addVariable(
+        string $type,
+        string $name,
+        CompilationContext $compilationContext
+    ): Variable {
         $currentBranch = $compilationContext->branchManager->getCurrentBranch();
         $branchId = $currentBranch->getUniqueId();
         if ($this->globalsManager->isSuperGlobal($name) || 'zephir_fcall_cache_entry' == $type) {
@@ -189,7 +192,7 @@ class SymbolTable
      *
      * @return bool|Variable
      */
-    public function getVariable($name, $compilationContext = null)
+    public function getVariable($name, CompilationContext $compilationContext = null)
     {
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
