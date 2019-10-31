@@ -27,6 +27,17 @@ class Cast
         return (char) a;
     }
 
+    // To string cast
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testStringCastVariableChar() -> string
+    {
+        char a = 'X';
+        return (string) a;
+    }
+
     // To int cast
 
     public function testIntCastFromFloat() -> int
