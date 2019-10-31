@@ -154,8 +154,22 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function declareConstant($type, $name, $value, CompilationContext $context);
 
-    /* Assign values to variables */
-    abstract public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true);
+    /**
+     * Assign value to variable.
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $value
+     * @param CompilationContext $context
+     * @param bool               $useCodePrinter
+     *
+     * @return string
+     */
+    abstract public function assignString(
+        Variable $variable,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter = true
+    ): string;
 
     abstract public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
 
@@ -253,7 +267,7 @@ abstract class BaseBackend implements FcallAwareInterface
      *
      * @return string
      */
-    abstract public function getVariableCode(Variable $variable);
+    abstract public function getVariableCode(Variable $variable): string;
 
     /**
      * Get a double pointer to the variable.
