@@ -627,13 +627,19 @@ class Call
 
                         case 'char':
                         case 'uchar':
-                            if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1, 1);');
-                            } else {
-                                $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1);');
-                            }
+                            $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                'variable',
+                                $compilationContext,
+                                $expression
+                            );
+                            $codePrinter->output(
+                                sprintf(
+                                    'ZVAL_STRINGL(&%s, &%s, 1);',
+                                    $parameterVariable->getName(),
+                                    $compiledExpression->getCode()
+                                )
+                            );
+
                             $this->temporalVariables[] = $parameterVariable;
                             $params[] = '&'.$parameterVariable->getName();
                             $types[] = $parameterVariable->getType();
