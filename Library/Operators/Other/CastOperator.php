@@ -437,31 +437,62 @@ class CastOperator extends BaseOperator
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
 
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariable(
-                            'string',
-                            $compilationContext
-                        );
-
-                        $symbolVariable->setMustInitNull(true);
-                        $symbolVariable->setIsInitialized(true, $compilationContext);
-                        $symbolVariable->increaseUses();
-                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                         $resolvedVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolved->getCode(),
-                            $compilationContext
-                        );
-                        $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
-
-                        $compilationContext->codePrinter->output(
-                            sprintf('zephir_get_strval(%s, %s);', $symbol, $resolvedCode)
+                            $compilationContext,
+                            $expression
                         );
 
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
+                        switch ($resolvedVariable->getType()) {
+                            case Types::T_CHAR:
+                                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                    'string',
+                                    $compilationContext
+                                );
+
+                                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                                $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
+
+                                $compilationContext->codePrinter->output(
+                                    sprintf('ZVAL_STRINGL(%s, %s, 1);', $symbol, $resolvedCode)
+                                );
+
+                                return new CompiledExpression(
+                                    'variable',
+                                    $symbolVariable->getName(),
+                                    $expression
+                                );
+                            default:
+                                // TODO: I'm not a pretty sure this branch works
+                                // This is old code I just moved to "default"
+                                // See: https://github.com/phalcon/zephir/issues/1988
+                                $symbolVariable = $compilationContext->symbolTable->getTempVariable(
+                                    'string',
+                                    $compilationContext
+                                );
+
+                                $symbolVariable->setMustInitNull(true);
+                                $symbolVariable->setIsInitialized(true, $compilationContext);
+                                $symbolVariable->increaseUses();
+                                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                                $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
+
+                                $compilationContext->codePrinter->output(
+                                    sprintf('zephir_get_strval(%s, %s);', $symbol, $resolvedCode)
+                                );
+
+                                if ($symbolVariable->isTemporal()) {
+                                    $symbolVariable->setIdle(true);
+                                }
+
+                                return new CompiledExpression(
+                                    'variable',
+                                    $symbolVariable->getName(),
+                                    $expression
+                                );
                         }
 
-                        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
-
+                        break;
                     default:
                         throw new CompilerException(
                             sprintf(
