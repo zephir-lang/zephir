@@ -53,7 +53,7 @@ final class AliasManager
      *
      * @return string
      */
-    public function getAlias(string $alias): bool
+    public function getAlias(string $alias): string
     {
         return $this->aliases[$alias];
     }
