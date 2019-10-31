@@ -631,6 +631,7 @@ class Variable
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
+                                // FIXME: Most likely this code is outdated and no longer works.
                                 $codePrinter->output('Z_STRLEN_P('.$variable.') = zephir_spprintf(&Z_STRVAL_P('.$variable.'), 0, "%ld", '.$itemVariable->getName().');');
                                 $codePrinter->output('Z_TYPE_P('.$variable.') = IS_STRING;');
                                 break;
@@ -651,6 +652,7 @@ class Variable
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
+                                // FIXME: Most likely this code is outdated and no longer works.
                                 $codePrinter->output('Z_STRLEN_P('.$variable.') = zephir_spprintf(&Z_STRVAL_P('.$variable.'), 0, "%c", '.$itemVariable->getName().');');
                                 $codePrinter->output('Z_TYPE_P('.$variable.') = IS_STRING;');
                                 break;
