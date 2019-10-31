@@ -29,7 +29,67 @@ ZEPHIR_INIT_CLASS(Test_Cast) {
 
 }
 
-/** To int cast */
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testCharCastFromChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_LONG('a');
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testCharCastFromVariableChar) {
+
+	char a, _0;
+	zval *this_ptr = getThis();
+
+
+
+	a = 'A';
+	_0 = a;
+	RETURN_LONG(_0);
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testStringCastChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_STRING("z");
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testStringCastVariableChar) {
+
+	zval _0;
+	char a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	a = 'X';
+	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_STRINGL(&_0, &a, 1);
+	RETURN_CTOR(&_0);
+
+}
+
 PHP_METHOD(Test_Cast, testIntCastFromFloat) {
 
 	zval *this_ptr = getThis();
@@ -48,6 +108,33 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableFloat) {
 
 	a = 5.0;
 	RETURN_LONG((int) (a));
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testIntCastFromChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_LONG('A');
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testIntCastFromVariableChar) {
+
+	char a;
+	zval *this_ptr = getThis();
+
+
+
+	a = 'a';
+	RETURN_LONG(a);
 
 }
 
@@ -301,7 +388,33 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass) {
 
 }
 
-/** To float cast */
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testLongCastFromChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_LONG((long) 'a');
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testLongCastFromVariableChar) {
+
+	char a;
+	zval *this_ptr = getThis();
+
+
+
+	a = 'A';
+	RETURN_LONG(a);
+
+}
+
 PHP_METHOD(Test_Cast, testFloatCastFromFloat) {
 
 	zval *this_ptr = getThis();
@@ -521,7 +634,33 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass) {
 
 }
 
-/** To boolean cast */
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testDoubleCastFromVChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_DOUBLE((double) 'a');
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testDoubleCastFromVariableChar) {
+
+	char a;
+	zval *this_ptr = getThis();
+
+
+
+	a = 'A';
+	RETURN_DOUBLE((double) a);
+
+}
+
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 
 	zval *this_ptr = getThis();
@@ -626,7 +765,33 @@ PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 
 }
 
-/** To object cast */
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testBooleanCastFromChar) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_BOOL((zend_bool) 'a');
+
+}
+
+/**
+ * @see https://github.com/phalcon/zephir/issues/1988
+ */
+PHP_METHOD(Test_Cast, testBooleanCastFromVariableChar) {
+
+	char a;
+	zval *this_ptr = getThis();
+
+
+
+	a = 'A';
+	RETURN_BOOL((zend_bool) a);
+
+}
+
 PHP_METHOD(Test_Cast, testObjectCastFromInt) {
 
 	zval _0;
@@ -847,7 +1012,6 @@ PHP_METHOD(Test_Cast, testCastFileResourceToInteger) {
 
 }
 
-/** To array cast */
 PHP_METHOD(Test_Cast, testArrayCastFromVariableArray) {
 
 	zval _1;
