@@ -127,14 +127,17 @@ class SymbolTable
     /**
      * Adds a variable to the symbol table.
      *
-     * @param int                $type
+     * @param string             $type
      * @param string             $name
      * @param CompilationContext $compilationContext
      *
      * @return Variable
      */
-    public function addVariable($type, $name, CompilationContext $compilationContext)
-    {
+    public function addVariable(
+        string $type,
+        string $name,
+        CompilationContext $compilationContext
+    ): Variable {
         $currentBranch = $compilationContext->branchManager->getCurrentBranch();
         $branchId = $currentBranch->getUniqueId();
         if ($this->globalsManager->isSuperGlobal($name) || 'zephir_fcall_cache_entry' == $type) {
@@ -187,9 +190,9 @@ class SymbolTable
      * @param $name
      * @param CompilationContext $compilationContext
      *
-     * @return bool|\Zephir\Variable
+     * @return bool|Variable
      */
-    public function getVariable($name, $compilationContext = null)
+    public function getVariable($name, CompilationContext $compilationContext = null)
     {
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
@@ -197,7 +200,8 @@ class SymbolTable
             $branchId = (int) (substr($name, $pos + \strlen(Variable::BRANCH_MAGIC)));
             $name = substr($name, 0, $pos);
         } else {
-            $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
+            $compilationContext = $compilationContext ?: $this->compilationContext;
+            $branch = $this->resolveVariableToBranch($name, $compilationContext);
             if (!$branch) {
                 return false;
             }
@@ -569,10 +573,8 @@ class SymbolTable
      *
      * @return Variable
      */
-    public function getTempVariable($type, CompilationContext $compilationContext)
+    public function getTempVariable(string $type, CompilationContext $compilationContext): Variable
     {
-        $compilationContext = $compilationContext ?: $this->compilationContext;
-
         $tempVar = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_'.$tempVar, $compilationContext);
         $variable->setTemporal(true);

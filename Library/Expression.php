@@ -270,9 +270,9 @@ class Expression
      *
      * @throws CompilerException|Exception
      *
-     * @return bool|CompiledExpression
+     * @return CompiledExpression
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): CompiledExpression
     {
         $expression = $this->expression;
         $type = $expression['type'];

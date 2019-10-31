@@ -400,15 +400,10 @@ class Call
                         $parameterVariable,
                         add_slashes($compiledExpression->getCode()),
                         $compilationContext,
-                        true,
-                        'ZEPHIR_TEMP_PARAM_COPY'
+                        true
                     );
 
                     $this->temporalVariables[] = $parameterVariable;
-                    /* ZE3 copies strings */
-                    if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                        $mustCheck[] = $parameterVariable->getName();
-                    }
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
@@ -544,17 +539,17 @@ class Call
 
                 case 'char':
                 case 'uchar':
-                    if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                    } else {
-                        $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    }
+                    $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                        'variable',
+                        $compilationContext,
+                        $expression
+                    );
+
                     $compilationContext->backend->assignString(
                         $parameterVariable,
                         add_slashes($compiledExpression->getCode()),
                         $compilationContext,
-                        true,
-                        false
+                        true
                     );
 
                     $this->temporalVariables[] = $parameterVariable;
@@ -599,8 +594,7 @@ class Call
                         $parameterVariable,
                         add_slashes($compiledExpression->getCode()),
                         $compilationContext,
-                        true,
-                        false
+                        true
                     );
 
                     $this->temporalVariables[] = $parameterVariable;
@@ -633,13 +627,19 @@ class Call
 
                         case 'char':
                         case 'uchar':
-                            if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1, 1);');
-                            } else {
-                                $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                                $codePrinter->output('ZVAL_STRINGL(&'.$parameterVariable->getName().', &'.$compiledExpression->getCode().', 1);');
-                            }
+                            $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                'variable',
+                                $compilationContext,
+                                $expression
+                            );
+                            $codePrinter->output(
+                                sprintf(
+                                    'ZVAL_STRINGL(&%s, &%s, 1);',
+                                    $parameterVariable->getName(),
+                                    $compiledExpression->getCode()
+                                )
+                            );
+
                             $this->temporalVariables[] = $parameterVariable;
                             $params[] = '&'.$parameterVariable->getName();
                             $types[] = $parameterVariable->getType();

@@ -596,8 +596,7 @@ class ForStatement extends StatementAbstract
                 $constantVariable,
                 add_slashes($expression->getCode()),
                 $compilationContext,
-                true,
-                false
+                true
             );
 
             $stringVariable = $constantVariable;
