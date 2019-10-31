@@ -53,6 +53,10 @@ class CastOperator extends BaseOperator
                     case Types::T_NULL:
                         return new CompiledExpression('int', 0, $expression);
 
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
+                        return new CompiledExpression('int', "'{$resolved->getCode()}'", $expression);
+
                     case Types::T_INT:
                         return new CompiledExpression('int', $resolved->getCode(), $expression);
 
@@ -115,6 +119,7 @@ class CastOperator extends BaseOperator
                         switch ($symbolVariable->getType()) {
                             case Types::T_INT:
                             case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 return new CompiledExpression('int', $symbolVariable->getName(), $expression);
 
                             case Types::T_DOUBLE:
@@ -166,6 +171,14 @@ class CastOperator extends BaseOperator
                     case Types::T_INT:
                         return new CompiledExpression('long', $resolved->getCode(), $expression);
 
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
+                        return new CompiledExpression(
+                            'long',
+                            "(long) '{$resolved->getCode()}'",
+                            $expression
+                        );
+
                     case Types::T_DOUBLE:
                         return new CompiledExpression('long', '(long) '.$resolved->getCode(), $expression);
 
@@ -196,6 +209,7 @@ class CastOperator extends BaseOperator
                         switch ($symbolVariable->getType()) {
                             case Types::T_INT:
                             case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 return new CompiledExpression('long', $symbolVariable->getName(), $expression);
 
                             case Types::T_DOUBLE:
@@ -247,6 +261,16 @@ class CastOperator extends BaseOperator
                     case Types::T_BOOL:
                         return new CompiledExpression('double', $resolved->getBooleanCode(), $expression);
 
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
+                        return new CompiledExpression(
+                            'double',
+                            "(double) '{$resolved->getCode()}'",
+                            $expression
+                        );
+
+                    case Types::T_INT:
+                    case Types::T_LONG:
                     case Types::T_DOUBLE:
                         return new CompiledExpression('double', $resolved->getCode(), $expression);
 
@@ -276,7 +300,12 @@ class CastOperator extends BaseOperator
                         switch ($symbolVariable->getType()) {
                             case Types::T_INT:
                             case Types::T_CHAR:
-                                return new CompiledExpression('double', $symbolVariable->getName(), $expression);
+                            case Types::T_UCHAR:
+                                return new CompiledExpression(
+                                    'double',
+                                    "(double) {$symbolVariable->getName()}",
+                                    $expression
+                                );
 
                             case Types::T_DOUBLE:
                             case Types::T_BOOL:
@@ -330,6 +359,14 @@ class CastOperator extends BaseOperator
                             $expression
                         );
 
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
+                        return new CompiledExpression(
+                            'bool',
+                            "(zend_bool) '{$resolved->getCode()}'",
+                            $expression
+                        );
+
                     case Types::T_BOOL:
                         return new CompiledExpression('bool', $resolved->getCode(), $expression);
 
@@ -348,6 +385,7 @@ class CastOperator extends BaseOperator
                         switch ($symbolVariable->getType()) {
                             case Types::T_INT:
                             case Types::T_CHAR:
+                            case Types::T_UCHAR:
                                 return new CompiledExpression(
                                     'bool',
                                     sprintf('(zend_bool) %s', $symbolVariable->getName()),
@@ -388,6 +426,12 @@ class CastOperator extends BaseOperator
 
             case Types::T_CHAR:
                 switch ($resolved->getType()) {
+                    case Types::T_UCHAR:
+                        return new CompiledExpression('uchar', "'{$resolved->getCode()}'", $expression);
+
+                    case Types::T_CHAR:
+                        return new CompiledExpression('char', "'{$resolved->getCode()}'", $expression);
+
                     case Types::T_VARIABLE:
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
@@ -402,6 +446,7 @@ class CastOperator extends BaseOperator
                         );
 
                         switch ($symbolVariable->getType()) {
+                            // TODO: uchar
                             case Types::T_CHAR:
                                 $compilationContext->codePrinter->output(
                                     sprintf('%s = %s;', $tempVariable->getName(), $symbolVariable->getName())
@@ -433,6 +478,10 @@ class CastOperator extends BaseOperator
 
             case Types::T_STRING:
                 switch ($resolved->getType()) {
+                    case Types::T_UCHAR:
+                    case Types::T_CHAR:
+                        return new CompiledExpression('string', $resolved->getCode(), $expression);
+
                     case Types::T_VARIABLE:
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);

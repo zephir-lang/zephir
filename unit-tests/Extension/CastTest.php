@@ -37,15 +37,27 @@ class CastTest extends TestCase
     public function testCharCast()
     {
         /*
-         * Variable types
+         * Value
          */
 
         $this->assertSame(97, $this->test->testCharCastFromChar());
+
+        /*
+         * Variable types
+         */
+
         $this->assertSame(65, $this->test->testCharCastFromVariableChar());
     }
 
     public function testStringCast()
     {
+        /*
+         * Value
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame('z', $this->test->testStringCastChar());
+
         /*
          * Variable types
          */
@@ -68,6 +80,7 @@ class CastTest extends TestCase
         $this->assertSame(0, $this->test->testIntCastFromEmptyArray());
         $this->assertSame(1, $this->test->testIntCastFromArray());
         $this->assertSame(1, $this->test->testIntCastFromStdClass());
+        $this->assertSame(65, $this->test->testIntCastFromChar());
 
         /*
          * Variable types
@@ -95,6 +108,13 @@ class CastTest extends TestCase
 
     public function testLongCast()
     {
+        /*
+         * Value
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame(97, $this->test->testLongCastFromChar());
+
         /*
          * Variable types
          */
@@ -125,11 +145,18 @@ class CastTest extends TestCase
     public function testDoubleCast()
     {
         /*
+         * Value
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame(97.0, $this->test->testDoubleCastFromVChar());
+
+        /*
          * Variable types
          */
 
         // https://github.com/phalcon/zephir/issues/1988
-        $this->assertSame(65, $this->test->testLongCastFromVariableChar());
+        $this->assertSame(65.0, $this->test->testDoubleCastFromVariableChar());
     }
 
     public function testBooleanCast()
@@ -141,6 +168,9 @@ class CastTest extends TestCase
         $this->assertTrue($this->test->testBooleanCastFromIntTrue1());
         $this->assertTrue($this->test->testBooleanCastFromIntTrue2());
         $this->assertFalse($this->test->testBooleanCastFromIntFalse());
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertTrue($this->test->testBooleanCastFromChar());
 
         /*
          * Variable types
