@@ -66,7 +66,7 @@ class Backend extends BaseBackend
     /**
      * {@inheritdoc}
      */
-    public function getVariableCode(Variable $variable)
+    public function getVariableCode(Variable $variable): string
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'
@@ -210,18 +210,25 @@ class Backend extends BaseBackend
         );
     }
 
-    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
-    {
-        if (null === $value) {
-            $output = 'ZVAL_EMPTY_STRING('.$this->getVariableCode($variable).');';
-            if ($useCodePrinter) {
-                $context->codePrinter->output($output);
-            }
-
-            return $output;
-        }
-
-        return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, $doCopy);
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $value
+     * @param CompilationContext $context
+     * @param bool               $useCodePrinter
+     *
+     * @return string
+     */
+    public function assignString(
+        Variable $variable,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter = true
+    ): string {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
@@ -1040,25 +1047,31 @@ class Backend extends BaseBackend
         return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
     }
 
-    /* Assign value to variable */
-    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
-    {
+    /**
+     * Assign value to variable helper.
+     *
+     * @param string             $macro
+     * @param string             $variableName
+     * @param string|Variable    $value
+     * @param CompilationContext $context
+     * @param bool               $useCodePrinter
+     *
+     * @return string
+     */
+    protected function assignHelper(
+        string $macro,
+        string $variableName,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter
+    ): string {
         if ($value instanceof Variable) {
             $value = $value->getName();
         } else {
             $value = 'ZVAL_STRING' == $macro ? '"'.$value.'"' : $value;
         }
 
-        $copyStr = '';
-        if (true === $doCopy) {
-            $copyStr = ', 1';
-        } elseif (false === $doCopy) {
-            $copyStr = ', 0';
-        } elseif (isset($doCopy)) {
-            $copyStr = ', '.$doCopy;
-        }
-
-        $output = $macro.'('.$variableName.', '.$value.$copyStr.');';
+        $output = $macro.'('.$variableName.', '.$value.');';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }

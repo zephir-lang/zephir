@@ -60,7 +60,7 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      */
-    public function getVariableCode(Variable $variable)
+    public function getVariableCode(Variable $variable): string
     {
         if ($variable->isDoublePointer() ||
             \in_array($variable->getName(), ['this_ptr', 'return_value']) ||
@@ -625,10 +625,29 @@ class Backend extends BackendZendEngine2
         return 'void '.$method->getInternalName().'(int ht, zval *return_value, zval *this_ptr, int return_value_used)';
     }
 
-    /* Assign value to variable */
-    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = null)
-    {
-        return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, null);
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $value
+     * @param CompilationContext $context
+     * @param bool               $useCodePrinter
+     *
+     * @return string
+     */
+    public function assignString(
+        Variable $variable,
+        $value,
+        CompilationContext $context,
+        bool $useCodePrinter = true
+    ): string {
+        return $this->assignHelper(
+            'ZVAL_STRING',
+            $this->getVariableCode($variable),
+            $value,
+            $context,
+            $useCodePrinter
+        );
     }
 
     /**
