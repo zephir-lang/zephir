@@ -44,6 +44,16 @@ class CastTest extends TestCase
         $this->assertSame(65, $this->test->testCharCastFromVariableChar());
     }
 
+    public function testStringCast()
+    {
+        /*
+         * Variable types
+         */
+
+        // https://github.com/phalcon/zephir/issues/1988
+        $this->assertSame('X', $this->test->testStringCastVariableChar());
+    }
+
     public function testIntCast()
     {
         /*
