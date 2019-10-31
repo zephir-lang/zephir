@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Fixed
 - Fixed arithmetical operations with `zvals` which stores `double` numbers
-- Fixed updating `double` in `integer` static variables in the loop
-  [#1494](https://github.com/phalcon/zephir/issues/1494)
+- Fixed updating static variables in the loop which represents  `double` and
+  `integer` data types [#1494](https://github.com/phalcon/zephir/issues/1494)
+- Fixed casting char into another of a different type
+  [#1988](https://github.com/phalcon/zephir/issues/1988)
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
