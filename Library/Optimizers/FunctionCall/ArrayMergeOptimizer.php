@@ -49,35 +49,33 @@ class ArrayMergeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
+
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression);
         }
 
         $context->headersManager->add('kernel/array');
 
         $symbolVariable->setDynamicTypes('array');
-
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $resolveParam = $this->createParamResolver($context);
-        $context->codePrinter->output('zephir_fast_array_merge('.$symbol.', '.$resolveParam($resolvedParams[0]).', '.$resolveParam($resolvedParams[1]).');');
+
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_fast_array_merge(%s, %s, %s);',
+                $symbol,
+                $resolvedParams[0],
+                $resolvedParams[1]
+            )
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-    }
-
-    private function createParamResolver(CompilationContext $context)
-    {
-        if (false == $context->backend->isZE3()) {
-            return function ($str) {
-                return '&('.$str.')';
-            };
-        }
-
-        return function ($str) {
-            return $str;
-        };
     }
 }
