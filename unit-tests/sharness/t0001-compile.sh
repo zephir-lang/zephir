@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034
 test_description="Test compile commands"
 
+# shellcheck disable=SC1091
 source ./setup.sh
 
 regexp="'-O2 -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
