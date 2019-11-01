@@ -69,9 +69,9 @@ final class AliasManager
     }
 
     /**
-     * Returns Alias by Namespace.
+     * Returns alias by namespace.
      *
-     * @param string $namespace - FQN Class name
+     * @param string $namespace - fully qualified class name
      */
     public function getAliasForNamespace(string $namespace): string
     {
@@ -85,7 +85,7 @@ final class AliasManager
     }
 
     /**
-     * Check if Namespace use an Aliasing in use statement.
+     * Check if namespace use an aliasing in use statement.
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
      *
@@ -93,7 +93,7 @@ final class AliasManager
      *
      * @return bool
      */
-    public function hasUseStatementAliased(string $alias): bool
+    public function isUseStatementAliased(string $alias): bool
     {
         if ($this->isAlias($alias)) {
             return $alias !== $this->implicitAlias($this->getAlias($alias));
@@ -103,9 +103,9 @@ final class AliasManager
     }
 
     /**
-     * Check if Namespace has explicit Alias in `use` declaration.
+     * Check if namespace has explicit alias in `use` declaration.
      *
-     * @param string $namespace - FQN Class name
+     * @param string $namespace - fully qualified class name
      *
      * @return bool
      */
@@ -119,7 +119,7 @@ final class AliasManager
     /**
      * Extract implicit alias from use statement.
      *
-     * @param string $namespace - FQN or simple Class name from use statement
+     * @param string $namespace - FQCN or simple class name from use statement
      *
      * @return string
      */
