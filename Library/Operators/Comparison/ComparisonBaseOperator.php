@@ -342,7 +342,7 @@ class ComparisonBaseOperator extends BaseOperator
                 break;
 
             case 'string':
-                $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
                 $variableLeftCode = $compilationContext->backend->getVariableCode($variableLeft);
                 $compilationContext->backend->assignString(
                     $variableLeft,
