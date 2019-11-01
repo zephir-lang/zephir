@@ -37,4 +37,12 @@ test_expect_success "Should properly generate Namespace for extends (slash)" "
   test_cmp expected/Issue_1907.zep.php ide/0.0.1/Stubs/Issue_1907.zep.php
 "
 
+# See: https://github.com/phalcon/zephir/issues/1986
+test_expect_success "Should properly generate Aliases for use statements" "
+  cd $FIXTURESDIR/stubs/issues &&
+  zephirc generate --no-ansi 2>&1 >/dev/null &&
+  zephirc stubs --no-ansi 2>&1 >/dev/null &&
+  test_cmp expected/Issue_1986.zep.php ide/0.0.1/Stubs/Issue_1986.zep.php
+"
+
 test_done
