@@ -80,4 +80,39 @@ class AliasManagerTest extends TestCase
         $this->assertSame($this->testAliasMgr->getAliases(), $expected);
         $this->assertSame($this->testAliasMgr->getAlias($alias), $namespace);
     }
+
+    public function statementDataProvider(): array
+    {
+        return [
+            'with aliased statement' => [
+                [
+                    'name' => 'Bug\\Events\\ManagerInterface',
+                    'alias' => 'EventsManagerInterface',
+                ], true,
+            ],
+            'without aliased statement' => [
+                [
+                    'name' => 'Bug\\Events\\ManagerInterface',
+                    'alias' => 'ManagerInterface',
+                ], false,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider statementDataProvider
+     */
+    public function shouldCheckAliasedStatement(array $useStatements, bool $expected)
+    {
+        $this->testAliasMgr->add([
+            'aliases' => [$useStatements],
+        ]);
+
+        $alias = $useStatements['alias'];
+        $namespace = $useStatements['name'];
+
+        $this->assertSame($this->testAliasMgr->isUseStatementAliased($alias), $expected);
+        $this->assertSame($this->testAliasMgr->isNamespaceAliased($namespace), $expected);
+    }
 }
