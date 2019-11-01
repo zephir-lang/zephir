@@ -39,12 +39,12 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($context->backend->isZE3()) {
-            if ('IS_BOOL' == $this->getType()) {
-                $condition = '(Z_TYPE_P('.$resolvedParams[0].') == IS_TRUE || Z_TYPE_P('.$resolvedParams[0].') == IS_FALSE)';
-            } else {
-                $condition = 'Z_TYPE_P('.$resolvedParams[0].') == '.$this->getType();
-            }
+        if ('IS_BOOL' == $this->getType()) {
+            $condition = sprintf(
+                '(Z_TYPE_P(%s) == IS_TRUE || Z_TYPE_P(%s) == IS_FALSE)',
+                $resolvedParams[0],
+                $resolvedParams[0]
+            );
         } else {
             $condition = 'Z_TYPE_P('.$resolvedParams[0].') == '.$this->getType();
         }
