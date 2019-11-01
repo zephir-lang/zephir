@@ -619,10 +619,10 @@ class Backend extends BackendZendEngine2
         }
 
         if (\count($signatureParameters)) {
-            return 'void '.$method->getInternalName().'(int ht, zval *return_value, zval *this_ptr, int return_value_used, '.implode(', ', $signatureParameters).')';
+            return 'void '.$method->getInternalName().'(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, '.implode(', ', $signatureParameters).')';
         }
 
-        return 'void '.$method->getInternalName().'(int ht, zval *return_value, zval *this_ptr, int return_value_used)';
+        return 'void '.$method->getInternalName().'(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used)';
     }
 
     /**
