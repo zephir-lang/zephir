@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034
 test_description="Test generate IDE stubs"
 
+# shellcheck disable=SC1091
 source ./setup.sh
 
 # See: https://github.com/phalcon/zephir/issues/1922
