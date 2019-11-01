@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_McallInternal) {
 
 }
 
-void zep_Test_McallInternal_a(int ht, zval *return_value, zval *this_ptr, int return_value_used) {
+void zep_Test_McallInternal_a(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used) {
 
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -44,7 +44,7 @@ void zep_Test_McallInternal_a(int ht, zval *return_value, zval *this_ptr, int re
 
 }
 
-void zep_Test_McallInternal_b(int ht, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext ) {
+void zep_Test_McallInternal_b(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext ) {
 
 	zval *a, a_sub, *b, b_sub;
 		ZVAL_UNDEF(&a_sub);
@@ -60,7 +60,7 @@ void zep_Test_McallInternal_b(int ht, zval *return_value, zval *this_ptr, int re
 
 }
 
-void zep_Test_McallInternal_c(int ht, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
+void zep_Test_McallInternal_c(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
@@ -208,7 +208,7 @@ PHP_METHOD(Test_McallInternal, g) {
 
 }
 
-void zep_Test_McallInternal_other(int ht, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
+void zep_Test_McallInternal_other(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
@@ -266,6 +266,29 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 		}
 	}
 	RETURN_MM_DOUBLE(p);
+
+}
+
+void zep_Test_McallInternal_test1956(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used) {
+
+	
+
+	RETURN_THISW();
+
+}
+
+PHP_METHOD(Test_McallInternal, issue1956) {
+
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(this_ptr, zep_Test_McallInternal_test1956);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 

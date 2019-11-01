@@ -63,8 +63,18 @@ class McallInternal
   	{
 		double $p = 0; long $i = 0;
 		for i in range(0, 10000000) {
-            let $p += (double) $this->other($i, $i + 1);
-        }
-        return $p;
+			let $p += (double) $this->other($i, $i + 1);
+		}
+		return $p;
+  	}
+
+	internal function test1956() -> <McallInternal>
+	{
+		return this;
+  	}
+
+  	public function issue1956() -> double
+  	{
+		return $this->test1956();
   	}
 }
