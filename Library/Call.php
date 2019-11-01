@@ -504,7 +504,6 @@ class Call
      * @param array              $expression
      *
      * @throws CompilerException
-     * @throws Exception
      *
      * @return array
      */
@@ -539,6 +538,9 @@ class Call
 
                 case 'char':
                 case 'uchar':
+                case 'ulong':
+                case 'string':
+                case 'istring':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                         'variable',
                         $compilationContext,
@@ -574,33 +576,14 @@ class Call
                         if ('false' == $compiledExpression->getCode()) {
                             $params[] = $compilationContext->backend->resolveValue('false', $compilationContext);
                         } else {
-                            throw new Exception('?');
+                            throw new CompilerException(
+                                'Unable to resolve parameter using zval',
+                                $expression
+                            );
                         }
                     }
                     $types[] = 'bool';
                     $dynamicTypes[] = 'bool';
-                    break;
-
-                case 'ulong':
-                case 'string':
-                case 'istring':
-                    if ('ZendEngine2' == $compilationContext->backend->getName()) {
-                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                    } else {
-                        $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    }
-
-                    $compilationContext->backend->assignString(
-                        $parameterVariable,
-                        add_slashes($compiledExpression->getCode()),
-                        $compilationContext,
-                        true
-                    );
-
-                    $this->temporalVariables[] = $parameterVariable;
-                    $params[] = '&'.$parameterVariable->getName();
-                    $types[] = $parameterVariable->getType();
-                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'array':
