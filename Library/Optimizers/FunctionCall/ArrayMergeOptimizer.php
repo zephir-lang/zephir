@@ -53,7 +53,8 @@ class ArrayMergeOptimizer extends OptimizerAbstract
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException(
                 'Returned values by functions can only be assigned to variant variables',
-                $expression);
+                $expression
+            );
         }
 
         $context->headersManager->add('kernel/array');
