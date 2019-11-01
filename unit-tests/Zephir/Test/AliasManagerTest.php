@@ -24,43 +24,58 @@ class AliasManagerTest extends TestCase
         $this->testAliasMgr = new AliasManager();
     }
 
-    public function aliasDataProvider(): array
+    private function injectExpectedResult(array $expected): array
+    {
+        $testDataProvider = $this->baseTestSuiteProvider();
+
+        $index = 0;
+
+        foreach ($testDataProvider as $testName => $testSuite) {
+            array_push($testDataProvider[$testName], $expected[$index++]);
+        }
+
+        return $testDataProvider;
+    }
+
+    public function baseTestSuiteProvider(): array
     {
         return [
             'with alias' => [
-                // Actual
                 [
                     'name' => 'Bug\\Events\\ManagerInterface',
                     'alias' => 'EventsManagerInterface',
                 ],
-                // Expected
-                [
-                    'EventsManagerInterface' => 'Bug\\Events\\ManagerInterface',
-                ],
             ],
-            'with alias and namespace from root' => [
-                // Actual
+            'with alias and class name from root' => [
                 [
                     'name' => '\\Bug\\Events\\ManagerInterface',
                     'alias' => 'EventsManagerInterface',
                 ],
-                // Expected
-                [
-                    'EventsManagerInterface' => '\\Bug\\Events\\ManagerInterface',
-                ],
             ],
             'without explicit alias' => [
-                // Actual
                 [
                     'name' => 'Throwable',
                     'alias' => 'Throwable',
                 ],
-                // Expected
-                [
-                    'Throwable' => 'Throwable',
-                ],
             ],
         ];
+    }
+
+    public function aliasDataProvider(): array
+    {
+        $expected = [
+            [
+                'EventsManagerInterface' => 'Bug\\Events\\ManagerInterface',
+            ],
+            [
+                'EventsManagerInterface' => '\\Bug\\Events\\ManagerInterface',
+            ],
+            [
+                'Throwable' => 'Throwable',
+            ],
+        ];
+
+        return $this->injectExpectedResult($expected);
     }
 
     /**
@@ -74,29 +89,20 @@ class AliasManagerTest extends TestCase
         ]);
 
         $alias = $useStatements['alias'];
-        $namespace = $useStatements['name'];
+        $className = $useStatements['name'];
 
         $this->assertTrue($this->testAliasMgr->isAlias($alias));
         $this->assertSame($this->testAliasMgr->getAliases(), $expected);
-        $this->assertSame($this->testAliasMgr->getAlias($alias), $namespace);
+        $this->assertSame($this->testAliasMgr->getAlias($alias), $className);
     }
 
     public function statementDataProvider(): array
     {
-        return [
-            'with aliased statement' => [
-                [
-                    'name' => 'Bug\\Events\\ManagerInterface',
-                    'alias' => 'EventsManagerInterface',
-                ], true,
-            ],
-            'without aliased statement' => [
-                [
-                    'name' => 'Bug\\Events\\ManagerInterface',
-                    'alias' => 'ManagerInterface',
-                ], false,
-            ],
+        $expected = [
+            true, true, false,
         ];
+
+        return $this->injectExpectedResult($expected);
     }
 
     /**
@@ -110,9 +116,35 @@ class AliasManagerTest extends TestCase
         ]);
 
         $alias = $useStatements['alias'];
-        $namespace = $useStatements['name'];
+        $className = $useStatements['name'];
 
         $this->assertSame($this->testAliasMgr->isUseStatementAliased($alias), $expected);
-        $this->assertSame($this->testAliasMgr->isAliasPresentFor($namespace), $expected);
+        $this->assertSame($this->testAliasMgr->isAliasPresentFor($className), $expected);
+    }
+
+    public function classNameDataProvider(): array
+    {
+        $expected = [
+            'EventsManagerInterface',
+            '\Bug\Events\ManagerInterface',
+            'Throwable',
+        ];
+
+        return $this->injectExpectedResult($expected);
+    }
+
+    /**
+     * @test
+     * @dataProvider classNameDataProvider
+     */
+    public function shouldGetAliasForClassName(array $useStatements, string $expected)
+    {
+        $this->testAliasMgr->add([
+            'aliases' => [$useStatements],
+        ]);
+
+        $className = $useStatements['name'];
+
+        $this->assertSame($this->testAliasMgr->getAliasForClassName($className), $expected);
     }
 }
