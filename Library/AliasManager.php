@@ -28,13 +28,9 @@ final class AliasManager
     public function add(array $useStatement)
     {
         foreach ($useStatement['aliases'] as $alias) {
-            if (isset($alias['alias'])) {
-                $this->aliases[$alias['alias']] = $alias['name'];
-            } else {
-                $parts = explode('\\', $alias['name']);
-                $implicitAlias = $parts[\count($parts) - 1];
-                $this->aliases[$implicitAlias] = $alias['name'];
-            }
+            $implicitAlias = $alias['alias'] ?? $this->implicitAlias($alias['name']);
+
+            $this->aliases[$implicitAlias] = $alias['name'];
         }
     }
 
@@ -45,7 +41,7 @@ final class AliasManager
      *
      * @return bool
      */
-    public function isAlias($alias)
+    public function isAlias(string $alias): bool
     {
         return isset($this->aliases[$alias]);
     }
@@ -57,7 +53,7 @@ final class AliasManager
      *
      * @return string
      */
-    public function getAlias($alias)
+    public function getAlias(string $alias): string
     {
         return $this->aliases[$alias];
     }
@@ -70,5 +66,67 @@ final class AliasManager
     public function getAliases(): array
     {
         return $this->aliases;
+    }
+
+    /**
+     * Returns alias by namespace.
+     *
+     * @param string $namespace - fully qualified class name
+     */
+    public function getAliasForNamespace(string $namespace): string
+    {
+        $keys = array_keys($this->aliases, trim($namespace, '\\'));
+
+        if (1 === \count($keys)) {
+            return $keys[0];
+        }
+
+        return $namespace;
+    }
+
+    /**
+     * Check if namespace use an aliasing in use statement.
+     *
+     * ex: use Events\ManagerInterface as EventsManagerInterface;
+     *
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function isUseStatementAliased(string $alias): bool
+    {
+        if ($this->isAlias($alias)) {
+            return $alias !== $this->implicitAlias($this->getAlias($alias));
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if namespace has explicit alias in `use` declaration.
+     *
+     * @param string $namespace - fully qualified class name
+     *
+     * @return bool
+     */
+    public function isNamespaceAliased(string $namespace): bool
+    {
+        $extractAlias = $this->implicitAlias($namespace);
+
+        return !isset($this->aliases[$extractAlias]);
+    }
+
+    /**
+     * Extract implicit alias from use statement.
+     *
+     * @param string $namespace - FQCN or simple class name from use statement
+     *
+     * @return string
+     */
+    private function implicitAlias(string $namespace): string
+    {
+        $parts = explode('\\', $namespace);
+
+        return $parts[\count($parts) - 1];
     }
 }

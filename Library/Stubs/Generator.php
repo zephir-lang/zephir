@@ -104,12 +104,17 @@ class Generator
         $source = '<?php'.PHP_EOL.PHP_EOL;
         $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
-        $aliases = $class->getAliasManager()->getAliases();
+        /** @var Zephir\AliasManager $aliasManager */
+        $aliasManager = $class->getAliasManager();
+        $aliases = $aliasManager->getAliases();
+
         if (!empty($aliases)) {
             $source .= PHP_EOL;
 
             foreach ($aliases as $alias => $fqn) {
-                $source .= 'use '.$fqn.';'.PHP_EOL;
+                $isAliased = $aliasManager->isUseStatementAliased($alias);
+                $asAlias = $isAliased ? ' as '.$alias : '';
+                $source .= 'use '.$fqn.$asAlias.';'.PHP_EOL;
             }
         }
 
@@ -140,16 +145,20 @@ class Generator
                 );
             }
 
-            $hasAliasForExtends = $class->getAliasManager()->isAlias($extendsClassDefinition->getShortName());
+            $hasAliasForExtends = $aliasManager->isAlias($extendsClassDefinition->getShortName());
 
             $source .= ' extends '.($hasAliasForExtends || $extendsClassDefinition->isBundled() ? '' : '\\');
             $source .= $hasAliasForExtends ? $extendsClassDefinition->getShortName() : $extendsClassDefinition->getCompleteName();
         }
 
-        if ($implementedInterfaces = $class->getImplementedInterfaces()) {
-            $interfaces = array_map(function ($val) {
-                return '\\'.trim($val, '\\');
-            }, $implementedInterfaces);
+        if ($interfaces = $class->getImplementedInterfaces()) {
+            foreach ($interfaces as $key => $interface) {
+                $interfaces[$key] = '\\'.trim($interface, '\\');
+
+                if ($aliasManager->isNamespaceAliased($interface)) {
+                    $interfaces[$key] = $aliasManager->getAliasForNamespace($interface);
+                }
+            }
 
             $keyword = 'interface' == $class->getType() ? ' extends ' : ' implements ';
             $source .= $keyword.implode(', ', $interfaces);
