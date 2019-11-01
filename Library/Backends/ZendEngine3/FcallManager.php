@@ -136,14 +136,25 @@ HEAD;
             foreach ($initStatements as $statement) {
                 $codePrinter->output($statement);
             }
-            $zvalStr = $i ? ', &'.implode(', &', $zvals) : '';
-            $codePrinter->output('method(0, execute_data, '.$retParam.', '.($scope ? 'NULL, ' : $objParam).$retValueUsed.$zvalStr.'); \\');
+
+            $codePrinter->output(
+                sprintf(
+                    'method(0, execute_data, %s, %s%s%s); \\',
+                    $retParam,
+                    ($scope ? 'NULL, ' : $objParam),
+                    $retValueUsed,
+                    $i ? ', &'.implode(', &', $zvals) : ''
+                )
+            );
+
             if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $postStatements[] = 'zval_ptr_dtor(rvp); \\';
             }
+
             foreach ($postStatements as $statement) {
                 $codePrinter->output($statement);
             }
+
             $codePrinter->output('ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \\');
             $codePrinter->output('ZEPHIR_RESTORE_THIS_PTR(); \\');
 
