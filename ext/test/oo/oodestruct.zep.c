@@ -431,7 +431,7 @@ PHP_METHOD(Test_Oo_OoDestruct, check) {
 	if (zephir_is_true(&_0)) {
 		RETURN_MM_BOOL(1);
 	}
-	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info")) == SUCCESS)))) {
+	if (UNEXPECTED(!((zephir_function_exists_ex(ZEND_STRL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_1$$4);
 		if (!_2$$4) {
 		_2$$4 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
@@ -499,7 +499,7 @@ PHP_METHOD(Test_Oo_OoDestruct, getVersion) {
 
 	ZEPHIR_MM_GROW();
 
-	if (UNEXPECTED(!((zephir_function_exists_ex(SL("gd_info")) == SUCCESS)))) {
+	if (UNEXPECTED(!((zephir_function_exists_ex(ZEND_STRL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		if (!_1$$3) {
 		_1$$3 = zephir_fetch_class_str_ex(SL("Test\\Oo\\Exception"), ZEND_FETCH_CLASS_AUTO);
