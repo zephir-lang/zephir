@@ -130,7 +130,7 @@ PHP_METHOD(Test_FunctionExists, testWithString) {
 	zval *this_ptr = getThis();
 
 
-	RETURN_BOOL((zephir_function_exists_ex(SL("substr")) == SUCCESS));
+	RETURN_BOOL((zephir_function_exists_ex(ZEND_STRL("substr")) == SUCCESS));
 
 }
 
