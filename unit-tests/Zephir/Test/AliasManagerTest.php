@@ -113,6 +113,6 @@ class AliasManagerTest extends TestCase
         $namespace = $useStatements['name'];
 
         $this->assertSame($this->testAliasMgr->isUseStatementAliased($alias), $expected);
-        $this->assertSame($this->testAliasMgr->isNamespaceAliased($namespace), $expected);
+        $this->assertSame($this->testAliasMgr->isAliasPresentFor($namespace), $expected);
     }
 }
