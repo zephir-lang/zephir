@@ -9,6 +9,7 @@ class McallInternalTest extends TestCase
 {
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/1956
      */
     public function shouldReturnInstance()
