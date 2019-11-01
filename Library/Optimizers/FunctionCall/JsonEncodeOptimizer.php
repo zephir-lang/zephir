@@ -44,7 +44,10 @@ class JsonEncodeOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         $context->headersManager->add('kernel/string');
@@ -66,11 +69,7 @@ class JsonEncodeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_json_encode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
-        } else {
-            $context->codePrinter->output('zephir_json_encode('.$symbol.', &('.$symbol.'), '.$resolvedParams[0].', '.$options.');');
-        }
+        $context->codePrinter->output('zephir_json_encode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
