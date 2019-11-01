@@ -155,8 +155,8 @@ class Generator
             foreach ($interfaces as $key => $interface) {
                 $interfaces[$key] = '\\'.trim($interface, '\\');
 
-                if ($aliasManager->isNamespaceAliased($interface)) {
-                    $interfaces[$key] = $aliasManager->getAliasForNamespace($interface);
+                if ($aliasManager->isAliasPresentFor($interface)) {
+                    $interfaces[$key] = $aliasManager->getAliasForClassName($interface);
                 }
             }
 
