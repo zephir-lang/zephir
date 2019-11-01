@@ -1038,13 +1038,14 @@ class Backend extends BaseBackend
         return 'zephir_get_internal_ce(SS("'.$str.'"))';
     }
 
-    public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = false)
-    {
-        if ($isLocal) {
-            return $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
-        }
-
-        return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
+    public function getScalarTempVariable(
+        string $type,
+        CompilationContext $compilationContext,
+        $isLocal = false
+    ): Variable {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     /**
