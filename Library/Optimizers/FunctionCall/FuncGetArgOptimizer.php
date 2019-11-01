@@ -14,7 +14,6 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -67,26 +66,18 @@ class FuncGetArgOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        try {
-            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            // zephir_get_intval
-            $context->headersManager->add('kernel/operators');
+        // zephir_get_intval
+        $context->headersManager->add('kernel/operators');
 
-            // zephir_get_arg
-            $context->headersManager->add('kernel/main');
+        // zephir_get_arg
+        $context->headersManager->add('kernel/main');
 
-            if ($context->backend->isZE3()) {
-                $template = 'zephir_get_arg(%s, zephir_get_intval(%s));';
-            } else {
-                $template = 'zephir_get_arg(%s, zephir_get_intval(%s));';
-            }
+        $context->codePrinter->output(
+            sprintf('zephir_get_arg(%s, zephir_get_intval(%s));', $symbol, $resolvedParams[0])
+        );
 
-            $context->codePrinter->output(sprintf($template, $symbol, $resolvedParams[0]));
-
-            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-        } catch (Exception $e) {
-            throw new CompilerException($e->getMessage(), $expression, $e->getCode(), $e);
-        }
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
