@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034
 test_description="Test init command for failures"
 
+# shellcheck disable=SC1091
 source ./setup.sh
 
 test_expect_success "Should fail when not enough arguments" "

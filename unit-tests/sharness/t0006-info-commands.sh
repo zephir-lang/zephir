@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034
 test_description="Test informative commands"
 
+# shellcheck disable=SC1091
 source ./setup.sh
 
 find_local_cache() {
