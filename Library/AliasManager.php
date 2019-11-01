@@ -69,6 +69,22 @@ final class AliasManager
     }
 
     /**
+     * Returns Alias by Namespace.
+     *
+     * @param string $namespace - FQN Class name
+     */
+    public function getAliasForNamespace(string $namespace): string
+    {
+        $keys = array_keys($this->aliases, $namespace);
+
+        if (1 === \count($keys)) {
+            return $keys[0];
+        }
+
+        return $namespace;
+    }
+
+    /**
      * Check if Namespace use an Aliasing in use statement.
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
@@ -84,6 +100,20 @@ final class AliasManager
         }
 
         return false;
+    }
+
+    /**
+     * Check if Namespace has explicit Alias in `use` declaration.
+     *
+     * @param string $namespace - FQN Class name
+     *
+     * @return bool
+     */
+    public function isNamespaceAliased(string $namespace): bool
+    {
+        $extractAlias = $this->implicitAlias($namespace);
+
+        return !isset($this->aliases[$extractAlias]);
     }
 
     /**
