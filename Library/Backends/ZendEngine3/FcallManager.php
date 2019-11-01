@@ -137,7 +137,7 @@ HEAD;
                 $codePrinter->output($statement);
             }
             $zvalStr = $i ? ', &'.implode(', &', $zvals) : '';
-            $codePrinter->output('method(0, '.$retParam.', '.($scope ? 'NULL, ' : $objParam).$retValueUsed.$zvalStr.'); \\');
+            $codePrinter->output('method(0, execute_data, '.$retParam.', '.($scope ? 'NULL, ' : $objParam).$retValueUsed.$zvalStr.'); \\');
             if ('CALL_INTERNAL_METHOD_NORETURN_P' == $mode) {
                 $postStatements[] = 'zval_ptr_dtor(rvp); \\';
             }
