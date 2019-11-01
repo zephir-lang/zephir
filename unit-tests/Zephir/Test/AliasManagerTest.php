@@ -27,7 +27,7 @@ class AliasManagerTest extends TestCase
     public function aliasDataProvider(): array
     {
         return [
-            'with Alias' => [
+            'with alias' => [
                 // Actual
                 [
                     'name' => 'Bug\\Events\\ManagerInterface',
@@ -38,7 +38,18 @@ class AliasManagerTest extends TestCase
                     'EventsManagerInterface' => 'Bug\\Events\\ManagerInterface',
                 ],
             ],
-            'without Alias' => [
+            'with alias and namespace from root' => [
+                // Actual
+                [
+                    'name' => '\\Bug\\Events\\ManagerInterface',
+                    'alias' => 'EventsManagerInterface',
+                ],
+                // Expected
+                [
+                    'EventsManagerInterface' => '\\Bug\\Events\\ManagerInterface',
+                ],
+            ],
+            'without explicit alias' => [
                 // Actual
                 [
                     'name' => 'Throwable',

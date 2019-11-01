@@ -112,7 +112,7 @@ class Generator
             $source .= PHP_EOL;
 
             foreach ($aliases as $alias => $fqn) {
-                $isAliased = $aliasManager->hasUseStatementAliased($alias);
+                $isAliased = $aliasManager->isUseStatementAliased($alias);
                 $asAlias = $isAliased ? ' as '.$alias : '';
                 $source .= 'use '.$fqn.$asAlias.';'.PHP_EOL;
             }
