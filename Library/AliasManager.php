@@ -69,23 +69,23 @@ final class AliasManager
     }
 
     /**
-     * Returns alias by namespace.
+     * Returns alias by fully qualified class name.
      *
-     * @param string $namespace - fully qualified class name
+     * @param string $className - fully qualified class name
      */
-    public function getAliasForNamespace(string $namespace): string
+    public function getAliasForClassName(string $className): string
     {
-        $keys = array_keys($this->aliases, trim($namespace, '\\'));
+        $keys = array_keys($this->aliases, trim($className, '\\'));
 
         if (1 === \count($keys)) {
             return $keys[0];
         }
 
-        return $namespace;
+        return $className;
     }
 
     /**
-     * Check if namespace use an aliasing in use statement.
+     * Check if class name use an aliasing in use statement.
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
      *
@@ -103,15 +103,15 @@ final class AliasManager
     }
 
     /**
-     * Check if namespace has explicit alias in `use` declaration.
+     * Check if class name has explicit alias in `use` declaration.
      *
-     * @param string $namespace - fully qualified class name
+     * @param string $className - fully qualified class name
      *
      * @return bool
      */
-    public function isNamespaceAliased(string $namespace): bool
+    public function isAliasPresentFor(string $className): bool
     {
-        $extractAlias = $this->implicitAlias($namespace);
+        $extractAlias = $this->implicitAlias($className);
 
         return !isset($this->aliases[$extractAlias]);
     }
@@ -119,13 +119,13 @@ final class AliasManager
     /**
      * Extract implicit alias from use statement.
      *
-     * @param string $namespace - FQCN or simple class name from use statement
+     * @param string $className - FQCN or simple class name from use statement
      *
      * @return string
      */
-    private function implicitAlias(string $namespace): string
+    private function implicitAlias(string $className): string
     {
-        $parts = explode('\\', $namespace);
+        $parts = explode('\\', $className);
 
         return $parts[\count($parts) - 1];
     }

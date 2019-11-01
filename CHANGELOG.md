@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1988](https://github.com/phalcon/zephir/issues/1988)
 - Fixed `internal` methods definition when `internal-call-transformation` is enabled
   [#1956](https://github.com/phalcon/zephir/issues/1956)
+- Fixed aliases using in the `use` statement when generating stubs
+  [#1986](https://github.com/phalcon/zephir/issues/1986)
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
