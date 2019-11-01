@@ -65,9 +65,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_mcallinternal_test1956, 0, 
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_mcallinternal_issue1956, 0, 0, IS_DOUBLE, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_test_mcallinternal_issue1956, 0, 0, Test\\McallInternal, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_mcallinternal_issue1956, 0, 0, IS_DOUBLE, NULL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test_mcallinternal_issue1956, 0, 0, IS_OBJECT, "Test\\McallInternal", 0)
 #endif
 ZEND_END_ARG_INFO()
 
