@@ -156,7 +156,7 @@ class Generator
                 $interfaces[$key] = '\\'.trim($interface, '\\');
 
                 if ($aliasManager->isNamespaceAliased($interface)) {
-                    $interfaces[$key] = $aliasManager->getAliasForNamespace(trim($interface, '\\'));
+                    $interfaces[$key] = $aliasManager->getAliasForNamespace($interface);
                 }
             }
 

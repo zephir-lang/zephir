@@ -75,7 +75,7 @@ final class AliasManager
      */
     public function getAliasForNamespace(string $namespace): string
     {
-        $keys = array_keys($this->aliases, $namespace);
+        $keys = array_keys($this->aliases, trim($namespace, '\\'));
 
         if (1 === \count($keys)) {
             return $keys[0];
