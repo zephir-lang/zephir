@@ -202,7 +202,7 @@ class MethodDocBlock extends DocBlock
         if (!isset($this->predefinedParams['return'])) {
             list($type, $description) = $this->return;
 
-            $return = $type.' '.$description;
+            $return = $this->aliasManager->getAliasForNamespace($type).' '.$description;
             $this->lines[] = '@return '.trim($return, ' ');
         }
     }
