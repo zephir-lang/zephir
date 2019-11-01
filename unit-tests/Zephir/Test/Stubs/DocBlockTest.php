@@ -187,7 +187,7 @@ DOC;
         $doc = <<<DOC
     /**
      * Method with various tags
-     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
+     * @author Zephir Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
      * @link https://github.com/phalcon/zephir
@@ -204,7 +204,7 @@ DOC;
     /**
      * Method with various tags
      *
-     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
+     * @author Zephir Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
      * @link https://github.com/phalcon/zephir
