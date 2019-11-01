@@ -100,10 +100,10 @@ class BaseOperator
                         if (!$this->literalOnly) {
                             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                         } else {
-                            $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+                            $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
                         }
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
                     }
                 }
             } else {
@@ -111,10 +111,10 @@ class BaseOperator
                     if (!$this->literalOnly) {
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
                     }
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
                 }
             }
         }
@@ -144,16 +144,16 @@ class BaseOperator
                     $symbolVariable->initVariant($compilationContext);
                 } else {
                     if (!$this->readOnly) {
-                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext);
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
                     }
                 }
             } else {
                 if (!$this->readOnly) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext);
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
                 }
             }
         }

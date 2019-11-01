@@ -590,7 +590,7 @@ class ForStatement extends StatementAbstract
          * Create a temporary value to store the constant string
          */
         if ('string' == $expression->getType()) {
-            $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->statement);
+            $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
 
             $compilationContext->backend->assignString(
                 $constantVariable,
