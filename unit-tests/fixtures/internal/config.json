@@ -1,0 +1,10 @@
+{
+  "namespace": "internaltest",
+  "name": "internaltest",
+  "version": "0.0.1",
+  "verbose": false,
+
+  "optimizations": {
+    "internal-call-transformation": true
+  }
+}
