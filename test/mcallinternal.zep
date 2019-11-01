@@ -75,6 +75,6 @@ class McallInternal
 
 	public function issue1956() -> <McallInternal>
 	{
-		return $this->test1956();
+		return this->test1956();
 	}
 }
