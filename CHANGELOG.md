@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   `integer` data types [#1494](https://github.com/phalcon/zephir/issues/1494)
 - Fixed casting char into another of a different type
   [#1988](https://github.com/phalcon/zephir/issues/1988)
+- Fixed `internal` methods definition when `internal-call-transformation` is enabled
+  [#1956](https://github.com/phalcon/zephir/issues/1956)
 
 ## [0.12.10] - 2019-10-19
 ### Fixed

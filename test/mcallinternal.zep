@@ -57,14 +57,24 @@ class McallInternal
 	internal function other(long a, long b) -> double
 	{
 		return a / b;
-  	}
+	}
 
-  	public function callFibonacci() -> double
-  	{
+	public function callFibonacci() -> double
+	{
 		double $p = 0; long $i = 0;
 		for i in range(0, 10000000) {
-            let $p += (double) $this->other($i, $i + 1);
-        }
-        return $p;
-  	}
+			let $p += (double) $this->other($i, $i + 1);
+		}
+		return $p;
+	}
+
+	internal function test1956() -> <McallInternal>
+	{
+		return this;
+	}
+
+	public function issue1956() -> <McallInternal>
+	{
+		return this->test1956();
+	}
 }
