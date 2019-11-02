@@ -1,28 +1,37 @@
 <?php
 /**
- * @var $method \Zephir\ClassMethod
+ * @var string $classNamespace
+ * @var Zephir\ClassMethod $method
  */
 
 $allTypes = [];
-$_lClasses = $method->getReturnClassTypes();
 
-foreach ($_lClasses as $c) {
+foreach ($method->getReturnClassTypes() as $c) {
     if ('\\' == $c[0]) {
         $allTypes[] = substr($c,1);
-    } else {
-        $_lFullClassName = $classNamespace . "\\" . $c;
-        $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
-
-        $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+        continue;
     }
+
+    $aliasManager = $method->getClassDefinition()->getAliasManager();
+
+    $returnClassType = "{$classNamespace}\\{$c}";
+    if ($aliasManager->isAlias($c)) {
+        $returnClassType = '\\'.$aliasManager->getAlias($c);
+    }
+
+    $allTypes[] = sprintf(
+        '<a href="%s">%s</a>',
+        $this->url(Zephir\Documentation::classUrl($returnClassType)),
+        $returnClassType
+    );
 }
 
 $types = $method->getReturnTypes();
 
 if ($types && count($types)>0 ) {
     foreach ($types as $type) {
-        if ($type && isset($type["data-type"])) {
-            $allTypes[] =  $type["data-type"];
+        if ($type && isset($type['data-type'])) {
+            $allTypes[] =  $type['data-type'];
         }
     }
 }
@@ -33,9 +42,14 @@ $docblock = $method->getParsedDocblock();
 <li class="class-method clearfix">
     <div class="method-summary">
         <div class="method-signature">
-            <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
-            <span class="method-return">
-                &nbsp;<strong>:</strong>&nbsp;
+            <!-- method-summary -->
+            <!-- Do not remove comments below. It's a trick to remove the spaces. -->
+            <span class="method-name">
+                <a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a><!--
+            --></span><!--
+            -->(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)<!--
+            --><span class="method-return">
+                <strong>:</strong>
                 <?php if (!empty($allTypes)):?>
                     <?php echo join(' | ', $allTypes); ?>
                 <?php else: ?>
@@ -43,7 +57,7 @@ $docblock = $method->getParsedDocblock();
                 <?php endif; ?>
             </span>
         </div>
-        <?php if ($docblock):?>
+        <?php if ($docblock): ?>
             <div class="method-doc">
                 <div class="summary-text">
                     <?php echo $docblock->getSummary(); ?>
