@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $method \Zephir\ClassMethod
+ * @var $method Zephir\ClassMethod
  */
 
 if ($method->getParameters()) {
@@ -16,5 +16,5 @@ if ($method->getParameters()) {
         $i++;
     }
 
-    echo trim(join(', ', $parameters));
+    echo trim(implode(', ', $parameters));
 }
