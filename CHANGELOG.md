@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1956](https://github.com/phalcon/zephir/issues/1956)
 - Fixed aliases using in the `use` statement when generating stubs
   [#1986](https://github.com/phalcon/zephir/issues/1986)
+- Fixed incorrect namespace on type hinted return when generating API docs
+  [#1229](https://github.com/phalcon/zephir/issues/1229)
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
