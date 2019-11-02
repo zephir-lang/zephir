@@ -11,9 +11,9 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Documentation\AbstractFile;
+use Zephir\Documentation\FileInterface;
 
-class Sitemap extends AbstractFile
+class Sitemap implements FileInterface
 {
     protected $classes;
     protected $namespaces;
@@ -28,12 +28,22 @@ class Sitemap extends AbstractFile
         $this->baseDir = $baseDir;
     }
 
-    public function getTemplateName()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
     {
         return $this->baseDir.'/Api/sitemap.php';
     }
 
-    public function getData()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getData(): array
     {
         return [
             'classes' => $this->classes,
@@ -42,7 +52,12 @@ class Sitemap extends AbstractFile
         ];
     }
 
-    public function getOutputFile()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getOutputFile(): string
     {
         return 'sitemap.xml';
     }
