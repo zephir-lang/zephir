@@ -1,18 +1,12 @@
 {
-
   "extends" : "api-base",
 
   "javascript" : [
-
     "static/prettify.js"
-
   ],
 
   "css" : [
-
     "static/prettify.css",
     "static/zephir-theme.css"
-
   ]
-
 }
