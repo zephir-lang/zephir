@@ -12,13 +12,14 @@
 namespace Zephir\Documentation\File;
 
 use Zephir\CompilerFile;
-use Zephir\Documentation\AbstractFile;
+use Zephir\Documentation;
+use Zephir\Documentation\FileInterface;
 use Zephir\Documentation\NamespaceHelper;
 
-class NamespaceFile extends AbstractFile
+class NamespaceFile implements FileInterface
 {
     /**
-     * @var \Zephir\Documentation\NamespaceHelper
+     * @var NamespaceHelper
      */
     protected $namespaceHelper;
 
@@ -32,12 +33,22 @@ class NamespaceFile extends AbstractFile
         $this->namespaceHelper = $nh;
     }
 
-    public function getTemplateName()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
     {
         return 'namespace.phtml';
     }
 
-    public function getData()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getData(): array
     {
         return [
             'namespaceHelper' => $this->namespaceHelper,
@@ -46,8 +57,13 @@ class NamespaceFile extends AbstractFile
         ];
     }
 
-    public function getOutputFile()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getOutputFile(): string
     {
-        return \Zephir\Documentation::namespaceUrl($this->namespaceHelper->getFullNamespace());
+        return Documentation::namespaceUrl($this->namespaceHelper->getFullNamespace());
     }
 }

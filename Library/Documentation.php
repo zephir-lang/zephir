@@ -144,6 +144,9 @@ class Documentation
         return $path;
     }
 
+    /**
+     * @throws Exception
+     */
     public function build()
     {
         foreach ($this->classes as $class) {
@@ -196,13 +199,12 @@ class Documentation
 
     public static function classUrl($c)
     {
+        $cname = $c;
         if ($c instanceof ClassDefinition) {
             $cname = $c->getCompleteName();
-        } else {
-            $cname = $c;
         }
 
-        return '/class/'.str_replace('\\', '/', $cname).'.html';
+        return '/class/'.trim(str_replace('\\', '/', $cname), '/').'.html';
     }
 
     public static function namespaceUrl($ns)

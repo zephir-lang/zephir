@@ -111,11 +111,11 @@ class Theme
     /**
      * Parse and draw the specified file.
      *
-     * @param AbstractFile $file
+     * @param FileInterface $file
      *
      * @throws Exception
      */
-    public function drawFile(AbstractFile $file)
+    public function drawFile(FileInterface $file)
     {
         $outputFile = ltrim($file->getOutputFile(), '/');
 

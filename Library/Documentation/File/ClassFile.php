@@ -13,9 +13,10 @@ namespace Zephir\Documentation\File;
 
 use Zephir\ClassDefinition;
 use Zephir\CompilerFile;
-use Zephir\Documentation\AbstractFile;
+use Zephir\Documentation;
+use Zephir\Documentation\FileInterface;
 
-class ClassFile extends AbstractFile
+class ClassFile implements FileInterface
 {
     /**
      * @var ClassDefinition
@@ -33,12 +34,22 @@ class ClassFile extends AbstractFile
         $this->class = $class->getClassDefinition();
     }
 
-    public function getTemplateName()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
     {
         return 'class.phtml';
     }
 
-    public function getData()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getData(): array
     {
         $nsPieces = explode('\\', $this->class->getNamespace());
 
@@ -64,8 +75,13 @@ class ClassFile extends AbstractFile
         ];
     }
 
-    public function getOutputFile()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getOutputFile(): string
     {
-        return \Zephir\Documentation::classUrl($this->class);
+        return Documentation::classUrl($this->class);
     }
 }
