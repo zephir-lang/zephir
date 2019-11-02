@@ -1,42 +1,32 @@
 <?php
-
-/* @var $method \Zephir\ClassMethod */
-
+/**
+ * @var $method Zephir\ClassMethod
+ */
 ?>
 
 <li class="class-method clearfix">
-
     <div class="method-return">
-
         <?php
+            $allTypes = [];
 
-            $allTypes = array();
-
-            if($method->getReturnClassTypes()){
+            if ($method->getReturnClassTypes()) {
                 $allTypes = array_merge($allTypes,$method->getReturnClassTypes());
-
             }
-
 
             $types = $method->getReturnTypes();
 
-            if($types && count($types)>0 ){
-
-                foreach($types as $type){
-
-                    if($type && isset($type["data-type"]))
-                        $allTypes[] =  $type["data-type"];
+            if ($types && count($types) > 0) {
+                foreach ($types as $type) {
+                    if ($type && isset($type['data-type'])) {
+                        $allTypes[] =  $type['data-type'];
+                    }
                 }
             }
 
-            echo implode("|",$allTypes);
-
+            echo implode('|', $allTypes);
         ?>
-
     </div>
     <div class="method-summary">
-        <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
-
+        <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial('partials/class/method-summary-params.phtml') ?>)
     </div>
-
 </li>

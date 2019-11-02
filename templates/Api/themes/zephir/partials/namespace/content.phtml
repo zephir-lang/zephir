@@ -1,14 +1,17 @@
 <?php
+/**
+ * @var array $subNamespaces
+ * @var array $subClasses
+ * @var Zephir\Documentation\NamespaceHelper $namespaceHelper
+ */
 
-    $items = array(
-        array("name" => "Namespaces" , "url" => "/namespaces.html" ),
-        $items[] = array("name" => $namespaceHelper->getFullNamespace())
-    );
+$items = [
+    ['name' => 'Namespaces' , 'url' => '/namespaces.html'],
+    $items[] = ['name' => $namespaceHelper->getFullNamespace()]
+];
 ?>
 
-<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
-
-
+<?= $this->partial('partials/breadcrumb.phtml', ['items'=> $items]) ?>
 
 <div class="namespace-header">
     <div class="namespace-full-name">
@@ -18,36 +21,36 @@
     </div>
 </div>
 
-
-<?php if( count($subNamespaces)>0 ){ ?>
-
+<?php if (count($subNamespaces) > 0 ): ?>
     <div class="subnamespaces">
         <h2 class="standard-bandeau">Sub Namespaces</h2>
         
         <ul>
-            <?php foreach ($subNamespaces as $ns){ ?>
-            <li><a href="<?= $this->url(Zephir\Documentation::namespaceUrl($ns->getFullNamespace())) ?>"><?= $ns->getFullNamespace() ?></a></li>
-            <?php } ?>
-            
+            <?php foreach ($subNamespaces as $ns): ?>
+            <li>
+                <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($ns->getFullNamespace())) ?>">
+                    <?= $ns->getFullNamespace() ?>
+                </a>
+            </li>
+            <?php endforeach; ?>
         </ul>
         
     </div>
-<?php } ?>
+<?php endif; ?>
 
-
-<?php if( count($subClasses)>0 ){ ?>
-
+<?php if (count($subClasses) > 0): ?>
     <div class="subclasses">
         <h2 class="standard-bandeau">Sub Classes</h2>
         
         <ul>
-            <?php foreach ($subClasses as $sc){ ?>
-            <li><a href="<?= $this->url($sc) ?>"><?= $sc->getClassDefinition()->getName() ?></a></li>
-            <?php } ?>
-            
+            <?php foreach ($subClasses as $sc): ?>
+            <li>
+                <a href="<?= $this->url($sc) ?>">
+                    <?= $sc->getClassDefinition()->getName() ?>
+                </a>
+            </li>
+            <?php endforeach; ?>
         </ul>
         
     </div>
-<?php } ?>
-
-
+<?php endif; ?>

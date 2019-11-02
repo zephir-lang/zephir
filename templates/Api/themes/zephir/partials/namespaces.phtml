@@ -1,19 +1,21 @@
 <?php
-    $items = array(
-        array("name" => "Namespaces" ),
-    );
-?>
-<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+/**
+ * @var array $namespaces
+ */
 
+$items = [['name' => 'Namespaces']];
+?>
+
+<?= $this->partial('partials/breadcrumb.phtml', ['items'=> $items]) ?>
 
 <div class="namespace-list">
-
     <ul>
-    <?php foreach($namespaces as $namesapceName => $ns){ ?>
-
-        <li> <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($namesapceName)) ?>"><?= $namesapceName ?></a></li>
-
-    <?php } ?>
+    <?php foreach ($namespaces as $namespaceName => $ns): ?>
+        <li>
+            <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($namespaceName)) ?>">
+                <?= $namespaceName ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
     </ul>
-    
 </div>
