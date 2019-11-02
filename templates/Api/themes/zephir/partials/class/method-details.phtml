@@ -1,21 +1,27 @@
 <?php
-/* @var $method \Zephir\ClassMethod */
-
-$visibilities = $method->getVisibility();
-$docblock =  $method->getParsedDocBlock();
+/**
+ * @var Zephir\ClassMethod $method
+ */
 ?>
 
 <li class="class-method clearfix">
     <div class="hidden-anchor" id="method-details-<?= $method->getName() ?>"></div>
     <div class="method-details">
         <div class="method-details-details">
-            <div class="method-signature">
-                <?php foreach($visibilities as $visibility): ?>
+
+            <p class="method-signature">
+                <?php foreach ($method->getVisibility() as $visibility): ?>
                     <span class="visibility-<?= $visibility ?> keyword"><?= $visibility ?></span>
                 <?php endforeach; ?>
-                <span class="keyword">function</span>&nbsp;<span class="method-name"><?= $method->getName() ?></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
-            </div>
+                <span class="keyword">function</span>
+                <!-- method-details -->
+                <!-- Do not remove comments below. It's a trick to remove the spaces. -->
+                <span class="method-name"><?= $method->getName() ?></span><!--
+                -->(<?= $this->partial('partials/class/method-summary-params.phtml') ?>)
+            </p>
+
             <div class="method-doc">
+                <?php $docblock =  $method->getParsedDocBlock(); ?>
                 <?php if ($docblock):  ?>
                     <div class="summary">
                         <?= $docblock->getSummary() ?>
@@ -25,6 +31,7 @@ $docblock =  $method->getParsedDocBlock();
                     </div>
                 <?php endif; ?>
             </div>
+
         </div>
     </div>
 </li>
