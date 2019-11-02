@@ -961,7 +961,7 @@ class SymbolTable
      *
      * @return Variable
      */
-    protected function reuseTempVariable($type, $location, CompilationContext $compilationContext = null)
+    protected function reuseTempVariable(string $type, $location, CompilationContext $compilationContext = null)
     {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId = $compilationContext->branchManager->getCurrentBranchId();

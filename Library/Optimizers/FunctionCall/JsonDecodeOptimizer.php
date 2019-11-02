@@ -45,7 +45,10 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable();
         if ($symbolVariable) {
             if (!$symbolVariable->isVariable()) {
-                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+                throw new CompilerException(
+                    'Returned values by functions can only be assigned to variant variables',
+                    $expression
+                );
             }
         } else {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
@@ -71,13 +74,7 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-
-        /* TODO: This (and other optimizers using isZE3) should be fixed, when moving optimizers to backends */
-        if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_json_decode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
-        } else {
-            $context->codePrinter->output('zephir_json_decode('.$symbol.', &('.$symbol.'), '.$resolvedParams[0].', '.$options.');');
-        }
+        $context->codePrinter->output('zephir_json_decode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

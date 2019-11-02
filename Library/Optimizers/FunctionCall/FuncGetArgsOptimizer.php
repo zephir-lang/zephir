@@ -42,7 +42,10 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         if ($call->mustInitSymbolVariable()) {
@@ -50,11 +53,7 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/main');
-        if ($context->backend->isZE3()) {
-            $context->codePrinter->output('zephir_get_args('.$symbol.');');
-        } else {
-            $context->codePrinter->output('zephir_get_args('.$symbol.');');
-        }
+        $context->codePrinter->output('zephir_get_args('.$symbol.');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

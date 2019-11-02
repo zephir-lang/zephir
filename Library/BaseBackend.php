@@ -150,7 +150,20 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
-    abstract public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = true);
+    /**
+     * Creates a temporary variable to be used to point to a heap variable.
+     *
+     * @param string             $type
+     * @param CompilationContext $compilationContext
+     * @param bool               $isLocal
+     *
+     * @return Variable
+     */
+    abstract public function getScalarTempVariable(
+        string $type,
+        CompilationContext $compilationContext,
+        $isLocal = true
+    ): Variable;
 
     abstract public function declareConstant($type, $name, $value, CompilationContext $context);
 
