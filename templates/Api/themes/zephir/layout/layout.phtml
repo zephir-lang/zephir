@@ -16,9 +16,9 @@
             <?php echo $this->projectConfig("name") ?> API Documentation
         <?php endif; ?>
     </title>
-    <?php echo $this->partial("partials/assets.phtml") ?>
-    <script>var ZepCurrentPath = '<?php echo $this->url("/")?>'</script>
-    <?php echo $this->partial("partials/analytics.phtml") ?>
+    <?php echo $this->partial('partials/assets.phtml') ?>
+    <script type="application/javascript">let ZepCurrentPath = '<?php echo $this->url("/")?>'</script>
+    <?php echo $this->partial('partials/analytics.phtml') ?>
 </head>
  <body onload="prettyPrint()">
         <div id="top-bar">

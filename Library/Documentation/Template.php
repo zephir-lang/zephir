@@ -33,14 +33,14 @@ class Template
     /**
      * Template constructor.
      *
-     * @param Theme $theme
-     * @param $data
-     * @param $template
-     * @param int $nestedLevel
+     * @param Theme  $theme
+     * @param array  $data
+     * @param string $template
+     * @param int    $nestedLevel
      *
      * @throws Exception
      */
-    public function __construct(Theme $theme, $data, $template, $nestedLevel = 0)
+    public function __construct(Theme $theme, array $data, string $template, int $nestedLevel = 0)
     {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
@@ -53,7 +53,7 @@ class Template
         $this->nestedLevel = $nestedLevel;
     }
 
-    private function __getTemplatePath($fileName)
+    private function getTemplatePath($fileName)
     {
         if ('/' == $fileName[0] || 0 === strpos($fileName, 'phar://')) {
             return $fileName;
@@ -69,7 +69,7 @@ class Template
     }
 
     /**
-     * set a variable that will be accessible in the template.
+     * Set a variable that will be accessible in the template.
      *
      * @param $name
      * @param $value
@@ -207,7 +207,7 @@ class Template
         foreach ($this->data as $name => $value) {
             $$name = $value;
         }
-        $path = $this->__getTemplatePath($this->template);
+        $path = $this->getTemplatePath($this->template);
         ob_start();
         include $path;
         $content = ob_get_clean();
@@ -215,7 +215,7 @@ class Template
         return $content;
     }
 
-    public function partial($fileName, array $data = [])
+    public function partial(string $fileName, array $data = [])
     {
         $newLevel = $this->nestedLevel + 1;
 
