@@ -12,6 +12,7 @@
 namespace Zephir\Documentation\File;
 
 use Zephir\ClassDefinition;
+use Zephir\Documentation;
 
 class SourceFile extends ClassFile
 {
@@ -20,13 +21,23 @@ class SourceFile extends ClassFile
      */
     protected $class;
 
-    public function getTemplateName()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
     {
         return 'source.phtml';
     }
 
-    public function getOutputFile()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getOutputFile(): string
     {
-        return \Zephir\Documentation::sourceUrl($this->class);
+        return Documentation::sourceUrl($this->class);
     }
 }

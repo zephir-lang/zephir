@@ -11,10 +11,10 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Documentation\AbstractFile;
+use Zephir\Documentation\FileInterface;
 use Zephir\Documentation\NamespaceAccessor;
 
-class IndexFile extends AbstractFile
+class IndexFile implements FileInterface
 {
     /**
      * @var NamespaceAccessor
@@ -26,12 +26,22 @@ class IndexFile extends AbstractFile
         $this->namespaceAccessor = $namespaceAccessor;
     }
 
-    public function getTemplateName()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
     {
         return 'index.phtml';
     }
 
-    public function getData()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getData(): array
     {
         return [
             'namespaceAccessor' => $this->namespaceAccessor,
@@ -40,7 +50,12 @@ class IndexFile extends AbstractFile
         ];
     }
 
-    public function getOutputFile()
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getOutputFile(): string
     {
         return 'index.html';
     }

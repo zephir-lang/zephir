@@ -30,6 +30,16 @@ class Template
      */
     protected $projectConfig;
 
+    /**
+     * Template constructor.
+     *
+     * @param Theme $theme
+     * @param $data
+     * @param $template
+     * @param int $nestedLevel
+     *
+     * @throws Exception
+     */
     public function __construct(Theme $theme, $data, $template, $nestedLevel = 0)
     {
         // todo clean buffer before exception
