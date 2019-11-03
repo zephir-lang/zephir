@@ -53,7 +53,8 @@ final class GenerateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         if (\extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
-            $io->getErrorStyle()->warning(<<<MSG
+            $io->getErrorStyle()->warning(
+                <<<MSG
 The timecop extension was detected. It is recommended to disable
 it from the launcher during the code generation to avoid potential
 issues.
