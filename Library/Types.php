@@ -56,10 +56,12 @@ final class Types
             $isInteger = static::isTypeIntegerCompatible($type);
             $isDouble = static::isTypeDoubleCompatible($type);
             $isBoolean = static::isTypeBoolCompatible($type);
+            $isArray = static::isTypeArrayCompatible($type);
 
             $typeInteger = isset($typeInteger) ? ($isInteger && $typeInteger) : $isInteger;
             $typeDouble = isset($typeDouble) ? ($isDouble && $typeDouble) : $isDouble;
             $typeBoolean = isset($typeBoolean) ? ($isBoolean && $typeBoolean) : $isBoolean;
+            $typeArray = isset($typeArray) ? ($isArray && $typeArray) : $isArray;
         }
 
         if ($typeInteger) {
@@ -68,6 +70,8 @@ final class Types
             $compatibleType = static::T_FLOAT;
         } elseif ($typeBoolean) {
             $compatibleType = static::T_BOOL;
+        } elseif ($typeArray) {
+            $compatibleType = static::T_ARRAY;
         }
 
         return $compatibleType ?? static::T_MIXED;
@@ -96,6 +100,11 @@ final class Types
     private static function isTypeBoolCompatible(string $type): bool
     {
         return $type === static::T_BOOL;
+    }
+
+    private static function isTypeArrayCompatible(string $type): bool
+    {
+        return $type === static::T_ARRAY;
     }
 
     /**
