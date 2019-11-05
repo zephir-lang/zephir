@@ -115,6 +115,7 @@ class MethodDocBlock extends DocBlock
         }
 
         if (!empty($return)) {
+            // Emty line in array - it's an empty description. Don't remove it!
             $this->return = [implode('|', $return), ''];
         }
     }
