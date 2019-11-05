@@ -57,11 +57,19 @@ final class Types
             $isDouble = static::isTypeDoubleCompatible($type);
             $isBoolean = static::isTypeBoolCompatible($type);
             $isArray = static::isTypeArrayCompatible($type);
+            $isNull = static::isTypeNullCompatible($type);
+            $isSpecial = static::isTypeSpecialCompatible($type);
+            $isVoid = static::isTypeVoidCompatible($type);
+            $isObject = static::isTypeObjectCompatible($type);
 
             $typeInteger = isset($typeInteger) ? ($isInteger && $typeInteger) : $isInteger;
             $typeDouble = isset($typeDouble) ? ($isDouble && $typeDouble) : $isDouble;
             $typeBoolean = isset($typeBoolean) ? ($isBoolean && $typeBoolean) : $isBoolean;
             $typeArray = isset($typeArray) ? ($isArray && $typeArray) : $isArray;
+            $typeNull = isset($typeNull) ? ($isNull && $typeNull) : $isNull;
+            $typeSpecial = isset($typeSpecial) ? ($isSpecial && $typeSpecial) : $isSpecial;
+            $typeVoid = isset($typeVoid) ? ($isVoid && $typeVoid) : $isVoid;
+            $typeObject = isset($typeObject) ? ($isObject && $typeObject) : $isObject;
         }
 
         if ($typeInteger) {
@@ -72,6 +80,16 @@ final class Types
             $compatibleType = static::T_BOOL;
         } elseif ($typeArray) {
             $compatibleType = static::T_ARRAY;
+        } elseif ($typeNull) {
+            $compatibleType = static::T_NULL;
+        } elseif ($typeSpecial) {
+            // TODO: change after test
+            $compatibleType = static::T_UNDEFINED;
+        } elseif ($typeVoid) {
+            $compatibleType = static::T_VOID;
+        } elseif ($typeObject) {
+            // TODO: change after test
+            $compatibleType = static::T_UNDEFINED;
         }
 
         return $compatibleType ?? static::T_MIXED;
@@ -105,6 +123,35 @@ final class Types
     private static function isTypeArrayCompatible(string $type): bool
     {
         return $type === static::T_ARRAY;
+    }
+
+    private static function isTypeNullCompatible(string $type): bool
+    {
+        return $type === static::T_NULL;
+    }
+
+    private static function isTypeSpecialCompatible(string $type): bool
+    {
+        switch ($type) {
+            case static::T_NUMBER:
+            case static::T_RESOURCE:
+            case static::T_VARIABLE:
+            case static::T_CALLABLE:
+            case static::T_ITERABLE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static function isTypeVoidCompatible(string $type): bool
+    {
+        return $type === static::T_VOID;
+    }
+
+    private static function isTypeObjectCompatible(string $type): bool
+    {
+        return $type === static::T_OBJECT;
     }
 
     /**
