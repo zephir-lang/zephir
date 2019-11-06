@@ -18,7 +18,27 @@ use Zephir\Types;
 
 class TypesTest extends TestCase
 {
-    public function buildMethod(array $testData): ClassMethod
+    private function baseClassDefinition(array $types): array
+    {
+        return [
+            'type' => 'return-type',
+            'list' => array_map(
+                function ($type) {
+                    return [
+                        'type' => 'return-type-parameter',
+                        'data-type' => $type,
+                        'mandatory' => 0,
+                        'file' => 'stubs.zep',
+                        'line' => 1,
+                        'char' => 42,
+                    ];
+                },
+                $types,
+            ),
+        ];
+    }
+
+    private function buildMethod(array $testData, string $definition): ClassMethod
     {
         return new ClassMethod(
             new ClassDefinition('Zephir', 'testMethod'),
@@ -27,22 +47,7 @@ class TypesTest extends TestCase
             null,
             null,
             null,
-            [
-                'type' => 'return-type',
-                'list' => array_map(
-                    function ($type) {
-                        return [
-                            'type' => 'return-type-parameter',
-                            'data-type' => $type,
-                            'mandatory' => 0,
-                            'file' => 'stubs.zep',
-                            'line' => 1,
-                            'char' => 42,
-                        ];
-                    },
-                    $testData
-                ),
-            ]
+            $this->$definition($testData),
         );
     }
 
@@ -106,6 +111,12 @@ class TypesTest extends TestCase
             [
                 ['callable'], 'mixed',
             ],
+            [
+                ['var', 'null'], 'mixed|null',
+            ],
+            [
+                ['string', 'null'], 'string|null',
+            ],
         ];
     }
 
@@ -113,9 +124,33 @@ class TypesTest extends TestCase
      * @test
      * @dataProvider typesDataProvider
      */
-    public function integerTypeCompatible(array $returnTypes, string $expected)
+    public function shouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected)
     {
-        $testMethod = $this->buildMethod($returnTypes);
+        $testMethod = $this->buildMethod($returnTypes, 'baseClassDefinition');
+        $testTypes = new Types();
+
+        $actual = $testTypes->getCompatibleReturnType($testMethod);
+
+        $this->assertSame($actual, $expected);
+    }
+
+    public function objectsDataProvider(): array
+    {
+        return [
+            [
+                ['<EventsManagerInterface>'], 'EventsManagerInterface',
+            ],
+        ];
+    }
+
+    /**
+     * test.
+     *
+     * @dataProvider objectsDataProvider
+     */
+    public function shouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
+    {
+        $testMethod = $this->buildMethod($returnTypes, 'baseClassDefinition');
         $testTypes = new Types();
 
         $actual = $testTypes->getCompatibleReturnType($testMethod);
