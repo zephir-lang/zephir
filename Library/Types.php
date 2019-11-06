@@ -36,7 +36,7 @@ final class Types
     const T_ITERABLE = 'iterable';
     const T_UNDEFINED = 'undefined';
 
-    public const COMPATIBLETYPES = [
+    const COMPATIBLETYPES = [
         self::T_INT => [
             self::T_INT,
             self::T_UINT,
@@ -76,7 +76,14 @@ final class Types
         ],
     ];
 
-    public static function getCompatibleReturnType(ClassMethod $method): string
+    /**
+     * Gets PHP compatible return type from class method.
+     *
+     * @param ClassMethod $method
+     *
+     * @return string
+     */
+    public function getCompatibleReturnType(ClassMethod $method): string
     {
         if (!$method->hasReturnTypes() && !$method->isVoid()) {
             return '';
@@ -86,16 +93,16 @@ final class Types
         $typesCount = \count($returnTypes);
 
         $isNulable = $method->areReturnTypesNullCompatible() ? '|null' : '';
-        $isInteger = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_INT]);
-        $isDouble = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_FLOAT]);
-        $isBool = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_BOOL]);
-        $isString = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_STRING]);
-        $isNull = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_NULL]);
-        $isArray = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ARRAY]);
-        $isObject = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_OBJECT]);
-        $isIterable = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ITERABLE]);
-        $isResource = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_RESOURCE]);
-        $isVoid = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_VOID]);
+        $isInteger = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_INT]);
+        $isDouble = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_FLOAT]);
+        $isBool = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_BOOL]);
+        $isString = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_STRING]);
+        $isNull = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_NULL]);
+        $isArray = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ARRAY]);
+        $isObject = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_OBJECT]);
+        $isIterable = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ITERABLE]);
+        $isResource = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_RESOURCE]);
+        $isVoid = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_VOID]);
 
         if ($method->isVoid() || $isVoid) {
             return static::T_VOID;
@@ -144,7 +151,16 @@ final class Types
         return static::T_MIXED;
     }
 
-    private static function areReturnTypesCompatible(array $types, array $allowedTypes): bool
+    /**
+     * Match if return types from Zephire are compatible
+     * with allowed return types from PHP.
+     *
+     * @param array $types        - Return types from parser
+     * @param array $allowedTypes - Allowed return types
+     *
+     * @return bool
+     */
+    private function areReturnTypesCompatible(array $types, array $allowedTypes): bool
     {
         $result = null;
         $areEquals = false;

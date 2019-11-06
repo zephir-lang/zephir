@@ -116,8 +116,9 @@ class TypesTest extends TestCase
     public function integerTypeCompatible(array $returnTypes, string $expected)
     {
         $testMethod = $this->buildMethod($returnTypes);
+        $testTypes = new Types();
 
-        $actual = Types::getCompatibleReturnType($testMethod);
+        $actual = $testTypes->getCompatibleReturnType($testMethod);
 
         $this->assertSame($actual, $expected);
     }

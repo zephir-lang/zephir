@@ -40,7 +40,10 @@ class MethodDocBlock extends DocBlock
     /** @var ClassMethod */
     private $classMethod;
 
-    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ')
+    /** @var Types */
+    private $types;
+
+    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ', Types $types = null)
     {
         parent::__construct($method->getDocBlock(), $indent);
 
@@ -48,6 +51,7 @@ class MethodDocBlock extends DocBlock
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
         $this->classMethod = $method;
+        $this->types = $types ?? new Types();
     }
 
     /**
@@ -114,7 +118,7 @@ class MethodDocBlock extends DocBlock
             }
         }
 
-        $returnType = \Zephir\Types::getCompatibleReturnType($this->classMethod);
+        $returnType = $this->types->getCompatibleReturnType($this->classMethod);
 
         if (!empty($returnType)) {
             // Empty line in array - it's an empty description. Don't remove it!
