@@ -60,11 +60,15 @@ typedef enum _zephir_call_type {
 
 /* Saves the if pointer, and called/calling scope */
 #define ZEPHIR_BACKUP_THIS_PTR() \
-	zend_object *old_this_ptr = Z_TYPE(EG(current_execute_data)->This) == IS_OBJECT ? Z_OBJ(EG(current_execute_data)->This) : NULL;
+	zend_object *old_this_ptr = Z_TYPE(EG(current_execute_data)->This) == IS_OBJECT ? Z_OBJ(EG(current_execute_data)->This) : NULL; \
+	zend_class_entry *old_ce = Z_TYPE(EG(current_execute_data)->This) != IS_OBJECT ? Z_CE(EG(current_execute_data)->This) : NULL;
 
 #define ZEPHIR_RESTORE_THIS_PTR() do { \
 	if (old_this_ptr) { \
 		ZEPHIR_SET_THIS_OBJ(old_this_ptr); \
+	} else if (old_ce) { \
+		ZVAL_UNDEF(&EG(current_execute_data)->This); \
+		Z_CE(EG(current_execute_data)->This) = old_ce; \
 	} else { \
 		ZEPHIR_SET_THIS_EXPLICIT_NULL(); \
 	} \
