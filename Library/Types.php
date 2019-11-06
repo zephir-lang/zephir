@@ -36,141 +36,125 @@ final class Types
     const T_ITERABLE = 'iterable';
     const T_UNDEFINED = 'undefined';
 
-    public static function getTypesBySpecification(?array $returnTypes): string
+    public const COMPATIBLETYPES = [
+        self::T_INT => [
+            self::T_INT,
+            self::T_UINT,
+            self::T_CHAR,
+            self::T_UCHAR,
+            self::T_LONG,
+            self::T_ULONG,
+        ],
+        self::T_FLOAT => [
+            self::T_FLOAT,
+            self::T_DOUBLE,
+        ],
+        self::T_BOOL => [
+            self::T_BOOL,
+        ],
+        self::T_STRING => [
+            self::T_STRING,
+            self::T_ISTRING,
+        ],
+        self::T_NULL => [
+            self::T_NULL,
+        ],
+        self::T_ARRAY => [
+            self::T_ARRAY,
+        ],
+        self::T_OBJECT => [
+            self::T_OBJECT,
+        ],
+        self::T_ITERABLE => [
+            self::T_ITERABLE,
+        ],
+        self::T_RESOURCE => [
+            self::T_RESOURCE,
+        ],
+        self::T_VOID => [
+            self::T_VOID,
+        ],
+    ];
+
+    public static function getCompatibleReturnType(ClassMethod $method): string
     {
-        if (!static::hasReturnType($returnTypes)) {
+        if (!$method->hasReturnTypes() && !$method->isVoid()) {
             return '';
         }
 
-        return static::getCompatibleReturnType($returnTypes);
-    }
+        $returnTypes = $method->getReturnTypes();
+        $typesCount = \count($returnTypes);
 
-    public static function isVoid(array $returnTypes): bool
-    {
-        return \in_array(static::T_VOID, $returnTypes, true);
-    }
+        $isNulable = $method->areReturnTypesNullCompatible() ? '|null' : '';
+        $isInteger = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_INT]);
+        $isDouble = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_FLOAT]);
+        $isBool = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_BOOL]);
+        $isString = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_STRING]);
+        $isNull = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_NULL]);
+        $isArray = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ARRAY]);
+        $isObject = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_OBJECT]);
+        $isIterable = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ITERABLE]);
+        $isResource = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_RESOURCE]);
+        $isVoid = static::areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_VOID]);
 
-    public static function getCompatibleReturnType(array $types): string
-    {
-        foreach ($types as $k => $type) {
-            $isInteger = static::isTypeIntegerCompatible($type);
-            $isDouble = static::isTypeDoubleCompatible($type);
-            $isBoolean = static::isTypeBoolCompatible($type);
-            $isArray = static::isTypeArrayCompatible($type);
-            $isNull = static::isTypeNullCompatible($type);
-            $isSpecial = static::isTypeSpecialCompatible($type);
-            $isVoid = static::isTypeVoidCompatible($type);
-            $isObject = static::isTypeObjectCompatible($type);
-
-            $typeInteger = isset($typeInteger) ? ($isInteger && $typeInteger) : $isInteger;
-            $typeDouble = isset($typeDouble) ? ($isDouble && $typeDouble) : $isDouble;
-            $typeBoolean = isset($typeBoolean) ? ($isBoolean && $typeBoolean) : $isBoolean;
-            $typeArray = isset($typeArray) ? ($isArray && $typeArray) : $isArray;
-            $typeNull = isset($typeNull) ? ($isNull && $typeNull) : $isNull;
-            $typeSpecial = isset($typeSpecial) ? ($isSpecial && $typeSpecial) : $isSpecial;
-            $typeVoid = isset($typeVoid) ? ($isVoid && $typeVoid) : $isVoid;
-            $typeObject = isset($typeObject) ? ($isObject && $typeObject) : $isObject;
+        if ($method->isVoid() || $isVoid) {
+            return static::T_VOID;
         }
 
-        if ($typeInteger) {
-            $compatibleType = static::T_INT;
-        } elseif ($typeDouble) {
-            $compatibleType = static::T_FLOAT;
-        } elseif ($typeBoolean) {
-            $compatibleType = static::T_BOOL;
-        } elseif ($typeArray) {
-            $compatibleType = static::T_ARRAY;
-        } elseif ($typeNull) {
-            $compatibleType = static::T_NULL;
-        } elseif ($typeSpecial) {
-            // TODO: change after test
-            $compatibleType = static::T_UNDEFINED;
-        } elseif ($typeVoid) {
-            $compatibleType = static::T_VOID;
-        } elseif ($typeObject) {
-            // TODO: change after test
-            $compatibleType = static::T_UNDEFINED;
+        if ($isInteger) {
+            return static::T_INT.$isNulable;
         }
 
-        return $compatibleType ?? static::T_MIXED;
-    }
-
-    private static function isTypeIntegerCompatible(string $type): bool
-    {
-        switch ($type) {
-            case static::T_INT:
-            case static::T_UINT:
-            case static::T_CHAR:
-            case static::T_UCHAR:
-            case static::T_LONG:
-            case static::T_ULONG:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    private static function isTypeDoubleCompatible(string $type): bool
-    {
-        return $type === static::T_DOUBLE;
-    }
-
-    private static function isTypeBoolCompatible(string $type): bool
-    {
-        return $type === static::T_BOOL;
-    }
-
-    private static function isTypeArrayCompatible(string $type): bool
-    {
-        return $type === static::T_ARRAY;
-    }
-
-    private static function isTypeNullCompatible(string $type): bool
-    {
-        return $type === static::T_NULL;
-    }
-
-    private static function isTypeSpecialCompatible(string $type): bool
-    {
-        switch ($type) {
-            case static::T_NUMBER:
-            case static::T_RESOURCE:
-            case static::T_VARIABLE:
-            case static::T_CALLABLE:
-            case static::T_ITERABLE:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    private static function isTypeVoidCompatible(string $type): bool
-    {
-        return $type === static::T_VOID;
-    }
-
-    private static function isTypeObjectCompatible(string $type): bool
-    {
-        return $type === static::T_OBJECT;
-    }
-
-    /**
-     * Checks if the parsed returns has return-type or cast hints.
-     *
-     * @param array|null $returnTypes
-     *
-     * @return bool
-     */
-    private static function hasReturnType(?array $returnTypes): bool
-    {
-        if (null === $returnTypes) {
-            return false;
+        if ($isDouble) {
+            return static::T_FLOAT.$isNulable;
         }
 
-        if (0 === \count($returnTypes)) {
-            return false;
+        if ($isBool) {
+            return static::T_BOOL.$isNulable;
         }
 
-        return true;
+        if ($isString) {
+            return static::T_STRING.$isNulable;
+        }
+
+        if ($isNull && 1 === $typesCount) {
+            return static::T_NULL;
+        }
+
+        if ($isArray) {
+            return static::T_ARRAY;
+        }
+
+        if ($isObject) {
+            return static::T_OBJECT;
+        }
+
+        if ($isIterable) {
+            return static::T_ITERABLE;
+        }
+
+        if ($isResource) {
+            return static::T_RESOURCE;
+        }
+
+        if ($method->areReturnTypesCompatible()) {
+            return static::T_MIXED;
+        }
+
+        return static::T_MIXED;
+    }
+
+    private static function areReturnTypesCompatible(array $types, array $allowedTypes): bool
+    {
+        $result = null;
+        $areEquals = false;
+
+        foreach ($types as $type => $data) {
+            $areEquals = \in_array($type, $allowedTypes);
+
+            $result = isset($result) ? ($areEquals && $result) : $areEquals;
+        }
+
+        return $result ?? false;
     }
 }

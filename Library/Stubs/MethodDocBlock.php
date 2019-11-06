@@ -114,9 +114,11 @@ class MethodDocBlock extends DocBlock
             }
         }
 
-        if (!empty($return)) {
-            // Emty line in array - it's an empty description. Don't remove it!
-            $this->return = [implode('|', $return), ''];
+        $returnType = \Zephir\Types::getCompatibleReturnType($this->classMethod);
+
+        if (!empty($returnType)) {
+            // Empty line in array - it's an empty description. Don't remove it!
+            $this->return = [$returnType, ''];
         }
     }
 
