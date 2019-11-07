@@ -154,7 +154,7 @@ final class Types
     }
 
     /**
-     * Match if return types from Zephire are compatible
+     * Match if return types from Zephir are compatible
      * with allowed return types from PHP.
      *
      * @param array $types        - Return types from parser
@@ -174,7 +174,9 @@ final class Types
         foreach ($types as $type => $data) {
             $areEquals = \in_array($type, $allowedTypes);
 
-            $result = isset($result) ? ($areEquals && $result) : $areEquals;
+            $result = isset($result)
+                ? ($areEquals && $result)
+                : $areEquals;
         }
 
         return $result ?? false;

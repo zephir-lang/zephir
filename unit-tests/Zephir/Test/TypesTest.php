@@ -38,6 +38,32 @@ class TypesTest extends TestCase
         ];
     }
 
+    private function objectClassDefinition(array $types): array
+    {
+        return [
+            'type' => 'return-type',
+            'list' => array_map(
+                function ($type) {
+                    return [
+                        'type' => 'return-type-parameter',
+                        'cast' => [
+                            'type' => 'variable',
+                            'value' => $type,
+                            'file' => 'stubs.zep',
+                            'line' => 8,
+                            'char' => 5,
+                        ],
+                        'collection' => 0,
+                        'file' => 'stubs.zep',
+                        'line' => 8,
+                        'char' => 5,
+                    ];
+                },
+                $types,
+            ),
+        ];
+    }
+
     private function buildMethod(array $testData, string $definition): ClassMethod
     {
         return new ClassMethod(
@@ -150,7 +176,7 @@ class TypesTest extends TestCase
      */
     public function shouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
     {
-        $testMethod = $this->buildMethod($returnTypes, 'baseClassDefinition');
+        $testMethod = $this->buildMethod($returnTypes, 'objectClassDefinition');
         $testTypes = new Types();
 
         $actual = $testTypes->getCompatibleReturnType($testMethod);
