@@ -40,6 +40,17 @@ class TypesTest extends TestCase
 
     private function objectClassDefinition(array $types): array
     {
+        $ret = [];
+
+        foreach ($types as $alias) {
+            $ret[$alias] = 'Stubs\\'.$alias;
+        }
+
+        return $ret;
+    }
+
+    private function processVariableReturnTypes(array $types): array
+    {
         return [
             'type' => 'return-type',
             'list' => array_map(
@@ -143,6 +154,9 @@ class TypesTest extends TestCase
             [
                 ['string', 'null'], 'string|null',
             ],
+            [
+                ['char', 'ulong', 'int'], 'int',
+            ],
         ];
     }
 
@@ -164,22 +178,44 @@ class TypesTest extends TestCase
     {
         return [
             [
-                ['<EventsManagerInterface>'], 'EventsManagerInterface',
+                ['EventsManagerInterface'], 'EventsManagerInterface',
+            ],
+            [
+                ['EventsManagerInterface', 'StdClass'], 'EventsManagerInterface|StdClass',
+            ],
+            [
+                ['EventsManagerInterface', 'null'], 'EventsManagerInterface|null',
+            ],
+            [
+                ['SomeNamespace\EventsManagerInterface', 'null'], 'SomeNamespace\EventsManagerInterface|null',
+            ],
+            [
+                ['\SomeNamespace\EventsManagerInterface'], '\SomeNamespace\EventsManagerInterface',
             ],
         ];
     }
 
     /**
-     * test.
-     *
+     * @test
      * @dataProvider objectsDataProvider
      */
     public function shouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
     {
+        // This processes into MethodDocBlock with AliasManager resolving
+        $processedReturnTypes = $this->objectClassDefinition($returnTypes);
+
         $testMethod = $this->buildMethod($returnTypes, 'objectClassDefinition');
+
+        $testMethod->setReturnTypes(
+            $this->processVariableReturnTypes($returnTypes)
+        );
+
         $testTypes = new Types();
 
-        $actual = $testTypes->getCompatibleReturnType($testMethod);
+        $actual = $testTypes->getCompatibleReturnType(
+            $testMethod,
+            $processedReturnTypes
+        );
 
         $this->assertSame($actual, $expected);
     }
