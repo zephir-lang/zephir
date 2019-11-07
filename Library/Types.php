@@ -103,7 +103,11 @@ final class Types
         $isIterable = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_ITERABLE]);
         $isResource = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_RESOURCE]);
         $isVoid = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES[static::T_VOID]);
+        $isNumeric = $this->areReturnTypesCompatible($returnTypes, [static::T_NUMBER]);
+        $isDynamic = \in_array('var', array_keys($returnTypes));
 
+        $isTypeHinted = $method->isReturnTypesHintDetermined();
+        $isBasicTypes = $isArray || $isBool || $isDouble || $isInteger || $isResource || $isString || $isVoid || $isNumeric;
         $nullable = $isNullable ? '|null' : '';
 
         if ($method->isVoid() || $isVoid) {
@@ -146,8 +150,12 @@ final class Types
             return static::T_RESOURCE;
         }
 
-        if ($method->areReturnTypesCompatible()) {
+        if ($method->areReturnTypesCompatible() && !$isTypeHinted) {
             return static::T_MIXED.$nullable;
+        }
+
+        if ($isTypeHinted && !$isBasicTypes && !$isDynamic) {
+            return implode('|', array_keys($returnTypes));
         }
 
         return static::T_MIXED.$nullable;
