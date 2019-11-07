@@ -12,8 +12,6 @@ ide/
 doc/
 vendor/
 
-.prove
-
 *.gch
 *.lo
 *.la
