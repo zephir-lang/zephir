@@ -83,7 +83,7 @@ final class Types
      *
      * @return string
      */
-    public function getCompatibleReturnType(ClassMethod $method, array $returnTypes = null): string
+    public function getReturnTypeAnnotation(ClassMethod $method, array $returnTypes = null): string
     {
         if (!$method->hasReturnTypes() && !$method->isVoid()) {
             return '';

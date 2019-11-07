@@ -33,7 +33,7 @@ class TypesTest extends TestCase
                         'char' => 42,
                     ];
                 },
-                $types,
+                $types
             ),
         ];
     }
@@ -70,7 +70,7 @@ class TypesTest extends TestCase
                         'char' => 5,
                     ];
                 },
-                $types,
+                $types
             ),
         ];
     }
@@ -169,7 +169,7 @@ class TypesTest extends TestCase
         $testMethod = $this->buildMethod($returnTypes, 'baseClassDefinition');
         $testTypes = new Types();
 
-        $actual = $testTypes->getCompatibleReturnType($testMethod);
+        $actual = $testTypes->getReturnTypeAnnotation($testMethod);
 
         $this->assertSame($actual, $expected);
     }
@@ -212,7 +212,7 @@ class TypesTest extends TestCase
 
         $testTypes = new Types();
 
-        $actual = $testTypes->getCompatibleReturnType(
+        $actual = $testTypes->getReturnTypeAnnotation(
             $testMethod,
             $processedReturnTypes
         );
