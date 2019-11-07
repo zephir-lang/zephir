@@ -120,7 +120,7 @@ class MethodDocBlock extends DocBlock
         }
 
         $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
-        $returnType = $this->types->getCompatibleReturnType($this->classMethod, $processedTypes);
+        $returnType = $this->types->getReturnTypeAnnotation($this->classMethod, $processedTypes);
 
         if (!empty($returnType)) {
             // Empty line in array - it's an empty description. Don't remove it!
