@@ -84,7 +84,7 @@ class TypesTest extends TestCase
             null,
             null,
             null,
-            $this->$definition($testData),
+            $this->$definition($testData)
         );
     }
 
