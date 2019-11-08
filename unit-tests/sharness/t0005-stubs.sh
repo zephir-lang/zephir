@@ -22,6 +22,14 @@ test_expect_success "Should properly namespace imports (use block)" "
   test_cmp expected/Issue_1778.zep.php ide/0.0.1/Stubs/Issue_1778.zep.php
 "
 
+# See: https://github.com/phalcon/zephir/issues/1900
+test_expect_success "Should properly generate return types for stubs" "
+  cd $FIXTURESDIR/stubs/issues &&
+  zephirc generate --no-ansi 2>&1 >/dev/null &&
+  zephirc stubs --no-ansi 2>&1 >/dev/null &&
+  test_cmp expected/Issue_1900.zep.php ide/0.0.1/Stubs/Issue_1900.zep.php
+"
+
 # See: https://github.com/phalcon/zephir/issues/1907
 test_expect_success "Should properly generate Namespace for extends" "
   cd $FIXTURESDIR/stubs/issues &&
