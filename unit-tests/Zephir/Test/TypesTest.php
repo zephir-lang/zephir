@@ -157,6 +157,9 @@ class TypesTest extends TestCase
             [
                 ['char', 'ulong', 'int'], 'int',
             ],
+            [
+                ['mixed', 'string'], 'mixed|string',
+            ],
         ];
     }
 
