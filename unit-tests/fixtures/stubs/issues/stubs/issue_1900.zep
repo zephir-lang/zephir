@@ -14,12 +14,12 @@ use Stubs\Events\ManagerInterface as AliasedManagerInterface;
 
 class Issue_1900 implements AliasedManagerInterface
 {
-    public $eventsManager;
+    public eventsManager;
 
     /** @var array $collect - descr for collect var. */
-    private $collect;
+    private collect;
 
-    protected static $uniqueId = 0;
+    protected static uniqueId = 0;
 
     /**
      * @return AliasedManagerInterface
