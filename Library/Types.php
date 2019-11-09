@@ -36,46 +36,6 @@ final class Types
     const T_ITERABLE = 'iterable';
     const T_UNDEFINED = 'undefined';
 
-    const COMPATIBLETYPES = [
-        'int' => [
-            self::T_INT,
-            self::T_UINT,
-            self::T_CHAR,
-            self::T_UCHAR,
-            self::T_LONG,
-            self::T_ULONG,
-        ],
-        'float' => [
-            self::T_FLOAT,
-            self::T_DOUBLE,
-        ],
-        'bool' => [
-            self::T_BOOL,
-        ],
-        'string' => [
-            self::T_STRING,
-            self::T_ISTRING,
-        ],
-        'null' => [
-            self::T_NULL,
-        ],
-        'array' => [
-            self::T_ARRAY,
-        ],
-        'object' => [
-            self::T_OBJECT,
-        ],
-        'iterable' => [
-            self::T_ITERABLE,
-        ],
-        'resource' => [
-            self::T_RESOURCE,
-        ],
-        'void' => [
-            self::T_VOID,
-        ],
-    ];
-
     /**
      * Gets PHP compatible return type from class method.
      *
@@ -92,21 +52,20 @@ final class Types
         $returnTypes = $returnTypes ?? $method->getReturnTypes();
         $typesCount = \count($returnTypes);
 
-        $isNullable = $method->areReturnTypesNullCompatible()
-            && 1 !== $typesCount;
-
-        $isInteger = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['int']);
-        $isDouble = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['float']);
-        $isBool = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['bool']);
-        $isString = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['string'], $isNullable);
-        $isNull = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['null']);
-        $isArray = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['array']);
-        $isObject = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['object']);
-        $isIterable = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['iterable']);
-        $isResource = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['resource']);
-        $isVoid = $this->areReturnTypesCompatible($returnTypes, static::COMPATIBLETYPES['void']);
-        $isNumeric = $this->areReturnTypesCompatible($returnTypes, [static::T_NUMBER]);
         $isDynamic = \in_array('var', array_keys($returnTypes));
+        $isNullable = $this->isNullable($returnTypes);
+
+        $isBool = $this->areReturnTypesBoolCompatible($returnTypes);
+        $isNull = $this->areReturnTypesNullCompatible($returnTypes);
+        $isVoid = $this->areReturnTypesVoidCompatible($returnTypes);
+        $isArray = $this->areReturnTypesArrayCompatible($returnTypes);
+        $isDouble = $this->areReturnTypesFloatCompatible($returnTypes);
+        $isString = $this->areReturnTypesStringCompatible($returnTypes);
+        $isObject = $this->areReturnTypesObjectCompatible($returnTypes);
+        $isInteger = $this->areReturnTypesIntegerCompatible($returnTypes);
+        $isNumeric = $this->isNumeric($returnTypes);
+        $isIterable = $this->areReturnTypesIterableCompatible($returnTypes);
+        $isResource = $this->areReturnTypesResourceCompatible($returnTypes);
 
         $isTypeHinted = $method->isReturnTypesHintDetermined();
         $isBasicTypes = $isArray || $isBool || $isDouble || $isInteger || $isResource || $isString || $isVoid || $isNumeric;
@@ -162,6 +121,174 @@ final class Types
         }
 
         return static::T_MIXED.$nullableType;
+    }
+
+    /**
+     * Match Zephir types with Integer type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesIntegerCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible(
+            $types,
+            [
+                self::T_INT,
+                self::T_UINT,
+                self::T_CHAR,
+                self::T_UCHAR,
+                self::T_LONG,
+                self::T_ULONG,
+            ]
+        );
+    }
+
+    /**
+     * Match Zephir types with Float type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesFloatCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible(
+            $types,
+            [
+                self::T_FLOAT,
+                self::T_DOUBLE,
+            ]
+        );
+    }
+
+    /**
+     * Match Zephir types with Boolean type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesBoolCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_BOOL]);
+    }
+
+    /**
+     * Match Zephir types with String type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesStringCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible(
+            $types,
+            [
+                static::T_STRING,
+                static::T_ISTRING,
+            ],
+            $this->isNullable($types)
+        );
+    }
+
+    /**
+     * Match Zephir types with Null type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesNullCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_NULL]);
+    }
+
+    /**
+     * Match Zephir types with Array type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesArrayCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_ARRAY]);
+    }
+
+    /**
+     * Match Zephir types with Object type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesObjectCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_OBJECT]);
+    }
+
+    /**
+     * Match Zephir types with Iterable type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesIterableCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_ITERABLE]);
+    }
+
+    /**
+     * Match Zephir types with Resource type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesResourceCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_RESOURCE]);
+    }
+
+    /**
+     * Match Zephir types with Void type.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesVoidCompatible(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_VOID]);
+    }
+
+    /**
+     * Check if Zephir types is a Numeric type compatible.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function isNumeric(array $types): bool
+    {
+        return $this->areReturnTypesCompatible($types, [static::T_NUMBER]);
+    }
+
+    /**
+     * Check if Zephir types can be Nullable.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function isNullable(array $types): bool
+    {
+        return \array_key_exists(static::T_NULL, $types)
+            && 1 !== \count($types);
     }
 
     /**
