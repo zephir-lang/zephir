@@ -47,62 +47,53 @@ class Issue_1900 implements AliasedManagerInterface
     }
 
     /**
-    * Returns if priorities are enabled
-    */
+     * Returns if priorities are enabled
+     */
     public function arePrioritiesEnabled() -> bool
     {
         return true;
     }
 
     /**
-    * Tells the event manager if it needs to collect all the responses returned
-    * by every registered listener in a single fire
-    */
+     * Tells the event manager if it needs to collect all the responses returned
+     * by every registered listener in a single fire
+     */
     public function collectResponses(bool collect, string! eventType, var handler) -> void
     {
         let this->collect = collect;
     }
 
     /**
-    * Fires an event in the events manager causing the active listeners to be
-    * notified about it
-    *
-    *```php
-    * $eventsManager->fire("db", $connection);
-    *```
-    *
-    * @param object source
-    * @param mixed  data
-    * @return mixed
-    */
+     * Fires an event in the events manager causing the active listeners to be
+     * notified about it
+     *
+     *```php
+     * $eventsManager->fire("db", $connection);
+     *```
+     *
+     * @param object source
+     * @param mixed  data
+     * @return mixed
+     */
     public function fire(string! eventType, object source, var data = null, bool cancelable = true)
     {
         return 1;
     }
 
     /**
-    * Internal handler to call a queue of events
-    *
-    * @return mixed
-    */
+     * Internal handler to call a queue of events
+     *
+     * @return mixed
+     */
     final public function fireQueue(<SplPriorityQueue> queue, <RequestInterface> event) -> <AliasedManagerInterface>
     {
         return event;
     }
 
     /**
-    * Returns all the attached listeners of a certain type
-    */
+     * Returns all the attached listeners of a certain type
+     */
     public function getListeners(string! type) -> array
-    {
-        return [];
-    }
-
-    /**
-    * Returns all the responses returned by every handler executed by the last
-    * 'fire' executed
-    */
-    public function getResponses() -> array | null
     {
         return [];
     }
@@ -113,8 +104,8 @@ class Issue_1900 implements AliasedManagerInterface
     }
 
     /**
-    * Check whether certain type of event has listeners
-    */
+     * Check whether certain type of event has listeners
+     */
     public function hasListeners(string! type) -> <AliasedManagerInterface>
     {
         return [];

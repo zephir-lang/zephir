@@ -115,16 +115,6 @@ class Issue_1900 implements AliasedManagerInterface
     }
 
     /**
-     * Returns all the responses returned by every handler executed by the last
-     * 'fire' executed
-     *
-     * @return array|null
-     */
-    public function getResponses(): ?array
-    {
-    }
-
-    /**
      * @return resource
      */
     public function getResources()
