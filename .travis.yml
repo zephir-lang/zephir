@@ -148,7 +148,7 @@ install:
     # Prepare Zephir executable
     if [ "$BUILD_PHAR" -eq 1 ]
     then
-      echo "Build Zephit PHAR"
+      echo "Build Zephir PHAR"
       .ci/build-phar.sh
       sudo ln -s "$(pwd)/zephir.phar" /usr/local/bin/zephir
     else
