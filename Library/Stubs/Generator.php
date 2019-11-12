@@ -72,10 +72,10 @@ class Generator
             $source = $this->buildClass($class, $indent);
 
             $filename = ucfirst($class->getName()).'.zep.php';
-            $filePath = $path.str_replace(
+            $filePath = $path.str_ireplace(
                 $namespace,
                 '',
-                str_replace($namespace.'\\\\', \DIRECTORY_SEPARATOR, strtolower($class->getNamespace()))
+                str_replace($namespace.'\\\\', \DIRECTORY_SEPARATOR, $class->getNamespace())
             );
             $filePath = str_replace('\\', \DIRECTORY_SEPARATOR, $filePath);
             $filePath = str_replace(\DIRECTORY_SEPARATOR.\DIRECTORY_SEPARATOR, \DIRECTORY_SEPARATOR, $filePath);
