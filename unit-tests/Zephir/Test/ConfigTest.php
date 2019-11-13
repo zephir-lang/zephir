@@ -84,7 +84,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function setConfigDataProvider(): array
+    public function setConfigProvider(): array
     {
         return [
             'set with namespace' => [
@@ -110,7 +110,7 @@ class ConfigTest extends TestCase
 
     /**
      * @test
-     * @dataProvider setConfigDataProvider
+     * @dataProvider setConfigProvider
      */
     public function shouldSetConfigParams(array $test, $expected)
     {
@@ -122,22 +122,60 @@ class ConfigTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /** @test */
-    public function shouldGetDefaultConfigParams()
+    public function defaultConfigProvider(): array
     {
-        $this->assertSame($this->config->get('test.my_setting_1', 'test'), null);
+        $banner = [
+            'This file is part of the Zephir.',
+            '',
+            '(c) Zephir Team <team@zephir-lang.com>',
+            '',
+            'For the full copyright and license information, please view',
+            'the LICENSE file that was distributed with this source code.',
+        ];
+
+        return [
+            // 'test suite name' => [$namespace, $key, $expected,]
+            'not existing param' => ['test.my_setting_1', 'test', null],
+            'stubs path' => ['stubs', 'path', 'ide/%version%/%namespace%/'],
+            'stubs run' => ['stubs', 'stubs-run-after-generate', false],
+            'stubs banner' => ['stubs', 'banner', $banner],
+            'api path' => ['api', 'path', 'doc/%version%'],
+            'api path' => ['api', 'path', 'doc/%version%'],
+            'warnings unused-variable' => ['warnings', 'unused-variable', true],
+            'optimizations static-type-inference' => ['optimizations', 'static-type-inference', true],
+            'extra indent' => ['extra', 'indent', 'spaces'],
+            'namespace' => [null, 'namespace', 'test'],
+            'name' => [null, 'name', 'Test Extension'],
+            'author' => [null, 'author', 'Zephir Team and contributors'],
+            'globals test_setting_1' => ['globals', 'test_setting_1', ['type' => 'bool', 'default' => true]],
+            'globals db.my_setting_1' => ['globals', 'db.my_setting_1', ['type' => 'bool', 'default' => false]],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider defaultConfigProvider
+     */
+    public function shouldGetDefaultConfigParams($namespace, string $key, $expected)
+    {
+        $actual = $this->config->get($key, $namespace);
+
+        $this->assertSame($expected, $actual);
     }
 
     /** @test */
     public function shouldSaveConfigOnExit()
     {
         chdir(sys_get_temp_dir());
-        $config = new Config();
-        $config->set('name', 'foo');
-        $config->dumpToFile();
+
+        $this->config->set('name', 'foo');
+        $this->config->dumpToFile();
+
         $configJson = json_decode(file_get_contents('config.json'), true);
+
         $this->assertInternalType('array', $configJson);
         $this->assertSame($configJson['name'], 'foo');
+
         $this->cleanTmpConfigFile();
     }
 }
