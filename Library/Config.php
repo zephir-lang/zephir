@@ -34,6 +34,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
+            'banner' => [],
         ],
         'api' => [
             'path' => 'doc/%version%',
