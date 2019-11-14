@@ -163,6 +163,33 @@ class ConfigTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function offsetConfigProvider(): array
+    {
+        return [
+            // 'test suite name' => [$key, $expected,]
+            'globals test_setting_1 with namespace' => [
+                ['globals' => 'test_setting_1'], ['type' => 'bool', 'default' => true],
+            ],
+            'globals test_setting_1 without namespace' => [
+                ['globals' => 'test_setting_1'], ['type' => 'bool', 'default' => true],
+            ],
+            'info header without namespace' => [
+                ['requires' => 'extensions'], ['PDO', 'SPL', 'standard', 'hash', 'json'],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider offsetConfigProvider
+     */
+    public function shouldGetWithOffsetConfigParams(array $key, array $expected)
+    {
+        $actual = $this->config->offsetGet($key);
+
+        $this->assertSame($expected, $actual);
+    }
+
     /** @test */
     public function shouldSaveConfigOnExit()
     {
