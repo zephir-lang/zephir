@@ -59,6 +59,25 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Returns Stubs banner for test suite.
+     *
+     * @return string
+     */
+    private function stubsBanner(): string
+    {
+        return <<<DOC
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+DOC;
+    }
+
+    /**
      * Test when we have a bad config.json file.
      *
      * @test
@@ -124,21 +143,12 @@ class ConfigTest extends TestCase
 
     public function defaultConfigProvider(): array
     {
-        $banner = [
-            'This file is part of the Zephir.',
-            '',
-            '(c) Zephir Team <team@zephir-lang.com>',
-            '',
-            'For the full copyright and license information, please view',
-            'the LICENSE file that was distributed with this source code.',
-        ];
-
         return [
             // 'test suite name' => [$namespace, $key, $expected,]
             'not existing param' => ['test.my_setting_1', 'test', null],
             'stubs path' => ['stubs', 'path', 'ide/%version%/%namespace%/'],
             'stubs run' => ['stubs', 'stubs-run-after-generate', false],
-            'stubs banner' => ['stubs', 'banner', $banner],
+            'stubs banner' => ['stubs', 'banner', $this->stubsBanner()],
             'api path' => ['api', 'path', 'doc/%version%'],
             'api path' => ['api', 'path', 'doc/%version%'],
             'warnings unused-variable' => ['warnings', 'unused-variable', true],
@@ -209,6 +219,15 @@ class ConfigTest extends TestCase
 
         $this->assertFalse($this->config->offsetExists('globals'));
         $this->assertNull($actual);
+    }
+
+    /** @test */
+    public function shouldGetBannerFromConfig()
+    {
+        $this->assertSame($this->stubsBanner(), $this->config->getBanner());
+
+        $this->config->offsetUnset('stubs');
+        $this->assertSame('', $this->config->getBanner());
     }
 
     /** @test */
