@@ -114,7 +114,6 @@ HEAD;
             }
 
             $codePrinter->output('ZEPHIR_BACKUP_SCOPE(); \\');
-            $codePrinter->output('ZEPHIR_BACKUP_THIS_PTR(); \\');
             if (!$scope) {
                 $codePrinter->output('ZEPHIR_SET_THIS(object); \\');
                 $codePrinter->output('ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \\');
@@ -156,7 +155,6 @@ HEAD;
             }
 
             $codePrinter->output('ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \\');
-            $codePrinter->output('ZEPHIR_RESTORE_THIS_PTR(); \\');
 
             $codePrinter->output('ZEPHIR_RESTORE_SCOPE(); \\');
             $codePrinter->decreaseLevel();
