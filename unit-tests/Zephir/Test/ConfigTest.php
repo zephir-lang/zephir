@@ -191,6 +191,27 @@ class ConfigTest extends TestCase
     }
 
     /** @test */
+    public function shouldUnsetConfigParams()
+    {
+        $initials = $this->config->get('test_setting_1', 'globals');
+
+        $this->assertTrue($this->config->offsetExists('globals'));
+        $this->assertSame(
+            [
+                'type' => 'bool',
+                'default' => true,
+            ],
+            $initials
+        );
+
+        $this->config->offsetUnset('globals');
+        $actual = $this->config->get('test_setting_1', 'globals');
+
+        $this->assertFalse($this->config->offsetExists('globals'));
+        $this->assertNull($actual);
+    }
+
+    /** @test */
     public function shouldSaveConfigOnExit()
     {
         chdir(sys_get_temp_dir());
