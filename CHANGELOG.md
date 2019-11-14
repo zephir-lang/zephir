@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ## [0.12.11] - 2019-11-02
+### Added
+- Option to set banner for stubs [#1987](https://github.com/phalcon/zephir/1987)
+
 ### Fixed
 - Fixed arithmetical operations with `zvals` which stores `double` numbers
 - Fixed updating static variables in the loop which represents  `double` and
