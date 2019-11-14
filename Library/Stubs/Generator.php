@@ -54,10 +54,11 @@ class Generator
      * @param string $namespace
      * @param string $path
      * @param string $indent
+     * @param string $banner
      *
      * @throws Exception\LogicException
      */
-    public function generate(string $namespace, string $path, string $indent)
+    public function generate(string $namespace, string $path, string $indent, string $banner)
     {
         if (empty($path)) {
             throw new Exception\LogicException(
@@ -69,7 +70,7 @@ class Generator
 
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
-            $source = $this->buildClass($class, $indent);
+            $source = $this->buildClass($class, $indent, $banner);
 
             $filename = ucfirst($class->getName()).'.zep.php';
             $filePath = $path.str_ireplace(
@@ -94,14 +95,16 @@ class Generator
      *
      * @param ClassDefinition $class
      * @param string          $indent
+     * @param string          $banner
      *
      * @throws Exception\RuntimeException
      *
      * @return string
      */
-    protected function buildClass(ClassDefinition $class, string $indent): string
+    protected function buildClass(ClassDefinition $class, string $indent, string $banner): string
     {
         $source = '<?php'.PHP_EOL.PHP_EOL;
+        $source .= '' === $banner ? '' : $banner.PHP_EOL;
         $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
         /** @var Zephir\AliasManager $aliasManager */
