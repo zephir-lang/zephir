@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Option to set banner for stubs [#1987](https://github.com/phalcon/zephir/1987)
+- Interface stubs have relative namespace [#2016](https://github.com/phalcon/zephir/2016)
 
 ## [0.12.11] - 2019-11-02
 ### Fixed
