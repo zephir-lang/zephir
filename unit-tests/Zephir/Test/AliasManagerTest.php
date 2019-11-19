@@ -182,6 +182,9 @@ class AliasManagerTest extends TestCase
                     'name' => 'AnotherClass',
                     'alias' => 'AnotherClass',
                 ],
+                [
+                    'name' => 'Bug\\Storage\\FileSystem',
+                ],
             ],
         ]);
 
@@ -189,5 +192,6 @@ class AliasManagerTest extends TestCase
         $this->assertFalse($this->testAliasMgr->isAliasPresentFor('\\Root\SomeNamespace\\SomeClassName'));
         $this->assertFalse($this->testAliasMgr->isAliasPresentFor('AnotherClass'));
         $this->assertFalse($this->testAliasMgr->isAliasPresentFor('NonExistingClass'));
+        $this->assertFalse($this->testAliasMgr->isAliasPresentFor('Bug\\Storage\\FileSystem'));
     }
 }
