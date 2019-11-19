@@ -126,7 +126,9 @@ class AliasManagerTest extends TestCase
         ]);
 
         $className = $useStatements['name'];
-        $alias = $useStatements['alias'] ?? trim($className, '\\');
+
+        $parts = explode('\\', $className);
+        $alias = $useStatements['alias'] ?? $parts[\count($parts) - 1];
 
         $this->assertSame($expected, $this->testAliasMgr->isUseStatementAliased($alias));
         $this->assertSame($expected, $this->testAliasMgr->isAliasPresentFor($className));
