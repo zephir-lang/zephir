@@ -113,7 +113,10 @@ final class AliasManager
     {
         $extractAlias = $this->implicitAlias($className);
 
-        return !isset($this->aliases[$extractAlias]);
+        $isClassDeclarated = \in_array($className, $this->aliases);
+        $classAlias = array_flip($this->aliases)[$className] ?? null;
+
+        return $isClassDeclarated && $classAlias !== $extractAlias;
     }
 
     /**
