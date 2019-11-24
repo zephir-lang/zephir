@@ -6,7 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Option to set banner for stubs [#1987](https://github.com/phalcon/zephir/1987)
+- Option to set banner for stubs generator
+  [#1987](https://github.com/phalcon/zephir/1987)
+
+### Fixed
+- Calling object methods from static context yields segmentation fault when
+  `internal-call-transformation` is set to `TRUE`
+  [#2000](https://github.com/phalcon/zephir/issues/2000)
+- Certain method calls fail when called from static context when
+  `internal-call-transformation` is set to `TRUE`
+  [#2005](https://github.com/phalcon/zephir/issues/2005)
+- Method context loses track of `this` after calling static method when
+  `internal-call-transformation` is set to `TRUE`
+  [#2007](https://github.com/phalcon/zephir/issues/2007)
+- Fixed incorrect stubs generation for return type hint
+  [#1990](https://github.com/phalcon/zephir/issues/1990)
+- Fixed incorrect stubs generation for classes in the same namespace
+  [#2016](https://github.com/phalcon/zephir/issues/2016)
 
 ## [0.12.11] - 2019-11-02
 ### Fixed
@@ -21,8 +37,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   [#1986](https://github.com/phalcon/zephir/issues/1986)
 - Fixed incorrect namespace on type hinted return when generating API docs
   [#1229](https://github.com/phalcon/zephir/issues/1229)
-- Fixed incorrect stubs generation for classes in the same namespace
-  [#2016](https://github.com/phalcon/zephir/issues/2016)
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
