@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.12.12] - 2019-11-25
 ### Added
 - Option to set banner for stubs generator
   [#1987](https://github.com/phalcon/zephir/1987)
@@ -338,7 +339,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.11...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.12...HEAD
+[0.12.12]: https://github.com/phalcon/zephir/compare/0.12.11...0.12.12
 [0.12.11]: https://github.com/phalcon/zephir/compare/0.12.10...0.12.11
 [0.12.10]: https://github.com/phalcon/zephir/compare/0.12.9...0.12.10
 [0.12.9]: https://github.com/phalcon/zephir/compare/0.12.8...0.12.9
