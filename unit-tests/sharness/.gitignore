@@ -1,3 +1,6 @@
 lib/sharness/
 test-results/
 trash directory.*.sh/
+
+# prove saved state
+.prove

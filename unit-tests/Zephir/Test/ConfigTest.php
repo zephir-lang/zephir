@@ -23,10 +23,14 @@ class ConfigTest extends TestCase
      */
     private $pwd;
 
+    /** @var Config $config */
+    private $config;
+
     public function setUp()
     {
         /* Store the current directory before to be change */
         $this->pwd = getcwd();
+        $this->config = new Config();
     }
 
     /**
@@ -38,62 +42,6 @@ class ConfigTest extends TestCase
             chdir($this->pwd);
         }
 
-        $this->cleanTmpConfigFile();
-    }
-
-    /**
-     * Test when we have a bad config.json file.
-     *
-     * @expectedException \Zephir\Exception
-     * @expectedExceptionMessage The config.json file is not valid or there is
-     * no Zephir extension initialized in this directory.
-     */
-    public function testConstructWithBadConfigFile()
-    {
-        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/badconfig');
-        new Config();
-    }
-
-    public function testGetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
-    }
-
-    public function testGetWithNamespace()
-    {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
-    }
-
-    public function testSetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('config'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
-    }
-
-    /**
-     * Test saveOnExit method.
-     */
-    public function testSaveOnExit()
-    {
-        chdir(sys_get_temp_dir());
-        $config = new Config();
-        $config->set('name', 'foo');
-        $config->dumpToFile();
-        $configJson = json_decode(file_get_contents('config.json'), true);
-        $this->assertInternalType('array', $configJson);
-        $this->assertSame($configJson['name'], 'foo');
         $this->cleanTmpConfigFile();
     }
 
@@ -110,13 +58,191 @@ class ConfigTest extends TestCase
         }
     }
 
-    /** @test */
-    public function directiveShowsWithoutDuplicatedNamespace()
+    /**
+     * Returns Stubs banner for test suite.
+     *
+     * @return string
+     */
+    private function stubsBanner(): string
     {
-        $config = new Config();
-        $config->set('ext.some_key', 'some_value', 'test');
+        return <<<DOC
+/**
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+DOC;
+    }
 
-        $this->assertSame($config->get('ext.some_key', 'test'), 'some_value');
-        $this->assertSame($config->get('test.my_setting_1', 'test'), null);
+    /**
+     * Test when we have a bad config.json file.
+     *
+     * @test
+     * @expectedException \Zephir\Exception
+     * @expectedExceptionMessage The config.json file is not valid or there is
+     * no Zephir extension initialized in this directory.
+     */
+    public function constructWithBadConfigFile()
+    {
+        chdir(\constant('ZEPHIRPATH').'/unit-tests/fixtures/badconfig');
+        new Config();
+    }
+
+    /**
+     * Test data provider.
+     *
+     * [
+     *     'test name' => [
+     *          [$key, $value, $namespace], $expected,
+     *      ],
+     *      ...
+     * ]
+     *
+     * @return array
+     */
+    public function setConfigProvider(): array
+    {
+        return [
+            'set with namespace' => [
+                ['unused-variable', false, 'warnings'], false,
+            ],
+            'set without namespace' => [
+                ['config', true, null], true,
+            ],
+            'get with namespace' => [
+                ['unused-variable', true, 'warnings'], true,
+            ],
+            'get without namespace' => [
+                ['verbose', false, null], false,
+            ],
+            'directive don`t have duplicates with namespace' => [
+                ['ext.some_key', 'some_value', 'test'], 'some_value',
+            ],
+            'directive don`t have duplicates without namespace' => [
+                ['test.my_setting_1', 'test', null], 'test',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider setConfigProvider
+     */
+    public function shouldSetConfigParams(array $test, $expected)
+    {
+        list($key, $value, $namespace) = $test;
+        $this->config->set($key, $value, $namespace);
+
+        $actual = $this->config->get($key, $namespace);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function defaultConfigProvider(): array
+    {
+        return [
+            // 'test suite name' => [$namespace, $key, $expected,]
+            'not existing param' => ['test.my_setting_1', 'test', null],
+            'stubs path' => ['stubs', 'path', 'ide/%version%/%namespace%/'],
+            'stubs run' => ['stubs', 'stubs-run-after-generate', false],
+            'stubs banner' => ['stubs', 'banner', $this->stubsBanner()],
+            'api path' => ['api', 'path', 'doc/%version%'],
+            'api path' => ['api', 'path', 'doc/%version%'],
+            'warnings unused-variable' => ['warnings', 'unused-variable', true],
+            'optimizations static-type-inference' => ['optimizations', 'static-type-inference', true],
+            'extra indent' => ['extra', 'indent', 'spaces'],
+            'namespace' => [null, 'namespace', 'test'],
+            'name' => [null, 'name', 'Test Extension'],
+            'author' => [null, 'author', 'Zephir Team and contributors'],
+            'globals test_setting_1' => ['globals', 'test_setting_1', ['type' => 'bool', 'default' => true]],
+            'globals db.my_setting_1' => ['globals', 'db.my_setting_1', ['type' => 'bool', 'default' => false]],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider defaultConfigProvider
+     */
+    public function shouldGetDefaultConfigParams($namespace, string $key, $expected)
+    {
+        $actual = $this->config->get($key, $namespace);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function offsetConfigProvider(): array
+    {
+        return [
+            // 'test suite name' => [$key, $expected,]
+            'globals test_setting_1 with namespace' => [
+                ['globals' => 'test_setting_1'], ['type' => 'bool', 'default' => true],
+            ],
+            'globals test_setting_1 without namespace' => [
+                ['globals' => 'test_setting_1'], ['type' => 'bool', 'default' => true],
+            ],
+            'info header without namespace' => [
+                ['requires' => 'extensions'], ['PDO', 'SPL', 'standard', 'hash', 'json'],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider offsetConfigProvider
+     */
+    public function shouldGetWithOffsetConfigParams(array $key, array $expected)
+    {
+        $actual = $this->config->offsetGet($key);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /** @test */
+    public function shouldUnsetConfigParams()
+    {
+        $initials = $this->config->get('test_setting_1', 'globals');
+
+        $this->assertTrue($this->config->offsetExists('globals'));
+        $this->assertSame(
+            [
+                'type' => 'bool',
+                'default' => true,
+            ],
+            $initials
+        );
+
+        $this->config->offsetUnset('globals');
+        $actual = $this->config->get('test_setting_1', 'globals');
+
+        $this->assertFalse($this->config->offsetExists('globals'));
+        $this->assertNull($actual);
+    }
+
+    /** @test */
+    public function shouldGetBannerFromConfig()
+    {
+        $this->assertSame($this->stubsBanner(), $this->config->getBanner());
+
+        $this->config->offsetUnset('stubs');
+        $this->assertSame('', $this->config->getBanner());
+    }
+
+    /** @test */
+    public function shouldSaveConfigOnExit()
+    {
+        chdir(sys_get_temp_dir());
+
+        $this->config->set('name', 'foo');
+        $this->config->dumpToFile();
+
+        $configJson = json_decode(file_get_contents('config.json'), true);
+
+        $this->assertInternalType('array', $configJson);
+        $this->assertSame($configJson['name'], 'foo');
+
+        $this->cleanTmpConfigFile();
     }
 }

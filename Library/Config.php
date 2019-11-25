@@ -34,6 +34,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
+            'banner' => '',
         ],
         'api' => [
             'path' => 'doc/%version%',
@@ -326,6 +327,16 @@ class Config implements \ArrayAccess, \JsonSerializable
     public function jsonSerialize()
     {
         return $this->container;
+    }
+
+    /**
+     * Returns banner from configuration file.
+     *
+     * @return string
+     */
+    public function getBanner(): string
+    {
+        return $this->get('banner', 'stubs') ?? '';
     }
 
     /**

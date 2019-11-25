@@ -54,16 +54,21 @@ class AliasManagerTest extends TestCase
             ],
             'without explicit alias' => [
                 [
-                    'name' => 'Throwable',
-                    'alias' => 'Throwable',
+                    'name' => '\\Throwable',
+                ],
+            ],
+            'without explicit alias and FQN' => [
+                [
+                    'name' => 'Zephir\\Compiler\\CompilerInterface',
                 ],
             ],
         ];
     }
 
-    public function aliasDataProvider(): array
+    public function aliasProvider(): array
     {
         $expected = [
+            //   [ alias => name ]
             [
                 'EventsManagerInterface' => 'Bug\\Events\\ManagerInterface',
             ],
@@ -71,7 +76,10 @@ class AliasManagerTest extends TestCase
                 'EventsManagerInterface' => '\\Bug\\Events\\ManagerInterface',
             ],
             [
-                'Throwable' => 'Throwable',
+                'Throwable' => '\Throwable',
+            ],
+            [
+                'CompilerInterface' => 'Zephir\\Compiler\\CompilerInterface',
             ],
         ];
 
@@ -80,7 +88,7 @@ class AliasManagerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider aliasDataProvider
+     * @dataProvider aliasProvider
      */
     public function shouldProperAddStatements(array $useStatements, array $expected)
     {
@@ -88,18 +96,20 @@ class AliasManagerTest extends TestCase
             'aliases' => [$useStatements],
         ]);
 
-        $alias = $useStatements['alias'];
         $className = $useStatements['name'];
 
+        $parts = explode('\\', $className);
+        $alias = $useStatements['alias'] ?? $parts[\count($parts) - 1];
+
         $this->assertTrue($this->testAliasMgr->isAlias($alias));
-        $this->assertSame($this->testAliasMgr->getAliases(), $expected);
-        $this->assertSame($this->testAliasMgr->getAlias($alias), $className);
+        $this->assertSame($expected, $this->testAliasMgr->getAliases());
+        $this->assertSame($className, $this->testAliasMgr->getAlias($alias));
     }
 
-    public function statementDataProvider(): array
+    public function statementProvider(): array
     {
         $expected = [
-            true, true, false,
+            true, true, false, false,
         ];
 
         return $this->injectExpectedResult($expected);
@@ -107,7 +117,7 @@ class AliasManagerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider statementDataProvider
+     * @dataProvider statementProvider
      */
     public function shouldCheckAliasedStatement(array $useStatements, bool $expected)
     {
@@ -115,11 +125,13 @@ class AliasManagerTest extends TestCase
             'aliases' => [$useStatements],
         ]);
 
-        $alias = $useStatements['alias'];
         $className = $useStatements['name'];
 
-        $this->assertSame($this->testAliasMgr->isUseStatementAliased($alias), $expected);
-        $this->assertSame($this->testAliasMgr->isAliasPresentFor($className), $expected);
+        $parts = explode('\\', $className);
+        $alias = $useStatements['alias'] ?? $parts[\count($parts) - 1];
+
+        $this->assertSame($expected, $this->testAliasMgr->isUseStatementAliased($alias));
+        $this->assertSame($expected, $this->testAliasMgr->isAliasPresentFor($className));
     }
 
     public function classNameDataProvider(): array
@@ -127,7 +139,8 @@ class AliasManagerTest extends TestCase
         $expected = [
             'EventsManagerInterface',
             '\Bug\Events\ManagerInterface',
-            'Throwable',
+            '\Throwable',
+            'CompilerInterface',
         ];
 
         return $this->injectExpectedResult($expected);
@@ -145,6 +158,40 @@ class AliasManagerTest extends TestCase
 
         $className = $useStatements['name'];
 
-        $this->assertSame($this->testAliasMgr->getAliasForClassName($className), $expected);
+        $this->assertSame($expected, $this->testAliasMgr->getAliasForClassName($className));
+    }
+
+    /** @test */
+    public function shouldCheckIfAliasPresentForClass()
+    {
+        $this->testAliasMgr->add([
+            'aliases' => [
+                [
+                    'name' => 'One',
+                    'alias' => 'One',
+                ],
+                [
+                    'name' => 'Bug\\Events\\ManagerInterface',
+                    'alias' => 'EventsManagerInterface',
+                ],
+                [
+                    'name' => '\\Root\SomeNamespace\\SomeClassName',
+                    'alias' => 'SomeClassName',
+                ],
+                [
+                    'name' => 'AnotherClass',
+                    'alias' => 'AnotherClass',
+                ],
+                [
+                    'name' => 'Bug\\Storage\\FileSystem',
+                ],
+            ],
+        ]);
+
+        $this->assertTrue($this->testAliasMgr->isAliasPresentFor('Bug\\Events\\ManagerInterface'));
+        $this->assertFalse($this->testAliasMgr->isAliasPresentFor('\\Root\SomeNamespace\\SomeClassName'));
+        $this->assertFalse($this->testAliasMgr->isAliasPresentFor('AnotherClass'));
+        $this->assertFalse($this->testAliasMgr->isAliasPresentFor('NonExistingClass'));
+        $this->assertFalse($this->testAliasMgr->isAliasPresentFor('Bug\\Storage\\FileSystem'));
     }
 }

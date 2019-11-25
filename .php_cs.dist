@@ -40,10 +40,13 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHPUnit48Migration:risky' => true,
+        '@PSR2' => true,
         'php_unit_no_expectation_annotation' => false,
         'array_syntax' => ['syntax' => 'short'],
         'fopen_flags' => false,
         'ordered_imports' => ['sortAlgorithm' => 'alpha'],
         'protected_to_private' => false,
         'phpdoc_var_annotation_correct_order' => true,
+        'no_superfluous_phpdoc_tags' => false,
+        'single_line_throw' => false,
     ]);

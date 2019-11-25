@@ -148,7 +148,7 @@ install:
     # Prepare Zephir executable
     if [ "$BUILD_PHAR" -eq 1 ]
     then
-      echo "Build Zephit PHAR"
+      echo "Build Zephir PHAR"
       .ci/build-phar.sh
       sudo ln -s "$(pwd)/zephir.phar" /usr/local/bin/zephir
     else
@@ -184,8 +184,8 @@ script:
 
   # Static Code Analysis
   - phpenv config-rm xdebug.ini || true
-  - if [ "$BUILD_TYPE" == "analysis" ]; then phpcs; fi
-  - if [ "$BUILD_TYPE" == "analysis" ]; then php-cs-fixer fix --diff --dry-run -v; fi
+  - if [ "$BUILD_TYPE" == "analysis" ]; then phpcs --version; phpcs; fi
+  - if [ "$BUILD_TYPE" == "analysis" ]; then php-cs-fixer --version; php-cs-fixer fix --diff --dry-run -v; fi
   - if [ "$BUILD_TYPE" == "analysis" ]; then shellcheck .ci/*.sh; fi
 
 after_script:

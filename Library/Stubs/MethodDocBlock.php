@@ -13,6 +13,7 @@ namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
 use Zephir\ClassMethod;
+use Zephir\Types;
 
 /**
  * Stubs Generator.
@@ -40,7 +41,10 @@ class MethodDocBlock extends DocBlock
     /** @var ClassMethod */
     private $classMethod;
 
-    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ')
+    /** @var Types */
+    private $types;
+
+    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ', Types $types = null)
     {
         parent::__construct($method->getDocBlock(), $indent);
 
@@ -48,6 +52,7 @@ class MethodDocBlock extends DocBlock
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
         $this->classMethod = $method;
+        $this->types = $types ?? new Types();
     }
 
     /**
@@ -114,8 +119,12 @@ class MethodDocBlock extends DocBlock
             }
         }
 
-        if (!empty($return)) {
-            $this->return = [implode('|', $return), ''];
+        $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
+        $returnType = $this->types->getReturnTypeAnnotation($this->classMethod, $processedTypes);
+
+        if (!empty($returnType)) {
+            // Empty line in array - it's an empty description. Don't remove it!
+            $this->return = [$returnType, ''];
         }
     }
 

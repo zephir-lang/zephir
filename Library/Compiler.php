@@ -973,7 +973,8 @@ final class Compiler
         $stubsGenerator->generate(
             $this->config->get('namespace'),
             $path,
-            $this->config->get('indent', 'extra')
+            $this->config->get('indent', 'extra'),
+            $this->config->getBanner()
         );
     }
 

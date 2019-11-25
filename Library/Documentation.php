@@ -279,7 +279,6 @@ class Documentation
      *  => check if the command line argument --output-directory was given
      *  => if not ; check if config config[api][path] was given
      *
-     *
      * @param string $outputDir
      *
      * @return string|null

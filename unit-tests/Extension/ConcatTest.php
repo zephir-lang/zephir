@@ -62,7 +62,7 @@ class ConcatTest extends TestCase
     {
         $t = new Concat();
         $this->assertSame(
-            /* @lang text */ 'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
+            'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
             $t->testConcat4(1893)
         );
     }
