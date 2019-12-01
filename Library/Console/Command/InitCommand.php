@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\BaseBackend;
-use Zephir\Compiler;
 use Zephir\Config;
 
 /**
@@ -29,14 +28,12 @@ use Zephir\Config;
  */
 final class InitCommand extends Command
 {
-    private $compiler;
     private $backend;
     private $config;
     private $logger;
 
-    public function __construct(Compiler $compiler, BaseBackend $backend, Config $config, LoggerInterface $logger)
+    public function __construct(BaseBackend $backend, Config $config, LoggerInterface $logger)
     {
-        $this->compiler = $compiler;
         $this->backend = $backend;
         $this->config = $config;
         $this->logger = $logger;
@@ -82,7 +79,7 @@ final class InitCommand extends Command
         return 0;
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [
@@ -129,7 +126,7 @@ final class InitCommand extends Command
      *
      * @return bool
      */
-    private function recursiveProcess($src, $dst, $pattern = null, $callback = 'copy')
+    private function recursiveProcess($src, $dst, $pattern = null, $callback = 'copy'): bool
     {
         $success = true;
         $iterator = new \DirectoryIterator($src);
@@ -152,7 +149,7 @@ final class InitCommand extends Command
                 }
             } elseif (!$pattern || ($pattern && 1 === preg_match($pattern, $fileName))) {
                 $path = $dst.\DIRECTORY_SEPARATOR.$fileName;
-                $success = $success && \call_user_func($callback, $pathName, $path);
+                $success = $success && $callback($pathName, $path);
             }
         }
 
