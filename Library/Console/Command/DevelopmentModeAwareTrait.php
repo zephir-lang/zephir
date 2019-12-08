@@ -25,9 +25,9 @@ trait DevelopmentModeAwareTrait
      *
      * @return bool
      */
-    protected function isDevelopmentModeEnabled(InputInterface $input)
+    protected function isDevelopmentModeEnabled(InputInterface $input): bool
     {
-        if (false == $input->getOption('no-dev')) {
+        if (false === $input->getOption('no-dev')) {
             return $input->getOption('dev') || PHP_DEBUG;
         }
 
