@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed PHP 7.4 support for macOS [phalcon/cphalcon#14577](https://github.com/phalcon/cphalcon/issues/14577)
+
 ## [0.12.12] - 2019-11-25
 ### Added
 - Option to set banner for stubs generator
