@@ -114,7 +114,7 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 			break;
 
 		case IS_DOUBLE:
-			result = zend_hash_index_find(h, (ulong)Z_DVAL_P(index));
+			result = zend_hash_index_find(h, (zend_ulong)Z_DVAL_P(index));
 			break;
 
 		case IS_LONG:
@@ -261,7 +261,7 @@ int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
 			return zend_hash_str_exists(h, SL(""));
 
 		case IS_DOUBLE:
-			return zend_hash_index_exists(h, (ulong)Z_DVAL_P(index));
+			return zend_hash_index_exists(h, (zend_ulong)Z_DVAL_P(index));
 
 		case IS_TRUE:
 		case IS_FALSE:
@@ -348,7 +348,7 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 			return (zend_hash_str_del(ht, "", 1) == SUCCESS);
 
 		case IS_DOUBLE:
-			return (zend_hash_index_del(ht, (ulong)Z_DVAL_P(index)) == SUCCESS);
+			return (zend_hash_index_del(ht, (zend_ulong)Z_DVAL_P(index)) == SUCCESS);
 
 		case IS_TRUE:
 			return (zend_hash_index_del(ht, 1) == SUCCESS);
@@ -437,7 +437,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 	zval *zv;
 	HashTable *ht;
 	int result = SUCCESS, found = 0;
-	ulong uidx = 0;
+	zend_ulong uidx = 0;
 	char *sidx = NULL;
 
 	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
@@ -460,7 +460,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 				break;
 
 			case IS_DOUBLE:
-				uidx   = (ulong)Z_DVAL_P(index);
+				uidx   = (zend_ulong)Z_DVAL_P(index);
 				found  = (zv = zend_hash_index_find(ht, uidx)) != NULL;
 				break;
 
@@ -673,7 +673,7 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 			break;
 
 		case IS_DOUBLE:
-			ret = zend_hash_index_update(ht, (ulong)Z_DVAL_P(index), value);
+			ret = zend_hash_index_update(ht, (zend_ulong)Z_DVAL_P(index), value);
 			break;
 
 		case IS_LONG:
