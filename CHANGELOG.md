@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ## [0.12.13] - 2019-12-08
 ### Fixed
-- Removed `uint` and `ulong` typedefs support
 - Fixed PHP 7.4 support for macOS [phalcon/cphalcon#14577](https://github.com/phalcon/cphalcon/issues/14577)
+
+### Removed
+- Removed `uint` and `ulong` typedefs support
 
 ## [0.12.12] - 2019-11-25
 ### Added
