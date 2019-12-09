@@ -283,7 +283,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
  * Calls a function/method in the PHP userland
  */
 int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_call_type type,
-	zval *function_name, zval *retval_ptr, zephir_fcall_cache_entry **cache_entry, int cache_slot, zend_uint param_count,
+	zval *function_name, zval *retval_ptr, zephir_fcall_cache_entry **cache_entry, int cache_slot, uint32_t param_count,
 	zval *params[])
 {
 	zval local_retval_ptr;

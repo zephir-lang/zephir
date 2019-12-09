@@ -5,12 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Removed `zend_uint` typedef usage
+
 ## [0.12.13] - 2019-12-08
 ### Fixed
 - Fixed PHP 7.4 support for macOS [phalcon/cphalcon#14577](https://github.com/phalcon/cphalcon/issues/14577)
 
 ### Removed
-- Removed `uint` and `ulong` typedefs support
+- Removed `uint` and `ulong` typedefs usage
 
 ## [0.12.12] - 2019-11-25
 ### Added
