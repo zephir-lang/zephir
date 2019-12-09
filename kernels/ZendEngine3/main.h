@@ -37,7 +37,7 @@ extern zend_string* i_self;
 #define PH_CTOR 4096
 
 #ifndef zend_uint
- #define zend_uint unsigned int uint
+ #define zend_uint unsigned int
 #endif
 
 #ifndef ZEND_ACC_FINAL_CLASS
