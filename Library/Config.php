@@ -120,7 +120,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function __toString()
     {
-        return json_encode($this, JSON_PRETTY_PRINT);
+        return (string) json_encode($this, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -130,7 +130,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @return Config
      */
-    public static function fromServer()
+    public static function fromServer(): Config
     {
         $config = new self();
 
