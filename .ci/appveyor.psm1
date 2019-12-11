@@ -45,7 +45,7 @@ Function SetupPhpVersionString {
     $DestinationPath = "${Env:Temp}\php-sha1sum.txt"
 
     If (-not [System.IO.File]::Exists($DestinationPath)) {
-        Write-Host "Downloading PHP SHA sums file: ${RemoteUrl} ..."
+        Write-Output "Downloading PHP SHA sums file: ${RemoteUrl} ..."
         DownloadFile $RemoteUrl $DestinationPath
     }
 
@@ -99,14 +99,14 @@ Function EnsureChocolateyIsInstalled {
 }
 
 Function InstallSdk {
-    Write-Host "Install PHP SDK binary tools: ${Env:PHP_SDK_VERSION}" -foregroundcolor Cyan
+    Write-Output "Install PHP SDK binary tools: ${Env:PHP_SDK_VERSION}" -foregroundcolor Cyan
 
     $RemoteUrl = "https://github.com/OSTC/php-sdk-binary-tools/archive/php-sdk-${Env:PHP_SDK_VERSION}.zip"
     $DestinationPath = "C:\Downloads\php-sdk-${Env:PHP_SDK_VERSION}.zip"
 
     If (-not (Test-Path $Env:PHP_SDK_PATH)) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Host "Downloading PHP SDK binary tools: $RemoteUrl ..."
+            Write-Output "Downloading PHP SDK binary tools: $RemoteUrl ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
@@ -121,14 +121,14 @@ Function InstallSdk {
 }
 
 Function InstallPhp {
-    Write-Host "Install PHP: ${Env:PHP_VERSION}" -foregroundcolor Cyan
+    Write-Output "Install PHP: ${Env:PHP_VERSION}" -foregroundcolor Cyan
 
     $RemoteUrl = "http://windows.php.net/downloads/releases/php-${Env:PHP_VERSION}-${Env:BUILD_TYPE}-vc${Env:VC_VERSION}-${Env:PLATFORM}.zip"
     $DestinationPath = "C:\Downloads\php-${Env:PHP_VERSION}-${Env:BUILD_TYPE}-VC${Env:VC_VERSION}-${Env:PLATFORM}.zip"
 
     If (-not (Test-Path $Env:PHP_PATH)) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Host "Downloading PHP source code: $RemoteUrl ..."
+            Write-Output "Downloading PHP source code: $RemoteUrl ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
@@ -141,14 +141,14 @@ Function InstallPhp {
 }
 
 Function InstallPhpDevPack {
-    Write-Host "Install PHP Dev pack: ${Env:PHP_VERSION}" -foregroundcolor Cyan
+    Write-Output "Install PHP Dev pack: ${Env:PHP_VERSION}" -foregroundcolor Cyan
 
     $RemoteUrl = "http://windows.php.net/downloads/releases/php-devel-pack-${Env:PHP_VERSION}-${Env:BUILD_TYPE}-vc${Env:VC_VERSION}-${Env:PLATFORM}.zip"
     $DestinationPath = "C:\Downloads\php-devel-pack-${Env:PHP_VERSION}-${Env:BUILD_TYPE}-VC${Env:VC_VERSION}-${Env:PLATFORM}.zip"
 
     If (-not (Test-Path $Env:PHP_DEVPACK)) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Host "Downloading PHP Dev pack: ${RemoteUrl} ..."
+            Write-Output "Downloading PHP Dev pack: ${RemoteUrl} ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
@@ -177,7 +177,7 @@ Function InstallParser {
 
     If (-not (Test-Path "${Env:PHP_PATH}\ext\php_zephir_parser.dll")) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Host "Downloading Zephir Parser: ${RemoteUrl} ..."
+            Write-Output "Downloading Zephir Parser: ${RemoteUrl} ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
@@ -200,7 +200,7 @@ Function InstallPsrExtension {
 
     If (-not (Test-Path "${Env:PHP_PATH}\ext\php_psr.dll")) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Host "Downloading PHP PSR: ${RemoteUrl} ..."
+            Write-Output "Downloading PHP PSR: ${RemoteUrl} ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
@@ -338,13 +338,13 @@ Function EnableExtension {
 Function PrintBuildDetails {
     $BuildDate = Get-Date -Format g
 
-    Write-Host "Build date: ${BuildDate}"
-    Write-Host "Build version: ${Env:APPVEYOR_BUILD_VERSION}"
-    Write-Host "Build type: ${Env:BUILD_TYPE}"
-    Write-Host "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}"
-    Write-Host "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"
-    Write-Host "Platform: ${Env:PLATFORM}"
-    Write-Host "Target PHP version: ${Env:PHP_MINOR}"
+    Write-Output "Build date: ${BuildDate}"
+    Write-Output "Build version: ${Env:APPVEYOR_BUILD_VERSION}"
+    Write-Output "Build type: ${Env:BUILD_TYPE}"
+    Write-Output "Build worker image: ${Env:APPVEYOR_BUILD_WORKER_IMAGE}"
+    Write-Output "Git commit: ${Env:APPVEYOR_REPO_COMMIT}"
+    Write-Output "Platform: ${Env:PLATFORM}"
+    Write-Output "Target PHP version: ${Env:PHP_MINOR}"
 }
 
 Function PrintLogs {
@@ -362,7 +362,7 @@ Function PrintLogs {
 }
 
 Function PrintVars {
-    Write-Host ($Env:Path).Replace(';', "`n")
+    Write-Output ($Env:Path).Replace(';', "`n")
 
     Get-ChildItem Env:
 }
@@ -398,13 +398,13 @@ Function PrintPhpInfo {
     $PhpExe = "${Env:PHP_PATH}\php.exe"
 
     If (Test-Path -Path "${PhpExe}") {
-        Write-Host ""
+        Write-Output ""
         & "${PhpExe}" -v
 
-        Write-Host ""
+        Write-Output ""
         & "${PhpExe}" -m
 
-        Write-Host ""
+        Write-Output ""
         & "${PhpExe}" -i
     } ElseIf (Test-Path -Path "${IniFile}") {
         Get-Content -Path "${IniFile}"
@@ -428,7 +428,7 @@ Function Expand-Item7zip {
     $Result = (& 7z x "$Archive" "-o$Destination" -aoa -bd -y -r)
 
     If ($LastExitCode -ne 0) {
-        Write-Host "An error occurred while unzipping [$Archive] to [$Destination]. Error code was: ${LastExitCode}"
+        Write-Output "An error occurred while unzipping [$Archive] to [$Destination]. Error code was: ${LastExitCode}"
         Exit $LastExitCode
     }
 }
@@ -453,7 +453,7 @@ Function DownloadFile {
         } Catch {
             If ($RetryCount -ge $RetryMax) {
                 $ErrorMessage = $_.Exception.Message
-                Write-Host "Error downloadingig ${RemoteUrl}: $ErrorMessage"
+                Write-Output "Error downloadingig ${RemoteUrl}: $ErrorMessage"
                 $Completed = $true
             } Else {
                 $RetryCount++

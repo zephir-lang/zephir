@@ -87,7 +87,7 @@ class StringsManager extends BaseStringsManager
                 $t = substr($key, $i, 1);
                 $sparams[] = 'op'.$n;
                 if ('s' == $t) {
-                    $params[] = 'const char *op'.$n.', zend_uint op'.$n.'_len';
+                    $params[] = 'const char *op'.$n.', uint32_t op'.$n.'_len';
                     $lparams[] = 'op'.$n.', sizeof(op'.$n.')-1';
                     $lengths[] = 'op'.$n.'_len';
                     $svars[] = $n;
