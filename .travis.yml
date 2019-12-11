@@ -25,7 +25,7 @@ env:
     - BUILD_TYPE=regular
     - BOX_VERSION=3.8.1
     - REPORT_COVERAGE=1
-    - ZEPHIR_PARSER_VERSION="v1.3.2"
+    - ZEPHIR_PARSER_VERSION="v1.3.3"
     - PATH="${HOME}/bin:${PATH}"
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
     - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
