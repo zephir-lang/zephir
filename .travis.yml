@@ -33,8 +33,6 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: '7.4snapshot'
 
   include:
     - os: linux
@@ -80,14 +78,13 @@ matrix:
 
     - os: linux
       compiler: gcc
-      php: '7.4snapshot'
+      php: '7.4'
       addons:
         apt:
           packages:
             - gdb
       env:
-        # TODO: Recheck
-        - BUILD_PHAR=0
+        - SYMFONY_PHPUNIT_VERSION=7.4
 
     - os: linux
       cache: false
