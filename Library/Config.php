@@ -130,7 +130,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @return Config
      */
-    public static function fromServer(): Config
+    public static function fromServer(): self
     {
         $config = new self();
 
