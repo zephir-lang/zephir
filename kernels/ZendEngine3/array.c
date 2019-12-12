@@ -30,7 +30,7 @@
 
 void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint32_t size, int initialize)
 {
-	uint i;
+	uint32_t i;
 	zval null_value;
 	HashTable *hashTable;
 	ZVAL_NULL(&null_value);
