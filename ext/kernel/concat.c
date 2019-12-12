@@ -10,11 +10,11 @@
 #include "kernel/memory.h"
 #include "kernel/concat.h"
 
-void zephir_concat_ss(zval *result, const char *op1, zend_uint op1_len, const char *op2, zend_uint op2_len, int self_var){
+void zephir_concat_ss(zval *result, const char *op1, uint32_t op1_len, const char *op2, uint32_t op2_len, int self_var){
 
 	zval result_copy;
 	int use_copy = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	length = op1_len + op2_len;
 	if (self_var) {
@@ -44,11 +44,11 @@ void zephir_concat_ss(zval *result, const char *op1, zend_uint op1_len, const ch
 
 }
 
-void zephir_concat_sssssss(zval *result, const char *op1, zend_uint op1_len, const char *op2, zend_uint op2_len, const char *op3, zend_uint op3_len, const char *op4, zend_uint op4_len, const char *op5, zend_uint op5_len, const char *op6, zend_uint op6_len, const char *op7, zend_uint op7_len, int self_var){
+void zephir_concat_sssssss(zval *result, const char *op1, uint32_t op1_len, const char *op2, uint32_t op2_len, const char *op3, uint32_t op3_len, const char *op4, uint32_t op4_len, const char *op5, uint32_t op5_len, const char *op6, uint32_t op6_len, const char *op7, uint32_t op7_len, int self_var){
 
 	zval result_copy;
 	int use_copy = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	length = op1_len + op2_len + op3_len + op4_len + op5_len + op6_len + op7_len;
 	if (self_var) {
@@ -83,11 +83,11 @@ void zephir_concat_sssssss(zval *result, const char *op1, zend_uint op1_len, con
 
 }
 
-void zephir_concat_ssv(zval *result, const char *op1, zend_uint op1_len, const char *op2, zend_uint op2_len, zval *op3, int self_var){
+void zephir_concat_ssv(zval *result, const char *op1, uint32_t op1_len, const char *op2, uint32_t op2_len, zval *op3, int self_var){
 
 	zval result_copy, op3_copy;
 	int use_copy = 0, use_copy3 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op3) != IS_STRING) {
 	   use_copy3 = zend_make_printable_zval(op3, &op3_copy);
@@ -129,11 +129,11 @@ void zephir_concat_ssv(zval *result, const char *op1, zend_uint op1_len, const c
 
 }
 
-void zephir_concat_sv(zval *result, const char *op1, zend_uint op1_len, zval *op2, int self_var){
+void zephir_concat_sv(zval *result, const char *op1, uint32_t op1_len, zval *op2, int self_var){
 
 	zval result_copy, op2_copy;
 	int use_copy = 0, use_copy2 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op2) != IS_STRING) {
 	   use_copy2 = zend_make_printable_zval(op2, &op2_copy);
@@ -174,11 +174,11 @@ void zephir_concat_sv(zval *result, const char *op1, zend_uint op1_len, zval *op
 
 }
 
-void zephir_concat_svs(zval *result, const char *op1, zend_uint op1_len, zval *op2, const char *op3, zend_uint op3_len, int self_var){
+void zephir_concat_svs(zval *result, const char *op1, uint32_t op1_len, zval *op2, const char *op3, uint32_t op3_len, int self_var){
 
 	zval result_copy, op2_copy;
 	int use_copy = 0, use_copy2 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op2) != IS_STRING) {
 	   use_copy2 = zend_make_printable_zval(op2, &op2_copy);
@@ -220,11 +220,11 @@ void zephir_concat_svs(zval *result, const char *op1, zend_uint op1_len, zval *o
 
 }
 
-void zephir_concat_svsv(zval *result, const char *op1, zend_uint op1_len, zval *op2, const char *op3, zend_uint op3_len, zval *op4, int self_var){
+void zephir_concat_svsv(zval *result, const char *op1, uint32_t op1_len, zval *op2, const char *op3, uint32_t op3_len, zval *op4, int self_var){
 
 	zval result_copy, op2_copy, op4_copy;
 	int use_copy = 0, use_copy2 = 0, use_copy4 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op2) != IS_STRING) {
 	   use_copy2 = zend_make_printable_zval(op2, &op2_copy);
@@ -278,11 +278,11 @@ void zephir_concat_svsv(zval *result, const char *op1, zend_uint op1_len, zval *
 
 }
 
-void zephir_concat_vs(zval *result, zval *op1, const char *op2, zend_uint op2_len, int self_var){
+void zephir_concat_vs(zval *result, zval *op1, const char *op2, uint32_t op2_len, int self_var){
 
 	zval result_copy, op1_copy;
 	int use_copy = 0, use_copy1 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op1) != IS_STRING) {
 	   use_copy1 = zend_make_printable_zval(op1, &op1_copy);
@@ -327,7 +327,7 @@ void zephir_concat_vv(zval *result, zval *op1, zval *op2, int self_var){
 
 	zval result_copy, op1_copy, op2_copy;
 	int use_copy = 0, use_copy1 = 0, use_copy2 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op1) != IS_STRING) {
 	   use_copy1 = zend_make_printable_zval(op1, &op1_copy);
@@ -379,11 +379,11 @@ void zephir_concat_vv(zval *result, zval *op1, zval *op2, int self_var){
 
 }
 
-void zephir_concat_vvs(zval *result, zval *op1, zval *op2, const char *op3, zend_uint op3_len, int self_var){
+void zephir_concat_vvs(zval *result, zval *op1, zval *op2, const char *op3, uint32_t op3_len, int self_var){
 
 	zval result_copy, op1_copy, op2_copy;
 	int use_copy = 0, use_copy1 = 0, use_copy2 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op1) != IS_STRING) {
 	   use_copy1 = zend_make_printable_zval(op1, &op1_copy);
@@ -440,7 +440,7 @@ void zephir_concat_vvv(zval *result, zval *op1, zval *op2, zval *op3, int self_v
 
 	zval result_copy, op1_copy, op2_copy, op3_copy;
 	int use_copy = 0, use_copy1 = 0, use_copy2 = 0, use_copy3 = 0;
-	uint offset = 0, length;
+	size_t offset = 0, length;
 
 	if (Z_TYPE_P(op1) != IS_STRING) {
 	   use_copy1 = zend_make_printable_zval(op1, &op1_copy);

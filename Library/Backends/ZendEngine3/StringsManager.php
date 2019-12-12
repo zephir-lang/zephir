@@ -120,7 +120,7 @@ class StringsManager extends BaseStringsManager
                 $code .= "\t".'zval result_copy;'.PHP_EOL;
                 $code .= "\t".'int use_copy = 0;'.PHP_EOL;
             }
-            $code .= "\t".'uint offset = 0, length;'.PHP_EOL.PHP_EOL;
+            $code .= "\t".'size_t offset = 0, length;'.PHP_EOL.PHP_EOL;
 
             foreach ($zvars as $zvar) {
                 $code .= "\t".'if (Z_TYPE_P(op'.$zvar.') != IS_STRING) {'.PHP_EOL;
