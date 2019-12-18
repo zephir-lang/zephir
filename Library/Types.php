@@ -295,6 +295,18 @@ final class Types
      * Match if return types from Zephir are compatible
      * with allowed return types from PHP.
      *
+     * Examples:
+     *  $types = [
+     *      'variable' => [
+     *          'type' => 'return-type-parameter',
+     *          'data-type' => 'variable',
+     *          'mandatory' => 0,
+     *          'file' => '../path-to-file/stubs.zep',
+     *          'line' => 21,
+     *          'char' => 48,
+     *       ]
+     *  ]
+     *
      * @param array $types        - Return types from parser
      * @param array $allowedTypes - Allowed return types
      *
