@@ -174,7 +174,7 @@ class TypesTest extends TestCase
 
         $actual = $testTypes->getReturnTypeAnnotation($testMethod);
 
-        $this->assertSame($actual, $expected);
+        $this->assertSame($expected, $actual);
     }
 
     public function objectsDataProvider(): array
@@ -220,6 +220,6 @@ class TypesTest extends TestCase
             $processedReturnTypes
         );
 
-        $this->assertSame($actual, $expected);
+        $this->assertSame($expected, $actual);
     }
 }
