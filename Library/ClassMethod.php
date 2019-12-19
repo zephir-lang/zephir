@@ -206,6 +206,42 @@ class ClassMethod
         $this->setReturnTypes($returnType);
     }
 
+    /**
+     * Process RAW return types structure.
+     *
+     * Example:
+     * $returnType = [
+     *  'type' => 'return-type',
+     *  'list' => [
+     *      [
+     *          'type' => 'return-type-parameter',
+     *          'cast' => [
+     *              'type' => 'variable',
+     *              'value' => '\StdClass',
+     *              'file' => './stubs.zep',
+     *              'line' => 21,
+     *              'char' => 48
+     *          ],
+     *          'collection' => 1,
+     *          'file' => './stubs.zep',
+     *          'line' => 21,
+     *          'char' => 48
+     *      ],
+     *      [
+     *          'type' => 'return-type-parameter',
+     *          'data-type' => 'bool',
+     *          'mandatory' => 0,
+     *          'file' => './stubs.zep',
+     *          'line' => 22,
+     *          'char' => 5
+     *      ]
+     *  ],
+     *  'void' => 0,
+     *  'file' => './stubs.zep',
+     *  'line' => 22,
+     *  'char' => 5
+     * ];
+     */
     public function setReturnTypes(array $returnType = null)
     {
         $this->returnTypesRaw = $returnType;
