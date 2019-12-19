@@ -66,6 +66,7 @@ final class Types
         $isNumeric = $this->isNumeric($returnTypes);
         $isIterable = $this->areReturnTypesIterableCompatible($returnTypes);
         $isResource = $this->areReturnTypesResourceCompatible($returnTypes);
+        $isCollection = $this->areReturnTypesCollectionCompatible($returnTypes);
 
         $isTypeHinted = $method->isReturnTypesHintDetermined();
         $isBasicTypes = $isArray || $isBool || $isDouble || $isInteger || $isResource || $isString || $isVoid || $isNumeric;
@@ -118,6 +119,10 @@ final class Types
 
         if ($isTypeHinted && !$isBasicTypes && !$isDynamic) {
             return implode('|', array_keys($returnTypes));
+        }
+
+        if ($isCollection) {
+            return implode('|', array_values($returnTypes));
         }
 
         return static::T_MIXED.$nullableType;
@@ -252,6 +257,26 @@ final class Types
     private function areReturnTypesResourceCompatible(array $types): bool
     {
         return $this->areReturnTypesCompatible($types, [static::T_RESOURCE]);
+    }
+
+    /**
+     * Match Zephir types with Collections.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesCollectionCompatible(array $types): bool
+    {
+        $result = false;
+
+        foreach ($types as $type => $data) {
+            if (false !== strpos($type, '[]')) {
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 
     /**
