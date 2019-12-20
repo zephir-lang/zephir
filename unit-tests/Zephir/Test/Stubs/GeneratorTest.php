@@ -16,6 +16,7 @@ use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
+use Zephir\ClassProperty;
 use Zephir\Stubs\Generator;
 
 class GeneratorTest extends TestCase
@@ -60,6 +61,11 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
      * Default path delimiter
      */
     const DEFAULT_PATH_DELIMITER = '.';
+
+    /**
+     * Default path delimiter class property
+     */
+    static public \$defaultPathDelimiter = null;
 
 
     /**
@@ -124,6 +130,23 @@ DOC;
             'Default path delimiter'
         );
 
+        $propertyDefinition = new ClassProperty(
+            $classDefinition,
+            ['public', 'static'],
+            'defaultPathDelimiter',
+            [
+                'type' => 'null',
+                'value' => null,
+            ],
+            'Default path delimiter class property',
+            [
+                'default' => [
+                    'type' => 'null',
+                    'value' => null,
+                ],
+            ]
+        );
+
         // Inject definitions and construct test Class
 
         $aliasManager->add([
@@ -157,6 +180,7 @@ DOC;
         ]);
         $classDefinition->setMethod('init', $classMethod);
         $classDefinition->addConstant($constantsDefinition);
+        $classDefinition->addProperty($propertyDefinition);
 
         // Generate test Class
 
