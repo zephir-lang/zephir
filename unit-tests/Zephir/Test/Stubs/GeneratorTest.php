@@ -236,6 +236,7 @@ DOC;
                 'value' => $value,
             ],
         ];
+
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildProperty');
@@ -253,6 +254,93 @@ DOC;
             $this->testClass,
             [
                 $classProperty,
+                '',
+            ]
+        );
+
+        $this->assertSame(PHP_EOL.$expected, $actual);
+    }
+
+    public function constantProvider(): array
+    {
+        return [
+            // constant type, value, expected
+            [
+                'null', null, 'const TEST = null;',
+            ],
+            [
+                'string', 'Foo', 'const TEST = \'Foo\';',
+            ],
+            [
+                'char', 'A', 'const TEST = \'A\';',
+            ],
+            [
+                'empty-array', null, 'const TEST = array();',
+            ],
+            [
+                'static-constant-access', ['left' => '\Pdo', 'right' => 'FETCH_LAZY'], 'const TEST = \\Pdo::FETCH_LAZY;',
+            ],
+            [
+                'array',
+                [
+                    'left' => [
+                        [
+                            'key' => ['type' => 'string', 'value' => 'first'],
+                            'value' => ['type' => 'int', 'value' => 1],
+                        ],
+                        [
+                            'key' => ['type' => 'string', 'value' => 'second'],
+                            'value' => ['type' => 'double', 'value' => 2],
+                        ],
+                        [
+                            'key' => ['type' => 'int', 'value' => 3],
+                            'value' => ['type' => 'bool', 'value' => 0],
+                        ],
+                    ],
+                ],
+                'const TEST = array(\'first\' => 1, \'second\' => 2, 3 => 0);',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider constantProvider
+     */
+    public function shouldBuildConstant(string $type, $value, string $expected)
+    {
+        $buildClass = $this->getMethod('buildConstant');
+
+        $extended = [];
+        if ('static-constant-access' === $type) {
+            $extended = [
+                'left' => [
+                    'value' => $value['left'],
+                ],
+                'right' => [
+                    'value' => $value['right'],
+                ],
+            ];
+        }
+
+        if ('array' === $type) {
+            $extended = $value;
+        }
+
+        $classConstant = new ClassConstant(
+            'TEST',
+            [
+                'type' => $type,
+                'value' => $value,
+            ] + $extended,
+            ''
+        );
+
+        // protected function buildConstant(ClassConstant $constant, string $indent): string
+        $actual = $buildClass->invokeArgs(
+            $this->testClass,
+            [
+                $classConstant,
                 '',
             ]
         );
