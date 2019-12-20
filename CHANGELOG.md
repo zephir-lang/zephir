@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ## [0.12.15] - 2019-12-12
+### Added
+- Improved type hint for arrays when generating stubs
+  [#2026](https://github.com/phalcon/zephir/issues/2026)
+
 ### Removed
 - Removed `uint` typedef usage
 
