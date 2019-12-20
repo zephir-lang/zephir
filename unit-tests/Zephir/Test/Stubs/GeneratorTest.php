@@ -45,15 +45,15 @@ class GeneratorTest extends TestCase
         $actual = <<<DOC
 <?php
 
-namespace TestNamespace\Stubs;
+namespace Test\Stubs;
 
-use TestNamespace\Events\ManagerInterface;
-use TestNamespace\Events\EventInterface as EventsManagerInterface;
+use Test\Extendable\BaseTestClass;
+use Test\Events\EventInterface as EventsManagerInterface;
 
 /**
  * Class description example
  */
-final class shouldBuildClassTest
+final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsManagerInterface
 {
 
 }
@@ -61,24 +61,41 @@ final class shouldBuildClassTest
 DOC;
 
         $generator = new Generator([]);
-        $classDefinition = new ClassDefinition('TestNamespace\Stubs', 'shouldBuildClassTest');
+
+        $classDefinition = new ClassDefinition('Test\Stubs', 'StubsBuildClass');
+        $extendsClassDefinition = new ClassDefinition('Test\Extendable', 'BaseTestClass');
+        $implementClassDefinition = new ClassDefinition('Test\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
 
         $aliasManager->add([
             'aliases' => [
                 [
-                    'name' => 'TestNamespace\\Events\\ManagerInterface',
+                    'name' => 'Test\\Extendable\\BaseTestClass',
                 ],
                 [
-                    'name' => 'TestNamespace\\Events\\EventInterface',
+                    'name' => 'Test\\Events\\EventInterface',
                     'alias' => 'EventsManagerInterface',
                 ],
             ],
         ]);
 
+        $implementClassDefinition->setAliasManager($aliasManager);
         $classDefinition->setAliasManager($aliasManager);
         $classDefinition->setDocBlock('Class description example');
         $classDefinition->setIsFinal(true);
+        $classDefinition->setExtendsClassDefinition($extendsClassDefinition);
+        $classDefinition->setExtendsClass('BaseTestClass');
+        $classDefinition->setImplementedInterfaceDefinitions([
+            $implementClassDefinition,
+        ]);
+        $classDefinition->setImplementsInterfaces([
+            [
+                'value' => '\Iterator',
+            ],
+            [
+                'value' => 'Test\\Events\\EventInterface',
+            ],
+        ]);
 
         $expected = $buildClass->invokeArgs(
             $generator,
@@ -89,6 +106,6 @@ DOC;
             ]
         );
 
-        $this->assertSame($expected, $actual);
+        $this->assertSame($actual, $expected);
     }
 }
