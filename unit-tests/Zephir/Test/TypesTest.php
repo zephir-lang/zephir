@@ -18,64 +18,82 @@ use Zephir\Types;
 
 class TypesTest extends TestCase
 {
-    private function baseClassDefinition(array $types): array
+    /**
+     * Helper to build proper structure with method return types.
+     *
+     * @param array $returnTypesList - collactions with all return types
+     */
+    private function buildReturnTypes(array $returnTypesList): array
     {
         return [
             'type' => 'return-type',
-            'list' => array_map(
-                function ($type) {
-                    return [
-                        'type' => 'return-type-parameter',
-                        'data-type' => $type,
-                        'mandatory' => 0,
-                        'file' => 'stubs.zep',
-                        'line' => 1,
-                        'char' => 42,
-                    ];
-                },
-                $types
-            ),
+            'list' => $returnTypesList,
+            'void' => 0,
+            'file' => 'stubs.zep',
+            'line' => 1,
+            'char' => 42,
         ];
     }
 
-    private function objectClassDefinition(array $types): array
+    /**
+     * Builds base object definition for return type.
+     *
+     * @param array $types     - list of method return types
+     * @param int   $mandatory - is mandatory flag
+     */
+    private function baseReturnTypeDefinition(array $types, int $mandatory = 0): array
     {
-        $ret = [];
-
-        foreach ($types as $alias) {
-            $ret[$alias] = 'Stubs\\'.$alias;
-        }
-
-        return $ret;
+        return array_map(
+            function ($type) use ($mandatory) {
+                return [
+                    'type' => 'return-type-parameter',
+                    'data-type' => $type,
+                    'mandatory' => $mandatory,
+                    'file' => 'stubs.zep',
+                    'line' => 1,
+                    'char' => 42,
+                ];
+            },
+            $types
+        );
     }
 
-    private function processVariableReturnTypes(array $types): array
+    /**
+     * Builds variable/collection object definition for return type.
+     *
+     * @param array $types      - list of method return types
+     * @param int   $collection - is collection flag
+     */
+    private function variableReturnTypeDefinition(array $types, int $collection = 0): array
     {
-        return [
-            'type' => 'return-type',
-            'list' => array_map(
-                function ($type) {
-                    return [
-                        'type' => 'return-type-parameter',
-                        'cast' => [
-                            'type' => 'variable',
-                            'value' => $type,
-                            'file' => 'stubs.zep',
-                            'line' => 8,
-                            'char' => 5,
-                        ],
-                        'collection' => 0,
+        return array_map(
+            function ($type) use ($collection) {
+                return [
+                    'type' => 'return-type-parameter',
+                    'cast' => [
+                        'type' => 'variable',
+                        'value' => $type,
                         'file' => 'stubs.zep',
                         'line' => 8,
                         'char' => 5,
-                    ];
-                },
-                $types
-            ),
-        ];
+                    ],
+                    'collection' => $collection,
+                    'file' => 'stubs.zep',
+                    'line' => 8,
+                    'char' => 5,
+                ];
+            },
+            $types
+        );
     }
 
-    private function buildMethod(array $testData, string $definition): ClassMethod
+    /**
+     * Helper to build test Method with injected test data.
+     *
+     * @param array $testData   - dataProvider data set
+     * @param int   $definition - (optional) one of mandatory/collection flag
+     */
+    private function buildMethod(array $testData, int $definition = 0): ClassMethod
     {
         return new ClassMethod(
             new ClassDefinition('Zephir', 'testMethod'),
@@ -84,11 +102,11 @@ class TypesTest extends TestCase
             null,
             null,
             null,
-            $this->$definition($testData)
+            $this->buildReturnTypes($testData, $definition)
         );
     }
 
-    public function typesDataProvider(): array
+    public function typesProvider(): array
     {
         return [
             [
@@ -165,19 +183,22 @@ class TypesTest extends TestCase
 
     /**
      * @test
-     * @dataProvider typesDataProvider
+     * @dataProvider typesProvider
      */
     public function shouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected)
     {
-        $testMethod = $this->buildMethod($returnTypes, 'baseClassDefinition');
+        $testMethod = $this->buildMethod(
+            $this->baseReturnTypeDefinition($returnTypes)
+        );
+
         $testTypes = new Types();
 
         $actual = $testTypes->getReturnTypeAnnotation($testMethod);
 
-        $this->assertSame($actual, $expected);
+        $this->assertSame($expected, $actual);
     }
 
-    public function objectsDataProvider(): array
+    public function objectsProvider(): array
     {
         return [
             [
@@ -200,26 +221,75 @@ class TypesTest extends TestCase
 
     /**
      * @test
-     * @dataProvider objectsDataProvider
+     * @dataProvider objectsProvider
      */
     public function shouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
     {
-        // This processes into MethodDocBlock with AliasManager resolving
-        $processedReturnTypes = $this->objectClassDefinition($returnTypes);
+        $withAliases = [];
+        foreach ($returnTypes as $alias) {
+            $withAliases[$alias] = 'Stubs\\'.$alias;
+        }
 
-        $testMethod = $this->buildMethod($returnTypes, 'objectClassDefinition');
-
-        $testMethod->setReturnTypes(
-            $this->processVariableReturnTypes($returnTypes)
+        $testMethod = $this->buildMethod(
+            $this->baseReturnTypeDefinition($returnTypes)
         );
 
         $testTypes = new Types();
 
         $actual = $testTypes->getReturnTypeAnnotation(
             $testMethod,
-            $processedReturnTypes
+            $withAliases
         );
 
-        $this->assertSame($actual, $expected);
+        $this->assertSame($expected, $actual);
+    }
+
+    public function collectionsProvider(): array
+    {
+        return [
+            //  [ Zephir return types...], 'expected php docblock param'
+            '<\StdClass[]> | bool' => [
+                ['<\StdClass[]>', 'bool'], 'array|bool|\StdClass[]',
+            ],
+            '<IndexInterface[]>' => [
+                ['<IndexInterface[]>'], 'array|IndexInterface[]',
+            ],
+            '<RelationInterface[]> | array' => [
+                ['<RelationInterface[]>', 'array'], 'array|RelationInterface[]',
+            ],
+            '<RelationInterface[]> | <Item[]> | array' => [
+                ['<RelationInterface[]>', '<Item[]>', 'array'], 'array|RelationInterface[]|Item[]',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider collectionsProvider
+     */
+    public function shouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected)
+    {
+        $typesList = [];
+        $collections = [];
+        foreach ($returnTypes as $type) {
+            if (false !== strpos($type, '[]')) {
+                $typesList[] = $this->variableReturnTypeDefinition([$type], 1)[0];
+                $collectionType = trim($type, '<>');
+                $collections[$collectionType] = $collectionType;
+            } else {
+                $typesList[] = $this->baseReturnTypeDefinition([$type])[0];
+            }
+        }
+
+        $testMethod = $this->buildMethod($typesList);
+
+        $testTypes = new Types();
+
+        $actual = $testTypes->getReturnTypeAnnotation(
+            $testMethod,
+            array_merge($testMethod->getReturnTypes(), $collections)
+        );
+
+        $this->assertSame($expected, $actual);
     }
 }

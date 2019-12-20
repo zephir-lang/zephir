@@ -46,4 +46,8 @@ test_expect_success "Should properly generate Aliases for use statements" \
 test_expect_success "Should generage CamelCase folders for stubs" \
   "test $(ls ./ide/0.0.1/Stubs/Events/ManagerInterface.zep.php | sed -e 's~\/~\\~g') = .\ide\0.0.1\Stubs\Events\ManagerInterface.zep.php"
 
+# See: https://github.com/phalcon/zephir/issues/2026
+test_expect_success "Should properly generate return type for Collections" \
+  "test_cmp expected/Issue_2026.zep.php ide/0.0.1/Stubs/Issue_2026.zep.php"
+
 test_done
