@@ -61,25 +61,30 @@ class TypesTest extends TestCase
     /**
      * Builds variable/collection object definition for return type.
      *
-     * @param string $type - return type
+     * @param array $types - list of method return types
      * @param int $collection - is collection flag
      */
-    private function variableReturnTypeDefinition(string $type, int $collection = 0): array
+    private function variableReturnTypeDefinition(array $types, int $collection = 0): array
     {
-        return [
-            'type' => 'return-type-parameter',
-            'cast' => [
-                'type' => 'variable',
-                'value' => $type,
-                'file' => 'stubs.zep',
-                'line' => 8,
-                'char' => 5,
-            ],
-            'collection' => $collection,
-            'file' => 'stubs.zep',
-            'line' => 8,
-            'char' => 5,
-        ];
+        return array_map(
+            function ($type) use ($collection) {
+                return [
+                    'type' => 'return-type-parameter',
+                    'cast' => [
+                        'type' => 'variable',
+                        'value' => $type,
+                        'file' => 'stubs.zep',
+                        'line' => 8,
+                        'char' => 5,
+                    ],
+                    'collection' => $collection,
+                    'file' => 'stubs.zep',
+                    'line' => 8,
+                    'char' => 5,
+                ];
+            },
+            $types
+        );
     }
 
     /**
@@ -234,6 +239,55 @@ class TypesTest extends TestCase
         $actual = $testTypes->getReturnTypeAnnotation(
             $testMethod,
             $withAliases
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function collectionsProvider(): array
+    {
+        return [
+            //  [ Zephir return types...], 'expected php docblock param'
+            '<\StdClass[]> | bool' => [
+                ['<\StdClass[]>', 'bool'], 'array|bool|\StdClass[]',
+            ],
+            '<IndexInterface[]>' => [
+                ['<IndexInterface[]>'], 'array|IndexInterface[]',
+            ],
+            '<RelationInterface[]> | array' => [
+                ['<RelationInterface[]>', 'array'], 'array|RelationInterface[]',
+            ],
+            '<RelationInterface[]> | <Item[]> | array' => [
+                ['<RelationInterface[]>', '<Item[]>', 'array'], 'array|RelationInterface[]|Item[]',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider collectionsProvider
+     */
+    public function shouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected)
+    {
+        $typesList = [];
+        $collections = [];
+        foreach ($returnTypes as $type) {
+            if (false !== strpos($type, '[]')) {
+                $typesList[] = $this->variableReturnTypeDefinition([$type], 1)[0];
+                $collectionType = \trim($type, "<>");
+                $collections[$collectionType] = $collectionType;
+            } else {
+                $typesList[] = $this->baseReturnTypeDefinition([$type])[0];
+            }
+        }
+
+        $testMethod = $this->buildMethod($typesList);
+
+        $testTypes = new Types();
+
+        $actual = $testTypes->getReturnTypeAnnotation(
+            $testMethod,
+            \array_merge($testMethod->getReturnTypes(), $collections)
         );
 
         $this->assertSame($expected, $actual);
