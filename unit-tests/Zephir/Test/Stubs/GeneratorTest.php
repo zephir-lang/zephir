@@ -14,6 +14,7 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
 use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
 use Zephir\Stubs\Generator;
 
 class GeneratorTest extends TestCase
@@ -42,7 +43,7 @@ class GeneratorTest extends TestCase
     public function shouldBuildClass()
     {
         $buildClass = $this->getMethod('buildClass');
-        $actual = <<<DOC
+        $expected = <<<DOC
 <?php
 
 namespace Test\Stubs;
@@ -56,6 +57,14 @@ use Test\Events\EventInterface as EventsManagerInterface;
 final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsManagerInterface
 {
 
+    /**
+     * @param string \$key
+     * @param int \$priority
+     */
+    public static function init(string \$key, int \$priority = 1)
+    {
+    }
+
 }
 
 DOC;
@@ -66,6 +75,34 @@ DOC;
         $extendsClassDefinition = new ClassDefinition('Test\Extendable', 'BaseTestClass');
         $implementClassDefinition = new ClassDefinition('Test\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
+
+        $methodParamsDefinition = [
+            [
+                'type' => 'parameter',
+                'name' => 'key',
+                'const' => 0,
+                'data-type' => 'string',
+                'mandatory' => 0,
+            ],
+            [
+                'type' => 'parameter',
+                'name' => 'priority',
+                'const' => 0,
+                'data-type' => 'int',
+                'mandatory' => 0,
+                'default' => [
+                    'type' => 'int',
+                    'value' => 1,
+                ],
+            ],
+        ];
+        // Method definition for stubs generation
+        $classMethod = new ClassMethod(
+            $classDefinition,
+            ['public', 'static'],
+            'init',
+            new \Zephir\ClassMethodParameters($methodParamsDefinition)
+        );
 
         $aliasManager->add([
             'aliases' => [
@@ -96,16 +133,17 @@ DOC;
                 'value' => 'Test\\Events\\EventInterface',
             ],
         ]);
+        $classDefinition->setMethod('init', $classMethod);
 
-        $expected = $buildClass->invokeArgs(
+        $actual = $buildClass->invokeArgs(
             $generator,
             [
                 $classDefinition,
-                '  ',
+                '    ',
                 '',
             ]
         );
 
-        $this->assertSame($actual, $expected);
+        $this->assertSame($expected, $actual);
     }
 }
