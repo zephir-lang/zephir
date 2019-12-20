@@ -47,6 +47,9 @@ class GeneratorTest extends TestCase
 
 namespace TestNamespace\Stubs;
 
+use TestNamespace\Events\ManagerInterface;
+use TestNamespace\Events\EventInterface as EventsManagerInterface;
+
 /**
  * Class description example
  */
@@ -59,8 +62,21 @@ DOC;
 
         $generator = new Generator([]);
         $classDefinition = new ClassDefinition('TestNamespace\Stubs', 'shouldBuildClassTest');
+        $aliasManager = new AliasManager();
 
-        $classDefinition->setAliasManager(new AliasManager());
+        $aliasManager->add([
+            'aliases' => [
+                [
+                    'name' => 'TestNamespace\\Events\\ManagerInterface',
+                ],
+                [
+                    'name' => 'TestNamespace\\Events\\EventInterface',
+                    'alias' => 'EventsManagerInterface',
+                ],
+            ],
+        ]);
+
+        $classDefinition->setAliasManager($aliasManager);
         $classDefinition->setDocBlock('Class description example');
         $classDefinition->setIsFinal(true);
 
