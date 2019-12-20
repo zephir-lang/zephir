@@ -104,7 +104,7 @@ final class ClassDefinition
      * @param string      $name
      * @param string|null $shortName
      */
-    public function __construct($namespace, $name, $shortName = null)
+    public function __construct(string $namespace, string $name, string $shortName = null)
     {
         $this->namespace = $namespace;
         $this->name = $name;
