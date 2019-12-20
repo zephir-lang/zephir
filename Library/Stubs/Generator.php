@@ -204,7 +204,7 @@ class Generator
      *
      * @return string
      */
-    protected function buildProperty(ClassProperty $property, $indent)
+    protected function buildProperty(ClassProperty $property, string $indent): string
     {
         $visibility = 'public';
 

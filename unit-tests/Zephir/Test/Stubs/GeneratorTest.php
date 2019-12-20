@@ -22,10 +22,14 @@ use Zephir\Stubs\Generator;
 class GeneratorTest extends TestCase
 {
     private $generatorClass;
+    private $testClass;
+    private $classDefinition;
 
     public function setUp()
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
+        $this->testClass = new Generator([]);
+        $this->classDefinition = new ClassDefinition('Test\Stubs', 'StubsBuildClass');
     }
 
     /**
@@ -84,9 +88,6 @@ DOC;
 
         $buildClass = $this->getMethod('buildClass');
 
-        $generator = new Generator([]);
-
-        $classDefinition = new ClassDefinition('Test\Stubs', 'StubsBuildClass');
         $extendsClassDefinition = new ClassDefinition('Test\Extendable', 'BaseTestClass');
         $implementClassDefinition = new ClassDefinition('Test\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
@@ -115,7 +116,7 @@ DOC;
         ];
 
         $classMethod = new ClassMethod(
-            $classDefinition,
+            $this->classDefinition,
             ['public', 'static'],
             'init',
             new \Zephir\ClassMethodParameters($methodParamsDefinition)
@@ -131,7 +132,7 @@ DOC;
         );
 
         $propertyDefinition = new ClassProperty(
-            $classDefinition,
+            $this->classDefinition,
             ['public', 'static'],
             'defaultPathDelimiter',
             [
@@ -162,15 +163,15 @@ DOC;
         ]);
 
         $implementClassDefinition->setAliasManager($aliasManager);
-        $classDefinition->setAliasManager($aliasManager);
-        $classDefinition->setDocBlock('Class description example');
-        $classDefinition->setIsFinal(true);
-        $classDefinition->setExtendsClassDefinition($extendsClassDefinition);
-        $classDefinition->setExtendsClass('BaseTestClass');
-        $classDefinition->setImplementedInterfaceDefinitions([
+        $this->classDefinition->setAliasManager($aliasManager);
+        $this->classDefinition->setDocBlock('Class description example');
+        $this->classDefinition->setIsFinal(true);
+        $this->classDefinition->setExtendsClassDefinition($extendsClassDefinition);
+        $this->classDefinition->setExtendsClass('BaseTestClass');
+        $this->classDefinition->setImplementedInterfaceDefinitions([
             $implementClassDefinition,
         ]);
-        $classDefinition->setImplementsInterfaces([
+        $this->classDefinition->setImplementsInterfaces([
             [
                 'value' => '\Iterator',
             ],
@@ -178,21 +179,84 @@ DOC;
                 'value' => 'Test\\Events\\EventInterface',
             ],
         ]);
-        $classDefinition->setMethod('init', $classMethod);
-        $classDefinition->addConstant($constantsDefinition);
-        $classDefinition->addProperty($propertyDefinition);
+        $this->classDefinition->setMethod('init', $classMethod);
+        $this->classDefinition->addConstant($constantsDefinition);
+        $this->classDefinition->addProperty($propertyDefinition);
 
         // Generate test Class
 
+        // protected function buildClass(ClassDefinition $class, string $indent, string $banner): string
         $actual = $buildClass->invokeArgs(
-            $generator,
+            $this->testClass,
             [
-                $classDefinition,
+                $this->classDefinition,
                 '    ',
                 '',
             ]
         );
 
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Provide test case data for buildProperty method test.
+     */
+    public function propertyProvider(): array
+    {
+        return [
+            // [ visibility ], type, value, expected
+            [
+                ['public'], 'int', 1, 'public $testProperty = 1;',
+            ],
+            [
+                ['protected'], 'bool', 0, 'protected $testProperty = 0;',
+            ],
+            [
+                ['static'], 'string', 'A', 'static private $testProperty = \'A\';',
+            ],
+            [
+                ['static', 'error'], 'empty-array', null, 'static private $testProperty = array();',
+            ],
+            [
+                [], 'null', null, 'private $testProperty = null;',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider propertyProvider
+     * @covers \Zephir\Stubs\Generator::buildProperty
+     */
+    public function shouldBuildProperty(array $visibility, string $type, $value, string $expected)
+    {
+        $original = [
+            'default' => [
+                'type' => $type,
+                'value' => $value,
+            ],
+        ];
+        // Test requirements initialization
+
+        $buildClass = $this->getMethod('buildProperty');
+        $classProperty = new ClassProperty(
+            $this->classDefinition,
+            $visibility,
+            'testProperty',
+            null,
+            '',
+            $original
+        );
+
+        // protected function buildProperty(ClassProperty $property, string $indent): string
+        $actual = $buildClass->invokeArgs(
+            $this->testClass,
+            [
+                $classProperty,
+                '',
+            ]
+        );
+
+        $this->assertSame(PHP_EOL.$expected, $actual);
     }
 }
