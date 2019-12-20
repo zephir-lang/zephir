@@ -13,6 +13,7 @@ namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
+use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\Stubs\Generator;
@@ -42,7 +43,6 @@ class GeneratorTest extends TestCase
     /** @test */
     public function shouldBuildClass()
     {
-        $buildClass = $this->getMethod('buildClass');
         $expected = <<<DOC
 <?php
 
@@ -56,6 +56,11 @@ use Test\Events\EventInterface as EventsManagerInterface;
  */
 final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsManagerInterface
 {
+    /**
+     * Default path delimiter
+     */
+    const DEFAULT_PATH_DELIMITER = '.';
+
 
     /**
      * @param string \$key
@@ -69,12 +74,18 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
 
 DOC;
 
+        // Test requirements initialization
+
+        $buildClass = $this->getMethod('buildClass');
+
         $generator = new Generator([]);
 
         $classDefinition = new ClassDefinition('Test\Stubs', 'StubsBuildClass');
         $extendsClassDefinition = new ClassDefinition('Test\Extendable', 'BaseTestClass');
         $implementClassDefinition = new ClassDefinition('Test\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
+
+        // Definitions
 
         $methodParamsDefinition = [
             [
@@ -96,13 +107,24 @@ DOC;
                 ],
             ],
         ];
-        // Method definition for stubs generation
+
         $classMethod = new ClassMethod(
             $classDefinition,
             ['public', 'static'],
             'init',
             new \Zephir\ClassMethodParameters($methodParamsDefinition)
         );
+
+        $constantsDefinition = new ClassConstant(
+            'DEFAULT_PATH_DELIMITER',
+            [
+                'type' => 'string',
+                'value' => '.',
+            ],
+            'Default path delimiter'
+        );
+
+        // Inject definitions and construct test Class
 
         $aliasManager->add([
             'aliases' => [
@@ -134,6 +156,9 @@ DOC;
             ],
         ]);
         $classDefinition->setMethod('init', $classMethod);
+        $classDefinition->addConstant($constantsDefinition);
+
+        // Generate test Class
 
         $actual = $buildClass->invokeArgs(
             $generator,
