@@ -38,8 +38,8 @@ class TypesTest extends TestCase
     /**
      * Builds base object definition for return type.
      *
-     * @param array $types - list of method return types
-     * @param int $mandatory - is mandatory flag
+     * @param array $types     - list of method return types
+     * @param int   $mandatory - is mandatory flag
      */
     private function baseReturnTypeDefinition(array $types, int $mandatory = 0): array
     {
@@ -61,8 +61,8 @@ class TypesTest extends TestCase
     /**
      * Builds variable/collection object definition for return type.
      *
-     * @param array $types - list of method return types
-     * @param int $collection - is collection flag
+     * @param array $types      - list of method return types
+     * @param int   $collection - is collection flag
      */
     private function variableReturnTypeDefinition(array $types, int $collection = 0): array
     {
@@ -90,8 +90,8 @@ class TypesTest extends TestCase
     /**
      * Helper to build test Method with injected test data.
      *
-     * @param array $testData - dataProvider data set
-     * @param int $definition - (optional) one of mandatory/collection flag
+     * @param array $testData   - dataProvider data set
+     * @param int   $definition - (optional) one of mandatory/collection flag
      */
     private function buildMethod(array $testData, int $definition = 0): ClassMethod
     {
@@ -274,7 +274,7 @@ class TypesTest extends TestCase
         foreach ($returnTypes as $type) {
             if (false !== strpos($type, '[]')) {
                 $typesList[] = $this->variableReturnTypeDefinition([$type], 1)[0];
-                $collectionType = \trim($type, "<>");
+                $collectionType = trim($type, '<>');
                 $collections[$collectionType] = $collectionType;
             } else {
                 $typesList[] = $this->baseReturnTypeDefinition([$type])[0];
@@ -287,7 +287,7 @@ class TypesTest extends TestCase
 
         $actual = $testTypes->getReturnTypeAnnotation(
             $testMethod,
-            \array_merge($testMethod->getReturnTypes(), $collections)
+            array_merge($testMethod->getReturnTypes(), $collections)
         );
 
         $this->assertSame($expected, $actual);
