@@ -236,7 +236,7 @@ class Generator
      *
      * @return string
      */
-    protected function buildConstant(ClassConstant $constant, $indent)
+    protected function buildConstant(ClassConstant $constant, string $indent): string
     {
         $source = 'const '.$constant->getName();
 
@@ -368,13 +368,13 @@ class Generator
     /**
      * Prepare AST default value to PHP code print.
      *
-     * @param $parameter
+     * @param array $parameter
      *
      * @throws Exception\NotImplementedException
      *
      * @return string
      */
-    protected function wrapPHPValue($parameter)
+    protected function wrapPHPValue(array $parameter): string
     {
         switch ($parameter['default']['type']) {
             case 'null':
