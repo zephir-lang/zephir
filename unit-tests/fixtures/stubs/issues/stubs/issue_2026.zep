@@ -2,10 +2,12 @@ namespace Stubs;
 
 use Stubs\Events\EventManager;
 
+/**
+ * Should process return type and generate docblock.
+ */
 class Issue_2026
 {
     /**
-     * Should process return type and generate docblock.
      * Expects:
      *  return array|\StdClass[]
      */
@@ -17,7 +19,6 @@ class Issue_2026
     }
 
     /**
-     * Should process return type and generate docblock.
      * Expects:
      *  return array|bool|\StdClass[]
      */
@@ -29,11 +30,32 @@ class Issue_2026
     }
 
     /**
-     * Should process return type and generate docblock.
      * Expects:
      *  return array|bool|\Stubs\Events\EventManager[]
      */
     public function getInterfaceCollectionOrBool() -> <EventManager[]> | bool
+    {
+        return [
+            new EventManager()
+        ];
+    }
+
+    /**
+     * Expects:
+     *  return array|\Stubs\Events\EventManager[]
+     */
+    public function getInterfaceCollectionOrArray() -> <EventManager[]> | array
+    {
+        return [
+            new EventManager()
+        ];
+    }
+
+    /**
+     * Expects:
+     *  return array|\Stubs\Events\EventManager[]|\StdClass[]
+     */
+    public function getMixedCollectionOrArray() -> <EventManager[]> | <\StdClass[]> | array
     {
         return [
             new EventManager()
