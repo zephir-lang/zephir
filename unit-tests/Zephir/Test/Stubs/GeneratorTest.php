@@ -16,6 +16,7 @@ use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\Stubs\Generator;
 
@@ -119,7 +120,7 @@ DOC;
             $this->classDefinition,
             ['public', 'static'],
             'init',
-            new \Zephir\ClassMethodParameters($methodParamsDefinition)
+            new ClassMethodParameters($methodParamsDefinition)
         );
 
         $constantsDefinition = new ClassConstant(
@@ -346,5 +347,82 @@ DOC;
         );
 
         $this->assertSame(PHP_EOL.$expected, $actual);
+    }
+
+    /** @test */
+    public function shouldBuildMethod()
+    {
+        $buildClass = $this->getMethod('buildMethod');
+
+        $methodParamsDefinition = [
+            [
+                'type' => 'parameter',
+                'name' => 'key',
+                'const' => 0,
+                'data-type' => 'string',
+                'mandatory' => 0,
+            ],
+            [
+                'type' => 'parameter',
+                'name' => 'priority',
+                'const' => 0,
+                'data-type' => 'int',
+                'mandatory' => 0,
+                'default' => [
+                    'type' => 'int',
+                    'value' => 1,
+                ],
+            ],
+        ];
+        $methodParams = new ClassMethodParameters($methodParamsDefinition);
+
+        $returnType = [
+            'type' => 'return-type',
+            'list' => [
+                [
+                    'type' => 'return-type-parameter',
+                    'data-type' => 'bool',
+                    'mandatory' => 0,
+                ],
+            ],
+            'void' => 0,
+        ];
+
+        $this->classDefinition->setAliasManager(new AliasManager());
+
+        $classMethod = new ClassMethod(
+            $this->classDefinition,
+            ['public', 'static'],
+            'testName',
+            $methodParams,
+            null,
+            'Example description for testName method.',
+            $returnType
+        );
+
+        $expected = <<<DOC
+/**
+ * Example description for testName method.
+ *
+ * @param string \$key
+ * @param int \$priority
+ * @return bool
+ */
+public static function testName(string \$key, int \$priority = 1): bool
+{
+}
+DOC;
+
+        // protected function buildMethod(ClassMethod $method, bool $isInterface, string $indent): string
+        $actual = $buildClass->invokeArgs(
+            $this->testClass,
+            [
+                $classMethod,
+                false,
+                '',
+            ]
+        );
+
+        $this->assertSame($expected, $actual);
     }
 }
