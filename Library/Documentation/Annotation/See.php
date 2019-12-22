@@ -21,7 +21,7 @@ class See extends Annotation
     protected $resource;
     protected $text;
 
-    public function getResource()
+    public function getResource(): string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -30,7 +30,7 @@ class See extends Annotation
         return $this->resource;
     }
 
-    public function getText()
+    public function getText(): string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -43,11 +43,11 @@ class See extends Annotation
     {
         $spaceIndex = strpos($this->string, ' ');
 
+        $this->resource = $this->string;
+
         if (false !== $spaceIndex) {
             $this->resource = substr($this->string, 0, $spaceIndex);
             $this->text = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->resource = $this->string;
         }
 
         $this->contentParsed = true;

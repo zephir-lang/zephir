@@ -24,23 +24,23 @@ class Annotation
 
     protected $contentParsed = false;
 
-    public function __construct($name, $string)
+    public function __construct(string $name, string $string)
     {
         $this->name = $name;
         $this->string = trim($string);
     }
 
-    public function getString()
+    public function getString(): string
     {
         return $this->string;
     }
 
-    public function setString($string)
+    public function setString(string $string)
     {
         $this->string = $string;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

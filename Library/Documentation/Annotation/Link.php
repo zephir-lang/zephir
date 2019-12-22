@@ -18,7 +18,10 @@ use Zephir\Documentation\Annotation;
  */
 class Link extends Annotation
 {
+    /** @var string|null */
     protected $uri;
+
+    /** @var string|null */
     protected $linkText;
 
     public function getUri()
@@ -43,11 +46,11 @@ class Link extends Annotation
     {
         $spaceIndex = strpos($this->string, ' ');
 
+        $this->uri = $this->string;
+
         if (false !== $spaceIndex) {
             $this->uri = substr($this->string, 0, $spaceIndex);
             $this->linkText = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->uri = $this->string;
         }
 
         $this->contentParsed = true;
