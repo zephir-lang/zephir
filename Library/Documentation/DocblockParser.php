@@ -47,7 +47,7 @@ class DocblockParser
     /**
      * @param string $annotation a row annotation string begining with /**
      */
-    public function __construct($annotation)
+    public function __construct(string $annotation)
     {
         $this->annotation = $annotation;
     }

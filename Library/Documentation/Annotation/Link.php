@@ -24,7 +24,7 @@ class Link extends Annotation
     /** @var string|null */
     protected $linkText;
 
-    public function getUri(): ?string
+    public function getUri()
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -33,7 +33,7 @@ class Link extends Annotation
         return $this->uri;
     }
 
-    public function getLinkText(): ?string
+    public function getLinkText()
     {
         if (!$this->contentParsed) {
             $this->parseContent();
