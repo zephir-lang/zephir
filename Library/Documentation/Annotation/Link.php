@@ -18,10 +18,13 @@ use Zephir\Documentation\Annotation;
  */
 class Link extends Annotation
 {
+    /** @var string|null */
     protected $uri;
+
+    /** @var string|null */
     protected $linkText;
 
-    public function getUri(): string
+    public function getUri(): ?string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -30,7 +33,7 @@ class Link extends Annotation
         return $this->uri;
     }
 
-    public function getLinkText(): string
+    public function getLinkText(): ?string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
