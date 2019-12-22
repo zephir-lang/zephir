@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\ReturnAnnotation;
 
 class ReturnAnnotationTest extends TestCase
 {
-    private const ANNOTATION_NAME = 'return';
+    const ANNOTATION_NAME = 'return';
 
     /** @test */
     public function shouldGetReturnAnnotation()

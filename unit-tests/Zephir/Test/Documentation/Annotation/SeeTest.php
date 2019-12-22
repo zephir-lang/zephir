@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\See;
 
 class SeeTest extends TestCase
 {
-    private const SEE_NAME = 'see';
+    const SEE_NAME = 'see';
 
     /** @test */
     public function shouldGetLink()

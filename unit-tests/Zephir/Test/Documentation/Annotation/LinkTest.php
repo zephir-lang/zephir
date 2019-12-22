@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\Link;
 
 class LinkTest extends TestCase
 {
-    private const LINK_NAME = 'link';
+    const LINK_NAME = 'link';
 
     /** @test */
     public function shouldGetLink()
