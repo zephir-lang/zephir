@@ -25,7 +25,7 @@ class AnnotationTest extends TestCase
         $this->assertSame(
             'sample with leading space',
             $annotation->getString(),
-            'Annotation shoul be without leading spaces'
+            'Annotation should be without leading spaces'
         );
 
         $annotation->setString('another annotation');

@@ -27,7 +27,7 @@ class LinkTest extends TestCase
         $this->assertSame(
             'sample with leading space',
             $link->getString(),
-            'link shoul be without leading spaces'
+            'Link should be without leading spaces'
         );
 
         $link->setString('another link');
