@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\Link;
 
 class LinkTest extends TestCase
 {
-    private const LINK_NAME = 'zephir link name';
+    private const LINK_NAME = 'link';
 
     /** @test */
     public function shouldGetLink()
@@ -37,19 +37,19 @@ class LinkTest extends TestCase
     /** @test */
     public function shouldGetUri()
     {
-        $testString = 'https://github.com/cphalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
         $link = new Link(self::LINK_NAME, $testString);
 
         $this->assertSame(self::LINK_NAME, $link->getName());
         $this->assertSame($testString, $link->getString());
-        $this->assertSame('https://github.com/cphalcon/zephir', $link->getUri());
+        $this->assertSame('https://github.com/phalcon/zephir', $link->getUri());
     }
 
     /** @test */
     public function shouldGetLinkText()
     {
-        $testString = 'https://github.com/cphalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
         $link = new Link(self::LINK_NAME, $testString);
 

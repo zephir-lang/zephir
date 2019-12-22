@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\ReturnAnnotation;
 
 class ReturnAnnotationTest extends TestCase
 {
-    private const ANNOTATION_NAME = 'zephir return annotation name';
+    private const ANNOTATION_NAME = 'return';
 
     /** @test */
     public function shouldGetReturnAnnotation()
@@ -27,7 +27,7 @@ class ReturnAnnotationTest extends TestCase
         $this->assertSame(
             'sample with leading space',
             $link->getString(),
-            'Return types annotattion should be without leading spaces'
+            'Return types annotation should be without leading spaces'
         );
 
         $link->setString('array - Example description');

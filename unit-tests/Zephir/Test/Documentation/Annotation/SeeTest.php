@@ -16,7 +16,7 @@ use Zephir\Documentation\Annotation\See;
 
 class SeeTest extends TestCase
 {
-    private const SEE_NAME = 'zephir see name';
+    private const SEE_NAME = 'see';
 
     /** @test */
     public function shouldGetLink()
@@ -27,7 +27,7 @@ class SeeTest extends TestCase
         $this->assertSame(
             'sample with leading space',
             $link->getString(),
-            'See Annotation should be without leading spaces'
+            'See annotation should be without leading spaces'
         );
 
         $link->setString('another link');
@@ -37,19 +37,19 @@ class SeeTest extends TestCase
     /** @test */
     public function shouldGetResource()
     {
-        $testString = 'https://github.com/cphalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 
         $this->assertSame(self::SEE_NAME, $link->getName());
         $this->assertSame($testString, $link->getString());
-        $this->assertSame('https://github.com/cphalcon/zephir', $link->getResource());
+        $this->assertSame('https://github.com/phalcon/zephir', $link->getResource());
     }
 
     /** @test */
     public function shouldGetText()
     {
-        $testString = 'https://github.com/cphalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 
