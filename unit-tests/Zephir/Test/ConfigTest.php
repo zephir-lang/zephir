@@ -224,10 +224,10 @@ DOC;
     /** @test */
     public function shouldGetBannerFromConfig()
     {
-        $this->assertSame($this->stubsBanner(), $this->config->getBanner());
+        $this->assertSame($this->stubsBanner(), $this->config->get('banner', 'stubs'));
 
-        $this->config->offsetUnset('stubs');
-        $this->assertSame('', $this->config->getBanner());
+        unset($this->config['stubs']);
+        $this->assertNull($this->config->get('banner', 'stubs'));
     }
 
     /** @test */

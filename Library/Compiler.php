@@ -963,18 +963,25 @@ final class Compiler
         }
 
         $this->logger->info('Generating stubs...');
-
         $stubsGenerator = new Stubs\Generator($this->files);
 
-        $path = $this->config->get('path', 'stubs');
-        $path = str_replace('%version%', $this->config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
+        $path = str_replace(
+            [
+                '%version%',
+                '%namespace%',
+            ],
+            [
+                $this->config->get('version'),
+                ucfirst($this->config->get('namespace')),
+            ],
+            $this->config->get('path', 'stubs')
+        );
 
         $stubsGenerator->generate(
             $this->config->get('namespace'),
             $path,
             $this->config->get('indent', 'extra'),
-            $this->config->getBanner()
+            $this->config->get('banner', 'stubs') ?? ''
         );
     }
 
