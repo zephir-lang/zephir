@@ -11,12 +11,15 @@
 
 namespace Zephir;
 
+use ArrayAccess;
+use JsonSerializable;
+
 /**
  * Zephir\Config.
  *
  * Manages compiler global configuration.
  */
-class Config implements \ArrayAccess, \JsonSerializable
+class Config implements ArrayAccess, JsonSerializable
 {
     /**
      * Is config changed?
@@ -200,8 +203,8 @@ class Config implements \ArrayAccess, \JsonSerializable
                 }
             }
 
-            $_SERVER['argv'] = $argv = array_values($argv);
-            $_SERVER['argc'] = $argc = \count($argv);
+            $_SERVER['argv'] = array_values($argv);
+            $_SERVER['argc'] = \count($argv);
         }
 
         return $config;
@@ -214,7 +217,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return isset($this->container[$key]) || \array_key_exists($key, $this->container);
     }
@@ -235,7 +238,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         $namespace = key($key);
         $key = current($key);
 
-        if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
+        if (!\is_array($this->container[$namespace]) || !$this->offsetExists($namespace)) {
             return null;
         }
 
@@ -254,9 +257,10 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function offsetSet($key, $value)
     {
+        $this->changed = true;
+
         if (!\is_array($key)) {
             $this->container[$key] = $value;
-            $this->changed = true;
 
             return;
         }
@@ -269,7 +273,6 @@ class Config implements \ArrayAccess, \JsonSerializable
         }
 
         $this->container[$namespace][$key] = $value;
-        $this->changed = true;
     }
 
     /**
@@ -324,19 +327,9 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->container;
-    }
-
-    /**
-     * Returns banner from configuration file.
-     *
-     * @return string
-     */
-    public function getBanner(): string
-    {
-        return $this->get('banner', 'stubs') ?? '';
     }
 
     /**
