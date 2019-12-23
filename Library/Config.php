@@ -238,7 +238,7 @@ class Config implements ArrayAccess, JsonSerializable
         $namespace = key($key);
         $key = current($key);
 
-        if (!\is_array($this->container[$namespace]) || !$this->offsetExists($namespace)) {
+        if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
             return null;
         }
 
