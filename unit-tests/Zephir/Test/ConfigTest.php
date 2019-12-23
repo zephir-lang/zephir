@@ -227,7 +227,7 @@ DOC;
         $this->assertSame($this->stubsBanner(), $this->config->get('banner', 'stubs'));
 
         unset($this->config['stubs']);
-        $this->assertSame('', $this->config->get('banner', 'stubs'));
+        $this->assertNull($this->config->get('banner', 'stubs'));
     }
 
     /** @test */
