@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
 /**
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -156,7 +156,7 @@ DOC;
             'extra indent' => ['extra', 'indent', 'spaces'],
             'namespace' => [null, 'namespace', 'test'],
             'name' => [null, 'name', 'Test Extension'],
-            'author' => [null, 'author', 'Zephir Team and contributors'],
+            'author' => [null, 'author', 'Phalcon Team and contributors'],
             'globals test_setting_1' => ['globals', 'test_setting_1', ['type' => 'bool', 'default' => true]],
             'globals db.my_setting_1' => ['globals', 'db.my_setting_1', ['type' => 'bool', 'default' => false]],
         ];

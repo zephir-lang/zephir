@@ -1,7 +1,7 @@
 @echo off
 rem This file is part of the Zephir.
 rem
-rem (c) Zephir Team <team@zephir-lang.com>
+rem (c) Phalcon Team <team@zephir-lang.com>
 rem
 rem For the full copyright and license information, please view the LICENSE
 rem file that was distributed with this source code.

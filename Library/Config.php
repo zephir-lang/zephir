@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -95,7 +95,7 @@ class Config implements ArrayAccess, JsonSerializable
         'namespace' => '',
         'name' => '',
         'description' => '',
-        'author' => 'Zephir Team',
+        'author' => 'Phalcon Team',
         'version' => '0.0.1',
         'verbose' => false,
         'requires' => [

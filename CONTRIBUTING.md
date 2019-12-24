@@ -1,16 +1,33 @@
-Zephir is an open source project and a volunteer effort.
-Contributions are welcome!
+# Contributing to Zephir
 
-## General
+Zephir is an open source project and a volunteer effort. Zephir welcomes
+contribution from everyone. The following summarizes the process for
+contributing changes. Please take a moment to review this document in order
+to make the contribution process easy and effective for everyone involved.
 
-*We only accept bug reports, new feature requests and pull requests in GitHub*.
+## Community
 
-If you are not familiar with markdown and also
-[GitHub markdown implementation](https://help.github.com/articles/github-flavored-markdown),
-then read this. This is important, because we write code, and all our questions are about the code.
-So lets respect each other and wrap code-blocks by specified tags.
+Zephir is maintained and supported by [Phalcon Team][team] and developed in
+collaboration with a productive community of contributors. Please use the
+[GitHub issues][issues] to raise discussion of development topics.
 
-If you have a change or new feature in mind, please fill a New Feature Request (NFR).
+We use the GitHub issues for tracking bugs and feature requests and have
+limited bandwidth to address all of them. Thus we only accept bug reports,
+new feature requests and pull requests in GitHub. Our great community and
+contributors are happy to help you though! Please use these community
+resources for obtaining help.
+
+_Please use the [Documentation][docs] before anything else. You can also use
+the search feature in our documents to find what you are looking for. If your
+question is still not answered, there are more options below._
+
+## Contributions
+
+Contributions to Zephir should be made in the form of GitHub pull requests.
+Each pull request will be reviewed by a core contributor (someone with
+permission to merge patches). Feedback can be provided and potentially changes
+requested or the pull request will be merged. All contributions should follow
+this format, even those from core contributors.
 
 ## Code style conventions
 
@@ -23,9 +40,8 @@ Pull requests should be targeted at Zephir's `master` branch.
 Before pushing to your Github repo and issuing the pull request,
 please do two things:
 
-1. [Rebase](http://git-scm.com/book/en/Git-Branching-Rebasing) your
-   local changes against the `master` branch. Resolve any conflicts
-   that arise.
+1. [Rebase][git rebase] your local changes against the `master` branch.
+   Resolve any conflicts that arise.
 2. Run the full Zephir test suite with the `./vendor/bin/phpunit` command.
    You're not off the hook even if you just stick to documentation; code
    examples in the docs are tested as well!
@@ -34,8 +50,7 @@ please do two things:
    and also yourself, do not make mistakes in the future.
 
 Pull requests will be treated as "review requests", and we will give
-feedback we expect to see corrected on
-[coding style](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
+feedback we expect to see corrected on [coding style][psr-2]
 and substance before pulling.  Changes contributed via pull request should
 focus on a single issue at a time, like any other.  We will not accept
 pull-requests that try to "sneak" unrelated changes in.
@@ -60,4 +75,10 @@ When submitting bugs to the issue tracker make sure your issue includes:
  - Zephir version, if your version is outdated - try updating the latest version
 
 Thanks! <br />
-Zephir Team
+Phalcon Team
+
+[team]: https://phalcon.io/en-us/team
+[issues]: https://github.com/phalcon/zephir/issues
+[docs]: https://docs.zephir-lang.com
+[git rebase]: http://git-scm.com/book/en/Git-Branching-Rebasing
+[psr-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
