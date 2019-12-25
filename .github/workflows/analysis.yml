@@ -21,13 +21,8 @@ jobs:
         with:
             fetch-depth: 1
 
-      - name: Setup environments
-        run:
-          mkdir -p $HOME/bin
-          echo "::set-env name=PATH::$HOME/bin:$PATH"
-
       - name: Install Prerequisites
-        run: apt install --no-install-recommends --quiet --assume-yes wget shellcheck
+        run: sudo apt install --no-install-recommends --quiet --assume-yes wget shellcheck
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
@@ -37,22 +32,22 @@ jobs:
           pecl: false
 
       - name: Install PHP CS Fixer
-        run:
-          wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
-          chmod +x "$HOME/bin/php-cs-fixer"
-          php-cs-fixer --version
+        run: |
+          wget --quiet -O ./php-cs-fixer https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+          chmod +x ./php-cs-fixer
+          ./php-cs-fixer --version
 
       - name: Install PHP_CodeSniffer
-        run:
-          wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-          chmod +x "$HOME/bin/phpcs"
-          phpcs --version
+        run: |
+          wget --quiet -O ./phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+          chmod +x ./phpcs
+          ./phpcs --version
 
       - name: Run PHP_CodeSniffer
-        run: phpcs
+        run: ./phpcs
 
       - name: Run PHP CS Fixer
-        run: php-cs-fixer fix --diff --dry-run -v
+        run: ./php-cs-fixer fix --diff --dry-run -v
 
       - name: Run Shell Check
         run: shellcheck .ci/*.sh
