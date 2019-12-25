@@ -23,9 +23,8 @@ env:
   global:
     - BUILD_PHAR=1
     - BOX_VERSION=3.8.1
-    - REPORT_COVERAGE=1
     - ZEPHIR_PARSER_VERSION="v1.3.3"
-    - PATH="${HOME}/bin:${PATH}"
+    - PATH="$HOME/bin:${PATH}"
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
     - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
     - SYMFONY_PHPUNIT_DIR="$HOME/.phpunit"
@@ -84,16 +83,6 @@ matrix:
             - gdb
       env:
         - SYMFONY_PHPUNIT_VERSION=7.4
-
-    - os: linux
-      cache: false
-      addons:
-        apt:
-          packages:
-            - shellcheck
-      env:
-        - BUILD_PHAR=0
-        - REPORT_COVERAGE=0
 
 before_install:
   - |
@@ -165,7 +154,7 @@ after_script:
   - printf "$TRAVIS_COMMIT_LOG\n"
 
 after_success:
-  - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
+  - bash <(curl -s https://codecov.io/bash)
 
 after_failure:
   - echo "$($(phpenv which php) -v)"
