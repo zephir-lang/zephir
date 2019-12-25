@@ -26,6 +26,9 @@ jobs:
           mkdir -p $HOME/bin
           echo "::set-env name=PATH::$HOME/bin:$PATH"
 
+      - name: Install Prerequisites
+        run: apt install --no-install-recommends --quiet --assume-yes wget shellcheck
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
