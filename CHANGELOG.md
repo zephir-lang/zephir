@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Do not dump config file if config was changed.
+  Usually we need dump configuration exactly once - at project initialization.
+  There are no needs to dump it for every config change. Also, this patch
+  removes `Config::$changed` variable that is no longer needed.
+
 ### Changed
 - Improved type hint for arrays when generating stubs
   [#2026](https://github.com/phalcon/zephir/issues/2026)
