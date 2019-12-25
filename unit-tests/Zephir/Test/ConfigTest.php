@@ -82,8 +82,7 @@ DOC;
      *
      * @test
      * @expectedException \Zephir\Exception
-     * @expectedExceptionMessage The config.json file is not valid or there is
-     * no Zephir extension initialized in this directory.
+     * @expectedExceptionMessage The config.json file is invalid: Syntax error, malformed JSON
      */
     public function constructWithBadConfigFile()
     {
