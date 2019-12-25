@@ -21,9 +21,6 @@ jobs:
         with:
             fetch-depth: 1
 
-      - name: Install Prerequisites
-        run: sudo apt install --no-install-recommends --quiet --assume-yes wget shellcheck
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:

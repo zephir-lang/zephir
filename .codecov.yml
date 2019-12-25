@@ -28,6 +28,7 @@ ignore:
   - "*.yml"
   - "*.json"
   - "*.md"
+  - "*.mk"
   # ignore folders and all its contents
   - ".ci/.*"
   - ".github/.*"
@@ -38,4 +39,3 @@ ignore:
   - ".phpunit/.*"
   - "tests/.*"
   - "vendor/.*"
-  - "php-zephir-parser/.*"
