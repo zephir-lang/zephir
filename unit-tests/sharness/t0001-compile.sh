@@ -11,7 +11,7 @@ test_expect_success "Compile the extension in production mode" "
   cd $FIXTURESDIR/devmode &&
   zephirc fullclean 2>&1 >/dev/null &&
   zephirc compile --no-dev 2>&1 >/dev/null &&
-  grep -q -e \"^CFLAGS=$regexp\" ext/config.nice
+  cat ext/config.nice | grep -q -e \"^CFLAGS=$regexp\"
 "
 
 regexp="'-O0 -g3'"
@@ -19,7 +19,7 @@ test_expect_success "Compile the extension in development mode" "
   cd $FIXTURESDIR/devmode &&
   zephirc fullclean 2>&1 >/dev/null &&
   zephirc compile --dev 2>&1 >/dev/null &&
-  grep -q -e \"^CFLAGS=$regexp\" ext/config.nice
+  cat ext/config.nice | grep -q -e \"^CFLAGS=$regexp\"
 "
 
 test_done

@@ -82,8 +82,7 @@ DOC;
      *
      * @test
      * @expectedException \Zephir\Exception
-     * @expectedExceptionMessage The config.json file is not valid or there is
-     * no Zephir extension initialized in this directory.
+     * @expectedExceptionMessage The config.json file is invalid: Syntax error, malformed JSON
      */
     public function constructWithBadConfigFile()
     {
@@ -149,7 +148,6 @@ DOC;
             'stubs path' => ['stubs', 'path', 'ide/%version%/%namespace%/'],
             'stubs run' => ['stubs', 'stubs-run-after-generate', false],
             'stubs banner' => ['stubs', 'banner', $this->stubsBanner()],
-            'api path' => ['api', 'path', 'doc/%version%'],
             'api path' => ['api', 'path', 'doc/%version%'],
             'warnings unused-variable' => ['warnings', 'unused-variable', true],
             'optimizations static-type-inference' => ['optimizations', 'static-type-inference', true],
@@ -231,7 +229,7 @@ DOC;
     }
 
     /** @test */
-    public function shouldSaveConfigOnExit()
+    public function shouldSaveConfig()
     {
         chdir(sys_get_temp_dir());
 

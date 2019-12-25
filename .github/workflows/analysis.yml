@@ -1,0 +1,50 @@
+name: Static Code Analysis
+
+on:
+  push:
+    branches-ignore:
+      - 'wip-*'
+    paths-ignore:
+      - 'README.md'
+
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  analysis:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2-beta
+        with:
+            fetch-depth: 1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: '7.3'
+          coverage: none
+          pecl: false
+
+      - name: Install PHP CS Fixer
+        run: |
+          wget --quiet -O ./php-cs-fixer https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+          chmod +x ./php-cs-fixer
+          ./php-cs-fixer --version
+
+      - name: Install PHP_CodeSniffer
+        run: |
+          wget --quiet -O ./phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+          chmod +x ./phpcs
+          ./phpcs --version
+
+      - name: Run PHP_CodeSniffer
+        run: ./phpcs
+
+      - name: Run PHP CS Fixer
+        run: ./php-cs-fixer fix --diff --dry-run -v
+
+      - name: Run Shell Check
+        run: shellcheck .ci/*.sh

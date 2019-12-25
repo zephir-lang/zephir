@@ -22,11 +22,9 @@ cache:
 env:
   global:
     - BUILD_PHAR=1
-    - BUILD_TYPE=regular
     - BOX_VERSION=3.8.1
-    - REPORT_COVERAGE=1
     - ZEPHIR_PARSER_VERSION="v1.3.3"
-    - PATH="${HOME}/bin:${PATH}"
+    - PATH="$HOME/bin:${PATH}"
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"
     - MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)"
     - SYMFONY_PHPUNIT_DIR="$HOME/.phpunit"
@@ -86,17 +84,6 @@ matrix:
       env:
         - SYMFONY_PHPUNIT_VERSION=7.4
 
-    - os: linux
-      cache: false
-      addons:
-        apt:
-          packages:
-            - shellcheck
-      env:
-        - BUILD_PHAR=0
-        - REPORT_COVERAGE=0
-        - BUILD_TYPE=analysis
-
 before_install:
   - |
     # Core dump settings
@@ -122,24 +109,8 @@ before_install:
 install:
   - |
     # Install regular dependencies
-    if [ "$BUILD_TYPE" == "regular" ]; then
-      .ci/install-prereqs.sh
-      composer install --no-interaction --no-ansi --no-progress --no-suggest
-    fi
-
-  - |
-    # Install dependencies needed for static code analysis
-    if [ "$BUILD_TYPE" == "analysis" ]; then
-      if [ ! -f "$HOME/bin/php-cs-fixer" ]; then
-        wget --quiet -O "$HOME/bin/php-cs-fixer" https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
-        chmod +x "$HOME/bin/php-cs-fixer"
-      fi
-
-      if [ ! -f "$HOME/bin/phpcs" ]; then
-        wget --quiet -O "$HOME/bin/phpcs" https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-        chmod +x "$HOME/bin/phpcs"
-      fi
-    fi
+    .ci/install-prereqs.sh
+    composer install --no-interaction --no-ansi --no-progress --no-suggest
 
   - |
     # Prepare Zephir executable
@@ -156,34 +127,26 @@ install:
 before_script:
   - cat .ci/travis.ini >> "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
   - cat "$(phpenv root)/versions/$(phpenv version-name)/etc/conf.d/travis.ini"
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir clean; fi
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir fullclean; fi
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir generate; fi
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir stubs; fi
-  - if [ "$BUILD_TYPE" == "regular" ]; then zephir api; fi
+  - zephir clean
+  - zephir fullclean
+  - zephir generate
+  - zephir stubs
+  - zephir api
   - |
-    if [ "$BUILD_TYPE" == "regular" ]; then
-      # These variables is needed to produce non optimized code and use code coverage
-      LDFLAGS="--coverage"
-      CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
-      CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+    # These variables are needed to produce non optimized code as well as for code coverage
+    LDFLAGS="--coverage"
+    CFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
+    CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
 
-      # Export variables in the subshell to not shadow global variables
-      ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
-    fi
+    # Export variables in the subshell to not shadow global variables
+    ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
 
 script:
   # Unit testing
-  - if [ "$BUILD_TYPE" == "regular" ]; then .ci/run-tests.sh; fi
+  - .ci/run-tests.sh
 
   # Black-box testing
-  - if [ "$BUILD_TYPE" == "regular" ]; then ( cd unit-tests/sharness && PHP=$(phpenv which php) make ); fi
-
-  # Static Code Analysis
-  - phpenv config-rm xdebug.ini || true
-  - if [ "$BUILD_TYPE" == "analysis" ]; then phpcs --version; phpcs; fi
-  - if [ "$BUILD_TYPE" == "analysis" ]; then php-cs-fixer --version; php-cs-fixer fix --diff --dry-run -v; fi
-  - if [ "$BUILD_TYPE" == "analysis" ]; then shellcheck .ci/*.sh; fi
+  - ( cd unit-tests/sharness && PHP=$(phpenv which php) make )
 
 after_script:
   - re2c --version
@@ -191,7 +154,7 @@ after_script:
   - printf "$TRAVIS_COMMIT_LOG\n"
 
 after_success:
-  - '[[ "$REPORT_COVERAGE" -eq 1 ]] && bash <(curl -s https://codecov.io/bash)'
+  - bash <(curl -s https://codecov.io/bash)
 
 after_failure:
   - echo "$($(phpenv which php) -v)"
@@ -210,5 +173,4 @@ deploy:
   on:
     tags: true
     php: '7.2'
-    condition: $BUILD_TYPE = regular
   repo: phalcon/zephir
