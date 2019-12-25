@@ -5,7 +5,7 @@ codecov:
 coverage:
   precision: 2
   round: down
-  range: "33...90"
+  range: "35...90"
 
   status:
     project:
@@ -19,9 +19,9 @@ coverage:
     changes: no
 
 comment:
-  layout: "header, diff"
+  layout: diff
   behavior: default
-  require_changes: no
+  require_changes: false
 
 ignore:
   - ".git"
@@ -38,3 +38,4 @@ ignore:
   - ".phpunit/.*"
   - "tests/.*"
   - "vendor/.*"
+  - "php-zephir-parser/.*"
