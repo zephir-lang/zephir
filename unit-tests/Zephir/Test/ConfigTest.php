@@ -150,7 +150,6 @@ DOC;
             'stubs run' => ['stubs', 'stubs-run-after-generate', false],
             'stubs banner' => ['stubs', 'banner', $this->stubsBanner()],
             'api path' => ['api', 'path', 'doc/%version%'],
-            'api path' => ['api', 'path', 'doc/%version%'],
             'warnings unused-variable' => ['warnings', 'unused-variable', true],
             'optimizations static-type-inference' => ['optimizations', 'static-type-inference', true],
             'extra indent' => ['extra', 'indent', 'spaces'],
@@ -231,7 +230,7 @@ DOC;
     }
 
     /** @test */
-    public function shouldSaveConfigOnExit()
+    public function shouldSaveConfig()
     {
         chdir(sys_get_temp_dir());
 
