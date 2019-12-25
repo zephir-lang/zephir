@@ -76,6 +76,9 @@ final class InitCommand extends Command
         // Copy the latest kernel files
         $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
 
+        // Dump initial configuration on project creation
+        $this->config->dumpToFile();
+
         return 0;
     }
 

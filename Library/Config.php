@@ -111,9 +111,6 @@ class Config implements ArrayAccess, JsonSerializable
     public function __construct()
     {
         $this->populate();
-        $this->changed = false;
-
-        register_shutdown_function([$this, 'dumpToFile']);
     }
 
     /**
@@ -257,8 +254,6 @@ class Config implements ArrayAccess, JsonSerializable
      */
     public function offsetSet($key, $value)
     {
-        $this->changed = true;
-
         if (!\is_array($key)) {
             $this->container[$key] = $value;
 
@@ -278,13 +273,13 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Unsets a $key from internal container.
      *
+     * @deprecated
+     *
      * @param mixed $key
      */
     public function offsetUnset($key)
     {
         unset($this->container[$key]);
-
-        $this->changed = true;
     }
 
     /**
@@ -317,9 +312,7 @@ class Config implements ArrayAccess, JsonSerializable
      */
     public function dumpToFile()
     {
-        if ($this->changed && !file_exists('config.json')) {
-            file_put_contents('config.json', $this);
-        }
+        file_put_contents('config.json', $this);
     }
 
     /**
@@ -344,14 +337,34 @@ class Config implements ArrayAccess, JsonSerializable
         }
 
         $config = json_decode(file_get_contents('config.json'), true);
-        if (!\is_array($config)) {
-            throw new Exception(
-                'The config.json file is not valid or there is no Zephir extension initialized in this directory.'
-            );
+        $message = 'The config.json file is invalid';
+
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                foreach ($config as $key => $configSection) {
+                    $this->offsetSet($key, $configSection);
+                }
+
+                return;
+            case JSON_ERROR_DEPTH:
+                $message = "{$message}: Maximum stack depth exceeded";
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $message = "{$message}: Underflow or the modes mismatch";
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                $message = "{$message}: Unexpected control character found";
+                break;
+            case JSON_ERROR_SYNTAX:
+                $message = "{$message}: Syntax error, malformed JSON";
+                break;
+            case JSON_ERROR_UTF8:
+                $message = "{$message}: Malformed UTF-8 characters, possibly incorrectly encoded";
+                break;
+            default:
+                break;
         }
 
-        foreach ($config as $key => $configSection) {
-            $this->offsetSet($key, $configSection);
-        }
+        throw new Exception($message);
     }
 }
