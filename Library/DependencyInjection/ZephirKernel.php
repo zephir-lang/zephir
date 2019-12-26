@@ -113,19 +113,18 @@ final class ZephirKernel extends Kernel
      */
     private function getPathSalt(): string
     {
-        $hash =
+        $prefix =
             Zephir::VERSION.
             $this->environment.
             serialize($this->extraConfigFiles);
 
         $localConfig = $this->startedDir.DIRECTORY_SEPARATOR.'config.json';
-        if (file_exists($localConfig) && is_readable($localConfig)) {
-            $salt = md5_file($localConfig);
-        } else {
-            $salt = $this->startedDir;
+        $suffix = $this->startedDir;
+        if (file_exists($localConfig)) {
+            $suffix = md5_file($localConfig);
         }
 
-        return substr(md5("{$hash}{$salt}"), 0, 16);
+        return substr(md5("{$prefix}{$suffix}"), 0, 16);
     }
 
     /**

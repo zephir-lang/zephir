@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   cache and filling it with a project-specific configuration, there is no
   way to invalidate it. Any next project will use the same Kernel cache and
   the same Kernel configuration (if any).
+  [#2036](https://github.com/phalcon/zephir/pull/2036)
 
 ### Changed
 - Improved type hint for arrays when generating stubs
