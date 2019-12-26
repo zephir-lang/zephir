@@ -21,8 +21,4 @@ test_expect_success "Should generate a project and dump config file" "
   test -f ./success/config.json
 "
 
-# Cleanup
-[ -d "$OUTPUTDIR/config.json" ] && rm -rf "$OUTPUTDIR/config.json"
-[ -d "$OUTPUTDIR/success" ] && rm -rf "$OUTPUTDIR/success"
-
 test_done
