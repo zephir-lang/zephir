@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   There are no needs to dump it for every config change. Also, this patch
   removes `Config::$changed` variable that is no longer needed
   [#2035](https://github.com/phalcon/zephir/pull/2035)
+- Use a different path for the Kernel cache if possible.
+  This patch fixes a cache collision issue. The issue is after creating the
+  cache and filling it with a project-specific configuration, there is no
+  way to invalidate it. Any next project will use the same Kernel cache and
+  the same Kernel configuration (if any).
 
 ### Changed
 - Improved type hint for arrays when generating stubs
