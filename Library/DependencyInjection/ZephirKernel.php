@@ -82,8 +82,6 @@ final class ZephirKernel extends Kernel
      */
     public function getCacheDir(): string
     {
-        // allows container rebuild when config or version changes
-
         $home = getenv('HOME') ?: (getenv('HOMEDRIVE').DIRECTORY_SEPARATOR.getenv('HOMEPATH'));
 
         if (is_macos()) {
@@ -99,7 +97,9 @@ final class ZephirKernel extends Kernel
 
         $path = $cacheDir.DIRECTORY_SEPARATOR.$this->getPathSalt();
         if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
-            throw new RuntimeException(sprintf('Unable to create cache directory: "%s"', $path));
+            throw new RuntimeException(
+                sprintf('Unable to create cache directory: "%s"', $path)
+            );
         }
 
         return $path;
@@ -113,7 +113,10 @@ final class ZephirKernel extends Kernel
      */
     private function getPathSalt(): string
     {
-        $hash = Zephir::VERSION.$this->environment.serialize($this->extraConfigFiles);
+        $hash =
+            Zephir::VERSION.
+            $this->environment.
+            serialize($this->extraConfigFiles);
 
         $localConfig = $this->startedDir.DIRECTORY_SEPARATOR.'config.json';
         if (file_exists($localConfig) && is_readable($localConfig)) {
@@ -148,7 +151,9 @@ final class ZephirKernel extends Kernel
 
         $path = $stateDir.DIRECTORY_SEPARATOR.$this->getPathSalt();
         if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
-            throw new RuntimeException(sprintf('Unable to create logs directory: "%s"', $path));
+            throw new RuntimeException(
+                sprintf('Unable to create logs directory: "%s"', $path)
+            );
         }
 
         return $path;
