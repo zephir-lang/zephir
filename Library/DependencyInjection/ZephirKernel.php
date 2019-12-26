@@ -12,12 +12,15 @@
 namespace Zephir\DependencyInjection;
 
 use const DIRECTORY_SEPARATOR;
+use Exception;
 use Oneup\FlysystemBundle\OneupFlysystemBundle;
+use RuntimeException;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Throwable;
 use Zephir\DependencyInjection\CompilerPass\CollectCommandsToApplicationCompilerPass;
 use function Zephir\is_macos;
 use function Zephir\is_windows;
@@ -61,7 +64,7 @@ final class ZephirKernel extends Kernel
      *
      * @param LoaderInterface $loader
      *
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
@@ -77,10 +80,10 @@ final class ZephirKernel extends Kernel
      *
      * @return string
      */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         // allows container rebuild when config or version changes
-        $hash = Zephir::VERSION.$this->environment.serialize($this->extraConfigFiles);
+
         $home = getenv('HOME') ?: (getenv('HOMEDRIVE').DIRECTORY_SEPARATOR.getenv('HOMEPATH'));
 
         if (is_macos()) {
@@ -94,12 +97,32 @@ final class ZephirKernel extends Kernel
             $cacheDir .= '/zephir';
         }
 
-        $path = $cacheDir.DIRECTORY_SEPARATOR.substr(md5($hash), 0, 16);
-        if (!is_dir($path) && !mkdir($path, 0777, true) && !is_dir($path)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+        $path = $cacheDir.DIRECTORY_SEPARATOR.$this->getPathSalt();
+        if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
+            throw new RuntimeException(sprintf('Unable to create cache directory: "%s"', $path));
         }
 
         return $path;
+    }
+
+    /**
+     * Allows container rebuild when config or version changes.
+     * This also used to get unique path to kernel logs.
+     *
+     * @return string
+     */
+    private function getPathSalt(): string
+    {
+        $hash = Zephir::VERSION.$this->environment.serialize($this->extraConfigFiles);
+
+        $localConfig = $this->startedDir.DIRECTORY_SEPARATOR.'config.json';
+        if (file_exists($localConfig) && is_readable($localConfig)) {
+            $salt = md5_file($localConfig);
+        } else {
+            $salt = $this->startedDir;
+        }
+
+        return substr(md5("{$hash}{$salt}"), 0, 16);
     }
 
     /**
@@ -107,7 +130,7 @@ final class ZephirKernel extends Kernel
      *
      * @return string
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         $home = getenv('HOME') ?: (getenv('HOMEDRIVE').DIRECTORY_SEPARATOR.getenv('HOMEPATH'));
 
@@ -123,9 +146,9 @@ final class ZephirKernel extends Kernel
             $stateDir .= '/zephir';
         }
 
-        $path = $stateDir.DIRECTORY_SEPARATOR.Zephir::VERSION;
-        if (!is_dir($path) && !mkdir($path, 0777, true) && !is_dir($path)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+        $path = $stateDir.DIRECTORY_SEPARATOR.$this->getPathSalt();
+        if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
+            throw new RuntimeException(sprintf('Unable to create logs directory: "%s"', $path));
         }
 
         return $path;
@@ -136,15 +159,17 @@ final class ZephirKernel extends Kernel
      *
      * @return string The project root dir
      */
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
-        return \dirname(\dirname(__DIR__));
+        return \dirname(__DIR__, 2);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return \dirname(__DIR__);
     }
@@ -154,7 +179,7 @@ final class ZephirKernel extends Kernel
      *
      * @return string The local cache dir
      */
-    public function getStartedDir()
+    public function getStartedDir(): string
     {
         return $this->startedDir.'/.zephir';
     }
@@ -174,7 +199,7 @@ final class ZephirKernel extends Kernel
      *
      * @return array An array of kernel parameters
      */
-    protected function getKernelParameters()
+    protected function getKernelParameters(): array
     {
         $parameters = parent::getKernelParameters();
         $parameters['kernel.local_cache_dir'] = $this->getStartedDir();

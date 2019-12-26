@@ -18,7 +18,7 @@ interface FileSystemInterface
      *
      * @return bool
      */
-    public function isInitialized();
+    public function isInitialized(): bool;
 
     /**
      * Initialize the filesystem.
@@ -32,7 +32,7 @@ interface FileSystemInterface
      *
      * @return bool
      */
-    public function exists($path);
+    public function exists(string $path): bool;
 
     /**
      * Creates a directory inside the temporary container.
@@ -41,7 +41,7 @@ interface FileSystemInterface
      *
      * @return bool
      */
-    public function makeDirectory($path);
+    public function makeDirectory(string $path): bool;
 
     /**
      * Returns a temporary entry as an array.
@@ -50,7 +50,7 @@ interface FileSystemInterface
      *
      * @return array
      */
-    public function file($path);
+    public function file(string $path): array;
 
     /**
      * Requires a file from the temporary directory.
@@ -59,7 +59,7 @@ interface FileSystemInterface
      *
      * @return mixed
      */
-    public function requireFile($path);
+    public function requireFile(string $path);
 
     /**
      * Attempts to remove recursively the temporary directory with all subdirectories and files.
@@ -72,7 +72,7 @@ interface FileSystemInterface
      * @param string $path
      * @param string $data
      */
-    public function write($path, $data);
+    public function write(string $path, string $data);
 
     /**
      * Writes data from a temporary entry.
@@ -81,14 +81,14 @@ interface FileSystemInterface
      *
      * @return string
      */
-    public function read($path);
+    public function read(string $path): string;
 
     /**
      * Deletes a temporary entry.
      *
      * @param string $path
      */
-    public function delete($path);
+    public function delete(string $path);
 
     /**
      * Generate a hash value using the contents of a given file.
@@ -99,7 +99,7 @@ interface FileSystemInterface
      *
      * @return string
      */
-    public function getHashFile($algorithm, $sourceFile, $useCache = false);
+    public function getHashFile(string $algorithm, string $sourceFile, $useCache = false): string;
 
     /**
      * Returns the modification time of a temporary entry.
@@ -108,7 +108,7 @@ interface FileSystemInterface
      *
      * @return int
      */
-    public function modificationTime($path);
+    public function modificationTime(string $path): int;
 
     /**
      * Executes a command and saves the result into a temporary entry.
@@ -117,7 +117,7 @@ interface FileSystemInterface
      * @param string $descriptor
      * @param string $destination
      */
-    public function system($command, $descriptor, $destination);
+    public function system(string $command, string $descriptor, string $destination);
 
     /**
      * Normalizes path to be used as a temporary entry.
@@ -126,5 +126,5 @@ interface FileSystemInterface
      *
      * @return string
      */
-    public function normalizePath($path);
+    public function normalizePath(string $path): string;
 }
