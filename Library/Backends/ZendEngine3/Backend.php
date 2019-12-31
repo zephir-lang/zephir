@@ -956,6 +956,18 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('zephir_update_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
     }
 
+    public function addStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_add_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
+    }
+
+    public function subStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_sub_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
+    }
+
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
     {
         $resolveValue = $this->resolveValue($value, $context);
