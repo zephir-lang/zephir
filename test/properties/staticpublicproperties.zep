@@ -39,8 +39,17 @@ class StaticPublicProperties
 	 */
 	public static someString = "test";
 
+	public static someAdd = 0;
+	public static someSub = 0;
+
 	public static function setSomeString(val)
 	{
 		let self::someString = val;
+	}
+
+	public static function testAddAndSub()
+	{
+		let self::someAdd += 1;
+		let self::someSub -= 1;
 	}
 }

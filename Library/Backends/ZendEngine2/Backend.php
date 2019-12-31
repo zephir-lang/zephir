@@ -704,6 +704,20 @@ class Backend extends BaseBackend
         );
     }
 
+    public function addStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
+    }
+
+    public function subStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
+    }
+
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
     {
         throw new CompilerException(

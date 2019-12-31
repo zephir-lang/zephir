@@ -38,4 +38,14 @@ class StaticPublicPropertiesTest extends TestCase
         // \Test\Properties\StaticPublicProperties::setSomeString('test3');
         // $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
     }
+
+    public function testIssues2020()
+    {
+        \Test\Properties\StaticPublicProperties::testAddAndSub();
+        $this->assertEquals(1, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-1, \Test\Properties\StaticPublicProperties::$someSub);
+        \Test\Properties\StaticPublicProperties::testAddAndSub();
+        $this->assertEquals(2, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-2, \Test\Properties\StaticPublicProperties::$someSub);
+    }
 }
