@@ -52,4 +52,16 @@ class StaticPublicProperties
 		let self::someAdd += 1;
 		let self::someSub -= 1;
 	}
+
+	public static function testAddAndSub2()
+	{
+		let self::someAdd += "2string";
+		let self::someSub -= "2string";
+	}
+
+	public static function testAddAndSub3()
+	{
+		let self::someAdd += 1.0;
+		let self::someSub -= 1.0;
+	}
 }
