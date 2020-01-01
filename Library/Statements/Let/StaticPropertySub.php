@@ -184,10 +184,58 @@ class StaticPropertySub
                     $statement
                 );
 
-				$compilationContext->backend->addStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
-				if ($variableVariable->isTemporal()) {
-					$variableVariable->setIdle(true);
+                switch ($variableVariable->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'char':
+                    case 'uchar':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                            'variable',
+                            $compilationContext,
+                            true
+                        );
+
+                        $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
+                    case 'double':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                            'variable',
+                            $compilationContext,
+                            true
+                        );
+
+                        $compilationContext->backend->assignDouble($tempVariable, $variableVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
+                    case 'bool':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+					default:
+						$compilationContext->backend->subStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
+						if ($variableVariable->isTemporal()) {
+							$variableVariable->setIdle(true);
+						}
+						break;
 				}
+
                 break;
 
             default:
