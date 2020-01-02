@@ -44,8 +44,22 @@ class StaticPublicPropertiesTest extends TestCase
         \Test\Properties\StaticPublicProperties::testAddAndSub();
         $this->assertEquals(1, \Test\Properties\StaticPublicProperties::$someAdd);
         $this->assertEquals(-1, \Test\Properties\StaticPublicProperties::$someSub);
-        \Test\Properties\StaticPublicProperties::testAddAndSub();
+
+        // PHP Notice:  A non well formed numeric value encountered
+        //\Test\Properties\StaticPublicProperties::testAddAndSub2();
+        //$this->assertEquals(2, \Test\Properties\StaticPublicProperties::$someAdd);
+        //$this->assertEquals(-2, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub3();
         $this->assertEquals(2, \Test\Properties\StaticPublicProperties::$someAdd);
         $this->assertEquals(-2, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub4();
+        $this->assertEquals(3, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-3, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub4();
+        $this->assertEquals(4, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-4, \Test\Properties\StaticPublicProperties::$someSub);
     }
 }
