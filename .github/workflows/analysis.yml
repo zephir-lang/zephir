@@ -43,11 +43,13 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: |
           ./phpcs --runtime-set ignore_warnings_on_exit true
+        continue-on-error: true
 
       - name: Run PHP CS Fixer
-        if: always()
-        run: ./php-cs-fixer fix --diff --dry-run -v
+        run: |
+          ./php-cs-fixer fix --diff --dry-run -v
+        continue-on-error: true
 
       - name: Run Shell Check
-        if: always()
         run: shellcheck .ci/*.sh
+        continue-on-error: true
