@@ -14,9 +14,6 @@ on:
 jobs:
   analysis:
 
-    strategy:
-      fail-fast: false
-
     runs-on: ubuntu-latest
 
     steps:
@@ -48,7 +45,9 @@ jobs:
           ./phpcs --runtime-set ignore_warnings_on_exit true
 
       - name: Run PHP CS Fixer
+        if: always()
         run: ./php-cs-fixer fix --diff --dry-run -v
 
       - name: Run Shell Check
+        if: always()
         run: shellcheck .ci/*.sh
