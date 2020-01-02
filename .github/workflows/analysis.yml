@@ -41,7 +41,8 @@ jobs:
           ./phpcs --version
 
       - name: Run PHP_CodeSniffer
-        run: ./phpcs
+        run: |
+          ./phpcs --runtime-set ignore_warnings_on_exit true
 
       - name: Run PHP CS Fixer
         run: ./php-cs-fixer fix --diff --dry-run -v
