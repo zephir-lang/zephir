@@ -16,7 +16,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
-use Zephir\Expression;
 
 /**
  * StaticPropertySub.
@@ -228,13 +227,13 @@ class StaticPropertySub
                             $tempVariable->setIdle(true);
                         }
                         break;
-					default:
-						$compilationContext->backend->subStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
-						if ($variableVariable->isTemporal()) {
-							$variableVariable->setIdle(true);
-						}
-						break;
-				}
+                    default:
+                        $compilationContext->backend->subStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
+                        if ($variableVariable->isTemporal()) {
+                            $variableVariable->setIdle(true);
+                        }
+                        break;
+                }
 
                 break;
 

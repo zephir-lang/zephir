@@ -208,7 +208,7 @@ class Config implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Allows to check whether an $key is defined.
+     * Allows to check whether a $key is defined.
      *
      * @param mixed $key
      *
