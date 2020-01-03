@@ -164,17 +164,20 @@ class LetStatement extends StatementAbstract
                     break;
 
                 case 'static-property':
+                    $let = new LetStaticProperty();
                     if (isset($assignment['operator'])) {
-                        if ('add-assign' == $assignment['operator']) {
-                            $let = new LetStaticPropertyAdd();
-                        } elseif ('sub-assign' == $assignment['operator']) {
-                            $let = new LetStaticPropertySub();
-                        } else {
-                            $let = new LetStaticProperty();
+                        switch ($assignment['operator']) {
+                            case 'add-assign':
+                                $let = new LetStaticPropertyAdd();
+                                break;
+                            case 'sub-assign':
+                                $let = new LetStaticPropertySub();
+                                break;
+                            default:
+                                $let = new LetStaticProperty();
                         }
-                    } else {
-                        $let = new LetStaticProperty();
                     }
+
                     $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
                     break;
 
