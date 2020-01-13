@@ -193,7 +193,11 @@ class Config implements ArrayAccess, JsonSerializable
                         $config->set('silent', true);
                         break;
                     case '-v':
+                    case '--verbose':
                         $config->set('verbose', true);
+                        break;
+                    case '-V':
+                        $config->set('verbose', false);
                         break;
                     default:
                         break;
