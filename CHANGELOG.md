@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   way to invalidate it. Any next project will use the same Kernel cache and
   the same Kernel configuration (if any).
   [#2036](https://github.com/phalcon/zephir/pull/2036)
+- Fixed `-V` CLI flag purpose. Initially it was designed to disable verbose mode
+  on the fly, e.g. to override project configuration for a single Zephir pass.
+  This behaviour was returned back.
 
 ### Changed
 - Improved type hint for arrays when generating stubs
