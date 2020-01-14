@@ -5,14 +5,14 @@ on:
     branches-ignore:
       - 'wip-*'
     paths-ignore:
-      - README.md
+      - '**.md'
+      - '**.txt'
   pull_request:
     branches:
       - master
 
 jobs:
   analysis:
-
     runs-on: ubuntu-latest
 
     steps:

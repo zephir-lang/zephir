@@ -22,7 +22,7 @@ cache:
 env:
   global:
     - BUILD_PHAR=1
-    - BOX_VERSION=3.8.1
+    - BOX_VERSION='3.8.1'
     - ZEPHIR_PARSER_VERSION="v1.3.3"
     - PATH="$HOME/bin:${PATH}"
     - TRAVIS_COMMIT_LOG="$(git log --format=fuller -5)"

@@ -11,7 +11,7 @@
 # -u  Treat unset variables as an error when substituting.
 set -eu
 
-if [ "$($(phpenv which php-config) --vernum)" -lt "70200" ]; then
+if [ "$(php-config --vernum)" -lt "70200" ]; then
   test_suite="Extension_Php70"
 else
   test_suite="Extension_Php72"
@@ -19,14 +19,14 @@ fi
 
 vendor/bin/simple-phpunit --version
 
-"$(phpenv which php)" \
+php \
   -d extension=ext/modules/test.so \
   vendor/bin/simple-phpunit \
   --colors=always \
   --bootstrap unit-tests/ext-bootstrap.php \
   --testsuite ${test_suite}
 
-"$(phpenv which php)" \
+php \
   vendor/bin/simple-phpunit \
   --colors=always \
   --testsuite Zephir

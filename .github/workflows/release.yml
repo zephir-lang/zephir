@@ -1,0 +1,98 @@
+name: Upload Release Asset
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set environment variables
+        uses: allenevans/set-env@v1.0.0
+        with:
+          BOX_VERSION: '3.8.4'
+
+      - name: Checkout code
+        uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: '7.2'
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=1G, phar.readonly=0
+
+      - name: Common settings
+        run: |
+          git config --global user.name cicdbot
+          git config --global user.email team@zephir-lang.com
+
+          # Choose a suitable PHP version to build PHAR
+          composer config platform.php 7.0.33
+
+          export BUILD_NUMBER="${GITHUB_REF#refs/tags/v}"
+
+      - name: Setup GitHub Token
+        run: |
+          # To increase the GitHub rate limit we're use GitHub authentication
+          if [ -n "${{ secrets.GH_TOKEN }}" ]; then
+            composer config github-oauth.github.com "${{ secrets.GH_TOKEN }}"
+          fi
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install project dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+
+      - name: Install Box
+        run: |
+          wget \
+            "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+            --quiet \
+            -O ./box
+
+          chmod +x ./box
+          sudo mv ./box /usr/local/bin
+
+      - name: Build Zephir PHAR
+        run: |
+          echo $BUILD_NUMBER
+          .ci/build-phar.sh
+          ls -al ./zephir.phar
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: true
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./zephir.phar
+          asset_name: zephir.phar
+          asset_content_type: application/x-php
