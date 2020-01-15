@@ -73,14 +73,18 @@ jobs:
           ls -al ./zephir.phar
           cat ".git/${{ github.ref }}"
 
+      - name: Get the version
+        id: get-version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.get-version.outputs.VERSION }}
+          release_name: ${{ steps.get-version.outputs.VERSION }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
           draft: true
           prerelease: false
