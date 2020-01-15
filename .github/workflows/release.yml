@@ -36,8 +36,6 @@ jobs:
           # Choose a suitable PHP version to build PHAR
           composer config platform.php 7.0.33
 
-          export BUILD_NUMBER="${GITHUB_REF#refs/tags/v}"
-
       - name: Setup GitHub Token
         run: |
           # To increase the GitHub rate limit we're use GitHub authentication
@@ -71,9 +69,9 @@ jobs:
 
       - name: Build Zephir PHAR
         run: |
-          echo $BUILD_NUMBER
           .ci/build-phar.sh
           ls -al ./zephir.phar
+          cat ".git/${{ github.ref }}"
 
       - name: Create Release
         id: create_release
@@ -83,8 +81,10 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: |
+            All notable changes to this version has been documented in the CHANGELOG.md file.
           draft: true
-          prerelease: true
+          prerelease: false
 
       - name: Upload Release Asset
         id: upload-release-asset
