@@ -83,8 +83,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ steps.get-version.outputs.VERSION }}
-          release_name: ${{ steps.get-version.outputs.VERSION }}
+          tag_name: v${{ steps.get-version.outputs.VERSION }}
+          release_name: v${{ steps.get-version.outputs.VERSION }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
           draft: true
           prerelease: false
