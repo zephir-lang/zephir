@@ -7,13 +7,41 @@
 # For the full copyright and license information, please view
 # the LICENSE file that was distributed with this source code.
 
-# -e  Exit immediately if a command exits with a non-zero status.
-# -u  Treat unset variables as an error when substituting.
-set -eu
+autoconf --version
+echo "----------------------------------------------------------------------------"
 
-shopt -s nullglob
+cc --version
+echo "----------------------------------------------------------------------------"
 
-export LC_ALL=C
+make --version
+echo "----------------------------------------------------------------------------"
+
+re2c --version
+echo "----------------------------------------------------------------------------"
+
+php -v
+echo "----------------------------------------------------------------------------"
+
+phpize --version
+echo "----------------------------------------------------------------------------"
+
+php -m
+echo "----------------------------------------------------------------------------"
+
+command -v php
+echo "----------------------------------------------------------------------------"
+
+command -v php-config
+echo "----------------------------------------------------------------------------"
+
+command -v phpize
+echo "----------------------------------------------------------------------------"
+
+php-config
+echo "----------------------------------------------------------------------------"
+
+ls -al "$(php-config --extension-dir)"
+echo "----------------------------------------------------------------------------"
 
 if [ -f ./compile-errors.log ]
 then
@@ -23,25 +51,3 @@ then
     (>&1 printf "%s\\n" "$log_contents")
   }
 fi
-
-# for some reason Ubuntu 18.04 on Travis CI doesn't install gdb
-function install_gdb() {
-  if [ "${CI}" = "true" ] && [ "$(command -v gdb 2>/dev/null)" = "" ]
-  then
-    (>&1 echo "Install gdb...")
-    sudo apt-get install --no-install-recommends --quiet --assume-yes gdb 1> /dev/null
-  fi
-}
-
-for i in /tmp/core.php.*; do
-  install_gdb
-  (>&1 printf "Found core dump file: %s\\n\\n" "$i")
-  gdb -q "$(phpenv which php)" "$i" <<EOF
-set pagination 0
-backtrace full
-info registers
-x/16i \$pc
-thread apply all backtrace
-quit
-EOF
-done
