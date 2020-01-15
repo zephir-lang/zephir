@@ -81,8 +81,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: |
-            All notable changes to this version has been documented in the CHANGELOG.md file.
+          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
           draft: true
           prerelease: false
 
