@@ -3,7 +3,7 @@ name: Upload Release Asset
 on:
   push:
     tags:
-      - 'ignore*'
+      - '*'
 
 jobs:
   build:
@@ -83,8 +83,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.get-version.outputs.VERSION }}
-          release_name: v${{ steps.get-version.outputs.VERSION }}
+          tag_name: ${{ github.ref }}
+          release_name: ${{ steps.get-version.outputs.VERSION }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
           draft: true
           prerelease: false
