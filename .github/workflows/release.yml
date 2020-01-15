@@ -86,7 +86,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ steps.get-version.outputs.VERSION }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          draft: true
+          draft: false
           prerelease: false
 
       - name: Upload Release Asset
