@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+## [0.12.16] - 2020-01-16
 ### Fixed
 - Do not dump config file if config was changed.
   Usually we need dump configuration exactly once - at project initialization.
@@ -378,7 +379,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.15...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.16...HEAD
+[0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16
 [0.12.15]: https://github.com/phalcon/zephir/compare/0.12.14...0.12.15
 [0.12.14]: https://github.com/phalcon/zephir/compare/0.12.13...0.12.14
 [0.12.13]: https://github.com/phalcon/zephir/compare/0.12.12...0.12.13
