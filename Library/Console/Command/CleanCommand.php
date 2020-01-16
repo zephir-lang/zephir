@@ -50,7 +50,9 @@ final class CleanCommand extends Command
         try {
             $this->filesystem->clean();
 
+            // TODO(klay): Do nothing if there is no Makefile
             if (is_windows()) {
+                // TODO(klay): Is there an analogue for "> /dev/null" ?
                 system('cd ext && nmake clean-all');
             } else {
                 system('cd ext && make clean > /dev/null');

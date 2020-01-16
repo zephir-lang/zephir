@@ -1,18 +1,18 @@
-name: build
+name: Linux CI
 
 on:
   push:
-    branches-ignore:
-      - 'wip2-*'
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
   pull_request:
     branches:
       - master
 
 jobs:
   linux:
-
     name: "Linux: PHP v${{ matrix.php }}"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -43,10 +43,9 @@ jobs:
 
     steps:
       - name: Set environment variables
-        uses: allenevans/set-env@v1.0.0
-        with:
-          SYMFONY_PHPUNIT_VERSION: ${{ matrix.symfony_phpunit }}
-          ZEPHIR_PARSER_VERSION: v1.3.3
+        run: |
+          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
+          echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
@@ -60,7 +59,7 @@ jobs:
           # enable_dl: https://github.com/phalcon/zephir/pull/1654
           # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
-          ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone="UTC", xdebug.max_nesting_level=256
+          ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
 
       - name: Checkout code
         uses: actions/checkout@v2-beta
@@ -130,7 +129,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: Cache dependencies
+      - name: Setup Composer Cache
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -145,6 +144,7 @@ jobs:
 
       - name: Fast Commands Test
         run: |
+          zephir --help
           zephir clean
           zephir fullclean
           zephir generate
@@ -171,7 +171,7 @@ jobs:
         if: always()
         run: cd unit-tests/sharness && PHP=$(which php) make
 
-      - name: Error reporting
+      - name: After Failure
         if: failure()
         run: .ci/after-failure.sh
 

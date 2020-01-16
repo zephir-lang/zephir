@@ -836,6 +836,7 @@ final class Compiler
 
         if ($needConfigure) {
             if (is_windows()) {
+                // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
                 $releaseFolder = windows_release_dir();
@@ -843,6 +844,7 @@ final class Compiler
                     exec('rd /s /q '.$releaseFolder, $output, $exit);
                 }
                 $this->logger->info('Preparing for PHP compilation...');
+                // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
                 /**

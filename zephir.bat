@@ -3,8 +3,8 @@ rem This file is part of the Zephir.
 rem
 rem (c) Phalcon Team <team@zephir-lang.com>
 rem
-rem For the full copyright and license information, please view the LICENSE
-rem file that was distributed with this source code.
+rem For the full copyright and license information, please view
+rem the LICENSE file that was distributed with this source code.
 cls
 
 if "%PHP_PEAR_PHP_BIN%" neq "" (
