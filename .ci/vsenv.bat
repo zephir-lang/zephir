@@ -7,16 +7,6 @@ rem For the full copyright and license information, please view
 rem the LICENSE file that was distributed with this source code.
 cls
 
-rem Old solution (to be removed in the future)
-rem
-rem for /f "usebackq delims=*" %%i in (`%VSWHERE% -latest -property installationPath`) do (
-rem   call "%%i"\Common7\Tools\vsdevcmd.bat %*
-rem )
-rem
-rem Yet another working solution is to do it as follows:
-rem
-rem call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars%VC_VARS%.bat"
-rem
 rem For more see: https://github.com/microsoft/vswhere/wiki/Find-VC
 rem
 rem For the software installed on GitHub-hosted runners see:

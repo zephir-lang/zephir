@@ -136,3 +136,87 @@ Function DownloadFile {
         }
     }
 }
+
+Function PrintLogs {
+    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile-errors.log") {
+        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile-errors.log"
+    }
+
+    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile.log") {
+        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile.log"
+    }
+
+    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\ext\configure.js") {
+        Get-Content -Path "${env:GITHUB_WORKSPACE}\ext\configure.js"
+    }
+}
+
+Function PrintEnvVars {
+    Write-Output ($env:Path).Replace(';', "`n")
+    Get-ChildItem env:
+}
+
+Function PrintDirectoriesContent {
+    Get-ChildItem -Path "${Env:GITHUB_WORKSPACE}"
+
+    If (Test-Path -Path "C:\Downloads") {
+        Get-ChildItem -Path "C:\Downloads"
+    }
+
+    If (Test-Path -Path "C:\Projects") {
+        Get-ChildItem -Path "C:\Projects"
+    }
+
+    If (Test-Path -Path "${Env:PHPROOT}\ext") {
+        Get-ChildItem -Path "${Env:PHPROOT}\ext"
+    }
+
+    # TODO(klay): Not used.
+    #
+    # $ReleasePath = Split-Path -Path "${Env:RELEASE_DLL_PATH}"
+    # If (Test-Path -Path "${ReleasePath}") {
+    #     Get-ChildItem -Path "${ReleasePath}"
+    # }
+    #
+    # $BuildPath = Split-Path -Path "${ReleasePath}"
+    # If (Test-Path -Path "${BuildPath}") {
+    #     Get-ChildItem -Path "${BuildPath}"
+    # }
+}
+
+# TODO(klay): Add phpize and phpconfig here
+Function PrintPhpInfo {
+    $IniFile = "${Env:PHPROOT}\php.ini"
+    $PhpExe = "${Env:PHPROOT}\php.exe"
+
+    If (Test-Path -Path "${PhpExe}") {
+        Write-Output ""
+        & "${PhpExe}" -v
+
+        Write-Output ""
+        & "${PhpExe}" -m
+
+        Write-Output ""
+        & "${PhpExe}" -i
+    } ElseIf (Test-Path -Path "${IniFile}") {
+        Get-Content -Path "${IniFile}"
+    }
+}
+
+Function PrintBuildDetails {
+    $BuildDate = Get-Date -Format g
+
+    Write-Output "Build date: ${BuildDate}"
+    Write-Output "Git commit: ${Env:GITHUB_SHA}"
+    Write-Output "Target PHP version: ${Env:PHP_MINOR}"
+    Write-Output "PHP SDK Toolset Version: ${Env:PHP_SDK_VC_TOOLSET_VER}"
+    Write-Output "Build Worker Image Version: ${Env:ImageVersion}"
+    Write-Output "Processor ID: ${Env:PROCESSOR_IDENTIFIER}"
+    Write-Output "Processor Architecture: ${Env:PROCESSOR_ARCHITECTURE}"
+    Write-Output "Number of Processors: ${Env:NUMBER_OF_PROCESSORS}"
+    Write-Output "Visual Studio Version: ${Env:VisualStudioVersion}"
+    Write-Output "Host Architecture: ${Env:VSCMD_ARG_HOST_ARCH}"
+    Write-Output "Target Architecture: ${Env:VSCMD_ARG_TGT_ARCH}"
+    Write-Output "VC Tools Version: ${Env:VCToolsVersion}"
+    Write-Output "Windows SDK Version: ${Env:WindowsSDKVersion}"
+}

@@ -70,7 +70,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: C:\Downloads
-          key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build.yml') }}
+          key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build-windows.yml') }}
           restore-keys: |
             ${{ runner.os }}-downloads-${{ env.cache-name }}-
             ${{ runner.os }}-downloads-
@@ -111,7 +111,7 @@ jobs:
       - name: Minimal Zephir Parser Load Test
         run: php --ri 'Zephir Parser'
 
-      - name: "Configure Project ${{ matrix.arch }}"
+      - name: "Setup Visual Studio Command Line for PHP SDK ${{ matrix.arch }}"
         run: .ci\vsenv.bat -arch=${{ matrix.arch }} -host_arch=${{ matrix.arch }}
 
       - name: Fix Environment Variables
@@ -128,14 +128,6 @@ jobs:
           Write-Output "::set-env name=WindowsSDKLibVersion::$WindowsSDKLibVersion"
 
           ls "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build"
-
-#      - name: Stetup Visual Studio Command Line for PHP SDK
-#        # .\phpsdk-starter.bat vc${{ matrix.vc_num }} ${{ matrix.arch }}
-#        run: |
-#          cd "${env:PHP_SDK_PATH}"
-#
-#          .\phpsdk-starter.bat -c vc16 -a ${{ matrix.arch }}
-#          .\bin\phpsdk_setvars.bat
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -165,12 +157,29 @@ jobs:
           # .\zephir.bat api
 
       - name: Compile Test Project
-        # -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
-        run: .\zephir.bat compile
+        run: .\zephir.bat compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
 
       - name: Make Test Extension
-        # 2> compile-errors.log 1> compile.log
+        shell: cmd
         run: |
           cd ext
-          Get-ChildItem -Path .
-          nmake
+          nmake 2> "%GITHUB_WORKSPACE%\compile-errors.log" 1> "%GITHUB_WORKSPACE%\compile.log"
+
+      - name: After Failure
+        if: failure()
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          PrintLogs
+          PrintEnvVars
+          PrintDirectoriesContent
+
+      - name: After Success
+        if: success()
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          PrintBuildDetails
+
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64\Release_TS"
