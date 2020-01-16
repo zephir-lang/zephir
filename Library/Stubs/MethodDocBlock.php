@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -98,6 +98,8 @@ class MethodDocBlock extends DocBlock
             $return = array_merge($return, $returnClassTypes);
         }
 
+        // Prepare return types for Collections compatible types
+        $collections = [];
         if ($method->hasReturnTypesRaw()) {
             $returnClassTypes = $method->getReturnTypesRaw();
 
@@ -115,12 +117,16 @@ class MethodDocBlock extends DocBlock
                     }
 
                     $return[$key] = $type.'[]';
+                    $collections[$type.'[]'] = $returnType;
                 }
             }
         }
 
         $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
-        $returnType = $this->types->getReturnTypeAnnotation($this->classMethod, $processedTypes);
+        $returnType = $this->types->getReturnTypeAnnotation(
+            $this->classMethod,
+            $processedTypes ?? array_merge($method->getReturnTypes(), $collections)
+        );
 
         if (!empty($returnType)) {
             // Empty line in array - it's an empty description. Don't remove it!

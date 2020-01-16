@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -11,12 +11,15 @@
 
 namespace Zephir;
 
+use ArrayAccess;
+use JsonSerializable;
+
 /**
  * Zephir\Config.
  *
  * Manages compiler global configuration.
  */
-class Config implements \ArrayAccess, \JsonSerializable
+class Config implements ArrayAccess, JsonSerializable
 {
     /**
      * Is config changed?
@@ -92,7 +95,7 @@ class Config implements \ArrayAccess, \JsonSerializable
         'namespace' => '',
         'name' => '',
         'description' => '',
-        'author' => 'Zephir Team',
+        'author' => 'Phalcon Team',
         'version' => '0.0.1',
         'verbose' => false,
         'requires' => [
@@ -108,9 +111,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     public function __construct()
     {
         $this->populate();
-        $this->changed = false;
-
-        register_shutdown_function([$this, 'dumpToFile']);
     }
 
     /**
@@ -193,28 +193,32 @@ class Config implements \ArrayAccess, \JsonSerializable
                         $config->set('silent', true);
                         break;
                     case '-v':
+                    case '--verbose':
                         $config->set('verbose', true);
+                        break;
+                    case '-V':
+                        $config->set('verbose', false);
                         break;
                     default:
                         break;
                 }
             }
 
-            $_SERVER['argv'] = $argv = array_values($argv);
-            $_SERVER['argc'] = $argc = \count($argv);
+            $_SERVER['argv'] = array_values($argv);
+            $_SERVER['argc'] = \count($argv);
         }
 
         return $config;
     }
 
     /**
-     * Allows to check whether an $key is defined.
+     * Allows to check whether a $key is defined.
      *
      * @param mixed $key
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return isset($this->container[$key]) || \array_key_exists($key, $this->container);
     }
@@ -256,7 +260,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     {
         if (!\is_array($key)) {
             $this->container[$key] = $value;
-            $this->changed = true;
 
             return;
         }
@@ -269,19 +272,18 @@ class Config implements \ArrayAccess, \JsonSerializable
         }
 
         $this->container[$namespace][$key] = $value;
-        $this->changed = true;
     }
 
     /**
      * Unsets a $key from internal container.
+     *
+     * @deprecated
      *
      * @param mixed $key
      */
     public function offsetUnset($key)
     {
         unset($this->container[$key]);
-
-        $this->changed = true;
     }
 
     /**
@@ -314,9 +316,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function dumpToFile()
     {
-        if ($this->changed && !file_exists('config.json')) {
-            file_put_contents('config.json', $this);
-        }
+        file_put_contents('config.json', $this);
     }
 
     /**
@@ -324,19 +324,9 @@ class Config implements \ArrayAccess, \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->container;
-    }
-
-    /**
-     * Returns banner from configuration file.
-     *
-     * @return string
-     */
-    public function getBanner(): string
-    {
-        return $this->get('banner', 'stubs') ?? '';
     }
 
     /**
@@ -351,14 +341,34 @@ class Config implements \ArrayAccess, \JsonSerializable
         }
 
         $config = json_decode(file_get_contents('config.json'), true);
-        if (!\is_array($config)) {
-            throw new Exception(
-                'The config.json file is not valid or there is no Zephir extension initialized in this directory.'
-            );
+        $message = 'The config.json file is invalid';
+
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                foreach ($config as $key => $configSection) {
+                    $this->offsetSet($key, $configSection);
+                }
+
+                return;
+            case JSON_ERROR_DEPTH:
+                $message = "{$message}: Maximum stack depth exceeded";
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $message = "{$message}: Underflow or the modes mismatch";
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                $message = "{$message}: Unexpected control character found";
+                break;
+            case JSON_ERROR_SYNTAX:
+                $message = "{$message}: Syntax error, malformed JSON";
+                break;
+            case JSON_ERROR_UTF8:
+                $message = "{$message}: Malformed UTF-8 characters, possibly incorrectly encoded";
+                break;
+            default:
+                break;
         }
 
-        foreach ($config as $key => $configSection) {
-            $this->offsetSet($key, $configSection);
-        }
+        throw new Exception($message);
     }
 }

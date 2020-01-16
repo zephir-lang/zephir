@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -21,7 +21,7 @@ class ReturnAnnotation extends Annotation
     protected $returnType;
     protected $description;
 
-    public function getReturnType()
+    public function getReturnType(): string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -30,7 +30,7 @@ class ReturnAnnotation extends Annotation
         return $this->returnType;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         if (!$this->contentParsed) {
             $this->parseContent();
@@ -43,11 +43,11 @@ class ReturnAnnotation extends Annotation
     {
         $spaceIndex = strpos($this->string, ' ');
 
+        $this->returnType = $this->string;
+
         if (false !== $spaceIndex) {
             $this->returnType = substr($this->string, 0, $spaceIndex);
             $this->description = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->returnType = $this->string;
         }
 
         $this->contentParsed = true;

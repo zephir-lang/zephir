@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -187,8 +187,8 @@ DOC;
         $doc = <<<DOC
     /**
      * Method with various tags
-     * @author Zephir Team <noreply@zephir-lang.com>
-     * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
+     * @author Phalcon Team <noreply@zephir-lang.com>
+     * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
      * @link https://github.com/phalcon/zephir
      * @since 1.0.0
@@ -204,8 +204,8 @@ DOC;
     /**
      * Method with various tags
      *
-     * @author Zephir Team <noreply@zephir-lang.com>
-     * @copyright (c) 2013-present Zephir Team (https://zephir-lang.com/)
+     * @author Phalcon Team <noreply@zephir-lang.com>
+     * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
      * @link https://github.com/phalcon/zephir
      * @since 1.0.0

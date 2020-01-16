@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -50,7 +50,9 @@ final class CleanCommand extends Command
         try {
             $this->filesystem->clean();
 
+            // TODO(klay): Do nothing if there is no Makefile
             if (is_windows()) {
+                // TODO(klay): Is there an analogue for "> /dev/null" ?
                 system('cd ext && nmake clean-all');
             } else {
                 system('cd ext && make clean > /dev/null');

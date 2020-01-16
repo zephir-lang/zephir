@@ -1,0 +1,204 @@
+name: Windows CI
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  windows:
+    name: "Windows: PHP v${{ matrix.php }}"
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        php:
+          - '7.2'
+
+        include:
+          - php: '7.2'
+            vc_num: '15'
+            arch: x64
+            build_type: Win32
+            symfony_phpunit: '7.4'
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, fileinfo, gmp, pdo_sqlite, psr, zip
+          # See: https://github.com/shivammathur/setup-php/issues/147#issuecomment-574483257
+          tools: pecl
+          coverage: none
+          # variables_order: https://github.com/phalcon/zephir/pull/1537
+          # enable_dl: https://github.com/phalcon/zephir/pull/1654
+          # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
+          # error_reporting: https://github.com/zendframework/zend-code/issues/160
+          ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
+
+      - name: Set Up Environment Variables
+        run: |
+          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
+          echo "::set-env name=PARSER_VERSION::1.3.3"
+          echo "::set-env name=PARSER_RELEASE::514"
+          echo "::set-env name=PHP_SDK_VERSION::2.2.0"
+          echo "::set-env name=PHP_DEVPACK::C:\tools\php-devpack"
+          echo "::set-env name=PHP_SDK_PATH::C:\tools\php-sdk"
+          echo "::set-env name=PHP_VERSION::$(php -r 'echo phpversion();')"
+          echo "::set-env name=PHP_MINOR::${{ matrix.php }}"
+          echo "::set-env name=TEST_PHP_EXECUTABLE::${env:PHPROOT}\php.exe"
+          echo "::set-env name=BUILD_TYPE::${{ matrix.build_type }}"
+          echo "::set-env name=VC_VERSION::${{ matrix.vc_num }}"
+          echo "::set-env name=PHP_ARCH::${{ matrix.arch }}"
+          echo "::set-env name=PACKAGE_PREFIX::test"
+          echo "::set-env name=EXTENSION_NAME::test"
+          echo "::set-env name=EXTENSION_FILE::php_test.dll"
+
+      - name: Checkout Code
+        uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 1
+
+      - name: Setup Downloads Cache
+        uses: actions/cache@v1
+        with:
+          path: C:\Downloads
+          key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build-windows.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-downloads-${{ env.cache-name }}-
+            ${{ runner.os }}-downloads-
+            ${{ runner.os }}
+
+      - name: Setup Common Environmet
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          SetupCommonEnvironmet
+
+      - name: Install PHP SDK Binary Tools
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          InstallPhpSdk
+
+      - name: Install PHP Dev pack
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          InstallPhpDevPack
+
+      - name: Getting Details About Installed PHP
+        run: Get-Php "${env:PHPROOT}"
+
+      - name: Install System Dependencies
+        run: choco install -y --cache-location=C:\Downloads\Choco re2c
+
+      - name: Install Zephir Parser
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          InstallZephirParser
+
+      - name: Enable Zephir Parser
+        run: Enable-PhpExtension -Extension 'Zephir Parser' -Path "${env:PHPROOT}"
+
+      - name: Minimal Zephir Parser Load Test
+        run: php --ri 'Zephir Parser'
+
+      - name: "Setup Visual Studio Command Line for PHP SDK ${{ matrix.arch }}"
+        run: .ci\vsenv.bat -arch=${{ matrix.arch }} -host_arch=${{ matrix.arch }}
+
+      - name: Fix Environment Variables
+        shell: powershell
+        run: |
+          $v = "${env:WindowsSDKVersion}" -replace '\\$', ''
+          Write-Output "::set-env name=WindowsSDKVersion::$v"
+
+          $v = "${env:WindowsSDKLibVersion}" -replace '\\$', ''
+          Write-Output "::set-env name=WindowsSDKLibVersion::$v"
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup Composer Cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ env.cache-name }}-
+            ${{ runner.os }}-composer-
+            ${{ runner.os }}-
+
+      - name: Install Project Dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+
+      - name: Initialize Release Variables
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          InitializeReleaseVars
+
+      - name: Fast Commands Test
+        # TODO(klay): Enable all commands
+        run: |
+          .\zephir.bat --help
+          # .\zephir.bat clean
+          # .\zephir.bat fullclean
+          # .\zephir.bat generate
+          # .\zephir.bat stubs
+          # .\zephir.bat api
+
+      - name: Compile Test Project
+        run: .\zephir.bat compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
+
+      - name: Make Test Extension
+        shell: cmd
+        run: |
+          cd ext
+          nmake 2> "%GITHUB_WORKSPACE%\compile-errors.log" 1> "%GITHUB_WORKSPACE%\compile.log"
+
+      - name: Inspecting Test Extension DLL File
+        run: Get-PhpExtension "${env:RELEASE_DLL_PATH}"
+
+      - name: Enable Test Extension
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          EnableTestExtension
+
+      - name: Minimal Load Test for Test Extension
+        run: php --ri "${env:EXTENSION_NAME}"
+
+      - name: Install PHPUnit
+        run: php phpunit install
+
+      - name: Run Unit Tests
+        shell: cmd
+        run: |
+          SET X=0
+          php phpunit install
+          php phpunit --bootstrap %GITHUB_WORKSPACE%\unit-tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
+          php phpunit --testsuite Zephir || SET X=!errorlevel!
+          exit %X%
+
+      - name: After Failure
+        if: failure()
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          PrintLogs
+          PrintEnvVars
+          PrintDirectoriesContent
+
+      - name: After Success
+        if: success()
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          PrintBuildDetails
+
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64"
+          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64\Release_TS"

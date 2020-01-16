@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -11,6 +11,7 @@
 
 namespace Zephir\FileSystem;
 
+use ErrorException;
 use League\Flysystem;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\FileSystemException;
@@ -70,7 +71,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return bool
      */
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->initialized;
     }
@@ -98,7 +99,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return bool
      */
-    public function exists($path)
+    public function exists(string $path): bool
     {
         if ('.' === $path || empty($path)) {
             $path = $this->localPath;
@@ -116,7 +117,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return bool
      */
-    public function makeDirectory($path)
+    public function makeDirectory(string $path): bool
     {
         if ('.' === $path || empty($path)) {
             $path = $this->localPath;
@@ -136,7 +137,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return array
      */
-    public function file($path)
+    public function file(string $path): array
     {
         try {
             $contents = $this->filesystem->read($this->localPath."/{$path}");
@@ -152,9 +153,11 @@ class HardDisk implements FileSystemInterface
      *
      * @param string $path
      *
+     * @return int
+     *
      * @throws Flysystem\FileNotFoundException
      */
-    public function modificationTime($path)
+    public function modificationTime(string $path): int
     {
         return (int) $this->filesystem->getTimestamp($this->localPath."/{$path}");
     }
@@ -168,7 +171,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return string
      */
-    public function read($path)
+    public function read(string $path): string
     {
         return (string) $this->filesystem->read($this->localPath."/{$path}");
     }
@@ -180,7 +183,7 @@ class HardDisk implements FileSystemInterface
      *
      * @throws Flysystem\FileNotFoundException
      */
-    public function delete($path)
+    public function delete(string $path)
     {
         $this->filesystem->delete($this->localPath."/{$path}");
     }
@@ -193,7 +196,7 @@ class HardDisk implements FileSystemInterface
      *
      * @throws Flysystem\FileExistsException
      */
-    public function write($path, $contents)
+    public function write(string $path, string $contents)
     {
         $this->filesystem->write($this->localPath."/{$path}", $contents);
     }
@@ -205,11 +208,11 @@ class HardDisk implements FileSystemInterface
      * @param string $descriptor
      * @param string $destination
      */
-    public function system($command, $descriptor, $destination)
+    public function system(string $command, string $descriptor, string $destination)
     {
         // fallback
         $redirect = "{$this->localPath}/{$destination}";
-        if (false == empty($this->basePath)) {
+        if (!empty($this->basePath)) {
             $redirect = "{$this->basePath}/{$this->localPath}/{$destination}";
         }
 
@@ -233,9 +236,9 @@ class HardDisk implements FileSystemInterface
      *
      * @throws Flysystem\FileNotFoundException
      */
-    public function requireFile($path)
+    public function requireFile(string $path)
     {
-        if (false == empty($this->basePath)) {
+        if (!empty($this->basePath)) {
             return require "{$this->basePath}/{$this->localPath}/{$path}";
         }
 
@@ -254,7 +257,7 @@ class HardDisk implements FileSystemInterface
     {
         try {
             $this->filesystem->deleteDir($this->localPath);
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             // For reasons beyond our control, the actual owner of the directory
             // contents may not be the same as the current user. Therefore we need
             // to catch ErrorException and throw an expected exception with informing
@@ -278,7 +281,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return string
      */
-    public function getHashFile($algorithm, $sourceFile, $useCache = false)
+    public function getHashFile(string $algorithm, string $sourceFile, $useCache = false): string
     {
         if (false === $useCache) {
             return hash_file($algorithm, $sourceFile);
@@ -296,14 +299,16 @@ class HardDisk implements FileSystemInterface
             $this->filesystem->write($cacheFile, $contents);
 
             return $contents;
-        } elseif (filemtime($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
+        }
+
+        if (filemtime($sourceFile) > $this->filesystem->getTimestamp($cacheFile)) {
             $contents = hash_file($algorithm, $sourceFile);
             $this->filesystem->update($cacheFile, $contents);
 
             return $contents;
-        } else {
-            return $this->filesystem->read($cacheFile);
         }
+
+        return $this->filesystem->read($cacheFile);
     }
 
     /**
@@ -313,7 +318,7 @@ class HardDisk implements FileSystemInterface
      *
      * @return string
      */
-    public function normalizePath($path)
+    public function normalizePath(string $path): string
     {
         return str_replace(['\\', ':', '/'], '_', $path);
     }

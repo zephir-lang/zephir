@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -698,6 +698,20 @@ class Backend extends BaseBackend
     }
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
+    }
+
+    public function addStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
+    }
+
+    public function subStaticProperty($classEntry, $property, $value, CompilationContext $context)
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'

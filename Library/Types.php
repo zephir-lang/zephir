@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -66,6 +66,7 @@ final class Types
         $isNumeric = $this->isNumeric($returnTypes);
         $isIterable = $this->areReturnTypesIterableCompatible($returnTypes);
         $isResource = $this->areReturnTypesResourceCompatible($returnTypes);
+        $isCollection = $this->areReturnTypesCollectionCompatible($returnTypes);
 
         $isTypeHinted = $method->isReturnTypesHintDetermined();
         $isBasicTypes = $isArray || $isBool || $isDouble || $isInteger || $isResource || $isString || $isVoid || $isNumeric;
@@ -118,6 +119,10 @@ final class Types
 
         if ($isTypeHinted && !$isBasicTypes && !$isDynamic) {
             return implode('|', array_keys($returnTypes));
+        }
+
+        if ($isCollection) {
+            return implode('|', array_values($returnTypes));
         }
 
         return static::T_MIXED.$nullableType;
@@ -255,6 +260,26 @@ final class Types
     }
 
     /**
+     * Match Zephir types with Collections.
+     *
+     * @param array $types
+     *
+     * @return bool
+     */
+    private function areReturnTypesCollectionCompatible(array $types): bool
+    {
+        $result = false;
+
+        foreach ($types as $type => $data) {
+            if (false !== strpos($type, '[]')) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Match Zephir types with Void type.
      *
      * @param array $types
@@ -294,6 +319,18 @@ final class Types
     /**
      * Match if return types from Zephir are compatible
      * with allowed return types from PHP.
+     *
+     * Examples:
+     *  $types = [
+     *      'variable' => [
+     *          'type' => 'return-type-parameter',
+     *          'data-type' => 'variable',
+     *          'mandatory' => 0,
+     *          'file' => '../path-to-file/stubs.zep',
+     *          'line' => 21,
+     *          'char' => 48,
+     *       ]
+     *  ]
      *
      * @param array $types        - Return types from parser
      * @param array $allowedTypes - Allowed return types

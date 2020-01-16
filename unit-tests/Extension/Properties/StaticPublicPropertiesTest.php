@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -37,5 +37,29 @@ class StaticPublicPropertiesTest extends TestCase
         // https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340
         // \Test\Properties\StaticPublicProperties::setSomeString('test3');
         // $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+    }
+
+    public function testIssues2020()
+    {
+        \Test\Properties\StaticPublicProperties::testAddAndSub();
+        $this->assertEquals(1, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-1, \Test\Properties\StaticPublicProperties::$someSub);
+
+        // PHP Notice:  A non well formed numeric value encountered
+        //\Test\Properties\StaticPublicProperties::testAddAndSub2();
+        //$this->assertEquals(2, \Test\Properties\StaticPublicProperties::$someAdd);
+        //$this->assertEquals(-2, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub3();
+        $this->assertEquals(2, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-2, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub4();
+        $this->assertEquals(3, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-3, \Test\Properties\StaticPublicProperties::$someSub);
+
+        \Test\Properties\StaticPublicProperties::testAddAndSub4();
+        $this->assertEquals(4, \Test\Properties\StaticPublicProperties::$someAdd);
+        $this->assertEquals(-4, \Test\Properties\StaticPublicProperties::$someSub);
     }
 }

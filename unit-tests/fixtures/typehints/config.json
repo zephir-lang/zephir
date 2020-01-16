@@ -40,7 +40,7 @@
     "namespace": "typehints",
     "name": "TypeHints Test Extension",
     "description": "Description test for<br\/>TypeHints Test Extension",
-    "author": "Zephir Team",
+    "author": "Phalcon Team",
     "version": "1.0.0",
     "verbose": false,
     "silent": true

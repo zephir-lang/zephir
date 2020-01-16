@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -18,7 +18,10 @@ use Zephir\Documentation\Annotation;
  */
 class Link extends Annotation
 {
+    /** @var string|null */
     protected $uri;
+
+    /** @var string|null */
     protected $linkText;
 
     public function getUri()
@@ -43,11 +46,11 @@ class Link extends Annotation
     {
         $spaceIndex = strpos($this->string, ' ');
 
+        $this->uri = $this->string;
+
         if (false !== $spaceIndex) {
             $this->uri = substr($this->string, 0, $spaceIndex);
             $this->linkText = substr($this->string, $spaceIndex + 1);
-        } else {
-            $this->uri = $this->string;
         }
 
         $this->contentParsed = true;

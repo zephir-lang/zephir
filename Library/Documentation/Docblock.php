@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -44,7 +44,7 @@ class Docblock
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -52,7 +52,7 @@ class Docblock
     /**
      * @return Annotation[]
      */
-    public function getAnnotations()
+    public function getAnnotations(): array
     {
         return $this->annotations;
     }
@@ -70,22 +70,23 @@ class Docblock
      *
      * @return Annotation[] an array containing the annotations matching the name
      */
-    public function getAnnotationsByType($type)
+    public function getAnnotationsByType(string $type): array
     {
-        $annotations = [];
+        $annotation = [];
+
         foreach ($this->annotations as $an) {
-            if ($an->getName() == $type) {
-                $annotations[] = $an;
+            if ($an->getName() === $type) {
+                $annotation[] = $an;
             }
         }
 
-        return $annotations;
+        return $annotation;
     }
 
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
@@ -101,7 +102,7 @@ class Docblock
     /**
      * @return string
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->summary;
     }
@@ -109,7 +110,7 @@ class Docblock
     /**
      * @param string $summary
      */
-    public function setSummary($summary)
+    public function setSummary(string $summary)
     {
         $this->summary = $summary;
     }
@@ -117,27 +118,30 @@ class Docblock
     /**
      * @return string
      */
-    public function generate()
+    public function generate(): string
     {
         $docBlock = '**';
+        $summaryBlock = $this->getSummary();
+        $descriptionBlock = $this->getDescription();
+        $annotationsBlock = $this->getAnnotations();
 
-        if ($summary = $this->getSummary()) {
-            $docBlock .= PHP_EOL.' * '.$summary;
+        if ($summaryBlock) {
+            $docBlock .= PHP_EOL.' * '.$summaryBlock;
         }
 
-        if ($description = $this->getDescription()) {
+        if ($descriptionBlock) {
             $docBlock .= PHP_EOL.' *';
             $docBlock .= PHP_EOL.' *';
 
-            foreach ((array) explode("\n", $description) as $line) {
+            foreach ((array) explode("\n", $descriptionBlock) as $line) {
                 $docBlock .= PHP_EOL.' * '.trim($line);
             }
 
             $docBlock .= PHP_EOL.' *';
         }
 
-        if ($annotations = $this->getAnnotations()) {
-            foreach ($annotations as $annotation) {
+        if ($annotationsBlock) {
+            foreach ($annotationsBlock as $annotation) {
                 $docBlock .= PHP_EOL.' * @'.$annotation->getName().' '.$annotation->getString();
             }
         }

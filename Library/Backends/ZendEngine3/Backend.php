@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -954,6 +954,18 @@ class Backend extends BackendZendEngine2
     {
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output('zephir_update_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
+    }
+
+    public function addStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_add_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
+    }
+
+    public function subStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_sub_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
     }
 
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -30,9 +30,11 @@ use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArr
 use Zephir\Statements\Let\ObjectPropertyDecr as LetObjectPropertyDecr;
 use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\StaticProperty as LetStaticProperty;
+use Zephir\Statements\Let\StaticPropertyAdd as LetStaticPropertyAdd;
 use Zephir\Statements\Let\StaticPropertyAppend as LetStaticPropertyAppend;
 use Zephir\Statements\Let\StaticPropertyArrayIndex as LetStaticPropertyArrayIndex;
 use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArrayIndexAppend;
+use Zephir\Statements\Let\StaticPropertySub as LetStaticPropertySub;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 
@@ -163,6 +165,19 @@ class LetStatement extends StatementAbstract
 
                 case 'static-property':
                     $let = new LetStaticProperty();
+                    if (isset($assignment['operator'])) {
+                        switch ($assignment['operator']) {
+                            case 'add-assign':
+                                $let = new LetStaticPropertyAdd();
+                                break;
+                            case 'sub-assign':
+                                $let = new LetStaticPropertySub();
+                                break;
+                            default:
+                                $let = new LetStaticProperty();
+                        }
+                    }
+
                     $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
                     break;
 

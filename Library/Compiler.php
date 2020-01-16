@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -836,6 +836,7 @@ final class Compiler
 
         if ($needConfigure) {
             if (is_windows()) {
+                // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
                 $releaseFolder = windows_release_dir();
@@ -843,6 +844,7 @@ final class Compiler
                     exec('rd /s /q '.$releaseFolder, $output, $exit);
                 }
                 $this->logger->info('Preparing for PHP compilation...');
+                // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
                 /**
@@ -963,18 +965,25 @@ final class Compiler
         }
 
         $this->logger->info('Generating stubs...');
-
         $stubsGenerator = new Stubs\Generator($this->files);
 
-        $path = $this->config->get('path', 'stubs');
-        $path = str_replace('%version%', $this->config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
+        $path = str_replace(
+            [
+                '%version%',
+                '%namespace%',
+            ],
+            [
+                $this->config->get('version'),
+                ucfirst($this->config->get('namespace')),
+            ],
+            $this->config->get('path', 'stubs')
+        );
 
         $stubsGenerator->generate(
             $this->config->get('namespace'),
             $path,
             $this->config->get('indent', 'extra'),
-            $this->config->getBanner()
+            $this->config->get('banner', 'stubs') ?? ''
         );
     }
 

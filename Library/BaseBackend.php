@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -223,6 +223,10 @@ abstract class BaseBackend implements FcallAwareInterface
     abstract public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $compilationContext);
 
     abstract public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context);
+
+    abstract public function addStaticProperty($classEntry, $property, $value, CompilationContext $context);
+
+    abstract public function subStaticProperty($classEntry, $property, $value, CompilationContext $context);
 
     abstract public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context);
 

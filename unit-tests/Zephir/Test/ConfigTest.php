@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
 /**
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -82,8 +82,7 @@ DOC;
      *
      * @test
      * @expectedException \Zephir\Exception
-     * @expectedExceptionMessage The config.json file is not valid or there is
-     * no Zephir extension initialized in this directory.
+     * @expectedExceptionMessage The config.json file is invalid: Syntax error, malformed JSON
      */
     public function constructWithBadConfigFile()
     {
@@ -150,13 +149,12 @@ DOC;
             'stubs run' => ['stubs', 'stubs-run-after-generate', false],
             'stubs banner' => ['stubs', 'banner', $this->stubsBanner()],
             'api path' => ['api', 'path', 'doc/%version%'],
-            'api path' => ['api', 'path', 'doc/%version%'],
             'warnings unused-variable' => ['warnings', 'unused-variable', true],
             'optimizations static-type-inference' => ['optimizations', 'static-type-inference', true],
             'extra indent' => ['extra', 'indent', 'spaces'],
             'namespace' => [null, 'namespace', 'test'],
             'name' => [null, 'name', 'Test Extension'],
-            'author' => [null, 'author', 'Zephir Team and contributors'],
+            'author' => [null, 'author', 'Phalcon Team and contributors'],
             'globals test_setting_1' => ['globals', 'test_setting_1', ['type' => 'bool', 'default' => true]],
             'globals db.my_setting_1' => ['globals', 'db.my_setting_1', ['type' => 'bool', 'default' => false]],
         ];
@@ -224,14 +222,14 @@ DOC;
     /** @test */
     public function shouldGetBannerFromConfig()
     {
-        $this->assertSame($this->stubsBanner(), $this->config->getBanner());
+        $this->assertSame($this->stubsBanner(), $this->config->get('banner', 'stubs'));
 
-        $this->config->offsetUnset('stubs');
-        $this->assertSame('', $this->config->getBanner());
+        unset($this->config['stubs']);
+        $this->assertNull($this->config->get('banner', 'stubs'));
     }
 
     /** @test */
-    public function shouldSaveConfigOnExit()
+    public function shouldSaveConfig()
     {
         chdir(sys_get_temp_dir());
 

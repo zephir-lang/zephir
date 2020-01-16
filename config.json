@@ -2,7 +2,7 @@
   "namespace": "test",
   "name": "Test Extension",
   "description": "Description <b>test</b> for<br\/>Test Extension.",
-  "author": "Zephir Team and contributors",
+  "author": "Phalcon Team and contributors",
   "version": "1.0.0",
   "verbose": true,
 
@@ -19,7 +19,7 @@
   "stubs": {
     "path": "ide\/%version%\/%namespace%\/",
     "stubs-run-after-generate": false,
-    "banner": "/**\n * This file is part of the Zephir.\n *\n * (c) Zephir Team <team@zephir-lang.com>\n *\n * For the full copyright and license information, please view\n * the LICENSE file that was distributed with this source code.\n */"
+    "banner": "/**\n * This file is part of the Zephir.\n *\n * (c) Phalcon Team <team@zephir-lang.com>\n *\n * For the full copyright and license information, please view\n * the LICENSE file that was distributed with this source code.\n */"
   },
 
   "api": {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -47,7 +47,7 @@ class DocblockParser
     /**
      * @param string $annotation a row annotation string begining with /**
      */
-    public function __construct($annotation)
+    public function __construct(string $annotation)
     {
         $this->annotation = $annotation;
     }

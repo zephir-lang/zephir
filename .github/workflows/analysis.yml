@@ -1,0 +1,37 @@
+name: Static Code Analysis
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: php-cs-fixer, phpcs
+
+      - name: Run PHP_CodeSniffer
+        run: phpcs --runtime-set ignore_warnings_on_exit true
+
+      - name: Run PHP CS Fixer
+        if: always()
+        run: php-cs-fixer fix --diff --dry-run -v
+
+      - name: Run Shell Check
+        if: always()
+        run: shellcheck .ci/*.sh

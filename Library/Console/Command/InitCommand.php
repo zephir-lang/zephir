@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -75,6 +75,9 @@ final class InitCommand extends Command
 
         // Copy the latest kernel files
         $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
+
+        // Dump initial configuration on project creation
+        $this->config->dumpToFile();
 
         return 0;
     }

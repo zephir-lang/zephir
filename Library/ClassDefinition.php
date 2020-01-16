@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -104,7 +104,7 @@ final class ClassDefinition
      * @param string      $name
      * @param string|null $shortName
      */
-    public function __construct($namespace, $name, $shortName = null)
+    public function __construct(string $namespace, string $name, string $shortName = null)
     {
         $this->namespace = $namespace;
         $this->name = $name;

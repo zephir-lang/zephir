@@ -2,7 +2,7 @@
     "namespace": "lifecycle",
     "name": "Life Cycle Test",
     "description": "Description: Life Cycle Test 'Extension'",
-    "author": "Zephir Team",
+    "author": "Phalcon Team",
     "version": "1.0.0",
     "verbose": false,
     "silent": true,

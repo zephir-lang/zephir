@@ -3,7 +3,7 @@
 /*
  * This file is part of the Zephir.
  *
- * (c) Zephir Team <team@zephir-lang.com>
+ * (c) Phalcon Team <team@zephir-lang.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -204,7 +204,7 @@ class Generator
      *
      * @return string
      */
-    protected function buildProperty(ClassProperty $property, $indent)
+    protected function buildProperty(ClassProperty $property, string $indent): string
     {
         $visibility = 'public';
 
@@ -236,7 +236,7 @@ class Generator
      *
      * @return string
      */
-    protected function buildConstant(ClassConstant $constant, $indent)
+    protected function buildConstant(ClassConstant $constant, string $indent): string
     {
         $source = 'const '.$constant->getName();
 
@@ -368,13 +368,13 @@ class Generator
     /**
      * Prepare AST default value to PHP code print.
      *
-     * @param $parameter
+     * @param array $parameter
      *
      * @throws Exception\NotImplementedException
      *
      * @return string
      */
-    protected function wrapPHPValue($parameter)
+    protected function wrapPHPValue(array $parameter): string
     {
         switch ($parameter['default']['type']) {
             case 'null':

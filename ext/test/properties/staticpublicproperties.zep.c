@@ -55,6 +55,10 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPublicProperties) {
 	 */
 	zend_declare_property_string(test_properties_staticpublicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
 
+	zend_declare_property_long(test_properties_staticpublicproperties_ce, SL("someAdd"), 0, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
+
+	zend_declare_property_long(test_properties_staticpublicproperties_ce, SL("someSub"), 0, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
+
 	return SUCCESS;
 
 }
@@ -71,6 +75,99 @@ PHP_METHOD(Test_Properties_StaticPublicProperties, setSomeString) {
 
 
 	zephir_update_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someString"), val);
+
+}
+
+PHP_METHOD(Test_Properties_StaticPublicProperties, testAddAndSub) {
+
+	zval _0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_add_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_sub_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+
+}
+
+PHP_METHOD(Test_Properties_StaticPublicProperties, testAddAndSub2) {
+
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "2string");
+	zephir_add_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "2string");
+	zephir_sub_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Properties_StaticPublicProperties, testAddAndSub3) {
+
+	zval _0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_DOUBLE(&_0, 1.0);
+	zephir_add_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_DOUBLE(&_0, 1.0);
+	zephir_sub_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+
+}
+
+PHP_METHOD(Test_Properties_StaticPublicProperties, testAddAndSub4) {
+
+	zval _0;
+	zend_long v = 0;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+
+
+	v = 1;
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, v);
+	zephir_add_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, v);
+	zephir_sub_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+
+}
+
+PHP_METHOD(Test_Properties_StaticPublicProperties, testAddAndSub5) {
+
+	zval v;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&v);
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&v);
+	ZVAL_STRING(&v, "1");
+	zephir_add_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &v);
+	zephir_sub_static_property_ce(test_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &v);
+	ZEPHIR_MM_RESTORE();
 
 }
 
