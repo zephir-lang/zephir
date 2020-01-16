@@ -1,8 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](http://keepachangelog.com)
+and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 ### Fixed
@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed `-V` CLI flag purpose. Initially it was designed to disable verbose mode
   on the fly, e.g. to override project configuration for a single Zephir pass.
   This behaviour was returned back.
+- Fixed bug for incrementing array elements
+  [#2020](https://github.com/phalcon/zephir/issues/2020)
+- Fixed compound addition and subtraction assignment operators for static properties
+  [#2038](https://github.com/phalcon/zephir/issues/2038)
 
 ### Changed
 - Improved type hint for arrays when generating stubs
