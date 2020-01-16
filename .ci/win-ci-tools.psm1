@@ -64,24 +64,24 @@ Function InstallPhpDevPack {
 
 Function InstallZephirParser {
     $BaseUri = "https://github.com/phalcon/php-zephir-parser/releases/download"
-    $LocalPart = "zephir_parser_${Env:PHP_ARCH}_vc${Env:VC_VERSION}_php${Env:PHP_MINOR}"
+    $LocalPart = "zephir_parser_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
 
-    If ($Env:BUILD_TYPE -Match "nts-Win32") {
+    If ($env:BUILD_TYPE -Match "nts-Win32") {
         $VersionPrefix = "-nts"
     } Else {
         $VersionPrefix = ""
     }
 
-    $RemoteUrl = "${BaseUri}/v${Env:PARSER_VERSION}/${LocalPart}${VersionPrefix}_${Env:PARSER_VERSION}-${Env:PARSER_RELEASE}.zip"
-    $DestinationPath = "C:\Downloads\${LocalPart}${VersionPrefix}_${Env:PARSER_VERSION}-${Env:PARSER_RELEASE}.zip"
+    $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}${VersionPrefix}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
+    $DestinationPath = "C:\Downloads\${LocalPart}${VersionPrefix}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
 
-    If (-not (Test-Path "${Env:PHPROOT}\ext\php_zephir_parser.dll")) {
+    If (-not (Test-Path "${env:PHPROOT}\ext\php_zephir_parser.dll")) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
             Write-Output "Downloading Zephir Parser: ${RemoteUrl} ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
-        Expand-Item7zip $DestinationPath "${Env:PHPROOT}\ext"
+        Expand-Item7zip $DestinationPath "${env:PHPROOT}\ext"
     }
 }
 
@@ -157,7 +157,7 @@ Function PrintEnvVars {
 }
 
 Function PrintDirectoriesContent {
-    Get-ChildItem -Path "${Env:GITHUB_WORKSPACE}"
+    Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
 
     If (Test-Path -Path "C:\Downloads") {
         Get-ChildItem -Path "C:\Downloads"
@@ -167,27 +167,25 @@ Function PrintDirectoriesContent {
         Get-ChildItem -Path "C:\Projects"
     }
 
-    If (Test-Path -Path "${Env:PHPROOT}\ext") {
-        Get-ChildItem -Path "${Env:PHPROOT}\ext"
+    If (Test-Path -Path "${env:PHPROOT}\ext") {
+        Get-ChildItem -Path "${env:PHPROOT}\ext"
     }
 
-    # TODO(klay): Not used.
-    #
-    # $ReleasePath = Split-Path -Path "${Env:RELEASE_DLL_PATH}"
-    # If (Test-Path -Path "${ReleasePath}") {
-    #     Get-ChildItem -Path "${ReleasePath}"
-    # }
-    #
-    # $BuildPath = Split-Path -Path "${ReleasePath}"
-    # If (Test-Path -Path "${BuildPath}") {
-    #     Get-ChildItem -Path "${BuildPath}"
-    # }
+     $ReleasePath = Split-Path -Path "${env:RELEASE_DLL_PATH}"
+     If (Test-Path -Path "${ReleasePath}") {
+         Get-ChildItem -Path "${ReleasePath}"
+     }
+
+     $BuildPath = Split-Path -Path "${ReleasePath}"
+     If (Test-Path -Path "${BuildPath}") {
+         Get-ChildItem -Path "${BuildPath}"
+     }
 }
 
 # TODO(klay): Add phpize and phpconfig here
 Function PrintPhpInfo {
-    $IniFile = "${Env:PHPROOT}\php.ini"
-    $PhpExe = "${Env:PHPROOT}\php.exe"
+    $IniFile = "${env:PHPROOT}\php.ini"
+    $PhpExe = "${env:PHPROOT}\php.exe"
 
     If (Test-Path -Path "${PhpExe}") {
         Write-Output ""
@@ -207,16 +205,64 @@ Function PrintBuildDetails {
     $BuildDate = Get-Date -Format g
 
     Write-Output "Build date: ${BuildDate}"
-    Write-Output "Git commit: ${Env:GITHUB_SHA}"
-    Write-Output "Target PHP version: ${Env:PHP_MINOR}"
-    Write-Output "PHP SDK Toolset Version: ${Env:PHP_SDK_VC_TOOLSET_VER}"
-    Write-Output "Build Worker Image Version: ${Env:ImageVersion}"
-    Write-Output "Processor ID: ${Env:PROCESSOR_IDENTIFIER}"
-    Write-Output "Processor Architecture: ${Env:PROCESSOR_ARCHITECTURE}"
-    Write-Output "Number of Processors: ${Env:NUMBER_OF_PROCESSORS}"
-    Write-Output "Visual Studio Version: ${Env:VisualStudioVersion}"
-    Write-Output "Host Architecture: ${Env:VSCMD_ARG_HOST_ARCH}"
-    Write-Output "Target Architecture: ${Env:VSCMD_ARG_TGT_ARCH}"
-    Write-Output "VC Tools Version: ${Env:VCToolsVersion}"
-    Write-Output "Windows SDK Version: ${Env:WindowsSDKVersion}"
+    Write-Output "Git commit: ${env:GITHUB_SHA}"
+    Write-Output "Target PHP version: ${env:PHP_MINOR}"
+    Write-Output "PHP SDK Toolset Version: ${env:PHP_SDK_VC_TOOLSET_VER}"
+    Write-Output "Build Worker Image Version: ${env:ImageVersion}"
+    Write-Output "Processor ID: ${env:PROCESSOR_IDENTIFIER}"
+    Write-Output "Processor Architecture: ${env:PROCESSOR_ARCHITECTURE}"
+    Write-Output "Number of Processors: ${env:NUMBER_OF_PROCESSORS}"
+    Write-Output "Visual Studio Version: ${env:VisualStudioVersion}"
+    Write-Output "Host Architecture: ${env:VSCMD_ARG_HOST_ARCH}"
+    Write-Output "Target Architecture: ${env:VSCMD_ARG_TGT_ARCH}"
+    Write-Output "VC Tools Version: ${env:VCToolsVersion}"
+    Write-Output "Windows SDK Version: ${env:WindowsSDKVersion}"
+}
+
+
+Function InitializeReleaseVars {
+    If ($env:BUILD_TYPE -Match "nts-Win32") {
+        $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}_nts"
+
+        If ($env:PHP_ARCH -eq 'x86') {
+            $env:RELEASE_FOLDER = "Release"
+        } Else {
+            $env:RELEASE_FOLDER = "x64\Release"
+        }
+    } Else {
+        $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
+
+        If ($env:PHP_ARCH -eq 'x86') {
+            $env:RELEASE_FOLDER = "Release_TS"
+        } Else {
+            $env:RELEASE_FOLDER = "x64\Release_TS"
+        }
+    }
+
+    $env:RELEASE_DLL_PATH = "${env:GITHUB_WORKSPACE}\ext\${env:RELEASE_FOLDER}\${env:EXTENSION_FILE}"
+
+    Write-Output "::set-env name=RELEASE_ZIPBALL::${env:RELEASE_ZIPBALL}"
+    Write-Output "::set-env name=RELEASE_DLL_PATH::${env:RELEASE_DLL_PATH}"
+}
+
+Function EnableTestExtension {
+    if (-not (Test-Path env:RELEASE_DLL_PATH)) {
+        InitializeReleaseVars
+    }
+
+    If (-not (Test-Path "${env:RELEASE_DLL_PATH}")) {
+        Throw "Unable to locate extension path: ${env:RELEASE_DLL_PATH}"
+    }
+
+    Copy-Item "${env:RELEASE_DLL_PATH}" "${env:PHPROOT}\ext\${env:EXTENSION_FILE}"
+
+    # TODO(klay): Sortout with this:
+    #
+    # Multiple extensions match the name (or handle) "test":
+    # - handle: test version 1.0.0
+    # - handle: test version 0.1.0
+    # You can filter the extension to enable by adding :version to the -Extension parameter
+    # (example: "-Extension 'test:0.1.0'")
+    #
+    Enable-PhpExtension -Extension "${env:EXTENSION_NAME}:1.0.0" -Path "${env:PHPROOT}"
 }

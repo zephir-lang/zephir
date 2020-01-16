@@ -25,8 +25,6 @@ jobs:
           - php: '7.2'
             vc_num: '15'
             arch: x64
-            # TODO(klay): make it better
-            vc_vars: '64'
             build_type: Win32
             symfony_phpunit: '7.4'
 
@@ -58,8 +56,10 @@ jobs:
           echo "::set-env name=TEST_PHP_EXECUTABLE::${env:PHPROOT}\php.exe"
           echo "::set-env name=BUILD_TYPE::${{ matrix.build_type }}"
           echo "::set-env name=VC_VERSION::${{ matrix.vc_num }}"
-          echo "::set-env name=VC_VARS::${{ matrix.vc_vars }}"
           echo "::set-env name=PHP_ARCH::${{ matrix.arch }}"
+          echo "::set-env name=PACKAGE_PREFIX::test"
+          echo "::set-env name=EXTENSION_NAME::test"
+          echo "::set-env name=EXTENSION_FILE::php_test.dll"
 
       - name: Checkout Code
         uses: actions/checkout@v2-beta
@@ -102,9 +102,6 @@ jobs:
           Import-Module .\.ci\win-ci-tools.psm1
           InstallZephirParser
 
-      - name: Inspecting a Zephir Parser DLL File
-        run: Get-PhpExtension "${env:PHPROOT}\ext\php_zephir_parser.dll"
-
       - name: Enable Zephir Parser
         run: Enable-PhpExtension -Extension 'Zephir Parser' -Path "${env:PHPROOT}"
 
@@ -117,17 +114,11 @@ jobs:
       - name: Fix Environment Variables
         shell: powershell
         run: |
-          Write-Output "Old WindowsSDKVersion: $WindowsSDKVersion"
-          $WindowsSDKVersion = "${env:WindowsSDKVersion}" -replace '\\$', ''
-          Write-Output "New WindowsSDKVersion: $WindowsSDKVersion"
-          Write-Output "::set-env name=WindowsSDKVersion::$WindowsSdkVersion"
+          $v = "${env:WindowsSDKVersion}" -replace '\\$', ''
+          Write-Output "::set-env name=WindowsSDKVersion::$v"
 
-          Write-Output "Old WindowsSDKLibVersion: $WindowsSDKLibVersion"
-          $WindowsSDKLibVersion = "${env:WindowsSDKLibVersion}" -replace '\\$', ''
-          Write-Output "New WindowsSDKLibVersion: $WindowsSDKLibVersion"
-          Write-Output "::set-env name=WindowsSDKLibVersion::$WindowsSDKLibVersion"
-
-          ls "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build"
+          $v = "${env:WindowsSDKLibVersion}" -replace '\\$', ''
+          Write-Output "::set-env name=WindowsSDKLibVersion::$v"
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -145,6 +136,11 @@ jobs:
 
       - name: Install Project Dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+
+      - name: Initialize Release Variables
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          InitializeReleaseVars
 
       - name: Fast Commands Test
         # TODO(klay): Enable all commands
@@ -164,6 +160,29 @@ jobs:
         run: |
           cd ext
           nmake 2> "%GITHUB_WORKSPACE%\compile-errors.log" 1> "%GITHUB_WORKSPACE%\compile.log"
+
+      - name: Inspecting Test Extension DLL File
+        run: Get-PhpExtension "${env:RELEASE_DLL_PATH}"
+
+      - name: Enable Test Extension
+        run: |
+          Import-Module .\.ci\win-ci-tools.psm1
+          EnableTestExtension
+
+      - name: Minimal Load Test for Test Extension
+        run: php --ri "${env:EXTENSION_NAME}"
+
+      - name: Install PHPUnit
+        run: php phpunit install
+
+      - name: Run Unit Tests
+        shell: cmd
+        run: |
+          SET X=0
+          php phpunit install
+          php phpunit --bootstrap %GITHUB_WORKSPACE%\unit-tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
+          php phpunit --testsuite Zephir || SET X=!errorlevel!
+          exit %X%
 
       - name: After Failure
         if: failure()
