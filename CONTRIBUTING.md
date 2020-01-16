@@ -11,6 +11,8 @@ Zephir is maintained and supported by [Phalcon Team][team] and developed in
 collaboration with a productive community of contributors. Please use the
 [GitHub issues][issues] to raise discussion of development topics.
 
+## Answering Questions
+
 We use the GitHub issues for tracking bugs and feature requests and have
 limited bandwidth to address all of them. Thus we only accept bug reports,
 new feature requests and pull requests in GitHub. Our great community and
