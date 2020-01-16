@@ -5,28 +5,43 @@
 #
 # https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
 
-.zephir/
-.libs/
-.phpunit/
-ide/
-doc/
-vendor/
+# Directories to ignore (do not add trailing '/'s, they skip symlinks).
+.zephir
+.libs
+.phpunit
+ide
+doc
+vendor
 
+# Compilation artifacts.
 *.gch
 *.lo
 *.la
 *.loT
 *.dSYM
 
+# Dependency lock is ignored for now.
+composer.lock
+
+# Compilation logs.
 compile.log
 compile-errors.log
 
-composer.lock
-
+# Test and build configurations.
 phpunit.xml
 phpcs.xml
 .php_cs
 .php_cs.cache
-
-zephir.phar
 box.json
+
+# Build artefact
+zephir.phar
+
+# Ignore codecoverage stuff.
+*.profraw
+*.gcov
+*.gcno
+*.gcda
+
+# Use this as your own wish list or a temporary buffer
+LATER
