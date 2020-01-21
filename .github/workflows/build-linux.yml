@@ -60,12 +60,6 @@ jobs:
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
           ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
 
-      - name: Minimal Load Test for Required Extensions
-        run: |
-          for e in gmp pdo_sqlite psr zip; do
-            php --ri $e 1>/dev/null || (echo "Extension $e was not found")
-          done
-
       - name: Checkout code
         uses: actions/checkout@v2-beta
         with:
