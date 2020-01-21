@@ -34,8 +34,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, fileinfo, gmp, pdo_sqlite, psr, zip
-          # See: https://github.com/shivammathur/setup-php/issues/147#issuecomment-574483257
-          tools: pecl
           coverage: none
           # variables_order: https://github.com/phalcon/zephir/pull/1537
           # enable_dl: https://github.com/phalcon/zephir/pull/1654
