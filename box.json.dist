@@ -66,5 +66,8 @@
         "KevinGH\\Box\\Compactor\\Php"
     ],
     "replacement-sigil": "$",
+    "replacements": {
+        "kernel-environment": "prod"
+    },
     "git-commit-short": "Id"
 }
