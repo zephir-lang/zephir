@@ -16,14 +16,6 @@ use Test\McallDynamic;
 
 class MCallDynamicTest extends TestCase
 {
-    public function setUp()
-    {
-        $this->markTestSkipped(
-            // FIXME
-            'Does not work on macOs.'
-        );
-    }
-
     /** @test */
     public function callDynamic()
     {
@@ -39,6 +31,11 @@ class MCallDynamicTest extends TestCase
      */
     public function callAnonymousFunctionWithContext()
     {
+        $this->markTestSkipped(
+        // FIXME
+            'Does not work on macOs.'
+        );
+
         $t = new McallDynamic();
 
         $this->assertSame('Caller:perform', $t->testCallAnonymousFunctionWithContext());

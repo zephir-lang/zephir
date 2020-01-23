@@ -97,10 +97,10 @@ jobs:
           # Will be used before as a cache key
           export CPUHASH="$(cat /proc/cpuinfo | grep "model name" | head -n 1 | cut -d':' -f2 | md5sum)"
 
-      - name: Compiler settings (macOS)
-        if: startsWith(runner.os, 'macOS')
-        run: |
-          sudo xcode-select -switch /Applications/Xcode.app
+      #- name: Compiler settings (macOS)
+      #  if: startsWith(runner.os, 'macOS')
+      #  run: |
+      #    sudo xcode-select -switch /Applications/Xcode.app
 
           # Disabled
           # echo "::set-env name=CC::$(xcrun -f clang)"

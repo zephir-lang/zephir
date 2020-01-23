@@ -6,26 +6,18 @@
          bootstrap="./Library/autoload.php"
          colors="true"
          verbose="true"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnRisky="false"
-         stopOnIncomplete="false"
-         stopOnSkipped="false"
-         stopOnWarning="false"
 >
 
     <testsuites>
         <testsuite name="Extension_Php70">
             <!-- PHP >= 7.0 && < 7.2  -->
             <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php56</exclude>
             <exclude>unit-tests/Extension/Php72</exclude>
         </testsuite>
 
         <testsuite name="Extension_Php72">
             <!-- PHP >= 7.2  -->
             <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php56</exclude>
             <exclude>unit-tests/Extension/Php70</exclude>
         </testsuite>
 
