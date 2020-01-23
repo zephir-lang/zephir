@@ -73,6 +73,7 @@ jobs:
 
           command -v php-config
           php-config || true # php-config returns 1
+          ls -al $(php-config --extension-dir)
 
           command -v phpize
           phpize --version
