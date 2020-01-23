@@ -6,6 +6,12 @@
          bootstrap="./Library/autoload.php"
          colors="true"
          verbose="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnRisky="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         stopOnWarning="false"
 >
 
     <testsuites>
