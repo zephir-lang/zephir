@@ -102,11 +102,11 @@ jobs:
         run: |
           sudo xcode-select -switch /Applications/Xcode.app
 
-# Disabled
-#          echo "::set-env name=CC::$(xcrun -f clang)"
-#          echo "::set-env name=CXX::$(xcrun -f clang++)"
-#          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
-#          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+          # Disabled
+          # echo "::set-env name=CC::$(xcrun -f clang)"
+          # echo "::set-env name=CXX::$(xcrun -f clang++)"
+          # echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
+          # echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
 
       - name: Setup APT repositories
         if: startsWith(runner.os, 'Linux')
@@ -189,7 +189,18 @@ jobs:
           zephir stubs
           zephir api
 
-      - name: Compile Test Project
+      - name: Compile Test Project (macOS)
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          # These variables are needed to produce non optimized code
+          CFLAGS="-O0 -g"
+          CXXFLAGS="-O0 -g"
+
+          # Export variables in the subshell to not shadow global variables
+          ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
+
+      - name: Compile Test Project (Linux)
+        if: startsWith(runner.os, 'Linux')
         run: |
           # These variables are needed to produce non optimized code as well as for code coverage
           LDFLAGS="--coverage"
@@ -214,6 +225,7 @@ jobs:
         run: .ci/after-failure.sh
 
       - name: Upload code coverage report
+        if: startsWith(runner.os, 'Linux')
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
