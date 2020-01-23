@@ -19,6 +19,11 @@ class MCallDynamicTest extends TestCase
     /** @test */
     public function callDynamic()
     {
+        $this->markTestSkipped(
+        // FIXME
+            'Does not work on macOs.'
+        );
+
         $a = new McallDynamic();
         $this->assertSame(1, $a->method1());
         $this->assertSame(2, $a->testMagicCall1());
@@ -31,11 +36,6 @@ class MCallDynamicTest extends TestCase
      */
     public function callAnonymousFunctionWithContext()
     {
-        $this->markTestSkipped(
-        // FIXME
-            'Does not work on macOs.'
-        );
-
         $t = new McallDynamic();
 
         $this->assertSame('Caller:perform', $t->testCallAnonymousFunctionWithContext());
