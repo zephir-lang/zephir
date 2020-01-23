@@ -504,7 +504,7 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 
 		if ((flags & PH_NOISY) == PH_NOISY) {
 			if (sidx == NULL) {
-				zend_error(E_NOTICE, "Undefined index: %ld in %s on line %d", uidx, file, line);
+				zend_error(E_NOTICE, "Undefined index: %llu in %s on line %d", uidx, file, line);
 			} else {
 				zend_error(E_NOTICE, "Undefined index: %s in %s on line %d", sidx, file, line);
 			}
