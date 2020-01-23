@@ -72,7 +72,7 @@ jobs:
           php -m
 
           command -v php-config
-          php-config
+          php-config || true # php-config returns 1
 
           command -v phpize
           phpize --version
