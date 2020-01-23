@@ -19,13 +19,9 @@ class MCallDynamicTest extends TestCase
     /** @test */
     public function callDynamic()
     {
-//        $this->markTestSkipped(
-//        // FIXME
-//            'Does not work on macOs.'
-//        );
-
         $a = new McallDynamic();
         $this->assertSame(1, $a->method1());
+        // FIXME: Does not work on macOs
         //$this->assertSame(2, $a->testMagicCall1());
     }
 
