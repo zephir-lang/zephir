@@ -102,10 +102,11 @@ jobs:
         run: |
           sudo xcode-select -switch /Applications/Xcode.app
 
-          echo "::set-env name=CC::$(xcrun -f clang)"
-          echo "::set-env name=CXX::$(xcrun -f clang++)"
-          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
-          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+# Disabled
+#          echo "::set-env name=CC::$(xcrun -f clang)"
+#          echo "::set-env name=CXX::$(xcrun -f clang++)"
+#          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
+#          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
 
       - name: Setup APT repositories
         if: startsWith(runner.os, 'Linux')
