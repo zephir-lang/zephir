@@ -147,7 +147,7 @@ jobs:
 
           cd "$HOME/php-zephir-parser"
           phpize
-          ./configure --with-php-config=/usr/bin/php-config --enable-zephir_parser
+          ./configure --with-php-config="$(command -v php-config)" --enable-zephir_parser
           make -j"$(getconf _NPROCESSORS_ONLN)"
           sudo make install
           echo 'extension="zephir_parser.so"' | sudo tee "/etc/php/${{ matrix.php }}/cli/conf.d/zephir_parser.ini"
