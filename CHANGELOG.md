@@ -20,8 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#2036](https://github.com/phalcon/zephir/pull/2036)
 - Fixed `-V` CLI flag purpose. Initially it was designed to disable verbose mode
   on the fly, e.g. to override project configuration for a single Zephir pass.
-  This behaviour was returned back.
-- Fixed bug for incrementing array elements
+  This behavior was returned back.
+- Fix increment array elements operation
   [#2020](https://github.com/phalcon/zephir/issues/2020)
 - Fixed compound addition and subtraction assignment operators for static properties
   [#2038](https://github.com/phalcon/zephir/issues/2038)

@@ -25,7 +25,7 @@ jobs:
           - php: '7.2'
             vc_num: '15'
             arch: x64
-            build_type: Win32
+            build_type: nts
             symfony_phpunit: '7.4'
 
     steps:
@@ -40,6 +40,8 @@ jobs:
           # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
           ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
+        env:
+          PHPTS: ${{ matrix.build_type }}
 
       - name: Set Up Environment Variables
         run: |
@@ -195,8 +197,3 @@ jobs:
         run: |
           Import-Module .\.ci\win-ci-tools.psm1
           PrintBuildDetails
-
-          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
-          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext"
-          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64"
-          Get-ChildItem -Path "${env:GITHUB_WORKSPACE}\ext\x64\Release_TS"
