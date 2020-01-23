@@ -1,4 +1,4 @@
-name: Linux CI
+name: Unix CI
 
 on:
   push:
@@ -12,13 +12,17 @@ on:
 
 jobs:
   linux:
-    name: "Linux: PHP v${{ matrix.php }}"
-    runs-on: ubuntu-latest
+    name: "${{ matrix.os }}: PHP v${{ matrix.php }}"
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
 
       matrix:
+        os:
+          - ubuntu-18.04
+          - macOS-latest
+
         php:
           - '7.0'
           - '7.1'
@@ -61,6 +65,18 @@ jobs:
           echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
           echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
 
+      - name: Getting Details About Installed PHP
+        run: |
+          command -v php
+          php -v
+          php -m
+
+          command -v php-config
+          php-config
+
+          command -v phpize
+          phpize --version
+
       - name: Checkout code
         uses: actions/checkout@v2-beta
         with:
@@ -77,7 +93,18 @@ jobs:
           # Will be used before as a cache key
           export CPUHASH="$(cat /proc/cpuinfo | grep "model name" | head -n 1 | cut -d':' -f2 | md5sum)"
 
+      - name: Compiler settings (macOS)
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          sudo xcode-select -switch /Applications/Xcode.app
+
+          echo "::set-env name=CC::$(xcrun -f clang)"
+          echo "::set-env name=CXX::$(xcrun -f clang++)"
+          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
+          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+
       - name: Setup APT repositories
+        if: startsWith(runner.os, 'Linux')
         run: |
           # We don't need this at all, and our
           # builds often fails because Microsoft
@@ -85,10 +112,16 @@ jobs:
           sudo rm -f /etc/apt/sources.list.d/dotnetdev.list
           sudo rm -f /etc/apt/sources.list.d/azure*.list
 
-      - name: Install system dependencies
+      - name: Install system dependencies (Linux)
+        if: startsWith(runner.os, 'Linux')
         run: |
           sudo apt-get update --quiet --yes 1>/dev/null
           sudo apt-get install --no-install-recommends -q -y re2c
+
+      - name: Install system dependencies (macOS)
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          brew install re2c
 
       - name: Get Zephir Parser Cache Key
         id: zephir-parser-cache-key
