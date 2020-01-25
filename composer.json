@@ -86,8 +86,9 @@
     ],
     "support": {
         "issues": "https://github.com/phalcon/zephir/issues?state=open",
-        "forum": "https://forum.zephir-lang.com",
         "source": "https://github.com/phalcon/zephir",
+        "email": "team@zephir-lang.com",
+        "irc": "irc://irc.freenode.net/zephir",
         "docs": "https://docs.zephir-lang.com"
     }
 }
