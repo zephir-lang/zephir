@@ -21,7 +21,7 @@ jobs:
       matrix:
         os:
           - ubuntu-18.04
-          - macOS-latest
+          - macos-latest
 
         php:
           - '7.0'
@@ -97,17 +97,6 @@ jobs:
           # Will be used before as a cache key
           export CPUHASH="$(cat /proc/cpuinfo | grep "model name" | head -n 1 | cut -d':' -f2 | md5sum)"
 
-      #- name: Compiler settings (macOS)
-      #  if: startsWith(runner.os, 'macOS')
-      #  run: |
-      #    sudo xcode-select -switch /Applications/Xcode.app
-
-          # Disabled
-          # echo "::set-env name=CC::$(xcrun -f clang)"
-          # echo "::set-env name=CXX::$(xcrun -f clang++)"
-          # echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
-          # echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
-
       - name: Setup APT repositories
         if: startsWith(runner.os, 'Linux')
         run: |
@@ -137,7 +126,11 @@ jobs:
         with:
           path: ~/php-zephir-parser
           key: ${{ runner.os }}-${{ matrix.php }}-zephir-parser-${{ steps.zephir-parser-cache.outputs.key }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-zephir-parser-
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.php }}-zephir-parser-${{ env.cache-name }}-
+            ${{ runner.os }}-${{ matrix.php }}-zephir-parser-
+            ${{ runner.os }}-${{ matrix.php }}-
+            ${{ runner.os }}
 
       - name: Install Zephir Parser
         run: |
@@ -172,7 +165,10 @@ jobs:
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ env.cache-name }}-
+            ${{ runner.os }}-composer-
+            ${{ runner.os }}
 
       - name: Install project dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
