@@ -42,11 +42,6 @@ jobs:
             symfony_phpunit: '7.4'
 
     steps:
-      - name: Set environment variables
-        run: |
-          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
-          echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
@@ -59,6 +54,18 @@ jobs:
           # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
           ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
+
+      - name: Set environment variables
+        run: |
+          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
+          echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
+          echo "::set-env name=PHP_INI_DIR::$(php-config --configure-options | tr -s " " "\012" | grep with-config-file-scan-dir | cut -d= -f2)"
+
+      - name: Enable PSR extension
+        run: |
+          if ! php --ri psr 1>/dev/null; then
+            echo 'extension="psr.so"' | sudo tee "$PHP_INI_DIR/psr.ini"
+          fi
 
       - name: Checkout code
         uses: actions/checkout@v2-beta
