@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - master
+      - development
 
 jobs:
   linux:
@@ -59,13 +60,6 @@ jobs:
         run: |
           echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
           echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
-          echo "::set-env name=PHP_INI_DIR::$(php-config --configure-options | tr -s " " "\012" | grep with-config-file-scan-dir | cut -d= -f2)"
-
-      - name: Enable PSR extension
-        run: |
-          if ! php --ri psr 1>/dev/null; then
-            echo 'extension="psr.so"' | sudo tee "$PHP_INI_DIR/psr.ini"
-          fi
 
       - name: Checkout code
         uses: actions/checkout@v2-beta
