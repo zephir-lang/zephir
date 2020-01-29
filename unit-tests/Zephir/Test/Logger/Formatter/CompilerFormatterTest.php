@@ -90,4 +90,19 @@ class CompilerFormatterTest extends TestCase
 
         $this->assertSame($expected, $compilerFormatter->format($testContext));
     }
+
+    /** @test */
+    public function shouldFormatWithStripInfoLevels()
+    {
+        $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);
+        $compilerFormatter = new CompilerFormatter($this->config);
+        $testContext = $this->getWarningContext();
+
+        $testContext['level_name'] = 'INFO';
+        unset($testContext['context'][1]['file']);
+
+        $expected = " Variable \"param1\" declared but not used in test\\3__closure::__invoke in unknown on line 0 [unused-variable-external]\n";
+
+        $this->assertSame($expected, $compilerFormatter->format($testContext));
+    }
 }
