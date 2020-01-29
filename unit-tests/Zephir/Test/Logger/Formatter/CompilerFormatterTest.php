@@ -80,7 +80,7 @@ class CompilerFormatterTest extends TestCase
         $filePath = $testContext['context'][1]['file'];
 
         $expected = " Warning: Variable \"param1\" declared but not used in test\\3__closure::__invoke in {$filePath} on line 20 [unused-variable-external]\n\n".
-                    "\t**return function(param1) {\n\n".
+                    "\t  return function(param1) {\n\n".
                     "\t------------------------^\n";
 
         $this->assertSame($expected, $compilerFormatter->format($testContext));
