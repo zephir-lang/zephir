@@ -47,8 +47,8 @@ class CompilerFormatterTest extends TestCase
                     'data-type' => 'variable',
                     'mandatory' => 0,
                     'reference' => 0,
-                    'file' => realpath(__DIR__.'/../../../../../test/closures.zep'),
-                    'line' => 20,
+                    'file' => realpath(__DIR__.'/../../../../fixtures/logger/closures.zep'),
+                    'line' => 7,
                     'char' => 25,
                 ],
             ],
@@ -79,7 +79,7 @@ class CompilerFormatterTest extends TestCase
         $testContext = $this->getWarningContext();
         $filePath = $testContext['context'][1]['file'];
 
-        $expected = " Warning: Variable \"param1\" declared but not used in test\\3__closure::__invoke in {$filePath} on line 20 [unused-variable-external]\n\n".
+        $expected = " Warning: Variable \"param1\" declared but not used in test\\3__closure::__invoke in {$filePath} on line 7 [unused-variable-external]\n\n".
                     "\t  return function(param1) {\n\n".
                     "\t------------------------^\n";
 
