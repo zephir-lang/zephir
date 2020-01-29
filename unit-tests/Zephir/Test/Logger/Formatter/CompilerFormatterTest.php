@@ -47,7 +47,7 @@ class CompilerFormatterTest extends TestCase
                     'data-type' => 'variable',
                     'mandatory' => 0,
                     'reference' => 0,
-                    'file' => './zephir/test/closures.zep',
+                    'file' => realpath(__DIR__.'/../../../../../test/closures.zep'),
                     'line' => 20,
                     'char' => 25,
                 ],
@@ -76,8 +76,18 @@ class CompilerFormatterTest extends TestCase
         // allow to print warnings for this category
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);
         $compilerFormatter = new CompilerFormatter($this->config);
+        $testContext = $this->getWarningContext();
+        $filePath = $testContext['context'][1]['file'];
 
-        $expected = 'Warning: Variable "param1" declared but not used in test\3__closure::__invoke in ./zephir/test/closures.zep on line 20 [unused-variable-external]';
-        $this->assertSame($expected, trim($compilerFormatter->format($this->getWarningContext())));
+        $expected = " Warning: Variable \"param1\" declared but not used in test\\3__closure::__invoke in {$filePath} on line 20 [unused-variable-external]\n\n".
+                    "\t**return function(param1) {\n\n".
+                    "\t------------------------^\n";
+
+        $this->assertSame($expected, $compilerFormatter->format($testContext));
+
+        unset($testContext['context'][1]['file']);
+        $expected = ' Warning: Variable "param1" declared but not used in test\3__closure::__invoke in unknown on line 0 [unused-variable-external]'.PHP_EOL;
+
+        $this->assertSame($expected, $compilerFormatter->format($testContext));
     }
 }
