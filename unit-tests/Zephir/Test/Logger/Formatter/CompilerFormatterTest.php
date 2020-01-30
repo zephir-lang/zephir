@@ -47,7 +47,7 @@ class CompilerFormatterTest extends TestCase
                     'data-type' => 'variable',
                     'mandatory' => 0,
                     'reference' => 0,
-                    'file' => realpath(__DIR__.'/../../../../fixtures/logger/closures.zep'),
+                    'file' => realpath(\constant('FIXTURES_PATH').'/logger/closures.zep'),
                     'line' => 7,
                     'char' => 25,
                 ],
