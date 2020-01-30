@@ -44,6 +44,7 @@
 
         <const name="TESTS_PATH" value="./unit-tests"/>
         <const name="DATA_PATH" value="./unit-tests/Data"/>
+        <const name="FIXTURES_PATH" value="./unit-tests/fixtures"/>
         <const name="ZEPHIRPATH" value="./"/>
 
         <server name="KERNEL_CLASS" value="Zephir\DependencyInjection\ZephirKernel" />
