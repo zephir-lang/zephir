@@ -34,7 +34,7 @@ ignore:
   - ".github/.*"
   - ".zephir/.*"
   - "ide/.*"
-  - "/home/travis/.phpenv/.*"
+  - "kernels/.*"
   - "php-zephir-parser/.*"
   - ".phpunit/.*"
   - "tests/.*"

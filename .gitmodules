@@ -1,0 +1,12 @@
+[submodule "kerenel/ZendEngine3"]
+	path = kerenel/ZendEngine3
+	url = https://github.com/zephir-lang/kernel-zendengine3.git
+	branch = master
+[submodule "kerenels/ZendEngine3"]
+	path = kerenels/ZendEngine3
+	url = https://github.com/zephir-lang/kernel-zendengine3.git
+	branch = master
+[submodule "kernels/ZendEngine3"]
+	path = kernels/ZendEngine3
+	url = https://github.com/zephir-lang/kernel-zendengine3.git
+	branch = master
