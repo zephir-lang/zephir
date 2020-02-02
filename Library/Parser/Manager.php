@@ -38,7 +38,7 @@ class Manager
      *
      * @return Parser
      */
-    public function getParser()
+    public function getParser(): Parser
     {
         return $this->parser;
     }
@@ -48,7 +48,7 @@ class Manager
      *
      * @return bool
      */
-    public function isAvailable()
+    public function isAvailable(): bool
     {
         return $this->parser->isAvailable() &&
             version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
@@ -62,24 +62,23 @@ class Manager
         return $this->parser->getVersion();
     }
 
-    public function requirements()
+    public function requirements(): string
     {
         $template = <<<EOF
 
-
 ────────────────────────────────────────────────────────────
-  The Zephir Parser extension %s.
+  PHP extension Zephir Parser %s.
   Note: Zephir no longer distributed with internal parser.
   %s
   To install latest stable Zephir Parser please refer to:
   %s
 ────────────────────────────────────────────────────────────
+
 EOF;
 
+        $add = '';
         if ($this->parser->isAvailable()) {
             $add = sprintf("Minimum required Zephir Parser version: %s\n", self::MINIMUM_PARSER_VERSION);
-        } else {
-            $add = '';
         }
 
         return sprintf(
