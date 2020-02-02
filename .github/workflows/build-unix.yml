@@ -178,7 +178,7 @@ jobs:
           CXXFLAGS="-O0 -g"
 
           # Export variables in the subshell to not shadow global variables
-          ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
+          ( export CFLAGS CXXFLAGS; zephir compile ) || false
 
       - name: Compile Test Project (Linux)
         if: startsWith(runner.os, 'Linux')

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Changed
+- Move ZendEngine3 kernel to the separate project
+
 ## [0.12.16] - 2020-01-16
 ### Fixed
 - Do not dump config file if config was changed.

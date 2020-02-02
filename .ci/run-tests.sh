@@ -24,11 +24,9 @@ php \
   vendor/bin/simple-phpunit \
   --colors=always \
   --bootstrap unit-tests/ext-bootstrap.php \
-  --debug \
   --testsuite ${test_suite}
 
 php \
   vendor/bin/simple-phpunit \
   --colors=always \
-  --debug \
   --testsuite Zephir
