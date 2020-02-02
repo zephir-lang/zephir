@@ -66,21 +66,6 @@ jobs:
           echo "::set-env name=ZEPHIR_PARSER_VERSION::v1.3.3"
           echo "::set-env name=PHP_INI_DIR::$(php-config --configure-options | tr -s " " "\012" | grep with-config-file-scan-dir | cut -d= -f2)"
 
-      - name: Getting Details About Installed PHP
-        run: |
-          command -v php
-          php -v
-          php -m
-
-          command -v php-config
-          php-config || true # php-config returns 1
-
-          ls -al $(php-config --extension-dir)
-          ls -al "$PHP_INI_DIR"
-
-          command -v phpize
-          phpize --version
-
       - name: Checkout code
         uses: actions/checkout@v2-beta
         with:
