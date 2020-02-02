@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\ExceptionInterface;
@@ -50,10 +49,8 @@ final class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-
-        if (\extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
-            $io->getErrorStyle()->warning(
+        if (\extension_loaded('timecop') && 1 === (int)ini_get('timecop.func_override')) {
+            $output->writeln(
                 <<<MSG
 The timecop extension was detected. It is recommended to disable
 it from the launcher during the code generation to avoid potential
@@ -71,7 +68,7 @@ MSG
             // TODO: Move all the stuff from the compiler
             $this->compiler->generate(true);
         } catch (InvalidArgumentException $e) {
-            $io->getErrorStyle()->error(
+            $output->writeln(
                 sprintf(
                     'Internal error: %s at %s:%d',
                     $e->getMessage(),
@@ -82,12 +79,10 @@ MSG
 
             return 1;
         } catch (ExceptionInterface $e) {
-            $io->getErrorStyle()->error($e->getMessage());
-
+            $output->writeln($e->getMessage());
             return 1;
         } catch (Exception $e) {
-            $io->getErrorStyle()->error($e->getMessage());
-
+            $output->writeln($e->getMessage());
             return 1;
         }
 
