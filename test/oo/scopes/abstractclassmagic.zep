@@ -15,6 +15,6 @@ abstract class AbstractClassMagic
 
     public function __get(var name)
     {
-        return this->name;
+        return this->{name};
     }
 }
