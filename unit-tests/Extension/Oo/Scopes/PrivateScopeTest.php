@@ -116,6 +116,16 @@ class PrivateScopeTest extends TestCase
     /**
      * @expectedException \Error
      */
+    public function testShouldSetPrivatePropertyViaThis()
+    {
+        $obj = new TestScopeExtending();
+        $obj->setProperty('privateProperty2', 'test');
+        $this->assertEquals('test', $obj->getPrivateProperty2());
+    }
+
+    /**
+     * @expectedException \Error
+     */
     public function testShouldNotSetPrivatePropertyExtendedMagicObjInternal()
     {
         $obj = new TestScopeExtendingMagic();

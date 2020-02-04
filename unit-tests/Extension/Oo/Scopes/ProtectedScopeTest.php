@@ -93,6 +93,9 @@ class ProtectedScopeTest extends TestCase
         $obj = new TestScopeExtending();
         $obj->setProperty('protectedProperty', 'test');
         $this->assertEquals('test', $obj->getProtectedProperty());
+        $obj = new TestScopeExtending();
+        $obj->setProperty('protectedProperty2', 'test');
+        $this->assertEquals('test', $obj->getProtectedProperty2());
     }
 
     public function testShouldNotGetObjectVarsProtectedPropertyObjPhp()
