@@ -9,7 +9,7 @@ abstract class AbstractClassMagic
 
     public function __set(var name, var value)
     {
-        let this->name = value;
+        let this->{name} = value;
         let this->setCount = this->setCount + 1;
     }
 
