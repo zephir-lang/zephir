@@ -11,6 +11,9 @@ use TestScopePhpMagic;
 
 class ProtectedScopeTest extends TestCase
 {
+    /**
+     * @expectedException \Error
+     */
     public function testShouldNotSetProtectedPropertyObjPhp()
     {
         $object = new TestScopePhp();
@@ -19,6 +22,9 @@ class ProtectedScopeTest extends TestCase
         $this->assertFalse(true, 'This should not be called');
     }
 
+    /**
+     * @expectedException \Error
+     */
     public function testShouldNotSetProtectedPropertyNewPhp()
     {
         $tester = new PropertyTester();
@@ -26,6 +32,9 @@ class ProtectedScopeTest extends TestCase
         $this->assertFalse(true, 'This should not be called');
     }
 
+    /**
+     * @expectedException \Error
+     */
     public function testShouldNotSetProtectedPropertyObjInternal()
     {
         $object = new TestScopeExtending();
@@ -34,6 +43,9 @@ class ProtectedScopeTest extends TestCase
         $this->assertFalse(true, 'This should not be called');
     }
 
+    /**
+     * @expectedException \Error
+     */
     public function testShouldNotSetProtectedPropertyNewInternal()
     {
         $tester = new PropertyTester();
@@ -53,7 +65,7 @@ class ProtectedScopeTest extends TestCase
     {
         $tester = new PropertyTester();
         $obj = $tester->setPropertyNew(TestScopePhpMagic::class, 'protectedProperty', 'test');
-        $this->assertEquals('test', $obj->privateProperty);
+        $this->assertEquals('test', $obj->protectedProperty);
         $this->assertEquals(1, $obj->setCount);
     }
 
@@ -69,10 +81,13 @@ class ProtectedScopeTest extends TestCase
     {
         $tester = new PropertyTester();
         $obj = $tester->setPropertyNew(TestScopeExtendingMagic::class, 'protectedProperty', 'test');
-        $this->assertEquals('test', $obj->privateProperty);
+        $this->assertEquals('test', $obj->protectedProperty);
         $this->assertEquals(1, $obj->setCount);
     }
 
+    /**
+     * @expectedException \Error
+     */
     public function testShouldSetProtectedPropertyViaThis()
     {
         $obj = new TestScopeExtending();
