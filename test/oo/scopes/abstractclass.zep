@@ -14,7 +14,7 @@ abstract class AbstractClass
 
     public function getPrivateProperty2()
     {
-        return this->privatePropert2;
+        return this->privateProperty2;
     }
 
     public function getProtectedProperty2()
