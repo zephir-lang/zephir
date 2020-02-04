@@ -130,7 +130,7 @@ class PrivateScopeTest extends TestCase
     public function testShouldNotSetPrivatePropertyExtendedMagicNewInternal()
     {
         $tester = new PropertyTester();
-        $this->assertEquals('test', $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty2', 'test'));
+        $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty2', 'test');
         $this->assertFalse(true, 'This should not be called');
     }
 
@@ -141,7 +141,7 @@ class PrivateScopeTest extends TestCase
     {
         $obj = new TestScopePhpMagicExtending();
         $tester = new PropertyTester();
-        $this->assertEquals('test', $tester->setPropertyObj($obj, 'privateProperty2', 'test'));
+        $tester->setPropertyObj($obj, 'privateProperty2', 'test');
         $this->assertFalse(true, 'This should not be called');
     }
 
@@ -151,7 +151,7 @@ class PrivateScopeTest extends TestCase
     public function testShouldNotSetPrivatePropertyExtendedMagicNewPhp()
     {
         $tester = new PropertyTester();
-        $this->assertEquals('test', $tester->setPropertyNew(TestScopePhpMagicExtending::class, 'privateProperty2', 'test'));
+        $tester->setPropertyNew(TestScopePhpMagicExtending::class, 'privateProperty2', 'test');
         $this->assertFalse(true, 'This should not be called');
     }
 
