@@ -6,9 +6,4 @@ class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterfac
 	{
 		return this->callPrivateMethod();
 	}
-
-	public function getProperty()
-	{
-	    return this->
-	}
 }
