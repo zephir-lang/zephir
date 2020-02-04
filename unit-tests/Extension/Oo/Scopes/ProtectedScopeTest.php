@@ -3,8 +3,8 @@
 namespace Extension\Oo\Scopes;
 
 use TestScopeExtending;
+use TestScopeExtendingMagic;
 use TestScopePhp;
-use Test\Oo\Scopes\ProtectedScopeTester;
 use Test\Oo\Scopes\PropertyTester;
 use PHPUnit\Framework\TestCase;
 use TestScopePhpMagic;
