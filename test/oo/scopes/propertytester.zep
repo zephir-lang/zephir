@@ -2,7 +2,7 @@ namespace Test\Oo\Scopes;
 
 class PropertyTester
 {
-    public function setPropertyObj(object obj, string property, var value)
+    public function setPropertyObj(var obj, string property, var value)
     {
         let obj->{property} = value;
 
@@ -19,7 +19,7 @@ class PropertyTester
         return obj;
     }
 
-    public function getObjVars(object obj)
+    public function getObjVars(var obj)
     {
         return get_object_vars(obj);
     }
