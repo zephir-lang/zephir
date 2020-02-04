@@ -1,4 +1,4 @@
-namespace ;
+namespace Test\Oo\Scopes;
 
 abstract class AbstractClassMagic
 {
