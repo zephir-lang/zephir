@@ -11,7 +11,7 @@ use TestScopePhpMagic;
 
 class ProtectedScopeTest extends TestCase
 {
-    public function shouldNotSetProtectedPropertyObjPhp()
+    public function testShouldNotSetProtectedPropertyObjPhp()
     {
         $object = new TestScopePhp();
         $tester = new PropertyTester();
@@ -19,14 +19,14 @@ class ProtectedScopeTest extends TestCase
         $this->assertFalse(true, 'This should not be called');
     }
 
-    public function shouldNotSetProtectedPropertyNewPhp()
+    public function testShouldNotSetProtectedPropertyNewPhp()
     {
         $tester = new PropertyTester();
         $tester->setPropertyNew(TestScopePhp::class, 'protectedProperty', 'test');
         $this->assertFalse(true, 'This should not be called');
     }
 
-    public function shouldNotSetProtectedPropertyObjInternal()
+    public function testShouldNotSetProtectedPropertyObjInternal()
     {
         $object = new TestScopeExtending();
         $tester = new PropertyTester();
@@ -34,14 +34,14 @@ class ProtectedScopeTest extends TestCase
         $this->assertFalse(true, 'This should not be called');
     }
 
-    public function shouldNotSetProtectedPropertyNewInternal()
+    public function testShouldNotSetProtectedPropertyNewInternal()
     {
         $tester = new PropertyTester();
         $tester->setPropertyNew(TestScopeExtending::class, 'protectedProperty', 'test');
         $this->assertFalse(true, 'This should not be called');
     }
 
-    public function shouldSetProtectedPropertyObjPhp()
+    public function testShouldSetProtectedPropertyObjPhp()
     {
         $object = new TestScopePhpMagic();
         $tester = new PropertyTester();
@@ -49,7 +49,7 @@ class ProtectedScopeTest extends TestCase
         $this->assertEquals(1, $object->setCount);
     }
 
-    public function shouldSetProtectedPropertyNewPhp()
+    public function testShouldSetProtectedPropertyNewPhp()
     {
         $tester = new PropertyTester();
         $obj = $tester->setPropertyNew(TestScopePhpMagic::class, 'protectedProperty', 'test');
@@ -57,7 +57,7 @@ class ProtectedScopeTest extends TestCase
         $this->assertEquals(1, $obj->setCount);
     }
 
-    public function shouldSetProtectedPropertyObjInternal()
+    public function testShouldSetProtectedPropertyObjInternal()
     {
         $object = new TestScopeExtendingMagic();
         $tester = new PropertyTester();
@@ -65,7 +65,7 @@ class ProtectedScopeTest extends TestCase
         $this->assertEquals(1, $object->setCount);
     }
 
-    public function shouldSetProtectedPropertyNewInternal()
+    public function testShouldSetProtectedPropertyNewInternal()
     {
         $tester = new PropertyTester();
         $obj = $tester->setPropertyNew(TestScopeExtendingMagic::class, 'protectedProperty', 'test');
@@ -73,14 +73,14 @@ class ProtectedScopeTest extends TestCase
         $this->assertEquals(1, $obj->setCount);
     }
 
-    public function shouldSetProtectedPropertyViaThis()
+    public function testShouldSetProtectedPropertyViaThis()
     {
         $obj = new TestScopeExtending();
         $obj->setProperty('protectedProperty', 'test');
         $this->assertEquals('test', $obj->getProtectedProperty());
     }
 
-    public function shouldNotGetObjectVarsProtectedPropertyObjPhp()
+    public function testShouldNotGetObjectVarsProtectedPropertyObjPhp()
     {
         $tester = new PropertyTester();
         $object = new TestScopePhp();
@@ -88,14 +88,14 @@ class ProtectedScopeTest extends TestCase
         $this->assertArrayNotHasKey('protectedProperty', $objectVars);
     }
 
-    public function shouldNotGetObjectVarsProtectedPropertyNewPhp()
+    public function testShouldNotGetObjectVarsProtectedPropertyNewPhp()
     {
         $tester = new PropertyTester();
         $objectVars = $tester->getNewVars(TestScopePhp::class);
         $this->assertArrayNotHasKey('protectedProperty', $objectVars);
     }
 
-    public function shouldNotGetObjectVarsProtectedPropertyObjInternal()
+    public function testShouldNotGetObjectVarsProtectedPropertyObjInternal()
     {
         $tester = new PropertyTester();
         $object = new TestScopeExtending();
@@ -103,7 +103,7 @@ class ProtectedScopeTest extends TestCase
         $this->assertArrayNotHasKey('protectedProperty', $objectVars);
     }
 
-    public function shouldNotGetObjectVarsProtectedPropertyNewInternal()
+    public function testShouldNotGetObjectVarsProtectedPropertyNewInternal()
     {
         $tester = new PropertyTester();
         $objectVars = $tester->getNewVars(TestScopeExtending::class);
