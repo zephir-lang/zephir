@@ -85,15 +85,11 @@ class ProtectedScopeTest extends TestCase
         $this->assertEquals(1, $obj->setCount);
     }
 
-    /**
-     * @expectedException \Error
-     */
     public function testShouldSetProtectedPropertyViaThis()
     {
         $obj = new TestScopeExtending();
         $obj->setProperty('protectedProperty', 'test');
         $this->assertEquals('test', $obj->getProtectedProperty());
-        $obj = new TestScopeExtending();
         $obj->setProperty('protectedProperty2', 'test');
         $this->assertEquals('test', $obj->getProtectedProperty2());
     }
