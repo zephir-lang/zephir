@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+## [Unreleased] - ????-??-??
+### Fixed
+- On some platforms special alpha characters aren't correctly escaped.
+  [2058](https://github.com/phalcon/zephir/pull/2058)
+
 ## [0.12.16] - 2020-01-16
 ### Fixed
 - Do not dump config file if config was changed.
@@ -29,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - Improved type hint for arrays when generating stubs
   [#2026](https://github.com/phalcon/zephir/issues/2026)
-  
+
 ## [0.12.15] - 2019-12-12
 ### Removed
 - Removed `uint` typedef usage
