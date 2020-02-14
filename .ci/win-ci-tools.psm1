@@ -43,8 +43,17 @@ Function InstallPhpSdk {
 Function InstallPhpDevPack {
     Write-Output "Install PHP Dev pack: ${env:PHP_VERSION}"
 
-    $RemoteUrl = "http://windows.php.net/downloads/releases/php-devel-pack-${env:PHP_VERSION}-${env:BUILD_TYPE}-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
-    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}-${env:BUILD_TYPE}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    If ($env:BUILD_TYPE -Match "nts") {
+        $TS = "nts-"
+    } Else {
+        $TS = ""
+    }
+
+    $BaseUrl = "http://windows.php.net/downloads/releases"
+    $LocalPart = "/php-devel-pack-${env:PHP_VERSION}-${TS}Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+
+    $RemoteUrl = "${BaseUrl}${LocalPart}"
+    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}-${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
     If (-not (Test-Path $env:PHP_DEVPACK)) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
@@ -66,14 +75,14 @@ Function InstallZephirParser {
     $BaseUri = "https://github.com/phalcon/php-zephir-parser/releases/download"
     $LocalPart = "zephir_parser_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
 
-    If ($env:BUILD_TYPE -Match "nts-Win32") {
-        $VersionPrefix = "-nts"
+    If ($env:BUILD_TYPE -Match "nts") {
+        $TS = "-nts"
     } Else {
-        $VersionPrefix = ""
+        $TS = ""
     }
 
-    $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}${VersionPrefix}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
-    $DestinationPath = "C:\Downloads\${LocalPart}${VersionPrefix}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
+    $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
+    $DestinationPath = "C:\Downloads\${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
 
     If (-not (Test-Path "${env:PHPROOT}\ext\php_zephir_parser.dll")) {
         If (-not [System.IO.File]::Exists($DestinationPath)) {
@@ -171,15 +180,18 @@ Function PrintDirectoriesContent {
         Get-ChildItem -Path "${env:PHPROOT}\ext"
     }
 
-     $ReleasePath = Split-Path -Path "${env:RELEASE_DLL_PATH}"
-     If (Test-Path -Path "${ReleasePath}") {
-         Get-ChildItem -Path "${ReleasePath}"
-     }
+    # Might be empty
+    if ("${env:RELEASE_DLL_PATH}") {
+        $ReleasePath = Split-Path -Path "${env:RELEASE_DLL_PATH}"
+        If (Test-Path -Path "${ReleasePath}") {
+            Get-ChildItem -Path "${ReleasePath}"
+        }
 
-     $BuildPath = Split-Path -Path "${ReleasePath}"
-     If (Test-Path -Path "${BuildPath}") {
-         Get-ChildItem -Path "${BuildPath}"
-     }
+        $BuildPath = Split-Path -Path "${ReleasePath}"
+        If (Test-Path -Path "${BuildPath}") {
+            Get-ChildItem -Path "${BuildPath}"
+        }
+    }
 }
 
 # TODO(klay): Add phpize and phpconfig here
@@ -205,10 +217,11 @@ Function PrintBuildDetails {
     $BuildDate = Get-Date -Format g
 
     Write-Output "Build date: ${BuildDate}"
+    Write-Output "Build Worker Image Version: ${env:ImageVersion}"
+    Write-Output "Build Type: ${env:BUILD_TYPE}"
     Write-Output "Git commit: ${env:GITHUB_SHA}"
     Write-Output "Target PHP version: ${env:PHP_MINOR}"
     Write-Output "PHP SDK Toolset Version: ${env:PHP_SDK_VC_TOOLSET_VER}"
-    Write-Output "Build Worker Image Version: ${env:ImageVersion}"
     Write-Output "Processor ID: ${env:PROCESSOR_IDENTIFIER}"
     Write-Output "Processor Architecture: ${env:PROCESSOR_ARCHITECTURE}"
     Write-Output "Number of Processors: ${env:NUMBER_OF_PROCESSORS}"
@@ -221,7 +234,7 @@ Function PrintBuildDetails {
 
 
 Function InitializeReleaseVars {
-    If ($env:BUILD_TYPE -Match "nts-Win32") {
+    If ($env:BUILD_TYPE -Match "nts") {
         $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}_nts"
 
         If ($env:PHP_ARCH -eq 'x86') {

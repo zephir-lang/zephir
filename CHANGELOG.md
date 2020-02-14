@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+## [Unreleased] - ????-??-??
+
+## [0.12.17] - 2020-02-14
+### Fixed
+- On some platforms special alpha characters aren't correctly escaped.
+  [#2058](https://github.com/phalcon/zephir/pull/2058)
+
+### Changed
+- Changed the internal DI environment mode when compile PHAR
+  [#2049](https://github.com/phalcon/zephir/pull/2049)
+
 ## [0.12.16] - 2020-01-16
 ### Fixed
 - Do not dump config file if config was changed.
@@ -20,8 +30,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#2036](https://github.com/phalcon/zephir/pull/2036)
 - Fixed `-V` CLI flag purpose. Initially it was designed to disable verbose mode
   on the fly, e.g. to override project configuration for a single Zephir pass.
-  This behaviour was returned back.
-- Fixed bug for incrementing array elements
+  This behavior was returned back.
+- Fix increment array elements operation
   [#2020](https://github.com/phalcon/zephir/issues/2020)
 - Fixed compound addition and subtraction assignment operators for static properties
   [#2038](https://github.com/phalcon/zephir/issues/2038)
@@ -29,7 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - Improved type hint for arrays when generating stubs
   [#2026](https://github.com/phalcon/zephir/issues/2026)
-  
+
 ## [0.12.15] - 2019-12-12
 ### Removed
 - Removed `uint` typedef usage
@@ -379,7 +389,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.16...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.17...HEAD
+[0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17
 [0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16
 [0.12.15]: https://github.com/phalcon/zephir/compare/0.12.14...0.12.15
 [0.12.14]: https://github.com/phalcon/zephir/compare/0.12.13...0.12.14
