@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - ????-??-??
+
+## [0.12.17] - 2020-02-14
 ### Fixed
 - On some platforms special alpha characters aren't correctly escaped.
-  [2058](https://github.com/phalcon/zephir/pull/2058)
+  [#2058](https://github.com/phalcon/zephir/pull/2058)
+
+### Changed
+- Changed the internal DI environment mode when compile PHAR
+  [#2049](https://github.com/phalcon/zephir/pull/2049)
 
 ## [0.12.16] - 2020-01-16
 ### Fixed
@@ -383,7 +389,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.16...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.17...HEAD
+[0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17
 [0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16
 [0.12.15]: https://github.com/phalcon/zephir/compare/0.12.14...0.12.15
 [0.12.14]: https://github.com/phalcon/zephir/compare/0.12.13...0.12.14
