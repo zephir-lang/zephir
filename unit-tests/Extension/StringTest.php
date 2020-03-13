@@ -238,7 +238,7 @@ class StringTest extends TestCase
         $this->assertSame($hardcodedString, ob_get_clean());
         $this->assertSame(trim($hardcodedString), $t->testTrimMultilineString());
 
-        $escapedString = '\"\}\$hello\$\"\\\'';
+        $escapedString = '\"\}\$hello\$\"\'';
         $this->assertSame($escapedString, $t->testWellEscapedMultilineString());
     }
 
