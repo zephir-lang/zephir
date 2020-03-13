@@ -16,6 +16,14 @@ use PHPUnit\Framework\TestCase;
 
 class StringTest extends TestCase
 {
+    /** @var \Test\Strings $test */
+    private $test;
+
+    public function SetUp()
+    {
+        $this->test = new \Test\Strings();
+    }
+
     /**
      * @dataProvider providerHashEquals
      *
@@ -25,13 +33,11 @@ class StringTest extends TestCase
      */
     public function testHashEquals($knownString, $userString, $expected)
     {
-        $t = new \Test\Strings();
-
         $salt = '$2a$07$usesomesillystringforsalt$';
         $knownString = crypt($knownString, $salt);
         $userString = crypt($userString, $salt);
 
-        $this->assertSame($expected, $t->testHashEquals($knownString, $userString));
+        $this->assertSame($expected, $this->test->testHashEquals($knownString, $userString));
     }
 
     /**
@@ -42,9 +48,7 @@ class StringTest extends TestCase
      */
     public function testHashEqualsNonString($knownString, $userString)
     {
-        $t = new \Test\Strings();
-
-        $this->assertFalse($t->testHashEquals($knownString, $userString));
+        $this->assertFalse($this->test->testHashEquals($knownString, $userString));
     }
 
     /**
@@ -56,9 +60,7 @@ class StringTest extends TestCase
      */
     public function testCamelize($actual, $expected, $delimiter)
     {
-        $t = new \Test\Strings();
-
-        $this->assertSame($expected, $t->camelize($actual, $delimiter));
+        $this->assertSame($expected, $this->test->camelize($actual, $delimiter));
     }
 
     /**
@@ -73,8 +75,7 @@ class StringTest extends TestCase
             'The second argument passed to the camelize() must be a string containing at least one character'
         );
 
-        $t = new \Test\Strings();
-        $t->camelize('CameLiZe', $delimiter);
+        $this->test->camelize('CameLiZe', $delimiter);
     }
 
     /**
@@ -86,9 +87,7 @@ class StringTest extends TestCase
      */
     public function testUnCamelize($actual, $expected, $delimiter)
     {
-        $t = new \Test\Strings();
-
-        $this->assertSame($expected, $t->uncamelize($actual, $delimiter));
+        $this->assertSame($expected, $this->test->uncamelize($actual, $delimiter));
     }
 
     /**
@@ -103,66 +102,71 @@ class StringTest extends TestCase
             'Second argument passed to the uncamelize() must be a string of one character'
         );
 
-        $t = new \Test\Strings();
-        $t->uncamelize('CameLiZe', $delimiter);
+        $this->test->uncamelize('CameLiZe', $delimiter);
     }
 
     public function testTrim()
     {
-        $t = new \Test\Strings();
+        $testSuite = [
+            [' hello ', 'hello'],
+            ['hello ', 'hello'],
+            [' hello', 'hello'],
+        ];
 
-        $this->assertSame($t->testTrim(' hello '), 'hello');
-        $this->assertSame($t->testTrim('hello '), 'hello');
-        $this->assertSame($t->testTrim(' hello'), 'hello');
+        foreach ($testSuite as $itm) {
+            $this->assertSame($this->test->testTrim($itm[0]), $itm[1]);
+        }
 
-        $this->assertSame($t->testTrim2Params('Hello World', 'Hdle'), 'o Wor');
+        $this->assertSame($this->test->testTrim2Params('Hello World', 'Hdle'), 'o Wor');
     }
 
     public function testLtrim()
     {
-        $t = new \Test\Strings();
+        $testSuite = [
+            [' hello ', 'hello '],
+            ['hello ', 'hello '],
+            [' hello', 'hello'],
+        ];
 
-        $this->assertSame($t->testLtrim(' hello '), 'hello ');
-        $this->assertSame($t->testLtrim('hello '), 'hello ');
-        $this->assertSame($t->testLtrim(' hello'), 'hello');
+        foreach ($testSuite as $itm) {
+            $this->assertSame($this->test->testLtrim($itm[0]), $itm[1]);
+        }
 
-        $this->assertSame($t->testLtrim2Params('Hello World', 'Hdle'), 'o World');
+        $this->assertSame($this->test->testLtrim2Params('Hello World', 'Hdle'), 'o World');
     }
 
     public function testRtrim()
     {
-        $t = new \Test\Strings();
+        $testSuite = [
+            [' hello ', ' hello'],
+            ['hello ', 'hello'],
+            [' hello', ' hello'],
+        ];
 
-        $this->assertSame($t->testRtrim(' hello '), ' hello');
-        $this->assertSame($t->testRtrim('hello '), 'hello');
-        $this->assertSame($t->testRtrim(' hello'), ' hello');
+        foreach ($testSuite as $itm) {
+            $this->assertSame($this->test->testRtrim($itm[0]), $itm[1]);
+        }
 
-        $this->assertSame($t->testRtrim2Params('Hello World', 'Hdle'), 'Hello Wor');
+        $this->assertSame($this->test->testRtrim2Params('Hello World', 'Hdle'), 'Hello Wor');
     }
 
     public function testStrpos()
     {
-        $t = new \Test\Strings();
-
-        $this->assertSame($t->testStrpos('abcdef abcdef', 'a'), 0);
-        $this->assertSame($t->testStrposOffset('abcdef abcdef', 'a', 1), 7);
+        $this->assertSame($this->test->testStrpos('abcdef abcdef', 'a'), 0);
+        $this->assertSame($this->test->testStrposOffset('abcdef abcdef', 'a', 1), 7);
     }
 
     public function testImplode()
     {
-        $t = new \Test\Strings();
-
         $pieces = ['a', 'b', 'c'];
-        $this->assertSame($t->testImplode(',', $pieces), 'a,b,c');
+        $this->assertSame($this->test->testImplode(',', $pieces), 'a,b,c');
     }
 
     public function testExplode()
     {
-        $t = new \Test\Strings();
-
         $pizza = 'piece1,piece2,piece3,piece4,piece5,piece6';
-        $ar1 = $t->testExplode(',', $pizza);
-        $ar2 = $t->testExplodeStr($pizza);
+        $ar1 = $this->test->testExplode(',', $pizza);
+        $ar2 = $this->test->testExplodeStr($pizza);
 
         $this->assertSame($ar1[0], 'piece1');
         $this->assertSame($ar1[2], 'piece3');
@@ -170,58 +174,66 @@ class StringTest extends TestCase
         $this->assertSame($ar2[0], 'piece1');
         $this->assertSame($ar2[2], 'piece3');
 
-        $ar3 = $t->testExplodeLimit($pizza, 3);
+        $ar3 = $this->test->testExplodeLimit($pizza, 3);
         $this->assertCount(3, $ar3);
         $this->assertSame($ar3[2], 'piece3,piece4,piece5,piece6');
     }
 
-    public function testSubstr()
+    public function providerSubstring(): array
     {
-        $t = new \Test\Strings();
-
-        $this->assertSame($t->testSubstr('abcdef', 1, 3), 'bcd');
-        $this->assertSame($t->testSubstr('abcdef', 0, 4), 'abcd');
-        $this->assertSame($t->testSubstr('abcdef', 0, 8), 'abcdef');
-        $this->assertSame($t->testSubstr('abcdef', -1, 1), 'f');
-        $this->assertSame($t->testSubstr('abcdef', -3, -1), 'de');
-        $this->assertSame($t->testSubstr('abcdef', 2, -1), 'cde');
-
-        $this->assertSame($t->testSubstr2('abcdef', -1), 'f');
-        $this->assertSame($t->testSubstr2('abcdef', -2), 'ef');
-        $this->assertSame($t->testSubstr2('abcdef', 2), 'cdef');
-
-        $this->assertSame($t->testSubstr3('abcdef'), 'f');
-        $this->assertSame($t->testSubstr4('abcdef'), 'abcde');
+        $testStr = 'abcdef';
+        return [
+            [$testStr, 1, 3, 'bcd'],
+            [$testStr, 0, 4, 'abcd'],
+            [$testStr, 0, 8, 'abcdef'],
+            [$testStr, -1, 1, 'f'],
+            [$testStr, -3, -1, 'de'],
+            [$testStr, 2, -1, 'cde'],
+        ];
     }
 
-    public function testAddslashes()
+    /** @dataProvider providerSubstring */
+    public function testSubstr(string $input, int $from, int $to, string $expected)
     {
-        $t = new \Test\Strings();
+        $this->assertSame($this->test->testSubstr($input, $from, $to), $expected);
 
-        $this->assertSame($t->testAddslashes("How's everybody"), addslashes("How's everybody"));
-        $this->assertSame($t->testAddslashes('Are you "JOHN"?'), addslashes('Are you "JOHN"?'));
-        $this->assertSame($t->testAddslashes("hello\0world"), addslashes("hello\0world"));
+        $this->assertSame($this->test->testSubstr2($input, -1), 'f');
+        $this->assertSame($this->test->testSubstr2($input, -2), 'ef');
+        $this->assertSame($this->test->testSubstr2($input, 2), 'cdef');
+
+        $this->assertSame($this->test->testSubstr3($input), 'f');
+        $this->assertSame($this->test->testSubstr4($input), 'abcde');
     }
 
-    public function testStripslashes()
+    public function providerAddStripSlashes(): array
     {
-        $t = new \Test\Strings();
+        return [
+            ["How's everybody", "How's everybody"],
+            ['Are you "JOHN"?', 'Are you "JOHN"?'],
+            ["hello\0world",    "hello\0world"],
+        ];
+    }
 
-        $this->assertSame($t->testStripslashes(addslashes("How's everybody")), "How's everybody");
-        $this->assertSame($t->testStripslashes(addslashes('Are you "JOHN"?')), 'Are you "JOHN"?');
-        $this->assertSame($t->testStripslashes(addslashes("hello\0world")), "hello\0world");
+    /** @dataProvider providerAddStripSlashes */
+    public function testAddslashes(string $sample, string $expected)
+    {
+        $this->assertSame($this->test->testAddslashes($sample), addslashes($expected));
+    }
+
+    /** @dataProvider providerAddStripSlashes */
+    public function testStripslashes(string $sample, string $expected)
+    {
+        $this->assertSame($this->test->testStripslashes(addslashes($sample)), $expected);
     }
 
     public function testStripcslashes()
     {
-        $t = new \Test\Strings();
-
         parent::assertSame(
             stripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z'),
-            $t->testStripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z')
+            $this->test->testStripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z')
         );
-        parent::assertSame(stripcslashes('\065\x64'), $t->testStripcslashes('\065\x64'));
-        parent::assertSame(stripcslashes(''), $t->testStripcslashes(''));
+        parent::assertSame(stripcslashes('\065\x64'), $this->test->testStripcslashes('\065\x64'));
+        parent::assertSame(stripcslashes(''), $this->test->testStripcslashes(''));
     }
 
     public function testMultilineStrings()
@@ -230,22 +242,19 @@ class StringTest extends TestCase
             Hello world
         ';
 
-        $t = new \Test\Strings();
-
-        $this->assertSame($hardcodedString, $t->testHardcodedMultilineString());
+        $this->assertSame($hardcodedString, $this->test->testHardcodedMultilineString());
         ob_start();
-        $t->testEchoMultilineString();
+        $this->test->testEchoMultilineString();
         $this->assertSame($hardcodedString, ob_get_clean());
-        $this->assertSame(trim($hardcodedString), $t->testTrimMultilineString());
+        $this->assertSame(trim($hardcodedString), $this->test->testTrimMultilineString());
 
         $escapedString = '\"\}\$hello\$\"\'';
-        $this->assertSame($escapedString, $t->testWellEscapedMultilineString());
+        $this->assertSame($escapedString, $this->test->testWellEscapedMultilineString());
     }
 
     public function testStrToHex()
     {
-        $t = new \Test\Strings();
-        $this->assertSame('746573742073656e74656e73652e2e2e', $t->strToHex('test sentense...'));
+        $this->assertSame('746573742073656e74656e73652e2e2e', $this->test->strToHex('test sentense...'));
     }
 
     public function providerHashEquals()
