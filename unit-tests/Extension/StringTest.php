@@ -182,6 +182,7 @@ class StringTest extends TestCase
     public function providerSubstring(): array
     {
         $testStr = 'abcdef';
+
         return [
             [$testStr, 1, 3, 'bcd'],
             [$testStr, 0, 4, 'abcd'],
