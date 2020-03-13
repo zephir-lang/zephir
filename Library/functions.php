@@ -122,6 +122,12 @@ function add_slashes(string $string): string
             $newstr .= $escape.$ch;
             continue;
         }
+
+        if ('"' === $ch) {
+            $newstr .= $escape.$ch;
+            continue;
+        }
+
         $newstr .= $ch;
     }
 
