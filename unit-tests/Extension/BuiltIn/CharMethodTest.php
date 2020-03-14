@@ -18,9 +18,9 @@ class CharMethodTest extends TestCase
 {
     public function testModifications()
     {
-        $t = new CharMethods();
+        $charm = new CharMethods();
 
-        $this->assertSame('61', $t->getHex());
-        $this->assertSame('68656C6C6F', $t->getHexForString('hello'));
+        $this->assertSame('61', $charm->getHex());
+        $this->assertSame('68656C6C6F', $charm->getHexForString('hello'));
     }
 }

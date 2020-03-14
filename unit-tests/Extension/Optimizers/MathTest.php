@@ -24,122 +24,122 @@ class MathTest extends TestCase
 {
     public function testLdexp()
     {
-        $t = new Ldexp();
+        $test = new Ldexp();
 
-        $this->assertSame(16.0, $t->testInt());
-        $this->assertSame(16.0, $t->testVar());
-        $this->assertSame(16.0, $t->testIntValue1());
-        $this->assertSame(16.0, $t->testDoubleInt());
-        $this->assertSame(16.0, $t->testDouble());
-        $this->assertSame(524288.0, $t->testIntParameter(8, 16));
-        $this->assertSame(524288.0, $t->testvarParameter(8, 16));
+        $this->assertSame(16.0, $test->testInt());
+        $this->assertSame(16.0, $test->testVar());
+        $this->assertSame(16.0, $test->testIntValue1());
+        $this->assertSame(16.0, $test->testDoubleInt());
+        $this->assertSame(16.0, $test->testDouble());
+        $this->assertSame(524288.0, $test->testIntParameter(8, 16));
+        $this->assertSame(524288.0, $test->testvarParameter(8, 16));
     }
 
     public function testSqrt()
     {
-        $t = new Sqrt();
+        $test = new Sqrt();
 
-        $this->assertSame(2.0, $t->testInt());
-        $this->assertSame(2.0, $t->testVar());
+        $this->assertSame(2.0, $test->testInt());
+        $this->assertSame(2.0, $test->testVar());
 
-        $this->assertSame(2.0, $t->testIntValue1());
-        $this->assertSame(4.0, $t->testIntValue2());
+        $this->assertSame(2.0, $test->testIntValue1());
+        $this->assertSame(4.0, $test->testIntValue2());
 
-        $this->assertSame(2.0, $t->testIntParameter(4));
-        $this->assertSame(4.0, $t->testIntParameter(16));
+        $this->assertSame(2.0, $test->testIntParameter(4));
+        $this->assertSame(4.0, $test->testIntParameter(16));
 
-        $this->assertSame(2.0, $t->testVarParameter(4));
-        $this->assertSame(4.0, $t->testVarParameter(16));
+        $this->assertSame(2.0, $test->testVarParameter(4));
+        $this->assertSame(4.0, $test->testVarParameter(16));
     }
 
     public function testSin()
     {
-        $t = new Sin();
+        $test = new Sin();
 
-        $this->assertSame(sin(4), $t->testInt());
-        $this->assertSame(sin(4), $t->testVar());
+        $this->assertSame(sin(4), $test->testInt());
+        $this->assertSame(sin(4), $test->testVar());
 
-        $this->assertSame(sin(4), $t->testIntValue1());
-        $this->assertSame(sin(16), $t->testIntValue2());
+        $this->assertSame(sin(4), $test->testIntValue1());
+        $this->assertSame(sin(16), $test->testIntValue2());
 
-        $this->assertSame(sin(4), $t->testIntParameter(4));
-        $this->assertSame(sin(16), $t->testIntParameter(16));
+        $this->assertSame(sin(4), $test->testIntParameter(4));
+        $this->assertSame(sin(16), $test->testIntParameter(16));
 
-        $this->assertSame(sin(4), $t->testVarParameter(4));
-        $this->assertSame(sin(16), $t->testVarParameter(16));
+        $this->assertSame(sin(4), $test->testVarParameter(4));
+        $this->assertSame(sin(16), $test->testVarParameter(16));
     }
 
     public function testCos()
     {
-        $t = new Cos();
+        $test = new Cos();
 
-        $this->assertSame(cos(4), $t->testInt());
-        $this->assertSame(cos(4), $t->testVar());
+        $this->assertSame(cos(4), $test->testInt());
+        $this->assertSame(cos(4), $test->testVar());
 
-        $this->assertSame(cos(4), $t->testIntValue1());
-        $this->assertSame(cos(16), $t->testIntValue2());
+        $this->assertSame(cos(4), $test->testIntValue1());
+        $this->assertSame(cos(16), $test->testIntValue2());
 
-        $this->assertSame(cos(4), $t->testIntParameter(4));
-        $this->assertSame(cos(16), $t->testIntParameter(16));
+        $this->assertSame(cos(4), $test->testIntParameter(4));
+        $this->assertSame(cos(16), $test->testIntParameter(16));
 
-        $this->assertSame(cos(4), $t->testVarParameter(4));
-        $this->assertSame(cos(16), $t->testVarParameter(16));
+        $this->assertSame(cos(4), $test->testVarParameter(4));
+        $this->assertSame(cos(16), $test->testVarParameter(16));
     }
 
     public function testACos()
     {
-        $t = new ACos();
+        $test = new ACos();
 
-        $this->assertSame(acos(1), $t->testInt());
-        $this->assertSame(acos(1), $t->testVar());
+        $this->assertSame(acos(1), $test->testInt());
+        $this->assertSame(acos(1), $test->testVar());
 
-        $this->assertSame(acos(0), $t->testIntValue1());
+        $this->assertSame(acos(0), $test->testIntValue1());
 
-        $this->assertSame(acos(1), $t->testIntParameter(1));
-        $this->assertSame(acos(0), $t->testIntParameter(0));
+        $this->assertSame(acos(1), $test->testIntParameter(1));
+        $this->assertSame(acos(0), $test->testIntParameter(0));
 
-        $this->assertSame(acos(1), $t->testVarParameter(1));
-        $this->assertSame(acos(0), $t->testVarParameter(0));
+        $this->assertSame(acos(1), $test->testVarParameter(1));
+        $this->assertSame(acos(0), $test->testVarParameter(0));
     }
 
     public function testASin()
     {
-        $t = new ASin();
+        $test = new ASin();
 
-        $this->assertSame(asin(1), $t->testInt());
-        $this->assertSame(asin(1), $t->testVar());
+        $this->assertSame(asin(1), $test->testInt());
+        $this->assertSame(asin(1), $test->testVar());
 
-        $this->assertSame(asin(0), $t->testIntValue1());
+        $this->assertSame(asin(0), $test->testIntValue1());
 
-        $this->assertSame(asin(1), $t->testIntParameter(1));
-        $this->assertSame(asin(0), $t->testIntParameter(0));
+        $this->assertSame(asin(1), $test->testIntParameter(1));
+        $this->assertSame(asin(0), $test->testIntParameter(0));
 
-        $this->assertSame(asin(1), $t->testVarParameter(1));
-        $this->assertSame(asin(0), $t->testVarParameter(0));
+        $this->assertSame(asin(1), $test->testVarParameter(1));
+        $this->assertSame(asin(0), $test->testVarParameter(0));
     }
 
     public function testTan()
     {
-        $t = new Tan();
+        $test = new Tan();
 
-        $this->assertSame(tan(0), $t->testInt());
-        $this->assertSame(tan(0), $t->testVar());
+        $this->assertSame(tan(0), $test->testInt());
+        $this->assertSame(tan(0), $test->testVar());
 
-        $this->assertSame(tan(1), $t->testVar2());
-        $this->assertSame(tan(1), $t->testIntValue1());
-        $this->assertSame(tan(2), $t->testIntValue2());
+        $this->assertSame(tan(1), $test->testVar2());
+        $this->assertSame(tan(1), $test->testIntValue1());
+        $this->assertSame(tan(2), $test->testIntValue2());
 
-        $this->assertSame(tan(0), $t->testIntParameter(0));
-        $this->assertSame(tan(1), $t->testIntParameter(1));
-        $this->assertSame(tan(2), $t->testIntParameter(2));
-        $this->assertSame(tan(3), $t->testIntParameter(3));
-        $this->assertSame(tan(4), $t->testIntParameter(4));
+        $this->assertSame(tan(0), $test->testIntParameter(0));
+        $this->assertSame(tan(1), $test->testIntParameter(1));
+        $this->assertSame(tan(2), $test->testIntParameter(2));
+        $this->assertSame(tan(3), $test->testIntParameter(3));
+        $this->assertSame(tan(4), $test->testIntParameter(4));
 
-        $this->assertSame(tan(0), $t->testVarParameter(0));
-        $this->assertSame(tan(1), $t->testVarParameter(1));
-        $this->assertSame(tan(2), $t->testVarParameter(2));
-        $this->assertSame(tan(3), $t->testVarParameter(3));
-        $this->assertSame(tan(4), $t->testVarParameter(4));
-        $this->assertSame(tan(0), $t->testVarParameter('0'));
+        $this->assertSame(tan(0), $test->testVarParameter(0));
+        $this->assertSame(tan(1), $test->testVarParameter(1));
+        $this->assertSame(tan(2), $test->testVarParameter(2));
+        $this->assertSame(tan(3), $test->testVarParameter(3));
+        $this->assertSame(tan(4), $test->testVarParameter(4));
+        $this->assertSame(tan(0), $test->testVarParameter('0'));
     }
 }

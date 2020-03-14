@@ -16,23 +16,26 @@ use Test\Oo\OoParams;
 
 class OoParamsStrictTest extends TestCase
 {
+    /** @var OoParams */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new OoParams();
+    }
+
     public function testSetStrictAgeSuccess()
     {
-        $t = new OoParams();
-
-        $this->assertSame($t->setStrictAge(17), 17);
+        $this->assertSame($this->test->setStrictAge(17), 17);
     }
 
     public function testSetStrictAverageSuccess()
     {
-        $t = new OoParams();
-
-        $this->assertSame($t->setStrictAverage(17.1), 17.1);
+        $this->assertSame($this->test->setStrictAverage(17.1), 17.1);
     }
 
     public function testSetStrictNameSuccess()
     {
-        $t = new OoParams();
-        $this->assertSame($t->setStrictName('peter'), 'peter');
+        $this->assertSame($this->test->setStrictName('peter'), 'peter');
     }
 }

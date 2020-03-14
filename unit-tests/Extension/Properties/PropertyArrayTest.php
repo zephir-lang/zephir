@@ -18,10 +18,10 @@ class PropertyArrayTest extends TestCase
 {
     public function testAssertations()
     {
-        $t = new PropertyArray();
-        $this->assertSame([1], $t->someArray);
-        $t->appendSome('one');
-        $this->assertSame([1, 'one'], $t->someArray);
+        $test = new PropertyArray();
+        $this->assertSame([1], $test->someArray);
+        $test->appendSome('one');
+        $this->assertSame([1, 'one'], $test->someArray);
     }
 
     public function testIssues1831()
@@ -46,8 +46,8 @@ class PropertyArrayTest extends TestCase
             'data 8',
         ];
 
-        $t = new PropertyArray();
-        $t->setOtherArray($data);
-        $this->assertSame($header, $t->testIssues1831());
+        $test = new PropertyArray();
+        $test->setOtherArray($data);
+        $this->assertSame($header, $test->testIssues1831());
     }
 }

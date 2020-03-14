@@ -17,14 +17,14 @@ class EmptyTest extends TestCase
 {
     public function testEmpty()
     {
-        $t = new \Test\EmptyTest();
+        $test = new \Test\EmptyTest();
 
-        $this->assertTrue($t->testDynamicVarArrayEmpty());
-        $this->assertFalse($t->testDynamicVarArrayNotEmpty());
-        $this->assertTrue($t->testEmptyString());
-        $this->assertFalse($t->testNotEmptyString());
-        $this->assertTrue($t->testString(''));
-        $this->assertFalse($t->testString('this is a string'));
-        $this->assertTrue($t->testString('0'));
+        $this->assertTrue($test->testDynamicVarArrayEmpty());
+        $this->assertFalse($test->testDynamicVarArrayNotEmpty());
+        $this->assertTrue($test->testEmptyString());
+        $this->assertFalse($test->testNotEmptyString());
+        $this->assertTrue($test->testString(''));
+        $this->assertFalse($test->testString('this is a string'));
+        $this->assertTrue($test->testString('0'));
     }
 }

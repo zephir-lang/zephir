@@ -17,14 +17,14 @@ class PrivatePropertiesTest extends TestCase
 {
     public function testAssertations()
     {
-        $t = new \Test\Properties\PrivateProperties();
+        $test = new \Test\Properties\PrivateProperties();
 
-        $this->assertNull($t->getSomeNull());
-        $this->assertNull($t->getSomeNullInitial());
-        $this->assertFalse($t->getSomeFalse());
-        $this->assertTrue($t->getSomeTrue());
-        $this->assertSame($t->getSomeInteger(), 10);
-        $this->assertSame($t->getSomeDouble(), 10.25);
-        $this->assertSame($t->getSomeString(), 'test');
+        $this->assertNull($test->getSomeNull());
+        $this->assertNull($test->getSomeNullInitial());
+        $this->assertFalse($test->getSomeFalse());
+        $this->assertTrue($test->getSomeTrue());
+        $this->assertSame($test->getSomeInteger(), 10);
+        $this->assertSame($test->getSomeDouble(), 10.25);
+        $this->assertSame($test->getSomeString(), 'test');
     }
 }

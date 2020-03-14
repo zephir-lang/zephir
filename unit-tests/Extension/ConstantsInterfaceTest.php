@@ -15,6 +15,14 @@ use PHPUnit\Framework\TestCase;
 
 class ConstantsInterfaceTest extends TestCase
 {
+    /** @var \Test\ConstantsInterface $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\ConstantsInterface();
+    }
+
     public function testConstants()
     {
         $this->assertSame(\Test\TestInterface::C1, null);
@@ -27,15 +35,13 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testClassOfInterface()
     {
-        $t = new \Test\ConstantsInterface();
-
-        $this->assertInternalType('object', $t);
-        $this->assertSame($t->testReadInterfaceConstant1(), null);
-        $this->assertSame($t->testReadInterfaceConstant2(), false);
-        $this->assertSame($t->testReadInterfaceConstant3(), true);
-        $this->assertSame($t->testReadInterfaceConstant4(), 10);
-        $this->assertSame($t->testReadInterfaceConstant5(), 10.25);
-        $this->assertSame($t->testReadInterfaceConstant6(), 'test');
+        $this->assertInternalType('object', $this->test);
+        $this->assertSame($this->test->testReadInterfaceConstant1(), null);
+        $this->assertSame($this->test->testReadInterfaceConstant2(), false);
+        $this->assertSame($this->test->testReadInterfaceConstant3(), true);
+        $this->assertSame($this->test->testReadInterfaceConstant4(), 10);
+        $this->assertSame($this->test->testReadInterfaceConstant5(), 10.25);
+        $this->assertSame($this->test->testReadInterfaceConstant6(), 'test');
     }
 
     public function testStaticConstantsInheritanceFromInterface()
@@ -50,14 +56,12 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testInstanceConstantsInheritanceFromInterface()
     {
-        $t = new \Test\ConstantsInterface();
-
-        $this->assertInternalType('object', $t);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant1(), null);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant2(), false);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant3(), true);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant4(), 10);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant5(), 10.25);
-        $this->assertSame($t->testReadInheritanceFromInterfaceConstant6(), 'test');
+        $this->assertInternalType('object', $this->test);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant1(), null);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant2(), false);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant3(), true);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant4(), 10);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant5(), 10.25);
+        $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant6(), 'test');
     }
 }

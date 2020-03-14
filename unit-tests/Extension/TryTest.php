@@ -19,15 +19,15 @@ class TryTest extends TestCase
     {
         $this->expectException('\Exception');
 
-        $t = new \Test\TryTest();
-        $t->testThrow1();
+        $test = new \Test\TryTest();
+        $test->testThrow1();
     }
 
     public function testThrow2()
     {
         $this->expectException('\Exception');
 
-        $t = new \Test\TryTest();
-        $t->testThrow2();
+        $test = new \Test\TryTest();
+        $test->testThrow2();
     }
 }

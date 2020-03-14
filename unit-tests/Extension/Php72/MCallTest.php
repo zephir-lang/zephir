@@ -21,7 +21,7 @@ class MCallTest extends TestCase
     /** @test */
     public function shouldThrowTypeErrorForOptionalBoolean1()
     {
-        $t = new Mcall();
+        $test = new Mcall();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageRegExp(
@@ -31,13 +31,13 @@ class MCallTest extends TestCase
             'must be of the type bool(ean)?, string given/'
         );
 
-        $t->optionalParameterBoolean('test');
+        $test->optionalParameterBoolean('test');
     }
 
     /** @test */
     public function shouldThrowTypeErrorForOptionalBoolean2()
     {
-        $t = new Mcall();
+        $test = new Mcall();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageRegExp(
@@ -47,6 +47,6 @@ class MCallTest extends TestCase
             'must be of the type bool(ean)?, array given/'
         );
 
-        $t->optionalParameterBoolean([]);
+        $test->optionalParameterBoolean([]);
     }
 }

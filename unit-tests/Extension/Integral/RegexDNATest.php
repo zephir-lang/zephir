@@ -17,10 +17,10 @@ class RegexDNATest extends TestCase
 {
     public function testProcess()
     {
-        $t = new \Test\RegexDNA();
+        $test = new \Test\RegexDNA();
 
         ob_start();
-        $t->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
+        $test->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(

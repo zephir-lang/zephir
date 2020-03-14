@@ -17,7 +17,7 @@ class FannkuchTest extends TestCase
 {
     public function testFannkuch()
     {
-        $t = new \Test\Fannkuch();
-        $this->assertSame($t->process(5), [11, 5, 7]);
+        $test = new \Test\Fannkuch();
+        $this->assertSame($test->process(5), [11, 5, 7]);
     }
 }

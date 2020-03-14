@@ -17,6 +17,14 @@ use Test\BuiltIn\StringMethods;
 
 class StringMethodTest extends TestCase
 {
+    /** @var StringMethods $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new StringMethods();
+    }
+
     /**
      * @dataProvider providerCamelize
      *
@@ -26,9 +34,7 @@ class StringMethodTest extends TestCase
      */
     public function testCamelize($actual, $expected, $delimiter)
     {
-        $t = new StringMethods();
-
-        $this->assertSame($expected, $t->camelize($actual, $delimiter));
+        $this->assertSame($expected, $this->test->camelize($actual, $delimiter));
     }
 
     /**
@@ -43,8 +49,7 @@ class StringMethodTest extends TestCase
             'The second argument passed to the camelize() must be a string containing at least one character'
         );
 
-        $t = new StringMethods();
-        $t->camelize('CameLiZe', $delimiter);
+        $this->test->camelize('CameLiZe', $delimiter);
     }
 
     /**
@@ -56,9 +61,7 @@ class StringMethodTest extends TestCase
      */
     public function testUnCamelize($actual, $expected, $delimiter)
     {
-        $t = new StringMethods();
-
-        $this->assertSame($expected, $t->uncamelize($actual, $delimiter));
+        $this->assertSame($expected, $this->test->uncamelize($actual, $delimiter));
     }
 
     /**
@@ -73,88 +76,72 @@ class StringMethodTest extends TestCase
             'Second argument passed to the uncamelize() must be a string of one character'
         );
 
-        $t = new StringMethods();
-
-        $t->uncamelize('CameLiZe', $delimiter);
+        $this->test->uncamelize('CameLiZe', $delimiter);
     }
 
     public function testLength()
     {
-        $t = new StringMethods();
-
-        $this->assertSame(5, $t->getLength1());
-        $this->assertSame(5, $t->getLength2());
-        $this->assertSame(10, $t->getLength3());
-        $this->assertSame(3, $t->getLength4('foo'));
-        $this->assertSame(8, $t->getLength5('bar'));
+        $this->assertSame(5, $this->test->getLength1());
+        $this->assertSame(5, $this->test->getLength2());
+        $this->assertSame(10, $this->test->getLength3());
+        $this->assertSame(3, $this->test->getLength4('foo'));
+        $this->assertSame(8, $this->test->getLength5('bar'));
     }
 
     public function testIndex()
     {
-        $t = new StringMethods();
-
-        $this->assertSame(0, $t->getIndex('test', 't'));
-        $this->assertSame(3, $t->getIndexWithPosition('test', 't', 1));
+        $this->assertSame(0, $this->test->getIndex('test', 't'));
+        $this->assertSame(3, $this->test->getIndexWithPosition('test', 't', 1));
     }
 
     public function testTrim()
     {
-        $t = new StringMethods();
-
-        $this->assertSame('hello', $t->getTrimmed());
-        $this->assertSame('foo bar', $t->getTrimmed1(' foo bar  '));
-        $this->assertSame('foo bar  ', $t->getLeftTrimmed(' foo bar  '));
-        $this->assertSame(' foo bar', $t->getRightTrimmed(' foo bar  '));
+        $this->assertSame('hello', $this->test->getTrimmed());
+        $this->assertSame('foo bar', $this->test->getTrimmed1(' foo bar  '));
+        $this->assertSame('foo bar  ', $this->test->getLeftTrimmed(' foo bar  '));
+        $this->assertSame(' foo bar', $this->test->getRightTrimmed(' foo bar  '));
     }
 
     public function testChangeCase()
     {
-        $t = new StringMethods();
+        $this->assertSame('FOO', $this->test->getUpper('foo'));
+        $this->assertSame('foo', $this->test->getLower('FOO'));
 
-        $this->assertSame('FOO', $t->getUpper('foo'));
-        $this->assertSame('foo', $t->getLower('FOO'));
-
-        $this->assertSame('Foo', $t->getUpperFirst('foo'));
-        $this->assertSame('fOO', $t->getLowerFirst('FOO'));
+        $this->assertSame('Foo', $this->test->getUpperFirst('foo'));
+        $this->assertSame('fOO', $this->test->getLowerFirst('FOO'));
     }
 
     public function testFormat()
     {
-        $t = new StringMethods();
-
-        $this->assertSame('hello zephir!', $t->getFormatted('zephir'));
+        $this->assertSame('hello zephir!', $this->test->getFormatted('zephir'));
     }
 
     public function testHashes()
     {
-        $t = new StringMethods();
         $str = 'hello world!';
 
-        $this->assertSame(md5($str), $t->getMd5($str));
-        $this->assertSame(sha1($str), $t->getSha1($str));
+        $this->assertSame(md5($str), $this->test->getMd5($str));
+        $this->assertSame(sha1($str), $this->test->getSha1($str));
     }
 
     public function testModifications()
     {
-        $t = new StringMethods();
-        $this->assertSame("<br />\nfoo<br />\n", $t->getNl2br("\nfoo\n"));
-        $this->assertSame('foobarfoobar', $t->getRepeatted('foobar', 2));
+        $this->assertSame("<br />\nfoo<br />\n", $this->test->getNl2br("\nfoo\n"));
+        $this->assertSame('foobarfoobar', $this->test->getRepeatted('foobar', 2));
 
-        $shuffled = $t->getShuffled('hello world');
+        $shuffled = $this->test->getShuffled('hello world');
         $this->assertNotEquals('hello world', $shuffled);
         $this->assertSame(\strlen('hello world'), \strlen($shuffled));
 
-        $this->assertSame('olleh', $t->getReversed('hello'));
+        $this->assertSame('olleh', $this->test->getReversed('hello'));
     }
 
     public function testParsers()
     {
-        $t = new StringMethods();
-
         // TODO: Do we still need this?
         // $this->assertSame(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
 
-        $this->assertSame(['foo', 'bar', 'baz'], $t->getParsedCsv('foo,bar,"baz"'));
+        $this->assertSame(['foo', 'bar', 'baz'], $this->test->getParsedCsv('foo,bar,"baz"'));
     }
 
     public function providerCamelize()

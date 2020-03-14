@@ -19,24 +19,24 @@ class PublicPropertiesTest extends TestCase
 {
     public function testAssertations()
     {
-        $t = new PublicProperties();
+        $test = new PublicProperties();
 
-        $this->assertNull($t->someNull);
-        $this->assertNull($t->someNullInitial);
-        $this->assertFalse($t->someFalse);
-        $this->assertTrue($t->someTrue);
-        $this->assertSame($t->someInteger, 10);
-        $this->assertSame($t->someDouble, 10.25);
-        $this->assertSame($t->someString, 'test');
+        $this->assertNull($test->someNull);
+        $this->assertNull($test->someNullInitial);
+        $this->assertFalse($test->someFalse);
+        $this->assertTrue($test->someTrue);
+        $this->assertSame($test->someInteger, 10);
+        $this->assertSame($test->someDouble, 10.25);
+        $this->assertSame($test->someString, 'test');
 
-        $this->assertInternalType('array', $t->someEmptyArray);
-        $this->assertSame([1, 2, 3, 4], $t->someArray);
+        $this->assertInternalType('array', $test->someEmptyArray);
+        $this->assertSame([1, 2, 3, 4], $test->someArray);
     }
 
     public function test394Issue()
     {
-        $t = new PublicProperties();
-        $this->assertTrue($t->test394Issue());
+        $test = new PublicProperties();
+        $this->assertTrue($test->test394Issue());
     }
 
     /**
@@ -44,7 +44,7 @@ class PublicPropertiesTest extends TestCase
      */
     public function test537Issue()
     {
-        $t = new ExtendsPublicProperties();
-        $this->assertSame($t->getSomeGetterSetterArray(), ['holy']);
+        $test = new ExtendsPublicProperties();
+        $this->assertSame($test->getSomeGetterSetterArray(), ['holy']);
     }
 }

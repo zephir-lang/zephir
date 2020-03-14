@@ -18,23 +18,23 @@ class SwitchFlowTest extends TestCase
 {
     public function testSwitch()
     {
-        $t = new SwitchFlow();
+        $test = new SwitchFlow();
 
-        $this->assertSame(10, $t->testSwitch1());
-        $this->assertTrue($t->testSwitch2());
-        $this->assertFalse($t->testSwitch3());
-        $this->assertSame(2, $t->testSwitch4());
-        $this->assertSame(1, $t->testSwitch5());
-        $this->assertSame(1, $t->testSwitch6());
-        $this->assertSame(1, $t->testSwitch7());
-        $this->assertSame(2, $t->testSwitch8());
-        $this->assertSame(2, $t->testSwitch9());
-        $this->assertSame(2, $t->testSwitch10());
-        $this->assertSame(1, $t->testSwitch11());
-        $this->assertSame(1, $t->testSwitch12(10, 6));
-        $this->assertSame(0, $t->testSwitch12(6, 10));
-        $this->assertSame(2, $t->testSwitch12(2, 3));
-        $this->assertSame('aaa', $t->testSwitch14(1));
-        $this->assertSame('bbb', $t->testSwitch14(99));
+        $this->assertSame(10, $test->testSwitch1());
+        $this->assertTrue($test->testSwitch2());
+        $this->assertFalse($test->testSwitch3());
+        $this->assertSame(2, $test->testSwitch4());
+        $this->assertSame(1, $test->testSwitch5());
+        $this->assertSame(1, $test->testSwitch6());
+        $this->assertSame(1, $test->testSwitch7());
+        $this->assertSame(2, $test->testSwitch8());
+        $this->assertSame(2, $test->testSwitch9());
+        $this->assertSame(2, $test->testSwitch10());
+        $this->assertSame(1, $test->testSwitch11());
+        $this->assertSame(1, $test->testSwitch12(10, 6));
+        $this->assertSame(0, $test->testSwitch12(6, 10));
+        $this->assertSame(2, $test->testSwitch12(2, 3));
+        $this->assertSame('aaa', $test->testSwitch14(1));
+        $this->assertSame('bbb', $test->testSwitch14(99));
     }
 }

@@ -17,8 +17,8 @@ class CblockTest extends TestCase
 {
     public function testBlock()
     {
-        $t = new \Test\Cblock();
-        $this->assertSame($t->testCblock1(), 10);
-        $this->assertSame($t->testCblock2(), 55);
+        $test = new \Test\Cblock();
+        $this->assertSame($test->testCblock1(), 10);
+        $this->assertSame($test->testCblock2(), 55);
     }
 }

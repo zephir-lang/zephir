@@ -16,38 +16,40 @@ use Test\BuiltIn\IntMethods;
 
 class IntMethodTest extends TestCase
 {
+    /** @var IntMethods $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new IntMethods();
+    }
+
     public function testMath()
     {
-        $t = new IntMethods();
+        $this->assertSame(abs(10), $this->test->getAbs(10));
+        $this->assertSame(abs(-5), $this->test->getAbs1());
+        $this->assertSame(pow(2, 4), $this->test->getPow(2, 4));
+        $this->assertSame(sqrt(4), $this->test->getSqrt(4));
+        $this->assertSame(exp(2), $this->test->getExp(2));
 
-        $this->assertSame(abs(10), $t->getAbs(10));
-        $this->assertSame(abs(-5), $t->getAbs1());
-        $this->assertSame(pow(2, 4), $t->getPow(2, 4));
-        $this->assertSame(sqrt(4), $t->getSqrt(4));
-        $this->assertSame(exp(2), $t->getExp(2));
-
-        $this->assertSame(log(10), $t->getLog(10));
-        $this->assertSame(log(10, 10), $t->getLog(10, 10));
+        $this->assertSame(log(10), $this->test->getLog(10));
+        $this->assertSame(log(10, 10), $this->test->getLog(10, 10));
     }
 
     public function testTrigonometry()
     {
-        $t = new IntMethods();
-
-        $this->assertSame(sin(1), $t->getSin(1));
-        $this->assertSame(cos(1), $t->getCos(1));
-        $this->assertSame(tan(1), $t->getTan(1));
-        $this->assertSame(asin(1), $t->getAsin(1));
-        $this->assertSame(acos(1), $t->getAcos(1));
-        $this->assertSame(atan(1), $t->getAtan(1));
+        $this->assertSame(sin(1), $this->test->getSin(1));
+        $this->assertSame(cos(1), $this->test->getCos(1));
+        $this->assertSame(tan(1), $this->test->getTan(1));
+        $this->assertSame(asin(1), $this->test->getAsin(1));
+        $this->assertSame(acos(1), $this->test->getAcos(1));
+        $this->assertSame(atan(1), $this->test->getAtan(1));
     }
 
     public function testTransforms()
     {
-        $t = new IntMethods();
-
-        $this->assertSame(decbin(255), $t->getBinary(255));
-        $this->assertSame(dechex(255), $t->getHex(255));
-        $this->assertSame(decoct(255), $t->getOctal(255));
+        $this->assertSame(decbin(255), $this->test->getBinary(255));
+        $this->assertSame(dechex(255), $this->test->getHex(255));
+        $this->assertSame(decoct(255), $this->test->getOctal(255));
     }
 }

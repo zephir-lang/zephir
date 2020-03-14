@@ -18,32 +18,37 @@ class IssetTest extends TestCase
     public $b = 'a';
     private $test2 = 'b';
 
+    /** @var \Test\IssetTest $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\IssetTest();
+    }
+
     public function testIssetArray()
     {
-        $t = new \Test\IssetTest();
         $testArray = ['a', 'abc' => 'def', 'gef' => '123'];
-        $this->assertTrue($t->testIssetArray1($testArray, 'abc'));
-        $this->assertTrue(!$t->testIssetArray2($testArray, 12));
-        $this->assertTrue($t->testIssetArray3($testArray, 'gef'));
-        $this->assertTrue($t->testIssetArray4($testArray));
-        $this->assertTrue(!$t->testIssetArray5($testArray));
+        $this->assertTrue($this->test->testIssetArray1($testArray, 'abc'));
+        $this->assertTrue(!$this->test->testIssetArray2($testArray, 12));
+        $this->assertTrue($this->test->testIssetArray3($testArray, 'gef'));
+        $this->assertTrue($this->test->testIssetArray4($testArray));
+        $this->assertTrue(!$this->test->testIssetArray5($testArray));
     }
 
     public function testIssetProperties()
     {
-        $t = new \Test\IssetTest();
-        $this->assertTrue($t->testIssetProperty1($this));
-        $this->assertTrue($t->testIssetProperty2($this, 'test2'));
-        $this->assertTrue(!$t->testIssetProperty2($this, 'test3'));
-        $this->assertTrue($t->testIssetProperty3($this));
+        $this->assertTrue($this->test->testIssetProperty1($this));
+        $this->assertTrue($this->test->testIssetProperty2($this, 'test2'));
+        $this->assertTrue(!$this->test->testIssetProperty2($this, 'test3'));
+        $this->assertTrue($this->test->testIssetProperty3($this));
     }
 
     public function testIssetDynamicProperty()
     {
-        $t = new \Test\IssetTest();
-        $this->assertTrue($t->testIssetDynamicProperty1());
-        $this->assertTrue(!$t->testIssetDynamicProperty2($this));
+        $this->assertTrue($this->test->testIssetDynamicProperty1());
+        $this->assertTrue(!$this->test->testIssetDynamicProperty2($this));
         $this->s = ['a' => 'true'];
-        $this->assertTrue($t->testIssetDynamicProperty2($this));
+        $this->assertTrue($this->test->testIssetDynamicProperty2($this));
     }
 }

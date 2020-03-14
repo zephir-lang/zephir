@@ -15,66 +15,65 @@ use PHPUnit\Framework\TestCase;
 
 class TypeoffTest extends TestCase
 {
+    /** @var \Test\Typeoff */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\Typeoff();
+    }
+
     public function testNativeString()
     {
-        $t = new \Test\Typeoff();
-        $this->assertFalse($t->testNativeStringFalse());
-        $this->assertTrue($t->testNativeStringTrue());
+        $this->assertFalse($this->test->testNativeStringFalse());
+        $this->assertTrue($this->test->testNativeStringTrue());
     }
 
     public function testNativeInt()
     {
-        $t = new \Test\Typeoff();
-        $this->assertFalse($t->testNativeIntFalse());
-        $this->assertTrue($t->testNativeIntTrue());
+        $this->assertFalse($this->test->testNativeIntFalse());
+        $this->assertTrue($this->test->testNativeIntTrue());
     }
 
     public function testNativeDouble()
     {
-        $t = new \Test\Typeoff();
-        $this->assertTrue($t->testNativeDoubleTrue());
+        $this->assertTrue($this->test->testNativeDoubleTrue());
     }
 
     public function testNativeBool()
     {
-        $t = new \Test\Typeoff();
-        $this->assertFalse($t->testNativeBoolFalse());
-        $this->assertTrue($t->testNativeBoolTrue());
-        $this->assertFalse($t->testNotBoolTrue());
+        $this->assertFalse($this->test->testNativeBoolFalse());
+        $this->assertTrue($this->test->testNativeBoolTrue());
+        $this->assertFalse($this->test->testNotBoolTrue());
     }
 
     public function testArray()
     {
-        $t = new \Test\Typeoff();
-        $this->assertFalse($t->testArrayFalse());
-        $this->assertTrue($t->testArrayTrue());
+        $this->assertFalse($this->test->testArrayFalse());
+        $this->assertTrue($this->test->testArrayTrue());
     }
 
     public function testClassProperty()
     {
-        $t = new \Test\Typeoff();
-        $this->assertTrue($t->testClassPropertyAccess());
+        $this->assertTrue($this->test->testClassPropertyAccess());
     }
 
     public function testCallable()
     {
-        $t = new \Test\Typeoff();
         $callback = function () {
         };
-        $this->assertTrue($t->testCallableTypeOf($callback));
-        $this->assertFalse($t->testCallableTypeOf(true));
+        $this->assertTrue($this->test->testCallableTypeOf($callback));
+        $this->assertFalse($this->test->testCallableTypeOf(true));
     }
 
     public function testUnknown()
     {
-        $t = new \Test\Typeoff();
-
-        $this->assertSame('string', $t->testUnknownTypeOf('test'));
-        $this->assertSame('integer', $t->testUnknownTypeOf(5));
-        $this->assertSame('boolean', $t->testUnknownTypeOf(true));
-        $this->assertSame('double', $t->testUnknownTypeOf(5.5));
-        $this->assertSame('array', $t->testUnknownTypeOf([]));
-        $this->assertSame('object', $t->testUnknownTypeOf(new \stdClass()));
-        $this->assertSame('NULL', $t->testUnknownTypeOf(null));
+        $this->assertSame('string', $this->test->testUnknownTypeOf('test'));
+        $this->assertSame('integer', $this->test->testUnknownTypeOf(5));
+        $this->assertSame('boolean', $this->test->testUnknownTypeOf(true));
+        $this->assertSame('double', $this->test->testUnknownTypeOf(5.5));
+        $this->assertSame('array', $this->test->testUnknownTypeOf([]));
+        $this->assertSame('object', $this->test->testUnknownTypeOf(new \stdClass()));
+        $this->assertSame('NULL', $this->test->testUnknownTypeOf(null));
     }
 }
