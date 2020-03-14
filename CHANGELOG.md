@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - ????-??-??
+### Fixed
+- In some cases for C "control characters" aren't properly escaped
+  [#2065](https://github.com/phalcon/zephir/issues/2065)
 
 ## [0.12.17] - 2020-02-14
 ### Fixed
