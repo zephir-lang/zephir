@@ -19,7 +19,7 @@ class StringTest extends TestCase
     /** @var \Test\Strings $test */
     private $test;
 
-    public function SetUp()
+    public function setUp()
     {
         $this->test = new \Test\Strings();
     }
@@ -194,9 +194,9 @@ class StringTest extends TestCase
     }
 
     /** @dataProvider providerSubstring */
-    public function testSubstr(string $input, int $from, int $to, string $expected)
+    public function testSubstr(string $input, int $start, int $end, string $expected)
     {
-        $this->assertSame($this->test->testSubstr($input, $from, $to), $expected);
+        $this->assertSame($this->test->testSubstr($input, $start, $end), $expected);
 
         $this->assertSame($this->test->testSubstr2($input, -1), 'f');
         $this->assertSame($this->test->testSubstr2($input, -2), 'ef');
