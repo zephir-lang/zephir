@@ -185,6 +185,6 @@ class VarsTest extends TestCase
         // It will return variables of the most recent userland function
         // down the call stack.
         // In this case, all local variables of this method will be returned
-        $this->assertEquals(['t' => $test], $test->testGetDefinedVars());
+        $this->assertEquals(['test' => $test], $test->testGetDefinedVars());
     }
 }
