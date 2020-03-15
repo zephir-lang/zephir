@@ -147,6 +147,7 @@ class MCallTest extends TestCase
 
     /**
      * @return \ReflectionParameter
+     *
      * @throws \ReflectionException
      */
     protected function getMethodFirstParameter()
