@@ -5,7 +5,7 @@
 # For the full copyright and license information, please view
 # the LICENSE file that was distributed with this source code.
 
-Function SetupCommonEnvironmet {
+Function SetupCommonEnvironment {
     If (-not (Test-Path 'C:\Downloads')) {
         New-Item -ItemType Directory -Force -Path 'C:\Downloads' | Out-Null
     }
@@ -269,7 +269,7 @@ Function EnableTestExtension {
 
     Copy-Item "${env:RELEASE_DLL_PATH}" "${env:PHPROOT}\ext\${env:EXTENSION_FILE}"
 
-    # TODO(klay): Sortout with this:
+    # TODO(klay): Sort out with this:
     #
     # Multiple extensions match the name (or handle) "test":
     # - handle: test version 1.0.0
