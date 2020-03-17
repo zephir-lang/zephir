@@ -17,8 +17,8 @@ class ClosureTest extends TestCase
 {
     public function testUseCommand()
     {
-        $t = new \Test\Closures();
+        $test = new \Test\Closures();
 
-        $this->assertSame(2, $t->testUseCommand()());
+        $this->assertSame(2, $test->testUseCommand()());
     }
 }

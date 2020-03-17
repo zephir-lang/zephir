@@ -15,26 +15,30 @@ use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase
 {
+    /** @var \Test\Json $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\Json();
+    }
+
     public function testEncode()
     {
-        $t = new \Test\Json();
-
-        $this->assertSame($t->testEncodeObject(), '{"a":"hello","b":"world","c":128}');
-        $this->assertSame($t->testEncodeArray(), '[1,2,3]');
-        $this->assertSame($t->testEncodeOptions(), '["\\u003Cfoo\\u003E","\'bar\'","&blong&","\\u00e9"]');
+        $this->assertSame($this->test->testEncodeObject(), '{"a":"hello","b":"world","c":128}');
+        $this->assertSame($this->test->testEncodeArray(), '[1,2,3]');
+        $this->assertSame($this->test->testEncodeOptions(), '["\\u003Cfoo\\u003E","\'bar\'","&blong&","\\u00e9"]');
     }
 
     public function testDecode()
     {
-        $t = new \Test\Json();
-
-        $obj1 = $t->testDecodeObject();
+        $obj1 = $this->test->testDecodeObject();
         $this->assertSame($obj1->a, 'hello');
 
-        $arr1 = $t->testDecodeArray();
+        $arr1 = $this->test->testDecodeArray();
         $this->assertSame($arr1[1], 2);
 
-        $obj2 = $t->testDecodeObject2();
+        $obj2 = $this->test->testDecodeObject2();
         $this->assertSame($obj2['a'], 'hello');
     }
 }

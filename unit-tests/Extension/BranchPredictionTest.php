@@ -17,11 +17,11 @@ class BranchPredictionTest extends TestCase
 {
     public function testVariants()
     {
-        $b = new \Test\BranchPrediction();
+        $br = new \Test\BranchPrediction();
 
-        $this->assertTrue($b->testLikely1());
-        $this->assertFalse($b->testLikely2(false));
-        $this->assertTrue($b->testUnlikely1());
-        $this->assertFalse($b->testUnlikely2(false));
+        $this->assertTrue($br->testLikely1());
+        $this->assertFalse($br->testLikely2(false));
+        $this->assertTrue($br->testUnlikely1());
+        $this->assertFalse($br->testUnlikely2(false));
     }
 }

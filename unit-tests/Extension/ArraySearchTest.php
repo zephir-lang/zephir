@@ -16,18 +16,24 @@ use Test\ArraySearch;
 
 class ArraySearchTest extends TestCase
 {
+    /** @var ArraySearch $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new ArraySearch();
+    }
+
     /**
      * @test
      * @issue https://github.com/phalcon/zephir/issues/1609
      */
     public function shouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {
-        $t = new ArraySearch();
-
         $needle = 'value';
         $haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
 
-        $this->assertEquals(7, $t->simpleSearch($needle, $haystack));
+        $this->assertEquals(7, $this->test->simpleSearch($needle, $haystack));
     }
 
     /**
@@ -36,7 +42,6 @@ class ArraySearchTest extends TestCase
      */
     public function shouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {
-        $t = new ArraySearch();
-        $this->assertEquals(7, $t->searchUsingArrayInsideZephir());
+        $this->assertEquals(7, $this->test->searchUsingArrayInsideZephir());
     }
 }

@@ -15,6 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 class NewInstanceOperatorTest extends TestCase
 {
+    /** @var \Test\Operator */
+    public $test;
+
     protected $autoloadMap = [
         'Fixture\ThrowException' => ZEPHIRPATH.'/unit-tests/fixtures/throw-exception.php',
         'Fixture\EmptyClass' => ZEPHIRPATH.'/unit-tests/fixtures/class-empty.php',
@@ -23,6 +26,7 @@ class NewInstanceOperatorTest extends TestCase
     public function setUp()
     {
         spl_autoload_register([$this, 'autoload']);
+        $this->test = new \Test\Operator();
     }
 
     public function tearDown()
@@ -40,14 +44,12 @@ class NewInstanceOperatorTest extends TestCase
     public function testException()
     {
         $this->expectException(\Exception::class);
-        $t = new \Test\Operator();
-        $obj = $t->testNewInstanceOperator('Fixture\ThrowException');
+        $obj = $this->test->testNewInstanceOperator('Fixture\ThrowException');
     }
 
     public function testNewInstance()
     {
-        $t = new \Test\Operator();
-        $object = $t->testNewInstanceOperator('Fixture\EmptyClass');
+        $object = $this->test->testNewInstanceOperator('Fixture\EmptyClass');
 
         $this->assertInstanceOf('Fixture\EmptyClass', $object);
     }

@@ -19,22 +19,22 @@ class MCallTest extends TestCase
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForOptionalBoolean()
     {
-        $t = new Mcall();
+        $test = new Mcall();
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'start' must be of the type bool");
 
-        $t->optionalParameterBoolean('test');
+        $test->optionalParameterBoolean('test');
     }
 
     /** @test */
     public function shouldThrowTypeErrorForOptionalBoolean()
     {
-        $t = new Mcall();
+        $test = new Mcall();
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'start' must be of the type bool");
 
-        $t->optionalParameterBoolean([]);
+        $test->optionalParameterBoolean([]);
     }
 }

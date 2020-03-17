@@ -16,60 +16,62 @@ use Test\MethodArgs;
 
 class MethodArgsTest extends TestCase
 {
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new MethodArgs();
+    }
+
     public function testCallable()
     {
-        $t = new MethodArgs();
         $callback = function () {
         };
 
-        $t->setCallable($callback);
-        $this->assertSame($callback, $t->a);
+        $this->test->setCallable($callback);
+        $this->assertSame($callback, $this->test->a);
 
-        $t->setCallableStrict($callback);
-        $this->assertSame($callback, $t->a);
+        $this->test->setCallableStrict($callback);
+        $this->assertSame($callback, $this->test->a);
 
         $this->expectException('\Exception');
 
-        $t->setCallableStrict(true);
+        $this->test->setCallableStrict(true);
     }
 
     public function testObject()
     {
-        $t = new MethodArgs();
         $obj = new \stdClass();
 
-        $t->setObject($obj);
-        $this->assertSame($obj, $t->a);
+        $this->test->setObject($obj);
+        $this->assertSame($obj, $this->test->a);
 
-        $t->setObjectStrict($obj);
-        $this->assertSame($obj, $t->a);
+        $this->test->setObjectStrict($obj);
+        $this->assertSame($obj, $this->test->a);
 
         $this->expectException('\Exception');
 
-        $t->setObjectStrict(true);
+        $this->test->setObjectStrict(true);
     }
 
     public function testResource()
     {
-        $t = new MethodArgs();
-
-        $t->setResourceStrict(STDIN);
-        $this->assertSame(STDIN, $t->a);
+        $this->test->setResourceStrict(STDIN);
+        $this->assertSame(STDIN, $this->test->a);
 
         $this->expectException('\Exception');
 
-        $t->setResourceStrict(true);
+        $this->test->setResourceStrict(true);
     }
 
     public function testMethodOptionalValueWithDefaultStaticConstantAccess()
     {
-        $t = new MethodArgs();
-        $this->assertSame('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
+        $this->assertSame('test', $this->test->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 
-        $this->assertSame(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
-        $this->assertSame(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
-        $this->assertSame(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
-        $this->assertSame(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
-        $this->assertSame(MethodArgs::MY_INT, $t->methodOptionalIntValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $this->test->methodOptionalValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::GET, $this->test->methodOptionalStringValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_DOUBLE, $this->test->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_BOOL, $this->test->methodOptionalBoolValueWithDefaultStaticConstantAccess());
+        $this->assertSame(MethodArgs::MY_INT, $this->test->methodOptionalIntValueWithDefaultStaticConstantAccess());
     }
 }

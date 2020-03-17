@@ -35,9 +35,9 @@ class VarsTest extends TestCase
             'string(5)"hello"'
         );
 
-        $t = new \Test\Vars();
+        $test = new \Test\Vars();
 
-        $t->testVarDump();
+        $test->testVarDump();
     }
 
     /**
@@ -50,9 +50,9 @@ class VarsTest extends TestCase
             'bool(true)'."\n"
         );
 
-        $t = new \Test\Vars();
+        $test = new \Test\Vars();
 
-        $t->testVarDump2param(3.1, true);
+        $test->testVarDump2param(3.1, true);
     }
 
     /**
@@ -72,9 +72,9 @@ class VarsTest extends TestCase
             'array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}'
         );
 
-        $t = new \Test\Vars();
+        $test = new \Test\Vars();
 
-        $t->testVarDump3param(3.1, true, [1, 2, 3]);
+        $test->testVarDump3param(3.1, true, [1, 2, 3]);
     }
 
     public function testVarExport()
@@ -89,13 +89,13 @@ class VarsTest extends TestCase
             "array(0=>1,1=>'world',2=>false,)'hello'"
         );
 
-        $t = new \Test\Vars();
-        $this->assertSame($t->testVarExport(), "'hello'");
+        $test = new \Test\Vars();
+        $this->assertSame($test->testVarExport(), "'hello'");
     }
 
     public function test88Issue()
     {
-        $t = new \Test\Vars();
+        $test = new \Test\Vars();
 
         $this->expectOutputString(
             'string(3) "foo"'."\n".
@@ -105,9 +105,9 @@ class VarsTest extends TestCase
             "'bar'"
         );
 
-        $t->test88Issue('foo', 'bar');
+        $test->test88Issue('foo', 'bar');
 
-        $t->test88IssueParam2InitString('foo', 'bar');
+        $test->test88IssueParam2InitString('foo', 'bar');
     }
 
     public function testVarDumpAndCountOptimizer()
@@ -117,8 +117,8 @@ class VarsTest extends TestCase
             '5'
         );
 
-        $t = new \Test\Vars();
-        $t->testCountOptimizerVarDumpAndExport([1, 2, 3, 4, 5]);
+        $test = new \Test\Vars();
+        $test->testCountOptimizerVarDumpAndExport([1, 2, 3, 4, 5]);
     }
 
     public function testArrayTypeVarDumpAndExport()
@@ -134,8 +134,8 @@ class VarsTest extends TestCase
             'array(0=>1,1=>2,2=>3,)'
         );
 
-        $t = new \Test\Vars();
-        $t->testArrayTypeVarDumpAndExport([1, 2, 3]);
+        $test = new \Test\Vars();
+        $test->testArrayTypeVarDumpAndExport([1, 2, 3]);
     }
 
     public function testIntVarDump()
@@ -145,8 +145,8 @@ class VarsTest extends TestCase
             '1'
         );
 
-        $t = new \Test\Vars();
-        $t->testIntVarDump();
+        $test = new \Test\Vars();
+        $test->testIntVarDump();
     }
 
     public function testDoubleVarDump()
@@ -163,8 +163,8 @@ class VarsTest extends TestCase
             );
         }
 
-        $t = new \Test\Vars();
-        $t->testDoubleVarDump();
+        $test = new \Test\Vars();
+        $test->testDoubleVarDump();
     }
 
     public function testBoolVarDump()
@@ -174,17 +174,17 @@ class VarsTest extends TestCase
             'true'
         );
 
-        $t = new \Test\Vars();
-        $t->testBoolVarDump();
+        $test = new \Test\Vars();
+        $test->testBoolVarDump();
     }
 
     public function testGetDefinedVars()
     {
-        $t = new \Test\Vars();
+        $test = new \Test\Vars();
         // get_defined_vars() does NOT work in C (and hence Zephir) functions
         // It will return variables of the most recent userland function
         // down the call stack.
         // In this case, all local variables of this method will be returned
-        $this->assertEquals(['t' => $t], $t->testGetDefinedVars());
+        $this->assertEquals(['test' => $test], $test->testGetDefinedVars());
     }
 }

@@ -26,8 +26,8 @@ class SessionTest extends TestCase
         unset($_SESSION);
         $this->assertFalse(isset($_SESSION));
 
-        $t = new Base();
-        $t->set('foo', 'bar');
+        $test = new Base();
+        $test->set('foo', 'bar');
 
         $this->assertTrue(isset($_SESSION));
         /* @noinspection PhpUndefinedVariableInspection */

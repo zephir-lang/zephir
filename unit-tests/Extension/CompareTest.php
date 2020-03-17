@@ -16,59 +16,55 @@ use Test\Compare;
 
 class CompareTest extends TestCase
 {
+    /** @var Compare $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new Compare();
+    }
+
     public function testLess()
     {
-        $t = new Compare();
-
-        $this->assertTrue($t->isLessInt(1, 2));
-        $this->assertTrue($t->isLessDouble(1.1, 1.2));
-        $this->assertFalse($t->isLessInt(20, 10));
+        $this->assertTrue($this->test->isLessInt(1, 2));
+        $this->assertTrue($this->test->isLessDouble(1.1, 1.2));
+        $this->assertFalse($this->test->isLessInt(20, 10));
     }
 
     public function testGreaterEqual()
     {
-        $t = new Compare();
-
-        $this->assertTrue($t->isGreaterEqual(3, 2));
-        $this->assertTrue($t->isGreaterEqual(2, 2));
-        $this->assertFalse($t->isGreaterEqual(1, 2));
+        $this->assertTrue($this->test->isGreaterEqual(3, 2));
+        $this->assertTrue($this->test->isGreaterEqual(2, 2));
+        $this->assertFalse($this->test->isGreaterEqual(1, 2));
     }
 
     public function testConst()
     {
-        $t = new Compare();
-
-        $this->assertTrue($t->isLessThenPi(3.12));
-        $this->assertTrue($t->isMoreThenPi(3.15));
+        $this->assertTrue($this->test->isLessThenPi(3.12));
+        $this->assertTrue($this->test->isMoreThenPi(3.15));
     }
 
     public function testVarWithStringEquals()
     {
-        $t = new Compare();
-
-        $this->assertSame('NOK', $t->testVarWithStringEquals('wrong testing'));
-        $this->assertSame('NOK', $t->testVarWithStringEquals('another testing'));
-        $this->assertSame('OK', $t->testVarWithStringEquals('testing'));
-        $this->assertSame('NOK', $t->testVarWithStringEquals('testing nok'));
+        $this->assertSame('NOK', $this->test->testVarWithStringEquals('wrong testing'));
+        $this->assertSame('NOK', $this->test->testVarWithStringEquals('another testing'));
+        $this->assertSame('OK', $this->test->testVarWithStringEquals('testing'));
+        $this->assertSame('NOK', $this->test->testVarWithStringEquals('testing nok'));
     }
 
     public function testEquals()
     {
-        $t = new Compare();
+        $this->assertTrue($this->test->testVarEqualsNull(null));
+        $this->assertFalse($this->test->testVarEqualsNull(1));
 
-        $this->assertTrue($t->testVarEqualsNull(null));
-        $this->assertFalse($t->testVarEqualsNull(1));
-
-        $this->assertTrue($t->testNullEqualsVar(null));
-        $this->assertFalse($t->testNullEqualsVar(1));
+        $this->assertTrue($this->test->testNullEqualsVar(null));
+        $this->assertFalse($this->test->testNullEqualsVar(1));
     }
 
     public function testNotEquals()
     {
-        $t = new Compare();
-
-        $this->assertTrue($t->testNotIdenticalZeroVar());
-        $this->assertTrue($t->testNotIdenticalZeroInt());
-        $this->assertTrue($t->testNotIdenticalZeroLong());
+        $this->assertTrue($this->test->testNotIdenticalZeroVar());
+        $this->assertTrue($this->test->testNotIdenticalZeroInt());
+        $this->assertTrue($this->test->testNotIdenticalZeroLong());
     }
 }

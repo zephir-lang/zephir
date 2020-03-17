@@ -15,23 +15,28 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceTest extends TestCase
 {
+    /** @var \Test\ResourceTest */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\ResourceTest();
+    }
+
     public function testLetStatementAssign()
     {
-        $t = new \Test\ResourceTest();
-        $this->assertInternalType('resource', $t->testLetStatementSTDIN());
-        $this->assertInternalType('resource', $t->testLetStatementSTDOUT());
-        $this->assertInternalType('resource', $t->testLetStatementSTDERR());
+        $this->assertInternalType('resource', $this->test->testLetStatementSTDIN());
+        $this->assertInternalType('resource', $this->test->testLetStatementSTDOUT());
+        $this->assertInternalType('resource', $this->test->testLetStatementSTDERR());
     }
 
     public function testTypeOffResource()
     {
-        $t = new \Test\ResourceTest();
-        $this->assertSame('resource', $t->testTypeOffResource());
+        $this->assertSame('resource', $this->test->testTypeOffResource());
     }
 
     public function testIsResource()
     {
-        $t = new \Test\ResourceTest();
-        $this->assertTrue($t->testIsResource());
+        $this->assertTrue($this->test->testIsResource());
     }
 }

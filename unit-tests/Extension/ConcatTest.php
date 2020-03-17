@@ -16,32 +16,36 @@ use Test\Concat;
 
 class ConcatTest extends TestCase
 {
+    /** @var Concat $test */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new Concat();
+    }
+
     /** @test */
     public function shouldConcatenateLocalVariableAndSelfVariable()
     {
-        $t = new Concat();
+        $this->assertNull($this->test->getTestProperty());
 
-        $this->assertNull($t->getTestProperty());
+        $this->test->testConcatBySelfProperty('test');
+        $this->assertSame('test', $this->test->getTestProperty());
 
-        $t->testConcatBySelfProperty('test');
-        $this->assertSame('test', $t->getTestProperty());
-
-        $t->testConcatBySelfProperty(' string');
-        $this->assertSame('test string', $t->getTestProperty());
+        $this->test->testConcatBySelfProperty(' string');
+        $this->assertSame('test string', $this->test->getTestProperty());
     }
 
     /** @test */
     public function shouldAppendVariableToString()
     {
-        $t = new Concat();
-        $this->assertSame('appendtest', $t->testConcat1());
+        $this->assertSame('appendtest', $this->test->testConcat1());
     }
 
     /** @test */
     public function shouldConcatenateVariableWithString()
     {
-        $t = new Concat();
-        $this->assertSame('appendotherappendother', $t->testConcat2());
+        $this->assertSame('appendotherappendother', $this->test->testConcat2());
     }
 
     /**
@@ -50,8 +54,7 @@ class ConcatTest extends TestCase
      */
     public function shouldConcatenateStringsSimilarToIntegersNumbers()
     {
-        $t = new Concat();
-        $this->assertSame('21', $t->testConcat3());
+        $this->assertSame('21', $this->test->testConcat3());
     }
 
     /**
@@ -60,10 +63,9 @@ class ConcatTest extends TestCase
      */
     public function shouldConcatenateStringWithVarDouble()
     {
-        $t = new Concat();
         $this->assertSame(
             'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
-            $t->testConcat4(1893)
+            $this->test->testConcat4(1893)
         );
     }
 
@@ -73,10 +75,9 @@ class ConcatTest extends TestCase
      */
     public function shouldConcatenateStringWithDouble()
     {
-        $t = new Concat();
         $this->assertSame(
             'Concatenated string with number 18.93000001',
-            $t->testConcat5(18.93000001)
+            $this->test->testConcat5(18.93000001)
         );
     }
 }
