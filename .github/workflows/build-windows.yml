@@ -33,7 +33,7 @@ jobs:
         uses: shivammathur/setup-php@v1
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, fileinfo, gmp, psr, zip
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr, zip
           coverage: none
           # variables_order: https://github.com/phalcon/zephir/pull/1537
           # enable_dl: https://github.com/phalcon/zephir/pull/1654
