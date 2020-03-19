@@ -146,7 +146,7 @@ final class Compiler
      *
      * @throws IllegalStateException in case of absence internal prototypes directory
      */
-    private function reslovePrototypesPath()
+    private function resolvePrototypesPath()
     {
         $prototypesPath = $this->prototypesPath;
 
@@ -657,7 +657,7 @@ final class Compiler
             /*
              * Load additional extension prototypes.
              */
-            $prototypesPath = $this->reslovePrototypesPath();
+            $prototypesPath = $this->resolvePrototypesPath();
             foreach (new \DirectoryIterator($prototypesPath) as $file) {
                 if ($file->isDir() || $file->isDot()) {
                     continue;
