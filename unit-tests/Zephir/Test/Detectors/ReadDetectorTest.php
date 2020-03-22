@@ -55,6 +55,8 @@ class ReadDetectorTest extends TestCase
             'type variable' => [true, 'foo', $variable],
             'type magic variable' => [true, 'foo$$', $variable],
             'type function' => [true, 'foo', $fcall],
+            'variable with l-expression' => [true, 'foo', $variable + ['left' => $variable]],
+            'variable with r-expression' => [true, 'foo', $variable + ['right' => $variable]],
         ];
     }
 }
