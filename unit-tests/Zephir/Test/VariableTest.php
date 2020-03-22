@@ -12,7 +12,9 @@
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\BranchManager;
 use Zephir\ClassDefinition;
+use Zephir\CompilationContext;
 use Zephir\Variable;
 
 class VariableTest extends TestCase
@@ -43,6 +45,13 @@ class VariableTest extends TestCase
         $this->assertSame([], $variable->getClassTypes());
         $this->assertNull($variable->getAssociatedClass());
         $this->assertSame(['unknown' => true], $variable->getDynamicTypes());
+        $this->assertFalse($variable->hasAnyDynamicType('string'));
+        $this->assertTrue($variable->hasAnyDynamicType(['string', 'unknown']));
+        $this->assertTrue($variable->hasDifferentDynamicType(['string', 'int']));
+        $this->assertSame(0, $variable->getNumberUses());
+        $this->assertSame(0, $variable->getNumberMutations());
+        $this->assertFalse($variable->isInitialized());
+        $this->assertFalse($variable->isExternal());
 
         // Set properties and check
         $variable->setType('callable');
@@ -90,5 +99,23 @@ class VariableTest extends TestCase
         $classDefinition = new ClassDefinition('Zephir\Test', 'VariableTest');
         $variable->setAssociatedClass($classDefinition);
         $this->assertSame($classDefinition, $variable->getAssociatedClass());
+
+        $variable->setDynamicTypes(['type' => 'int']);
+        $variable->setDynamicTypes('uint');
+        $this->assertSame(['int' => true, 'uint' => true], $variable->getDynamicTypes());
+
+        $variable->increaseUses();
+        $this->assertSame(1, $variable->getNumberUses());
+
+        $variable->increaseMutates();
+        $this->assertSame(1, $variable->getNumberMutations());
+
+        $context = new CompilationContext();
+        $context->branchManager = new BranchManager();
+        $variable->setIsInitialized(true, $context);
+        $this->assertTrue($variable->isInitialized());
+
+        $variable->setIsExternal(true);
+        $this->assertTrue($variable->isExternal());
     }
 }

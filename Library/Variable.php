@@ -208,7 +208,7 @@ class Variable implements TypeAwareInterface
      *
      * @param string $type
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
@@ -228,7 +228,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $localOnly
      */
-    public function setLocalOnly($localOnly)
+    public function setLocalOnly(bool $localOnly)
     {
         $this->localOnly = $localOnly;
     }
@@ -248,7 +248,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $doublePointer
      */
-    public function setIsDoublePointer($doublePointer)
+    public function setIsDoublePointer(bool $doublePointer)
     {
         $this->doublePointer = $doublePointer;
     }
@@ -290,7 +290,7 @@ class Variable implements TypeAwareInterface
      *
      * @param string $lowName
      */
-    public function setLowName($lowName)
+    public function setLowName(string $lowName)
     {
         $this->lowName = $lowName;
     }
@@ -300,7 +300,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly)
     {
         $this->readOnly = $readOnly;
     }
@@ -320,7 +320,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $temporal
      */
-    public function setTemporal($temporal)
+    public function setTemporal(bool $temporal)
     {
         $this->temporal = $temporal;
     }
@@ -340,7 +340,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $idle
      */
-    public function setIdle($idle)
+    public function setIdle(bool $idle)
     {
         $this->idle = false;
 
@@ -366,7 +366,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $reusable
      */
-    public function setReusable($reusable)
+    public function setReusable(bool $reusable)
     {
         $this->reusable = $reusable;
     }
@@ -387,7 +387,7 @@ class Variable implements TypeAwareInterface
      * @param bool  $used
      * @param array $node
      */
-    public function setUsed($used, $node)
+    public function setUsed(bool $used, array $node)
     {
         $this->used = $used;
         $this->usedNode = $node;
@@ -418,7 +418,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $memoryTracked
      */
-    public function setMemoryTracked($memoryTracked)
+    public function setMemoryTracked(bool $memoryTracked)
     {
         $this->memoryTracked = $memoryTracked;
     }
@@ -506,7 +506,7 @@ class Variable implements TypeAwareInterface
      *
      * @param ClassDefinition $associatedClass
      */
-    public function setAssociatedClass($associatedClass)
+    public function setAssociatedClass(ClassDefinition $associatedClass)
     {
         $this->associatedClass = $associatedClass;
     }
@@ -580,11 +580,11 @@ class Variable implements TypeAwareInterface
     /**
      * Check if the variable has at least one dynamic type to the ones passed in the list.
      *
-     * @param array|string $types
+     * @param array $types
      *
      * @return bool
      */
-    public function hasDifferentDynamicType($types)
+    public function hasDifferentDynamicType(array $types)
     {
         $number = 0;
         foreach ($types as $type) {
@@ -639,7 +639,7 @@ class Variable implements TypeAwareInterface
      * @param bool               $initialized
      * @param CompilationContext $compilationContext
      */
-    public function setIsInitialized($initialized, CompilationContext $compilationContext)
+    public function setIsInitialized(bool $initialized, CompilationContext $compilationContext)
     {
         $this->initialized = $initialized;
 
@@ -669,7 +669,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $isExternal
      */
-    public function setIsExternal($isExternal)
+    public function setIsExternal(bool $isExternal)
     {
         $this->isExternal = $isExternal;
         $this->variantInits = 1;
