@@ -12,6 +12,7 @@
 namespace Zephir\Test\Statements\Let;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\BranchManager;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
@@ -24,9 +25,18 @@ class VariableTest extends TestCase
     /** @var Variable */
     private $test;
 
+    /** @var ReadDetector */
+    private $readDetector;
+
+    /** @var CompilationContext */
+    private $compilationCtx;
+
     public function setUp()
     {
         $this->test = new Variable();
+        $this->readDetector = new ReadDetector();
+        $this->compilationCtx = new CompilationContext();
+        $this->compilationCtx->branchManager = new BranchManager();
     }
 
     /** @test */
@@ -41,7 +51,7 @@ class VariableTest extends TestCase
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage('Cannot mutate variable \'foo\' because it is read only');
 
-        $this->test->assign('foo', $zephirVariable, $compiledExpr, new ReadDetector(), new CompilationContext(), []);
+        $this->test->assign('foo', $zephirVariable, $compiledExpr, $this->readDetector, $this->compilationCtx, []);
     }
 
     /** @test */
@@ -54,6 +64,22 @@ class VariableTest extends TestCase
 
         $compiledExpr = new CompiledExpression('variable', '', []);
 
-        $this->test->assign('foo', $zephirVariable, $compiledExpr, new ReadDetector(), new CompilationContext(), ['operator' => 'concat']);
+        $this->test->assign('foo', $zephirVariable, $compiledExpr, $this->readDetector, $this->compilationCtx, ['operator' => 'concat']);
+    }
+
+    /** @test */
+    public function cannotAssignUnknownType()
+    {
+        $this->expectException(CompilerException::class);
+        $this->expectExceptionMessage('Unknown type: prototype');
+
+        $zephirVariable = new ZephirVariable('variable', 'foo');
+        $zephirVariable->setType('prototype');
+
+        $statement = [
+            'operator' => 'assign',
+        ];
+
+        $this->test->assign('foo', $zephirVariable, new CompiledExpression('variable', '', []), $this->readDetector, $this->compilationCtx, $statement);
     }
 }

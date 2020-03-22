@@ -51,6 +51,7 @@ class ReadDetectorTest extends TestCase
 
         return [
             'no type' => [false, 'foo', []],
+            'not a variable' => [false, 'foo', ['type' => 'undefined']],
             'type variable' => [true, 'foo', $variable],
             'type magic variable' => [true, 'foo$$', $variable],
             'type function' => [true, 'foo', $fcall],
