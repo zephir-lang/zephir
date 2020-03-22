@@ -103,7 +103,6 @@ class Variable
                 break;
 
             default:
-                var_dump($resolvedExpr);
                 throw new CompilerException('Unknown type: '.$type, $statement);
         }
     }
