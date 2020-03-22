@@ -31,55 +31,63 @@ class VariableTest extends TestCase
     /** @var CompilationContext */
     private $compilationCtx;
 
+    /** @var CompiledExpression */
+    private $compiledExpr;
+
     public function setUp()
     {
         $this->test = new Variable();
         $this->readDetector = new ReadDetector();
+        $this->compiledExpr = new CompiledExpression('variable', '', []);
         $this->compilationCtx = new CompilationContext();
         $this->compilationCtx->branchManager = new BranchManager();
     }
 
-    /** @test */
-    public function cannotMutateReadonlyVariable()
+    public function exceptionTestProvider(): array
+    {
+        return [
+            'immutable variable' => [
+                [],
+                'Cannot mutate variable \'foo\' because it is read only',
+                function (ZephirVariable $var) {
+                    $var->setReadOnly(true);
+                },
+            ],
+            'not initialized variable' => [
+                ['operator' => 'concat'],
+                'Cannot mutate variable \'foo\' because it is not initialized',
+                function (ZephirVariable $var) {
+                    return;
+                },
+            ],
+            'unknown variable type' => [
+                ['operator' => 'assign'],
+                'Unknown type: prototype',
+                function (ZephirVariable $var) {
+                    $var->setType('prototype');
+                },
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider exceptionTestProvider
+     *
+     * @param array    $statement
+     * @param string   $message     - Expected error message
+     * @param callable $setProperty - Callback func to set required for test property
+     */
+    public function throwsExceptionForWrongVariables(array $statement, string $message, callable $setProperty)
     {
         $zephirVariable = new ZephirVariable('variable', 'foo');
-        $zephirVariable->setReadOnly(true);
-
-        $compiledExpr = new CompiledExpression('variable', '', []);
+        // call necessary setters for test case
+        $setProperty($zephirVariable);
 
         $this->expectException(CompilerException::class);
         $this->expectExceptionCode(0);
-        $this->expectExceptionMessage('Cannot mutate variable \'foo\' because it is read only');
+        $this->expectExceptionMessage($message);
 
-        $this->test->assign('foo', $zephirVariable, $compiledExpr, $this->readDetector, $this->compilationCtx, []);
-    }
-
-    /** @test */
-    public function cannotMutateNotInitializedVariable()
-    {
-        $this->expectException(CompilerException::class);
-        $this->expectExceptionMessage('Cannot mutate variable \'foo\' because it is not initialized');
-
-        $zephirVariable = new ZephirVariable('variable', 'foo');
-
-        $compiledExpr = new CompiledExpression('variable', '', []);
-
-        $this->test->assign('foo', $zephirVariable, $compiledExpr, $this->readDetector, $this->compilationCtx, ['operator' => 'concat']);
-    }
-
-    /** @test */
-    public function cannotAssignUnknownType()
-    {
-        $this->expectException(CompilerException::class);
-        $this->expectExceptionMessage('Unknown type: prototype');
-
-        $zephirVariable = new ZephirVariable('variable', 'foo');
-        $zephirVariable->setType('prototype');
-
-        $statement = [
-            'operator' => 'assign',
-        ];
-
-        $this->test->assign('foo', $zephirVariable, new CompiledExpression('variable', '', []), $this->readDetector, $this->compilationCtx, $statement);
+        $this->test->assign('foo', $zephirVariable, $this->compiledExpr, $this->readDetector, $this->compilationCtx, $statement);
     }
 }
