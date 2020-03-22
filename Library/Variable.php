@@ -170,7 +170,7 @@ class Variable implements TypeAwareInterface
      * @param string $name
      * @param Branch $branch
      */
-    public function __construct($type, $name, Branch $branch = null)
+    public function __construct(string $type, string $name, Branch $branch = null)
     {
         $this->globalsManager = new Globals();
 
