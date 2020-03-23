@@ -16,6 +16,7 @@ use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
@@ -32,6 +33,11 @@ class VariableTest extends TestCase
     /** @test */
     public function shouldSetProperties()
     {
+        $context = new CompilationContext();
+        $branch = new Branch();
+        $context->branchManager = new BranchManager();
+        $context->branchManager->addBranch($branch);
+
         // Check variable default state
         $this->assertFalse($this->zephirVar->getInitBranch());
         $this->assertSame([], $this->zephirVar->getInitBranches());
@@ -68,6 +74,17 @@ class VariableTest extends TestCase
         $this->assertTrue($this->zephirVar->isVariable());
         $this->assertFalse($this->zephirVar->isLocalStatic());
         $this->assertFalse($this->zephirVar->isSuperGlobal());
+        $this->assertTrue($this->zephirVar->isComplex());
+        $this->assertFalse($this->zephirVar->isBoolean());
+        $this->assertFalse($this->zephirVar->isString());
+        $this->assertFalse($this->zephirVar->isInt());
+        $this->assertFalse($this->zephirVar->isDouble());
+        $this->assertFalse($this->zephirVar->isArray());
+        $this->assertFalse($this->zephirVar->isNotVariable());
+        $this->assertFalse($this->zephirVar->isNotVariableAndString());
+        $this->assertFalse($this->zephirVar->isNotVariableAndArray());
+        $this->assertNull($this->zephirVar->getPossibleValue());
+        $this->assertNull($this->zephirVar->getPossibleValueBranch());
 
         // Set properties and check
         $this->zephirVar->setType('callable');
@@ -126,9 +143,6 @@ class VariableTest extends TestCase
         $this->zephirVar->increaseMutates();
         $this->assertSame(1, $this->zephirVar->getNumberMutations());
 
-        $context = new CompilationContext();
-        $context->branchManager = new BranchManager();
-        $context->branchManager->addBranch(new Branch());
         $this->zephirVar->setIsInitialized(false, $context);
         $this->assertFalse($this->zephirVar->isInitialized());
         $this->zephirVar->setIsInitialized(true, $context);
@@ -160,6 +174,34 @@ class VariableTest extends TestCase
         $superglobalVar = new Variable('', '_SERVER');
         $superglobalVar->setIsExternal(true);
         $this->assertTrue($superglobalVar->isSuperGlobal());
+
+        $this->zephirVar->setType('int');
+        $this->assertFalse($this->zephirVar->isComplex());
+
+        $this->zephirVar->setType('bool');
+        $this->assertTrue($this->zephirVar->isBoolean());
+
+        $this->zephirVar->setType('string');
+        $this->assertTrue($this->zephirVar->isString());
+
+        $this->zephirVar->setType('int');
+        $this->assertTrue($this->zephirVar->isInt());
+
+        $this->zephirVar->setType('double');
+        $this->assertTrue($this->zephirVar->isDouble());
+
+        $this->zephirVar->setType('array');
+        $this->assertTrue($this->zephirVar->isArray());
+
+        $this->zephirVar->setType('not-variable');
+        $this->assertTrue($this->zephirVar->isNotVariable());
+        $this->assertTrue($this->zephirVar->isNotVariableAndString());
+        $this->assertTrue($this->zephirVar->isNotVariableAndArray());
+
+        $possibleValue = new CompiledExpression('string', 'let a = \'some value\'', []);
+        $this->zephirVar->setPossibleValue($possibleValue, $context);
+        $this->assertSame($possibleValue, $this->zephirVar->getPossibleValue());
+        $this->assertSame($branch, $this->zephirVar->getPossibleValueBranch());
     }
 
     /** @test */
