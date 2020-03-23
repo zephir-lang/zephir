@@ -806,7 +806,7 @@ class Variable implements TypeAwareInterface
      *
      * @return int
      */
-    public function geVariantInits()
+    public function getVariantInits()
     {
         return $this->variantInits;
     }
@@ -1057,7 +1057,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isLocalSatic()
+    public function isLocalStatic()
     {
         return $this->isExternal && $this->localOnly;
     }
