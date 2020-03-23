@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionClass;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Globals;
 
@@ -384,10 +385,10 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the latest node where a variable was used.
      *
-     * @param bool  $used
-     * @param array $node
+     * @param bool       $used
+     * @param array|null $node
      */
-    public function setUsed(bool $used, array $node)
+    public function setUsed(bool $used, array $node = null)
     {
         $this->used = $used;
         $this->usedNode = $node;
@@ -504,9 +505,9 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the PHP class related to variable.
      *
-     * @param ClassDefinition $associatedClass
+     * @param ClassDefinition|ReflectionClass $associatedClass
      */
-    public function setAssociatedClass(ClassDefinition $associatedClass)
+    public function setAssociatedClass($associatedClass)
     {
         $this->associatedClass = $associatedClass;
     }
