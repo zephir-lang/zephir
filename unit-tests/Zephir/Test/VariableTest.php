@@ -12,110 +12,190 @@
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
+use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
 class VariableTest extends TestCase
 {
+    /** @var Variable */
+    private $zephirVar;
+
+    public function setUp()
+    {
+        $this->zephirVar = new Variable('object', 'UnitTest');
+    }
+
     /** @test */
     public function shouldSetProperties()
     {
-        $variable = new Variable('object', 'UnitTest');
-
         // Check variable default state
-        $this->assertFalse($variable->getInitBranch());
-        $this->assertSame([], $variable->getInitBranches());
+        $this->assertFalse($this->zephirVar->getInitBranch());
+        $this->assertSame([], $this->zephirVar->getInitBranches());
 
-        $this->assertSame('variable', $variable->getType());
-        $this->assertFalse($variable->isLocalOnly());
-        $this->assertFalse($variable->isReadOnly());
-        $this->assertFalse($variable->isTemporal());
-        $this->assertTrue($variable->isReusable());
-        $this->assertFalse($variable->isIdle());
-        $this->assertTrue($variable->isUsed());
-        $this->assertFalse($variable->isDoublePointer());
-        $this->assertTrue($variable->isMemoryTracked());
-        $this->assertSame('UnitTest', $variable->getRealName());
-        $this->assertSame('UnitTest', $variable->getName());
-        $this->assertNull($variable->getLastUsedNode());
-        $this->assertNull($variable->getBranch());
-        $this->assertSame(['file' => 'unknown', 'line' => 0, 'char' => 0], $variable->getOriginal());
-        $this->assertSame([], $variable->getClassTypes());
-        $this->assertNull($variable->getAssociatedClass());
-        $this->assertSame(['unknown' => true], $variable->getDynamicTypes());
-        $this->assertFalse($variable->hasAnyDynamicType('string'));
-        $this->assertTrue($variable->hasAnyDynamicType(['string', 'unknown']));
-        $this->assertTrue($variable->hasDifferentDynamicType(['string', 'int']));
-        $this->assertSame(0, $variable->getNumberUses());
-        $this->assertSame(0, $variable->getNumberMutations());
-        $this->assertFalse($variable->isInitialized());
-        $this->assertFalse($variable->isExternal());
+        $this->assertSame('variable', $this->zephirVar->getType());
+        $this->assertFalse($this->zephirVar->isLocalOnly());
+        $this->assertFalse($this->zephirVar->isReadOnly());
+        $this->assertFalse($this->zephirVar->isTemporal());
+        $this->assertTrue($this->zephirVar->isReusable());
+        $this->assertFalse($this->zephirVar->isIdle());
+        $this->assertTrue($this->zephirVar->isUsed());
+        $this->assertFalse($this->zephirVar->isDoublePointer());
+        $this->assertTrue($this->zephirVar->isMemoryTracked());
+        $this->assertSame('UnitTest', $this->zephirVar->getRealName());
+        $this->assertSame('UnitTest', $this->zephirVar->getName());
+        $this->assertNull($this->zephirVar->getLastUsedNode());
+        $this->assertNull($this->zephirVar->getBranch());
+        $this->assertSame(['file' => 'unknown', 'line' => 0, 'char' => 0], $this->zephirVar->getOriginal());
+        $this->assertSame([], $this->zephirVar->getClassTypes());
+        $this->assertNull($this->zephirVar->getAssociatedClass());
+        $this->assertSame(['unknown' => true], $this->zephirVar->getDynamicTypes());
+        $this->assertFalse($this->zephirVar->hasAnyDynamicType('string'));
+        $this->assertTrue($this->zephirVar->hasAnyDynamicType(['string', 'unknown']));
+        $this->assertFalse($this->zephirVar->hasAnyDynamicType([]));
+        $this->assertTrue($this->zephirVar->hasDifferentDynamicType(['string', 'int']));
+        $this->assertSame(0, $this->zephirVar->getNumberUses());
+        $this->assertSame(0, $this->zephirVar->getNumberMutations());
+        $this->assertFalse($this->zephirVar->isInitialized());
+        $this->assertFalse($this->zephirVar->isExternal());
+        $this->assertFalse($this->zephirVar->mustInitNull());
+        $this->assertNull($this->zephirVar->getDefaultInitValue());
+        $this->assertSame(0, $this->zephirVar->getSkipVariant());
+        $this->assertSame(0, $this->zephirVar->getVariantInits());
+        $this->assertTrue($this->zephirVar->isVariable());
+        $this->assertFalse($this->zephirVar->isLocalStatic());
+        $this->assertFalse($this->zephirVar->isSuperGlobal());
 
         // Set properties and check
-        $variable->setType('callable');
-        $this->assertSame('callable', $variable->getType());
+        $this->zephirVar->setType('callable');
+        $this->assertSame('callable', $this->zephirVar->getType());
 
-        $variable->setLocalOnly(true);
-        $this->assertTrue($variable->isLocalOnly());
+        $this->zephirVar->setLocalOnly(true);
+        $this->assertTrue($this->zephirVar->isLocalOnly());
 
-        $variable->setReadOnly(true);
-        $this->assertTrue($variable->isReadOnly());
+        $this->zephirVar->setReadOnly(true);
+        $this->assertTrue($this->zephirVar->isReadOnly());
 
-        $variable->setTemporal(true);
-        $this->assertTrue($variable->isTemporal());
+        $this->zephirVar->setTemporal(true);
+        $this->assertTrue($this->zephirVar->isTemporal());
 
-        $variable->setIdle(true);
-        $this->assertTrue($variable->isIdle());
+        $this->zephirVar->setIdle(true);
+        $this->assertTrue($this->zephirVar->isIdle());
 
-        $variable->setReusable(false);
-        $this->assertFalse($variable->isReusable());
+        $this->zephirVar->setReusable(false);
+        $this->assertFalse($this->zephirVar->isReusable());
 
-        $variable->setUsed(false, []);
-        $this->assertFalse($variable->isUsed());
+        $this->zephirVar->setUsed(false, []);
+        $this->assertFalse($this->zephirVar->isUsed());
 
-        $variable->setUsed(true, ['lastUsedNode']);
-        $this->assertSame(['lastUsedNode'], $variable->getLastUsedNode());
+        $this->zephirVar->setUsed(true, ['lastUsedNode']);
+        $this->assertSame(['lastUsedNode'], $this->zephirVar->getLastUsedNode());
 
-        $variable->setIsDoublePointer(true);
-        $this->assertTrue($variable->isDoublePointer());
+        $this->zephirVar->setIsDoublePointer(true);
+        $this->assertTrue($this->zephirVar->isDoublePointer());
 
-        $variable->setMemoryTracked(false);
-        $this->assertFalse($variable->isMemoryTracked());
+        $this->zephirVar->setMemoryTracked(false);
+        $this->assertFalse($this->zephirVar->isMemoryTracked());
 
-        $variable->setLowName('unit_test');
-        $this->assertSame('UnitTest', $variable->getRealName());
-        $this->assertSame('unit_test', $variable->getName());
+        $this->zephirVar->setLowName('unit_test');
+        $this->assertSame('UnitTest', $this->zephirVar->getRealName());
+        $this->assertSame('unit_test', $this->zephirVar->getName());
 
-        $variable->setOriginal(['file' => 'unknown', 'line' => 1, 'char' => 1]);
-        $this->assertSame(['file' => 'unknown', 'line' => 1, 'char' => 1], $variable->getOriginal());
+        $this->zephirVar->setOriginal(['file' => 'unknown', 'line' => 1, 'char' => 1]);
+        $this->assertSame(['file' => 'unknown', 'line' => 1, 'char' => 1], $this->zephirVar->getOriginal());
 
-        $variable->setClassTypes(['class1', 'class2']);
-        $variable->setClassTypes('class3');
-        $variable->setClassTypes('class1');
-        $this->assertSame(['class1', 'class2', 'class3'], $variable->getClassTypes());
+        $this->zephirVar->setClassTypes(['class1', 'class2']);
+        $this->zephirVar->setClassTypes('class3');
+        $this->zephirVar->setClassTypes('class1');
+        $this->assertSame(['class1', 'class2', 'class3'], $this->zephirVar->getClassTypes());
 
         $classDefinition = new ClassDefinition('Zephir\Test', 'VariableTest');
-        $variable->setAssociatedClass($classDefinition);
-        $this->assertSame($classDefinition, $variable->getAssociatedClass());
+        $this->zephirVar->setAssociatedClass($classDefinition);
+        $this->assertSame($classDefinition, $this->zephirVar->getAssociatedClass());
 
-        $variable->setDynamicTypes(['type' => 'int']);
-        $variable->setDynamicTypes('uint');
-        $this->assertSame(['int' => true, 'uint' => true], $variable->getDynamicTypes());
+        $this->zephirVar->setDynamicTypes(['type' => 'int']);
+        $this->zephirVar->setDynamicTypes('uint');
+        $this->assertSame(['int' => true, 'uint' => true], $this->zephirVar->getDynamicTypes());
 
-        $variable->increaseUses();
-        $this->assertSame(1, $variable->getNumberUses());
+        $this->zephirVar->increaseUses();
+        $this->assertSame(1, $this->zephirVar->getNumberUses());
 
-        $variable->increaseMutates();
-        $this->assertSame(1, $variable->getNumberMutations());
+        $this->zephirVar->increaseMutates();
+        $this->assertSame(1, $this->zephirVar->getNumberMutations());
 
         $context = new CompilationContext();
         $context->branchManager = new BranchManager();
-        $variable->setIsInitialized(true, $context);
-        $this->assertTrue($variable->isInitialized());
+        $context->branchManager->addBranch(new Branch());
+        $this->zephirVar->setIsInitialized(false, $context);
+        $this->assertFalse($this->zephirVar->isInitialized());
+        $this->zephirVar->setIsInitialized(true, $context);
+        $this->assertTrue($this->zephirVar->isInitialized());
 
-        $variable->setIsExternal(true);
-        $this->assertTrue($variable->isExternal());
+        $this->zephirVar->setIsExternal(true);
+        $this->assertTrue($this->zephirVar->isExternal());
+
+        $this->zephirVar->setMustInitNull(true);
+        $this->assertTrue($this->zephirVar->mustInitNull());
+
+        $this->zephirVar->setDefaultInitValue('testValue');
+        $this->assertSame('testValue', $this->zephirVar->getDefaultInitValue());
+
+        $this->zephirVar->skipInitVariant(42);
+        $this->assertSame(42, $this->zephirVar->getSkipVariant());
+
+        $this->zephirVar->increaseVariantIfNull();
+        $this->zephirVar->increaseVariantIfNull();
+        $this->assertSame(3, $this->zephirVar->getVariantInits());
+
+        $this->zephirVar->setType('not-a-type');
+        $this->assertFalse($this->zephirVar->isVariable());
+
+        $this->zephirVar->setLocalOnly(true);
+        $this->zephirVar->setIsExternal(true);
+        $this->assertTrue($this->zephirVar->isLocalStatic());
+
+        $superglobalVar = new Variable('', '_SERVER');
+        $superglobalVar->setIsExternal(true);
+        $this->assertTrue($superglobalVar->isSuperGlobal());
+    }
+
+    /** @test */
+    public function shouldEnableDefaultAutoInitValue()
+    {
+        $numericTypes = [
+            'char', 'boolean', 'bool', 'int', 'uint', 'long', 'ulong',
+            'double', 'zephir_ce_guard',
+        ];
+
+        $nullableTypes = [
+            'variable', 'string', 'array',
+        ];
+
+        $delegate = function (Variable $zephirVar, string $type) {
+            $zephirVar->setDefaultInitValue('default');
+            $zephirVar->setType($type);
+            $zephirVar->enableDefaultAutoInitValue();
+        };
+
+        foreach ($numericTypes as $type) {
+            $delegate($this->zephirVar, $type);
+
+            $this->assertSame(0, $this->zephirVar->getDefaultInitValue());
+        }
+
+        foreach ($nullableTypes as $type) {
+            $delegate($this->zephirVar, $type);
+
+            $this->assertNull($this->zephirVar->getDefaultInitValue());
+        }
+
+        $this->expectException(CompilerException::class);
+        $this->expectExceptionMessage('Cannot create an automatic safe default value for variable type: not-a-type');
+
+        $this->zephirVar->setType('not-a-type');
+        $this->zephirVar->enableDefaultAutoInitValue();
     }
 }
