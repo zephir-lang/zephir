@@ -277,21 +277,26 @@ function PrintBuildDetails {
 }
 
 
-Function InitializeReleaseVars {
-    If ($env:BUILD_TYPE -Match "nts") {
+function InitializeReleaseVars {
+    <#
+        .SYNOPSIS
+            Configures Environment variables for Release build.
+    #>
+
+    if ($env:BUILD_TYPE -Match "nts") {
         $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}_nts"
 
-        If ($env:PHP_ARCH -eq 'x86') {
+        if ($env:PHP_ARCH -eq 'x86') {
             $env:RELEASE_FOLDER = "Release"
-        } Else {
+        } else {
             $env:RELEASE_FOLDER = "x64\Release"
         }
-    } Else {
+    } else {
         $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
 
-        If ($env:PHP_ARCH -eq 'x86') {
+        if ($env:PHP_ARCH -eq 'x86') {
             $env:RELEASE_FOLDER = "Release_TS"
-        } Else {
+        } else {
             $env:RELEASE_FOLDER = "x64\Release_TS"
         }
     }
@@ -302,13 +307,18 @@ Function InitializeReleaseVars {
     Write-Output "::set-env name=RELEASE_DLL_PATH::${env:RELEASE_DLL_PATH}"
 }
 
-Function EnableTestExtension {
+function EnableTestExtension {
+    <#
+        .SYNOPSIS
+            Enables PHP Extension.
+    #>
+
     if (-not (Test-Path env:RELEASE_DLL_PATH)) {
         InitializeReleaseVars
     }
 
-    If (-not (Test-Path "${env:RELEASE_DLL_PATH}")) {
-        Throw "Unable to locate extension path: ${env:RELEASE_DLL_PATH}"
+    if (-not (Test-Path "${env:RELEASE_DLL_PATH}")) {
+        throw "Unable to locate extension path: ${env:RELEASE_DLL_PATH}"
     }
 
     Copy-Item "${env:RELEASE_DLL_PATH}" "${env:PHPROOT}\ext\${env:EXTENSION_FILE}"
