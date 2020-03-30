@@ -127,30 +127,47 @@ function Expand-Item7zip {
     }
 }
 
-Function DownloadFile {
-    Param(
-        [Parameter(Mandatory=$true)][System.String] $RemoteUrl,
-        [Parameter(Mandatory=$true)][System.String] $DestinationPath
+function DownloadFile {
+    <#
+        .SYNOPSIS
+            Downloads file from providing URL to specified destionation.
+
+        .NOTES
+            Throws System.Net.WebException if $RequestUrl not found.
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath
     )
 
-    $RetryMax   = 5
-    $RetryCount = 0
-    $Completed  = $false
+    process {
+        $RetryMax   = 5
+        $RetryCount = 0
+        $Completed  = $false
 
-    $WebClient = New-Object System.Net.WebClient
-    $WebClient.Headers.Add('User-Agent', 'GitHub Actions PowerShell Script')
+        $WebClient = New-Object System.Net.WebClient
+        $WebClient.Headers.Add('User-Agent', 'GitHub Actions PowerShell Script')
 
-    While (-not $Completed) {
-        Try {
-            $WebClient.DownloadFile($RemoteUrl, $DestinationPath)
-            $Completed = $true
-        } Catch {
-            If ($RetryCount -ge $RetryMax) {
-                $ErrorMessage = $_.Exception.Message
-                Write-Output "Error downloadingig ${RemoteUrl}: $ErrorMessage"
+        while (-not $Completed || $RetryCount -eq $RetryMax) {
+            try {
+                $WebClient.DownloadFile($RemoteUrl, $DestinationPath)
                 $Completed = $true
-            } Else {
-                $RetryCount++
+            } catch [System.Net.WebException] {
+                $ErrorMessage = $_.Exception.Message
+
+                if ($_.Exception.Response.StatusCode -eq 404) {
+                    Write-Warning -Message "Error downloading ${RemoteUrl}: $ErrorMessage"
+                    throw [System.Net.WebException] "Error downloading ${RemoteUrl}"
+                }
+
+                if ($RetryCount -ge $RetryMax) {
+                    Write-Output "Error downloading ${RemoteUrl}: $ErrorMessage"
+                    $Completed = $true
+                } else {
+                    $RetryCount++
+                }
             }
         }
     }
