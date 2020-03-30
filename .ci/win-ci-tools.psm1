@@ -173,21 +173,29 @@ function DownloadFile {
     }
 }
 
-Function PrintLogs {
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile-errors.log") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile-errors.log"
-    }
+function PrintLogs {
+    <#
+        .SYNOPSIS
+            Prints logs files details.
+    #>
 
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile.log") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile.log"
-    }
+    $Logs = "${env:GITHUB_WORKSPACE}\compile-errors.log",
+            "${env:GITHUB_WORKSPACE}\compile.log",
+            "${env:GITHUB_WORKSPACE}\ext\configure.js"
 
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\ext\configure.js") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\ext\configure.js"
+    foreach ($logFile in $Logs) {
+        if (Test-Path -Path $logFile) {
+            Get-Content -Path $logFile
+        }
     }
 }
 
-Function PrintEnvVars {
+function PrintEnvVars {
+    <#
+        .SYNOPSIS
+            Prints environment variables.
+    #>
+
     Write-Output ($env:Path).Replace(';', "`n")
     Get-ChildItem env:
 }
