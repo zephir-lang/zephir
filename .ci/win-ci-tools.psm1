@@ -62,11 +62,11 @@ function InstallPhpDevPack {
     $TS = Get-ThreadSafety
 
     $BaseUrl = "http://windows.php.net/downloads/releases"
-    $DevPack = "php-devel-pack-${env:PHP_VERSION}-${TS}Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    $DevPack = "php-devel-pack-${env:PHP_VERSION}${TS}-Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
     $RemoteUrl = "${BaseUrl}/${DevPack}"
     $RemoteArchiveUrl = "${BaseUrl}/archives/${DevPack}"
-    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}-${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
     if (-not (Test-Path $env:PHP_DEVPACK)) {
         if (-not [System.IO.File]::Exists($DestinationPath)) {
