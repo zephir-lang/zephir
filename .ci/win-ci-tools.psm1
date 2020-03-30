@@ -70,7 +70,10 @@ function InstallPhpDevPack {
 
     if (-not (Test-Path $env:PHP_DEVPACK)) {
         if (-not [System.IO.File]::Exists($DestinationPath)) {
-            DownloadFileUsingAlternative $RemoteUrl $RemoteArchiveUrl $DestinationPath "Downloading PHP Dev pack"
+            DownloadFileUsingAlternative -RemoteUrl $RemoteUrl `
+                -RemoteArchiveUrl $RemoteArchiveUrl `
+                -DestinationPath $DestinationPath `
+                -Message "Downloading PHP Dev pack"
         }
 
         $DestinationUnzipPath = "${env:Temp}\php-${env:PHP_VERSION}-devel-VC${env:VC_VERSION}-${env:PHP_ARCH}"
@@ -156,10 +159,10 @@ function DownloadFileUsingAlternative {
 
     [CmdletBinding()]
     param(
-        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
-        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteArchiveUrl,
-        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath,
-        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $Message
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteArchiveUrl,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $Message
     )
 
     process {
@@ -196,7 +199,7 @@ function DownloadFile {
         $WebClient = New-Object System.Net.WebClient
         $WebClient.Headers.Add('User-Agent', 'GitHub Actions PowerShell Script')
 
-        while (-not $Completed || $RetryCount -eq $RetryMax) {
+        while (-not $Completed -or $RetryCount -eq $RetryMax) {
             try {
                 $WebClient.DownloadFile($RemoteUrl, $DestinationPath)
                 $Completed = $true
