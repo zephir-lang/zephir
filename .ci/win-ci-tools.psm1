@@ -200,41 +200,45 @@ function PrintEnvVars {
     Get-ChildItem env:
 }
 
-Function PrintDirectoriesContent {
+function PrintDirectoriesContent {
+    <#
+        .SYNOPSIS
+            Prints Builds, Release, Projects, Downloads and Extensions directories contents.
+    #>
+
     Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
 
-    If (Test-Path -Path "C:\Downloads") {
-        Get-ChildItem -Path "C:\Downloads"
-    }
+    $Directories =  "C:\Downloads",
+                    "C:\Projects",
+                    "${env:PHPROOT}\ext"
 
-    If (Test-Path -Path "C:\Projects") {
-        Get-ChildItem -Path "C:\Projects"
-    }
-
-    If (Test-Path -Path "${env:PHPROOT}\ext") {
-        Get-ChildItem -Path "${env:PHPROOT}\ext"
-    }
-
-    # Might be empty
     if ("${env:RELEASE_DLL_PATH}") {
+        # Might be empty
         $ReleasePath = Split-Path -Path "${env:RELEASE_DLL_PATH}"
-        If (Test-Path -Path "${ReleasePath}") {
-            Get-ChildItem -Path "${ReleasePath}"
-        }
-
         $BuildPath = Split-Path -Path "${ReleasePath}"
-        If (Test-Path -Path "${BuildPath}") {
-            Get-ChildItem -Path "${BuildPath}"
+
+        $Directories.Add($ReleasePath)
+        $Directories.Add($BuildPath)
+    }
+
+    foreach ($dir in $Directories) {
+        if (Test-Path -Path $dir) {
+            Get-ChildItem -Path $dir
         }
     }
 }
 
 # TODO(klay): Add phpize and phpconfig here
-Function PrintPhpInfo {
+function PrintPhpInfo {
+    <#
+        .SYNOPSIS
+            Prints PHP info.
+    #>
+
     $IniFile = "${env:PHPROOT}\php.ini"
     $PhpExe = "${env:PHPROOT}\php.exe"
 
-    If (Test-Path -Path "${PhpExe}") {
+    if (Test-Path -Path "${PhpExe}") {
         Write-Output ""
         & "${PhpExe}" -v
 
@@ -243,12 +247,17 @@ Function PrintPhpInfo {
 
         Write-Output ""
         & "${PhpExe}" -i
-    } ElseIf (Test-Path -Path "${IniFile}") {
+    } elseif (Test-Path -Path "${IniFile}") {
         Get-Content -Path "${IniFile}"
     }
 }
 
-Function PrintBuildDetails {
+function PrintBuildDetails {
+    <#
+        .SYNOPSIS
+            Prints various Build details information.
+    #>
+
     $BuildDate = Get-Date -Format g
 
     Write-Output "Build date: ${BuildDate}"
