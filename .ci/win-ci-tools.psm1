@@ -23,21 +23,27 @@ function SetupCommonEnvironment {
     git config --global advice.detachedHead false
 }
 
-Function InstallPhpSdk {
+function InstallPhpSdk {
+    <#
+        .SYNOPSIS
+            Install PHP SDK binary tools from sources.
+    #>
+
     Write-Output "Install PHP SDK binary tools: ${env:PHP_SDK_VERSION}"
 
-    $RemoteUrl = "https://github.com/microsoft/php-sdk-binary-tools/archive/php-sdk-${env:PHP_SDK_VERSION}.zip"
-    $DestinationPath = "C:\Downloads\php-sdk-${env:PHP_SDK_VERSION}.zip"
+    $PhpSdk = "php-sdk-${env:PHP_SDK_VERSION}.zip"
+    $RemoteUrl = "https://github.com/microsoft/php-sdk-binary-tools/archive/${PhpSdk}"
+    $DestinationPath = "C:\Downloads\${PhpSdk}"
 
-    If (-not (Test-Path $env:PHP_SDK_PATH)) {
-        If (-not [System.IO.File]::Exists($DestinationPath)) {
+    if (-not (Test-Path $env:PHP_SDK_PATH)) {
+        if (-not [System.IO.File]::Exists($DestinationPath)) {
             Write-Output "Downloading PHP SDK binary tools: $RemoteUrl ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
         $DestinationUnzipPath = "${env:Temp}\php-sdk-binary-tools-php-sdk-${env:PHP_SDK_VERSION}"
 
-        If (-not (Test-Path "$DestinationUnzipPath")) {
+        if (-not (Test-Path "$DestinationUnzipPath")) {
             Expand-Item7zip $DestinationPath $env:Temp
         }
 
@@ -45,21 +51,26 @@ Function InstallPhpSdk {
     }
 }
 
-Function InstallPhpDevPack {
+function InstallPhpDevPack {
+    <#
+        .SYNOPSIS
+            Intstall PHP Developer pack from sources.
+    #>
+
     Write-Output "Install PHP Dev pack: ${env:PHP_VERSION}"
 
     $TS = Get-ThreadSafety
 
     $BaseUrl = "http://windows.php.net/downloads/releases"
-    $LocalPart = "/php-devel-pack-${env:PHP_VERSION}-${TS}Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    $DevPack = "php-devel-pack-${env:PHP_VERSION}-${TS}Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
-    $RemoteUrl = "${BaseUrl}${LocalPart}"
+    $RemoteUrl = "${BaseUrl}/${DevPack}"
+    $RemoteArchiveUrl = "${BaseUrl}/archives/${DevPack}"
     $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}-${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
     if (-not (Test-Path $env:PHP_DEVPACK)) {
         if (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Output "Downloading PHP Dev pack: ${RemoteUrl} ..."
-            DownloadFile $RemoteUrl $DestinationPath
+            DownloadFileUsingAlternative $RemoteUrl $RemoteArchiveUrl $DestinationPath "Downloading PHP Dev pack"
         }
 
         $DestinationUnzipPath = "${env:Temp}\php-${env:PHP_VERSION}-devel-VC${env:VC_VERSION}-${env:PHP_ARCH}"
@@ -134,6 +145,31 @@ function Expand-Item7zip {
     if ($LastExitCode -ne 0) {
         Write-Output "An error occurred while unzipping [$Archive] to [$Destination]. Error code was: ${LastExitCode}"
         Exit $LastExitCode
+    }
+}
+
+function DownloadFileUsingAlternative {
+    <#
+        .SYNOPSIS
+            Downloads files from URL using alternative ULR if primary URL not found
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteArchiveUrl,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $Message
+    )
+
+    process {
+        try {
+            Write-Output "${Message}: ${RemoteUrl} ..."
+            DownloadFile $RemoteUrl $DestinationPath
+        } catch [System.Net.WebException] {
+            Write-Output "${Message} from archive: ${RemoteArchiveUrl} ..."
+            DownloadFile $RemoteArchiveUrl $DestinationPath
+        }
     }
 }
 
