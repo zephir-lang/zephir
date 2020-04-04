@@ -33,3 +33,5 @@ make -j"$(getconf _NPROCESSORS_ONLN)"
 sudo make install
 echo 'extension="zephir_parser.so"' |\
   sudo tee "/etc/php/$PHP_VERSION/cli/conf.d/zephir_parser.ini"
+
+php --ri "Zephir Parser"
