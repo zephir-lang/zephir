@@ -49,7 +49,14 @@ jobs:
           # enable_dl: https://github.com/phalcon/zephir/pull/1654
           # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
-          ini-values: variables_order=EGPCS, enable_dl=On, allow_url_fopen=On, error_reporting=-1, memory_limit=1G, date.timezone=UTC, xdebug.max_nesting_level=256
+          ini-values: >-
+            variables_order=EGPCS,
+            enable_dl=On,
+            allow_url_fopen=On,
+            error_reporting=-1,
+            memory_limit=1G,
+            date.timezone=UTC,
+            xdebug.max_nesting_level=256
         env:
           PHPTS: ${{ matrix.build_type }}
 
