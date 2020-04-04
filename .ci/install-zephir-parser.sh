@@ -11,10 +11,10 @@
 # -u	Treat unset variables as an error when substituting.
 set -eu
 
-: ${ZEPHIR_PARSER_VERSION:=development}
+: "${ZEPHIR_PARSER_VERSION:=development}"
 PHP_VERSION=$1
 
-echo "Install Zephir Parser"
+echo "Install Zephir Parser using version: $ZEPHIR_PARSER_VERSION"
 
 if [ ! -f "$HOME/php-zephir-parser/LICENSE" ]; then
   rm -rf "$HOME/php-zephir-parser"
