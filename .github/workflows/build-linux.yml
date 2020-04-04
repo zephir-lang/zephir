@@ -104,7 +104,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-zephir-parser-
 
       - name: Install Zephir Parser
-        run: .ci/install-zephir-bash.sh ${{ matrix.php }}
+        run: .ci/install-zephir-parser.sh ${{ matrix.php }}
 
       - name: Setup GitHub Token
         run: |
