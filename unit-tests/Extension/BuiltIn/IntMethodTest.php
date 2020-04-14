@@ -16,7 +16,7 @@ use Test\BuiltIn\IntMethods;
 
 class IntMethodTest extends TestCase
 {
-    /** @var IntMethods $test */
+    /** @var IntMethods */
     private $test;
 
     public function setUp()

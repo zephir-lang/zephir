@@ -16,7 +16,7 @@ use Test\Assign;
 
 class AssignTest extends TestCase
 {
-    /** @var Assign $test */
+    /** @var Assign */
     private $test;
 
     public function setUp()

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConstantsInterfaceTest extends TestCase
 {
-    /** @var \Test\ConstantsInterface $test */
+    /** @var \Test\ConstantsInterface */
     private $test;
 
     public function setUp()

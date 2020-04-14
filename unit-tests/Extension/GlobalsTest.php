@@ -19,7 +19,7 @@ use Test\Globals;
  */
 class GlobalsTest extends TestCase
 {
-    /** @var Test\Globals $test */
+    /** @var \Test\Globals */
     private $test;
 
     public function setUp()

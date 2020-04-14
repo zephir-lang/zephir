@@ -1859,11 +1859,7 @@ class ClassMethod
          * Compile the block of statements if any
          */
         if (\is_object($this->statements)) {
-            if ($this->hasModifier('static')) {
-                $compilationContext->staticContext = true;
-            } else {
-                $compilationContext->staticContext = false;
-            }
+            $compilationContext->staticContext = $this->hasModifier('static');
 
             /*
              * Compile the statements block as a 'root' branch
@@ -1874,7 +1870,10 @@ class ClassMethod
         /**
          * Initialize variable default values.
          */
-        $initVarCode = $compilationContext->backend->initializeVariableDefaults($symbolTable->getVariables(), $compilationContext);
+        $initVarCode = $compilationContext->backend->initializeVariableDefaults(
+            $symbolTable->getVariables(),
+            $compilationContext
+        );
 
         /**
          * Fetch parameters from vm-top.

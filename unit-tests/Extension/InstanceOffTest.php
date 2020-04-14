@@ -16,7 +16,7 @@ use Test\InstanceOff;
 
 class InstanceOffTest extends TestCase
 {
-    /** @var InstanceOff $test */
+    /** @var InstanceOff */
     private $test;
 
     public function setUp()

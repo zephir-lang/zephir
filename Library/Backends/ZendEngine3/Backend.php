@@ -369,7 +369,6 @@ class Backend extends BackendZendEngine2
                     $groupVariables[] = $pointer.$variable->getName();
                     break;
 
-                /* @noinspection PhpMissingBreakStatementInspection */
                 case 'char':
                     if (\strlen($defaultValue) > 4) {
                         if (\strlen($defaultValue) > 10) {
@@ -405,7 +404,7 @@ class Backend extends BackendZendEngine2
      *
      * @return string
      */
-    public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string
+    public function initializeVariableDefaults(array $variables, CompilationContext $compilationContext): string
     {
         $codePrinter = new CodePrinter();
         $codePrinter->increaseLevel();
@@ -414,125 +413,180 @@ class Backend extends BackendZendEngine2
 
         /* Initialize default values in dynamic variables */
         foreach ($variables as $variable) {
-            /*
-             * Initialize 'dynamic' variables with default values
-             */
+            /* All use cases considered below works with variable used at least once */
+            if ($variable->getNumberUses() < 1) {
+                continue;
+            }
+
+            /* The default init value to be used bellow.
+               Actually this value should be in array form and provide 'type' and 'value' keys. */
+            $defaultValue = $variable->getDefaultInitValue();
+            if (!\is_array($defaultValue)) {
+                continue;
+            }
+
+            /* Initialize 'dynamic' variables with default values */
             if ('variable' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
-                        $defaultValue = $variable->getDefaultInitValue();
-                        if (\is_array($defaultValue)) {
-                            $compilationContext->symbolTable->mustGrownStack(true);
-                            $compilationContext->backend->initVar($variable, $compilationContext);
-                            switch ($defaultValue['type']) {
-                                case 'int':
-                                case 'uint':
-                                case 'long':
-                                    $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'bool':
-                                    $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'char':
-                                case 'uchar':
-                                    if (\strlen($defaultValue['value']) > 2) {
-                                        if (\strlen($defaultValue['value']) > 10) {
-                                            throw new CompilerException("Invalid char literal: '".substr($defaultValue['value'], 0, 10)."...'", $defaultValue);
-                                        } else {
-                                            throw new CompilerException("Invalid char literal: '".$defaultValue['value']."'", $defaultValue);
-                                        }
-                                    }
-                                    $compilationContext->backend->assignLong($variable, '\''.$defaultValue['value'].'\'', $compilationContext);
-                                    break;
-
-                                case 'null':
-                                    $compilationContext->backend->assignNull($variable, $compilationContext);
-                                    break;
-
-                                case 'double':
-                                    $compilationContext->backend->assignDouble($variable, $defaultValue['value'], $compilationContext);
-                                    break;
-
-                                case 'string':
-                                    $compilationContext->backend->assignString(
-                                        $variable,
-                                        add_slashes($defaultValue['value']),
-                                        $compilationContext
-                                    );
-                                    break;
-
-                                case 'array':
-                                case 'empty-array':
-                                    $compilationContext->backend->initArray($variable, $compilationContext, null);
-                                    break;
-
-                                default:
-                                    throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                            }
-                        }
-                    }
+                /* These ones are system variables, do not add default values.
+                   Also see: https://github.com/phalcon/zephir/issues/1660 */
+                if (\in_array($variable->getName(), ['this_ptr', 'return_value', 'return_value_ptr'])) {
+                    continue;
                 }
+
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $compilationContext->backend->initVar($variable, $compilationContext);
+                switch ($defaultValue['type']) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                        $compilationContext->backend->assignLong(
+                            $variable,
+                            $defaultValue['value'],
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'bool':
+                        $compilationContext->backend->assignBool(
+                            $variable,
+                            $defaultValue['value'],
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'char':
+                    case 'uchar':
+                        if (\strlen($defaultValue['value']) > 2) {
+                            throw new CompilerException(
+                                sprintf(
+                                    "Invalid char literal: '%s%s'",
+                                    substr($defaultValue['value'], 0, 10),
+                                    \strlen($defaultValue['value']) > 10 ? '...' : ''
+                                ),
+                                $defaultValue
+                            );
+                        }
+
+                        $compilationContext->backend->assignLong(
+                            $variable,
+                            "'".$defaultValue['value']."'",
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'null':
+                        $compilationContext->backend->assignNull(
+                            $variable,
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'double':
+                        $compilationContext->backend->assignDouble(
+                            $variable,
+                            $defaultValue['value'],
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'string':
+                        $compilationContext->backend->assignString(
+                            $variable,
+                            add_slashes($defaultValue['value']),
+                            $compilationContext
+                        );
+                        break;
+
+                    case 'array':
+                    case 'empty-array':
+                        $compilationContext->backend->initArray(
+                            $variable,
+                            $compilationContext
+                        );
+                        break;
+
+                    default:
+                        throw new CompilerException(
+                            sprintf(
+                                'Invalid default type: %s for data type: %s',
+                                $defaultValue['type'],
+                                $variable->getType()
+                            ),
+                            $variable->getOriginal()
+                        );
+                }
+
                 continue;
             }
 
-            /*
-             * Initialize 'string' variables with default values
-             */
+            /* Initialize 'string' variables with default values */
             if ('string' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (\is_array($defaultValue)) {
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->backend->initVar($variable, $compilationContext);
-                        switch ($defaultValue['type']) {
-                            case 'string':
-                                $compilationContext->backend->assignString(
-                                    $variable,
-                                    add_slashes($defaultValue['value']),
-                                    $compilationContext
-                                );
-                                break;
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $compilationContext->backend->initVar($variable, $compilationContext);
+                switch ($defaultValue['type']) {
+                    case 'string':
+                        $compilationContext->backend->assignString(
+                            $variable,
+                            add_slashes($defaultValue['value']),
+                            $compilationContext
+                        );
+                        break;
 
-                            case 'null':
-                                $compilationContext->backend->assignString($variable, null, $compilationContext);
-                                break;
+                    case 'null':
+                        $compilationContext->backend->assignString(
+                            $variable,
+                            null,
+                            $compilationContext
+                        );
+                        break;
 
-                            default:
-                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                        }
-                    }
+                    default:
+                        throw new CompilerException(
+                            sprintf(
+                                'Invalid default type: %s for data type: %s',
+                                $defaultValue['type'],
+                                $variable->getType()
+                            ),
+                            $variable->getOriginal()
+                        );
                 }
+
                 continue;
             }
 
-            /*
-             * Initialize 'array' variables with default values
-             */
+            /* Initialize 'array' variables with default values */
             if ('array' == $variable->getType()) {
-                if ($variable->getNumberUses() > 0) {
-                    $defaultValue = $variable->getDefaultInitValue();
-                    if (\is_array($defaultValue)) {
-                        $compilationContext->symbolTable->mustGrownStack(true);
-                        $compilationContext->backend->initVar($variable, $compilationContext);
-                        switch ($defaultValue['type']) {
-                            case 'null':
-                                $compilationContext->backend->assignNull($variable, $compilationContext);
-                                break;
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $compilationContext->backend->initVar($variable, $compilationContext);
+                switch ($defaultValue['type']) {
+                    case 'null':
+                        $compilationContext->backend->assignNull(
+                            $variable,
+                            $compilationContext
+                        );
+                        break;
 
-                            case 'array':
-                            case 'empty-array':
-                                $compilationContext->backend->initArray($variable, $compilationContext, null);
-                                break;
+                    case 'array':
+                    case 'empty-array':
+                        $compilationContext->backend->initArray(
+                            $variable,
+                            $compilationContext
+                        );
+                        break;
 
-                            default:
-                                throw new CompilerException('Invalid default type: '.$defaultValue['type'].' for data type: '.$variable->getType(), $variable->getOriginal());
-                        }
-                    }
+                    default:
+                        throw new CompilerException(
+                            sprintf(
+                                'Invalid default type: %s for data type: %s',
+                                $defaultValue['type'],
+                                $variable->getType()
+                            ),
+                            $variable->getOriginal()
+                        );
                 }
             }
         }
+
         $compilationContext->codePrinter = $oldCodePrinter;
 
         return (string) $codePrinter->getOutput();
@@ -941,13 +995,30 @@ class Backend extends BackendZendEngine2
 
     public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
     {
-        //TODO: maybe optimizations as well as above
+        // TODO(serghei): maybe optimizations as well as above
         $value = $this->resolveValue($value, $context);
+
         if ($propertyName instanceof Variable) {
-            $context->codePrinter->output('zephir_update_property_zval_zval('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($propertyName).', '.$value.');');
-        } else {
-            $context->codePrinter->output('zephir_update_property_zval('.$this->getVariableCode($symbolVariable).', SL("'.$propertyName.'"), '.$value.');');
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_update_property_zval_zval(%s, %s, %s);',
+                    $this->getVariableCode($symbolVariable),
+                    $this->getVariableCode($propertyName),
+                    $value
+                )
+            );
+
+            return;
         }
+
+        $context->codePrinter->output(
+            sprintf(
+                'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);',
+                $this->getVariableCode($symbolVariable),
+                $propertyName,
+                $value
+            )
+        );
     }
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)

@@ -142,7 +142,7 @@ class Backend extends BaseBackend
     /**
      * {@inheritdoc}
      */
-    public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string
+    public function initializeVariableDefaults(array $variables, CompilationContext $context): string
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'

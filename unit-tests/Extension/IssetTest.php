@@ -18,7 +18,7 @@ class IssetTest extends TestCase
     public $b = 'a';
     private $test2 = 'b';
 
-    /** @var \Test\IssetTest $test */
+    /** @var \Test\IssetTest */
     private $test;
 
     public function setUp()

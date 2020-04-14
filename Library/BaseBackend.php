@@ -128,11 +128,11 @@ abstract class BaseBackend implements FcallAwareInterface
      * Initialize variable defaults.
      *
      * @param Variable[]         $variables
-     * @param CompilationContext $compilationContext
+     * @param CompilationContext $context
      *
      * @return string
      */
-    abstract public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string;
+    abstract public function initializeVariableDefaults(array $variables, CompilationContext $context): string;
 
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 

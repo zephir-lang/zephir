@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class StringTest extends TestCase
 {
-    /** @var \Test\Strings $test */
+    /** @var \Test\Strings */
     private $test;
 
     public function setUp()

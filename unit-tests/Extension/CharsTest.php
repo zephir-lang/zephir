@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class CharsTest extends TestCase
 {
-    /** @var \Test\Chars $test */
+    /** @var \Test\Chars */
     private $test;
 
     public function setUp()

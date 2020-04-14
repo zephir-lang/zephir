@@ -16,7 +16,7 @@ use Test\Concat;
 
 class ConcatTest extends TestCase
 {
-    /** @var Concat $test */
+    /** @var Concat */
     private $test;
 
     public function setUp()

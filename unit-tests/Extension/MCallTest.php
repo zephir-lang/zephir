@@ -19,7 +19,7 @@ class MCallTest extends TestCase
     /** @var \ReflectionClass */
     private $reflection;
 
-    /** @var Mcall $test */
+    /** @var Mcall */
     private $test;
 
     public function setUp()

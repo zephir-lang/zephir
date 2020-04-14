@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase
 {
-    /** @var \Test\Json $test */
+    /** @var \Test\Json */
     private $test;
 
     public function setUp()
