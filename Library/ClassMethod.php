@@ -1867,7 +1867,7 @@ class ClassMethod
             $this->statements->compile($compilationContext, false, Branch::TYPE_ROOT);
         }
 
-        /**
+        /*
          * Initialize variable default values.
          */
         $initVarCode = $compilationContext->backend->initializeVariableDefaults(
@@ -1875,7 +1875,7 @@ class ClassMethod
             $compilationContext
         );
 
-        /**
+        /*
          * Fetch parameters from vm-top.
          */
         $initCode = '';
@@ -2098,6 +2098,7 @@ class ClassMethod
         $codePrinter->preOutput($code);
 
         $compilationContext->headersManager->add('kernel/object');
+
         /*
          * Fetch used superglobals
          */
@@ -2135,7 +2136,7 @@ class ClassMethod
             $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
         }
 
-        /**
+        /*
          * Check if there are unused variables.
          */
         $usedVariables = [];
@@ -2204,13 +2205,22 @@ class ClassMethod
             $codePrinter->preOutputBlankLine();
         }
 
-        /**
+        /*
          * Generate the variable definition for variables used.
          */
-        $initCode = "\t".implode(PHP_EOL."\t", $compilationContext->backend->declareVariables($this, $usedVariables, $compilationContext));
-        if ($initCode) {
-            $codePrinter->preOutput($initCode);
-        }
+        $initCode = sprintf(
+            "\t%s",
+            implode(
+                PHP_EOL."\t",
+                $compilationContext->backend->declareVariables(
+                    $this,
+                    $usedVariables,
+                    $compilationContext
+                )
+            )
+        );
+
+        $codePrinter->preOutput($initCode);
 
         /*
          * Finalize the method compilation
