@@ -274,18 +274,25 @@ class Backend extends BaseBackend
         $context->codePrinter->output('zephir_concat_self('.$variable.', '.$itemVariable.');');
     }
 
-    public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
-    {
-        if (!isset($size)) {
-            $output = 'array_init('.$this->getVariableCode($variable).');';
-        } else {
-            $output = 'zephir_create_array('.$this->getVariableCode($variable).', '.$size.', 0);';
-        }
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-
-        return $output;
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param CompilationContext $context
+     * @param int                $size
+     * @param bool               $print
+     *
+     * @return string
+     */
+    public function initArray(
+        Variable $variable,
+        CompilationContext $context,
+        int $size = null,
+        $print = true
+    ): string {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)

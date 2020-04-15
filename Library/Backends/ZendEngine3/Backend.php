@@ -410,6 +410,7 @@ class Backend extends BackendZendEngine2
     {
         $codePrinter = new CodePrinter();
         $codePrinter->increaseLevel();
+
         $oldCodePrinter = $context->codePrinter;
         $context->codePrinter = $codePrinter;
 
@@ -1131,16 +1132,47 @@ class Backend extends BackendZendEngine2
      * {@inheritdoc}
      *
      * @param string             $type
-     * @param CompilationContext $compilationContext
+     * @param CompilationContext $context
      * @param bool               $isLocal
      *
      * @return Variable
      */
     public function getScalarTempVariable(
         string $type,
-        CompilationContext $compilationContext,
+        CompilationContext $context,
         $isLocal = true
     ): Variable {
-        return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
+        return $context->symbolTable->getTempNonTrackedVariable($type, $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param CompilationContext $context
+     * @param int                $size
+     * @param bool               $print
+     *
+     * @return string
+     */
+    public function initArray(
+        Variable $variable,
+        CompilationContext $context,
+        int $size = null,
+        $print = true
+    ): string {
+        $code = $this->getVariableCode($variable);
+
+        if (null === $size) {
+            $output = "array_init({$code});";
+        } else {
+            $output = "zephir_create_array({$code}, {$size}, 0);";
+        }
+
+        if ($print) {
+            $context->codePrinter->output($output);
+        }
+
+        return $output;
     }
 }
