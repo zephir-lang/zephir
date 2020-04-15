@@ -202,9 +202,9 @@ class CodePrinter
      *
      * @return string
      */
-    public function getOutput()
+    public function getOutput(): string
     {
-        return $this->code;
+        return (string) $this->code;
     }
 
     /**
