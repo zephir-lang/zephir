@@ -868,6 +868,21 @@ class Backend extends BackendZendEngine2
             return;
         }
 
+        /* Are we going to init default object property value? */
+        if ($context->currentMethod &&
+            preg_match('/^zephir_init_properties/', $context->currentMethod->getName())) {
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_init_property_zval(%s, ZEND_STRL("%s"), %s);',
+                    $this->getVariableCode($variable),
+                    $property,
+                    $value
+                )
+            );
+
+            return;
+        }
+
         $context->codePrinter->output(
             sprintf(
                 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);',
