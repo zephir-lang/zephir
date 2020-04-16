@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
 class TestScopePhpMagic
 {
     public $setCount = 0;
@@ -19,7 +18,7 @@ class TestScopePhpMagic
 
     public function __set($name, $value)
     {
-        $this->setCount++;
+        ++$this->setCount;
         $this->$name = $value;
     }
 

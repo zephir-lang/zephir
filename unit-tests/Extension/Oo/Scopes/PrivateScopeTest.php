@@ -12,12 +12,12 @@
 namespace Extension\Oo;
 
 use Error;
-use TestScopeExtending;
-use TestScopePhp;
-use TestScopeExtendingMagic;
-use TestScopePhpMagic;
 use PHPUnit\Framework\TestCase;
 use Test\Oo\Scopes\PrivateScopeTester;
+use TestScopeExtending;
+use TestScopeExtendingMagic;
+use TestScopePhp;
+use TestScopePhpMagic;
 
 class PrivateScopeTest extends TestCase
 {
@@ -29,6 +29,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyObjPhp()
@@ -44,6 +45,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyNewPhp()
@@ -59,6 +61,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyObjInternal()
@@ -74,6 +77,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyNewInternal()
@@ -89,6 +93,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldSetPrivatePropertyObjPhp()
@@ -103,6 +108,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldSetPrivatePropertyNewPhp()
@@ -116,6 +122,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldSetPrivatePropertyObjInternal()
@@ -130,6 +137,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldSetPrivatePropertyNewInternal()
@@ -143,6 +151,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyViaThis()
@@ -158,6 +167,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldSetPrivatePropertyViaThis()
@@ -170,6 +180,7 @@ class PrivateScopeTest extends TestCase
 
     /**
      * @test
+     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
     public function shouldNotSetPrivatePropertyExtendedMagicObjInternal()
