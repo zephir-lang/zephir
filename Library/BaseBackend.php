@@ -236,7 +236,19 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context);
 
-    abstract public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $compilationContext);
+    /**
+     * Update object property.
+     *
+     * object->property = value
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $property
+     * @param mixed              $value
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    abstract public function updateProperty(Variable $variable, $property, $value, CompilationContext $context);
 
     abstract public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context);
 

@@ -697,7 +697,17 @@ class Backend extends BaseBackend
         return $value;
     }
 
-    public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $property
+     * @param mixed              $value
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    public function updateProperty(Variable $variable, $property, $value, CompilationContext $context)
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'

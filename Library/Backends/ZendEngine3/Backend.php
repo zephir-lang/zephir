@@ -840,17 +840,27 @@ class Backend extends BackendZendEngine2
         return $value;
     }
 
-    public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $property
+     * @param mixed              $value
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    public function updateProperty(Variable $variable, $property, $value, CompilationContext $context)
     {
         // TODO(serghei): maybe optimizations as well as above
         $value = $this->resolveValue($value, $context);
 
-        if ($propertyName instanceof Variable) {
+        if ($property instanceof Variable) {
             $context->codePrinter->output(
                 sprintf(
                     'zephir_update_property_zval_zval(%s, %s, %s);',
-                    $this->getVariableCode($symbolVariable),
-                    $this->getVariableCode($propertyName),
+                    $this->getVariableCode($variable),
+                    $this->getVariableCode($property),
                     $value
                 )
             );
@@ -861,8 +871,8 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output(
             sprintf(
                 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);',
-                $this->getVariableCode($symbolVariable),
-                $propertyName,
+                $this->getVariableCode($variable),
+                $property,
                 $value
             )
         );
