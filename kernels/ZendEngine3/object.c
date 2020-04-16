@@ -650,7 +650,7 @@ int zephir_init_property_zval(zval *object, const char *property_name,
 int zephir_update_property_zval(zval *object, const char *property_name,
 								unsigned int property_length, zval *value)
 {
-	zend_class_entry *ce, *scope;
+	zend_class_entry *ce;
 	zval property, sep_value;
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
@@ -659,9 +659,6 @@ int zephir_update_property_zval(zval *object, const char *property_name,
 						 property_name);
 		return FAILURE;
 	}
-
-	/* Backup current scope */
-	scope = zephir_get_scope(0);
 
 	/* Is this function was called from within caller scope */
 	ce = zend_get_called_scope(EG(current_execute_data));
@@ -673,9 +670,6 @@ int zephir_update_property_zval(zval *object, const char *property_name,
 	if (ce->parent) {
 		ce = zephir_lookup_class_ce(ce, property_name, property_length);
 	}
-
-	/* Use caller's scope */
-	zephir_set_scope(ce);
 
 	if (!Z_OBJ_HT_P(object)->write_property) {
 		const char *class_name;
@@ -701,9 +695,6 @@ int zephir_update_property_zval(zval *object, const char *property_name,
 	   so no Z_TRY_ADDREF_P(value) is necessary */
 	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
 	zval_ptr_dtor(&property);
-
-	/* Restore original scope */
-	zephir_set_scope(scope);
 
 	return SUCCESS;
 }
