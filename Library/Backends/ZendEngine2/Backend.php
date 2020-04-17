@@ -274,22 +274,8 @@ class Backend extends BaseBackend
         $context->codePrinter->output('zephir_concat_self('.$variable.', '.$itemVariable.');');
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param Variable           $variable
-     * @param CompilationContext $context
-     * @param int                $size
-     * @param bool               $print
-     *
-     * @return string
-     */
-    public function initArray(
-        Variable $variable,
-        CompilationContext $context,
-        int $size = null,
-        $print = true
-    ): string {
+    public function initArray(Variable $variable, CompilationContext $context, int $size = null)
+    {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'
         );

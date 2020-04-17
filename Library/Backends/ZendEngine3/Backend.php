@@ -1176,16 +1176,11 @@ class Backend extends BackendZendEngine2
      * @param Variable           $variable
      * @param CompilationContext $context
      * @param int                $size
-     * @param bool               $print
      *
-     * @return string
+     * @return void
      */
-    public function initArray(
-        Variable $variable,
-        CompilationContext $context,
-        int $size = null,
-        $print = true
-    ): string {
+    public function initArray(Variable $variable, CompilationContext $context, int $size = null)
+    {
         $code = $this->getVariableCode($variable);
 
         if (null === $size) {
@@ -1194,10 +1189,6 @@ class Backend extends BackendZendEngine2
             $output = "zephir_create_array({$code}, {$size}, 0);";
         }
 
-        if ($print) {
-            $context->codePrinter->output($output);
-        }
-
-        return $output;
+        $context->codePrinter->output($output);
     }
 }

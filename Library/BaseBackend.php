@@ -200,21 +200,14 @@ abstract class BaseBackend implements FcallAwareInterface
 
     /**
      * Generate the code to initialize array typed variable.
-     * The optional $print argument maybe used to print result using code printer.
      *
      * @param Variable           $variable
      * @param CompilationContext $context
      * @param int                $size
-     * @param bool               $print
      *
-     * @return string
+     * @return void
      */
-    abstract public function initArray(
-        Variable $variable,
-        CompilationContext $context,
-        int $size = null,
-        $print = true
-    ): string;
+    abstract public function initArray(Variable $variable, CompilationContext $context, int $size = null);
 
     abstract public function createClosure(Variable $variable, $classDefinition, CompilationContext $context);
 
