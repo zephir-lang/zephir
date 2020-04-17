@@ -8,7 +8,6 @@
 # Directories to ignore (do not add trailing '/'s, they skip symlinks).
 .zephir
 .libs
-.phpunit
 ide
 doc
 vendor
@@ -28,11 +27,13 @@ compile.log
 compile-errors.log
 
 # Test and build configurations.
-phpunit.xml
-phpcs.xml
 .php_cs
 .php_cs.cache
+.phpunit
 box.json
+phpcs.xml
+phpmd.xml
+phpunit.xml
 
 # Build artefact
 zephir.phar
