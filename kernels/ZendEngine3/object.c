@@ -614,12 +614,9 @@ int zephir_init_property_zval(zval *object, const char *property_name,
 	zephir_set_scope(ce);
 
 	if (!Z_OBJ_HT_P(object)->write_property) {
-		const char *class_name;
-
-		class_name = Z_OBJ_P(object) ? ZSTR_VAL(Z_OBJCE_P(object)->name) : "";
 		zend_error(E_CORE_ERROR,
 				   "Property %s of class %s cannot be updated",
-				   property_name, class_name);
+				   property_name, ZSTR_VAL(Z_OBJCE_P(object)->name));
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
@@ -678,12 +675,9 @@ int zephir_update_property_zval(zval *object, const char *property_name,
 	zephir_set_scope(ce);
 
 	if (!Z_OBJ_HT_P(object)->write_property) {
-		const char *class_name;
-
-		class_name = Z_OBJ_P(object) ? ZSTR_VAL(Z_OBJCE_P(object)->name) : "";
 		zend_error(E_CORE_ERROR,
 				   "Property %s of class %s cannot be updated",
-				   property_name, class_name);
+				   property_name, ZSTR_VAL(Z_OBJCE_P(object)->name));
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
