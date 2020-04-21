@@ -660,8 +660,8 @@ int zephir_update_property_zval(zval *object, const char *property_name,
 	/* Is this function was called from within caller scope */
 	/*ce = zend_get_called_scope(EG(current_execute_data));
 	if (UNEXPECTED(!ce)) {
-	ce = Z_OBJCE_P(object);*/
-	}
+	ce = Z_OBJCE_P(object);
+	}*/
 
 	/* Backup current scope */
 	/*scope = zephir_get_scope(0);*/
