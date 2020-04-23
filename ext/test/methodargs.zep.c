@@ -48,7 +48,7 @@ PHP_METHOD(Test_MethodArgs, setCallable) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 
 }
 
@@ -63,7 +63,7 @@ PHP_METHOD(Test_MethodArgs, setObject) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 
 }
 
@@ -82,7 +82,7 @@ PHP_METHOD(Test_MethodArgs, setCallableStrict) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 
 }
 
@@ -101,7 +101,7 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 
 }
 
@@ -120,7 +120,7 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 
 }
 

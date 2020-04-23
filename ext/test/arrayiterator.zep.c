@@ -54,10 +54,10 @@ PHP_METHOD(Test_ArrayIterator, __construct) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "three");
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval(this_ptr, SL("test"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
 	ZEPHIR_INIT_ZVAL_NREF(_2);
 	ZVAL_LONG(&_2, 0);
-	zephir_update_property_zval(this_ptr, SL("position"), &_2);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("position"), &_2);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -72,7 +72,7 @@ PHP_METHOD(Test_ArrayIterator, rewind) {
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 0);
-	zephir_update_property_zval(this_ptr, SL("position"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("position"), &_0);
 
 }
 

@@ -63,7 +63,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval(this_ptr, SL("someArray"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("someArray"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -100,7 +100,7 @@ PHP_METHOD(Test_Properties_PropertyArray, setOtherArray) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("otherArray"), arr);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("otherArray"), arr);
 
 }
 
@@ -138,12 +138,12 @@ PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 		}
 		zephir_read_property(&_0$$3, this_ptr, SL("otherArray"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 73, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 74, &_0$$3);
 		ZEPHIR_UNREF(&_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 74, &info, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 75, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "test/properties/propertyarray.zep", 51);
@@ -151,7 +151,7 @@ PHP_METHOD(Test_Properties_PropertyArray, testIssues1831) {
 		} else {
 			zephir_read_property(&_5$$5, this_ptr, SL("otherArray"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 75, &_5$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 76, &_5$$5, &info);
 			ZEPHIR_UNREF(&_5$$5);
 			zephir_check_call_status();
 			break;
@@ -183,7 +183,7 @@ zend_object *zephir_init_properties_Test_Properties_PropertyArray(zend_class_ent
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
 			array_init(&_1$$3);
-			zephir_update_property_zval(this_ptr, SL("otherArray"), &_1$$3);
+			zend_update_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL("otherArray"), &_1$$3);
 		}
 		zephir_read_property(&_2, this_ptr, SL("someArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_2) == IS_NULL) {
@@ -201,13 +201,13 @@ zend_object *zephir_init_properties_Test_Properties_PropertyArray(zend_class_ent
 			ZEPHIR_INIT_NVAR(&_4$$4);
 			ZVAL_LONG(&_4$$4, 4);
 			zephir_array_fast_append(&_3$$4, &_4$$4);
-			zephir_update_property_zval(this_ptr, SL("someArray"), &_3$$4);
+			zend_update_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL("someArray"), &_3$$4);
 		}
 		zephir_read_property(&_5, this_ptr, SL("someEmptyArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_5) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_6$$5);
 			array_init(&_6$$5);
-			zephir_update_property_zval(this_ptr, SL("someEmptyArray"), &_6$$5);
+			zend_update_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL("someEmptyArray"), &_6$$5);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);

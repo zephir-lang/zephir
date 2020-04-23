@@ -40,7 +40,7 @@ PHP_METHOD(Test_Invoke, __construct) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "aaa");
-	zephir_update_property_zval(this_ptr, SL("a"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }

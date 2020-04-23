@@ -400,7 +400,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringProperty) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
-	zephir_update_property_zval(this_ptr, SL("test"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -429,7 +429,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, SL("eproperty"), &value);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("eproperty"), &value);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -446,7 +446,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setNonExistingStringProperty) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
-	zephir_update_property_zval(this_ptr, SL("property"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("property"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }

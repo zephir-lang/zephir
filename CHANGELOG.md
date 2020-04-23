@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - In some cases for C "control characters" aren't properly escaped
   [#2065](https://github.com/phalcon/zephir/issues/2065)
 - Zephir ignored property visibility and has not thrown error when setting
-  private/protected properties in scope that shouldn't intened for it
+  private/protected properties in scope that shouldn't intended for it
   [#2078](https://github.com/phalcon/zephir/pull/2078),
   [phalcon/cphalcon#14810](https://github.com/phalcon/cphalcon/issues/14810),
   [phalcon/cphalcon#14766](https://github.com/phalcon/cphalcon/issues/14766)
@@ -99,20 +99,20 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
-- Fixed incorrect behaviour in `zephir_get_global` if `zval` reference count <= 1
+- Fixed incorrect behavior in `zephir_get_global` if `zval` reference count <= 1
   [#1961](https://github.com/phalcon/zephir/issues/1961)
 
 ### Removed
 - Removed `--vernum` option from the help for regular commands
 - Removed `void` from the return type hint in the generated stubs
   [#1977](https://github.com/phalcon/zephir/issues/1977)
-- Remove no longer supported TSRMLS_CC usage
+- Remove no longer supported `TSRMLS_CC` usage
   [#1865](https://github.com/phalcon/zephir/issues/1865)
 
 ### Changed
 - Disabled PHP warnings for PHP >= 7.3.0 to be able correct work with lowest versions of dependencies
   [zendframework/zend-code#160](https://github.com/zendframework/zend-code/issues/160)
-- Introduced support of multiline `@param` body for generated stubs
+- Introduced support of multi line `@param` body for generated stubs
   [#1968](https://github.com/phalcon/zephir/issues/1968)
 
 ## [0.12.9] - 2019-10-14

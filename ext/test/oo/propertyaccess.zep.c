@@ -76,13 +76,13 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_DOUBLE(&_1, 6.00);
 	zephir_array_fast_append(&_0, &_1);
-	zephir_update_property_zval(&test, SL("test"), &_0);
+	zephir_update_property_zval(&test, ZEND_STRL("test"), &_0);
 	zephir_read_property(&_2, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 21);
-	zephir_update_property_zval(&test, SL("test2"), &_3);
+	zephir_update_property_zval(&test, ZEND_STRL("test2"), &_3);
 	zephir_read_property(&_4, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 22);
-	zephir_update_property_zval(&test, SL("test3"), &_5);
+	zephir_update_property_zval(&test, ZEND_STRL("test3"), &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);
 	zephir_read_property(&_7, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
@@ -98,11 +98,11 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_6, &_1);
-	zephir_update_property_zval(&test, SL("test3"), &_6);
-	zephir_update_property_zval(this_ptr, SL("a"), &test);
+	zephir_update_property_zval(&test, ZEND_STRL("test3"), &_6);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), &test);
 	zephir_read_property(&_9, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_10, &_9, SL("test2"), PH_NOISY_CC | PH_READONLY);
-	zephir_update_property_zval(this_ptr, SL("b"), &_10);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
 	zephir_read_property(&test1, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_MM_RESTORE();
 
@@ -119,7 +119,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, setPrivatevariable) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("privateVariable"), value);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("privateVariable"), value);
 	RETURN_THISW();
 
 }
