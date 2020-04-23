@@ -845,32 +845,27 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 
 int zephir_unset_property(zval* object, const char* name)
 {
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		zval member;
-		zend_class_entry *old_scope;
-
-		ZVAL_STRING(&member, name);
-
-#if PHP_VERSION_ID >= 70100
-		old_scope = EG(fake_scope);
-		EG(fake_scope) = Z_OBJCE_P(object);
-#else
-		old_scope = EG(scope);
-		EG(scope) = Z_OBJCE_P(object);
-#endif
-
-		Z_OBJ_HT_P(object)->unset_property(object, &member, 0);
-
-#if PHP_VERSION_ID >= 70100
-		EG(fake_scope) = old_scope;
-#else
-		EG(scope) = old_scope;
-#endif
-
-		return SUCCESS;
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return FAILURE;
 	}
 
-	return FAILURE;
+	zval member;
+	zend_class_entry *scope;
+
+	ZVAL_STRING(&member, name);
+
+	/* Backup current scope */
+	scope = zephir_get_scope(0);
+
+	/* Use caller's scope */
+	zephir_set_scope(Z_OBJCE_P(object));
+
+	Z_OBJ_HT_P(object)->unset_property(object, &member, 0);
+
+	/* Restore original scope */
+	zephir_set_scope(scope);
+
+	return SUCCESS;
 }
 
 /**
