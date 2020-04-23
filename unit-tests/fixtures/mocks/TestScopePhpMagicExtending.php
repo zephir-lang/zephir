@@ -11,4 +11,9 @@
 class TestScopePhpMagicExtending extends TestScopePhpMagic
 {
     private $privateProperty2 = 'private2';
+
+    public function getPrivateProperty2()
+    {
+        return $this->privateProperty2;
+    }
 }

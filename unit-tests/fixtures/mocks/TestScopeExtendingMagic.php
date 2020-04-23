@@ -19,4 +19,9 @@ class TestScopeExtendingMagic extends AbstractClassMagic
     {
         return $this->protectedProperty;
     }
+
+    public function getPrivateProperty2()
+    {
+        return $this->privateProperty2;
+    }
 }

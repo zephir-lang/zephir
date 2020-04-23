@@ -187,15 +187,28 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicObjInternal()
     {
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage(
-            'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
-        );
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->expectException(Error::class);
+            $this->expectExceptionMessage(
+                'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
+            );
+        }
 
         $object = new TestScopeExtendingMagic();
         $tester = new PrivateScopeTester();
 
-        $tester->setPropertyObj($object, 'privateProperty2', 'test');
+        $this->assertEquals('private', $object->getPrivateProperty2());
+        $tester->setPropertyObj($object, 'privateProperty2', 'CHANGED');
+
+        // This related the way PHP < 7.4 handles object's properties when
+        // there  is a magic __set method present.
+        //
+        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
+        // throws a Fatal Error.  All previous versions just out a Notice and
+        // continue execution.
+        if (\PHP_VERSION_ID < 70400) {
+            $this->assertEquals('private', $object->getPrivateProperty2());
+        }
     }
 
     /**
@@ -205,13 +218,29 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicNewInternal()
     {
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage(
-            'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
-        );
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->expectException(Error::class);
+            $this->expectExceptionMessage(
+                'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
+            );
+        }
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty2', 'test');
+        $object = $tester->setPropertyNew(
+            TestScopeExtendingMagic::class,
+            'privateProperty2',
+            'CHANGED'
+        );
+
+        // This related the way PHP < 7.4 handles object's properties when
+        // there  is a magic __set method present.
+        //
+        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
+        // throws a Fatal Error.  All previous versions just out a Notice and
+        // continue execution.
+        if (\PHP_VERSION_ID < 70400) {
+            $this->assertEquals('private', $object->getPrivateProperty2());
+        }
     }
 
     /**
@@ -246,13 +275,29 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicNewPhp()
     {
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage(
-            'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
-        );
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->expectException(Error::class);
+            $this->expectExceptionMessage(
+                'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
+            );
+        }
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyNew(TestScopePhpMagicExtending::class, 'privateProperty2', 'test');
+        $object = $tester->setPropertyNew(
+            TestScopePhpMagicExtending::class,
+            'privateProperty2',
+            'CHANGED'
+        );
+
+        // This related the way PHP < 7.4 handles object's properties when
+        // there  is a magic __set method present.
+        //
+        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
+        // throws a Fatal Error.  All previous versions just out a Notice and
+        // continue execution.
+        if (\PHP_VERSION_ID < 70400) {
+            $this->assertEquals('private2', $object->getPrivateProperty2());
+        }
     }
 
     /**
