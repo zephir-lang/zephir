@@ -565,65 +565,6 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 }
 
 /**
- * Checks whether obj is an object and updates property with another zval.
- *
- * This function is intended to set initial values to object properties.
- * Do not use it for a regular property updating.
- */
-int zephir_init_property_zval(zval *object, const char *property_name,
-								unsigned int property_length, zval *value)
-{
-	zend_class_entry *ce, *scope;
-	zval property, sep_value;
-
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		php_error_docref(NULL, E_WARNING,
-						 "Attempt to assign property '%s' of non-object",
-						 property_name);
-		return FAILURE;
-	}
-
-	/* Backup current scope */
-	scope = zephir_get_scope(0);
-	ce = Z_OBJCE_P(object);
-
-	/* Lookup real property owner */
-	if (ce->parent) {
-		ce = zephir_lookup_class_ce(ce, property_name, property_length);
-	}
-
-	/* Use caller's scope */
-	zephir_set_scope(ce);
-
-	if (!Z_OBJ_HT_P(object)->write_property) {
-		zend_error(E_CORE_ERROR,
-				   "Property %s of class %s cannot be updated",
-				   property_name, ZSTR_VAL(Z_OBJCE_P(object)->name));
-	}
-
-	ZVAL_STRINGL(&property, property_name, property_length);
-	ZVAL_COPY_VALUE(&sep_value, value);
-	if (Z_TYPE(sep_value) == IS_ARRAY) {
-		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
-		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
-			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
-				GC_DELREF(Z_ARR(sep_value));
-			}
-		}
-	}
-
-	/* write_property will add 1 to refcount,
-	   so no Z_TRY_ADDREF_P(value) is necessary */
-	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
-	zval_ptr_dtor(&property);
-
-	/* Restore original scope */
-	zephir_set_scope(scope);
-
-	return SUCCESS;
-}
-
-/**
  * Checks whether obj is an object and updates property with another zval
  */
 int zephir_update_property_zval(zval *object, const char *property_name,
