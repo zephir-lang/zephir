@@ -157,7 +157,6 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyViaThis()
     {
-        $this->markTestSkipped('This test is not ready');
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtending::$privateProperty'
@@ -187,8 +186,10 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicObjInternal()
     {
-        $this->markTestSkipped('This test is not ready');
         $this->expectException(Error::class);
+        $this->expectExceptionMessage(
+            'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
+        );
 
         $object = new TestScopeExtendingMagic();
         $tester = new PrivateScopeTester();
@@ -203,8 +204,10 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicNewInternal()
     {
-        $this->markTestSkipped('This test is not ready');
         $this->expectException(Error::class);
+        $this->expectExceptionMessage(
+            'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
+        );
 
         $tester = new PrivateScopeTester();
         $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty2', 'test');
@@ -217,8 +220,10 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicObjPhp()
     {
-        $this->markTestSkipped('This test is not ready');
         $this->expectException(Error::class);
+        $this->expectExceptionMessage(
+            'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
+        );
 
         $obj = new TestScopePhpMagicExtending();
 
@@ -233,8 +238,10 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicNewPhp()
     {
-        $this->markTestSkipped('This test is not ready');
         $this->expectException(Error::class);
+        $this->expectExceptionMessage(
+            'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
+        );
 
         $tester = new PrivateScopeTester();
         $tester->setPropertyNew(TestScopePhpMagicExtending::class, 'privateProperty2', 'test');
