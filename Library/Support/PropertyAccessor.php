@@ -41,12 +41,12 @@ trait PropertyAccessor
             return $this->$getter();
         } elseif (method_exists($this, $setter)) {
             throw new InvalidCallException(
-                sprintf('Getting write-only property: %s::%s', \get_class($this), $name)
+                sprintf('Getting write-only property: %s::%s', static::class, $name)
             );
         }
 
         throw new UnknownPropertyException(
-            sprintf('Getting unknown property: %s::%s', \get_class($this), $name)
+            sprintf('Getting unknown property: %s::%s', static::class, $name)
         );
     }
 }

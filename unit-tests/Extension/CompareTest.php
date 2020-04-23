@@ -16,7 +16,7 @@ use Test\Compare;
 
 class CompareTest extends TestCase
 {
-    /** @var Compare $test */
+    /** @var Compare */
     private $test;
 
     public function setUp()

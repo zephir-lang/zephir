@@ -17,7 +17,7 @@ use Test\Exceptions;
 
 class ExceptionsTest extends TestCase
 {
-    /** @var Exceptions $test */
+    /** @var Exceptions */
     private $test;
 
     public function setUp()

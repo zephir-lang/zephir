@@ -17,7 +17,7 @@ use Test\BuiltIn\StringMethods;
 
 class StringMethodTest extends TestCase
 {
-    /** @var StringMethods $test */
+    /** @var StringMethods */
     private $test;
 
     public function setUp()

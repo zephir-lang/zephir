@@ -16,7 +16,7 @@ use Test\ArraySearch;
 
 class ArraySearchTest extends TestCase
 {
-    /** @var ArraySearch $test */
+    /** @var ArraySearch */
     private $test;
 
     public function setUp()

@@ -128,11 +128,11 @@ abstract class BaseBackend implements FcallAwareInterface
      * Initialize variable defaults.
      *
      * @param Variable[]         $variables
-     * @param CompilationContext $compilationContext
+     * @param CompilationContext $context
      *
      * @return string
      */
-    abstract public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string;
+    abstract public function initializeVariableDefaults(array $variables, CompilationContext $context): string;
 
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 
@@ -198,7 +198,16 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function returnString($value, CompilationContext $context, $useCodePrinter = true);
 
-    abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
+    /**
+     * Generate the code to initialize array typed variable.
+     *
+     * @param Variable           $variable
+     * @param CompilationContext $context
+     * @param int                $size
+     *
+     * @return void
+     */
+    abstract public function initArray(Variable $variable, CompilationContext $context, int $size = null);
 
     abstract public function createClosure(Variable $variable, $classDefinition, CompilationContext $context);
 
@@ -220,7 +229,19 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context);
 
-    abstract public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $compilationContext);
+    /**
+     * Update object property.
+     *
+     * object->property = value
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $property
+     * @param mixed              $value
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    abstract public function updateProperty(Variable $variable, $property, $value, CompilationContext $context);
 
     abstract public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context);
 

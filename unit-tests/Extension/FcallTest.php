@@ -21,7 +21,7 @@ class UserExample extends PropertyAccess
 
 class FcallTest extends TestCase
 {
-    /** @var Fcall $test */
+    /** @var Fcall */
     private $test;
 
     public function setUp()

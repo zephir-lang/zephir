@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class McallChainedTest extends TestCase
 {
-    /** @var \Test\McallChained $test */
+    /** @var \Test\McallChained */
     private $test;
 
     public function setUp()

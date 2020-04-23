@@ -16,7 +16,7 @@ use Test\FunctionExists;
 
 class FunctionExistsTest extends TestCase
 {
-    /** @var FunctionExists $test */
+    /** @var FunctionExists */
     private $test;
 
     public function setUp()
