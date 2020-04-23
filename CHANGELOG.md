@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - In some cases for C "control characters" aren't properly escaped
   [#2065](https://github.com/phalcon/zephir/issues/2065)
+- Zephir ignored property visibility and has not thrown error when setting
+  private/protected properties in scope that shouldn't intened for it
+  [#2078](https://github.com/phalcon/zephir/pull/2078),
+  [phalcon/cphalcon#14810](https://github.com/phalcon/cphalcon/issues/14810),
+  [phalcon/cphalcon#14766](https://github.com/phalcon/cphalcon/issues/14766)
 
 ## [0.12.17] - 2020-02-14
 ### Fixed
