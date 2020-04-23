@@ -12,6 +12,7 @@
 namespace Extension\Oo;
 
 use Error;
+use PHPUnit\Framework\Error\Notice;
 use PHPUnit\Framework\TestCase;
 use Test\Oo\Scopes\PrivateScopeTester;
 use TestScopeExtending;
@@ -220,10 +221,17 @@ class PrivateScopeTest extends TestCase
      */
     public function shouldNotSetPrivatePropertyExtendedMagicObjPhp()
     {
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage(
-            'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
-        );
+        if (\PHP_VERSION_ID < 70400) {
+            $this->expectException(Notice::class);
+            $this->expectExceptionMessage(
+                'Undefined property: TestScopePhpMagicExtending::$privateProperty2'
+            );
+        } else {
+            $this->expectException(Error::class);
+            $this->expectExceptionMessage(
+                'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
+            );
+        }
 
         $obj = new TestScopePhpMagicExtending();
 
