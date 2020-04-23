@@ -38,7 +38,7 @@ PHP_METHOD(Test_Issues, setAdapter) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("adapter"), adapter);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("adapter"), adapter);
 
 }
 

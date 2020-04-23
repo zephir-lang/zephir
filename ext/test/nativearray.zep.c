@@ -2030,7 +2030,7 @@ zend_object *zephir_init_properties_Test_NativeArray(zend_class_entry *class_typ
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
 			array_init(&_1$$3);
-			zephir_update_property_zval(this_ptr, SL("prefixes"), &_1$$3);
+			zephir_init_property_zval(this_ptr, ZEND_STRL("prefixes"), &_1$$3);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);

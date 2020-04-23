@@ -221,7 +221,7 @@ zend_object *zephir_init_properties_Test_IssetTest(zend_class_entry *class_type 
 			ZEPHIR_INIT_VAR(&_1$$3);
 			zephir_create_array(&_1$$3, 1, 0);
 			add_assoc_stringl_ex(&_1$$3, SL("a"), SL("true"));
-			zephir_update_property_zval(this_ptr, SL("s"), &_1$$3);
+			zephir_init_property_zval(this_ptr, ZEND_STRL("s"), &_1$$3);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);

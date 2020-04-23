@@ -157,6 +157,8 @@ zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ooparams_ce;
 zend_class_entry *test_oo_param_ce;
 zend_class_entry *test_oo_propertyaccess_ce;
+zend_class_entry *test_oo_scopes_abstractclass_ce;
+zend_class_entry *test_oo_scopes_abstractclassmagic_ce;
 zend_class_entry *test_oo_scopes_privatescopetester_ce;
 zend_class_entry *test_operator_ce;
 zend_class_entry *test_optimizers_acos_ce;
@@ -352,6 +354,8 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_OoParams);
 	ZEPHIR_INIT(Test_Oo_Param);
 	ZEPHIR_INIT(Test_Oo_PropertyAccess);
+	ZEPHIR_INIT(Test_Oo_Scopes_AbstractClass);
+	ZEPHIR_INIT(Test_Oo_Scopes_AbstractClassMagic);
 	ZEPHIR_INIT(Test_Oo_Scopes_PrivateScopeTester);
 	ZEPHIR_INIT(Test_Operator);
 	ZEPHIR_INIT(Test_Optimizers_ACos);

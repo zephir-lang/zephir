@@ -483,7 +483,7 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 		ZVAL_NULL(result);
 		return FAILURE;
 	}
-
+/*
 	ce = Z_OBJCE_P(object);
 
 	if (ce->parent) {
@@ -497,7 +497,7 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 	old_scope = EG(scope);
 	EG(scope) = ce;
 #endif
-
+*/
 	if (!Z_OBJ_HT_P(object)->read_property) {
 		const char *class_name;
 
@@ -515,12 +515,13 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 	}
 
 	zval_ptr_dtor(&property);
-
+/*
 #if PHP_VERSION_ID >= 70100
 	EG(fake_scope) = old_scope;
 #else
 	EG(scope) = old_scope;
 #endif
+*/
 	return SUCCESS;
 }
 

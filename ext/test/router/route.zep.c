@@ -87,7 +87,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, 0, pattern, paths);
 	zephir_check_call_status();
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -212,7 +212,7 @@ PHP_METHOD(Test_Router_Route, via) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	RETURN_THISW();
 
 }
@@ -585,9 +585,9 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	} else {
 		ZEPHIR_CPY_WRT(&compiledPattern, pattern);
 	}
-	zephir_update_property_zval(this_ptr, SL("_pattern"), pattern);
-	zephir_update_property_zval(this_ptr, SL("_compiledPattern"), &compiledPattern);
-	zephir_update_property_zval(this_ptr, SL("_paths"), &routePaths);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_pattern"), pattern);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_compiledPattern"), &compiledPattern);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_paths"), &routePaths);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -629,7 +629,7 @@ PHP_METHOD(Test_Router_Route, setName) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_name"), name);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_name"), name);
 	RETURN_THISW();
 
 }
@@ -653,7 +653,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_beforeMatch"), callback);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_beforeMatch"), callback);
 	RETURN_THISW();
 
 }
@@ -813,7 +813,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	RETURN_THISW();
 
 }
@@ -853,7 +853,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_hostname"), hostname);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_hostname"), hostname);
 	RETURN_THISW();
 
 }

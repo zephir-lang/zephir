@@ -185,7 +185,7 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "test string");
-	zephir_update_property_zval(this_ptr, SL("property"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("property"), &_0);
 	ZEPHIR_OBS_VAR(&_1);
 	zephir_read_property(&_1, this_ptr, SL("property"), PH_NOISY_CC);
 	RETURN_MM_BOOL(Z_TYPE_P(&_1) == IS_STRING);
