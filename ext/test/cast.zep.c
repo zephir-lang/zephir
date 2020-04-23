@@ -1180,10 +1180,10 @@ PHP_METHOD(Test_Cast, testArrayCastFromVariableStdClass) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v1");
-	zephir_update_property_zval(&uids, SL("p1"), &_0);
+	zephir_update_property_zval(&uids, ZEND_STRL("p1"), &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "v2");
-	zephir_update_property_zval(&uids, SL("p2"), &_0);
+	zephir_update_property_zval(&uids, ZEND_STRL("p2"), &_0);
 	zephir_get_arrval(&_1, &uids);
 	ZEPHIR_CPY_WRT(&uids, &_1);
 	RETURN_CCTOR(&uids);

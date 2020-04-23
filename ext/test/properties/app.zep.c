@@ -53,7 +53,7 @@ PHP_METHOD(Test_Properties_App, __construct) {
 
 	ZEPHIR_CALL_CE_STATIC(&_0, test_properties_staticprivateproperties_ce, "getinstance", &_1, 0);
 	zephir_check_call_status();
-	zephir_update_property_zval(this_ptr, SL("instance"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("instance"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }

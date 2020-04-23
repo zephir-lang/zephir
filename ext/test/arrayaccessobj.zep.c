@@ -43,7 +43,7 @@ PHP_METHOD(Test_ArrayAccessObj, __construct) {
 	add_assoc_long_ex(&_0, SL("one"), 1);
 	add_assoc_long_ex(&_0, SL("two"), 2);
 	add_assoc_long_ex(&_0, SL("three"), 3);
-	zephir_update_property_zval(this_ptr, SL("test"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
 	ZEPHIR_MM_RESTORE();
 
 }

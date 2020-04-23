@@ -236,25 +236,25 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 		ZEPHIR_CALL_SELF(NULL, "check", NULL, 0);
 		zephir_check_call_status();
 	}
-	zephir_update_property_zval(this_ptr, SL("file"), &file);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("file"), &file);
 	zephir_read_property(&_1, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property(&_2$$4, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 58, &_2$$4);
 		zephir_check_call_status();
-		zephir_update_property_zval(this_ptr, SL("realpath"), &_3$$4);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("realpath"), &_3$$4);
 		zephir_read_property(&_4$$4, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 59, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
 			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 62);
-			zephir_update_property_zval(this_ptr, SL("width"), &_5$$5);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("width"), &_5$$5);
 			zephir_array_fetch_long(&_6$$5, &imageinfo, 1, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 63);
-			zephir_update_property_zval(this_ptr, SL("height"), &_6$$5);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("height"), &_6$$5);
 			zephir_array_fetch_long(&_7$$5, &imageinfo, 2, PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 64);
-			zephir_update_property_zval(this_ptr, SL("type"), &_7$$5);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_7$$5);
 			zephir_array_fetch_string(&_8$$5, &imageinfo, SL("mime"), PH_NOISY | PH_READONLY, "test/oo/oodestruct.zep", 65);
-			zephir_update_property_zval(this_ptr, SL("mime"), &_8$$5);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("mime"), &_8$$5);
 		}
 		zephir_read_property(&_9$$4, this_ptr, SL("type"), PH_NOISY_CC | PH_READONLY);
 		do {
@@ -262,35 +262,35 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 				zephir_read_property(&_10$$6, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_CALL_FUNCTION(&_11$$6, "imagecreatefromgif", NULL, 60, &_10$$6);
 				zephir_check_call_status();
-				zephir_update_property_zval(this_ptr, SL("image"), &_11$$6);
+				zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_11$$6);
 				break;
 			}
 			if (ZEPHIR_IS_LONG(&_9$$4, 2)) {
 				zephir_read_property(&_12$$7, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_CALL_FUNCTION(&_13$$7, "imagecreatefromjpeg", NULL, 61, &_12$$7);
 				zephir_check_call_status();
-				zephir_update_property_zval(this_ptr, SL("image"), &_13$$7);
+				zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_13$$7);
 				break;
 			}
 			if (ZEPHIR_IS_LONG(&_9$$4, 3)) {
 				zephir_read_property(&_14$$8, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_CALL_FUNCTION(&_15$$8, "imagecreatefrompng", NULL, 62, &_14$$8);
 				zephir_check_call_status();
-				zephir_update_property_zval(this_ptr, SL("image"), &_15$$8);
+				zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_15$$8);
 				break;
 			}
 			if (ZEPHIR_IS_LONG(&_9$$4, 15)) {
 				zephir_read_property(&_16$$9, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_CALL_FUNCTION(&_17$$9, "imagecreatefromwbmp", NULL, 63, &_16$$9);
 				zephir_check_call_status();
-				zephir_update_property_zval(this_ptr, SL("image"), &_17$$9);
+				zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_17$$9);
 				break;
 			}
 			if (ZEPHIR_IS_LONG(&_9$$4, 16)) {
 				zephir_read_property(&_18$$10, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_CALL_FUNCTION(&_19$$10, "imagecreatefromxbm", NULL, 64, &_18$$10);
 				zephir_check_call_status();
-				zephir_update_property_zval(this_ptr, SL("image"), &_19$$10);
+				zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_19$$10);
 				break;
 			}
 			zephir_read_property(&_20$$11, this_ptr, SL("mime"), PH_NOISY_CC | PH_READONLY);
@@ -356,7 +356,7 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 		ZVAL_LONG(&_36$$13, height);
 		ZEPHIR_CALL_FUNCTION(&_37$$13, "imagecreatetruecolor", NULL, 66, &_35$$13, &_36$$13);
 		zephir_check_call_status();
-		zephir_update_property_zval(this_ptr, SL("image"), &_37$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_37$$13);
 		zephir_read_property(&_35$$13, this_ptr, SL("image"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 67, &_35$$13, &__$true);
 		zephir_check_call_status();
@@ -364,20 +364,20 @@ PHP_METHOD(Test_Oo_OoDestruct, __construct) {
 		ZEPHIR_CALL_FUNCTION(NULL, "imagesavealpha", &_29, 65, &_36$$13, &__$true);
 		zephir_check_call_status();
 		zephir_read_property(&_38$$13, this_ptr, SL("file"), PH_NOISY_CC | PH_READONLY);
-		zephir_update_property_zval(this_ptr, SL("realpath"), &_38$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("realpath"), &_38$$13);
 		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
 		ZVAL_LONG(&_39$$13, width);
-		zephir_update_property_zval(this_ptr, SL("width"), &_39$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("width"), &_39$$13);
 		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
 		ZVAL_LONG(&_39$$13, height);
-		zephir_update_property_zval(this_ptr, SL("height"), &_39$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("height"), &_39$$13);
 		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
 		ZVAL_LONG(&_39$$13, 3);
-		zephir_update_property_zval(this_ptr, SL("type"), &_39$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_39$$13);
 		ZEPHIR_INIT_VAR(&_40$$13);
 		ZEPHIR_INIT_NVAR(&_40$$13);
 		ZVAL_STRING(&_40$$13, "image/png");
-		zephir_update_property_zval(this_ptr, SL("mime"), &_40$$13);
+		zephir_update_property_zval(this_ptr, ZEND_STRL("mime"), &_40$$13);
 	}
 	ZEPHIR_MM_RESTORE();
 

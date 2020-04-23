@@ -72,7 +72,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("someVar"), someVar);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("someVar"), someVar);
 	RETURN_THISW();
 
 }
@@ -106,7 +106,7 @@ PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("someNull"), param);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("someNull"), param);
 
 }
 

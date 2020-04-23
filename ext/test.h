@@ -124,6 +124,8 @@
 #include "test/oo/ooparams.zep.h"
 #include "test/oo/param.zep.h"
 #include "test/oo/propertyaccess.zep.h"
+#include "test/oo/scopes/abstractclass.zep.h"
+#include "test/oo/scopes/abstractclassmagic.zep.h"
 #include "test/oo/scopes/privatescopetester.zep.h"
 #include "test/ooimpl/abeginning.zep.h"
 #include "test/operator.zep.h"

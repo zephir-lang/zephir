@@ -132,7 +132,7 @@ PHP_METHOD(Test_McallChained, testChained4) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_update_property_zval(this_ptr, SL("temp"), this_ptr);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("temp"), this_ptr);
 	zephir_read_property(&_0, this_ptr, SL("temp"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod1", NULL, 0);
 	zephir_check_call_status();

@@ -129,6 +129,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/ooparams.zep.c
 	test/oo/param.zep.c
 	test/oo/propertyaccess.zep.c
+	test/oo/scopes/abstractclass.zep.c
+	test/oo/scopes/abstractclassmagic.zep.c
 	test/oo/scopes/privatescopetester.zep.c
 	test/ooimpl/abeginning.zep.c
 	test/operator.zep.c

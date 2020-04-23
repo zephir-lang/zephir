@@ -96,7 +96,7 @@ PHP_METHOD(Test_Requires, requireExternal3) {
 		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 78, path, this_ptr);
+	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 79, path, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "content");
 
@@ -113,7 +113,7 @@ PHP_METHOD(Test_Requires, setContent) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("content"), content);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("content"), content);
 
 }
 

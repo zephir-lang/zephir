@@ -157,14 +157,14 @@ PHP_METHOD(Test_Unsettest, testStdClassUnset) {
 	object_init(&simpleObject);
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 12345);
-	zephir_update_property_zval(&simpleObject, SL("property1"), &_0);
+	zephir_update_property_zval(&simpleObject, ZEND_STRL("property1"), &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "test");
-	zephir_update_property_zval(&simpleObject, SL("property2"), &_1);
+	zephir_update_property_zval(&simpleObject, ZEND_STRL("property2"), &_1);
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 12345);
-	zephir_update_property_zval(&simpleObject, SL("property3"), &_0);
+	zephir_update_property_zval(&simpleObject, ZEND_STRL("property3"), &_0);
 	zephir_unset_property(&simpleObject, "property2");
 	RETURN_CCTOR(&simpleObject);
 
