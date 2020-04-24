@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased] - ????-??-??
+## [Unreleased]
+
+## [0.12.18] - 2020-04-25
 ### Fixed
 - In some cases for C "control characters" aren't properly escaped
   [#2065](https://github.com/phalcon/zephir/issues/2065)
@@ -397,7 +399,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.17...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.18...HEAD
+[0.12.18]: https://github.com/phalcon/zephir/compare/0.12.17...0.12.18
 [0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17
 [0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16
 [0.12.15]: https://github.com/phalcon/zephir/compare/0.12.14...0.12.15
