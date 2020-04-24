@@ -558,19 +558,19 @@ class Variable implements TypeAwareInterface
     /**
      * Checks if the variable has any of the passed dynamic.
      *
-     * @param mixed $types
+     * @param array|string $types
      *
      * @return bool
      */
     public function hasAnyDynamicType($types)
     {
         if (\is_string($types)) {
-            return isset($this->dynamicTypes[$types]);
-        } else {
-            foreach ($types as $type) {
-                if (isset($this->dynamicTypes[$type])) {
-                    return true;
-                }
+            $types = [$types];
+        }
+
+        foreach ($types as $type) {
+            if (isset($this->dynamicTypes[$type])) {
+                return true;
             }
         }
 

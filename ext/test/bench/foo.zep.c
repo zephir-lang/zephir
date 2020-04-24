@@ -309,7 +309,7 @@ PHP_METHOD(Test_Bench_Foo, writeProp) {
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
 			ZVAL_LONG(&_3$$3, 0);
-			zephir_update_property_zval(this_ptr, SL("b"), &_3$$3);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_3$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -354,7 +354,7 @@ PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 			ZVAL_LONG(&_4$$3, 2);
 			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
 			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3)
-			zephir_update_property_zval(this_ptr, SL("b"), &_3$$3);
+			zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_3$$3);
 		}
 	}
 	ZEPHIR_MM_RESTORE();

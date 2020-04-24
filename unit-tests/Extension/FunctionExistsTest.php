@@ -16,6 +16,14 @@ use Test\FunctionExists;
 
 class FunctionExistsTest extends TestCase
 {
+    /** @var FunctionExists */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new FunctionExists();
+    }
+
     /**
      * @test
      * @dataProvider providerInternalFunctions
@@ -25,8 +33,7 @@ class FunctionExistsTest extends TestCase
      */
     public function shouldCorrectDetectestExistenceWithPassedName($func)
     {
-        $t = new FunctionExists();
-        $this->assertTrue($t->testWithPassedName($func));
+        $this->assertTrue($this->test->testWithPassedName($func));
     }
 
     /**
@@ -35,7 +42,6 @@ class FunctionExistsTest extends TestCase
      */
     public function shouldCorrectDetectestExistenceInsideTheZephirCode()
     {
-        $t = new FunctionExists();
         $expected = [
             'substr' => true,
             'cubstr' => false,
@@ -47,7 +53,7 @@ class FunctionExistsTest extends TestCase
             'prim' => false,
         ];
 
-        $this->assertSame($expected, $t->testBuiltInFunctions());
+        $this->assertSame($expected, $this->test->testBuiltInFunctions());
     }
 
     /**
@@ -56,8 +62,7 @@ class FunctionExistsTest extends TestCase
      */
     public function shouldCorrectDetectestExistenceByUsingString()
     {
-        $t = new FunctionExists();
-        $this->assertTrue($t->testWithString());
+        $this->assertTrue($this->test->testWithString());
     }
 
     public function providerInternalFunctions()

@@ -24,13 +24,13 @@ class CastTest extends TestCase
      */
     public function shouldReturnResourceIdWhenCastingResourceToInteger()
     {
-        $t = new Cast();
+        $test = new Cast();
 
-        $this->assertEquals((int) STDIN, $t->testCastStdinToInteger());
-        $this->assertEquals((int) STDOUT, $t->testCastStdoutToInteger());
+        $this->assertEquals((int) STDIN, $test->testCastStdinToInteger());
+        $this->assertEquals((int) STDOUT, $test->testCastStdoutToInteger());
 
         $file = fopen(__DIR__.'/../../fixtures/exists.php', 'r');
-        $this->assertEquals((int) $file, $t->testCastFileResourceToInteger($file));
+        $this->assertEquals((int) $file, $test->testCastFileResourceToInteger($file));
         fclose($file);
     }
 }

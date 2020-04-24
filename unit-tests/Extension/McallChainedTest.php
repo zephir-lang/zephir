@@ -15,21 +15,26 @@ use PHPUnit\Framework\TestCase;
 
 class McallChainedTest extends TestCase
 {
+    /** @var \Test\McallChained */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\McallChained();
+    }
+
     public function testChained1()
     {
-        $t = new \Test\McallChained();
-        $this->assertSame($t->testChained1(), $t);
+        $this->assertSame($this->test->testChained1(), $this->test);
     }
 
     public function testChained2()
     {
-        $t = new \Test\McallChained();
-        $this->assertSame($t->testChained2(), $t);
+        $this->assertSame($this->test->testChained2(), $this->test);
     }
 
     public function testChained3()
     {
-        $t = new \Test\McallChained();
-        $this->assertSame($t->testChained3(), $t);
+        $this->assertSame($this->test->testChained3(), $this->test);
     }
 }

@@ -17,7 +17,7 @@ use Zephir\Logger\Formatter\CompilerFormatter;
 
 class CompilerFormatterTest extends TestCase
 {
-    /** @var Config $config */
+    /** @var Config */
     private $config;
 
     public function setUp()

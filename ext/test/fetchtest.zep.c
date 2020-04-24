@@ -42,7 +42,7 @@ PHP_METHOD(Test_FetchTest, setValues) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("values"), values);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("values"), values);
 	RETURN_THISW();
 
 }

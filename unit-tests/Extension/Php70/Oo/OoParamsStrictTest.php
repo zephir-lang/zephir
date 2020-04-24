@@ -16,69 +16,65 @@ use Test\Oo\OoParams;
 
 class OoParamsStrictTest extends TestCase
 {
+    /** @var OoParams */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new OoParams();
+    }
+
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForInt1()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'age' must be of the type int");
 
-        $t->setStrictAge(17.0);
+        $this->test->setStrictAge(17.0);
     }
 
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForInt2()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'age' must be of the type int");
 
-        $t->setStrictAge('17');
+        $this->test->setStrictAge('17');
     }
 
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForDouble()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'average' must be of the type double");
 
-        $t->setStrictAverage('17');
+        $this->test->setStrictAverage('17');
     }
 
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForInt()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'average' must be of the type double");
 
-        $t->setStrictAverage(17);
+        $this->test->setStrictAverage(17);
     }
 
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForString()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'name' must be of the type string");
 
-        $t->setStrictName(1234);
+        $this->test->setStrictName(1234);
     }
 
     /** @test */
     public function shouldThrowInvalidArgumentExceptionForCallFromZephirLand()
     {
-        $t = new OoParams();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'name' must be of the type string");
 
-        $t->setStrictNameFromZephirLand();
+        $this->test->setStrictNameFromZephirLand();
     }
 }

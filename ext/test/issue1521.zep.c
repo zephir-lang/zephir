@@ -41,7 +41,7 @@ PHP_METHOD(Test_Issue1521, test) {
 	zephir_create_array(&_0, 2, 0);
 	add_assoc_stringl_ex(&_0, SL("merchantNumber"), SL("0818217122"));
 	add_assoc_stringl_ex(&_0, SL("zero"), SL("0"));
-	zephir_update_property_zval(this_ptr, SL("params"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("params"), &_0);
 	RETURN_MM_MEMBER(getThis(), "params");
 
 }

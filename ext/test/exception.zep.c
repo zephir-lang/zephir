@@ -57,7 +57,7 @@ PHP_METHOD(Test_Exception, testRuntimePropertyFetch) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, SL("message"), &message);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message);
 	ZEPHIR_MM_RESTORE();
 
 }

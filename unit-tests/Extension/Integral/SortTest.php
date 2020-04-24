@@ -20,7 +20,7 @@ class SortTest extends TestCase
         $data = $original = range(1, 50);
         shuffle($data);
 
-        $t = new \Test\Sort();
-        $this->assertSame($t->quick($data), $original);
+        $test = new \Test\Sort();
+        $this->assertSame($test->quick($data), $original);
     }
 }

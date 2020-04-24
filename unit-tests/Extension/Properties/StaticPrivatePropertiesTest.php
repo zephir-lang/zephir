@@ -23,10 +23,10 @@ class StaticPrivatePropertiesTest extends TestCase
      */
     public function shouldGetInstanceByUsingSingleton()
     {
-        $t = new App();
+        $test = new App();
 
-        $this->assertInstanceOf(StaticPrivateProperties::class, $t->getInstance());
+        $this->assertInstanceOf(StaticPrivateProperties::class, $test->getInstance());
         $this->assertInstanceOf(StaticPrivateProperties::class, StaticPrivateProperties::getInstance());
-        $this->assertSame($t->getInstance(), StaticPrivateProperties::getInstance());
+        $this->assertSame($test->getInstance(), StaticPrivateProperties::getInstance());
     }
 }

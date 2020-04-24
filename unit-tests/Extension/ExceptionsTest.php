@@ -17,14 +17,21 @@ use Test\Exceptions;
 
 class ExceptionsTest extends TestCase
 {
+    /** @var Exceptions */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new Exceptions();
+    }
+
     /**
      * @expectedException \Test\Exception
      * @expectedExceptionMessage hello1
      */
     public function testException1()
     {
-        $t = new Exceptions();
-        $t->testException1();
+        $this->test->testException1();
     }
 
     /**
@@ -33,8 +40,7 @@ class ExceptionsTest extends TestCase
      */
     public function testException2()
     {
-        $t = new Exceptions();
-        $t->testException2();
+        $this->test->testException2();
     }
 
     /**
@@ -43,8 +49,7 @@ class ExceptionsTest extends TestCase
      */
     public function testException3()
     {
-        $t = new Exceptions();
-        $t->testException3();
+        $this->test->testException3();
     }
 
     /**
@@ -53,8 +58,7 @@ class ExceptionsTest extends TestCase
      */
     public function testException4()
     {
-        $t = new Exceptions();
-        $t->testException4();
+        $this->test->testException4();
     }
 
     /**
@@ -63,8 +67,7 @@ class ExceptionsTest extends TestCase
      */
     public function testException5()
     {
-        $t = new Exceptions();
-        $t->testException5();
+        $this->test->testException5();
     }
 
     /**
@@ -73,8 +76,7 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionString()
     {
-        $t = new Exceptions();
-        $t->testExceptionLiteral('string');
+        $this->test->testExceptionLiteral('string');
     }
 
     /**
@@ -83,8 +85,7 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionChar()
     {
-        $t = new Exceptions();
-        $t->testExceptionLiteral('char');
+        $this->test->testExceptionLiteral('char');
     }
 
     /**
@@ -93,8 +94,7 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionInt()
     {
-        $t = new Exceptions();
-        $t->testExceptionLiteral('int');
+        $this->test->testExceptionLiteral('int');
     }
 
     /**
@@ -103,8 +103,7 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionDouble()
     {
-        $t = new Exceptions();
-        $t->testExceptionLiteral('double');
+        $this->test->testExceptionLiteral('double');
     }
 
     /**
@@ -113,8 +112,7 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionSprintf()
     {
-        $t = new Exceptions();
-        $t->testExceptionSprintf('Zephir');
+        $this->test->testExceptionSprintf('Zephir');
     }
 
     /**
@@ -123,15 +121,13 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionConcat()
     {
-        $t = new Exceptions();
-        $t->testExceptionConcat('Phalcon', 'Zephir');
+        $this->test->testExceptionConcat('Phalcon', 'Zephir');
     }
 
     public function testExceptionRethrow()
     {
-        $t = new Exceptions();
         try {
-            $t->testExceptionRethrow();
+            $this->test->testExceptionRethrow();
             $this->assertFalse();
         } catch (\Exception $e) {
             $this->assertSame(11, $e->getLine());
@@ -140,31 +136,30 @@ class ExceptionsTest extends TestCase
 
     public function testMultiException()
     {
-        $t = new Exceptions();
         try {
-            $t->testMultiException('test', new Exception('Some Exception'));
+            $this->test->testMultiException('test', new Exception('Some Exception'));
         } catch (Exception $e) {
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
-        $t->internalExceptionCallable = function () {
+        $this->test->internalExceptionCallable = function () {
             return false;
         };
         try {
-            $value = $t->testMultiException('test', new Exception('Some Exception'));
+            $value = $this->test->testMultiException('test', new Exception('Some Exception'));
             $this->assertSame($value, 'test');
         } catch (Exception $e) {
             $this->assertTrue(false);
         }
         try {
-            $t->testMultiException('test', new \Exception('Some Exception'));
+            $this->test->testMultiException('test', new \Exception('Some Exception'));
         } catch (\Exception $e) {
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
-        $t->exceptionCallable = function () {
+        $this->test->exceptionCallable = function () {
             return false;
         };
         try {
-            $t->testMultiException('test', new \Exception('Some Exception'));
+            $this->test->testMultiException('test', new \Exception('Some Exception'));
             $this->assertSame($value, 'test');
         } catch (\Exception $e) {
             $this->assertTrue(false);
@@ -173,8 +168,7 @@ class ExceptionsTest extends TestCase
 
     public function testIssue1325()
     {
-        $t = new Exceptions();
-        $res = $t->issue1325();
+        $res = $this->test->issue1325();
         $this->assertSame(1, $res);
     }
 }

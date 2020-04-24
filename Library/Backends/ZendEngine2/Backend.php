@@ -142,7 +142,7 @@ class Backend extends BaseBackend
     /**
      * {@inheritdoc}
      */
-    public function initializeVariableDefaults($variables, CompilationContext $compilationContext): string
+    public function initializeVariableDefaults(array $variables, CompilationContext $context): string
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'
@@ -274,18 +274,11 @@ class Backend extends BaseBackend
         $context->codePrinter->output('zephir_concat_self('.$variable.', '.$itemVariable.');');
     }
 
-    public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
+    public function initArray(Variable $variable, CompilationContext $context, int $size = null)
     {
-        if (!isset($size)) {
-            $output = 'array_init('.$this->getVariableCode($variable).');';
-        } else {
-            $output = 'zephir_create_array('.$this->getVariableCode($variable).', '.$size.', 0);';
-        }
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-
-        return $output;
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
     public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
@@ -690,7 +683,17 @@ class Backend extends BaseBackend
         return $value;
     }
 
-    public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
+    /**
+     * {@inheritdoc}
+     *
+     * @param Variable           $variable
+     * @param string|Variable    $property
+     * @param mixed              $value
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    public function updateProperty(Variable $variable, $property, $value, CompilationContext $context)
     {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'

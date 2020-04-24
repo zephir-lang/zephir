@@ -17,9 +17,9 @@ class EvalTest extends TestCase
 {
     public function testEval()
     {
-        $t = new \Test\EvalTest();
+        $test = new \Test\EvalTest();
 
-        $this->assertSame(2, $t->evalCode('return 1 + 1;'));
-        $this->assertSame(8, $t->evalCode('$g = pow(2, 2); return $g * 2;'));
+        $this->assertSame(2, $test->evalCode('return 1 + 1;'));
+        $this->assertSame(8, $test->evalCode('$g = pow(2, 2); return $g * 2;'));
     }
 }

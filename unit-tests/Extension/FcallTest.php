@@ -21,19 +21,25 @@ class UserExample extends PropertyAccess
 
 class FcallTest extends TestCase
 {
+    /** @var Fcall */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new Fcall();
+    }
+
     public function testCall()
     {
-        $t = new Fcall();
-        $this->assertSame(0, $t->testCall1());
-        $this->assertGreaterThan(-1, $t->testCall2());
-        $this->assertSame(2, $t->testCall1FromVar());
+        $this->assertSame(0, $this->test->testCall1());
+        $this->assertGreaterThan(-1, $this->test->testCall2());
+        $this->assertSame(2, $this->test->testCall1FromVar());
     }
 
     public function testStrtok()
     {
-        $t = new Fcall();
-        $this->assertFalse($t->testStrtokFalse());
-        $this->assertSame('test', $t->testStrtokVarBySlash('test'));
+        $this->assertFalse($this->test->testStrtokFalse());
+        $this->assertSame('test', $this->test->testStrtokVarBySlash('test'));
     }
 
     /**
@@ -44,8 +50,7 @@ class FcallTest extends TestCase
      */
     public function testFunctionGetArgs($param1, $param2)
     {
-        $t = new Fcall();
-        $this->assertSame([$param1, $param2], $t->testFunctionGetArgs($param1, $param2));
+        $this->assertSame([$param1, $param2], $this->test->testFunctionGetArgs($param1, $param2));
     }
 
     /**
@@ -57,8 +62,7 @@ class FcallTest extends TestCase
      */
     public function shouldGetArgsUsingAllExtraParams($param1, $param2)
     {
-        $t = new Fcall();
-        $this->assertSame([$param1, $param2], $t->testFunctionGetArgsAllExtra($param1, $param2));
+        $this->assertSame([$param1, $param2], $this->test->testFunctionGetArgsAllExtra($param1, $param2));
     }
 
     /**
@@ -89,8 +93,7 @@ class FcallTest extends TestCase
     /** @test */
     public function shouldGedDesiredArgUsingAllExtraParams()
     {
-        $t = new Fcall();
-        $this->assertSame([true, false], $t->testFunctionGetArgAllExtra(true, false));
+        $this->assertSame([true, false], $this->test->testFunctionGetArgAllExtra(true, false));
     }
 
     /** @test */
@@ -101,10 +104,9 @@ class FcallTest extends TestCase
 
     public function testArrayFill()
     {
-        $t = new Fcall();
         $this->assertSame(
             [array_fill(0, 5, '?'), array_fill(0, 6, '?')],
-            $t->testArrayFill()
+            $this->test->testArrayFill()
         );
     }
 

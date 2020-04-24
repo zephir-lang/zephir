@@ -18,22 +18,22 @@ class ExistsTest extends TestCase
 {
     public function testAssertations()
     {
-        $t = new Exists();
+        $test = new Exists();
 
-        $this->assertTrue($t->testClassExists(\TestExClass::class));
-        $this->assertFalse($t->testClassExists('TestExClassx'));
-        $this->assertFalse($t->testClassExists(\TestExInterface::class));
+        $this->assertTrue($test->testClassExists(\TestExClass::class));
+        $this->assertFalse($test->testClassExists('TestExClassx'));
+        $this->assertFalse($test->testClassExists(\TestExInterface::class));
         // with namespace
-        $this->assertTrue($t->testClassExists(Exists::class));
+        $this->assertTrue($test->testClassExists(Exists::class));
 
         // class not interface
-        $this->assertFalse($t->testInterfaceExists(\TestExClass::class));
-        $this->assertTrue($t->testInterfaceExists(\TestExInterface::class));
-        $this->assertFalse($t->testInterfaceExists('TestExInterfacex'));
+        $this->assertFalse($test->testInterfaceExists(\TestExClass::class));
+        $this->assertTrue($test->testInterfaceExists(\TestExInterface::class));
+        $this->assertFalse($test->testInterfaceExists('TestExInterfacex'));
 
-        $this->assertTrue($t->testMethodExists($t, 'testMethodExists'));
+        $this->assertTrue($test->testMethodExists($test, 'testMethodExists'));
 
-        $this->assertTrue($t->testFileExists(__DIR__.'/../fixtures/exists.php'));
-        $this->assertFalse($t->testFileExists(__DIR__.'/php/existsxxxx.php'));
+        $this->assertTrue($test->testFileExists(__DIR__.'/../fixtures/exists.php'));
+        $this->assertFalse($test->testFileExists(__DIR__.'/php/existsxxxx.php'));
     }
 }

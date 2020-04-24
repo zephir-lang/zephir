@@ -18,13 +18,13 @@ class ArrayObjectTest extends TestCase
 {
     public function testSetGet()
     {
-        $t = new ArrayObject();
-        $this->assertInstanceOf('\ArrayObject', $t);
+        $test = new ArrayObject();
+        $this->assertInstanceOf('\ArrayObject', $test);
 
-        $t->test_1 = 1;
-        $this->assertSame(1, $t->test_1);
+        $test->test_1 = 1;
+        $this->assertSame(1, $test->test_1);
 
-        $t['test_2'] = 1;
-        $this->assertSame(1, $t['test_2']);
+        $test['test_2'] = 1;
+        $this->assertSame(1, $test['test_2']);
     }
 }

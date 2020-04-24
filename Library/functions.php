@@ -69,59 +69,66 @@ function escape_class($className)
 /**
  * Prepares a string to be used as a C-string.
  *
+ * Should NOT escape next `escape sequences`:
+ *  Escape sequence | ASCII hex value | Char represented
+ *  --------------- | --------------- | ----------------
+ *  \a              | 07              | Audible bell (Alert, Beep)
+ *  \b              | 08              | Backspace
+ *  \e              | 1B              | Escape character
+ *  \f              | 0C              | Formed page brake
+ *  \n              | 0A              | Newline (Line Feed)
+ *  \r              | 0D              | Carriage Return
+ *  \t              | 09              | Horizontal Tab
+ *  \v              | 0B              | Vertical Tab
+ *  \\              | 5C              | Backslash
+ *  \'              | 27              | Apostrophe or single quotation mark
+ *  \"              | 22              | Double quotation mark
+ *  \?              | 3F              | Question mark (used to avoid trigraphs)
+ *  \nnn            | any             | The byte whose numerical value is given by nnn interpreted as an octal number
+ *  \xhh…           | any             | The byte whose numerical value is given by hh… interpreted as a hexadecimal number
+ *
  * @param string $string
  *
  * @return string
  */
-function add_slashes($string)
+function add_slashes(string $string): string
 {
+    $escape = '\\';
+    $controlChar = [
+        'a', 'b', 'e', 'f', 'n', 'r', 't', 'v', '\\', '\'', '"', '?', 'x',
+    ];
+
     $newstr = '';
     $after = null;
-    $length = \strlen($string);
+    $last = \strlen($string) - 1;
 
-    for ($i = 0; $i < $length; ++$i) {
+    for ($i = 0, $next = 1; $i <= $last; ++$i, ++$next) {
         $ch = $string[$i];
-        if ($i !== ($length - 1)) {
-            $after = $string[$i + 1];
+
+        if ($i !== $last) {
+            $after = $string[$next];
         } else {
             $after = null;
         }
 
-        switch ($ch) {
-            case '"':
-                $newstr .= '\\'.'"';
-                break;
-            case "\n":
-                $newstr .= '\\'.'n';
-                break;
-            case "\t":
-                $newstr .= '\\'.'t';
-                break;
-            case "\r":
-                $newstr .= '\\'.'r';
-                break;
-            case "\v":
-                $newstr .= '\\'.'v';
-                break;
-            case '\\':
-                switch ($after) {
-                    case 'n':
-                    case 'v':
-                    case 't':
-                    case 'r':
-                    case '"':
-                    case '\\':
-                        $newstr .= $ch.$after;
-                        ++$i;
-                        break;
-                    default:
-                        $newstr .= '\\\\';
-                        break;
-                }
-                break;
-            default:
-                $newstr .= $ch;
+        if ($ch === $escape) {
+            if (\in_array($after, $controlChar, true) || is_numeric($after)) {
+                // should not escape native C control chars
+                $newstr .= $ch.$after;
+                ++$i;
+                ++$next;
+                continue;
+            }
+            $newstr .= $escape.$ch;
+            continue;
         }
+
+        if ('"' === $ch) {
+            $newstr .= $escape.$ch;
+            continue;
+        }
+
+        $newstr .= $ch;
     }
 
     return $newstr;

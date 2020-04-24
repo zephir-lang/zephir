@@ -1,0 +1,10 @@
+---
+engines:
+  phpmd:
+    enabled: true
+    config:
+      rulesets: "phpmd.xml.dist"
+
+exclude_paths:
+  - 'ext/**'
+  - 'prototypes/**'

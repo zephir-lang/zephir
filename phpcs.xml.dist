@@ -39,6 +39,14 @@
         on the command line will ignore all file tags.
     -->
     <file>Library</file>
+
     <!-- file>unit-tests/Extension</file -->
     <!-- file>unit-tests/Zephir</file -->
+
+    <!--
+        Hard-code ignore patterns directly into custom standard
+        so we don't have to specify the patterns on the command line.
+    -->
+    <exclude-pattern>prototypes/*</exclude-pattern>
+    <exclude-pattern>unit-tests/fixtures/*</exclude-pattern>
 </ruleset>

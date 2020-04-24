@@ -17,7 +17,7 @@ class DeclareTest extends TestCase
 {
     public function testDeclareMcallExpression()
     {
-        $t = new \Test\DeclareTest();
-        $this->assertSame($t->testDeclareMcallExpression(), 'hello');
+        $test = new \Test\DeclareTest();
+        $this->assertSame($test->testDeclareMcallExpression(), 'hello');
     }
 }

@@ -16,17 +16,23 @@ use Test\Requires;
 
 class RequiresTest extends TestCase
 {
+    /** @var Requires */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new Requires();
+    }
+
     public function testRequireExternal1()
     {
-        $r = new Requires();
-
         $this->assertSame(
             [1, 2, 3],
-            $r->requireExternal1(__DIR__.'/../fixtures/require-me-1.php')
+            $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-1.php')
         );
 
         $this->assertFalse(\defined('REQUIRE_ME'));
-        $r->requireExternal1(__DIR__.'/../fixtures/require-me-2.php');
+        $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-2.php');
         $this->assertTrue(\defined('REQUIRE_ME'));
     }
 
@@ -36,10 +42,8 @@ class RequiresTest extends TestCase
      */
     public function shouldRequireUsingNewSymbolTable()
     {
-        $r = new Requires();
-
         ob_start();
-        $actual = $r->requireExternal3(__DIR__.'/../fixtures/require-me-3.php');
+        $actual = $this->test->requireExternal3(__DIR__.'/../fixtures/require-me-3.php');
         ob_end_clean();
 
         $this->assertSame('test', $actual);
@@ -51,15 +55,14 @@ class RequiresTest extends TestCase
      */
     public function shouldRenderTemplate()
     {
-        $r = new Requires();
-        $a = 1;
+        $param = 1;
 
         $this->assertEquals(
             2,
-            $r->renderTemplate(__DIR__.'/../fixtures/template.php', ['a' => 2])
+            $this->test->renderTemplate(__DIR__.'/../fixtures/template.php', ['a' => 2])
         );
 
-        $this->assertEquals(1, $a);
+        $this->assertEquals(1, $param);
     }
 
     /**
@@ -68,11 +71,9 @@ class RequiresTest extends TestCase
      */
     public function shouldRequirePhar()
     {
-        $r = new Requires();
-
         $this->assertEquals(
             "I'm in",
-            $r->requireExternal1('phar://'.__DIR__.'/../fixtures/requires/myapp.phar/index.php')
+            $this->test->requireExternal1('phar://'.__DIR__.'/../fixtures/requires/myapp.phar/index.php')
         );
     }
 }

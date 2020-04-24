@@ -43,8 +43,8 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("a"), a);
-	zephir_update_property_zval(this_ptr, SL("b"), b);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), b);
 
 }
 

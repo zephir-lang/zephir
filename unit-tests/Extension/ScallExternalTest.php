@@ -17,13 +17,13 @@ class ScallExternalTest extends TestCase
 {
     public function testCall1()
     {
-        $t = new \Test\ScallExternal();
-        $this->assertSame($t->testCall1(), 'hello public');
+        $test = new \Test\ScallExternal();
+        $this->assertSame($test->testCall1(), 'hello public');
     }
 
     public function testCall2()
     {
-        $t = new \Test\ScallExternal();
-        $this->assertSame($t->testCall2(2, 3), 5);
+        $test = new \Test\ScallExternal();
+        $this->assertSame($test->testCall2(2, 3), 5);
     }
 }

@@ -16,38 +16,41 @@ use Test\InstanceOff;
 
 class InstanceOffTest extends TestCase
 {
+    /** @var InstanceOff */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new InstanceOff();
+    }
+
     public function testInstanceOf1()
     {
-        $t = new InstanceOff();
-        $this->assertTrue($t->testInstanceOf1());
+        $this->assertTrue($this->test->testInstanceOf1());
     }
 
     public function testInstanceOf2()
     {
-        $t = new InstanceOff();
-        $this->assertTrue($t->testInstanceOf2());
+        $this->assertTrue($this->test->testInstanceOf2());
     }
 
     public function testInstanceOf3()
     {
-        $t = new InstanceOff();
-        $this->assertFalse($t->testInstanceOf3());
+        $this->assertFalse($this->test->testInstanceOf3());
     }
 
     public function testInstanceOf4()
     {
-        $t = new InstanceOff();
+        $this->assertTrue($this->test->testInstanceOf4(new \ArrayIterator([])));
+        $this->assertTrue($this->test->testInstanceOf4(new \ArrayObject()));
 
-        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator([])));
-        $this->assertTrue($t->testInstanceOf4(new \ArrayObject()));
-
-        $this->assertFalse($t->testInstanceOf4(1));
-        $this->assertFalse($t->testInstanceOf4(1.25));
-        $this->assertFalse($t->testInstanceOf4(true));
-        $this->assertFalse($t->testInstanceOf4(false));
-        $this->assertFalse($t->testInstanceOf4('test'));
-        $this->assertFalse($t->testInstanceOf4([]));
-        $this->assertFalse($t->testInstanceOf4(new \stdClass()));
+        $this->assertFalse($this->test->testInstanceOf4(1));
+        $this->assertFalse($this->test->testInstanceOf4(1.25));
+        $this->assertFalse($this->test->testInstanceOf4(true));
+        $this->assertFalse($this->test->testInstanceOf4(false));
+        $this->assertFalse($this->test->testInstanceOf4('test'));
+        $this->assertFalse($this->test->testInstanceOf4([]));
+        $this->assertFalse($this->test->testInstanceOf4(new \stdClass()));
     }
 
     /**
@@ -55,23 +58,19 @@ class InstanceOffTest extends TestCase
      */
     public function testInstanceOf5()
     {
-        $t = new InstanceOff();
-
-        $this->assertTrue($t->testInstanceOf5($t));
+        $this->assertTrue($this->test->testInstanceOf5($this->test));
 
         /*
          * Cannot test instance of for not objects
          * @link https://github.com/phalcon/zephir/issues/822
          */
 
-        $this->assertFalse($t->testInstanceOf5(new \stdClass()));
+        $this->assertFalse($this->test->testInstanceOf5(new \stdClass()));
     }
 
     public function testInstanceOf6()
     {
-        $t = new InstanceOff();
-
-        $this->assertTrue($t->testInstanceOf6());
+        $this->assertTrue($this->test->testInstanceOf6());
     }
 
     /**
@@ -80,10 +79,8 @@ class InstanceOffTest extends TestCase
      */
     public function instanceOf7()
     {
-        $t = new InstanceOff();
-
-        $this->assertTrue($t->testInstanceOf7($t));
-        $this->assertFalse($t->testInstanceOf7(new \stdClass()));
+        $this->assertTrue($this->test->testInstanceOf7($this->test));
+        $this->assertFalse($this->test->testInstanceOf7(new \stdClass()));
     }
 
     /**
@@ -92,10 +89,8 @@ class InstanceOffTest extends TestCase
      */
     public function instanceOf8()
     {
-        $t = new InstanceOff();
-
-        $this->assertTrue($t->testInstanceOf8('\\Test\\InstanceOff'));
-        $this->assertFalse($t->testInstanceOf8('\\stdClass'));
+        $this->assertTrue($this->test->testInstanceOf8('\\Test\\InstanceOff'));
+        $this->assertFalse($this->test->testInstanceOf8('\\stdClass'));
     }
 
     /**
@@ -104,9 +99,7 @@ class InstanceOffTest extends TestCase
      */
     public function instanceOf9()
     {
-        $t = new InstanceOff();
-
-        $this->assertTrue($t->testInstanceOf9($t, '\\Test\\InstanceOff'));
-        $this->assertFalse($t->testInstanceOf9($t, '\\stdClass'));
+        $this->assertTrue($this->test->testInstanceOf9($this->test, '\\Test\\InstanceOff'));
+        $this->assertFalse($this->test->testInstanceOf9($this->test, '\\stdClass'));
     }
 }

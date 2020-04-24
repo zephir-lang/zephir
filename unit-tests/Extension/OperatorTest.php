@@ -15,45 +15,45 @@ use PHPUnit\Framework\TestCase;
 
 class OperatorTest extends TestCase
 {
+    /** @var \Test\Operator */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\Operator();
+    }
+
     public function test404Issue()
     {
-        $t = new \Test\Operator();
-
-        $this->assertFalse($t->testIdentical(true, 1));
-        $this->assertFalse($t->testIdentical(true, 'phalcon'));
-        $this->assertFalse($t->testIdentical(false, 0));
-        $this->assertFalse($t->testIdentical(1, '1'));
-        $this->assertTrue($t->testIdentical(1, 1));
-        $this->assertTrue($t->testIdentical(true, true));
-        $this->assertTrue($t->testIdentical('phalcon', 'phalcon'));
+        $this->assertFalse($this->test->testIdentical(true, 1));
+        $this->assertFalse($this->test->testIdentical(true, 'phalcon'));
+        $this->assertFalse($this->test->testIdentical(false, 0));
+        $this->assertFalse($this->test->testIdentical(1, '1'));
+        $this->assertTrue($this->test->testIdentical(1, 1));
+        $this->assertTrue($this->test->testIdentical(true, true));
+        $this->assertTrue($this->test->testIdentical('phalcon', 'phalcon'));
     }
 
     public function test829Issue()
     {
-        $t = new \Test\Operator();
-
-        $this->assertTrue($t->testIdenticalVarFalse(false));
-        $this->assertFalse($t->testIdenticalVarFalse(0));
-        $this->assertFalse($t->testIdenticalVarFalse(''));
-        $this->assertTrue($t->testIdenticalFalseVar(false));
-        $this->assertFalse($t->testIdenticalFalseVar(0));
-        $this->assertFalse($t->testIdenticalFalseVar(''));
+        $this->assertTrue($this->test->testIdenticalVarFalse(false));
+        $this->assertFalse($this->test->testIdenticalVarFalse(0));
+        $this->assertFalse($this->test->testIdenticalVarFalse(''));
+        $this->assertTrue($this->test->testIdenticalFalseVar(false));
+        $this->assertFalse($this->test->testIdenticalFalseVar(0));
+        $this->assertFalse($this->test->testIdenticalFalseVar(''));
     }
 
     public function test1072Issue()
     {
-        $t = new \Test\Operator();
-
-        $this->assertFalse($t->testIdenticalIfComplex(false));
-        $this->assertTrue($t->testIdenticalIfComplex(0));
-        $this->assertTrue($t->testIdenticalIfComplex(''));
+        $this->assertFalse($this->test->testIdenticalIfComplex(false));
+        $this->assertTrue($this->test->testIdenticalIfComplex(0));
+        $this->assertTrue($this->test->testIdenticalIfComplex(''));
     }
 
     public function test1279Issue()
     {
-        $t = new \Test\Operator();
-
-        $values = $t->testBoolComparison(true, false);
+        $values = $this->test->testBoolComparison(true, false);
 
         $this->assertTrue($values[0]);
         $this->assertTrue($values[1]);

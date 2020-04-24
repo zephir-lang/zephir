@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
      */
     private $pwd;
 
-    /** @var Config $config */
+    /** @var Config */
     private $config;
 
     public function setUp()

@@ -15,19 +15,23 @@ use PHPUnit\Framework\TestCase;
 
 class CharsTest extends TestCase
 {
+    /** @var \Test\Chars */
+    private $test;
+
+    public function setUp()
+    {
+        $this->test = new \Test\Chars();
+    }
+
     public function testSumChars()
     {
-        $t = new \Test\Chars();
-
-        $this->assertSame(\chr($t->sumChars1()), 'a');
-        $this->assertSame(\chr($t->sumChars2('A')), 'a');
+        $this->assertSame(\chr($this->test->sumChars1()), 'a');
+        $this->assertSame(\chr($this->test->sumChars2('A')), 'a');
     }
 
     public function testDiffChars()
     {
-        $t = new \Test\Chars();
-
-        $this->assertSame(\chr($t->diffChars1()), 'A');
-        $this->assertSame(\chr($t->diffChars2('a')), 'A');
+        $this->assertSame(\chr($this->test->diffChars1()), 'A');
+        $this->assertSame(\chr($this->test->diffChars2('a')), 'A');
     }
 }

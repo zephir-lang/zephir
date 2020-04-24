@@ -5,34 +5,45 @@
 # For the full copyright and license information, please view
 # the LICENSE file that was distributed with this source code.
 
-Function SetupCommonEnvironmet {
-    If (-not (Test-Path 'C:\Downloads')) {
-        New-Item -ItemType Directory -Force -Path 'C:\Downloads' | Out-Null
-    }
+function SetupCommonEnvironment {
+    <#
+        .SYNOPSIS
+            Creates common directories if not exists
+    #>
 
-    If (-not (Test-Path 'C:\Downloads\Choco')) {
-        New-Item -ItemType Directory -Force -Path 'C:\Downloads\Choco' | Out-Null
+    $CommonPath = "C:\Downloads", "C:\Downloads\Choco"
+
+    foreach ($path in $CommonPath) {
+        if (-not (Test-Path $path)) {
+            New-Item -ItemType Directory -Force -Path $path | Out-Null
+        }
     }
 
     # Hide "You are in 'detached HEAD' state" message
     git config --global advice.detachedHead false
 }
 
-Function InstallPhpSdk {
+function InstallPhpSdk {
+    <#
+        .SYNOPSIS
+            Install PHP SDK binary tools from sources.
+    #>
+
     Write-Output "Install PHP SDK binary tools: ${env:PHP_SDK_VERSION}"
 
-    $RemoteUrl = "https://github.com/microsoft/php-sdk-binary-tools/archive/php-sdk-${env:PHP_SDK_VERSION}.zip"
-    $DestinationPath = "C:\Downloads\php-sdk-${env:PHP_SDK_VERSION}.zip"
+    $PhpSdk = "php-sdk-${env:PHP_SDK_VERSION}.zip"
+    $RemoteUrl = "https://github.com/microsoft/php-sdk-binary-tools/archive/${PhpSdk}"
+    $DestinationPath = "C:\Downloads\${PhpSdk}"
 
-    If (-not (Test-Path $env:PHP_SDK_PATH)) {
-        If (-not [System.IO.File]::Exists($DestinationPath)) {
+    if (-not (Test-Path $env:PHP_SDK_PATH)) {
+        if (-not [System.IO.File]::Exists($DestinationPath)) {
             Write-Output "Downloading PHP SDK binary tools: $RemoteUrl ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
 
         $DestinationUnzipPath = "${env:Temp}\php-sdk-binary-tools-php-sdk-${env:PHP_SDK_VERSION}"
 
-        If (-not (Test-Path "$DestinationUnzipPath")) {
+        if (-not (Test-Path "$DestinationUnzipPath")) {
             Expand-Item7zip $DestinationPath $env:Temp
         }
 
@@ -40,30 +51,34 @@ Function InstallPhpSdk {
     }
 }
 
-Function InstallPhpDevPack {
+function InstallPhpDevPack {
+    <#
+        .SYNOPSIS
+            Intstall PHP Developer pack from sources.
+    #>
+
     Write-Output "Install PHP Dev pack: ${env:PHP_VERSION}"
 
-    If ($env:BUILD_TYPE -Match "nts") {
-        $TS = "nts-"
-    } Else {
-        $TS = ""
-    }
+    $TS = Get-ThreadSafety
 
     $BaseUrl = "http://windows.php.net/downloads/releases"
-    $LocalPart = "/php-devel-pack-${env:PHP_VERSION}-${TS}Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    $DevPack = "php-devel-pack-${env:PHP_VERSION}${TS}-Win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
-    $RemoteUrl = "${BaseUrl}${LocalPart}"
-    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}-${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
+    $RemoteUrl = "${BaseUrl}/${DevPack}"
+    $RemoteArchiveUrl = "${BaseUrl}/archives/${DevPack}"
+    $DestinationPath = "C:\Downloads\php-devel-pack-${env:PHP_VERSION}${TS}-VC${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
-    If (-not (Test-Path $env:PHP_DEVPACK)) {
-        If (-not [System.IO.File]::Exists($DestinationPath)) {
-            Write-Output "Downloading PHP Dev pack: ${RemoteUrl} ..."
-            DownloadFile $RemoteUrl $DestinationPath
+    if (-not (Test-Path $env:PHP_DEVPACK)) {
+        if (-not [System.IO.File]::Exists($DestinationPath)) {
+            DownloadFileUsingAlternative -RemoteUrl $RemoteUrl `
+                -RemoteArchiveUrl $RemoteArchiveUrl `
+                -DestinationPath $DestinationPath `
+                -Message "Downloading PHP Dev pack"
         }
 
         $DestinationUnzipPath = "${env:Temp}\php-${env:PHP_VERSION}-devel-VC${env:VC_VERSION}-${env:PHP_ARCH}"
 
-        If (-not (Test-Path "$DestinationUnzipPath")) {
+        if (-not (Test-Path "$DestinationUnzipPath")) {
             Expand-Item7zip $DestinationPath $env:Temp
         }
 
@@ -71,21 +86,22 @@ Function InstallPhpDevPack {
     }
 }
 
-Function InstallZephirParser {
+function InstallZephirParser {
+    <#
+        .SYNOPSIS
+            Download and install Zephir parser PHP extension
+    #>
+
     $BaseUri = "https://github.com/phalcon/php-zephir-parser/releases/download"
     $LocalPart = "zephir_parser_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
 
-    If ($env:BUILD_TYPE -Match "nts") {
-        $TS = "-nts"
-    } Else {
-        $TS = ""
-    }
+    $TS = Get-ThreadSafety
 
     $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
     $DestinationPath = "C:\Downloads\${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
 
-    If (-not (Test-Path "${env:PHPROOT}\ext\php_zephir_parser.dll")) {
-        If (-not [System.IO.File]::Exists($DestinationPath)) {
+    if (-not (Test-Path "${env:PHPROOT}\ext\php_zephir_parser.dll")) {
+        if (-not [System.IO.File]::Exists($DestinationPath)) {
             Write-Output "Downloading Zephir Parser: ${RemoteUrl} ..."
             DownloadFile $RemoteUrl $DestinationPath
         }
@@ -94,112 +110,184 @@ Function InstallZephirParser {
     }
 }
 
+function Get-ThreadSafety {
+    <#
+        .SYNOPSIS
+            Detects if Build is Thread Safety or not and returns `ts` suffix.
+    #>
 
-Function Expand-Item7zip {
-    Param(
-        [Parameter(Mandatory=$true)][System.String] $Archive,
-        [Parameter(Mandatory=$true)][System.String] $Destination
-    )
-
-    If (-not (Test-Path -Path $Archive -PathType Leaf)) {
-        Throw "Specified archive File is invalid: [$Archive]"
+    if ($env:BUILD_TYPE -Match "nts") {
+        return "-nts"
     }
 
-    If (-not (Test-Path -Path $Destination -PathType Container)) {
+    return [string]::Empty
+}
+
+
+function Expand-Item7zip {
+    <#
+        .SYNOPSIS
+            Extracts ZIP archives to specified directory
+    #>
+
+    param(
+        [Parameter(Mandatory = $true)] [System.String] $Archive,
+        [Parameter(Mandatory = $true)] [System.String] $Destination
+    )
+
+    if (-not (Test-Path -Path $Archive -PathType Leaf)) {
+        throw "Specified archive File is invalid: [$Archive]"
+    }
+
+    if (-not (Test-Path -Path $Destination -PathType Container)) {
         New-Item $Destination -ItemType Directory | Out-Null
     }
 
     $Result = (& 7z x "$Archive" "-o$Destination" -aoa -bd -y -r)
 
-    If ($LastExitCode -ne 0) {
+    if ($LastExitCode -ne 0) {
         Write-Output "An error occurred while unzipping [$Archive] to [$Destination]. Error code was: ${LastExitCode}"
         Exit $LastExitCode
     }
 }
 
-Function DownloadFile {
-    Param(
-        [Parameter(Mandatory=$true)][System.String] $RemoteUrl,
-        [Parameter(Mandatory=$true)][System.String] $DestinationPath
+function DownloadFileUsingAlternative {
+    <#
+        .SYNOPSIS
+            Downloads files from URL using alternative ULR if primary URL not found
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteArchiveUrl,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath,
+        [parameter(Mandatory = $true, ValueFromPipeline = $true)] [ValidateNotNullOrEmpty()] [System.String] $Message
     )
 
-    $RetryMax   = 5
-    $RetryCount = 0
-    $Completed  = $false
+    process {
+        try {
+            Write-Output "${Message}: ${RemoteUrl} ..."
+            DownloadFile $RemoteUrl $DestinationPath
+        } catch [System.Net.WebException] {
+            Write-Output "${Message} from archive: ${RemoteArchiveUrl} ..."
+            DownloadFile $RemoteArchiveUrl $DestinationPath
+        }
+    }
+}
 
-    $WebClient = New-Object System.Net.WebClient
-    $WebClient.Headers.Add('User-Agent', 'GitHub Actions PowerShell Script')
+function DownloadFile {
+    <#
+        .SYNOPSIS
+            Downloads file from providing URL to specified destionation.
 
-    While (-not $Completed) {
-        Try {
-            $WebClient.DownloadFile($RemoteUrl, $DestinationPath)
-            $Completed = $true
-        } Catch {
-            If ($RetryCount -ge $RetryMax) {
-                $ErrorMessage = $_.Exception.Message
-                Write-Output "Error downloadingig ${RemoteUrl}: $ErrorMessage"
+        .NOTES
+            Throws System.Net.WebException if $RequestUrl not found.
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $RemoteUrl,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()] [System.String] $DestinationPath
+    )
+
+    process {
+        $RetryMax   = 5
+        $RetryCount = 0
+        $Completed  = $false
+
+        $WebClient = New-Object System.Net.WebClient
+        $WebClient.Headers.Add('User-Agent', 'GitHub Actions PowerShell Script')
+
+        while (-not $Completed -or $RetryCount -eq $RetryMax) {
+            try {
+                $WebClient.DownloadFile($RemoteUrl, $DestinationPath)
                 $Completed = $true
-            } Else {
-                $RetryCount++
+            } catch [System.Net.WebException] {
+                $ErrorMessage = $_.Exception.Message
+
+                if ($_.Exception.Response.StatusCode -eq 404) {
+                    Write-Warning -Message "Error downloading ${RemoteUrl}: $ErrorMessage"
+                    throw [System.Net.WebException] "Error downloading ${RemoteUrl}"
+                }
+
+                if ($RetryCount -ge $RetryMax) {
+                    Write-Output "Error downloading ${RemoteUrl}: $ErrorMessage"
+                    $Completed = $true
+                } else {
+                    $RetryCount++
+                }
             }
         }
     }
 }
 
-Function PrintLogs {
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile-errors.log") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile-errors.log"
-    }
+function PrintLogs {
+    <#
+        .SYNOPSIS
+            Prints logs files details.
+    #>
 
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\compile.log") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\compile.log"
-    }
+    $Logs = "${env:GITHUB_WORKSPACE}\compile-errors.log",
+            "${env:GITHUB_WORKSPACE}\compile.log",
+            "${env:GITHUB_WORKSPACE}\ext\configure.js"
 
-    If (Test-Path -Path "${env:GITHUB_WORKSPACE}\ext\configure.js") {
-        Get-Content -Path "${env:GITHUB_WORKSPACE}\ext\configure.js"
+    foreach ($logFile in $Logs) {
+        if (Test-Path -Path $logFile) {
+            Get-Content -Path $logFile
+        }
     }
 }
 
-Function PrintEnvVars {
+function PrintEnvVars {
+    <#
+        .SYNOPSIS
+            Prints environment variables.
+    #>
+
     Write-Output ($env:Path).Replace(';', "`n")
     Get-ChildItem env:
 }
 
-Function PrintDirectoriesContent {
+function PrintDirectoriesContent {
+    <#
+        .SYNOPSIS
+            Prints Builds, Release, Projects, Downloads and Extensions directories contents.
+    #>
+
     Get-ChildItem -Path "${env:GITHUB_WORKSPACE}"
 
-    If (Test-Path -Path "C:\Downloads") {
-        Get-ChildItem -Path "C:\Downloads"
-    }
+    $Directories =  "C:\Downloads",
+                    "C:\Projects",
+                    "${env:PHPROOT}\ext"
 
-    If (Test-Path -Path "C:\Projects") {
-        Get-ChildItem -Path "C:\Projects"
-    }
-
-    If (Test-Path -Path "${env:PHPROOT}\ext") {
-        Get-ChildItem -Path "${env:PHPROOT}\ext"
-    }
-
-    # Might be empty
     if ("${env:RELEASE_DLL_PATH}") {
+        # Might be empty
         $ReleasePath = Split-Path -Path "${env:RELEASE_DLL_PATH}"
-        If (Test-Path -Path "${ReleasePath}") {
-            Get-ChildItem -Path "${ReleasePath}"
-        }
-
         $BuildPath = Split-Path -Path "${ReleasePath}"
-        If (Test-Path -Path "${BuildPath}") {
-            Get-ChildItem -Path "${BuildPath}"
+
+        $Directories.Add($ReleasePath)
+        $Directories.Add($BuildPath)
+    }
+
+    foreach ($dir in $Directories) {
+        if (Test-Path -Path $dir) {
+            Get-ChildItem -Path $dir
         }
     }
 }
 
 # TODO(klay): Add phpize and phpconfig here
-Function PrintPhpInfo {
+function PrintPhpInfo {
+    <#
+        .SYNOPSIS
+            Prints PHP info.
+    #>
+
     $IniFile = "${env:PHPROOT}\php.ini"
     $PhpExe = "${env:PHPROOT}\php.exe"
 
-    If (Test-Path -Path "${PhpExe}") {
+    if (Test-Path -Path "${PhpExe}") {
         Write-Output ""
         & "${PhpExe}" -v
 
@@ -208,12 +296,17 @@ Function PrintPhpInfo {
 
         Write-Output ""
         & "${PhpExe}" -i
-    } ElseIf (Test-Path -Path "${IniFile}") {
+    } elseif (Test-Path -Path "${IniFile}") {
         Get-Content -Path "${IniFile}"
     }
 }
 
-Function PrintBuildDetails {
+function PrintBuildDetails {
+    <#
+        .SYNOPSIS
+            Prints various Build details information.
+    #>
+
     $BuildDate = Get-Date -Format g
 
     Write-Output "Build date: ${BuildDate}"
@@ -233,21 +326,26 @@ Function PrintBuildDetails {
 }
 
 
-Function InitializeReleaseVars {
-    If ($env:BUILD_TYPE -Match "nts") {
+function InitializeReleaseVars {
+    <#
+        .SYNOPSIS
+            Configures Environment variables for Release build.
+    #>
+
+    if ($env:BUILD_TYPE -Match "nts") {
         $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}_nts"
 
-        If ($env:PHP_ARCH -eq 'x86') {
+        if ($env:PHP_ARCH -eq 'x86') {
             $env:RELEASE_FOLDER = "Release"
-        } Else {
+        } else {
             $env:RELEASE_FOLDER = "x64\Release"
         }
-    } Else {
+    } else {
         $env:RELEASE_ZIPBALL = "${env:PACKAGE_PREFIX}_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
 
-        If ($env:PHP_ARCH -eq 'x86') {
+        if ($env:PHP_ARCH -eq 'x86') {
             $env:RELEASE_FOLDER = "Release_TS"
-        } Else {
+        } else {
             $env:RELEASE_FOLDER = "x64\Release_TS"
         }
     }
@@ -258,18 +356,23 @@ Function InitializeReleaseVars {
     Write-Output "::set-env name=RELEASE_DLL_PATH::${env:RELEASE_DLL_PATH}"
 }
 
-Function EnableTestExtension {
+function EnableTestExtension {
+    <#
+        .SYNOPSIS
+            Enables PHP Extension.
+    #>
+
     if (-not (Test-Path env:RELEASE_DLL_PATH)) {
         InitializeReleaseVars
     }
 
-    If (-not (Test-Path "${env:RELEASE_DLL_PATH}")) {
-        Throw "Unable to locate extension path: ${env:RELEASE_DLL_PATH}"
+    if (-not (Test-Path "${env:RELEASE_DLL_PATH}")) {
+        throw "Unable to locate extension path: ${env:RELEASE_DLL_PATH}"
     }
 
     Copy-Item "${env:RELEASE_DLL_PATH}" "${env:PHPROOT}\ext\${env:EXTENSION_FILE}"
 
-    # TODO(klay): Sortout with this:
+    # TODO(klay): Sort out with this:
     #
     # Multiple extensions match the name (or handle) "test":
     # - handle: test version 1.0.0

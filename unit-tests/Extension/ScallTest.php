@@ -19,33 +19,33 @@ class ScallTest extends TestCase
 {
     public function testScall()
     {
-        $t = new Scall();
+        $test = new Scall();
 
-        $this->assertSame('hello public', $t->testMethod1());
-        $this->assertSame('hello public', $t::testMethod1());
+        $this->assertSame('hello public', $test->testMethod1());
+        $this->assertSame('hello public', $test::testMethod1());
         $this->assertSame('hello public', Scall::testMethod1());
 
-        $this->assertSame('hello public', $t->testCall1());
-        $this->assertSame('hello protected', $t->testCall2());
-        $this->assertSame('hello private', $t->testCall3());
+        $this->assertSame('hello public', $test->testCall1());
+        $this->assertSame('hello protected', $test->testCall2());
+        $this->assertSame('hello private', $test->testCall3());
 
-        $this->assertSame(5, $t->testCall4(2, 3));
-        $this->assertSame(13, $t->testCall5(6, 7));
-        $this->assertSame(9, $t->testCall6(4, 5));
+        $this->assertSame(5, $test->testCall4(2, 3));
+        $this->assertSame(13, $test->testCall5(6, 7));
+        $this->assertSame(9, $test->testCall6(4, 5));
 
-        $this->assertSame('hello public', $t->testCall7());
-        $this->assertSame('hello protected', $t->testCall8());
-        $this->assertSame('hello private', $t->testCall9());
+        $this->assertSame('hello public', $test->testCall7());
+        $this->assertSame('hello protected', $test->testCall8());
+        $this->assertSame('hello private', $test->testCall9());
 
-        $this->assertSame(5, $t->testCall10(2, 3));
-        $this->assertSame(13, $t->testCall11(6, 7));
-        $this->assertSame(9, $t->testCall12(4, 5));
+        $this->assertSame(5, $test->testCall10(2, 3));
+        $this->assertSame(13, $test->testCall11(6, 7));
+        $this->assertSame(9, $test->testCall12(4, 5));
 
-        $this->assertSame('hello parent public', $t->testCall13());
-        $this->assertSame('hello parent protected', $t->testCall14());
+        $this->assertSame('hello parent public', $test->testCall13());
+        $this->assertSame('hello parent protected', $test->testCall14());
 
         $this->assertSame('hello ScallParent', Scallparent::testCallStatic());
-        $this->assertSame('hello Scall', $t::testCallStatic());
+        $this->assertSame('hello Scall', $test::testCallStatic());
     }
 
     /**
@@ -55,8 +55,8 @@ class ScallTest extends TestCase
      */
     public function shouldReturnInterpolatedMethodFromZephir()
     {
-        $t = new Scall();
-        $this->assertSame('hello Scall', $t->interpolatedStaticReturn());
+        $test = new Scall();
+        $this->assertSame('hello Scall', $test->interpolatedStaticReturn());
     }
 
     /**
@@ -66,10 +66,10 @@ class ScallTest extends TestCase
      */
     public function shouldEchoInterpolatedMethodFromZephir()
     {
-        $t = new Scall();
+        $test = new Scall();
 
         ob_start();
-        $t->interpolatedStaticEcho();
+        $test->interpolatedStaticEcho();
         $content = ob_get_clean();
 
         $this->assertSame('hello Scall', $content);

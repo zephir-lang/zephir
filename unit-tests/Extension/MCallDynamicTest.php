@@ -19,9 +19,9 @@ class MCallDynamicTest extends TestCase
     /** @test */
     public function callDynamic()
     {
-        $a = new McallDynamic();
-        $this->assertSame(1, $a->method1());
-        $this->assertSame(2, $a->testMagicCall1());
+        $test = new McallDynamic();
+        $this->assertSame(1, $test->method1());
+        $this->assertSame(2, $test->testMagicCall1());
     }
 
     /**
@@ -31,8 +31,8 @@ class MCallDynamicTest extends TestCase
      */
     public function callAnonymousFunctionWithContext()
     {
-        $t = new McallDynamic();
+        $test = new McallDynamic();
 
-        $this->assertSame('Caller:perform', $t->testCallAnonymousFunctionWithContext());
+        $this->assertSame('Caller:perform', $test->testCallAnonymousFunctionWithContext());
     }
 }
