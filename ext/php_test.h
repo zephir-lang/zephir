@@ -14,7 +14,7 @@
 #define PHP_TEST_VERSION     "1.0.0"
 #define PHP_TEST_EXTNAME     "test"
 #define PHP_TEST_AUTHOR      "Phalcon Team and contributors"
-#define PHP_TEST_ZEPVERSION  "0.12.18-$Id$"
+#define PHP_TEST_ZEPVERSION  "0.12.18-26d47456"
 #define PHP_TEST_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
 typedef struct _zephir_struct_db { 
