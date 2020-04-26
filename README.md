@@ -16,7 +16,7 @@ Functionality is exposed to the PHP language.
 ## Community
 
 * Follow us on [GitHub][zephir] and [Facebook][facebook]
-* Get Zephir support on [Discord][discord] and [Official Forums][forum]
+* Get Zephir support on [Discord][discord]
 * Read our [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Contributing
@@ -51,7 +51,6 @@ Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for mor
 [facebook]: https://www.facebook.com/groups/zephir.language
 [discord]: https://phalcon.link/discord
 [zephir logo]: https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
-[forum]: https://forum.zephir-lang.com
 [web site]: https://zephir-lang.com
 [actions link]: https://github.com/phalcon/zephir/actions
 [actions lin badge]: https://github.com/phalcon/zephir/workflows/Linux%20CI/badge.svg
