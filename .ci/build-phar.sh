@@ -18,8 +18,8 @@ if [ "$(command -v box 2>/dev/null || true)" = "" ]; then
   exit 1
 fi
 
-box validate
-box compile
+box validate || exit 1
+box compile  || exit 1
 
 if [ ! -f "./zephir.phar" ] || [ ! -x "./zephir.phar" ]; then
   (>&2 echo "Something went wrong when building zephir.phar")

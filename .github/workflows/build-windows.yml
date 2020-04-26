@@ -2,12 +2,15 @@ name: Windows CI
 
 on:
   push:
+    branches:
+      - development
     paths-ignore:
       - '**.md'
       - '**.txt'
   pull_request:
     branches:
       - master
+      - development
 
 env:
   PARSER_VERSION: 1.3.4
@@ -60,7 +63,7 @@ jobs:
         env:
           PHPTS: ${{ matrix.build_type }}
 
-      - name: Set Up Environment Variables
+      - name: Set Environment Variables
         run: |
           echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
           echo "::set-env name=PHP_VERSION::$(php -r 'echo phpversion();')"
@@ -139,9 +142,15 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ runner.os }}-composer-${{ env.cache-name }}-
             ${{ runner.os }}-composer-
-            ${{ runner.os }}-
+
+      - name: Setup GitHub Token
+        shell: bash
+        run: |
+          # To increase the GitHub rate limit we're use GitHub authentication
+          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
+            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
+          fi
 
       - name: Install Project Dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
@@ -162,7 +171,15 @@ jobs:
           # .\zephir.bat api
 
       - name: Compile Test Project
-        run: .\zephir.bat compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
+        run: |
+          .\zephir.bat compile `
+            -Wnonexistent-function `
+            -Wnonexistent-class `
+            -Wunused-variable `
+            -Wnonexistent-constant `
+            -Wunreachable-code `
+            -Wnot-supported-magic-constant `
+            -Wnon-valid-decrement
 
       - name: Make Test Extension
         shell: cmd
