@@ -2,6 +2,8 @@ name: Linux CI
 
 on:
   push:
+    branches:
+      - development
     paths-ignore:
       - '**.md'
       - '**.txt'
@@ -74,16 +76,16 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
 
-      - name: Set environment variables
+      - name: Set Environment Variables
         run: |
           echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
 
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v2
         with:
           fetch-depth: 5
 
-      - name: Common settings
+      - name: Common Settings
         run: |
           # Core dump settings
           ulimit -c unlimited -S || true
@@ -94,7 +96,7 @@ jobs:
           # Will be used before as a cache key
           export CPUHASH="$(cat /proc/cpuinfo | grep "model name" | head -n 1 | cut -d':' -f2 | md5sum)"
 
-      - name: Setup APT repositories
+      - name: Setup APT Repositories
         run: |
           # We don't need this at all, and our
           # builds often fails because Microsoft
@@ -102,7 +104,7 @@ jobs:
           sudo rm -f /etc/apt/sources.list.d/dotnetdev.list
           sudo rm -f /etc/apt/sources.list.d/azure*.list
 
-      - name: Install system dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update --quiet --yes 1>/dev/null
           sudo apt-get install --no-install-recommends -q -y re2c
@@ -121,13 +123,6 @@ jobs:
       - name: Install Zephir Parser
         run: .ci/install-zephir-parser.sh ${{ matrix.php }}
 
-      - name: Setup GitHub Token
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ -n "${{ secrets.GH_TOKEN }}" ]; then
-            composer config github-oauth.github.com "${{ secrets.GH_TOKEN }}"
-          fi
-
       - name: Get Composer Cache Directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -137,12 +132,22 @@ jobs:
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          restore-keys:
+            ${{ runner.os }}-composer-${{ env.cache-name }}-
+            ${{ runner.os }}-composer-
+            ${{ runner.os }}-
 
-      - name: Install project dependencies
+      - name: Setup Composer Token
+        run: |
+          # To increase the GitHub rate limit we're use GitHub authentication
+          if [ -n "${{ secrets.COMPOSER_TOKEN }}" ]; then
+            composer config github-oauth.github.com "${{ secrets.COMPOSER_TOKEN }}"
+          fi
+
+      - name: Install Project Dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
 
-      - name: Prepare Zephir executable
+      - name: Prepare Zephir Executable
         run: sudo ln -s "$(pwd)/zephir" /usr/local/bin/zephir
 
       - name: Fast Commands Test
@@ -167,10 +172,10 @@ jobs:
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Unit testing
+      - name: Unit Testing
         run: .ci/run-tests.sh
 
-      - name: Black-box testing
+      - name: Black-box Testing
         if: always()
         run: cd unit-tests/sharness && PHP=$(which php) make
 
@@ -178,7 +183,7 @@ jobs:
         if: failure()
         run: .ci/after-failure.sh
 
-      - name: Upload code coverage report
+      - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -187,6 +192,6 @@ jobs:
           flags: unittests
           fail_ci_if_error: false
 
-      - name: Success reporting
+      - name: Success Reporting
         if: success()
         run: git log --format=fuller -5
