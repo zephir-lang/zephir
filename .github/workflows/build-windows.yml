@@ -172,13 +172,13 @@ jobs:
 
       - name: Compile Test Project
         run: |
-          .\zephir.bat compile ^
-            -Wnonexistent-function ^
-            -Wnonexistent-class ^
-            -Wunused-variable ^
-            -Wnonexistent-constant ^
-            -Wunreachable-code ^
-            -Wnot-supported-magic-constant ^
+          .\zephir.bat compile `
+            -Wnonexistent-function `
+            -Wnonexistent-class `
+            -Wunused-variable `
+            -Wnonexistent-constant `
+            -Wunreachable-code `
+            -Wnot-supported-magic-constant `
             -Wnon-valid-decrement
 
       - name: Make Test Extension
