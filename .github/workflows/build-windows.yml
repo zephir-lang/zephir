@@ -145,6 +145,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Setup GitHub Token
+        shell: bash
         run: |
           # To increase the GitHub rate limit we're use GitHub authentication
           if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then

@@ -40,10 +40,8 @@ jobs:
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys:
-            ${{ runner.os }}-composer-${{ env.cache-name }}-
+          restore-keys: |
             ${{ runner.os }}-composer-
-            ${{ runner.os }}-
 
       - name: Setup GitHub Token
         run: |
