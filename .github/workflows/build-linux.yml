@@ -77,8 +77,7 @@ jobs:
             xdebug.max_nesting_level=256
 
       - name: Set Environment Variables
-        run: |
-          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
+        run: echo ::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -111,7 +110,7 @@ jobs:
 
       - name: Get Zephir Parser Cache Key
         id: pcache
-        run: echo "::set-output name=key::$(echo -n ${ZEPHIR_PARSER_VERSION}_${CPUHASH})"
+        run: echo ::set-output name=key::$(echo -n ${ZEPHIR_PARSER_VERSION}_${CPUHASH})
 
       - name: Cache Zephir Parser
         uses: actions/cache@v1
@@ -125,7 +124,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
         uses: actions/cache@v1
@@ -140,8 +139,8 @@ jobs:
       - name: Setup Composer Token
         run: |
           # To increase the GitHub rate limit we're use GitHub authentication
-          if [ -n "${{ secrets.COMPOSER_TOKEN }}" ]; then
-            composer config github-oauth.github.com "${{ secrets.COMPOSER_TOKEN }}"
+          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
+            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
           fi
 
       - name: Install Project Dependencies
@@ -170,7 +169,7 @@ jobs:
           ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
 
       - name: Setup Problem Matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+        run: echo ::add-matcher::${{ runner.tool_cache }}/phpunit.json
 
       - name: Unit Testing
         run: .ci/run-tests.sh

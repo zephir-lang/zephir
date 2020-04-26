@@ -65,13 +65,13 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
-          echo "::set-env name=PHP_VERSION::$(php -r 'echo phpversion();')"
-          echo "::set-env name=PHP_MINOR::${{ matrix.php }}"
-          echo "::set-env name=TEST_PHP_EXECUTABLE::${env:PHPROOT}\php.exe"
-          echo "::set-env name=BUILD_TYPE::${{ matrix.build_type }}"
-          echo "::set-env name=VC_VERSION::${{ matrix.vc_num }}"
-          echo "::set-env name=PHP_ARCH::${{ matrix.arch }}"
+          echo ::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}
+          echo ::set-env name=PHP_VERSION::$(php -r 'echo phpversion();')
+          echo ::set-env name=PHP_MINOR::${{ matrix.php }}
+          echo ::set-env name=TEST_PHP_EXECUTABLE::${env:PHPROOT}\php.exe
+          echo ::set-env name=BUILD_TYPE::${{ matrix.build_type }}
+          echo ::set-env name=VC_VERSION::${{ matrix.vc_num }}
+          echo ::set-env name=PHP_ARCH::${{ matrix.arch }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -134,7 +134,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
         uses: actions/cache@v1
@@ -149,8 +149,8 @@ jobs:
       - name: Setup GitHub Token
         run: |
           # To increase the GitHub rate limit we're use GitHub authentication
-          if [ -n "${{ secrets.COMPOSER_TOKEN }}" ]; then
-            composer config github-oauth.github.com "${{ secrets.COMPOSER_TOKEN }}"
+          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
+            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
           fi
 
       - name: Install Project Dependencies
@@ -172,7 +172,15 @@ jobs:
           # .\zephir.bat api
 
       - name: Compile Test Project
-        run: .\zephir.bat compile -Wnonexistent-function -Wnonexistent-class -Wunused-variable -Wnonexistent-constant -Wunreachable-code -Wnot-supported-magic-constant -Wnon-valid-decrement
+        run: |
+          .\zephir.bat compile \
+            -Wnonexistent-function \
+            -Wnonexistent-class \
+            -Wunused-variable \
+            -Wnonexistent-constant \
+            -Wunreachable-code \
+            -Wnot-supported-magic-constant \
+            -Wnon-valid-decrement
 
       - name: Make Test Extension
         shell: cmd
