@@ -33,7 +33,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
         uses: actions/cache@v1
@@ -48,8 +48,8 @@ jobs:
       - name: Setup GitHub Token
         run: |
           # To increase the GitHub rate limit we're use GitHub authentication
-          if [ -n "${{ secrets.COMPOSER_TOKEN }}" ]; then
-            composer config github-oauth.github.com "${{ secrets.COMPOSER_TOKEN }}"
+          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
+            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
           fi
 
       - name: Install Project Dependencies
