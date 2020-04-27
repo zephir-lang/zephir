@@ -27,6 +27,10 @@ zend_class_entry *typehints_args_ce;
 zend_class_entry *typehints_both_ce;
 zend_class_entry *typehints_retval_ce;
 
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+#endif
+
 ZEND_DECLARE_MODULE_GLOBALS(typehints)
 
 PHP_INI_BEGIN()
@@ -85,9 +89,6 @@ static void php_zephir_init_module_globals(zend_typehints_globals *typehints_glo
 static PHP_RINIT_FUNCTION(typehints)
 {
 	zend_typehints_globals *typehints_globals_ptr;
-#ifdef ZTS
-	tsrm_ls = ts_resource(0);
-#endif
 	typehints_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(typehints_globals_ptr);
@@ -125,6 +126,10 @@ static PHP_MINFO_FUNCTION(typehints)
 
 static PHP_GINIT_FUNCTION(typehints)
 {
+#ifdef ZTS
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
 	php_zephir_init_globals(typehints_globals);
 	php_zephir_init_module_globals(typehints_globals);
 }
