@@ -216,6 +216,10 @@ zend_class_entry *test_unsettest_ce;
 zend_class_entry *test_usetest_ce;
 zend_class_entry *test_vars_ce;
 
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+#endif
+
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
 PHP_INI_BEGIN()
@@ -481,9 +485,6 @@ static void php_zephir_init_module_globals(zend_test_globals *test_globals TSRML
 static PHP_RINIT_FUNCTION(test)
 {
 	zend_test_globals *test_globals_ptr;
-#ifdef ZTS
-	tsrm_ls = ts_resource(0);
-#endif
 	test_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(test_globals_ptr);
@@ -533,6 +534,10 @@ static PHP_MINFO_FUNCTION(test)
 
 static PHP_GINIT_FUNCTION(test)
 {
+#ifdef ZTS
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
 	php_zephir_init_globals(test_globals);
 	php_zephir_init_module_globals(test_globals);
 }
