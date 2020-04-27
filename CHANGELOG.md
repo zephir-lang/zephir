@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+- Fixed duplicate definition with GCC 10
+  [ice/framework#266](https://github.com/ice/framework/pull/266)
 
 ## [0.12.18] - 2020-04-25
 ### Fixed
