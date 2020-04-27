@@ -1,7 +1,7 @@
 # [![Zephir][zephir logo]][web site]
 
-[![Build on Linux][actions lin badge]][actions link]
-[![Build on Windows][actions win badge]][actions link]
+[![Build on Linux][actions unix]][actions link]
+[![Build on Windows][actions windows]][actions link]
 [![Latest Stable Version][version badge]][packagist link]
 [![MIT License][license badge]](./LICENSE)
 
@@ -53,8 +53,8 @@ Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for mor
 [zephir logo]: https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
 [web site]: https://zephir-lang.com
 [actions link]: https://github.com/phalcon/zephir/actions
-[actions lin badge]: https://github.com/phalcon/zephir/workflows/Linux%20CI/badge.svg
-[actions win badge]: https://github.com/phalcon/zephir/workflows/Windows%20CI/badge.svg
+[actions unix]: https://github.com/phalcon/zephir/workflows/Unix%20CI/badge.svg
+[actions windows]: https://github.com/phalcon/zephir/workflows/Windows%20CI/badge.svg
 [version badge]: https://poser.pugx.org/phalcon/zephir/v/stable.svg
 [packagist link]: https://packagist.org/packages/phalcon/zephir
 [license badge]: https://poser.pugx.org/phalcon/zephir/license.svg

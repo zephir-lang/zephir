@@ -26,7 +26,7 @@ jobs:
       matrix:
         os:
           - ubuntu-18.04
-          - macos-latest
+          # - macos-latest
 
         php:
           - '7.0'
@@ -109,9 +109,9 @@ jobs:
           sudo rm -f /etc/apt/sources.list.d/dotnetdev.list
           sudo rm -f /etc/apt/sources.list.d/azure*.list
 
-      - name: Install System Dependencies (macOS)
-        if: startsWith(runner.os, 'macOS')
-        run: brew install re2c
+      # - name: Install System Dependencies (macOS)
+      #   if: startsWith(runner.os, 'macOS')
+      #   run: brew install re2c
 
       - name: Install System Dependencies (Linux)
         if: startsWith(runner.os, 'Linux')
@@ -167,15 +167,15 @@ jobs:
           zephir stubs
           zephir api
 
-      - name: Compile Test Project (macOS)
-        if: startsWith(runner.os, 'macOS')
-        run: |
-          # These variables are needed to produce non optimized code
-          CFLAGS="-O0 -g"
-          CXXFLAGS="-O0 -g"
+      # - name: Compile Test Project (macOS)
+      #   if: startsWith(runner.os, 'macOS')
+      #   run: |
+      #     # These variables are needed to produce non optimized code
+      #     CFLAGS="-O0 -g"
+      #     CXXFLAGS="-O0 -g"
 
-          # Export variables in the subshell to not shadow global variables
-          ( export CFLAGS CXXFLAGS; zephir compile ) || false
+      #     # Export variables in the subshell to not shadow global variables
+      #     ( export CFLAGS CXXFLAGS; zephir compile ) || false
 
       - name: Compile Test Project (Linux)
         if: startsWith(runner.os, 'Linux')
