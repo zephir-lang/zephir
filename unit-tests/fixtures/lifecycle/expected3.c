@@ -28,6 +28,10 @@
 
 zend_class_entry *lifecycle_test_ce;
 
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+#endif
+
 ZEND_DECLARE_MODULE_GLOBALS(lifecycle)
 
 PHP_INI_BEGIN()
@@ -86,9 +90,6 @@ static void php_zephir_init_module_globals(zend_lifecycle_globals *lifecycle_glo
 static PHP_RINIT_FUNCTION(lifecycle)
 {
 	zend_lifecycle_globals *lifecycle_globals_ptr;
-#ifdef ZTS
-	tsrm_ls = ts_resource(0);
-#endif
 	lifecycle_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(lifecycle_globals_ptr);
@@ -130,6 +131,10 @@ static PHP_MINFO_FUNCTION(lifecycle)
 
 static PHP_GINIT_FUNCTION(lifecycle)
 {
+#ifdef ZTS
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
 	php_zephir_init_globals(lifecycle_globals);
 	php_zephir_init_module_globals(lifecycle_globals);
 }
