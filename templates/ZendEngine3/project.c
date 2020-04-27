@@ -25,6 +25,10 @@
 
 %CLASS_ENTRIES%
 
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+#endif
+
 ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
 
 PHP_INI_BEGIN()
@@ -80,9 +84,6 @@ static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJEC
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals_ptr;
-#ifdef ZTS
-	tsrm_ls = ts_resource(0);
-#endif
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr);
@@ -120,6 +121,10 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
+#ifdef ZTS
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
 	php_zephir_init_globals(%PROJECT_LOWER%_globals);
 	php_zephir_init_module_globals(%PROJECT_LOWER%_globals);
 }
