@@ -25,10 +25,6 @@
 
 %CLASS_ENTRIES%
 
-#ifdef ZTS
-ZEND_TSRMLS_CACHE_DEFINE()
-#endif
-
 ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
 
 PHP_INI_BEGIN()
@@ -121,7 +117,7 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
-#ifdef ZTS
+#if defined(COMPILE_DL_%PROJECT_UPPER%) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
@@ -171,6 +167,10 @@ zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
 	STANDARD_MODULE_PROPERTIES_EX
 };
 
+/* implement standard "stub" routine to introduce ourselves to Zend */
 #ifdef COMPILE_DL_%PROJECT_UPPER%
+# ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+# endif
 ZEND_GET_MODULE(%PROJECT_LOWER_SAFE%)
 #endif
