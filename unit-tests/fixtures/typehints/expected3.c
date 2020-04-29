@@ -27,10 +27,6 @@ zend_class_entry *typehints_args_ce;
 zend_class_entry *typehints_both_ce;
 zend_class_entry *typehints_retval_ce;
 
-#ifdef ZTS
-ZEND_TSRMLS_CACHE_DEFINE()
-#endif
-
 ZEND_DECLARE_MODULE_GLOBALS(typehints)
 
 PHP_INI_BEGIN()
@@ -126,7 +122,7 @@ static PHP_MINFO_FUNCTION(typehints)
 
 static PHP_GINIT_FUNCTION(typehints)
 {
-#ifdef ZTS
+#if defined(COMPILE_DL_TYPEHINTS) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
@@ -366,6 +362,10 @@ zend_module_entry typehints_module_entry = {
 	STANDARD_MODULE_PROPERTIES_EX
 };
 
+/* implement standard "stub" routine to introduce ourselves to Zend */
 #ifdef COMPILE_DL_TYPEHINTS
+# ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+# endif
 ZEND_GET_MODULE(typehints)
 #endif

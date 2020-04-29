@@ -28,10 +28,6 @@
 
 zend_class_entry *lifecycle_test_ce;
 
-#ifdef ZTS
-ZEND_TSRMLS_CACHE_DEFINE()
-#endif
-
 ZEND_DECLARE_MODULE_GLOBALS(lifecycle)
 
 PHP_INI_BEGIN()
@@ -131,7 +127,7 @@ static PHP_MINFO_FUNCTION(lifecycle)
 
 static PHP_GINIT_FUNCTION(lifecycle)
 {
-#ifdef ZTS
+#if defined(COMPILE_DL_LIFECYCLE) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
@@ -182,6 +178,10 @@ zend_module_entry lifecycle_module_entry = {
 	STANDARD_MODULE_PROPERTIES_EX
 };
 
+/* implement standard "stub" routine to introduce ourselves to Zend */
 #ifdef COMPILE_DL_LIFECYCLE
+# ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+# endif
 ZEND_GET_MODULE(lifecycle)
 #endif

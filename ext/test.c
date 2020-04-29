@@ -216,10 +216,6 @@ zend_class_entry *test_unsettest_ce;
 zend_class_entry *test_usetest_ce;
 zend_class_entry *test_vars_ce;
 
-#ifdef ZTS
-ZEND_TSRMLS_CACHE_DEFINE()
-#endif
-
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
 PHP_INI_BEGIN()
@@ -534,7 +530,7 @@ static PHP_MINFO_FUNCTION(test)
 
 static PHP_GINIT_FUNCTION(test)
 {
-#ifdef ZTS
+#if defined(COMPILE_DL_TEST) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
@@ -633,6 +629,10 @@ zend_module_entry test_module_entry = {
 	STANDARD_MODULE_PROPERTIES_EX
 };
 
+/* implement standard "stub" routine to introduce ourselves to Zend */
 #ifdef COMPILE_DL_TEST
+# ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+# endif
 ZEND_GET_MODULE(test)
 #endif
