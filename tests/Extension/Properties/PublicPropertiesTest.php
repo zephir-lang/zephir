@@ -47,19 +47,4 @@ class PublicPropertiesTest extends TestCase
         $test = new ExtendsPublicProperties();
         $this->assertSame($test->getSomeGetterSetterArray(), ['holy']);
     }
-
-    /**
-     * @see https://github.com/phalcon/zephir/issues/2089
-     */
-    public function test2089Issue()
-    {
-        $extend = new class() extends PublicProperties
-        {
-            protected $someGetterSetterArray = [
-                'key' => 'value'
-            ];
-        };
-
-        $this->assertSame($extend->getSomeGetterSetterArray(), ['key' => 'value']);
-    }
 }

@@ -13,6 +13,13 @@ namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
 
+class ExtendsProtectedProperties extends ProtectedProperties
+{
+    protected $someArrayVar = [
+        'key' => 'value'
+    ];
+}
+
 class ProtectedPropertiesTest extends TestCase
 {
     public function testAssertations()
@@ -29,5 +36,17 @@ class ProtectedPropertiesTest extends TestCase
 
         $test->setSomeVar(($rand = rand(1, 1000) * 100));
         $this->assertSame($test->getSomeVar(), $rand);
+    }
+
+    /**
+     * @see https://github.com/phalcon/zephir/issues/2089
+     */
+    public function test2089Issue()
+    {
+        $extend = new ExtendsProtectedProperties();
+        $this->assertSame($extend->getSomeArrayVar(), ['key' => 'value']);
+
+        $extend->setSomeArrayVar(['key' => 'value']);
+        $this->assertSame($extend->getSomeArrayVar(), ['key' => 'value']);
     }
 }

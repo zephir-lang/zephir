@@ -41,6 +41,8 @@ class ProtectedProperties
 
 	protected someVar {set, get};
 
+	protected someArrayVar = [] { set, get };
+
 	public function getSomeNull()
 	{
 		return this->someNull;
