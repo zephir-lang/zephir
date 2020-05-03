@@ -72,6 +72,7 @@ final class AliasManager
      * Returns alias by fully qualified class name.
      *
      * @param string $className - fully qualified class name
+     *
      * @return string
      */
     public function getAliasForClassName(string $className): string
