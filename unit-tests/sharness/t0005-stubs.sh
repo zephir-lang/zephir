@@ -50,4 +50,8 @@ test_expect_success "Should generage CamelCase folders for stubs" \
 test_expect_success "Should properly generate return type for Collections" \
   "test_cmp expected/Issue_2026.zep.php ide/0.0.1/Stubs/Issue_2026.zep.php"
 
+# See: https://github.com/phalcon/zephir/issues/2092
+test_expect_success "Should properly generate return type for type hinted object" \
+  "test_cmp expected/Issue_2092.zep.php ide/0.0.1/Stubs/Issue_2092.zep.php"
+
 test_done
