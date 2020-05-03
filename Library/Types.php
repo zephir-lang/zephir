@@ -312,7 +312,8 @@ final class Types
      */
     private function isNullable(array $types): bool
     {
-        return \array_key_exists(static::T_NULL, $types)
+        return (\array_key_exists(static::T_NULL, $types)
+            || \in_array(static::T_NULL, $types))
             && 1 !== \count($types);
     }
 
