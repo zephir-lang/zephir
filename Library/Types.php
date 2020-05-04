@@ -40,6 +40,7 @@ final class Types
      * Gets PHP compatible return type from class method.
      *
      * @param ClassMethod $method
+     * @param array|null  $returnTypes
      *
      * @return string
      */
@@ -49,6 +50,7 @@ final class Types
             return '';
         }
 
+        $isProcessedReturnType = null !== $returnTypes;
         $returnTypes = $returnTypes ?? $method->getReturnTypes();
         $typesCount = \count($returnTypes);
 
@@ -119,6 +121,16 @@ final class Types
 
         if ($isTypeHinted && !$isBasicTypes && !$isDynamic) {
             return implode('|', array_keys($returnTypes));
+        }
+
+        if ($isTypeHinted && $isProcessedReturnType) {
+            $withoutNullable = array_filter(array_values($returnTypes), static function ($ret) {
+                if ($ret !== static::T_NULL) {
+                    return $ret;
+                }
+            });
+
+            return implode('|', array_values($withoutNullable)).$nullableType;
         }
 
         if ($isCollection) {
@@ -312,7 +324,8 @@ final class Types
      */
     private function isNullable(array $types): bool
     {
-        return \array_key_exists(static::T_NULL, $types)
+        return (\array_key_exists(static::T_NULL, $types)
+            || \in_array(static::T_NULL, $types))
             && 1 !== \count($types);
     }
 
