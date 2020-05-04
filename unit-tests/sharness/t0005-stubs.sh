@@ -15,7 +15,7 @@ zephir_stubs() {
 }
 
 # Some stubs test requires PHP >= 7.1
-if [ $PHP_VERSION_ID -lt 71000 ]; then
+if [ "$PHP_VERSION_ID" -lt "71000" ]; then
   test_set_prereq PHP70
 fi
 
@@ -57,6 +57,9 @@ test_expect_success "Should properly generate return type for Collections" \
 
 if test_have_prereq PHP70; then
   say 'skipping generation stubs tests with return types not supported in PHP 7.0.x'
+  cat ide/0.0.1/Stubs/Issue_2092.zep.php
+  test_expect_success "Should properly generate return type for type hinted object" \
+    "test_cmp expected/Issue_2092_PHP70.zep.php ide/0.0.1/Stubs/Issue_2092.zep.php"
 else
   # See: https://github.com/phalcon/zephir/issues/2092
   test_expect_success "Should properly generate return type for type hinted object" \
