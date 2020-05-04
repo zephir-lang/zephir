@@ -15,7 +15,7 @@ zephir_stubs() {
 }
 
 # Some stubs test requires PHP >= 7.1
-if [ "$PHP_VERSION_ID" -lt "71000" ]; then
+if [ "$PHP_VERSION_ID" -lt "70100" ]; then
   test_set_prereq PHP70
 fi
 
