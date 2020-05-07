@@ -14,6 +14,11 @@ zephir_stubs() {
   zephirc stubs --no-ansi 2>&1 >/dev/null
 }
 
+# Some stubs test requires PHP >= 7.1
+if [ "$PHP_VERSION_ID" -lt "70100" ]; then
+  test_set_prereq PHP70
+fi
+
 # This test generates Stubs once and all other tests uses this build artifacts
 test_expect_success "Should generate Stubs" \
   "zephir_stubs && test -d ./ide/0.0.1/Stubs"
@@ -49,5 +54,14 @@ test_expect_success "Should generage CamelCase folders for stubs" \
 # See: https://github.com/phalcon/zephir/issues/2026
 test_expect_success "Should properly generate return type for Collections" \
   "test_cmp expected/Issue_2026.zep.php ide/0.0.1/Stubs/Issue_2026.zep.php"
+
+if test_have_prereq PHP70; then
+  expected="Issue_2092_PHP70.zep.php"
+else
+  expected="Issue_2092.zep.php"
+fi
+# See: https://github.com/phalcon/zephir/issues/2092
+test_expect_success "Should properly generate return type for type hinted object" \
+  "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_2092.zep.php"
 
 test_done

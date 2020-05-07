@@ -180,6 +180,10 @@ class MethodDocBlockTest extends TestCase
                 '@return var|array - some description of var',
                 '@return mixed|array - some description of var',
             ],
+            'with mixed in @return' => [
+                '@return ManagerInterface|null - some description',
+                '@return ManagerInterface|null - some description',
+            ],
             'with many params and Exception' => [
                 // Zep
                 "Test for full filled Method\n".
@@ -188,7 +192,7 @@ class MethodDocBlockTest extends TestCase
                 "* @param int \$val1\n".
                 "* @param callback callback\n".
                 "* @param array \$val3\n".
-                "* @param string \$val2 - with additional descrription\n".
+                "* @param string \$val2 - with additional description\n".
                 "* @throws \Zephir\Compiler\CompilerException",
                 // Php
                 "Test for full filled Method\n".
@@ -197,7 +201,7 @@ class MethodDocBlockTest extends TestCase
                 " * @param int \$val1\n".
                 " * @param callback \$callback\n".
                 " * @param array \$val3\n".
-                " * @param string \$val2 - with additional descrription\n".
+                " * @param string \$val2 - with additional description\n".
                 " * @throws \Zephir\Compiler\CompilerException",
             ],
             'with function scalar input args' => [
