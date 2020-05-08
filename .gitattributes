@@ -2,9 +2,8 @@
 
 prototypes/*            linguist-vendored
 
+ext/*                   linguist-vendored
 tests/*                 linguist-vendored
-unit-tests/*            linguist-vendored
-unit-tests/fixtures/*   linguist-vendored
 
 *.xml.dist              text eol=lf linguist-language=XML
 *.json.dist             text eol=lf linguist-language=JSON

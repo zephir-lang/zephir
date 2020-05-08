@@ -1,5 +1,5 @@
 {
-  "namespace": "test",
+  "namespace": "stub",
   "name": "Test Extension",
   "description": "Description <b>test</b> for<br\/>Test Extension.",
   "author": "Phalcon Team and contributors",

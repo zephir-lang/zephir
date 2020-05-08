@@ -11,7 +11,8 @@
     <exclude-pattern>ide/*</exclude-pattern>
     <exclude-pattern>ext/*</exclude-pattern>
     <exclude-pattern>prototypes/*</exclude-pattern>
-    <exclude-pattern>unit-tests/*</exclude-pattern>
+    <exclude-pattern>stub/*</exclude-pattern>
+    <exclude-pattern>tests/*</exclude-pattern>
     <exclude-pattern>vendor/*</exclude-pattern>
 
     <!-- Code Size -->

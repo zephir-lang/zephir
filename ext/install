@@ -33,7 +33,7 @@ fi
 
 ${phpize} --silent
 
-./configure --silent --enable-test CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+./configure --silent --enable-stub CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 
 make -s
 $sudo make -s install

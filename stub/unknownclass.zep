@@ -1,0 +1,6 @@
+
+namespace Stub;
+
+class UnknownClass
+{
+}

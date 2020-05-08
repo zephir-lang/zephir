@@ -11,21 +11,21 @@
     <testsuites>
         <testsuite name="Extension_Php70">
             <!-- PHP >= 7.0 && < 7.2  -->
-            <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php56</exclude>
-            <exclude>unit-tests/Extension/Php72</exclude>
+            <directory suffix=".php">./tests/Extension</directory>
+            <exclude>tests/Extension/Php56</exclude>
+            <exclude>tests/Extension/Php72</exclude>
         </testsuite>
 
         <testsuite name="Extension_Php72">
             <!-- PHP >= 7.2  -->
-            <directory suffix=".php">./unit-tests/Extension</directory>
-            <exclude>unit-tests/Extension/Php56</exclude>
-            <exclude>unit-tests/Extension/Php70</exclude>
+            <directory suffix=".php">./tests/Extension</directory>
+            <exclude>tests/Extension/Php56</exclude>
+            <exclude>tests/Extension/Php70</exclude>
         </testsuite>
 
         <testsuite name="Zephir">
-            <directory suffix=".php">./unit-tests/Zephir</directory>
-            <exclude>unit-tests/Zephir/Test/KernelTestCase.php</exclude>
+            <directory suffix=".php">./tests/Zephir</directory>
+            <exclude>tests/Zephir/Test/KernelTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
@@ -42,16 +42,16 @@
         <ini name="display_startup_errors" value="on"/>
         <ini name="error_reporting" value="-1"/>
 
-        <const name="TESTS_PATH" value="./unit-tests"/>
-        <const name="DATA_PATH" value="./unit-tests/Data"/>
-        <const name="FIXTURES_PATH" value="./unit-tests/fixtures"/>
+        <const name="TESTS_PATH" value="./tests"/>
+        <const name="DATA_PATH" value="./tests/Data"/>
+        <const name="FIXTURES_PATH" value="./tests/fixtures"/>
         <const name="ZEPHIRPATH" value="./"/>
 
         <server name="KERNEL_CLASS" value="Zephir\DependencyInjection\ZephirKernel" />
     </php>
 
     <logging>
-        <log type="coverage-clover" target="./unit-tests/output/clover.xml"/>
-        <!-- log type="coverage-html" target="./unit-tests/output/html"/-->
+        <log type="coverage-clover" target="./tests/output/clover.xml"/>
+        <!-- log type="coverage-html" target="./tests/output/html"/-->
     </logging>
 </phpunit>

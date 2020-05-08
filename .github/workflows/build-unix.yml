@@ -177,7 +177,7 @@ jobs:
       #     # Export variables in the subshell to not shadow global variables
       #     ( export CFLAGS CXXFLAGS; zephir compile ) || false
 
-      - name: Compile Test Project (Linux)
+      - name: Compile Stub Project (Linux)
         if: startsWith(runner.os, 'Linux')
         run: |
           # These variables are needed to produce non optimized code as well as for code coverage
@@ -196,7 +196,7 @@ jobs:
 
       - name: Black-box Testing
         if: always()
-        run: cd unit-tests/sharness && PHP=$(which php) make
+        run: cd tests/sharness && PHP=$(which php) make
 
       - name: After Failure
         if: failure()
