@@ -141,8 +141,8 @@ class MCallTest extends TestCase
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('Test\Oo\Param', $this->test->objectParamCastOoParam(new \Stub\Oo\Param()));
+        $this->assertSame('Stub\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
+        $this->assertInstanceOf('Stub\Oo\Param', $this->test->objectParamCastOoParam(new \Stub\Oo\Param()));
     }
 
     /**

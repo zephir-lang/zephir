@@ -30,7 +30,7 @@ class GeneratorTest extends TestCase
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
         $this->testClass = new Generator([]);
-        $this->classDefinition = new ClassDefinition('Test\Stubs', 'StubsBuildClass');
+        $this->classDefinition = new ClassDefinition('Stub\Stubs', 'StubsBuildClass');
     }
 
     /**
@@ -89,8 +89,8 @@ DOC;
 
         $buildClass = $this->getMethod('buildClass');
 
-        $extendsClassDefinition = new ClassDefinition('Test\Extendable', 'BaseTestClass');
-        $implementClassDefinition = new ClassDefinition('Test\Events', 'EventsManagerInterface');
+        $extendsClassDefinition = new ClassDefinition('Stub\Extendable', 'BaseTestClass');
+        $implementClassDefinition = new ClassDefinition('Stub\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
 
         // Definitions
@@ -154,10 +154,10 @@ DOC;
         $aliasManager->add([
             'aliases' => [
                 [
-                    'name' => 'Test\\Extendable\\BaseTestClass',
+                    'name' => 'Stub\\Extendable\\BaseTestClass',
                 ],
                 [
-                    'name' => 'Test\\Events\\EventInterface',
+                    'name' => 'Stub\\Events\\EventInterface',
                     'alias' => 'EventsManagerInterface',
                 ],
             ],
@@ -177,7 +177,7 @@ DOC;
                 'value' => '\Iterator',
             ],
             [
-                'value' => 'Test\\Events\\EventInterface',
+                'value' => 'Stub\\Events\\EventInterface',
             ],
         ]);
         $this->classDefinition->setMethod('init', $classMethod);

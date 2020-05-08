@@ -25,8 +25,8 @@ class OoParamsTest extends TestCase
 
     public function testOoParams()
     {
-        $this->assertInstanceOf('Test\Oo\OoParams', $this->test->createThisClassWithoutWriteCurrentNamespace());
-        $this->assertinstanceOf('Test\Oo\OoDynamicA', $this->test->createOtherClassWithoutWriteCurrentNamespace());
+        $this->assertInstanceOf('Stub\Oo\OoParams', $this->test->createThisClassWithoutWriteCurrentNamespace());
+        $this->assertinstanceOf('Stub\Oo\OoDynamicA', $this->test->createOtherClassWithoutWriteCurrentNamespace());
 
         $this->assertSame($this->test->setAge(17), 17);
         $this->assertSame($this->test->setAge('17'), 17);
@@ -55,6 +55,6 @@ class OoParamsTest extends TestCase
     {
         $result = $this->test->setStrictName(new \Stub\Oo\Param());
 
-        $this->assertInstanceOf('Test\Oo\Param', $result);
+        $this->assertInstanceOf('Stub\Oo\Param', $result);
     }
 }

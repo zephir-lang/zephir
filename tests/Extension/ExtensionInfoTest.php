@@ -28,11 +28,11 @@ class ExtensionInfoTest extends TestCase
             ['Test variable => Value', true],
             ['extension.test_ini_variable => On => On', true],
             ['ini-entry.my_setting_1', true],
-            ['test.db.my_setting_1', true],
-            ['test.orm.cache_enable', true],
-            ['test.test.my_setting_1', false],
-            ['test.test.test_setting_1', false],
-            ['test.test.', false],
+            ['stub.db.my_setting_1', true],
+            ['stub.orm.cache_enable', true],
+            ['stub.test.my_setting_1', false],
+            ['stub.test.test_setting_1', false],
+            ['stub.test.', false],
         ];
     }
 

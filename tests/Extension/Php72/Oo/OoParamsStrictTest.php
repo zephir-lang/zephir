@@ -33,7 +33,7 @@ class OoParamsStrictTest extends TestCase
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
-            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictAge\(\) '.
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictAge\(\) '.
             'must be of the type int(eger)?, float given/'
         );
 
@@ -47,7 +47,7 @@ class OoParamsStrictTest extends TestCase
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
-            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictAge\(\) '.
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictAge\(\) '.
             'must be of the type int(eger)?, string given/'
         );
 
@@ -59,7 +59,7 @@ class OoParamsStrictTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
-            'Argument 1 passed to Test\Oo\OoParams::setStrictAverage() must be of the type float, string given'
+            'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given'
         );
 
         $this->test->setStrictAverage('17');
@@ -72,7 +72,7 @@ class OoParamsStrictTest extends TestCase
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
-            '/Argument 1 passed to Test\\\Oo\\\OoParams::setStrictName\(\) '.
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictName\(\) '.
             'must be of the type string, int(eger)? given/'
         );
 

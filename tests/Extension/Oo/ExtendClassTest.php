@@ -34,7 +34,7 @@ class ExtendClassTest extends TestCase
         $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
-        $this->assertInstanceof('Test\\PdoStatement', $stmt);
+        $this->assertInstanceof('Stub\\PdoStatement', $stmt);
     }
 
     /**
@@ -58,7 +58,7 @@ class ExtendClassTest extends TestCase
      */
     public function shouldCorrectWorkWithLateStaticBinding()
     {
-        $this->assertSame('Test\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
+        $this->assertSame('Stub\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
     }
 
     /**

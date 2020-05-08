@@ -40,7 +40,7 @@ class ConstantsTest extends TestCase
         $this->assertSame(Constants::C4, 10);
         $this->assertSame(Constants::C5, 10.25);
         $this->assertSame(Constants::C6, 'test');
-        $this->assertSame(Constants::className, 'Test\Constants');
+        $this->assertSame(Constants::className, 'Stub\Constants');
         $this->assertSame(Constants::STD_PROP_LIST, \ArrayObject::STD_PROP_LIST);
     }
 
@@ -74,14 +74,14 @@ class ConstantsTest extends TestCase
 
     public function testMagickConstants()
     {
-        $this->assertSame($this->test->testNamespaceMagicConstant(), 'Test');
-        $this->assertSame($this->test->testClassMagicConstant(), 'Test\Constants');
+        $this->assertSame($this->test->testNamespaceMagicConstant(), 'Stub');
+        $this->assertSame($this->test->testClassMagicConstant(), 'Stub\Constants');
 
         $this->assertSame($this->test->testMethodMagicConstant(), 'Constants:testMethodMagicConstant');
         $this->assertSame($this->test->testFunctionMagicConstant(), 'testFunctionMagicConstant');
 
-        $this->assertSame(ConstantsInterface::CLASSNAME, 'Test\Oo\ConstantsInterface');
-        $this->assertSame(ConstantsInterface::NAMESPACENAME, 'Test\Oo');
+        $this->assertSame(ConstantsInterface::CLASSNAME, 'Stub\Oo\ConstantsInterface');
+        $this->assertSame(ConstantsInterface::NAMESPACENAME, 'Stub\Oo');
     }
 
     /**

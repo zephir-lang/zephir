@@ -51,19 +51,19 @@ class OoTest extends TestCase
 
         $obj9 = $test->testInstance9();
         $this->assertInternalType('object', $obj9);
-        $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj9);
+        $this->assertInstanceOf('Stub\Oo\OoDynamicA', $obj9);
 
         $obj10 = $test->testInstance10();
         $this->assertInternalType('object', $obj10);
-        $this->assertInstanceOf('Test\Oo\OoDynamicB', $obj10);
+        $this->assertInstanceOf('Stub\Oo\OoDynamicB', $obj10);
 
         $obj = $test->testInstance11();
         $this->assertInternalType('object', $obj);
-        $this->assertInstanceOf('Test\Oo\OoConstructParams', $obj);
+        $this->assertInstanceOf('Stub\Oo\OoConstructParams', $obj);
 
         $obj12 = $test->testInstance12();
         $this->assertInternalType('object', $obj12);
-        $this->assertInstanceOf('Test\Oo\OoDynamicA', $obj12);
+        $this->assertInstanceOf('Stub\Oo\OoDynamicA', $obj12);
     }
 
     /**

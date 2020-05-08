@@ -27,7 +27,7 @@ class MCallTest extends TestCase
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : bool
             // PHP 7.2 : boolean
-            '/Argument 1 passed to Test\\\Mcall::optionalParameterBoolean\(\) '.
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
             'must be of the type bool(ean)?, string given/'
         );
 
@@ -43,7 +43,7 @@ class MCallTest extends TestCase
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : bool
             // PHP 7.2 : boolean
-            '/Argument 1 passed to Test\\\Mcall::optionalParameterBoolean\(\) '.
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
             'must be of the type bool(ean)?, array given/'
         );
 
