@@ -72,7 +72,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Zephir\\Test\\": "tests/Zephir/Test/",
+            "Zephir\\Test\\": "tests/Zephir/",
             "Extension\\": "tests/Extension/"
         },
         "classmap": [

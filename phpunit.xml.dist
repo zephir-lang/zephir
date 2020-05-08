@@ -25,7 +25,7 @@
 
         <testsuite name="Zephir">
             <directory suffix=".php">./tests/Zephir</directory>
-            <exclude>tests/Zephir/Test/KernelTestCase.php</exclude>
+            <exclude>tests/Zephir/KernelTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
