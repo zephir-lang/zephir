@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Issue1404;
+use Stub\Issue1404;
 
 /**
  * Extension\Optimizers\IsPhpVersionTest.

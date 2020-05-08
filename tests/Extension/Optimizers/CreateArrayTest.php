@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\CreateArray;
+use Stub\Optimizers\CreateArray;
 
 class CreateArrayTest extends TestCase
 {

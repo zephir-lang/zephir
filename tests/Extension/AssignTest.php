@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Assign;
+use Stub\Assign;
 
 class AssignTest extends TestCase
 {

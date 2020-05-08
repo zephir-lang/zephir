@@ -12,8 +12,8 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Constants;
-use Test\Oo\ConstantsInterface;
+use Stub\Constants;
+use Stub\Oo\ConstantsInterface;
 
 class ConstantsTest extends TestCase
 {

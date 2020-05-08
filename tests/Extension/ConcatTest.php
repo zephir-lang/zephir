@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Concat;
+use Stub\Concat;
 
 class ConcatTest extends TestCase
 {

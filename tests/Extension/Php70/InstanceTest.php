@@ -12,7 +12,7 @@
 namespace Extension\Php70;
 
 use PHPUnit\Framework\TestCase;
-use Test\Instance;
+use Stub\Instance;
 
 class InstanceTest extends TestCase
 {

@@ -13,7 +13,7 @@ namespace Extension\BuiltIn;
 
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
-use Test\BuiltIn\StringMethods;
+use Stub\BuiltIn\StringMethods;
 
 class StringMethodTest extends TestCase
 {

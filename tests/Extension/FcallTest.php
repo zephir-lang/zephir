@@ -12,8 +12,8 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Fcall;
-use Test\Oo\PropertyAccess;
+use Stub\Fcall;
+use Stub\Oo\PropertyAccess;
 
 class UserExample extends PropertyAccess
 {
@@ -113,8 +113,8 @@ class FcallTest extends TestCase
     public function testFunctionDeclaration()
     {
         $this->assertSame('aaaaa', \Stub\zephir_namespaced_method_test('a'));
-        $this->assertTrue(\Test\test_call_relative_object_hint(new PropertyAccess()));
-        $this->assertTrue(\Test\test_call_object_hint(new PropertyAccess()));
+        $this->assertTrue(\Stub\test_call_relative_object_hint(new PropertyAccess()));
+        $this->assertTrue(\Stub\test_call_object_hint(new PropertyAccess()));
 
         $this->assertSame('ab', zephir_global_method_test('ab/c'));
 

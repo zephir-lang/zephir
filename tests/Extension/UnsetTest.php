@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Unsettest as UnsetTestExt;
+use Stub\Unsettest as UnsetTestExt;
 
 class UnsetTest extends TestCase
 {

@@ -12,8 +12,8 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
-use Test\Properties\App;
-use Test\Properties\StaticPrivateProperties;
+use Stub\Properties\App;
+use Stub\Properties\StaticPrivateProperties;
 
 class StaticPrivatePropertiesTest extends TestCase
 {

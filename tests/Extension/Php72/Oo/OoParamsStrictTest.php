@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Extension\Php72\Oo;
 
 use PHPUnit\Framework\TestCase;
-use Test\Oo\OoParams;
+use Stub\Oo\OoParams;
 
 class OoParamsStrictTest extends TestCase
 {

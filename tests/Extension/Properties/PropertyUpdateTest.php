@@ -12,7 +12,7 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
-use Test\Properties\PropertyUpdate;
+use Stub\Properties\PropertyUpdate;
 
 class PropertyUpdateTest extends TestCase
 {

@@ -12,8 +12,8 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
-use Test\Properties\ExtendsPublicProperties;
-use Test\Properties\PublicProperties;
+use Stub\Properties\ExtendsPublicProperties;
+use Stub\Properties\PublicProperties;
 
 class PublicPropertiesTest extends TestCase
 {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Extension\Php72;
 
 use PHPUnit\Framework\TestCase;
-use Test\Mcall;
+use Stub\Mcall;
 
 class MCallTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\McallDynamic;
+use Stub\McallDynamic;
 
 class MCallDynamicTest extends TestCase
 {

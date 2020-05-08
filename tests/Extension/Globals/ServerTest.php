@@ -12,7 +12,7 @@
 namespace Extension\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\Server;
+use Stub\Globals\Server;
 
 class ServerTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Requires;
+use Stub\Requires;
 
 class RequiresTest extends TestCase
 {

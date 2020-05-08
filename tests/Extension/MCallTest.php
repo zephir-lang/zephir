@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Mcall;
+use Stub\Mcall;
 
 class MCallTest extends TestCase
 {
@@ -161,7 +161,7 @@ class MCallTest extends TestCase
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new \ReflectionClass('\Test\Mcall');
+            return $this->reflection = new \ReflectionClass('\Stub\Mcall');
         }
 
         return $this->reflection;

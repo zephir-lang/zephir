@@ -12,7 +12,7 @@
 namespace Extension\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\Post;
+use Stub\Globals\Post;
 
 class PostTest extends TestCase
 {

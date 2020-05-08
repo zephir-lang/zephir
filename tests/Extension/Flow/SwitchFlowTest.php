@@ -12,7 +12,7 @@
 namespace Extension\Flow;
 
 use PHPUnit\Framework\TestCase;
-use Test\Flow\SwitchFlow;
+use Stub\Flow\SwitchFlow;
 
 class SwitchFlowTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\ServerRequestFactory;
+use Stub\Globals\ServerRequestFactory;
 
 class ServerRequestFactoryTest extends TestCase
 {

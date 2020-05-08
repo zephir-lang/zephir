@@ -17,26 +17,26 @@ class StaticPublicPropertiesTest extends TestCase
 {
     public function testAssertations()
     {
-        $this->assertNull(\Test\Properties\StaticPublicProperties::$someNull);
-        $this->assertNull(\Test\Properties\StaticPublicProperties::$someNullInitial);
-        $this->assertFalse(\Test\Properties\StaticPublicProperties::$someFalse);
-        $this->assertTrue(\Test\Properties\StaticPublicProperties::$someTrue);
-        $this->assertSame(\Test\Properties\StaticPublicProperties::$someInteger, 10);
-        $this->assertSame(\Test\Properties\StaticPublicProperties::$someDouble, 10.25);
-        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, 'test');
+        $this->assertNull(\Stub\Properties\StaticPublicProperties::$someNull);
+        $this->assertNull(\Stub\Properties\StaticPublicProperties::$someNullInitial);
+        $this->assertFalse(\Stub\Properties\StaticPublicProperties::$someFalse);
+        $this->assertTrue(\Stub\Properties\StaticPublicProperties::$someTrue);
+        $this->assertSame(\Stub\Properties\StaticPublicProperties::$someInteger, 10);
+        $this->assertSame(\Stub\Properties\StaticPublicProperties::$someDouble, 10.25);
+        $this->assertSame(\Stub\Properties\StaticPublicProperties::$someString, 'test');
     }
 
     public function testIssues1904()
     {
-        $value = &\Test\Properties\StaticPublicProperties::$someString;
+        $value = &\Stub\Properties\StaticPublicProperties::$someString;
         $value = 'test1';
-        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        $this->assertSame(\Stub\Properties\StaticPublicProperties::$someString, $value);
         \Stub\Properties\StaticPublicProperties::$someString = 'test2';
-        $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        $this->assertSame(\Stub\Properties\StaticPublicProperties::$someString, $value);
         // Disabled due to:
         // https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340
         // \Stub\Properties\StaticPublicProperties::setSomeString('test3');
-        // $this->assertSame(\Test\Properties\StaticPublicProperties::$someString, $value);
+        // $this->assertSame(\Stub\Properties\StaticPublicProperties::$someString, $value);
     }
 
     public function testIssues2020()
@@ -46,7 +46,7 @@ class StaticPublicPropertiesTest extends TestCase
         $this->assertEquals(-1, \Stub\Properties\StaticPublicProperties::$someSub);
 
         // PHP Notice:  A non well formed numeric value encountered
-        //\Test\Properties\StaticPublicProperties::testAddAndSub2();
+        //\Stub\Properties\StaticPublicProperties::testAddAndSub2();
         //$this->assertEquals(2, \Stub\Properties\StaticPublicProperties::$someAdd);
         //$this->assertEquals(-2, \Stub\Properties\StaticPublicProperties::$someSub);
 

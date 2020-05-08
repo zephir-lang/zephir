@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\ArraySearch;
+use Stub\ArraySearch;
 
 class ArraySearchTest extends TestCase
 {

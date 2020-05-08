@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Exists;
+use Stub\Exists;
 
 class ExistsTest extends TestCase
 {

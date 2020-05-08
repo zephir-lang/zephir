@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\NativeArray;
+use Stub\NativeArray;
 
 class NativeArrayTest extends TestCase
 {

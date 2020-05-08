@@ -25,12 +25,12 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testConstants()
     {
-        $this->assertSame(\Test\TestInterface::C1, null);
-        $this->assertSame(\Test\TestInterface::C2, false);
-        $this->assertSame(\Test\TestInterface::C3, true);
-        $this->assertSame(\Test\TestInterface::C4, 10);
-        $this->assertSame(\Test\TestInterface::C5, 10.25);
-        $this->assertSame(\Test\TestInterface::C6, 'test');
+        $this->assertSame(\Stub\TestInterface::C1, null);
+        $this->assertSame(\Stub\TestInterface::C2, false);
+        $this->assertSame(\Stub\TestInterface::C3, true);
+        $this->assertSame(\Stub\TestInterface::C4, 10);
+        $this->assertSame(\Stub\TestInterface::C5, 10.25);
+        $this->assertSame(\Stub\TestInterface::C6, 'test');
     }
 
     public function testClassOfInterface()
@@ -46,12 +46,12 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testStaticConstantsInheritanceFromInterface()
     {
-        $this->assertSame(\Test\ConstantsInterface::C1, null);
-        $this->assertSame(\Test\ConstantsInterface::C2, false);
-        $this->assertSame(\Test\ConstantsInterface::C3, true);
-        $this->assertSame(\Test\ConstantsInterface::C4, 10);
-        $this->assertSame(\Test\ConstantsInterface::C5, 10.25);
-        $this->assertSame(\Test\ConstantsInterface::C6, 'test');
+        $this->assertSame(\Stub\ConstantsInterface::C1, null);
+        $this->assertSame(\Stub\ConstantsInterface::C2, false);
+        $this->assertSame(\Stub\ConstantsInterface::C3, true);
+        $this->assertSame(\Stub\ConstantsInterface::C4, 10);
+        $this->assertSame(\Stub\ConstantsInterface::C5, 10.25);
+        $this->assertSame(\Stub\ConstantsInterface::C6, 'test');
     }
 
     public function testInstanceConstantsInheritanceFromInterface()

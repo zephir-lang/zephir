@@ -12,7 +12,7 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
-use Test\Properties\StaticPropertyArray;
+use Stub\Properties\StaticPropertyArray;
 
 class StaticPropertyArrayTest extends TestCase
 {

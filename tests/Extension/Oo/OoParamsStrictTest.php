@@ -12,7 +12,7 @@
 namespace Extension\Oo;
 
 use PHPUnit\Framework\TestCase;
-use Test\Oo\OoParams;
+use Stub\Oo\OoParams;
 
 class OoParamsStrictTest extends TestCase
 {

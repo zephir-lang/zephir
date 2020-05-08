@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\ArrayMerge;
+use Stub\Optimizers\ArrayMerge;
 
 class ArrayMergeTest extends TestCase
 {

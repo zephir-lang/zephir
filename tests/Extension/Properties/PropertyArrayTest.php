@@ -12,7 +12,7 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
-use Test\Properties\PropertyArray;
+use Stub\Properties\PropertyArray;
 
 class PropertyArrayTest extends TestCase
 {

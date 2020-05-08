@@ -8,17 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Test\ExitDie;
+use Stub\ExitDie;
 
-if (!extension_loaded('test')) {
+if (!extension_loaded('stub')) {
     if ('1' == ini_get('enable_dl')) {
         $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-        dl($prefix.'test.'.PHP_SHLIB_SUFFIX);
+        dl($prefix.'stub.'.PHP_SHLIB_SUFFIX);
     }
 }
 
-if (!extension_loaded('test')) {
-    exit('"test" extension not loaded; cannot run tests without it');
+if (!extension_loaded('stub')) {
+    $message = sprintf("The 'stub' extension not loaded; cannot run tests without it");
+    $line = str_repeat('-', strlen($message) + 4);
+
+    $message = sprintf("%s\n| %s |\n%s\n\n", $line, $message, $line);
+    exit($message);
 }
 
 $t = new ExitDie();

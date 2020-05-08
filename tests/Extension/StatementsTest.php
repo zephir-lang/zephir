@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Statements;
+use Stub\Statements;
 
 class StatementsTest extends TestCase
 {

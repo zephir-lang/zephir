@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\ExtendedInterface;
+use Stub\ExtendedInterface;
 
 class ExtendedInterfaceTest extends TestCase
 {

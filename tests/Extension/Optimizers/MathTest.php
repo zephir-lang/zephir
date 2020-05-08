@@ -12,13 +12,13 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\ACos;
-use Test\Optimizers\ASin;
-use Test\Optimizers\Cos;
-use Test\Optimizers\Ldexp;
-use Test\Optimizers\Sin;
-use Test\Optimizers\Sqrt;
-use Test\Optimizers\Tan;
+use Stub\Optimizers\ACos;
+use Stub\Optimizers\ASin;
+use Stub\Optimizers\Cos;
+use Stub\Optimizers\Ldexp;
+use Stub\Optimizers\Sin;
+use Stub\Optimizers\Sqrt;
+use Stub\Optimizers\Tan;
 
 class MathTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\Substr;
+use Stub\Optimizers\Substr;
 
 class SubstrTest extends TestCase
 {

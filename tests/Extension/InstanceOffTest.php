@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\InstanceOff;
+use Stub\InstanceOff;
 
 class InstanceOffTest extends TestCase
 {
@@ -89,7 +89,7 @@ class InstanceOffTest extends TestCase
      */
     public function instanceOf8()
     {
-        $this->assertTrue($this->test->testInstanceOf8('\\Test\\InstanceOff'));
+        $this->assertTrue($this->test->testInstanceOf8('\\Stub\\InstanceOff'));
         $this->assertFalse($this->test->testInstanceOf8('\\stdClass'));
     }
 
@@ -99,7 +99,7 @@ class InstanceOffTest extends TestCase
      */
     public function instanceOf9()
     {
-        $this->assertTrue($this->test->testInstanceOf9($this->test, '\\Test\\InstanceOff'));
+        $this->assertTrue($this->test->testInstanceOf9($this->test, '\\Stub\\InstanceOff'));
         $this->assertFalse($this->test->testInstanceOf9($this->test, '\\stdClass'));
     }
 }

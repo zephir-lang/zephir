@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\IsScalar;
+use Stub\Optimizers\IsScalar;
 
 class IsScalarTest extends TestCase
 {

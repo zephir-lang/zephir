@@ -12,8 +12,8 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Scall;
-use Test\Scallparent;
+use Stub\Scall;
+use Stub\Scallparent;
 
 class ScallTest extends TestCase
 {

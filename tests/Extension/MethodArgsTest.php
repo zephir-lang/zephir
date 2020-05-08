@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\MethodArgs;
+use Stub\MethodArgs;
 
 class MethodArgsTest extends TestCase
 {

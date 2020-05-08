@@ -52,10 +52,10 @@ class GeneratorTest extends TestCase
         $expected = <<<DOC
 <?php
 
-namespace Test\Stubs;
+namespace Stub\Stubs;
 
-use Test\Extendable\BaseTestClass;
-use Test\Events\EventInterface as EventsManagerInterface;
+use Stub\Extendable\BaseTestClass;
+use Stub\Events\EventInterface as EventsManagerInterface;
 
 /**
  * Class description example

@@ -14,7 +14,7 @@ namespace Extension\Oo;
 use Error;
 use PHPUnit\Framework\Error\Notice;
 use PHPUnit\Framework\TestCase;
-use Test\Oo\Scopes\PrivateScopeTester;
+use Stub\Oo\Scopes\PrivateScopeTester;
 use TestScopeExtending;
 use TestScopeExtendingMagic;
 use TestScopePhp;

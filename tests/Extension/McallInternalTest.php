@@ -3,7 +3,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\McallInternal;
+use Stub\McallInternal;
 
 class McallInternalTest extends TestCase
 {

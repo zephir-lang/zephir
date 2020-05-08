@@ -30,7 +30,7 @@ class ExitDieTest extends TestCase
         }
 
         $this->phpBinary .= " -d 'enable_dl=true'";
-        $extension = realpath(__DIR__.'/../../ext/modules/test.so');
+        $extension = realpath(__DIR__.'/../../ext/modules/stub.so');
 
         if (file_exists($extension)) {
             $this->phpBinary .= sprintf(" -d 'extension=%s'", $extension);

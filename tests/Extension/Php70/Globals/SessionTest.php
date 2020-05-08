@@ -12,7 +12,7 @@
 namespace Extension\Php70\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\Session\Base;
+use Stub\Globals\Session\Base;
 
 class SessionTest extends TestCase
 {

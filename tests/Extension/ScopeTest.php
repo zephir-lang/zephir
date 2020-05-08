@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Scope;
+use Stub\Scope;
 
 class ScopeTest extends TestCase
 {

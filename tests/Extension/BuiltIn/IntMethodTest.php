@@ -12,7 +12,7 @@
 namespace Extension\BuiltIn;
 
 use PHPUnit\Framework\TestCase;
-use Test\BuiltIn\IntMethods;
+use Stub\BuiltIn\IntMethods;
 
 class IntMethodTest extends TestCase
 {

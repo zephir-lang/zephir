@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Returns;
+use Stub\Returns;
 
 class ReturnsTest extends TestCase
 {

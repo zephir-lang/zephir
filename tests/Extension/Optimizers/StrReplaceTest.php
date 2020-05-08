@@ -12,7 +12,7 @@
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
-use Test\Optimizers\StrReplace;
+use Stub\Optimizers\StrReplace;
 
 class StrReplaceTest extends TestCase
 {

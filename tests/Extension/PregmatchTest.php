@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Pregmatch;
+use Stub\Pregmatch;
 
 class PregmatchTest extends TestCase
 {

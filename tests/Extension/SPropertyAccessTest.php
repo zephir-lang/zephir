@@ -12,7 +12,7 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\SPropertyAccess;
+use Stub\SPropertyAccess;
 
 class SPropertyAccessTest extends TestCase
 {

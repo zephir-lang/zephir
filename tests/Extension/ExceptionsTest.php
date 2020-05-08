@@ -12,8 +12,8 @@
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use Test\Exception;
-use Test\Exceptions;
+use Stub\Exception;
+use Stub\Exceptions;
 
 class ExceptionsTest extends TestCase
 {

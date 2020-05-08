@@ -12,7 +12,7 @@
 namespace Extension\BuiltIn;
 
 use PHPUnit\Framework\TestCase;
-use Test\BuiltIn\CharMethods;
+use Stub\BuiltIn\CharMethods;
 
 class CharMethodTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension\Globals;
 
 use PHPUnit\Framework\TestCase;
-use Test\Globals\Env;
+use Stub\Globals\Env;
 
 class EnvTest extends TestCase
 {

@@ -12,7 +12,7 @@
 namespace Extension\Php70;
 
 use PHPUnit\Framework\TestCase;
-use Test\Cast;
+use Stub\Cast;
 
 class CastTest extends TestCase
 {

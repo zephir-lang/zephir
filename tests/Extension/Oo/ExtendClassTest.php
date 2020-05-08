@@ -13,9 +13,9 @@ namespace Extension\Oo;
 
 use PDO;
 use PHPUnit\Framework\TestCase;
-use Test\Integration\Psr\Http\Message\MessageInterfaceEx;
-use Test\Oo\ConcreteStatic;
-use Test\Oo\ExtendPdoClass;
+use Stub\Integration\Psr\Http\Message\MessageInterfaceEx;
+use Stub\Oo\ConcreteStatic;
+use Stub\Oo\ExtendPdoClass;
 
 class ExtendClassTest extends TestCase
 {

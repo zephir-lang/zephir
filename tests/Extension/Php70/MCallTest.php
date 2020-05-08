@@ -12,7 +12,7 @@
 namespace Extension\Php70;
 
 use PHPUnit\Framework\TestCase;
-use Test\Mcall;
+use Stub\Mcall;
 
 class MCallTest extends TestCase
 {

@@ -9,7 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-use Test\Oo\Scopes\AbstractClassMagic;
+use Stub\Oo\Scopes\AbstractClassMagic;
 
 class TestScopeExtendingMagic extends AbstractClassMagic
 {
