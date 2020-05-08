@@ -3,6 +3,7 @@
 prototypes/*            linguist-vendored
 
 ext/*                   linguist-vendored
+stub/*                  linguist-vendored
 tests/*                 linguist-vendored
 
 *.xml.dist              text eol=lf linguist-language=XML

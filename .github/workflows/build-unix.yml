@@ -2,8 +2,6 @@ name: Unix CI
 
 on:
   push:
-    branches:
-      - development
     paths-ignore:
       - '**.md'
       - '**.txt'
