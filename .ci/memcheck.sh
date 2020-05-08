@@ -37,7 +37,7 @@ valgrind \
   --num-callers=20 \
   --run-libc-freeres=no \
   php \
-    -d "extension=ext/modules/test.so" \
+    -d "extension=ext/modules/stub.so" \
       "vendor/bin/simple-phpunit" \
       --no-coverage \
       --testsuite "$test_suite"

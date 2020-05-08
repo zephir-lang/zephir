@@ -72,11 +72,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Zephir\\Test\\": "unit-tests/Zephir/Test/",
-            "Extension\\": "unit-tests/Extension/"
+            "Zephir\\Test\\": "tests/Zephir/",
+            "Extension\\": "tests/Extension/"
         },
         "classmap": [
-            "unit-tests/fixtures/mocks/"
+            "tests/fixtures/mocks/"
         ]
     },
     "minimum-stability": "dev",

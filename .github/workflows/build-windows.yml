@@ -18,9 +18,9 @@ env:
   PHP_SDK_VERSION: 2.2.0
   PHP_DEVPACK: C:\tools\php-devpack
   PHP_SDK_PATH: C:\tools\php-sdk
-  PACKAGE_PREFIX: test
-  EXTENSION_NAME: test
-  EXTENSION_FILE: php_test.dll
+  PACKAGE_PREFIX: stub
+  EXTENSION_NAME: stub
+  EXTENSION_FILE: php_stub.dll
 
 jobs:
   windows:
@@ -170,7 +170,7 @@ jobs:
           # .\zephir.bat stubs
           # .\zephir.bat api
 
-      - name: Compile Test Project
+      - name: Compile Stub Project
         run: |
           .\zephir.bat compile `
             -Wnonexistent-function `
@@ -181,21 +181,21 @@ jobs:
             -Wnot-supported-magic-constant `
             -Wnon-valid-decrement
 
-      - name: Make Test Extension
+      - name: Make Stub Extension
         shell: cmd
         run: |
           cd ext
           nmake 2> "%GITHUB_WORKSPACE%\compile-errors.log" 1> "%GITHUB_WORKSPACE%\compile.log"
 
-      - name: Inspecting Test Extension DLL File
+      - name: Inspecting Stub Extension DLL File
         run: Get-PhpExtension "${env:RELEASE_DLL_PATH}"
 
-      - name: Enable Test Extension
+      - name: Enable Stub Extension
         run: |
           Import-Module .\.ci\win-ci-tools.psm1
           EnableTestExtension
 
-      - name: Minimal Load Test for Test Extension
+      - name: Minimal Load Test for Stub Extension
         run: php --ri "${env:EXTENSION_NAME}"
 
       - name: Install PHPUnit
@@ -206,7 +206,7 @@ jobs:
         run: |
           SET X=0
           php phpunit install
-          php phpunit --bootstrap %GITHUB_WORKSPACE%\unit-tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
+          php phpunit --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
           php phpunit --testsuite Zephir || SET X=!errorlevel!
           exit %X%
 

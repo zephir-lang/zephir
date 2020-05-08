@@ -1,208 +1,208 @@
-PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test])
+PHP_ARG_ENABLE(stub, whether to enable stub, [ --enable-stub   Enable Stub])
 
-if test "$PHP_TEST" = "yes"; then
+if test "$PHP_STUB" = "yes"; then
 
 	
 
 	if ! test "x" = "x"; then
-		PHP_EVAL_LIBLINE(, TEST_SHARED_LIBADD)
+		PHP_EVAL_LIBLINE(, STUB_SHARED_LIBADD)
 	fi
 
-	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
-	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/testinterface.zep.c
-	test/oo/extend/exception.zep.c
-	test/oo/extend/db/exception.zep.c
-	test/scallparent.zep.c
-	test/constantsparent.zep.c
-	test/globals/session/base.zep.c
-	test/methodinterface.zep.c
-	test/oo/abstractstatic.zep.c
-	test/oo/extend/db/query/exception.zep.c
-	test/oo/oodynamica.zep.c
-	test/oo/scopes/hasprivatemethod.zep.c
-	test/oo/scopes/scopetesterinterface.zep.c
-	test/ooimpl/zbeginning.zep.c
-	test/properties/publicproperties.zep.c
-	test/arithmetic.zep.c
-	test/arrayaccessobj.zep.c
-	test/arrayaccesstest.zep.c
-	test/arrayiterator.zep.c
-	test/arrayiteratortest.zep.c
-	test/arrayobject.zep.c
-	test/arraysearch.zep.c
-	test/assign.zep.c
-	test/bench/foo.zep.c
-	test/bitwise.zep.c
-	test/branchprediction.zep.c
-	test/builtin/arraymethods.zep.c
-	test/builtin/charmethods.zep.c
-	test/builtin/intmethods.zep.c
-	test/builtin/stringmethods.zep.c
-	test/cast.zep.c
-	test/cblock.zep.c
-	test/chars.zep.c
-	test/closures.zep.c
-	test/compare.zep.c
-	test/concat.zep.c
-	test/constants.zep.c
-	test/constantsinterface.zep.c
-	test/constantsinterfacea.zep.c
-	test/constantsinterfaceb.zep.c
-	test/declaretest.zep.c
-	test/diinterface.zep.c
-	test/echoes.zep.c
-	test/emptytest.zep.c
-	test/evaltest.zep.c
-	test/exception.zep.c
-	test/exceptions.zep.c
-	test/exists.zep.c
-	test/exitdie.zep.c
-	test/extendedinterface.zep.c
-	test/factorial.zep.c
-	test/fannkuch.zep.c
-	test/fasta.zep.c
-	test/fcall.zep.c
-	test/fetchtest.zep.c
-	test/fibonnaci.zep.c
-	test/flow.zep.c
-	test/flow/switchflow.zep.c
-	test/fortytwo.zep.c
-	test/functional.zep.c
-	test/functionexists.zep.c
-	test/geometry.zep.c
-	test/globals.zep.c
-	test/globals/env.zep.c
-	test/globals/post.zep.c
-	test/globals/server.zep.c
-	test/globals/serverrequestfactory.zep.c
-	test/globals/session/child.zep.c
-	test/instance.zep.c
-	test/instanceoff.zep.c
-	test/integration/psr/http/message/messageinterfaceex.zep.c
-	test/internalclasses.zep.c
-	test/internalinterfaces.zep.c
-	test/invoke.zep.c
-	test/issettest.zep.c
-	test/issue1404.zep.c
-	test/issue1521.zep.c
-	test/issues.zep.c
-	test/json.zep.c
-	test/logical.zep.c
-	test/mcall.zep.c
-	test/mcall/caller.zep.c
-	test/mcallchained.zep.c
-	test/mcalldynamic.zep.c
-	test/mcallinternal.zep.c
-	test/methodabstract.zep.c
-	test/methodargs.zep.c
-	test/nativearray.zep.c
-	test/oo.zep.c
-	test/oo/abstractclass.zep.c
-	test/oo/concretestatic.zep.c
-	test/oo/constantsinterface.zep.c
-	test/oo/deprecatedmethods.zep.c
-	test/oo/dynamicprop.zep.c
-	test/oo/extend/db/query/placeholder/exception.zep.c
-	test/oo/extend/spl/arrayobject.zep.c
-	test/oo/extend/spl/directoryiterator.zep.c
-	test/oo/extend/spl/doublylinkedlist.zep.c
-	test/oo/extend/spl/fileinfo.zep.c
-	test/oo/extend/spl/fileobject.zep.c
-	test/oo/extend/spl/filesystemiterator.zep.c
-	test/oo/extend/spl/fixedarray.zep.c
-	test/oo/extend/spl/globiterator.zep.c
-	test/oo/extend/spl/heap.zep.c
-	test/oo/extend/spl/maxheap.zep.c
-	test/oo/extend/spl/minheap.zep.c
-	test/oo/extend/spl/priorityqueue.zep.c
-	test/oo/extend/spl/queue.zep.c
-	test/oo/extend/spl/recursivedirectoryiterator.zep.c
-	test/oo/extend/spl/stack.zep.c
-	test/oo/extend/spl/tempfileobject.zep.c
-	test/oo/extendpdoclass.zep.c
-	test/oo/ooconstruct.zep.c
-	test/oo/ooconstructparams.zep.c
-	test/oo/oodestruct.zep.c
-	test/oo/oodynamicb.zep.c
-	test/oo/oonativeimplements.zep.c
-	test/oo/oonoconstruct.zep.c
-	test/oo/ooparams.zep.c
-	test/oo/param.zep.c
-	test/oo/propertyaccess.zep.c
-	test/oo/scopes/abstractclass.zep.c
-	test/oo/scopes/abstractclassmagic.zep.c
-	test/oo/scopes/privatescopetester.zep.c
-	test/ooimpl/abeginning.zep.c
-	test/operator.zep.c
-	test/optimizers/isscalar.zep.c
-	test/optimizers/acos.zep.c
-	test/optimizers/arraymerge.zep.c
-	test/optimizers/asin.zep.c
-	test/optimizers/cos.zep.c
-	test/optimizers/createarray.zep.c
-	test/optimizers/ldexp.zep.c
-	test/optimizers/sin.zep.c
-	test/optimizers/sqrt.zep.c
-	test/optimizers/strreplace.zep.c
-	test/optimizers/substr.zep.c
-	test/optimizers/tan.zep.c
-	test/pdostatement.zep.c
-	test/pregmatch.zep.c
-	test/properties/app.zep.c
-	test/properties/extendspublicproperties.zep.c
-	test/properties/privateproperties.zep.c
-	test/properties/propertyarray.zep.c
-	test/properties/propertyupdate.zep.c
-	test/properties/protectedproperties.zep.c
-	test/properties/staticprivateproperties.zep.c
-	test/properties/staticpropertyarray.zep.c
-	test/properties/staticprotectedproperties.zep.c
-	test/properties/staticpublicproperties.zep.c
-	test/quantum.zep.c
-	test/range.zep.c
-	test/references.zep.c
-	test/regexdna.zep.c
-	test/requires.zep.c
-	test/requires/external3.zep.c
-	test/resourcetest.zep.c
-	test/returns.zep.c
-	test/router.zep.c
-	test/router/exception.zep.c
-	test/router/route.zep.c
-	test/scall.zep.c
-	test/scalldynamic.zep.c
-	test/scallexternal.zep.c
-	test/scope.zep.c
-	test/sort.zep.c
-	test/spectralnorm.zep.c
-	test/spropertyaccess.zep.c
-	test/statements.zep.c
-	test/strings.zep.c
-	test/stubs.zep.c
-	test/ternary.zep.c
-	test/trytest.zep.c
-	test/typehinting/testabstract.zep.c
-	test/typeinstances.zep.c
-	test/typeoff.zep.c
-	test/unknownclass.zep.c
-	test/unsettest.zep.c
-	test/usetest.zep.c
-	test/vars.zep.c
-	test/0__closure.zep.c
-	test/1__closure.zep.c
-	test/2__closure.zep.c
-	test/3__closure.zep.c
-	test/4__closure.zep.c
-	test/5__closure.zep.c
-	test/6__closure.zep.c
-	test/7__closure.zep.c
-	test/8__closure.zep.c
-	test/9__closure.zep.c
-	test/10__closure.zep.c
-	test/11__closure.zep.c
-	test/12__closure.zep.c "
-	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
-	PHP_SUBST(TEST_SHARED_LIBADD)
+	AC_DEFINE(HAVE_STUB, 1, [Whether you have Stub])
+	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c stub/testinterface.zep.c
+	stub/oo/extend/exception.zep.c
+	stub/oo/extend/db/exception.zep.c
+	stub/scallparent.zep.c
+	stub/constantsparent.zep.c
+	stub/globals/session/base.zep.c
+	stub/methodinterface.zep.c
+	stub/oo/abstractstatic.zep.c
+	stub/oo/extend/db/query/exception.zep.c
+	stub/oo/oodynamica.zep.c
+	stub/oo/scopes/hasprivatemethod.zep.c
+	stub/oo/scopes/scopetesterinterface.zep.c
+	stub/ooimpl/zbeginning.zep.c
+	stub/properties/publicproperties.zep.c
+	stub/arithmetic.zep.c
+	stub/arrayaccessobj.zep.c
+	stub/arrayaccesstest.zep.c
+	stub/arrayiterator.zep.c
+	stub/arrayiteratortest.zep.c
+	stub/arrayobject.zep.c
+	stub/arraysearch.zep.c
+	stub/assign.zep.c
+	stub/bench/foo.zep.c
+	stub/bitwise.zep.c
+	stub/branchprediction.zep.c
+	stub/builtin/arraymethods.zep.c
+	stub/builtin/charmethods.zep.c
+	stub/builtin/intmethods.zep.c
+	stub/builtin/stringmethods.zep.c
+	stub/cast.zep.c
+	stub/cblock.zep.c
+	stub/chars.zep.c
+	stub/closures.zep.c
+	stub/compare.zep.c
+	stub/concat.zep.c
+	stub/constants.zep.c
+	stub/constantsinterface.zep.c
+	stub/constantsinterfacea.zep.c
+	stub/constantsinterfaceb.zep.c
+	stub/declaretest.zep.c
+	stub/diinterface.zep.c
+	stub/echoes.zep.c
+	stub/emptytest.zep.c
+	stub/evaltest.zep.c
+	stub/exception.zep.c
+	stub/exceptions.zep.c
+	stub/exists.zep.c
+	stub/exitdie.zep.c
+	stub/extendedinterface.zep.c
+	stub/factorial.zep.c
+	stub/fannkuch.zep.c
+	stub/fasta.zep.c
+	stub/fcall.zep.c
+	stub/fetchtest.zep.c
+	stub/fibonnaci.zep.c
+	stub/flow.zep.c
+	stub/flow/switchflow.zep.c
+	stub/fortytwo.zep.c
+	stub/functional.zep.c
+	stub/functionexists.zep.c
+	stub/geometry.zep.c
+	stub/globals.zep.c
+	stub/globals/env.zep.c
+	stub/globals/post.zep.c
+	stub/globals/server.zep.c
+	stub/globals/serverrequestfactory.zep.c
+	stub/globals/session/child.zep.c
+	stub/instance.zep.c
+	stub/instanceoff.zep.c
+	stub/integration/psr/http/message/messageinterfaceex.zep.c
+	stub/internalclasses.zep.c
+	stub/internalinterfaces.zep.c
+	stub/invoke.zep.c
+	stub/issettest.zep.c
+	stub/issue1404.zep.c
+	stub/issue1521.zep.c
+	stub/issues.zep.c
+	stub/json.zep.c
+	stub/logical.zep.c
+	stub/mcall.zep.c
+	stub/mcall/caller.zep.c
+	stub/mcallchained.zep.c
+	stub/mcalldynamic.zep.c
+	stub/mcallinternal.zep.c
+	stub/methodabstract.zep.c
+	stub/methodargs.zep.c
+	stub/nativearray.zep.c
+	stub/oo.zep.c
+	stub/oo/abstractclass.zep.c
+	stub/oo/concretestatic.zep.c
+	stub/oo/constantsinterface.zep.c
+	stub/oo/deprecatedmethods.zep.c
+	stub/oo/dynamicprop.zep.c
+	stub/oo/extend/db/query/placeholder/exception.zep.c
+	stub/oo/extend/spl/arrayobject.zep.c
+	stub/oo/extend/spl/directoryiterator.zep.c
+	stub/oo/extend/spl/doublylinkedlist.zep.c
+	stub/oo/extend/spl/fileinfo.zep.c
+	stub/oo/extend/spl/fileobject.zep.c
+	stub/oo/extend/spl/filesystemiterator.zep.c
+	stub/oo/extend/spl/fixedarray.zep.c
+	stub/oo/extend/spl/globiterator.zep.c
+	stub/oo/extend/spl/heap.zep.c
+	stub/oo/extend/spl/maxheap.zep.c
+	stub/oo/extend/spl/minheap.zep.c
+	stub/oo/extend/spl/priorityqueue.zep.c
+	stub/oo/extend/spl/queue.zep.c
+	stub/oo/extend/spl/recursivedirectoryiterator.zep.c
+	stub/oo/extend/spl/stack.zep.c
+	stub/oo/extend/spl/tempfileobject.zep.c
+	stub/oo/extendpdoclass.zep.c
+	stub/oo/ooconstruct.zep.c
+	stub/oo/ooconstructparams.zep.c
+	stub/oo/oodestruct.zep.c
+	stub/oo/oodynamicb.zep.c
+	stub/oo/oonativeimplements.zep.c
+	stub/oo/oonoconstruct.zep.c
+	stub/oo/ooparams.zep.c
+	stub/oo/param.zep.c
+	stub/oo/propertyaccess.zep.c
+	stub/oo/scopes/abstractclass.zep.c
+	stub/oo/scopes/abstractclassmagic.zep.c
+	stub/oo/scopes/privatescopetester.zep.c
+	stub/ooimpl/abeginning.zep.c
+	stub/operator.zep.c
+	stub/optimizers/isscalar.zep.c
+	stub/optimizers/acos.zep.c
+	stub/optimizers/arraymerge.zep.c
+	stub/optimizers/asin.zep.c
+	stub/optimizers/cos.zep.c
+	stub/optimizers/createarray.zep.c
+	stub/optimizers/ldexp.zep.c
+	stub/optimizers/sin.zep.c
+	stub/optimizers/sqrt.zep.c
+	stub/optimizers/strreplace.zep.c
+	stub/optimizers/substr.zep.c
+	stub/optimizers/tan.zep.c
+	stub/pdostatement.zep.c
+	stub/pregmatch.zep.c
+	stub/properties/app.zep.c
+	stub/properties/extendspublicproperties.zep.c
+	stub/properties/privateproperties.zep.c
+	stub/properties/propertyarray.zep.c
+	stub/properties/propertyupdate.zep.c
+	stub/properties/protectedproperties.zep.c
+	stub/properties/staticprivateproperties.zep.c
+	stub/properties/staticpropertyarray.zep.c
+	stub/properties/staticprotectedproperties.zep.c
+	stub/properties/staticpublicproperties.zep.c
+	stub/quantum.zep.c
+	stub/range.zep.c
+	stub/references.zep.c
+	stub/regexdna.zep.c
+	stub/requires.zep.c
+	stub/requires/external3.zep.c
+	stub/resourcetest.zep.c
+	stub/returns.zep.c
+	stub/router.zep.c
+	stub/router/exception.zep.c
+	stub/router/route.zep.c
+	stub/scall.zep.c
+	stub/scalldynamic.zep.c
+	stub/scallexternal.zep.c
+	stub/scope.zep.c
+	stub/sort.zep.c
+	stub/spectralnorm.zep.c
+	stub/spropertyaccess.zep.c
+	stub/statements.zep.c
+	stub/strings.zep.c
+	stub/stubs.zep.c
+	stub/ternary.zep.c
+	stub/trytest.zep.c
+	stub/typehinting/testabstract.zep.c
+	stub/typeinstances.zep.c
+	stub/typeoff.zep.c
+	stub/unknownclass.zep.c
+	stub/unsettest.zep.c
+	stub/usetest.zep.c
+	stub/vars.zep.c
+	stub/0__closure.zep.c
+	stub/1__closure.zep.c
+	stub/2__closure.zep.c
+	stub/3__closure.zep.c
+	stub/4__closure.zep.c
+	stub/5__closure.zep.c
+	stub/6__closure.zep.c
+	stub/7__closure.zep.c
+	stub/8__closure.zep.c
+	stub/9__closure.zep.c
+	stub/10__closure.zep.c
+	stub/11__closure.zep.c
+	stub/12__closure.zep.c "
+	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
+	PHP_SUBST(STUB_SHARED_LIBADD)
 
 	old_CPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $INCLUDES"
@@ -213,7 +213,7 @@ if test "$PHP_TEST" = "yes"; then
 			AC_CHECK_HEADERS(
 				[ext/pcre/php_pcre.h],
 				[
-					PHP_ADD_EXTENSION_DEP([test], [pcre])
+					PHP_ADD_EXTENSION_DEP([stub], [pcre])
 					AC_DEFINE([ZEPHIR_USE_PHP_PCRE], [1], [Whether PHP pcre extension is present at compile time])
 				],
 				,
@@ -230,7 +230,7 @@ if test "$PHP_TEST" = "yes"; then
 			AC_CHECK_HEADERS(
 				[ext/json/php_json.h],
 				[
-					PHP_ADD_EXTENSION_DEP([test], [json])
+					PHP_ADD_EXTENSION_DEP([stub], [json])
 					AC_DEFINE([ZEPHIR_USE_PHP_JSON], [1], [Whether PHP json extension is present at compile time])
 				],
 				,
@@ -243,6 +243,6 @@ if test "$PHP_TEST" = "yes"; then
 
 	CPPFLAGS=$old_CPPFLAGS
 
-	PHP_INSTALL_HEADERS([ext/test], [php_TEST.h])
+	PHP_INSTALL_HEADERS([ext/stub], [php_STUB.h])
 
 fi

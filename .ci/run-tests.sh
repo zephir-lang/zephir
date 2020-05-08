@@ -20,10 +20,10 @@ fi
 vendor/bin/simple-phpunit --version
 
 php \
-  -d extension=ext/modules/test.so \
+  -d extension=ext/modules/stub.so \
   vendor/bin/simple-phpunit \
   --colors=always \
-  --bootstrap unit-tests/ext-bootstrap.php \
+  --bootstrap tests/ext-bootstrap.php \
   --testsuite ${test_suite}
 
 php \

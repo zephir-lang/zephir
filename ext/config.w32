@@ -1,37 +1,37 @@
-ARG_ENABLE("test", "enable test", "no");
+ARG_ENABLE("stub", "enable stub", "no");
 
-if (PHP_TEST != "no") {
-  EXTENSION("test", "test.c", null, "-I"+configure_module_dirname);
-  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c math.c concat.c variables.c filter.c iterator.c exit.c time.c", "test");
+if (PHP_STUB != "no") {
+  EXTENSION("stub", "stub.c", null, "-I"+configure_module_dirname);
+  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c math.c concat.c variables.c filter.c iterator.c exit.c time.c", "stub");
   /* PCRE is always included on WIN32 */
   AC_DEFINE("ZEPHIR_USE_PHP_PCRE", 1, "Whether PHP pcre extension is present at compile time");
   if (PHP_JSON != "no") {
-    ADD_EXTENSION_DEP("test", "json");
+    ADD_EXTENSION_DEP("stub", "json");
     AC_DEFINE("ZEPHIR_USE_PHP_JSON", 1, "Whether PHP json extension is present at compile time");
   }
   
-  ADD_SOURCES(configure_module_dirname + "/test", "testinterface.zep.c scallparent.zep.c constantsparent.zep.c methodinterface.zep.c arithmetic.zep.c arrayaccessobj.zep.c arrayaccesstest.zep.c arrayiterator.zep.c arrayiteratortest.zep.c arrayobject.zep.c arraysearch.zep.c assign.zep.c bitwise.zep.c branchprediction.zep.c cast.zep.c cblock.zep.c chars.zep.c closures.zep.c compare.zep.c concat.zep.c constants.zep.c constantsinterface.zep.c constantsinterfacea.zep.c constantsinterfaceb.zep.c declaretest.zep.c diinterface.zep.c echoes.zep.c emptytest.zep.c evaltest.zep.c exception.zep.c exceptions.zep.c exists.zep.c exitdie.zep.c extendedinterface.zep.c factorial.zep.c fannkuch.zep.c fasta.zep.c fcall.zep.c fetchtest.zep.c fibonnaci.zep.c flow.zep.c fortytwo.zep.c functional.zep.c functionexists.zep.c geometry.zep.c globals.zep.c instance.zep.c instanceoff.zep.c internalclasses.zep.c internalinterfaces.zep.c invoke.zep.c issettest.zep.c issue1404.zep.c issue1521.zep.c issues.zep.c json.zep.c logical.zep.c mcall.zep.c mcallchained.zep.c mcalldynamic.zep.c mcallinternal.zep.c methodabstract.zep.c methodargs.zep.c nativearray.zep.c oo.zep.c operator.zep.c pdostatement.zep.c pregmatch.zep.c quantum.zep.c range.zep.c references.zep.c regexdna.zep.c requires.zep.c resourcetest.zep.c returns.zep.c router.zep.c scall.zep.c scalldynamic.zep.c scallexternal.zep.c scope.zep.c sort.zep.c spectralnorm.zep.c spropertyaccess.zep.c statements.zep.c strings.zep.c stubs.zep.c ternary.zep.c trytest.zep.c typeinstances.zep.c typeoff.zep.c unknownclass.zep.c unsettest.zep.c usetest.zep.c vars.zep.c 0__closure.zep.c 1__closure.zep.c 2__closure.zep.c 3__closure.zep.c 4__closure.zep.c 5__closure.zep.c 6__closure.zep.c 7__closure.zep.c 8__closure.zep.c 9__closure.zep.c 10__closure.zep.c 11__closure.zep.c 12__closure.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/extend", "exception.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db", "exception.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/globals/session", "base.zep.c child.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo", "abstractstatic.zep.c oodynamica.zep.c abstractclass.zep.c concretestatic.zep.c constantsinterface.zep.c deprecatedmethods.zep.c dynamicprop.zep.c extendpdoclass.zep.c ooconstruct.zep.c ooconstructparams.zep.c oodestruct.zep.c oodynamicb.zep.c oonativeimplements.zep.c oonoconstruct.zep.c ooparams.zep.c param.zep.c propertyaccess.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db/query", "exception.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/scopes", "hasprivatemethod.zep.c scopetesterinterface.zep.c abstractclass.zep.c abstractclassmagic.zep.c privatescopetester.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/ooimpl", "zbeginning.zep.c abeginning.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/bench", "foo.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/flow", "switchflow.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/integration/psr/http/message", "messageinterfaceex.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/mcall", "caller.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/db/query/placeholder", "exception.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/oo/extend/spl", "arrayobject.zep.c directoryiterator.zep.c doublylinkedlist.zep.c fileinfo.zep.c fileobject.zep.c filesystemiterator.zep.c fixedarray.zep.c globiterator.zep.c heap.zep.c maxheap.zep.c minheap.zep.c priorityqueue.zep.c queue.zep.c recursivedirectoryiterator.zep.c stack.zep.c tempfileobject.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/optimizers", "isscalar.zep.c acos.zep.c arraymerge.zep.c asin.zep.c cos.zep.c createarray.zep.c ldexp.zep.c sin.zep.c sqrt.zep.c strreplace.zep.c substr.zep.c tan.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/requires", "external3.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/router", "exception.zep.c route.zep.c", "test");
-	ADD_SOURCES(configure_module_dirname + "/test/typehinting", "testabstract.zep.c", "test");
-  ADD_FLAG("CFLAGS_TEST", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
+  ADD_SOURCES(configure_module_dirname + "/stub", "testinterface.zep.c scallparent.zep.c constantsparent.zep.c methodinterface.zep.c arithmetic.zep.c arrayaccessobj.zep.c arrayaccesstest.zep.c arrayiterator.zep.c arrayiteratortest.zep.c arrayobject.zep.c arraysearch.zep.c assign.zep.c bitwise.zep.c branchprediction.zep.c cast.zep.c cblock.zep.c chars.zep.c closures.zep.c compare.zep.c concat.zep.c constants.zep.c constantsinterface.zep.c constantsinterfacea.zep.c constantsinterfaceb.zep.c declaretest.zep.c diinterface.zep.c echoes.zep.c emptytest.zep.c evaltest.zep.c exception.zep.c exceptions.zep.c exists.zep.c exitdie.zep.c extendedinterface.zep.c factorial.zep.c fannkuch.zep.c fasta.zep.c fcall.zep.c fetchtest.zep.c fibonnaci.zep.c flow.zep.c fortytwo.zep.c functional.zep.c functionexists.zep.c geometry.zep.c globals.zep.c instance.zep.c instanceoff.zep.c internalclasses.zep.c internalinterfaces.zep.c invoke.zep.c issettest.zep.c issue1404.zep.c issue1521.zep.c issues.zep.c json.zep.c logical.zep.c mcall.zep.c mcallchained.zep.c mcalldynamic.zep.c mcallinternal.zep.c methodabstract.zep.c methodargs.zep.c nativearray.zep.c oo.zep.c operator.zep.c pdostatement.zep.c pregmatch.zep.c quantum.zep.c range.zep.c references.zep.c regexdna.zep.c requires.zep.c resourcetest.zep.c returns.zep.c router.zep.c scall.zep.c scalldynamic.zep.c scallexternal.zep.c scope.zep.c sort.zep.c spectralnorm.zep.c spropertyaccess.zep.c statements.zep.c strings.zep.c stubs.zep.c ternary.zep.c trytest.zep.c typeinstances.zep.c typeoff.zep.c unknownclass.zep.c unsettest.zep.c usetest.zep.c vars.zep.c 0__closure.zep.c 1__closure.zep.c 2__closure.zep.c 3__closure.zep.c 4__closure.zep.c 5__closure.zep.c 6__closure.zep.c 7__closure.zep.c 8__closure.zep.c 9__closure.zep.c 10__closure.zep.c 11__closure.zep.c 12__closure.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend", "exception.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/db", "exception.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/globals/session", "base.zep.c child.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo", "abstractstatic.zep.c oodynamica.zep.c abstractclass.zep.c concretestatic.zep.c constantsinterface.zep.c deprecatedmethods.zep.c dynamicprop.zep.c extendpdoclass.zep.c ooconstruct.zep.c ooconstructparams.zep.c oodestruct.zep.c oodynamicb.zep.c oonativeimplements.zep.c oonoconstruct.zep.c ooparams.zep.c param.zep.c propertyaccess.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/db/query", "exception.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/scopes", "hasprivatemethod.zep.c scopetesterinterface.zep.c abstractclass.zep.c abstractclassmagic.zep.c privatescopetester.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/ooimpl", "zbeginning.zep.c abeginning.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/bench", "foo.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/flow", "switchflow.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/integration/psr/http/message", "messageinterfaceex.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/mcall", "caller.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/db/query/placeholder", "exception.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/spl", "arrayobject.zep.c directoryiterator.zep.c doublylinkedlist.zep.c fileinfo.zep.c fileobject.zep.c filesystemiterator.zep.c fixedarray.zep.c globiterator.zep.c heap.zep.c maxheap.zep.c minheap.zep.c priorityqueue.zep.c queue.zep.c recursivedirectoryiterator.zep.c stack.zep.c tempfileobject.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/optimizers", "isscalar.zep.c acos.zep.c arraymerge.zep.c asin.zep.c cos.zep.c createarray.zep.c ldexp.zep.c sin.zep.c sqrt.zep.c strreplace.zep.c substr.zep.c tan.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/requires", "external3.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/router", "exception.zep.c route.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/typehinting", "testabstract.zep.c", "stub");
+  ADD_FLAG("CFLAGS_STUB", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("CFLAGS", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("LDFLAGS", "/LTCG");
 }

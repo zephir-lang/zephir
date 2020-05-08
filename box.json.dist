@@ -18,8 +18,9 @@
         "LICENSE"
     ],
     "blacklist": [
-        "unit-tests",
-        "test"
+        "ext",
+        "tests",
+        "stub"
     ],
     "finder": [
         {
