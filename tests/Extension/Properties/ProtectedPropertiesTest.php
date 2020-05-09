@@ -12,6 +12,7 @@
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Properties\ProtectedProperties;
 
 class ExtendsProtectedProperties extends ProtectedProperties
 {
@@ -24,7 +25,7 @@ class ProtectedPropertiesTest extends TestCase
 {
     public function testAssertations()
     {
-        $test = new \Stub\Properties\ProtectedProperties();
+        $test = new ProtectedProperties();
 
         $this->assertNull($test->getSomeNull());
         $this->assertNull($test->getSomeNullInitial());
@@ -46,7 +47,7 @@ class ProtectedPropertiesTest extends TestCase
         $extend = new ExtendsProtectedProperties();
         $this->assertSame($extend->getSomeArrayVar(), ['key' => 'value']);
 
-        $extend->setSomeArrayVar(['key' => 'value']);
-        $this->assertSame($extend->getSomeArrayVar(), ['key' => 'value']);
+        $extend->setSomeArrayVar(['key' => 'value2']);
+        $this->assertSame($extend->getSomeArrayVar(), ['key' => 'value2']);
     }
 }
