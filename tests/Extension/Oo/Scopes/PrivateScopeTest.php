@@ -201,11 +201,11 @@ class PrivateScopeTest extends TestCase
         $tester->setPropertyObj($object, 'privateProperty2', 'CHANGED');
 
         // This related the way PHP < 7.4 handles object's properties when
-        // there  is a magic __set method present.
+        // there is a magic __set method present.
         //
-        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
-        // throws a Fatal Error.  All previous versions just out a Notice and
-        // continue execution.
+        // Actually we DO NOT change property here (fixed).  However, only
+        // PHP 7.4 throws a fatal error.  All previous versions just out a
+        // notice and continue to execution.
         if (\PHP_VERSION_ID < 70400) {
             $this->assertEquals('private', $object->getPrivateProperty2());
         }
@@ -233,11 +233,11 @@ class PrivateScopeTest extends TestCase
         );
 
         // This related the way PHP < 7.4 handles object's properties when
-        // there  is a magic __set method present.
+        // there is a magic __set method present.
         //
-        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
-        // throws a Fatal Error.  All previous versions just out a Notice and
-        // continue execution.
+        // Actually we DO NOT change property here (fixed).  However, only
+        // PHP 7.4 throws a fatal error.  All previous versions just out a
+        // notice and continue to execution.
         if (\PHP_VERSION_ID < 70400) {
             $this->assertEquals('private', $object->getPrivateProperty2());
         }
@@ -290,11 +290,11 @@ class PrivateScopeTest extends TestCase
         );
 
         // This related the way PHP < 7.4 handles object's properties when
-        // there  is a magic __set method present.
+        // there is a magic __set method present.
         //
-        // Actually we DO NOT change property here (fixed).  Only PHP 7.4
-        // throws a Fatal Error.  All previous versions just out a Notice and
-        // continue execution.
+        // Actually we DO NOT change property here (fixed).  However, only
+        // PHP 7.4 throws a fatal error.  All previous versions just out a
+        // notice and continue to execution.
         if (\PHP_VERSION_ID < 70400) {
             $this->assertEquals('private2', $object->getPrivateProperty2());
         }
@@ -352,5 +352,18 @@ class PrivateScopeTest extends TestCase
         $objectVars = $tester->getNewVars(TestScopeExtending::class);
 
         $this->assertArrayNotHasKey('privateProperty', $objectVars);
+    }
+
+    /**
+     * @test
+     *
+     * @see https://github.com/phalcon/zephir/issues/1851
+     */
+    public function shouldGetAndSetPrivatePropertyUsingParentGetterAndSetter()
+    {
+        $tester = new \UserExample();
+        $tester->setPrivateVariable('test');
+
+        $this->assertEquals('test', $tester->getPrivateVariable());
     }
 }
