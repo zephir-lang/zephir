@@ -905,7 +905,7 @@ class Backend extends BackendZendEngine2
         $template = 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $template = 'zephir_init_property_zval(%s, ZEND_STRL("%s"), %s);';
+            $template = 'zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);';
         }
 
         $context->codePrinter->output(

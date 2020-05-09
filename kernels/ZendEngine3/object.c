@@ -477,29 +477,38 @@ zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce,
 	return original_ce;
 }
 
+/**
+ * Checks whether obj is an object and reads a property from this object.
+ *
+ * This function is intended to use in initializer.  Do not use it for a
+ * regular property updating.
+ */
 int zephir_read_property_ex(zval *result, zval *object, const char *property_name,
 						 uint32_t property_length, int flags)
 {
 	zend_class_entry *ce, *scope;
 	int retval;
 
-	/* Backup current scope */
-	scope = zephir_get_scope(0);
-	ce = Z_OBJCE_P(object);
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		/* Backup current scope */
+		scope = zephir_get_scope(0);
+		ce = Z_OBJCE_P(object);
 
-	/* Lookup for the real owner of the property */
-	if (ce->parent) {
-		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+		/* Lookup for the real owner of the property */
+		if (ce->parent) {
+			ce = zephir_lookup_class_ce(ce, property_name, property_length);
+		}
+
+		/* Use the scope of the found object */
+		zephir_set_scope(ce);
 	}
-
-	/* Use the scope of the found object */
-	zephir_set_scope(ce);
-
 	/* Read the property */
 	retval = zephir_read_property(result, object, property_name, property_length, flags);
 
-	/* Restore original scope */
-	zephir_set_scope(scope);
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		/* Restore original scope */
+		zephir_set_scope(scope);
+	}
 
 	return retval;
 }
@@ -608,63 +617,37 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 /**
  * Checks whether obj is an object and updates property with another zval.
  *
- * This function is intended to set initial value to object's property.
- * Do not use it for a regular property updating.
- *
- * TODO(serghei): This function has the same logic as zephir_update_property_zval
+ * This function is intended to use in initializer.  Do not use it for a
+ * regular property updating.
  */
-int zephir_init_property_zval(zval *object, const char *property_name,
+int zephir_update_property_zval_ex(zval *object, const char *property_name,
 								unsigned int property_length, zval *value)
 {
 	zend_class_entry *ce, *scope;
-	zval property, sep_value;
+	int retval;
 
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		php_error_docref(NULL, E_WARNING,
-						 "Attempt to assign property '%s' of non-object",
-						 property_name);
-		return FAILURE;
-	}
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		/* Backup current scope */
+		scope = zephir_get_scope(0);
+		ce = Z_OBJCE_P(object);
 
-	/* Backup current scope */
-	scope = zephir_get_scope(0);
-	ce = Z_OBJCE_P(object);
-
-	/* Lookup for the real owner of the property */
-	if (ce->parent) {
-		ce = zephir_lookup_class_ce(ce, property_name, property_length);
-	}
-
-	/* Use the scope of the found object */
-	zephir_set_scope(ce);
-
-	/* The class did not declare a handler for updating properties */
-	if (!Z_OBJ_HT_P(object)->write_property) {
-		zend_error(E_CORE_ERROR,
-				   "Property %s of class %s cannot be updated",
-				   property_name, ZSTR_VAL(Z_OBJCE_P(object)->name));
-	}
-
-	ZVAL_STRINGL(&property, property_name, property_length);
-	ZVAL_COPY_VALUE(&sep_value, value);
-	if (Z_TYPE(sep_value) == IS_ARRAY) {
-		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
-		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
-			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
-				GC_DELREF(Z_ARR(sep_value));
-			}
+		/* Lookup for the real owner of the property */
+		if (ce->parent) {
+			ce = zephir_lookup_class_ce(ce, property_name, property_length);
 		}
+
+		/* Use the scope of the found object */
+		zephir_set_scope(ce);
+	}
+	/* Update the property */
+	retval = zephir_update_property_zval(object, property_name, property_length, value);
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		/* Restore original scope */
+		zephir_set_scope(scope);
 	}
 
-	/* write_property will add 1 to refcount,
-	   so no Z_TRY_ADDREF_P(value) is necessary */
-	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
-	zval_ptr_dtor(&property);
-
-	/* Restore original scope */
-	zephir_set_scope(scope);
-
-	return SUCCESS;
+	return retval;
 }
 
 /**
