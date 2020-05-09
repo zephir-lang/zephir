@@ -19,12 +19,10 @@ use Zephir\Types;
 
 class CollectionTest extends TestCase
 {
-    /**
-     * @test
-     * @expectedException \Zephir\Exception\InvalidArgumentException
-     */
+    /**  @test */
     public function shouldThrowExceptionOnInvalidAttachedObject()
     {
+        $this->expectException(\Zephir\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got instance of stdClass'
         );
@@ -153,7 +151,7 @@ class CollectionTest extends TestCase
      * @param string $type
      * @param bool   $expected
      */
-    public function shouldDetectWhetherReturnTypesAreIntCompatible($type, $expected)
+    public function shouldDetectWhetherReturnTypesAreIntCompatible(string $type, bool $expected)
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesIntCompatible());
@@ -162,35 +160,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesIntCompatible());
 
         $collection->attach(new RealType($type));
-        $this->assertTrue($expected === $collection->areReturnTypesIntCompatible());
-    }
-
-    public function intCompatibleProvider()
-    {
-        return [
-            [Types::T_INT, true],
-            [Types::T_UINT, true],
-            [Types::T_CHAR, true],
-            [Types::T_UCHAR, true],
-            [Types::T_LONG, true],
-            [Types::T_ULONG, true],
-            [Types::T_DOUBLE, false],
-            [Types::T_FLOAT, false],
-            [Types::T_NUMBER, false],
-            [Types::T_NULL, false],
-            [Types::T_BOOL, false],
-            [Types::T_STRING, false],
-            [Types::T_ISTRING, false],
-            [Types::T_VOID, false],
-            [Types::T_VARIABLE, false],
-            [Types::T_MIXED, false],
-            [Types::T_ARRAY, false],
-            [Types::T_OBJECT, false],
-            [Types::T_CALLABLE, false],
-            [Types::T_ITERABLE, false],
-            [Types::T_RESOURCE, false],
-            [Types::T_UNDEFINED, false],
-        ];
+        $this->assertSame($expected, $collection->areReturnTypesIntCompatible());
     }
 
     /** @test */
@@ -242,7 +212,7 @@ class CollectionTest extends TestCase
      * @param string $type
      * @param bool   $expected
      */
-    public function shouldDetectWhetherReturnTypesAreStringCompatible($type, $expected)
+    public function shouldDetectWhetherReturnTypesAreStringCompatible(string $type, bool $expected)
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesStringCompatible());
@@ -251,35 +221,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesStringCompatible());
 
         $collection->attach(new RealType($type));
-        $this->assertTrue($expected === $collection->areReturnTypesStringCompatible());
-    }
-
-    public function stringCompatibleProvider()
-    {
-        return [
-            [Types::T_INT, false],
-            [Types::T_UINT, false],
-            [Types::T_CHAR, false],
-            [Types::T_UCHAR, false],
-            [Types::T_LONG, false],
-            [Types::T_ULONG, false],
-            [Types::T_DOUBLE, false],
-            [Types::T_FLOAT, false],
-            [Types::T_NULL, false],
-            [Types::T_NUMBER, false],
-            [Types::T_BOOL, false],
-            [Types::T_STRING, true],
-            [Types::T_ISTRING, true],
-            [Types::T_VOID, false],
-            [Types::T_VARIABLE, false],
-            [Types::T_MIXED, false],
-            [Types::T_ARRAY, false],
-            [Types::T_OBJECT, false],
-            [Types::T_CALLABLE, false],
-            [Types::T_ITERABLE, false],
-            [Types::T_RESOURCE, false],
-            [Types::T_UNDEFINED, false],
-        ];
+        $this->assertSame($expected, $collection->areReturnTypesStringCompatible());
     }
 
     /** @test */
@@ -341,9 +283,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesObjectCompatible());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function shouldDetectWellKnownTypes()
     {
         $collection = new Collection();
@@ -416,31 +356,68 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->areReturnTypesCompatible());
     }
 
+    public function intCompatibleProvider()
+    {
+        $expected = [
+            true, true, true, true, true, true,
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false, false,
+        ];
+
+        return array_map(
+            function ($type, $expected) {
+                return [$type[0], $expected];
+            },
+            $this->compatibleTypesProvider(),
+            $expected
+        );
+    }
+
+    public function stringCompatibleProvider()
+    {
+        $expected = [
+            false, false, false, false, false,
+            false, false, false, false, false, false,
+            true, true,
+            false, false, false, false, false,
+            false, false, false, false,
+        ];
+
+        return array_map(
+            function ($type, $expected) {
+                return [$type[0], $expected];
+            },
+            $this->compatibleTypesProvider(),
+            $expected
+        );
+    }
+
     public function compatibleTypesProvider()
     {
         return [
-            [Types::T_INT],
-            [Types::T_UINT],
-            [Types::T_CHAR],
-            [Types::T_UCHAR],
-            [Types::T_LONG],
-            [Types::T_ULONG],
-            [Types::T_DOUBLE],
-            [Types::T_FLOAT],
-            [Types::T_NULL],
-            [Types::T_NUMBER],
-            [Types::T_BOOL],
-            [Types::T_STRING],
-            [Types::T_ISTRING],
-            [Types::T_VOID],
-            [Types::T_VARIABLE],
-            [Types::T_MIXED],
-            [Types::T_ARRAY],
-            [Types::T_OBJECT],
-            [Types::T_CALLABLE],
-            [Types::T_ITERABLE],
-            [Types::T_RESOURCE],
-            [Types::T_UNDEFINED],
+            'int' => [Types::T_INT],
+            'iunt' => [Types::T_UINT],
+            'char' => [Types::T_CHAR],
+            'uchar' => [Types::T_UCHAR],
+            'long' => [Types::T_LONG],
+            'ulong' => [Types::T_ULONG],
+            'double' => [Types::T_DOUBLE],
+            'float' => [Types::T_FLOAT],
+            'null' => [Types::T_NULL],
+            'number' => [Types::T_NUMBER],
+            'bool' => [Types::T_BOOL],
+            'string' => [Types::T_STRING],
+            'istring' => [Types::T_ISTRING],
+            'void' => [Types::T_VOID],
+            'variable' => [Types::T_VARIABLE],
+            'mixed' => [Types::T_MIXED],
+            'array' => [Types::T_ARRAY],
+            'object' => [Types::T_OBJECT],
+            'callable' => [Types::T_CALLABLE],
+            'iterable' => [Types::T_ITERABLE],
+            'resource' => [Types::T_RESOURCE],
+            'undefined' => [Types::T_UNDEFINED],
         ];
     }
 

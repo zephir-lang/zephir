@@ -29,6 +29,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'templates/ZendEngine3',
+        'tests/fixtures',
         'tests/sharness',
     ])
     ->notPath('#tests/fixtures/stubs/.*#');

@@ -2107,7 +2107,7 @@ class ClassMethod
                 $globalVar = $symbolTable->getVariable($name);
                 $codePrinter->preOutput("\t".$compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
-            if ($variable->isLocalSatic()) {
+            if ($variable->isLocalStatic()) {
                 $staticVar = $symbolTable->getVariable($name);
 
                 $codePrinter->preOutput(sprintf(
