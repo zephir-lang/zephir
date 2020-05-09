@@ -740,7 +740,7 @@ class Backend extends BackendZendEngine2
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param Variable           $symbolVariable
      * @param Variable           $variableVariable
