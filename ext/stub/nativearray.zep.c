@@ -1977,13 +1977,13 @@ PHP_METHOD(Stub_NativeArray, Issue1140) {
 	zephir_get_strval(&baseDir, baseDir_param);
 
 
-	zephir_read_property(&_0, this_ptr, SL("prefixes"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset(&_0, &prefix))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
 		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix, &_1$$3);
 	}
-	zephir_read_property(&_2, this_ptr, SL("prefixes"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_2, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch(&_3, &_2, &prefix, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
 	ZEPHIR_MAKE_REF(&_3);
 	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 54, &_3, &baseDir);
@@ -2026,11 +2026,11 @@ zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_typ
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property(&_0, this_ptr, SL("prefixes"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
 			array_init(&_1$$3);
-			zend_update_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL("prefixes"), &_1$$3);
+			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("prefixes"), &_1$$3);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);

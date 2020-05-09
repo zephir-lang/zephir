@@ -57,7 +57,7 @@ PHP_METHOD(Stub_Issues, someMethod) {
 
 
 
-	zephir_read_property(&_0, this_ptr, SL("adapter"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("adapter"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_METHOD_ZVAL(&_0, methodName, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();

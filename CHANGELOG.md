@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Fixed duplicate definition with GCC 10
   [ice/framework#266](https://github.com/ice/framework/pull/266)
+- Fixed initialization of object properties with default values when
+  the object is an instance of a child class
+  [#2089](https://github.com/phalcon/zephir/issues/2089)
 
 ### Changed
 - Improved stubs generation for methods which may return object or null
@@ -18,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - In some cases for C "control characters" aren't properly escaped
   [#2065](https://github.com/phalcon/zephir/issues/2065)
 - Zephir ignored property visibility and has not thrown error when setting
-  private/protected properties in scope that shouldn't intended for it
+  private/protected properties in scope that shouldn't intend for it
   [#2078](https://github.com/phalcon/zephir/pull/2078),
   [phalcon/cphalcon#14810](https://github.com/phalcon/cphalcon/issues/14810),
   [phalcon/cphalcon#14766](https://github.com/phalcon/cphalcon/issues/14766)

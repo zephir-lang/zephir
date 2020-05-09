@@ -17,9 +17,6 @@
 #include "kernel/object.h"
 
 
-/**
- * Class with constructor + params
- */
 ZEPHIR_INIT_CLASS(Stub_Oo_PropertyAccess) {
 
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, PropertyAccess, stub, oo_propertyaccess, stub_oo_propertyaccess_method_entry, 0);
@@ -77,17 +74,17 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
 	ZVAL_DOUBLE(&_1, 6.00);
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(&test, ZEND_STRL("test"), &_0);
-	zephir_read_property(&_2, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 21);
+	zephir_read_property(&_2, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_fetch_long(&_3, &_2, 0, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 17);
 	zephir_update_property_zval(&test, ZEND_STRL("test2"), &_3);
-	zephir_read_property(&_4, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 22);
+	zephir_read_property(&_4, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 18);
 	zephir_update_property_zval(&test, ZEND_STRL("test3"), &_5);
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);
-	zephir_read_property(&_7, &test, SL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_7, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_OBS_VAR(&_8);
-	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 23);
+	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 19);
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 1);
@@ -100,14 +97,17 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
 	zephir_array_fast_append(&_6, &_1);
 	zephir_update_property_zval(&test, ZEND_STRL("test3"), &_6);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), &test);
-	zephir_read_property(&_9, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_10, &_9, SL("test2"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_9, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_10, &_9, ZEND_STRL("test2"), PH_NOISY_CC | PH_READONLY);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
-	zephir_read_property(&test1, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_MM_RESTORE();
 
 }
 
+/**
+ * @issue https://github.com/phalcon/zephir/issues/1851
+ */
 PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 
 	zval *value, value_sub;
@@ -124,6 +124,9 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 
 }
 
+/**
+ * @issue https://github.com/phalcon/zephir/issues/1851
+ */
 PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable) {
 
 	zval *this_ptr = getThis();

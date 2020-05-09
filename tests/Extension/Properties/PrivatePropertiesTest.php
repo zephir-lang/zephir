@@ -5,19 +5,20 @@
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Properties;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Properties\PrivateProperties;
 
 class PrivatePropertiesTest extends TestCase
 {
     public function testAssertations()
     {
-        $test = new \Stub\Properties\PrivateProperties();
+        $test = new PrivateProperties();
 
         $this->assertNull($test->getSomeNull());
         $this->assertNull($test->getSomeNullInitial());

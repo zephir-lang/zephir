@@ -222,10 +222,7 @@ class PropertyAccess
         }
 
         $readOnly = $this->readOnly || $readOnly;
-        $useOptimized = $classDefinition == $currentClassDefinition;
-        if (!$compilationContext->backend->isZE3()) {
-            $readOnly = $useOptimized && $readOnly;
-        }
+
         if ($makeSymbolVariable) {
             if ($readOnly) {
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
@@ -248,7 +245,7 @@ class PropertyAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, $readOnly, $compilationContext, $useOptimized);
+        $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, $readOnly, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

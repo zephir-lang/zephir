@@ -80,7 +80,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists) {
 
 
 
-	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset(&_0, offset));
 
 }
@@ -97,7 +97,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset) {
 
 
 
-	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, offset, PH_SEPARATE);
 
 }
@@ -119,9 +119,9 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet) {
 
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_read_property(&_1, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset(&_1, offset)) {
-		zephir_read_property(&_2, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 		zephir_array_fetch(&_0, &_2, offset, PH_NOISY, "stub/arrayaccessobj.zep", 33);
 	} else {
 		ZVAL_NULL(&_0);

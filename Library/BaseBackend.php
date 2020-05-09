@@ -225,7 +225,22 @@ abstract class BaseBackend implements FcallAwareInterface
 
     abstract public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
 
-    abstract public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false);
+    /**
+     * Fetch object's property.
+     *
+     * @param Variable           $symbolVariable
+     * @param Variable           $variableVariable
+     * @param Variable|string    $property
+     * @param bool               $readOnly
+     * @param CompilationContext $context
+     */
+    abstract public function fetchProperty(
+        Variable $symbolVariable,
+        Variable $variableVariable,
+        $property,
+        $readOnly,
+        CompilationContext $context
+    );
 
     abstract public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context);
 

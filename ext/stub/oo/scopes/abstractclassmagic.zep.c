@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set) {
 
 
 	zephir_update_property_zval_zval(this_ptr, &name, value);
-	zephir_read_property(&_0, this_ptr, SL("setCount"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("setCount"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_ZVAL_NREF(_1);
 	ZVAL_LONG(&_1, (zephir_get_numberval(&_0) + 1));
 	zephir_update_property_zval(this_ptr, ZEND_STRL("setCount"), &_1);

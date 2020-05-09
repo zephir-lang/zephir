@@ -752,7 +752,7 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths) {
 
 	ZEPHIR_INIT_VAR(&reversed);
 	array_init(&reversed);
-	zephir_read_property(&_0, this_ptr, SL("_paths"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("_paths"), PH_NOISY_CC | PH_READONLY);
 	zephir_is_iterable(&_0, 0, "stub/router/route.zep", 478);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
