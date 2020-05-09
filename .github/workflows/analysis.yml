@@ -2,8 +2,6 @@ name: Static Code Analysis
 
 on:
   push:
-    branches:
-      - development
     paths-ignore:
       - '**.md'
       - '**.txt'
