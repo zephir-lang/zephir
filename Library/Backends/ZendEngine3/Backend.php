@@ -869,12 +869,10 @@ class Backend extends BackendZendEngine2
         }
 
         /* Are we going to init default object property value? */
-        if ($context->currentMethod &&
-            preg_match('/^zephir_init_properties/', $context->currentMethod->getName())) {
+        if ($context->currentMethod && $context->currentMethod->isInitializer()) {
             $context->codePrinter->output(
                 sprintf(
-                    'zend_update_property(Z_OBJCE_P(%s), %s, ZEND_STRL("%s"), %s);',
-                    $this->getVariableCode($variable),
+                    'zephir_init_property_zval(%s, ZEND_STRL("%s"), %s);',
                     $this->getVariableCode($variable),
                     $property,
                     $value
@@ -896,6 +894,7 @@ class Backend extends BackendZendEngine2
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
     {
+        // TODO(serghei): Sort out as well as above
         $value = $this->resolveValue($value, $context);
         $context->codePrinter->output('zephir_update_static_property_ce('.$classEntry.', ZEND_STRL("'.$property.'"), '.$value.');');
     }

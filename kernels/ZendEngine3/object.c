@@ -436,31 +436,46 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 	return 0;
 }
 
+/**
+ * Lookup for the real owner of the property
+ */
 static inline
 zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce,
 										 const char *property_name,
 										 unsigned int property_length) {
 	zend_class_entry *original_ce = ce;
 	zend_property_info *info;
+	zend_class_entry *scope;
+	zval member;
+
+	ZVAL_STRINGL(&member, property_name, property_length);
+
+	/* Backup current scope */
+	scope = zephir_get_scope(0);
 
 	while (ce) {
-		info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length);
+		/* Use the scope of the current object */
+		zephir_set_scope(ce);
 
-#if PHP_VERSION_ID < 70400
-		if (info != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
+		info = zend_get_property_info(ce, Z_STR(member), 1);
+		if (info && info != ZEND_WRONG_PROPERTY_INFO) {
+			zval_ptr_dtor(&member);
+			/* Restore original scope */
+			zephir_set_scope(scope);
+
 			return ce;
 		}
-#else
-		if (info != NULL)  {
-			return ce;
-		}
-#endif
+
 		ce = ce->parent;
 	}
 
+	zval_ptr_dtor(&member);
+
+	/* Restore original scope */
+	zephir_set_scope(scope);
+
 	return original_ce;
 }
-
 
 /**
  * Checks whether obj is an object and reads a property from this object
@@ -468,6 +483,7 @@ zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce,
 int zephir_read_property(zval *result, zval *object, const char *property_name,
 						 uint32_t property_length, int flags)
 {
+	zend_class_entry *ce, *scope;
 	zval property, tmp;
 	zval *res;
 
@@ -483,6 +499,18 @@ int zephir_read_property(zval *result, zval *object, const char *property_name,
 		ZVAL_NULL(result);
 		return FAILURE;
 	}
+
+	/* Backup current scope */
+	scope = zephir_get_scope(0);
+	ce = Z_OBJCE_P(object);
+
+	/* Lookup for the real owner of the property */
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	/* Use the scope of the found object */
+	zephir_set_scope(ce);
 
 	if (!Z_OBJ_HT_P(object)->read_property) {
 		zend_error(E_CORE_ERROR,
@@ -502,6 +530,9 @@ int zephir_read_property(zval *result, zval *object, const char *property_name,
 	}
 
 	zval_ptr_dtor(&property);
+
+	/* Restore original scope */
+	zephir_set_scope(scope);
 
 	return SUCCESS;
 }
@@ -562,6 +593,68 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 	}
 
 	return zephir_read_property(result, object, Z_STRVAL_P(property), Z_STRLEN_P(property), flags);
+}
+
+/**
+ * Checks whether obj is an object and updates property with another zval.
+ *
+ * This function is intended to set initial value to object's property.
+ * Do not use it for a regular property updating.
+ *
+ * TODO(serghei): This function has the same logic as zephir_update_property_zval
+ */
+int zephir_init_property_zval(zval *object, const char *property_name,
+								unsigned int property_length, zval *value)
+{
+	zend_class_entry *ce, *scope;
+	zval property, sep_value;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		php_error_docref(NULL, E_WARNING,
+						 "Attempt to assign property '%s' of non-object",
+						 property_name);
+		return FAILURE;
+	}
+
+	/* Backup current scope */
+	scope = zephir_get_scope(0);
+	ce = Z_OBJCE_P(object);
+
+	/* Lookup for the real owner of the property */
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	/* Use the scope of the found object */
+	zephir_set_scope(ce);
+
+	/* The class did not declare a handler for updating properties */
+	if (!Z_OBJ_HT_P(object)->write_property) {
+		zend_error(E_CORE_ERROR,
+				   "Property %s of class %s cannot be updated",
+				   property_name, ZSTR_VAL(Z_OBJCE_P(object)->name));
+	}
+
+	ZVAL_STRINGL(&property, property_name, property_length);
+	ZVAL_COPY_VALUE(&sep_value, value);
+	if (Z_TYPE(sep_value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
+		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
+			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
+				GC_DELREF(Z_ARR(sep_value));
+			}
+		}
+	}
+
+	/* write_property will add 1 to refcount,
+	   so no Z_TRY_ADDREF_P(value) is necessary */
+	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
+	zval_ptr_dtor(&property);
+
+	/* Restore original scope */
+	zephir_set_scope(scope);
+
+	return SUCCESS;
 }
 
 /**
@@ -690,7 +783,6 @@ int zephir_update_property_array(zval *object, const char *property, uint32_t pr
 
 	return SUCCESS;
 }
-
 
 /**
  * Appends a zval value to an array property
