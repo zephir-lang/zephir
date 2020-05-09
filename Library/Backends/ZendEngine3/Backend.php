@@ -739,20 +739,55 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false)
-    {
+    /**
+     * {@inheritDoc}
+     *
+     * @param Variable           $symbolVariable
+     * @param Variable           $variableVariable
+     * @param Variable|string    $property
+     * @param bool               $readOnly
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    public function fetchProperty(
+        Variable $symbolVariable,
+        Variable $variableVariable,
+        $property,
+        $readOnly,
+        CompilationContext $context
+    ) {
         $flags = 'PH_NOISY_CC';
         if ($readOnly) {
             $flags .= ' | PH_READONLY';
         }
+
         $variableCode = $this->getVariableCode($variableVariable);
         $symbol = $this->getVariableCode($symbolVariable);
-        //TODO: maybe optimizations (read_nproperty/quick) for thisScope access in NG (as in ZE2 - if necessary)
+
         if ($property instanceof Variable) {
-            $context->codePrinter->output('zephir_read_property_zval('.$symbol.', '.$variableCode.', '.$this->getVariableCode($property).', '.$flags.');');
-        } else {
-            $context->codePrinter->output('zephir_read_property('.$symbol.', '.$variableCode.', SL("'.$property.'"), '.$flags.');');
+            $context->codePrinter->output(
+                sprintf(
+                    'zephir_read_property_zval(%s, %s, %s, %s);',
+                    $symbol,
+                    $variableCode,
+                    $this->getVariableCode($property),
+                    $flags
+                )
+            );
+
+            return;
         }
+
+        $template = 'zephir_read_property(%s, %s, ZEND_STRL("%s"), %s);';
+        /* Are we going to init default object property value? */
+        if ($context->currentMethod && $context->currentMethod->isInitializer()) {
+            $template = 'zephir_read_property_ex(%s, %s, ZEND_STRL("%s"), %s);';
+        }
+
+        $context->codePrinter->output(
+            sprintf($template, $symbol, $variableCode, $property, $flags)
+        );
     }
 
     /**
@@ -852,7 +887,6 @@ class Backend extends BackendZendEngine2
      */
     public function updateProperty(Variable $variable, $property, $value, CompilationContext $context)
     {
-        // TODO(serghei): maybe optimizations as well as above
         $value = $this->resolveValue($value, $context);
 
         if ($property instanceof Variable) {
@@ -868,27 +902,14 @@ class Backend extends BackendZendEngine2
             return;
         }
 
+        $template = 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
-            $context->codePrinter->output(
-                sprintf(
-                    'zephir_init_property_zval(%s, ZEND_STRL("%s"), %s);',
-                    $this->getVariableCode($variable),
-                    $property,
-                    $value
-                )
-            );
-
-            return;
+            $template = 'zephir_init_property_zval(%s, ZEND_STRL("%s"), %s);';
         }
 
         $context->codePrinter->output(
-            sprintf(
-                'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);',
-                $this->getVariableCode($variable),
-                $property,
-                $value
-            )
+            sprintf($template, $this->getVariableCode($variable), $property, $value)
         );
     }
 

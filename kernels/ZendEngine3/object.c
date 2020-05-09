@@ -477,6 +477,33 @@ zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce,
 	return original_ce;
 }
 
+int zephir_read_property_ex(zval *result, zval *object, const char *property_name,
+						 uint32_t property_length, int flags)
+{
+	zend_class_entry *ce, *scope;
+	int retval;
+
+	/* Backup current scope */
+	scope = zephir_get_scope(0);
+	ce = Z_OBJCE_P(object);
+
+	/* Lookup for the real owner of the property */
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	/* Use the scope of the found object */
+	zephir_set_scope(ce);
+
+	/* Read the property */
+	retval = zephir_read_property(result, object, property_name, property_length, flags);
+
+	/* Restore original scope */
+	zephir_set_scope(scope);
+
+	return retval;
+}
+
 /**
  * Checks whether obj is an object and reads a property from this object
  */
