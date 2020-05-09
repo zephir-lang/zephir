@@ -172,7 +172,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_OBS_VAR(&g);
-	zephir_read_property(&g, this_ptr, SL("s"), PH_NOISY_CC);
+	zephir_read_property(&g, this_ptr, ZEND_STRL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
@@ -195,7 +195,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2) {
 
 
 	ZEPHIR_OBS_VAR(&g);
-	zephir_read_property(&g, inp, SL("s"), PH_NOISY_CC);
+	zephir_read_property(&g, inp, ZEND_STRL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
@@ -216,12 +216,12 @@ zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type 
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
-		zephir_read_property(&_0, this_ptr, SL("s"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("s"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
 			zephir_create_array(&_1$$3, 1, 0);
 			add_assoc_stringl_ex(&_1$$3, SL("a"), SL("true"));
-			zend_update_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL("s"), &_1$$3);
+			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("s"), &_1$$3);
 		}
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);

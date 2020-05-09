@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Unsettest, has) {
 
 
 
-	zephir_read_property(&_0, this_ptr, SL("property"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset(&_0, key));
 
 }
@@ -85,7 +85,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty) {
 
 
 
-	zephir_read_property(&_0, this_ptr, SL("property"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, key, PH_SEPARATE);
 
 }

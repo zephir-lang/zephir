@@ -7,7 +7,11 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct);
 PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable);
 PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_propertyaccess_setprivatevariable, 0, 0, 1)
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_oo_propertyaccess_setprivatevariable, 0, 1, Stub\\Oo\\PropertyAccess, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_propertyaccess_setprivatevariable, 0, 1, IS_OBJECT, "Stub\\Oo\\PropertyAccess", 0)
+#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 

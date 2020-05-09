@@ -257,7 +257,7 @@ PHP_METHOD(Stub_FetchTest, hasValue) {
 	if (zephir_array_isset(&_POST, &name)) {
 		RETURN_MM_BOOL(1);
 	} else {
-		zephir_read_property(&_0$$4, this_ptr, SL("values"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property(&_0$$4, this_ptr, ZEND_STRL("values"), PH_NOISY_CC | PH_READONLY);
 		if (zephir_array_isset(&_0$$4, &name)) {
 			RETURN_MM_BOOL(1);
 		}
@@ -288,7 +288,7 @@ PHP_METHOD(Stub_FetchTest, getValue) {
 	ZEPHIR_OBS_VAR(&value);
 	if (!(zephir_array_isset_fetch(&value, &_POST, &name, 0))) {
 		ZEPHIR_OBS_NVAR(&value);
-		zephir_read_property(&_0$$3, this_ptr, SL("values"), PH_NOISY_CC | PH_READONLY);
+		zephir_read_property(&_0$$3, this_ptr, ZEND_STRL("values"), PH_NOISY_CC | PH_READONLY);
 		if (!(zephir_array_isset_fetch(&value, &_0$$3, &name, 0))) {
 			RETURN_MM_NULL();
 		}

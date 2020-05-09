@@ -267,7 +267,7 @@ PHP_METHOD(Stub_Bench_Foo, readProp) {
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			zephir_read_property(&x, this_ptr, SL("b"), PH_NOISY_CC | PH_READONLY);
+			zephir_read_property(&x, this_ptr, ZEND_STRL("b"), PH_NOISY_CC | PH_READONLY);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
@@ -352,7 +352,7 @@ PHP_METHOD(Stub_Bench_Foo, assignAddProp) {
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_INIT_NVAR(&_4$$3);
 			ZVAL_LONG(&_4$$3, 2);
-			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
+			zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("b"), PH_NOISY_CC);
 			ZEPHIR_ADD_ASSIGN(&_3$$3, &_4$$3)
 			zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_3$$3);
 		}
@@ -528,7 +528,7 @@ PHP_METHOD(Stub_Bench_Foo, emptyProp) {
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZEPHIR_OBS_NVAR(&_3$$3);
-			zephir_read_property(&_3$$3, this_ptr, SL("b"), PH_NOISY_CC);
+			zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("b"), PH_NOISY_CC);
 			x = ZEPHIR_IS_EMPTY(&_3$$3);
 		}
 	}

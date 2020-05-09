@@ -88,9 +88,9 @@ PHP_METHOD(Stub_ArrayIterator, current) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_OBS_VAR(&_2);
-	zephir_read_property(&_2, this_ptr, SL("position"), PH_NOISY_CC);
+	zephir_read_property(&_2, this_ptr, ZEND_STRL("position"), PH_NOISY_CC);
 	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "stub/arrayiterator.zep", 22);
 	RETURN_CTOR(&_1);
 
@@ -123,8 +123,8 @@ PHP_METHOD(Stub_ArrayIterator, valid) {
 	ZVAL_UNDEF(&_1);
 
 
-	zephir_read_property(&_0, this_ptr, SL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_1, this_ptr, SL("position"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_1, this_ptr, ZEND_STRL("position"), PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset(&_0, &_1));
 
 }

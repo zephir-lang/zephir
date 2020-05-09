@@ -317,9 +317,9 @@ PHP_METHOD(Stub_Exceptions, testMultiException) {
 
 
 	ZEPHIR_OBS_VAR(&iexc);
-	zephir_read_property(&iexc, this_ptr, SL("internalExceptionCallable"), PH_NOISY_CC);
+	zephir_read_property(&iexc, this_ptr, ZEND_STRL("internalExceptionCallable"), PH_NOISY_CC);
 	ZEPHIR_OBS_VAR(&exc);
-	zephir_read_property(&exc, this_ptr, SL("exceptionCallable"), PH_NOISY_CC);
+	zephir_read_property(&exc, this_ptr, ZEND_STRL("exceptionCallable"), PH_NOISY_CC);
 
 	/* try_start_1: */
 

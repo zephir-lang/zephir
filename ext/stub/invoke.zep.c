@@ -53,7 +53,7 @@ PHP_METHOD(Stub_Invoke, __invoke) {
 	ZVAL_UNDEF(&_0);
 
 
-	zephir_read_property(&_0, this_ptr, SL("a"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_gettype(return_value, &_0);
 	return;
 
