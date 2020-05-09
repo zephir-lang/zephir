@@ -558,8 +558,7 @@ int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int s
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)
 {
 	ZVAL_NULL(return_value);
-	zephir_read_property(return_value, object, property_name, property_length, 0);
-	return SUCCESS;
+	return zephir_read_property(return_value, object, property_name, property_length, 0);
 }
 
 /**
