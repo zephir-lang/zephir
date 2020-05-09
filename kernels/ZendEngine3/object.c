@@ -486,10 +486,12 @@ zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce,
 int zephir_read_property_ex(zval *result, zval *object, const char *property_name,
 						 uint32_t property_length, int flags)
 {
-	zend_class_entry *ce, *scope;
+	zend_class_entry *scope;
 	int retval;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
+		zend_class_entry *ce;
+
 		/* Backup current scope */
 		scope = zephir_get_scope(0);
 		ce = Z_OBJCE_P(object);
@@ -623,10 +625,12 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 int zephir_update_property_zval_ex(zval *object, const char *property_name,
 								unsigned int property_length, zval *value)
 {
-	zend_class_entry *ce, *scope;
+	zend_class_entry *scope;
 	int retval;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
+		zend_class_entry *ce;
+
 		/* Backup current scope */
 		scope = zephir_get_scope(0);
 		ce = Z_OBJCE_P(object);
