@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+## [0.12.19] - 2020-05-13
 ### Fixed
 - Fixed duplicate definition with GCC 10
   [ice/framework#266](https://github.com/ice/framework/pull/266)
@@ -409,7 +410,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.18...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.19...HEAD
+[0.12.19]: https://github.com/phalcon/zephir/compare/0.12.18...0.12.19
 [0.12.18]: https://github.com/phalcon/zephir/compare/0.12.17...0.12.18
 [0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17
 [0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16

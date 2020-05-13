@@ -14,7 +14,7 @@
 #define PHP_STUB_VERSION     "1.0.0"
 #define PHP_STUB_EXTNAME     "stub"
 #define PHP_STUB_AUTHOR      "Phalcon Team and contributors"
-#define PHP_STUB_ZEPVERSION  "0.12.18-$Id$"
+#define PHP_STUB_ZEPVERSION  "0.12.19-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
 typedef struct _zephir_struct_db { 
