@@ -41,7 +41,7 @@ class Variable
      * @throws CompilerException
      */
     public function assign(
-        $variable,
+        string $variable,
         ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         ReadDetector $readDetector,
@@ -122,7 +122,7 @@ class Variable
     private function doNumericAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext
     ) {
@@ -359,7 +359,7 @@ class Variable
     private function doDoubleAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext
     ) {
@@ -547,7 +547,7 @@ class Variable
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext
     ) {
@@ -734,7 +734,7 @@ class Variable
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext
     ) {
@@ -781,7 +781,7 @@ class Variable
     private function doBoolAssignment(
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext
     ) {
@@ -918,7 +918,7 @@ class Variable
         CodePrinter $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
-        $variable,
+        string $variable,
         array $statement,
         CompilationContext $compilationContext,
         ReadDetector $readDetector

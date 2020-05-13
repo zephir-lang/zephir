@@ -80,9 +80,6 @@ static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJEC
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals_ptr;
-#ifdef ZTS
-	tsrm_ls = ts_resource(0);
-#endif
 	%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr);
@@ -120,6 +117,10 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
+#if defined(COMPILE_DL_%PROJECT_UPPER%) && defined(ZTS)
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
 	php_zephir_init_globals(%PROJECT_LOWER%_globals);
 	php_zephir_init_module_globals(%PROJECT_LOWER%_globals);
 }
@@ -166,6 +167,10 @@ zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
 	STANDARD_MODULE_PROPERTIES_EX
 };
 
+/* implement standard "stub" routine to introduce ourselves to Zend */
 #ifdef COMPILE_DL_%PROJECT_UPPER%
+# ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE()
+# endif
 ZEND_GET_MODULE(%PROJECT_LOWER_SAFE%)
 #endif

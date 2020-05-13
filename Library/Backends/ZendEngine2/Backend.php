@@ -632,25 +632,25 @@ class Backend extends BaseBackend
         );
     }
 
-    public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false)
-    {
-        if ($useOptimized) {
-            if ($readOnly) {
-                $context->codePrinter->output($symbolVariable->getName().' = zephir_fetch_nproperty_this('.$variableVariable->getName().', SL("'.$property.'"), PH_NOISY_CC);');
-            } else {
-                $context->codePrinter->output('zephir_read_property_this(&'.$symbolVariable->getName().', '.$variableVariable->getName().', SL("'.$property.'"), PH_NOISY_CC);');
-            }
-        } else {
-            if ($property instanceof Variable) {
-                $context->codePrinter->output('zephir_read_property_zval(&'.$symbolVariable->getName().', '.$variableVariable->getName().', '.$this->getVariableCode($property).', PH_NOISY_CC);');
-            } else {
-                $context->codePrinter->output('zephir_read_property(&'.$symbolVariable->getName().', '.$variableVariable->getName().', SL("'.$property.'"), PH_NOISY_CC);');
-            }
-        }
+    public function fetchProperty(
+        Variable $symbolVariable,
+        Variable $variableVariable,
+        $property,
+        $readOnly,
+        CompilationContext $context
+    ) {
+        throw new CompilerException(
+            'ZendEngine2 backend is no longer supported'
+        );
     }
 
-    public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
-    {
+    public function fetchStaticProperty(
+        Variable $symbolVariable,
+        $classDefinition,
+        $property,
+        $readOnly,
+        CompilationContext $context
+    ) {
         throw new CompilerException(
             'ZendEngine2 backend is no longer supported'
         );

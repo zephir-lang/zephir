@@ -1,0 +1,37 @@
+
+extern zend_class_entry *stub_properties_staticprotectedproperties_ce;
+
+ZEPHIR_INIT_CLASS(Stub_Properties_StaticProtectedProperties);
+
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeVar);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeVar);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNull);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeNull);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNullInitial);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeFalse);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeTrue);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeInteger);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeDouble);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeString);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticprotectedproperties_setsomevar, 0, 0, 1)
+	ZEND_ARG_INFO(0, someVar)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticprotectedproperties_setsomenull, 0, 0, 1)
+	ZEND_ARG_INFO(0, param)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(stub_properties_staticprotectedproperties_method_entry) {
+	PHP_ME(Stub_Properties_StaticProtectedProperties, setSomeVar, arginfo_stub_properties_staticprotectedproperties_setsomevar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeVar, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeNull, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, setSomeNull, arginfo_stub_properties_staticprotectedproperties_setsomenull, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeNullInitial, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeFalse, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeTrue, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeInteger, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeDouble, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeString, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_FE_END
+};

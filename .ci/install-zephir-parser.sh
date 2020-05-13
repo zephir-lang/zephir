@@ -12,9 +12,10 @@
 set -eu
 
 : "${ZEPHIR_PARSER_VERSION:=development}"
-PHP_VERSION=$1
 
 echo "Install Zephir Parser using version: $ZEPHIR_PARSER_VERSION"
+
+PHP_INI_DIR="$(dirname "$(php -i | grep /.+/conf.d/.+.ini -oE | head -n 1)")"
 
 git clone -b "$ZEPHIR_PARSER_VERSION" \
       --depth 1 \
@@ -24,11 +25,11 @@ git clone -b "$ZEPHIR_PARSER_VERSION" \
 cd php-zephir-parser || exit 1
 
 phpize
-./configure --with-php-config=/usr/bin/php-config --enable-zephir_parser
+./configure --with-php-config="$(command -v php-config)" --enable-zephir_parser
 make -j"$(getconf _NPROCESSORS_ONLN)"
 sudo make install
 
 echo 'extension="zephir_parser.so"' |\
-  sudo tee "/etc/php/$PHP_VERSION/cli/conf.d/zephir_parser.ini"
+  sudo tee "$PHP_INI_DIR/zephir_parser.ini"
 
 php --ri "Zephir Parser"

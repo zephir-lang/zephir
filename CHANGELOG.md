@@ -5,13 +5,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+## [0.12.19] - 2020-05-13
+### Fixed
+- Fixed duplicate definition with GCC 10
+  [ice/framework#266](https://github.com/ice/framework/pull/266)
+- Fixed initialization of object properties with default values when
+  the object is an instance of a child class
+  [#2089](https://github.com/phalcon/zephir/issues/2089)
+
+### Changed
+- Improved stubs generation for methods which may return object or null
+  [#2092](https://github.com/phalcon/zephir/issues/2092)
 
 ## [0.12.18] - 2020-04-25
 ### Fixed
 - In some cases for C "control characters" aren't properly escaped
   [#2065](https://github.com/phalcon/zephir/issues/2065)
 - Zephir ignored property visibility and has not thrown error when setting
-  private/protected properties in scope that shouldn't intended for it
+  private/protected properties in scope that shouldn't intend for it
   [#2078](https://github.com/phalcon/zephir/pull/2078),
   [phalcon/cphalcon#14810](https://github.com/phalcon/cphalcon/issues/14810),
   [phalcon/cphalcon#14766](https://github.com/phalcon/cphalcon/issues/14766)
@@ -399,7 +410,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.18...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.19...HEAD
+[0.12.19]: https://github.com/phalcon/zephir/compare/0.12.18...0.12.19
 [0.12.18]: https://github.com/phalcon/zephir/compare/0.12.17...0.12.18
 [0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17
 [0.12.16]: https://github.com/phalcon/zephir/compare/0.12.15...0.12.16

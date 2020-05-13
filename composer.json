@@ -72,11 +72,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Zephir\\Test\\": "unit-tests/Zephir/Test/",
-            "Extension\\": "unit-tests/Extension/"
+            "Zephir\\Test\\": "tests/Zephir/",
+            "Extension\\": "tests/Extension/"
         },
         "classmap": [
-            "unit-tests/fixtures/mocks/"
+            "tests/fixtures/mocks/"
         ]
     },
     "minimum-stability": "dev",
@@ -86,8 +86,8 @@
     ],
     "support": {
         "issues": "https://github.com/phalcon/zephir/issues?state=open",
-        "forum": "https://forum.zephir-lang.com",
         "source": "https://github.com/phalcon/zephir",
+        "irc": "irc://irc.freenode.net/zephir",
         "docs": "https://docs.zephir-lang.com"
     }
 }

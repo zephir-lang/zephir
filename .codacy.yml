@@ -4,6 +4,10 @@ engines:
     enabled: true
     config:
       rulesets: "phpmd.xml.dist"
+  phpcs:
+    enabled: true
+    config:
+      ruleset: "phpcs.xml.dist"
 
 exclude_paths:
   - 'ext/**'

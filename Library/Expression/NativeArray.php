@@ -215,7 +215,7 @@ class NativeArray
             $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
         $oldSymbolVariable = $symbolVariable;
-        if ($this->expectingVariable && $symbolVariable->geVariantInits() >= 1) {
+        if ($this->expectingVariable && $symbolVariable->getVariantInits() >= 1) {
             $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
             $symbolVariable->initVariant($compilationContext);
             $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);

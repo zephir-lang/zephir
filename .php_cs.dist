@@ -29,9 +29,10 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'templates/ZendEngine3',
-        'unit-tests/sharness',
+        'tests/fixtures',
+        'tests/sharness',
     ])
-    ->notPath('#unit-tests/fixtures/stubs/.*#');
+    ->notPath('#tests/fixtures/stubs/.*#');
 
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)

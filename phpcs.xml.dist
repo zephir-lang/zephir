@@ -40,13 +40,14 @@
     -->
     <file>Library</file>
 
-    <!-- file>unit-tests/Extension</file -->
-    <!-- file>unit-tests/Zephir</file -->
+    <!-- file>tests/Extension</file -->
+    <!-- file>tests/Zephir</file -->
 
     <!--
         Hard-code ignore patterns directly into custom standard
         so we don't have to specify the patterns on the command line.
     -->
     <exclude-pattern>prototypes/*</exclude-pattern>
-    <exclude-pattern>unit-tests/fixtures/*</exclude-pattern>
+    <exclude-pattern>stub/*</exclude-pattern>
+    <exclude-pattern>tests/fixtures/*</exclude-pattern>
 </ruleset>
