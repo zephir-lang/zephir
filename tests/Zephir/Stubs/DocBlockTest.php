@@ -142,6 +142,7 @@ DOC;
      * @param string \$valueString
      * @param bool \$valueBoolean
      * @param array \$valueArray
+     * @param string[] \$stringArray
      * @param object \$valueObject
      * @param resource \$valueResource
      * @param null \$valueNull
@@ -165,6 +166,7 @@ DOC;
      * @param string \$valueString
      * @param bool \$valueBoolean
      * @param array \$valueArray
+     * @param string[] \$stringArray
      * @param object \$valueObject
      * @param resource \$valueResource
      * @param null \$valueNull

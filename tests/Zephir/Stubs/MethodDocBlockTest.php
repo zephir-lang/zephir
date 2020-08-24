@@ -234,6 +234,12 @@ class MethodDocBlockTest extends TestCase
                 " *    \"test\" => \"xyz\"\n".
                 ' * ]',
             ],
+            'with square brackets array syntax' => [
+                // Zep
+                '@param Foo[] $name - some description',
+                // php
+                '@param Foo[] $name - some description',
+            ],
         ];
     }
 
