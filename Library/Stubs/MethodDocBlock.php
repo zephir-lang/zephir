@@ -141,7 +141,7 @@ class MethodDocBlock extends DocBlock
     {
         $pattern = '~
             @(?P<doctype>param|return|var)\s+
-            (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+)*)\s*
+            (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+|\s*\[]+)*)\s*
             (?P<dollar>\$)?
             (?P<name>[a-z_][a-z0-9_]*)?\s*
             (?P<description>(.|\s)*)?
