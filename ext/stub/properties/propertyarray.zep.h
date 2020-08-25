@@ -8,7 +8,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome);
 PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray);
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray);
 PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831);
-zend_object *zephir_init_properties_Stub_Properties_PropertyArray(zend_class_entry *class_type TSRMLS_DC);
+zend_object *zephir_init_properties_Stub_Properties_PropertyArray(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_propertyarray_appendsome, 0, 0, 1)
 	ZEND_ARG_INFO(0, value)

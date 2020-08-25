@@ -133,7 +133,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
 
 }
 
-zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type) {
 
 		zval _3$$4, _4$$4, _6$$5, _8$$6;
 	zval _0, _2, _5, _7, _10, _1$$3, _9$$6, _11$$7;

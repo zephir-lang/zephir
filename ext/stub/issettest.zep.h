@@ -13,7 +13,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2);
 PHP_METHOD(Stub_IssetTest, testIssetProperty3);
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1);
 PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2);
-zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type TSRMLS_DC);
+zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issettest_testissetarray1, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)

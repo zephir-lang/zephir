@@ -10,7 +10,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle);
 PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle);
-void zephir_init_static_properties_Stub_SPropertyAccess(TSRMLS_D);
+void zephir_init_static_properties_Stub_SPropertyAccess();
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess_testargumentwithunderscore, 0, 0, 0)
 	ZEND_ARG_INFO(0, delimiter)

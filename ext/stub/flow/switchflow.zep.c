@@ -291,12 +291,13 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13) {
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
 
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *result_type = NULL, result_type_sub, ret, _0;
+	zval *result_type = NULL, result_type_sub, ret, _0, _1;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&result_type_sub);
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &result_type);
@@ -311,7 +312,9 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
 	do {
 		ZEPHIR_INIT_VAR(&_0);
 		ZEPHIR_GET_CONSTANT(&_0, "MYSQL_ASSOC");
-		if (ZEPHIR_IS_LONG(result_type, 1) || ZEPHIR_IS_EQUAL(result_type, &_0) || ZEPHIR_IS_LONG(result_type, 1)) {
+		ZEPHIR_INIT_VAR(&_1);
+		ZEPHIR_GET_CONSTANT(&_1, "MYSQLI_ASSOC");
+		if (ZEPHIR_IS_LONG(result_type, 1) || ZEPHIR_IS_EQUAL(result_type, &_0) || ZEPHIR_IS_EQUAL(result_type, &_1)) {
 			ZEPHIR_INIT_VAR(&ret);
 			ZVAL_STRING(&ret, "aaa");
 			break;

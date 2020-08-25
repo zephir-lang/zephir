@@ -308,7 +308,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle) {
 
 }
 
-void zephir_init_static_properties_Stub_SPropertyAccess(TSRMLS_D) {
+void zephir_init_static_properties_Stub_SPropertyAccess() {
 
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
