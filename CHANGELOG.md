@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed stubs generation for case with array declaration with square brackets in params
+
 ## [0.12.19] - 2020-05-13
 ### Fixed
 - Fixed duplicate definition with GCC 10

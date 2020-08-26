@@ -28,11 +28,15 @@ jobs:
           tools: php-cs-fixer, phpcs
 
       - name: Run PHP_CodeSniffer
-        run: phpcs --runtime-set ignore_warnings_on_exit true
+        run: |
+          phpcs --version
+          phpcs --runtime-set ignore_warnings_on_exit true
 
       - name: Run PHP CS Fixer
         if: always()
-        run: php-cs-fixer fix --diff --dry-run -v
+        run: |
+          php-cs-fixer --version
+          php-cs-fixer fix --diff --dry-run -v
 
       - name: Run Shell Check
         if: always()
