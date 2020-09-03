@@ -566,7 +566,7 @@ void zephir_fast_join_str(zval *return_value, char *glue, unsigned int glue_leng
 void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 {
 
-	int i, len, delim_len, pre_del = 1;
+	int i, len, delim_len, pre_del = 0;
 	smart_str camelize_str = {0};
 	char *marker, ch, *delim;
 
@@ -600,7 +600,7 @@ void zephir_camelize(zval *return_value, const zval *str, const zval *delimiter)
 			smart_str_appendc(&camelize_str, toupper(ch));
 			pre_del = 0;
 		} else {
-			smart_str_appendc(&camelize_str, tolower(ch));
+			smart_str_appendc(&camelize_str, ch);
 		}
 	}
 

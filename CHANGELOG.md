@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 ### Fixed
 - Fixed stubs generation for case with array declaration with square brackets in params
+- Fixed camelize method to produce camelCase and not force lowercase
+  [#2115](https://github.com/phalcon/zephir/issues/2115)
 
 ## [0.12.19] - 2020-05-13
 ### Fixed

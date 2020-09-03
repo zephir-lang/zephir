@@ -293,17 +293,19 @@ class StringTest extends TestCase
     {
         return [
             ['=_camelize',      '=Camelize', '_'],
-            ['camelize',        'Camelize',  '_'],
-            ['came_li_ze',      'CameLiZe',  '_'],
-            ['came_li_ze',      'CameLiZe',  null],
-            ['came#li#ze',      'CameLiZe',  '#'],
-            ['came li ze',      'CameLiZe',  ' '],
-            ['came.li^ze',      'CameLiZe',  '.^'],
-            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  '-_'],
-            ['c_a-m_e-l_i-z_e', 'CAMELIZE',  null],
-            ['came.li.ze',      'CameLiZe',  '.'],
-            ['came-li-ze',      'CameLiZe',  '-'],
-            ['c+a+m+e+l+i+z+e', 'CAMELIZE',  '+'],
+            ['camelize',        'camelize',  '_'],
+            ['Camelize',        'Camelize',  '_'],
+            ['CameLiZe',        'CameLiZe',  '_'],
+            ['came_li_ze',      'cameLiZe',  '_'],
+            ['came_li_ze',      'cameLiZe',  null],
+            ['came#li#ze',      'cameLiZe',  '#'],
+            ['came li ze',      'cameLiZe',  ' '],
+            ['came.li^ze',      'cameLiZe',  '.^'],
+            ['c_a-m_e-l_i-z_e', 'cAMELIZE',  '-_'],
+            ['c_a-m_e-l_i-z_e', 'cAMELIZE',  null],
+            ['came.li.ze',      'cameLiZe',  '.'],
+            ['came-li-ze',      'cameLiZe',  '-'],
+            ['c+a+m+e+l+i+z+e', 'cAMELIZE',  '+'],
         ];
     }
 
