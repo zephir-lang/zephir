@@ -49,7 +49,7 @@ static PHP_MSHUTDOWN_FUNCTION(lifecycle)
 {
 	ext_takedown_module();
 	ext_kill_module();
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -58,7 +58,7 @@ static PHP_MSHUTDOWN_FUNCTION(lifecycle)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_lifecycle_globals *lifecycle_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_lifecycle_globals *lifecycle_globals)
 {
 	lifecycle_globals->initialized = 0;
 
@@ -78,7 +78,7 @@ static void php_zephir_init_globals(zend_lifecycle_globals *lifecycle_globals TS
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_lifecycle_globals *lifecycle_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_lifecycle_globals *lifecycle_globals)
 {
 	
 }
@@ -98,7 +98,7 @@ static PHP_RINIT_FUNCTION(lifecycle)
 static PHP_RSHUTDOWN_FUNCTION(lifecycle)
 {
 	ext_takedown_request();
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 
