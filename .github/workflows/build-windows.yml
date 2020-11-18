@@ -65,13 +65,13 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" >> $GITHUB_ENV
-          echo "PHP_VERSION=$(php -r 'echo phpversion();')" >> $GITHUB_ENV
-          echo "PHP_MINOR=${{ matrix.php }}" >> $GITHUB_ENV
-          echo "TEST_PHP_EXECUTABLE=${env:PHPROOT}\php.exe" >> $GITHUB_ENV
-          echo "BUILD_TYPE=${{ matrix.build_type }}" >> $GITHUB_ENV
-          echo "VC_VERSION=${{ matrix.vc_num }}" >> $GITHUB_ENV
-          echo "PHP_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+          Write-Output "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_VERSION=$(php -r 'echo phpversion();')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_MINOR=${{ matrix.php }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "TEST_PHP_EXECUTABLE=${env:PHPROOT}\php.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "BUILD_TYPE=${{ matrix.build_type }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "VC_VERSION=${{ matrix.vc_num }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_ARCH=${{ matrix.arch }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Checkout Code
         uses: actions/checkout@v2
