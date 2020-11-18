@@ -80,7 +80,7 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo ::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}
+          echo "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v2
