@@ -15,6 +15,10 @@ env:
 
 jobs:
   linux:
+    # To prevent build a particular commit use
+    #     git commit -m "......... [ci skip]"
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+
     name: "${{ matrix.os }}: PHP v${{ matrix.php }}"
     runs-on: ${{ matrix.os }}
 
@@ -204,7 +208,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          yml: ./.codecov.yml
           name: codecov-umbrella
           flags: unittests
           fail_ci_if_error: false
