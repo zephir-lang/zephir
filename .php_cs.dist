@@ -49,5 +49,5 @@ return PhpCsFixer\Config::create()
         'protected_to_private' => false,
         'phpdoc_var_annotation_correct_order' => true,
         'no_superfluous_phpdoc_tags' => false,
-        'single_line_throw' => false,
+        // 'single_line_throw' => false,
     ]);
