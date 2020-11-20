@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 ### Fixed
 - Fixed stubs generation for case with array declaration with square brackets in params
+- Fixed parameters positioning for `implode()` php function [#2120](https://github.com/phalcon/zephir/issues/2120)
 
 ## [0.12.19] - 2020-05-13
 ### Fixed
