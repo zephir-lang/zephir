@@ -335,6 +335,11 @@ class Generator
                 $return = 'array';
                 ++$supported;
             }
+            
+            if (version_compare(PHP_VERSION, '7.1.0', '>=') && $method->areReturnTypesVoidCompatible()) {
+                $reutrn = 'void';
+                ++$supported;
+            }
 
             if (!empty($return) && $method->areReturnTypesNullCompatible()) {
                 if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
