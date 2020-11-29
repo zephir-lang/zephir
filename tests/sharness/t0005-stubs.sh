@@ -31,9 +31,14 @@ test_expect_success "Should properly generate type hint" \
 test_expect_success "Should properly namespace imports (use block)" \
   "test_cmp expected/Issue_1778.zep.php ide/0.0.1/Stubs/Issue_1778.zep.php"
 
+if test_have_prereq PHP70; then
+  expected="Issue_1900_PHP70.zep.php"
+else
+  expected="Issue_1900.zep.php"
+fi
 # See: https://github.com/phalcon/zephir/issues/1900
 test_expect_success "Should properly generate return types for stubs" \
-  "test_cmp expected/Issue_1900.zep.php ide/0.0.1/Stubs/Issue_1900.zep.php"
+  "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_1900.zep.php"
 
 # See: https://github.com/phalcon/zephir/issues/1907
 test_expect_success "Should properly generate Namespace for extends" \
@@ -43,9 +48,14 @@ test_expect_success "Should properly generate Namespace for extends" \
 test_expect_success "Should properly generate Namespace for extends (slash)" \
   "test_cmp expected/Issue_1907.zep.php ide/0.0.1/Stubs/Issue_1907.zep.php"
 
+if test_have_prereq PHP70; then
+  expected="Issue_1986_PHP70.zep.php"
+else
+  expected="Issue_1986.zep.php"
+fi
 # See: https://github.com/phalcon/zephir/issues/1986
 test_expect_success "Should properly generate Aliases for use statements" \
-  "test_cmp expected/Issue_1986.zep.php ide/0.0.1/Stubs/Issue_1986.zep.php"
+  "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_1986.zep.php"
 
 # See: https://github.com/phalcon/zephir/issues/1896
 test_expect_success "Should generage CamelCase folders for stubs" \
