@@ -54,7 +54,7 @@
         "ext-zip": "*",
         "psr/log": "1.1.*",
         "symfony/debug": "3.4.*",
-        "symfony/phpunit-bridge": "4.3.*"
+        "symfony/phpunit-bridge": "5.1.*"
     },
     "config": {
         "optimize-autoloader": true,
