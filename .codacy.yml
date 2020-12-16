@@ -12,3 +12,7 @@ engines:
 exclude_paths:
   - 'ext/**'
   - 'prototypes/**'
+  - 'templates/**'
+  - 'CHANGELOG.md'
+  - '**.md'
+  - '**.json'
