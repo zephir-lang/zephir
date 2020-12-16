@@ -21,7 +21,7 @@ class IssetTest extends TestCase
     /** @var \Stub\IssetTest */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\IssetTest();
     }

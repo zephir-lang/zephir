@@ -20,13 +20,12 @@ class CompilerFormatterTest extends TestCase
     /** @var Config */
     private $config;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config();
     }
 
-    /** @test */
-    public function shouldBeQuietWhenConfigSilent()
+    public function testShouldBeQuietWhenConfigSilent()
     {
         $this->config->set('silent', true);
         $compilerFormatter = new CompilerFormatter($this->config);
@@ -60,8 +59,7 @@ class CompilerFormatterTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function shouldBeQuietForDisabledWarning()
+    public function testShouldBeQuietForDisabledWarning()
     {
         // deny to print warnings for this category
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], false);
@@ -70,8 +68,7 @@ class CompilerFormatterTest extends TestCase
         $this->assertSame('', $compilerFormatter->format($this->getWarningContext()));
     }
 
-    /** @test */
-    public function shouldFormatWarningForCategory()
+    public function testShouldFormatWarningForCategory()
     {
         // allow to print warnings for this category
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);
@@ -91,8 +88,7 @@ class CompilerFormatterTest extends TestCase
         $this->assertSame($expected, $compilerFormatter->format($testContext));
     }
 
-    /** @test */
-    public function shouldFormatWithStripInfoLevels()
+    public function testShouldFormatWithStripInfoLevels()
     {
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);
         $compilerFormatter = new CompilerFormatter($this->config);

@@ -16,10 +16,7 @@ use Stub\Globals\Env;
 
 class EnvTest extends TestCase
 {
-    /**
-     * This method is called before a test is executed.
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,8 +32,7 @@ class EnvTest extends TestCase
         }
     }
 
-    /** @test */
-    public function readStandard()
+    public function testReadStandard()
     {
         $tester = new Env();
 
@@ -50,8 +46,7 @@ class EnvTest extends TestCase
         $this->assertSame($_ENV[$var], getenv($var));
     }
 
-    /** @test */
-    public function readNew()
+    public function testReadNew()
     {
         $_ENV['NEW_VARIABLEFROM'] = __FUNCTION__;
         $tester = new Env();

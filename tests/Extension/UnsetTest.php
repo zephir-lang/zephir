@@ -19,7 +19,7 @@ class UnsetTest extends TestCase
     /** @var UnsetTestExt */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new UnsetTestExt();
     }

@@ -16,8 +16,7 @@ use Stub\Properties\ProtectedProperties;
 
 class ProtectedPropertiesTest extends TestCase
 {
-    /** @test */
-    public function shouldGetDefaultValueOfProtectedPropertiesUsingGetters()
+    public function testShouldGetDefaultValueOfProtectedPropertiesUsingGetters()
     {
         $test = new ProtectedProperties();
 
@@ -33,8 +32,7 @@ class ProtectedPropertiesTest extends TestCase
         $this->assertEquals('test', $test->getSomeString());
     }
 
-    /** @test */
-    public function shouldSetAndGetProtectedPropertyUsingShortcuts()
+    public function testShouldSetAndGetProtectedPropertyUsingShortcuts()
     {
         $test = new ProtectedProperties();
 
@@ -45,11 +43,9 @@ class ProtectedPropertiesTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2089
      */
-    public function shouldSetAndGetProtectedPropertyUsingExtendedClass()
+    public function testShouldSetAndGetProtectedPropertyUsingExtendedClass()
     {
         $test = new \ExtendsProtectedProperties();
 

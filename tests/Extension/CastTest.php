@@ -21,12 +21,12 @@ class CastTest extends TestCase
      */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Cast();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->test = null;
     }

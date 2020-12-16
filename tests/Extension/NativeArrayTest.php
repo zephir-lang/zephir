@@ -19,7 +19,7 @@ class NativeArrayTest extends TestCase
     /** @var NativeArray */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new NativeArray();
     }

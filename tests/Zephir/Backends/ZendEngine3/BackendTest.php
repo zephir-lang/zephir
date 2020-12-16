@@ -32,10 +32,9 @@ class BackendTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider stringDataProvider
      */
-    public function shouldEscapeStringWithRegexp(string $testString, string $expectedString)
+    public function testShouldEscapeStringWithRegexp(string $testString, string $expectedString)
     {
         $backend = new Backend(new Config(), null, null);
         $variable = new Variable('variable', 'name');

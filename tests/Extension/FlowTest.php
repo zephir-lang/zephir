@@ -18,7 +18,7 @@ class FlowTest extends TestCase
     /** @var \Stub\Flow */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Flow();
     }

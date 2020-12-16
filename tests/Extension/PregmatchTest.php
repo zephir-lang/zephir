@@ -19,7 +19,7 @@ class PregmatchTest extends TestCase
     /** @var Pregmatch */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Pregmatch();
     }

@@ -17,10 +17,9 @@ use Stub\Instance;
 class InstanceTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1339
      */
-    public function shouldCreateAnInstanceUsingMoreThan10Parameters()
+    public function testShouldCreateAnInstanceUsingMoreThan10Parameters()
     {
         $this->assertInstanceOf(Instance::class, Instance::testIssue1339());
     }

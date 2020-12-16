@@ -23,13 +23,13 @@ class NewInstanceOperatorTest extends TestCase
         'Fixture\EmptyClass' => ZEPHIRPATH.'/tests/fixtures/class-empty.php',
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         spl_autoload_register([$this, 'autoload']);
         $this->test = new \Stub\Operator();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         spl_autoload_unregister([$this, 'autoload']);
     }

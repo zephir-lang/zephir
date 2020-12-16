@@ -19,7 +19,7 @@ class SessionTest extends TestCase
     /**
      * This method is called before a test is executed.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,8 +28,7 @@ class SessionTest extends TestCase
         }
     }
 
-    /** @test */
-    public function destroy()
+    public function testDestroy()
     {
         $this->assertSame([], $_SESSION);
 
@@ -46,8 +45,7 @@ class SessionTest extends TestCase
         $this->assertSame($_SESSION, $result);
     }
 
-    /** @test */
-    public function directUnset()
+    public function testDirectUnset()
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';
@@ -58,8 +56,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    /** @test */
-    public function remove()
+    public function testRemove()
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['foo'] = 'bar';
@@ -70,8 +67,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    /** @test */
-    public function removeFromUnset()
+    public function testRemoveFromUnset()
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';

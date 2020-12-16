@@ -17,7 +17,7 @@ class FetchTest extends TestCase
 {
     public static $test;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$test = new \Stub\FetchTest();
 
@@ -35,7 +35,7 @@ class FetchTest extends TestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$test = null;
     }

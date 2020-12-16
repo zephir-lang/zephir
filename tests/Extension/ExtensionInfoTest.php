@@ -38,12 +38,11 @@ class ExtensionInfoTest extends TestCase
 
     /**
      * @dataProvider directiveProvider()
-     * @test
      *
      * @param string $var
      * @param bool   $contains
      */
-    public function shouldBeWithoutDuplicatesNamespace($var, $contains)
+    public function testShouldBeWithoutDuplicatesNamespace($var, $contains)
     {
         ob_start();
 

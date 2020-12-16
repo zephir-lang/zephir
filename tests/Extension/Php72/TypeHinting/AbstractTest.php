@@ -17,10 +17,9 @@ use TestConcreteClass;
 class AbstractTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1667
      */
-    public function shouldCreateCompatibleChildClassUsingTypeHintedParams()
+    public function testShouldCreateCompatibleChildClassUsingTypeHintedParams()
     {
         $childClass = new TestConcreteClass();
 
@@ -36,20 +35,18 @@ class AbstractTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1667
      */
-    public function shouldCreateCompatibleChildClassWithMultipleReturnTypesHint()
+    public function testShouldCreateCompatibleChildClassWithMultipleReturnTypesHint()
     {
         $childClass = new TestConcreteClass();
         $this->assertEquals('TestConcreteClass::returnOneOfScalar', $childClass->returnOneOfScalar());
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1667
      */
-    public function shouldCreateCompatibleChildClassWithScalarType()
+    public function testShouldCreateCompatibleChildClassWithScalarType()
     {
         $childClass = new TestConcreteClass();
 

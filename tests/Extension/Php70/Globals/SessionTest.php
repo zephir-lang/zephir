@@ -17,11 +17,9 @@ use Stub\Globals\Session\Base;
 class SessionTest extends TestCase
 {
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1775
      */
-    public function shouldAccessToTheSession()
+    public function testShouldAccessToTheSession()
     {
         unset($_SESSION);
         $this->assertFalse(isset($_SESSION));
