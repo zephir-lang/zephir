@@ -28,9 +28,6 @@ jobs:
           coverage: none
           ini-values: memory_limit=1G, phar.readonly=0
 
-      - name: Choose a Suitable PHP Version to Build PHAR
-        run: composer config platform.php 7.0.33
-
       - name: Get Composer Cache Directory
         id: composer-cache
         run: echo ::set-output name=dir::$(composer config cache-files-dir)
