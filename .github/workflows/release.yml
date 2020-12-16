@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Setup Environment Variables
-        uses: allenevans/set-env@v1.0.0
+        uses: allenevans/set-env@v2.0.0
         with:
           BOX_VERSION: '3.8.4'
 
@@ -36,7 +36,7 @@ jobs:
         run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
