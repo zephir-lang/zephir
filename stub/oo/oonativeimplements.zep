@@ -10,8 +10,8 @@ class OoNativeImplements implements
 							\Iterator,
 							\OuterIterator,
 							\RecursiveIterator,
-							\SeekableIterator,
-							\IteratorAggregate
+							\SeekableIterator
+							// \IteratorAggregate
 {
 
 	/* Countable */

@@ -16,8 +16,7 @@ use Stub\McallDynamic;
 
 class MCallDynamicTest extends TestCase
 {
-    /** @test */
-    public function callDynamic()
+    public function testCallDynamic()
     {
         $test = new McallDynamic();
         $this->assertSame(1, $test->method1());
@@ -25,11 +24,9 @@ class MCallDynamicTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1751
      */
-    public function callAnonymousFunctionWithContext()
+    public function testCallAnonymousFunctionWithContext()
     {
         $test = new McallDynamic();
 

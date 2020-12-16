@@ -19,28 +19,26 @@ class FunctionExistsTest extends TestCase
     /** @var FunctionExists */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new FunctionExists();
     }
 
     /**
-     * @test
      * @dataProvider providerInternalFunctions
      * @issue https://github.com/phalcon/zephir/issues/1547
      *
      * @param string $func The internal (built-in) function name
      */
-    public function shouldCorrectDetectestExistenceWithPassedName($func)
+    public function testShouldCorrectDetectestExistenceWithPassedName($func)
     {
         $this->assertTrue($this->test->testWithPassedName($func));
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1547
      */
-    public function shouldCorrectDetectestExistenceInsideTheZephirCode()
+    public function testShouldCorrectDetectestExistenceInsideTheZephirCode()
     {
         $expected = [
             'substr' => true,
@@ -57,10 +55,9 @@ class FunctionExistsTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1547
      */
-    public function shouldCorrectDetectestExistenceByUsingString()
+    public function testShouldCorrectDetectestExistenceByUsingString()
     {
         $this->assertTrue($this->test->testWithString());
     }

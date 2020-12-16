@@ -22,13 +22,12 @@ class GlobalsTest extends TestCase
     /** @var \Stub\Globals */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Globals();
     }
 
-    /** @test */
-    public function shouldGetGlobalExtensionSettings()
+    public function testShouldGetGlobalExtensionSettings()
     {
         $this->assertFalse($this->test->getDefaultGlobals1());
 
@@ -41,48 +40,42 @@ class GlobalsTest extends TestCase
         $this->assertSame(65, $this->test->getDefaultGlobals7());
     }
 
-    /** @test */
-    public function shouldSetGlobalExtensionSetting()
+    public function testShouldSetGlobalExtensionSetting()
     {
         $this->test->setBoolValueUsingDotNotation(false);
 
         $this->assertFalse($this->test->getDefaultGlobals1());
     }
 
-    /** @test */
-    public function setIntValueUsingDotNotation()
+    public function testSetIntValueUsingDotNotation()
     {
         $this->test->setIntValueUsingDotNotation(900);
 
         $this->assertSame(900, $this->test->getDefaultGlobals2());
     }
 
-    /** @test */
-    public function setCharValueUsingString()
+    public function testSetCharValueUsingString()
     {
         $this->test->setCharValue('B');
 
         $this->assertSame(66, $this->test->getDefaultGlobals7());
     }
 
-    /** @test */
-    public function setCharValueUsingInt()
+    public function testSetCharValueUsingInt()
     {
         $this->test->setCharValue(90);
 
         $this->assertSame(90, $this->test->getDefaultGlobals7());
     }
 
-    /** @test */
-    public function setBoolValueUsingInt()
+    public function testSetBoolValueUsingInt()
     {
         $this->test->setBoolValue(0);
 
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
-    /** @test */
-    public function setBoolValueUsingBool()
+    public function testSetBoolValueUsingBool()
     {
         $this->test->setBoolValue(true);
         $this->assertTrue($this->test->getDefaultGlobals4());
@@ -91,8 +84,7 @@ class GlobalsTest extends TestCase
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
-    /** @test */
-    public function shouldSetGlobalExtensionOrmCacheLevel()
+    public function testShouldSetGlobalExtensionOrmCacheLevel()
     {
         $this->test->setDefaultGlobalsOrmCacheLevel(3);
 

@@ -18,7 +18,7 @@ class MethodArgsTest extends TestCase
 {
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new MethodArgs();
     }

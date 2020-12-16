@@ -21,12 +21,11 @@ use Zephir\Types;
 class FactoryTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider realTypeDataProvider
      *
      * @param array $ir
      */
-    public function shouldCreateRealType(array $ir)
+    public function testShouldCreateRealType(array $ir)
     {
         $factory = new Factory();
         $this->assertInstanceOf(RealType::class, $factory->create($ir));
@@ -63,12 +62,11 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider castHintDataProvider
      *
      * @param array $ir
      */
-    public function shouldCreateCastHint(array $ir)
+    public function testShouldCreateCastHint(array $ir)
     {
         $factory = new Factory();
         $this->assertInstanceOf(CastHint::class, $factory->create($ir));

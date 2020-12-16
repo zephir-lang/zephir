@@ -19,7 +19,7 @@ class CompareTest extends TestCase
     /** @var Compare */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Compare();
     }

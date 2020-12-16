@@ -19,7 +19,7 @@ class IsScalarTest extends TestCase
     /** @var IsScalar */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new IsScalar();
     }

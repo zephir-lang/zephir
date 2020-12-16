@@ -19,7 +19,7 @@ class IntMethodTest extends TestCase
     /** @var IntMethods */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new IntMethods();
     }
@@ -28,7 +28,7 @@ class IntMethodTest extends TestCase
     {
         $this->assertSame(abs(10), $this->test->getAbs(10));
         $this->assertSame(abs(-5), $this->test->getAbs1());
-        $this->assertSame(pow(2, 4), $this->test->getPow(2, 4));
+        $this->assertSame(2 ** 4, $this->test->getPow(2, 4));
         $this->assertSame(sqrt(4), $this->test->getSqrt(4));
         $this->assertSame(exp(2), $this->test->getExp(2));
 

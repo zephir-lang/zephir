@@ -20,13 +20,12 @@ class DocblockTest extends TestCase
     /** @var Docblock */
     private $docblock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->docblock = new Docblock();
     }
 
-    /** @test */
-    public function shouldGetAllProperties()
+    public function testShouldGetAllProperties()
     {
         $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
@@ -56,8 +55,7 @@ class DocblockTest extends TestCase
         $this->assertSame('See LICENSE.txt for more details.', $this->docblock->getSummary());
     }
 
-    /** @test */
-    public function shouldAddAnnotations()
+    public function testShouldAddAnnotations()
     {
         $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
@@ -73,8 +71,7 @@ class DocblockTest extends TestCase
         $this->assertCount(3, $this->docblock->getAnnotations());
     }
 
-    /** @test */
-    public function shouldGenerateDocblock()
+    public function testShouldGenerateDocblock()
     {
         $expected = <<<DOC
 **

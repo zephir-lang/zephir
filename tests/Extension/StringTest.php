@@ -19,7 +19,7 @@ class StringTest extends TestCase
     /** @var \Stub\Strings */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Strings();
     }

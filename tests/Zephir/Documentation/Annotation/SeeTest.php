@@ -18,8 +18,7 @@ class SeeTest extends TestCase
 {
     const SEE_NAME = 'see';
 
-    /** @test */
-    public function shouldGetLink()
+    public function testShouldGetLink()
     {
         $link = new See(self::SEE_NAME, '  sample with leading space  ');
 
@@ -34,8 +33,7 @@ class SeeTest extends TestCase
         $this->assertSame('another link', $link->getString());
     }
 
-    /** @test */
-    public function shouldGetResource()
+    public function testShouldGetResource()
     {
         $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
@@ -46,8 +44,7 @@ class SeeTest extends TestCase
         $this->assertSame('https://github.com/phalcon/zephir', $link->getResource());
     }
 
-    /** @test */
-    public function shouldGetText()
+    public function testShouldGetText()
     {
         $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 

@@ -20,20 +20,14 @@ class ServerRequestFactoryTest extends TestCase
     private $get;
     private $post;
 
-    /**
-     * This method is called before each test.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->server = $_SERVER;
         $this->get = $_GET;
         $this->post = $_POST;
     }
 
-    /**
-     * This method is called after each test.
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->server;
         $_GET = $this->get;
@@ -41,10 +35,9 @@ class ServerRequestFactoryTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1934
      */
-    public function shouldNotTriggerAnyErrorIfPostIsUndefined()
+    public function testShouldNotTriggerAnyErrorIfPostIsUndefined()
     {
         $tester = new ServerRequestFactory();
 

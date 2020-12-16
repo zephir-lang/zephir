@@ -18,8 +18,7 @@ class LinkTest extends TestCase
 {
     const LINK_NAME = 'link';
 
-    /** @test */
-    public function shouldGetLink()
+    public function testShouldGetLink()
     {
         $link = new Link(self::LINK_NAME, '  sample with leading space  ');
 
@@ -34,8 +33,7 @@ class LinkTest extends TestCase
         $this->assertSame('another link', $link->getString());
     }
 
-    /** @test */
-    public function shouldGetUri()
+    public function testShouldGetUri()
     {
         $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 
@@ -46,8 +44,7 @@ class LinkTest extends TestCase
         $this->assertSame('https://github.com/phalcon/zephir', $link->getUri());
     }
 
-    /** @test */
-    public function shouldGetLinkText()
+    public function testShouldGetLinkText()
     {
         $testString = 'https://github.com/phalcon/zephir Zephir SRC';
 

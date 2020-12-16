@@ -123,13 +123,12 @@ class MethodDocBlockTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider getDocBlock()
      *
      * @param array  $parameters
      * @param string $expected
      */
-    public function methodsWithDataSet(array $parameters, $expected)
+    public function testMethodsWithDataSet(array $parameters, $expected)
     {
         $baseDefinition = require ZEPHIRPATH.'/tests/fixtures/base-definition.php';
         $baseDefinition['method']['parameters'][] = $parameters;
@@ -234,14 +233,19 @@ class MethodDocBlockTest extends TestCase
                 " *    \"test\" => \"xyz\"\n".
                 ' * ]',
             ],
+            'with square brackets array syntax' => [
+                // Zep
+                '@param Foo[] $name - some description',
+                // php
+                '@param Foo[] $name - some description',
+            ],
         ];
     }
 
     /**
-     * @test
      * @dataProvider docBlockProvider()
      */
-    public function shouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock)
+    public function testShouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock)
     {
         $classMethod = new ClassMethod(
             new ClassDefinition('Zephir', 'testMethod'),

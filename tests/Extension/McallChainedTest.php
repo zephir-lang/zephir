@@ -18,7 +18,7 @@ class McallChainedTest extends TestCase
     /** @var \Stub\McallChained */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\McallChained();
     }

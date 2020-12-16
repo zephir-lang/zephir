@@ -17,39 +17,35 @@ use Stub\Returns;
 class ReturnsTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1534
      */
-    public function shouldReturnWithParameter()
+    public function testShouldReturnWithParameter()
     {
         $tester = new Returns();
         $this->assertSame('Return back', $tester->returnWithParameter('Hello World!'));
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1534
      */
-    public function shouldReturnWithParameterStaticVersion()
+    public function testShouldReturnWithParameterStaticVersion()
     {
         $this->assertSame('Return back', Returns::returnWithParameter('Hello World!'));
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1534
      */
-    public function shouldReturnWithoutParameter()
+    public function testShouldReturnWithoutParameter()
     {
         $tester = new Returns();
         $this->assertSame('Return back', $tester->returnWithoutParameter());
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1534
      */
-    public function shouldReturnWithoutParameterStaticVersion()
+    public function testShouldReturnWithoutParameterStaticVersion()
     {
         $this->assertSame('Return back', Returns::returnWithoutParameter());
     }

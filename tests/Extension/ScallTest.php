@@ -49,22 +49,18 @@ class ScallTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1622
      */
-    public function shouldReturnInterpolatedMethodFromZephir()
+    public function testShouldReturnInterpolatedMethodFromZephir()
     {
         $test = new Scall();
         $this->assertSame('hello Scall', $test->interpolatedStaticReturn());
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1622
      */
-    public function shouldEchoInterpolatedMethodFromZephir()
+    public function testShouldEchoInterpolatedMethodFromZephir()
     {
         $test = new Scall();
 

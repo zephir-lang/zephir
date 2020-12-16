@@ -65,13 +65,13 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo "::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}"
-          echo "::set-env name=PHP_VERSION::$(php -r 'echo phpversion();')"
-          echo "::set-env name=PHP_MINOR::${{ matrix.php }}"
-          echo "::set-env name=TEST_PHP_EXECUTABLE::${env:PHPROOT}\php.exe"
-          echo "::set-env name=BUILD_TYPE::${{ matrix.build_type }}"
-          echo "::set-env name=VC_VERSION::${{ matrix.vc_num }}"
-          echo "::set-env name=PHP_ARCH::${{ matrix.arch }}"
+          Write-Output "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_VERSION=$(php -r 'echo phpversion();')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_MINOR=${{ matrix.php }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "TEST_PHP_EXECUTABLE=${env:PHPROOT}\php.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "BUILD_TYPE=${{ matrix.build_type }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "VC_VERSION=${{ matrix.vc_num }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "PHP_ARCH=${{ matrix.arch }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -127,10 +127,10 @@ jobs:
         shell: powershell
         run: |
           $v = "${env:WindowsSDKVersion}" -replace '\\$', ''
-          Write-Output "::set-env name=WindowsSDKVersion::$v"
+          Write-Output "WindowsSDKVersion=$v" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
           $v = "${env:WindowsSDKLibVersion}" -replace '\\$', ''
-          Write-Output "::set-env name=WindowsSDKLibVersion::$v"
+          Write-Output "WindowsSDKLibVersion=$v" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Get Composer Cache Directory
         id: composer-cache

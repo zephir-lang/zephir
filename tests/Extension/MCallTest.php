@@ -22,7 +22,7 @@ class MCallTest extends TestCase
     /** @var Mcall */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Mcall();
     }
@@ -92,57 +92,52 @@ class MCallTest extends TestCase
         $this->assertFalse($this->test->optionalParameterBoolean(false));
     }
 
-    /** @test */
-    public function arrayParamWithDefaultEmptyArray()
+    public function testArrayParamWithDefaultEmptyArray()
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($this->test->arrayParamWithDefaultEmptyArray(), []);
-        $this->assertSame($this->test->arrayParamWithDefaultEmptyArray([1]), [1]);
+        $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray(), []);
+        $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray([1]), [1]);
     }
 
-    /** @test */
-    public function arrayParamWithDefaultNullValue()
+    public function testArrayParamWithDefaultNullValue()
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($this->test->arrayParamWithDefaultNullValue(), []);
-        $this->assertSame($this->test->arrayParamWithDefaultNullValue([1]), [1]);
+        $this->assertSame($this->test->testArrayParamWithDefaultNullValue(), []);
+        $this->assertSame($this->test->testArrayParamWithDefaultNullValue([1]), [1]);
     }
 
-    /** @test */
-    public function arrayParam()
+    public function testArrayParam()
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        $this->assertSame($this->test->arrayParam([]), []);
-        $this->assertSame($this->test->arrayParam([1, 2, 3]), [1, 2, 3]);
+        $this->assertSame($this->test->testArrayParam([]), []);
+        $this->assertSame($this->test->testArrayParam([1, 2, 3]), [1, 2, 3]);
     }
 
-    /**  @test */
-    public function objectParamCastStdClass()
+    public function testObjectParamCastStdClass()
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('stdClass', $this->test->objectParamCastStdClass(new \stdClass()));
+        $this->assertInstanceOf('stdClass', $this->test->testObjectParamCastStdClass(new \stdClass()));
     }
 
-    /** @test */
-    public function objectParamCastOoParam()
+    public function testObjectParamCastOoParam()
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
         $this->assertSame('Stub\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('Stub\Oo\Param', $this->test->objectParamCastOoParam(new \Stub\Oo\Param()));
+        $this->assertInstanceOf('Stub\Oo\Param', $this->test->testObjectParamCastOoParam(new \Stub\Oo\Param()));
     }
 
     /**

@@ -26,12 +26,12 @@ class IsPhpVersionTest extends TestCase
 
     protected $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Issue1404();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->test = null;
     }
@@ -212,7 +212,7 @@ class IsPhpVersionTest extends TestCase
      *
      * @throws \Throwable
      */
-    protected function onNotSuccessfulTest(\Throwable $error)
+    protected function onNotSuccessfulTest(\Throwable $error): void
     {
         $phpVer = sprintf(
             'PHP_VERSION_ID:%d(%d.%d.%d)',

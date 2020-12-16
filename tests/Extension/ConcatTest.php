@@ -19,13 +19,12 @@ class ConcatTest extends TestCase
     /** @var Concat */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Concat();
     }
 
-    /** @test */
-    public function shouldConcatenateLocalVariableAndSelfVariable()
+    public function testShouldConcatenateLocalVariableAndSelfVariable()
     {
         $this->assertNull($this->test->getTestProperty());
 
@@ -36,32 +35,28 @@ class ConcatTest extends TestCase
         $this->assertSame('test string', $this->test->getTestProperty());
     }
 
-    /** @test */
-    public function shouldAppendVariableToString()
+    public function testShouldAppendVariableToString()
     {
         $this->assertSame('appendtest', $this->test->testConcat1());
     }
 
-    /** @test */
-    public function shouldConcatenateVariableWithString()
+    public function testShouldConcatenateVariableWithString()
     {
         $this->assertSame('appendotherappendother', $this->test->testConcat2());
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1573
      */
-    public function shouldConcatenateStringsSimilarToIntegersNumbers()
+    public function testShouldConcatenateStringsSimilarToIntegersNumbers()
     {
         $this->assertSame('21', $this->test->testConcat3());
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1893
      */
-    public function shouldConcatenateStringWithVarDouble()
+    public function testShouldConcatenateStringWithVarDouble()
     {
         $this->assertSame(
             'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
@@ -70,10 +65,9 @@ class ConcatTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1893
      */
-    public function shouldConcatenateStringWithDouble()
+    public function testShouldConcatenateStringWithDouble()
     {
         $this->assertSame(
             'Concatenated string with number 18.93000001',

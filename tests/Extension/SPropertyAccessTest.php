@@ -30,10 +30,7 @@ class SPropertyAccessTest extends TestCase
         $this->assertSame($spa->testArgumentWithUnderscore(), '.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldMutateStringVarInsideCycle()
+    public function testShouldMutateStringVarInsideCycle()
     {
         $this->assertEquals(
             str_repeat(' + ', 4),
@@ -42,11 +39,9 @@ class SPropertyAccessTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
-    public function shouldMutateIntVarInsideCycle()
+    public function testShouldMutateIntVarInsideCycle()
     {
         $this->assertEquals(
             42,
@@ -55,11 +50,9 @@ class SPropertyAccessTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1494
      */
-    public function shouldMutateDoubleVarInsideCycle()
+    public function testShouldMutateDoubleVarInsideCycle()
     {
         $this->assertEquals(
             3.14,
@@ -67,10 +60,7 @@ class SPropertyAccessTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldMutateArrayVarInsideCycle()
+    public function testShouldMutateArrayVarInsideCycle()
     {
         $this->assertEquals(
             [0, 1, 2, 3],
