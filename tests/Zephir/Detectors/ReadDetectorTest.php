@@ -17,14 +17,13 @@ use Zephir\Detectors\ReadDetector;
 class ReadDetectorTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider variableProvider
      *
      * @param bool   $expected
      * @param string $variable
      * @param array  $expression
      */
-    public function shouldDetectsIfVariableIsUsedInGivenExpressionContext(bool $expected, string $variable, array $expression)
+    public function testShouldDetectsIfVariableIsUsedInGivenExpressionContext(bool $expected, string $variable, array $expression)
     {
         $detector = new ReadDetector();
 

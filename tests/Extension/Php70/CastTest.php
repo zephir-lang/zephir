@@ -17,12 +17,9 @@ use Stub\Cast;
 class CastTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1524
-     *
-     * @author Alexander Andriiako <AlexNDR@phalconphp.com>
      */
-    public function shouldReturnResourceIdWhenCastingResourceToInteger()
+    public function testShouldReturnResourceIdWhenCastingResourceToInteger()
     {
         $test = new Cast();
 

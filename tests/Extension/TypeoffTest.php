@@ -18,7 +18,7 @@ class TypeoffTest extends TestCase
     /** @var \Stub\Typeoff */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Typeoff();
     }

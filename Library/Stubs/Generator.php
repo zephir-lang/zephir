@@ -348,7 +348,10 @@ class Generator
             if ($supported > 1) {
                 $return = '';
             }
+        } elseif (version_compare(PHP_VERSION, '7.1.0', '>=') && $method->isVoid()) {
+            $return = 'void';
         }
+
         if (!empty($return)) {
             $return = ': '.$return;
         }

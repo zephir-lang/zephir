@@ -17,10 +17,9 @@ use Stub\Globals\Post;
 class PostTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function shouldNotTriggerAnyErrorIfPostIsUndefined()
+    public function testShouldNotTriggerAnyErrorIfPostIsUndefined()
     {
         $tester = new Post();
 
@@ -31,10 +30,9 @@ class PostTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function shouldReturnFalseIfVariableIsUndefined()
+    public function testShouldReturnFalseIfVariableIsUndefined()
     {
         $tester = new Post();
 
@@ -45,10 +43,9 @@ class PostTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function shouldReturnTrueIfVariableIsDefined()
+    public function testShouldReturnTrueIfVariableIsDefined()
     {
         $tester = new Post();
 

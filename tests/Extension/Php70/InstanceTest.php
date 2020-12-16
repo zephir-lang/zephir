@@ -17,11 +17,10 @@ use Stub\Instance;
 class InstanceTest extends TestCase
 {
     /**
-     * @test
      * @expectedException \Error
      * @expectedExceptionMessage Cannot instantiate abstract class TestAbstractClass
      */
-    public function shouldThrowErrorOnInstantiateAbstractClass()
+    public function testShouldThrowErrorOnInstantiateAbstractClass()
     {
         Instance::testInstanceCreate(\TestAbstractClass::class);
     }

@@ -16,8 +16,7 @@ use Stub\ExtendedInterface;
 
 class ExtendedInterfaceTest extends TestCase
 {
-    /** @test */
-    public function shouldExtendsInterfaces()
+    public function testShouldExtendsInterfaces()
     {
         try {
             $reflection = new \ReflectionClass(ExtendedInterface::class);

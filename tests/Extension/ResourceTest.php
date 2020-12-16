@@ -18,7 +18,7 @@ class ResourceTest extends TestCase
     /** @var \Stub\ResourceTest */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\ResourceTest();
     }

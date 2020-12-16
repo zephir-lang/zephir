@@ -51,7 +51,7 @@ class IsPrivatePropertyOptimizer extends OptimizerAbstract
 
             return new CompiledExpression('bool', 'zephir_is_private_prop('.$resolvedParams[0].')', $expression);
         } catch (Exception $e) {
-            throw  new CompilerException($e->getMessage(), $expression);
+            throw new CompilerException($e->getMessage(), $expression);
         }
     }
 }

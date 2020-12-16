@@ -20,7 +20,7 @@ class StringMethodTest extends TestCase
     /** @var StringMethods */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new StringMethods();
     }

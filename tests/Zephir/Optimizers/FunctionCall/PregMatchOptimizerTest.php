@@ -33,7 +33,7 @@ class PregMatchOptimizerTest extends TestCase
     /** @var MockObject|Variable */
     protected $variableMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->callMock = $this->createMock(Call::class);
         $this->contextMock = $this->createMock(CompilationContext::class);
@@ -42,12 +42,11 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at least 2 parameters, 0 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfNoParametersGiven()
+    public function testShouldThrowExceptionIfNoParametersGiven()
     {
         $optimizer = new PregMatchOptimizer();
 
@@ -59,12 +58,11 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at least 2 parameters, 0 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfParametersLessThanRequired()
+    public function testShouldThrowExceptionIfParametersLessThanRequired()
     {
         $optimizer = new PregMatchOptimizer();
 
@@ -76,12 +74,11 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage preg_match() expects at most 5 parameters, 7 given
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfParametersMoreThanRequired()
+    public function testShouldThrowExceptionIfParametersMoreThanRequired()
     {
         $optimizer = new PregMatchOptimizer();
 
@@ -93,12 +90,11 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage Only variables can be passed by reference
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfMatchedIsNotVariable()
+    public function testShouldThrowExceptionIfMatchedIsNotVariable()
     {
         $optimizer = new PregMatchOptimizer();
 
@@ -118,14 +114,13 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage Cannot mutate variable 'matches' because it wasn't defined
      *
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfUsedUndefinedMatchesVariable()
+    public function testShouldThrowExceptionIfUsedUndefinedMatchesVariable()
     {
         $optimizer = new PregMatchOptimizer();
 
@@ -156,14 +151,13 @@ class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @test
      * @expectedException \Zephir\Exception\CompilerException
      * @expectedExceptionMessage The 'matches' variable must be either a variable or an array, got Ooops
      *
      * @throws \ReflectionException
      * @issue https://github.com/phalcon/zephir/issues/1697
      */
-    public function shouldThrowExceptionIfMatchesHasUnexpectedType()
+    public function testShouldThrowExceptionIfMatchesHasUnexpectedType()
     {
         $optimizer = new PregMatchOptimizer();
 

@@ -18,8 +18,7 @@ use Zephir\Types;
 
 class RealTypeTest extends TestCase
 {
-    /** @test */
-    public function shouldReturnType()
+    public function testShouldReturnType()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertEquals(TypeInterface::TYPE_PARAMETER, $type->getType());
@@ -31,8 +30,7 @@ class RealTypeTest extends TestCase
         $this->assertEquals('return-type-custom', $type->getType());
     }
 
-    /** @test */
-    public function shouldReturnMandatoryStatus()
+    public function testShouldReturnMandatoryStatus()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertFalse($type->isMandatory());
@@ -44,15 +42,13 @@ class RealTypeTest extends TestCase
         $this->assertTrue($type->isMandatory());
     }
 
-    /** @test */
-    public function shouldAlwaysHaveNullableValue()
+    public function testShouldAlwaysHaveNullableValue()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertNull($type->getValue());
     }
 
-    /** @test */
-    public function shouldAlwaysBeNotACollection()
+    public function testShouldAlwaysBeNotACollection()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertFalse($type->isCollection());
@@ -61,8 +57,7 @@ class RealTypeTest extends TestCase
         $this->assertFalse($type->isCollection());
     }
 
-    /** @test */
-    public function shouldReturnDataType()
+    public function testShouldReturnDataType()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertEquals(Types::T_STRING, $type->getDataType());
@@ -74,8 +69,7 @@ class RealTypeTest extends TestCase
         $this->assertEquals(Types::T_VOID, $type->getDataType());
     }
 
-    /** @test */
-    public function shouldAlwaysBeRealType()
+    public function testShouldAlwaysBeRealType()
     {
         $type = new RealType(Types::T_STRING);
         $this->assertTrue($type->isRealType());

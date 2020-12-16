@@ -21,8 +21,7 @@ use Zephir\Documentation\DocblockParser;
 
 class DocblockParserTest extends TestCase
 {
-    /** @test */
-    public function shouldParseDocblockFromString()
+    public function testShouldParseDocblockFromString()
     {
         $test = <<<DOC
 /**

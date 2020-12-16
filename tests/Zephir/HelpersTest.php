@@ -18,8 +18,7 @@ use function Zephir\escape_class;
 
 class HelpersTest extends TestCase
 {
-    /** @test */
-    public function shouldEscapeClassName()
+    public function testShouldEscapeClassName()
     {
         $classname = '\Bar\Foo';
         $this->assertSame(
@@ -28,8 +27,7 @@ class HelpersTest extends TestCase
         );
     }
 
-    /** @test */
-    public function shouldCamelizeClassName()
+    public function testShouldCamelizeClassName()
     {
         $name = 'foo_Bar_Foo_bar';
         $this->assertSame(
@@ -68,10 +66,9 @@ class HelpersTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider cStringProvider
      */
-    public function shouldPrepareStringAsCString(string $testString, string $expected)
+    public function testShouldPrepareStringAsCString(string $testString, string $expected)
     {
         $this->assertSame($expected, add_slashes($testString));
     }

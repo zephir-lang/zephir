@@ -18,7 +18,7 @@ class ConstantsInterfaceTest extends TestCase
     /** @var \Stub\ConstantsInterface */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\ConstantsInterface();
     }

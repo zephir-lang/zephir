@@ -356,7 +356,7 @@ final class Types
         $areEquals = false;
 
         if ($isNullable) {
-            array_push($allowedTypes, static::T_NULL);
+            $allowedTypes[] = static::T_NULL;
         }
 
         foreach ($types as $type => $data) {

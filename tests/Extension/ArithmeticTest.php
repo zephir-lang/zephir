@@ -17,7 +17,7 @@ class ArithmeticTest extends TestCase
 {
     protected $class;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->class = new \Stub\Arithmetic();
     }

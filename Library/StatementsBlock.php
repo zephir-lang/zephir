@@ -124,7 +124,7 @@ class StatementsBlock
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
-            array_push($compilationContext->cycleBlocks, $this);
+            $compilationContext->cycleBlocks[] = $this;
         }
 
         $where = '';

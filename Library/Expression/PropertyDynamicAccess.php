@@ -137,7 +137,7 @@ class PropertyDynamicAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $property = $propertyVariable ? $propertyVariable : add_slashes($expression['right']['value']);
+        $property = $propertyVariable ?: add_slashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

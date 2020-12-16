@@ -20,7 +20,7 @@ class ExceptionsTest extends TestCase
     /** @var Exceptions */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Exceptions();
     }

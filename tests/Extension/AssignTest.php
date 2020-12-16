@@ -19,20 +19,19 @@ class AssignTest extends TestCase
     /** @var Assign */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Assign();
     }
 
     /**
      * @dataProvider variableAssignProvider
-     * @test
      *
      * @param mixed  $expected
      * @param string $test
      * @param mixed  $testParams
      */
-    public function shouldPerformAssignment($expected, $test, $testParams = null)
+    public function testShouldPerformAssignment($expected, $test, $testParams = null)
     {
         $this->assertSame($expected, \call_user_func([$this->test, $test], $testParams));
     }
@@ -98,13 +97,12 @@ class AssignTest extends TestCase
 
     /**
      * @dataProvider propertyAssignProvider
-     * @test
      *
      * @param mixed  $expected
      * @param string $test
      * @param mixed  $testParams
      */
-    public function shouldPerformAssignmentForProperties($expected, $test, $testParams = null)
+    public function testShouldPerformAssignmentForProperties($expected, $test, $testParams = null)
     {
         if ('array' === \gettype($testParams)) {
             $this->assertSame($expected, \call_user_func_array([$this->test, $test], $testParams));

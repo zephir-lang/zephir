@@ -19,7 +19,7 @@ class RequiresTest extends TestCase
     /** @var Requires */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Requires();
     }
@@ -37,10 +37,9 @@ class RequiresTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/pull/1428
      */
-    public function shouldRequireUsingNewSymbolTable()
+    public function testShouldRequireUsingNewSymbolTable()
     {
         ob_start();
         $actual = $this->test->requireExternal3(__DIR__.'/../fixtures/require-me-3.php');
@@ -50,10 +49,9 @@ class RequiresTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1621
      */
-    public function shouldRenderTemplate()
+    public function testShouldRenderTemplate()
     {
         $param = 1;
 
@@ -66,10 +64,9 @@ class RequiresTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1713
      */
-    public function shouldRequirePhar()
+    public function testShouldRequirePhar()
     {
         $this->assertEquals(
             "I'm in",

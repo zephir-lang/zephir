@@ -19,7 +19,7 @@ class StatementsTest extends TestCase
     /** @var Statements */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Statements();
     }

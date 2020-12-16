@@ -1,4 +1,4 @@
-``<?php
+<?php
 
 /*
  * This file is part of the Zephir.
@@ -29,6 +29,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'templates/ZendEngine3',
+        'templates/Api',
         'tests/fixtures',
         'tests/sharness',
     ])
@@ -49,6 +50,6 @@ return PhpCsFixer\Config::create()
         'protected_to_private' => false,
         'phpdoc_var_annotation_correct_order' => true,
         'no_superfluous_phpdoc_tags' => false,
-        // Removed this line, because latest php-cs-fixer v2.15.x does not support this rule
-        // 'single_line_throw' => false,
+        'single_line_throw' => false,
+        'psr_autoloading' => false,
     ]);
