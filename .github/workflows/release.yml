@@ -1,9 +1,9 @@
 name: Upload Release Asset
 
-on: [push]
-  # push:
-    # tags:
-    #   - '*'
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -65,16 +65,16 @@ jobs:
         id: get-version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     # This token is provided by GitHub Actions.
-      #     # You DO NOT need to create your own token.
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     name: ${{ steps.get-version.outputs.version }}
-      #     tag: ${{ steps.get-version.outputs.version }}
-      #     body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-      #     # This will update existing tags if any
-      #     allowUpdates: true
-      #     artifacts: zephir.phar
-      #     artifactContentType: application/x-php
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          # This token is provided by GitHub Actions.
+          # You DO NOT need to create your own token.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.get-version.outputs.version }}
+          tag: ${{ steps.get-version.outputs.version }}
+          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
+          # This will update existing tags if any
+          allowUpdates: true
+          artifacts: zephir.phar
+          artifactContentType: application/x-php
