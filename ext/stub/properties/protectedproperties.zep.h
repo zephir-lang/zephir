@@ -15,7 +15,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeTrue);
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeInteger);
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeDouble);
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeString);
-zend_object *zephir_init_properties_Stub_Properties_ProtectedProperties(zend_class_entry *class_type TSRMLS_DC);
+zend_object *zephir_init_properties_Stub_Properties_ProtectedProperties(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_protectedproperties_setsomevar, 0, 0, 1)
 	ZEND_ARG_INFO(0, someVar)

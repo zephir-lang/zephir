@@ -1451,7 +1451,7 @@ final class ClassDefinition
              * Zend classes
              */
             case 'exception':
-                $classEntry = 'zend_exception_get_default(TSRMLS_C)';
+                $classEntry = 'zend_exception_get_default()';
                 break;
 
             /*

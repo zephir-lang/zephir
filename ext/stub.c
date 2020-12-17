@@ -433,7 +433,7 @@ static PHP_MINIT_FUNCTION(stub)
 static PHP_MSHUTDOWN_FUNCTION(stub)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -442,7 +442,7 @@ static PHP_MSHUTDOWN_FUNCTION(stub)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_stub_globals *stub_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 {
 	stub_globals->initialized = 0;
 
@@ -473,7 +473,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals TSRMLS_DC)
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_stub_globals *stub_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
 	
 }
@@ -486,8 +486,8 @@ static PHP_RINIT_FUNCTION(stub)
 	php_zephir_init_globals(stub_globals_ptr);
 	zephir_initialize_memory(stub_globals_ptr);
 
-		zephir_init_static_properties_Stub_Properties_StaticPropertyArray(TSRMLS_C);
-		zephir_init_static_properties_Stub_SPropertyAccess(TSRMLS_C);
+		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
+		zephir_init_static_properties_Stub_SPropertyAccess();
 	
 	return SUCCESS;
 }
@@ -495,7 +495,7 @@ static PHP_RINIT_FUNCTION(stub)
 static PHP_RSHUTDOWN_FUNCTION(stub)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 

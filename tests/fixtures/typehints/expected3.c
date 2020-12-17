@@ -48,7 +48,7 @@ static PHP_MINIT_FUNCTION(typehints)
 static PHP_MSHUTDOWN_FUNCTION(typehints)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -57,7 +57,7 @@ static PHP_MSHUTDOWN_FUNCTION(typehints)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_typehints_globals *typehints_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_typehints_globals *typehints_globals)
 {
 	typehints_globals->initialized = 0;
 
@@ -77,7 +77,7 @@ static void php_zephir_init_globals(zend_typehints_globals *typehints_globals TS
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_typehints_globals *typehints_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_typehints_globals *typehints_globals)
 {
 	
 }
@@ -97,7 +97,7 @@ static PHP_RINIT_FUNCTION(typehints)
 static PHP_RSHUTDOWN_FUNCTION(typehints)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 

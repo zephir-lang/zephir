@@ -39,7 +39,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray) {
 
 }
 
-void zephir_init_static_properties_Stub_Properties_StaticPropertyArray(TSRMLS_D) {
+void zephir_init_static_properties_Stub_Properties_StaticPropertyArray() {
 
 	zval _1;
 	zval _0;

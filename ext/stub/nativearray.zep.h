@@ -77,7 +77,7 @@ PHP_METHOD(Stub_NativeArray, issue743c);
 PHP_METHOD(Stub_NativeArray, issue709);
 PHP_METHOD(Stub_NativeArray, Issue1140);
 PHP_METHOD(Stub_NativeArray, Issue1159);
-zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_type TSRMLS_DC);
+zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_type);
 
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_nativearray_testarray1, 0, 0, IS_ARRAY, 0)

@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_ExtendsPublicProperties) {
 
 }
 
-zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type) {
 
 		zval _1$$3, _2$$3, _4$$4, _6$$5, _11$$7;
 	zval _0, _3, _5, _8, _10, _7$$5, _9$$6, _12$$7;

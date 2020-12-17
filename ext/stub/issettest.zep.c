@@ -203,7 +203,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2) {
 
 }
 
-zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_IssetTest(zend_class_entry *class_type) {
 
 		zval _1$$3;
 	zval _0;

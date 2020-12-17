@@ -11,7 +11,7 @@ on:
       - development
 
 env:
-  ZEPHIR_PARSER_VERSION: v1.3.4
+  ZEPHIR_PARSER_VERSION: v1.3.6
 
 jobs:
   linux:
@@ -34,6 +34,7 @@ jobs:
           - '7.2'
           - '7.3'
           - '7.4'
+          - '8.0'
 
         include:
           - php: '7.2'
@@ -43,6 +44,9 @@ jobs:
             symfony_phpunit: '7.4'
 
           - php: '7.4'
+            symfony_phpunit: '7.4'
+
+          - php: '8.0'
             symfony_phpunit: '7.4'
 
     steps:

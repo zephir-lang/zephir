@@ -718,7 +718,7 @@ final class Compiler
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '['.$method->getName().':'.implode('-', $method->getVisibility()).']';
                     if ($method->isInitializer() && $method->isStatic()) {
-                        $this->internalInitializers[] = "\t".$method->getName().'(TSRMLS_C);';
+                        $this->internalInitializers[] = "\t".$method->getName().'();';
                     }
                 }
 

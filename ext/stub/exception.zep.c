@@ -24,7 +24,7 @@
  */
 ZEPHIR_INIT_CLASS(Stub_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Stub, Exception, stub, exception, zend_exception_get_default(TSRMLS_C), stub_exception_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Stub, Exception, stub, exception, zend_exception_get_default(), stub_exception_method_entry, 0);
 
 	return SUCCESS;
 
