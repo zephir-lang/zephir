@@ -1,9 +1,9 @@
 name: Upload Release Asset
 
-on:
-  push:
-    tags:
-      - '*'
+on: [push]
+  # push:
+    # tags:
+    #   - '*'
 
 jobs:
   build:
@@ -11,9 +11,7 @@ jobs:
 
     steps:
       - name: Setup Environment Variables
-        uses: allenevans/set-env@v2.0.0
-        with:
-          BOX_VERSION: '3.8.4'
+        run: echo "BOX_VERSION=3.10.0" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -23,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.2'
+          php-version: '7.4'
           extensions: intl, zip, zlib
           coverage: none
           ini-values: memory_limit=1G, phar.readonly=0
@@ -67,16 +65,16 @@ jobs:
         id: get-version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        with:
-          # This token is provided by GitHub Actions.
-          # You DO NOT need to create your own token.
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ steps.get-version.outputs.version }}
-          tag: ${{ steps.get-version.outputs.version }}
-          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          # This will update existing tags if any
-          allowUpdates: true
-          artifacts: zephir.phar
-          artifactContentType: application/x-php
+      # - name: Create Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     # This token is provided by GitHub Actions.
+      #     # You DO NOT need to create your own token.
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     name: ${{ steps.get-version.outputs.version }}
+      #     tag: ${{ steps.get-version.outputs.version }}
+      #     body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
+      #     # This will update existing tags if any
+      #     allowUpdates: true
+      #     artifacts: zephir.phar
+      #     artifactContentType: application/x-php
