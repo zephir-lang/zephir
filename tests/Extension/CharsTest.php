@@ -18,7 +18,7 @@ class CharsTest extends TestCase
     /** @var \Stub\Chars */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Chars();
     }

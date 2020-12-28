@@ -49,7 +49,7 @@ class Issue_1900 implements AliasedManagerInterface
      * @param int $priority
      * @return void
      */
-    public function attach(string $eventType, $handler, int $priority = 1): void
+    public function attach(string $eventType, $handler, int $priority = 1)
     {
     }
 
@@ -71,7 +71,7 @@ class Issue_1900 implements AliasedManagerInterface
      * @param mixed $handler
      * @return void
      */
-    public function collectResponses(bool $collect, string $eventType, $handler): void
+    public function collectResponses(bool $collect, string $eventType, $handler)
     {
     }
 

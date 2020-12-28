@@ -8,11 +8,9 @@ use Stub\McallInternal;
 class McallInternalTest extends TestCase
 {
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1956
      */
-    public function shouldReturnInstance()
+    public function testShouldReturnInstance()
     {
         $test = new McallInternal();
         $this->assertInstanceOf(McallInternal::class, $test->issue1956());

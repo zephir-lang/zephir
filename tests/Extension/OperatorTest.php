@@ -18,7 +18,7 @@ class OperatorTest extends TestCase
     /** @var \Stub\Operator */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Operator();
     }

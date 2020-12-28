@@ -19,7 +19,7 @@ class AliasManagerTest extends TestCase
     /** @var \Zephir\AliasManager */
     private $testAliasMgr;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->testAliasMgr = new AliasManager();
     }
@@ -31,7 +31,7 @@ class AliasManagerTest extends TestCase
         $index = 0;
 
         foreach ($testDataProvider as $testName => $testSuite) {
-            array_push($testDataProvider[$testName], $expected[$index++]);
+            $testDataProvider[$testName][] = $expected[$index++];
         }
 
         return $testDataProvider;
@@ -87,10 +87,9 @@ class AliasManagerTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider aliasProvider
      */
-    public function shouldProperAddStatements(array $useStatements, array $expected)
+    public function testShouldProperAddStatements(array $useStatements, array $expected)
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -116,10 +115,9 @@ class AliasManagerTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider statementProvider
      */
-    public function shouldCheckAliasedStatement(array $useStatements, bool $expected)
+    public function testShouldCheckAliasedStatement(array $useStatements, bool $expected)
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -147,10 +145,9 @@ class AliasManagerTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider classNameDataProvider
      */
-    public function shouldGetAliasForClassName(array $useStatements, string $expected)
+    public function testShouldGetAliasForClassName(array $useStatements, string $expected)
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -161,8 +158,7 @@ class AliasManagerTest extends TestCase
         $this->assertSame($expected, $this->testAliasMgr->getAliasForClassName($className));
     }
 
-    /** @test */
-    public function shouldCheckIfAliasPresentForClass()
+    public function testShouldCheckIfAliasPresentForClass()
     {
         $this->testAliasMgr->add([
             'aliases' => [

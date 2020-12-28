@@ -19,7 +19,7 @@ class InstanceOffTest extends TestCase
     /** @var InstanceOff */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new InstanceOff();
     }
@@ -75,9 +75,8 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
-     * @test
      */
-    public function instanceOf7()
+    public function testInstanceOf7()
     {
         $this->assertTrue($this->test->testInstanceOf7($this->test));
         $this->assertFalse($this->test->testInstanceOf7(new \stdClass()));
@@ -85,9 +84,8 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
-     * @test
      */
-    public function instanceOf8()
+    public function testInstanceOf8()
     {
         $this->assertTrue($this->test->testInstanceOf8('\\Stub\\InstanceOff'));
         $this->assertFalse($this->test->testInstanceOf8('\\stdClass'));
@@ -95,9 +93,8 @@ class InstanceOffTest extends TestCase
 
     /**
      * @see https://github.com/phalcon/zephir/issues/1828
-     * @test
      */
-    public function instanceOf9()
+    public function testInstanceOf9()
     {
         $this->assertTrue($this->test->testInstanceOf9($this->test, '\\Stub\\InstanceOff'));
         $this->assertFalse($this->test->testInstanceOf9($this->test, '\\stdClass'));

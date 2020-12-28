@@ -182,10 +182,9 @@ class TypesTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider typesProvider
      */
-    public function shouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected)
     {
         $testMethod = $this->buildMethod(
             $this->baseReturnTypeDefinition($returnTypes)
@@ -220,10 +219,9 @@ class TypesTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider objectsProvider
      */
-    public function shouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
     {
         $withAliases = [];
         foreach ($returnTypes as $alias) {
@@ -264,10 +262,9 @@ class TypesTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider collectionsProvider
      */
-    public function shouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected)
     {
         $typesList = [];
         $collections = [];

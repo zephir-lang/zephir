@@ -859,7 +859,7 @@ final class Compiler
                 $hasChanged = false;
 
                 if (false === strpos($configureFile, $fixMarker)) {
-                    $configureFile = $fixMarker.PHP_EOL.implode($configureFix, PHP_EOL).PHP_EOL.$configureFile;
+                    $configureFile = $fixMarker.PHP_EOL.implode(PHP_EOL, $configureFix).PHP_EOL.$configureFile;
                     $hasChanged = true;
                 }
 

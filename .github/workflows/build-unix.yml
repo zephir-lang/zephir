@@ -15,6 +15,10 @@ env:
 
 jobs:
   linux:
+    # To prevent build a particular commit use
+    #     git commit -m "......... [ci skip]"
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+
     name: "${{ matrix.os }}: PHP v${{ matrix.php }}"
     runs-on: ${{ matrix.os }}
 
@@ -27,20 +31,12 @@ jobs:
           # - macos-latest
 
         php:
-          - '7.0'
-          - '7.1'
           - '7.2'
           - '7.3'
           - '7.4'
           - '8.0'
 
         include:
-          - php: '7.0'
-            symfony_phpunit: '6.5'
-
-          - php: '7.1'
-            symfony_phpunit: '7.4'
-
           - php: '7.2'
             symfony_phpunit: '7.4'
 
@@ -84,7 +80,7 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo ::set-env name=SYMFONY_PHPUNIT_VERSION::${{ matrix.symfony_phpunit }}
+          echo "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -208,7 +204,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          yml: ./.codecov.yml
           name: codecov-umbrella
           flags: unittests
           fail_ci_if_error: false

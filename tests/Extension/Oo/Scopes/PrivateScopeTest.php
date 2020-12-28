@@ -23,18 +23,15 @@ use TestScopePhpMagicExtending;
 
 class PrivateScopeTest extends TestCase
 {
-    /** @test */
-    public function shouldCallPrivateMethod()
+    public function testShouldCallPrivateMethod()
     {
         $this->assertSame('isPrivate', (new PrivateScopeTester())->run());
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyObjPhp()
+    public function testShouldNotSetPrivatePropertyObjPhp()
     {
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
@@ -46,11 +43,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyNewPhp()
+    public function testShouldNotSetPrivatePropertyNewPhp()
     {
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
@@ -62,11 +57,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyObjInternal()
+    public function testShouldNotSetPrivatePropertyObjInternal()
     {
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
@@ -78,11 +71,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyNewInternal()
+    public function testShouldNotSetPrivatePropertyNewInternal()
     {
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
@@ -94,11 +85,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldSetPrivatePropertyObjPhp()
+    public function testShouldSetPrivatePropertyObjPhp()
     {
         $object = new TestScopePhpMagic();
         $tester = new PrivateScopeTester();
@@ -109,11 +98,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldSetPrivatePropertyNewPhp()
+    public function testShouldSetPrivatePropertyNewPhp()
     {
         $tester = new PrivateScopeTester();
         $obj = $tester->setPropertyNew(TestScopePhpMagic::class, 'privateProperty', 'test');
@@ -123,11 +110,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldSetPrivatePropertyObjInternal()
+    public function testShouldSetPrivatePropertyObjInternal()
     {
         $tester = new PrivateScopeTester();
         $object = new TestScopeExtendingMagic();
@@ -138,11 +123,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldSetPrivatePropertyNewInternal()
+    public function testShouldSetPrivatePropertyNewInternal()
     {
         $tester = new PrivateScopeTester();
         $obj = $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty', 'test');
@@ -152,11 +135,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyViaThis()
+    public function testShouldNotSetPrivatePropertyViaThis()
     {
         $this->expectException(Error::class);
         $this->expectExceptionMessage(
@@ -168,11 +149,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldSetPrivatePropertyViaThis()
+    public function testShouldSetPrivatePropertyViaThis()
     {
         $obj = new TestScopeExtending();
         $obj->setProperty('privateProperty2', 'test');
@@ -181,11 +160,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyExtendedMagicObjInternal()
+    public function testShouldNotSetPrivatePropertyExtendedMagicObjInternal()
     {
         if (\PHP_VERSION_ID >= 70400) {
             $this->expectException(Error::class);
@@ -212,11 +189,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyExtendedMagicNewInternal()
+    public function testShouldNotSetPrivatePropertyExtendedMagicNewInternal()
     {
         if (\PHP_VERSION_ID >= 70400) {
             $this->expectException(Error::class);
@@ -244,11 +219,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyExtendedMagicObjPhp()
+    public function testShouldNotSetPrivatePropertyExtendedMagicObjPhp()
     {
         if (\PHP_VERSION_ID < 70400) {
             $this->expectException(Notice::class);
@@ -269,11 +242,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotSetPrivatePropertyExtendedMagicNewPhp()
+    public function testShouldNotSetPrivatePropertyExtendedMagicNewPhp()
     {
         if (\PHP_VERSION_ID >= 70400) {
             $this->expectException(Error::class);
@@ -301,11 +272,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotGetObjectVarsPrivatePropertyObjPhp()
+    public function testShouldNotGetObjectVarsPrivatePropertyObjPhp()
     {
         $tester = new PrivateScopeTester();
         $object = new TestScopePhp();
@@ -315,11 +284,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotGetObjectVarsPrivatePropertyNewPhp()
+    public function testShouldNotGetObjectVarsPrivatePropertyNewPhp()
     {
         $tester = new PrivateScopeTester();
         $objectVars = $tester->getNewVars(TestScopePhp::class);
@@ -328,11 +295,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotGetObjectVarsPrivatePropertyObjInternal()
+    public function testShouldNotGetObjectVarsPrivatePropertyObjInternal()
     {
         $tester = new PrivateScopeTester();
         $object = new TestScopeExtending();
@@ -342,11 +307,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/2057
      */
-    public function shouldNotGetObjectVarsPrivatePropertyNewInternal()
+    public function testShouldNotGetObjectVarsPrivatePropertyNewInternal()
     {
         $tester = new PrivateScopeTester();
         $objectVars = $tester->getNewVars(TestScopeExtending::class);
@@ -355,11 +318,9 @@ class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1851
      */
-    public function shouldGetAndSetPrivatePropertyUsingParentGetterAndSetter()
+    public function testShouldGetAndSetPrivatePropertyUsingParentGetterAndSetter()
     {
         $tester = new \UserExample();
         $tester->setPrivateVariable('test');

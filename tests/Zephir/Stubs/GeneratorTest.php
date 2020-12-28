@@ -26,7 +26,7 @@ class GeneratorTest extends TestCase
     private $testClass;
     private $classDefinition;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
         $this->testClass = new Generator([]);
@@ -46,8 +46,7 @@ class GeneratorTest extends TestCase
         return $method;
     }
 
-    /** @test */
-    public function shouldBuildClass()
+    public function testShouldBuildClass()
     {
         $expected = <<<DOC
 <?php
@@ -225,11 +224,10 @@ DOC;
     }
 
     /**
-     * @test
      * @dataProvider propertyProvider
      * @covers \Zephir\Stubs\Generator::buildProperty
      */
-    public function shouldBuildProperty(array $visibility, string $type, $value, string $expected)
+    public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected)
     {
         $original = [
             'default' => [
@@ -305,10 +303,9 @@ DOC;
     }
 
     /**
-     * @test
      * @dataProvider constantProvider
      */
-    public function shouldBuildConstant(string $type, $value, string $expected)
+    public function testShouldBuildConstant(string $type, $value, string $expected)
     {
         $buildClass = $this->getMethod('buildConstant');
 
@@ -349,8 +346,7 @@ DOC;
         $this->assertSame(PHP_EOL.$expected, $actual);
     }
 
-    /** @test */
-    public function shouldBuildMethod()
+    public function testShouldBuildMethod()
     {
         $buildClass = $this->getMethod('buildMethod');
 

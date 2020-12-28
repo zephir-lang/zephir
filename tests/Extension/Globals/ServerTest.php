@@ -18,28 +18,20 @@ class ServerTest extends TestCase
 {
     private $server;
 
-    /**
-     * This method is called before each test.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->server = $_SERVER;
     }
 
-    /**
-     * This method is called after each test.
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->server;
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1961
      */
-    public function shouldPrintPhpSelf()
+    public function testShouldPrintPhpSelf()
     {
         $test = new Server();
 
@@ -52,11 +44,9 @@ class ServerTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @see https://github.com/phalcon/zephir/issues/1961
      */
-    public function shouldPrintUserAgent()
+    public function testShouldPrintUserAgent()
     {
         $test = new Server();
         $_SERVER['HTTP_USER_AGENT'] = 'Test';

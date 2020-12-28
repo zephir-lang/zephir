@@ -18,8 +18,7 @@ use Zephir\Types;
 
 class CastHintTest extends TestCase
 {
-    /** @test */
-    public function shouldReturnType()
+    public function testShouldReturnType()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertEquals(TypeInterface::TYPE_PARAMETER, $type->getType());
@@ -31,8 +30,7 @@ class CastHintTest extends TestCase
         $this->assertEquals('return-type-custom', $type->getType());
     }
 
-    /** @test */
-    public function shouldReturnDataType()
+    public function testShouldReturnDataType()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertEquals(Types::T_OBJECT, $type->getDataType());
@@ -41,8 +39,7 @@ class CastHintTest extends TestCase
         $this->assertEquals(Types::T_UNDEFINED, $type->getDataType());
     }
 
-    /** @test */
-    public function shouldReturnValue()
+    public function testShouldReturnValue()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertEquals('Class1', $type->getValue());
@@ -51,8 +48,7 @@ class CastHintTest extends TestCase
         $this->assertEquals('\A\Namespaced\Class\Foo', $type->getValue());
     }
 
-    /** @test */
-    public function shouldAlwaysBeNotMandatory()
+    public function testShouldAlwaysBeNotMandatory()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertFalse($type->isMandatory());
@@ -61,8 +57,7 @@ class CastHintTest extends TestCase
         $this->assertFalse($type->isMandatory());
     }
 
-    /** @test */
-    public function shouldDetectCollectionNature()
+    public function testShouldDetectCollectionNature()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertFalse($type->isCollection());
@@ -77,8 +72,7 @@ class CastHintTest extends TestCase
         $this->assertFalse($type->isCollection());
     }
 
-    /** @test */
-    public function shouldAlwaysBeRealType()
+    public function testShouldAlwaysBeRealType()
     {
         $type = new CastHint(Types::T_OBJECT, 'Class1');
         $this->assertFalse($type->isRealType());

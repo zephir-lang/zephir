@@ -24,7 +24,7 @@ class Issue_1986 implements EventsManagerInterface
      * @param string $eventType
      * @return void
      */
-    public function attach(string $eventType, $handler): void
+    public function attach(string $eventType, $handler)
     {
     }
 

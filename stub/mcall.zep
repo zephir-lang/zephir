@@ -208,27 +208,27 @@ class Mcall
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/142
 	 */
-	public function arrayParamWithDefaultEmptyArray(array driverOptions = [])
+	public function testArrayParamWithDefaultEmptyArray(array driverOptions = [])
 	{
 		return driverOptions;
 	}
 
-	public function arrayParamWithDefaultNullValue(array driverOptions = null)
+	public function testArrayParamWithDefaultNullValue(array driverOptions = null)
 	{
 		return driverOptions;
 	}
 
-	public function arrayParam(array driverOptions)
+	public function testArrayParam(array driverOptions)
 	{
 		return driverOptions;
 	}
 
-	public function objectParamCastStdClass(<\StdClass> param)
+	public function testObjectParamCastStdClass(<\StdClass> param)
 	{
 		return param;
 	}
 
-	public function objectParamCastOoParam(<Oo\Param> param)
+	public function testObjectParamCastOoParam(<Oo\Param> param)
 	{
 		return param;
 	}

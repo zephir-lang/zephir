@@ -18,10 +18,9 @@ use Stub\Properties\StaticPrivateProperties;
 class StaticPrivatePropertiesTest extends TestCase
 {
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1530
      */
-    public function shouldGetInstanceByUsingSingleton()
+    public function testShouldGetInstanceByUsingSingleton()
     {
         $test = new App();
 

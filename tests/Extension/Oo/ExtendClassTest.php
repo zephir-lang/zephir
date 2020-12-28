@@ -38,10 +38,9 @@ class ExtendClassTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1686
      */
-    public function shouldExtendMiddlewareInterface()
+    public function testShouldExtendMiddlewareInterface()
     {
         if (!\extension_loaded('psr')) {
             $this->markTestSkipped('The psr extension is not loaded');
@@ -53,19 +52,17 @@ class ExtendClassTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1392
      */
-    public function shouldCorrectWorkWithLateStaticBinding()
+    public function testShouldCorrectWorkWithLateStaticBinding()
     {
         $this->assertSame('Stub\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1372
      */
-    public function shouldCallParentMethodFromStaticByUsingSelf()
+    public function testShouldCallParentMethodFromStaticByUsingSelf()
     {
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());

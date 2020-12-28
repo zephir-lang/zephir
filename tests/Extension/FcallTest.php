@@ -20,7 +20,7 @@ class FcallTest extends TestCase
     /** @var Fcall */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Fcall();
     }
@@ -50,25 +50,23 @@ class FcallTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider getArgsDataProvider
      *
      * @param mixed $param1
      * @param mixed $param2
      */
-    public function shouldGetArgsUsingAllExtraParams($param1, $param2)
+    public function testShouldGetArgsUsingAllExtraParams($param1, $param2)
     {
         $this->assertSame([$param1, $param2], $this->test->testFunctionGetArgsAllExtra($param1, $param2));
     }
 
     /**
-     * @test
      * @dataProvider getArgsDataProvider
      *
      * @param mixed $param1
      * @param mixed $param2
      */
-    public function shouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2)
+    public function testShouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2)
     {
         $this->assertSame([$param1, $param2], Fcall::testStaticFunctionGetArgsAllExtra($param1, $param2));
     }
@@ -86,14 +84,12 @@ class FcallTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function shouldGedDesiredArgUsingAllExtraParams()
+    public function testShouldGedDesiredArgUsingAllExtraParams()
     {
         $this->assertSame([true, false], $this->test->testFunctionGetArgAllExtra(true, false));
     }
 
-    /** @test */
-    public function shouldGedDesiredArgUsingAllExtraParamsAndStaticFunction()
+    public function testShouldGedDesiredArgUsingAllExtraParamsAndStaticFunction()
     {
         $this->assertSame([true, false], Fcall::testStaticFunctionGetArgAllExtra(true, false));
     }

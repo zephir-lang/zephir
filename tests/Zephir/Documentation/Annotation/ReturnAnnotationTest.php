@@ -18,8 +18,7 @@ class ReturnAnnotationTest extends TestCase
 {
     const ANNOTATION_NAME = 'return';
 
-    /** @test */
-    public function shouldGetReturnAnnotation()
+    public function testShouldGetReturnAnnotation()
     {
         $link = new ReturnAnnotation(self::ANNOTATION_NAME, '  sample with leading space  ');
 
@@ -34,8 +33,7 @@ class ReturnAnnotationTest extends TestCase
         $this->assertSame('array - Example description', $link->getString());
     }
 
-    /** @test */
-    public function shouldGetReturnType()
+    public function testShouldGetReturnType()
     {
         $testString = 'Zephir\EventInterface - Sample Event';
 
@@ -46,8 +44,7 @@ class ReturnAnnotationTest extends TestCase
         $this->assertSame('Zephir\EventInterface', $link->getReturnType());
     }
 
-    /** @test */
-    public function shouldGetLinkText()
+    public function testShouldGetLinkText()
     {
         $testString = 'Zephir\EventInterface - Sample Event';
 

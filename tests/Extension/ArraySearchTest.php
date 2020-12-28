@@ -19,16 +19,15 @@ class ArraySearchTest extends TestCase
     /** @var ArraySearch */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new ArraySearch();
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1609
      */
-    public function shouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
+    public function testShouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {
         $needle = 'value';
         $haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
@@ -37,10 +36,9 @@ class ArraySearchTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1609
      */
-    public function shouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
+    public function testShouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
     {
         $this->assertEquals(7, $this->test->searchUsingArrayInsideZephir());
     }

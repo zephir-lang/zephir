@@ -16,8 +16,7 @@ use Stub\Mcall;
 
 class MCallTest extends TestCase
 {
-    /** @test */
-    public function shouldThrowInvalidArgumentExceptionForOptionalBoolean()
+    public function testShouldThrowInvalidArgumentExceptionForOptionalBoolean()
     {
         $test = new Mcall();
 
@@ -27,8 +26,7 @@ class MCallTest extends TestCase
         $test->optionalParameterBoolean('test');
     }
 
-    /** @test */
-    public function shouldThrowTypeErrorForOptionalBoolean()
+    public function testShouldThrowTypeErrorForOptionalBoolean()
     {
         $test = new Mcall();
 

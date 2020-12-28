@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+## [0.12.20] - 2020-12-16
+### Added
+- Added supports void type return value for stubs
+  [phalcon/ide-stubs#50](https://github.com/phalcon/ide-stubs/pull/50)
+  [#1977](https://github.com/phalcon/zephir/issues/1977)
+
+### Fixed
+- Fixed missing kernel directory at build time [ice/framework#271](https://github.com/ice/framework/issues/271)
+- Fixed stubs generation for case with array declaration with square brackets in params
+- Fixed parameters positioning for `implode()` php function [#2120](https://github.com/phalcon/zephir/issues/2120)
+
 ## [0.12.19] - 2020-05-13
 ### Fixed
 - Fixed duplicate definition with GCC 10
@@ -410,7 +421,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/phalcon/zephir/issues/1524)
 
-[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.19...HEAD
+[Unreleased]: https://github.com/phalcon/zephir/compare/0.12.20...HEAD
+[0.12.20]: https://github.com/phalcon/zephir/compare/0.12.19...0.12.20
 [0.12.19]: https://github.com/phalcon/zephir/compare/0.12.18...0.12.19
 [0.12.18]: https://github.com/phalcon/zephir/compare/0.12.17...0.12.18
 [0.12.17]: https://github.com/phalcon/zephir/compare/0.12.16...0.12.17

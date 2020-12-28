@@ -22,12 +22,12 @@ class ConstantsTest extends TestCase
 
     protected $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new Constants();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->test = null;
     }

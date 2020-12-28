@@ -19,7 +19,7 @@ class OoParamsStrictTest extends TestCase
     /** @var OoParams */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new OoParams();
     }

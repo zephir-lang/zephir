@@ -18,7 +18,7 @@ class OoParamsTest extends TestCase
     /** @var \Stub\Oo\OoParams */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Oo\OoParams();
     }

@@ -26,17 +26,14 @@ class ConfigTest extends TestCase
     /** @var Config */
     private $config;
 
-    public function setUp()
+    protected function setUp(): void
     {
         /* Store the current directory before to be change */
         $this->pwd = getcwd();
         $this->config = new Config();
     }
 
-    /**
-     * Restore current directory, and clean config.json.
-     */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (getcwd() != $this->pwd) {
             chdir($this->pwd);
@@ -80,11 +77,10 @@ DOC;
     /**
      * Test when we have a bad config.json file.
      *
-     * @test
      * @expectedException \Zephir\Exception
      * @expectedExceptionMessage The config.json file is invalid: Syntax error, malformed JSON
      */
-    public function constructWithBadConfigFile()
+    public function testConstructWithBadConfigFile()
     {
         chdir(\constant('ZEPHIRPATH').'/tests/fixtures/badconfig');
         new Config();
@@ -127,10 +123,9 @@ DOC;
     }
 
     /**
-     * @test
      * @dataProvider setConfigProvider
      */
-    public function shouldSetConfigParams(array $test, $expected)
+    public function testShouldSetConfigParams(array $test, $expected)
     {
         list($key, $value, $namespace) = $test;
         $this->config->set($key, $value, $namespace);
@@ -161,10 +156,9 @@ DOC;
     }
 
     /**
-     * @test
      * @dataProvider defaultConfigProvider
      */
-    public function shouldGetDefaultConfigParams($namespace, string $key, $expected)
+    public function testShouldGetDefaultConfigParams($namespace, string $key, $expected)
     {
         $actual = $this->config->get($key, $namespace);
 
@@ -188,18 +182,16 @@ DOC;
     }
 
     /**
-     * @test
      * @dataProvider offsetConfigProvider
      */
-    public function shouldGetWithOffsetConfigParams(array $key, array $expected)
+    public function testShouldGetWithOffsetConfigParams(array $key, array $expected)
     {
         $actual = $this->config->offsetGet($key);
 
         $this->assertSame($expected, $actual);
     }
 
-    /** @test */
-    public function shouldUnsetConfigParams()
+    public function testShouldUnsetConfigParams()
     {
         $initials = $this->config->get('test_setting_1', 'globals');
 
@@ -219,8 +211,7 @@ DOC;
         $this->assertNull($actual);
     }
 
-    /** @test */
-    public function shouldGetBannerFromConfig()
+    public function testShouldGetBannerFromConfig()
     {
         $this->assertSame($this->stubsBanner(), $this->config->get('banner', 'stubs'));
 
@@ -228,8 +219,7 @@ DOC;
         $this->assertNull($this->config->get('banner', 'stubs'));
     }
 
-    /** @test */
-    public function shouldSaveConfig()
+    public function testShouldSaveConfig()
     {
         chdir(sys_get_temp_dir());
 

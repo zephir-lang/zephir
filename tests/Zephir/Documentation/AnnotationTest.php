@@ -16,8 +16,7 @@ use Zephir\Documentation\Annotation;
 
 class AnnotationTest extends TestCase
 {
-    /** @test */
-    public function shouldGetAnnotation()
+    public function testShouldGetAnnotation()
     {
         $annotation = new Annotation('test annotation', '  sample with leading space  ');
 

@@ -67,10 +67,9 @@ class OoTest extends TestCase
     }
 
     /**
-     * @test
      * @issue https://github.com/phalcon/zephir/issues/1673
      */
-    public function shouldDinamicalyCreateInstancesInLoop()
+    public function testShouldDinamicalyCreateInstancesInLoop()
     {
         $test = new Oo();
 

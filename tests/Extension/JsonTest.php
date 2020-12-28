@@ -18,7 +18,7 @@ class JsonTest extends TestCase
     /** @var \Stub\Json */
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new \Stub\Json();
     }

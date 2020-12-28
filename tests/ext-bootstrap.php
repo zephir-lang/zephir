@@ -20,7 +20,7 @@ if (!extension_loaded('stub')) {
         $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
         dl($prefix.'stub.'.PHP_SHLIB_SUFFIX);
     } else {
-        $message = sprintf("The 'stub' extension not loaded; cannot run tests without it");
+        $message = "The 'stub' extension not loaded; cannot run tests without it";
         $line = str_repeat('-', strlen($message) + 4);
 
         $message = sprintf("%s\n| %s |\n%s\n\n", $line, $message, $line);

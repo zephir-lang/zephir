@@ -29,6 +29,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'templates/ZendEngine3',
+        'templates/Api',
         'tests/fixtures',
         'tests/sharness',
     ])
@@ -50,4 +51,5 @@ return PhpCsFixer\Config::create()
         'phpdoc_var_annotation_correct_order' => true,
         'no_superfluous_phpdoc_tags' => false,
         'single_line_throw' => false,
+        'psr_autoloading' => false,
     ]);
