@@ -29,7 +29,7 @@ set_error_handler(
 if (filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
     set_exception_handler(
         static function (\Throwable $t) {
-            fwrite(STDERR, "[ERROR] {$t->getMessage()}".PHP_EOL);
+            fwrite(\STDERR, "[ERROR] {$t->getMessage()}". \PHP_EOL);
 
             exit(1);
         }
