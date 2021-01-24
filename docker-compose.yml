@@ -10,6 +10,7 @@ version: '3'
 services:
   zephir-7.3:
     container_name: phalcon-zephir-7.3
+    hostname: zephir-73
     build: docker/7.3
     working_dir: /srv
     environment:
@@ -19,6 +20,7 @@ services:
 
   zephir-7.4:
     container_name: phalcon-zephir-7.4
+    hostname: zephir-74
     build: docker/7.4
     working_dir: /srv
     environment:
@@ -28,6 +30,7 @@ services:
 
   zephir-8.0:
     container_name: phalcon-zephir-8.0
+    hostname: zephir-80
     build: docker/8.0
     working_dir: /srv
     environment:
