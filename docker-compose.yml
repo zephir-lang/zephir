@@ -1,0 +1,13 @@
+# For local development only.
+
+version: '3'
+
+services:
+  zephir:
+    container_name: phalcon-zephir
+    build: docker
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv
