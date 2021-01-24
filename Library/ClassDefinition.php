@@ -1339,7 +1339,7 @@ final class ClassDefinition
                             $method->isReturnTypesHintDetermined() &&
                             $method->areReturnTypesCompatible();
 
-                        if ($richFormat || $method->hasParameters()) {
+                        if ($richFormat || $method->hasParameters() || version_compare(PHP_VERSION, '8.0.0', '>=')) {
                             $codePrinter->output(
                                 sprintf(
                                     "\tZEND_ME(%s_%s, %s, %s, %s)",
