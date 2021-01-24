@@ -11,7 +11,7 @@ on:
       - development
 
 env:
-  ZEPHIR_PARSER_VERSION: v1.3.4
+  ZEPHIR_PARSER_VERSION: v1.3.6
 
 jobs:
   linux:
