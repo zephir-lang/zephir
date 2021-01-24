@@ -1342,7 +1342,7 @@ final class ClassDefinition
                         if ($richFormat || $method->hasParameters()) {
                             $codePrinter->output(
                                 sprintf(
-                                    "\tPHP_ME(%s_%s, %s, %s, %s)",
+                                    "\tZEND_ME(%s_%s, %s, %s, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
                                     $method->getName(),
@@ -1353,7 +1353,7 @@ final class ClassDefinition
                         } else {
                             $codePrinter->output(
                                 sprintf(
-                                    "\tPHP_ME(%s_%s, %s, NULL, %s)",
+                                    "\tZEND_ME(%s_%s, %s, NULL, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
                                     $method->getName(),
