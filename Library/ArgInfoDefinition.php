@@ -109,6 +109,12 @@ class ArgInfoDefinition
                     $this->functionLike->getNumberOfRequiredParameters()
                 )
             );
+        } else {
+            $this->codePrinter->output(
+                sprintf('ZEND_BEGIN_ARG_INFO_EX(%s, 0, 0, 0)', $this->name)
+            );
+            $this->codePrinter->output('ZEND_END_ARG_INFO()');
+            $this->codePrinter->outputBlankLine();
         }
 
         if (true == $this->hasParameters()) {
