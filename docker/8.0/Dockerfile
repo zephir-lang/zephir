@@ -1,4 +1,4 @@
-FROM composer:latest as composer
+FROM composer:2.0.8 as composer
 FROM php:8.0-fpm
 
 RUN apt update -y && apt install -y \
