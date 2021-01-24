@@ -5,6 +5,6 @@ class Env
 {
 	public function read(string name) -> var
 	{
-		return _ENV[name];
+		return isset _ENV[name] ? _ENV[name] : false;
 	}
 }

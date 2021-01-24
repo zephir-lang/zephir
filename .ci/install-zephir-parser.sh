@@ -17,10 +17,12 @@ echo "Install Zephir Parser using version: $ZEPHIR_PARSER_VERSION"
 
 PHP_INI_DIR="$(dirname "$(php -i | grep /.+/conf.d/.+.ini -oE | head -n 1)")"
 
-git clone -b "$ZEPHIR_PARSER_VERSION" \
-      --depth 1 \
-      -q https://github.com/phalcon/php-zephir-parser \
-      php-zephir-parser
+if [ ! -d "php-zephir-parser" ]; then
+  git clone -b "$ZEPHIR_PARSER_VERSION" \
+        --depth 1 \
+        -q https://github.com/phalcon/php-zephir-parser \
+        php-zephir-parser
+fi
 
 cd php-zephir-parser || exit 1
 

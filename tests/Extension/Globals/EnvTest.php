@@ -32,6 +32,15 @@ class EnvTest extends TestCase
         }
     }
 
+    public function testEmpty()
+    {
+        $tester = new Env();
+        $var = 'non-existing';
+
+        $this->assertSame(false, $tester->read($var));
+        $this->assertSame(false, getenv($var));
+    }
+
     public function testReadStandard()
     {
         $tester = new Env();
