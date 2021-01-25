@@ -1339,9 +1339,10 @@ final class ClassDefinition
                             $method->isReturnTypesHintDetermined() &&
                             $method->areReturnTypesCompatible();
 
-                        if ($richFormat || $method->hasParameters()) {
+                        if ($richFormat || $method->hasParameters() || version_compare(PHP_VERSION, '8.0.0', '>=')) {
                             $codePrinter->output(
                                 sprintf(
+                                    // TODO: Rename to ZEND_ME
                                     "\tPHP_ME(%s_%s, %s, %s, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
@@ -1353,6 +1354,7 @@ final class ClassDefinition
                         } else {
                             $codePrinter->output(
                                 sprintf(
+                                    // TODO: Rename to ZEND_ME
                                     "\tPHP_ME(%s_%s, %s, NULL, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
