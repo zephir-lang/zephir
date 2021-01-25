@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Documentation;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
@@ -17,15 +17,14 @@ use Zephir\Documentation\Docblock;
 
 class DocblockTest extends TestCase
 {
-    /** @var Docblock */
-    private $docblock;
+    private Docblock $docblock;
 
     protected function setUp(): void
     {
         $this->docblock = new Docblock();
     }
 
-    public function testShouldGetAllProperties()
+    public function testShouldGetAllProperties(): void
     {
         $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
@@ -37,12 +36,12 @@ class DocblockTest extends TestCase
         $this->docblock->setDescription('Example description for test docblock.');
         $this->docblock->setSummary('See LICENSE.txt for more details.');
 
-        $this->assertArraySubset(
+        $this->assertSame(
+            $this->docblock->getAnnotations(),
             [
                 $annotation1,
                 $annotation2,
-            ],
-            $this->docblock->getAnnotations()
+            ]
         );
 
         $this->assertSame([$annotation1], $this->docblock->getAnnotationsByType('see'));

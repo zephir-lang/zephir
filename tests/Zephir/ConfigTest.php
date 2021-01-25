@@ -76,12 +76,12 @@ DOC;
 
     /**
      * Test when we have a bad config.json file.
-     *
-     * @expectedException \Zephir\Exception
-     * @expectedExceptionMessage The config.json file is invalid: Syntax error, malformed JSON
      */
-    public function testConstructWithBadConfigFile()
+    public function testConstructWithBadConfigFile(): void
     {
+        $this->expectException(\Zephir\Exception::class);
+        $this->expectExceptionMessage('The config.json file is invalid: Syntax error, malformed JSON');
+
         chdir(\constant('ZEPHIRPATH').'/tests/fixtures/badconfig');
         new Config();
     }
@@ -228,7 +228,7 @@ DOC;
 
         $configJson = json_decode(file_get_contents('config.json'), true);
 
-        $this->assertInternalType('array', $configJson);
+        $this->assertIsArray($configJson);
         $this->assertSame($configJson['name'], 'foo');
 
         $this->cleanTmpConfigFile();

@@ -30,12 +30,13 @@ class CollectionTest extends TestCase
         $collection->attach(new \stdClass());
     }
 
-    /**
-     * @expectedException \Zephir\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got array
-     */
-    public function testShouldThrowExceptionOnInvalidAttachedValue()
+    public function testShouldThrowExceptionOnInvalidAttachedValue(): void
     {
+        $this->expectException(\Zephir\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got array'
+        );
+
         $collection = new Collection();
         $collection->attach([]);
     }

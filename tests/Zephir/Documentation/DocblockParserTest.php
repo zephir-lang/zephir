@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Documentation;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
@@ -63,9 +63,10 @@ DOC;
 
         $this->assertSame($expected->getSummary(), $actual->getSummary());
         $this->assertSame($expected->getDescription(), $actual->getDescription());
-        $this->assertArraySubset($expected->getAnnotationsByType('link'), $actual->getAnnotationsByType('link'));
-        $this->assertArraySubset($expected->getAnnotationsByType('see'), $actual->getAnnotationsByType('see'));
-        $this->assertArraySubset($expected->getAnnotationsByType('param'), $actual->getAnnotationsByType('param'));
-        $this->assertArraySubset($expected->getAnnotationsByType('return'), $actual->getAnnotationsByType('return'));
+
+        $this->assertEquals($expected->getAnnotationsByType('link'), $actual->getAnnotationsByType('link'));
+        $this->assertEquals($expected->getAnnotationsByType('see'), $actual->getAnnotationsByType('see'));
+        $this->assertEquals($expected->getAnnotationsByType('param'), $actual->getAnnotationsByType('param'));
+        $this->assertEquals($expected->getAnnotationsByType('return'), $actual->getAnnotationsByType('return'));
     }
 }

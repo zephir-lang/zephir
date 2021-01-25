@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Documentation;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
