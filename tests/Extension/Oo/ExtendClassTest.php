@@ -19,7 +19,7 @@ use Stub\Oo\ExtendPdoClass;
 
 class ExtendClassTest extends TestCase
 {
-    public function testPDOExtending()
+    public function testPDOExtending(): void
     {
         if (!\extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extension is not loaded');
@@ -29,7 +29,7 @@ class ExtendClassTest extends TestCase
         $this->assertSame(PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
-    public function testPDOStatementExtending()
+    public function testPDOStatementExtending(): void
     {
         $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
@@ -40,7 +40,7 @@ class ExtendClassTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1686
      */
-    public function testShouldExtendMiddlewareInterface()
+    public function testShouldExtendMiddlewareInterface(): void
     {
         if (!\extension_loaded('psr')) {
             $this->markTestSkipped('The psr extension is not loaded');
@@ -54,7 +54,7 @@ class ExtendClassTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1392
      */
-    public function testShouldCorrectWorkWithLateStaticBinding()
+    public function testShouldCorrectWorkWithLateStaticBinding(): void
     {
         $this->assertSame('Stub\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
     }
@@ -62,7 +62,7 @@ class ExtendClassTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1372
      */
-    public function testShouldCallParentMethodFromStaticByUsingSelf()
+    public function testShouldCallParentMethodFromStaticByUsingSelf(): void
     {
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());

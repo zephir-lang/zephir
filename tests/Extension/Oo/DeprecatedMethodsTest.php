@@ -13,25 +13,30 @@ namespace Extension\Oo;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Oo\DeprecatedMethods;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 
 class DeprecatedMethodsTest extends TestCase
 {
+    use ExpectDeprecationTrait;
+
     /**
      * @group legacy
-     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
-    public function testPublicMethodThrowsDeprecatedWarning()
+    public function testPublicMethodThrowsDeprecatedWarning(): void
     {
+        $this->expectDeprecation('Unsilenced deprecation: Method Stub\Oo\DeprecatedMethods::publicDeprecated() is deprecated');
+
         $test = new DeprecatedMethods();
         $test->publicDeprecated();
     }
 
     /**
      * @group legacy
-     * @expectedDeprecation Unsilenced deprecation: Function %s is deprecated
      */
-    public function testPrivateMethodThrowsDeprecatedWarning()
+    public function testPrivateMethodThrowsDeprecatedWarning(): void
     {
+        $this->expectDeprecation('Unsilenced deprecation: Method Stub\Oo\DeprecatedMethods::privateDeprecated() is deprecated');
+
         $test = new DeprecatedMethods();
         $test->normalMethod();
     }

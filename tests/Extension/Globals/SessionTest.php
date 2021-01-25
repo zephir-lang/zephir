@@ -28,6 +28,11 @@ class SessionTest extends TestCase
         }
     }
 
+    protected function tearDown(): void
+    {
+        unset($_SESSION);
+    }
+
     public function testDestroy()
     {
         $this->assertSame([], $_SESSION);
@@ -36,7 +41,7 @@ class SessionTest extends TestCase
         $tester->test = 'Some session data here';
 
         $this->assertArrayHasKey('test', $_SESSION);
-        $this->assertContains('Some session data here', $_SESSION['test']);
+        $this->assertStringContainsString('Some session data here', $_SESSION['test']);
 
         $result = $tester->destroy();
 

@@ -29,7 +29,7 @@ class PublicPropertiesTest extends TestCase
         $this->assertSame($test->someDouble, 10.25);
         $this->assertSame($test->someString, 'test');
 
-        $this->assertInternalType('array', $test->someEmptyArray);
+        $this->assertIsArray($test->someEmptyArray);
         $this->assertSame([1, 2, 3, 4], $test->someArray);
     }
 
