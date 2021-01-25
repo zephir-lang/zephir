@@ -66,30 +66,27 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $isPhpVersion);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionLLU()
+    public function testOptimizerExceptionLLU(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(92233720368547758079);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionNegativeNumber()
+    public function testOptimizerExceptionNegativeNumber(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(-7);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionNull()
+    public function testOptimizerExceptionNull(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(null);
     }
 
