@@ -35,7 +35,7 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testClassOfInterface()
     {
-        $this->assertInternalType('object', $this->test);
+        $this->assertIsObject($this->test);
         $this->assertSame($this->test->testReadInterfaceConstant1(), null);
         $this->assertSame($this->test->testReadInterfaceConstant2(), false);
         $this->assertSame($this->test->testReadInterfaceConstant3(), true);
@@ -56,7 +56,7 @@ class ConstantsInterfaceTest extends TestCase
 
     public function testInstanceConstantsInheritanceFromInterface()
     {
-        $this->assertInternalType('object', $this->test);
+        $this->assertIsObject($this->test);
         $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant1(), null);
         $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant2(), false);
         $this->assertSame($this->test->testReadInheritanceFromInterfaceConstant3(), true);
