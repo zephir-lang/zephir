@@ -27,17 +27,17 @@ class MCallTest extends TestCase
         $this->test = new Mcall();
     }
 
-    public function assertNumberOfParameters($number)
+    public function assertNumberOfParameters($number): void
     {
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfParameters());
     }
 
-    public function assertNumberOfRequiredParameters($number)
+    public function assertNumberOfRequiredParameters($number): void
     {
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $this->assertSame($this->test->testCall1(), 'hello public');
         $this->assertSame($this->test->testCall2(), 'hello protected');
@@ -60,27 +60,27 @@ class MCallTest extends TestCase
         $this->assertSame($this->test->testCall15(4, 5), 9);
     }
 
-    public function testOptionalParameterString()
+    public function testOptionalParameterString(): void
     {
         $this->assertSame($this->test->optionalParameterString('test'), 'test');
         $this->assertSame($this->test->optionalParameterString(), 'test string');
         $this->assertSame($this->test->optionalParameterStringNull(), '');
     }
 
-    public function testOptionalParameterInt()
+    public function testOptionalParameterInt(): void
     {
         $this->assertSame($this->test->optionalParameterInt(1), 1);
         $this->assertSame($this->test->optionalParameterInt(), 2);
     }
 
-    public function testOptionalParameterVar()
+    public function testOptionalParameterVar(): void
     {
         $this->assertSame($this->test->optionalParameterVar(1), 1);
         $this->assertSame($this->test->optionalParameterVar('testtesttesttest'), 'testtesttesttest');
         $this->assertNull($this->test->optionalParameterVar());
     }
 
-    public function testOptionalParameterBoolean()
+    public function testOptionalParameterBoolean(): void
     {
         $this->assertFalse($this->test->optionalParameterBoolFalse());
         $this->assertTrue($this->test->optionalParameterBoolTrue());
@@ -92,52 +92,52 @@ class MCallTest extends TestCase
         $this->assertFalse($this->test->optionalParameterBoolean(false));
     }
 
-    public function testArrayParamWithDefaultEmptyArray()
+    public function testArrayParamWithDefaultEmptyArray(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray(), []);
         $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray([1]), [1]);
     }
 
-    public function testArrayParamWithDefaultNullValue()
+    public function testArrayParamWithDefaultNullValue(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue(), []);
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue([1]), [1]);
     }
 
-    public function testArrayParam()
+    public function testArrayParam(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParam([]), []);
         $this->assertSame($this->test->testArrayParam([1, 2, 3]), [1, 2, 3]);
     }
 
-    public function testObjectParamCastStdClass()
+    public function testObjectParamCastStdClass(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('stdClass', $this->test->testObjectParamCastStdClass(new \stdClass()));
+        $this->assertSame(\StdClass::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertInstanceOf(\stdClass::class, $this->test->testObjectParamCastStdClass(new \stdClass()));
     }
 
-    public function testObjectParamCastOoParam()
+    public function testObjectParamCastOoParam(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame('Stub\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('Stub\Oo\Param', $this->test->testObjectParamCastOoParam(new \Stub\Oo\Param()));
+        $this->assertSame(\Stub\Oo\Param::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertInstanceOf(\Stub\Oo\Param::class, $this->test->testObjectParamCastOoParam(new \Stub\Oo\Param()));
     }
 
     /**
@@ -156,7 +156,7 @@ class MCallTest extends TestCase
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new \ReflectionClass('\Stub\Mcall');
+            return $this->reflection = new \ReflectionClass(\Stub\Mcall::class);
         }
 
         return $this->reflection;
