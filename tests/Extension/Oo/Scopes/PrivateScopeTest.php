@@ -9,7 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Extension\Oo;
+namespace Extension\Oo\Scopes;
 
 use Error;
 use PHPUnit\Framework\Error\Notice;
