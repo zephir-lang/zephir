@@ -35,7 +35,7 @@ class UnsetTest extends TestCase
 
     public function xtestUnsetValueFromProperty()
     {
-        //@todo Zephir is not generating the correct code to make this work
+        //TODO: Zephir is not generating the correct code to make this work
         $testVar = [1, 2, 3, 4, 5, 6];
         $this->assertFalse($this->test->has('testVar'));
         $this->test->addValueToProperty('testVar', $testVar);
@@ -49,7 +49,7 @@ class UnsetTest extends TestCase
 
     public function xtestStdClassUnset()
     {
-        //@todo Zephir is not generating the correct code to make this work
+        //TODO: Zephir is not generating the correct code to make this work
         $equalsStdClass = new \StdClass();
         $equalsStdClass->property1 = 12345;
         $equalsStdClass->property3 = 12345;

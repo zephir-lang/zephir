@@ -509,7 +509,7 @@ final class ClassDefinition
     /**
      * Checks if a class definition has a property.
      *
-     * @todo Duplicates getProperty
+     * TODO: Duplicates getProperty
      *
      * @deprecated
      *

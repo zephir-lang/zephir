@@ -212,7 +212,7 @@ class NewInstanceOperator extends BaseOperator
             }
         }
 
-        /* @TODO use the MethodBuilder here */
+        /* TODO: use the MethodBuilder here */
         if (isset($expression['parameters'])) {
             $callExpr = new Expression([
                 'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
@@ -246,7 +246,7 @@ class NewInstanceOperator extends BaseOperator
         } else {
             $compilationContext->headersManager->add('kernel/fcall');
 
-            /* @todo, generate the code using builders */
+            /* TODO:, generate the code using builders */
             $compilationContext->backend->checkConstructor($symbolVariable, $compilationContext);
             $codePrinter->increaseLevel();
 

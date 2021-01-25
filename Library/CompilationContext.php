@@ -196,7 +196,7 @@ class CompilationContext
     /**
      * Transform class/interface name to FQN format.
      *
-     * @todo WHY WHY :'(
+     * TODO: WHY WHY :'(
      *
      * @param string $className
      *

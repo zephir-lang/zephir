@@ -64,7 +64,7 @@ class ClassConstant
     /**
      * Returns the constant's value.
      *
-     * @todo Rewrite name
+     * TODO: Rewrite name
      *
      * @return array
      */

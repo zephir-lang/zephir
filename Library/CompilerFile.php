@@ -110,8 +110,6 @@ final class CompilerFile implements FileInterface
     }
 
     /**
-     * @internal
-     *
      * @param string $filePath
      */
     public function setFilePath($filePath)
@@ -120,8 +118,6 @@ final class CompilerFile implements FileInterface
     }
 
     /**
-     * @internal
-     *
      * @param string $className
      */
     public function setClassName($className)

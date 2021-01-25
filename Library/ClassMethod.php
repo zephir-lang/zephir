@@ -1158,7 +1158,7 @@ class ClassMethod
 
         $paramVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
         /*
-         * @todo Refactoring this place, move to one - static-constant-access
+         * TODO: Refactoring this place, move to one - static-constant-access
          */
         switch ($dataType) {
             case 'int':
@@ -1170,7 +1170,7 @@ class ClassMethod
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
                          *
-                         * @todo Rewrite all to codePrinter
+                         * TODO: Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
@@ -1214,7 +1214,7 @@ class ClassMethod
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
                          *
-                         * @todo Rewrite all to codePrinter
+                         * TODO: Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
@@ -1258,7 +1258,7 @@ class ClassMethod
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
                          *
-                         * @todo Rewrite all to codePrinter
+                         * TODO: Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
@@ -1303,7 +1303,7 @@ class ClassMethod
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
                          *
-                         * @todo Rewrite all to codePrinter
+                         * TODO: Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
@@ -1374,7 +1374,7 @@ class ClassMethod
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
                          *
-                         * @todo Rewrite all to codePrinter
+                         * TODO: Rewrite all to codePrinter
                          */
                         $expression = new Expression($parameter['default']);
                         $expression->setExpectReturn(true, $symbolVariable);
@@ -1470,7 +1470,7 @@ class ClassMethod
     /**
      * Assigns a zval value to a static low-level type.
      *
-     * @todo rewrite this to build ifs and throw from builders
+     * TODO: rewrite this to build ifs and throw from builders
      *
      * @param array              $parameter
      * @param CompilationContext $compilationContext
@@ -2406,7 +2406,7 @@ class ClassMethod
                 }
 
                 /*
-                 * @todo Probable we should detect return type more more carefully.
+                 * TODO: Probable we should detect return type more more carefully.
                  * It is hard to process return type from the annotations at this time.
                  * Thus we just return false here.
                  */

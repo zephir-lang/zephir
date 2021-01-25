@@ -130,8 +130,6 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $prototypesPath
      */
     public function setPrototypesPath($prototypesPath)
@@ -163,8 +161,6 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $optimizersPath
      */
     public function setOptimizersPath($optimizersPath)
@@ -196,8 +192,6 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $templatesPath
      */
     public function setTemplatesPath($templatesPath)
@@ -229,7 +223,7 @@ final class Compiler
     {
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
-            // @todo Cover by test
+            // TODO: Cover by test
             throw new CompilerException(
                 "Function '".$func->getCompleteName()."' was defined more than one time",
                 $statement
@@ -1313,8 +1307,8 @@ final class Compiler
 
                 $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
-                // @todo Add support for 'string', 'hash'
-                // @todo Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
+                // TODO: Add support for 'string', 'hash'
+                // TODO: Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
@@ -2050,7 +2044,7 @@ final class Compiler
     /**
      * Copies the base kernel to the extension destination.
      *
-     * @todo
+     * TODO:
      *
      * @deprecated
      *

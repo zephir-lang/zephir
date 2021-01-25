@@ -36,8 +36,6 @@ class StaticProperty
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     *
-     * @internal param string $variable
      */
     public function assignStatic(
         string $className,

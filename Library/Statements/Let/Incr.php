@@ -40,7 +40,7 @@ class Incr
 
         if ($symbolVariable->isReadOnly()) {
             /*
-             * @TODO implement increment of objects members
+             * TODO: implement increment of objects members
              */
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
         }

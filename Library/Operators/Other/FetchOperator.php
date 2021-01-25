@@ -47,7 +47,7 @@ class FetchOperator extends BaseOperator
          */
         if ('return_value' != $variable->getName()) {
             /*
-             * @todo use a read detector here
+             * TODO: use a read detector here
              */
             $readOnly = false;
             $line = max($compilationContext->symbolTable->getLastCallLine(), $compilationContext->symbolTable->getLastUnsetLine());

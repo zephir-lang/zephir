@@ -61,7 +61,7 @@ class UnsetStatement extends StatementAbstract
                 return true;
 
             case 'property-dynamic-access':
-                //@todo fix it
+                //TODO: fix it
 
             default:
                 throw new CompilerException('Cannot use expression type: '.$expression['type'].' in "unset"', $expression);

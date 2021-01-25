@@ -56,7 +56,7 @@ class PregmatchTest extends TestCase
             $match4 = null;
             $this->assertSame(1, $this->test->testPregMatch5Params('@\w{4}\s\w{2}\s\\\(?:\s.*)@', $string, $match4, PREG_OFFSET_CAPTURE, 14)); //finds "this is \ a string" (with non-capturing parentheses)
             /*
-             * @todo didn`this->test pass at local machine
+             * TODO: didn`this->test pass at local machine
              */
             $this->assertSame('this is \ a string', $match4[0][0]);
 

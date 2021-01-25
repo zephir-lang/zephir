@@ -73,7 +73,7 @@ class CastOperator extends BaseOperator
                          * zephir_get_intval_ex use zval variable
                          * before use with it we create a new variable and assign value of literal.
                          *
-                         * @todo Optimize by creating native function for string without zval using
+                         * TODO: Optimize by creating native function for string without zval using
                          */
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'string',

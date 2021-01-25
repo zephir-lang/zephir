@@ -18,7 +18,7 @@ use Zephir\Types;
 /**
  * Stubs Generator.
  *
- * @todo: Merge class with documentation generator
+ * TODO: Merge class with documentation generator
  */
 class MethodDocBlock extends DocBlock
 {

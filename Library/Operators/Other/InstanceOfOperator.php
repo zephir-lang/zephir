@@ -76,7 +76,7 @@ class InstanceOfOperator extends BaseOperator
                     case 'variable':
                         if ('this' == $resolvedVariable) {
                             /**
-                             * @todo It's an optimization variant, but maybe we need to get entry in runtime?
+                             * TODO: It's an optimization variant, but maybe we need to get entry in runtime?
                              */
                             $classEntry = $context->classDefinition->getClassEntry($context);
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
@@ -126,7 +126,7 @@ class InstanceOfOperator extends BaseOperator
                 }
         }
 
-        /* @TODO, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
+        /* TODO:, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
         $context->headersManager->add('kernel/object');
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($code)) {

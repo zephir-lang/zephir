@@ -299,7 +299,7 @@ class ForStatement extends StatementAbstract
             }
 
             /**
-             * Create an implicit 'let' operation, @TODO use a builder.
+             * Create an implicit 'let' operation, TODO: use a builder.
              */
             $statement = new LetStatement([
                 'type' => 'let',
@@ -339,7 +339,7 @@ class ForStatement extends StatementAbstract
             }
 
             /**
-             * Create an implicit 'let' operation, @TODO use a builder.
+             * Create an implicit 'let' operation, TODO: use a builder.
              */
             $statement = new LetStatement([
                 'type' => 'let',
@@ -756,7 +756,7 @@ class ForStatement extends StatementAbstract
         $exprRaw = $this->statement['expr'];
 
         /*
-         * @TODO implement optimizers here
+         * TODO: implement optimizers here
          */
         if ('fcall' == $exprRaw['type']) {
             if ('range' == $exprRaw['name']) {

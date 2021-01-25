@@ -57,8 +57,6 @@ class HardDisk implements FileSystemInterface
     }
 
     /**
-     * @internal
-     *
      * @param string|null $basePath
      */
     public function setBasePath($basePath)

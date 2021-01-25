@@ -18,7 +18,7 @@ use Zephir\Types;
  *
  * Encapsulates built-in methods for the "string" type
  *
- * @TODO explode, join, replace
+ * TODO: explode, join, replace
  */
 class StringType extends AbstractType
 {
