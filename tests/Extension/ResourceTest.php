@@ -23,19 +23,19 @@ class ResourceTest extends TestCase
         $this->test = new \Stub\ResourceTest();
     }
 
-    public function testLetStatementAssign()
+    public function testLetStatementAssign(): void
     {
-        $this->assertInternalType('resource', $this->test->testLetStatementSTDIN());
-        $this->assertInternalType('resource', $this->test->testLetStatementSTDOUT());
-        $this->assertInternalType('resource', $this->test->testLetStatementSTDERR());
+        $this->assertIsResource($this->test->testLetStatementSTDIN());
+        $this->assertIsResource($this->test->testLetStatementSTDOUT());
+        $this->assertIsResource($this->test->testLetStatementSTDERR());
     }
 
-    public function testTypeOffResource()
+    public function testTypeOffResource(): void
     {
         $this->assertSame('resource', $this->test->testTypeOffResource());
     }
 
-    public function testIsResource()
+    public function testIsResource(): void
     {
         $this->assertTrue($this->test->testIsResource());
     }
