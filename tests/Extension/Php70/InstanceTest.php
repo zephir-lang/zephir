@@ -16,12 +16,11 @@ use Stub\Instance;
 
 class InstanceTest extends TestCase
 {
-    /**
-     * @expectedException \Error
-     * @expectedExceptionMessage Cannot instantiate abstract class TestAbstractClass
-     */
-    public function testShouldThrowErrorOnInstantiateAbstractClass()
+    public function testShouldThrowErrorOnInstantiateAbstractClass(): void
     {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Cannot instantiate abstract class TestAbstractClass');
+
         Instance::testInstanceCreate(\TestAbstractClass::class);
     }
 }
