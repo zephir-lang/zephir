@@ -11,25 +11,25 @@
 
 namespace Extension;
 
-use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
+use Stub\Strings;
 
 class StringTest extends TestCase
 {
-    /** @var \Stub\Strings */
+    /** @var Strings */
     private $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Strings();
+        $this->test = new Strings();
     }
 
     /**
      * @dataProvider providerHashEquals
      *
-     * @param string $knownString
-     * @param string $userString
-     * @param string $expected
+     * @param mixed $knownString
+     * @param mixed $userString
+     * @param mixed $expected
      */
     public function testHashEquals($knownString, $userString, $expected)
     {
@@ -70,7 +70,7 @@ class StringTest extends TestCase
      */
     public function testCamelizeWrongSecondParam($delimiter)
     {
-        $this->expectException(Warning::class);
+        $this->expectWarning();
         $this->expectExceptionMessage(
             'The second argument passed to the camelize() must be a string containing at least one character'
         );
@@ -97,7 +97,7 @@ class StringTest extends TestCase
      */
     public function testUnCamelizeWrongSecondParam($delimiter)
     {
-        $this->expectException(Warning::class);
+        $this->expectWarning();
         $this->expectExceptionMessage(
             'Second argument passed to the uncamelize() must be a string of one character'
         );
