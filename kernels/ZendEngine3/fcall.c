@@ -342,6 +342,8 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	fci.params         = NULL;
 #if PHP_VERSION_ID < 80000
 	fci.no_separation = 1;
+#else
+	fci.named_params = NULL;
 #endif
 
 #if PHP_VERSION_ID < 70300
