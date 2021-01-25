@@ -1387,26 +1387,16 @@ final class ClassDefinition
                             );
                         }
                     } else {
-                        if ($richFormat || $method->hasParameters()) {
-                            $codePrinter->output(
-                                sprintf(
-                                    "\tPHP_ABSTRACT_ME(%s_%s, %s, %s)",
-                                    $this->getCNamespace(),
-                                    $this->getName(),
-                                    $method->getName(),
-                                    $method->getArgInfoName($this)
-                                )
-                            );
-                        } else {
-                            $codePrinter->output(
-                                sprintf(
-                                    "\tPHP_ABSTRACT_ME(%s_%s, %s, NULL)",
-                                    $this->getCNamespace(),
-                                    $this->getName(),
-                                    $method->getName()
-                                )
-                            );
-                        }
+                        $isInterface = $method->getClassDefinition()->isInterface();
+                        $codePrinter->output(
+                            sprintf(
+                                "\tPHP_ABSTRACT_ME(%s_%s, %s, %s)",
+                                $this->getCNamespace(),
+                                $this->getName(),
+                                $method->getName(),
+                                $isInterface ? $method->getArgInfoName($this) : 'NULL'
+                            )
+                        );
                     }
                 }
             }
