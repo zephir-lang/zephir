@@ -20,7 +20,7 @@ class ExtensionInfoTest extends TestCase
      *
      * @return array
      */
-    public function directiveProvider()
+    public function directiveProvider(): array
     {
         return [
             ['Test Extension => enabled', true],
@@ -42,7 +42,7 @@ class ExtensionInfoTest extends TestCase
      * @param string $var
      * @param bool   $contains
      */
-    public function testShouldBeWithoutDuplicatesNamespace($var, $contains)
+    public function testShouldBeWithoutDuplicatesNamespace(string $var, bool $contains): void
     {
         ob_start();
 
@@ -52,9 +52,9 @@ class ExtensionInfoTest extends TestCase
         ob_end_clean();
 
         if ($contains) {
-            $this->assertContains($var, $phpinfo);
+            $this->assertStringContainsString($var, $phpinfo);
         } else {
-            $this->assertNotContains($var, $phpinfo);
+            $this->assertStringNotContainsString($var, $phpinfo);
         }
     }
 }

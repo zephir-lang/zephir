@@ -25,106 +25,95 @@ class ExceptionsTest extends TestCase
         $this->test = new Exceptions();
     }
 
-    /**
-     * @expectedException \Stub\Exception
-     * @expectedExceptionMessage hello1
-     */
-    public function testException1()
+    public function testException1(): void
     {
+        $this->expectException(\Stub\Exception::class);
+        $this->expectExceptionMessage('hello1');
+
         $this->test->testException1();
     }
 
-    /**
-     * @expectedException \Stub\Exception
-     * @expectedExceptionMessage hello2
-     */
-    public function testException2()
+    public function testException2(): void
     {
+        $this->expectException(\Stub\Exception::class);
+        $this->expectExceptionMessage('hello2');
+
         $this->test->testException2();
     }
 
-    /**
-     * @expectedException \Stub\Exception
-     * @expectedExceptionMessage hello3
-     */
-    public function testException3()
+    public function testException3(): void
     {
+        $this->expectException(\Stub\Exception::class);
+        $this->expectExceptionMessage('hello3');
+
         $this->test->testException3();
     }
 
-    /**
-     * @expectedException \Stub\Exception
-     * @expectedExceptionMessage hello4
-     */
-    public function testException4()
+    public function testException4(): void
     {
+        $this->expectException(\Stub\Exception::class);
+        $this->expectExceptionMessage('hello4');
+
         $this->test->testException4();
     }
 
-    /**
-     * @expectedException \Stub\Exception
-     * @expectedExceptionMessage hello5
-     */
-    public function testException5()
+    public function testException5(): void
     {
+        $this->expectException(\Stub\Exception::class);
+        $this->expectExceptionMessage('hello5');
+
         $this->test->testException5();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test
-     */
-    public function testExceptionString()
+    public function testExceptionString(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Test');
+
         $this->test->testExceptionLiteral('string');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage t
-     */
-    public function testExceptionChar()
+    public function testExceptionChar(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('t');
+
         $this->test->testExceptionLiteral('char');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 123
-     */
-    public function testExceptionInt()
+    public function testExceptionInt(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(123);
+
         $this->test->testExceptionLiteral('int');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 123.123
-     */
-    public function testExceptionDouble()
+    public function testExceptionDouble(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(123.123);
+
         $this->test->testExceptionLiteral('double');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Hello, Zephir
-     */
-    public function testExceptionSprintf()
+    public function testExceptionSprintf(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Hello, Zephir');
+
         $this->test->testExceptionSprintf('Zephir');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Framework Phalcon written using Zephir
-     */
-    public function testExceptionConcat()
+    public function testExceptionConcat(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Framework Phalcon written using Zephir');
+
         $this->test->testExceptionConcat('Phalcon', 'Zephir');
     }
 
-    public function testExceptionRethrow()
+    public function testExceptionRethrow(): void
     {
         try {
             $this->test->testExceptionRethrow();
@@ -134,30 +123,35 @@ class ExceptionsTest extends TestCase
         }
     }
 
-    public function testMultiException()
+    public function testMultiException(): void
     {
         try {
             $this->test->testMultiException('test', new Exception('Some Exception'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
+
         $this->test->internalExceptionCallable = function () {
             return false;
         };
+
         try {
             $value = $this->test->testMultiException('test', new Exception('Some Exception'));
             $this->assertSame($value, 'test');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertTrue(false);
         }
+
         try {
             $this->test->testMultiException('test', new \Exception('Some Exception'));
         } catch (\Exception $e) {
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
+
         $this->test->exceptionCallable = function () {
             return false;
         };
+
         try {
             $this->test->testMultiException('test', new \Exception('Some Exception'));
             $this->assertSame($value, 'test');
@@ -166,7 +160,7 @@ class ExceptionsTest extends TestCase
         }
     }
 
-    public function testIssue1325()
+    public function testIssue1325(): void
     {
         $res = $this->test->issue1325();
         $this->assertSame(1, $res);
