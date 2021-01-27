@@ -31,7 +31,9 @@ class ExtendClassTest extends TestCase
 
     public function testPDOStatementExtending(): void
     {
-        $this->markTestSkipped('TypeError : PHPUnit\Framework\TestCase::__construct(): Argument #2 ($data) must be of type array, string given');
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestSkipped('TypeError : PHPUnit\Framework\TestCase::__construct(): Argument #2 ($data) must be of type array, string given');
+        }
 
         $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
@@ -66,7 +68,9 @@ class ExtendClassTest extends TestCase
      */
     public function testShouldCallParentMethodFromStaticByUsingSelf(): void
     {
-        $this->markTestSkipped('Should be fixed static call before run this test (Invalid callback , no array or string given)');
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestSkipped('Should be fixed static call before run this test (Invalid callback , no array or string given)');
+        }
 
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());

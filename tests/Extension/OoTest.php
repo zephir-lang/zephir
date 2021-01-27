@@ -61,9 +61,12 @@ class OoTest extends TestCase
         $this->assertIsObject($obj);
         $this->assertInstanceOf(\Stub\Oo\OoConstructParams::class, $obj);
 
-        $this->markTestIncomplete(
-            'Not ready to run with PHP 8: interrupted by signal 11: SIGSEGV (Invalid callback , no array or string given)'
-        );
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestIncomplete(
+                'Not ready to run with PHP 8: interrupted by signal 11: SIGSEGV (Invalid callback , no array or string given)'
+            );
+        }
+
         $obj12 = $test->testInstance12();
         $this->assertIsObject($obj12);
         $this->assertInstanceOf('Stub\Oo\OoDynamicA', $obj12);
