@@ -52,9 +52,7 @@
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "phpunit/phpunit": "^9.5",
-        "psr/log": "1.1.*",
-        "symfony/debug": "3.4.*",
-        "symfony/phpunit-bridge": "^5.2"
+        "psr/log": "1.1.*"
     },
     "config": {
         "optimize-autoloader": true,
