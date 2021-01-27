@@ -383,6 +383,9 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	}
 
 	fci.params = p;
+	if (!fcic.function_handler) {
+		ZVAL_COPY_VALUE(&fci.function_name, &callable);
+	}
 	status = zend_call_function(&fci, &fcic);
 #ifdef _MSC_VER
 	efree(p);
