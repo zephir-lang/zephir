@@ -22,7 +22,6 @@
     ],
     "require": {
         "php": ">=7.4.1",
-        "ext-SPL": "*",
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
@@ -52,9 +51,10 @@
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
+        "phpunit/phpunit": "^9.5",
         "psr/log": "1.1.*",
         "symfony/debug": "3.4.*",
-        "symfony/phpunit-bridge": "5.1.*"
+        "symfony/phpunit-bridge": "^5.2"
     },
     "config": {
         "optimize-autoloader": true,
