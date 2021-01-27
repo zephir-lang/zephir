@@ -27,7 +27,7 @@ class DeprecatedMethodsTest extends TestCase
         $this->expectDeprecation('Unsilenced deprecation: Method Stub\Oo\DeprecatedMethods::publicDeprecated() is deprecated');
 
         $test = new DeprecatedMethods();
-        $test->publicDeprecated();
+        $this->assertTrue($test->publicDeprecated());
     }
 
     /**
@@ -38,6 +38,6 @@ class DeprecatedMethodsTest extends TestCase
         $this->expectDeprecation('Unsilenced deprecation: Method Stub\Oo\DeprecatedMethods::privateDeprecated() is deprecated');
 
         $test = new DeprecatedMethods();
-        $test->normalMethod();
+        $this->assertTrue($test->normalMethod());
     }
 }

@@ -18,11 +18,16 @@ use Stub\Mcall;
 
 class MCallTest extends TestCase
 {
-    public function testSouldThrowTypeErrorForOptionalBoolean1()
+    public function testShouldThrowTypeErrorForOptionalBoolean1()
     {
         $test = new Mcall();
 
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\Error::class);
+        } else {
+            $this->expectException(\TypeError::class);
+        }
+
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : bool
             // PHP 7.2 : boolean
@@ -37,7 +42,12 @@ class MCallTest extends TestCase
     {
         $test = new Mcall();
 
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\Error::class);
+        } else {
+            $this->expectException(\TypeError::class);
+        }
+
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : bool
             // PHP 7.2 : boolean

@@ -28,7 +28,12 @@ class OoParamsStrictTest extends TestCase
 
     public function testShouldThrowTypeErrorForInt1()
     {
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\Error::class);
+        } else {
+            $this->expectException(\TypeError::class);
+        }
+
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
@@ -41,7 +46,12 @@ class OoParamsStrictTest extends TestCase
 
     public function testShouldThrowInvalidArgumentExceptionForInt2()
     {
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\Error::class);
+        } else {
+            $this->expectException(\TypeError::class);
+        }
+
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
@@ -52,8 +62,12 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictAge('17');
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForDouble()
+    public function testShouldThrowInvalidArgumentExceptionForDoublePhp7()
     {
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestIncomplete('Test requires PHP 7.x');
+        }
+
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage(
             'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given'
@@ -62,9 +76,28 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictAverage('17');
     }
 
+    public function testShouldThrowInvalidArgumentExceptionForDoublePhp8()
+    {
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            $this->markTestIncomplete('Test requires PHP 8.x');
+        }
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Parameter \'average\' must be of the type double'
+        );
+
+        $this->test->setStrictAverage('17');
+    }
+
     public function testShouldThrowInvalidArgumentExceptionForString()
     {
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\Error::class);
+        } else {
+            $this->expectException(\TypeError::class);
+        }
+
         $this->expectExceptionMessageRegExp(
             // PHP 7.3 : int
             // PHP 7.2 : integer
