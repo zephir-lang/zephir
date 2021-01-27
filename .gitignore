@@ -19,9 +19,6 @@ vendor
 *.loT
 *.dSYM
 
-# Dependency lock is ignored for now.
-composer.lock
-
 # Compilation logs.
 compile.log
 compile-errors.log

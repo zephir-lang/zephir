@@ -161,4 +161,30 @@ class MCallTest extends TestCase
 
         return $this->reflection;
     }
+
+    public function testSouldThrowTypeErrorForOptionalBoolean1()
+    {
+        $test = new Mcall();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, string given/'
+        );
+
+        $test->optionalParameterBoolean('test');
+    }
+
+    public function testShouldThrowTypeErrorForOptionalBoolean2()
+    {
+        $test = new Mcall();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, array given/'
+        );
+
+        $test->optionalParameterBoolean([]);
+    }
 }

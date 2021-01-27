@@ -9,18 +9,8 @@
 >
 
     <testsuites>
-        <testsuite name="Extension_Php70">
-            <!-- PHP >= 7.0 && < 7.2  -->
+        <testsuite name="Extension">
             <directory suffix=".php">./tests/Extension</directory>
-            <exclude>tests/Extension/Php56</exclude>
-            <exclude>tests/Extension/Php72</exclude>
-        </testsuite>
-
-        <testsuite name="Extension_Php72">
-            <!-- PHP >= 7.2  -->
-            <directory suffix=".php">./tests/Extension</directory>
-            <exclude>tests/Extension/Php56</exclude>
-            <exclude>tests/Extension/Php70</exclude>
         </testsuite>
 
         <testsuite name="Zephir">
