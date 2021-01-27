@@ -11,18 +11,12 @@
 # -u  Treat unset variables as an error when substituting.
 set -eu
 
-if [ "$(php-config --vernum)" -lt "70200" ]; then
-  test_suite="Extension_Php70"
-else
-  test_suite="Extension_Php72"
-fi
-
 php \
   -d extension=ext/modules/stub.so \
   vendor/bin/phpunit \
   --colors=always \
   --bootstrap tests/ext-bootstrap.php \
-  --testsuite ${test_suite}
+  --testsuite Extension
 
 php \
   vendor/bin/phpunit \
