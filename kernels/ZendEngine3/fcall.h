@@ -212,18 +212,35 @@ typedef enum _zephir_call_type {
 		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, class_entry, zephir_fcall_parent, this_ptr, method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
 
+#if PHP_VERSION_ID >= 80000
 #define ZEPHIR_CALL_SELF(return_value_ptr, method, cache, cache_slot, ...) \
 	do { \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
 		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_aparams(return_value_ptr, getThis(), zephir_fcall_self, (getThis() ? Z_OBJCE_P(getThis()) : NULL), method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
+#else
+#define ZEPHIR_CALL_SELF(return_value_ptr, method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+		ZEPHIR_LAST_CALL_STATUS = zephir_call_class_method_aparams(return_value_ptr, NULL, zephir_fcall_self, NULL, method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+#endif
 
+#if PHP_VERSION_ID >= 80000
 #define ZEPHIR_RETURN_CALL_SELF(method, cache, cache_slot, ...) \
 	do { \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
 		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, getThis(), zephir_fcall_self, (getThis() ? Z_OBJCE_P(getThis()) : NULL), method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
 	} while (0)
+#else
+#define ZEPHIR_RETURN_CALL_SELF(method, cache, cache_slot, ...) \
+	do { \
+		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+		ZEPHIR_LAST_CALL_STATUS = zephir_return_call_class_method(return_value, NULL, zephir_fcall_self, NULL, method, strlen(method), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+#endif
 
 #define ZEPHIR_CALL_STATIC(return_value_ptr, method, cache, cache_slot, ...) \
 	do { \
