@@ -17,16 +17,14 @@ else
   test_suite="Extension_Php72"
 fi
 
-vendor/bin/simple-phpunit --version
-
 php \
   -d extension=ext/modules/stub.so \
-  vendor/bin/simple-phpunit \
+  vendor/bin/phpunit \
   --colors=always \
   --bootstrap tests/ext-bootstrap.php \
   --testsuite ${test_suite}
 
 php \
-  vendor/bin/simple-phpunit \
+  vendor/bin/phpunit \
   --colors=always \
   --testsuite Zephir
