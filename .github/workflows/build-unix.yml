@@ -131,12 +131,7 @@ jobs:
             composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
           fi
 
-      - name: Install Project Dependencies for PHP 7.x
-        if: matrix.php == '7.4'
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
-
-      - name: Install Project Dependencies for PHP 8.x
-        if: matrix.php == '8.0'
+      - name: Install Project Dependencies for PHP
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
 
       - name: Prepare Zephir Executable
