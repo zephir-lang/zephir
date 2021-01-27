@@ -19,9 +19,9 @@ class ScopeTest extends TestCase
     public function testScope1()
     {
         if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-            $this->markTestIncomplete(
+            /*$this->markTestIncomplete(
                 'Not ready to run with PHP 8: interrupted by signal 11: SIGSEGV'
-            );
+            );*/
         }
 
         $this->assertSame(Scope::test1(), 'testinternal_string');

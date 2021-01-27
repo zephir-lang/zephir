@@ -20,7 +20,7 @@ class ScallTest extends TestCase
     public function testScall()
     {
         if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-            $this->markTestSkipped('Should be fixed static call before run this test (Invalid callback , no array or string given)');
+            //$this->markTestSkipped('Should be fixed static call before run this test (Invalid callback , no array or string given)');
         }
 
         $test = new Scall();
