@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Extension\Php72\TypeHinting;
+namespace Extension\TypeHinting;
 
 use PHPUnit\Framework\TestCase;
 use TestConcreteClass;

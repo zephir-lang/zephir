@@ -170,7 +170,7 @@ jobs:
       - name: Setup Problem Matchers for PHPUnit
         run: echo ::add-matcher::${{ runner.tool_cache }}/phpunit.json
 
-      - name: Unit Testing - Stubs Extension
+      - name: Unit Testing - Extension
         if: always()
         run: |
           php \

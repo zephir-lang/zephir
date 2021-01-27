@@ -38,4 +38,55 @@ class OoParamsStrictTest extends TestCase
     {
         $this->assertSame($this->test->setStrictName('peter'), 'peter');
     }
+
+    public function testShouldThrowTypeErrorForInt1()
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictAge\(\) '.
+            'must be of the type int, float given/'
+        );
+
+        $this->test->setStrictAge(17.0);
+    }
+
+    public function testShouldThrowInvalidArgumentExceptionForInt2()
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictAge\(\) '.
+            'must be of the type int, string given/'
+        );
+
+        $this->test->setStrictAge('17');
+    }
+
+    public function testShouldThrowInvalidArgumentExceptionForDouble()
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage(
+            'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given'
+        );
+
+        $this->test->setStrictAverage('a');
+    }
+
+    public function testShouldThrowInvalidArgumentExceptionForString()
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Oo\\\OoParams::setStrictName\(\) '.
+            'must be of the type string, int given/'
+        );
+
+        $this->test->setStrictName(1234);
+    }
+
+    public function testShouldThrowInvalidArgumentExceptionForCallFromZephirLand()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parameter 'name' must be of the type string");
+
+        $this->test->setStrictNameFromZephirLand();
+    }
 }
