@@ -11,4 +11,9 @@ class ConcreteStatic extends AbstractStatic
 	{
 		return self::parentFunction();
 	}
+
+	public static function simpleStaticIntReturn() -> int
+	{
+	    return 1337;
+	}
 }

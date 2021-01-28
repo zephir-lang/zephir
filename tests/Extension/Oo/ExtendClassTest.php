@@ -75,4 +75,9 @@ class ExtendClassTest extends TestCase
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
     }
+
+    public function testShouldCallStaticMethodWithSimpleValue(): void
+    {
+        $this->assertSame(1337, \Stub\Oo\ConcreteStatic::simpleStaticIntReturn());
+    }
 }
