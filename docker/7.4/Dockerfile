@@ -1,6 +1,9 @@
 FROM composer:2.0.8 as composer
 FROM php:7.4-fpm
 
+RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
+ENV MAKEFLAGS="-j${CPU_CORES}"
+
 RUN apt update -y && apt install -y \
     wget \
     zip \
