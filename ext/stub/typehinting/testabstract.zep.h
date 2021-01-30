@@ -33,6 +33,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_typehinting_testabstract_testfunc, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_typehinting_testabstract_returnoneofscalar, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_typehinting_testabstract_returnint, 0, 0, IS_LONG, 0)
 #else
@@ -91,7 +94,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_typehinting_testabstract_method_entry) {
 	PHP_ME(Stub_TypeHinting_TestAbstract, testFunc, arginfo_stub_typehinting_testabstract_testfunc, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_TypeHinting_TestAbstract, returnOneOfScalar, NULL, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_TypeHinting_TestAbstract, returnOneOfScalar, arginfo_stub_typehinting_testabstract_returnoneofscalar, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnInt, arginfo_stub_typehinting_testabstract_returnint, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnUint, arginfo_stub_typehinting_testabstract_returnuint, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnLong, arginfo_stub_typehinting_testabstract_returnlong, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)

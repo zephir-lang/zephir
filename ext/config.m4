@@ -202,6 +202,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/11__closure.zep.c
 	stub/12__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
+	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
+	PHP_ADD_BUILD_DIR([$ext_builddir/stub/])
 	PHP_SUBST(STUB_SHARED_LIBADD)
 
 	old_CPPFLAGS=$CPPFLAGS

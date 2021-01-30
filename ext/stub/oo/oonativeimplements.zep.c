@@ -30,7 +30,6 @@ ZEPHIR_INIT_CLASS(Stub_Oo_OoNativeImplements) {
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_OuterIterator);
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_RecursiveIterator);
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_SeekableIterator);
-	zend_class_implements(stub_oo_oonativeimplements_ce, 1, zend_ce_aggregate);
 	return SUCCESS;
 
 }

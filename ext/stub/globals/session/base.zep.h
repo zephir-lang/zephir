@@ -43,11 +43,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_session_base___unset, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_session_base_removesessiondata, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_globals_session_base_method_entry) {
 	PHP_ME(Stub_Globals_Session_Base, set, arginfo_stub_globals_session_base_set, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Session_Base, remove, arginfo_stub_globals_session_base_remove, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Session_Base, __set, arginfo_stub_globals_session_base___set, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Session_Base, __unset, arginfo_stub_globals_session_base___unset, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Globals_Session_Base, removeSessionData, NULL, ZEND_ACC_PROTECTED)
+	PHP_ME(Stub_Globals_Session_Base, removeSessionData, arginfo_stub_globals_session_base_removesessiondata, ZEND_ACC_PROTECTED)
 	PHP_FE_END
 };

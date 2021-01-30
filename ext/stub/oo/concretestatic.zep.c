@@ -49,3 +49,12 @@ PHP_METHOD(Stub_Oo_ConcreteStatic, childFunction) {
 
 }
 
+PHP_METHOD(Stub_Oo_ConcreteStatic, simpleStaticIntReturn) {
+
+	zval *this_ptr = getThis();
+
+
+	RETURN_LONG(1337);
+
+}
+

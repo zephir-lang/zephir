@@ -15,6 +15,9 @@ PHP_METHOD(Stub_McallInternal, callFibonacci);
 void zep_Stub_McallInternal_test1956(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used);
 PHP_METHOD(Stub_McallInternal, issue1956);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_a, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_b, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
@@ -31,6 +34,18 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_c, 0, 0, 2)
 #else
 	ZEND_ARG_INFO(0, b)
 #endif
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_e, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_d, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_f, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcallinternal_g, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -72,10 +87,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_mcallinternal_issue1956, 0,
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_mcallinternal_method_entry) {
-	PHP_ME(Stub_McallInternal, e, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_McallInternal, d, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_McallInternal, f, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_McallInternal, g, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_McallInternal, e, arginfo_stub_mcallinternal_e, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_McallInternal, d, arginfo_stub_mcallinternal_d, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_McallInternal, f, arginfo_stub_mcallinternal_f, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_McallInternal, g, arginfo_stub_mcallinternal_g, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_McallInternal, callFibonacci, arginfo_stub_mcallinternal_callfibonacci, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_McallInternal, issue1956, arginfo_stub_mcallinternal_issue1956, ZEND_ACC_PUBLIC)
 	PHP_FE_END

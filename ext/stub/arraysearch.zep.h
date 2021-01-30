@@ -16,8 +16,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arraysearch_simplesearch, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arraysearch_searchusingarrayinsidezephir, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_arraysearch_method_entry) {
 	PHP_ME(Stub_ArraySearch, simpleSearch, arginfo_stub_arraysearch_simplesearch, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_ArraySearch, searchUsingArrayInsideZephir, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArraySearch, searchUsingArrayInsideZephir, arginfo_stub_arraysearch_searchusingarrayinsidezephir, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

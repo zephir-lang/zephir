@@ -59,7 +59,7 @@ PHP_METHOD(Stub_Oo, testInstance2) {
 
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstruct_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 55);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 53);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -105,7 +105,7 @@ PHP_METHOD(Stub_Oo, testInstance4) {
 	ZVAL_STRING(&b, "b");
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &a, &b);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &a, &b);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -130,7 +130,7 @@ PHP_METHOD(Stub_Oo, testInstance5) {
 	ZVAL_STRING(&_0, "a");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "b");
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -153,7 +153,7 @@ PHP_METHOD(Stub_Oo, testInstance6) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -176,7 +176,7 @@ PHP_METHOD(Stub_Oo, testInstance7) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_BOOL(&_0, 0);
 	ZVAL_BOOL(&_1, 1);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -199,7 +199,7 @@ PHP_METHOD(Stub_Oo, testInstance8) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_DOUBLE(&_0, 1.2);
 	ZVAL_DOUBLE(&_1, 7.30);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 
@@ -258,7 +258,7 @@ PHP_METHOD(Stub_Oo, testInstance11) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 56, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 54, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
 

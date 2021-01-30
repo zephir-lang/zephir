@@ -9,6 +9,9 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists);
 PHP_METHOD(Stub_ArrayAccessObj, offsetUnset);
 PHP_METHOD(Stub_ArrayAccessObj, offsetGet);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj___construct, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetset, 0, 0, 2)
 	ZEND_ARG_INFO(0, offset)
 	ZEND_ARG_INFO(0, value)
@@ -27,7 +30,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetget, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arrayaccessobj_method_entry) {
-	PHP_ME(Stub_ArrayAccessObj, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(Stub_ArrayAccessObj, __construct, arginfo_stub_arrayaccessobj___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_ArrayAccessObj, offsetSet, arginfo_stub_arrayaccessobj_offsetset, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessObj, offsetExists, arginfo_stub_arrayaccessobj_offsetexists, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessObj, offsetUnset, arginfo_stub_arrayaccessobj_offsetunset, ZEND_ACC_PUBLIC)

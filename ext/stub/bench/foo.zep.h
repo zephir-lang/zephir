@@ -71,6 +71,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_foo_emptyprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_foo_g, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench_foo_call, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
@@ -118,7 +121,7 @@ ZEPHIR_INIT_FUNCS(stub_bench_foo_method_entry) {
 	PHP_ME(Stub_Bench_Foo, postDecProp, arginfo_stub_bench_foo_postdecprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, issetProp, arginfo_stub_bench_foo_issetprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, emptyProp, arginfo_stub_bench_foo_emptyprop, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Bench_Foo, g, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench_Foo, g, arginfo_stub_bench_foo_g, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, call, arginfo_stub_bench_foo_call, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, staticMethod, arginfo_stub_bench_foo_staticmethod, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, staticMethod1, arginfo_stub_bench_foo_staticmethod1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)

@@ -173,6 +173,24 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_testhashequals, 0, 
 	ZEND_ARG_INFO(0, str2)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testhardcodedmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testechomultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testtrimmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testwellescapedmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testinternedstring1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testinternedstring2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 #if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_strtohex, 0, 1, IS_STRING, 0)
 #else
@@ -212,12 +230,12 @@ ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, testStripslashes, arginfo_stub_strings_teststripslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testStripcslashes, arginfo_stub_strings_teststripcslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testHashEquals, arginfo_stub_strings_testhashequals, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testHardcodedMultilineString, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testEchoMultilineString, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testTrimMultilineString, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testHardcodedMultilineString, arginfo_stub_strings_testhardcodedmultilinestring, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testEchoMultilineString, arginfo_stub_strings_testechomultilinestring, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testTrimMultilineString, arginfo_stub_strings_testtrimmultilinestring, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testWellEscapedMultilineString, arginfo_stub_strings_testwellescapedmultilinestring, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testInternedString1, arginfo_stub_strings_testinternedstring1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, testInternedString2, arginfo_stub_strings_testinternedstring2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, strToHex, arginfo_stub_strings_strtohex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue1267, arginfo_stub_strings_issue1267, ZEND_ACC_PUBLIC)
 	PHP_FE_END

@@ -51,6 +51,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_setdi, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, dependencyInjector, Stub\\DiInterface, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getdi, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getrewriteuri, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_seturisource, 0, 0, 1)
 	ZEND_ARG_INFO(0, uriSource)
 ZEND_END_ARG_INFO()
@@ -136,6 +142,36 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_notfound, 0, 0, 1)
 	ZEND_ARG_INFO(0, paths)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_clear, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getnamespacename, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getmodulename, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getcontrollername, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getactionname, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getparams, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getmatchedroute, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getmatches, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_wasmatched, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getroutes, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_getroutebyid, 0, 0, 1)
 	ZEND_ARG_INFO(0, id)
 ZEND_END_ARG_INFO()
@@ -147,8 +183,8 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(stub_router_method_entry) {
 	PHP_ME(Stub_Router, __construct, arginfo_stub_router___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_Router, setDI, arginfo_stub_router_setdi, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getDI, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getRewriteUri, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getDI, arginfo_stub_router_getdi, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getRewriteUri, arginfo_stub_router_getrewriteuri, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, setUriSource, arginfo_stub_router_seturisource, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, removeExtraSlashes, arginfo_stub_router_removeextraslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, setDefaultNamespace, arginfo_stub_router_setdefaultnamespace, ZEND_ACC_PUBLIC)
@@ -168,16 +204,16 @@ ZEPHIR_INIT_FUNCS(stub_router_method_entry) {
 	PHP_ME(Stub_Router, addHead, arginfo_stub_router_addhead, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, mount, arginfo_stub_router_mount, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, notFound, arginfo_stub_router_notfound, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, clear, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getNamespaceName, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getModuleName, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getControllerName, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getActionName, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getParams, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getMatchedRoute, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getMatches, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, wasMatched, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Router, getRoutes, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, clear, arginfo_stub_router_clear, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getNamespaceName, arginfo_stub_router_getnamespacename, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getModuleName, arginfo_stub_router_getmodulename, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getControllerName, arginfo_stub_router_getcontrollername, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getActionName, arginfo_stub_router_getactionname, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getParams, arginfo_stub_router_getparams, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getMatchedRoute, arginfo_stub_router_getmatchedroute, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getMatches, arginfo_stub_router_getmatches, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, wasMatched, arginfo_stub_router_wasmatched, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Router, getRoutes, arginfo_stub_router_getroutes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, getRouteById, arginfo_stub_router_getroutebyid, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router, getRouteByName, arginfo_stub_router_getroutebyname, ZEND_ACC_PUBLIC)
 	PHP_FE_END

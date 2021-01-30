@@ -37,9 +37,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_fcall_testcall2, 0, 0, IS_L
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall3, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall4, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall5, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall6, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_testcall7, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fcall_zvalfcallwith1parameter, 0, 0, 1)
@@ -130,11 +142,11 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(stub_fcall_method_entry) {
 	PHP_ME(Stub_Fcall, testCall1, arginfo_stub_fcall_testcall1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fcall, testCall2, arginfo_stub_fcall_testcall2, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Fcall, testCall3, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Fcall, testCall4, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Fcall, testCall3, arginfo_stub_fcall_testcall3, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Fcall, testCall4, arginfo_stub_fcall_testcall4, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fcall, testCall5, arginfo_stub_fcall_testcall5, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Fcall, testCall6, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Fcall, testCall7, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Fcall, testCall6, arginfo_stub_fcall_testcall6, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Fcall, testCall7, arginfo_stub_fcall_testcall7, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fcall, zvalFcallWith1Parameter, arginfo_stub_fcall_zvalfcallwith1parameter, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fcall, testCall8, arginfo_stub_fcall_testcall8, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fcall, testCall1FromVar, arginfo_stub_fcall_testcall1fromvar, ZEND_ACC_PUBLIC)

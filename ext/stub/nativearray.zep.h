@@ -602,6 +602,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_issue1140, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_issue1159, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_nativearray_zephir_init_properties_stub_nativearray, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_nativearray_method_entry) {
 	PHP_ME(Stub_NativeArray, testArray1, arginfo_stub_nativearray_testarray1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_NativeArray, testArray2, arginfo_stub_nativearray_testarray2, ZEND_ACC_PUBLIC)
@@ -676,6 +682,6 @@ ZEPHIR_INIT_FUNCS(stub_nativearray_method_entry) {
 	PHP_ME(Stub_NativeArray, issue743c, arginfo_stub_nativearray_issue743c, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_NativeArray, issue709, arginfo_stub_nativearray_issue709, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_NativeArray, Issue1140, arginfo_stub_nativearray_issue1140, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_NativeArray, Issue1159, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_NativeArray, Issue1159, arginfo_stub_nativearray_issue1159, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

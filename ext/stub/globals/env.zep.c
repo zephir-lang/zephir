@@ -12,9 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -44,8 +44,13 @@ PHP_METHOD(Stub_Globals_Env, read) {
 	zephir_get_strval(&name, name_param);
 
 
-	zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY | PH_READONLY, "stub/globals/env.zep", 8);
-	RETURN_CTOR(&_0);
+	ZEPHIR_INIT_VAR(&_0);
+	if (zephir_array_isset(&_ENV, &name)) {
+		zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY, "stub/globals/env.zep", 8);
+	} else {
+		ZVAL_BOOL(&_0, 0);
+	}
+	RETURN_CCTOR(&_0);
 
 }
 

@@ -16,13 +16,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fasta_fastarepeat, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fasta_fastrandom, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_fasta_main, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_fasta_method_entry) {
 	PHP_ME(Stub_Fasta, fastaRepeat, arginfo_stub_fasta_fastarepeat, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Fasta, fastRandom, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Fasta, fastRandom, arginfo_stub_fasta_fastrandom, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fasta, main, arginfo_stub_fasta_main, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

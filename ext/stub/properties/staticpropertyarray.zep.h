@@ -5,6 +5,9 @@ ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray);
 
 void zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticpropertyarray_zephir_init_static_properties_stub_properties_staticpropertyarray, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_properties_staticpropertyarray_method_entry) {
 	PHP_FE_END
 };

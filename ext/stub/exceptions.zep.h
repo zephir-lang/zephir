@@ -18,6 +18,27 @@ PHP_METHOD(Stub_Exceptions, testMultiException);
 PHP_METHOD(Stub_Exceptions, issue1325);
 PHP_METHOD(Stub_Exceptions, doNoopException);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexception1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexceptionstringescape, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexception2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexception3, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_getexception, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexception4, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexception5, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexceptionliteral, 0, 0, 1)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, type, IS_STRING, 0)
@@ -47,25 +68,34 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexceptionconcat, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testexceptionrethrow, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_testmultiexception, 0, 0, 2)
 	ZEND_ARG_INFO(0, returnValue)
 	ZEND_ARG_INFO(0, exception)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_issue1325, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_exceptions_donoopexception, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_exceptions_method_entry) {
-	PHP_ME(Stub_Exceptions, testException1, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, testExceptionStringEscape, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, testException2, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, testException3, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, getException, NULL, ZEND_ACC_PROTECTED)
-	PHP_ME(Stub_Exceptions, testException4, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, testException5, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testException1, arginfo_stub_exceptions_testexception1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testExceptionStringEscape, arginfo_stub_exceptions_testexceptionstringescape, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testException2, arginfo_stub_exceptions_testexception2, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testException3, arginfo_stub_exceptions_testexception3, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, getException, arginfo_stub_exceptions_getexception, ZEND_ACC_PROTECTED)
+	PHP_ME(Stub_Exceptions, testException4, arginfo_stub_exceptions_testexception4, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testException5, arginfo_stub_exceptions_testexception5, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Exceptions, testExceptionLiteral, arginfo_stub_exceptions_testexceptionliteral, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Exceptions, testExceptionSprintf, arginfo_stub_exceptions_testexceptionsprintf, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Exceptions, testExceptionConcat, arginfo_stub_exceptions_testexceptionconcat, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, testExceptionRethrow, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, testExceptionRethrow, arginfo_stub_exceptions_testexceptionrethrow, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Exceptions, testMultiException, arginfo_stub_exceptions_testmultiexception, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, issue1325, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Exceptions, doNoopException, NULL, ZEND_ACC_PRIVATE)
+	PHP_ME(Stub_Exceptions, issue1325, arginfo_stub_exceptions_issue1325, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Exceptions, doNoopException, arginfo_stub_exceptions_donoopexception, ZEND_ACC_PRIVATE)
 	PHP_FE_END
 };

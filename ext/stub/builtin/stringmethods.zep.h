@@ -60,6 +60,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_uncam
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength3, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength4, 0, 0, 1)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_STRING, 0)
@@ -105,6 +114,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getindexwithposition, 
 #else
 	ZEND_ARG_INFO(0, position)
 #endif
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_gettrimmed, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_gettrimmed1, 0, 0, 1)
@@ -295,14 +307,14 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(stub_builtin_stringmethods_method_entry) {
 	PHP_ME(Stub_BuiltIn_StringMethods, camelize, arginfo_stub_builtin_stringmethods_camelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, uncamelize, arginfo_stub_builtin_stringmethods_uncamelize, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_BuiltIn_StringMethods, getLength1, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_BuiltIn_StringMethods, getLength2, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_BuiltIn_StringMethods, getLength3, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength1, arginfo_stub_builtin_stringmethods_getlength1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength2, arginfo_stub_builtin_stringmethods_getlength2, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength3, arginfo_stub_builtin_stringmethods_getlength3, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength4, arginfo_stub_builtin_stringmethods_getlength4, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength5, arginfo_stub_builtin_stringmethods_getlength5, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getIndex, arginfo_stub_builtin_stringmethods_getindex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getIndexWithPosition, arginfo_stub_builtin_stringmethods_getindexwithposition, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed, arginfo_stub_builtin_stringmethods_gettrimmed, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed1, arginfo_stub_builtin_stringmethods_gettrimmed1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getLeftTrimmed, arginfo_stub_builtin_stringmethods_getlefttrimmed, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getRightTrimmed, arginfo_stub_builtin_stringmethods_getrighttrimmed, ZEND_ACC_PUBLIC)

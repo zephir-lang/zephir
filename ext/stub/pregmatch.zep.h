@@ -16,6 +16,21 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches);
 PHP_METHOD(Stub_Pregmatch, testMatchAll);
 PHP_METHOD(Stub_Pregmatch, testMatchAllInZep);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testwithoutreturnandmatches, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testwithoutreturns, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testwithoutmatches, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testpregmatchall, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testpregmatchfallback, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testpregmatch2params, 0, 0, 2)
 	ZEND_ARG_INFO(0, pattern)
 	ZEND_ARG_INFO(0, subject)
@@ -59,18 +74,21 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testmatchall, 0, 0, 1)
 	ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_pregmatch_testmatchallinzep, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_pregmatch_method_entry) {
-	PHP_ME(Stub_Pregmatch, testWithoutReturnAndMatches, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Pregmatch, testWithoutReturns, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Pregmatch, testWithoutMatches, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Pregmatch, testPregMatchAll, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Pregmatch, testPregMatchFallback, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testWithoutReturnAndMatches, arginfo_stub_pregmatch_testwithoutreturnandmatches, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testWithoutReturns, arginfo_stub_pregmatch_testwithoutreturns, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testWithoutMatches, arginfo_stub_pregmatch_testwithoutmatches, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testPregMatchAll, arginfo_stub_pregmatch_testpregmatchall, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testPregMatchFallback, arginfo_stub_pregmatch_testpregmatchfallback, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testPregMatch2Params, arginfo_stub_pregmatch_testpregmatch2params, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testPregMatch3Params, arginfo_stub_pregmatch_testpregmatch3params, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testPregMatch4Params, arginfo_stub_pregmatch_testpregmatch4params, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testPregMatch5Params, arginfo_stub_pregmatch_testpregmatch5params, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testPregMatchSaveMatches, arginfo_stub_pregmatch_testpregmatchsavematches, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Pregmatch, testMatchAll, arginfo_stub_pregmatch_testmatchall, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Pregmatch, testMatchAllInZep, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Pregmatch, testMatchAllInZep, arginfo_stub_pregmatch_testmatchallinzep, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

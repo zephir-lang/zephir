@@ -106,12 +106,18 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_dynamicprop_setpropertyvariableboolfalse,
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_dynamicprop_setexistingstringproperty, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_dynamicprop_setexistingstringpropertystring, 0, 0, 1)
 #if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 #else
 	ZEND_ARG_INFO(0, value)
 #endif
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_dynamicprop_setnonexistingstringproperty, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_dynamicprop_method_entry) {
@@ -126,8 +132,8 @@ ZEPHIR_INIT_FUNCS(stub_oo_dynamicprop_method_entry) {
 	PHP_ME(Stub_Oo_DynamicProp, setPropertyVariableString, arginfo_stub_oo_dynamicprop_setpropertyvariablestring, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue, arginfo_stub_oo_dynamicprop_setpropertyvariablebooltrue, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse, arginfo_stub_oo_dynamicprop_setpropertyvariableboolfalse, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Oo_DynamicProp, setExistingStringProperty, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Oo_DynamicProp, setExistingStringProperty, arginfo_stub_oo_dynamicprop_setexistingstringproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_DynamicProp, setExistingStringPropertyString, arginfo_stub_oo_dynamicprop_setexistingstringpropertystring, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_Oo_DynamicProp, setNonExistingStringProperty, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Oo_DynamicProp, setNonExistingStringProperty, arginfo_stub_oo_dynamicprop_setnonexistingstringproperty, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

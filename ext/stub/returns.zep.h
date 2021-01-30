@@ -46,12 +46,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_returns_returnwithparameter, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_returns_returnwithoutparameter, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_returns_method_entry) {
 	PHP_ME(Stub_Returns, testReturnCast1, arginfo_stub_returns_testreturncast1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Returns, testReturnCast2, arginfo_stub_returns_testreturncast2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Returns, testReturnCast3, arginfo_stub_returns_testreturncast3, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Returns, testReturnCast4, arginfo_stub_returns_testreturncast4, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Returns, returnWithParameter, arginfo_stub_returns_returnwithparameter, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_Returns, returnWithoutParameter, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Returns, returnWithoutParameter, arginfo_stub_returns_returnwithoutparameter, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END
 };
