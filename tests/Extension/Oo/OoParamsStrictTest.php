@@ -65,10 +65,15 @@ class OoParamsStrictTest extends TestCase
 
     public function testShouldThrowInvalidArgumentExceptionForDouble()
     {
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage(
-            'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given'
-        );
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\InvalidArgumentException::class);
+            $message = "Parameter 'average' must be of the type double";
+        } else {
+            $this->expectException(\Error::class);
+            $message = 'Argument 1 passed to Stub\Oo\OoParams::setStrictAverage() must be of the type float, string given';
+        }
+
+        $this->expectExceptionMessage($message);
 
         $this->test->setStrictAverage('a');
     }
