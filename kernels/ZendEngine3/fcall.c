@@ -231,32 +231,56 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
 	switch (type) {
 		case zephir_fcall_parent:
+			
+#if PHP_VERSION_ID >= 80000
+			if (ce && Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&ce->parent->function_table, Z_STR_P(func));
+				
+				fcic->calling_scope = ce->parent;
+			} else if (EXPECTED(calling_scope && calling_scope->parent)) {
+				if (Z_TYPE_P(func) == IS_STRING) {
+					fcic->function_handler = zend_hash_find_ptr(&calling_scope->parent->function_table, Z_STR_P(func));
+				}
+				fcic->calling_scope = calling_scope->parent;
+			} else {
+				return;
+			}
+#endif
 			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
 				return;
 			}
-#if PHP_VERSION_ID >= 80000
-			if (Z_TYPE_P(func) == IS_STRING) {
-				fcic->function_handler = zend_hash_find_ptr(&calling_scope->parent->function_table, Z_STR_P(func));
-			}
-#endif
-			fcic->calling_scope = ce;
+			fcic->calling_scope = calling_scope->parent;
 			break;
 
 		case zephir_fcall_static:
-			fcic->calling_scope = fcic->called_scope;
+#if PHP_VERSION_ID >= 80000
+			if (ce && Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
+				fcic->calling_scope = ce;
+			} else if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
+				fcic->calling_scope = called_scope;
+			}
+#else
+			fcic->calling_scope = called_scope;
 			if (UNEXPECTED(!calling_scope)) {
 				return;
 			}
+#endif
 
 			break;
 
 		case zephir_fcall_self:
 #if PHP_VERSION_ID >= 80000
-			if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
+			if (ce && Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
+				
+				fcic->calling_scope = ce;
+			} else if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
 				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
+				fcic->calling_scope = calling_scope;
 			}
 #endif
-			fcic->calling_scope = calling_scope;
 			break;
 
 		case zephir_fcall_ce:
