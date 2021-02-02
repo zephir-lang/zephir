@@ -11,7 +11,7 @@ class Functions
         var ret;
         let ret = "0";
 
-        return false === filter_var($ret, FILTER_VALIDATE_FLOAT, 20480);
+        return false === filter_var(ret, FILTER_VALIDATE_FLOAT, 20480);
     }
 
     /**
@@ -22,6 +22,6 @@ class Functions
         var ret;
         let ret = "0";
 
-        return false == filter_var($ret, FILTER_VALIDATE_FLOAT, 20480);
+        return false == filter_var(ret, FILTER_VALIDATE_FLOAT, 20480);
     }
 }
