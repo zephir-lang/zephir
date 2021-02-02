@@ -168,9 +168,9 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 #if PHP_VERSION_ID >= 80000
 			{
 				zend_class_entry* called_scope = ce ? ce : zend_get_called_scope(EG(current_execute_data));
-				assert(called_scope && called_scope->parent);
-				zend_string_addref(called_scope->parent->name);
-				ZVAL_STR(&q, called_scope->parent->name);
+				assert(called_scope);
+				zend_string_addref(called_scope->name);
+				ZVAL_STR(&q, called_scope->name);
 				ZEND_HASH_FILL_ADD(&q);
 			}
 
