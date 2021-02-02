@@ -165,15 +165,36 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 		zval q;
 		switch (type) {
 			case zephir_fcall_parent:
+#if PHP_VERSION_ID >= 80000
+			{
+				zend_class_entry* called_scope = ce ? ce : zend_get_called_scope(EG(current_execute_data));
+				assert(called_scope);
+				zend_string_addref(called_scope->name);
+				ZVAL_STR(&q, called_scope->name);
+				ZEND_HASH_FILL_ADD(&q);
+			}
+
+#else
 				zend_string_addref(i_parent);
 				ZVAL_STR(&q, i_parent);
 				ZEND_HASH_FILL_ADD(&q);
+#endif
 				break;
 
 			case zephir_fcall_self:
+#if PHP_VERSION_ID >= 80000
+			{
+				zend_class_entry* called_scope = ce ? ce : zend_get_called_scope(EG(current_execute_data));
+				assert(called_scope);
+				zend_string_addref(called_scope->name);
+				ZVAL_STR(&q, called_scope->name);
+				ZEND_HASH_FILL_ADD(&q);
+			}
+#else
 				zend_string_addref(i_self);
 				ZVAL_STR(&q, i_self);
 				ZEND_HASH_FILL_ADD(&q);
+#endif
 				break;
 
 			case zephir_fcall_static:
@@ -368,9 +389,6 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	}
 
 	fci.params = p;
-	if (!fcic.function_handler) {
-		ZVAL_COPY_VALUE(&fci.function_name, &callable);
-	}
 	status = zend_call_function(&fci, &fcic);
 #ifdef _MSC_VER
 	efree(p);
