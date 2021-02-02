@@ -171,19 +171,9 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 				break;
 
 			case zephir_fcall_self:
-#if PHP_VERSION_ID >= 80000
-			{
-				zend_class_entry* called_scope = ce ? ce : zend_get_called_scope(EG(current_execute_data));
-				assert(called_scope);
-				zend_string_addref(called_scope->name);
-				ZVAL_STR(&q, called_scope->name);
-				ZEND_HASH_FILL_ADD(&q);
-			}
-#else
 				zend_string_addref(i_self);
 				ZVAL_STR(&q, i_self);
 				ZEND_HASH_FILL_ADD(&q);
-#endif
 				break;
 
 			case zephir_fcall_static:
@@ -261,6 +251,11 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			break;
 
 		case zephir_fcall_self:
+#if PHP_VERSION_ID >= 80000
+			if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
+			}
+#endif
 			fcic->calling_scope = calling_scope;
 			break;
 
