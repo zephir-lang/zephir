@@ -60,7 +60,7 @@ class ExtendClassTest extends TestCase
      */
     public function testShouldCorrectWorkWithLateStaticBinding(): void
     {
-        $this->assertSame('Stub\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
+        $this->assertSame(ConcreteStatic::class, ConcreteStatic::getCalledClass());
     }
 
     /**
@@ -76,8 +76,13 @@ class ExtendClassTest extends TestCase
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
     }
 
+    public function testShouldCallParentMethodFromStaticByUsingParent(): void
+    {
+        $this->assertSame(ConcreteStatic::class, ConcreteStatic::callParentFunction());
+    }
+
     public function testShouldCallStaticMethodWithSimpleValue(): void
     {
-        $this->assertSame(1337, \Stub\Oo\ConcreteStatic::simpleStaticIntReturn());
+        $this->assertSame(1337, ConcreteStatic::simpleStaticIntReturn());
     }
 }
