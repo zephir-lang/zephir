@@ -165,20 +165,9 @@ static void resolve_callable(zval* retval, zephir_call_type type, zend_class_ent
 		zval q;
 		switch (type) {
 			case zephir_fcall_parent:
-#if PHP_VERSION_ID >= 80000
-			{
-				zend_class_entry* called_scope = ce ? ce : zend_get_called_scope(EG(current_execute_data));
-				assert(called_scope);
-				zend_string_addref(called_scope->name);
-				ZVAL_STR(&q, called_scope->name);
-				ZEND_HASH_FILL_ADD(&q);
-			}
-
-#else
 				zend_string_addref(i_parent);
 				ZVAL_STR(&q, i_parent);
 				ZEND_HASH_FILL_ADD(&q);
-#endif
 				break;
 
 			case zephir_fcall_self:
@@ -255,8 +244,12 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
 				return;
 			}
-
-			fcic->calling_scope = calling_scope->parent;
+#if PHP_VERSION_ID >= 80000
+			if (Z_TYPE_P(func) == IS_STRING) {
+				fcic->function_handler = zend_hash_find_ptr(&calling_scope->parent->function_table, Z_STR_P(func));
+			}
+#endif
+			fcic->calling_scope = ce;
 			break;
 
 		case zephir_fcall_static:
@@ -375,7 +368,9 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	} else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
 		/* The caller is interested in caching OR we have the call cache enabled */
 		resolve_callable(&callable, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
-		zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL);
+		if (!zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL)) {
+			populate_fcic(&fcic, type, obj_ce, object_pp, function_name, called_scope);
+		}
 	}
 
 #ifdef _MSC_VER
