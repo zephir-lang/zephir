@@ -10,11 +10,12 @@ RUN apt update -y && apt install -y \
     git \
     apt-utils \
     sudo \
+    libicu-dev \
     libgmp-dev \
     libzip-dev && \
     pecl install psr
 
-RUN docker-php-ext-install zip gmp && \
+RUN docker-php-ext-install zip gmp intl && \
     docker-php-ext-enable psr
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
