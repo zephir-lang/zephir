@@ -249,6 +249,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			if (UNEXPECTED(!calling_scope || !calling_scope->parent)) {
 				return;
 			}
+
 			fcic->calling_scope = calling_scope->parent;
 			break;
 
@@ -280,6 +281,8 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
 				fcic->calling_scope = calling_scope;
 			}
+#else
+			fcic->calling_scope = calling_scope;
 #endif
 			break;
 
@@ -402,9 +405,14 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 	} else if ((cache_entry && !*cache_entry) || zephir_globals_ptr->cache_enabled) {
 		/* The caller is interested in caching OR we have the call cache enabled */
 		resolve_callable(&callable, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
+
+#if PHP_VERSION_ID >= 80000
 		if (obj_ce || !zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL)) {
 			populate_fcic(&fcic, type, obj_ce, object_pp, function_name, called_scope);
 		}
+#else
+		zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL);
+#endif
 	}
 
 #ifdef _MSC_VER
@@ -419,7 +427,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 
 	fci.params = p;
 
-#if PHP_VERSION_ID < 80000
+#if PHP_VERSION_ID >= 80000
 	if (!fcic.function_handler) {
 		ZVAL_COPY_VALUE(&fci.function_name, &callable);
 	}
