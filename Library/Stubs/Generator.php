@@ -11,6 +11,7 @@
 
 namespace Zephir\Stubs;
 
+use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
@@ -107,7 +108,7 @@ class Generator
         $source .= '' === $banner ? '' : $banner.PHP_EOL;
         $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
-        /** @var Zephir\AliasManager $aliasManager */
+        /** @var AliasManager $aliasManager */
         $aliasManager = $class->getAliasManager();
         $aliases = $aliasManager->getAliases();
 
