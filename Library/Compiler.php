@@ -1099,6 +1099,18 @@ final class Compiler
         $extraCflags = $this->config->get('extra-cflags');
         $contentM4 = $this->generatePackageDependenciesM4($contentM4);
 
+        $buildDirs = [];
+
+        foreach ($compiledFiles as $file) {
+            $dir = dirname($file);
+
+            if (!in_array($dir, $buildDirs)) {
+                $buildDirs[] = $dir;
+            }
+        }
+
+        asort($buildDirs);
+
         /**
          * Generate config.m4.
          */
@@ -1112,6 +1124,7 @@ final class Compiler
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
+            '%PROJECT_BUILD_DIRS%' => implode(' ', $buildDirs),
         ];
 
         foreach ($toReplace as $mark => $replace) {
