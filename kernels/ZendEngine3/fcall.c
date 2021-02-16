@@ -607,8 +607,6 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 {
 	zend_fcall_info fci;
 	zend_fcall_info_cache fci_cache;
-	char *is_callable_error = NULL;
-	int status = FAILURE;
 
 	if (params && Z_TYPE_P(params) != IS_ARRAY) {
 		ZVAL_NULL(return_value);
@@ -616,29 +614,7 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 		return FAILURE;
 	}
 
-	zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error);
-
-	if (is_callable_error) {
-		zend_error(E_WARNING, "%s", is_callable_error);
-		efree(is_callable_error);
-	} else {
-		status = SUCCESS;
-	}
-
-	if (status == SUCCESS) {
-		zend_fcall_info_args(&fci, params);
-
-		fci.retval = return_value;
-		zend_call_function(&fci, &fci_cache);
-
-		zend_fcall_info_args_clear(&fci, 1);
-	}
-
-	if (EG(exception)) {
-		status = SUCCESS;
-	}
-
-	return status;
+	return zend_compile_func_cufa(NULL, params, "call_user_func_array");
 }
 
 /**
@@ -687,4 +663,52 @@ void zephir_eval_php(zval *str, zval *retval_ptr, char *context)
 		destroy_op_array(new_op_array);
 		efree_size(new_op_array, sizeof(zend_op_array));
 	}
+}
+
+zend_result zend_compile_func_cufa(znode *result, zend_ast_list *args, zend_string *lcname)
+{
+	znode arg_node;
+
+	if (args->children != 2) {
+		return FAILURE;
+	}
+
+	zend_compile_init_user_func(args->child[0], 0, lcname);
+	if (args->child[1]->kind == ZEND_AST_CALL
+	 && args->child[1]->child[0]->kind == ZEND_AST_ZVAL
+	 && Z_TYPE_P(zend_ast_get_zval(args->child[1]->child[0])) == IS_STRING
+	 && args->child[1]->child[1]->kind == ZEND_AST_ARG_LIST) {
+		zend_string *orig_name = zend_ast_get_str(args->child[1]->child[0]);
+		zend_ast_list *list = zend_ast_get_list(args->child[1]->child[1]);
+		bool is_fully_qualified;
+		zend_string *name = zend_resolve_function_name(orig_name, args->child[1]->child[0]->attr, &is_fully_qualified);
+
+		if (zend_string_equals_literal_ci(name, "array_slice")
+		 && list->children == 3
+		 && list->child[1]->kind == ZEND_AST_ZVAL) {
+			zval *zv = zend_ast_get_zval(list->child[1]);
+
+			if (Z_TYPE_P(zv) == IS_LONG
+			 && Z_LVAL_P(zv) >= 0
+			 && Z_LVAL_P(zv) <= 0x7fffffff) {
+				zend_op *opline;
+				znode len_node;
+
+				zend_compile_expr(&arg_node, list->child[0]);
+				zend_compile_expr(&len_node, list->child[2]);
+				opline = zend_emit_op(NULL, ZEND_SEND_ARRAY, &arg_node, &len_node);
+				opline->extended_value = Z_LVAL_P(zv);
+				zend_emit_op(result, ZEND_DO_FCALL, NULL, NULL);
+				zend_string_release_ex(name, 0);
+				return SUCCESS;
+			}
+		}
+		zend_string_release_ex(name, 0);
+	}
+	zend_compile_expr(&arg_node, args->child[1]);
+	zend_emit_op(NULL, ZEND_SEND_ARRAY, &arg_node, NULL);
+	zend_emit_op(NULL, ZEND_CHECK_UNDEF_ARGS, NULL, NULL);
+	zend_emit_op(result, ZEND_DO_FCALL, NULL, NULL);
+
+	return SUCCESS;
 }
