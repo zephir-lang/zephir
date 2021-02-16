@@ -222,10 +222,10 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 
 	fcic->called_scope = called_scope;
 
-#if PHP_VERSION_ID >= 70100
-	calling_scope = zend_get_executed_scope();
+#if PHP_VERSION_ID >= 80000
+	calling_scope = zend_get_called_scope(EG(current_execute_data));
 #else
-	calling_scope = EG(scope);
+	calling_scope = zend_get_executed_scope();
 #endif
 
 	fcic->object = this_ptr ? Z_OBJ_P(this_ptr) : NULL;
@@ -297,6 +297,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 				fcic->calling_scope = calling_scope;
 			}
 #endif
+			// TODO: Check for PHP 7.4 and PHP 8.0, as it rewrite from above
 			fcic->calling_scope = ce;
 			fcic->called_scope  = ce;
 			break;
