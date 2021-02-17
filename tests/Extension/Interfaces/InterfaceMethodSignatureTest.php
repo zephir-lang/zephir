@@ -43,6 +43,6 @@ final class InterfaceMethodSignatureTest extends TestCase
             $error = $exception->getMessage();
         }
 
-        $this->assertMatchesRegularExpression('/^must be of type InterfaceInt, bool given/', $error);
+        $this->assertMatchesRegularExpression('/^must implement interface Stub\Interfaces\InterfaceInt, bool given/', $error);
     }
 }
