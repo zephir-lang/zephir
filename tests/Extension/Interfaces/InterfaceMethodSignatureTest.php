@@ -25,6 +25,15 @@ final class InterfaceMethodSignatureTest extends TestCase
         $class->set(1);
         $this->assertSame(1, $class->get());
 
+        $error = '';
+        try {
+            $class->set(true);
+        } catch (\TypeError $exception) {
+            $error = $exception->getMessage();
+        }
+
+        $this->assertMatchesRegularExpression('/^must be of type int, bool given/', $error);
+
         $this->assertSame(1, (new ImplementInterface())->get($class));
 
         $error = '';
