@@ -135,7 +135,6 @@ class ArgInfoDefinition
                 $class = escape_class($this->compilationContext->getFullName($class));
             }
 
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)',
@@ -146,18 +145,6 @@ class ArgInfoDefinition
                     (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
-            $this->codePrinter->output('#else');
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    $class,
-                    (int) $this->functionLike->areReturnTypesNullCompatible()
-                )
-            );
-            $this->codePrinter->output('#endif');
 
             return;
         }
