@@ -38,7 +38,9 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInterface(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/^must implement interface Stub\Interfaces\InterfaceInt, bool given/');
+        $this->expectExceptionMessageMatches(
+            '/must be a class name derived from Stub\\\\Interfaces\\\\ImplementInt/'
+        );
 
         (new ImplementInterface())->getVoid(true);
     }
