@@ -24,25 +24,22 @@ final class InterfaceMethodSignatureTest extends TestCase
         $this->assertNull($class->get());
         $class->set(1);
         $this->assertSame(1, $class->get());
-
-        $error = '';
-        try {
-            $class->set(true);
-        } catch (\TypeError $exception) {
-            $error = $exception->getMessage();
-        }
-
-        $this->assertMatchesRegularExpression('/^must be of type int, bool given/', $error);
-
         $this->assertSame(1, (new ImplementInterface())->get($class));
+    }
 
-        $error = '';
-        try {
-            (new ImplementInterface())->getVoid(true);
-        } catch (\TypeError $exception) {
-            $error = $exception->getMessage();
-        }
+    public function testImplementInterfaceInMethodSignatureInt(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageMatches('/^must be of type int, bool given/');
 
-        $this->assertMatchesRegularExpression('/^must implement interface Stub\Interfaces\InterfaceInt, bool given/', $error);
+        (new ImplementInt())->set(true);
+    }
+
+    public function testImplementInterfaceInMethodSignatureInterface(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageMatches('/^must implement interface Stub\Interfaces\InterfaceInt, bool given/');
+
+        (new ImplementInterface())->getVoid(true);
     }
 }
