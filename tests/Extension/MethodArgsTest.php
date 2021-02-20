@@ -34,7 +34,7 @@ class MethodArgsTest extends TestCase
         $this->test->setCallableStrict($callback);
         $this->assertSame($callback, $this->test->a);
 
-        $this->expectException('\Exception');
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->test->setCallableStrict(true);
     }
@@ -49,7 +49,7 @@ class MethodArgsTest extends TestCase
         $this->test->setObjectStrict($obj);
         $this->assertSame($obj, $this->test->a);
 
-        $this->expectException('\Exception');
+        $this->expectException(\Throwable::class);
 
         $this->test->setObjectStrict(true);
     }
@@ -59,7 +59,7 @@ class MethodArgsTest extends TestCase
         $this->test->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $this->test->a);
 
-        $this->expectException('\Exception');
+        $this->expectException(\TypeError::class);
 
         $this->test->setResourceStrict(true);
     }

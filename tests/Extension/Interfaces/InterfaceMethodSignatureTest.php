@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Zephir.
  *
@@ -30,7 +32,7 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInt(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/^must be of type int, bool given/');
+        $this->expectExceptionMessageMatches('/must be of type int, bool given/');
 
         (new ImplementInt())->set(true);
     }
@@ -39,7 +41,7 @@ final class InterfaceMethodSignatureTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageMatches(
-            '/must be a class name derived from Stub\\\\Interfaces\\\\ImplementInt/'
+            '/must be of type Stub\\\\Interfaces\\\\InterfaceInt, bool given/'
         );
 
         (new ImplementInterface())->getVoid(true);
