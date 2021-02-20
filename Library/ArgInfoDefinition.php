@@ -232,7 +232,6 @@ class ArgInfoDefinition
 
                 case '1:bool':
                 case '1:boolean':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, %s, %d)",
@@ -242,18 +241,12 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:uchar':
                 case '1:int':
                 case '1:uint':
                 case '1:long':
                 case '1:ulong':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)",
@@ -262,14 +255,8 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:double':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)",
@@ -278,15 +265,9 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:char':
                 case '1:string':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)",
@@ -295,11 +276,6 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 default:
                     $this->codePrinter->output(

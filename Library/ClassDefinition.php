@@ -1266,7 +1266,6 @@ final class ClassDefinition
                 $codePrinter->outputBlankLine();
             } else {
                 $codePrinter->output('ZEPHIR_DOC_METHOD('.$this->getCNamespace().'_'.$this->getName().', '.$method->getName().');');
-                $codePrinter->outputBlankLine();
             }
         }
 
