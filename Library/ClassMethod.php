@@ -1880,13 +1880,13 @@ class ClassMethod
          */
         $initCode = '';
         $code = '';
+        $requiredParams = [];
+        $optionalParams = [];
         if (\is_object($parameters)) {
             /**
              * Round 2. Fetch the parameters in the method.
              */
             $params = [];
-            $requiredParams = [];
-            $optionalParams = [];
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
@@ -2205,6 +2205,37 @@ class ClassMethod
             $codePrinter->preOutputBlankLine();
         }
 
+        /**
+         * ZEND_PARSE_PARAMETERS
+         */
+        $tempCodePrinter = new CodePrinter();
+        if (is_object($parameters) && !empty($parameters->getParameters())) {
+            $tempCodePrinter->output("\t".'bool is_null_true = 1;');
+
+            $tempCodePrinter->output(sprintf(
+                "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
+                count($requiredParams),
+                count($requiredParams) + count($optionalParams)
+            ));
+
+            foreach ($requiredParams as $requiredParam) {
+                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext));
+            }
+
+            if (!empty($optionalParams)) {
+                $tempCodePrinter->output("\t"."\t".'Z_PARAM_OPTIONAL');
+
+                foreach ($optionalParams as $optionalParam) {
+                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext));
+                }
+            }
+
+            $tempCodePrinter->output("\t".'ZEND_PARSE_PARAMETERS_END();');
+            $tempCodePrinter->outputBlankLine();
+        }
+
+        $codePrinter->preOutput($tempCodePrinter->getOutput());
+
         /*
          * Generate the variable definition for variables used.
          */
@@ -2440,5 +2471,140 @@ class ClassMethod
         }
 
         return true;
+    }
+
+    /**
+     * Determine Z_PARAM_*
+     *
+     * @param array $parameter
+     * @param CompilationContext $compilationContext
+     * @return string
+     * @throws Exception
+     */
+    public function detectParam(array $parameter, CompilationContext $compilationContext): string
+    {
+        $name = $parameter['name'];
+        if (!isset($parameter['data-type'])) {
+            return sprintf('Z_PARAM_ZVAL(%s)', $name);
+        }
+
+        /**
+         * In case of unknown type, just return generic param type.
+         */
+        $param = sprintf('Z_PARAM_ZVAL(%s)', $name);
+        $hasDefaultNull = isset($parameter['default']['type']) && $parameter['default']['type'] === 'null';
+
+        switch ($parameter['data-type']) {
+            case 'array':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ARRAY(%s)', $name);
+                }
+
+                break;
+
+            case 'bool':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_BOOL_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_BOOL(%s)', $name);
+                }
+
+                break;
+
+            case 'float':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_DOUBLE(%s)', $name);
+                }
+
+                break;
+
+            case 'int':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_LONG_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_LONG(%s)', $name);
+                }
+
+                break;
+
+            case 'object':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_OBJECT(%s)', $name);
+                }
+
+                break;
+
+            case 'resource':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_RESOURCE_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_RESOURCE(%s)', $name);
+                }
+
+                break;
+
+            case 'string':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                }
+
+                break;
+
+            case 'variable':
+                if (isset($parameter['cast'])) {
+                    if ($parameter['cast']['type'] === 'variable' && $parameter['cast']['value']) {
+                        $className = $parameter['cast']['value'];
+
+                        if ($this->classDefinition !== null) {
+                            /**
+                             * Full namespace with class name
+                             */
+                            if (strpos($className, '\\') === 0) {
+                                $classNamespace = explode('\\', $className);
+                                $className = end($classNamespace);
+                            }
+
+                            try {
+                                $classEntry = $this->classDefinition->getClassEntryByClassName(strtolower($className), $compilationContext, false);
+                            } catch (CompilerException $exception) {
+                                $classEntry = null;
+                            }
+
+                            /**
+                             * Check for partial namespace specification
+                             * Example: Oo\Param, while namespace at the top is Stub
+                             */
+                            $classNamespace = explode('\\', $className);
+                            $className = end($classNamespace);
+                            array_pop($classNamespace);
+                            array_unshift($classNamespace, $this->classDefinition->getNamespace());
+                            $namespace = join('\\', $classNamespace);
+
+                            if ($classEntry === null) {
+                                $classEntryDefinition = new ClassDefinition($namespace, $className);
+                                $classEntry = $classEntryDefinition->getClassEntry();
+                            }
+
+                            if ($hasDefaultNull) {
+                                $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s, %s)', $name, $classEntry);
+                            } else {
+                                $param = sprintf('Z_PARAM_OBJECT_OF_CLASS(%s, %s)', $name, $classEntry);
+                            }
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        return $param;
     }
 }
