@@ -2559,45 +2559,13 @@ class ClassMethod
                 break;
 
             case 'variable':
-                if (isset($parameter['cast'])) {
-                    if ($parameter['cast']['type'] === 'variable' && $parameter['cast']['value']) {
-                        $className = $parameter['cast']['value'];
-
-                        if ($this->classDefinition !== null) {
-                            /**
-                             * Full namespace with class name
-                             */
-                            if (strpos($className, '\\') === 0) {
-                                $classNamespace = explode('\\', $className);
-                                $className = end($classNamespace);
-                            }
-
-                            try {
-                                $classEntry = $this->classDefinition->getClassEntryByClassName(strtolower($className), $compilationContext, false);
-                            } catch (CompilerException $exception) {
-                                $classEntry = null;
-                            }
-
-                            /**
-                             * Check for partial namespace specification
-                             * Example: Oo\Param, while namespace at the top is Stub
-                             */
-                            $classNamespace = explode('\\', $className);
-                            $className = end($classNamespace);
-                            array_pop($classNamespace);
-                            array_unshift($classNamespace, $this->classDefinition->getNamespace());
-                            $namespace = join('\\', $classNamespace);
-
-                            if ($classEntry === null) {
-                                $classEntryDefinition = new ClassDefinition($namespace, $className);
-                                $classEntry = $classEntryDefinition->getClassEntry();
-                            }
-
-                            if ($hasDefaultNull) {
-                                $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s, %s)', $name, $classEntry);
-                            } else {
-                                $param = sprintf('Z_PARAM_OBJECT_OF_CLASS(%s, %s)', $name, $classEntry);
-                            }
+                if (isset($parameter['cast']) && $parameter['cast']['type'] === 'variable' && $parameter['cast']['value']) {
+                    $classEntry = $this->detectClassNameEntry($parameter['cast']['value'], $compilationContext);
+                    if ($classEntry !== null) {
+                        if ($hasDefaultNull) {
+                            $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s, %s)', $name, $classEntry);
+                        } else {
+                            $param = sprintf('Z_PARAM_OBJECT_OF_CLASS(%s, %s)', $name, $classEntry);
                         }
                     }
                 }
@@ -2606,5 +2574,133 @@ class ClassMethod
         }
 
         return $param;
+    }
+
+    /**
+     * @param string $className
+     * @param CompilationContext $compilationContext
+     * @return string|null
+     * @throws Exception
+     */
+    private function detectClassNameEntry(string $className, CompilationContext $compilationContext): ?string
+    {
+        if ($this->classDefinition === null) {
+            return null;
+        }
+
+        $isAlias = false;
+        $aliasManager = $this->classDefinition->getAliasManager();
+        if ($aliasManager->isAlias($className)) {
+            $isAlias = true;
+            $className = $aliasManager->getAlias($className);
+        }
+
+        /**
+         * PSR
+         */
+        if (strpos($className, 'Psr') === 0 || strpos($className, '\Psr') === 0) {
+            $className = ltrim($className, '\\');
+
+            $psrHeaderFiles = [
+                'psr_http_message' => [
+                    'Psr\Http\Message\StreamInterface',
+                    'Psr\Http\Message\StreamFactoryInterface',
+                    'Psr\Http\Message\UriFactoryInterface',
+                    'Psr\Http\Message\UriInterface',
+                    'Psr\Http\Message\RequestInterface',
+                    'Psr\Http\Message\RequestFactoryInterface',
+                    'Psr\Http\Message\ResponseInterface',
+                    'Psr\Http\Message\ResponseFactoryInterface',
+                    'Psr\Http\Message\ServerRequestInterface',
+                    'Psr\Http\Message\ServerRequestFactoryInterface',
+                    'Psr\Http\Message\UploadedFileInterface',
+                    'Psr\Http\Message\UploadedFileFactoryInterface',
+                ],
+                'psr_simple_cache' => [
+                    'Psr\SimpleCache\CacheInterface',
+                    'Psr\SimpleCache\CacheException',
+                    'Psr\SimpleCache\InvalidArgumentException',
+                ],
+                'psr_container' => [
+                    'Psr\Container\ContainerInterface',
+                ],
+                'psr_log' => [
+                    'Psr\Log\AbstractLogger',
+                    'Psr\Log\LoggerInterface',
+                    'Psr\Log\LogLevel',
+                ],
+                'psr_link' => [
+                    'Psr\Link\EvolvableLinkInterface',
+                    'Psr\Link\EvolvableLinkProviderInterface',
+                    'Psr\Link\LinkInterface',
+                    'Psr\Link\LinkProviderInterface',
+                ],
+                'psr_http_server_middleware' => [
+                    'Psr\Http\Server\MiddlewareInterface',
+                ],
+                'psr_http_server_handler' => [
+                    'Psr\Http\Server\RequestHandlerInterface',
+                ],
+            ];
+            foreach ($psrHeaderFiles as $file => $classes) {
+                if (in_array($className, $classes)) {
+                    $compilationContext->headersManager->add('ext/psr/' . $file);
+                }
+            }
+
+            return str_replace('\\', '', $className) . '_ce_ptr';
+        }
+
+        try {
+            return $this
+                ->classDefinition
+                ->getClassEntryByClassName(
+                    preg_replace(['/^\\\\/'], '', $className),
+                    $compilationContext,
+                    false
+                );
+        } catch (CompilerException $exception) {
+            // Continue below execution
+        }
+
+        /**
+         * Full namespace with class name
+         */
+        if (strpos($className, '\\') === 0) {
+            $classNamespace = explode('\\', $className);
+            $classNamespace = array_filter($classNamespace);
+
+            /**
+             * External class
+             */
+            if (count($classNamespace) === 1) {
+                return null;
+            }
+
+            /**
+             * External class, we don't know its ClassEntry in C world.
+             */
+            if (!preg_match('/^'.$classNamespace[0].'/', $this->classDefinition->getNamespace())) {
+                return null;
+            }
+
+            $className = end($classNamespace);
+        }
+
+        /**
+         * Check for partial namespace specification
+         * Example: Oo\Param, while namespace at the top is Stub
+         */
+        $classNamespace = explode('\\', $className);
+        $className = end($classNamespace);
+        array_pop($classNamespace);
+
+        if ($isAlias === false) {
+            array_unshift($classNamespace, $this->classDefinition->getNamespace());
+        }
+
+        $namespace = join('\\', $classNamespace);
+
+        return (new ClassDefinition($namespace, $className))->getClassEntry();
     }
 }
