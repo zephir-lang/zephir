@@ -2551,7 +2551,7 @@ class ClassMethod
 
             case 'string':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_STR(%s)', $name);
                 }
