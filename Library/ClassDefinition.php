@@ -1438,16 +1438,68 @@ final class ClassDefinition
         $this->compiler = $compilationContext->compiler;
 
         switch (strtolower($className)) {
-            /*
-             * Zend classes
+            /**
+             * Zend exceptions
              */
+            case 'throwable':
+                $classEntry = 'zend_ce_throwable';
+                break;
+
             case 'exception':
-                $classEntry = 'zend_exception_get_default()';
+                $classEntry = 'zend_ce_exception';
+                break;
+
+            case 'errorexception':
+                $classEntry = 'zend_ce_error_exception';
+                break;
+
+            case 'error':
+                $classEntry = 'zend_ce_error';
+                break;
+
+            case 'compileerror':
+                $classEntry = 'zend_ce_compile_error';
+                break;
+
+            case 'parseerror':
+                $classEntry = 'zend_ce_parse_error';
+                break;
+
+            case 'typeerror':
+                $classEntry = 'zend_ce_type_error';
+                break;
+
+            case 'argumentcounterror':
+                $classEntry = 'zend_ce_argument_count_error';
+                break;
+
+            case 'valueerror':
+                $classEntry = 'zend_ce_value_error';
+                break;
+
+            case 'arithmeticerror':
+                $classEntry = 'zend_ce_arithmetic_error';
+                break;
+
+            case 'divisionbyzeroerror':
+                $classEntry = 'zend_ce_division_by_zero_error';
+                break;
+
+            case 'unhandledmatcherror':
+                $classEntry = 'zend_ce_unhandled_match_error';
                 break;
 
             /*
              * Zend interfaces (Zend/zend_interfaces.h)
              */
+            case 'traversable':
+                $classEntry = 'zend_ce_traversable';
+                break;
+
+            case 'aggregate':
+                $classEntry = 'zend_ce_aggregate';
+                break;
+
             case 'iterator':
                 $classEntry = 'zend_ce_iterator';
                 break;
@@ -1460,8 +1512,12 @@ final class ClassDefinition
                 $classEntry = 'zend_ce_serializable';
                 break;
 
-            case 'iteratoraggregate':
-                $classEntry = 'zend_ce_aggregate';
+            case 'countable':
+                $classEntry = 'zend_ce_countable';
+                break;
+
+            case 'stringable':
+                $classEntry = 'zend_ce_stringable';
                 break;
 
             /*
@@ -1752,6 +1808,14 @@ final class ClassDefinition
             case 'datetimezone':
                 $compilationContext->headersManager->add('ext/date/php_date');
                 $classEntry = 'php_date_get_timezone_ce()';
+                break;
+
+            /**
+             * PHP Ext session
+             */
+            case 'sessionhandlerinterface':
+                $compilationContext->headersManager->add('ext/session/session');
+                $classEntry = 'php_session_iface_entry';
                 break;
 
             // Reflection
