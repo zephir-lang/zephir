@@ -382,16 +382,16 @@ class Generator
     {
         switch ($parameter['default']['type']) {
             case 'null':
-                return 'null';
+                $returnValue = 'null';
                 break;
 
             case 'string':
             case 'char':
-                return '\''.addslashes($parameter['default']['value']).'\'';
+                $returnValue = '\''.addslashes($parameter['default']['value']).'\'';
                 break;
 
             case 'empty-array':
-                return 'array()';
+                $returnValue = 'array()';
                 break;
 
             case 'array':
@@ -413,17 +413,17 @@ class Generator
                     ]);
                 }
 
-                return 'array('.implode(', ', $parameters).')';
+                $returnValue = 'array('.implode(', ', $parameters).')';
                 break;
 
             case 'static-constant-access':
-                return $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
+                $returnValue = $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
                 break;
 
             case 'int':
             case 'double':
             case 'bool':
-                return $parameter['default']['value'];
+                $returnValue = $parameter['default']['value'];
                 break;
 
             default:
@@ -433,7 +433,8 @@ class Generator
                         $parameter['default']['type']
                     )
                 );
-                break;
         }
+
+        return $returnValue;
     }
 }
