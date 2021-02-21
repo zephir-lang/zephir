@@ -59,7 +59,11 @@ class MethodArgsTest extends TestCase
         $this->test->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $this->test->a);
 
-        $this->expectException(\TypeError::class);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\TypeError::class);
+        } else {
+            $this->expectException(\InvalidArgumentException::class);
+        }
 
         $this->test->setResourceStrict(true);
     }

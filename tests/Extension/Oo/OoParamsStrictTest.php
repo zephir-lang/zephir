@@ -91,7 +91,9 @@ class OoParamsStrictTest extends TestCase
 
     public function testShouldThrowInvalidArgumentExceptionForCallFromZephirLand()
     {
-        $this->markTestSkipped('Move types check into fcall, instead of PHP_METHOD');
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestSkipped('Move types check into fcall, instead of PHP_METHOD');
+        }
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Parameter 'name' must be of the type string");
