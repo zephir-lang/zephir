@@ -1880,13 +1880,13 @@ class ClassMethod
          */
         $initCode = '';
         $code = '';
+        $requiredParams = [];
+        $optionalParams = [];
         if (\is_object($parameters)) {
             /**
              * Round 2. Fetch the parameters in the method.
              */
             $params = [];
-            $requiredParams = [];
-            $optionalParams = [];
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
@@ -2205,6 +2205,40 @@ class ClassMethod
             $codePrinter->preOutputBlankLine();
         }
 
+        /**
+         * ZEND_PARSE_PARAMETERS
+         */
+        $tempCodePrinter = new CodePrinter();
+        if (is_object($parameters) && !empty($parameters->getParameters())) {
+            $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
+            $tempCodePrinter->output("\t".'bool is_null_true = 1;');
+
+            $tempCodePrinter->output(sprintf(
+                "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
+                count($requiredParams),
+                count($requiredParams) + count($optionalParams)
+            ));
+
+            foreach ($requiredParams as $requiredParam) {
+                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext));
+            }
+
+            if (!empty($optionalParams)) {
+                $tempCodePrinter->output("\t"."\t".'Z_PARAM_OPTIONAL');
+
+                foreach ($optionalParams as $optionalParam) {
+                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext));
+                }
+            }
+
+            $tempCodePrinter->output("\t".'ZEND_PARSE_PARAMETERS_END();');
+            $tempCodePrinter->outputBlankLine();
+
+            $tempCodePrinter->output('#endif');
+        }
+
+        $codePrinter->preOutput($tempCodePrinter->getOutput());
+
         /*
          * Generate the variable definition for variables used.
          */
@@ -2440,5 +2474,236 @@ class ClassMethod
         }
 
         return true;
+    }
+
+    /**
+     * Determine Z_PARAM_*
+     *
+     * @param array $parameter
+     * @param CompilationContext $compilationContext
+     * @return string
+     * @throws Exception
+     */
+    public function detectParam(array $parameter, CompilationContext $compilationContext): string
+    {
+        $name = $parameter['name'];
+        if (!isset($parameter['data-type'])) {
+            return sprintf('Z_PARAM_ZVAL(%s)', $name);
+        }
+
+        /**
+         * In case of unknown type, just return generic param type.
+         */
+        $param = sprintf('Z_PARAM_ZVAL(%s)', $name);
+        $hasDefaultNull = isset($parameter['default']['type']) && $parameter['default']['type'] === 'null';
+
+        switch ($parameter['data-type']) {
+            case 'array':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ARRAY(%s)', $name);
+                }
+
+                break;
+
+            case 'bool':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_BOOL_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_BOOL(%s)', $name);
+                }
+
+                break;
+
+            case 'float':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_DOUBLE(%s)', $name);
+                }
+
+                break;
+
+            case 'int':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_LONG_OR_NULL(%s, is_null_true)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_LONG(%s)', $name);
+                }
+
+                break;
+
+            case 'object':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_OBJECT(%s)', $name);
+                }
+
+                break;
+
+            case 'resource':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_RESOURCE_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_RESOURCE(%s)', $name);
+                }
+
+                break;
+
+            case 'string':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                }
+
+                break;
+
+            case 'variable':
+                if (isset($parameter['cast']) && $parameter['cast']['type'] === 'variable' && $parameter['cast']['value']) {
+                    $classEntry = $this->detectClassNameEntry($parameter['cast']['value'], $compilationContext);
+                    if ($classEntry !== null) {
+                        if ($hasDefaultNull) {
+                            $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s, %s)', $name, $classEntry);
+                        } else {
+                            $param = sprintf('Z_PARAM_OBJECT_OF_CLASS(%s, %s)', $name, $classEntry);
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        return $param;
+    }
+
+    /**
+     * @param string $className
+     * @param CompilationContext $compilationContext
+     * @return string|null
+     * @throws Exception
+     */
+    private function detectClassNameEntry(string $className, CompilationContext $compilationContext): ?string
+    {
+        if ($this->classDefinition === null) {
+            return null;
+        }
+
+        $isAlias = false;
+        $aliasManager = $this->classDefinition->getAliasManager();
+        if ($aliasManager->isAlias($className)) {
+            $isAlias = true;
+            $className = $aliasManager->getAlias($className);
+        }
+
+        /**
+         * PSR
+         */
+        if (strpos($className, 'Psr') === 0 || strpos($className, '\Psr') === 0) {
+            $className = ltrim($className, '\\');
+
+            $psrHeaderFiles = [
+                'psr_http_message' => [
+                    'Psr\Http\Message\StreamInterface',
+                    'Psr\Http\Message\StreamFactoryInterface',
+                    'Psr\Http\Message\UriFactoryInterface',
+                    'Psr\Http\Message\UriInterface',
+                    'Psr\Http\Message\RequestInterface',
+                    'Psr\Http\Message\RequestFactoryInterface',
+                    'Psr\Http\Message\ResponseInterface',
+                    'Psr\Http\Message\ResponseFactoryInterface',
+                    'Psr\Http\Message\ServerRequestInterface',
+                    'Psr\Http\Message\ServerRequestFactoryInterface',
+                    'Psr\Http\Message\UploadedFileInterface',
+                    'Psr\Http\Message\UploadedFileFactoryInterface',
+                ],
+                'psr_simple_cache' => [
+                    'Psr\SimpleCache\CacheInterface',
+                    'Psr\SimpleCache\CacheException',
+                    'Psr\SimpleCache\InvalidArgumentException',
+                ],
+                'psr_container' => [
+                    'Psr\Container\ContainerInterface',
+                ],
+                'psr_log' => [
+                    'Psr\Log\AbstractLogger',
+                    'Psr\Log\LoggerInterface',
+                    'Psr\Log\LogLevel',
+                ],
+                'psr_link' => [
+                    'Psr\Link\EvolvableLinkInterface',
+                    'Psr\Link\EvolvableLinkProviderInterface',
+                    'Psr\Link\LinkInterface',
+                    'Psr\Link\LinkProviderInterface',
+                ],
+                'psr_http_server_middleware' => [
+                    'Psr\Http\Server\MiddlewareInterface',
+                ],
+                'psr_http_server_handler' => [
+                    'Psr\Http\Server\RequestHandlerInterface',
+                ],
+            ];
+            foreach ($psrHeaderFiles as $file => $classes) {
+                if (in_array($className, $classes)) {
+                    $compilationContext->headersManager->add('ext/psr/' . $file);
+                }
+            }
+
+            return str_replace('\\', '', $className) . '_ce_ptr';
+        }
+
+        try {
+            return $this
+                ->classDefinition
+                ->getClassEntryByClassName(
+                    preg_replace(['/^\\\\/'], '', $className),
+                    $compilationContext,
+                    false
+                );
+        } catch (CompilerException $exception) {
+            // Continue below execution
+        }
+
+        /**
+         * Full namespace with class name
+         */
+        if (strpos($className, '\\') === 0) {
+            $classNamespace = explode('\\', $className);
+            $classNamespace = array_filter($classNamespace);
+
+            /**
+             * External class
+             */
+            if (count($classNamespace) === 1) {
+                return null;
+            }
+
+            /**
+             * External class, we don't know its ClassEntry in C world.
+             */
+            if (!preg_match('/^'.$classNamespace[0].'/', $this->classDefinition->getNamespace())) {
+                return null;
+            }
+
+            $className = end($classNamespace);
+        }
+
+        /**
+         * Check for partial namespace specification
+         * Example: Oo\Param, while namespace at the top is Stub
+         */
+        $classNamespace = explode('\\', $className);
+        $className = end($classNamespace);
+        array_pop($classNamespace);
+
+        if ($isAlias === false) {
+            array_unshift($classNamespace, $this->classDefinition->getNamespace());
+        }
+
+        $namespace = join('\\', $classNamespace);
+
+        return (new ClassDefinition($namespace, $className))->getClassEntry();
     }
 }

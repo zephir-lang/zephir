@@ -45,11 +45,7 @@ static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_cla
 	const zend_class_entry *calling_scope;
 	unsigned char t;
 
-#if PHP_VERSION_ID >= 70100
 	calling_scope = zend_get_executed_scope();
-#else
-	calling_scope = EG(scope);
-#endif
 
 	switch (type) {
 		case zephir_fcall_parent:
@@ -205,15 +201,9 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 {
 	zend_class_entry* calling_scope;
 
-#if PHP_VERSION_ID < 70300
-	fcic->initialized      = 0;
-#endif
 	fcic->function_handler = NULL;
 
 	if (type == zephir_fcall_function && Z_TYPE_P(func) == IS_STRING) {
-#if PHP_VERSION_ID < 70300
-		fcic->initialized   = 1;
-#endif
 		fcic->called_scope  = NULL;
 		fcic->calling_scope = NULL;
 		fcic->object        = NULL;
@@ -329,10 +319,6 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 		default:
 			return;
 	}
-
-#if PHP_VERSION_ID < 70300
-	fcic->initialized = 1;
-#endif
 }
 
 /**
