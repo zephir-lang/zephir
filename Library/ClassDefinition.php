@@ -1814,6 +1814,7 @@ final class ClassDefinition
              * PHP Ext session
              */
             case 'sessionhandlerinterface':
+                $compilationContext->headersManager->add('ext/session/php_session');
                 $classEntry = 'php_session_iface_entry';
                 break;
 
