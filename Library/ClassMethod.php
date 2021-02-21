@@ -2210,6 +2210,7 @@ class ClassMethod
          */
         $tempCodePrinter = new CodePrinter();
         if (is_object($parameters) && !empty($parameters->getParameters())) {
+            $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
             $tempCodePrinter->output("\t".'bool is_null_true = 1;');
 
             $tempCodePrinter->output(sprintf(
@@ -2232,6 +2233,8 @@ class ClassMethod
 
             $tempCodePrinter->output("\t".'ZEND_PARSE_PARAMETERS_END();');
             $tempCodePrinter->outputBlankLine();
+
+            $tempCodePrinter->output('#endif');
         }
 
         $codePrinter->preOutput($tempCodePrinter->getOutput());
