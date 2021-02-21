@@ -32,7 +32,7 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInt(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/must be of ?(the) type int, bool given/');
+        $this->expectExceptionMessageMatches('/must be of (the\s)?type int, bool given/');
 
         (new ImplementInt())->set(true);
     }
