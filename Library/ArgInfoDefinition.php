@@ -110,9 +110,36 @@ class ArgInfoDefinition
                 )
             );
         } else {
-            $this->codePrinter->output(
-                sprintf('ZEND_BEGIN_ARG_INFO_EX(%s, 0, 0, 0)', $this->name)
-            );
+            if ($this->functionLike->getName() === '__toString') {
+                $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_STRING, %d)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        (int) $this->functionLike->areReturnTypesNullCompatible()
+                    )
+                );
+
+                $this->codePrinter->output('#else');
+
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters()
+                    )
+                );
+
+                $this->codePrinter->output('#endif');
+            } else {
+                $this->codePrinter->output(
+                    sprintf('ZEND_BEGIN_ARG_INFO_EX(%s, 0, 0, 0)', $this->name)
+                );
+            }
+
             $this->codePrinter->output('ZEND_END_ARG_INFO()');
             $this->codePrinter->outputBlankLine();
         }
