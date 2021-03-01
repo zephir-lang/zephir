@@ -614,12 +614,12 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	}
 
 	fci.size = sizeof(fci);
-    fci.object = fci_cache.object;
-    ZVAL_COPY_VALUE(&fci.function_name, handler);
-    fci.param_count = 0;
-    fci.params = NULL;
-    fci.retval = return_value;
-    fci.named_params = NULL;
+	fci.object = fci_cache.object;
+	ZVAL_COPY_VALUE(&fci.function_name, handler);
+	fci.param_count = 0;
+	fci.params = NULL;
+	fci.retval = return_value;
+	fci.named_params = NULL;
 
 	zend_fcall_info_args(&fci, params);
 	zend_call_function(&fci, &fci_cache);
