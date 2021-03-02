@@ -13,6 +13,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Invokes\InvokeProtected;
+use Stub\Invokes\InvokeProtectedComplex;
 
 class InvokeTest extends TestCase
 {
@@ -31,5 +32,15 @@ class InvokeTest extends TestCase
         $this->assertInstanceOf(InvokeProtected::class, $fromProtected());
         $this->assertSame('random2', (string)$fromProtected());
         $this->assertSame('random2', $fromProtected()->__toString());
+    }
+
+    public function testProtectedMethodComplex(): void
+    {
+        $expected = 'random1random2';
+        $fromProtected = new InvokeProtectedComplex('random');
+
+        $this->assertInstanceOf(InvokeProtectedComplex::class, $fromProtected());
+        $this->assertSame($expected, (string)$fromProtected());
+        $this->assertSame($expected, $fromProtected()->__toString());
     }
 }
