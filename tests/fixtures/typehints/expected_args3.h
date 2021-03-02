@@ -7,31 +7,11 @@ PHP_METHOD(TypeHints_Args, args);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_typehints_args_args, 0, 0, 7)
 	ZEND_ARG_INFO(0, _var)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _string, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, _string)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _bool, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, _bool)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _int, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, _int)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _long, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, _long)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _double, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, _double)
-#endif
 	ZEND_ARG_OBJ_INFO(0, _args, TypeHints\\Args, 0)
 ZEND_END_ARG_INFO()
 
