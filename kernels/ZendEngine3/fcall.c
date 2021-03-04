@@ -621,6 +621,10 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 
 		zend_fcall_info_args_clear(&fci, 1);
 	}
+
+	if (EG(exception)) {
+		status = SUCCESS;
+	}
 #else
 	zend_execute_data *frame = EG(current_execute_data);
 	if (!zend_is_callable_at_frame(handler, NULL, frame, 0, &fci_cache, &is_callable_error)) {
@@ -641,13 +645,9 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	fci.named_params = NULL;
 
 	zend_fcall_info_args(&fci, params);
-	zend_call_function(&fci, &fci_cache);
+	status = zend_call_function(&fci, &fci_cache);
 	zend_fcall_info_args_clear(&fci, 1);
 #endif
-
-	if (EG(exception)) {
-		status = SUCCESS;
-	}
 
 	return status;
 }
