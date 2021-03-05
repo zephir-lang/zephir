@@ -2333,8 +2333,7 @@ final class Compiler
     private function toUnixPaths(array $paths): array
     {
         return array_map(
-            static function(string $path): string
-            {
+            static function (string $path): string {
                 return str_replace(\DIRECTORY_SEPARATOR, '/', $path);
             },
             $paths
