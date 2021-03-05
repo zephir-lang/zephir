@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed missing kernel directory at build time [ice/framework#271](https://github.com/ice/framework/issues/271)
 - Fixed stubs generation for case with array declaration with square brackets in params
 - Fixed parameters positioning for `implode()` php function [#2120](https://github.com/phalcon/zephir/issues/2120)
+- Fixed path separators in generated `config.m4` file on Windows [#2153](https://github.com/phalcon/zephir/issues/2153)
+
 
 ## [0.12.19] - 2020-05-13
 ### Fixed

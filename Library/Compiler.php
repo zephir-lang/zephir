@@ -1113,9 +1113,9 @@ final class Compiler
             '%PROJECT_LOWER%' => strtolower($project),
             '%PROJECT_UPPER%' => strtoupper($project),
             '%PROJECT_CAMELIZE%' => ucfirst($project),
-            '%FILES_COMPILED%' => implode("\n\t", $compiledFiles),
-            '%HEADERS_COMPILED%' => implode(' ', $compiledHeaders),
-            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
+            '%FILES_COMPILED%' => implode("\n\t", $this->toUnixPaths($compiledFiles)),
+            '%HEADERS_COMPILED%' => implode(' ', $this->toUnixPaths($compiledHeaders)),
+            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->toUnixPaths($this->extraFiles)),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
         ];
@@ -2328,5 +2328,16 @@ final class Compiler
         }
 
         return '0.0.0';
+    }
+
+    private function toUnixPaths(array $paths): array
+    {
+        return array_map(
+            static function(string $path): string
+            {
+                return str_replace(\DIRECTORY_SEPARATOR, '/', $path);
+            },
+            $paths
+        );
     }
 }
