@@ -11,11 +11,13 @@
 
 namespace Zephir\Optimizers\FunctionCall;
 
-use function Zephir\add_slashes;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
+use function Zephir\add_slashes;
 
 /**
  * FunctionExistsOptimizer.
@@ -33,11 +35,11 @@ class FunctionExistsOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || 1 != \count($expression['parameters'])) {
+        if (!isset($expression['parameters']) || 1 !== count($expression['parameters'])) {
             return false;
         }
 
-        if ('string' == $expression['parameters'][0]['parameter']['type']) {
+        if ('string' === $expression['parameters'][0]['parameter']['type']) {
             $str = add_slashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
@@ -55,7 +57,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
 
         return new CompiledExpression(
             'bool',
-            '(zephir_function_exists('.$resolvedParams[0].')  == SUCCESS)',
+            '(zephir_function_exists('.$resolvedParams[0].') == SUCCESS)',
             $expression
         );
     }
