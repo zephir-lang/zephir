@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Zephir.
  *
@@ -19,7 +21,7 @@ class ArgInfoDefinition
     /**
      * @var bool
      */
-    private $returnByRef = false;
+    private bool $returnByRef;
 
     /**
      * @var ClassMethod|FunctionDefinition
@@ -29,33 +31,42 @@ class ArgInfoDefinition
     /**
      * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @var ClassMethodParameters|null
      */
-    private $parameters;
+    private ?ClassMethodParameters $parameters = null;
 
     /**
      * @var CodePrinter
      */
-    private $codePrinter;
+    private CodePrinter $codePrinter;
 
     /**
      * @var CompilationContext
      */
-    private $compilationContext;
+    private CompilationContext $compilationContext;
 
     /**
      * @var string
      */
-    private $booleanDefinition = '_IS_BOOL';
+    private string $booleanDefinition = '_IS_BOOL';
 
     /**
      * @var bool
      */
-    private $richFormat = true;
+    private bool $richFormat = true;
 
+    /**
+     * ArgInfoDefinition constructor.
+     *
+     * @param $name
+     * @param ClassMethod $functionLike
+     * @param CodePrinter $codePrinter
+     * @param CompilationContext $compilationContext
+     * @param false $returnByRef
+     */
     public function __construct(
         $name,
         ClassMethod $functionLike,
@@ -73,14 +84,14 @@ class ArgInfoDefinition
         $this->returnByRef = $returnByRef;
     }
 
-    public function setBooleanDefinition($definition)
+    public function setBooleanDefinition(string $definition): void
     {
-        $this->booleanDefinition = (string) $definition;
+        $this->booleanDefinition = $definition;
     }
 
-    public function setRichFormat($flag)
+    public function setRichFormat(bool $flag): void
     {
-        $this->richFormat = (bool) $flag;
+        $this->richFormat = $flag;
     }
 
     /**
@@ -88,7 +99,7 @@ class ArgInfoDefinition
      *
      * @throws Exception
      */
-    public function render()
+    public function render(): void
     {
         if ($this->richFormat &&
             $this->functionLike->isReturnTypesHintDetermined() &&
@@ -152,7 +163,7 @@ class ArgInfoDefinition
         }
     }
 
-    private function richRenderStart()
+    private function richRenderStart(): void
     {
         if (\array_key_exists('object', $this->functionLike->getReturnTypes())) {
             $class = 'NULL';
@@ -209,7 +220,7 @@ class ArgInfoDefinition
         );
     }
 
-    private function renderEnd()
+    private function renderEnd(): void
     {
         $flag = $this->richFormat ? '1' : '0';
 
@@ -317,12 +328,12 @@ class ArgInfoDefinition
         }
     }
 
-    private function hasParameters()
+    private function hasParameters(): bool
     {
         return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
     }
 
-    private function allowNull($parameter)
+    private function allowNull(array $parameter): bool
     {
         if (!isset($parameter['default']) || !\is_array($parameter['default'])) {
             return false;
@@ -335,12 +346,12 @@ class ArgInfoDefinition
         return false;
     }
 
-    private function passByReference($parameter)
+    private function passByReference(array $parameter)
     {
         return isset($parameter['reference']) ? $parameter['reference'] : 0;
     }
 
-    private function getReturnType()
+    private function getReturnType(): string
     {
         if ($this->functionLike->areReturnTypesIntCompatible()) {
             return 'IS_LONG';
