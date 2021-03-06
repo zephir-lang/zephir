@@ -1819,7 +1819,7 @@ final class ClassDefinition
                 break;
 
             // Reflection
-            /*case 'reflector':
+            case 'reflector':
                 $compilationContext->headersManager->add('ext/reflection/php_reflection');
                 $classEntry = 'reflector_ptr';
                 break;
@@ -1866,7 +1866,7 @@ final class ClassDefinition
             case 'reflectionzendextension':
                 $compilationContext->headersManager->add('ext/reflection/php_reflection');
                 $classEntry = 'reflection_zend_extension_ptr';
-                break;*/
+                break;
 
             default:
                 if (!$check) {
