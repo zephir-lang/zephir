@@ -15,7 +15,7 @@ class Issue_2092
      * Expects:
      *  return \Stubs\Events\ManagerInterface|null
      *
-     * @return \Stubs\Events\ManagerInterface|null
+     * @return ManagerInterface|null
      */
     public function getInternalEventsManager(): ?ManagerInterface
     {
