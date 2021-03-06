@@ -238,7 +238,6 @@ int zephir_fast_count_int(zval *value)
 	}
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
-
 		zval retval;
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
@@ -433,7 +432,7 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 	}
 
 	return SUCCESS;
-#elif PHP_VERSION_ID >= 70200
+#else
 	int ret;
 	zend_string *key;
 
@@ -450,20 +449,6 @@ int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t
 	}
 
 	return ret;
-#elif PHP_VERSION_ID >= 70100
-	int ret;
-
-	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
-	ret = zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
-	zend_string_release(key);
-	return ret;
-#else
-	if (Z_CONSTANT_P(value)) {
-		ce->ce_flags &= ~ZEND_ACC_CONSTANTS_UPDATED;
-	}
-	ZVAL_NEW_PERSISTENT_REF(value, value);
-	return zend_hash_str_update(&ce->constants_table, name, name_length, value) ?
-		SUCCESS : FAILURE;
 #endif
 }
 
@@ -538,8 +523,7 @@ int zephir_is_php_version(unsigned int id)
 	return ((php_major + php_minor + php_release) == id ? 1 : 0);
 }
 
-void
-zephir_get_args(zval *return_value)
+void zephir_get_args(zval *return_value)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
@@ -582,8 +566,7 @@ zephir_get_args(zval *return_value)
 	}
 }
 
-void
-zephir_get_arg(zval *return_value, zend_long idx)
+void zephir_get_arg(zval *return_value, zend_long idx)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count;
@@ -595,11 +578,9 @@ zephir_get_arg(zval *return_value, zend_long idx)
 	}
 
 	arg_count = ZEND_CALL_NUM_ARGS(ex);
-#if PHP_VERSION_ID >= 70100
-	if (zend_forbid_dynamic_call("func_get_arg()") == FAILURE) {
-		RETURN_FALSE;
-	}
-#endif
+    if (zend_forbid_dynamic_call("func_get_arg()") == FAILURE) {
+        RETURN_FALSE;
+    }
 
 	if (UNEXPECTED((zend_ulong)idx >= arg_count)) {
 		zend_error(E_WARNING, "func_get_arg():  Argument " ZEND_LONG_FMT " not passed to function", idx);
