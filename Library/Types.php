@@ -119,7 +119,7 @@ final class Types
             return static::T_MIXED.$nullableType;
         }
 
-        if ($isTypeHinted && !$isBasicTypes && !$isDynamic) {
+        if ($isTypeHinted && !$isBasicTypes && !$isDynamic && !$isNullable) {
             return implode('|', array_keys($returnTypes));
         }
 
@@ -347,13 +347,12 @@ final class Types
      *
      * @param array $types        - Return types from parser
      * @param array $allowedTypes - Allowed return types
-     *
+     * @param bool $isNullable
      * @return bool
      */
     private function areReturnTypesCompatible(array $types, array $allowedTypes, bool $isNullable = false): bool
     {
         $result = null;
-        $areEquals = false;
 
         if ($isNullable) {
             $allowedTypes[] = static::T_NULL;
