@@ -124,7 +124,7 @@ final class Types
         }
 
         if ($isTypeHinted && $isProcessedReturnType) {
-            $withoutNullable = array_filter(array_values($returnTypes), static function ($ret) {
+            $withoutNullable = array_filter(array_keys($returnTypes), static function ($ret) {
                 if ($ret !== static::T_NULL) {
                     return $ret;
                 }
