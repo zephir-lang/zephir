@@ -1447,9 +1447,77 @@ final class ClassDefinition
      *
      * @return string
      */
-    public function getClassEntryByClassName($className, CompilationContext $compilationContext, $check = true)
-    {
+    public function getClassEntryByClassName(
+        string $className,
+        CompilationContext $compilationContext,
+        bool $check = true
+    ): string {
         $this->compiler = $compilationContext->compiler;
+
+        /**
+         * Special treatment for Reflection in 8.0.
+         * Because in PHP 7.4 param arg info is lighter,
+         * but also incomplete.
+         */
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            switch (strtolower($className)) {
+                case 'reflector':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflector_ptr';
+                    break;
+                case 'reflectionexception':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_exception_ptr';
+                    break;
+                case 'reflection':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_ptr';
+                    break;
+                case 'reflectionfunctionabstract':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_function_abstract_ptr';
+                    break;
+                case 'reflectionfunction':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_function_ptr';
+                    break;
+                case 'reflectionparameter':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_parameter_ptr';
+                    break;
+                case 'reflectionclass':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_class_ptr';
+                    break;
+                case 'reflectionobject':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_object_ptr';
+                    break;
+                case 'reflectionmethod':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_method_ptr';
+                    break;
+                case 'reflectionproperty':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_property_ptr';
+                    break;
+                case 'reflectionextension':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_extension_ptr';
+                    break;
+                case 'reflectionzendextension':
+                    $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                    $classEntry = 'reflection_zend_extension_ptr';
+                    break;
+                default:
+                    $classEntry = null;
+                    break;
+            }
+
+            if ($classEntry !== null) {
+                return $classEntry;
+            }
+        }
 
         switch (strtolower($className)) {
             /**
@@ -1830,56 +1898,6 @@ final class ClassDefinition
             case 'sessionhandlerinterface':
                 $compilationContext->headersManager->add('ext/session/php_session');
                 $classEntry = 'php_session_iface_entry';
-                break;
-
-            // Reflection
-            case 'reflector':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflector_ptr';
-                break;
-            case 'reflectionexception':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_exception_ptr';
-                break;
-            case 'reflection':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_ptr';
-                break;
-            case 'reflectionfunctionabstract':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_function_abstract_ptr';
-                break;
-            case 'reflectionfunction':
-                //$compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_function_ptr';
-                break;
-            case 'reflectionparameter':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_parameter_ptr';
-                break;
-            case 'reflectionclass':
-                //$compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_class_ptr';
-                break;
-            case 'reflectionobject':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_object_ptr';
-                break;
-            case 'reflectionmethod':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_method_ptr';
-                break;
-            case 'reflectionproperty':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_property_ptr';
-                break;
-            case 'reflectionextension':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_extension_ptr';
-                break;
-            case 'reflectionzendextension':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
-                $classEntry = 'reflection_zend_extension_ptr';
                 break;
 
             default:
