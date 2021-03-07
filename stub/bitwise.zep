@@ -954,7 +954,7 @@ class Bitwise
         }
 
         /**
-         * @issue https://github.com/phalcon/zephir/issues/1581
+         * @issue https://github.com/zephir-lang/zephir/issues/1581
          */
         public function testbitwiseXor()
         {

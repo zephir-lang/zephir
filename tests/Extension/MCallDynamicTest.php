@@ -26,7 +26,7 @@ final class MCallDynamicTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1751
+     * @issue https://github.com/zephir-lang/zephir/issues/1751
      */
     public function testCallAnonymousFunctionWithContext(): void
     {

@@ -40,7 +40,7 @@ final class ExtendClassTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1686
+     * @issue https://github.com/zephir-lang/zephir/issues/1686
      */
     public function testShouldExtendMiddlewareInterface(): void
     {
@@ -54,7 +54,7 @@ final class ExtendClassTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1392
+     * @issue https://github.com/zephir-lang/zephir/issues/1392
      */
     public function testShouldCorrectWorkWithLateStaticBinding(): void
     {
@@ -62,7 +62,7 @@ final class ExtendClassTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1372
+     * @issue https://github.com/zephir-lang/zephir/issues/1372
      */
     public function testShouldCallParentMethodFromStaticByUsingSelf(): void
     {

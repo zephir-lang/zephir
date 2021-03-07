@@ -37,7 +37,7 @@ final class StaticPublicPropertiesTest extends TestCase
         StaticPublicProperties::$someString = 'test2';
         $this->assertSame(StaticPublicProperties::$someString, $value);
         // Disabled due to:
-        // https://github.com/phalcon/zephir/issues/1941#issuecomment-538654340
+        // https://github.com/zephir-lang/zephir/issues/1941#issuecomment-538654340
         StaticPublicProperties::setSomeString('test3');
         $this->assertSame(StaticPublicProperties::$someString, $value);
     }

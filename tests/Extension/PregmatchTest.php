@@ -36,7 +36,7 @@ final class PregmatchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/287
+     * @issue https://github.com/zephir-lang/zephir/issues/287
      */
     public function testCollectMatches(): void
     {
@@ -44,7 +44,7 @@ final class PregmatchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/144
+     * @issue https://github.com/zephir-lang/zephir/issues/144
      */
     public function testPregMatchAllFlags(): void
     {

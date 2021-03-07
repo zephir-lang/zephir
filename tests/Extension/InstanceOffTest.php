@@ -55,8 +55,8 @@ class InstanceOffTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/776
-     * @issue https://github.com/phalcon/zephir/issues/822
+     * @issue https://github.com/zephir-lang/zephir/issues/776
+     * @issue https://github.com/zephir-lang/zephir/issues/822
      */
     public function testInstanceOf5(): void
     {
@@ -70,7 +70,7 @@ class InstanceOffTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1828
+     * @issue https://github.com/zephir-lang/zephir/issues/1828
      */
     public function testInstanceOf7(): void
     {
@@ -79,7 +79,7 @@ class InstanceOffTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1828
+     * @issue https://github.com/zephir-lang/zephir/issues/1828
      */
     public function testInstanceOf8(): void
     {
@@ -88,7 +88,7 @@ class InstanceOffTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1828
+     * @issue https://github.com/zephir-lang/zephir/issues/1828
      */
     public function testInstanceOf9(): void
     {

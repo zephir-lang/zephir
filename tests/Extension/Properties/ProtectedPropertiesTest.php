@@ -45,7 +45,7 @@ final class ProtectedPropertiesTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/2089
+     * @issue https://github.com/zephir-lang/zephir/issues/2089
      */
     public function testShouldSetAndGetProtectedPropertyUsingExtendedClass(): void
     {

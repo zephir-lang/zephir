@@ -10,7 +10,7 @@ class Cast
     // To char cast
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testCharCastFromChar() -> char
     {
@@ -18,7 +18,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testCharCastFromVariableChar() -> char
     {
@@ -29,7 +29,7 @@ class Cast
     // To string cast
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastChar() -> string
     {
@@ -37,7 +37,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastVariableChar() -> string
     {
@@ -59,7 +59,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testIntCastFromChar() -> int
     {
@@ -67,7 +67,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testIntCastFromVariableChar() -> int
     {
@@ -171,7 +171,7 @@ class Cast
     // To long cast
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testLongCastFromChar() -> long
     {
@@ -179,7 +179,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testLongCastFromVariableChar() -> long
     {
@@ -278,7 +278,7 @@ class Cast
     // To double cast
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testDoubleCastFromVChar() -> double
     {
@@ -286,7 +286,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testDoubleCastFromVariableChar() -> double
     {
@@ -337,7 +337,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testBooleanCastFromChar() -> boolean
     {
@@ -345,7 +345,7 @@ class Cast
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testBooleanCastFromVariableChar() -> boolean
     {

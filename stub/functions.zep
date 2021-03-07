@@ -4,7 +4,7 @@ namespace Stub;
 class Functions
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/658
+     * @issue https://github.com/zephir-lang/zephir/issues/658
      */
     public function filterVar1() -> bool
     {
@@ -15,7 +15,7 @@ class Functions
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/658
+     * @issue https://github.com/zephir-lang/zephir/issues/658
      */
     public function filterVar2() -> bool
     {

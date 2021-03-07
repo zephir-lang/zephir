@@ -194,7 +194,7 @@ DOC;
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
-     * @link https://github.com/phalcon/zephir
+     * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
      * @uses MyClass::function doSmthName
@@ -211,7 +211,7 @@ DOC;
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
-     * @link https://github.com/phalcon/zephir
+     * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
      * @uses MyClass::function doSmthName

@@ -210,7 +210,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex3) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/665
+ * @link https://github.com/zephir-lang/zephir/issues/665
  */
 PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable) {
 
@@ -249,7 +249,7 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/297
+ * @link https://github.com/zephir-lang/zephir/issues/297
  */
 PHP_METHOD(Stub_Ternary, testTernaryAfterLetVariable) {
 

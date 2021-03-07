@@ -37,18 +37,18 @@ final class SeeTest extends TestCase
 
     public function testShouldGetResource(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 
         $this->assertSame(self::SEE_NAME, $link->getName());
         $this->assertSame($testString, $link->getString());
-        $this->assertSame('https://github.com/phalcon/zephir', $link->getResource());
+        $this->assertSame('https://github.com/zephir-lang/zephir', $link->getResource());
     }
 
     public function testShouldGetText(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 

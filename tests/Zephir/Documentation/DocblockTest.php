@@ -28,7 +28,7 @@ final class DocblockTest extends TestCase
 
     public function testShouldGetAllProperties(): void
     {
-        $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
+        $annotation1 = new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
 
         $this->docblock->setAnnotations([
@@ -58,7 +58,7 @@ final class DocblockTest extends TestCase
 
     public function testShouldAddAnnotations(): void
     {
-        $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
+        $annotation1 = new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
         $annotation3 = new Annotation('readme', 'https://github.com/zephir/README.md Readme');
 
@@ -81,14 +81,14 @@ final class DocblockTest extends TestCase
  *
  * Example description block.
  *
- * @see https://github.com/phalcon/zephir Zephir homepage
+ * @see https://github.com/zephir-lang/zephir Zephir homepage
  * @return void
  *
 DOC;
         $this->docblock->setDescription('Example description block.');
         $this->docblock->setSummary('Example summary block.');
         $this->docblock->setAnnotations([
-            new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage'),
+            new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage'),
         ]);
         $this->docblock->addAnnotation(
             new Annotation('return', 'void')

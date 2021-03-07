@@ -1052,7 +1052,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterBooleanNull) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/142
+ * @link https://github.com/zephir-lang/zephir/issues/142
  */
 PHP_METHOD(Stub_Mcall, testArrayParamWithDefaultEmptyArray) {
 

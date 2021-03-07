@@ -26,7 +26,7 @@ final class ArraySearchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1609
+     * @issue https://github.com/zephir-lang/zephir/issues/1609
      */
     public function testShouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey(): void
     {
@@ -37,7 +37,7 @@ final class ArraySearchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1609
+     * @issue https://github.com/zephir-lang/zephir/issues/1609
      */
     public function testShouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey(): void
     {

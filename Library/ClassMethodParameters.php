@@ -37,7 +37,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
             if (isset($parameter['reference']) && $parameter['reference']) {
                 throw new CompilerException(
                     'Zephir not support reference parameters for now. '.
-                    'Stay tuned for https://github.com/phalcon/zephir/issues/203',
+                    'Stay tuned for https://github.com/zephir-lang/zephir/issues/203',
                     $parameter
                 );
             }

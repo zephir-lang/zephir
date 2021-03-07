@@ -74,7 +74,7 @@ final class OoTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1673
+     * @issue https://github.com/zephir-lang/zephir/issues/1673
      */
     public function testShouldDinamicalyCreateInstancesInLoop(): void
     {

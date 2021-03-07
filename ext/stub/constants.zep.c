@@ -304,7 +304,7 @@ PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue) {
 /**
  * Test Delimiters as String Constants
  *
- * @link https://github.com/phalcon/zephir/issues/1571
+ * @link https://github.com/zephir-lang/zephir/issues/1571
  */
 PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted) {
 

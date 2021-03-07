@@ -64,7 +64,7 @@ class VariablesManager
     private function initDynamicVar(Variable $variable, array $value, Context $context)
     {
         /* These ones are system variables, do not add default values.
-           Also see: https://github.com/phalcon/zephir/issues/1660 */
+           Also see: https://github.com/zephir-lang/zephir/issues/1660 */
         if (\in_array($variable->getName(), self::RESERVED_NAMES, true)) {
             return;
         }

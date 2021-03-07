@@ -31,7 +31,7 @@ final class CastTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1988
+     * @see https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testCharCast(): void
     {
@@ -47,7 +47,7 @@ final class CastTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCast(): void
     {
@@ -86,7 +86,7 @@ final class CastTest extends TestCase
         $this->assertSame(0, $this->test->testIntCastFromVariableNull());
 
         /**
-         * @issue https://github.com/phalcon/zephir/issues/1988
+         * @issue https://github.com/zephir-lang/zephir/issues/1988
          */
         $this->assertSame(97, $this->test->testIntCastFromVariableChar());
 
@@ -103,7 +103,7 @@ final class CastTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testLongCast(): void
     {
@@ -138,7 +138,7 @@ final class CastTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testDoubleCast(): void
     {
@@ -163,7 +163,7 @@ final class CastTest extends TestCase
         $this->assertFalse($this->test->testBooleanCastFromIntFalse());
 
         /**
-         * @issue https://github.com/phalcon/zephir/issues/1988
+         * @issue https://github.com/zephir-lang/zephir/issues/1988
          */
         $this->assertTrue($this->test->testBooleanCastFromChar());
 
@@ -176,7 +176,7 @@ final class CastTest extends TestCase
         $this->assertFalse($this->test->testBooleanCastFromNull());
 
         /**
-         * @issue https://github.com/phalcon/zephir/issues/1988
+         * @issue https://github.com/zephir-lang/zephir/issues/1988
          */
         $this->assertTrue($this->test->testBooleanCastFromVariableChar());
     }

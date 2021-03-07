@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_ArraySearch) {
 
 }
 
-/** @issue https://github.com/phalcon/zephir/issues/1609 */
+/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
 PHP_METHOD(Stub_ArraySearch, simpleSearch) {
 
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch) {
 
 }
 
-/** @issue https://github.com/phalcon/zephir/issues/1609 */
+/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
 PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir) {
 
 	zval _0, pos;

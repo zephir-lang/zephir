@@ -37,7 +37,7 @@ final class ServerRequestFactoryTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1934
+     * @issue https://github.com/zephir-lang/zephir/issues/1934
      */
     public function testShouldNotTriggerAnyErrorIfPostIsUndefined(): void
     {

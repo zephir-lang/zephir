@@ -19,7 +19,7 @@ use TestConcreteClass;
 final class AbstractTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
     public function testShouldCreateCompatibleChildClassUsingTypeHintedParams(): void
     {
@@ -37,7 +37,7 @@ final class AbstractTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
     public function testShouldCreateCompatibleChildClassWithMultipleReturnTypesHint(): void
     {
@@ -46,7 +46,7 @@ final class AbstractTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
     public function testShouldCreateCompatibleChildClassWithScalarType(): void
     {

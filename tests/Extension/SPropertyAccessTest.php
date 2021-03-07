@@ -41,7 +41,7 @@ final class SPropertyAccessTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1494
+     * @issue https://github.com/zephir-lang/zephir/issues/1494
      */
     public function testShouldMutateIntVarInsideCycle(): void
     {
@@ -52,7 +52,7 @@ final class SPropertyAccessTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1494
+     * @issue https://github.com/zephir-lang/zephir/issues/1494
      */
     public function testShouldMutateDoubleVarInsideCycle(): void
     {

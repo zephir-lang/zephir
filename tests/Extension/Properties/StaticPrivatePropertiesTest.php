@@ -20,7 +20,7 @@ use Stub\Properties\StaticPrivateProperties;
 final class StaticPrivatePropertiesTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1530
+     * @issue https://github.com/zephir-lang/zephir/issues/1530
      */
     public function testShouldGetInstanceByUsingSingleton(): void
     {

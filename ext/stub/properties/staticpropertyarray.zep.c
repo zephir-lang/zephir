@@ -18,8 +18,8 @@
 
 
 /**
- * @link https://github.com/phalcon/zephir/issues/367
- * @link https://github.com/phalcon/zephir/issues/188
+ * @link https://github.com/zephir-lang/zephir/issues/367
+ * @link https://github.com/zephir-lang/zephir/issues/188
  */
 ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray) {
 

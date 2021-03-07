@@ -31,7 +31,7 @@ final class ServerTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1961
+     * @see https://github.com/zephir-lang/zephir/issues/1961
      */
     public function testShouldPrintPhpSelf(): void
     {
@@ -46,7 +46,7 @@ final class ServerTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1961
+     * @see https://github.com/zephir-lang/zephir/issues/1961
      */
     public function testShouldPrintUserAgent(): void
     {

@@ -47,7 +47,7 @@ final class ConcatTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1573
+     * @issue https://github.com/zephir-lang/zephir/issues/1573
      */
     public function testShouldConcatenateStringsSimilarToIntegersNumbers(): void
     {
@@ -55,7 +55,7 @@ final class ConcatTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1893
+     * @issue https://github.com/zephir-lang/zephir/issues/1893
      */
     public function testShouldConcatenateStringWithVarDouble(): void
     {
@@ -66,7 +66,7 @@ final class ConcatTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1893
+     * @issue https://github.com/zephir-lang/zephir/issues/1893
      */
     public function testShouldConcatenateStringWithDouble(): void
     {

@@ -47,14 +47,14 @@ Support us with a monthly donation and help us continue our activities.
 Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
 
 [docs]: https://docs.zephir-lang.com
-[zephir]: https://github.com/phalcon/zephir
+[zephir]: https://github.com/zephir-lang/zephir
 [facebook]: https://www.facebook.com/groups/zephir.language
 [discord]: https://phalcon.link/discord
 [zephir logo]: https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
 [web site]: https://zephir-lang.com
-[actions link]: https://github.com/phalcon/zephir/actions
-[actions unix]: https://github.com/phalcon/zephir/workflows/Unix%20CI/badge.svg
-[actions windows]: https://github.com/phalcon/zephir/workflows/Windows%20CI/badge.svg
+[actions link]: https://github.com/zephir-lang/zephir/actions
+[actions unix]: https://github.com/zephir-lang/zephir/workflows/Unix%20CI/badge.svg
+[actions windows]: https://github.com/zephir-lang/zephir/workflows/Windows%20CI/badge.svg
 [version badge]: https://poser.pugx.org/phalcon/zephir/v/stable.svg
 [packagist link]: https://packagist.org/packages/phalcon/zephir
 [license badge]: https://poser.pugx.org/phalcon/zephir/license.svg

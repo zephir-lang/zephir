@@ -38,7 +38,7 @@ final class RequiresTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/pull/1428
+     * @issue https://github.com/zephir-lang/zephir/pull/1428
      */
     public function testShouldRequireUsingNewSymbolTable(): void
     {
@@ -50,7 +50,7 @@ final class RequiresTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1621
+     * @issue https://github.com/zephir-lang/zephir/issues/1621
      */
     public function testShouldRenderTemplate(): void
     {
@@ -65,7 +65,7 @@ final class RequiresTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1713
+     * @issue https://github.com/zephir-lang/zephir/issues/1713
      */
     public function testShouldRequirePhar(): void
     {

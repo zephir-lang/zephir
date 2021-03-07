@@ -31,8 +31,8 @@ final class DocblockParserTest extends TestCase
  *
  * Helper to parse raw docblocks to structured object.
  *
- * @link https://github.com/phalcon/zephir - Zephir
- * @see  https://github.com/phalcon/zephir/README.md - Zephir readme
+ * @link https://github.com/zephir-lang/zephir - Zephir
+ * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
  *
  * @param array \$annotation - custom annotation
  *
@@ -40,10 +40,10 @@ final class DocblockParserTest extends TestCase
  */
 DOC;
 
-        $link = new Link('link', 'https://github.com/phalcon/zephir - Zephir');
+        $link = new Link('link', 'https://github.com/zephir-lang/zephir - Zephir');
         $link->getLinkText();
 
-        $see = new See('see', 'https://github.com/phalcon/zephir/README.md - Zephir readme');
+        $see = new See('see', 'https://github.com/zephir-lang/zephir/README.md - Zephir readme');
         $see->getResource();
 
         $return = new ReturnAnnotation('return', 'Docblock the parsed docblock');

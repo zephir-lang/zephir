@@ -54,7 +54,7 @@ class SPropertyAccess
 	}
 
 	/**
-	 * @see https://github.com/phalcon/zephir/issues/1494
+	 * @see https://github.com/zephir-lang/zephir/issues/1494
 	 */
 	public static function mutateIntVarInsideCycle() -> int
 	{
@@ -69,7 +69,7 @@ class SPropertyAccess
 	}
 
 	/**
-	 * @see https://github.com/phalcon/zephir/issues/1494
+	 * @see https://github.com/zephir-lang/zephir/issues/1494
 	 */
 	public static function mutateDoubleVarInsideCycle() -> double
 	{

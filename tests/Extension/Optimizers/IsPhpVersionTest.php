@@ -19,7 +19,7 @@ use Throwable;
 /**
  * Extension\Optimizers\IsPhpVersionTest.
  *
- * @issue https://github.com/phalcon/zephir/issues/1404
+ * @issue https://github.com/zephir-lang/zephir/issues/1404
  */
 final class IsPhpVersionTest extends TestCase
 {

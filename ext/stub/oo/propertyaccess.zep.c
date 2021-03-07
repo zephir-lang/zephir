@@ -107,7 +107,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/1851
+ * @issue https://github.com/zephir-lang/zephir/issues/1851
  */
 PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 
@@ -134,7 +134,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/1851
+ * @issue https://github.com/zephir-lang/zephir/issues/1851
  */
 PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable) {
 

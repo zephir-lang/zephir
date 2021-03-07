@@ -32,7 +32,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyObjPhp(): void
     {
@@ -46,7 +46,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyNewPhp(): void
     {
@@ -60,7 +60,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyObjInternal(): void
     {
@@ -74,7 +74,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyNewInternal(): void
     {
@@ -88,7 +88,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldSetPrivatePropertyObjPhp(): void
     {
@@ -101,7 +101,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldSetPrivatePropertyNewPhp(): void
     {
@@ -113,7 +113,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldSetPrivatePropertyObjInternal(): void
     {
@@ -126,7 +126,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldSetPrivatePropertyNewInternal(): void
     {
@@ -138,7 +138,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyViaThis(): void
     {
@@ -152,7 +152,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldSetPrivatePropertyViaThis(): void
     {
@@ -163,7 +163,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicObjInternal(): void
     {
@@ -180,7 +180,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicNewInternal(): void
     {
@@ -198,7 +198,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicObjPhp(): void
     {
@@ -221,7 +221,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicNewPhp(): void
     {
@@ -239,7 +239,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotGetObjectVarsPrivatePropertyObjPhp(): void
     {
@@ -251,7 +251,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotGetObjectVarsPrivatePropertyNewPhp(): void
     {
@@ -262,7 +262,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotGetObjectVarsPrivatePropertyObjInternal(): void
     {
@@ -274,7 +274,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2057
+     * @see https://github.com/zephir-lang/zephir/issues/2057
      */
     public function testShouldNotGetObjectVarsPrivatePropertyNewInternal(): void
     {
@@ -285,7 +285,7 @@ final class PrivateScopeTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1851
+     * @see https://github.com/zephir-lang/zephir/issues/1851
      */
     public function testShouldGetAndSetPrivatePropertyUsingParentGetterAndSetter(): void
     {

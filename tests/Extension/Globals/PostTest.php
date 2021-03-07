@@ -19,7 +19,7 @@ use Stub\Globals\Post;
 final class PostTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1623
+     * @issue https://github.com/zephir-lang/zephir/issues/1623
      */
     public function testShouldNotTriggerAnyErrorIfPostIsUndefined(): void
     {
@@ -32,7 +32,7 @@ final class PostTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1623
+     * @issue https://github.com/zephir-lang/zephir/issues/1623
      */
     public function testShouldReturnFalseIfVariableIsUndefined(): void
     {
@@ -45,7 +45,7 @@ final class PostTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1623
+     * @issue https://github.com/zephir-lang/zephir/issues/1623
      */
     public function testShouldReturnTrueIfVariableIsDefined(): void
     {

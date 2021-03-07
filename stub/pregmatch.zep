@@ -88,7 +88,7 @@ class Pregmatch
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/287
+	 * @link https://github.com/zephir-lang/zephir/issues/287
 	 */
 	public function testPregMatchSaveMatches(string str, string pattern)
 	{

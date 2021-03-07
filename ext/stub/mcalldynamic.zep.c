@@ -96,7 +96,7 @@ PHP_METHOD(Stub_McallDynamic, __call) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1751
+ * @link https://github.com/zephir-lang/zephir/issues/1751
  */
 PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext) {
 

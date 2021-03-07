@@ -45,7 +45,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfNoParametersGiven(): void
     {
@@ -62,7 +62,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfParametersLessThanRequired(): void
     {
@@ -79,7 +79,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfParametersMoreThanRequired(): void
     {
@@ -96,7 +96,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfMatchedIsNotVariable(): void
     {
@@ -121,7 +121,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfUsedUndefinedMatchesVariable(): void
     {
@@ -157,7 +157,7 @@ final class PregMatchOptimizerTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1697
+     * @issue https://github.com/zephir-lang/zephir/issues/1697
      */
     public function testShouldThrowExceptionIfMatchesHasUnexpectedType(): void
     {

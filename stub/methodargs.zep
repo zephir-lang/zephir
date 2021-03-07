@@ -38,7 +38,7 @@ class MethodArgs
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/336
+	 * @link https://github.com/zephir-lang/zephir/issues/336
 	 */
 	public function methodOptionalValueWithDefaultStaticConstantAccess(var method = self::GET)
 	{
@@ -47,7 +47,7 @@ class MethodArgs
 
 	/**
 	 * For string parameter
-	 * @link https://github.com/phalcon/zephir/issues/696
+	 * @link https://github.com/zephir-lang/zephir/issues/696
 	 */
 	public function methodOptionalStringValueWithDefaultStaticConstantAccess(string parameter = self::GET)
 	{
@@ -56,7 +56,7 @@ class MethodArgs
 
 	/**
 	 * For double parameter
-	 * @link https://github.com/phalcon/zephir/issues/696
+	 * @link https://github.com/zephir-lang/zephir/issues/696
 	 */
 	public function methodOptionalDoubleValueWithDefaultStaticConstantAccess(double parameter = self::MY_DOUBLE)
 	{
@@ -65,7 +65,7 @@ class MethodArgs
 
 	/**
 	 * For bool parameter
-	 * @link https://github.com/phalcon/zephir/issues/696
+	 * @link https://github.com/zephir-lang/zephir/issues/696
 	 */
 	public function methodOptionalBoolValueWithDefaultStaticConstantAccess(bool parameter = self::MY_BOOL)
 	{
@@ -74,7 +74,7 @@ class MethodArgs
 
 	/**
 	 * For int parameter
-	 * @link https://github.com/phalcon/zephir/issues/728
+	 * @link https://github.com/zephir-lang/zephir/issues/728
 	 */
 	public function methodOptionalIntValueWithDefaultStaticConstantAccess(int parameter = self::MY_INT)
 	{

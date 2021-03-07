@@ -17,7 +17,7 @@
         },
         {
             "name": "Contributors",
-            "homepage": "https://github.com/phalcon/zephir/graphs/contributors"
+            "homepage": "https://github.com/zephir-lang/zephir/graphs/contributors"
         }
     ],
     "require": {
@@ -83,8 +83,8 @@
         "zephir"
     ],
     "support": {
-        "issues": "https://github.com/phalcon/zephir/issues?state=open",
-        "source": "https://github.com/phalcon/zephir",
+        "issues": "https://github.com/zephir-lang/zephir/issues?state=open",
+        "source": "https://github.com/zephir-lang/zephir",
         "irc": "irc://irc.freenode.net/zephir",
         "docs": "https://docs.zephir-lang.com"
     }

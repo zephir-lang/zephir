@@ -51,7 +51,7 @@ final class ScallTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1622
+     * @issue https://github.com/zephir-lang/zephir/issues/1622
      */
     public function testShouldReturnInterpolatedMethodFromZephir(): void
     {
@@ -60,7 +60,7 @@ final class ScallTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1622
+     * @issue https://github.com/zephir-lang/zephir/issues/1622
      */
     public function testShouldEchoInterpolatedMethodFromZephir(): void
     {

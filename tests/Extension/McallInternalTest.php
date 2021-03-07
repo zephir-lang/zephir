@@ -19,7 +19,7 @@ use Stub\McallInternal;
 final class McallInternalTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1956
+     * @issue https://github.com/zephir-lang/zephir/issues/1956
      */
     public function testShouldReturnInstance(): void
     {

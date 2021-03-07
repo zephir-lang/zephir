@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Statements) {
 	zend_declare_property_string(stub_statements_ce, SL("tmp2"), "test string", ZEND_ACC_PUBLIC);
 
 	/**
-	 * @issue https://github.com/phalcon/zephir/issues/544
+	 * @issue https://github.com/zephir-lang/zephir/issues/544
 	 */
 	zend_declare_property_long(stub_statements_ce, SL("totalSteps"), 100, ZEND_ACC_PRIVATE);
 

@@ -37,18 +37,18 @@ final class LinkTest extends TestCase
 
     public function testShouldGetUri(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new Link(self::LINK_NAME, $testString);
 
         $this->assertSame(self::LINK_NAME, $link->getName());
         $this->assertSame($testString, $link->getString());
-        $this->assertSame('https://github.com/phalcon/zephir', $link->getUri());
+        $this->assertSame('https://github.com/zephir-lang/zephir', $link->getUri());
     }
 
     public function testShouldGetLinkText(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new Link(self::LINK_NAME, $testString);
 

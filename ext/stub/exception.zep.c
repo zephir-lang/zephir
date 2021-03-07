@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Exception) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/915
+ * @link https://github.com/zephir-lang/zephir/issues/915
  */
 PHP_METHOD(Stub_Exception, testRuntimePropertyFetch) {
 

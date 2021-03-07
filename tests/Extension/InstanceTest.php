@@ -19,7 +19,7 @@ use Stub\Instance;
 final class InstanceTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1339
+     * @issue https://github.com/zephir-lang/zephir/issues/1339
      */
     public function testShouldCreateAnInstanceUsingMoreThan10Parameters(): void
     {

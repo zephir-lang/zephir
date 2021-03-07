@@ -19,7 +19,7 @@ use Stub\Returns;
 final class ReturnsTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1534
+     * @issue https://github.com/zephir-lang/zephir/issues/1534
      */
     public function testShouldReturnWithParameter(): void
     {
@@ -28,7 +28,7 @@ final class ReturnsTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1534
+     * @issue https://github.com/zephir-lang/zephir/issues/1534
      */
     public function testShouldReturnWithParameterStaticVersion(): void
     {
@@ -36,7 +36,7 @@ final class ReturnsTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1534
+     * @issue https://github.com/zephir-lang/zephir/issues/1534
      */
     public function testShouldReturnWithoutParameter(): void
     {
@@ -45,7 +45,7 @@ final class ReturnsTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1534
+     * @issue https://github.com/zephir-lang/zephir/issues/1534
      */
     public function testShouldReturnWithoutParameterStaticVersion(): void
     {

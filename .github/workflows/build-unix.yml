@@ -50,9 +50,9 @@ jobs:
           extensions: gmp, pdo_sqlite, psr, zip
           tools: phpize, php-config
           coverage: xdebug
-          # variables_order: https://github.com/phalcon/zephir/pull/1537
-          # enable_dl: https://github.com/phalcon/zephir/pull/1654
-          # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
+          # variables_order: https://github.com/zephir-lang/zephir/pull/1537
+          # enable_dl: https://github.com/zephir-lang/zephir/pull/1654
+          # allow_url_fopen: https://github.com/zephir-lang/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
           ini-values: >-
             variables_order=EGPCS,
