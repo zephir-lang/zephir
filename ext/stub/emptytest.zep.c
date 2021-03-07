@@ -40,6 +40,7 @@ PHP_METHOD(Stub_EmptyTest, testDynamicVarArrayEmpty) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -56,6 +57,7 @@ PHP_METHOD(Stub_EmptyTest, testDynamicVarArrayNotEmpty) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -85,6 +87,7 @@ PHP_METHOD(Stub_EmptyTest, testEmptyString) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -100,6 +103,7 @@ PHP_METHOD(Stub_EmptyTest, testNotEmptyString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -117,6 +121,14 @@ PHP_METHOD(Stub_EmptyTest, testString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);

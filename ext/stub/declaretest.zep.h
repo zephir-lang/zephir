@@ -77,23 +77,95 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_declaretest_testdeclaremcallexpression, 0, 0
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_declaretest_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testStringDeclare1, arginfo_stub_declaretest_teststringdeclare1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testStringDeclare1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testStringDeclare2, arginfo_stub_declaretest_teststringdeclare2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testStringDeclare2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare1, arginfo_stub_declaretest_testdeclare1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare2, arginfo_stub_declaretest_testdeclare2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare3, arginfo_stub_declaretest_testdeclare3, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare3, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare4, arginfo_stub_declaretest_testdeclare4, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare4, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare5, arginfo_stub_declaretest_testdeclare5, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare5, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare6, arginfo_stub_declaretest_testdeclare6, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare6, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare7, arginfo_stub_declaretest_testdeclare7, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare7, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare8, arginfo_stub_declaretest_testdeclare8, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare8, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare9, arginfo_stub_declaretest_testdeclare9, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare9, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare10, arginfo_stub_declaretest_testdeclare10, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare10, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare11, arginfo_stub_declaretest_testdeclare11, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare11, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare12, arginfo_stub_declaretest_testdeclare12, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare12, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare13, arginfo_stub_declaretest_testdeclare13, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare13, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare14, arginfo_stub_declaretest_testdeclare14, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare14, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclare15, arginfo_stub_declaretest_testdeclare15, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclare15, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_DeclareTest, testDeclareMcallExpression, arginfo_stub_declaretest_testdeclaremcallexpression, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_DeclareTest, testDeclareMcallExpression, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

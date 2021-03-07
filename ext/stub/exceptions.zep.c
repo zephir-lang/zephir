@@ -37,6 +37,7 @@ PHP_METHOD(Stub_Exceptions, testException1) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "hello1", "stub/exceptions.zep", 11);
 	return;
 
@@ -45,6 +46,7 @@ PHP_METHOD(Stub_Exceptions, testException1) {
 PHP_METHOD(Stub_Exceptions, testExceptionStringEscape) {
 
 	zval *this_ptr = getThis();
+
 
 
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "hello \"simple code\" test", "stub/exceptions.zep", 16);
@@ -62,13 +64,14 @@ PHP_METHOD(Stub_Exceptions, testException2) {
 	ZVAL_UNDEF(&msg);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&msg);
 	ZVAL_STRING(&msg, "hello2");
 	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_exception_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 26, &msg);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 28, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 23);
 	ZEPHIR_MM_RESTORE();
@@ -86,13 +89,14 @@ PHP_METHOD(Stub_Exceptions, testException3) {
 	ZVAL_UNDEF(&ex);
 	ZVAL_UNDEF(&msg);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&msg);
 	ZVAL_STRING(&msg, "hello3");
 	ZEPHIR_INIT_VAR(&ex);
 	object_init_ex(&ex, stub_exception_ce);
-	ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 26, &msg);
+	ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 28, &msg);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&ex, "stub/exceptions.zep", 31);
 	ZEPHIR_MM_RESTORE();
@@ -109,12 +113,13 @@ PHP_METHOD(Stub_Exceptions, getException) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	object_init_ex(return_value, stub_exception_ce);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello4");
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 26, &_0);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 28, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -128,6 +133,7 @@ PHP_METHOD(Stub_Exceptions, testException4) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -149,13 +155,14 @@ PHP_METHOD(Stub_Exceptions, testException5) {
 	ZVAL_UNDEF(&exception);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&exception);
 	object_init_ex(&exception, stub_exception_ce);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello5");
-	ZEPHIR_CALL_METHOD(NULL, &exception, "__construct", NULL, 26, &_0);
+	ZEPHIR_CALL_METHOD(NULL, &exception, "__construct", NULL, 28, &_0);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&exception, "stub/exceptions.zep", 49);
 	ZEPHIR_MM_RESTORE();
@@ -171,6 +178,14 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&type);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(type)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &type_param);
@@ -180,19 +195,19 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral) {
 
 	do {
 		if (ZEPHIR_IS_STRING(&type, "string")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(), "Test", "stub/exceptions.zep", 56);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "Test", "stub/exceptions.zep", 56);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "char")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(), "t", "stub/exceptions.zep", 58);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "t", "stub/exceptions.zep", 58);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "int")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(), "123", "stub/exceptions.zep", 60);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "123", "stub/exceptions.zep", 60);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "double")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(), "123.123", "stub/exceptions.zep", 62);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "123.123", "stub/exceptions.zep", 62);
 			return;
 		}
 	} while(0);
@@ -212,6 +227,14 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf) {
 	ZVAL_UNDEF(&name);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(name)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name_param);
@@ -221,7 +244,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf) {
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Hello, %s");
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 15, &_0, &name);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 17, &_0, &name);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_1, "stub/exceptions.zep", 68);
 	ZEPHIR_MM_RESTORE();
@@ -239,6 +262,15 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat) {
 	ZVAL_UNDEF(&framework);
 	ZVAL_UNDEF(&language);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR(framework)
+		Z_PARAM_STR(language)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &framework_param, &language_param);
@@ -265,6 +297,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow) {
 	ZVAL_UNDEF(&e);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 
@@ -279,7 +312,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow) {
 		ZEPHIR_INIT_VAR(&_0);
 		ZVAL_OBJ(&_0, EG(exception));
 		Z_ADDREF_P(&_0);
-		if (zephir_instance_of_ev(&_0, zend_exception_get_default())) {
+		if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			zephir_throw_exception_debug(&e, "stub/exceptions.zep", 83);
@@ -310,6 +343,15 @@ PHP_METHOD(Stub_Exceptions, testMultiException) {
 	ZVAL_UNDEF(&_4$$7);
 	ZVAL_UNDEF(&_6$$10);
 	ZVAL_UNDEF(&_8$$13);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(returnValue)
+		Z_PARAM_ZVAL(exception)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
@@ -349,7 +391,7 @@ PHP_METHOD(Stub_Exceptions, testMultiException) {
 				return;
 			}
 		} else {
-			if (zephir_instance_of_ev(&_0, zend_exception_get_default())) {
+			if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_0);
 				_3$$7 = zephir_is_callable(&exc);
@@ -417,12 +459,13 @@ PHP_METHOD(Stub_Exceptions, issue1325) {
 	ZVAL_UNDEF(&status);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(&status, this_ptr, "donoopexception", NULL, 27);
+		ZEPHIR_CALL_METHOD(&status, this_ptr, "donoopexception", NULL, 29);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:
@@ -431,7 +474,7 @@ PHP_METHOD(Stub_Exceptions, issue1325) {
 		ZEPHIR_INIT_VAR(&_0);
 		ZVAL_OBJ(&_0, EG(exception));
 		Z_ADDREF_P(&_0);
-		if (zephir_instance_of_ev(&_0, zend_exception_get_default())) {
+		if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			ZEPHIR_INIT_NVAR(&status);
@@ -447,7 +490,8 @@ PHP_METHOD(Stub_Exceptions, doNoopException) {
 	zval *this_ptr = getThis();
 
 
-	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(), "I am exception", "stub/exceptions.zep", 140);
+
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_ce_exception, "I am exception", "stub/exceptions.zep", 140);
 	return;
 
 }

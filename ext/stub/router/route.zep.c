@@ -71,6 +71,17 @@ PHP_METHOD(Stub_Router_Route, __construct) {
 	ZVAL_UNDEF(&paths_sub);
 	ZVAL_UNDEF(&httpMethods_sub);
 	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 3)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL(httpMethods)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
@@ -120,6 +131,14 @@ PHP_METHOD(Stub_Router_Route, compilePattern) {
 	ZVAL_UNDEF(&_11$$9);
 	ZVAL_UNDEF(&_12$$9);
 	ZVAL_UNDEF(&_13$$9);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(pattern)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -207,6 +226,14 @@ PHP_METHOD(Stub_Router_Route, via) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(httpMethods)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
 
@@ -253,6 +280,14 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 	ZVAL_UNDEF(&_23$$16);
 	ZVAL_UNDEF(&_27$$19);
 	ZVAL_UNDEF(&_28$$28);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(pattern)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -483,6 +518,16 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
 	ZVAL_UNDEF(&_1$$10);
 	ZVAL_UNDEF(&_2$$19);
 	ZVAL_UNDEF(&_3$$19);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(paths)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -602,6 +647,7 @@ PHP_METHOD(Stub_Router_Route, getName) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "_name");
 
 }
@@ -624,6 +670,14 @@ PHP_METHOD(Stub_Router_Route, setName) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(name)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
 
@@ -648,6 +702,14 @@ PHP_METHOD(Stub_Router_Route, beforeMatch) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&callback_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(callback)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &callback);
 
@@ -668,6 +730,7 @@ PHP_METHOD(Stub_Router_Route, getBeforeMatch) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "_beforeMatch");
 
 }
@@ -680,6 +743,7 @@ PHP_METHOD(Stub_Router_Route, getBeforeMatch) {
 PHP_METHOD(Stub_Router_Route, getRouteId) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "_id");
@@ -696,6 +760,7 @@ PHP_METHOD(Stub_Router_Route, getPattern) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "_pattern");
 
 }
@@ -710,6 +775,7 @@ PHP_METHOD(Stub_Router_Route, getCompiledPattern) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "_compiledPattern");
 
 }
@@ -722,6 +788,7 @@ PHP_METHOD(Stub_Router_Route, getCompiledPattern) {
 PHP_METHOD(Stub_Router_Route, getPaths) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "_paths");
@@ -747,6 +814,7 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths) {
 	ZVAL_UNDEF(&position);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -808,6 +876,14 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(httpMethods)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
 
@@ -826,6 +902,7 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods) {
 PHP_METHOD(Stub_Router_Route, getHttpMethods) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "_methods");
@@ -848,6 +925,14 @@ PHP_METHOD(Stub_Router_Route, setHostname) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&hostname_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(hostname)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &hostname);
 
@@ -868,6 +953,7 @@ PHP_METHOD(Stub_Router_Route, getHostname) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "_hostname");
 
 }
@@ -886,6 +972,15 @@ PHP_METHOD(Stub_Router_Route, convert) {
 
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(name)
+		Z_PARAM_ZVAL(converter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &name, &converter);
 
@@ -904,6 +999,7 @@ PHP_METHOD(Stub_Router_Route, convert) {
 PHP_METHOD(Stub_Router_Route, getConverters) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "_converters");

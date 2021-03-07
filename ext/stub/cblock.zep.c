@@ -51,6 +51,7 @@ PHP_METHOD(Stub_Cblock, testCblock1) {
 
 
 
+
 	a = 0;
 	
 			a = MAX_FACTOR;
@@ -63,6 +64,7 @@ PHP_METHOD(Stub_Cblock, testCblock2) {
 
 	long a;
 	zval *this_ptr = getThis();
+
 
 
 

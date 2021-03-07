@@ -33,6 +33,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch1) {
 
 
 
+
 	a = 10;
 	RETURN_LONG(a);
 
@@ -42,6 +43,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch2) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -63,6 +65,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch3) {
 
 
 
+
 	a = 10;
 	do {
 		if (a == 5) {
@@ -78,6 +81,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch4) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -100,6 +104,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch5) {
 
 
 
+
 	a = 10;
 	do {
 		if (a == 10) {
@@ -116,6 +121,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch6) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -137,6 +143,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch7) {
 
 
 
+
 	a = 4;
 	do {
 		if (a == 10 || a == 4) {
@@ -155,6 +162,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch8) {
 
 
 
+
 	a = 5;
 	do {
 		if (a == 10 || a == 4) {
@@ -170,6 +178,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch9) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -194,6 +203,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch10) {
 
 
 
+
 	a = 5;
 	do {
 		if (a == 3 || a == 4) {
@@ -212,6 +222,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -234,6 +245,15 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12) {
 
 	ZVAL_UNDEF(&var1_sub);
 	ZVAL_UNDEF(&var2_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(var1)
+		Z_PARAM_ZVAL(var2)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &var1, &var2);
 
@@ -269,6 +289,14 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 
@@ -298,6 +326,15 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(result_type)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &result_type);

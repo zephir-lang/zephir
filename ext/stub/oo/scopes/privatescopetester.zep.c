@@ -34,6 +34,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callprivatemethod", NULL, 0);
@@ -56,6 +57,16 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj) {
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&property);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_ZVAL(obj)
+		Z_PARAM_STR(property)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &obj, &property_param, &value);
@@ -86,6 +97,16 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew) {
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&obj);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_STR(className)
+		Z_PARAM_STR(property)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &className_param, &property_param, &value);
@@ -113,13 +134,21 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&obj_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(obj)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &obj);
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 62, obj);
+	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 72, obj);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -138,6 +167,14 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars) {
 
 	ZVAL_UNDEF(&className);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(className)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &className_param);

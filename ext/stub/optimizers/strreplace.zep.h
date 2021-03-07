@@ -21,9 +21,25 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_optimizers_strreplace_issue732b, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_optimizers_strreplace_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Optimizers_StrReplace, issue1055, arginfo_stub_optimizers_strreplace_issue1055, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Optimizers_StrReplace, issue1055, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Optimizers_StrReplace, issue1087, arginfo_stub_optimizers_strreplace_issue1087, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Optimizers_StrReplace, issue1087, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Optimizers_StrReplace, issue732A, arginfo_stub_optimizers_strreplace_issue732a, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Optimizers_StrReplace, issue732A, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Optimizers_StrReplace, issue732B, arginfo_stub_optimizers_strreplace_issue732b, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Optimizers_StrReplace, issue732B, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

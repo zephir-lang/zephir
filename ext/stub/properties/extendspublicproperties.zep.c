@@ -49,6 +49,7 @@ zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_11$$7);
+	
 
 		ZEPHIR_MM_GROW();
 	

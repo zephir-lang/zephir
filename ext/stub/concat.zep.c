@@ -36,6 +36,7 @@ PHP_METHOD(Stub_Concat, getTestProperty) {
 	ZVAL_UNDEF(&_0);
 
 
+
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 
@@ -50,6 +51,14 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty) {
 
 	ZVAL_UNDEF(&title);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(title)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &title_param);
@@ -75,6 +84,7 @@ PHP_METHOD(Stub_Concat, testConcat1) {
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&url);
@@ -96,6 +106,7 @@ PHP_METHOD(Stub_Concat, testConcat2) {
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -126,6 +137,7 @@ PHP_METHOD(Stub_Concat, testConcat3) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -154,6 +166,14 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 	ZVAL_UNDEF(&query);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value);
@@ -192,6 +212,14 @@ PHP_METHOD(Stub_Concat, testConcat5) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&retval);
 	ZVAL_UNDEF(&left);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(number)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &number_param);

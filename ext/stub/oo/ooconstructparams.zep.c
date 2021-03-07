@@ -38,6 +38,15 @@ PHP_METHOD(Stub_Oo_OoConstructParams, __construct) {
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(a)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
 
@@ -53,6 +62,7 @@ PHP_METHOD(Stub_Oo_OoConstructParams, getA) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "a");
 
 }
@@ -60,6 +70,7 @@ PHP_METHOD(Stub_Oo_OoConstructParams, getA) {
 PHP_METHOD(Stub_Oo_OoConstructParams, getB) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "b");

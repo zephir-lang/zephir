@@ -33,6 +33,14 @@ PHP_METHOD(Stub_Issues, setAdapter) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&adapter_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(adapter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &adapter);
 
@@ -51,6 +59,14 @@ PHP_METHOD(Stub_Issues, someMethod) {
 
 	ZVAL_UNDEF(&methodName_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(methodName)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &methodName);
@@ -67,6 +83,7 @@ PHP_METHOD(Stub_Issues, someMethod) {
 PHP_METHOD(Stub_Issues, test) {
 
 	zval *this_ptr = getThis();
+
 
 
 	php_printf("%s", "test");

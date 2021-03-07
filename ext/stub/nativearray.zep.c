@@ -39,6 +39,7 @@ PHP_METHOD(Stub_NativeArray, testArray1) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -55,6 +56,7 @@ PHP_METHOD(Stub_NativeArray, testArray2) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -81,6 +83,7 @@ PHP_METHOD(Stub_NativeArray, testArray3) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -109,6 +112,7 @@ PHP_METHOD(Stub_NativeArray, testArray4) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -129,6 +133,7 @@ PHP_METHOD(Stub_NativeArray, testArray5) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -148,6 +153,7 @@ PHP_METHOD(Stub_NativeArray, testArray6) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -175,6 +181,7 @@ PHP_METHOD(Stub_NativeArray, testArray7) {
 
 	ZVAL_UNDEF(&d);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -206,6 +213,7 @@ PHP_METHOD(Stub_NativeArray, testArray8) {
 	ZVAL_UNDEF(&d);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = (double) (1);
@@ -235,6 +243,7 @@ PHP_METHOD(Stub_NativeArray, testArray9) {
 
 	ZVAL_UNDEF(&d);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -268,6 +277,7 @@ PHP_METHOD(Stub_NativeArray, testArray10) {
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -295,6 +305,7 @@ PHP_METHOD(Stub_NativeArray, testArray11) {
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -339,6 +350,7 @@ PHP_METHOD(Stub_NativeArray, testArray12) {
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -370,6 +382,7 @@ PHP_METHOD(Stub_NativeArray, testArray13) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -388,6 +401,7 @@ PHP_METHOD(Stub_NativeArray, testArray14) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -410,6 +424,7 @@ PHP_METHOD(Stub_NativeArray, testArray15) {
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -428,6 +443,7 @@ PHP_METHOD(Stub_NativeArray, testArray16) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -449,6 +465,7 @@ PHP_METHOD(Stub_NativeArray, testArray17) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -467,6 +484,7 @@ PHP_METHOD(Stub_NativeArray, testArray18) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -489,6 +507,7 @@ PHP_METHOD(Stub_NativeArray, testArray19) {
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -507,6 +526,7 @@ PHP_METHOD(Stub_NativeArray, testArray20) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -528,6 +548,7 @@ PHP_METHOD(Stub_NativeArray, testArray21) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -546,6 +567,7 @@ PHP_METHOD(Stub_NativeArray, testArray22) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -567,6 +589,7 @@ PHP_METHOD(Stub_NativeArray, testArray23) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -596,6 +619,7 @@ PHP_METHOD(Stub_NativeArray, testArray24) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	b = 0.0;
@@ -624,6 +648,7 @@ PHP_METHOD(Stub_NativeArray, testArray25) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	b = 0;
@@ -651,6 +676,7 @@ PHP_METHOD(Stub_NativeArray, testArray26) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
@@ -673,6 +699,7 @@ PHP_METHOD(Stub_NativeArray, testArray27) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -697,6 +724,7 @@ PHP_METHOD(Stub_NativeArray, testArray28) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
@@ -719,6 +747,7 @@ PHP_METHOD(Stub_NativeArray, testArray29) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	b = 1;
@@ -738,6 +767,7 @@ PHP_METHOD(Stub_NativeArray, testArray30) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -759,6 +789,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess1) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -787,6 +818,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess2) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -809,6 +841,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess3) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -840,6 +873,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess4) {
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -863,6 +897,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess5) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -888,6 +923,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess6) {
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -916,6 +952,7 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess1) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -943,6 +980,7 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess2) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -977,6 +1015,7 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess3) {
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1016,6 +1055,7 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess4) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1053,6 +1093,7 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess5) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1080,6 +1121,7 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate1) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1110,6 +1152,7 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate2) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1142,6 +1185,7 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate3) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1177,6 +1221,7 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate4) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1203,6 +1248,7 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate5) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1269,6 +1315,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAppend1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1318,6 +1365,7 @@ PHP_METHOD(Stub_NativeArray, testArrayAppend2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
@@ -1365,6 +1413,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate1) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1382,6 +1431,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate2) {
 
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1401,6 +1451,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate3) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1418,6 +1469,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate4) {
 
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1437,6 +1489,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate5) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1454,6 +1507,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate6) {
 
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1473,6 +1527,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate7) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1494,6 +1549,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate8) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1517,6 +1573,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate9) {
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1539,6 +1596,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate10) {
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1560,6 +1618,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate11) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1585,6 +1644,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate12) {
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&d);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1615,6 +1675,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate13) {
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&d);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1653,6 +1714,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend1) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1675,6 +1737,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend2) {
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&x);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1703,6 +1766,7 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend3) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1740,6 +1804,14 @@ PHP_METHOD(Stub_NativeArray, testArrayKeys) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(param)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
@@ -1758,6 +1830,14 @@ PHP_METHOD(Stub_NativeArray, testImplodeArray) {
 
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(param)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &param);
@@ -1782,6 +1862,7 @@ PHP_METHOD(Stub_NativeArray, issue110) {
 
 	ZVAL_UNDEF(&byteUnits);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1811,6 +1892,14 @@ PHP_METHOD(Stub_NativeArray, issue264) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&tokens);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(tokens)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &tokens_param);
@@ -1831,6 +1920,14 @@ PHP_METHOD(Stub_NativeArray, issue743a) {
 
 	ZVAL_UNDEF(&current743a);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(current743a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &current743a_param);
@@ -1854,6 +1951,14 @@ PHP_METHOD(Stub_NativeArray, issue743b) {
 
 	ZVAL_UNDEF(&current);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(current)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &current_param);
@@ -1878,6 +1983,14 @@ PHP_METHOD(Stub_NativeArray, issue743c) {
 	ZVAL_UNDEF(&current);
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(current)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &current_param);
@@ -1912,6 +2025,7 @@ PHP_METHOD(Stub_NativeArray, issue709) {
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	works = 1;
@@ -1938,7 +2052,7 @@ PHP_METHOD(Stub_NativeArray, issue709) {
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 51, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 54, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 626);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);
@@ -1969,6 +2083,15 @@ PHP_METHOD(Stub_NativeArray, Issue1140) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_1$$3);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR(prefix)
+		Z_PARAM_STR(baseDir)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &prefix_param, &baseDir_param);
@@ -1986,7 +2109,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140) {
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch(&_3, &_2, &prefix, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
 	ZEPHIR_MAKE_REF(&_3);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 52, &_3, &baseDir);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 55, &_3, &baseDir);
 	ZEPHIR_UNREF(&_3);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");
@@ -2001,6 +2124,7 @@ PHP_METHOD(Stub_NativeArray, Issue1159) {
 
 	ZVAL_UNDEF(&myvar);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2020,6 +2144,7 @@ zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_typ
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
+	
 
 		ZEPHIR_MM_GROW();
 	

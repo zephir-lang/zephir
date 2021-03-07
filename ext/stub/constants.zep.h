@@ -105,30 +105,130 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_constants_teststringpropertywithvarsget, 0, 
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_constants_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropWsVarsGet, arginfo_stub_constants_getpropwsvarsget, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropWsVarsGet, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC1, arginfo_stub_constants_getpropertyc1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC2, arginfo_stub_constants_getpropertyc2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC3, arginfo_stub_constants_getpropertyc3, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC3, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC4, arginfo_stub_constants_getpropertyc4, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC4, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC5, arginfo_stub_constants_getpropertyc5, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC5, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC6, arginfo_stub_constants_getpropertyc6, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC6, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC7, arginfo_stub_constants_getpropertyc7, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC7, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC8, arginfo_stub_constants_getpropertyc8, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC8, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, getPropertyC9, arginfo_stub_constants_getpropertyc9, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, getPropertyC9, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testReadConstant, arginfo_stub_constants_testreadconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testReadConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testReadClassConstant1, arginfo_stub_constants_testreadclassconstant1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testReadClassConstant1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testReadClassConstant2, arginfo_stub_constants_testreadclassconstant2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testReadClassConstant2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testReadClassConstant3, arginfo_stub_constants_testreadclassconstant3, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testReadClassConstant3, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testPHPVersionEnvConstant, arginfo_stub_constants_testphpversionenvconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testPHPVersionEnvConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testClassMagicConstant, arginfo_stub_constants_testclassmagicconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testClassMagicConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testMethodMagicConstant, arginfo_stub_constants_testmethodmagicconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testMethodMagicConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testFunctionMagicConstant, arginfo_stub_constants_testfunctionmagicconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testFunctionMagicConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testNamespaceMagicConstant, arginfo_stub_constants_testnamespacemagicconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testNamespaceMagicConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testDirConstant, arginfo_stub_constants_testdirconstant, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testDirConstant, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testPHPVersionEnvConstantInExpValue, arginfo_stub_constants_testphpversionenvconstantinexpvalue, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testPHPVersionEnvConstantInExpValue, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testStringDelimiterConstantDoubleQuoted, arginfo_stub_constants_teststringdelimiterconstantdoublequoted, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testStringDelimiterConstantDoubleQuoted, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testStringConstantWithVars, arginfo_stub_constants_teststringconstantwithvars, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testStringConstantWithVars, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testStringPropertyWithVarsAssigned, arginfo_stub_constants_teststringpropertywithvarsassigned, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testStringPropertyWithVarsAssigned, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Constants, testStringPropertyWithVarsGet, arginfo_stub_constants_teststringpropertywithvarsget, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Constants, testStringPropertyWithVarsGet, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

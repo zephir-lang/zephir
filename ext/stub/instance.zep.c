@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "ext/spl/spl_array.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
@@ -46,6 +47,24 @@ PHP_METHOD(Stub_Instance, __construct) {
 	ZVAL_UNDEF(&a9_sub);
 	ZVAL_UNDEF(&a10_sub);
 	ZVAL_UNDEF(&a11_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(11, 11)
+		Z_PARAM_OBJECT_OF_CLASS(a1, stub_arithmetic_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a2, spl_ce_ArrayObject)
+		Z_PARAM_OBJECT_OF_CLASS(a3, stub_assign_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a4, stub_bitwise_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a5, stub_branchprediction_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a6, stub_cast_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a7, stub_cblock_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a8, stub_chars_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a9, stub_closures_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a10, stub_compare_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a11, stub_concat_ce)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
 
@@ -64,6 +83,7 @@ PHP_METHOD(Stub_Instance, testIssue1339) {
 	ZVAL_UNDEF(&parameters);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&parameters);
@@ -77,7 +97,7 @@ PHP_METHOD(Stub_Instance, testIssue1339) {
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	object_init_ex(&_0, stub_arrayobject_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 42);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 45);
 	zephir_check_call_status();
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -160,6 +180,14 @@ PHP_METHOD(Stub_Instance, testInstanceCreate) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&className);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(className)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &className_param);

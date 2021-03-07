@@ -69,6 +69,14 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, setSomeString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
 
@@ -84,6 +92,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -102,6 +111,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -125,6 +135,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub3) {
 	ZVAL_UNDEF(&_0);
 
 
+
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_DOUBLE(&_0, 1.0);
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
@@ -141,6 +152,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub4) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 
 	v = 1;
@@ -160,6 +172,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&v);
+
 
 	ZEPHIR_MM_GROW();
 

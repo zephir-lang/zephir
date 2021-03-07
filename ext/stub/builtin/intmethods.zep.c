@@ -36,6 +36,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -60,6 +68,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, -5);
@@ -78,6 +87,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getBinary) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -101,6 +118,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getHex) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -124,6 +149,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getOctal) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -148,6 +181,15 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getPow) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(num)
+		Z_PARAM_LONG(exp)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &num_param, &exp_param);
@@ -171,6 +213,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getSqrt) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -191,6 +241,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getExp) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -212,6 +270,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getSin) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -230,6 +296,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getCos) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -248,6 +322,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getTan) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -261,37 +343,63 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getTan) {
 
 PHP_METHOD(Stub_BuiltIn_IntMethods, getAsin) {
 
-	zval *num_param = NULL, _0;
-	zend_long num;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *num_param = NULL, _0, _1;
+	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
 
-	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(asin(num));
+	ZEPHIR_CALL_FUNCTION(&_1, "asin", NULL, 12, &_0);
+	zephir_check_call_status();
+	RETURN_CCTOR(&_1);
 
 }
 
 PHP_METHOD(Stub_BuiltIn_IntMethods, getAcos) {
 
-	zval *num_param = NULL, _0;
-	zend_long num;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *num_param = NULL, _0, _1;
+	zend_long num, ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
 
-	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &num_param);
 
 	num = zephir_get_intval(num_param);
 
 
 	ZVAL_LONG(&_0, num);
-	RETURN_DOUBLE(acos(num));
+	ZEPHIR_CALL_FUNCTION(&_1, "acos", NULL, 13, &_0);
+	zephir_check_call_status();
+	RETURN_CCTOR(&_1);
 
 }
 
@@ -304,6 +412,14 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAtan) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -312,7 +428,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAtan) {
 
 
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 12, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 14, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 
@@ -330,6 +446,16 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_LONG(num)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(base)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &num_param, &base_param);
@@ -344,13 +470,13 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog) {
 
 	if (base == -1) {
 		ZVAL_LONG(&_0$$3, num);
-		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 13, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 15, &_0$$3);
 		zephir_check_call_status();
 		RETURN_CCTOR(&_1$$3);
 	}
 	ZVAL_LONG(&_2, num);
 	ZVAL_LONG(&_3, base);
-	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 13, &_2, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 15, &_2, &_3);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_4);
 

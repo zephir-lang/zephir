@@ -8,44 +8,20 @@ PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared);
 PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock);
 PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared);
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testdockblockandreturntype, 0, 0, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testdockblockandreturntype, 0, 0, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testdocblockandreturntypedeclared, 0, 0, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testdocblockandreturntypedeclared, 0, 0, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testmixedinputparamsdocblock, 0, 1, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testmixedinputparamsdocblock, 0, 1, IS_LONG, NULL, 1)
-#endif
 	ZEND_ARG_INFO(0, intOrString)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, number)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testmixedinputparamsdocblockdeclared, 0, 1, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testmixedinputparamsdocblockdeclared, 0, 1, IS_LONG, NULL, 1)
-#endif
 	ZEND_ARG_INFO(0, intOrString)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, number, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, number)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_stubs_method_entry) {

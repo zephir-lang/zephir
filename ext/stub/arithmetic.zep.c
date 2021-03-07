@@ -38,6 +38,7 @@ PHP_METHOD(Stub_Arithmetic, intSum) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a + b);
@@ -49,6 +50,7 @@ PHP_METHOD(Stub_Arithmetic, int2Sum) {
 
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -65,6 +67,7 @@ PHP_METHOD(Stub_Arithmetic, intSumSimple) {
 
 
 
+
 	c = 3;
 	RETURN_LONG(c);
 
@@ -74,6 +77,7 @@ PHP_METHOD(Stub_Arithmetic, boolSum) {
 
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -91,6 +95,7 @@ PHP_METHOD(Stub_Arithmetic, bool2Sum) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	c = (a + 2);
 	RETURN_BOOL(c);
@@ -104,6 +109,7 @@ PHP_METHOD(Stub_Arithmetic, bool3Sum) {
 
 
 
+
 	a = 1;
 	c = (a | 0);
 	RETURN_BOOL(c);
@@ -114,6 +120,7 @@ PHP_METHOD(Stub_Arithmetic, boolSumSimple) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -133,6 +140,7 @@ PHP_METHOD(Stub_Arithmetic, boolSumExpression) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 1;
@@ -150,6 +158,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSum) {
 
 
 
+
 	a = (double) (1);
 	b = (double) (2);
 	c = (a + b);
@@ -161,6 +170,7 @@ PHP_METHOD(Stub_Arithmetic, double2Sum) {
 
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -178,6 +188,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumSimple) {
 
 
 
+
 	c = (double) (3);
 	RETURN_DOUBLE(c);
 
@@ -187,6 +198,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSum2Simple) {
 
 	double c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -204,6 +216,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumExpression) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -225,6 +238,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumVarExpression) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 1.0;
@@ -242,6 +256,7 @@ PHP_METHOD(Stub_Arithmetic, varSum) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a + b);
@@ -256,6 +271,7 @@ PHP_METHOD(Stub_Arithmetic, varSumSimple) {
 
 
 
+
 	c = 3;
 	RETURN_LONG(c);
 
@@ -266,6 +282,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSum) {
 	double a = 0;
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -283,6 +300,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSumSimple) {
 
 
 
+
 	c = (long) (3);
 	RETURN_LONG(c);
 
@@ -293,6 +311,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSum) {
 	double a = 0, c = 0;
 	zend_long b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -310,6 +329,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSumSimple) {
 
 
 
+
 	c = 3;
 	RETURN_DOUBLE(c);
 
@@ -319,6 +339,7 @@ PHP_METHOD(Stub_Arithmetic, varIntSum) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -333,6 +354,7 @@ PHP_METHOD(Stub_Arithmetic, intVarSum) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -353,6 +375,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCastSum) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -376,6 +399,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sum) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -393,6 +417,7 @@ PHP_METHOD(Stub_Arithmetic, complexSum) {
 
 
 
+
 	c = 3;
 	RETURN_DOUBLE(c);
 
@@ -405,6 +430,7 @@ PHP_METHOD(Stub_Arithmetic, complex2Sum) {
 
 
 
+
 	c = (1 | 1);
 	RETURN_BOOL(c);
 
@@ -414,6 +440,7 @@ PHP_METHOD(Stub_Arithmetic, complex3Sum) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -430,6 +457,7 @@ PHP_METHOD(Stub_Arithmetic, complex4Sum) {
 
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&c);
@@ -445,6 +473,7 @@ PHP_METHOD(Stub_Arithmetic, complex5Sum) {
 
 
 
+
 	c = (1 + 1);
 	RETURN_LONG(c);
 
@@ -454,6 +483,7 @@ PHP_METHOD(Stub_Arithmetic, complex6Sum) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -470,6 +500,7 @@ PHP_METHOD(Stub_Arithmetic, complex7Sum) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a + b);
@@ -482,6 +513,7 @@ PHP_METHOD(Stub_Arithmetic, complex9Sum) {
 	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -501,6 +533,7 @@ PHP_METHOD(Stub_Arithmetic, complex10Sum) {
 
 
 
+
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b + a));
@@ -514,6 +547,7 @@ PHP_METHOD(Stub_Arithmetic, complex11Sum) {
 	zend_long b = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -532,6 +566,7 @@ PHP_METHOD(Stub_Arithmetic, complex12Sum) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b + a);
@@ -547,6 +582,7 @@ PHP_METHOD(Stub_Arithmetic, complex13Sum) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
@@ -559,6 +595,7 @@ PHP_METHOD(Stub_Arithmetic, complex14Sum) {
 	zend_bool b = 0;
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -578,6 +615,7 @@ PHP_METHOD(Stub_Arithmetic, complex15Sum) {
 
 
 
+
 	a = 1;
 	b = 2.0;
 	c = (((b +  (double) a) != 0.0) ? 1 : 0);
@@ -590,6 +628,7 @@ PHP_METHOD(Stub_Arithmetic, complex16Sum) {
 	double b = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -609,6 +648,7 @@ PHP_METHOD(Stub_Arithmetic, complex17Sum) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a + b));
@@ -622,6 +662,7 @@ PHP_METHOD(Stub_Arithmetic, complex18Sum) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -642,6 +683,7 @@ PHP_METHOD(Stub_Arithmetic, complex19Sum) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a + b));
@@ -656,6 +698,7 @@ PHP_METHOD(Stub_Arithmetic, complex20Sum) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -676,6 +719,7 @@ PHP_METHOD(Stub_Arithmetic, complex21Sum) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a + b));
@@ -689,6 +733,7 @@ PHP_METHOD(Stub_Arithmetic, complex22Sum) {
 	double d = 0, c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -709,6 +754,7 @@ PHP_METHOD(Stub_Arithmetic, complex23Sum) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a + b));
@@ -722,6 +768,7 @@ PHP_METHOD(Stub_Arithmetic, complex24Sum) {
 	double d = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -739,6 +786,7 @@ PHP_METHOD(Stub_Arithmetic, addSum1) {
 
 
 
+
 	a = 0;
 	a += 10;
 	RETURN_LONG(a);
@@ -749,6 +797,7 @@ PHP_METHOD(Stub_Arithmetic, addSum2) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -765,6 +814,7 @@ PHP_METHOD(Stub_Arithmetic, addSum2b) {
 
 
 
+
 	a = 5;
 	a += 0;
 	RETURN_LONG(a);
@@ -775,6 +825,7 @@ PHP_METHOD(Stub_Arithmetic, addSum3) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -791,6 +842,7 @@ PHP_METHOD(Stub_Arithmetic, addSum4) {
 
 
 
+
 	a = 0;
 	a += 0;
 	RETURN_LONG(a);
@@ -801,6 +853,7 @@ PHP_METHOD(Stub_Arithmetic, addSum5) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -817,6 +870,7 @@ PHP_METHOD(Stub_Arithmetic, addSum6) {
 
 
 
+
 	a = 0;
 	a += (long) (1.0);
 	RETURN_LONG(a);
@@ -827,6 +881,7 @@ PHP_METHOD(Stub_Arithmetic, addSum7) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -843,6 +898,7 @@ PHP_METHOD(Stub_Arithmetic, addSum8) {
 
 
 
+
 	a = 0.0;
 	a += 0.0;
 	RETURN_DOUBLE(a);
@@ -853,6 +909,7 @@ PHP_METHOD(Stub_Arithmetic, addSum8b) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -869,6 +926,7 @@ PHP_METHOD(Stub_Arithmetic, addSum9) {
 
 
 
+
 	a = 0.0;
 	a += 1;
 	RETURN_DOUBLE(a);
@@ -879,6 +937,7 @@ PHP_METHOD(Stub_Arithmetic, addSum10) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -895,6 +954,7 @@ PHP_METHOD(Stub_Arithmetic, addSum11) {
 
 
 
+
 	a = 0.0;
 	a += 1.0;
 	RETURN_DOUBLE(a);
@@ -905,6 +965,7 @@ PHP_METHOD(Stub_Arithmetic, addSum12) {
 
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -923,6 +984,7 @@ PHP_METHOD(Stub_Arithmetic, addSum13) {
 
 
 
+
 	a = 0;
 	b = 1;
 	a += b;
@@ -935,6 +997,7 @@ PHP_METHOD(Stub_Arithmetic, addSum14) {
 	zend_bool b = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -953,6 +1016,7 @@ PHP_METHOD(Stub_Arithmetic, addSum15) {
 
 
 
+
 	a = 0;
 	b = 1.0;
 	a += (long) b;
@@ -964,6 +1028,7 @@ PHP_METHOD(Stub_Arithmetic, addSum16) {
 
 	double a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -982,6 +1047,7 @@ PHP_METHOD(Stub_Arithmetic, addSum17) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a += (double) b;
@@ -994,6 +1060,7 @@ PHP_METHOD(Stub_Arithmetic, addSum18) {
 	zend_bool b = 0;
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1012,6 +1079,7 @@ PHP_METHOD(Stub_Arithmetic, addSum19) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a += (double) b;
@@ -1023,6 +1091,7 @@ PHP_METHOD(Stub_Arithmetic, addSum20) {
 
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1041,6 +1110,7 @@ PHP_METHOD(Stub_Arithmetic, addSum21) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a += (double) b;
@@ -1056,6 +1126,7 @@ PHP_METHOD(Stub_Arithmetic, addSum22) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1076,6 +1147,7 @@ PHP_METHOD(Stub_Arithmetic, addSum23) {
 
 
 
+
 	a = 1;
 	a += 1024;
 	RETURN_LONG(a);
@@ -1090,6 +1162,14 @@ PHP_METHOD(Stub_Arithmetic, addSum24) {
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);
@@ -1112,6 +1192,7 @@ PHP_METHOD(Stub_Arithmetic, intSub) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a - b);
@@ -1123,6 +1204,7 @@ PHP_METHOD(Stub_Arithmetic, intLetSub) {
 
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1140,6 +1222,7 @@ PHP_METHOD(Stub_Arithmetic, intSub2) {
 
 
 
+
 	a = 1;
 	c = (a - 2);
 	RETURN_LONG(c);
@@ -1153,6 +1236,7 @@ PHP_METHOD(Stub_Arithmetic, intSubSimple) {
 
 
 
+
 	c = -1;
 	RETURN_LONG(c);
 
@@ -1162,6 +1246,7 @@ PHP_METHOD(Stub_Arithmetic, boolSub) {
 
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1179,6 +1264,7 @@ PHP_METHOD(Stub_Arithmetic, bool2Sub) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	c = (a - 2);
 	RETURN_BOOL(c);
@@ -1189,6 +1275,7 @@ PHP_METHOD(Stub_Arithmetic, bool3Sub) {
 
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1205,6 +1292,7 @@ PHP_METHOD(Stub_Arithmetic, bool4Sub) {
 
 
 
+
 	a = 1;
 	c = (a & 1);
 	RETURN_BOOL(c);
@@ -1218,6 +1306,7 @@ PHP_METHOD(Stub_Arithmetic, boolSubSimple) {
 
 
 
+
 	c = ((-1) ? 1 : 0);
 	RETURN_BOOL(c);
 
@@ -1227,6 +1316,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSub) {
 
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1244,6 +1334,7 @@ PHP_METHOD(Stub_Arithmetic, double2Sub) {
 
 
 
+
 	a = 1.0;
 	b = 2.0;
 	c = (a - b);
@@ -1255,6 +1346,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSubSimple) {
 
 	double c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1270,6 +1362,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSub2Simple) {
 
 
 
+
 	c = -1;
 	RETURN_DOUBLE(c);
 
@@ -1279,6 +1372,7 @@ PHP_METHOD(Stub_Arithmetic, varSub) {
 
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1296,6 +1390,7 @@ PHP_METHOD(Stub_Arithmetic, varSubSimple) {
 
 
 
+
 	c = -1;
 	RETURN_LONG(c);
 
@@ -1306,6 +1401,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSub) {
 	double a = 0;
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1323,6 +1419,7 @@ PHP_METHOD(Stub_Arithmetic, intDoubleSubSimple) {
 
 
 
+
 	c = (long) (-1);
 	RETURN_LONG(c);
 
@@ -1333,6 +1430,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSub) {
 	double a = 0, c = 0;
 	zend_long b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1350,6 +1448,7 @@ PHP_METHOD(Stub_Arithmetic, doubleIntSubSimple) {
 
 
 
+
 	c = -1;
 	RETURN_DOUBLE(c);
 
@@ -1359,6 +1458,7 @@ PHP_METHOD(Stub_Arithmetic, varIntSub) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1373,6 +1473,7 @@ PHP_METHOD(Stub_Arithmetic, intVarSub) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1393,6 +1494,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCastSub) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1416,6 +1518,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sub) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -1433,6 +1536,7 @@ PHP_METHOD(Stub_Arithmetic, complexSub) {
 
 
 
+
 	c = 1;
 	RETURN_DOUBLE(c);
 
@@ -1445,6 +1549,7 @@ PHP_METHOD(Stub_Arithmetic, complex2Sub) {
 
 
 
+
 	c = (1 & 1);
 	RETURN_BOOL(c);
 
@@ -1454,6 +1559,7 @@ PHP_METHOD(Stub_Arithmetic, complex3Sub) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1470,6 +1576,7 @@ PHP_METHOD(Stub_Arithmetic, complex4Sub) {
 
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&c);
@@ -1485,6 +1592,7 @@ PHP_METHOD(Stub_Arithmetic, complex5Sub) {
 
 
 
+
 	c = (1 - 1);
 	RETURN_LONG(c);
 
@@ -1494,6 +1602,7 @@ PHP_METHOD(Stub_Arithmetic, complex6Sub) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1510,6 +1619,7 @@ PHP_METHOD(Stub_Arithmetic, complex7Sub) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a - b);
@@ -1522,6 +1632,7 @@ PHP_METHOD(Stub_Arithmetic, complex9Sub) {
 	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1541,6 +1652,7 @@ PHP_METHOD(Stub_Arithmetic, complex10Sub) {
 
 
 
+
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b - a));
@@ -1554,6 +1666,7 @@ PHP_METHOD(Stub_Arithmetic, complex11Sub) {
 	zend_long b = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1572,6 +1685,7 @@ PHP_METHOD(Stub_Arithmetic, complex12Sub) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b - a);
@@ -1587,6 +1701,7 @@ PHP_METHOD(Stub_Arithmetic, complex13Sub) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
@@ -1599,6 +1714,7 @@ PHP_METHOD(Stub_Arithmetic, complex14Sub) {
 	zend_bool b = 0;
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1618,6 +1734,7 @@ PHP_METHOD(Stub_Arithmetic, complex15Sub) {
 
 
 
+
 	a = 1;
 	b = 2.0;
 	c = (((b -  (double) a) != 0.0) ? 1 : 0);
@@ -1630,6 +1747,7 @@ PHP_METHOD(Stub_Arithmetic, complex16Sub) {
 	double b = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1649,6 +1767,7 @@ PHP_METHOD(Stub_Arithmetic, complex17Sub) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a - b));
@@ -1662,6 +1781,7 @@ PHP_METHOD(Stub_Arithmetic, complex18Sub) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1682,6 +1802,7 @@ PHP_METHOD(Stub_Arithmetic, complex19Sub) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a - b));
@@ -1696,6 +1817,7 @@ PHP_METHOD(Stub_Arithmetic, complex20Sub) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1716,6 +1838,7 @@ PHP_METHOD(Stub_Arithmetic, complex21Sub) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a - b));
@@ -1729,6 +1852,7 @@ PHP_METHOD(Stub_Arithmetic, complex22Sub) {
 	double d = 0, c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1749,6 +1873,7 @@ PHP_METHOD(Stub_Arithmetic, complex23Sub) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a - b));
@@ -1762,6 +1887,7 @@ PHP_METHOD(Stub_Arithmetic, complex24Sub) {
 	double d = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1779,6 +1905,7 @@ PHP_METHOD(Stub_Arithmetic, sub1) {
 
 
 
+
 	a = 0;
 	a -= 10;
 	RETURN_LONG(a);
@@ -1789,6 +1916,7 @@ PHP_METHOD(Stub_Arithmetic, sub2) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1805,6 +1933,7 @@ PHP_METHOD(Stub_Arithmetic, sub2b) {
 
 
 
+
 	a = 5;
 	a -= 0;
 	RETURN_LONG(a);
@@ -1815,6 +1944,7 @@ PHP_METHOD(Stub_Arithmetic, sub3) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1831,6 +1961,7 @@ PHP_METHOD(Stub_Arithmetic, sub4) {
 
 
 
+
 	a = 0;
 	a -= 0;
 	RETURN_LONG(a);
@@ -1841,6 +1972,7 @@ PHP_METHOD(Stub_Arithmetic, sub5) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1857,6 +1989,7 @@ PHP_METHOD(Stub_Arithmetic, sub6) {
 
 
 
+
 	a = 0;
 	a -= (long) (1.0);
 	RETURN_LONG(a);
@@ -1867,6 +2000,7 @@ PHP_METHOD(Stub_Arithmetic, sub7) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1883,6 +2017,7 @@ PHP_METHOD(Stub_Arithmetic, sub8) {
 
 
 
+
 	a = 0.0;
 	a -= 0.0;
 	RETURN_DOUBLE(a);
@@ -1893,6 +2028,7 @@ PHP_METHOD(Stub_Arithmetic, sub8b) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1909,6 +2045,7 @@ PHP_METHOD(Stub_Arithmetic, sub9) {
 
 
 
+
 	a = 0.0;
 	a -= 1;
 	RETURN_DOUBLE(a);
@@ -1919,6 +2056,7 @@ PHP_METHOD(Stub_Arithmetic, sub10) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1935,6 +2073,7 @@ PHP_METHOD(Stub_Arithmetic, sub11) {
 
 
 
+
 	a = 0.0;
 	a -= 1.0;
 	RETURN_DOUBLE(a);
@@ -1945,6 +2084,7 @@ PHP_METHOD(Stub_Arithmetic, sub12) {
 
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1963,6 +2103,7 @@ PHP_METHOD(Stub_Arithmetic, sub13) {
 
 
 
+
 	a = 0;
 	b = 1;
 	a -= b;
@@ -1975,6 +2116,7 @@ PHP_METHOD(Stub_Arithmetic, sub14) {
 	zend_bool b = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1993,6 +2135,7 @@ PHP_METHOD(Stub_Arithmetic, sub15) {
 
 
 
+
 	a = 0;
 	b = 1.0;
 	a -= (long) b;
@@ -2004,6 +2147,7 @@ PHP_METHOD(Stub_Arithmetic, sub16) {
 
 	double a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2022,6 +2166,7 @@ PHP_METHOD(Stub_Arithmetic, sub17) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a -= (double) b;
@@ -2034,6 +2179,7 @@ PHP_METHOD(Stub_Arithmetic, sub18) {
 	zend_bool b = 0;
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2052,6 +2198,7 @@ PHP_METHOD(Stub_Arithmetic, sub19) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a -= (double) b;
@@ -2063,6 +2210,7 @@ PHP_METHOD(Stub_Arithmetic, sub20) {
 
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2081,6 +2229,7 @@ PHP_METHOD(Stub_Arithmetic, sub21) {
 
 
 
+
 	a = 0.0;
 	b = 1;
 	a -= (double) b;
@@ -2096,6 +2245,7 @@ PHP_METHOD(Stub_Arithmetic, sub22) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2116,6 +2266,7 @@ PHP_METHOD(Stub_Arithmetic, sub23) {
 
 
 
+
 	a = 1;
 	a -= 1024;
 	RETURN_LONG(a);
@@ -2130,6 +2281,14 @@ PHP_METHOD(Stub_Arithmetic, sub24) {
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);
@@ -2152,6 +2311,7 @@ PHP_METHOD(Stub_Arithmetic, mul1) {
 
 
 
+
 	a = 1;
 	a *= 5;
 	RETURN_LONG(a);
@@ -2166,6 +2326,14 @@ PHP_METHOD(Stub_Arithmetic, mul2) {
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);
@@ -2188,6 +2356,7 @@ PHP_METHOD(Stub_Arithmetic, mul3) {
 
 
 
+
 	a = 1;
 	a *= 1024;
 	RETURN_LONG(a);
@@ -2198,6 +2367,7 @@ PHP_METHOD(Stub_Arithmetic, less1) {
 
 	zend_long a, b;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2214,6 +2384,7 @@ PHP_METHOD(Stub_Arithmetic, less2) {
 
 
 
+
 	a = 2;
 	b = 1;
 	RETURN_BOOL(a < b);
@@ -2226,6 +2397,14 @@ PHP_METHOD(Stub_Arithmetic, less3) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -2241,6 +2420,14 @@ PHP_METHOD(Stub_Arithmetic, less4) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -2257,6 +2444,7 @@ PHP_METHOD(Stub_Arithmetic, greater1) {
 
 
 
+
 	a = 1;
 	b = 2;
 	RETURN_BOOL(a > b);
@@ -2267,6 +2455,7 @@ PHP_METHOD(Stub_Arithmetic, greater2) {
 
 	zend_long a, b;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2282,6 +2471,14 @@ PHP_METHOD(Stub_Arithmetic, greater3) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -2297,6 +2494,14 @@ PHP_METHOD(Stub_Arithmetic, greater4) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -2313,6 +2518,7 @@ PHP_METHOD(Stub_Arithmetic, letStatementIntMinus) {
 
 
 
+
 	a = -1;
 	RETURN_LONG(a);
 
@@ -2322,6 +2528,7 @@ PHP_METHOD(Stub_Arithmetic, declaredIntMinus) {
 
 	zend_long a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -2340,6 +2547,14 @@ PHP_METHOD(Stub_Arithmetic, letStatementBoolMinus) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&b_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &b);
 
@@ -2359,6 +2574,14 @@ PHP_METHOD(Stub_Arithmetic, letStatementVarMinus) {
 
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&a);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &b);
@@ -2378,6 +2601,7 @@ PHP_METHOD(Stub_Arithmetic, div1) {
 
 
 
+
 	a = 100;
 	RETURN_DOUBLE(zephir_safe_div_long_long(((a - 1)), 4));
 
@@ -2389,6 +2613,7 @@ PHP_METHOD(Stub_Arithmetic, div2) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);

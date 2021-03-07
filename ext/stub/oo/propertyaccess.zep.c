@@ -52,6 +52,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_6);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&test);
@@ -114,6 +115,14 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
@@ -130,6 +139,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "privateVariable");

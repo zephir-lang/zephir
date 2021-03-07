@@ -31,6 +31,7 @@ PHP_METHOD(Stub_Closures, simple1) {
 	zval *this_ptr = getThis();
 
 
+
 	zephir_create_closure_ex(return_value, NULL, stub_1__closure_ce, SL("__invoke"));
 	return;
 
@@ -39,6 +40,7 @@ PHP_METHOD(Stub_Closures, simple1) {
 PHP_METHOD(Stub_Closures, simple2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	zephir_create_closure_ex(return_value, NULL, stub_2__closure_ce, SL("__invoke"));
@@ -51,6 +53,7 @@ PHP_METHOD(Stub_Closures, simple3) {
 	zval *this_ptr = getThis();
 
 
+
 	zephir_create_closure_ex(return_value, NULL, stub_3__closure_ce, SL("__invoke"));
 	return;
 
@@ -59,6 +62,7 @@ PHP_METHOD(Stub_Closures, simple3) {
 PHP_METHOD(Stub_Closures, simple4) {
 
 	zval *this_ptr = getThis();
+
 
 
 	zephir_create_closure_ex(return_value, NULL, stub_4__closure_ce, SL("__invoke"));
@@ -71,6 +75,7 @@ PHP_METHOD(Stub_Closures, simple5) {
 	zval *this_ptr = getThis();
 
 
+
 	zephir_create_closure_ex(return_value, NULL, stub_5__closure_ce, SL("__invoke"));
 	return;
 
@@ -81,6 +86,7 @@ PHP_METHOD(Stub_Closures, arrow1) {
 	zval *this_ptr = getThis();
 
 
+
 	zephir_create_closure_ex(return_value, NULL, stub_6__closure_ce, SL("__invoke"));
 	return;
 
@@ -89,6 +95,7 @@ PHP_METHOD(Stub_Closures, arrow1) {
 PHP_METHOD(Stub_Closures, arrow2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	zephir_create_closure_ex(return_value, NULL, stub_7__closure_ce, SL("__invoke"));
@@ -103,6 +110,7 @@ PHP_METHOD(Stub_Closures, testUseCommand) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 
 	abc = 1;
@@ -122,6 +130,14 @@ PHP_METHOD(Stub_Closures, issue1860) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(abc)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &abc_param);

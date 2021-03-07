@@ -86,6 +86,7 @@ PHP_METHOD(Stub_Constants, getPropWsVarsGet) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propWsVarsGet");
 
 }
@@ -93,6 +94,7 @@ PHP_METHOD(Stub_Constants, getPropWsVarsGet) {
 PHP_METHOD(Stub_Constants, getPropertyC1) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "propertyC1");
@@ -104,6 +106,7 @@ PHP_METHOD(Stub_Constants, getPropertyC2) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propertyC2");
 
 }
@@ -111,6 +114,7 @@ PHP_METHOD(Stub_Constants, getPropertyC2) {
 PHP_METHOD(Stub_Constants, getPropertyC3) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "propertyC3");
@@ -122,6 +126,7 @@ PHP_METHOD(Stub_Constants, getPropertyC4) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propertyC4");
 
 }
@@ -129,6 +134,7 @@ PHP_METHOD(Stub_Constants, getPropertyC4) {
 PHP_METHOD(Stub_Constants, getPropertyC5) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "propertyC5");
@@ -140,6 +146,7 @@ PHP_METHOD(Stub_Constants, getPropertyC6) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propertyC6");
 
 }
@@ -149,6 +156,7 @@ PHP_METHOD(Stub_Constants, getPropertyC7) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propertyC7");
 
 }
@@ -156,6 +164,7 @@ PHP_METHOD(Stub_Constants, getPropertyC7) {
 PHP_METHOD(Stub_Constants, getPropertyC8) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "propertyC8");
@@ -169,6 +178,7 @@ PHP_METHOD(Stub_Constants, getPropertyC9) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propertyC9");
 
 }
@@ -176,6 +186,7 @@ PHP_METHOD(Stub_Constants, getPropertyC9) {
 PHP_METHOD(Stub_Constants, testReadConstant) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG(3);
@@ -187,6 +198,7 @@ PHP_METHOD(Stub_Constants, testReadClassConstant1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(10);
 
 }
@@ -194,6 +206,7 @@ PHP_METHOD(Stub_Constants, testReadClassConstant1) {
 PHP_METHOD(Stub_Constants, testReadClassConstant2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG(10);
@@ -205,6 +218,7 @@ PHP_METHOD(Stub_Constants, testReadClassConstant3) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(10);
 
 }
@@ -212,6 +226,7 @@ PHP_METHOD(Stub_Constants, testReadClassConstant3) {
 PHP_METHOD(Stub_Constants, testPHPVersionEnvConstant) {
 
 	zval *this_ptr = getThis();
+
 
 
 	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
@@ -224,6 +239,7 @@ PHP_METHOD(Stub_Constants, testClassMagicConstant) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("Stub\\Constants");
 
 }
@@ -231,6 +247,7 @@ PHP_METHOD(Stub_Constants, testClassMagicConstant) {
 PHP_METHOD(Stub_Constants, testMethodMagicConstant) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("Constants:testMethodMagicConstant");
@@ -242,6 +259,7 @@ PHP_METHOD(Stub_Constants, testFunctionMagicConstant) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("testFunctionMagicConstant");
 
 }
@@ -251,6 +269,7 @@ PHP_METHOD(Stub_Constants, testNamespaceMagicConstant) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("Stub");
 
 }
@@ -258,6 +277,7 @@ PHP_METHOD(Stub_Constants, testNamespaceMagicConstant) {
 PHP_METHOD(Stub_Constants, testDirConstant) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_NULL();
@@ -271,6 +291,7 @@ PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -293,6 +314,7 @@ PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted) {
 
 	ZVAL_UNDEF(&delimiter);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&delimiter);
@@ -309,6 +331,7 @@ PHP_METHOD(Stub_Constants, testStringConstantWithVars) {
 
 	ZVAL_UNDEF(&property);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&property);
@@ -322,6 +345,7 @@ PHP_METHOD(Stub_Constants, testStringPropertyWithVarsAssigned) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "propWsVarsAssigned");
 
 }
@@ -329,6 +353,7 @@ PHP_METHOD(Stub_Constants, testStringPropertyWithVarsAssigned) {
 PHP_METHOD(Stub_Constants, testStringPropertyWithVarsGet) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "propWsVarsGet");

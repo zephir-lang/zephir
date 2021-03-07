@@ -42,6 +42,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString1) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 24);
@@ -64,6 +65,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString2) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, -24);
@@ -85,6 +87,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString3) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
