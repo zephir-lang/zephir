@@ -1852,7 +1852,7 @@ PHP_METHOD(Stub_NativeArray, testImplodeArray) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/110
+ * @link https://github.com/zephir-lang/zephir/issues/110
  */
 PHP_METHOD(Stub_NativeArray, issue110) {
 
@@ -2008,7 +2008,7 @@ PHP_METHOD(Stub_NativeArray, issue743c) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/709
+ * @link https://github.com/zephir-lang/zephir/issues/709
  */
 PHP_METHOD(Stub_NativeArray, issue709) {
 

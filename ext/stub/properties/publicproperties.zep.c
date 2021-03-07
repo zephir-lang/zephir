@@ -69,13 +69,13 @@ ZEPHIR_INIT_CLASS(Stub_Properties_PublicProperties) {
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSpecifyKeys"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSubArray"), ZEND_ACC_PROTECTED);
 

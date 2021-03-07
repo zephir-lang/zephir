@@ -23,11 +23,11 @@ fi
 test_expect_success "Should generate Stubs" \
   "zephir_stubs && test -d ./ide/0.0.1/Stubs"
 
-# See: https://github.com/phalcon/zephir/issues/1922
+# See: https://github.com/zephir-lang/zephir/issues/1922
 test_expect_success "Should properly generate type hint" \
   "test_cmp expected/Issue_1922.zep.php ide/0.0.1/Stubs/Issue_1922.zep.php"
 
-# See: https://github.com/phalcon/zephir/issues/1778
+# See: https://github.com/zephir-lang/zephir/issues/1778
 test_expect_success "Should properly namespace imports (use block)" \
   "test_cmp expected/Issue_1778.zep.php ide/0.0.1/Stubs/Issue_1778.zep.php"
 
@@ -36,15 +36,15 @@ if test_have_prereq PHP70; then
 else
   expected="Issue_1900.zep.php"
 fi
-# See: https://github.com/phalcon/zephir/issues/1900
+# See: https://github.com/zephir-lang/zephir/issues/1900
 test_expect_success "Should properly generate return types for stubs" \
   "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_1900.zep.php"
 
-# See: https://github.com/phalcon/zephir/issues/1907
+# See: https://github.com/zephir-lang/zephir/issues/1907
 test_expect_success "Should properly generate Namespace for extends" \
   "test_cmp expected/Exception.zep.php ide/0.0.1/Stubs/Exception.zep.php"
 
-# See: https://github.com/phalcon/zephir/issues/1907
+# See: https://github.com/zephir-lang/zephir/issues/1907
 test_expect_success "Should properly generate Namespace for extends (slash)" \
   "test_cmp expected/Issue_1907.zep.php ide/0.0.1/Stubs/Issue_1907.zep.php"
 
@@ -53,15 +53,15 @@ if test_have_prereq PHP70; then
 else
   expected="Issue_1986.zep.php"
 fi
-# See: https://github.com/phalcon/zephir/issues/1986
+# See: https://github.com/zephir-lang/zephir/issues/1986
 test_expect_success "Should properly generate Aliases for use statements" \
   "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_1986.zep.php"
 
-# See: https://github.com/phalcon/zephir/issues/1896
+# See: https://github.com/zephir-lang/zephir/issues/1896
 test_expect_success "Should generage CamelCase folders for stubs" \
   "test $(ls ./ide/0.0.1/Stubs/Events/ManagerInterface.zep.php | sed -e 's~\/~\\~g') = .\ide\0.0.1\Stubs\Events\ManagerInterface.zep.php"
 
-# See: https://github.com/phalcon/zephir/issues/2026
+# See: https://github.com/zephir-lang/zephir/issues/2026
 test_expect_success "Should properly generate return type for Collections" \
   "test_cmp expected/Issue_2026.zep.php ide/0.0.1/Stubs/Issue_2026.zep.php"
 
@@ -70,7 +70,7 @@ if test_have_prereq PHP70; then
 else
   expected="Issue_2092.zep.php"
 fi
-# See: https://github.com/phalcon/zephir/issues/2092
+# See: https://github.com/zephir-lang/zephir/issues/2092
 test_expect_success "Should properly generate return type for type hinted object" \
   "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_2092.zep.php"
 

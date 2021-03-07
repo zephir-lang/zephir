@@ -44,7 +44,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/2057
+ * @issue https://github.com/zephir-lang/zephir/issues/2057
  */
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj) {
 
@@ -83,7 +83,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/2057
+ * @issue https://github.com/zephir-lang/zephir/issues/2057
  */
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew) {
 
@@ -124,7 +124,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/2057
+ * @issue https://github.com/zephir-lang/zephir/issues/2057
  */
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars) {
 
@@ -155,7 +155,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/2057
+ * @issue https://github.com/zephir-lang/zephir/issues/2057
  */
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars) {
 

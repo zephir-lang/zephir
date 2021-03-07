@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Cast) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testCharCastFromChar) {
 
@@ -43,7 +43,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testCharCastFromVariableChar) {
 
@@ -60,7 +60,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastChar) {
 
@@ -73,7 +73,7 @@ PHP_METHOD(Stub_Cast, testStringCastChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastVariableChar) {
 
@@ -118,7 +118,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableFloat) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testIntCastFromChar) {
 
@@ -131,7 +131,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testIntCastFromVariableChar) {
 
@@ -419,7 +419,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testLongCastFromChar) {
 
@@ -432,7 +432,7 @@ PHP_METHOD(Stub_Cast, testLongCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testLongCastFromVariableChar) {
 
@@ -681,7 +681,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testDoubleCastFromVChar) {
 
@@ -694,7 +694,7 @@ PHP_METHOD(Stub_Cast, testDoubleCastFromVChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testDoubleCastFromVariableChar) {
 
@@ -821,7 +821,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromNull) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testBooleanCastFromChar) {
 
@@ -834,7 +834,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testBooleanCastFromVariableChar) {
 

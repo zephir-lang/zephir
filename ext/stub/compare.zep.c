@@ -156,7 +156,7 @@ PHP_METHOD(Stub_Compare, isMoreThenPi) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/411
+ * @link https://github.com/zephir-lang/zephir/issues/411
  */
 PHP_METHOD(Stub_Compare, testVarWithStringEquals) {
 

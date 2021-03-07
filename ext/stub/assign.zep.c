@@ -694,7 +694,7 @@ PHP_METHOD(Stub_Assign, testAssign40) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1573
+ * @link https://github.com/zephir-lang/zephir/issues/1573
  */
 PHP_METHOD(Stub_Assign, testAssign41) {
 
@@ -723,7 +723,7 @@ PHP_METHOD(Stub_Assign, testAssign41) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1573
+ * @link https://github.com/zephir-lang/zephir/issues/1573
  */
 PHP_METHOD(Stub_Assign, testAssign42) {
 
@@ -2446,7 +2446,7 @@ PHP_METHOD(Stub_Assign, testArrayProperty) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/159
+ * @link https://github.com/zephir-lang/zephir/issues/159
  */
 PHP_METHOD(Stub_Assign, testGlobalVarAssign) {
 
@@ -2476,7 +2476,7 @@ PHP_METHOD(Stub_Assign, testGlobalVarAssign) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/523
+ * @link https://github.com/zephir-lang/zephir/issues/523
  */
 PHP_METHOD(Stub_Assign, testConstantKeyAssign) {
 
@@ -2499,7 +2499,7 @@ PHP_METHOD(Stub_Assign, testConstantKeyAssign) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/746
+ * @link https://github.com/zephir-lang/zephir/issues/746
  *
  */
 PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign) {
@@ -2538,7 +2538,7 @@ PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/725
+ * @link https://github.com/zephir-lang/zephir/issues/725
  */
 PHP_METHOD(Stub_Assign, testAssignSuperGlobals) {
 
@@ -2577,7 +2577,7 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobals) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1917
+ * @link https://github.com/zephir-lang/zephir/issues/1917
  */
 PHP_METHOD(Stub_Assign, testAssignSuperGlobalsSERVER) {
 
@@ -2606,7 +2606,7 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsSERVER) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1917
+ * @link https://github.com/zephir-lang/zephir/issues/1917
  */
 PHP_METHOD(Stub_Assign, testAssignSuperGlobalsGET) {
 

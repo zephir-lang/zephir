@@ -80,7 +80,7 @@ class Vars
     }
 
     /**
-     * @link https://github.com/phalcon/zephir/issues/681
+     * @link https://github.com/zephir-lang/zephir/issues/681
      */
     public function testIntVarDump()
     {

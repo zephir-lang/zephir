@@ -126,7 +126,7 @@ PHP_METHOD(Stub_Concat, testConcat2) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1573
+ * @link https://github.com/zephir-lang/zephir/issues/1573
  */
 PHP_METHOD(Stub_Concat, testConcat3) {
 
@@ -150,7 +150,7 @@ PHP_METHOD(Stub_Concat, testConcat3) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1893
+ * @link https://github.com/zephir-lang/zephir/issues/1893
  */
 PHP_METHOD(Stub_Concat, testConcat4) {
 
@@ -199,7 +199,7 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1893
+ * @link https://github.com/zephir-lang/zephir/issues/1893
  */
 PHP_METHOD(Stub_Concat, testConcat5) {
 

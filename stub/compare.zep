@@ -30,7 +30,7 @@ class Compare
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/411
+	 * @link https://github.com/zephir-lang/zephir/issues/411
 	 */
 	public function testVarWithStringEquals(string! str)
 	{

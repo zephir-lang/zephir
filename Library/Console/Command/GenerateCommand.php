@@ -61,7 +61,7 @@ issues.
 
 For more see:
 
-- https://github.com/phalcon/zephir/issues/1950
+- https://github.com/zephir-lang/zephir/issues/1950
 - https://github.com/phalcon/cphalcon/issues/13117
 MSG
             );

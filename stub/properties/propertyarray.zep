@@ -2,7 +2,7 @@
 namespace Stub\Properties;
 
 /**
- * @link https://github.com/phalcon/zephir/issues/520
+ * @link https://github.com/zephir-lang/zephir/issues/520
  */
 class PropertyArray
 {

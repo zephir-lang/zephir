@@ -1,25 +1,27 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class ArrayAccessTest extends TestCase
+final class ArrayAccessTest extends TestCase
 {
-    public function testTest()
+    public function testTest(): void
     {
-        $arrtest = new \Stub\ArrayAccessTest();
+        $class = new \Stub\ArrayAccessTest();
 
-        $this->assertTrue($arrtest->exits('one'));
-        $this->assertSame(2, $arrtest->get());
+        $this->assertTrue($class->exits('one'));
+        $this->assertSame(2, $class->get());
     }
 }

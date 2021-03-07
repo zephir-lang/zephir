@@ -1,32 +1,38 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class IssetTest extends TestCase
+final class IssetTest extends TestCase
 {
-    public $b = 'a';
-    private $test2 = 'b';
+    public string $b = 'a';
+    private \Stub\IssetTest $test;
 
-    /** @var \Stub\IssetTest */
-    private $test;
+    /**
+     * This property is used during test
+     *
+     * @var mixed
+     */
+    private $test2;
 
     protected function setUp(): void
     {
         $this->test = new \Stub\IssetTest();
     }
 
-    public function testIssetArray()
+    public function testIssetArray(): void
     {
         $testArray = ['a', 'abc' => 'def', 'gef' => '123'];
         $this->assertTrue($this->test->testIssetArray1($testArray, 'abc'));
@@ -36,15 +42,15 @@ class IssetTest extends TestCase
         $this->assertTrue(!$this->test->testIssetArray5($testArray));
     }
 
-    public function testIssetProperties()
+    public function testIssetProperties(): void
     {
         $this->assertTrue($this->test->testIssetProperty1($this));
         $this->assertTrue($this->test->testIssetProperty2($this, 'test2'));
-        $this->assertTrue(!$this->test->testIssetProperty2($this, 'test3'));
+        $this->assertFalse($this->test->testIssetProperty2($this, 'test3'));
         $this->assertTrue($this->test->testIssetProperty3($this));
     }
 
-    public function testIssetDynamicProperty()
+    public function testIssetDynamicProperty(): void
     {
         $this->assertTrue($this->test->testIssetDynamicProperty1());
         $this->assertTrue(!$this->test->testIssetDynamicProperty2($this));

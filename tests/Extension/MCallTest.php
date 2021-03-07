@@ -1,26 +1,32 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 use Stub\Mcall;
+use Stub\Oo\Param;
 
-class MCallTest extends TestCase
+final class MCallTest extends TestCase
 {
-    /** @var \ReflectionClass */
+    /**
+     * @var mixed
+     */
     private $reflection;
-
-    /** @var Mcall */
-    private $test;
+    private Mcall $test;
 
     protected function setUp(): void
     {
@@ -136,16 +142,11 @@ class MCallTest extends TestCase
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame(\Stub\Oo\Param::class, $this->getMethodFirstParameter()->getType()->getName());
-        $this->assertInstanceOf(\Stub\Oo\Param::class, $this->test->testObjectParamCastOoParam(new \Stub\Oo\Param()));
+        $this->assertSame(Param::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertInstanceOf(Param::class, $this->test->testObjectParamCastOoParam(new Param()));
     }
 
-    /**
-     * @return \ReflectionParameter
-     *
-     * @throws \ReflectionException
-     */
-    protected function getMethodFirstParameter()
+    protected function getMethodFirstParameter(): ReflectionParameter
     {
         $methodInfo = $this->reflection->getMethod($this->getName());
         $parameters = $methodInfo->getParameters();
@@ -153,16 +154,19 @@ class MCallTest extends TestCase
         return $parameters[0];
     }
 
+    /**
+     * @return mixed|ReflectionClass
+     */
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new \ReflectionClass(\Stub\Mcall::class);
+            return $this->reflection = new ReflectionClass(Mcall::class);
         }
 
         return $this->reflection;
     }
 
-    public function testSouldThrowTypeErrorForOptionalBoolean1()
+    public function testSouldThrowTypeErrorForOptionalBoolean1(): void
     {
         $test = new Mcall();
 
@@ -175,7 +179,7 @@ class MCallTest extends TestCase
         $test->optionalParameterBoolean('test');
     }
 
-    public function testShouldThrowTypeErrorForOptionalBoolean2()
+    public function testShouldThrowTypeErrorForOptionalBoolean2(): void
     {
         $test = new Mcall();
 

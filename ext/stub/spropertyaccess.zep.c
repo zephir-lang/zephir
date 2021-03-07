@@ -205,7 +205,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1494
+ * @see https://github.com/zephir-lang/zephir/issues/1494
  */
 PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle) {
 
@@ -245,7 +245,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1494
+ * @see https://github.com/zephir-lang/zephir/issues/1494
  */
 PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle) {
 

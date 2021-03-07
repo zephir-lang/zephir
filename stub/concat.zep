@@ -34,7 +34,7 @@ class Concat
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1573
+	 * @link https://github.com/zephir-lang/zephir/issues/1573
 	 */
 	public function testConcat3() -> string
 	{
@@ -46,7 +46,7 @@ class Concat
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1893
+	 * @link https://github.com/zephir-lang/zephir/issues/1893
 	 */
 	public function testConcat4(var value) -> string
 	{
@@ -63,7 +63,7 @@ class Concat
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1893
+	 * @link https://github.com/zephir-lang/zephir/issues/1893
 	 */
 	public function testConcat5(double number) -> string
 	{

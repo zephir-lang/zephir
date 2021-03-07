@@ -451,7 +451,7 @@ PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/681
+ * @link https://github.com/zephir-lang/zephir/issues/681
  */
 PHP_METHOD(Stub_Vars, testIntVarDump) {
 

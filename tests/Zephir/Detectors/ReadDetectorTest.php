@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Detectors;
@@ -14,7 +16,7 @@ namespace Zephir\Test\Detectors;
 use PHPUnit\Framework\TestCase;
 use Zephir\Detectors\ReadDetector;
 
-class ReadDetectorTest extends TestCase
+final class ReadDetectorTest extends TestCase
 {
     /**
      * @dataProvider variableProvider
@@ -23,7 +25,7 @@ class ReadDetectorTest extends TestCase
      * @param string $variable
      * @param array  $expression
      */
-    public function testShouldDetectsIfVariableIsUsedInGivenExpressionContext(bool $expected, string $variable, array $expression)
+    public function testShouldDetectsIfVariableIsUsedInGivenExpressionContext(bool $expected, string $variable, array $expression): void
     {
         $detector = new ReadDetector();
 

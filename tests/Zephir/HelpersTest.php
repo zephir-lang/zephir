@@ -1,24 +1,27 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
+
 use function Zephir\add_slashes;
 use function Zephir\camelize;
 use function Zephir\escape_class;
 
-class HelpersTest extends TestCase
+final class HelpersTest extends TestCase
 {
-    public function testShouldEscapeClassName()
+    public function testShouldEscapeClassName(): void
     {
         $classname = '\Bar\Foo';
         $this->assertSame(
@@ -27,7 +30,7 @@ class HelpersTest extends TestCase
         );
     }
 
-    public function testShouldCamelizeClassName()
+    public function testShouldCamelizeClassName(): void
     {
         $name = 'foo_Bar_Foo_bar';
         $this->assertSame(
@@ -67,8 +70,10 @@ class HelpersTest extends TestCase
 
     /**
      * @dataProvider cStringProvider
+     * @param string $testString
+     * @param string $expected
      */
-    public function testShouldPrepareStringAsCString(string $testString, string $expected)
+    public function testShouldPrepareStringAsCString(string $testString, string $expected): void
     {
         $this->assertSame($expected, add_slashes($testString));
     }

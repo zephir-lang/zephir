@@ -8,7 +8,7 @@ class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterfac
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/2057
+     * @issue https://github.com/zephir-lang/zephir/issues/2057
      */
     public function setPropertyObj(var obj, string property, var value) -> var
     {
@@ -18,7 +18,7 @@ class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterfac
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/2057
+     * @issue https://github.com/zephir-lang/zephir/issues/2057
      */
     public function setPropertyNew(string className, string property, var value) -> var
     {
@@ -31,7 +31,7 @@ class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterfac
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/2057
+     * @issue https://github.com/zephir-lang/zephir/issues/2057
      */
     public function getObjVars(var obj) -> var
     {
@@ -39,7 +39,7 @@ class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterfac
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/2057
+     * @issue https://github.com/zephir-lang/zephir/issues/2057
      */
     public function getNewVars(string className) -> var
     {

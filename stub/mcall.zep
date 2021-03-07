@@ -206,7 +206,7 @@ class Mcall
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/142
+	 * @link https://github.com/zephir-lang/zephir/issues/142
 	 */
 	public function testArrayParamWithDefaultEmptyArray(array driverOptions = [])
 	{

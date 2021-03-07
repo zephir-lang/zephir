@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Optimizers;
@@ -14,9 +16,9 @@ namespace Extension\Optimizers;
 use PHPUnit\Framework\TestCase;
 use Stub\Optimizers\Substr;
 
-class SubstrTest extends TestCase
+final class SubstrTest extends TestCase
 {
-    public function testTwoArguments1()
+    public function testTwoArguments1(): void
     {
         $test = new Substr();
 
@@ -34,7 +36,7 @@ class SubstrTest extends TestCase
         }
     }
 
-    public function testThreeArguments1()
+    public function testThreeArguments1(): void
     {
         $test = new Substr();
         $this->assertSame($test->testThreeArguments('abcdef', 0, -3), 'abc');

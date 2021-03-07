@@ -305,8 +305,8 @@ class Generator
         /**
          * TODO: Add $method->isVoid() check after removing PHP 7.0 support.
          *
-         * @see https://github.com/phalcon/zephir/issues/1977
-         * @see https://github.com/phalcon/zephir/pull/1978
+         * @see https://github.com/zephir-lang/zephir/issues/1977
+         * @see https://github.com/zephir-lang/zephir/pull/1978
          */
         if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
             $supported = 0;

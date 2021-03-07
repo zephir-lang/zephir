@@ -20,7 +20,7 @@
 
 
 /**
- * @link https://github.com/phalcon/zephir/issues/520
+ * @link https://github.com/zephir-lang/zephir/issues/520
  */
 ZEPHIR_INIT_CLASS(Stub_Properties_PropertyArray) {
 

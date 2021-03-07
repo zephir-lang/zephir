@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Documentation\Annotation;
@@ -14,11 +16,11 @@ namespace Zephir\Test\Documentation\Annotation;
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation\See;
 
-class SeeTest extends TestCase
+final class SeeTest extends TestCase
 {
-    const SEE_NAME = 'see';
+    private const SEE_NAME = 'see';
 
-    public function testShouldGetLink()
+    public function testShouldGetLink(): void
     {
         $link = new See(self::SEE_NAME, '  sample with leading space  ');
 
@@ -33,20 +35,20 @@ class SeeTest extends TestCase
         $this->assertSame('another link', $link->getString());
     }
 
-    public function testShouldGetResource()
+    public function testShouldGetResource(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 
         $this->assertSame(self::SEE_NAME, $link->getName());
         $this->assertSame($testString, $link->getString());
-        $this->assertSame('https://github.com/phalcon/zephir', $link->getResource());
+        $this->assertSame('https://github.com/zephir-lang/zephir', $link->getResource());
     }
 
-    public function testShouldGetText()
+    public function testShouldGetText(): void
     {
-        $testString = 'https://github.com/phalcon/zephir Zephir SRC';
+        $testString = 'https://github.com/zephir-lang/zephir Zephir SRC';
 
         $link = new See(self::SEE_NAME, $testString);
 

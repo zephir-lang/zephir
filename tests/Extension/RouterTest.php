@@ -1,21 +1,24 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Router;
 
-class RouterTest extends TestCase
+final class RouterTest extends TestCase
 {
-    public function testRouter()
+    public function testRouter(): void
     {
         $tests = [
             [
@@ -122,7 +125,7 @@ class RouterTest extends TestCase
             ],
         ];
 
-        $router = new \Stub\Router();
+        $router = new Router();
 
         $router->add('/', [
             'controller' => 'index',
@@ -174,11 +177,8 @@ class RouterTest extends TestCase
         ]);
 
         $router->add("/feed/{lang:[a-z]+}/blog/{blog:[a-z\-]+}\.{type:[a-z\-]+}", 'Feed::get');
-
         $router->add("/posts/{year:[0-9]+}/s/{title:[a-z\-]+}", 'Posts::show');
-
         $router->add('/posts/delete/{id}', 'Posts::delete');
-
         $router->add("/show/{id:video([0-9]+)}/{title:[a-z\-]+}", 'Videos::show');
 
         foreach ($tests as $n => $test) {

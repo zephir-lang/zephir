@@ -52,13 +52,13 @@ class PublicProperties
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	protected someArrayWithSpecifyKeys = ["a": "A", "b": "B", "c": "C"];
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	protected someArrayWithSubArray = [
 		"success": ["class": "alert alert-success"],

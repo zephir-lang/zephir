@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_Optimizers_StrReplace) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1055
+ * @link https://github.com/zephir-lang/zephir/issues/1055
  */
 PHP_METHOD(Stub_Optimizers_StrReplace, issue1055) {
 

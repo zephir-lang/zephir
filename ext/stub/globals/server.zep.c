@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Server) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1961
+ * @see https://github.com/zephir-lang/zephir/issues/1961
  */
 PHP_METHOD(Stub_Globals_Server, f1) {
 
@@ -71,7 +71,7 @@ PHP_METHOD(Stub_Globals_Server, f2) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1970
+ * @see https://github.com/zephir-lang/zephir/issues/1970
  */
 PHP_METHOD(Stub_Globals_Server, check) {
 

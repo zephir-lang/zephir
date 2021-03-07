@@ -1,35 +1,37 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Chars;
 
-class CharsTest extends TestCase
+final class CharsTest extends TestCase
 {
-    /** @var \Stub\Chars */
-    private $test;
+    private Chars $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Chars();
+        $this->test = new Chars();
     }
 
-    public function testSumChars()
+    public function testSumChars(): void
     {
         $this->assertSame(\chr($this->test->sumChars1()), 'a');
         $this->assertSame(\chr($this->test->sumChars2('A')), 'a');
     }
 
-    public function testDiffChars()
+    public function testDiffChars(): void
     {
         $this->assertSame(\chr($this->test->diffChars1()), 'A');
         $this->assertSame(\chr($this->test->diffChars2('a')), 'A');

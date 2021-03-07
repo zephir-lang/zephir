@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\TypeHinting;
@@ -14,12 +16,12 @@ namespace Extension\TypeHinting;
 use PHPUnit\Framework\TestCase;
 use TestConcreteClass;
 
-class AbstractTest extends TestCase
+final class AbstractTest extends TestCase
 {
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
-    public function testShouldCreateCompatibleChildClassUsingTypeHintedParams()
+    public function testShouldCreateCompatibleChildClassUsingTypeHintedParams(): void
     {
         $childClass = new TestConcreteClass();
 
@@ -35,18 +37,18 @@ class AbstractTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
-    public function testShouldCreateCompatibleChildClassWithMultipleReturnTypesHint()
+    public function testShouldCreateCompatibleChildClassWithMultipleReturnTypesHint(): void
     {
         $childClass = new TestConcreteClass();
         $this->assertEquals('TestConcreteClass::returnOneOfScalar', $childClass->returnOneOfScalar());
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1667
+     * @issue https://github.com/zephir-lang/zephir/issues/1667
      */
-    public function testShouldCreateCompatibleChildClassWithScalarType()
+    public function testShouldCreateCompatibleChildClassWithScalarType(): void
     {
         $childClass = new TestConcreteClass();
 

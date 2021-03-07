@@ -1,35 +1,38 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Arithmetic;
 
-class ArithmeticTest extends TestCase
+final class ArithmeticTest extends TestCase
 {
-    protected $class;
+    protected Arithmetic $class;
 
     protected function setUp(): void
     {
-        $this->class = new \Stub\Arithmetic();
+        $this->class = new Arithmetic();
     }
 
-    public function testIntSum()
+    public function testIntSum(): void
     {
         $this->assertSame($this->class->intSum(), 3);
         $this->assertSame($this->class->int2Sum(), 3);
         $this->assertSame($this->class->intSumSimple(), 3);
     }
 
-    public function testDoubleSum()
+    public function testDoubleSum(): void
     {
         $this->assertSame($this->class->doubleSum(), 3.0);
         $this->assertSame($this->class->double2Sum(), 3.0);
@@ -37,7 +40,7 @@ class ArithmeticTest extends TestCase
         $this->assertSame($this->class->doubleSum2Simple(), 3.0);
     }
 
-    public function testSummTest()
+    public function testSummTest(): void
     {
         $this->assertSame($this->class->varSum(), 3);
         $this->assertSame($this->class->varSumSimple(), 3);
@@ -74,7 +77,7 @@ class ArithmeticTest extends TestCase
         $this->assertSame($this->class->complex24Sum(), 3.0);
     }
 
-    public function testBoolSum()
+    public function testBoolSum(): void
     {
         $this->assertTrue($this->class->boolSum());
         $this->assertTrue($this->class->bool2Sum());
@@ -82,7 +85,7 @@ class ArithmeticTest extends TestCase
         $this->assertTrue($this->class->boolSumSimple());
     }
 
-    public function testVarLess()
+    public function testVarLess(): void
     {
         $this->assertTrue($this->class->less1());
         $this->assertFalse($this->class->less2());
@@ -104,7 +107,7 @@ class ArithmeticTest extends TestCase
         $this->assertTrue($this->class->less4(4));
     }
 
-    public function testVarGreater()
+    public function testVarGreater(): void
     {
         $this->assertFalse($this->class->greater1());
         $this->assertTrue($this->class->greater2());
@@ -126,7 +129,7 @@ class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->greater4(4));
     }
 
-    public function testAddSum()
+    public function testAddSum(): void
     {
         $this->assertSame($this->class->addSum1(), 10);
         $this->assertSame($this->class->addSum2(), 0);
@@ -159,7 +162,7 @@ class ArithmeticTest extends TestCase
         $this->assertSame($this->class->addSum24(1), 1 + (1 << 10));
     }
 
-    public function testSubTest()
+    public function testSubTest(): void
     {
         $this->assertSame($this->class->intSub(), -1);
         $this->assertSame($this->class->intSub2(), -1);
@@ -235,20 +238,20 @@ class ArithmeticTest extends TestCase
         $this->assertSame($this->class->sub24(1), 1 - (1 << 10));
     }
 
-    public function testMul()
+    public function testMul(): void
     {
         $this->assertSame($this->class->mul1(), 5);
         $this->assertSame($this->class->mul2(5), 25);
         $this->assertSame($this->class->mul3(), 1 * (1 << 10));
     }
 
-    public function testDiv()
+    public function testDiv(): void
     {
         $this->assertSame(24.75, $this->class->div1());
         $this->assertSame(24.75, $this->class->div2());
     }
 
-    public function testLetStatement()
+    public function testLetStatement(): void
     {
         $this->assertSame($this->class->letStatementIntMinus(), -1);
         $this->assertSame($this->class->letStatementVarMinus(1), -1);

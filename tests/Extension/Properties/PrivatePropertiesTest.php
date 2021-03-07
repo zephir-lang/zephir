@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -14,9 +16,9 @@ namespace Extension\Properties;
 use PHPUnit\Framework\TestCase;
 use Stub\Properties\PrivateProperties;
 
-class PrivatePropertiesTest extends TestCase
+final class PrivatePropertiesTest extends TestCase
 {
-    public function testAssertations()
+    public function testAssertations(): void
     {
         $test = new PrivateProperties();
 

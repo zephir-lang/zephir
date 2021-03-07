@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,10 +16,9 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Strings;
 
-class StringTest extends TestCase
+final class StringTest extends TestCase
 {
-    /** @var Strings */
-    private $test;
+    private Strings $test;
 
     protected function setUp(): void
     {
@@ -31,7 +32,7 @@ class StringTest extends TestCase
      * @param mixed $userString
      * @param mixed $expected
      */
-    public function testHashEquals($knownString, $userString, $expected)
+    public function testHashEquals($knownString, $userString, $expected): void
     {
         $salt = '$2a$07$usesomesillystringforsalt$';
         $knownString = crypt($knownString, $salt);
@@ -43,10 +44,10 @@ class StringTest extends TestCase
     /**
      * @dataProvider providerHashEqualsNonString
      *
-     * @param string $knownString
-     * @param string $userString
+     * @param mixed $knownString
+     * @param mixed $userString
      */
-    public function testHashEqualsNonString($knownString, $userString)
+    public function testHashEqualsNonString($knownString, $userString): void
     {
         $this->assertFalse($this->test->testHashEquals($knownString, $userString));
     }
@@ -58,7 +59,7 @@ class StringTest extends TestCase
      * @param mixed $expected
      * @param mixed $delimiter
      */
-    public function testCamelize($actual, $expected, $delimiter)
+    public function testCamelize($actual, $expected, $delimiter): void
     {
         $this->assertSame($expected, $this->test->camelize($actual, $delimiter));
     }
@@ -68,7 +69,7 @@ class StringTest extends TestCase
      *
      * @param mixed $delimiter
      */
-    public function testCamelizeWrongSecondParam($delimiter)
+    public function testCamelizeWrongSecondParam($delimiter): void
     {
         $this->expectWarning();
         $this->expectExceptionMessage(
@@ -85,7 +86,7 @@ class StringTest extends TestCase
      * @param mixed $expected
      * @param mixed $delimiter
      */
-    public function testUnCamelize($actual, $expected, $delimiter)
+    public function testUnCamelize($actual, $expected, $delimiter): void
     {
         $this->assertSame($expected, $this->test->uncamelize($actual, $delimiter));
     }
@@ -95,7 +96,7 @@ class StringTest extends TestCase
      *
      * @param mixed $delimiter
      */
-    public function testUnCamelizeWrongSecondParam($delimiter)
+    public function testUnCamelizeWrongSecondParam($delimiter): void
     {
         $this->expectWarning();
         $this->expectExceptionMessage(
@@ -105,7 +106,7 @@ class StringTest extends TestCase
         $this->test->uncamelize('CameLiZe', $delimiter);
     }
 
-    public function testTrim()
+    public function testTrim(): void
     {
         $testSuite = [
             [' hello ', 'hello'],
@@ -120,7 +121,7 @@ class StringTest extends TestCase
         $this->assertSame($this->test->testTrim2Params('Hello World', 'Hdle'), 'o Wor');
     }
 
-    public function testLtrim()
+    public function testLtrim(): void
     {
         $testSuite = [
             [' hello ', 'hello '],
@@ -135,7 +136,7 @@ class StringTest extends TestCase
         $this->assertSame($this->test->testLtrim2Params('Hello World', 'Hdle'), 'o World');
     }
 
-    public function testRtrim()
+    public function testRtrim(): void
     {
         $testSuite = [
             [' hello ', ' hello'],
@@ -150,19 +151,19 @@ class StringTest extends TestCase
         $this->assertSame($this->test->testRtrim2Params('Hello World', 'Hdle'), 'Hello Wor');
     }
 
-    public function testStrpos()
+    public function testStrpos(): void
     {
         $this->assertSame($this->test->testStrpos('abcdef abcdef', 'a'), 0);
         $this->assertSame($this->test->testStrposOffset('abcdef abcdef', 'a', 1), 7);
     }
 
-    public function testImplode()
+    public function testImplode(): void
     {
         $pieces = ['a', 'b', 'c'];
         $this->assertSame($this->test->testImplode(',', $pieces), 'a,b,c');
     }
 
-    public function testExplode()
+    public function testExplode(): void
     {
         $pizza = 'piece1,piece2,piece3,piece4,piece5,piece6';
         $ar1 = $this->test->testExplode(',', $pizza);
@@ -193,8 +194,15 @@ class StringTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerSubstring */
-    public function testSubstr(string $input, int $start, int $end, string $expected)
+    /**
+     * @dataProvider providerSubstring
+     *
+     * @param string $input
+     * @param int $start
+     * @param int $end
+     * @param string $expected
+     */
+    public function testSubstr(string $input, int $start, int $end, string $expected): void
     {
         $this->assertSame($this->test->testSubstr($input, $start, $end), $expected);
 
@@ -215,19 +223,29 @@ class StringTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerAddStripSlashes */
-    public function testAddslashes(string $sample, string $expected)
+    /**
+     * @dataProvider providerAddStripSlashes
+     *
+     * @param string $sample
+     * @param string $expected
+     */
+    public function testAddslashes(string $sample, string $expected): void
     {
         $this->assertSame($this->test->testAddslashes($sample), addslashes($expected));
     }
 
-    /** @dataProvider providerAddStripSlashes */
-    public function testStripslashes(string $sample, string $expected)
+    /**
+     * @dataProvider providerAddStripSlashes
+     *
+     * @param string $sample
+     * @param string $expected
+     */
+    public function testStripslashes(string $sample, string $expected): void
     {
         $this->assertSame($this->test->testStripslashes(addslashes($sample)), $expected);
     }
 
-    public function testStripcslashes()
+    public function testStripcslashes(): void
     {
         parent::assertSame(
             stripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z'),
@@ -237,7 +255,7 @@ class StringTest extends TestCase
         parent::assertSame(stripcslashes(''), $this->test->testStripcslashes(''));
     }
 
-    public function testMultilineStrings()
+    public function testMultilineStrings(): void
     {
         $hardcodedString = '
             Hello world
@@ -253,12 +271,12 @@ class StringTest extends TestCase
         $this->assertSame($escapedString, $this->test->testWellEscapedMultilineString());
     }
 
-    public function testStrToHex()
+    public function testStrToHex(): void
     {
         $this->assertSame('746573742073656e74656e73652e2e2e', $this->test->strToHex('test sentense...'));
     }
 
-    public function providerHashEquals()
+    public function providerHashEquals(): array
     {
         return [
             ['Phalcon',    'Phalcony',    false],
@@ -275,7 +293,7 @@ class StringTest extends TestCase
         ];
     }
 
-    public function providerHashEqualsNonString()
+    public function providerHashEqualsNonString(): array
     {
         return [
             [null,       123,        false],
@@ -289,7 +307,7 @@ class StringTest extends TestCase
         ];
     }
 
-    public function providerCamelize()
+    public function providerCamelize(): array
     {
         return [
             ['=_camelize',      '=Camelize', '_'],
@@ -307,7 +325,7 @@ class StringTest extends TestCase
         ];
     }
 
-    public function providerUnCamelize()
+    public function providerUnCamelize(): array
     {
         return [
             ['=Camelize', '=_camelize',      '_'],
@@ -322,7 +340,7 @@ class StringTest extends TestCase
         ];
     }
 
-    public function providerCamelizeWrongSecondParam()
+    public function providerCamelizeWrongSecondParam(): array
     {
         return [
             [''],

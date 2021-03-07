@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -15,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 use Stub\Constants;
 use Stub\Oo\ConstantsInterface;
 
-class ConstantsTest extends TestCase
+final class ConstantsTest extends TestCase
 {
     const EXPECTED_DOUBLE_DELIMITER = '.';
     const EXPECTED_CONST_VARS = '$SOME/CSRF/KEY$';
 
-    protected $test;
+    protected ?Constants $test = null;
 
     protected function setUp(): void
     {
@@ -32,7 +34,7 @@ class ConstantsTest extends TestCase
         $this->test = null;
     }
 
-    public function testConstantsDeclaration()
+    public function testConstantsDeclaration(): void
     {
         $this->assertNull(Constants::C1);
         $this->assertFalse(Constants::C2);
@@ -44,7 +46,7 @@ class ConstantsTest extends TestCase
         $this->assertSame(Constants::STD_PROP_LIST, \ArrayObject::STD_PROP_LIST);
     }
 
-    public function testConstantGetters()
+    public function testConstantGetters(): void
     {
         $this->assertNull($this->test->getPropertyC1());
         $this->assertFalse($this->test->getPropertyC2());
@@ -55,7 +57,7 @@ class ConstantsTest extends TestCase
         $this->assertSame($this->test->getPropertyC9(), 'some-value');
     }
 
-    public function testConstantsRead()
+    public function testConstantsRead(): void
     {
         $this->assertSame($this->test->testReadConstant(), ENT_QUOTES);
         $this->assertSame($this->test->testReadClassConstant1(), Constants::C4);
@@ -63,7 +65,7 @@ class ConstantsTest extends TestCase
         $this->assertSame($this->test->testReadClassConstant3(), \Stub\ConstantsParent::P4);
     }
 
-    public function testEnvConstants()
+    public function testEnvConstants(): void
     {
         $phpVersion = $this->test->testPHPVersionEnvConstant();
         $this->assertTrue(\is_string($phpVersion) && !empty($phpVersion));
@@ -72,7 +74,7 @@ class ConstantsTest extends TestCase
         $this->assertTrue(\is_string($phpVersion) && !empty($phpVersion));
     }
 
-    public function testMagickConstants()
+    public function testMagickConstants(): void
     {
         $this->assertSame($this->test->testNamespaceMagicConstant(), 'Stub');
         $this->assertSame($this->test->testClassMagicConstant(), 'Stub\Constants');
@@ -90,24 +92,24 @@ class ConstantsTest extends TestCase
      * @author Alexnder Andriiako <AlexNDR@phalconphp.com>
      *
      * @since 2017-08-09
-     * @see https://github.com/phalcon/zephir/issues/1571
+     * @issue https://github.com/zephir-lang/zephir/issues/1571
      */
-    public function testStringDelimiterAsConstDoubleQuoted()
+    public function testStringDelimiterAsConstDoubleQuoted(): void
     {
         $this->assertSame($this->test->testStringDelimiterConstantDoubleQuoted(), self::EXPECTED_DOUBLE_DELIMITER);
     }
 
-    public function testStringConstWithPhpVars()
+    public function testStringConstWithPhpVars(): void
     {
         $this->assertSame($this->test->testStringConstantWithVars(), self::EXPECTED_CONST_VARS);
     }
 
-    public function testStringConstWithPhpVarsAssigned()
+    public function testStringConstWithPhpVarsAssigned(): void
     {
         $this->assertSame($this->test->testStringPropertyWithVarsAssigned(), self::EXPECTED_CONST_VARS);
     }
 
-    public function testStringConstWithPhpVarsGet()
+    public function testStringConstWithPhpVarsGet(): void
     {
         $this->assertSame($this->test->testStringPropertyWithVarsGet(), self::EXPECTED_CONST_VARS);
     }

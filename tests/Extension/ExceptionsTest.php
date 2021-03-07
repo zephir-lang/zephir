@@ -1,12 +1,12 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -15,10 +15,9 @@ use PHPUnit\Framework\TestCase;
 use Stub\Exception;
 use Stub\Exceptions;
 
-class ExceptionsTest extends TestCase
+final class ExceptionsTest extends TestCase
 {
-    /** @var Exceptions */
-    private $test;
+    private Exceptions $test;
 
     protected function setUp(): void
     {
@@ -27,7 +26,7 @@ class ExceptionsTest extends TestCase
 
     public function testException1(): void
     {
-        $this->expectException(\Stub\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('hello1');
 
         $this->test->testException1();
@@ -35,7 +34,7 @@ class ExceptionsTest extends TestCase
 
     public function testException2(): void
     {
-        $this->expectException(\Stub\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('hello2');
 
         $this->test->testException2();
@@ -43,7 +42,7 @@ class ExceptionsTest extends TestCase
 
     public function testException3(): void
     {
-        $this->expectException(\Stub\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('hello3');
 
         $this->test->testException3();
@@ -51,7 +50,7 @@ class ExceptionsTest extends TestCase
 
     public function testException4(): void
     {
-        $this->expectException(\Stub\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('hello4');
 
         $this->test->testException4();
@@ -59,7 +58,7 @@ class ExceptionsTest extends TestCase
 
     public function testException5(): void
     {
-        $this->expectException(\Stub\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('hello5');
 
         $this->test->testException5();

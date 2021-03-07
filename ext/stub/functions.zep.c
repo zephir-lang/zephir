@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Functions) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/658
+ * @issue https://github.com/zephir-lang/zephir/issues/658
  */
 PHP_METHOD(Stub_Functions, filterVar1) {
 
@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Functions, filterVar1) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/658
+ * @issue https://github.com/zephir-lang/zephir/issues/658
  */
 PHP_METHOD(Stub_Functions, filterVar2) {
 

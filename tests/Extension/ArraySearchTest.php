@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,10 +16,9 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\ArraySearch;
 
-class ArraySearchTest extends TestCase
+final class ArraySearchTest extends TestCase
 {
-    /** @var ArraySearch */
-    private $test;
+    private ArraySearch $test;
 
     protected function setUp(): void
     {
@@ -25,9 +26,9 @@ class ArraySearchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1609
+     * @issue https://github.com/zephir-lang/zephir/issues/1609
      */
-    public function testShouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
+    public function testShouldSearchInTheExternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey(): void
     {
         $needle = 'value';
         $haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
@@ -36,9 +37,9 @@ class ArraySearchTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1609
+     * @issue https://github.com/zephir-lang/zephir/issues/1609
      */
-    public function testShouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey()
+    public function testShouldSearchInTheInternalArrayForAGivenValueAndReturnTheFirstCorrespondingKey(): void
     {
         $this->assertEquals(7, $this->test->searchUsingArrayInsideZephir());
     }

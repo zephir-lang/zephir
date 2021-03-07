@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_ServerRequestFactory) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1934
+ * @link https://github.com/zephir-lang/zephir/issues/1934
  */
 PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 

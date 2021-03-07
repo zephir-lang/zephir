@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Documentation;
@@ -19,9 +21,9 @@ use Zephir\Documentation\Annotation\See;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 
-class DocblockParserTest extends TestCase
+final class DocblockParserTest extends TestCase
 {
-    public function testShouldParseDocblockFromString()
+    public function testShouldParseDocblockFromString(): void
     {
         $test = <<<DOC
 /**
@@ -29,8 +31,8 @@ class DocblockParserTest extends TestCase
  *
  * Helper to parse raw docblocks to structured object.
  *
- * @link https://github.com/phalcon/zephir - Zephir
- * @see  https://github.com/phalcon/zephir/README.md - Zephir readme
+ * @link https://github.com/zephir-lang/zephir - Zephir
+ * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
  *
  * @param array \$annotation - custom annotation
  *
@@ -38,10 +40,10 @@ class DocblockParserTest extends TestCase
  */
 DOC;
 
-        $link = new Link('link', 'https://github.com/phalcon/zephir - Zephir');
+        $link = new Link('link', 'https://github.com/zephir-lang/zephir - Zephir');
         $link->getLinkText();
 
-        $see = new See('see', 'https://github.com/phalcon/zephir/README.md - Zephir readme');
+        $see = new See('see', 'https://github.com/zephir-lang/zephir/README.md - Zephir readme');
         $see->getResource();
 
         $return = new ReturnAnnotation('return', 'Docblock the parsed docblock');

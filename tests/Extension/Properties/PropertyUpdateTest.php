@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Properties;
@@ -14,7 +16,7 @@ namespace Extension\Properties;
 use PHPUnit\Framework\TestCase;
 use Stub\Properties\PropertyUpdate;
 
-class PropertyUpdateTest extends TestCase
+final class PropertyUpdateTest extends TestCase
 {
     public function testUpdate11()
     {

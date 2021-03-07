@@ -165,7 +165,7 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/336
+ * @link https://github.com/zephir-lang/zephir/issues/336
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) {
 
@@ -201,7 +201,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 
 /**
  * For string parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess) {
 
@@ -238,7 +238,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 
 /**
  * For double parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess) {
 
@@ -271,7 +271,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 
 /**
  * For bool parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess) {
 
@@ -304,7 +304,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 
 /**
  * For int parameter
- * @link https://github.com/phalcon/zephir/issues/728
+ * @link https://github.com/zephir-lang/zephir/issues/728
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess) {
 
