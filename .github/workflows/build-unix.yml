@@ -165,7 +165,7 @@ jobs:
           CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
 
           # Export variables in the subshell to not shadow global variables
-          ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
+          ( export LDFLAGS CFLAGS CXXFLAGS; zephir fullclean && zephir generate && cd ext/ && ./install ) || false
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo ::add-matcher::${{ runner.tool_cache }}/phpunit.json
