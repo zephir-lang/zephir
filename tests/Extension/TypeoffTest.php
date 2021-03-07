@@ -1,64 +1,66 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Typeoff;
 
-class TypeoffTest extends TestCase
+final class TypeoffTest extends TestCase
 {
-    /** @var \Stub\Typeoff */
-    private $test;
+    private Typeoff $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Typeoff();
+        $this->test = new Typeoff();
     }
 
-    public function testNativeString()
+    public function testNativeString(): void
     {
         $this->assertFalse($this->test->testNativeStringFalse());
         $this->assertTrue($this->test->testNativeStringTrue());
     }
 
-    public function testNativeInt()
+    public function testNativeInt(): void
     {
         $this->assertFalse($this->test->testNativeIntFalse());
         $this->assertTrue($this->test->testNativeIntTrue());
     }
 
-    public function testNativeDouble()
+    public function testNativeDouble(): void
     {
         $this->assertTrue($this->test->testNativeDoubleTrue());
     }
 
-    public function testNativeBool()
+    public function testNativeBool(): void
     {
         $this->assertFalse($this->test->testNativeBoolFalse());
         $this->assertTrue($this->test->testNativeBoolTrue());
         $this->assertFalse($this->test->testNotBoolTrue());
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $this->assertFalse($this->test->testArrayFalse());
         $this->assertTrue($this->test->testArrayTrue());
     }
 
-    public function testClassProperty()
+    public function testClassProperty(): void
     {
         $this->assertTrue($this->test->testClassPropertyAccess());
     }
 
-    public function testCallable()
+    public function testCallable(): void
     {
         $callback = function () {
         };
@@ -66,7 +68,7 @@ class TypeoffTest extends TestCase
         $this->assertFalse($this->test->testCallableTypeOf(true));
     }
 
-    public function testUnknown()
+    public function testUnknown(): void
     {
         $this->assertSame('string', $this->test->testUnknownTypeOf('test'));
         $this->assertSame('integer', $this->test->testUnknownTypeOf(5));

@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
@@ -36,7 +38,7 @@ class KernelTestCase extends BaseTestCase
      *
      * @throws \RuntimeException
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         if (null === static::$class) {
             static::$class = static::getKernelClass();
@@ -79,7 +81,7 @@ class KernelTestCase extends BaseTestCase
      *
      * @param ContainerInterface $container
      */
-    protected function muteOutput(ContainerInterface $container)
+    protected function muteOutput(ContainerInterface $container): void
     {
         try {
             $container->get(Config::class)->set('silent', true);

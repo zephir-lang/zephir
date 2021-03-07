@@ -1,23 +1,26 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Oo\DynamicProp;
 
-class DynamicPropTest extends TestCase
+final class DynamicPropTest extends TestCase
 {
-    public function testSetProperty()
+    public function testSetProperty(): void
     {
-        $class = new \Stub\Oo\DynamicProp();
+        $class = new DynamicProp();
         $this->assertNull($class->test);
 
         $class->setPropertyInt('test');

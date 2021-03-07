@@ -1,21 +1,21 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class FetchTest extends TestCase
+final class FetchTest extends TestCase
 {
-    public static $test;
+    public static ?\Stub\FetchTest $test = null;
 
     public static function setUpBeforeClass(): void
     {
@@ -40,7 +40,7 @@ class FetchTest extends TestCase
         self::$test = null;
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $this->assertSame(self::$test->testFetchPost(1), 'one');
         $this->assertSame(self::$test->testFetchPost('two'), 2);
@@ -54,17 +54,19 @@ class FetchTest extends TestCase
      * @param mixed $expected
      * @param mixed $has
      */
-    public function testValue($input, $expected, $has)
+    public function testValue($input, $expected, $has): void
     {
         $this->assertSame(self::$test->hasValue($input), $has);
         $this->assertSame(self::$test->getValue($input), $expected);
     }
 
-    public function fieldProvider()
+    /**
+     * input, expected, exist
+     *
+     * @return array[]
+     */
+    public function fieldProvider(): array
     {
-        /*
-         * input, expected, exist
-         */
         return [
             ['somePOST', 'some_post', true],
             ['VALUEPOST', 'some_post2', true],

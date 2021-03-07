@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,12 +16,12 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\Post;
 
-class PostTest extends TestCase
+final class PostTest extends TestCase
 {
     /**
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function testShouldNotTriggerAnyErrorIfPostIsUndefined()
+    public function testShouldNotTriggerAnyErrorIfPostIsUndefined(): void
     {
         $tester = new Post();
 
@@ -32,7 +34,7 @@ class PostTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function testShouldReturnFalseIfVariableIsUndefined()
+    public function testShouldReturnFalseIfVariableIsUndefined(): void
     {
         $tester = new Post();
 
@@ -45,7 +47,7 @@ class PostTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1623
      */
-    public function testShouldReturnTrueIfVariableIsDefined()
+    public function testShouldReturnTrueIfVariableIsDefined(): void
     {
         $tester = new Post();
 

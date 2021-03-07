@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Documentation\Annotation;
@@ -14,11 +16,11 @@ namespace Zephir\Test\Documentation\Annotation;
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation\ReturnAnnotation;
 
-class ReturnAnnotationTest extends TestCase
+final class ReturnAnnotationTest extends TestCase
 {
-    const ANNOTATION_NAME = 'return';
+    private const ANNOTATION_NAME = 'return';
 
-    public function testShouldGetReturnAnnotation()
+    public function testShouldGetReturnAnnotation(): void
     {
         $link = new ReturnAnnotation(self::ANNOTATION_NAME, '  sample with leading space  ');
 
@@ -33,10 +35,9 @@ class ReturnAnnotationTest extends TestCase
         $this->assertSame('array - Example description', $link->getString());
     }
 
-    public function testShouldGetReturnType()
+    public function testShouldGetReturnType(): void
     {
         $testString = 'Zephir\EventInterface - Sample Event';
-
         $link = new ReturnAnnotation(self::ANNOTATION_NAME, $testString);
 
         $this->assertSame(self::ANNOTATION_NAME, $link->getName());
@@ -44,10 +45,9 @@ class ReturnAnnotationTest extends TestCase
         $this->assertSame('Zephir\EventInterface', $link->getReturnType());
     }
 
-    public function testShouldGetLinkText()
+    public function testShouldGetLinkText(): void
     {
         $testString = 'Zephir\EventInterface - Sample Event';
-
         $link = new ReturnAnnotation(self::ANNOTATION_NAME, $testString);
 
         $this->assertSame(self::ANNOTATION_NAME, $link->getName());

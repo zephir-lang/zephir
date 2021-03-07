@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Optimizers;
@@ -14,17 +16,16 @@ namespace Extension\Optimizers;
 use PHPUnit\Framework\TestCase;
 use Stub\Optimizers\IsScalar;
 
-class IsScalarTest extends TestCase
+final class IsScalarTest extends TestCase
 {
-    /** @var IsScalar */
-    private $test;
+    private IsScalar $test;
 
     protected function setUp(): void
     {
         $this->test = new IsScalar();
     }
 
-    public function testVariable()
+    public function testVariable(): void
     {
         $this->assertTrue($this->test->testIntVar());
         $this->assertTrue($this->test->testDoubleVar());
@@ -35,7 +36,7 @@ class IsScalarTest extends TestCase
         $this->assertFalse($this->test->testEmptyArrayVar());
     }
 
-    public function testVariableParameter()
+    public function testVariableParameter(): void
     {
         $this->assertTrue($this->test->testVarParameter(1));
         $this->assertTrue($this->test->testVarParameter(1.0));

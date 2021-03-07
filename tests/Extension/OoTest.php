@@ -1,28 +1,35 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Oo;
+use Stub\Oo\OoConstruct;
+use Stub\Oo\OoConstructParams;
+use Stub\Oo\OoDynamicA;
+use Stub\Oo\OoDynamicB;
+use Stub\Oo\OoNoConstruct;
 
-class OoTest extends TestCase
+final class OoTest extends TestCase
 {
     public function testAssertations(): void
     {
-        $test = new \Stub\Oo();
+        $test = new Oo();
 
         $this->assertEquals($test->testInstance1(), new \stdClass());
-        $this->assertEquals($test->testInstance2(), new \Stub\Oo\OoConstruct());
-        $this->assertEquals($test->testInstance3(), new \Stub\Oo\OoNoConstruct());
+        $this->assertEquals($test->testInstance2(), new OoConstruct());
+        $this->assertEquals($test->testInstance3(), new OoNoConstruct());
 
         $obj4 = $test->testInstance4();
         $this->assertIsObject($obj4);
@@ -51,21 +58,15 @@ class OoTest extends TestCase
 
         $obj9 = $test->testInstance9();
         $this->assertIsObject($obj9);
-        $this->assertInstanceOf(\Stub\Oo\OoDynamicA::class, $obj9);
+        $this->assertInstanceOf(OoDynamicA::class, $obj9);
 
         $obj10 = $test->testInstance10();
         $this->assertIsObject($obj10);
-        $this->assertInstanceOf(\Stub\Oo\OoDynamicB::class, $obj10);
+        $this->assertInstanceOf(OoDynamicB::class, $obj10);
 
         $obj = $test->testInstance11();
         $this->assertIsObject($obj);
-        $this->assertInstanceOf(\Stub\Oo\OoConstructParams::class, $obj);
-
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-            /*$this->markTestIncomplete(
-                'Not ready to run with PHP 8: interrupted by signal 11: SIGSEGV (Invalid callback , no array or string given)'
-            );*/
-        }
+        $this->assertInstanceOf(OoConstructParams::class, $obj);
 
         $obj12 = $test->testInstance12();
         $this->assertIsObject($obj12);

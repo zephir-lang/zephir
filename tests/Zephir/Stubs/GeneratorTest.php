@@ -1,17 +1,20 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
@@ -22,9 +25,12 @@ use Zephir\Stubs\Generator;
 
 class GeneratorTest extends TestCase
 {
+    /**
+     * @var mixed
+     */
     private $generatorClass;
-    private $testClass;
-    private $classDefinition;
+    private Generator $testClass;
+    private ClassDefinition $classDefinition;
 
     protected function setUp(): void
     {
@@ -37,6 +43,8 @@ class GeneratorTest extends TestCase
      * Modify method visibility to call protected.
      *
      * @param string $name - method name
+     * @return mixed
+     * @throws ReflectionException
      */
     private function getMethod(string $name)
     {
@@ -46,7 +54,7 @@ class GeneratorTest extends TestCase
         return $method;
     }
 
-    public function testShouldBuildClass()
+    public function testShouldBuildClass(): void
     {
         $expected = <<<DOC
 <?php
@@ -225,9 +233,15 @@ DOC;
 
     /**
      * @dataProvider propertyProvider
-     * @covers \Zephir\Stubs\Generator::buildProperty
+     * @covers       \Zephir\Stubs\Generator::buildProperty
+     *
+     * @param array $visibility
+     * @param string $type
+     * @param $value
+     * @param string $expected
+     * @throws ReflectionException
      */
-    public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected)
+    public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
         $original = [
             'default' => [
@@ -304,8 +318,13 @@ DOC;
 
     /**
      * @dataProvider constantProvider
+     *
+     * @param string $type
+     * @param $value
+     * @param string $expected
+     * @throws ReflectionException
      */
-    public function testShouldBuildConstant(string $type, $value, string $expected)
+    public function testShouldBuildConstant(string $type, $value, string $expected): void
     {
         $buildClass = $this->getMethod('buildConstant');
 
@@ -346,7 +365,7 @@ DOC;
         $this->assertSame(PHP_EOL.$expected, $actual);
     }
 
-    public function testShouldBuildMethod()
+    public function testShouldBuildMethod(): void
     {
         $buildClass = $this->getMethod('buildMethod');
 

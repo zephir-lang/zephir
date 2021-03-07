@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -15,8 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ExitDieTest extends TestCase
 {
-    /** @var string */
-    private $phpBinary;
+    private string $phpBinary;
 
     /**
      * {@inheritdoc}
@@ -39,7 +40,7 @@ class ExitDieTest extends TestCase
         parent::setUp();
     }
 
-    public function testShouldExitWthoutAnyMessage()
+    public function testShouldExitWthoutAnyMessage(): void
     {
         $testfile = __DIR__.'/../fixtures/exit.php';
         $command = "$this->phpBinary $testfile";
@@ -60,7 +61,7 @@ class ExitDieTest extends TestCase
         ));
     }
 
-    public function testShouldExitWthProvidedStatusMessage()
+    public function testShouldExitWthProvidedStatusMessage(): void
     {
         $testfile = __DIR__.'/../fixtures/exit_string.php';
         $statusMessage = 'Hello World';
@@ -82,7 +83,7 @@ class ExitDieTest extends TestCase
         ));
     }
 
-    public function testShouldExitWthProvidedStatusCode()
+    public function testShouldExitWthProvidedStatusCode(): void
     {
         $testfile = __DIR__.'/../fixtures/exit_int.php';
         $statusCode = 220;
@@ -104,7 +105,7 @@ class ExitDieTest extends TestCase
         ));
     }
 
-    private function prepareOutput($output)
+    private function prepareOutput(array $output): string
     {
         if (empty($output)) {
             return '(empty output)';

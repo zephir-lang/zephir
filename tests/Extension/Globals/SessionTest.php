@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,7 +16,7 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\Session\Child;
 
-class SessionTest extends TestCase
+final class SessionTest extends TestCase
 {
     /**
      * This method is called before a test is executed.
@@ -33,7 +35,7 @@ class SessionTest extends TestCase
         unset($_SESSION);
     }
 
-    public function testDestroy()
+    public function testDestroy(): void
     {
         $this->assertSame([], $_SESSION);
 
@@ -50,7 +52,7 @@ class SessionTest extends TestCase
         $this->assertSame($_SESSION, $result);
     }
 
-    public function testDirectUnset()
+    public function testDirectUnset(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';
@@ -61,7 +63,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['foo'] = 'bar';
@@ -72,7 +74,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    public function testRemoveFromUnset()
+    public function testRemoveFromUnset(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';

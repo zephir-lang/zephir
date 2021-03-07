@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -15,24 +17,28 @@ use PHPUnit\Framework\TestCase;
 use Stub\Fcall;
 use Stub\Oo\PropertyAccess;
 
-class FcallTest extends TestCase
+use function Stub\test_call_object_hint;
+use function Stub\test_call_relative_object_hint;
+use function Stub\zephir_namespaced_method_test;
+use function Stub\zephir_namespaced_method_with_type_casting;
+
+final class FcallTest extends TestCase
 {
-    /** @var Fcall */
-    private $test;
+    private Fcall $test;
 
     protected function setUp(): void
     {
         $this->test = new Fcall();
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $this->assertSame(0, $this->test->testCall1());
         $this->assertGreaterThan(-1, $this->test->testCall2());
         $this->assertSame(2, $this->test->testCall1FromVar());
     }
 
-    public function testStrtok()
+    public function testStrtok(): void
     {
         $this->assertFalse($this->test->testStrtokFalse());
         $this->assertSame('test', $this->test->testStrtokVarBySlash('test'));
@@ -44,7 +50,7 @@ class FcallTest extends TestCase
      * @param mixed $param1
      * @param mixed $param2
      */
-    public function testFunctionGetArgs($param1, $param2)
+    public function testFunctionGetArgs($param1, $param2): void
     {
         $this->assertSame([$param1, $param2], $this->test->testFunctionGetArgs($param1, $param2));
     }
@@ -55,7 +61,7 @@ class FcallTest extends TestCase
      * @param mixed $param1
      * @param mixed $param2
      */
-    public function testShouldGetArgsUsingAllExtraParams($param1, $param2)
+    public function testShouldGetArgsUsingAllExtraParams($param1, $param2): void
     {
         $this->assertSame([$param1, $param2], $this->test->testFunctionGetArgsAllExtra($param1, $param2));
     }
@@ -66,12 +72,12 @@ class FcallTest extends TestCase
      * @param mixed $param1
      * @param mixed $param2
      */
-    public function testShouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2)
+    public function testShouldGetArgsUsingAllExtraParamsAndStaticFunction($param1, $param2): void
     {
         $this->assertSame([$param1, $param2], Fcall::testStaticFunctionGetArgsAllExtra($param1, $param2));
     }
 
-    public function getArgsDataProvider()
+    public function getArgsDataProvider(): array
     {
         return [
             [true, false],
@@ -84,17 +90,17 @@ class FcallTest extends TestCase
         ];
     }
 
-    public function testShouldGedDesiredArgUsingAllExtraParams()
+    public function testShouldGedDesiredArgUsingAllExtraParams(): void
     {
         $this->assertSame([true, false], $this->test->testFunctionGetArgAllExtra(true, false));
     }
 
-    public function testShouldGedDesiredArgUsingAllExtraParamsAndStaticFunction()
+    public function testShouldGedDesiredArgUsingAllExtraParamsAndStaticFunction(): void
     {
         $this->assertSame([true, false], Fcall::testStaticFunctionGetArgAllExtra(true, false));
     }
 
-    public function testArrayFill()
+    public function testArrayFill(): void
     {
         $this->assertSame(
             [array_fill(0, 5, '?'), array_fill(0, 6, '?')],
@@ -102,15 +108,15 @@ class FcallTest extends TestCase
         );
     }
 
-    public function testFunctionDeclaration()
+    public function testFunctionDeclaration(): void
     {
-        $this->assertSame('aaaaa', \Stub\zephir_namespaced_method_test('a'));
-        $this->assertTrue(\Stub\test_call_relative_object_hint(new PropertyAccess()));
-        $this->assertTrue(\Stub\test_call_object_hint(new PropertyAccess()));
+        $this->assertSame('aaaaa', zephir_namespaced_method_test('a'));
+        $this->assertTrue(test_call_relative_object_hint(new PropertyAccess()));
+        $this->assertTrue(test_call_object_hint(new PropertyAccess()));
 
         $this->assertSame('ab', zephir_global_method_test('ab/c'));
 
-        $this->assertInstanceOf(\stdClass::class, \Stub\zephir_namespaced_method_with_type_casting(new \stdClass()));
+        $this->assertInstanceOf(\stdClass::class, zephir_namespaced_method_with_type_casting(new \stdClass()));
         $this->assertInstanceOf(\stdClass::class, zephir_global_method_with_type_casting(new \stdClass()));
     }
 }

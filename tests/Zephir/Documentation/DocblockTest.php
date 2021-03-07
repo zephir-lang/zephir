@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Documentation;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
 use Zephir\Documentation\Docblock;
 
-class DocblockTest extends TestCase
+final class DocblockTest extends TestCase
 {
     private Docblock $docblock;
 
@@ -54,7 +56,7 @@ class DocblockTest extends TestCase
         $this->assertSame('See LICENSE.txt for more details.', $this->docblock->getSummary());
     }
 
-    public function testShouldAddAnnotations()
+    public function testShouldAddAnnotations(): void
     {
         $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
@@ -70,7 +72,7 @@ class DocblockTest extends TestCase
         $this->assertCount(3, $this->docblock->getAnnotations());
     }
 
-    public function testShouldGenerateDocblock()
+    public function testShouldGenerateDocblock(): void
     {
         $expected = <<<DOC
 **

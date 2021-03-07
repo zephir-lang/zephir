@@ -1,23 +1,26 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Closures;
 
-class ClosureTest extends TestCase
+final class ClosureTest extends TestCase
 {
-    public function testUseCommand()
+    public function testUseCommand(): void
     {
-        $test = new \Stub\Closures();
+        $test = new Closures();
 
         $this->assertSame(2, $test->testUseCommand()());
     }

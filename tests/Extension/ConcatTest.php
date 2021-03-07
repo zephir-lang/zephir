@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,17 +16,16 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Concat;
 
-class ConcatTest extends TestCase
+final class ConcatTest extends TestCase
 {
-    /** @var Concat */
-    private $test;
+    private Concat $test;
 
     protected function setUp(): void
     {
         $this->test = new Concat();
     }
 
-    public function testShouldConcatenateLocalVariableAndSelfVariable()
+    public function testShouldConcatenateLocalVariableAndSelfVariable(): void
     {
         $this->assertNull($this->test->getTestProperty());
 
@@ -35,12 +36,12 @@ class ConcatTest extends TestCase
         $this->assertSame('test string', $this->test->getTestProperty());
     }
 
-    public function testShouldAppendVariableToString()
+    public function testShouldAppendVariableToString(): void
     {
         $this->assertSame('appendtest', $this->test->testConcat1());
     }
 
-    public function testShouldConcatenateVariableWithString()
+    public function testShouldConcatenateVariableWithString(): void
     {
         $this->assertSame('appendotherappendother', $this->test->testConcat2());
     }
@@ -48,7 +49,7 @@ class ConcatTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1573
      */
-    public function testShouldConcatenateStringsSimilarToIntegersNumbers()
+    public function testShouldConcatenateStringsSimilarToIntegersNumbers(): void
     {
         $this->assertSame('21', $this->test->testConcat3());
     }
@@ -56,7 +57,7 @@ class ConcatTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1893
      */
-    public function testShouldConcatenateStringWithVarDouble()
+    public function testShouldConcatenateStringWithVarDouble(): void
     {
         $this->assertSame(
             'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25',
@@ -67,7 +68,7 @@ class ConcatTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1893
      */
-    public function testShouldConcatenateStringWithDouble()
+    public function testShouldConcatenateStringWithDouble(): void
     {
         $this->assertSame(
             'Concatenated string with number 18.93000001',

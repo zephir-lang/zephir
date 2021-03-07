@@ -1,29 +1,31 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Operator;
 
-class OperatorTest extends TestCase
+final class OperatorTest extends TestCase
 {
-    /** @var \Stub\Operator */
-    private $test;
+    private Operator $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Operator();
+        $this->test = new Operator();
     }
 
-    public function test404Issue()
+    public function test404Issue(): void
     {
         $this->assertFalse($this->test->testIdentical(true, 1));
         $this->assertFalse($this->test->testIdentical(true, 'phalcon'));
@@ -34,7 +36,7 @@ class OperatorTest extends TestCase
         $this->assertTrue($this->test->testIdentical('phalcon', 'phalcon'));
     }
 
-    public function test829Issue()
+    public function test829Issue(): void
     {
         $this->assertTrue($this->test->testIdenticalVarFalse(false));
         $this->assertFalse($this->test->testIdenticalVarFalse(0));
@@ -44,14 +46,14 @@ class OperatorTest extends TestCase
         $this->assertFalse($this->test->testIdenticalFalseVar(''));
     }
 
-    public function test1072Issue()
+    public function test1072Issue(): void
     {
         $this->assertFalse($this->test->testIdenticalIfComplex(false));
         $this->assertTrue($this->test->testIdenticalIfComplex(0));
         $this->assertTrue($this->test->testIdenticalIfComplex(''));
     }
 
-    public function test1279Issue()
+    public function test1279Issue(): void
     {
         $values = $this->test->testBoolComparison(true, false);
 

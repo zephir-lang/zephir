@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,12 +16,9 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Cast;
 
-class CastTest extends TestCase
+final class CastTest extends TestCase
 {
-    /**
-     * @var Cast
-     */
-    private $test;
+    private ?Cast $test = null;
 
     protected function setUp(): void
     {
@@ -34,44 +33,40 @@ class CastTest extends TestCase
     /**
      * @see https://github.com/phalcon/zephir/issues/1988
      */
-    public function testCharCast()
+    public function testCharCast(): void
     {
-        /*
+        /**
          * Value
          */
-
         $this->assertSame(97, $this->test->testCharCastFromChar());
 
-        /*
+        /**
          * Variable types
          */
-
         $this->assertSame(65, $this->test->testCharCastFromVariableChar());
     }
 
-    public function testStringCast()
+    /**
+     * @issue https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testStringCast(): void
     {
-        /*
+        /**
          * Value
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame('z', $this->test->testStringCastChar());
 
-        /*
+        /**
          * Variable types
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame('X', $this->test->testStringCastVariableChar());
     }
 
-    public function testIntCast()
+    public function testIntCast(): void
     {
-        /*
+        /**
          * Value
          */
-
         $this->assertSame(5, $this->test->testIntCastFromFloat());
         $this->assertSame(1, $this->test->testIntCastFromBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromBooleanFalse());
@@ -82,16 +77,17 @@ class CastTest extends TestCase
         $this->assertSame(1, $this->test->testIntCastFromStdClass());
         $this->assertSame(65, $this->test->testIntCastFromChar());
 
-        /*
+        /**
          * Variable types
          */
-
         $this->assertSame(5, $this->test->testIntCastFromVariableFloat());
         $this->assertSame(1, $this->test->testIntCastFromVariableBooleanTrue());
         $this->assertSame(0, $this->test->testIntCastFromVariableBooleanFalse());
         $this->assertSame(0, $this->test->testIntCastFromVariableNull());
 
-        // https://github.com/phalcon/zephir/issues/1988
+        /**
+         * @issue https://github.com/phalcon/zephir/issues/1988
+         */
         $this->assertSame(97, $this->test->testIntCastFromVariableChar());
 
         $this->assertSame(0, $this->test->testIntCastFromVariableString());
@@ -106,24 +102,23 @@ class CastTest extends TestCase
         $this->assertSame(1, $this->test->testIntCastFromVariableStdClass());
     }
 
-    public function testLongCast()
+    /**
+     * @issue https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testLongCast(): void
     {
-        /*
+        /**
          * Value
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame(97, $this->test->testLongCastFromChar());
 
-        /*
+        /**
          * Variable types
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame(65, $this->test->testLongCastFromVariableChar());
     }
 
-    public function testFloatCast()
+    public function testFloatCast(): void
     {
         $this->assertSame(5.0, $this->test->testFloatCastFromFloat());
         $this->assertSame(1.0, $this->test->testFloatCastFromBooleanTrue());
@@ -142,50 +137,51 @@ class CastTest extends TestCase
         $this->assertSame(1.0, $this->test->testFloatCastFromVariableStdClass());
     }
 
-    public function testDoubleCast()
+    /**
+     * @issue https://github.com/phalcon/zephir/issues/1988
+     */
+    public function testDoubleCast(): void
     {
-        /*
+        /**
          * Value
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame(97.0, $this->test->testDoubleCastFromVChar());
 
-        /*
+        /**
          * Variable types
          */
-
-        // https://github.com/phalcon/zephir/issues/1988
         $this->assertSame(65.0, $this->test->testDoubleCastFromVariableChar());
     }
 
-    public function testBooleanCast()
+    public function testBooleanCast(): void
     {
-        /*
+        /**
          * Value
          */
-
         $this->assertTrue($this->test->testBooleanCastFromIntTrue1());
         $this->assertTrue($this->test->testBooleanCastFromIntTrue2());
         $this->assertFalse($this->test->testBooleanCastFromIntFalse());
 
-        // https://github.com/phalcon/zephir/issues/1988
+        /**
+         * @issue https://github.com/phalcon/zephir/issues/1988
+         */
         $this->assertTrue($this->test->testBooleanCastFromChar());
 
-        /*
+        /**
          * Variable types
          */
-
         $this->assertTrue($this->test->testBooleanCastFromObject());
         $this->assertFalse($this->test->testBooleanCastFromEmptyArray());
         $this->assertTrue($this->test->testBooleanCastFromArray());
         $this->assertFalse($this->test->testBooleanCastFromNull());
 
-        // https://github.com/phalcon/zephir/issues/1988
+        /**
+         * @issue https://github.com/phalcon/zephir/issues/1988
+         */
         $this->assertTrue($this->test->testBooleanCastFromVariableChar());
     }
 
-    public function testObjectCast()
+    public function testObjectCast(): void
     {
         $this->assertEquals((object) 5, $this->test->testObjectCastFromInt());
         $this->assertEquals((object) 5.0, $this->test->testObjectCastFromFloat());
@@ -198,7 +194,7 @@ class CastTest extends TestCase
         $this->assertEquals((object) 'test string', $this->test->testObjectCastFromString());
     }
 
-    public function testArrayCast()
+    public function testArrayCast(): void
     {
         $this->assertEquals((array) [1, 2, 3], $this->test->testArrayCastFromVariableArray());
         $this->assertEquals((array) true, $this->test->testArrayCastFromVariableTrue());

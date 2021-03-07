@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Stubs;
@@ -14,16 +16,16 @@ namespace Zephir\Test\Stubs;
 use PHPUnit\Framework\TestCase;
 use Zephir\Stubs\DocBlock;
 
-class DocBlockTest extends TestCase
+final class DocBlockTest extends TestCase
 {
-    public function testInitialState()
+    public function testInitialState(): void
     {
         $docBlock = new DocBlock('');
 
         $this->assertSame('', (string) $docBlock);
     }
 
-    public function testDescription()
+    public function testDescription(): void
     {
         $doc = <<<DOC
 /**
@@ -43,7 +45,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocs()
+    public function testPhpDocs(): void
     {
         $doc = <<<DOC
 /**
@@ -62,7 +64,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithDescription()
+    public function testPhpDocWithDescription(): void
     {
         $doc = <<<DOC
 /**
@@ -83,7 +85,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithCodeBloc()
+    public function testPhpDocWithCodeBloc(): void
     {
         $doc = <<<DOC
 /**
@@ -130,7 +132,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithScalarParams()
+    public function testPhpDocWithScalarParams(): void
     {
         $doc = <<<DOC
     /**
@@ -184,7 +186,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithVariousDocBlockTags()
+    public function testPhpDocWithVariousDocBlockTags(): void
     {
         $doc = <<<DOC
     /**
@@ -223,7 +225,7 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithDoubleDollarSymbols()
+    public function testPhpDocWithDoubleDollarSymbols(): void
     {
         $doc = <<<DOC
     /**

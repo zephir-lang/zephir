@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
@@ -14,17 +16,16 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
 
-class ConfigTest extends TestCase
+final class ConfigTest extends TestCase
 {
     /**
      * Common directory.
      *
      * @var string
      */
-    private $pwd;
+    private string $pwd;
 
-    /** @var Config */
-    private $config;
+    private Config $config;
 
     protected function setUp(): void
     {
@@ -45,7 +46,7 @@ class ConfigTest extends TestCase
     /**
      * Clean config.json file into tmp dir.
      */
-    private function cleanTmpConfigFile()
+    private function cleanTmpConfigFile(): void
     {
         /* clean config.json into tmp dir */
         $tmpConfigFile = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'config.json';
@@ -124,8 +125,10 @@ DOC;
 
     /**
      * @dataProvider setConfigProvider
+     * @param array $test
+     * @param mixed $expected
      */
-    public function testShouldSetConfigParams(array $test, $expected)
+    public function testShouldSetConfigParams(array $test, $expected): void
     {
         list($key, $value, $namespace) = $test;
         $this->config->set($key, $value, $namespace);
@@ -157,6 +160,10 @@ DOC;
 
     /**
      * @dataProvider defaultConfigProvider
+     *
+     * @param mixed $namespace
+     * @param string $key
+     * @param mixed $expected
      */
     public function testShouldGetDefaultConfigParams($namespace, string $key, $expected)
     {
@@ -183,15 +190,18 @@ DOC;
 
     /**
      * @dataProvider offsetConfigProvider
+     *
+     * @param array $key
+     * @param array $expected
      */
-    public function testShouldGetWithOffsetConfigParams(array $key, array $expected)
+    public function testShouldGetWithOffsetConfigParams(array $key, array $expected): void
     {
         $actual = $this->config->offsetGet($key);
 
         $this->assertSame($expected, $actual);
     }
 
-    public function testShouldUnsetConfigParams()
+    public function testShouldUnsetConfigParams(): void
     {
         $initials = $this->config->get('test_setting_1', 'globals');
 
@@ -211,7 +221,7 @@ DOC;
         $this->assertNull($actual);
     }
 
-    public function testShouldGetBannerFromConfig()
+    public function testShouldGetBannerFromConfig(): void
     {
         $this->assertSame($this->stubsBanner(), $this->config->get('banner', 'stubs'));
 
@@ -219,7 +229,7 @@ DOC;
         $this->assertNull($this->config->get('banner', 'stubs'));
     }
 
-    public function testShouldSaveConfig()
+    public function testShouldSaveConfig(): void
     {
         chdir(sys_get_temp_dir());
 

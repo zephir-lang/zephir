@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -16,9 +18,9 @@ use Zephir\FunctionLike\ReturnType\RealType;
 use Zephir\FunctionLike\ReturnType\TypeInterface;
 use Zephir\Types;
 
-class RealTypeTest extends TestCase
+final class RealTypeTest extends TestCase
 {
-    public function testShouldReturnType()
+    public function testShouldReturnType(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertEquals(TypeInterface::TYPE_PARAMETER, $type->getType());
@@ -30,7 +32,7 @@ class RealTypeTest extends TestCase
         $this->assertEquals('return-type-custom', $type->getType());
     }
 
-    public function testShouldReturnMandatoryStatus()
+    public function testShouldReturnMandatoryStatus(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertFalse($type->isMandatory());
@@ -42,13 +44,13 @@ class RealTypeTest extends TestCase
         $this->assertTrue($type->isMandatory());
     }
 
-    public function testShouldAlwaysHaveNullableValue()
+    public function testShouldAlwaysHaveNullableValue(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertNull($type->getValue());
     }
 
-    public function testShouldAlwaysBeNotACollection()
+    public function testShouldAlwaysBeNotACollection(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertFalse($type->isCollection());
@@ -57,7 +59,7 @@ class RealTypeTest extends TestCase
         $this->assertFalse($type->isCollection());
     }
 
-    public function testShouldReturnDataType()
+    public function testShouldReturnDataType(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertEquals(Types::T_STRING, $type->getDataType());
@@ -69,7 +71,7 @@ class RealTypeTest extends TestCase
         $this->assertEquals(Types::T_VOID, $type->getDataType());
     }
 
-    public function testShouldAlwaysBeRealType()
+    public function testShouldAlwaysBeRealType(): void
     {
         $type = new RealType(Types::T_STRING);
         $this->assertTrue($type->isRealType());

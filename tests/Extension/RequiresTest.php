@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -14,17 +16,16 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Requires;
 
-class RequiresTest extends TestCase
+final class RequiresTest extends TestCase
 {
-    /** @var Requires */
-    private $test;
+    private Requires $test;
 
     protected function setUp(): void
     {
         $this->test = new Requires();
     }
 
-    public function testRequireExternal1()
+    public function testRequireExternal1(): void
     {
         $this->assertSame(
             [1, 2, 3],
@@ -39,7 +40,7 @@ class RequiresTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/pull/1428
      */
-    public function testShouldRequireUsingNewSymbolTable()
+    public function testShouldRequireUsingNewSymbolTable(): void
     {
         ob_start();
         $actual = $this->test->requireExternal3(__DIR__.'/../fixtures/require-me-3.php');
@@ -51,7 +52,7 @@ class RequiresTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1621
      */
-    public function testShouldRenderTemplate()
+    public function testShouldRenderTemplate(): void
     {
         $param = 1;
 
@@ -66,7 +67,7 @@ class RequiresTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1713
      */
-    public function testShouldRequirePhar()
+    public function testShouldRequirePhar(): void
     {
         $this->assertEquals(
             "I'm in",

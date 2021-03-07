@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Oo;
@@ -16,32 +16,31 @@ namespace Extension\Oo;
 use PHPUnit\Framework\TestCase;
 use Stub\Oo\OoParams;
 
-class OoParamsStrictTest extends TestCase
+final class OoParamsStrictTest extends TestCase
 {
-    /** @var OoParams */
-    private $test;
+    private OoParams $test;
 
     protected function setUp(): void
     {
         $this->test = new OoParams();
     }
 
-    public function testSetStrictAgeSuccess()
+    public function testSetStrictAgeSuccess(): void
     {
         $this->assertSame($this->test->setStrictAge(17), 17);
     }
 
-    public function testSetStrictAverageSuccess()
+    public function testSetStrictAverageSuccess(): void
     {
         $this->assertSame($this->test->setStrictAverage(17.1), 17.1);
     }
 
-    public function testSetStrictNameSuccess()
+    public function testSetStrictNameSuccess(): void
     {
         $this->assertSame($this->test->setStrictName('peter'), 'peter');
     }
 
-    public function testShouldThrowTypeErrorForInt1()
+    public function testShouldThrowTypeErrorForInt1(): void
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessageRegExp(
@@ -52,7 +51,7 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictAge(17.0);
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForInt2()
+    public function testShouldThrowInvalidArgumentExceptionForInt2(): void
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessageRegExp(
@@ -63,7 +62,7 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictAge('17');
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForDouble()
+    public function testShouldThrowInvalidArgumentExceptionForDouble(): void
     {
         if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             $this->expectException(\InvalidArgumentException::class);
@@ -78,7 +77,7 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictAverage('a');
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForString()
+    public function testShouldThrowInvalidArgumentExceptionForString(): void
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessageRegExp(
@@ -89,7 +88,7 @@ class OoParamsStrictTest extends TestCase
         $this->test->setStrictName(1234);
     }
 
-    public function testShouldThrowInvalidArgumentExceptionForCallFromZephirLand()
+    public function testShouldThrowInvalidArgumentExceptionForCallFromZephirLand(): void
     {
         if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             $this->markTestSkipped('Move types check into fcall, instead of PHP_METHOD');

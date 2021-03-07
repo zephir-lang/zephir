@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,11 +16,11 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\ServerRequestFactory;
 
-class ServerRequestFactoryTest extends TestCase
+final class ServerRequestFactoryTest extends TestCase
 {
-    private $server;
-    private $get;
-    private $post;
+    private array $server;
+    private array $get;
+    private array $post;
 
     protected function setUp(): void
     {
@@ -37,7 +39,7 @@ class ServerRequestFactoryTest extends TestCase
     /**
      * @issue https://github.com/phalcon/zephir/issues/1934
      */
-    public function testShouldNotTriggerAnyErrorIfPostIsUndefined()
+    public function testShouldNotTriggerAnyErrorIfPostIsUndefined(): void
     {
         $tester = new ServerRequestFactory();
 

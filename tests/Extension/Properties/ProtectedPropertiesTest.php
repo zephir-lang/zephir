@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -14,9 +16,9 @@ namespace Extension\Properties;
 use PHPUnit\Framework\TestCase;
 use Stub\Properties\ProtectedProperties;
 
-class ProtectedPropertiesTest extends TestCase
+final class ProtectedPropertiesTest extends TestCase
 {
-    public function testShouldGetDefaultValueOfProtectedPropertiesUsingGetters()
+    public function testShouldGetDefaultValueOfProtectedPropertiesUsingGetters(): void
     {
         $test = new ProtectedProperties();
 
@@ -32,7 +34,7 @@ class ProtectedPropertiesTest extends TestCase
         $this->assertEquals('test', $test->getSomeString());
     }
 
-    public function testShouldSetAndGetProtectedPropertyUsingShortcuts()
+    public function testShouldSetAndGetProtectedPropertyUsingShortcuts(): void
     {
         $test = new ProtectedProperties();
 
@@ -43,9 +45,9 @@ class ProtectedPropertiesTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/2089
+     * @issue https://github.com/phalcon/zephir/issues/2089
      */
-    public function testShouldSetAndGetProtectedPropertyUsingExtendedClass()
+    public function testShouldSetAndGetProtectedPropertyUsingExtendedClass(): void
     {
         $test = new \ExtendsProtectedProperties();
 

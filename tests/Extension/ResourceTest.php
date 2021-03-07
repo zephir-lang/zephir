@@ -1,22 +1,23 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class ResourceTest extends TestCase
+final class ResourceTest extends TestCase
 {
-    /** @var \Stub\ResourceTest */
-    private $test;
+    private \Stub\ResourceTest $test;
 
     protected function setUp(): void
     {
