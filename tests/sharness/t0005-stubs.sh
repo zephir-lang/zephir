@@ -58,7 +58,7 @@ test_expect_success "Should properly generate Aliases for use statements" \
   "test_cmp expected/$expected ide/0.0.1/Stubs/Issue_1986.zep.php"
 
 # See: https://github.com/zephir-lang/zephir/issues/1896
-test_expect_success "Should generage CamelCase folders for stubs" \
+test_expect_success "Should generate CamelCase folders for stubs" \
   "test $(ls ./ide/0.0.1/Stubs/Events/ManagerInterface.zep.php | sed -e 's~\/~\\~g') = .\ide\0.0.1\Stubs\Events\ManagerInterface.zep.php"
 
 # See: https://github.com/zephir-lang/zephir/issues/2026

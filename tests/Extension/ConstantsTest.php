@@ -87,11 +87,6 @@ final class ConstantsTest extends TestCase
     }
 
     /**
-     * Test Constant declaration as String.
-     *
-     * @author Alexnder Andriiako <AlexNDR@phalconphp.com>
-     *
-     * @since 2017-08-09
      * @issue https://github.com/zephir-lang/zephir/issues/1571
      */
     public function testStringDelimiterAsConstDoubleQuoted(): void
