@@ -1850,7 +1850,7 @@ final class ClassDefinition
                 $classEntry = 'reflection_function_abstract_ptr';
                 break;
             case 'reflectionfunction':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                //$compilationContext->headersManager->add('ext/reflection/php_reflection');
                 $classEntry = 'reflection_function_ptr';
                 break;
             case 'reflectionparameter':
@@ -1858,7 +1858,7 @@ final class ClassDefinition
                 $classEntry = 'reflection_parameter_ptr';
                 break;
             case 'reflectionclass':
-                $compilationContext->headersManager->add('ext/reflection/php_reflection');
+                //$compilationContext->headersManager->add('ext/reflection/php_reflection');
                 $classEntry = 'reflection_class_ptr';
                 break;
             case 'reflectionobject':
