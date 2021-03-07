@@ -85,23 +85,6 @@ if (!function_exists('image_type_to_mime_type')) {
     }
 }
 
-if (!function_exists('image2wbmp') && PHP_VERSION_ID < 70400) {
-    /**
-     * Output image to browser or file.
-     *
-     * @see https://www.php.net/manual/en/function.image2wbmp.php
-     *
-     * @param resource $image
-     * @param string   $filename
-     * @param int      $threshold
-     *
-     * @return bool
-     */
-    function image2wbmp($image, $filename, $threshold)
-    {
-    }
-}
-
 if (!function_exists('imageaffine')) {
     /**
      * Return an image containing the affine transformed src image, using an optional clipping area.
