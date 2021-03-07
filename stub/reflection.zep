@@ -8,11 +8,17 @@ class Reflection
 {
     public function getReflectionClass() -> <ReflectionClass>
     {
-        return new ReflectionClass();
+        var r;
+        let r = new ReflectionClass();
+
+        return r;
     }
 
     public function getReflectionFunction() -> <ReflectionFunction>
     {
-        return new ReflectionFunction();
+        var r;
+        let r = new ReflectionFunction();
+
+        return r;
     }
 }
