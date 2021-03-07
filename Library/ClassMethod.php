@@ -170,6 +170,26 @@ class ClassMethod
     protected $callGathererPass;
 
     /**
+     * All classes must be in lower case.
+     *
+     * @var array|string[]
+     */
+    protected array $excludedClassEntries = [
+        'reflector',
+        'reflectionexception',
+        'reflection',
+        'reflectionfunctionabstract',
+        'reflectionfunction',
+        'reflectionparameter',
+        'reflectionclass',
+        'reflectionobject',
+        'reflectionmethod',
+        'reflectionproperty',
+        'reflectionextension',
+        'reflectionzendextension',
+    ];
+
+    /**
      * ClassMethod constructor.
      *
      * @param ClassDefinition            $classDefinition
@@ -2588,6 +2608,17 @@ class ClassMethod
     private function detectClassNameEntry(string $className, CompilationContext $compilationContext): ?string
     {
         if ($this->classDefinition === null) {
+            return null;
+        }
+
+        /**
+         * Excluded classes.
+         *
+         * Cases when we can't retrieve class entry.
+         * For example: php/ext/reflection, as there
+         * are no PHP_INSTALL_HEADERS.
+         */
+        if (in_array(ltrim(strtolower($className), '\\'), $this->excludedClassEntries)) {
             return null;
         }
 

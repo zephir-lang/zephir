@@ -166,6 +166,7 @@
 #include "stub/quantum.zep.h"
 #include "stub/range.zep.h"
 #include "stub/references.zep.h"
+#include "stub/reflection.zep.h"
 #include "stub/regexdna.zep.h"
 #include "stub/requires.zep.h"
 #include "stub/requires/external3.zep.h"
