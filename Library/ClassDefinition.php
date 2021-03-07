@@ -1458,8 +1458,10 @@ final class ClassDefinition
          * Special treatment for Reflection in 8.0.
          * Because in PHP 7.4 param arg info is lighter,
          * but also incomplete.
+         *
+         * TODO: Leave for future, maybe PHP code devs will make "reflection" ext public...
          */
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+        /*if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             switch (strtolower($className)) {
                 case 'reflector':
                     $compilationContext->headersManager->add('ext/reflection/php_reflection');
@@ -1517,7 +1519,7 @@ final class ClassDefinition
             if ($classEntry !== null) {
                 return $classEntry;
             }
-        }
+        }*/
 
         switch (strtolower($className)) {
             /**
