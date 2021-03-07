@@ -171,6 +171,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/quantum.zep.c
 	stub/range.zep.c
 	stub/references.zep.c
+	stub/reflection.zep.c
 	stub/regexdna.zep.c
 	stub/requires.zep.c
 	stub/requires/external3.zep.c

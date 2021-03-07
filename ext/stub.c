@@ -198,6 +198,7 @@ zend_class_entry *stub_properties_staticpublicproperties_ce;
 zend_class_entry *stub_quantum_ce;
 zend_class_entry *stub_range_ce;
 zend_class_entry *stub_references_ce;
+zend_class_entry *stub_reflection_ce;
 zend_class_entry *stub_regexdna_ce;
 zend_class_entry *stub_requires_ce;
 zend_class_entry *stub_requires_external3_ce;
@@ -406,6 +407,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Quantum);
 	ZEPHIR_INIT(Stub_Range);
 	ZEPHIR_INIT(Stub_References);
+	ZEPHIR_INIT(Stub_Reflection);
 	ZEPHIR_INIT(Stub_RegexDNA);
 	ZEPHIR_INIT(Stub_Requires);
 	ZEPHIR_INIT(Stub_Requires_External3);
