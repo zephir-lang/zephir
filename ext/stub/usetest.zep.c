@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "ext/spl/spl_iterators.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
@@ -22,7 +21,7 @@ ZEPHIR_INIT_CLASS(Stub_UseTest) {
 
 	ZEPHIR_REGISTER_CLASS(Stub, UseTest, stub, usetest, stub_usetest_method_entry, 0);
 
-	zend_class_implements(stub_usetest_ce, 1, spl_ce_Countable);
+	zend_class_implements(stub_usetest_ce, 1, zend_ce_countable);
 	return SUCCESS;
 
 }
@@ -30,6 +29,7 @@ ZEPHIR_INIT_CLASS(Stub_UseTest) {
 PHP_METHOD(Stub_UseTest, createInstance) {
 
 	zval *this_ptr = getThis();
+
 
 
 	object_init(return_value);
@@ -43,6 +43,7 @@ PHP_METHOD(Stub_UseTest, count) {
 
 
 
+
 }
 
 PHP_METHOD(Stub_UseTest, testUseClass1) {
@@ -51,6 +52,7 @@ PHP_METHOD(Stub_UseTest, testUseClass1) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
 
 
 	ZEPHIR_MM_GROW();
@@ -75,6 +77,7 @@ PHP_METHOD(Stub_UseTest, testUseClass2) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	if (!_0) {
@@ -95,6 +98,7 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
 
 
 	ZEPHIR_MM_GROW();

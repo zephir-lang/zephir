@@ -38,6 +38,16 @@ PHP_METHOD(Stub_Strings, camelize) {
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_STR(str)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(delimiter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
@@ -64,6 +74,16 @@ PHP_METHOD(Stub_Strings, uncamelize) {
 	ZVAL_UNDEF(&str);
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_STR(str)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(delimiter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
@@ -86,6 +106,14 @@ PHP_METHOD(Stub_Strings, testTrim) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -102,6 +130,14 @@ PHP_METHOD(Stub_Strings, testRtrim) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -118,6 +154,14 @@ PHP_METHOD(Stub_Strings, testLtrim) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -135,6 +179,15 @@ PHP_METHOD(Stub_Strings, testTrim2Params) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_ZVAL(charlist)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
 
@@ -152,6 +205,15 @@ PHP_METHOD(Stub_Strings, testRtrim2Params) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_ZVAL(charlist)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
 
@@ -169,6 +231,15 @@ PHP_METHOD(Stub_Strings, testLtrim2Params) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&charlist_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_ZVAL(charlist)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
 
@@ -186,6 +257,15 @@ PHP_METHOD(Stub_Strings, testImplode) {
 
 	ZVAL_UNDEF(&glue_sub);
 	ZVAL_UNDEF(&pieces_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(glue)
+		Z_PARAM_ZVAL(pieces)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &glue, &pieces);
 
@@ -203,6 +283,15 @@ PHP_METHOD(Stub_Strings, testStrpos) {
 
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(haystack)
+		Z_PARAM_ZVAL(needle)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &haystack, &needle);
 
@@ -222,6 +311,16 @@ PHP_METHOD(Stub_Strings, testStrposOffset) {
 	ZVAL_UNDEF(&haystack_sub);
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_ZVAL(haystack)
+		Z_PARAM_ZVAL(needle)
+		Z_PARAM_LONG(offset)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(3, 0, &haystack, &needle, &offset_param);
 
@@ -241,6 +340,15 @@ PHP_METHOD(Stub_Strings, testExplode) {
 
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(delimiter)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &str);
 
@@ -257,6 +365,14 @@ PHP_METHOD(Stub_Strings, testExplodeStr) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -275,6 +391,15 @@ PHP_METHOD(Stub_Strings, testExplodeLimit) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_LONG(limit)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &limit_param);
 
@@ -296,6 +421,16 @@ PHP_METHOD(Stub_Strings, testSubstr) {
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_LONG(from)
+		Z_PARAM_LONG(len)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(3, 0, &str, &from_param, &len_param);
 
@@ -318,6 +453,15 @@ PHP_METHOD(Stub_Strings, testSubstr2) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str)
+		Z_PARAM_LONG(from)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &from_param);
 
@@ -337,6 +481,14 @@ PHP_METHOD(Stub_Strings, testSubstr3) {
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -356,6 +508,14 @@ PHP_METHOD(Stub_Strings, testSubstr4) {
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -374,6 +534,14 @@ PHP_METHOD(Stub_Strings, testAddslashes) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -390,6 +558,14 @@ PHP_METHOD(Stub_Strings, testStripslashes) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -406,6 +582,14 @@ PHP_METHOD(Stub_Strings, testStripcslashes) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(str)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
@@ -423,6 +607,15 @@ PHP_METHOD(Stub_Strings, testHashEquals) {
 
 	ZVAL_UNDEF(&str1_sub);
 	ZVAL_UNDEF(&str2_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(str1)
+		Z_PARAM_ZVAL(str2)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str1, &str2);
 
@@ -437,6 +630,7 @@ PHP_METHOD(Stub_Strings, testHardcodedMultilineString) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("\n            Hello world\n        ");
 
 }
@@ -444,6 +638,7 @@ PHP_METHOD(Stub_Strings, testHardcodedMultilineString) {
 PHP_METHOD(Stub_Strings, testEchoMultilineString) {
 
 	zval *this_ptr = getThis();
+
 
 
 	php_printf("%s", "\n            Hello world\n        ");
@@ -457,6 +652,7 @@ PHP_METHOD(Stub_Strings, testTrimMultilineString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -475,6 +671,7 @@ PHP_METHOD(Stub_Strings, testWellEscapedMultilineString) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -489,6 +686,7 @@ PHP_METHOD(Stub_Strings, testInternedString1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("hello");
 
 }
@@ -501,6 +699,7 @@ PHP_METHOD(Stub_Strings, testInternedString2) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -528,6 +727,14 @@ PHP_METHOD(Stub_Strings, strToHex) {
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_5$$3);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value_param);
@@ -545,7 +752,7 @@ PHP_METHOD(Stub_Strings, strToHex) {
 		_1$$3 = ZEPHIR_STRING_OFFSET(&value, i);
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 87, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 97, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 10, &_3$$3);
 		zephir_check_call_status();
@@ -574,6 +781,14 @@ PHP_METHOD(Stub_Strings, issue1267) {
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value);
@@ -598,17 +813,17 @@ PHP_METHOD(Stub_Strings, issue1267) {
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 513);
-	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 88, value, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 43, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 89, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 98, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 89, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 98, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);

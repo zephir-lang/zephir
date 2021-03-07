@@ -34,6 +34,15 @@ PHP_METHOD(Stub_Operator, testIdentical) {
 
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(param1)
+		Z_PARAM_ZVAL(param2)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &param1, &param2);
 
@@ -53,6 +62,14 @@ PHP_METHOD(Stub_Operator, testIdenticalIfComplex) {
 	ZVAL_UNDEF(&input_sub);
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(input)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &input);
@@ -77,6 +94,14 @@ PHP_METHOD(Stub_Operator, testIdenticalVarFalse) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(param)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
@@ -92,6 +117,14 @@ PHP_METHOD(Stub_Operator, testIdenticalFalseVar) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(param)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
@@ -111,6 +144,15 @@ PHP_METHOD(Stub_Operator, testBoolComparison) {
 	ZVAL_UNDEF(&varTrue_sub);
 	ZVAL_UNDEF(&varFalse_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(varTrue)
+		Z_PARAM_ZVAL(varFalse)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &varTrue, &varFalse);
@@ -158,6 +200,14 @@ PHP_METHOD(Stub_Operator, testNewInstanceOperator) {
 
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(className)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &className);

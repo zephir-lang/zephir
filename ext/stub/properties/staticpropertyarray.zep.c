@@ -47,6 +47,7 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray() {
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);

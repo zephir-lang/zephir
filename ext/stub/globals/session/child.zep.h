@@ -9,6 +9,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_globals_session_child_destroy, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_globals_session_child_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Globals_Session_Child, destroy, arginfo_stub_globals_session_child_destroy, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Globals_Session_Child, destroy, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

@@ -59,6 +59,19 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 5)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ARRAY_OR_NULL(server)
+		Z_PARAM_ARRAY_OR_NULL(get)
+		Z_PARAM_ARRAY_OR_NULL(post)
+		Z_PARAM_ARRAY_OR_NULL(cookies)
+		Z_PARAM_ARRAY_OR_NULL(files)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SERVER, SL("_SERVER"));
@@ -125,19 +138,19 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 	if (!(ZEPHIR_IS_EMPTY(&_SERVER))) {
 		ZEPHIR_CPY_WRT(&globalServer, &_SERVER);
 	}
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 41, &server, &globalServer);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 44, &server, &globalServer);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&server, &_0);
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 41, &files, &globalFiles);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 44, &files, &globalFiles);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&files, &_2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 41, &cookies, &globalCookies);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 44, &cookies, &globalCookies);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&cookies, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 41, &get, &globalGet);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 44, &get, &globalGet);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&get, &_4);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 41, &post, &globalPost);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 44, &post, &globalPost);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&post, &_5);
 	zephir_create_array(return_value, 5, 0);
@@ -163,6 +176,15 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray) {
 
 	ZVAL_UNDEF(&source_sub);
 	ZVAL_UNDEF(&super);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(source)
+		Z_PARAM_ARRAY(super)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &source, &super_param);

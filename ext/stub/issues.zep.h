@@ -21,6 +21,10 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(stub_issues_method_entry) {
 	PHP_ME(Stub_Issues, setAdapter, arginfo_stub_issues_setadapter, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Issues, someMethod, arginfo_stub_issues_somemethod, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Issues, test, arginfo_stub_issues_test, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Issues, test, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

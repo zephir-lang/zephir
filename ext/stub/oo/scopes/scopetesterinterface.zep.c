@@ -21,4 +21,3 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_ScopeTesterInterface) {
 }
 
 ZEPHIR_DOC_METHOD(Stub_Oo_Scopes_ScopeTesterInterface, run);
-

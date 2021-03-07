@@ -35,6 +35,15 @@ PHP_METHOD(Stub_Optimizers_ArrayMerge, mergeTwoRequiredArrays) {
 
 	ZVAL_UNDEF(&arr1);
 	ZVAL_UNDEF(&arr2);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ARRAY(arr1)
+		Z_PARAM_ARRAY(arr2)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &arr1_param, &arr2_param);

@@ -29,5 +29,6 @@ PHP_METHOD(stub_2__closure, __invoke) {
 
 
 
+
 }
 

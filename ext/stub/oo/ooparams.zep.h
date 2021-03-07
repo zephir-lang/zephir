@@ -35,35 +35,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_createotherclasswithoutwritecurr
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, age)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setaverage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, average, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, average)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setname, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, name)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setenabled, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, enabled, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, enabled)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlist, 0, 0, 1)
@@ -71,42 +55,22 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlist, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, age)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictaverage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, average, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, average)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictnamefromzephirland, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_ooparams_setstrictname, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_ooparams_setstrictname, 0, 1, IS_STRING, NULL, 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, name)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictenabled, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, enabled, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, enabled)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictlist, 0, 0, 1)
@@ -114,35 +78,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictlist, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setagedefault, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, age)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setaveragedefault, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, average, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, average)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setnamedefault, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, name)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setenableddefault, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, enabled, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, enabled)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlistdefault, 0, 0, 0)
@@ -150,19 +98,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlistdefault, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setconstage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, age)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setconstaverage, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, average, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, average)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setobject, 0, 0, 1)
@@ -182,8 +122,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setobjectclasscast, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createthisclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createotherclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_Oo_OoParams, setAge, arginfo_stub_oo_ooparams_setage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setAverage, arginfo_stub_oo_ooparams_setaverage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setName, arginfo_stub_oo_ooparams_setname, ZEND_ACC_PUBLIC)
@@ -191,7 +139,11 @@ ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {
 	PHP_ME(Stub_Oo_OoParams, setList, arginfo_stub_oo_ooparams_setlist, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictAge, arginfo_stub_oo_ooparams_setstrictage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictAverage, arginfo_stub_oo_ooparams_setstrictaverage, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Oo_OoParams, setStrictNameFromZephirLand, arginfo_stub_oo_ooparams_setstrictnamefromzephirland, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Oo_OoParams, setStrictNameFromZephirLand, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_Oo_OoParams, setStrictName, arginfo_stub_oo_ooparams_setstrictname, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictEnabled, arginfo_stub_oo_ooparams_setstrictenabled, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictList, arginfo_stub_oo_ooparams_setstrictlist, ZEND_ACC_PUBLIC)

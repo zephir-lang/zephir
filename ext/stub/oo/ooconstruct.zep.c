@@ -32,5 +32,6 @@ PHP_METHOD(Stub_Oo_OoConstruct, __construct) {
 
 
 
+
 }
 

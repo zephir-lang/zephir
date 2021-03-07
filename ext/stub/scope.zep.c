@@ -33,6 +33,7 @@ PHP_METHOD(Stub_Scope, getStr) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("internal_string");
 
 }
@@ -45,6 +46,14 @@ PHP_METHOD(Stub_Scope, getDyStr) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(g)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &g_param);
@@ -71,11 +80,12 @@ PHP_METHOD(Stub_Scope, test1) {
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&k$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
-	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 76);
+	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 86);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
@@ -101,6 +111,7 @@ PHP_METHOD(Stub_Scope, test2) {
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -152,6 +163,7 @@ PHP_METHOD(Stub_Scope, test3) {
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&str$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&k);
@@ -171,7 +183,7 @@ PHP_METHOD(Stub_Scope, test3) {
 			}
 			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
-			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 77, &c);
+			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 87, &c);
 			zephir_check_call_status();
 			zephir_concat_self(&k, &str$$3);
 		}

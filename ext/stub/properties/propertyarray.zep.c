@@ -56,6 +56,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, __construct) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -77,6 +78,14 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome) {
 
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value);
@@ -95,6 +104,14 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(arr)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &arr);
 
@@ -107,6 +124,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray) {
 PHP_METHOD(Stub_Properties_PropertyArray, getOtherArray) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "otherArray");
@@ -128,6 +146,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_5$$5);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&headers);
@@ -138,12 +157,12 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831) {
 		}
 		zephir_read_property(&_0$$3, this_ptr, ZEND_STRL("otherArray"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 64, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 74, &_0$$3);
 		ZEPHIR_UNREF(&_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 65, &info, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 75, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
@@ -151,7 +170,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831) {
 		} else {
 			zephir_read_property(&_5$$5, this_ptr, ZEND_STRL("otherArray"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 66, &_5$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 76, &_5$$5, &info);
 			ZEPHIR_UNREF(&_5$$5);
 			zephir_check_call_status();
 			break;
@@ -173,6 +192,7 @@ zend_object *zephir_init_properties_Stub_Properties_PropertyArray(zend_class_ent
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_3$$4);
+	
 
 		ZEPHIR_MM_GROW();
 	

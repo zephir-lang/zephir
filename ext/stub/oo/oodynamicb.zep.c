@@ -31,6 +31,7 @@ PHP_METHOD(Stub_Oo_OoDynamicB, execute) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("B");
 
 }
@@ -38,6 +39,7 @@ PHP_METHOD(Stub_Oo_OoDynamicB, execute) {
 PHP_METHOD(Stub_Oo_OoDynamicB, execute2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("BB");

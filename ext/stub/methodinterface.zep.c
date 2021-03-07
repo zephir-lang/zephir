@@ -21,4 +21,3 @@ ZEPHIR_INIT_CLASS(Stub_MethodInterface) {
 }
 
 ZEPHIR_DOC_METHOD(Stub_MethodInterface, testMethod);
-

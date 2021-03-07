@@ -21,4 +21,3 @@ ZEPHIR_INIT_CLASS(Stub_DiInterface) {
 }
 
 ZEPHIR_DOC_METHOD(Stub_DiInterface, getShared);
-

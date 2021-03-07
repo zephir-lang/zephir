@@ -33,6 +33,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDIN) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -48,6 +49,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDOUT) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -65,6 +67,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDERR) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -81,6 +84,7 @@ PHP_METHOD(Stub_ResourceTest, testTypeOffResource) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -100,6 +104,7 @@ PHP_METHOD(Stub_ResourceTest, testIsResource) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -118,12 +123,13 @@ PHP_METHOD(Stub_ResourceTest, testFunctionsForSTDIN) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 72, &a, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 82, &a, &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

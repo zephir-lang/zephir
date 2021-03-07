@@ -10,11 +10,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_propertyaccess___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_oo_propertyaccess_setprivatevariable, 0, 1, Stub\\Oo\\PropertyAccess, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_propertyaccess_setprivatevariable, 0, 1, IS_OBJECT, "Stub\\Oo\\PropertyAccess", 0)
-#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -22,8 +18,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_propertyaccess_getprivatevariable, 0, 0, 
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_propertyaccess_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Oo_PropertyAccess, __construct, arginfo_stub_oo_propertyaccess___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#else
+	PHP_ME(Stub_Oo_PropertyAccess, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#endif
 	PHP_ME(Stub_Oo_PropertyAccess, setPrivatevariable, arginfo_stub_oo_propertyaccess_setprivatevariable, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Oo_PropertyAccess, getPrivatevariable, arginfo_stub_oo_propertyaccess_getprivatevariable, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Oo_PropertyAccess, getPrivatevariable, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

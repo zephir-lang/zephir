@@ -42,14 +42,46 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_issue1860, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_closures_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, simple1, arginfo_stub_closures_simple1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, simple1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, simple2, arginfo_stub_closures_simple2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, simple2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, simple3, arginfo_stub_closures_simple3, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, simple3, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, simple4, arginfo_stub_closures_simple4, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, simple4, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, simple5, arginfo_stub_closures_simple5, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, simple5, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, arrow1, arginfo_stub_closures_arrow1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, arrow1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, arrow2, arginfo_stub_closures_arrow2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, arrow2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Closures, testUseCommand, arginfo_stub_closures_testusecommand, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_Closures, testUseCommand, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_Closures, issue1860, arginfo_stub_closures_issue1860, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

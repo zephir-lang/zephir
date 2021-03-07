@@ -34,29 +34,13 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompareLocale);
 PHP_METHOD(Stub_BuiltIn_StringMethods, getReversed);
 PHP_METHOD(Stub_BuiltIn_StringMethods, getHtmlSpecialChars);
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_camelize, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_camelize, 0, 1, IS_STRING, NULL, 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_uncamelize, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_builtin_stringmethods_uncamelize, 0, 1, IS_STRING, NULL, 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
@@ -70,251 +54,139 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength3, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength4, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, a)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlength5, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, a, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, a)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getindex, 0, 0, 2)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, needle, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, needle)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getindexwithposition, 0, 0, 3)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, needle, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, needle)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, position, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, position)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_gettrimmed, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_gettrimmed1, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlefttrimmed, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getrighttrimmed, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlower, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getupper, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getlowerfirst, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getupperfirst, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getformatted, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getmd5, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getsha1, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getnl2br, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getparsedcsv, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getparsedjson, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, assoc, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, assoc)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getrepeatted, 0, 0, 2)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, count, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, count)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getshuffled, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getsplited, 0, 0, 2)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, del, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, del)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getcompare, 0, 0, 2)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, left, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, left)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, right, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, right)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getcomparelocale, 0, 0, 2)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, left, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, left)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, right, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, right)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_getreversed, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_stringmethods_gethtmlspecialchars, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_builtin_stringmethods_method_entry) {
 	PHP_ME(Stub_BuiltIn_StringMethods, camelize, arginfo_stub_builtin_stringmethods_camelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, uncamelize, arginfo_stub_builtin_stringmethods_uncamelize, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength1, arginfo_stub_builtin_stringmethods_getlength1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength2, arginfo_stub_builtin_stringmethods_getlength2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength3, arginfo_stub_builtin_stringmethods_getlength3, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_BuiltIn_StringMethods, getLength3, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength4, arginfo_stub_builtin_stringmethods_getlength4, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getLength5, arginfo_stub_builtin_stringmethods_getlength5, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getIndex, arginfo_stub_builtin_stringmethods_getindex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getIndexWithPosition, arginfo_stub_builtin_stringmethods_getindexwithposition, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed, arginfo_stub_builtin_stringmethods_gettrimmed, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_BuiltIn_StringMethods, getTrimmed1, arginfo_stub_builtin_stringmethods_gettrimmed1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getLeftTrimmed, arginfo_stub_builtin_stringmethods_getlefttrimmed, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_StringMethods, getRightTrimmed, arginfo_stub_builtin_stringmethods_getrighttrimmed, ZEND_ACC_PUBLIC)

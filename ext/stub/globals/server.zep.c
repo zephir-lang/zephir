@@ -40,6 +40,7 @@ PHP_METHOD(Stub_Globals_Server, f1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
@@ -61,6 +62,7 @@ PHP_METHOD(Stub_Globals_Server, f2) {
 	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&_0);
 
+
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
 	zephir_array_fetch_string(&_0, &_SERVER, SL("SCRIPT_NAME"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 17);
@@ -78,6 +80,7 @@ PHP_METHOD(Stub_Globals_Server, check) {
 
 	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&_0);
+
 
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 

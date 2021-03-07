@@ -98,6 +98,14 @@ PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someGetterSetterArray_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(someGetterSetterArray)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &someGetterSetterArray);
 
@@ -113,6 +121,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, getSomeGetterSetterArray) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someGetterSetterArray");
 
 }
@@ -124,6 +133,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -150,6 +160,7 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_8$$6);
+	
 
 		ZEPHIR_MM_GROW();
 	

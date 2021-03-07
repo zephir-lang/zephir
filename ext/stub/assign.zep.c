@@ -40,6 +40,7 @@ PHP_METHOD(Stub_Assign, getTestVar) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "testVar");
 
 }
@@ -47,6 +48,7 @@ PHP_METHOD(Stub_Assign, getTestVar) {
 PHP_METHOD(Stub_Assign, getMyArray) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "myArray");
@@ -57,6 +59,7 @@ PHP_METHOD(Stub_Assign, testAssign1) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -72,6 +75,7 @@ PHP_METHOD(Stub_Assign, testAssign2) {
 
 
 
+
 	a = 1;
 	RETURN_LONG(a);
 
@@ -81,6 +85,7 @@ PHP_METHOD(Stub_Assign, testAssign3) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -96,6 +101,7 @@ PHP_METHOD(Stub_Assign, testAssign4) {
 
 
 
+
 	a = 0;
 	RETURN_LONG(a);
 
@@ -105,6 +111,7 @@ PHP_METHOD(Stub_Assign, testAssign5) {
 
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -120,6 +127,7 @@ PHP_METHOD(Stub_Assign, testAssign6) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	RETURN_BOOL(a);
 
@@ -129,6 +137,7 @@ PHP_METHOD(Stub_Assign, testAssign7) {
 
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -144,6 +153,7 @@ PHP_METHOD(Stub_Assign, testAssign8) {
 
 
 
+
 	a = 1;
 	RETURN_BOOL(a);
 
@@ -153,6 +163,7 @@ PHP_METHOD(Stub_Assign, testAssign9) {
 
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -168,6 +179,7 @@ PHP_METHOD(Stub_Assign, testAssign10) {
 
 
 
+
 	a = 0;
 	RETURN_BOOL(a);
 
@@ -177,6 +189,7 @@ PHP_METHOD(Stub_Assign, testAssign11) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -192,6 +205,7 @@ PHP_METHOD(Stub_Assign, testAssign12) {
 
 
 
+
 	a = (double) (4);
 	RETURN_DOUBLE(a);
 
@@ -201,6 +215,7 @@ PHP_METHOD(Stub_Assign, testAssign13) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -216,6 +231,7 @@ PHP_METHOD(Stub_Assign, testAssign14) {
 
 
 
+
 	a = 1;
 	RETURN_DOUBLE(a);
 
@@ -225,6 +241,7 @@ PHP_METHOD(Stub_Assign, testAssign15) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -240,6 +257,7 @@ PHP_METHOD(Stub_Assign, testAssign16) {
 
 
 
+
 	a = 1;
 	RETURN_LONG(a);
 
@@ -249,6 +267,7 @@ PHP_METHOD(Stub_Assign, testAssign17) {
 
 	double a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -264,6 +283,7 @@ PHP_METHOD(Stub_Assign, testAssign18) {
 
 
 
+
 	a = 0;
 	RETURN_BOOL(a);
 
@@ -273,6 +293,7 @@ PHP_METHOD(Stub_Assign, testAssign19) {
 
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -289,6 +310,7 @@ PHP_METHOD(Stub_Assign, testAssign20) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -301,6 +323,7 @@ PHP_METHOD(Stub_Assign, testAssign21) {
 
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -317,6 +340,7 @@ PHP_METHOD(Stub_Assign, testAssign22) {
 
 
 
+
 	a = 1.0;
 	b = a;
 	RETURN_DOUBLE(b);
@@ -327,6 +351,7 @@ PHP_METHOD(Stub_Assign, testAssign23) {
 
 	zend_bool a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -344,6 +369,7 @@ PHP_METHOD(Stub_Assign, testAssign24) {
 
 
 
+
 	a = 1;
 	b = (double) a;
 	RETURN_DOUBLE(b);
@@ -355,6 +381,7 @@ PHP_METHOD(Stub_Assign, testAssign25) {
 	double b = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -372,6 +399,7 @@ PHP_METHOD(Stub_Assign, testAssign26) {
 
 
 
+
 	a = (double) (1);
 	b = (long) a;
 	RETURN_LONG(b);
@@ -383,6 +411,7 @@ PHP_METHOD(Stub_Assign, testAssign27) {
 	double a = 0;
 	zend_long b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -400,6 +429,7 @@ PHP_METHOD(Stub_Assign, testAssign28) {
 
 
 
+
 	b = 1;
 	a = ((b) ? 1 : 0);
 	RETURN_BOOL(a);
@@ -411,6 +441,7 @@ PHP_METHOD(Stub_Assign, testAssign29) {
 	zend_bool a = 0;
 	double b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -428,6 +459,7 @@ PHP_METHOD(Stub_Assign, testAssign30) {
 
 
 
+
 	b = 0;
 	a = b;
 	RETURN_LONG(a);
@@ -439,6 +471,7 @@ PHP_METHOD(Stub_Assign, testAssign31) {
 	double a = 0;
 	zend_bool b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -455,6 +488,7 @@ PHP_METHOD(Stub_Assign, testAssign32) {
 
 
 
+
 	b = 0;
 	a = b;
 	RETURN_BOOL(a);
@@ -465,6 +499,7 @@ PHP_METHOD(Stub_Assign, testAssign33) {
 
 	zend_bool b = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -482,6 +517,7 @@ PHP_METHOD(Stub_Assign, testAssign34) {
 
 
 
+
 	b = 0;
 	a = ((b) ? 1 : 0);
 	RETURN_BOOL(a);
@@ -496,6 +532,7 @@ PHP_METHOD(Stub_Assign, testAssign35) {
 
 
 
+
 	b = 0;
 	a = ((b != 0.0) ? 1 : 0);
 	RETURN_BOOL(a);
@@ -506,6 +543,7 @@ PHP_METHOD(Stub_Assign, testAssign36) {
 
 	zend_bool b = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -529,6 +567,7 @@ PHP_METHOD(Stub_Assign, testAssign37) {
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_4);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -579,6 +618,14 @@ PHP_METHOD(Stub_Assign, testAssign38) {
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -603,6 +650,7 @@ PHP_METHOD(Stub_Assign, testAssign39) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&c);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -629,6 +677,7 @@ PHP_METHOD(Stub_Assign, testAssign40) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
@@ -653,6 +702,14 @@ PHP_METHOD(Stub_Assign, testAssign41) {
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -674,6 +731,14 @@ PHP_METHOD(Stub_Assign, testAssign42) {
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -692,6 +757,14 @@ PHP_METHOD(Stub_Assign, testAssign43) {
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -709,6 +782,14 @@ PHP_METHOD(Stub_Assign, testAssign44) {
 	zval *num_param = NULL;
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -733,6 +814,7 @@ PHP_METHOD(Stub_Assign, testPropertyAssign1) {
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -784,6 +866,7 @@ PHP_METHOD(Stub_Assign, testPropertyAssign2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&f);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 1;
@@ -822,6 +905,7 @@ PHP_METHOD(Stub_Assign, testPropertyIncr1) {
 	ZVAL_UNDEF(&_0);
 
 
+
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_0);
@@ -838,6 +922,7 @@ PHP_METHOD(Stub_Assign, testPropertyAddAssign1) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -862,6 +947,7 @@ PHP_METHOD(Stub_Assign, testPropertyAddAssign2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -885,6 +971,7 @@ PHP_METHOD(Stub_Assign, testPropertyAssignValuePlus1) {
 	ZVAL_UNDEF(&_1);
 
 
+
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_0);
@@ -904,6 +991,7 @@ PHP_METHOD(Stub_Assign, testPropertyDecr) {
 	ZVAL_UNDEF(&_0);
 
 
+
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(&_0, 2);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_0);
@@ -920,6 +1008,7 @@ PHP_METHOD(Stub_Assign, testPropertySubAssign1) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -944,6 +1033,7 @@ PHP_METHOD(Stub_Assign, testPropertySubAssign2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -966,6 +1056,7 @@ PHP_METHOD(Stub_Assign, testPropertyMulAssign1) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -990,6 +1081,7 @@ PHP_METHOD(Stub_Assign, testPropertyMulAssign2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -1011,6 +1103,7 @@ PHP_METHOD(Stub_Assign, testPropertyAssignStringConcat) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1036,6 +1129,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1088,6 +1182,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&f);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1142,6 +1237,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray3) {
 	ZVAL_UNDEF(&_10);
 	ZVAL_UNDEF(&_11);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -1195,6 +1291,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray4) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1239,6 +1343,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray5) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index_param);
@@ -1280,6 +1392,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray6) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -1318,6 +1431,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray7) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1358,6 +1472,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray8) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1401,6 +1523,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray9) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index_param);
@@ -1446,6 +1576,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray10) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index_param);
@@ -1493,6 +1631,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray11) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1541,6 +1687,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray12) {
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1597,6 +1751,14 @@ PHP_METHOD(Stub_Assign, testPropertyArray13) {
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1648,6 +1810,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray14) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1703,6 +1866,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyAssign1) {
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -1756,6 +1920,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyAssign2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&f);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 1;
@@ -1798,6 +1963,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArray1) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -1838,6 +2004,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArray2) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1880,6 +2047,14 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArray3) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -1923,6 +2098,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayAppend) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -1958,6 +2134,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayMutli1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2000,6 +2177,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayMutli2) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -2041,6 +2219,14 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayMutli3) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(index)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index);
@@ -2086,6 +2272,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayMulti4) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2136,6 +2323,7 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayAppend1) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -2173,6 +2361,15 @@ PHP_METHOD(Stub_Assign, testArrayVarAssign1) {
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&a);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(index)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &index, &value);
@@ -2195,6 +2392,15 @@ PHP_METHOD(Stub_Assign, testArrayVarAssign2) {
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(index)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &index, &value);
@@ -2217,6 +2423,15 @@ PHP_METHOD(Stub_Assign, testArrayProperty) {
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(index)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &index, &value);
@@ -2241,6 +2456,15 @@ PHP_METHOD(Stub_Assign, testGlobalVarAssign) {
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(index)
+		Z_PARAM_ZVAL(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params_without_memory_grow(2, 0, &index, &value);
@@ -2261,6 +2485,7 @@ PHP_METHOD(Stub_Assign, testConstantKeyAssign) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&elements);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2289,6 +2514,7 @@ PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -2327,6 +2553,7 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobals) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
+
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_GET, SL("_GET"));
 
@@ -2363,6 +2590,7 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsSERVER) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
@@ -2390,6 +2618,7 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsGET) {
 	ZVAL_UNDEF(&_GET);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_GET, SL("_GET"));
