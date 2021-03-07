@@ -113,13 +113,33 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_typehints_retval_retval_static_object_or_scalar, 
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, getMyVar, arginfo_typehints_retval_getmyvar, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, getMyVar, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(TypeHints_RetVal, getMyString, arginfo_typehints_retval_getmystring, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, getMyArray, arginfo_typehints_retval_getmyarray, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_var_var, arginfo_typehints_retval_retval_var_var, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_var_var, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_var_var_builit_1, arginfo_typehints_retval_retval_var_var_builit_1, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_var_var_builit_1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_var_var_builit_2, arginfo_typehints_retval_retval_var_var_builit_2, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_var_var_builit_2, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_var, arginfo_typehints_retval_retval_var, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_var, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(TypeHints_RetVal, retval_string, arginfo_typehints_retval_retval_string, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_boolean, arginfo_typehints_retval_retval_boolean, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_int, arginfo_typehints_retval_retval_int, ZEND_ACC_PUBLIC)
@@ -138,7 +158,15 @@ ZEPHIR_INIT_FUNCS(typehints_retval_method_entry) {
 	PHP_ME(TypeHints_RetVal, retval_nullable_boolean, arginfo_typehints_retval_retval_nullable_boolean, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_char, arginfo_typehints_retval_retval_nullable_char, ZEND_ACC_PUBLIC)
 	PHP_ME(TypeHints_RetVal, retval_nullable_array, arginfo_typehints_retval_retval_nullable_array, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_object_or_scalar, arginfo_typehints_retval_retval_object_or_scalar, ZEND_ACC_PUBLIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_object_or_scalar, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
 	PHP_ME(TypeHints_RetVal, retval_static_object_or_scalar, arginfo_typehints_retval_retval_static_object_or_scalar, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#else
+	PHP_ME(TypeHints_RetVal, retval_static_object_or_scalar, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
 	PHP_FE_END
 };

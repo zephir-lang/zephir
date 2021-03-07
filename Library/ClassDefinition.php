@@ -1338,7 +1338,7 @@ final class ClassDefinition
                             $method->isReturnTypesHintDetermined() &&
                             $method->areReturnTypesCompatible();
 
-                        if ($richFormat || $method->hasParameters() || version_compare(PHP_VERSION, '8.0.0', '>=')) {
+                        if ($richFormat || $method->hasParameters()) {
                             $codePrinter->output(
                                 sprintf(
                                     // TODO: Rename to ZEND_ME
@@ -1351,9 +1351,22 @@ final class ClassDefinition
                                 )
                             );
                         } else {
+                            $codePrinter->output('#if PHP_VERSION_ID >= 80000');
                             $codePrinter->output(
                                 sprintf(
-                                    // TODO: Rename to ZEND_ME
+                                // TODO: Rename to ZEND_ME
+                                    "\tPHP_ME(%s_%s, %s, %s, %s)",
+                                    $this->getCNamespace(),
+                                    $this->getName(),
+                                    $method->getName(),
+                                    $method->getArgInfoName($this),
+                                    $method->getModifiers()
+                                )
+                            );
+                            $codePrinter->output('#else');
+                            $codePrinter->output(
+                                sprintf(
+                                // TODO: Rename to ZEND_ME
                                     "\tPHP_ME(%s_%s, %s, NULL, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
@@ -1361,6 +1374,7 @@ final class ClassDefinition
                                     $method->getModifiers()
                                 )
                             );
+                            $codePrinter->output('#endif');
                         }
                     }
                 } else {

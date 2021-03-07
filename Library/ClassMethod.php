@@ -2456,7 +2456,7 @@ class ClassMethod
      *
      * @return bool
      */
-    public function areReturnTypesCompatible()
+    public function areReturnTypesCompatible(): bool
     {
         // void
         if ($this->isVoid()) {
