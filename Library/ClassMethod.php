@@ -2702,7 +2702,7 @@ class ClassMethod
          */
         if (strpos($className, '\\') === 0) {
             $classNamespace = explode('\\', $className);
-            $classNamespace = array_filter($classNamespace);
+            $classNamespace = array_values(array_filter($classNamespace));
 
             /**
              * External class
