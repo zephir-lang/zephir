@@ -13,15 +13,22 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-/**
- * Class Definition in Runtime
- *
- * Represents a class/interface that only exists in runtime.
- */
-final class ClassDefinitionRuntime extends AbstractClassDefinition
+abstract class AbstractClassDefinition
 {
-    public function __construct(string $name)
+    /**
+     * Class name
+     *
+     * @var string
+     */
+    protected string $name;
+
+    /**
+     * Returns the class name.
+     *
+     * @return string
+     */
+    public function getName(): string
     {
-        $this->name = $name;
+        return $this->name;
     }
 }
