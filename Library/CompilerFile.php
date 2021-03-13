@@ -20,6 +20,8 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
 
+use function strlen;
+
 /**
  * Zephir\CompilerFile.
  *
@@ -515,22 +517,25 @@ final class CompilerFile implements FileInterface
         /**
          * Traverse the top level statements looking for the namespace.
          */
-        $namespace = null;
+        $namespace = '';
 
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'namespace':
-                    if (null !== $namespace) {
+                    if (strlen($namespace) > 0) {
                         throw new CompilerException('The namespace must be defined just one time', $topStatement);
                     }
+
                     $namespace = $topStatement['name'];
                     $this->namespace = $namespace;
+
                     if (!preg_match('/^[A-Z]/', $namespace)) {
                         throw new CompilerException(
                             "Namespace '{$namespace}' must be in camelized-form",
                             $topStatement
                         );
                     }
+
                     break;
 
                 case 'cblock':
@@ -553,7 +558,7 @@ final class CompilerFile implements FileInterface
                         $returnType = $topStatement['return-type'];
                     }
 
-                    // Just do the precompilation of the function
+                    // Just do the pre-compilation of the function
                     $functionDefinition = new FunctionDefinition(
                         $namespace,
                         $topStatement['name'],

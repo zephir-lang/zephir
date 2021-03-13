@@ -60,7 +60,7 @@ class MethodDocBlock extends DocBlock
      *
      * @return string
      */
-    public function processMethodDocBlock()
+    public function processMethodDocBlock(): string
     {
         $this->parseMethodParameters($this->classMethod);
         $this->parseLines();
