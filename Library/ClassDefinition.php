@@ -124,12 +124,12 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * @var string
      */
-    protected string $docBlock;
+    protected string $docBlock = '';
 
     /**
-     * @var Docblock
+     * @var Docblock|null
      */
-    protected Docblock $parsedDocblock;
+    protected ?Docblock $parsedDocblock = null;
 
     /**
      * @var int

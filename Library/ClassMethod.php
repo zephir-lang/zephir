@@ -20,10 +20,10 @@ use Zephir\Exception\CompilerException;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
+
 use function count;
 use function in_array;
 use function is_array;
-use function strlen;
 
 /**
  * ClassMethod.
@@ -35,7 +35,7 @@ class ClassMethod
     public bool $optimizable = true;
 
     /**
-     * @var ClassDefinition
+     * @var ClassDefinition|null
      */
     protected ?ClassDefinition $classDefinition = null;
 
@@ -65,9 +65,9 @@ class ClassMethod
     protected ?string $docblock = null;
 
     /**
-     * @var Docblock
+     * @var Docblock|null
      */
-    protected Docblock $parsedDocblock;
+    protected ?Docblock $parsedDocblock = null;
 
     /**
      * Types returned by the method.
@@ -212,12 +212,12 @@ class ClassMethod
         ClassDefinition $classDefinition,
         array $visibility,
         string $name,
-        ClassMethodParameters $parameters = null,
-        StatementsBlock $statements = null,
-        $docblock = null,
-        array $returnType = null,
-        array $expression = null,
-        array $staticVariables = null
+        ?ClassMethodParameters $parameters = null,
+        ?StatementsBlock $statements = null,
+        ?string $docblock = null,
+        ?array $returnType = null,
+        ?array $expression = null,
+        ?array $staticVariables = null
     ) {
         $this->checkVisibility($visibility, $name, $expression);
 
@@ -585,7 +585,7 @@ class ClassMethod
             return $this->parsedDocblock;
         }
 
-        if (strlen($this->docblock) === 0) {
+        if ($this->docblock === null) {
             return null;
         }
 
