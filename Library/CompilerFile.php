@@ -751,8 +751,9 @@ final class CompilerFile implements FileInterface
                     if ($compiler->isBundledInterface($interface)) {
                         $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
                     } else {
-                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
-                        $classDefinition->setExtendsClassDefinition($extendedDefinition);
+                        if ($extendedClass !== null) {
+                            $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
+                        }
 
                         $this->logger->warning(
                             sprintf(
