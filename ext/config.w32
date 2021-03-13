@@ -27,6 +27,8 @@ if (PHP_STUB != "no") {
 	ADD_SOURCES(configure_module_dirname + "/stub/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/integration/psr/http/message", "messageinterfaceex.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/mcall", "caller.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/namespaces/a/b", "sub.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/namespaces", "classentry.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/db/query/placeholder", "exception.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/spl", "arrayobject.zep.c directoryiterator.zep.c doublylinkedlist.zep.c fileinfo.zep.c fileobject.zep.c filesystemiterator.zep.c fixedarray.zep.c globiterator.zep.c heap.zep.c maxheap.zep.c minheap.zep.c priorityqueue.zep.c queue.zep.c recursivedirectoryiterator.zep.c stack.zep.c tempfileobject.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/optimizers", "isscalar.zep.c acos.zep.c arraymerge.zep.c asin.zep.c cos.zep.c createarray.zep.c ldexp.zep.c sin.zep.c sqrt.zep.c strreplace.zep.c substr.zep.c tan.zep.c", "stub");

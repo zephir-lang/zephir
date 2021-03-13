@@ -2557,11 +2557,12 @@ class ClassMethod
             // Continue below execution
         }
 
+        $classNamespace = explode('\\', $className);
+
         /**
          * Full namespace with class name
          */
         if (strpos($className, '\\') === 0) {
-            $classNamespace = explode('\\', $className);
             $classNamespace = array_values(array_filter($classNamespace));
 
             /**
@@ -2579,18 +2580,18 @@ class ClassMethod
             }
 
             $className = end($classNamespace);
-        }
+            array_pop($classNamespace);
+        } else {
+            /**
+             * Check for partial namespace specification
+             * Example: Oo\Param, while namespace at the top is Stub
+             */
+            $className = end($classNamespace);
+            array_pop($classNamespace);
 
-        /**
-         * Check for partial namespace specification
-         * Example: Oo\Param, while namespace at the top is Stub
-         */
-        $classNamespace = explode('\\', $className);
-        $className = end($classNamespace);
-        array_pop($classNamespace);
-
-        if ($isAlias === false) {
-            array_unshift($classNamespace, $this->classDefinition->getNamespace());
+            if ($isAlias === false) {
+                array_unshift($classNamespace, $this->classDefinition->getNamespace());
+            }
         }
 
         $namespace = join('\\', $classNamespace);

@@ -133,6 +133,8 @@ zend_class_entry *stub_mcalldynamic_ce;
 zend_class_entry *stub_mcallinternal_ce;
 zend_class_entry *stub_methodabstract_ce;
 zend_class_entry *stub_methodargs_ce;
+zend_class_entry *stub_namespaces_a_b_sub_ce;
+zend_class_entry *stub_namespaces_classentry_ce;
 zend_class_entry *stub_nativearray_ce;
 zend_class_entry *stub_oo_abstractclass_ce;
 zend_class_entry *stub_oo_ce;
@@ -342,6 +344,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Mcall_Caller);
 	ZEPHIR_INIT(Stub_MethodAbstract);
 	ZEPHIR_INIT(Stub_MethodArgs);
+	ZEPHIR_INIT(Stub_Namespaces_A_B_Sub);
+	ZEPHIR_INIT(Stub_Namespaces_ClassEntry);
 	ZEPHIR_INIT(Stub_NativeArray);
 	ZEPHIR_INIT(Stub_Oo);
 	ZEPHIR_INIT(Stub_Oo_AbstractClass);

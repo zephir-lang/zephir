@@ -148,7 +148,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars) {
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 72, obj);
+	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 65, obj);
 	zephir_check_call_status();
 	RETURN_MM();
 
