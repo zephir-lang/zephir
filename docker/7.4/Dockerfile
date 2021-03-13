@@ -18,6 +18,22 @@ RUN apt update -y && apt install -y \
 RUN docker-php-ext-install zip gmp intl && \
     docker-php-ext-enable psr
 
+# Install Zephir parser
+RUN PHP_INI_DIR="$(dirname "$(php -i | grep /.+/conf.d/.+.ini -oE | head -n 1)")" && \
+    cd /opt && \
+    git clone -b "development" \
+            --depth 1 \
+            -q https://github.com/phalcon/php-zephir-parser \
+            php-zephir-parser && \
+    cd php-zephir-parser || exit 1 && \
+    phpize && \
+    ./configure --with-php-config="$(command -v php-config)" --enable-zephir_parser && \
+    make -j"$(getconf _NPROCESSORS_ONLN)" && \
+    sudo make install && \
+    echo 'extension="zephir_parser.so"' |\
+      sudo tee "$PHP_INI_DIR/zephir_parser.ini" && \
+    php --ri "Zephir Parser"
+
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
 CMD ["php-fpm"]
