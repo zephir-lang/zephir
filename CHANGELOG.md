@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Fixed
 - Fixed parameters type detection in methods/functions (PHP `>= 8.0` only)
+- Fixed not adding all build directories [#2144](https://github.com/zephir-lang/zephir/pull/2144)
 
 ## [0.12.21] - 2021-03-05
 ### Fixed
