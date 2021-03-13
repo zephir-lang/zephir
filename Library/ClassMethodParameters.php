@@ -9,20 +9,27 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
+use ArrayAccess;
+use Countable;
+use Iterator;
 use Zephir\Exception\CompilerException;
+
+use function count;
 
 /**
  * Zephir\ClassMethodParameters.
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
+class ClassMethodParameters implements Countable, Iterator, ArrayAccess
 {
-    private $parameters = [];
+    private array $parameters = [];
 
-    private $position = 0;
+    private int $position = 0;
 
     /**
      * ClassMethodParameters constructor.
@@ -51,7 +58,7 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -59,9 +66,9 @@ class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
-        return \count($this->parameters);
+        return count($this->parameters);
     }
 
     public function rewind()

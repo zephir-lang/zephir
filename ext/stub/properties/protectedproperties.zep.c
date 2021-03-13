@@ -71,6 +71,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_ProtectedProperties) {
 	zend_declare_property_null(stub_properties_protectedproperties_ce, SL("someArrayVar"), ZEND_ACC_PROTECTED);
 
 	stub_properties_protectedproperties_ce->create_object = zephir_init_properties_Stub_Properties_ProtectedProperties;
+
 	return SUCCESS;
 
 }

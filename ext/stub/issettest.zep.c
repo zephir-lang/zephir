@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_IssetTest) {
 	zend_declare_property_null(stub_issettest_ce, SL("s"), ZEND_ACC_PUBLIC);
 
 	stub_issettest_ce->create_object = zephir_init_properties_Stub_IssetTest;
+
 	return SUCCESS;
 
 }

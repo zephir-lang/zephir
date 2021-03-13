@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_NativeArray) {
 	zend_declare_property_null(stub_nativearray_ce, SL("prefixes"), ZEND_ACC_PROTECTED);
 
 	stub_nativearray_ce->create_object = zephir_init_properties_Stub_NativeArray;
+
 	return SUCCESS;
 
 }

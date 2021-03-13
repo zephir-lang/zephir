@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_ExtendsPublicProperties) {
 	zend_declare_property_null(stub_properties_extendspublicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED);
 
 	stub_properties_extendspublicproperties_ce->create_object = zephir_init_properties_Stub_Properties_ExtendsPublicProperties;
+
 	return SUCCESS;
 
 }
