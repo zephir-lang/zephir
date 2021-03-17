@@ -265,7 +265,6 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 #if PHP_VERSION_ID >= 80000
 			if (ce && Z_TYPE_P(func) == IS_STRING) {
 				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
-
 				fcic->calling_scope = ce;
 			} else if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
 				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
@@ -407,6 +406,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #else
 	zval p[fci.param_count];
 #endif
+
 	uint32_t i;
 	for (i = 0; i < fci.param_count; ++i) {
 		ZVAL_COPY_VALUE(&p[i], params[i]);
@@ -421,6 +421,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 #endif
 
 	status = zend_call_function(&fci, &fcic);
+
 #ifdef _MSC_VER
 	efree(p);
 #endif
@@ -529,11 +530,18 @@ int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
 	return status;
 }
 
-int zephir_call_class_method_aparams(zval *return_value, zend_class_entry *ce, zephir_call_type type, zval *object,
-	const char *method_name, uint32_t method_len,
-	zephir_fcall_cache_entry **cache_entry, int cache_slot,
-	uint32_t param_count, zval **params)
-{
+int zephir_call_class_method_aparams(
+    zval *return_value,
+    zend_class_entry *ce,
+    zephir_call_type type,
+    zval *object,
+	const char *method_name,
+	uint32_t method_len,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
 	int status;
 
 #ifndef ZEPHIR_RELEASE
