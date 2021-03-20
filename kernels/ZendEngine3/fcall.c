@@ -268,6 +268,9 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 				fcic->calling_scope = ce;
 			} else if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
 				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
+				// TODO: Review when error will be enabled in zend_is_callable_ex() calls
+				//fcic->object = zend_get_this_object(EG(current_execute_data));
+				//fcic->called_scope = zend_get_called_scope(EG(current_execute_data));
 				fcic->calling_scope = calling_scope;
 			}
 #else
@@ -400,7 +403,16 @@ int zephir_call_user_function(
 		resolve_callable(&callable, type, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), object_pp, function_name);
 
 #if PHP_VERSION_ID >= 80000
+        char *is_callable_error = NULL;
 		if (obj_ce || !zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL)) {
+		    // TODO: enable error tracker for more correct function definition
+            if (is_callable_error) {
+                zend_error(E_WARNING, "%s", is_callable_error);
+                efree(is_callable_error);
+
+                return FAILURE;
+            }
+
 			populate_fcic(&fcic, type, obj_ce, object_pp, function_name, called_scope);
 		}
 #else
@@ -459,6 +471,7 @@ int zephir_call_user_function(
 		}
 	}
 
+    //printf("Pointer %p, %p, %p | Function - %s\n", fci.retval, retval_ptr, &local_retval_ptr, Z_STRVAL_P(function_name));
 	if (!retval_ptr) {
 		zval_ptr_dtor(&local_retval_ptr);
 	} else if (FAILURE == status || EG(exception)) {
