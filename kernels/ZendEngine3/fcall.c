@@ -404,8 +404,8 @@ int zephir_call_user_function(
 
 #if PHP_VERSION_ID >= 80000
         char *is_callable_error = NULL;
-		if (obj_ce || !zend_is_callable_ex(&callable, fci.object, IS_CALLABLE_CHECK_SILENT, NULL, &fcic, NULL)) {
-		    // TODO: enable error tracker for more correct function definition
+        zend_execute_data *frame = EG(current_execute_data);
+		if (obj_ce || !zend_is_callable_at_frame(&callable, fci.object, frame, 0, &fcic, &is_callable_error)) {
             if (is_callable_error) {
                 zend_error(E_WARNING, "%s", is_callable_error);
                 efree(is_callable_error);
