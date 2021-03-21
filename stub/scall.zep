@@ -6,7 +6,6 @@ namespace Stub;
 
 class Scall extends ScallParent
 {
-
 	static public function testMethod1() -> string
 	{
 		return "hello public";
