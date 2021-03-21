@@ -13,6 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Zephir\Code\Builder\Struct;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
@@ -1285,7 +1286,7 @@ final class Compiler
                     throw new Exception("Struct name: '".$structureName."' contains invalid characters");
                 }
 
-                $structBuilder = new Code\Builder\Struct('_zephir_struct_'.$structureName, $structureName);
+                $structBuilder = new Struct('_zephir_struct_'.$structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
                     if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
                         throw new Exception("Struct field name: '".$field."' contains invalid characters");
