@@ -471,7 +471,6 @@ int zephir_call_user_function(
 		}
 	}
 
-    //printf("Pointer %p, %p, %p | Function - %s\n", fci.retval, retval_ptr, &local_retval_ptr, Z_STRVAL_P(function_name));
 	if (!retval_ptr) {
 		zval_ptr_dtor(&local_retval_ptr);
 	} else if (FAILURE == status || EG(exception)) {
