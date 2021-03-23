@@ -25,6 +25,7 @@ use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
 
 use function count;
+use function dirname;
 use function is_array;
 use function is_string;
 
@@ -155,7 +156,7 @@ final class Compiler
 
         // fallback
         if (empty($prototypesPath)) {
-            $prototypesPath = \dirname(__DIR__).'/prototypes';
+            $prototypesPath = dirname(__DIR__).'/prototypes';
         }
 
         if (!is_dir($prototypesPath) || !is_readable($prototypesPath)) {
@@ -199,7 +200,7 @@ final class Compiler
     /**
      * @param string $templatesPath
      */
-    public function setTemplatesPath($templatesPath)
+    public function setTemplatesPath(string $templatesPath): void
     {
         $this->templatesPath = $templatesPath;
     }
@@ -639,7 +640,7 @@ final class Compiler
             $this->setExtensionGlobals($globals);
         }
 
-        /*
+        /**
          * Load function optimizers
          */
         if (false === self::$loadedPrototypes) {
@@ -653,7 +654,7 @@ final class Compiler
                 }
             }
 
-            /*
+            /**
              * Load additional extension prototypes.
              */
             $prototypesPath = $this->resolvePrototypesPath();
@@ -677,7 +678,7 @@ final class Compiler
             $prototypeDirs = $this->config->get('prototype-dir');
             if (is_array($prototypeDirs)) {
                 foreach ($prototypeDirs as $prototype => $prototypeDir) {
-                    /*
+                    /**
                      * Check if the extension is installed
                      */
                     if (!\extension_loaded($prototype)) {
@@ -705,7 +706,7 @@ final class Compiler
 
         $hash = '';
         foreach ($this->files as $compileFile) {
-            /*
+            /**
              * Only compile classes in the local extension, ignore external classes
              */
             if (!$compileFile->isExternal()) {
@@ -800,7 +801,7 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 5. Generate concatenation functions
          */
         $this->stringManager->genConcatCode();
@@ -924,17 +925,13 @@ final class Compiler
      * @throws ConfigException
      * @throws Exception
      */
-    public function api(array $options = [], $fromGenerate = false)
+    public function api(array $options = [], bool $fromGenerate = false)
     {
         if (!$fromGenerate) {
             $this->generate();
         }
 
-        $templatesPath = $this->templatesPath;
-        if (null === $templatesPath) {
-            // fallback
-            $templatesPath = \dirname(__DIR__).'/templates';
-        }
+        $templatesPath = $this->templatesPath ?: dirname(__DIR__).'/templates';
 
         $documentator = new Documentation($this->files, $this->config, $templatesPath, $options);
         $documentator->setLogger($this->logger);
@@ -1085,7 +1082,7 @@ final class Compiler
             $compiledHeaders = ['php_'.strtoupper($project).'.h'];
         }
 
-        /*
+        /**
          * Check extra-libs, extra-cflags, package-dependencies exists
          */
         $extraLibs = $this->config->get('extra-libs');
@@ -1247,7 +1244,7 @@ final class Compiler
      *
      * @return array
      */
-    public function processExtensionGlobals($namespace)
+    public function processExtensionGlobals(string $namespace): array
     {
         $globalCode = '';
         $globalStruct = '';
@@ -1270,7 +1267,7 @@ final class Compiler
                 }
             }
 
-            /*
+            /**
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
@@ -1299,7 +1296,8 @@ final class Compiler
                 $globalCode .= "\t".'zephir_struct_'.$structureName.' '.
                                 $structureName.';'.PHP_EOL.PHP_EOL;
             }
-            /*
+
+            /**
              * Process single variables
              */
             foreach ($variables as $name => $global) {
@@ -1385,6 +1383,7 @@ final class Compiler
                 }
             }
         }
+
         $globalsDefault[0] = implode('', $globalsDefault[0]);
         $globalsDefault[1] = implode('', $globalsDefault[1]);
 
@@ -1396,36 +1395,40 @@ final class Compiler
      *
      * @return string
      */
-    public function processExtensionInfo()
+    public function processExtensionInfo(): string
     {
         $phpinfo = '';
 
         $info = $this->config->get('info');
-        if (is_array($info)) {
-            foreach ($info as $table) {
-                $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
-                if (isset($table['header'])) {
-                    $headerArray = [];
-                    foreach ($table['header'] as $header) {
-                        $headerArray[] = '"'.htmlentities($header).'"';
-                    }
+        if (!is_array($info)) {
+            return $phpinfo;
+        }
 
-                    $phpinfo .= "\t".'php_info_print_table_header('. count($headerArray).', '.
-                            implode(', ', $headerArray).');'.PHP_EOL;
+        foreach ($info as $table) {
+            $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
+            if (isset($table['header'])) {
+                $headerArray = [];
+                foreach ($table['header'] as $header) {
+                    $headerArray[] = '"'.htmlentities($header).'"';
                 }
-                if (isset($table['rows'])) {
-                    foreach ($table['rows'] as $row) {
-                        $rowArray = [];
-                        foreach ($row as $field) {
-                            $rowArray[] = '"'.htmlentities($field).'"';
-                        }
 
-                        $phpinfo .= "\t".'php_info_print_table_row('. count($rowArray).', '.
-                                implode(', ', $rowArray).');'.PHP_EOL;
-                    }
-                }
-                $phpinfo .= "\t".'php_info_print_table_end();'.PHP_EOL;
+                $phpinfo .= "\t".'php_info_print_table_header('. count($headerArray).', '.
+                    implode(', ', $headerArray).');'.PHP_EOL;
             }
+
+            if (isset($table['rows'])) {
+                foreach ($table['rows'] as $row) {
+                    $rowArray = [];
+                    foreach ($row as $field) {
+                        $rowArray[] = '"'.htmlentities($field).'"';
+                    }
+
+                    $phpinfo .= "\t".'php_info_print_table_row('. count($rowArray).', '.
+                        implode(', ', $rowArray).');'.PHP_EOL;
+                }
+            }
+
+            $phpinfo .= "\t".'php_info_print_table_end();'.PHP_EOL;
         }
 
         return $phpinfo;
@@ -1439,7 +1442,7 @@ final class Compiler
      *
      * @return array
      */
-    public function processCodeInjection(array $entries, $section = 'request')
+    public function processCodeInjection(array $entries, string $section = 'request'): array
     {
         $codes = [];
         $includes = [];
@@ -1449,6 +1452,7 @@ final class Compiler
                 if (isset($entry['code']) && !empty($entry['code'])) {
                     $codes[] = $entry['code'].';';
                 }
+
                 if (isset($entry['include']) && !empty($entry['include'])) {
                     $includes[] = '#include "'.$entry['include'].'"';
                 }
@@ -1464,7 +1468,7 @@ final class Compiler
      * @param string $namespace
      * @param string $location
      */
-    public function addExternalDependency($namespace, $location)
+    public function addExternalDependency(string $namespace, string $location): void
     {
         $this->externalDependencies[$namespace] = $location;
     }
@@ -1888,7 +1892,7 @@ final class Compiler
      *
      * @return bool
      */
-    public function checkIfPhpized()
+    public function checkIfPhpized(): bool
     {
         return !file_exists('ext/Makefile');
     }
@@ -1900,7 +1904,7 @@ final class Compiler
      *
      * @return string
      */
-    public static function getShortUserPath($path)
+    public static function getShortUserPath(string $path): string
     {
         return str_replace('\\', '/', str_replace(getcwd().\DIRECTORY_SEPARATOR, '', $path));
     }
@@ -2156,7 +2160,7 @@ final class Compiler
     {
         $groupSources = [];
         foreach ($sources as $source) {
-            $dirName = str_replace(\DIRECTORY_SEPARATOR, '/', \dirname($source));
+            $dirName = str_replace(\DIRECTORY_SEPARATOR, '/', dirname($source));
             if (!isset($groupSources[$dirName])) {
                 $groupSources[$dirName] = [];
             }
