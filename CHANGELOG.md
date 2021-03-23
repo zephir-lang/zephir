@@ -8,12 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [0.13.0] - xxxx-xx-xx
 ### Added
-- Added support of PHP `8.0`
+- Added support of PHP `8.0` [#2111](https://github.com/zephir-lang/zephir/pull/2111), [#2165](https://github.com/zephir-lang/zephir/pull/2165)
 
 ### Changed
-- Dropped support of PHP `<= 7.4` versions
-- Removed call of `generate` command inside `compile` call
-- Removed call of `compile` command inside `install` call
+- Dropped support of PHP `<= 7.4` versions [#2111](https://github.com/zephir-lang/zephir/pull/2111)
+- Removed call of `generate` command inside `compile` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
+- Removed call of `compile` command inside `install` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
 
 ### Fixed
 - Fixed parameters type detection in methods/functions (PHP `>= 8.0` only)
