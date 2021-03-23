@@ -831,69 +831,67 @@ final class Compiler
             $extensionName = $namespace;
         }
 
-        if (true === $this->generate()) {
-            if (is_windows()) {
-                // TODO(klay): Make this better. Looks like it is non standard Env. Var
-                exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
+        if (is_windows()) {
+            // TODO(klay): Make this better. Looks like it is non standard Env. Var
+            exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-                $releaseFolder = windows_release_dir();
-                if (file_exists($releaseFolder)) {
-                    exec('rd /s /q '.$releaseFolder, $output, $exit);
-                }
-
-                $this->logger->info('Preparing for PHP compilation...');
-                // TODO(klay): Make this better. Looks like it is non standard Env. Var
-                exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
-
-                /**
-                 * fix until patch hits all supported PHP builds.
-                 *
-                 * @see https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
-                 */
-                $fixMarker = '/* zephir_phpize_fix */';
-
-                $configureFile = file_get_contents('ext\\configure.js');
-                $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
-                $hasChanged = false;
-
-                if (false === strpos($configureFile, $fixMarker)) {
-                    $configureFile = $fixMarker.PHP_EOL.implode(PHP_EOL, $configureFix).PHP_EOL.$configureFile;
-                    $hasChanged = true;
-                }
-
-                /* fix php's broken phpize patching ... */
-                $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
-                $pos = strpos($configureFile, $marker);
-                if (false !== $pos) {
-                    $spMarker = 'if (MODE_PHPIZE) {';
-                    $sp = strpos($configureFile, $spMarker, $pos - 200);
-                    if (false === $sp) {
-                        throw new CompilerException('outofdate... phpize seems broken again');
-                    }
-                    $configureFile = substr($configureFile, 0, $sp).
-                        'if (false) {'.substr($configureFile, $sp + \strlen($spMarker));
-                    $hasChanged = true;
-                }
-
-                if ($hasChanged) {
-                    file_put_contents('ext\\configure.js', $configureFile);
-                }
-
-                $this->logger->info('Preparing configuration file...');
-                exec('cd ext && configure --enable-'.$extensionName);
-            } else {
-                exec('cd ext && make clean && phpize --clean', $output, $exit);
-                $this->logger->info('Preparing for PHP compilation...');
-                exec('cd ext && phpize', $output, $exit);
-                $this->logger->info('Preparing configuration file...');
-
-                exec(
-                    'cd ext && export CC="gcc" && export CFLAGS="'.
-                    $this->getGccFlags($development).
-                    '" && ./configure --enable-'.
-                    $extensionName
-                );
+            $releaseFolder = windows_release_dir();
+            if (file_exists($releaseFolder)) {
+                exec('rd /s /q '.$releaseFolder, $output, $exit);
             }
+
+            $this->logger->info('Preparing for PHP compilation...');
+            // TODO(klay): Make this better. Looks like it is non standard Env. Var
+            exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
+
+            /**
+             * fix until patch hits all supported PHP builds.
+             *
+             * @see https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
+             */
+            $fixMarker = '/* zephir_phpize_fix */';
+
+            $configureFile = file_get_contents('ext\\configure.js');
+            $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
+            $hasChanged = false;
+
+            if (false === strpos($configureFile, $fixMarker)) {
+                $configureFile = $fixMarker.PHP_EOL.implode(PHP_EOL, $configureFix).PHP_EOL.$configureFile;
+                $hasChanged = true;
+            }
+
+            /* fix php's broken phpize patching ... */
+            $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
+            $pos = strpos($configureFile, $marker);
+            if (false !== $pos) {
+                $spMarker = 'if (MODE_PHPIZE) {';
+                $sp = strpos($configureFile, $spMarker, $pos - 200);
+                if (false === $sp) {
+                    throw new CompilerException('outofdate... phpize seems broken again');
+                }
+                $configureFile = substr($configureFile, 0, $sp).
+                    'if (false) {'.substr($configureFile, $sp + \strlen($spMarker));
+                $hasChanged = true;
+            }
+
+            if ($hasChanged) {
+                file_put_contents('ext\\configure.js', $configureFile);
+            }
+
+            $this->logger->info('Preparing configuration file...');
+            exec('cd ext && configure --enable-'.$extensionName);
+        } else {
+            exec('cd ext && make clean && phpize --clean', $output, $exit);
+            $this->logger->info('Preparing for PHP compilation...');
+            exec('cd ext && phpize', $output, $exit);
+            $this->logger->info('Preparing configuration file...');
+
+            exec(
+                'cd ext && export CC="gcc" && export CFLAGS="'.
+                $this->getGccFlags($development).
+                '" && ./configure --enable-'.
+                $extensionName
+            );
         }
 
         $currentDir = getcwd();
