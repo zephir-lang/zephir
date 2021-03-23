@@ -22,7 +22,7 @@ use Zephir\Compiler;
 use Zephir\Exception\CompilerException;
 
 /**
- * Zephir\Console\Command\CompileCommand.
+ * Compile Command
  *
  * Compile a Zephir extension.
  */

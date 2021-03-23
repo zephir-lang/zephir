@@ -24,6 +24,10 @@ use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
 
+use function count;
+use function is_array;
+use function is_string;
+
 final class Compiler
 {
     use LoggerAwareTrait;
@@ -293,7 +297,7 @@ final class Compiler
         /*
          * Try to autoload the class from an external dependency
          */
-        if (\count($this->externalDependencies)) {
+        if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
@@ -326,7 +330,7 @@ final class Compiler
         /*
          * Try to autoload the class from an external dependency
          */
-        if (\count($this->externalDependencies)) {
+        if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
@@ -484,7 +488,7 @@ final class Compiler
 
         $gccFlags = getenv('CFLAGS');
 
-        if (!\is_string($gccFlags)) {
+        if (!is_string($gccFlags)) {
             if (false === $development) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
@@ -558,18 +562,18 @@ final class Compiler
      * @throws IllegalStateException
      * @throws InvalidArgumentException
      */
-    public function generate($fromGenerate = false)
+    public function generate(bool $fromGenerate = false): bool
     {
-        /*
+        /**
          * Get global namespace.
          */
         $namespace = $this->checkDirectory();
 
-        /*
+        /**
          * Check whether there are external dependencies.
          */
         $externalDependencies = $this->config->get('external-dependencies');
-        if (\is_array($externalDependencies)) {
+        if (is_array($externalDependencies)) {
             foreach ($externalDependencies as $dependencyNs => $location) {
                 if (!file_exists($location)) {
                     throw new CompilerException(
@@ -584,24 +588,24 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 1. pre-compile all files in memory
          */
         $this->recursivePreCompile(str_replace('\\', \DIRECTORY_SEPARATOR, $namespace));
-        if (!\count($this->files)) {
+        if (!count($this->files)) {
             throw new Exception(
                 "Zephir files to compile couldn't be found. Did you add a first class to the extension?"
             );
         }
 
-        /*
+        /**
          * Round 2. Check 'extends' and 'implements' dependencies
          */
         foreach ($this->files as $compileFile) {
             $compileFile->checkDependencies($this);
         }
 
-        /*
+        /**
          * Sort the files by dependency ranking.
          */
         $files = [];
@@ -619,19 +623,19 @@ final class Compiler
         }
         $this->files = $files;
 
-        /*
+        /**
          * Convert C-constants into PHP constants.
          */
         $constantsSources = $this->config->get('constants-sources');
-        if (\is_array($constantsSources)) {
+        if (is_array($constantsSources)) {
             $this->loadConstantsSources($constantsSources);
         }
 
-        /*
+        /**
          * Set extension globals.
          */
         $globals = $this->config->get('globals');
-        if (\is_array($globals)) {
+        if (is_array($globals)) {
             $this->setExtensionGlobals($globals);
         }
 
@@ -643,7 +647,7 @@ final class Compiler
             FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
 
             $customOptimizersPaths = $this->config->get('optimizer-dirs');
-            if (\is_array($customOptimizersPaths)) {
+            if (is_array($customOptimizersPaths)) {
                 foreach ($customOptimizersPaths as $directory) {
                     FunctionCall::addOptimizerDir(realpath($directory));
                 }
@@ -671,7 +675,7 @@ final class Compiler
              * Load customer additional extension prototypes.
              */
             $prototypeDirs = $this->config->get('prototype-dir');
-            if (\is_array($prototypeDirs)) {
+            if (is_array($prototypeDirs)) {
                 foreach ($prototypeDirs as $prototype => $prototypeDir) {
                     /*
                      * Check if the extension is installed
@@ -724,7 +728,7 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 3.2. Compile anonymous classes
          */
         foreach ($this->anonymousFiles as $compileFile) {
@@ -749,7 +753,7 @@ final class Compiler
          * Round 3.3. Load extra C-sources.
          */
         $extraSources = $this->config->get('extra-sources');
-        if (\is_array($extraSources)) {
+        if (is_array($extraSources)) {
             $this->extraFiles = $extraSources;
         } else {
             $this->extraFiles = [];
@@ -759,7 +763,7 @@ final class Compiler
          * Round 3.4. Load extra classes sources.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['source'])) {
                     $this->extraFiles[] = $value['source'];
@@ -772,7 +776,7 @@ final class Compiler
          */
         $namespace = str_replace('\\', '_', $namespace);
         $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !\is_string($extensionName)) {
+        if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
@@ -780,7 +784,7 @@ final class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        /*
+        /**
          * When a new file is added or removed we need to run configure again
          */
         if (!$fromGenerate) {
@@ -816,20 +820,18 @@ final class Compiler
      *
      * @throws CompilerException|Exception
      */
-    public function compile($development = false)
+    public function compile(bool $development = false): void
     {
         /**
          * Get global namespace.
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
         $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !\is_string($extensionName)) {
+        if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
-        $needConfigure = $this->generate();
-
-        if ($needConfigure) {
+        if (true === $this->generate()) {
             if (is_windows()) {
                 // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
@@ -838,6 +840,7 @@ final class Compiler
                 if (file_exists($releaseFolder)) {
                     exec('rd /s /q '.$releaseFolder, $output, $exit);
                 }
+
                 $this->logger->info('Preparing for PHP compilation...');
                 // TODO(klay): Make this better. Looks like it is non standard Env. Var
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
@@ -880,17 +883,13 @@ final class Compiler
                 exec('cd ext && configure --enable-'.$extensionName);
             } else {
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
-
                 $this->logger->info('Preparing for PHP compilation...');
                 exec('cd ext && phpize', $output, $exit);
-
                 $this->logger->info('Preparing configuration file...');
-
-                $gccFlags = $this->getGccFlags($development);
 
                 exec(
                     'cd ext && export CC="gcc" && export CFLAGS="'.
-                    $gccFlags.
+                    $this->getGccFlags($development).
                     '" && ./configure --enable-'.
                     $extensionName
                 );
@@ -1266,7 +1265,7 @@ final class Compiler
          * Generate the extensions globals declaration.
          */
         $globals = $this->config->get('globals');
-        if (\is_array($globals)) {
+        if (is_array($globals)) {
             $structures = [];
             $variables = [];
             foreach ($globals as $name => $global) {
@@ -1409,7 +1408,7 @@ final class Compiler
         $phpinfo = '';
 
         $info = $this->config->get('info');
-        if (\is_array($info)) {
+        if (is_array($info)) {
             foreach ($info as $table) {
                 $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
                 if (isset($table['header'])) {
@@ -1418,7 +1417,7 @@ final class Compiler
                         $headerArray[] = '"'.htmlentities($header).'"';
                     }
 
-                    $phpinfo .= "\t".'php_info_print_table_header('.\count($headerArray).', '.
+                    $phpinfo .= "\t".'php_info_print_table_header('. count($headerArray).', '.
                             implode(', ', $headerArray).');'.PHP_EOL;
                 }
                 if (isset($table['rows'])) {
@@ -1428,7 +1427,7 @@ final class Compiler
                             $rowArray[] = '"'.htmlentities($field).'"';
                         }
 
-                        $phpinfo .= "\t".'php_info_print_table_row('.\count($rowArray).', '.
+                        $phpinfo .= "\t".'php_info_print_table_row('. count($rowArray).', '.
                                 implode(', ', $rowArray).');'.PHP_EOL;
                     }
                 }
@@ -1648,7 +1647,7 @@ final class Compiler
          * Check if there are module/request/global destructors.
          */
         $destructors = $this->config->get('destructors');
-        if (\is_array($destructors)) {
+        if (is_array($destructors)) {
             $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
             $includes .= PHP_EOL.$invokeRequestDestructors[0];
             $reqDestructors = $invokeRequestDestructors[1];
@@ -1670,7 +1669,7 @@ final class Compiler
          * Check if there are module/request/global initializers.
          */
         $initializers = $this->config->get('initializers');
-        if (\is_array($initializers)) {
+        if (is_array($initializers)) {
             $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
             $includes .= PHP_EOL.$invokeRequestInitializers[0];
             $reqInitializers = $invokeRequestInitializers[1];
@@ -1688,7 +1687,7 @@ final class Compiler
          * Append extra details.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['init'])) {
                     $completeClassInits[] = 'ZEPHIR_INIT('.$value['init'].')';
@@ -1784,7 +1783,7 @@ final class Compiler
          * Append extra headers.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['header'])) {
                     $include = '#include "'.$value['header'].'"';
@@ -1925,7 +1924,7 @@ final class Compiler
     public function generatePackageDependenciesM4($contentM4)
     {
         $packageDependencies = $this->config->get('package-dependencies');
-        if (\is_array($packageDependencies)) {
+        if (is_array($packageDependencies)) {
             $pkgconfigM4 = $this->backend->getTemplateFileContents('pkg-config.m4');
             $pkgconfigCheckM4 = $this->backend->getTemplateFileContents('pkg-config-check.m4');
             $extraCFlags = '';
@@ -1936,7 +1935,7 @@ final class Compiler
                 $operator = '=';
                 $operatorCmd = '--exact-version';
                 $ar = explode('=', $version);
-                if (1 == \count($ar)) {
+                if (1 == count($ar)) {
                     if ('*' == $version) {
                         $version = '0.0.0';
                         $operator = '>=';
@@ -2195,7 +2194,7 @@ final class Compiler
         foreach ($extensionRequires as $key => $value) {
             // TODO: We'll use this as an object in the future.
             // Right not it should be a string.
-            if (!\is_string($value)) {
+            if (!is_string($value)) {
                 continue;
             }
             if (false === \extension_loaded($value)) {
@@ -2290,7 +2289,7 @@ final class Compiler
             throw new Exception('Extension namespace cannot be loaded');
         }
 
-        if (!\is_string($namespace)) {
+        if (!is_string($namespace)) {
             throw new Exception('Extension namespace is invalid');
         }
 
@@ -2330,7 +2329,7 @@ final class Compiler
         $lines = $this->filesystem->file('gcc-version');
         $lines = array_filter($lines);
 
-        $lastLine = $lines[\count($lines) - 1];
+        $lastLine = $lines[count($lines) - 1];
         if (preg_match('/\d+\.\d+\.\d+/', $lastLine, $matches)) {
             return $matches[0];
         }
