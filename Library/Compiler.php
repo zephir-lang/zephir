@@ -982,15 +982,13 @@ final class Compiler
     /**
      * Compiles and installs the extension.
      *
-     * TODO: Move to the separated installer
-     *
      * @param bool $development
      *
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
      */
-    public function install($development = false)
+    public function install(bool $development = false): void
     {
         // Get global namespace
         $namespace = str_replace('\\', '_', $this->checkDirectory());
@@ -1012,10 +1010,7 @@ final class Compiler
             unlink("{$currentDir}/ext/modules/{$namespace}.so");
         }
 
-        $this->compile($development);
-
         $this->logger->info('Installing...');
-
         $gccFlags = $this->getGccFlags($development);
 
         $command = strtr(
