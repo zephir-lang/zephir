@@ -9,17 +9,17 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
 
-abstract class Command extends BaseCommand
+abstract class AbstractCommand extends Command
 {
     use RemoveOptionsTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param bool $mergeArgs
      */
     public function mergeApplicationDefinition($mergeArgs = true)

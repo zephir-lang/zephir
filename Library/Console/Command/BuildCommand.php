@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
@@ -19,11 +21,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Zephir\Console\Command\BuildCommand.
+ * Build Command
  *
  * Generates/Compiles/Installs a Zephir extension.
  */
-final class BuildCommand extends Command
+final class BuildCommand extends AbstractCommand
 {
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
@@ -58,7 +60,7 @@ final class BuildCommand extends Command
         }
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [
@@ -74,11 +76,9 @@ final class BuildCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
-    protected function getDevelopmentModeHelp()
+    protected function getDevelopmentModeHelp(): string
     {
         return <<<'EOT'
 This is a meta command that just calls the <info>generate</info>, <info>compile</info> and <info>install</info> commands.

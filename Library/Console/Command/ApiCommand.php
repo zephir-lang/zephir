@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -19,17 +21,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 use Zephir\Config;
 
+use function in_array;
+
 /**
- * Zephir\Console\Command\ApiCommand.
+ * API Command
  *
  * Generates a HTML API based on the classes exposed in the extension.
  */
-final class ApiCommand extends Command
+final class ApiCommand extends AbstractCommand
 {
     use ZflagsAwareTrait;
 
-    private $compiler;
-    private $config;
+    private Compiler $compiler;
+    private Config $config;
 
     public function __construct(Compiler $compiler, Config $config)
     {
@@ -61,7 +65,7 @@ final class ApiCommand extends Command
         return 0;
     }
 
-    protected function getDefaultOptions()
+    protected function getDefaultOptions(): array
     {
         return [
             'path' => null,
@@ -71,14 +75,14 @@ final class ApiCommand extends Command
         ];
     }
 
-    protected function sanitizeOptionsFromInput(InputInterface $input)
+    protected function sanitizeOptionsFromInput(InputInterface $input): array
     {
         $defaults = $this->getDefaultOptions();
 
         $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {
             $allowedOpts = array_keys($defaults);
 
-            return \in_array($k, $allowedOpts, true) && null !== $v;
+            return in_array($k, $allowedOpts, true) && null !== $v;
         }, ARRAY_FILTER_USE_BOTH);
 
         foreach ($options as $option => $value) {
@@ -93,7 +97,7 @@ final class ApiCommand extends Command
         return $options;
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [

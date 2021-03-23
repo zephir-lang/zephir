@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputDefinition;
@@ -24,12 +26,12 @@ use Zephir\Exception\CompilerException;
  *
  * Compile a Zephir extension.
  */
-final class CompileCommand extends Command
+final class CompileCommand extends AbstractCommand
 {
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
 
-    private $compiler;
+    private Compiler $compiler;
 
     public function __construct(Compiler $compiler)
     {
@@ -67,7 +69,7 @@ final class CompileCommand extends Command
         return 0;
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [
@@ -83,11 +85,9 @@ final class CompileCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
-    protected function getDevelopmentModeHelp()
+    protected function getDevelopmentModeHelp(): string
     {
         return <<<EOT
 Using <comment>--dev</comment> option will force compiling the extension in development mode

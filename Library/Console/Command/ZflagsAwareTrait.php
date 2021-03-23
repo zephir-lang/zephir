@@ -9,11 +9,10 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
-/**
- * Zephir\Console\Command\ZflagsAwareTrait.
- */
 trait ZflagsAwareTrait
 {
     /**

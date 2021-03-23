@@ -9,8 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
+use DirectoryIterator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,16 +24,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\BaseBackend;
 use Zephir\Config;
 
+use function chdir;
+use function extension_loaded;
+use function is_dir;
+use function is_readable;
+use function mkdir;
+use function preg_match;
+
+use const DIRECTORY_SEPARATOR;
+
 /**
- * Zephir\Console\Command\InitCommand.
+ * Init Command
  *
  * Initializes a Zephir extension.
  */
-final class InitCommand extends Command
+final class InitCommand extends AbstractCommand
 {
-    private $backend;
-    private $config;
-    private $logger;
+    private BaseBackend $backend;
+    private Config $config;
+    private LoggerInterface $logger;
 
     public function __construct(BaseBackend $backend, Config $config, LoggerInterface $logger)
     {
@@ -55,8 +67,8 @@ final class InitCommand extends Command
         $namespace = $this->sanitizeNamespace($input->getArgument('namespace'));
 
         // Tell the user the name could be reserved by another extension
-        if (\extension_loaded($namespace)) {
-            $this->logger->error('This extension can have conflicts with an existing loaded extension');
+        if (extension_loaded($namespace)) {
+            $this->logger->warning('This extension can have conflicts with an existing loaded extension');
         }
 
         $this->config->set('namespace', $namespace);
@@ -102,7 +114,7 @@ final class InitCommand extends Command
         );
     }
 
-    private function sanitizeNamespace($namespace)
+    private function sanitizeNamespace(string $namespace): string
     {
         // Prevent "" namespace
         if (empty($namespace)) {
@@ -122,17 +134,17 @@ final class InitCommand extends Command
     /**
      * Copies the base kernel to the extension destination.
      *
-     * @param $src
-     * @param $dst
-     * @param string $pattern
-     * @param mixed  $callback
+     * @param string $src
+     * @param string $dst
+     * @param string|null $pattern
+     * @param string  $callback
      *
      * @return bool
      */
-    private function recursiveProcess($src, $dst, $pattern = null, $callback = 'copy'): bool
+    private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): bool
     {
         $success = true;
-        $iterator = new \DirectoryIterator($src);
+        $iterator = new DirectoryIterator($src);
 
         foreach ($iterator as $item) {
             $pathName = $item->getPathname();
@@ -145,13 +157,13 @@ final class InitCommand extends Command
 
             if ($item->isDir()) {
                 if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
-                    if (!is_dir($dst.\DIRECTORY_SEPARATOR.$fileName)) {
-                        mkdir($dst.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    if (!is_dir($dst. DIRECTORY_SEPARATOR.$fileName)) {
+                        mkdir($dst. DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dst.\DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dst. DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
-            } elseif (!$pattern || ($pattern && 1 === preg_match($pattern, $fileName))) {
-                $path = $dst.\DIRECTORY_SEPARATOR.$fileName;
+            } elseif ($pattern === null || 1 === preg_match($pattern, $fileName)) {
+                $path = $dst. DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && $callback($pathName, $path);
             }
         }
