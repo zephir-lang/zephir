@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Changed
 - Dropped support of PHP `<= 7.4` versions
+- Removed call of `generate` command inside `compile` call
+- Removed call of `compile` command inside `install` call
 
 ### Fixed
 - Fixed parameters type detection in methods/functions (PHP `>= 8.0` only)
