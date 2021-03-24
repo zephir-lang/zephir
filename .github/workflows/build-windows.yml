@@ -197,17 +197,15 @@ jobs:
       - name: Minimal Load Test for Stub Extension
         run: php --ri "${env:EXTENSION_NAME}"
 
-      - name: Install PHPUnit
-        run: php phpunit install
-
-      - name: Run Unit Tests
-        shell: cmd
+      - name: Unit Testing - Extension
+        if: always()
         run: |
-          SET X=0
-          php phpunit install
-          php phpunit --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php --testsuite Extension_Php72 || SET X=!errorlevel!
-          php phpunit --testsuite Zephir || SET X=!errorlevel!
-          exit %X%
+          php \
+            -d extension="${env:RELEASE_DLL_PATH}" \
+            %GITHUB_WORKSPACE%\vendor\bin\phpunit \
+            --colors=always \
+            --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php \
+            --testsuite Extension
 
       - name: After Failure
         if: failure()
