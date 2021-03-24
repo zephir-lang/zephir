@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,24 +9,33 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension\Integral;
 
 use PHPUnit\Framework\TestCase;
 use Stub\RegexDNA;
 
+use function dirname;
+use function Zephir\is_windows;
+
 final class RegexDNATest extends TestCase
 {
     public function testProcess(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Different strlen() in Windows.');
+        }
+
         $test = new RegexDNA();
 
         ob_start();
-        $test->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
+        $test->process(dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(
             $content,
-            file_get_contents(\dirname(__DIR__).'/../fixtures/regexdna/output.txt')
+            file_get_contents(dirname(__DIR__).'/../fixtures/regexdna/output.txt')
         );
     }
 }

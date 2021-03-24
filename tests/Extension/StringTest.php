@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,10 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Strings;
+
+use function Zephir\is_windows;
 
 final class StringTest extends TestCase
 {
@@ -257,6 +259,10 @@ final class StringTest extends TestCase
 
     public function testMultilineStrings(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('String will contain different line endings.');
+        }
+
         $hardcodedString = '
             Hello world
         ';
