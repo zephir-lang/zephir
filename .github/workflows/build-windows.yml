@@ -172,6 +172,7 @@ jobs:
 
       - name: Compile Stub Project
         run: |
+          .\zephir.bat generate
           .\zephir.bat compile `
             -Wnonexistent-function `
             -Wnonexistent-class `
