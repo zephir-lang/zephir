@@ -25,7 +25,7 @@ env:
 jobs:
   windows:
     name: "Windows: PHP v${{ matrix.php }}"
-    runs-on: windows-latest
+    runs-on: windows-2016
 
     strategy:
       fail-fast: false
