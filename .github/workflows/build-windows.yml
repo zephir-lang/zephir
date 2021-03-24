@@ -202,7 +202,7 @@ jobs:
         run: |
           .\vendor\bin\phpunit `
             --colors=always `
-            --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php `
+            --bootstrap tests\ext-bootstrap.php `
             --testsuite Extension
 
       - name: After Failure
