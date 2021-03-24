@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,15 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Test\Logger\Formatter;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
 use Zephir\Logger\Formatter\CompilerFormatter;
+
+use function Zephir\is_windows;
 
 final class CompilerFormatterTest extends TestCase
 {
@@ -71,6 +73,10 @@ final class CompilerFormatterTest extends TestCase
 
     public function testShouldFormatWarningForCategory(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         // allow to print warnings for this category
         $this->config->offsetSet(['warnings' => 'unused-variable-external'], true);
         $compilerFormatter = new CompilerFormatter($this->config);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,10 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Stubs\DocBlock;
+
+use function Zephir\is_windows;
 
 final class DocBlockTest extends TestCase
 {
@@ -27,6 +29,10 @@ final class DocBlockTest extends TestCase
 
     public function testDescription(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Hello world
@@ -47,6 +53,10 @@ DOC;
 
     public function testPhpDocs(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * @param string \$foo
@@ -66,6 +76,10 @@ DOC;
 
     public function testPhpDocWithDescription(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Hello world
@@ -87,6 +101,10 @@ DOC;
 
     public function testPhpDocWithCodeBloc(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Some method.
@@ -134,6 +152,10 @@ DOC;
 
     public function testPhpDocWithScalarParams(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * Method with various input params
@@ -188,6 +210,10 @@ DOC;
 
     public function testPhpDocWithVariousDocBlockTags(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * Method with various tags
@@ -227,6 +253,10 @@ DOC;
 
     public function testPhpDocWithDoubleDollarSymbols(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * @param integer \$\$dollars - var description

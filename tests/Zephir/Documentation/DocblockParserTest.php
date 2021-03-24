@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Test\Documentation;
 
@@ -21,10 +21,16 @@ use Zephir\Documentation\Annotation\See;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 
+use function Zephir\is_windows;
+
 final class DocblockParserTest extends TestCase
 {
     public function testShouldParseDocblockFromString(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $test = <<<DOC
 /**
  * This file is part of the Zephir.

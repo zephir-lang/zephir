@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Test\Stubs;
 
@@ -22,6 +22,8 @@ use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\Stubs\Generator;
+
+use function Zephir\is_windows;
 
 class GeneratorTest extends TestCase
 {
@@ -56,6 +58,10 @@ class GeneratorTest extends TestCase
 
     public function testShouldBuildClass(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $expected = <<<DOC
 <?php
 
@@ -243,6 +249,10 @@ DOC;
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $original = [
             'default' => [
                 'type' => $type,
@@ -326,6 +336,10 @@ DOC;
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $buildClass = $this->getMethod('buildConstant');
 
         $extended = [];
@@ -367,6 +381,10 @@ DOC;
 
     public function testShouldBuildMethod(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $buildClass = $this->getMethod('buildMethod');
 
         $methodParamsDefinition = [
