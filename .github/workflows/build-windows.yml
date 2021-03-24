@@ -33,7 +33,7 @@ jobs:
       matrix:
         php:
           - '7.4'
-          - '8.0'
+          #- '8.0'
 
         include:
           - php: '7.4'
@@ -41,10 +41,10 @@ jobs:
             arch: x64
             build_type: nts
 
-          - php: '8.0'
-            vc_num: '15'
-            arch: x64
-            build_type: nts
+          #- php: '8.0'
+          #  vc_num: '15'
+          #  arch: x64
+          #  build_type: nts
 
     steps:
       - name: Setup PHP
