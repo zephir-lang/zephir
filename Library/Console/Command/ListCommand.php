@@ -9,12 +9,14 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Command\ListCommand as Command;
 
 /**
- * Zephir\Console\Command\ListCommand.
+ * List Command
  *
  * Displays the list of all available commands for the application.
  */

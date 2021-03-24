@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputDefinition;
@@ -20,15 +22,15 @@ use Zephir\Compiler;
 use Zephir\Exception\ExceptionInterface;
 
 /**
- * Zephir\Console\Command\StubsCommand.
+ * Stubs Command
  *
  * Generates stubs that can be used in a PHP IDE.
  */
-final class StubsCommand extends Command
+final class StubsCommand extends AbstractCommand
 {
     use ZflagsAwareTrait;
 
-    private $compiler;
+    private Compiler $compiler;
 
     public function __construct(Compiler $compiler)
     {
@@ -62,7 +64,7 @@ final class StubsCommand extends Command
         return 0;
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [

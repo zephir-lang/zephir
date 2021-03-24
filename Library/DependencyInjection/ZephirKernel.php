@@ -9,26 +9,30 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\DependencyInjection;
 
-use const DIRECTORY_SEPARATOR;
 use Exception;
 use Oneup\FlysystemBundle\OneupFlysystemBundle;
 use RuntimeException;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Throwable;
 use Zephir\DependencyInjection\CompilerPass\CollectCommandsToApplicationCompilerPass;
+use Zephir\Zephir;
+
+use function dirname;
 use function Zephir\is_macos;
 use function Zephir\is_windows;
-use Zephir\Zephir;
+
+use const DIRECTORY_SEPARATOR;
 
 final class ZephirKernel extends Kernel
 {
-    private $extraConfigFiles;
+    private array $extraConfigFiles;
     private $startedDir;
 
     /**
@@ -38,20 +42,18 @@ final class ZephirKernel extends Kernel
      * @param bool     $debug       Whether to enable debugging or not
      * @param string[] $configFiles Optional Zephir configuration files
      */
-    public function __construct($environment, $debug, array $configFiles = [])
+    public function __construct(string $environment, bool $debug, array $configFiles = [])
     {
-        $this->extraConfigFiles = $configFiles;
         $this->startedDir = getcwd();
+        $this->extraConfigFiles = $configFiles;
 
         parent::__construct($environment, $debug);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return BundleInterface[]|iterable
+     * @return array
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [
             new MonologBundle(),
@@ -76,8 +78,6 @@ final class ZephirKernel extends Kernel
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
     public function getCacheDir(): string
@@ -165,7 +165,7 @@ final class ZephirKernel extends Kernel
      */
     public function getProjectDir(): string
     {
-        return \dirname(__DIR__, 2);
+        return dirname(__DIR__, 2);
     }
 
     /**
@@ -175,7 +175,7 @@ final class ZephirKernel extends Kernel
      */
     public function getRootDir(): string
     {
-        return \dirname(__DIR__);
+        return dirname(__DIR__);
     }
 
     /**
@@ -191,11 +191,11 @@ final class ZephirKernel extends Kernel
     /**
      * {@inheritdoc}
      *
-     * @param ContainerBuilder $containerBuilder
+     * @param ContainerBuilder $container
      */
-    protected function build(ContainerBuilder $containerBuilder)
+    protected function build(ContainerBuilder $container)
     {
-        $containerBuilder->addCompilerPass(new CollectCommandsToApplicationCompilerPass());
+        $container->addCompilerPass(new CollectCommandsToApplicationCompilerPass());
     }
 
     /**

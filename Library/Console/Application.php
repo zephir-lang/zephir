@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console;
 
 use Exception;
@@ -40,7 +42,7 @@ final class Application extends BaseApplication
         $this->setupEventDispatcher();
     }
 
-    protected function setupEventDispatcher()
+    protected function setupEventDispatcher(): void
     {
         $dispatcher = new EventDispatcher();
         $consoleErrorListener = new ConsoleErrorListener();
@@ -64,11 +66,11 @@ final class Application extends BaseApplication
     }
 
     /**
-     * {@inheritdoc}
+     * Get Version Number
      *
      * @return string The application version
      */
-    public function getVernum()
+    public function getVerNum(): string
     {
         $version = explode('-', parent::getVersion());
         $version = explode('.', $version[0]);
@@ -81,7 +83,7 @@ final class Application extends BaseApplication
      *
      * @return string The application version
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         $version = explode('-', parent::getVersion());
 
@@ -97,7 +99,7 @@ final class Application extends BaseApplication
      *
      * @return string The long application version
      */
-    public function getLongVersion()
+    public function getLongVersion(): string
     {
         $version = explode('-', $this->getVersion());
         $commit = "({$version[1]})";
@@ -131,7 +133,7 @@ final class Application extends BaseApplication
         }
 
         if (true === $input->hasParameterOption(['--vernum'], true)) {
-            $output->writeln($this->getVernum());
+            $output->writeln($this->getVerNum());
 
             return 0;
         }
