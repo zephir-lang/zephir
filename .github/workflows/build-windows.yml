@@ -39,7 +39,6 @@ jobs:
             vc_num: '15'
             arch: x64
             build_type: nts
-            symfony_phpunit: '7.4'
 
     steps:
       - name: Setup PHP
@@ -65,7 +64,6 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          Write-Output "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "PHP_VERSION=$(php -r 'echo phpversion();')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "PHP_MINOR=${{ matrix.php }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "TEST_PHP_EXECUTABLE=${env:PHPROOT}\php.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
