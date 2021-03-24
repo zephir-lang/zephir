@@ -200,11 +200,11 @@ jobs:
       - name: Unit Testing - Extension
         if: always()
         run: |
-          php \
-            -d extension="${env:RELEASE_DLL_PATH}" \
-            %GITHUB_WORKSPACE%\vendor\bin\phpunit \
-            --colors=always \
-            --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php \
+          php `
+            -d extension="${env:RELEASE_DLL_PATH}" `
+            %GITHUB_WORKSPACE%\vendor\bin\phpunit `
+            --colors=always `
+            --bootstrap %GITHUB_WORKSPACE%\tests\ext-bootstrap.php `
             --testsuite Extension
 
       - name: After Failure
