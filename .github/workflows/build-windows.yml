@@ -168,11 +168,11 @@ jobs:
         # TODO(klay): Enable all commands
         run: |
           .\zephir.bat --help
-          # .\zephir.bat clean
-          # .\zephir.bat fullclean
-          # .\zephir.bat generate
-          # .\zephir.bat stubs
-          # .\zephir.bat api
+          .\zephir.bat clean
+          .\zephir.bat fullclean
+          .\zephir.bat generate
+          .\zephir.bat stubs
+          .\zephir.bat api
 
       - name: Compile Stub Project
         run: |
