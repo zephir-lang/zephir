@@ -205,6 +205,10 @@ jobs:
             --bootstrap tests\ext-bootstrap.php `
             --testsuite Extension
 
+      - name: Unit Testing - Zephir
+        if: always()
+        run: vendor/bin/phpunit --colors=always --testsuite Zephir
+
       - name: After Failure
         if: failure()
         run: |
