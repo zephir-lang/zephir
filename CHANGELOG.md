@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
-## [0.13.0] - xxxx-xx-xx
+## [0.13.0] - 2021-03-25
 ### Added
 - Added support of PHP `8.0` [#2111](https://github.com/zephir-lang/zephir/pull/2111), [#2165](https://github.com/zephir-lang/zephir/pull/2165)
 
@@ -439,7 +439,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.12.21...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.0...HEAD
+[0.13.0]: https://github.com/zephir-lang/zephir/compare/0.12.21...0.13.0
 [0.12.21]: https://github.com/zephir-lang/zephir/compare/0.12.20...0.12.21
 [0.12.20]: https://github.com/zephir-lang/zephir/compare/0.12.19...0.12.20
 [0.12.19]: https://github.com/zephir-lang/zephir/compare/0.12.18...0.12.19
