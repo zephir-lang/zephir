@@ -24,8 +24,10 @@
 
 
 zend_class_entry *stub_testinterface_ce;
+zend_class_entry *stub_issue2165_issueextendinterface_ce;
 zend_class_entry *stub_interfaces_interfaceint_ce;
 zend_class_entry *stub_interfaces_interfaceintsignature_ce;
+zend_class_entry *stub_issue2165_issueinterface_ce;
 zend_class_entry *stub_methodinterface_ce;
 zend_class_entry *stub_oo_scopes_scopetesterinterface_ce;
 zend_class_entry *stub_ooimpl_zbeginning_ce;
@@ -123,6 +125,7 @@ zend_class_entry *stub_invokes_invokeprotectedcomplex_ce;
 zend_class_entry *stub_issettest_ce;
 zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
+zend_class_entry *stub_issue2165_issue_ce;
 zend_class_entry *stub_issues_ce;
 zend_class_entry *stub_json_ce;
 zend_class_entry *stub_logical_ce;
@@ -248,8 +251,10 @@ static PHP_MINIT_FUNCTION(stub)
 	REGISTER_INI_ENTRIES();
 	zephir_module_init();
 	ZEPHIR_INIT(Stub_TestInterface);
+	ZEPHIR_INIT(Stub_Issue2165_IssueExtendInterface);
 	ZEPHIR_INIT(Stub_Interfaces_InterfaceInt);
 	ZEPHIR_INIT(Stub_Interfaces_InterfaceIntSignature);
+	ZEPHIR_INIT(Stub_Issue2165_IssueInterface);
 	ZEPHIR_INIT(Stub_MethodInterface);
 	ZEPHIR_INIT(Stub_OoImpl_ZBeginning);
 	ZEPHIR_INIT(Stub_Oo_Scopes_ScopeTesterInterface);
@@ -334,6 +339,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_IssetTest);
 	ZEPHIR_INIT(Stub_Issue1404);
 	ZEPHIR_INIT(Stub_Issue1521);
+	ZEPHIR_INIT(Stub_Issue2165_Issue);
 	ZEPHIR_INIT(Stub_Issues);
 	ZEPHIR_INIT(Stub_Json);
 	ZEPHIR_INIT(Stub_Logical);
