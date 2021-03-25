@@ -30,11 +30,12 @@ ZEPHIR_INIT_CLASS(Stub_Cast) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testCharCastFromChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG('a');
@@ -42,12 +43,13 @@ PHP_METHOD(Stub_Cast, testCharCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testCharCastFromVariableChar) {
 
 	char a, _0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -58,11 +60,12 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("z");
@@ -70,7 +73,7 @@ PHP_METHOD(Stub_Cast, testStringCastChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastVariableChar) {
 
@@ -80,6 +83,7 @@ PHP_METHOD(Stub_Cast, testStringCastVariableChar) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -95,6 +99,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromFloat) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG((int) 5.0);
 
 }
@@ -106,17 +111,19 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableFloat) {
 
 
 
+
 	a = 5.0;
 	RETURN_LONG((int) (a));
 
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testIntCastFromChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG('A');
@@ -124,12 +131,13 @@ PHP_METHOD(Stub_Cast, testIntCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testIntCastFromVariableChar) {
 
 	char a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -143,6 +151,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromBooleanTrue) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(1);
 
 }
@@ -150,6 +159,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromBooleanTrue) {
 PHP_METHOD(Stub_Cast, testIntCastFromBooleanFalse) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG(0);
@@ -163,6 +173,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableBooleanTrue) {
 
 
 
+
 	a = 1;
 	RETURN_LONG((int) (a));
 
@@ -172,6 +183,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableBooleanFalse) {
 
 	zend_bool a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -188,6 +200,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableNull) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -203,6 +216,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromStringValue) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -221,6 +235,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableString) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -237,6 +252,14 @@ PHP_METHOD(Stub_Cast, testIntCastFromParameterString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
@@ -253,6 +276,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromNull) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(0);
 
 }
@@ -264,6 +288,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableEmptyArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -281,6 +306,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromEmptyArray) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -297,6 +323,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableArray) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -327,6 +354,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromArray) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -360,6 +388,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromStdClass) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -380,6 +409,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -389,11 +419,12 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testLongCastFromChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG((long) 'a');
@@ -401,12 +432,13 @@ PHP_METHOD(Stub_Cast, testLongCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testLongCastFromVariableChar) {
 
 	char a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -420,6 +452,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromFloat) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_DOUBLE(5.0);
 
 }
@@ -428,6 +461,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableFloat) {
 
 	double a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -441,6 +475,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromBooleanTrue) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_DOUBLE(1);
 
 }
@@ -448,6 +483,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromBooleanTrue) {
 PHP_METHOD(Stub_Cast, testFloatCastFromBooleanFalse) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_DOUBLE(0);
@@ -461,6 +497,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableBooleanTrue) {
 
 
 
+
 	a = 1;
 	RETURN_DOUBLE((double) (a));
 
@@ -470,6 +507,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableBooleanFalse) {
 
 	zend_bool a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -486,6 +524,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableNull) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -499,6 +538,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromNull) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_DOUBLE(0);
 
 }
@@ -510,6 +550,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableEmptyArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -527,6 +568,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromEmptyArray) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -543,6 +585,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableArray) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -573,6 +616,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromArray) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -606,6 +650,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromStdClass) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -626,6 +671,7 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -635,11 +681,12 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testDoubleCastFromVChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_DOUBLE((double) 'a');
@@ -647,12 +694,13 @@ PHP_METHOD(Stub_Cast, testDoubleCastFromVChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testDoubleCastFromVariableChar) {
 
 	char a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -666,6 +714,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromIntTrue1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_BOOL((zend_bool) 1);
 
 }
@@ -675,6 +724,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromIntTrue2) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_BOOL((zend_bool) 1000);
 
 }
@@ -682,6 +732,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromIntTrue2) {
 PHP_METHOD(Stub_Cast, testBooleanCastFromIntFalse) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_BOOL((zend_bool) 0);
@@ -695,6 +746,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromObject) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&simpleObject);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -712,6 +764,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromEmptyArray) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -728,6 +781,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromArray) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -757,6 +811,7 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromNull) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -766,11 +821,12 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromNull) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testBooleanCastFromChar) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_BOOL((zend_bool) 'a');
@@ -778,12 +834,13 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromChar) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1988
+ * @see https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testBooleanCastFromVariableChar) {
 
 	char a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -799,6 +856,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromInt) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -817,6 +875,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromFloat) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -833,6 +892,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromFalse) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -851,6 +911,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromTrue) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -867,6 +928,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromNull) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -885,6 +947,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromEmptyArray) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -906,6 +969,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromArray) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -937,6 +1001,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromEmptyString) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -953,6 +1018,7 @@ PHP_METHOD(Stub_Cast, testObjectCastFromString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -971,6 +1037,7 @@ PHP_METHOD(Stub_Cast, testCastStdinToInteger) {
 
 	ZVAL_UNDEF(&handle);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&handle);
@@ -987,6 +1054,7 @@ PHP_METHOD(Stub_Cast, testCastStdoutToInteger) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -1002,6 +1070,14 @@ PHP_METHOD(Stub_Cast, testCastFileResourceToInteger) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&fileName_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(fileName)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &fileName);
 
@@ -1022,6 +1098,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableArray) {
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1052,6 +1129,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableTrue) {
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&uids);
@@ -1071,6 +1149,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableFalse) {
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1092,6 +1171,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableNull) {
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&uids);
@@ -1111,6 +1191,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableInteger) {
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1132,6 +1213,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableFloat) {
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&uids);
@@ -1151,6 +1233,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableString) {
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -1172,6 +1255,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass) {
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 

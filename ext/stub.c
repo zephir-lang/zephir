@@ -24,6 +24,10 @@
 
 
 zend_class_entry *stub_testinterface_ce;
+zend_class_entry *stub_issue2165_issueextendinterface_ce;
+zend_class_entry *stub_interfaces_interfaceint_ce;
+zend_class_entry *stub_interfaces_interfaceintsignature_ce;
+zend_class_entry *stub_issue2165_issueinterface_ce;
 zend_class_entry *stub_methodinterface_ce;
 zend_class_entry *stub_oo_scopes_scopetesterinterface_ce;
 zend_class_entry *stub_ooimpl_zbeginning_ce;
@@ -31,11 +35,14 @@ zend_class_entry *stub_diinterface_ce;
 zend_class_entry *stub_extendedinterface_ce;
 zend_class_entry *stub_integration_psr_http_message_messageinterfaceex_ce;
 zend_class_entry *stub_ooimpl_abeginning_ce;
+zend_class_entry *stub_invokes_abstractprotected_ce;
 zend_class_entry *stub_oo_extend_exception_ce;
 zend_class_entry *stub_oo_extend_db_exception_ce;
 zend_class_entry *stub_scallparent_ce;
 zend_class_entry *stub_constantsparent_ce;
 zend_class_entry *stub_globals_session_base_ce;
+zend_class_entry *stub_invokes_abstractinvoker_ce;
+zend_class_entry *stub_invokes_abstractinvokercomplex_ce;
 zend_class_entry *stub_oo_abstractstatic_ce;
 zend_class_entry *stub_oo_extend_db_query_exception_ce;
 zend_class_entry *stub_oo_oodynamica_ce;
@@ -98,6 +105,7 @@ zend_class_entry *stub_flow_switchflow_ce;
 zend_class_entry *stub_fortytwo_ce;
 zend_class_entry *stub_functional_ce;
 zend_class_entry *stub_functionexists_ce;
+zend_class_entry *stub_functions_ce;
 zend_class_entry *stub_geometry_ce;
 zend_class_entry *stub_globals_ce;
 zend_class_entry *stub_globals_env_ce;
@@ -107,12 +115,17 @@ zend_class_entry *stub_globals_serverrequestfactory_ce;
 zend_class_entry *stub_globals_session_child_ce;
 zend_class_entry *stub_instance_ce;
 zend_class_entry *stub_instanceoff_ce;
+zend_class_entry *stub_interfaces_implementint_ce;
+zend_class_entry *stub_interfaces_implementinterface_ce;
 zend_class_entry *stub_internalclasses_ce;
 zend_class_entry *stub_internalinterfaces_ce;
 zend_class_entry *stub_invoke_ce;
+zend_class_entry *stub_invokes_invokeprotected_ce;
+zend_class_entry *stub_invokes_invokeprotectedcomplex_ce;
 zend_class_entry *stub_issettest_ce;
 zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
+zend_class_entry *stub_issue2165_issue_ce;
 zend_class_entry *stub_issues_ce;
 zend_class_entry *stub_json_ce;
 zend_class_entry *stub_logical_ce;
@@ -123,6 +136,8 @@ zend_class_entry *stub_mcalldynamic_ce;
 zend_class_entry *stub_mcallinternal_ce;
 zend_class_entry *stub_methodabstract_ce;
 zend_class_entry *stub_methodargs_ce;
+zend_class_entry *stub_namespaces_a_b_sub_ce;
+zend_class_entry *stub_namespaces_classentry_ce;
 zend_class_entry *stub_nativearray_ce;
 zend_class_entry *stub_oo_abstractclass_ce;
 zend_class_entry *stub_oo_ce;
@@ -188,6 +203,7 @@ zend_class_entry *stub_properties_staticpublicproperties_ce;
 zend_class_entry *stub_quantum_ce;
 zend_class_entry *stub_range_ce;
 zend_class_entry *stub_references_ce;
+zend_class_entry *stub_reflection_ce;
 zend_class_entry *stub_regexdna_ce;
 zend_class_entry *stub_requires_ce;
 zend_class_entry *stub_requires_external3_ce;
@@ -199,6 +215,7 @@ zend_class_entry *stub_router_route_ce;
 zend_class_entry *stub_scall_ce;
 zend_class_entry *stub_scalldynamic_ce;
 zend_class_entry *stub_scallexternal_ce;
+zend_class_entry *stub_scalllateconstruct_ce;
 zend_class_entry *stub_scope_ce;
 zend_class_entry *stub_sort_ce;
 zend_class_entry *stub_spectralnorm_ce;
@@ -234,6 +251,10 @@ static PHP_MINIT_FUNCTION(stub)
 	REGISTER_INI_ENTRIES();
 	zephir_module_init();
 	ZEPHIR_INIT(Stub_TestInterface);
+	ZEPHIR_INIT(Stub_Issue2165_IssueExtendInterface);
+	ZEPHIR_INIT(Stub_Interfaces_InterfaceInt);
+	ZEPHIR_INIT(Stub_Interfaces_InterfaceIntSignature);
+	ZEPHIR_INIT(Stub_Issue2165_IssueInterface);
 	ZEPHIR_INIT(Stub_MethodInterface);
 	ZEPHIR_INIT(Stub_OoImpl_ZBeginning);
 	ZEPHIR_INIT(Stub_Oo_Scopes_ScopeTesterInterface);
@@ -241,11 +262,14 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_ExtendedInterface);
 	ZEPHIR_INIT(Stub_Integration_Psr_Http_Message_MessageInterfaceEx);
 	ZEPHIR_INIT(Stub_OoImpl_ABeginning);
+	ZEPHIR_INIT(Stub_Invokes_AbstractProtected);
 	ZEPHIR_INIT(Stub_Oo_Extend_Exception);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Exception);
 	ZEPHIR_INIT(Stub_ScallParent);
 	ZEPHIR_INIT(Stub_ConstantsParent);
 	ZEPHIR_INIT(Stub_Globals_Session_Base);
+	ZEPHIR_INIT(Stub_Invokes_AbstractInvoker);
+	ZEPHIR_INIT(Stub_Invokes_AbstractInvokerComplex);
 	ZEPHIR_INIT(Stub_Oo_AbstractStatic);
 	ZEPHIR_INIT(Stub_Oo_Extend_Db_Query_Exception);
 	ZEPHIR_INIT(Stub_Oo_OoDynamicA);
@@ -295,6 +319,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_FortyTwo);
 	ZEPHIR_INIT(Stub_FunctionExists);
 	ZEPHIR_INIT(Stub_Functional);
+	ZEPHIR_INIT(Stub_Functions);
 	ZEPHIR_INIT(Stub_Geometry);
 	ZEPHIR_INIT(Stub_Globals);
 	ZEPHIR_INIT(Stub_Globals_Env);
@@ -304,12 +329,17 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Globals_Session_Child);
 	ZEPHIR_INIT(Stub_Instance);
 	ZEPHIR_INIT(Stub_Instanceoff);
+	ZEPHIR_INIT(Stub_Interfaces_ImplementInt);
+	ZEPHIR_INIT(Stub_Interfaces_ImplementInterface);
 	ZEPHIR_INIT(Stub_InternalClasses);
 	ZEPHIR_INIT(Stub_InternalInterfaces);
 	ZEPHIR_INIT(Stub_Invoke);
+	ZEPHIR_INIT(Stub_Invokes_InvokeProtected);
+	ZEPHIR_INIT(Stub_Invokes_InvokeProtectedComplex);
 	ZEPHIR_INIT(Stub_IssetTest);
 	ZEPHIR_INIT(Stub_Issue1404);
 	ZEPHIR_INIT(Stub_Issue1521);
+	ZEPHIR_INIT(Stub_Issue2165_Issue);
 	ZEPHIR_INIT(Stub_Issues);
 	ZEPHIR_INIT(Stub_Json);
 	ZEPHIR_INIT(Stub_Logical);
@@ -320,6 +350,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Mcall_Caller);
 	ZEPHIR_INIT(Stub_MethodAbstract);
 	ZEPHIR_INIT(Stub_MethodArgs);
+	ZEPHIR_INIT(Stub_Namespaces_A_B_Sub);
+	ZEPHIR_INIT(Stub_Namespaces_ClassEntry);
 	ZEPHIR_INIT(Stub_NativeArray);
 	ZEPHIR_INIT(Stub_Oo);
 	ZEPHIR_INIT(Stub_Oo_AbstractClass);
@@ -385,6 +417,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Quantum);
 	ZEPHIR_INIT(Stub_Range);
 	ZEPHIR_INIT(Stub_References);
+	ZEPHIR_INIT(Stub_Reflection);
 	ZEPHIR_INIT(Stub_RegexDNA);
 	ZEPHIR_INIT(Stub_Requires);
 	ZEPHIR_INIT(Stub_Requires_External3);
@@ -397,6 +430,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Scall);
 	ZEPHIR_INIT(Stub_ScallDynamic);
 	ZEPHIR_INIT(Stub_ScallExternal);
+	ZEPHIR_INIT(Stub_ScallLateConstruct);
 	ZEPHIR_INIT(Stub_Scope);
 	ZEPHIR_INIT(Stub_Sort);
 	ZEPHIR_INIT(Stub_SpectralNorm);
@@ -433,7 +467,7 @@ static PHP_MINIT_FUNCTION(stub)
 static PHP_MSHUTDOWN_FUNCTION(stub)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -442,7 +476,7 @@ static PHP_MSHUTDOWN_FUNCTION(stub)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_stub_globals *stub_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 {
 	stub_globals->initialized = 0;
 
@@ -473,7 +507,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals TSRMLS_DC)
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_stub_globals *stub_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
 	
 }
@@ -486,8 +520,8 @@ static PHP_RINIT_FUNCTION(stub)
 	php_zephir_init_globals(stub_globals_ptr);
 	zephir_initialize_memory(stub_globals_ptr);
 
-		zephir_init_static_properties_Stub_Properties_StaticPropertyArray(TSRMLS_C);
-		zephir_init_static_properties_Stub_SPropertyAccess(TSRMLS_C);
+		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
+		zephir_init_static_properties_Stub_SPropertyAccess();
 	
 	return SUCCESS;
 }
@@ -495,7 +529,7 @@ static PHP_RINIT_FUNCTION(stub)
 static PHP_RSHUTDOWN_FUNCTION(stub)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 
@@ -559,11 +593,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_f_stub_zephir_namespaced_method_test, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_Stub_test_call_relative_object_hint);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_relative_object_hint, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_relative_object_hint, 0, 1, _IS_BOOL, NULL, 0)
-#endif
 	ZEND_ARG_OBJ_INFO(0, a, Stub\\Oo\\PropertyAccess, 0)
 ZEND_END_ARG_INFO()
 
@@ -573,11 +603,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_f_stub_zephir_namespaced_method_with_type_casting
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_Stub_test_call_object_hint);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_object_hint, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_object_hint, 0, 1, _IS_BOOL, NULL, 0)
-#endif
 	ZEND_ARG_OBJ_INFO(0, a, Stub\\Oo\\PropertyAccess, 0)
 ZEND_END_ARG_INFO()
 

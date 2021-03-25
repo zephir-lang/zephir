@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,9 +16,9 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Scope;
 
-class ScopeTest extends TestCase
+final class ScopeTest extends TestCase
 {
-    public function testScope1()
+    public function testScope1(): void
     {
         $this->assertSame(Scope::test1(), 'testinternal_string');
         $this->assertSame(Scope::test2(), [15, '0_66_132_198_']);

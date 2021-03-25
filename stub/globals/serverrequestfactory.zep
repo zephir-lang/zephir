@@ -3,7 +3,7 @@ namespace Stub\Globals;
 class ServerRequestFactory
 {
     /**
-     * @link https://github.com/phalcon/zephir/issues/1934
+     * @link https://github.com/zephir-lang/zephir/issues/1934
      */
     public function load(
         array server = null,

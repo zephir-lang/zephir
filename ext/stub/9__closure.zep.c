@@ -34,6 +34,7 @@ PHP_METHOD(stub_9__closure, __invoke) {
 	ZVAL_UNDEF(&abc);
 	ZVAL_UNDEF(&_0);
 
+
 	zephir_read_static_property_ce(&abc, stub_9__closure_ce, SL("abc"), PH_NOISY_CC);
 
 	zephir_array_fetch_string(&_0, &abc, SL("a"), PH_NOISY | PH_READONLY, "stub/closures.zep", 63);

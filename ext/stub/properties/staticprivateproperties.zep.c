@@ -37,6 +37,7 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance) {
 	ZVAL_UNDEF(&localInstance);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_OBS_VAR(&localInstance);

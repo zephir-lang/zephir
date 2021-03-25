@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -64,7 +64,7 @@ class ClassConstant
     /**
      * Returns the constant's value.
      *
-     * @todo Rewrite name
+     * TODO: Rewrite name
      *
      * @return array
      */

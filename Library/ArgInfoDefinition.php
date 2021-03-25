@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -19,7 +21,7 @@ class ArgInfoDefinition
     /**
      * @var bool
      */
-    private $returnByRef = false;
+    private bool $returnByRef;
 
     /**
      * @var ClassMethod|FunctionDefinition
@@ -29,33 +31,42 @@ class ArgInfoDefinition
     /**
      * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @var ClassMethodParameters|null
      */
-    private $parameters;
+    private ?ClassMethodParameters $parameters = null;
 
     /**
      * @var CodePrinter
      */
-    private $codePrinter;
+    private CodePrinter $codePrinter;
 
     /**
      * @var CompilationContext
      */
-    private $compilationContext;
+    private CompilationContext $compilationContext;
 
     /**
      * @var string
      */
-    private $booleanDefinition = '_IS_BOOL';
+    private string $booleanDefinition = '_IS_BOOL';
 
     /**
      * @var bool
      */
-    private $richFormat = true;
+    private bool $richFormat = true;
 
+    /**
+     * ArgInfoDefinition constructor.
+     *
+     * @param $name
+     * @param ClassMethod $functionLike
+     * @param CodePrinter $codePrinter
+     * @param CompilationContext $compilationContext
+     * @param false $returnByRef
+     */
     public function __construct(
         $name,
         ClassMethod $functionLike,
@@ -73,14 +84,14 @@ class ArgInfoDefinition
         $this->returnByRef = $returnByRef;
     }
 
-    public function setBooleanDefinition($definition)
+    public function setBooleanDefinition(string $definition): void
     {
-        $this->booleanDefinition = (string) $definition;
+        $this->booleanDefinition = $definition;
     }
 
-    public function setRichFormat($flag)
+    public function setRichFormat(bool $flag): void
     {
-        $this->richFormat = (bool) $flag;
+        $this->richFormat = $flag;
     }
 
     /**
@@ -88,7 +99,7 @@ class ArgInfoDefinition
      *
      * @throws Exception
      */
-    public function render()
+    public function render(): void
     {
         if ($this->richFormat &&
             $this->functionLike->isReturnTypesHintDetermined() &&
@@ -109,6 +120,39 @@ class ArgInfoDefinition
                     $this->functionLike->getNumberOfRequiredParameters()
                 )
             );
+        } else {
+            if ($this->functionLike->getName() === '__toString') {
+                $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_STRING, %d)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        (int) $this->functionLike->areReturnTypesNullCompatible()
+                    )
+                );
+
+                $this->codePrinter->output('#else');
+
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters()
+                    )
+                );
+
+                $this->codePrinter->output('#endif');
+            } else {
+                $this->codePrinter->output(
+                    sprintf('ZEND_BEGIN_ARG_INFO_EX(%s, 0, 0, 0)', $this->name)
+                );
+            }
+
+            $this->codePrinter->output('ZEND_END_ARG_INFO()');
+            $this->codePrinter->outputBlankLine();
         }
 
         if (true == $this->hasParameters()) {
@@ -119,7 +163,7 @@ class ArgInfoDefinition
         }
     }
 
-    private function richRenderStart()
+    private function richRenderStart(): void
     {
         if (\array_key_exists('object', $this->functionLike->getReturnTypes())) {
             $class = 'NULL';
@@ -129,7 +173,6 @@ class ArgInfoDefinition
                 $class = escape_class($this->compilationContext->getFullName($class));
             }
 
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)',
@@ -140,25 +183,11 @@ class ArgInfoDefinition
                     (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
-            $this->codePrinter->output('#else');
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_OBJECT, "%s", %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    $class,
-                    (int) $this->functionLike->areReturnTypesNullCompatible()
-                )
-            );
-            $this->codePrinter->output('#endif');
 
             return;
         }
 
         if ($this->functionLike->isVoid()) {
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 70100');
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
@@ -170,52 +199,15 @@ class ArgInfoDefinition
                 )
             );
 
-            $this->codePrinter->output('#else');
-
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, NULL, %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    $this->getReturnType(),
-                    (int) $this->functionLike->areReturnTypesNullCompatible()
-                )
-            );
-
-            $this->codePrinter->output('#endif');
-
             if (false == $this->hasParameters()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
             }
 
-            $this->codePrinter->output('#else');
-
-            if (true == $this->hasParameters()) {
-                $this->codePrinter->output(
-                    sprintf(
-                        'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
-                        $this->name,
-                        (int) $this->returnByRef,
-                        $this->functionLike->getNumberOfRequiredParameters()
-                    )
-                );
-            }
-
-            $this->codePrinter->output(
-                sprintf(
-                    '#define %s NULL',
-                    $this->name
-                )
-            );
-
-            $this->codePrinter->output('#endif');
             $this->codePrinter->outputBlankLine();
 
             return;
         }
 
-        $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
         $this->codePrinter->output(
             sprintf(
                 'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
@@ -226,24 +218,9 @@ class ArgInfoDefinition
                 (int) $this->functionLike->areReturnTypesNullCompatible()
             )
         );
-
-        $this->codePrinter->output('#else');
-
-        $this->codePrinter->output(
-            sprintf(
-                'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, NULL, %d)',
-                $this->name,
-                (int) $this->returnByRef,
-                $this->functionLike->getNumberOfRequiredParameters(),
-                $this->getReturnType(),
-                (int) $this->functionLike->areReturnTypesNullCompatible()
-            )
-        );
-
-        $this->codePrinter->output('#endif');
     }
 
-    private function renderEnd()
+    private function renderEnd(): void
     {
         $flag = $this->richFormat ? '1' : '0';
 
@@ -293,7 +270,6 @@ class ArgInfoDefinition
 
                 case '1:bool':
                 case '1:boolean':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, %s, %d)",
@@ -303,18 +279,12 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:uchar':
                 case '1:int':
                 case '1:uint':
                 case '1:long':
                 case '1:ulong':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)",
@@ -323,14 +293,8 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:double':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)",
@@ -339,15 +303,9 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 case '1:char':
                 case '1:string':
-                    $this->codePrinter->output('#if PHP_VERSION_ID >= 70200');
                     $this->codePrinter->output(
                         sprintf(
                             "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)",
@@ -356,11 +314,6 @@ class ArgInfoDefinition
                             (int) $this->allowNull($parameter)
                         )
                     );
-                    $this->codePrinter->output('#else');
-                    $this->codePrinter->output(
-                        sprintf("\tZEND_ARG_INFO(%d, %s)", $this->passByReference($parameter), $parameter['name'])
-                    );
-                    $this->codePrinter->output('#endif');
                     break;
                 default:
                     $this->codePrinter->output(
@@ -375,12 +328,12 @@ class ArgInfoDefinition
         }
     }
 
-    private function hasParameters()
+    private function hasParameters(): bool
     {
         return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
     }
 
-    private function allowNull($parameter)
+    private function allowNull(array $parameter): bool
     {
         if (!isset($parameter['default']) || !\is_array($parameter['default'])) {
             return false;
@@ -393,12 +346,12 @@ class ArgInfoDefinition
         return false;
     }
 
-    private function passByReference($parameter)
+    private function passByReference(array $parameter)
     {
         return isset($parameter['reference']) ? $parameter['reference'] : 0;
     }
 
-    private function getReturnType()
+    private function getReturnType(): string
     {
         if ($this->functionLike->areReturnTypesIntCompatible()) {
             return 'IS_LONG';

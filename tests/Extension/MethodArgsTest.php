@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,16 +16,16 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\MethodArgs;
 
-class MethodArgsTest extends TestCase
+final class MethodArgsTest extends TestCase
 {
-    private $test;
+    private MethodArgs $test;
 
     protected function setUp(): void
     {
         $this->test = new MethodArgs();
     }
 
-    public function testCallable()
+    public function testCallable(): void
     {
         $callback = function () {
         };
@@ -34,12 +36,12 @@ class MethodArgsTest extends TestCase
         $this->test->setCallableStrict($callback);
         $this->assertSame($callback, $this->test->a);
 
-        $this->expectException('\Exception');
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->test->setCallableStrict(true);
     }
 
-    public function testObject()
+    public function testObject(): void
     {
         $obj = new \stdClass();
 
@@ -49,22 +51,26 @@ class MethodArgsTest extends TestCase
         $this->test->setObjectStrict($obj);
         $this->assertSame($obj, $this->test->a);
 
-        $this->expectException('\Exception');
+        $this->expectException(\Throwable::class);
 
         $this->test->setObjectStrict(true);
     }
 
-    public function testResource()
+    public function testResource(): void
     {
         $this->test->setResourceStrict(STDIN);
         $this->assertSame(STDIN, $this->test->a);
 
-        $this->expectException('\Exception');
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\TypeError::class);
+        } else {
+            $this->expectException(\InvalidArgumentException::class);
+        }
 
         $this->test->setResourceStrict(true);
     }
 
-    public function testMethodOptionalValueWithDefaultStaticConstantAccess()
+    public function testMethodOptionalValueWithDefaultStaticConstantAccess(): void
     {
         $this->assertSame('test', $this->test->methodOptionalValueWithDefaultStaticConstantAccess('test'));
 

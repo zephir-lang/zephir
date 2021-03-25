@@ -1,22 +1,24 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Documentation;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
 
-class AnnotationTest extends TestCase
+final class AnnotationTest extends TestCase
 {
-    public function testShouldGetAnnotation()
+    public function testShouldGetAnnotation(): void
     {
         $annotation = new Annotation('test annotation', '  sample with leading space  ');
 

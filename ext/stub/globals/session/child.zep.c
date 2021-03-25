@@ -32,6 +32,7 @@ PHP_METHOD(Stub_Globals_Session_Child, destroy) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "removesessiondata", NULL, 0);

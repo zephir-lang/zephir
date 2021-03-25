@@ -71,6 +71,7 @@ ZEPHIR_INIT_CLASS(Stub_Properties_ProtectedProperties) {
 	zend_declare_property_null(stub_properties_protectedproperties_ce, SL("someArrayVar"), ZEND_ACC_PROTECTED);
 
 	stub_properties_protectedproperties_ce->create_object = zephir_init_properties_Stub_Properties_ProtectedProperties;
+
 	return SUCCESS;
 
 }
@@ -83,6 +84,14 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeVar) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someVar_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(someVar)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &someVar);
 
@@ -100,6 +109,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeVar) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someVar");
 
 }
@@ -115,6 +125,14 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeArrayVar) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someArrayVar);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(someArrayVar)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &someArrayVar_param);
@@ -135,6 +153,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeArrayVar) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someArrayVar");
 
 }
@@ -145,6 +164,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeArrayVar) {
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeNull) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "someNull");
@@ -160,6 +180,14 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeNull) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(param)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
 
@@ -177,6 +205,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeNullInitial) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someNullInitial");
 
 }
@@ -187,6 +216,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeNullInitial) {
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeFalse) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "someFalse");
@@ -201,6 +231,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeTrue) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someTrue");
 
 }
@@ -211,6 +242,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeTrue) {
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeInteger) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_MEMBER(getThis(), "someInteger");
@@ -225,6 +257,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeDouble) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someDouble");
 
 }
@@ -237,16 +270,18 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeString) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someString");
 
 }
 
-zend_object *zephir_init_properties_Stub_Properties_ProtectedProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_Properties_ProtectedProperties(zend_class_entry *class_type) {
 
 		zval _0, _1$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
+	
 
 		ZEPHIR_MM_GROW();
 	

@@ -36,6 +36,7 @@ void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *ret
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -49,6 +50,15 @@ void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *ret
 	zval *a, a_sub, *b, b_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(a)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	a = a_ext;
 
@@ -64,6 +74,15 @@ void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *ret
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(a)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	a_param = a_param_ext;
 
@@ -86,6 +105,7 @@ PHP_METHOD(Stub_McallInternal, e) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -103,6 +123,7 @@ PHP_METHOD(Stub_McallInternal, d) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_3$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -140,6 +161,7 @@ PHP_METHOD(Stub_McallInternal, f) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_3$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -180,6 +202,7 @@ PHP_METHOD(Stub_McallInternal, g) {
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 0;
@@ -212,6 +235,15 @@ void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval 
 
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(a)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	a_param = a_param_ext;
 
@@ -239,6 +271,7 @@ PHP_METHOD(Stub_McallInternal, callFibonacci) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -273,6 +306,7 @@ void zep_Stub_McallInternal_test1956(int ht, zend_execute_data *execute_data, zv
 
 	
 
+
 	RETURN_THISW();
 
 }
@@ -282,6 +316,7 @@ PHP_METHOD(Stub_McallInternal, issue1956) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+
 
 
 	ZEPHIR_MM_GROW();

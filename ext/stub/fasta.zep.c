@@ -64,6 +64,15 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 	ZVAL_UNDEF(&seq);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(n)
+		Z_PARAM_STR(seq)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &n, &seq_param);
@@ -150,6 +159,7 @@ PHP_METHOD(Stub_Fasta, fastRandom) {
 
 
 
+
 }
 
 PHP_METHOD(Stub_Fasta, main) {
@@ -166,6 +176,14 @@ PHP_METHOD(Stub_Fasta, main) {
 	ZVAL_UNDEF(&homoSap);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(n)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);

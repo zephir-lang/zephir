@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -16,9 +18,9 @@ use Phalcon\Mvc\Model\Query;
 use PHPUnit\Framework\TestCase;
 use Stub\InternalClasses;
 
-class InternalClassesTest extends TestCase
+final class InternalClassesTest extends TestCase
 {
-    public function testStaticMethodCall()
+    public function testStaticMethodCall(): void
     {
         if (false === class_exists(Di::class)) {
             $this->markTestSkipped('Class Phalcon\Di not found');
@@ -28,7 +30,7 @@ class InternalClassesTest extends TestCase
         $this->assertSame(Di::getDefault(), $class->testStaticCall());
     }
 
-    public function testStaticPropertyFetch()
+    public function testStaticPropertyFetch(): void
     {
         if (false === class_exists(Query::class)) {
             $this->markTestSkipped('Class Phalcon\Mvc\Model\Query not found');

@@ -17,12 +17,11 @@
         },
         {
             "name": "Contributors",
-            "homepage": "https://github.com/phalcon/zephir/graphs/contributors"
+            "homepage": "https://github.com/zephir-lang/zephir/graphs/contributors"
         }
     ],
     "require": {
-        "php": ">=7.2 <8.0",
-        "ext-SPL": "*",
+        "php": ">=7.4.1",
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",
@@ -30,7 +29,7 @@
         "ext-pcre": "*",
         "ext-xml": "*",
         "ext-zlib": "*",
-        "ocramius/proxy-manager": "2.0.4",
+        "ocramius/proxy-manager": "^2.10",
         "oneup/flysystem-bundle": "^1.14 || ^3.0",
         "symfony/cache": "3.4.*",
         "symfony/config": "3.4.*",
@@ -52,9 +51,8 @@
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
-        "psr/log": "1.1.*",
-        "symfony/debug": "3.4.*",
-        "symfony/phpunit-bridge": "4.3.*"
+        "phpunit/phpunit": "^9.5",
+        "psr/log": "1.1.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -85,8 +83,8 @@
         "zephir"
     ],
     "support": {
-        "issues": "https://github.com/phalcon/zephir/issues?state=open",
-        "source": "https://github.com/phalcon/zephir",
+        "issues": "https://github.com/zephir-lang/zephir/issues?state=open",
+        "source": "https://github.com/zephir-lang/zephir",
         "irc": "irc://irc.freenode.net/zephir",
         "docs": "https://docs.zephir-lang.com"
     }

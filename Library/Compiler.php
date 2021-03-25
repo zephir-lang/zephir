@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -13,6 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Zephir\Code\Builder\Struct;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
@@ -22,6 +23,11 @@ use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
+
+use function count;
+use function dirname;
+use function is_array;
+use function is_string;
 
 final class Compiler
 {
@@ -130,8 +136,6 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $prototypesPath
      */
     public function setPrototypesPath($prototypesPath)
@@ -152,7 +156,7 @@ final class Compiler
 
         // fallback
         if (empty($prototypesPath)) {
-            $prototypesPath = \dirname(__DIR__).'/prototypes';
+            $prototypesPath = dirname(__DIR__).'/prototypes';
         }
 
         if (!is_dir($prototypesPath) || !is_readable($prototypesPath)) {
@@ -163,8 +167,6 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $optimizersPath
      */
     public function setOptimizersPath($optimizersPath)
@@ -196,11 +198,9 @@ final class Compiler
     }
 
     /**
-     * @internal
-     *
      * @param string $templatesPath
      */
-    public function setTemplatesPath($templatesPath)
+    public function setTemplatesPath(string $templatesPath): void
     {
         $this->templatesPath = $templatesPath;
     }
@@ -229,7 +229,7 @@ final class Compiler
     {
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
-            // @todo Cover by test
+            // TODO: Cover by test
             throw new CompilerException(
                 "Function '".$func->getCompleteName()."' was defined more than one time",
                 $statement
@@ -298,7 +298,7 @@ final class Compiler
         /*
          * Try to autoload the class from an external dependency
          */
-        if (\count($this->externalDependencies)) {
+        if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
@@ -331,7 +331,7 @@ final class Compiler
         /*
          * Try to autoload the class from an external dependency
          */
-        if (\count($this->externalDependencies)) {
+        if (count($this->externalDependencies)) {
             foreach ($this->externalDependencies as $namespace => $location) {
                 if (preg_match('#^'.$namespace.'\\\\#i', $className)) {
                     return $this->loadExternalClass($className, $location);
@@ -489,7 +489,7 @@ final class Compiler
 
         $gccFlags = getenv('CFLAGS');
 
-        if (!\is_string($gccFlags)) {
+        if (!is_string($gccFlags)) {
             if (false === $development) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
@@ -563,18 +563,18 @@ final class Compiler
      * @throws IllegalStateException
      * @throws InvalidArgumentException
      */
-    public function generate($fromGenerate = false)
+    public function generate(bool $fromGenerate = false): bool
     {
-        /*
+        /**
          * Get global namespace.
          */
         $namespace = $this->checkDirectory();
 
-        /*
+        /**
          * Check whether there are external dependencies.
          */
         $externalDependencies = $this->config->get('external-dependencies');
-        if (\is_array($externalDependencies)) {
+        if (is_array($externalDependencies)) {
             foreach ($externalDependencies as $dependencyNs => $location) {
                 if (!file_exists($location)) {
                     throw new CompilerException(
@@ -589,24 +589,24 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 1. pre-compile all files in memory
          */
         $this->recursivePreCompile(str_replace('\\', \DIRECTORY_SEPARATOR, $namespace));
-        if (!\count($this->files)) {
+        if (!count($this->files)) {
             throw new Exception(
                 "Zephir files to compile couldn't be found. Did you add a first class to the extension?"
             );
         }
 
-        /*
+        /**
          * Round 2. Check 'extends' and 'implements' dependencies
          */
         foreach ($this->files as $compileFile) {
             $compileFile->checkDependencies($this);
         }
 
-        /*
+        /**
          * Sort the files by dependency ranking.
          */
         $files = [];
@@ -624,23 +624,23 @@ final class Compiler
         }
         $this->files = $files;
 
-        /*
+        /**
          * Convert C-constants into PHP constants.
          */
         $constantsSources = $this->config->get('constants-sources');
-        if (\is_array($constantsSources)) {
+        if (is_array($constantsSources)) {
             $this->loadConstantsSources($constantsSources);
         }
 
-        /*
+        /**
          * Set extension globals.
          */
         $globals = $this->config->get('globals');
-        if (\is_array($globals)) {
+        if (is_array($globals)) {
             $this->setExtensionGlobals($globals);
         }
 
-        /*
+        /**
          * Load function optimizers
          */
         if (false === self::$loadedPrototypes) {
@@ -648,13 +648,13 @@ final class Compiler
             FunctionCall::addOptimizerDir("{$optimizersPath}/FunctionCall");
 
             $customOptimizersPaths = $this->config->get('optimizer-dirs');
-            if (\is_array($customOptimizersPaths)) {
+            if (is_array($customOptimizersPaths)) {
                 foreach ($customOptimizersPaths as $directory) {
                     FunctionCall::addOptimizerDir(realpath($directory));
                 }
             }
 
-            /*
+            /**
              * Load additional extension prototypes.
              */
             $prototypesPath = $this->resolvePrototypesPath();
@@ -676,9 +676,9 @@ final class Compiler
              * Load customer additional extension prototypes.
              */
             $prototypeDirs = $this->config->get('prototype-dir');
-            if (\is_array($prototypeDirs)) {
+            if (is_array($prototypeDirs)) {
                 foreach ($prototypeDirs as $prototype => $prototypeDir) {
-                    /*
+                    /**
                      * Check if the extension is installed
                      */
                     if (!\extension_loaded($prototype)) {
@@ -706,7 +706,7 @@ final class Compiler
 
         $hash = '';
         foreach ($this->files as $compileFile) {
-            /*
+            /**
              * Only compile classes in the local extension, ignore external classes
              */
             if (!$compileFile->isExternal()) {
@@ -718,7 +718,7 @@ final class Compiler
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '['.$method->getName().':'.implode('-', $method->getVisibility()).']';
                     if ($method->isInitializer() && $method->isStatic()) {
-                        $this->internalInitializers[] = "\t".$method->getName().'(TSRMLS_C);';
+                        $this->internalInitializers[] = "\t".$method->getName().'();';
                     }
                 }
 
@@ -729,7 +729,7 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 3.2. Compile anonymous classes
          */
         foreach ($this->anonymousFiles as $compileFile) {
@@ -754,7 +754,7 @@ final class Compiler
          * Round 3.3. Load extra C-sources.
          */
         $extraSources = $this->config->get('extra-sources');
-        if (\is_array($extraSources)) {
+        if (is_array($extraSources)) {
             $this->extraFiles = $extraSources;
         } else {
             $this->extraFiles = [];
@@ -764,7 +764,7 @@ final class Compiler
          * Round 3.4. Load extra classes sources.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['source'])) {
                     $this->extraFiles[] = $value['source'];
@@ -777,7 +777,7 @@ final class Compiler
          */
         $namespace = str_replace('\\', '_', $namespace);
         $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !\is_string($extensionName)) {
+        if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
@@ -785,7 +785,7 @@ final class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
-        /*
+        /**
          * When a new file is added or removed we need to run configure again
          */
         if (!$fromGenerate) {
@@ -801,7 +801,7 @@ final class Compiler
             }
         }
 
-        /*
+        /**
          * Round 5. Generate concatenation functions
          */
         $this->stringManager->genConcatCode();
@@ -821,85 +821,78 @@ final class Compiler
      *
      * @throws CompilerException|Exception
      */
-    public function compile($development = false)
+    public function compile(bool $development = false): void
     {
         /**
          * Get global namespace.
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
         $extensionName = $this->config->get('extension-name');
-        if (empty($extensionName) || !\is_string($extensionName)) {
+        if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
         }
 
-        $needConfigure = $this->generate();
+        if (is_windows()) {
+            // TODO(klay): Make this better. Looks like it is non standard Env. Var
+            exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-        if ($needConfigure) {
-            if (is_windows()) {
-                // TODO(klay): Make this better. Looks like it is non standard Env. Var
-                exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
-
-                $releaseFolder = windows_release_dir();
-                if (file_exists($releaseFolder)) {
-                    exec('rd /s /q '.$releaseFolder, $output, $exit);
-                }
-                $this->logger->info('Preparing for PHP compilation...');
-                // TODO(klay): Make this better. Looks like it is non standard Env. Var
-                exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
-
-                /**
-                 * fix until patch hits all supported PHP builds.
-                 *
-                 * @see https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
-                 */
-                $fixMarker = '/* zephir_phpize_fix */';
-
-                $configureFile = file_get_contents('ext\\configure.js');
-                $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
-                $hasChanged = false;
-
-                if (false === strpos($configureFile, $fixMarker)) {
-                    $configureFile = $fixMarker.PHP_EOL.implode(PHP_EOL, $configureFix).PHP_EOL.$configureFile;
-                    $hasChanged = true;
-                }
-
-                /* fix php's broken phpize patching ... */
-                $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
-                $pos = strpos($configureFile, $marker);
-                if (false !== $pos) {
-                    $spMarker = 'if (MODE_PHPIZE) {';
-                    $sp = strpos($configureFile, $spMarker, $pos - 200);
-                    if (false === $sp) {
-                        throw new CompilerException('outofdate... phpize seems broken again');
-                    }
-                    $configureFile = substr($configureFile, 0, $sp).
-                        'if (false) {'.substr($configureFile, $sp + \strlen($spMarker));
-                    $hasChanged = true;
-                }
-
-                if ($hasChanged) {
-                    file_put_contents('ext\\configure.js', $configureFile);
-                }
-
-                $this->logger->info('Preparing configuration file...');
-                exec('cd ext && configure --enable-'.$extensionName);
-            } else {
-                exec('cd ext && make clean && phpize --clean', $output, $exit);
-
-                $this->logger->info('Preparing for PHP compilation...');
-                exec('cd ext && phpize', $output, $exit);
-
-                $this->logger->info('Preparing configuration file...');
-
-                $gccFlags = $this->getGccFlags($development);
-
-                exec(
-                    'cd ext && export CC="gcc" && export CFLAGS="'.
-                    $gccFlags.
-                    '" && ./configure --enable-'.
-                    $extensionName
-                );
+            $releaseFolder = windows_release_dir();
+            if (file_exists($releaseFolder)) {
+                exec('rd /s /q '.$releaseFolder, $output, $exit);
             }
+
+            $this->logger->info('Preparing for PHP compilation...');
+            // TODO(klay): Make this better. Looks like it is non standard Env. Var
+            exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
+
+            /**
+             * fix until patch hits all supported PHP builds.
+             *
+             * @see https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201
+             */
+            $fixMarker = '/* zephir_phpize_fix */';
+
+            $configureFile = file_get_contents('ext\\configure.js');
+            $configureFix = ["var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';"];
+            $hasChanged = false;
+
+            if (false === strpos($configureFile, $fixMarker)) {
+                $configureFile = $fixMarker.PHP_EOL.implode(PHP_EOL, $configureFix).PHP_EOL.$configureFile;
+                $hasChanged = true;
+            }
+
+            /* fix php's broken phpize patching ... */
+            $marker = 'var build_dir = (dirname ? dirname : "").replace(new RegExp("^..\\\\\\\\"), "");';
+            $pos = strpos($configureFile, $marker);
+            if (false !== $pos) {
+                $spMarker = 'if (MODE_PHPIZE) {';
+                $sp = strpos($configureFile, $spMarker, $pos - 200);
+                if (false === $sp) {
+                    throw new CompilerException('outofdate... phpize seems broken again');
+                }
+                $configureFile = substr($configureFile, 0, $sp).
+                    'if (false) {'.substr($configureFile, $sp + \strlen($spMarker));
+                $hasChanged = true;
+            }
+
+            if ($hasChanged) {
+                file_put_contents('ext\\configure.js', $configureFile);
+            }
+
+            $this->logger->info('Preparing configuration file...');
+            exec('cd ext && configure --enable-'.$extensionName);
+        } else {
+            exec('cd ext && make clean && phpize --clean', $output, $exit);
+            $this->logger->info('Preparing for PHP compilation...');
+            exec('cd ext && phpize', $output, $exit);
+            $this->logger->info('Preparing configuration file...');
+
+            exec(
+                'cd ext && export CC="gcc" && export CFLAGS="'.
+                $this->getGccFlags($development).
+                '" && ./configure --enable-'.
+                $extensionName
+            );
         }
 
         $currentDir = getcwd();
@@ -932,17 +925,13 @@ final class Compiler
      * @throws ConfigException
      * @throws Exception
      */
-    public function api(array $options = [], $fromGenerate = false)
+    public function api(array $options = [], bool $fromGenerate = false)
     {
         if (!$fromGenerate) {
             $this->generate();
         }
 
-        $templatesPath = $this->templatesPath;
-        if (null === $templatesPath) {
-            // fallback
-            $templatesPath = \dirname(__DIR__).'/templates';
-        }
+        $templatesPath = $this->templatesPath ?: dirname(__DIR__).'/templates';
 
         $documentator = new Documentation($this->files, $this->config, $templatesPath, $options);
         $documentator->setLogger($this->logger);
@@ -990,15 +979,13 @@ final class Compiler
     /**
      * Compiles and installs the extension.
      *
-     * TODO: Move to the separated installer
-     *
      * @param bool $development
      *
      * @throws Exception
      * @throws NotImplementedException
      * @throws CompilerException
      */
-    public function install($development = false)
+    public function install(bool $development = false): void
     {
         // Get global namespace
         $namespace = str_replace('\\', '_', $this->checkDirectory());
@@ -1020,10 +1007,7 @@ final class Compiler
             unlink("{$currentDir}/ext/modules/{$namespace}.so");
         }
 
-        $this->compile($development);
-
         $this->logger->info('Installing...');
-
         $gccFlags = $this->getGccFlags($development);
 
         $command = strtr(
@@ -1098,12 +1082,24 @@ final class Compiler
             $compiledHeaders = ['php_'.strtoupper($project).'.h'];
         }
 
-        /*
+        /**
          * Check extra-libs, extra-cflags, package-dependencies exists
          */
         $extraLibs = $this->config->get('extra-libs');
         $extraCflags = $this->config->get('extra-cflags');
         $contentM4 = $this->generatePackageDependenciesM4($contentM4);
+
+        $buildDirs = [];
+
+        foreach ($compiledFiles as $file) {
+            $dir = dirname($file);
+
+            if (!in_array($dir, $buildDirs)) {
+                $buildDirs[] = $dir;
+            }
+        }
+
+        asort($buildDirs);
 
         /**
          * Generate config.m4.
@@ -1113,11 +1109,12 @@ final class Compiler
             '%PROJECT_LOWER%' => strtolower($project),
             '%PROJECT_UPPER%' => strtoupper($project),
             '%PROJECT_CAMELIZE%' => ucfirst($project),
-            '%FILES_COMPILED%' => implode("\n\t", $compiledFiles),
-            '%HEADERS_COMPILED%' => implode(' ', $compiledHeaders),
-            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
+            '%FILES_COMPILED%' => implode("\n\t", $this->toUnixPaths($compiledFiles)),
+            '%HEADERS_COMPILED%' => implode(' ', $this->toUnixPaths($compiledHeaders)),
+            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->toUnixPaths($this->extraFiles)),
             '%PROJECT_EXTRA_LIBS%' => $extraLibs,
             '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
+            '%PROJECT_BUILD_DIRS%' => implode(' ', $buildDirs),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -1247,7 +1244,7 @@ final class Compiler
      *
      * @return array
      */
-    public function processExtensionGlobals($namespace)
+    public function processExtensionGlobals(string $namespace): array
     {
         $globalCode = '';
         $globalStruct = '';
@@ -1258,7 +1255,7 @@ final class Compiler
          * Generate the extensions globals declaration.
          */
         $globals = $this->config->get('globals');
-        if (\is_array($globals)) {
+        if (is_array($globals)) {
             $structures = [];
             $variables = [];
             foreach ($globals as $name => $global) {
@@ -1270,7 +1267,7 @@ final class Compiler
                 }
             }
 
-            /*
+            /**
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
@@ -1278,7 +1275,7 @@ final class Compiler
                     throw new Exception("Struct name: '".$structureName."' contains invalid characters");
                 }
 
-                $structBuilder = new Code\Builder\Struct('_zephir_struct_'.$structureName, $structureName);
+                $structBuilder = new Struct('_zephir_struct_'.$structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
                     if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
                         throw new Exception("Struct field name: '".$field."' contains invalid characters");
@@ -1299,7 +1296,8 @@ final class Compiler
                 $globalCode .= "\t".'zephir_struct_'.$structureName.' '.
                                 $structureName.';'.PHP_EOL.PHP_EOL;
             }
-            /*
+
+            /**
              * Process single variables
              */
             foreach ($variables as $name => $global) {
@@ -1313,8 +1311,8 @@ final class Compiler
 
                 $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
-                // @todo Add support for 'string', 'hash'
-                // @todo Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
+                // TODO: Add support for 'string', 'hash'
+                // TODO: Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
@@ -1385,6 +1383,7 @@ final class Compiler
                 }
             }
         }
+
         $globalsDefault[0] = implode('', $globalsDefault[0]);
         $globalsDefault[1] = implode('', $globalsDefault[1]);
 
@@ -1396,36 +1395,40 @@ final class Compiler
      *
      * @return string
      */
-    public function processExtensionInfo()
+    public function processExtensionInfo(): string
     {
         $phpinfo = '';
 
         $info = $this->config->get('info');
-        if (\is_array($info)) {
-            foreach ($info as $table) {
-                $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
-                if (isset($table['header'])) {
-                    $headerArray = [];
-                    foreach ($table['header'] as $header) {
-                        $headerArray[] = '"'.htmlentities($header).'"';
-                    }
+        if (!is_array($info)) {
+            return $phpinfo;
+        }
 
-                    $phpinfo .= "\t".'php_info_print_table_header('.\count($headerArray).', '.
-                            implode(', ', $headerArray).');'.PHP_EOL;
+        foreach ($info as $table) {
+            $phpinfo .= "\t".'php_info_print_table_start();'.PHP_EOL;
+            if (isset($table['header'])) {
+                $headerArray = [];
+                foreach ($table['header'] as $header) {
+                    $headerArray[] = '"'.htmlentities($header).'"';
                 }
-                if (isset($table['rows'])) {
-                    foreach ($table['rows'] as $row) {
-                        $rowArray = [];
-                        foreach ($row as $field) {
-                            $rowArray[] = '"'.htmlentities($field).'"';
-                        }
 
-                        $phpinfo .= "\t".'php_info_print_table_row('.\count($rowArray).', '.
-                                implode(', ', $rowArray).');'.PHP_EOL;
-                    }
-                }
-                $phpinfo .= "\t".'php_info_print_table_end();'.PHP_EOL;
+                $phpinfo .= "\t".'php_info_print_table_header('. count($headerArray).', '.
+                    implode(', ', $headerArray).');'.PHP_EOL;
             }
+
+            if (isset($table['rows'])) {
+                foreach ($table['rows'] as $row) {
+                    $rowArray = [];
+                    foreach ($row as $field) {
+                        $rowArray[] = '"'.htmlentities($field).'"';
+                    }
+
+                    $phpinfo .= "\t".'php_info_print_table_row('. count($rowArray).', '.
+                        implode(', ', $rowArray).');'.PHP_EOL;
+                }
+            }
+
+            $phpinfo .= "\t".'php_info_print_table_end();'.PHP_EOL;
         }
 
         return $phpinfo;
@@ -1439,7 +1442,7 @@ final class Compiler
      *
      * @return array
      */
-    public function processCodeInjection(array $entries, $section = 'request')
+    public function processCodeInjection(array $entries, string $section = 'request'): array
     {
         $codes = [];
         $includes = [];
@@ -1449,6 +1452,7 @@ final class Compiler
                 if (isset($entry['code']) && !empty($entry['code'])) {
                     $codes[] = $entry['code'].';';
                 }
+
                 if (isset($entry['include']) && !empty($entry['include'])) {
                     $includes[] = '#include "'.$entry['include'].'"';
                 }
@@ -1464,7 +1468,7 @@ final class Compiler
      * @param string $namespace
      * @param string $location
      */
-    public function addExternalDependency($namespace, $location)
+    public function addExternalDependency(string $namespace, string $location): void
     {
         $this->externalDependencies[$namespace] = $location;
     }
@@ -1640,7 +1644,7 @@ final class Compiler
          * Check if there are module/request/global destructors.
          */
         $destructors = $this->config->get('destructors');
-        if (\is_array($destructors)) {
+        if (is_array($destructors)) {
             $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
             $includes .= PHP_EOL.$invokeRequestDestructors[0];
             $reqDestructors = $invokeRequestDestructors[1];
@@ -1662,7 +1666,7 @@ final class Compiler
          * Check if there are module/request/global initializers.
          */
         $initializers = $this->config->get('initializers');
-        if (\is_array($initializers)) {
+        if (is_array($initializers)) {
             $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
             $includes .= PHP_EOL.$invokeRequestInitializers[0];
             $reqInitializers = $invokeRequestInitializers[1];
@@ -1680,7 +1684,7 @@ final class Compiler
          * Append extra details.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['init'])) {
                     $completeClassInits[] = 'ZEPHIR_INIT('.$value['init'].')';
@@ -1776,7 +1780,7 @@ final class Compiler
          * Append extra headers.
          */
         $extraClasses = $this->config->get('extra-classes');
-        if (\is_array($extraClasses)) {
+        if (is_array($extraClasses)) {
             foreach ($extraClasses as $value) {
                 if (isset($value['header'])) {
                     $include = '#include "'.$value['header'].'"';
@@ -1888,7 +1892,7 @@ final class Compiler
      *
      * @return bool
      */
-    public function checkIfPhpized()
+    public function checkIfPhpized(): bool
     {
         return !file_exists('ext/Makefile');
     }
@@ -1900,7 +1904,7 @@ final class Compiler
      *
      * @return string
      */
-    public static function getShortUserPath($path)
+    public static function getShortUserPath(string $path): string
     {
         return str_replace('\\', '/', str_replace(getcwd().\DIRECTORY_SEPARATOR, '', $path));
     }
@@ -1917,7 +1921,7 @@ final class Compiler
     public function generatePackageDependenciesM4($contentM4)
     {
         $packageDependencies = $this->config->get('package-dependencies');
-        if (\is_array($packageDependencies)) {
+        if (is_array($packageDependencies)) {
             $pkgconfigM4 = $this->backend->getTemplateFileContents('pkg-config.m4');
             $pkgconfigCheckM4 = $this->backend->getTemplateFileContents('pkg-config-check.m4');
             $extraCFlags = '';
@@ -1928,7 +1932,7 @@ final class Compiler
                 $operator = '=';
                 $operatorCmd = '--exact-version';
                 $ar = explode('=', $version);
-                if (1 == \count($ar)) {
+                if (1 == count($ar)) {
                     if ('*' == $version) {
                         $version = '0.0.0';
                         $operator = '>=';
@@ -2050,7 +2054,7 @@ final class Compiler
     /**
      * Copies the base kernel to the extension destination.
      *
-     * @todo
+     * TODO:
      *
      * @deprecated
      *
@@ -2156,7 +2160,7 @@ final class Compiler
     {
         $groupSources = [];
         foreach ($sources as $source) {
-            $dirName = str_replace(\DIRECTORY_SEPARATOR, '/', \dirname($source));
+            $dirName = str_replace(\DIRECTORY_SEPARATOR, '/', dirname($source));
             if (!isset($groupSources[$dirName])) {
                 $groupSources[$dirName] = [];
             }
@@ -2187,7 +2191,7 @@ final class Compiler
         foreach ($extensionRequires as $key => $value) {
             // TODO: We'll use this as an object in the future.
             // Right not it should be a string.
-            if (!\is_string($value)) {
+            if (!is_string($value)) {
                 continue;
             }
             if (false === \extension_loaded($value)) {
@@ -2282,7 +2286,7 @@ final class Compiler
             throw new Exception('Extension namespace cannot be loaded');
         }
 
-        if (!\is_string($namespace)) {
+        if (!is_string($namespace)) {
             throw new Exception('Extension namespace is invalid');
         }
 
@@ -2322,11 +2326,21 @@ final class Compiler
         $lines = $this->filesystem->file('gcc-version');
         $lines = array_filter($lines);
 
-        $lastLine = $lines[\count($lines) - 1];
+        $lastLine = $lines[count($lines) - 1];
         if (preg_match('/\d+\.\d+\.\d+/', $lastLine, $matches)) {
             return $matches[0];
         }
 
         return '0.0.0';
+    }
+
+    private function toUnixPaths(array $paths): array
+    {
+        return array_map(
+            static function (string $path): string {
+                return str_replace(\DIRECTORY_SEPARATOR, '/', $path);
+            },
+            $paths
+        );
     }
 }

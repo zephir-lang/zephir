@@ -31,7 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Statements) {
 	zend_declare_property_string(stub_statements_ce, SL("tmp2"), "test string", ZEND_ACC_PUBLIC);
 
 	/**
-	 * @issue https://github.com/phalcon/zephir/issues/544
+	 * @issue https://github.com/zephir-lang/zephir/issues/544
 	 */
 	zend_declare_property_long(stub_statements_ce, SL("totalSteps"), 100, ZEND_ACC_PRIVATE);
 
@@ -66,6 +66,7 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse) {
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_7);
 
+
 	ZEPHIR_MM_GROW();
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
@@ -94,6 +95,14 @@ PHP_METHOD(Stub_Statements, testElseIf) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -117,6 +126,14 @@ PHP_METHOD(Stub_Statements, testElseIf1) {
 	zval *num_param = NULL;
 	zend_long num, total;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -142,6 +159,15 @@ PHP_METHOD(Stub_Statements, testElseIf2) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&total_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(num)
+		Z_PARAM_ZVAL(total)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(2, 0, &num_param, &total);
 
@@ -181,6 +207,14 @@ PHP_METHOD(Stub_Statements, test544Issue) {
 	ZVAL_UNDEF(&_13$$4);
 	ZVAL_UNDEF(&_14$$5);
 	ZVAL_UNDEF(&_15$$5);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(step)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
@@ -248,6 +282,14 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable) {
 	ZVAL_UNDEF(&_11$$4);
 	ZVAL_UNDEF(&_12$$5);
 	ZVAL_UNDEF(&_13$$5);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(step)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);

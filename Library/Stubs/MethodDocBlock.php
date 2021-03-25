@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -18,7 +18,7 @@ use Zephir\Types;
 /**
  * Stubs Generator.
  *
- * @todo: Merge class with documentation generator
+ * TODO: Merge class with documentation generator
  */
 class MethodDocBlock extends DocBlock
 {
@@ -60,7 +60,7 @@ class MethodDocBlock extends DocBlock
      *
      * @return string
      */
-    public function processMethodDocBlock()
+    public function processMethodDocBlock(): string
     {
         $this->parseMethodParameters($this->classMethod);
         $this->parseLines();

@@ -25,7 +25,7 @@ class PropertyAccess
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1851
+     * @issue https://github.com/zephir-lang/zephir/issues/1851
      */
     public function setPrivatevariable(value) -> <PropertyAccess>
     {
@@ -35,7 +35,7 @@ class PropertyAccess
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1851
+     * @issue https://github.com/zephir-lang/zephir/issues/1851
      */
     public function getPrivatevariable() -> var
     {

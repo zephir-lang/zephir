@@ -42,11 +42,12 @@ PHP_METHOD(Stub_Range, inclusive1) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 78, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 76, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);
@@ -66,11 +67,12 @@ PHP_METHOD(Stub_Range, exclusive1) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 78, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 76, &_0, &_1);
 	zephir_check_call_status();
 	zephir_get_arrval(&_3, &_2);
 	RETURN_CTOR(&_3);

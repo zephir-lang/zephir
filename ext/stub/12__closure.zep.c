@@ -33,6 +33,7 @@ PHP_METHOD(stub_12__closure, __invoke) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_CE_STATIC(stub_mcall_caller_ce, "perform", &_0, 0);

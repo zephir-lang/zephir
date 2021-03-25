@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -16,7 +16,7 @@ namespace Zephir;
  */
 final class Zephir
 {
-    const VERSION = '0.12.20-$Id$';
+    const VERSION = '0.13.0-$Id$';
 
     const LOGO = <<<'ASCII'
  _____              __    _

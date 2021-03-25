@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Issue1521, test) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);

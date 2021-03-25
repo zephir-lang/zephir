@@ -349,7 +349,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1573
+	 * @link https://github.com/zephir-lang/zephir/issues/1573
 	 */
 	public function testAssign41(int num) -> int
 	{
@@ -361,7 +361,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1573
+	 * @link https://github.com/zephir-lang/zephir/issues/1573
 	 */
 	public function testAssign42(int num) -> int
 	{
@@ -882,7 +882,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/159
+	 * @link https://github.com/zephir-lang/zephir/issues/159
 	 */
 	public function testGlobalVarAssign(var index, var value)
 	{
@@ -890,7 +890,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/523
+	 * @link https://github.com/zephir-lang/zephir/issues/523
 	 */
 	public function testConstantKeyAssign()
 	{
@@ -899,7 +899,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/746
+	 * @link https://github.com/zephir-lang/zephir/issues/746
 	 *
 	 */
 	public function testArrayBoolExpressionAssign()
@@ -912,7 +912,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/725
+	 * @link https://github.com/zephir-lang/zephir/issues/725
 	 */
 	public function testAssignSuperGlobals()
 	{
@@ -925,7 +925,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1917
+	 * @link https://github.com/zephir-lang/zephir/issues/1917
 	 */
 	public function testAssignSuperGlobalsSERVER()
 	{
@@ -933,7 +933,7 @@ class Assign
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1917
+	 * @link https://github.com/zephir-lang/zephir/issues/1917
 	 */
 	public function testAssignSuperGlobalsGET()
 	{

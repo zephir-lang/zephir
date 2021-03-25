@@ -39,35 +39,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalvaluewithdefaultsta
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalstringvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, parameter, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, parameter)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionaldoublevaluewithdefaultstaticconstantaccess, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, parameter, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, parameter)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalboolvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, parameter, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, parameter)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalintvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, parameter, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, parameter)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_methodargs_method_entry) {

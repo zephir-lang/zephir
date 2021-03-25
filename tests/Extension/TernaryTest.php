@@ -1,23 +1,26 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Ternary;
 
-class TernaryTest extends TestCase
+final class TernaryTest extends TestCase
 {
-    public function testTernary()
+    public function testTernary(): void
     {
-        $test = new \Stub\Ternary();
+        $test = new Ternary();
         $this->assertSame(101, $test->testTernary1());
         $this->assertSame('foo', $test->testTernary2(true));
         $this->assertSame('bar', $test->testTernary2(false));
@@ -36,9 +39,9 @@ class TernaryTest extends TestCase
         $this->assertSame([], $test->testShortTernaryComplex(false, []));
     }
 
-    public function testComplex()
+    public function testComplex(): void
     {
-        $test = new \Stub\Ternary();
+        $test = new Ternary();
         $this->assertSame(101, $test->testTernaryComplex1([], ''));
         $this->assertSame(106, $test->testTernaryComplex2([], ''));
         $this->assertSame('boolean', $test->testTernaryComplex3(''));

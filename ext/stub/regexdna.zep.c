@@ -60,6 +60,14 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&_8$$4);
 	ZVAL_UNDEF(&_9$$4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(path)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
@@ -103,70 +111,70 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	array_init(&vIUBnew);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/B/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 30);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 29);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(c|g|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 30);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 29);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/D/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 31);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 30);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|g|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 31);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 30);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/H/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 32);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 31);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|c|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 32);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 31);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/K/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 33);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 32);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(g|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 33);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 32);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/M/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 34);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 33);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|c)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 34);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 33);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/N/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 35);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 34);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|c|g|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 35);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 34);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/R/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 36);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 35);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|g)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 36);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 35);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/S/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 37);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 36);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(c|g)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 37);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 36);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/V/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 38);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 37);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|c|g)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 38);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 37);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/W/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 39);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 38);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(a|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 39);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 38);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/Y/S");
-	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 40);
+	zephir_array_append(&vIUB, &_0, PH_SEPARATE, "stub/regexdna.zep", 39);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "(c|t)");
-	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 40);
+	zephir_array_append(&vIUBnew, &_0, PH_SEPARATE, "stub/regexdna.zep", 39);
 	ZEPHIR_INIT_VAR(&stuffToRemove);
 	ZVAL_STRING(&stuffToRemove, "^>.*$|\n");
 	ZEPHIR_INIT_NVAR(&discard);
@@ -179,12 +187,12 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	ZEPHIR_CONCAT_SVS(&_1, "/", &stuffToRemove, "/mS");
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "");
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 73, &_1, &_0, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 71, &_1, &_0, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	ZEPHIR_INIT_VAR(&codeLength);
 	ZVAL_LONG(&codeLength, zephir_fast_strlen_ev(&contents));
-	zephir_is_iterable(&variants, 0, "stub/regexdna.zep", 59);
+	zephir_is_iterable(&variants, 0, "stub/regexdna.zep", 58);
 	if (Z_TYPE_P(&variants) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&variants), _4)
 		{
@@ -223,7 +231,7 @@ PHP_METHOD(Stub_RegexDNA, process) {
 		}
 	}
 	ZEPHIR_INIT_NVAR(&regex);
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 73, &vIUB, &vIUBnew, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 71, &vIUB, &vIUBnew, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	php_printf("%c", '\n');

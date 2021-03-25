@@ -1,23 +1,26 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Bitwise;
 
-class BitwiseTest extends TestCase
+final class BitwiseTest extends TestCase
 {
     public function testBitwise()
     {
-        $test = new \Stub\Bitwise();
+        $test = new Bitwise();
 
         // OR TESTS
         $this->assertSame($test->intAnd(), 0);
@@ -123,9 +126,9 @@ class BitwiseTest extends TestCase
         $this->assertSame($test->testBitwiseNot(666), -667);
         $this->assertSame($test->testBitwiseAndNot(5, 4), 1);
 
-        /*
+        /**
          * Bitwise XOR
-         * @issue https://github.com/phalcon/zephir/issues/1581
+         * @issue https://github.com/zephir-lang/zephir/issues/1581
          */
         $this->assertSame(123 ^ 321, $test->testbitwiseXor());
     }

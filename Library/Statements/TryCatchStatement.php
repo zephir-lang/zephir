@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -83,7 +83,7 @@ class TryCatchStatement extends StatementAbstract
                 }
 
                 /*
-                 * @TODO, use a builder here
+                 * TODO:, use a builder here
                  */
                 $variable->setIsInitialized(true, $compilationContext);
                 $variable->setMustInitNull(true);
@@ -106,7 +106,7 @@ class TryCatchStatement extends StatementAbstract
                         )
                         ->setStatements($exprBuilder->statements()->block(array_merge(
                             [
-                                $exprBuilder->statements()->rawC('zend_clear_exception(TSRMLS_C);'),
+                                $exprBuilder->statements()->rawC('zend_clear_exception();'),
                                 $assignExceptionVarStmt,
                             ],
                             isset($catch['statements']) ? $catch['statements'] : []
@@ -127,7 +127,7 @@ class TryCatchStatement extends StatementAbstract
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
         } else {
-            $codePrinter->output('zend_clear_exception(TSRMLS_C);');
+            $codePrinter->output('zend_clear_exception();');
         }
     }
 }

@@ -21,23 +21,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_instance___construct, 0, 0, 11)
 	ZEND_ARG_OBJ_INFO(0, a11, Stub\\Concat, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_instance_testissue1339, 0, 0, Stub\\Instance, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_instance_testissue1339, 0, 0, IS_OBJECT, "Stub\\Instance", 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_instance_testinstancecreate, 0, 1, Stub\\Instance, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_instance_testinstancecreate, 0, 1, IS_OBJECT, "Stub\\Instance", 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, className, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, className)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_instance_method_entry) {

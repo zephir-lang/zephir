@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Invoke, __construct) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -53,6 +54,7 @@ PHP_METHOD(Stub_Invoke, __invoke) {
 	ZVAL_UNDEF(&_0);
 
 
+
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_gettype(return_value, &_0);
 	return;
@@ -68,11 +70,12 @@ PHP_METHOD(Stub_Invoke, test) {
 
 	ZVAL_UNDEF(&func);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&func);
 	object_init_ex(&func, stub_invoke_ce);
-	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 45);
+	ZEPHIR_CALL_METHOD(NULL, &func, "__construct", NULL, 46);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(&func, NULL, 0);
 	zephir_check_call_status();

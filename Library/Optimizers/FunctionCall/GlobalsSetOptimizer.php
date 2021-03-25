@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -100,8 +100,8 @@ class GlobalsSetOptimizer extends OptimizerAbstract
     }
 
     /**
-     * @todo  Add 'hash' support
-     * @todo  Use zval_get_string, zval_get_long, zval_get_double for ZE3
+     * TODO:  Add 'hash' support
+     * TODO:  Use zval_get_string, zval_get_long, zval_get_double for ZE3
      *
      * @param array  $definition
      * @param array  $expression

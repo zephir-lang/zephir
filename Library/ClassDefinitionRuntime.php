@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -9,24 +9,19 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
- * ClassDefinitionRuntime.
+ * Class Definition in Runtime
  *
- * Represents a class/interface that only exists in runtime
+ * Represents a class/interface that only exists in runtime.
  */
-class ClassDefinitionRuntime
+final class ClassDefinitionRuntime extends AbstractClassDefinition
 {
-    private $className;
-
-    public function __construct($className)
+    public function __construct(string $name)
     {
-        $this->className = $className;
-    }
-
-    public function getName()
-    {
-        return $this->className;
+        $this->name = $name;
     }
 }

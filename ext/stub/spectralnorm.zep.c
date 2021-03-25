@@ -43,6 +43,15 @@ PHP_METHOD(Stub_SpectralNorm, Ax) {
 	ZVAL_UNDEF(&j_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(i)
+		Z_PARAM_ZVAL(j)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &i, &j);
@@ -75,6 +84,16 @@ PHP_METHOD(Stub_SpectralNorm, Au) {
 	ZVAL_UNDEF(&_8$$4);
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_12$$4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(n)
+		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
+		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
@@ -151,6 +170,16 @@ PHP_METHOD(Stub_SpectralNorm, Atu) {
 	ZVAL_UNDEF(&_8$$4);
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_12$$4);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_LONG(n)
+		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
+		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
@@ -220,6 +249,17 @@ PHP_METHOD(Stub_SpectralNorm, AtAu) {
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&v_sub);
 	ZVAL_UNDEF(&w_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_ZVAL(n)
+		Z_PARAM_ZVAL(u)
+		Z_PARAM_ZVAL(v)
+		Z_PARAM_ZVAL(w)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 4, 0, &n, &u, &v, &w);
@@ -255,6 +295,14 @@ PHP_METHOD(Stub_SpectralNorm, process) {
 	ZVAL_UNDEF(&_18$$5);
 	ZVAL_UNDEF(&_19$$5);
 	ZVAL_UNDEF(&_20$$5);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);

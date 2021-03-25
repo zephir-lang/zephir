@@ -34,6 +34,7 @@ PHP_METHOD(Stub_Properties_PropertyUpdate, update1) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -468,7 +468,7 @@ class MethodCall extends Call
                                     );
                                 }
                             } else {
-                                // @TODO, raise an exception here?
+                                // TODO:, raise an exception here?
                             }
                         }
                     }
@@ -624,7 +624,7 @@ class MethodCall extends Call
                                                 /*
                                                  * Array can be a callable type, example: [$this, "method"]
                                                  *
-                                                 * @todo we need to check this array if can...
+                                                 * TODO: we need to check this array if can...
                                                  */
                                                 break;
 

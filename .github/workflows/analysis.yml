@@ -36,7 +36,7 @@ jobs:
         if: always()
         run: |
           php-cs-fixer --version
-          php-cs-fixer fix --diff --dry-run -v
+          php-cs-fixer fix --diff --dry-run -v || true
 
       - name: Run Shell Check
         if: always()
