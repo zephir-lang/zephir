@@ -41,6 +41,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, getNew) {
 	ZVAL_UNDEF(&fullClassName);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&className);
@@ -68,6 +69,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, call2) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_SELF("getnew", NULL, 0);
@@ -83,6 +85,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, call1) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_SELF("call2", NULL, 0);
@@ -96,6 +99,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, execute) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("A");
 
 }
@@ -103,6 +107,7 @@ PHP_METHOD(Stub_Oo_OoDynamicA, execute) {
 PHP_METHOD(Stub_Oo_OoDynamicA, execute2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("AA");

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -16,7 +16,7 @@ use Zephir\DependencyInjection\ContainerFactory;
 require __DIR__ . '/Library/autoload.php';
 require __DIR__ . '/Library/bootstrap.php';
 
-$container = (new ContainerFactory)->create();
+$container = (new ContainerFactory())->create();
 
 $application = $container->get(Application::class);
 $application->run();

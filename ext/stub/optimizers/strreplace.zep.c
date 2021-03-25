@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_Optimizers_StrReplace) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1055
+ * @link https://github.com/zephir-lang/zephir/issues/1055
  */
 PHP_METHOD(Stub_Optimizers_StrReplace, issue1055) {
 
@@ -41,6 +41,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1055) {
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -72,6 +73,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1087) {
 	ZVAL_UNDEF(&sanitize);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -124,6 +126,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A) {
 	ZVAL_UNDEF(&replace);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&subject);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -183,6 +186,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&subject);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&patterns);
@@ -209,7 +213,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B) {
 	zephir_array_fast_append(&replacements, &_0);
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "The quick brown fox jumped over the lazy dog.");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 73, &patterns, &replacements, &subject);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 71, &patterns, &replacements, &subject);
 	zephir_check_call_status();
 	RETURN_MM();
 

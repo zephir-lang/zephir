@@ -8,7 +8,6 @@ namespace Stub;
  */
 class RegexDNA
 {
-
 	public function process(var path)
 	{
 		var variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength,
@@ -42,23 +41,22 @@ class RegexDNA
 		let stuffToRemove = "^>.*$|\n",
 			discard = null;
 
-		//read in file
+		// Read in file
 		let contents = file_get_contents(path),
 			initialLength = strlen(contents);
 
-		//remove things
+		// Remove things
 		let contents = preg_replace("/" . stuffToRemove . "/mS", "", contents),
 			codeLength = strlen(contents);
 
-		//do regexp counts
+		// Do regexp counts
 		for regex in variants {
 			echo regex , " " , preg_match_all("/" . regex . "/iS", contents, discard), '\n';
 		}
 
-		// do replacements
+		// Do replacements
 		let contents = preg_replace(vIUB, vIUBnew, contents);
 
 		echo '\n', initialLength, '\n', codeLength, '\n', strlen(contents), '\n';
 	}
-
 }

@@ -40,6 +40,7 @@ PHP_METHOD(Stub_ArrayIteratorTest, test) {
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&arr);

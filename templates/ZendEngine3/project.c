@@ -44,7 +44,7 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 	%MOD_DESTRUCTORS%
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -53,7 +53,7 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals)
 {
 	%PROJECT_LOWER%_globals->initialized = 0;
 
@@ -72,7 +72,7 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals)
 {
 	%INIT_MODULE_GLOBALS%
 }
@@ -92,7 +92,7 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 	%REQ_DESTRUCTORS%
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 

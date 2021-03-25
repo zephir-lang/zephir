@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_ArraySearch) {
 
 }
 
-/** @issue https://github.com/phalcon/zephir/issues/1609 */
+/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
 PHP_METHOD(Stub_ArraySearch, simpleSearch) {
 
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -40,6 +40,17 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch) {
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&haystack);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 3)
+		Z_PARAM_ZVAL(needle)
+		Z_PARAM_ARRAY(haystack)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_BOOL(strict)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 1, &needle, &haystack_param, &strict_param);
@@ -59,7 +70,7 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch) {
 
 }
 
-/** @issue https://github.com/phalcon/zephir/issues/1609 */
+/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
 PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir) {
 
 	zval _0, pos;
@@ -71,6 +82,7 @@ PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir) {
 	ZVAL_UNDEF(&itoA64);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&pos);
+
 
 	ZEPHIR_MM_GROW();
 

@@ -19,7 +19,7 @@ PHP-Version requirements are marked using `[ ]`
     setx path "%path%;c:\path-to-php\"
     ```
 - [Install PHP SDK for PHP 5.6](http://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
-- [Install PHP SDK for PHP 7.0+](https://github.com/Microsoft/php-sdk-binary-tools/releases) 
+- [Install PHP SDK for PHP 7.0+](https://github.com/Microsoft/php-sdk-binary-tools/releases)
 ```cmd
 setx php_sdk "c:\path-to-php-sdk"
 ```
@@ -41,7 +41,7 @@ composer install
 
 ## Installation of Zephir Parser
 
-1. Download [Zephir Parser for Windows](https://github.com/phalcon/php-zephir-parser/releases/latest)
+1. Download [Zephir Parser for Windows](https://github.com/zephir-lang/php-zephir-parser/releases/latest)
 2. Extract the DLL file and copy it to your PHP extensions directory
 3. Edit your `php.ini` file and add this line:
    ```ini
@@ -51,7 +51,7 @@ composer install
    extension=zephir_parser.dll
    ```
 
-**NOTE**: Also you can [compile it yourself.](https://github.com/phalcon/php-zephir-parser/blob/master/README.WIN32-BUILD-SYSTEM)
+**NOTE**: Also you can [compile it yourself.](https://github.com/zephir-lang/php-zephir-parser/blob/master/README.WIN32-BUILD-SYSTEM)
 
 ## Usage of Zephir
 

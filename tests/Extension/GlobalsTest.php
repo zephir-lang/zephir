@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -17,17 +19,16 @@ use Stub\Globals;
 /**
  * Extension\GlobalsTest.
  */
-class GlobalsTest extends TestCase
+final class GlobalsTest extends TestCase
 {
-    /** @var \Stub\Globals */
-    private $test;
+    private Globals $test;
 
     protected function setUp(): void
     {
         $this->test = new Globals();
     }
 
-    public function testShouldGetGlobalExtensionSettings()
+    public function testShouldGetGlobalExtensionSettings(): void
     {
         $this->assertFalse($this->test->getDefaultGlobals1());
 
@@ -40,42 +41,42 @@ class GlobalsTest extends TestCase
         $this->assertSame(65, $this->test->getDefaultGlobals7());
     }
 
-    public function testShouldSetGlobalExtensionSetting()
+    public function testShouldSetGlobalExtensionSetting(): void
     {
         $this->test->setBoolValueUsingDotNotation(false);
 
         $this->assertFalse($this->test->getDefaultGlobals1());
     }
 
-    public function testSetIntValueUsingDotNotation()
+    public function testSetIntValueUsingDotNotation(): void
     {
         $this->test->setIntValueUsingDotNotation(900);
 
         $this->assertSame(900, $this->test->getDefaultGlobals2());
     }
 
-    public function testSetCharValueUsingString()
+    public function testSetCharValueUsingString(): void
     {
         $this->test->setCharValue('B');
 
         $this->assertSame(66, $this->test->getDefaultGlobals7());
     }
 
-    public function testSetCharValueUsingInt()
+    public function testSetCharValueUsingInt(): void
     {
         $this->test->setCharValue(90);
 
         $this->assertSame(90, $this->test->getDefaultGlobals7());
     }
 
-    public function testSetBoolValueUsingInt()
+    public function testSetBoolValueUsingInt(): void
     {
         $this->test->setBoolValue(0);
 
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
-    public function testSetBoolValueUsingBool()
+    public function testSetBoolValueUsingBool(): void
     {
         $this->test->setBoolValue(true);
         $this->assertTrue($this->test->getDefaultGlobals4());
@@ -84,7 +85,7 @@ class GlobalsTest extends TestCase
         $this->assertFalse($this->test->getDefaultGlobals4());
     }
 
-    public function testShouldSetGlobalExtensionOrmCacheLevel()
+    public function testShouldSetGlobalExtensionOrmCacheLevel(): void
     {
         $this->test->setDefaultGlobalsOrmCacheLevel(3);
 

@@ -33,6 +33,7 @@ PHP_METHOD(stub_8__closure, __invoke) {
 
 	ZVAL_UNDEF(&abc);
 
+
 	zephir_read_static_property_ce(&abc, stub_8__closure_ce, SL("abc"), PH_NOISY_CC);
 
 	RETURN_LONG((zephir_get_numberval(&abc) + 1));

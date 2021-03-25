@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testInt) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	a = 1;
@@ -53,6 +54,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testVar) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -73,6 +75,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testIntValue1) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZVAL_LONG(&_0, 0);
@@ -90,6 +93,14 @@ PHP_METHOD(Stub_Optimizers_ACos, testIntParameter) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
@@ -112,6 +123,14 @@ PHP_METHOD(Stub_Optimizers_ACos, testVarParameter) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);

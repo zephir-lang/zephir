@@ -37,6 +37,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getJoin1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -68,6 +69,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getReversed1) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -98,6 +100,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+
 
 	ZEPHIR_MM_GROW();
 

@@ -35,6 +35,7 @@ PHP_METHOD(Stub_McallChained, testMethod1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_THISW();
 
 }
@@ -44,6 +45,7 @@ PHP_METHOD(Stub_McallChained, testMethod2) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_THISW();
 
 }
@@ -51,6 +53,7 @@ PHP_METHOD(Stub_McallChained, testMethod2) {
 PHP_METHOD(Stub_McallChained, testMethod3) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_THISW();
@@ -65,6 +68,7 @@ PHP_METHOD(Stub_McallChained, testChained1) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -85,6 +89,7 @@ PHP_METHOD(Stub_McallChained, testChained2) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -108,9 +113,10 @@ PHP_METHOD(Stub_McallChained, testChained3) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 
+
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 52);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 58);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod2", NULL, 0);
 	zephir_check_call_status();
@@ -129,6 +135,7 @@ PHP_METHOD(Stub_McallChained, testChained4) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 

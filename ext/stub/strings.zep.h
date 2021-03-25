@@ -35,20 +35,12 @@ PHP_METHOD(Stub_Strings, strToHex);
 PHP_METHOD(Stub_Strings, issue1267);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_camelize, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_uncamelize, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, str)
-#endif
 	ZEND_ARG_INFO(0, delimiter)
 ZEND_END_ARG_INFO()
 
@@ -92,11 +84,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_teststrposoffset, 0, 0, 3)
 	ZEND_ARG_INFO(0, haystack)
 	ZEND_ARG_INFO(0, needle)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, offset, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, offset)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testexplode, 0, 0, 2)
@@ -110,34 +98,18 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testexplodelimit, 0, 0, 2)
 	ZEND_ARG_INFO(0, str)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, limit, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, limit)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testsubstr, 0, 0, 3)
 	ZEND_ARG_INFO(0, str)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, from, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, from)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, len, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, len)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testsubstr2, 0, 0, 2)
 	ZEND_ARG_INFO(0, str)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, from, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, from)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testsubstr3, 0, 0, 1)
@@ -156,33 +128,35 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_teststripslashes, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_teststripcslashes, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_teststripcslashes, 0, 1, IS_STRING, NULL, 0)
-#endif
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_testhashequals, 0, 2, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_testhashequals, 0, 2, _IS_BOOL, NULL, 0)
-#endif
 	ZEND_ARG_INFO(0, str1)
 	ZEND_ARG_INFO(0, str2)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testhardcodedmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testechomultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testtrimmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testwellescapedmultilinestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testinternedstring1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_testinternedstring2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_strtohex, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_strtohex, 0, 1, IS_STRING, NULL, 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, value)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue1267, 0, 0, 1)
@@ -212,12 +186,36 @@ ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, testStripslashes, arginfo_stub_strings_teststripslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testStripcslashes, arginfo_stub_strings_teststripcslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testHashEquals, arginfo_stub_strings_testhashequals, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testHardcodedMultilineString, arginfo_stub_strings_testhardcodedmultilinestring, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testHardcodedMultilineString, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testEchoMultilineString, arginfo_stub_strings_testechomultilinestring, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testEchoMultilineString, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testTrimMultilineString, arginfo_stub_strings_testtrimmultilinestring, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testTrimMultilineString, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testWellEscapedMultilineString, arginfo_stub_strings_testwellescapedmultilinestring, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testInternedString1, arginfo_stub_strings_testinternedstring1, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Strings, testInternedString2, arginfo_stub_strings_testinternedstring2, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(Stub_Strings, strToHex, arginfo_stub_strings_strtohex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue1267, arginfo_stub_strings_issue1267, ZEND_ACC_PUBLIC)
 	PHP_FE_END

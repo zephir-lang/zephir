@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Statements\Let;
@@ -20,19 +22,12 @@ use Zephir\Exception\CompilerException;
 use Zephir\Statements\Let\Variable;
 use Zephir\Variable as ZephirVariable;
 
-class VariableTest extends TestCase
+final class VariableTest extends TestCase
 {
-    /** @var Variable */
-    private $test;
-
-    /** @var ReadDetector */
-    private $readDetector;
-
-    /** @var CompilationContext */
-    private $compilationCtx;
-
-    /** @var CompiledExpression */
-    private $compiledExpr;
+    private Variable $test;
+    private ReadDetector $readDetector;
+    private CompilationContext $compilationCtx;
+    private CompiledExpression $compiledExpr;
 
     protected function setUp(): void
     {
@@ -77,7 +72,7 @@ class VariableTest extends TestCase
      * @param string   $message     - Expected error message
      * @param callable $setProperty - Callback func to set required for test property
      */
-    public function testThrowsExceptionForWrongVariables(array $statement, string $message, callable $setProperty)
+    public function testThrowsExceptionForWrongVariables(array $statement, string $message, callable $setProperty): void
     {
         $zephirVariable = new ZephirVariable('variable', 'foo');
         // call necessary setters for test case

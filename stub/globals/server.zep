@@ -3,7 +3,7 @@ namespace Stub\Globals;
 class Server
 {
     /**
-    * @see https://github.com/phalcon/zephir/issues/1961
+    * @see https://github.com/zephir-lang/zephir/issues/1961
     */
     public function f1() -> void
     {
@@ -18,7 +18,7 @@ class Server
     }
 
     /**
-    * @see https://github.com/phalcon/zephir/issues/1970
+    * @see https://github.com/zephir-lang/zephir/issues/1970
     */
     public function check() -> var
     {

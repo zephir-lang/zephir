@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,7 +16,7 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\Env;
 
-class EnvTest extends TestCase
+final class EnvTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -32,7 +34,16 @@ class EnvTest extends TestCase
         }
     }
 
-    public function testReadStandard()
+    public function testEmpty(): void
+    {
+        $tester = new Env();
+        $var = 'non-existing';
+
+        $this->assertSame(false, $tester->read($var));
+        $this->assertSame(false, getenv($var));
+    }
+
+    public function testReadStandard(): void
     {
         $tester = new Env();
 
@@ -46,7 +57,7 @@ class EnvTest extends TestCase
         $this->assertSame($_ENV[$var], getenv($var));
     }
 
-    public function testReadNew()
+    public function testReadNew(): void
     {
         $_ENV['NEW_VARIABLEFROM'] = __FUNCTION__;
         $tester = new Env();

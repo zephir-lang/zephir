@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir;
 
@@ -21,18 +23,28 @@ class FunctionDefinition extends ClassMethod
     /**
      * The namespace of the function.
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * Whether the function is declared in a global or namespaced scope.
      *
      * @var bool
      */
-    private $isGlobal;
+    private bool $isGlobal = false;
 
+    /**
+     * FunctionDefinition constructor.
+     *
+     * @param string $namespace
+     * @param string $name
+     * @param ClassMethodParameters|null $parameters
+     * @param StatementsBlock|null $statements
+     * @param array|null $returnType
+     * @param array|null $expression
+     */
     public function __construct(
-        $namespace,
-        $name,
+        string $namespace,
+        string $name,
         ClassMethodParameters $parameters = null,
         StatementsBlock $statements = null,
         array $returnType = null,
@@ -50,37 +62,37 @@ class FunctionDefinition extends ClassMethod
     /**
      * Get the internal name used in generated C code.
      */
-    public function getInternalName()
+    public function getInternalName(): string
     {
         return ($this->isGlobal() ? 'g_' : 'f_').str_replace('\\', '_', $this->namespace).'_'.$this->getName();
     }
 
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return $this->isGlobal;
     }
 
-    public function setGlobal($global)
+    public function setGlobal(bool $global): void
     {
         $this->isGlobal = $global;
     }
 
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return $this->namespace;
     }
 
-    public function setNamespace($namespace)
+    public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
     }
 
-    public function hasModifier($modifier)
+    public function hasModifier(string $modifier): bool
     {
         return false;
     }
 
-    public function getVisibility()
+    public function getVisibility(): array
     {
         return [];
     }

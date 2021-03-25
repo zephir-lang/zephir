@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
@@ -20,17 +22,18 @@ use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
+use function extension_loaded;
 
 /**
- * Zephir\Console\Command\GenerateCommand.
+ * Generate Command
  *
  * Generates C code from the Zephir code without compiling it.
  */
-final class GenerateCommand extends Command
+final class GenerateCommand extends AbstractCommand
 {
     use ZflagsAwareTrait;
 
-    private $compiler;
+    private Compiler $compiler;
 
     public function __construct(Compiler $compiler)
     {
@@ -52,7 +55,7 @@ final class GenerateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if (\extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
+        if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
             $io->getErrorStyle()->warning(
                 <<<MSG
 The timecop extension was detected. It is recommended to disable
@@ -61,7 +64,7 @@ issues.
 
 For more see:
 
-- https://github.com/phalcon/zephir/issues/1950
+- https://github.com/zephir-lang/zephir/issues/1950
 - https://github.com/phalcon/cphalcon/issues/13117
 MSG
             );
@@ -94,7 +97,7 @@ MSG
         return 0;
     }
 
-    protected function createDefinition()
+    protected function createDefinition(): InputDefinition
     {
         return new InputDefinition(
             [

@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Oo;
@@ -17,9 +19,9 @@ use Stub\Integration\Psr\Http\Message\MessageInterfaceEx;
 use Stub\Oo\ConcreteStatic;
 use Stub\Oo\ExtendPdoClass;
 
-class ExtendClassTest extends TestCase
+final class ExtendClassTest extends TestCase
 {
-    public function testPDOExtending()
+    public function testPDOExtending(): void
     {
         if (!\extension_loaded('pdo')) {
             $this->markTestSkipped('The PDO extension is not loaded');
@@ -29,7 +31,7 @@ class ExtendClassTest extends TestCase
         $this->assertSame(PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
-    public function testPDOStatementExtending()
+    public function testPDOStatementExtending(): void
     {
         $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
@@ -38,9 +40,9 @@ class ExtendClassTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1686
+     * @issue https://github.com/zephir-lang/zephir/issues/1686
      */
-    public function testShouldExtendMiddlewareInterface()
+    public function testShouldExtendMiddlewareInterface(): void
     {
         if (!\extension_loaded('psr')) {
             $this->markTestSkipped('The psr extension is not loaded');
@@ -52,19 +54,29 @@ class ExtendClassTest extends TestCase
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1392
+     * @issue https://github.com/zephir-lang/zephir/issues/1392
      */
-    public function testShouldCorrectWorkWithLateStaticBinding()
+    public function testShouldCorrectWorkWithLateStaticBinding(): void
     {
-        $this->assertSame('Stub\Oo\ConcreteStatic', ConcreteStatic::getCalledClass());
+        $this->assertSame(ConcreteStatic::class, ConcreteStatic::getCalledClass());
     }
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/1372
+     * @issue https://github.com/zephir-lang/zephir/issues/1372
      */
-    public function testShouldCallParentMethodFromStaticByUsingSelf()
+    public function testShouldCallParentMethodFromStaticByUsingSelf(): void
     {
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
+    }
+
+    public function testShouldCallParentMethodFromStaticByUsingParent(): void
+    {
+        $this->assertSame(ConcreteStatic::class, ConcreteStatic::callParentFunction());
+    }
+
+    public function testShouldCallStaticMethodWithSimpleValue(): void
+    {
+        $this->assertSame(1337, ConcreteStatic::simpleStaticIntReturn());
     }
 }

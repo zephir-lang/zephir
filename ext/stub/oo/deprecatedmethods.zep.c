@@ -30,6 +30,7 @@ PHP_METHOD(Stub_Oo_DeprecatedMethods, publicDeprecated) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_BOOL(1);
 
 }
@@ -41,9 +42,10 @@ PHP_METHOD(Stub_Oo_DeprecatedMethods, normalMethod) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 57);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 63);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -52,6 +54,7 @@ PHP_METHOD(Stub_Oo_DeprecatedMethods, normalMethod) {
 PHP_METHOD(Stub_Oo_DeprecatedMethods, privateDeprecated) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_BOOL(1);

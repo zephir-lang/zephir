@@ -37,6 +37,7 @@ PHP_METHOD(Stub_Typeoff, testNativeStringFalse) {
 
 	ZVAL_UNDEF(&testVar);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&testVar);
@@ -53,6 +54,7 @@ PHP_METHOD(Stub_Typeoff, testNativeStringTrue) {
 
 	ZVAL_UNDEF(&testVar);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&testVar);
@@ -68,6 +70,7 @@ PHP_METHOD(Stub_Typeoff, testNativeIntFalse) {
 
 
 
+
 	testVar = 12345;
 	RETURN_BOOL(1 == 0);
 
@@ -77,6 +80,7 @@ PHP_METHOD(Stub_Typeoff, testNativeIntTrue) {
 
 	zend_long testVar = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -92,6 +96,7 @@ PHP_METHOD(Stub_Typeoff, testNativeDoubleTrue) {
 
 
 
+
 	testVar = (double) (12345);
 	RETURN_BOOL(1 == 1);
 
@@ -101,6 +106,7 @@ PHP_METHOD(Stub_Typeoff, testNativeBoolTrue) {
 
 	zend_bool testVar = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -116,6 +122,7 @@ PHP_METHOD(Stub_Typeoff, testNotBoolTrue) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -134,6 +141,7 @@ PHP_METHOD(Stub_Typeoff, testNativeBoolFalse) {
 
 
 
+
 	testVar = 0;
 	RETURN_BOOL(1 == 0);
 
@@ -146,6 +154,7 @@ PHP_METHOD(Stub_Typeoff, testArrayFalse) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&testVar);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -163,6 +172,7 @@ PHP_METHOD(Stub_Typeoff, testArrayTrue) {
 
 	ZVAL_UNDEF(&testVar);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&testVar);
@@ -179,6 +189,7 @@ PHP_METHOD(Stub_Typeoff, testClassPropertyAccess) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -200,6 +211,14 @@ PHP_METHOD(Stub_Typeoff, testUnknownTypeOf) {
 
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(u)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &u);
@@ -218,6 +237,14 @@ PHP_METHOD(Stub_Typeoff, testCallableTypeOf) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&cb_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(cb)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &cb);
 

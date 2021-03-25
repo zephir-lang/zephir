@@ -18,8 +18,8 @@
 
 
 /**
- * @link https://github.com/phalcon/zephir/issues/367
- * @link https://github.com/phalcon/zephir/issues/188
+ * @link https://github.com/zephir-lang/zephir/issues/367
+ * @link https://github.com/zephir-lang/zephir/issues/188
  */
 ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray) {
 
@@ -39,13 +39,14 @@ ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray) {
 
 }
 
-void zephir_init_static_properties_Stub_Properties_StaticPropertyArray(TSRMLS_D) {
+void zephir_init_static_properties_Stub_Properties_StaticPropertyArray() {
 
 	zval _1;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 

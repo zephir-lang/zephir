@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -141,7 +141,7 @@ class StatementsBlock
 
         foreach ($statements as $statement) {
             /*
-             * @todo Generate GDB hints
+             * TODO: Generate GDB hints
              */
             if ($this->debug) {
                 if (isset($statement['file'])) {

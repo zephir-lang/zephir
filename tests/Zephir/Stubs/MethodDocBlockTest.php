@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test\Stubs;
@@ -19,9 +21,9 @@ use Zephir\ClassMethodParameters;
 use Zephir\StatementsBlock;
 use Zephir\Stubs\MethodDocBlock;
 
-class MethodDocBlockTest extends TestCase
+final class MethodDocBlockTest extends TestCase
 {
-    public function prepareMethod($params)
+    public function prepareMethod(array $params): MethodDocBlock
     {
         /**
          * ClassDefinition for Class creation.
@@ -71,12 +73,10 @@ class MethodDocBlockTest extends TestCase
             $methodExpression
         );
 
-        $aliasManager = new AliasManager();
-
-        return new MethodDocBlock($classMethod, $aliasManager);
+        return new MethodDocBlock($classMethod, new AliasManager());
     }
 
-    public function getDocBlock()
+    public function getDocBlock(): array
     {
         return [
             [
@@ -128,7 +128,7 @@ class MethodDocBlockTest extends TestCase
      * @param array  $parameters
      * @param string $expected
      */
-    public function testMethodsWithDataSet(array $parameters, $expected)
+    public function testMethodsWithDataSet(array $parameters, string $expected): void
     {
         $baseDefinition = require ZEPHIRPATH.'/tests/fixtures/base-definition.php';
         $baseDefinition['method']['parameters'][] = $parameters;
@@ -244,8 +244,11 @@ class MethodDocBlockTest extends TestCase
 
     /**
      * @dataProvider docBlockProvider()
+     *
+     * @param string $zephirDocBlock
+     * @param string $phpDocBlock
      */
-    public function testShouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock)
+    public function testShouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock): void
     {
         $classMethod = new ClassMethod(
             new ClassDefinition('Zephir', 'testMethod'),

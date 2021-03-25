@@ -33,6 +33,7 @@ PHP_METHOD(Stub_ScallParent, testMethod1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("hello parent public");
 
 }
@@ -40,6 +41,7 @@ PHP_METHOD(Stub_ScallParent, testMethod1) {
 PHP_METHOD(Stub_ScallParent, testMethod2) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("hello parent protected");
@@ -53,6 +55,7 @@ PHP_METHOD(Stub_ScallParent, testCallStatic) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL, 0);
@@ -64,6 +67,7 @@ PHP_METHOD(Stub_ScallParent, testCallStatic) {
 PHP_METHOD(Stub_ScallParent, testMethodStatic) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("hello ScallParent");

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -18,7 +18,7 @@ use Zephir\Types;
  *
  * Encapsulates built-in methods for the "string" type
  *
- * @TODO explode, join, replace
+ * TODO: explode, join, replace
  */
 class StringType extends AbstractType
 {

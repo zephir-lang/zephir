@@ -1,29 +1,31 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Flow;
 
-class FlowTest extends TestCase
+final class FlowTest extends TestCase
 {
-    /** @var \Stub\Flow */
-    private $test;
+    private Flow $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Flow();
+        $this->test = new Flow();
     }
 
-    public function testIf()
+    public function testIf(): void
     {
         $this->assertSame($this->test->testIf1(), 1);
         $this->assertSame($this->test->testIf2(), 0);
@@ -45,14 +47,14 @@ class FlowTest extends TestCase
         $this->assertFalse($this->test->testIf16(' '));
     }
 
-    public function testLoop()
+    public function testLoop(): void
     {
         $this->assertTrue($this->test->testLoop1());
         $this->assertSame($this->test->testLoop2(), 5);
         $this->assertSame($this->test->testLoop3(), 5);
     }
 
-    public function testWhile()
+    public function testWhile(): void
     {
         $this->assertSame($this->test->testWhile1(), 0);
         $this->assertSame($this->test->testWhile2(), 0);
@@ -79,7 +81,7 @@ class FlowTest extends TestCase
         );
     }
 
-    public function testFor()
+    public function testFor(): void
     {
         $this->assertSame($this->test->testFor1(), 10);
         $this->assertSame($this->test->testFor2(), 6.0);

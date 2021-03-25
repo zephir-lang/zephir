@@ -36,6 +36,7 @@ PHP_METHOD(Stub_Bitwise, intAnd) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a & b);
@@ -47,6 +48,7 @@ PHP_METHOD(Stub_Bitwise, int2And) {
 
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -63,6 +65,7 @@ PHP_METHOD(Stub_Bitwise, intAndSimple) {
 
 
 
+
 	c = 0;
 	RETURN_LONG(c);
 
@@ -72,6 +75,7 @@ PHP_METHOD(Stub_Bitwise, boolAnd) {
 
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -89,6 +93,7 @@ PHP_METHOD(Stub_Bitwise, bool2And) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	c = (((a & 2)) ? 1 : 0);
 	RETURN_BOOL(c);
@@ -99,6 +104,7 @@ PHP_METHOD(Stub_Bitwise, bool3And) {
 
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -115,6 +121,7 @@ PHP_METHOD(Stub_Bitwise, boolAndSimple) {
 
 
 
+
 	c = ((0) ? 1 : 0);
 	RETURN_BOOL(c);
 
@@ -124,6 +131,7 @@ PHP_METHOD(Stub_Bitwise, doubleAnd) {
 
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -141,6 +149,7 @@ PHP_METHOD(Stub_Bitwise, double2And) {
 
 
 
+
 	a = 1.0;
 	b = 2.0;
 	c = (double) (((int) (a) & (int) (b)));
@@ -152,6 +161,7 @@ PHP_METHOD(Stub_Bitwise, doubleAndSimple) {
 
 	double c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -167,6 +177,7 @@ PHP_METHOD(Stub_Bitwise, doubleAnd2Simple) {
 
 
 
+
 	c = (double) (0.0);
 	RETURN_DOUBLE(c);
 
@@ -176,6 +187,7 @@ PHP_METHOD(Stub_Bitwise, varAnd) {
 
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -193,6 +205,7 @@ PHP_METHOD(Stub_Bitwise, varAndSimple) {
 
 
 
+
 	c = 0;
 	RETURN_LONG(c);
 
@@ -203,6 +216,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleAnd) {
 	double a = 0;
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -220,6 +234,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleAndSimple) {
 
 
 
+
 	c = 0;
 	RETURN_LONG(c);
 
@@ -230,6 +245,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntAnd) {
 	double a = 0, c = 0;
 	zend_long b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -247,6 +263,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntAndSimple) {
 
 
 
+
 	c = (double) (0);
 	RETURN_DOUBLE(c);
 
@@ -256,6 +273,7 @@ PHP_METHOD(Stub_Bitwise, varIntAnd) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -270,6 +288,7 @@ PHP_METHOD(Stub_Bitwise, intVarAnd) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -290,6 +309,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -313,6 +333,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -330,6 +351,7 @@ PHP_METHOD(Stub_Bitwise, complexAnd) {
 
 
 
+
 	c = (double) (0);
 	RETURN_DOUBLE(c);
 
@@ -342,6 +364,7 @@ PHP_METHOD(Stub_Bitwise, complex2And) {
 
 
 
+
 	c = (((1 & 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 
@@ -351,6 +374,7 @@ PHP_METHOD(Stub_Bitwise, complex3And) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -367,6 +391,7 @@ PHP_METHOD(Stub_Bitwise, complex4And) {
 
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&c);
@@ -382,6 +407,7 @@ PHP_METHOD(Stub_Bitwise, complex5And) {
 
 
 
+
 	c = (1 & 1);
 	RETURN_LONG(c);
 
@@ -391,6 +417,7 @@ PHP_METHOD(Stub_Bitwise, complex6And) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -407,6 +434,7 @@ PHP_METHOD(Stub_Bitwise, complex7And) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a & b);
@@ -419,6 +447,7 @@ PHP_METHOD(Stub_Bitwise, complex9And) {
 	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -438,6 +467,7 @@ PHP_METHOD(Stub_Bitwise, complex10And) {
 
 
 
+
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b & a));
@@ -451,6 +481,7 @@ PHP_METHOD(Stub_Bitwise, complex11And) {
 	zend_long b = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -469,6 +500,7 @@ PHP_METHOD(Stub_Bitwise, complex12And) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b & a);
@@ -484,6 +516,7 @@ PHP_METHOD(Stub_Bitwise, complex13And) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b & a);
@@ -496,6 +529,7 @@ PHP_METHOD(Stub_Bitwise, complex14And) {
 	zend_bool b = 0;
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -515,6 +549,7 @@ PHP_METHOD(Stub_Bitwise, complex15And) {
 
 
 
+
 	a = 1;
 	b = 2.0;
 	c = ((((int) (b) &  a)) ? 1 : 0);
@@ -527,6 +562,7 @@ PHP_METHOD(Stub_Bitwise, complex16And) {
 	double b = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -546,6 +582,7 @@ PHP_METHOD(Stub_Bitwise, complex17And) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a & b));
@@ -559,6 +596,7 @@ PHP_METHOD(Stub_Bitwise, complex18And) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -579,6 +617,7 @@ PHP_METHOD(Stub_Bitwise, complex19And) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
@@ -593,6 +632,7 @@ PHP_METHOD(Stub_Bitwise, complex20And) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -613,6 +653,7 @@ PHP_METHOD(Stub_Bitwise, complex21And) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
@@ -626,6 +667,7 @@ PHP_METHOD(Stub_Bitwise, complex22And) {
 	double d = 0, c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -646,6 +688,7 @@ PHP_METHOD(Stub_Bitwise, complex23And) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a & b));
@@ -658,6 +701,7 @@ PHP_METHOD(Stub_Bitwise, complex24And) {
 	zend_bool b = 0;
 	zend_long a = 0, d = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -675,6 +719,7 @@ PHP_METHOD(Stub_Bitwise, intOr) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a | b);
@@ -686,6 +731,7 @@ PHP_METHOD(Stub_Bitwise, int2Or) {
 
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -702,6 +748,7 @@ PHP_METHOD(Stub_Bitwise, intOrSimple) {
 
 
 
+
 	c = 3;
 	RETURN_LONG(c);
 
@@ -711,6 +758,7 @@ PHP_METHOD(Stub_Bitwise, boolOr) {
 
 	zend_bool a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -728,6 +776,7 @@ PHP_METHOD(Stub_Bitwise, bool2Or) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	c = (((a | 2)) ? 1 : 0);
 	RETURN_BOOL(c);
@@ -738,6 +787,7 @@ PHP_METHOD(Stub_Bitwise, bool3Or) {
 
 	zend_bool a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -754,6 +804,7 @@ PHP_METHOD(Stub_Bitwise, bool4Or) {
 
 
 
+
 	a = 1;
 	c = (((a | 1)) ? 1 : 0);
 	RETURN_BOOL(c);
@@ -767,6 +818,7 @@ PHP_METHOD(Stub_Bitwise, boolOrSimple) {
 
 
 
+
 	c = ((3) ? 1 : 0);
 	RETURN_BOOL(c);
 
@@ -776,6 +828,7 @@ PHP_METHOD(Stub_Bitwise, doubleOr) {
 
 	double a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -793,6 +846,7 @@ PHP_METHOD(Stub_Bitwise, double2Or) {
 
 
 
+
 	a = 1.0;
 	b = 2.0;
 	c = (double) (((int) (a) | (int) (b)));
@@ -804,6 +858,7 @@ PHP_METHOD(Stub_Bitwise, doubleOrSimple) {
 
 	double c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -819,6 +874,7 @@ PHP_METHOD(Stub_Bitwise, doubleOr2Simple) {
 
 
 
+
 	c = (double) (3.0);
 	RETURN_DOUBLE(c);
 
@@ -828,6 +884,7 @@ PHP_METHOD(Stub_Bitwise, varOr) {
 
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -845,6 +902,7 @@ PHP_METHOD(Stub_Bitwise, varOrSimple) {
 
 
 
+
 	c = 3;
 	RETURN_LONG(c);
 
@@ -855,6 +913,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleOr) {
 	double a = 0;
 	zend_long b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -872,6 +931,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleOrSimple) {
 
 
 
+
 	c = 3.0;
 	RETURN_LONG(c);
 
@@ -882,6 +942,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntOr) {
 	double a = 0, c = 0;
 	zend_long b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -899,6 +960,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntOrSimple) {
 
 
 
+
 	c = (double) (3.0);
 	RETURN_DOUBLE(c);
 
@@ -908,6 +970,7 @@ PHP_METHOD(Stub_Bitwise, varIntOr) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -922,6 +985,7 @@ PHP_METHOD(Stub_Bitwise, intVarOr) {
 
 	zend_long b = 0, c = 0, a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -942,6 +1006,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr) {
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -965,6 +1030,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -982,6 +1048,7 @@ PHP_METHOD(Stub_Bitwise, complexOr) {
 
 
 
+
 	c = (double) (3.0);
 	RETURN_DOUBLE(c);
 
@@ -994,6 +1061,7 @@ PHP_METHOD(Stub_Bitwise, complex2Or) {
 
 
 
+
 	c = (((1 | 1)) ? 1 : 0);
 	RETURN_BOOL(c);
 
@@ -1003,6 +1071,7 @@ PHP_METHOD(Stub_Bitwise, complex3Or) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1019,6 +1088,7 @@ PHP_METHOD(Stub_Bitwise, complex4Or) {
 
 	ZVAL_UNDEF(&c);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&c);
@@ -1034,6 +1104,7 @@ PHP_METHOD(Stub_Bitwise, complex5Or) {
 
 
 
+
 	c = (1 | 1);
 	RETURN_LONG(c);
 
@@ -1043,6 +1114,7 @@ PHP_METHOD(Stub_Bitwise, complex6Or) {
 
 	zend_bool c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1059,6 +1131,7 @@ PHP_METHOD(Stub_Bitwise, complex7Or) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = 2;
 	c = (a | b);
@@ -1071,6 +1144,7 @@ PHP_METHOD(Stub_Bitwise, complex9Or) {
 	zend_long b = 0, c = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1090,6 +1164,7 @@ PHP_METHOD(Stub_Bitwise, complex10Or) {
 
 
 
+
 	a = ((1.0 != 0.0) ? 1 : 0);
 	b = 2;
 	c = (double) ((b | a));
@@ -1103,6 +1178,7 @@ PHP_METHOD(Stub_Bitwise, complex11Or) {
 	zend_long b = 0;
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1121,6 +1197,7 @@ PHP_METHOD(Stub_Bitwise, complex12Or) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = (long) (2.0);
 	c = (b | a);
@@ -1136,6 +1213,7 @@ PHP_METHOD(Stub_Bitwise, complex13Or) {
 
 
 
+
 	a = ((1) ? 1 : 0);
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (b | a);
@@ -1148,6 +1226,7 @@ PHP_METHOD(Stub_Bitwise, complex14Or) {
 	zend_bool b = 0;
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1167,6 +1246,7 @@ PHP_METHOD(Stub_Bitwise, complex15Or) {
 
 
 
+
 	a = 1;
 	b = 2.0;
 	c = ((((int) (b) |  a)) ? 1 : 0);
@@ -1179,6 +1259,7 @@ PHP_METHOD(Stub_Bitwise, complex16Or) {
 	double b = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1198,6 +1279,7 @@ PHP_METHOD(Stub_Bitwise, complex17Or) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	c = (double) ((a | b));
@@ -1211,6 +1293,7 @@ PHP_METHOD(Stub_Bitwise, complex18Or) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1231,6 +1314,7 @@ PHP_METHOD(Stub_Bitwise, complex19Or) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
@@ -1245,6 +1329,7 @@ PHP_METHOD(Stub_Bitwise, complex20Or) {
 	double d = 0, c = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1265,6 +1350,7 @@ PHP_METHOD(Stub_Bitwise, complex21Or) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
@@ -1278,6 +1364,7 @@ PHP_METHOD(Stub_Bitwise, complex22Or) {
 	double d = 0, c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1298,6 +1385,7 @@ PHP_METHOD(Stub_Bitwise, complex23Or) {
 
 
 
+
 	a = 1;
 	b = ((2.0 != 0.0) ? 1 : 0);
 	d = (double) ((a | b));
@@ -1311,6 +1399,7 @@ PHP_METHOD(Stub_Bitwise, complex24Or) {
 	double d = 0;
 	zend_long a = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1328,6 +1417,7 @@ PHP_METHOD(Stub_Bitwise, intShiftLeft) {
 
 
 
+
 	a = 1;
 	b = 2;
 	c = (a << b);
@@ -1339,6 +1429,7 @@ PHP_METHOD(Stub_Bitwise, int2ShiftLeft) {
 
 	zend_long a = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1355,6 +1446,7 @@ PHP_METHOD(Stub_Bitwise, intShiftLeftSimple) {
 
 
 
+
 	c = 4;
 	RETURN_LONG(c);
 
@@ -1364,6 +1456,7 @@ PHP_METHOD(Stub_Bitwise, intShiftRight) {
 
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -1381,6 +1474,7 @@ PHP_METHOD(Stub_Bitwise, int2ShiftRight) {
 
 
 
+
 	a = 1;
 	c = (a >> 2);
 	RETURN_LONG(c);
@@ -1394,6 +1488,7 @@ PHP_METHOD(Stub_Bitwise, intShiftRightSimple) {
 
 
 
+
 	c = 0;
 	RETURN_LONG(c);
 
@@ -1404,6 +1499,14 @@ PHP_METHOD(Stub_Bitwise, testBitwiseNot) {
 	zval *a_param = NULL;
 	zend_long a;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
@@ -1420,6 +1523,15 @@ PHP_METHOD(Stub_Bitwise, testBitwiseAndNot) {
 	zval *a_param = NULL, *b_param = NULL;
 	zend_long a, b;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(a)
+		Z_PARAM_LONG(b)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
@@ -1438,6 +1550,14 @@ PHP_METHOD(Stub_Bitwise, getInt) {
 	zend_long num;
 	zval *this_ptr = getThis();
 
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(num)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
 
@@ -1449,7 +1569,7 @@ PHP_METHOD(Stub_Bitwise, getInt) {
 }
 
 /**
- * @issue https://github.com/phalcon/zephir/issues/1581
+ * @issue https://github.com/zephir-lang/zephir/issues/1581
  */
 PHP_METHOD(Stub_Bitwise, testbitwiseXor) {
 
@@ -1461,6 +1581,7 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor) {
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&j);
+
 
 	ZEPHIR_MM_GROW();
 

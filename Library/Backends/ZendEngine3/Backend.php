@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -74,7 +74,7 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      *
-     * @todo Do we need this method at all?
+     * TODO: Do we need this method at all?
      */
     public function getVariableCodePointer(Variable $variable)
     {
@@ -488,11 +488,11 @@ class Backend extends BackendZendEngine2
     public function getInternalSignature(ClassMethod $method, CompilationContext $context): string
     {
         if ($method->isInitializer() && !$method->isStatic()) {
-            return 'zend_object *'.$method->getName().'(zend_class_entry *class_type TSRMLS_DC)';
+            return 'zend_object *'.$method->getName().'(zend_class_entry *class_type)';
         }
 
         if ($method->isInitializer() && $method->isStatic()) {
-            return 'void '.$method->getName().'(TSRMLS_D)';
+            return 'void '.$method->getName().'()';
         }
 
         $signatureParameters = [];

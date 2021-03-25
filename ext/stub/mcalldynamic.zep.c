@@ -35,6 +35,7 @@ PHP_METHOD(Stub_McallDynamic, testMethod1) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(1);
 
 }
@@ -48,6 +49,7 @@ PHP_METHOD(Stub_McallDynamic, testMagicCall1) {
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -70,6 +72,15 @@ PHP_METHOD(Stub_McallDynamic, __call) {
 	ZVAL_UNDEF(&method_sub);
 	ZVAL_UNDEF(&arguments_sub);
 	ZVAL_UNDEF(&realMethod);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(method)
+		Z_PARAM_ZVAL(arguments)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &method, &arguments);
@@ -85,7 +96,7 @@ PHP_METHOD(Stub_McallDynamic, __call) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/1751
+ * @link https://github.com/zephir-lang/zephir/issues/1751
  */
 PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext) {
 
@@ -97,6 +108,7 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext) {
 
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 

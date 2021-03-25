@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -18,14 +20,14 @@ namespace Zephir;
  */
 final class AliasManager
 {
-    protected $aliases = [];
+    protected array $aliases = [];
 
     /**
      * Adds a renaming in a "use" to the alias manager.
      *
      * @param array $useStatement
      */
-    public function add(array $useStatement)
+    public function add(array $useStatement): void
     {
         foreach ($useStatement['aliases'] as $alias) {
             $implicitAlias = $alias['alias'] ?? $this->implicitAlias($alias['name']);
@@ -115,10 +117,10 @@ final class AliasManager
     {
         $extractAlias = $this->implicitAlias($className);
 
-        $isClassDeclarated = \in_array($className, $this->aliases);
+        $isClassDeclared = \in_array($className, $this->aliases);
         $classAlias = array_flip($this->aliases)[$className] ?? null;
 
-        return $isClassDeclarated && $classAlias !== $extractAlias;
+        return $isClassDeclared && $classAlias !== $extractAlias;
     }
 
     /**

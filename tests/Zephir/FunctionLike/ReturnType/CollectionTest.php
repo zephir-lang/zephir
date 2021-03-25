@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -12,16 +14,17 @@
 namespace Zephir\Test\FunctionLike\ReturnType;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Exception\InvalidArgumentException;
 use Zephir\FunctionLike\ReturnType\CastHint;
 use Zephir\FunctionLike\ReturnType\Collection;
 use Zephir\FunctionLike\ReturnType\RealType;
 use Zephir\Types;
 
-class CollectionTest extends TestCase
+final class CollectionTest extends TestCase
 {
-    public function testShouldThrowExceptionOnInvalidAttachedObject()
+    public function testShouldThrowExceptionOnInvalidAttachedObject(): void
     {
-        $this->expectException(\Zephir\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got instance of stdClass'
         );
@@ -30,17 +33,18 @@ class CollectionTest extends TestCase
         $collection->attach(new \stdClass());
     }
 
-    /**
-     * @expectedException \Zephir\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got array
-     */
-    public function testShouldThrowExceptionOnInvalidAttachedValue()
+    public function testShouldThrowExceptionOnInvalidAttachedValue(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Expecting an instance of Zephir\FunctionLike\ReturnType\TypeInterface, got array'
+        );
+
         $collection = new Collection();
         $collection->attach([]);
     }
 
-    public function testShouldAttachTypes()
+    public function testShouldAttachTypes(): void
     {
         $collection = new Collection();
 
@@ -63,7 +67,7 @@ class CollectionTest extends TestCase
         $this->assertCount(4, $collection);
     }
 
-    public function testShouldDetectOnlyVoid()
+    public function testShouldDetectOnlyVoid(): void
     {
         $collection = new Collection();
 
@@ -76,7 +80,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->onlyVoid());
     }
 
-    public function testShouldCheckIfTheCollectionHasRealTypeOrCastHints()
+    public function testShouldCheckIfTheCollectionHasRealTypeOrCastHints(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->hasReturnTypes());
@@ -92,7 +96,7 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->hasReturnTypes());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreNullCompatible()
+    public function testShouldDetectWhetherReturnTypesAreNullCompatible(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesNullCompatible());
@@ -112,7 +116,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesNullCompatible());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreSpecial()
+    public function testShouldDetectWhetherReturnTypesAreSpecial(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->onlySpecial());
@@ -143,7 +147,7 @@ class CollectionTest extends TestCase
      * @param string $type
      * @param bool   $expected
      */
-    public function testShouldDetectWhetherReturnTypesAreIntCompatible(string $type, bool $expected)
+    public function testShouldDetectWhetherReturnTypesAreIntCompatible(string $type, bool $expected): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesIntCompatible());
@@ -155,7 +159,7 @@ class CollectionTest extends TestCase
         $this->assertSame($expected, $collection->areReturnTypesIntCompatible());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreDoubleCompatible()
+    public function testShouldDetectWhetherReturnTypesAreDoubleCompatible(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesDoubleCompatible());
@@ -175,7 +179,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesDoubleCompatible());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreBoolCompatible()
+    public function testShouldDetectWhetherReturnTypesAreBoolCompatible(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesBoolCompatible());
@@ -201,7 +205,7 @@ class CollectionTest extends TestCase
      * @param string $type
      * @param bool   $expected
      */
-    public function testShouldDetectWhetherReturnTypesAreStringCompatible(string $type, bool $expected)
+    public function testShouldDetectWhetherReturnTypesAreStringCompatible(string $type, bool $expected): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesStringCompatible());
@@ -213,7 +217,7 @@ class CollectionTest extends TestCase
         $this->assertSame($expected, $collection->areReturnTypesStringCompatible());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreArrayCompatible()
+    public function testShouldDetectWhetherReturnTypesAreArrayCompatible(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesArrayCompatible());
@@ -246,7 +250,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesArrayCompatible());
     }
 
-    public function testShouldDetectWhetherReturnTypesAreObjectCompatible()
+    public function testShouldDetectWhetherReturnTypesAreObjectCompatible(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesObjectCompatible());
@@ -270,7 +274,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesObjectCompatible());
     }
 
-    public function testShouldDetectWellKnownTypes()
+    public function testShouldDetectWellKnownTypes(): void
     {
         $collection = new Collection();
         $this->assertFalse($collection->areReturnTypesWellKnown());
@@ -332,7 +336,7 @@ class CollectionTest extends TestCase
      *
      * @param string $type
      */
-    public function testShouldDetectCompatibleTypesForTrivialCases($type)
+    public function testShouldDetectCompatibleTypesForTrivialCases(string $type): void
     {
         $collection = new Collection();
         $this->assertTrue($collection->areReturnTypesCompatible());
@@ -341,7 +345,7 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->areReturnTypesCompatible());
     }
 
-    public function intCompatibleProvider()
+    public function intCompatibleProvider(): array
     {
         $expected = [
             true, true, true, true, true, true,
@@ -359,7 +363,7 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function stringCompatibleProvider()
+    public function stringCompatibleProvider(): array
     {
         $expected = [
             false, false, false, false, false,
@@ -378,7 +382,7 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function compatibleTypesProvider()
+    public function compatibleTypesProvider(): array
     {
         return [
             'int' => [Types::T_INT],
@@ -406,7 +410,7 @@ class CollectionTest extends TestCase
         ];
     }
 
-    public function testShouldDetectCompatibleTypesForObjectLike()
+    public function testShouldDetectCompatibleTypesForObjectLike(): void
     {
         $collection = new Collection();
 
@@ -417,7 +421,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForCollections()
+    public function testShouldDetectCompatibleTypesForCollections(): void
     {
         $collection = new Collection();
 
@@ -434,7 +438,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForIntegers()
+    public function testShouldDetectCompatibleTypesForIntegers(): void
     {
         $collection = new Collection();
 
@@ -451,7 +455,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForBool()
+    public function testShouldDetectCompatibleTypesForBool(): void
     {
         $collection = new Collection();
 
@@ -462,7 +466,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForString()
+    public function testShouldDetectCompatibleTypesForString(): void
     {
         $collection = new Collection();
 
@@ -475,7 +479,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForDouble()
+    public function testShouldDetectCompatibleTypesForDouble(): void
     {
         $collection = new Collection();
 
@@ -486,7 +490,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldDetectCompatibleTypesForKnownTypes()
+    public function testShouldDetectCompatibleTypesForKnownTypes(): void
     {
         $collection = new Collection();
 
@@ -527,7 +531,7 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->areReturnTypesCompatible());
     }
 
-    public function testShouldGetOnlyRealTypes()
+    public function testShouldGetOnlyRealTypes(): void
     {
         $collection = new Collection();
         $this->assertCount(0, $collection->getRealReturnTypes());
@@ -545,7 +549,7 @@ class CollectionTest extends TestCase
         $this->assertCount(5, $collection->getRealReturnTypes());
     }
 
-    public function testShouldGetOnlyCastHint()
+    public function testShouldGetOnlyCastHint(): void
     {
         $collection = new Collection();
         $this->assertCount(0, $collection->getCastHintedReturnTypes());

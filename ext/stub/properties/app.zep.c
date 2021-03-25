@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Properties_App, getInstance) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "instance");
 
 }
@@ -48,6 +49,7 @@ PHP_METHOD(Stub_Properties_App, __construct) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

@@ -69,13 +69,13 @@ ZEPHIR_INIT_CLASS(Stub_Properties_PublicProperties) {
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSpecifyKeys"), ZEND_ACC_PROTECTED);
 
 	/**
 	 * It's needed to test ide stubs
-	 * @link https://github.com/phalcon/zephir/issues/731
+	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSubArray"), ZEND_ACC_PROTECTED);
 
@@ -98,6 +98,14 @@ PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someGetterSetterArray_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(someGetterSetterArray)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &someGetterSetterArray);
 
@@ -113,6 +121,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, getSomeGetterSetterArray) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_MEMBER(getThis(), "someGetterSetterArray");
 
 }
@@ -125,6 +134,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_OBS_VAR(&_0);
@@ -133,7 +143,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
 
 }
 
-zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type) {
 
 		zval _3$$4, _4$$4, _6$$5, _8$$6;
 	zval _0, _2, _5, _7, _10, _1$$3, _9$$6, _11$$7;
@@ -150,6 +160,7 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_8$$6);
+	
 
 		ZEPHIR_MM_GROW();
 	

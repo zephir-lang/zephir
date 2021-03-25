@@ -579,7 +579,7 @@ class NativeArray
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/110
+	 * @link https://github.com/zephir-lang/zephir/issues/110
 	 */
 	public function issue110()-> string
 	{
@@ -614,7 +614,7 @@ class NativeArray
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/709
+	 * @link https://github.com/zephir-lang/zephir/issues/709
 	 */
 	public function issue709() -> bool
 	{

@@ -19,9 +19,6 @@ vendor
 *.loT
 *.dSYM
 
-# Dependency lock is ignored for now.
-composer.lock
-
 # Compilation logs.
 compile.log
 compile-errors.log
@@ -46,3 +43,4 @@ zephir.phar
 
 # Use this as your own wish list or a temporary buffer
 LATER
+php-zephir-parser/

@@ -21,7 +21,7 @@
  */
 ZEPHIR_INIT_CLASS(Stub_Router_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Stub\\Router, Exception, stub, router_exception, zend_exception_get_default(TSRMLS_C), NULL, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Stub\\Router, Exception, stub, router_exception, zend_ce_exception, NULL, 0);
 
 	return SUCCESS;
 

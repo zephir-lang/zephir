@@ -28,6 +28,7 @@ PHP_METHOD(stub_11__closure, __invoke) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_LONG(5);
 
 }

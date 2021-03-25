@@ -1,0 +1,29 @@
+# For local development only.
+
+# First development steps after start containers:
+#     - .ci/install-zephir-parser.sh
+#     - php zephir stubs
+#     - cd ext/ && ./install
+
+version: '3'
+
+services:
+  zephir-7.4:
+    container_name: phalcon-zephir-7.4
+    hostname: zephir-74
+    build: docker/7.4
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv
+
+  zephir-8.0:
+    container_name: phalcon-zephir-8.0
+    hostname: zephir-80
+    build: docker/8.0
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv

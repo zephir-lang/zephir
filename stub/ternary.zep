@@ -33,7 +33,7 @@ class Ternary
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/665
+	 * @link https://github.com/zephir-lang/zephir/issues/665
 	 */
 	public function testTernaryWithPromotedTemporaryVariable()
 	{
@@ -47,7 +47,7 @@ class Ternary
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/297
+	 * @link https://github.com/zephir-lang/zephir/issues/297
 	 */
 	public function testTernaryAfterLetVariable()
 	{

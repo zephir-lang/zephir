@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,17 +16,16 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Statements;
 
-class StatementsTest extends TestCase
+final class StatementsTest extends TestCase
 {
-    /** @var Statements */
-    private $test;
+    private Statements $test;
 
     protected function setUp(): void
     {
         $this->test = new Statements();
     }
 
-    public function testElseIf()
+    public function testElseIf(): void
     {
         $this->assertSame('more', $this->test->testElseIf(10));
         $this->assertSame('equal', $this->test->testElseIf(0));
@@ -32,21 +33,21 @@ class StatementsTest extends TestCase
         $this->assertSame('less', $this->test->testElseIf(-10));
     }
 
-    public function testElseIf1()
+    public function testElseIf1(): void
     {
         $this->assertSame('equal', $this->test->testElseIf1(10));
         $this->assertSame('less', $this->test->testElseIf1(5));
         $this->assertSame('else', $this->test->testElseIf1(11));
     }
 
-    public function testElseIf2()
+    public function testElseIf2(): void
     {
         $this->assertSame('equal', $this->test->testElseIf2(10, 10));
         $this->assertSame('less', $this->test->testElseIf2(5, 10));
         $this->assertSame('else', $this->test->testElseIf2(11, 10));
     }
 
-    public function test544Issue()
+    public function test544Issue(): void
     {
         $this->assertSame('====>...............................................................................................', $this->test->test544Issue(5));
         $this->assertSame('====================================================================================================', $this->test->test544Issue(100));

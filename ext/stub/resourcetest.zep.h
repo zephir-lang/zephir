@@ -10,12 +10,54 @@ PHP_METHOD(Stub_ResourceTest, testTypeOffResource);
 PHP_METHOD(Stub_ResourceTest, testIsResource);
 PHP_METHOD(Stub_ResourceTest, testFunctionsForSTDIN);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testletstatementstdin, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testletstatementstdout, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testletstatementstderr, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testtypeoffresource, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testisresource, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_resourcetest_testfunctionsforstdin, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_resourcetest_method_entry) {
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testLetStatementSTDIN, arginfo_stub_resourcetest_testletstatementstdin, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testLetStatementSTDIN, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testLetStatementSTDOUT, arginfo_stub_resourcetest_testletstatementstdout, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testLetStatementSTDOUT, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testLetStatementSTDERR, arginfo_stub_resourcetest_testletstatementstderr, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testLetStatementSTDERR, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testTypeOffResource, arginfo_stub_resourcetest_testtypeoffresource, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testTypeOffResource, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testIsResource, arginfo_stub_resourcetest_testisresource, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testIsResource, NULL, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_ResourceTest, testFunctionsForSTDIN, arginfo_stub_resourcetest_testfunctionsforstdin, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(Stub_ResourceTest, testFunctionsForSTDIN, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_FE_END
 };

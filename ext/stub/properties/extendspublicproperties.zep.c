@@ -27,11 +27,12 @@ ZEPHIR_INIT_CLASS(Stub_Properties_ExtendsPublicProperties) {
 	zend_declare_property_null(stub_properties_extendspublicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED);
 
 	stub_properties_extendspublicproperties_ce->create_object = zephir_init_properties_Stub_Properties_ExtendsPublicProperties;
+
 	return SUCCESS;
 
 }
 
-zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type TSRMLS_DC) {
+zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type) {
 
 		zval _1$$3, _2$$3, _4$$4, _6$$5, _11$$7;
 	zval _0, _3, _5, _8, _10, _7$$5, _9$$6, _12$$7;
@@ -49,6 +50,7 @@ zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_11$$7);
+	
 
 		ZEPHIR_MM_GROW();
 	

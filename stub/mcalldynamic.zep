@@ -28,7 +28,7 @@ class McallDynamic
 	}
 
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1751
+	 * @link https://github.com/zephir-lang/zephir/issues/1751
 	 */
 	public function testCallAnonymousFunctionWithContext() -> var
 	{

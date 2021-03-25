@@ -1,6 +1,8 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -18,20 +20,20 @@ use Zephir\FunctionLike\ReturnType\RealType;
 use Zephir\FunctionLike\ReturnType\TypeInterface;
 use Zephir\Types;
 
-class FactoryTest extends TestCase
+final class FactoryTest extends TestCase
 {
     /**
      * @dataProvider realTypeDataProvider
      *
      * @param array $ir
      */
-    public function testShouldCreateRealType(array $ir)
+    public function testShouldCreateRealType(array $ir): void
     {
         $factory = new Factory();
         $this->assertInstanceOf(RealType::class, $factory->create($ir));
     }
 
-    public function realTypeDataProvider()
+    public function realTypeDataProvider(): array
     {
         return [
             [
@@ -66,13 +68,13 @@ class FactoryTest extends TestCase
      *
      * @param array $ir
      */
-    public function testShouldCreateCastHint(array $ir)
+    public function testShouldCreateCastHint(array $ir): void
     {
         $factory = new Factory();
         $this->assertInstanceOf(CastHint::class, $factory->create($ir));
     }
 
-    public function castHintDataProvider()
+    public function castHintDataProvider(): array
     {
         return [
             [
@@ -112,8 +114,7 @@ class FactoryTest extends TestCase
             ],
             [
                 [
-                    'cast' => [
-                    ],
+                    'cast' => [],
                 ],
             ],
         ];

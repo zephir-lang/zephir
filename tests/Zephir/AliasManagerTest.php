@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
@@ -14,10 +16,9 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
 
-class AliasManagerTest extends TestCase
+final class AliasManagerTest extends TestCase
 {
-    /** @var \Zephir\AliasManager */
-    private $testAliasMgr;
+    private AliasManager $testAliasMgr;
 
     protected function setUp(): void
     {
@@ -29,7 +30,6 @@ class AliasManagerTest extends TestCase
         $testDataProvider = $this->baseTestSuiteProvider();
 
         $index = 0;
-
         foreach ($testDataProvider as $testName => $testSuite) {
             $testDataProvider[$testName][] = $expected[$index++];
         }
@@ -88,8 +88,11 @@ class AliasManagerTest extends TestCase
 
     /**
      * @dataProvider aliasProvider
+     *
+     * @param array $useStatements
+     * @param array $expected
      */
-    public function testShouldProperAddStatements(array $useStatements, array $expected)
+    public function testShouldProperAddStatements(array $useStatements, array $expected): void
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -116,8 +119,11 @@ class AliasManagerTest extends TestCase
 
     /**
      * @dataProvider statementProvider
+     *
+     * @param array $useStatements
+     * @param bool $expected
      */
-    public function testShouldCheckAliasedStatement(array $useStatements, bool $expected)
+    public function testShouldCheckAliasedStatement(array $useStatements, bool $expected): void
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -146,8 +152,11 @@ class AliasManagerTest extends TestCase
 
     /**
      * @dataProvider classNameDataProvider
+     *
+     * @param array $useStatements
+     * @param string $expected
      */
-    public function testShouldGetAliasForClassName(array $useStatements, string $expected)
+    public function testShouldGetAliasForClassName(array $useStatements, string $expected): void
     {
         $this->testAliasMgr->add([
             'aliases' => [$useStatements],
@@ -158,7 +167,7 @@ class AliasManagerTest extends TestCase
         $this->assertSame($expected, $this->testAliasMgr->getAliasForClassName($className));
     }
 
-    public function testShouldCheckIfAliasPresentForClass()
+    public function testShouldCheckIfAliasPresentForClass(): void
     {
         $this->testAliasMgr->add([
             'aliases' => [

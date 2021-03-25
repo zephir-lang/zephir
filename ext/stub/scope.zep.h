@@ -9,19 +9,43 @@ PHP_METHOD(Stub_Scope, test1);
 PHP_METHOD(Stub_Scope, test2);
 PHP_METHOD(Stub_Scope, test3);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_scope_getstr, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_scope_getdystr, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, g, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, g)
-#endif
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_scope_test1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_scope_test2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_scope_test3, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_scope_method_entry) {
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Scope, getStr, arginfo_stub_scope_getstr, ZEND_ACC_PRIVATE|ZEND_ACC_STATIC)
+#else
 	PHP_ME(Stub_Scope, getStr, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_STATIC)
+#endif
 	PHP_ME(Stub_Scope, getDyStr, arginfo_stub_scope_getdystr, ZEND_ACC_PRIVATE|ZEND_ACC_STATIC)
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Scope, test1, arginfo_stub_scope_test1, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#else
 	PHP_ME(Stub_Scope, test1, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Scope, test2, arginfo_stub_scope_test2, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#else
 	PHP_ME(Stub_Scope, test2, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
+#if PHP_VERSION_ID >= 80000
+	PHP_ME(Stub_Scope, test3, arginfo_stub_scope_test3, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#else
 	PHP_ME(Stub_Scope, test3, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
 	PHP_FE_END
 };
