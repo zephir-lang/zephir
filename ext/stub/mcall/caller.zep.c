@@ -33,6 +33,14 @@ PHP_METHOD(Stub_Mcall_Caller, start) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&f_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(f)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &f);
@@ -48,6 +56,7 @@ PHP_METHOD(Stub_Mcall_Caller, start) {
 PHP_METHOD(Stub_Mcall_Caller, perform) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("Caller:perform");

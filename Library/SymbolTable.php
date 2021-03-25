@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -447,7 +447,7 @@ class SymbolTable
         if ($this->globalsManager->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
                 /**
-                 * @TODO, injecting globals, initialize to null and check first?
+                 * TODO:, injecting globals, initialize to null and check first?
                  */
                 $superVar = new Variable('variable', $name, $compilationContext->branchManager->getCurrentBranch());
                 $superVar->setIsInitialized(true, $compilationContext);
@@ -504,7 +504,7 @@ class SymbolTable
         if ($this->globalsManager->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
                 /**
-                 * @TODO, injecting globals, initialize to null and check first?
+                 * TODO:, injecting globals, initialize to null and check first?
                  */
                 $superVar = new Variable('variable', $name, $compilationContext->branchManager->getCurrentBranch());
                 $superVar->setIsInitialized(true, $compilationContext);

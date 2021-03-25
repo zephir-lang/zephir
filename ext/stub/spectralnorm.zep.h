@@ -15,21 +15,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spectralnorm_ax, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spectralnorm_au, 0, 0, 3)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, n)
-#endif
 	ZEND_ARG_OBJ_INFO(0, u, SplFixedArray, 0)
 	ZEND_ARG_OBJ_INFO(0, v, SplFixedArray, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spectralnorm_atu, 0, 0, 3)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, n)
-#endif
 	ZEND_ARG_OBJ_INFO(0, u, SplFixedArray, 0)
 	ZEND_ARG_OBJ_INFO(0, v, SplFixedArray, 0)
 ZEND_END_ARG_INFO()
@@ -42,11 +34,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spectralnorm_atau, 0, 0, 4)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spectralnorm_process, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, n)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_spectralnorm_method_entry) {

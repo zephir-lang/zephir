@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
@@ -16,12 +18,13 @@ use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\Types;
 
-class TypesTest extends TestCase
+final class TypesTest extends TestCase
 {
     /**
      * Helper to build proper structure with method return types.
      *
      * @param array $returnTypesList - collactions with all return types
+     * @return array
      */
     private function buildReturnTypes(array $returnTypesList): array
     {
@@ -38,8 +41,9 @@ class TypesTest extends TestCase
     /**
      * Builds base object definition for return type.
      *
-     * @param array $types     - list of method return types
-     * @param int   $mandatory - is mandatory flag
+     * @param array $types - list of method return types
+     * @param int $mandatory - is mandatory flag
+     * @return array
      */
     private function baseReturnTypeDefinition(array $types, int $mandatory = 0): array
     {
@@ -63,6 +67,7 @@ class TypesTest extends TestCase
      *
      * @param array $types      - list of method return types
      * @param int   $collection - is collection flag
+     * @return array
      */
     private function variableReturnTypeDefinition(array $types, int $collection = 0): array
     {
@@ -183,15 +188,17 @@ class TypesTest extends TestCase
 
     /**
      * @dataProvider typesProvider
+     *
+     * @param array $returnTypes
+     * @param string $expected
      */
-    public function testShouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected): void
     {
         $testMethod = $this->buildMethod(
             $this->baseReturnTypeDefinition($returnTypes)
         );
 
         $testTypes = new Types();
-
         $actual = $testTypes->getReturnTypeAnnotation($testMethod);
 
         $this->assertSame($expected, $actual);
@@ -220,8 +227,11 @@ class TypesTest extends TestCase
 
     /**
      * @dataProvider objectsProvider
+     *
+     * @param array $returnTypes
+     * @param string $expected
      */
-    public function testShouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected): void
     {
         $withAliases = [];
         foreach ($returnTypes as $alias) {
@@ -263,8 +273,11 @@ class TypesTest extends TestCase
 
     /**
      * @dataProvider collectionsProvider
+     *
+     * @param array $returnTypes
+     * @param string $expected
      */
-    public function testShouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected)
+    public function testShouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected): void
     {
         $typesList = [];
         $collections = [];
@@ -279,9 +292,7 @@ class TypesTest extends TestCase
         }
 
         $testMethod = $this->buildMethod($typesList);
-
         $testTypes = new Types();
-
         $actual = $testTypes->getReturnTypeAnnotation(
             $testMethod,
             array_merge($testMethod->getReturnTypes(), $collections)

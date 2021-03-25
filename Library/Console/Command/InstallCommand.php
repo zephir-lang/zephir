@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
@@ -21,18 +23,20 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
 
+use function extension_loaded;
+
 /**
- * Zephir\Console\Command\InstallCommand.
+ * Install Command
  *
  * Installs the extension in the extension directory.
  */
-final class InstallCommand extends Command
+final class InstallCommand extends AbstractCommand
 {
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
 
-    private $compiler;
-    private $config;
+    private Compiler $compiler;
+    private Config $config;
 
     public function __construct(Compiler $compiler, Config $config)
     {
@@ -64,11 +68,7 @@ final class InstallCommand extends Command
             $io->getErrorStyle()->note($e->getMessage());
 
             return 0;
-        } catch (CompilerException $e) {
-            $io->getErrorStyle()->error($e->getMessage());
-
-            return 1;
-        } catch (Exception $e) {
+        } catch (CompilerException | Exception $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
@@ -77,7 +77,7 @@ final class InstallCommand extends Command
         $success = ['Extension installed.'];
 
         $namespace = $this->config->get('namespace');
-        if (!\extension_loaded($namespace)) {
+        if (!extension_loaded($namespace)) {
             $success[] = sprintf('Add "extension=%s.so" to your php.ini', $namespace);
         }
 
@@ -88,11 +88,9 @@ final class InstallCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
-    protected function getDevelopmentModeHelp()
+    protected function getDevelopmentModeHelp(): string
     {
         return <<<EOT
 Using <comment>--dev</comment> option will try installing the extension in development mode

@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Optimizers;
@@ -20,9 +22,9 @@ use Stub\Optimizers\Sin;
 use Stub\Optimizers\Sqrt;
 use Stub\Optimizers\Tan;
 
-class MathTest extends TestCase
+final class MathTest extends TestCase
 {
-    public function testLdexp()
+    public function testLdexp(): void
     {
         $test = new Ldexp();
 
@@ -35,7 +37,7 @@ class MathTest extends TestCase
         $this->assertSame(524288.0, $test->testvarParameter(8, 16));
     }
 
-    public function testSqrt()
+    public function testSqrt(): void
     {
         $test = new Sqrt();
 
@@ -52,7 +54,7 @@ class MathTest extends TestCase
         $this->assertSame(4.0, $test->testVarParameter(16));
     }
 
-    public function testSin()
+    public function testSin(): void
     {
         $test = new Sin();
 
@@ -69,7 +71,7 @@ class MathTest extends TestCase
         $this->assertSame(sin(16), $test->testVarParameter(16));
     }
 
-    public function testCos()
+    public function testCos(): void
     {
         $test = new Cos();
 
@@ -86,7 +88,7 @@ class MathTest extends TestCase
         $this->assertSame(cos(16), $test->testVarParameter(16));
     }
 
-    public function testACos()
+    public function testACos(): void
     {
         $test = new ACos();
 
@@ -102,7 +104,7 @@ class MathTest extends TestCase
         $this->assertSame(acos(0), $test->testVarParameter(0));
     }
 
-    public function testASin()
+    public function testASin(): void
     {
         $test = new ASin();
 
@@ -118,7 +120,7 @@ class MathTest extends TestCase
         $this->assertSame(asin(0), $test->testVarParameter(0));
     }
 
-    public function testTan()
+    public function testTan(): void
     {
         $test = new Tan();
 

@@ -40,6 +40,7 @@ PHP_METHOD(Stub_Pregmatch, testWithoutReturnAndMatches) {
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&pattern);
@@ -66,6 +67,7 @@ PHP_METHOD(Stub_Pregmatch, testWithoutReturns) {
 	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&matches);
@@ -91,6 +93,7 @@ PHP_METHOD(Stub_Pregmatch, testWithoutMatches) {
 	ZVAL_UNDEF(&matched);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&pattern);
@@ -114,6 +117,7 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchAll) {
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&results);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&pattern);
@@ -136,6 +140,7 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchFallback) {
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&subject);
 	ZVAL_UNDEF(&matches);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -161,6 +166,15 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch2Params) {
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_ZVAL(subject)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &pattern, &subject);
@@ -181,6 +195,16 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch3Params) {
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_ZVAL(subject)
+		Z_PARAM_ZVAL(matches)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(3, 0, &pattern, &subject, &matches);
 
@@ -200,6 +224,17 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch4Params) {
 	ZVAL_UNDEF(&subject_sub);
 	ZVAL_UNDEF(&matches_sub);
 	ZVAL_UNDEF(&flags_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_ZVAL(subject)
+		Z_PARAM_ZVAL(matches)
+		Z_PARAM_ZVAL(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(4, 0, &pattern, &subject, &matches, &flags);
 
@@ -220,6 +255,18 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch5Params) {
 	ZVAL_UNDEF(&matches_sub);
 	ZVAL_UNDEF(&flags_sub);
 	ZVAL_UNDEF(&offset_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_ZVAL(pattern)
+		Z_PARAM_ZVAL(subject)
+		Z_PARAM_ZVAL(matches)
+		Z_PARAM_ZVAL(flags)
+		Z_PARAM_ZVAL(offset)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(5, 0, &pattern, &subject, &matches, &flags, &offset);
 
@@ -231,7 +278,7 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch5Params) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/287
+ * @link https://github.com/zephir-lang/zephir/issues/287
  */
 PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches) {
 
@@ -244,6 +291,15 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches) {
 	ZVAL_UNDEF(&pattern);
 	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_STR(str)
+		Z_PARAM_STR(pattern)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &str_param, &pattern_param);
@@ -272,6 +328,14 @@ PHP_METHOD(Stub_Pregmatch, testMatchAll) {
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &flags);
@@ -303,6 +367,7 @@ PHP_METHOD(Stub_Pregmatch, testMatchAllInZep) {
 	ZVAL_UNDEF(&m1);
 	ZVAL_UNDEF(&m2);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

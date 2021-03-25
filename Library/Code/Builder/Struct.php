@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -9,26 +9,46 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Code\Builder;
 
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
 
+use function is_string;
+
 /**
- * Zephir\Code\Builder\Struct.
- *
  * Represents an internal extension global structure
  */
 class Struct
 {
-    /** @var string */
-    protected $name;
+    /**
+     * Struct name
+     *
+     * @var string
+     */
+    protected string $name;
 
-    /** @var string */
-    protected $simpleName;
+    /**
+     * Struct simple name
+     *
+     * @var string
+     */
+    protected string $simpleName;
 
-    /** @var array */
-    protected $properties = [];
+    /**
+     * Struct members definition
+     *
+     * ```c
+     * struct Name {
+     *     key value;
+     * }
+     * ```
+     *
+     * @var array
+     */
+    protected array $properties = [];
 
     /**
      * @param string $name
@@ -36,16 +56,8 @@ class Struct
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $simpleName)
+    public function __construct(string $name, string $simpleName)
     {
-        if (!\is_string($name)) {
-            throw new InvalidArgumentException('Struct name must be string');
-        }
-
-        if (!\is_string($simpleName)) {
-            throw new InvalidArgumentException('Struct name must be string');
-        }
-
         if (empty($name)) {
             throw new InvalidArgumentException('Struct name must not be empty');
         }
@@ -57,7 +69,7 @@ class Struct
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $code = 'typedef struct '.$this->name.' { '.PHP_EOL;
 
@@ -74,18 +86,10 @@ class Struct
      *
      * @throws InvalidArgumentException
      */
-    public function addProperty($field, $global)
+    public function addProperty(string $field, array $global)
     {
-        if (!isset($global['type'])) {
+        if (!isset($global['type']) || !is_string($global['type'])) {
             throw new InvalidArgumentException('Property type must be string');
-        }
-
-        if (!\is_string($global['type'])) {
-            throw new InvalidArgumentException('Property type must be string');
-        }
-
-        if (!\is_string($field)) {
-            throw new InvalidArgumentException('Property name must be string');
         }
 
         if (isset($this->properties[$field])) {
@@ -100,14 +104,14 @@ class Struct
      *
      * @param string $name
      * @param array  $global
-     * @param mixed  $namespace
+     * @param string $namespace
      *
      * @throws RuntimeException
      * @throws InvalidArgumentException
      *
      * @return string
      */
-    public function getCDefault($name, $global, $namespace)
+    public function getCDefault(string $name, array $global, string $namespace): string
     {
         if (!isset($global['default'])) {
             throw new RuntimeException('Field "'.$name.'" does not have a default value');
@@ -117,18 +121,6 @@ class Struct
             case 'boolean':
             case 'bool':
                 return '';
-                /*
-                if ($global['default'] === true) {
-                    return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = 1;';
-                } else {
-                    if ($global['default'] === false) {
-                        return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = 0;';
-                    } else {
-                        throw new \Exception('Invalid default type for boolean field "' . $name . '", it must be false/true');
-                    }
-                }
-                */
-                break;
 
             case 'int':
             case 'uint':
@@ -147,30 +139,18 @@ class Struct
      *
      * @see https://docs.zephir-lang.com/latest/en/globals
      *
-     * @param mixed $name      - global-name
-     * @param mixed $global    - global structure (type, default...)
-     * @param mixed $namespace - global namespace
+     * @param string $name      - global-name
+     * @param array $global    - global structure (type, default...)
+     * @param string $namespace - global namespace
+     *
+     * @return string
      */
-    public function getInitEntry($name, $global, $namespace)
+    public function getInitEntry(string $name, array $global, string $namespace): string
     {
-        $iniEntry = [];
         $structName = $this->simpleName.'.'.$name;
-
-        if (isset($global['ini-entry'])) {
-            $iniEntry = $global['ini-entry'];
-        }
-
-        if (!isset($iniEntry['name'])) {
-            $iniName = $namespace.'.'.$structName;
-        } else {
-            $iniName = $iniEntry['name'];
-        }
-
-        if (!isset($iniEntry['scope'])) {
-            $scope = 'PHP_INI_ALL';
-        } else {
-            $scope = $iniEntry['scope'];
-        }
+        $iniEntry = $global['ini-entry'] ?? [];
+        $iniName = $iniEntry['name'] ?? $namespace.'.'.$structName;
+        $scope = $iniEntry['scope'] ?? 'PHP_INI_ALL';
 
         switch ($global['type']) {
             case 'boolean':
@@ -188,7 +168,6 @@ class Struct
                     $namespace.
                     '_globals, '.
                     $namespace.'_globals)';
-            break;
         }
 
         return '';
@@ -203,7 +182,7 @@ class Struct
      *
      * @return string
      */
-    protected function convertToCType($type)
+    protected function convertToCType(string $type): string
     {
         switch ($type) {
             case 'boolean':

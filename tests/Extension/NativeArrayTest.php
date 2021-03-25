@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,17 +16,16 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\NativeArray;
 
-class NativeArrayTest extends TestCase
+final class NativeArrayTest extends TestCase
 {
-    /** @var NativeArray */
-    private $test;
+    private NativeArray $test;
 
     protected function setUp(): void
     {
         $this->test = new NativeArray();
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $this->assertSame([], $this->test->testArray1());
         $this->assertSame([1, 2, 3], $this->test->testArray2());
@@ -52,7 +53,7 @@ class NativeArrayTest extends TestCase
         $this->assertSame([0 => 0.0, 1 => 0.0, 2 => 0.0], $this->test->testArray24());
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $this->assertSame(1, $this->test->testArrayAccess1());
         $this->assertSame(1, $this->test->testArrayAccess2());
@@ -61,7 +62,7 @@ class NativeArrayTest extends TestCase
         $this->assertSame(1, $this->test->testArrayAccess5());
     }
 
-    public function testArrayMultipleAccess()
+    public function testArrayMultipleAccess(): void
     {
         $this->assertSame('a', $this->test->testArrayMultipleAccess1());
         $this->assertSame('b', $this->test->testArrayMultipleAccess2());
@@ -70,7 +71,7 @@ class NativeArrayTest extends TestCase
         $this->assertSame(0, $this->test->testArrayMultipleAccess5());
     }
 
-    public function testArrayUpdate()
+    public function testArrayUpdate(): void
     {
         $this->assertSame([4, 2, 3], $this->test->testArrayUpdate1());
         $this->assertSame([4, 2, 3], $this->test->testArrayUpdate2());
@@ -78,7 +79,7 @@ class NativeArrayTest extends TestCase
         $this->assertSame(['a' => 4, 'b' => 2, 'c' => 3], $this->test->testArrayUpdate4());
     }
 
-    public function testMultipleArrayUpdate()
+    public function testMultipleArrayUpdate(): void
     {
         $this->assertSame(['x' => ['y' => null]], $this->test->testMultipleArrayUpdate1());
         $this->assertSame(['x' => ['y' => ['z' => null]]], $this->test->testMultipleArrayUpdate2());
@@ -94,28 +95,28 @@ class NativeArrayTest extends TestCase
         $this->assertSame(['y' => ['x' => ['z' => null]]], $this->test->testMultipleArrayUpdate12());
     }
 
-    public function testArrayKeys()
+    public function testArrayKeys(): void
     {
         $this->assertSame(['test1', 'test2', 'test3'], $this->test->testArrayKeys(['test1' => 1, 'test2' => 2, 'test3' => 3]));
         $this->assertSame([0, 1, 2, 3, 4, 5], $this->test->testArrayKeys([1, 2, 3, 4, 5, 6]));
     }
 
-    public function testImplodeArray()
+    public function testImplodeArray(): void
     {
         $this->assertSame('test1|test2|test3', $this->test->testImplodeArray(['test1' => 1, 'test2' => 2, 'test3' => 3]));
     }
 
-    public function testIssue110()
+    public function testIssue110(): void
     {
         $this->assertSame('B|K|M|G|T|KB|MB|GB|TB', $this->test->issue110());
     }
 
-    public function testIssue264()
+    public function testIssue264(): void
     {
         $this->assertFalse($this->test->issue264([1, 2, 3]));
     }
 
-    public function testIssue743()
+    public function testIssue743(): void
     {
         $this->test->issue743a([42 => []]);
 
@@ -153,17 +154,20 @@ class NativeArrayTest extends TestCase
         $this->assertSame($expected, $this->test->issue743c(['str' => ['hey' => new \stdClass()]]));
     }
 
-    public function testIssue709()
+    public function testIssue709(): void
     {
         $this->assertTrue($this->test->Issue709());
     }
 
-    public function testIssue1140()
+    public function testIssue1140(): void
     {
-        $this->assertSame(['phalcon' => ['/var/www/html/phalcon']], $this->test->Issue1140('phalcon', '/var/www/html/phalcon'));
+        $this->assertSame(
+            ['phalcon' => ['/var/www/html/phalcon']],
+            $this->test->Issue1140('phalcon', '/var/www/html/phalcon')
+        );
     }
 
-    public function testIssue1159()
+    public function testIssue1159(): void
     {
         $this->assertSame([1], $this->test->Issue1159());
     }

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -73,7 +73,7 @@ class CastOperator extends BaseOperator
                          * zephir_get_intval_ex use zval variable
                          * before use with it we create a new variable and assign value of literal.
                          *
-                         * @todo Optimize by creating native function for string without zval using
+                         * TODO: Optimize by creating native function for string without zval using
                          */
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                             'string',
@@ -514,7 +514,7 @@ class CastOperator extends BaseOperator
                             default:
                                 // TODO: I'm not a pretty sure this branch works
                                 // This is old code I just moved to "default"
-                                // See: https://github.com/phalcon/zephir/issues/1988
+                                // See: https://github.com/zephir-lang/zephir/issues/1988
                                 $symbolVariable = $compilationContext->symbolTable->getTempVariable(
                                     'string',
                                     $compilationContext

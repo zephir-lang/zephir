@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Properties;
@@ -14,9 +16,9 @@ namespace Extension\Properties;
 use PHPUnit\Framework\TestCase;
 use Stub\Properties\PropertyArray;
 
-class PropertyArrayTest extends TestCase
+final class PropertyArrayTest extends TestCase
 {
-    public function testAssertations()
+    public function testAssertations(): void
     {
         $test = new PropertyArray();
         $this->assertSame([1], $test->someArray);
@@ -24,7 +26,7 @@ class PropertyArrayTest extends TestCase
         $this->assertSame([1, 'one'], $test->someArray);
     }
 
-    public function testIssues1831()
+    public function testIssues1831(): void
     {
         $header = [
             'header 1',

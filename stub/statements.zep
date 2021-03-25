@@ -6,7 +6,7 @@ class Statements
     public tmp2 = "test string";
 
     /**
-     * @issue https://github.com/phalcon/zephir/issues/544
+     * @issue https://github.com/zephir-lang/zephir/issues/544
      */
     private totalSteps = 100;
 

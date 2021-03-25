@@ -23,7 +23,7 @@ test_expect_success "Life Cycle Test" "
   test_cmp ext/lifecycle.c expected3.c
 "
 
-# See: https://github.com/phalcon/zephir/issues/1758
+# See: https://github.com/zephir-lang/zephir/issues/1758
 test_expect_success "Should generate valid code with inheritance of prototype interfaces" "
   cd $FIXTURESDIR/protodir &&
   zephirc fullclean 2>&1 >/dev/null &&

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>

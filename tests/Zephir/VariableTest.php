@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Zephir\Test;
@@ -20,17 +22,16 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable;
 
-class VariableTest extends TestCase
+final class VariableTest extends TestCase
 {
-    /** @var Variable */
-    private $zephirVar;
+    private Variable $zephirVar;
 
     protected function setUp(): void
     {
         $this->zephirVar = new Variable('object', 'UnitTest');
     }
 
-    public function testShouldSetProperties()
+    public function testShouldSetProperties(): void
     {
         $context = new CompilationContext();
         $branch = new Branch();
@@ -203,7 +204,7 @@ class VariableTest extends TestCase
         $this->assertSame($branch, $this->zephirVar->getPossibleValueBranch());
     }
 
-    public function testShouldEnableDefaultAutoInitValue()
+    public function testShouldEnableDefaultAutoInitValue(): void
     {
         $numericTypes = [
             'char', 'boolean', 'bool', 'int', 'uint', 'long', 'ulong',

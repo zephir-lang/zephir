@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -35,8 +35,6 @@ class StaticPropertyAdd
      *
      * @throws CompilerException
      * @throws IllegalOperationException
-     *
-     * @internal param string $variable
      */
     public function assignStatic(
         string $className,

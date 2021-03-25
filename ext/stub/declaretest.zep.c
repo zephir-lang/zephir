@@ -36,6 +36,7 @@ PHP_METHOD(Stub_DeclareTest, testStringDeclare1) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -52,6 +53,7 @@ PHP_METHOD(Stub_DeclareTest, testStringDeclare2) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -67,6 +69,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare1) {
 
 
 
+
 	a = 1;
 	RETURN_LONG(a);
 
@@ -76,6 +79,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare2) {
 
 	zend_ulong a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -91,6 +95,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare3) {
 
 
 
+
 	a = 1.0;
 	RETURN_DOUBLE(a);
 
@@ -100,6 +105,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare4) {
 
 	double a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -115,6 +121,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare5) {
 
 
 
+
 	a = 'A';
 	RETURN_LONG(a);
 
@@ -124,6 +131,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare6) {
 
 	unsigned char a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -139,6 +147,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare7) {
 
 
 
+
 	a = 1;
 	RETURN_LONG(a);
 
@@ -148,6 +157,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare8) {
 
 	zend_bool a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -163,6 +173,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare9) {
 
 
 
+
 	a = 0;
 	RETURN_BOOL(a);
 
@@ -172,6 +183,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare10) {
 
 	zend_long a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -187,6 +199,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare11) {
 
 
 
+
 	a = 10.5;
 	RETURN_DOUBLE(a);
 
@@ -196,6 +209,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare12) {
 
 	zend_bool a;
 	zval *this_ptr = getThis();
+
 
 
 
@@ -211,6 +225,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare13) {
 
 
 
+
 	a = 1;
 	RETURN_BOOL(a);
 
@@ -223,6 +238,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare14) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -240,6 +256,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclare15) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -256,6 +273,7 @@ PHP_METHOD(Stub_DeclareTest, testDeclareMcallExpression) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 

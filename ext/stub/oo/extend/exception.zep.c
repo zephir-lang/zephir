@@ -16,7 +16,7 @@
 
 ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend, Exception, stub, oo_extend_exception, zend_exception_get_default(TSRMLS_C), NULL, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend, Exception, stub, oo_extend_exception, zend_ce_exception, NULL, 0);
 
 	return SUCCESS;
 

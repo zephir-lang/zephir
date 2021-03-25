@@ -1,43 +1,49 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 use Stub\Mcall;
+use Stub\Oo\Param;
 
-class MCallTest extends TestCase
+final class MCallTest extends TestCase
 {
-    /** @var \ReflectionClass */
+    /**
+     * @var mixed
+     */
     private $reflection;
-
-    /** @var Mcall */
-    private $test;
+    private Mcall $test;
 
     protected function setUp(): void
     {
         $this->test = new Mcall();
     }
 
-    public function assertNumberOfParameters($number)
+    public function assertNumberOfParameters($number): void
     {
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfParameters());
     }
 
-    public function assertNumberOfRequiredParameters($number)
+    public function assertNumberOfRequiredParameters($number): void
     {
         $this->assertSame($number, $this->getReflection()->getMethod($this->getName())->getNumberOfRequiredParameters());
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $this->assertSame($this->test->testCall1(), 'hello public');
         $this->assertSame($this->test->testCall2(), 'hello protected');
@@ -60,27 +66,27 @@ class MCallTest extends TestCase
         $this->assertSame($this->test->testCall15(4, 5), 9);
     }
 
-    public function testOptionalParameterString()
+    public function testOptionalParameterString(): void
     {
         $this->assertSame($this->test->optionalParameterString('test'), 'test');
         $this->assertSame($this->test->optionalParameterString(), 'test string');
         $this->assertSame($this->test->optionalParameterStringNull(), '');
     }
 
-    public function testOptionalParameterInt()
+    public function testOptionalParameterInt(): void
     {
         $this->assertSame($this->test->optionalParameterInt(1), 1);
         $this->assertSame($this->test->optionalParameterInt(), 2);
     }
 
-    public function testOptionalParameterVar()
+    public function testOptionalParameterVar(): void
     {
         $this->assertSame($this->test->optionalParameterVar(1), 1);
         $this->assertSame($this->test->optionalParameterVar('testtesttesttest'), 'testtesttesttest');
         $this->assertNull($this->test->optionalParameterVar());
     }
 
-    public function testOptionalParameterBoolean()
+    public function testOptionalParameterBoolean(): void
     {
         $this->assertFalse($this->test->optionalParameterBoolFalse());
         $this->assertTrue($this->test->optionalParameterBoolTrue());
@@ -92,60 +98,55 @@ class MCallTest extends TestCase
         $this->assertFalse($this->test->optionalParameterBoolean(false));
     }
 
-    public function testArrayParamWithDefaultEmptyArray()
+    public function testArrayParamWithDefaultEmptyArray(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray(), []);
         $this->assertSame($this->test->testArrayParamWithDefaultEmptyArray([1]), [1]);
     }
 
-    public function testArrayParamWithDefaultNullValue()
+    public function testArrayParamWithDefaultNullValue(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(0);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue(), []);
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue([1]), [1]);
     }
 
-    public function testArrayParam()
+    public function testArrayParam(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertTrue($this->getMethodFirstParameter()->isArray());
+        $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
         $this->assertSame($this->test->testArrayParam([]), []);
         $this->assertSame($this->test->testArrayParam([1, 2, 3]), [1, 2, 3]);
     }
 
-    public function testObjectParamCastStdClass()
+    public function testObjectParamCastStdClass(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('stdClass', $this->test->testObjectParamCastStdClass(new \stdClass()));
+        $this->assertSame(\StdClass::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertInstanceOf(\stdClass::class, $this->test->testObjectParamCastStdClass(new \stdClass()));
     }
 
-    public function testObjectParamCastOoParam()
+    public function testObjectParamCastOoParam(): void
     {
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame('Stub\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
-        $this->assertInstanceOf('Stub\Oo\Param', $this->test->testObjectParamCastOoParam(new \Stub\Oo\Param()));
+        $this->assertSame(Param::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertInstanceOf(Param::class, $this->test->testObjectParamCastOoParam(new Param()));
     }
 
-    /**
-     * @return \ReflectionParameter
-     *
-     * @throws \ReflectionException
-     */
-    protected function getMethodFirstParameter()
+    protected function getMethodFirstParameter(): ReflectionParameter
     {
         $methodInfo = $this->reflection->getMethod($this->getName());
         $parameters = $methodInfo->getParameters();
@@ -153,12 +154,41 @@ class MCallTest extends TestCase
         return $parameters[0];
     }
 
+    /**
+     * @return mixed|ReflectionClass
+     */
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new \ReflectionClass('\Stub\Mcall');
+            return $this->reflection = new ReflectionClass(Mcall::class);
         }
 
         return $this->reflection;
+    }
+
+    public function testSouldThrowTypeErrorForOptionalBoolean1(): void
+    {
+        $test = new Mcall();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, string given/'
+        );
+
+        $test->optionalParameterBoolean('test');
+    }
+
+    public function testShouldThrowTypeErrorForOptionalBoolean2(): void
+    {
+        $test = new Mcall();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessageRegExp(
+            '/Argument 1 passed to Stub\\\Mcall::optionalParameterBoolean\(\) '.
+            'must be of the type bool(ean)?, array given/'
+        );
+
+        $test->optionalParameterBoolean([]);
     }
 }

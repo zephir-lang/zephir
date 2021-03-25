@@ -7,7 +7,7 @@ namespace Stub;
 class Exception extends \Exception
 {
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/915
+	 * @link https://github.com/zephir-lang/zephir/issues/915
 	 */
 	public function testRuntimePropertyFetch(string! message)
 	{

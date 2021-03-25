@@ -1,33 +1,34 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Documentation;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Documentation\Annotation;
 use Zephir\Documentation\Docblock;
 
-class DocblockTest extends TestCase
+final class DocblockTest extends TestCase
 {
-    /** @var Docblock */
-    private $docblock;
+    private Docblock $docblock;
 
     protected function setUp(): void
     {
         $this->docblock = new Docblock();
     }
 
-    public function testShouldGetAllProperties()
+    public function testShouldGetAllProperties(): void
     {
-        $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
+        $annotation1 = new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
 
         $this->docblock->setAnnotations([
@@ -37,12 +38,12 @@ class DocblockTest extends TestCase
         $this->docblock->setDescription('Example description for test docblock.');
         $this->docblock->setSummary('See LICENSE.txt for more details.');
 
-        $this->assertArraySubset(
+        $this->assertSame(
+            $this->docblock->getAnnotations(),
             [
                 $annotation1,
                 $annotation2,
-            ],
-            $this->docblock->getAnnotations()
+            ]
         );
 
         $this->assertSame([$annotation1], $this->docblock->getAnnotationsByType('see'));
@@ -55,9 +56,9 @@ class DocblockTest extends TestCase
         $this->assertSame('See LICENSE.txt for more details.', $this->docblock->getSummary());
     }
 
-    public function testShouldAddAnnotations()
+    public function testShouldAddAnnotations(): void
     {
-        $annotation1 = new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage');
+        $annotation1 = new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage');
         $annotation2 = new Annotation('link', 'https://github.com/phalcon/cphalcon Phalcon homepage');
         $annotation3 = new Annotation('readme', 'https://github.com/zephir/README.md Readme');
 
@@ -71,7 +72,7 @@ class DocblockTest extends TestCase
         $this->assertCount(3, $this->docblock->getAnnotations());
     }
 
-    public function testShouldGenerateDocblock()
+    public function testShouldGenerateDocblock(): void
     {
         $expected = <<<DOC
 **
@@ -80,14 +81,14 @@ class DocblockTest extends TestCase
  *
  * Example description block.
  *
- * @see https://github.com/phalcon/zephir Zephir homepage
+ * @see https://github.com/zephir-lang/zephir Zephir homepage
  * @return void
  *
 DOC;
         $this->docblock->setDescription('Example description block.');
         $this->docblock->setSummary('Example summary block.');
         $this->docblock->setAnnotations([
-            new Annotation('see', 'https://github.com/phalcon/zephir Zephir homepage'),
+            new Annotation('see', 'https://github.com/zephir-lang/zephir Zephir homepage'),
         ]);
         $this->docblock->addAnnotation(
             new Annotation('return', 'void')

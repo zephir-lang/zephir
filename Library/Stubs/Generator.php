@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -11,6 +11,7 @@
 
 namespace Zephir\Stubs;
 
+use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
@@ -107,7 +108,7 @@ class Generator
         $source .= '' === $banner ? '' : $banner.PHP_EOL;
         $source .= "namespace {$class->getNamespace()};".PHP_EOL;
 
-        /** @var Zephir\AliasManager $aliasManager */
+        /** @var AliasManager $aliasManager */
         $aliasManager = $class->getAliasManager();
         $aliases = $aliasManager->getAliases();
 
@@ -304,8 +305,8 @@ class Generator
         /**
          * TODO: Add $method->isVoid() check after removing PHP 7.0 support.
          *
-         * @see https://github.com/phalcon/zephir/issues/1977
-         * @see https://github.com/phalcon/zephir/pull/1978
+         * @see https://github.com/zephir-lang/zephir/issues/1977
+         * @see https://github.com/zephir-lang/zephir/pull/1978
          */
         if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
             $supported = 0;
@@ -381,16 +382,16 @@ class Generator
     {
         switch ($parameter['default']['type']) {
             case 'null':
-                return 'null';
+                $returnValue = 'null';
                 break;
 
             case 'string':
             case 'char':
-                return '\''.addslashes($parameter['default']['value']).'\'';
+                $returnValue = '\''.addslashes($parameter['default']['value']).'\'';
                 break;
 
             case 'empty-array':
-                return 'array()';
+                $returnValue = 'array()';
                 break;
 
             case 'array':
@@ -412,17 +413,17 @@ class Generator
                     ]);
                 }
 
-                return 'array('.implode(', ', $parameters).')';
+                $returnValue = 'array('.implode(', ', $parameters).')';
                 break;
 
             case 'static-constant-access':
-                return $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
+                $returnValue = $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
                 break;
 
             case 'int':
             case 'double':
             case 'bool':
-                return $parameter['default']['value'];
+                $returnValue = $parameter['default']['value'];
                 break;
 
             default:
@@ -432,7 +433,8 @@ class Generator
                         $parameter['default']['type']
                     )
                 );
-                break;
         }
+
+        return $returnValue;
     }
 }

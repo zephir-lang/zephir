@@ -33,6 +33,7 @@ PHP_METHOD(Stub_Scope, getStr) {
 	zval *this_ptr = getThis();
 
 
+
 	RETURN_STRING("internal_string");
 
 }
@@ -45,6 +46,14 @@ PHP_METHOD(Stub_Scope, getDyStr) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(g)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &g_param);
@@ -70,6 +79,7 @@ PHP_METHOD(Stub_Scope, test1) {
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&k$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -101,6 +111,7 @@ PHP_METHOD(Stub_Scope, test2) {
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -151,6 +162,7 @@ PHP_METHOD(Stub_Scope, test3) {
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&str$$3);
+
 
 	ZEPHIR_MM_GROW();
 

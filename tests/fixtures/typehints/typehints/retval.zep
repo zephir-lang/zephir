@@ -6,36 +6,36 @@ class RetVal {
 	 * However, the language specification does not prohibit it.
 	 * Therefore, we must test and verify the expected result.
 	 *
-	 * @link https://github.com/phalcon/zephir/pull/1681
+	 * @link https://github.com/zephir-lang/zephir/pull/1681
 	 * @var \Some\Non\Existent\Class\At\This\Time
 	 */
 	protected my_var = "some-value" {get};
 
 	/**
-	 * @link https://github.com/phalcon/zephir/pull/1681
+	 * @link https://github.com/zephir-lang/zephir/pull/1681
 	 * @var string
 	 */
 	protected my_string = "some-value" {get};
 
 	/**
-	 * @link https://github.com/phalcon/zephir/pull/1685
+	 * @link https://github.com/zephir-lang/zephir/pull/1685
 	 * @var array
 	 */
 	protected my_array {get};
 
-	/** @link https://github.com/phalcon/zephir/pull/1681 */
+	/** @link https://github.com/zephir-lang/zephir/pull/1681 */
 	public function retval_var_var() -> var {
 		var _var;
 		return _var;
 	}
 
-	/** @link https://github.com/phalcon/zephir/pull/1681 */
+	/** @link https://github.com/zephir-lang/zephir/pull/1681 */
 	public function retval_var_var_builit_1() -> var|string {
 		var _var;
 		return _var;
 	}
 
-	/** @link https://github.com/phalcon/zephir/pull/1681 */
+	/** @link https://github.com/zephir-lang/zephir/pull/1681 */
 	public function retval_var_var_builit_2() -> int|var {
 		var _var;
 		return _var;
@@ -75,7 +75,7 @@ class RetVal {
 		return [];
 	}
 
-    /** @link https://github.com/phalcon/zephir/issues/1779 */
+    /** @link https://github.com/zephir-lang/zephir/issues/1779 */
     public function retval_array_of_objects() -> <\stdClass[]> {
 		return [];
 	}
@@ -135,13 +135,13 @@ class RetVal {
 	}
 }
 
-/** @link https://github.com/phalcon/zephir/pull/1681 */
+/** @link https://github.com/zephir-lang/zephir/pull/1681 */
 function retval_var_var_builit_1() -> var|string {
 	var _var;
 	return _var;
 }
 
-/** @link https://github.com/phalcon/zephir/pull/1681 */
+/** @link https://github.com/zephir-lang/zephir/pull/1681 */
 function retval_var_var_builit_2() -> int|var {
 	var _var;
 	return _var;
@@ -219,7 +219,7 @@ function retval_object_or_scalar() -> <\stdClass> | bool {
     return false;
 }
 
-/** @link https://github.com/phalcon/zephir/issues/1779 */
+/** @link https://github.com/zephir-lang/zephir/issues/1779 */
 function retval_array_of_objects() -> <\stdClass[]> {
     return [];
 }

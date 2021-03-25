@@ -59,6 +59,7 @@ PHP_METHOD(Stub_SPropertyAccess, __construct) {
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_ZVAL_NREF(_0);
@@ -89,6 +90,15 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore) {
 
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(delimiter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &delimiter);
@@ -119,6 +129,15 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument) {
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0$$3);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(delimiter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &delimiter);
@@ -154,6 +173,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	_2 = 3;
@@ -185,7 +205,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1494
+ * @see https://github.com/zephir-lang/zephir/issues/1494
  */
 PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle) {
 
@@ -196,6 +216,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle) {
 
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_3$$3);
+
 
 
 	_2 = 3;
@@ -224,7 +245,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle) {
 }
 
 /**
- * @see https://github.com/phalcon/zephir/issues/1494
+ * @see https://github.com/zephir-lang/zephir/issues/1494
  */
 PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle) {
 
@@ -236,6 +257,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle) {
 
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_3$$3);
+
 
 
 	_2 = 3;
@@ -277,6 +299,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle) {
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 
+
 	ZEPHIR_MM_GROW();
 
 	_2 = 3;
@@ -308,11 +331,12 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle) {
 
 }
 
-void zephir_init_static_properties_Stub_SPropertyAccess(TSRMLS_D) {
+void zephir_init_static_properties_Stub_SPropertyAccess() {
 
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

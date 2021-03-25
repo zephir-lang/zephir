@@ -4,7 +4,7 @@ namespace Stub\Optimizers;
 class StrReplace
 {
 	/**
-	 * @link https://github.com/phalcon/zephir/issues/1055
+	 * @link https://github.com/zephir-lang/zephir/issues/1055
 	 */
 	static public function issue1055()
 	{

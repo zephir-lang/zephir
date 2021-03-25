@@ -32,6 +32,7 @@ PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "isprivate", NULL, 1);
@@ -43,6 +44,7 @@ PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod) {
 PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, isPrivate) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_STRING("isPrivate");

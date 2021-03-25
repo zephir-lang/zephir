@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
@@ -14,10 +16,9 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Assign;
 
-class AssignTest extends TestCase
+final class AssignTest extends TestCase
 {
-    /** @var Assign */
-    private $test;
+    private Assign $test;
 
     protected function setUp(): void
     {
@@ -31,12 +32,12 @@ class AssignTest extends TestCase
      * @param string $test
      * @param mixed  $testParams
      */
-    public function testShouldPerformAssignment($expected, $test, $testParams = null)
+    public function testShouldPerformAssignment($expected, $test, $testParams = null): void
     {
         $this->assertSame($expected, \call_user_func([$this->test, $test], $testParams));
     }
 
-    public function variableAssignProvider()
+    public function variableAssignProvider(): array
     {
         $arry = [
             'a' => [
@@ -102,7 +103,7 @@ class AssignTest extends TestCase
      * @param string $test
      * @param mixed  $testParams
      */
-    public function testShouldPerformAssignmentForProperties($expected, $test, $testParams = null)
+    public function testShouldPerformAssignmentForProperties($expected, $test, $testParams = null): void
     {
         if ('array' === \gettype($testParams)) {
             $this->assertSame($expected, \call_user_func_array([$this->test, $test], $testParams));
@@ -111,7 +112,7 @@ class AssignTest extends TestCase
         }
     }
 
-    public function propertyAssignProvider()
+    public function propertyAssignProvider(): array
     {
         $arry = [
             'a' => [
@@ -142,7 +143,7 @@ class AssignTest extends TestCase
         ];
     }
 
-    public function testGlobalVarAssign()
+    public function testGlobalVarAssign(): void
     {
         /*
          * @see LetStatement::_assignArrayIndexSingle();
@@ -160,19 +161,17 @@ class AssignTest extends TestCase
         $this->assertSame($_GET['stest2'], 'testval');
     }
 
-    public function testGlobalVarAssignSERVER()
+    public function testGlobalVarAssignSERVER(): void
     {
         $serverCount = \count($_SERVER);
-
         $this->test->testAssignSuperGlobalsSERVER();
 
         $this->assertCount($serverCount + 2, $_SERVER);
     }
 
-    public function testGlobalVarAssignGET()
+    public function testGlobalVarAssignGET(): void
     {
         $getCount = \count($_GET);
-
         $this->test->testAssignSuperGlobalsGET();
 
         $this->assertCount($getCount + 2, $_GET);

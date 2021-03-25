@@ -33,6 +33,7 @@ PHP_METHOD(Stub_MethodAbstract, testInterfaceMetho) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testmethod", NULL, 0);

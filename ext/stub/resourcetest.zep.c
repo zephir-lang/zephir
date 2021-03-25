@@ -33,6 +33,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDIN) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -48,6 +49,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDOUT) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -65,6 +67,7 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDERR) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -81,6 +84,7 @@ PHP_METHOD(Stub_ResourceTest, testTypeOffResource) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -100,6 +104,7 @@ PHP_METHOD(Stub_ResourceTest, testIsResource) {
 
 	ZVAL_UNDEF(&a);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&a);
@@ -117,6 +122,7 @@ PHP_METHOD(Stub_ResourceTest, testFunctionsForSTDIN) {
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

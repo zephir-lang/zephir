@@ -1,29 +1,29 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Oo;
 
 use PHPUnit\Framework\TestCase;
+use Stub\Oo\OoParams;
 
-class OoParamsTest extends TestCase
+final class OoParamsTest extends TestCase
 {
-    /** @var \Stub\Oo\OoParams */
-    private $test;
+    private OoParams $test;
 
     protected function setUp(): void
     {
-        $this->test = new \Stub\Oo\OoParams();
+        $this->test = new OoParams();
     }
 
-    public function testOoParams()
+    public function testOoParams(): void
     {
         $this->assertInstanceOf('Stub\Oo\OoParams', $this->test->createThisClassWithoutWriteCurrentNamespace());
         $this->assertinstanceOf('Stub\Oo\OoDynamicA', $this->test->createOtherClassWithoutWriteCurrentNamespace());
@@ -51,7 +51,7 @@ class OoParamsTest extends TestCase
         $this->assertSame($this->test->setList([]), []);
     }
 
-    public function setObjectClassCast()
+    public function setObjectClassCast(): void
     {
         $result = $this->test->setStrictName(new \Stub\Oo\Param());
 

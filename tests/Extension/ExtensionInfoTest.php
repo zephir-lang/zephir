@@ -1,26 +1,28 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class ExtensionInfoTest extends TestCase
+final class ExtensionInfoTest extends TestCase
 {
     /**
      * @see config.json for Directive keys
      *
      * @return array
      */
-    public function directiveProvider()
+    public function directiveProvider(): array
     {
         return [
             ['Test Extension => enabled', true],
@@ -42,7 +44,7 @@ class ExtensionInfoTest extends TestCase
      * @param string $var
      * @param bool   $contains
      */
-    public function testShouldBeWithoutDuplicatesNamespace($var, $contains)
+    public function testShouldBeWithoutDuplicatesNamespace(string $var, bool $contains): void
     {
         ob_start();
 
@@ -52,9 +54,9 @@ class ExtensionInfoTest extends TestCase
         ob_end_clean();
 
         if ($contains) {
-            $this->assertContains($var, $phpinfo);
+            $this->assertStringContainsString($var, $phpinfo);
         } else {
-            $this->assertNotContains($var, $phpinfo);
+            $this->assertStringNotContainsString($var, $phpinfo);
         }
     }
 }

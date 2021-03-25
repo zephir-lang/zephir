@@ -1,24 +1,26 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-class ArrayIteratorTest extends TestCase
+final class ArrayIteratorTest extends TestCase
 {
-    public function testTest()
+    public function testTest(): void
     {
-        $itertest = new \Stub\ArrayIteratorTest();
+        $class = new \Stub\ArrayIteratorTest();
 
-        $this->assertTrue(!empty($itertest->test()));
+        $this->assertTrue(!empty($class->test()));
     }
 }

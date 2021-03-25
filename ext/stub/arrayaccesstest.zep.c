@@ -35,6 +35,7 @@ PHP_METHOD(Stub_ArrayAccessTest, exits) {
 
 	ZVAL_UNDEF(&arr);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&arr);
@@ -54,6 +55,7 @@ PHP_METHOD(Stub_ArrayAccessTest, get) {
 
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

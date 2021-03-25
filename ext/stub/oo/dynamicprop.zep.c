@@ -41,6 +41,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -73,6 +81,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$true, 1);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -103,6 +119,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$false, 0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -133,6 +157,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -166,6 +198,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -200,6 +240,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -233,6 +281,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -264,6 +320,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -297,6 +361,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&a);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -330,6 +402,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -364,6 +444,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(property)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
@@ -396,6 +484,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringProperty) {
 
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -413,6 +502,14 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value_param);
@@ -441,6 +538,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setNonExistingStringProperty) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 

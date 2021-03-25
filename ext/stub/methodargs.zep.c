@@ -43,6 +43,14 @@ PHP_METHOD(Stub_MethodArgs, setCallable) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -58,6 +66,14 @@ PHP_METHOD(Stub_MethodArgs, setObject) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJECT(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -73,6 +89,14 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -92,6 +116,14 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJECT(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -111,6 +143,14 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_RESOURCE(a)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
@@ -125,7 +165,7 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
 }
 
 /**
- * @link https://github.com/phalcon/zephir/issues/336
+ * @link https://github.com/zephir-lang/zephir/issues/336
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) {
 
@@ -134,6 +174,15 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&method_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(method)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &method);
@@ -152,7 +201,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 
 /**
  * For string parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess) {
 
@@ -162,6 +211,15 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&parameter);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR(parameter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &parameter_param);
@@ -180,13 +238,22 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 
 /**
  * For double parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess) {
 
 	zval *parameter_param = NULL;
 	double parameter;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL(parameter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
@@ -204,13 +271,22 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 
 /**
  * For bool parameter
- * @link https://github.com/phalcon/zephir/issues/696
+ * @link https://github.com/zephir-lang/zephir/issues/696
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess) {
 
 	zval *parameter_param = NULL;
 	zend_bool parameter;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_BOOL(parameter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
@@ -228,13 +304,22 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 
 /**
  * For int parameter
- * @link https://github.com/phalcon/zephir/issues/728
+ * @link https://github.com/zephir-lang/zephir/issues/728
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess) {
 
 	zval *parameter_param = NULL;
 	zend_long parameter;
 	zval *this_ptr = getThis();
+
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(parameter)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);

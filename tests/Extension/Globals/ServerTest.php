@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,9 +16,9 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\Server;
 
-class ServerTest extends TestCase
+final class ServerTest extends TestCase
 {
-    private $server;
+    private array $server;
 
     protected function setUp(): void
     {
@@ -29,9 +31,9 @@ class ServerTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1961
+     * @see https://github.com/zephir-lang/zephir/issues/1961
      */
-    public function testShouldPrintPhpSelf()
+    public function testShouldPrintPhpSelf(): void
     {
         $test = new Server();
 
@@ -44,9 +46,9 @@ class ServerTest extends TestCase
     }
 
     /**
-     * @see https://github.com/phalcon/zephir/issues/1961
+     * @see https://github.com/zephir-lang/zephir/issues/1961
      */
-    public function testShouldPrintUserAgent()
+    public function testShouldPrintUserAgent(): void
     {
         $test = new Server();
         $_SERVER['HTTP_USER_AGENT'] = 'Test';

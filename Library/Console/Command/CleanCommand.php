@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -9,8 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Console\Command;
 
+use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,9 +26,9 @@ use function Zephir\is_windows;
  *
  * Cleans any object files created by the extension.
  */
-final class CleanCommand extends Command
+final class CleanCommand extends AbstractCommand
 {
-    private $filesystem;
+    private FileSystemInterface $filesystem;
 
     public function __construct(FileSystemInterface $filesystem)
     {
@@ -69,11 +72,7 @@ final class CleanCommand extends Command
             );
 
             return 1;
-        } catch (\Exception $e) {
-            $io->getErrorStyle()->error($e->getMessage());
-
-            return 1;
-        } catch (\Throwable $e) {
+        } catch (Exception | \Throwable $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;

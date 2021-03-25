@@ -1,30 +1,38 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Stubs\DocBlock;
 
-class DocBlockTest extends TestCase
+use function Zephir\is_windows;
+
+final class DocBlockTest extends TestCase
 {
-    public function testInitialState()
+    public function testInitialState(): void
     {
         $docBlock = new DocBlock('');
 
         $this->assertSame('', (string) $docBlock);
     }
 
-    public function testDescription()
+    public function testDescription(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Hello world
@@ -43,8 +51,12 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocs()
+    public function testPhpDocs(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * @param string \$foo
@@ -62,8 +74,12 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithDescription()
+    public function testPhpDocWithDescription(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Hello world
@@ -83,8 +99,12 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithCodeBloc()
+    public function testPhpDocWithCodeBloc(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
 /**
  * Some method.
@@ -130,8 +150,12 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithScalarParams()
+    public function testPhpDocWithScalarParams(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * Method with various input params
@@ -184,15 +208,19 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithVariousDocBlockTags()
+    public function testPhpDocWithVariousDocBlockTags(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * Method with various tags
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
-     * @link https://github.com/phalcon/zephir
+     * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
      * @uses MyClass::function doSmthName
@@ -209,7 +237,7 @@ DOC;
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
      * @license MIT http://zephir-lang.com/license.html
-     * @link https://github.com/phalcon/zephir
+     * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
      * @uses MyClass::function doSmthName
@@ -223,8 +251,12 @@ DOC;
         $this->assertSame($expected, (string) $docBlock);
     }
 
-    public function testPhpDocWithDoubleDollarSymbols()
+    public function testPhpDocWithDoubleDollarSymbols(): void
     {
+        if (is_windows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
         $doc = <<<DOC
     /**
      * @param integer \$\$dollars - var description

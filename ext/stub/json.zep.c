@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Json, testEncodeObject) {
 
 	ZVAL_UNDEF(&obj);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&obj);
@@ -55,6 +56,7 @@ PHP_METHOD(Stub_Json, testEncodeArray) {
 
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -83,6 +85,7 @@ PHP_METHOD(Stub_Json, testEncodeOptions) {
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+
 
 	ZEPHIR_MM_GROW();
 
@@ -114,6 +117,7 @@ PHP_METHOD(Stub_Json, testDecodeObject) {
 
 	ZVAL_UNDEF(&obj);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&obj);
@@ -132,6 +136,7 @@ PHP_METHOD(Stub_Json, testDecodeObject2) {
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&obj);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&obj);
@@ -148,6 +153,7 @@ PHP_METHOD(Stub_Json, testDecodeArray) {
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);
+
 
 	ZEPHIR_MM_GROW();
 

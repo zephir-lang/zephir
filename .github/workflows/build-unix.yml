@@ -31,19 +31,8 @@ jobs:
           # - macos-latest
 
         php:
-          - '7.2'
-          - '7.3'
           - '7.4'
-
-        include:
-          - php: '7.2'
-            symfony_phpunit: '7.4'
-
-          - php: '7.3'
-            symfony_phpunit: '7.4'
-
-          - php: '7.4'
-            symfony_phpunit: '7.4'
+          - '8.0'
 
     steps:
       - name: Setup Prerequisites
@@ -61,9 +50,9 @@ jobs:
           extensions: gmp, pdo_sqlite, psr, zip
           tools: phpize, php-config
           coverage: xdebug
-          # variables_order: https://github.com/phalcon/zephir/pull/1537
-          # enable_dl: https://github.com/phalcon/zephir/pull/1654
-          # allow_url_fopen: https://github.com/phalcon/zephir/issues/1713
+          # variables_order: https://github.com/zephir-lang/zephir/pull/1537
+          # enable_dl: https://github.com/zephir-lang/zephir/pull/1654
+          # allow_url_fopen: https://github.com/zephir-lang/zephir/issues/1713
           # error_reporting: https://github.com/zendframework/zend-code/issues/160
           ini-values: >-
             variables_order=EGPCS,
@@ -73,10 +62,6 @@ jobs:
             memory_limit=1G,
             date.timezone=UTC,
             xdebug.max_nesting_level=256
-
-      - name: Set Environment Variables
-        run: |
-          echo "SYMFONY_PHPUNIT_VERSION=${{ matrix.symfony_phpunit }}" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -146,7 +131,7 @@ jobs:
             composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
           fi
 
-      - name: Install Project Dependencies
+      - name: Install Project Dependencies for PHP
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
 
       - name: Prepare Zephir Executable
@@ -180,13 +165,24 @@ jobs:
           CXXFLAGS="-O0 -ggdb -fprofile-arcs -ftest-coverage"
 
           # Export variables in the subshell to not shadow global variables
-          ( export LDFLAGS CFLAGS CXXFLAGS; zephir compile ) || false
+          ( export LDFLAGS CFLAGS CXXFLAGS; zephir fullclean && zephir generate && cd ext/ && ./install ) || false
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo ::add-matcher::${{ runner.tool_cache }}/phpunit.json
 
-      - name: Unit Testing
-        run: .ci/run-tests.sh
+      - name: Unit Testing - Extension
+        if: always()
+        run: |
+          php \
+            -d extension=ext/modules/stub.so \
+            vendor/bin/phpunit \
+            --colors=always \
+            --bootstrap tests/ext-bootstrap.php \
+            --testsuite Extension
+
+      - name: Unit Testing - Zephir
+        if: always()
+        run: vendor/bin/phpunit --colors=always --testsuite Zephir
 
       - name: Black-box Testing
         if: always()

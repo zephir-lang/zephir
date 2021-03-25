@@ -33,6 +33,7 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall) {
 	zval *this_ptr = getThis();
 
 
+
 	ZEPHIR_MM_GROW();
 
 	_0 = zephir_fetch_class_str_ex(SL("Phalcon\\Di"), ZEND_FETCH_CLASS_AUTO);
@@ -45,6 +46,7 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall) {
 PHP_METHOD(Stub_InternalClasses, testStaticPropertyFetch) {
 
 	zval *this_ptr = getThis();
+
 
 
 	RETURN_LONG(303);

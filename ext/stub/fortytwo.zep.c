@@ -48,6 +48,7 @@ PHP_METHOD(Stub_FortyTwo, proof) {
 	ZVAL_UNDEF(&_11$$7);
 	ZVAL_UNDEF(&_0);
 
+
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&box);

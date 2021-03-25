@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -11,15 +11,17 @@
 
 namespace Extension\Optimizers;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Stub\Issue1404;
+use Throwable;
 
 /**
  * Extension\Optimizers\IsPhpVersionTest.
  *
- * @issue https://github.com/phalcon/zephir/issues/1404
+ * @issue https://github.com/zephir-lang/zephir/issues/1404
  */
-class IsPhpVersionTest extends TestCase
+final class IsPhpVersionTest extends TestCase
 {
     const PHP_RELEASES_LIMIT = 17;
     const PHP_MINOR_LIMIT = 3;
@@ -36,7 +38,7 @@ class IsPhpVersionTest extends TestCase
         $this->test = null;
     }
 
-    public function phpVersionProvider()
+    public function phpVersionProvider(): array
     {
         return [
             [PHP_VERSION, true],
@@ -58,43 +60,40 @@ class IsPhpVersionTest extends TestCase
      *
      * @param mixed $version
      * @param mixed $expected
+     * @throws Exception
      */
-    public function testOptimizer($version, $expected)
+    public function testOptimizer($version, $expected): void
     {
         $isPhpVersion = (bool) $this->isPhpVersion($version);
 
         $this->assertEquals($expected, $isPhpVersion);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionLLU()
+    public function testOptimizerExceptionLLU(): void
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(92233720368547758079);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionNegativeNumber()
+    public function testOptimizerExceptionNegativeNumber(): void
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(-7);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not parse PHP version
-     */
-    public function testOptimizerExceptionNull()
+    public function testOptimizerExceptionNull(): void
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not parse PHP version');
+
         $this->isPhpVersion(null);
     }
 
-    /* -------------- Zephir Tests -------------- */
-    public function testZephirUsingInteger70000()
+    public function testZephirUsingInteger70000(): void
     {
         $actual = $this->test->testIsPhpVersionUsingInteger70000();
         $expected = $this->isPhpVersion(7);
@@ -102,7 +101,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingDouble70100()
+    public function testZephirUsingDouble70100(): void
     {
         $actual = $this->test->testIsPhpVersionUsingDouble70100();
         $expected = $this->isPhpVersion(7.1);
@@ -110,7 +109,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingLong70000()
+    public function testZephirUsingLong70000(): void
     {
         $actual = $this->test->testIsPhpVersionUsingLong70000();
         $expected = $this->isPhpVersion(2147483647);
@@ -118,12 +117,12 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingZeroFalse()
+    public function testZephirUsingZeroFalse(): void
     {
         $this->assertFalse($this->test->testIsPhpVersionUsingZero());
     }
 
-    public function testZephirUsingString70000()
+    public function testZephirUsingString70000(): void
     {
         $actual = $this->test->testIsPhpVersionUsingString70000();
         $expected = $this->isPhpVersion('7');
@@ -131,7 +130,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function releaseVersionProvider()
+    public function releaseVersionProvider(): array
     {
         $versionProvider = [];
 
@@ -147,8 +146,9 @@ class IsPhpVersionTest extends TestCase
      *
      * @param mixed $testName
      * @param mixed $version
+     * @throws Exception
      */
-    public function testIsPhpVersionVersionUsing701XX($testName, $version)
+    public function testIsPhpVersionVersionUsing701XX($testName, $version): void
     {
         $actual = $this->test->$testName();
         $expected = $this->isPhpVersion($version);
@@ -156,7 +156,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function minorVersionProvider()
+    public function minorVersionProvider(): array
     {
         $versionProvider = [];
 
@@ -172,8 +172,9 @@ class IsPhpVersionTest extends TestCase
      *
      * @param mixed $testName
      * @param mixed $version
+     * @throws Exception
      */
-    public function testIsPhpVersionVersionUsing70X00($testName, $version)
+    public function testIsPhpVersionVersionUsing70X00($testName, $version): void
     {
         $actual = $this->test->$testName();
         $expected = $this->isPhpVersion($version);
@@ -181,7 +182,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingString50000()
+    public function testZephirUsingString50000(): void
     {
         $actual = $this->test->testIsPhpVersionUsing50000();
         $expected = $this->isPhpVersion('5');
@@ -189,7 +190,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingString50500()
+    public function testZephirUsingString50500(): void
     {
         $actual = $this->test->testIsPhpVersionUsing50500();
         $expected = $this->isPhpVersion('5.5');
@@ -197,7 +198,7 @@ class IsPhpVersionTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testZephirUsingString50600()
+    public function testZephirUsingString50600(): void
     {
         $actual = $this->test->testIsPhpVersionUsing50600();
         $expected = $this->isPhpVersion('5.6');
@@ -206,13 +207,10 @@ class IsPhpVersionTest extends TestCase
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \Throwable $error
-     *
-     * @throws \Throwable
+     * @param Throwable $error
+     * @throws Throwable
      */
-    protected function onNotSuccessfulTest(\Throwable $error): void
+    protected function onNotSuccessfulTest(Throwable $error): void
     {
         $phpVer = sprintf(
             'PHP_VERSION_ID:%d(%d.%d.%d)',
@@ -235,15 +233,15 @@ class IsPhpVersionTest extends TestCase
      * @param float|int|string $version - PHP version in any format: 7, 7.1, "7.1.1"
      *
      * @return bool
+     * @throws Exception
      */
-    private function isPhpVersion($version)
+    private function isPhpVersion($version): bool
     {
         preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
         if (!\count($matches)) {
-            throw new \Exception('Could not parse PHP version');
+            throw new Exception('Could not parse PHP version');
         }
 
-        $majorVersion = 0;
         $minorVersion = 0;
         $releaseVersion = 0;
 
@@ -266,6 +264,6 @@ class IsPhpVersionTest extends TestCase
         $versionId = (int) ($majorVersion + $minorVersion + $releaseVersion);
         $phpVersionId = $phpMajorVersion + $phpMinorVersion + $phpReleaseVersion;
 
-        return (bool) ($phpVersionId == $versionId ? 1 : 0);
+        return $phpVersionId === $versionId;
     }
 }

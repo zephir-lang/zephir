@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Post) {
 /**
  * Tests "Invalid superglobal for _POST"
  *
- * @issue https://github.com/phalcon/zephir/issues/1623
+ * @issue https://github.com/zephir-lang/zephir/issues/1623
  */
 PHP_METHOD(Stub_Globals_Post, hasValue) {
 
@@ -40,6 +40,14 @@ PHP_METHOD(Stub_Globals_Post, hasValue) {
 
 	ZVAL_UNDEF(&name);
 	ZVAL_UNDEF(&_POST);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(name)
+	ZEND_PARSE_PARAMETERS_END();
+
+#endif
+
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SL("_POST"));

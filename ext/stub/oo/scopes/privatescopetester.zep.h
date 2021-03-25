@@ -9,34 +9,18 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew);
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars);
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars);
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_run, 0, 0, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_run, 0, 0, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_setpropertyobj, 0, 0, 3)
 	ZEND_ARG_INFO(0, obj)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, property)
-#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_setpropertynew, 0, 0, 3)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, className, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, className)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, property, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, property)
-#endif
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -45,11 +29,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_getobjvars, 0, 
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_scopes_privatescopetester_getnewvars, 0, 0, 1)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, className, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, className)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_scopes_privatescopetester_method_entry) {

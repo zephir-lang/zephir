@@ -48,7 +48,7 @@ static PHP_MINIT_FUNCTION(typehints)
 static PHP_MSHUTDOWN_FUNCTION(typehints)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
@@ -57,7 +57,7 @@ static PHP_MSHUTDOWN_FUNCTION(typehints)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_typehints_globals *typehints_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_typehints_globals *typehints_globals)
 {
 	typehints_globals->initialized = 0;
 
@@ -77,7 +77,7 @@ static void php_zephir_init_globals(zend_typehints_globals *typehints_globals TS
 /**
  * Initialize globals only on each thread started
  */
-static void php_zephir_init_module_globals(zend_typehints_globals *typehints_globals TSRMLS_DC)
+static void php_zephir_init_module_globals(zend_typehints_globals *typehints_globals)
 {
 	
 }
@@ -97,7 +97,7 @@ static PHP_RINIT_FUNCTION(typehints)
 static PHP_RSHUTDOWN_FUNCTION(typehints)
 {
 	
-	zephir_deinitialize_memory(TSRMLS_C);
+	zephir_deinitialize_memory();
 	return SUCCESS;
 }
 
@@ -138,169 +138,93 @@ static PHP_GSHUTDOWN_FUNCTION(typehints)
 PHP_FUNCTION(f_TypeHints_args);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_args, 0, 0, 7)
 	ZEND_ARG_INFO(0, _var)
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _string, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, _string)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _bool, _IS_BOOL, 0)
-#else
-	ZEND_ARG_INFO(0, _bool)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _int, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, _int)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _long, IS_LONG, 0)
-#else
-	ZEND_ARG_INFO(0, _long)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _double, IS_DOUBLE, 0)
-#else
-	ZEND_ARG_INFO(0, _double)
-#endif
 	ZEND_ARG_OBJ_INFO(0, _args, TypeHints\\Args, 0)
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_both);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_both, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_both, 0, 1, IS_STRING, NULL, 0)
-#endif
-#if PHP_VERSION_ID >= 70200
 	ZEND_ARG_TYPE_INFO(0, _string, IS_STRING, 0)
-#else
-	ZEND_ARG_INFO(0, _string)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_var_var_builit_1);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_retval_var_var_builit_1, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(f_TypeHints_retval_var_var_builit_2);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_retval_var_var_builit_2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(f_TypeHints_retval_var);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_retval_var, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(f_TypeHints_retval_string);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_string, 0, 0, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_string, 0, 0, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_boolean);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_boolean, 0, 0, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_boolean, 0, 0, _IS_BOOL, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_int);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_int, 0, 0, IS_LONG, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_int, 0, 0, IS_LONG, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_long);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_long, 0, 0, IS_LONG, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_long, 0, 0, IS_LONG, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_double);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_double, 0, 0, IS_DOUBLE, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_double, 0, 0, IS_DOUBLE, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_retval);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_f_typehints_retval_retval, 0, 0, TypeHints\\RetVal, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_retval, 0, 0, IS_OBJECT, "TypeHints\\RetVal", 0)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_int);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_int, 0, 0, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_int, 0, 0, IS_LONG, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_uint);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_uint, 0, 0, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_uint, 0, 0, IS_LONG, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_long);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_long, 0, 0, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_long, 0, 0, IS_LONG, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_float);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_float, 0, 0, IS_DOUBLE, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_float, 0, 0, IS_DOUBLE, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_double);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_double, 0, 0, IS_DOUBLE, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_double, 0, 0, IS_DOUBLE, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_string);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_string, 0, 0, IS_STRING, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_string, 0, 0, IS_STRING, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_boolean);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_boolean, 0, 0, _IS_BOOL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_boolean, 0, 0, _IS_BOOL, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_nullable_char);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_char, 0, 0, IS_LONG, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_nullable_char, 0, 0, IS_LONG, NULL, 1)
-#endif
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(f_TypeHints_retval_object_or_scalar);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_f_typehints_retval_object_or_scalar, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(f_TypeHints_retval_array_of_objects);
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_array_of_objects, 0, 0, IS_ARRAY, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_typehints_retval_array_of_objects, 0, 0, IS_ARRAY, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 

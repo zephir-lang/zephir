@@ -1,12 +1,14 @@
 <?php
 
-/*
+declare(strict_types=1);
+
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Extension\Globals;
@@ -14,7 +16,7 @@ namespace Extension\Globals;
 use PHPUnit\Framework\TestCase;
 use Stub\Globals\Session\Child;
 
-class SessionTest extends TestCase
+final class SessionTest extends TestCase
 {
     /**
      * This method is called before a test is executed.
@@ -28,7 +30,12 @@ class SessionTest extends TestCase
         }
     }
 
-    public function testDestroy()
+    protected function tearDown(): void
+    {
+        unset($_SESSION);
+    }
+
+    public function testDestroy(): void
     {
         $this->assertSame([], $_SESSION);
 
@@ -36,7 +43,7 @@ class SessionTest extends TestCase
         $tester->test = 'Some session data here';
 
         $this->assertArrayHasKey('test', $_SESSION);
-        $this->assertContains('Some session data here', $_SESSION['test']);
+        $this->assertStringContainsString('Some session data here', $_SESSION['test']);
 
         $result = $tester->destroy();
 
@@ -45,7 +52,7 @@ class SessionTest extends TestCase
         $this->assertSame($_SESSION, $result);
     }
 
-    public function testDirectUnset()
+    public function testDirectUnset(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';
@@ -56,7 +63,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['foo'] = 'bar';
@@ -67,7 +74,7 @@ class SessionTest extends TestCase
         $this->assertSame([], $_SESSION);
     }
 
-    public function testRemoveFromUnset()
+    public function testRemoveFromUnset(): void
     {
         $this->assertSame([], $_SESSION);
         $_SESSION['bar'] = 'foo';

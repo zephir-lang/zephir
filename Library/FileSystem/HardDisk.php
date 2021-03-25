@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -57,8 +57,6 @@ class HardDisk implements FileSystemInterface
     }
 
     /**
-     * @internal
-     *
      * @param string|null $basePath
      */
     public function setBasePath($basePath)
