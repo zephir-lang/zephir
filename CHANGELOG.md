@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Added support of PHP `8.0` [#2111](https://github.com/zephir-lang/zephir/pull/2111), [#2165](https://github.com/zephir-lang/zephir/pull/2165)
 
 ### Changed
-- Dropped support of PHP `<= 7.4` versions [#2111](https://github.com/zephir-lang/zephir/pull/2111)
+- Dropped support of PHP `< 7.4` versions [#2111](https://github.com/zephir-lang/zephir/pull/2111)
 - Removed call of `generate` command inside `compile` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
 - Removed call of `compile` command inside `install` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
 
