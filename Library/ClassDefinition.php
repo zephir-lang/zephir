@@ -1414,12 +1414,22 @@ final class ClassDefinition extends AbstractClassDefinition
                                 )
                             );
                         } else {
+                            $codePrinter->output('#if PHP_VERSION_ID >= 80000');
+                            $codePrinter->output(
+                                sprintf(
+                                    "\tZEND_FENTRY(%s, NULL, %s, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)",
+                                    $method->getName(),
+                                    $method->getArgInfoName($this)
+                                )
+                            );
+                            $codePrinter->output('#else');
                             $codePrinter->output(
                                 sprintf(
                                     "\tZEND_FENTRY(%s, NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)",
                                     $method->getName()
                                 )
                             );
+                            $codePrinter->output('#endif');
                         }
                     } else {
                         $isInterface = $method->getClassDefinition()->isInterface();
