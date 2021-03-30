@@ -832,6 +832,19 @@ final class Compiler
             $extensionName = $namespace;
         }
 
+        $currentDir = getcwd();
+        if (file_exists("{$currentDir}/compile.log")) {
+            unlink("{$currentDir}/compile.log");
+        }
+
+        if (file_exists("{$currentDir}/compile-errors.log")) {
+            unlink("{$currentDir}/compile-errors.log");
+        }
+
+        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
+            unlink("{$currentDir}/ext/modules/{$namespace}.so");
+        }
+
         if (is_windows()) {
             // TODO(klay): Make this better. Looks like it is non standard Env. Var
             exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
@@ -993,18 +1006,6 @@ final class Compiler
 
         if (is_windows()) {
             throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
-        }
-
-        if (file_exists("{$currentDir}/compile.log")) {
-            unlink("{$currentDir}/compile.log");
-        }
-
-        if (file_exists("{$currentDir}/compile-errors.log")) {
-            unlink("{$currentDir}/compile-errors.log");
-        }
-
-        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
-            unlink("{$currentDir}/ext/modules/{$namespace}.so");
         }
 
         $this->logger->info('Installing...');
