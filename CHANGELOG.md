@@ -6,12 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.13.1] - 2021-03-31
+### Added
+- Added jobs `-j, --jobs` option for `zephir compile` [#2174](https://github.com/zephir-lang/zephir/issues/2174)
+
+### Fixed
+- Fixed not used arginfo for interface static method without parameters (PHP `>= 8.0` only) [#2178](https://github.com/zephir-lang/zephir/pull/2178)
+- Fixed `zephir install` command [#2175](https://github.com/zephir-lang/zephir/issues/2175)
+
 ## [0.13.0] - 2021-03-25
 ### Added
 - Added support of PHP `8.0` [#2111](https://github.com/zephir-lang/zephir/pull/2111), [#2165](https://github.com/zephir-lang/zephir/pull/2165)
 
 ### Changed
-- Dropped support of PHP `<= 7.4` versions [#2111](https://github.com/zephir-lang/zephir/pull/2111)
+- Dropped support of PHP `< 7.4` versions [#2111](https://github.com/zephir-lang/zephir/pull/2111)
 - Removed call of `generate` command inside `compile` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
 - Removed call of `compile` command inside `install` call [#2150](https://github.com/zephir-lang/zephir/pull/2150)
 
@@ -439,7 +447,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.1...HEAD
+[0.13.1]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/zephir-lang/zephir/compare/0.12.21...0.13.0
 [0.12.21]: https://github.com/zephir-lang/zephir/compare/0.12.20...0.12.21
 [0.12.20]: https://github.com/zephir-lang/zephir/compare/0.12.19...0.12.20

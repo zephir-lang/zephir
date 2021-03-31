@@ -818,11 +818,14 @@ final class Compiler
      * Compiles the extension without installing it.
      *
      * @param bool $development
+     * @param int|null $jobs
      *
-     * @throws CompilerException|Exception
+     * @throws Exception
      */
-    public function compile(bool $development = false): void
+    public function compile(bool $development = false, ?int $jobs = null): void
     {
+        $jobs = $jobs ?: 2;
+
         /**
          * Get global namespace.
          */
@@ -830,6 +833,19 @@ final class Compiler
         $extensionName = $this->config->get('extension-name');
         if (empty($extensionName) || !is_string($extensionName)) {
             $extensionName = $namespace;
+        }
+
+        $currentDir = getcwd();
+        if (file_exists("{$currentDir}/compile.log")) {
+            unlink("{$currentDir}/compile.log");
+        }
+
+        if (file_exists("{$currentDir}/compile-errors.log")) {
+            unlink("{$currentDir}/compile-errors.log");
+        }
+
+        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
+            unlink("{$currentDir}/ext/modules/{$namespace}.so");
         }
 
         if (is_windows()) {
@@ -907,7 +923,7 @@ final class Compiler
         } else {
             $this->preCompileHeaders();
             exec(
-                'cd ext && (make -s -j2 2>'.$currentDir.'/compile-errors.log 1>'.
+                'cd ext && (make -s -j'.$jobs.' 2>'.$currentDir.'/compile-errors.log 1>'.
                 $currentDir.
                 '/compile.log)',
                 $output,
@@ -993,18 +1009,6 @@ final class Compiler
 
         if (is_windows()) {
             throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
-        }
-
-        if (file_exists("{$currentDir}/compile.log")) {
-            unlink("{$currentDir}/compile.log");
-        }
-
-        if (file_exists("{$currentDir}/compile-errors.log")) {
-            unlink("{$currentDir}/compile-errors.log");
-        }
-
-        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
-            unlink("{$currentDir}/ext/modules/{$namespace}.so");
         }
 
         $this->logger->info('Installing...');
