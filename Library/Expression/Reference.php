@@ -146,6 +146,7 @@ class Reference
                     default:
                         throw new CompilerException('Unknown '.$itemVariable->getType(), $itemVariable);
                 }
+            break;
 
             default:
                 throw new CompilerException('Unknown', $exprCompiled);
