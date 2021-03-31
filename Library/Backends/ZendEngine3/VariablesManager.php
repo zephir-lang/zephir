@@ -30,6 +30,8 @@ class VariablesManager
      * Meant for Backend::initializeVariableDefaults.
      * Shouldn't called directly.
      *
+     * TODO: Figure out why it never reached during generation.
+     *
      * @param Variable $variable
      * @param array    $value
      * @param Context  $context

@@ -181,7 +181,6 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 
 
 	ZEPHIR_INIT_VAR(&query);
-	ZVAL_STRING(&query, "");
 	min = (zephir_safe_div_zval_long(value, 100) * (double) (25));
 	max = (zephir_safe_div_zval_long(value, 100) * (double) (50));
 	ZEPHIR_INIT_VAR(&_0);

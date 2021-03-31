@@ -89,6 +89,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/integration/psr/http/message/messageinterfaceex.zep.c
 	stub/interfaces/implementint.zep.c
 	stub/interfaces/implementinterface.zep.c
+	stub/interfaces/interfacestaticmethod.zep.c
 	stub/internalclasses.zep.c
 	stub/internalinterfaces.zep.c
 	stub/invoke.zep.c

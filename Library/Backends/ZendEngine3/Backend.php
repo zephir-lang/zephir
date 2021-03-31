@@ -532,10 +532,10 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      *
-     * @param Variable           $variable
-     * @param string|Variable    $value
-     * @param CompilationContext $context
-     * @param bool               $useCodePrinter
+     * @param Variable              $variable
+     * @param string|null|Variable  $value
+     * @param CompilationContext    $context
+     * @param bool                  $useCodePrinter
      *
      * @return string
      */

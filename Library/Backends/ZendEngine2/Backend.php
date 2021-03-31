@@ -1068,11 +1068,11 @@ class Backend extends BaseBackend
     /**
      * Assign value to variable helper.
      *
-     * @param string             $macro
-     * @param string             $variableName
-     * @param string|Variable    $value
-     * @param CompilationContext $context
-     * @param bool               $useCodePrinter
+     * @param string                $macro
+     * @param string                $variableName
+     * @param string|null|Variable  $value
+     * @param CompilationContext    $context
+     * @param bool                  $useCodePrinter
      *
      * @return string
      */
@@ -1083,10 +1083,14 @@ class Backend extends BaseBackend
         CompilationContext $context,
         bool $useCodePrinter
     ): string {
+        if ($value === null && $macro === 'ZVAL_STRING') {
+            return '';
+        }
+
         if ($value instanceof Variable) {
             $value = $value->getName();
         } else {
-            $value = 'ZVAL_STRING' == $macro ? '"'.$value.'"' : $value;
+            $value = 'ZVAL_STRING' === $macro ? '"'.$value.'"' : $value;
         }
 
         $output = $macro.'('.$variableName.', '.$value.');';

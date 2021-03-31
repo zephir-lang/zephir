@@ -248,7 +248,6 @@ PHP_METHOD(Stub_Vars, test88Issue) {
 	}
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);
-		ZVAL_STRING(&param2, "");
 	} else {
 		zephir_get_strval(&param2, param2_param);
 	}

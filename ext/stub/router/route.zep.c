@@ -307,7 +307,6 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 	ZEPHIR_INIT_VAR(&matches);
 	array_init(&matches);
 	ZEPHIR_INIT_VAR(&route);
-	ZVAL_STRING(&route, "");
 	for (_0 = 0; _0 < Z_STRLEN_P(&pattern); _0++) {
 		cursor = _0; 
 		ch = ZEPHIR_STRING_OFFSET(&pattern, _0);
@@ -326,9 +325,7 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 						if (bracketCount == 0) {
 							numberMatches++;
 							ZEPHIR_INIT_NVAR(&variable);
-							ZVAL_STRING(&variable, "");
 							ZEPHIR_INIT_NVAR(&regexp);
-							ZVAL_STRING(&regexp, "");
 							ZVAL_LONG(&_1$$11, marker);
 							ZVAL_LONG(&_2$$11, (cursor - marker));
 							ZEPHIR_INIT_NVAR(&_3$$11);

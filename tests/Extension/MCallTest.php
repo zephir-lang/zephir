@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -70,7 +70,7 @@ final class MCallTest extends TestCase
     {
         $this->assertSame($this->test->optionalParameterString('test'), 'test');
         $this->assertSame($this->test->optionalParameterString(), 'test string');
-        $this->assertSame($this->test->optionalParameterStringNull(), '');
+        $this->assertSame($this->test->optionalParameterStringNull(), null);
     }
 
     public function testOptionalParameterInt(): void
