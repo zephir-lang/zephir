@@ -818,11 +818,14 @@ final class Compiler
      * Compiles the extension without installing it.
      *
      * @param bool $development
+     * @param int|null $jobs
      *
-     * @throws CompilerException|Exception
+     * @throws Exception
      */
-    public function compile(bool $development = false): void
+    public function compile(bool $development = false, ?int $jobs = null): void
     {
+        $jobs = $jobs ?: 2;
+
         /**
          * Get global namespace.
          */
@@ -920,7 +923,7 @@ final class Compiler
         } else {
             $this->preCompileHeaders();
             exec(
-                'cd ext && (make -s -j2 2>'.$currentDir.'/compile-errors.log 1>'.
+                'cd ext && (make -s -j'.$jobs.' 2>'.$currentDir.'/compile-errors.log 1>'.
                 $currentDir.
                 '/compile.log)',
                 $output,
