@@ -178,7 +178,6 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex) {
 
 
 	ZEPHIR_INIT_VAR(&result);
-	ZVAL_STRING(&result, "");
 	ZEPHIR_INIT_VAR(&elements);
 	zephir_create_array(&elements, 2, 0);
 	ZEPHIR_INIT_VAR(&_0);

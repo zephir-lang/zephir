@@ -34,6 +34,7 @@ zend_class_entry *stub_ooimpl_zbeginning_ce;
 zend_class_entry *stub_diinterface_ce;
 zend_class_entry *stub_extendedinterface_ce;
 zend_class_entry *stub_integration_psr_http_message_messageinterfaceex_ce;
+zend_class_entry *stub_interfaces_interfacestaticmethod_ce;
 zend_class_entry *stub_ooimpl_abeginning_ce;
 zend_class_entry *stub_invokes_abstractprotected_ce;
 zend_class_entry *stub_oo_extend_exception_ce;
@@ -261,6 +262,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_DiInterface);
 	ZEPHIR_INIT(Stub_ExtendedInterface);
 	ZEPHIR_INIT(Stub_Integration_Psr_Http_Message_MessageInterfaceEx);
+	ZEPHIR_INIT(Stub_Interfaces_InterfaceStaticMethod);
 	ZEPHIR_INIT(Stub_OoImpl_ABeginning);
 	ZEPHIR_INIT(Stub_Invokes_AbstractProtected);
 	ZEPHIR_INIT(Stub_Oo_Extend_Exception);

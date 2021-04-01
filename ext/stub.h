@@ -84,6 +84,7 @@
 #include "stub/integration/psr/http/message/messageinterfaceex.zep.h"
 #include "stub/interfaces/implementint.zep.h"
 #include "stub/interfaces/implementinterface.zep.h"
+#include "stub/interfaces/interfacestaticmethod.zep.h"
 #include "stub/internalclasses.zep.h"
 #include "stub/internalinterfaces.zep.h"
 #include "stub/invoke.zep.h"

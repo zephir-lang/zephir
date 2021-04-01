@@ -62,13 +62,11 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct) {
 	zephir_get_strval(&dsn, dsn_param);
 	if (!username_param) {
 		ZEPHIR_INIT_VAR(&username);
-		ZVAL_STRING(&username, "");
 	} else {
 		zephir_get_strval(&username, username_param);
 	}
 	if (!password_param) {
 		ZEPHIR_INIT_VAR(&password);
-		ZVAL_STRING(&password, "");
 	} else {
 		zephir_get_strval(&password, password_param);
 	}

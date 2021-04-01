@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
 use Zephir\CompilationContext;
@@ -20,26 +22,41 @@ use Zephir\GlobalConstant;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\Reference.
+ * Expression Reference
  *
- * Resolves expressions that create arrays
+ * Resolves expressions that create arrays.
  */
 class Reference
 {
-    protected $expecting = true;
+    /**
+     * Expecting the value
+     *
+     * @var bool
+     */
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    /**
+     * Result of the evaluated expression is read only or not
+     *
+     * @var bool
+     */
+    protected bool $readOnly = false;
 
-    protected $expectingVariable;
+    /**
+     * Expecting variable
+     *
+     * @var Variable|null
+     */
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -50,7 +67,7 @@ class Reference
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -61,9 +78,10 @@ class Reference
      * @param CompiledExpression $exprCompiled
      * @param CompilationContext $compilationContext
      *
-     * @return Variable
+     * @return GlobalConstant|Variable
+     * @throws Exception
      */
-    public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
+    public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -90,15 +108,15 @@ class Reference
                 return $tempVar;
 
             case 'bool':
-                if ('true' == $exprCompiled->getCode()) {
+                if ('true' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
-                } else {
-                    if ('false' == $exprCompiled->getCode()) {
-                        return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
-                    } else {
-                        throw new Exception('?');
-                    }
                 }
+
+                if ('false' === $exprCompiled->getCode()) {
+                    return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+                }
+
+                throw new Exception('?');
                 break;
 
             case 'null':
@@ -156,20 +174,21 @@ class Reference
     /**
      * Compiles a reference to a value.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
-                if ('variable' != $symbolVariable->getType()) {
+                if ('variable' !== $symbolVariable->getType()) {
                     throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' to store a reference', $expression);
                 }
             } else {
@@ -183,27 +202,21 @@ class Reference
         $leftExpr->setReadOnly($this->readOnly);
         $left = $leftExpr->compile($compilationContext);
 
-        switch ($left->getType()) {
-            case 'variable':
-            case 'string':
-            case 'object':
-            case 'array':
-            case 'callable':
-                break;
-            default:
-                throw new CompilerException('Cannot obtain a reference from type: '.$left->getType(), $expression);
+        $validTypes = [
+            'variable',
+            'string',
+            'object',
+            'array',
+            'callable',
+        ];
+
+        if (!in_array($left->getType(), $validTypes)) {
+            throw new CompilerException('Cannot obtain a reference from type: '.$left->getType(), $expression);
         }
 
         $leftVariable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression);
-        switch ($leftVariable->getType()) {
-            case 'variable':
-            case 'string':
-            case 'object':
-            case 'array':
-            case 'callable':
-                break;
-            default:
-                throw new CompilerException('Cannot obtain reference from variable type: '.$leftVariable->getType(), $expression);
+        if (!in_array($leftVariable->getType(), $validTypes)) {
+            throw new CompilerException('Cannot obtain reference from variable type: '.$leftVariable->getType(), $expression);
         }
 
         $symbolVariable->setMustInitNull(true);

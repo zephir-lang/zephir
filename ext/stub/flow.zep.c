@@ -1325,7 +1325,6 @@ PHP_METHOD(Stub_Flow, testFor11) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
@@ -1361,7 +1360,6 @@ PHP_METHOD(Stub_Flow, testFor12) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1397,7 +1395,6 @@ PHP_METHOD(Stub_Flow, testFor13) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
@@ -1433,7 +1430,6 @@ PHP_METHOD(Stub_Flow, testFor14) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
@@ -1799,7 +1795,6 @@ PHP_METHOD(Stub_Flow, testFor23) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1842,7 +1837,6 @@ PHP_METHOD(Stub_Flow, testFor24) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);

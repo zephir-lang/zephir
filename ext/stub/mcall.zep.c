@@ -858,7 +858,6 @@ PHP_METHOD(Stub_Mcall, optionalParameterStringNull) {
 
 	if (!param_param) {
 		ZEPHIR_INIT_VAR(&param);
-		ZVAL_STRING(&param, "");
 	} else {
 		zephir_get_strval(&param, param_param);
 	}

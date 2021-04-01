@@ -170,10 +170,10 @@ abstract class BaseBackend implements FcallAwareInterface
     /**
      * Assign value to variable.
      *
-     * @param Variable           $variable
-     * @param string|Variable    $value
-     * @param CompilationContext $context
-     * @param bool               $useCodePrinter
+     * @param Variable              $variable
+     * @param string|null|Variable  $value
+     * @param CompilationContext    $context
+     * @param bool                  $useCodePrinter
      *
      * @return string
      */
