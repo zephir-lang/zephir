@@ -196,6 +196,16 @@ class ClassMethod
     ];
 
     /**
+     * Currently used do detect if function param is type class and is external.
+     * For that, it will be possible to add condition for WIN builds. Because in
+     * when external extension is loaded via .dll it will add prefix '__imp_' to
+     * class entry.
+     *
+     * @var bool
+     */
+    protected bool $isExternalClassEntry = false;
+
+    /**
      * ClassMethod constructor.
      *
      * @param ClassDefinition $classDefinition
@@ -1787,45 +1797,9 @@ class ClassMethod
             /**
              * Round 2. Fetch the parameters in the method.
              */
-            $params = [];
-            $numberRequiredParams = 0;
-            $numberOptionalParams = 0;
-            foreach ($this->parameters->getParameters() as $parameter) {
-                if (isset($parameter['data-type'])) {
-                    $dataType = $parameter['data-type'];
-                } else {
-                    $dataType = 'variable';
-                }
-
-                switch ($dataType) {
-                    case 'object':
-                    case 'callable':
-                    case 'resource':
-                    case 'variable':
-                        if (!$this->isInternal()) {
-                            $params[] = '&'.$parameter['name'];
-                        } else {
-                            $params[] = $parameter['name'];
-                        }
-                        break;
-
-                    default:
-                        if (!$this->isInternal()) {
-                            $params[] = '&'.$parameter['name'].'_param';
-                        } else {
-                            $params[] = $parameter['name'].'_param';
-                        }
-                        break;
-                }
-
-                if (isset($parameter['default'])) {
-                    $optionalParams[] = $parameter;
-                    ++$numberOptionalParams;
-                } else {
-                    $requiredParams[] = $parameter;
-                    ++$numberRequiredParams;
-                }
-            }
+            $params = $this->parameters->fetchParameters($this->isInternal);
+            $numberRequiredParams = $this->parameters->countRequiredParameters();
+            $numberOptionalParams = $this->parameters->countOptionalParameters();
 
             /**
              * Pass the write detector to the method statement block to check if the parameter
@@ -2092,7 +2066,7 @@ class ClassMethod
          * ZEND_PARSE_PARAMETERS
          */
         $tempCodePrinter = new CodePrinter();
-        if ($this->parameters instanceof ClassMethodParameters && !empty($this->parameters->getParameters())) {
+        if ($this->parameters instanceof ClassMethodParameters && $this->parameters->count() > 0) {
             $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
             $tempCodePrinter->output("\t".'bool is_null_true = 1;');
 
@@ -2103,14 +2077,14 @@ class ClassMethod
             ));
 
             foreach ($requiredParams as $requiredParam) {
-                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext));
+                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext, $tempCodePrinter));
             }
 
             if (!empty($optionalParams)) {
                 $tempCodePrinter->output("\t"."\t".'Z_PARAM_OPTIONAL');
 
                 foreach ($optionalParams as $optionalParam) {
-                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext));
+                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext, $tempCodePrinter));
                 }
             }
 
@@ -2361,10 +2335,11 @@ class ClassMethod
      *
      * @param array $parameter
      * @param CompilationContext $compilationContext
+     * @param CodePrinter $codePrinter
      * @return string
      * @throws Exception
      */
-    public function detectParam(array $parameter, CompilationContext $compilationContext): string
+    public function detectParam(array $parameter, CompilationContext $compilationContext, CodePrinter $codePrinter): string
     {
         $name = $parameter['name'];
         if (!isset($parameter['data-type'])) {
@@ -2541,6 +2516,8 @@ class ClassMethod
                     $compilationContext->headersManager->add('ext/psr/' . $file);
                 }
             }
+
+            $this->isExternalClassEntry = true;
 
             return str_replace('\\', '', $className) . '_ce_ptr';
         }
