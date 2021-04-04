@@ -1812,11 +1812,7 @@ class ClassMethod
                 }
 
                 foreach ($this->parameters->getParameters() as $parameter) {
-                    if (isset($parameter['data-type'])) {
-                        $dataType = $parameter['data-type'];
-                    } else {
-                        $dataType = 'variable';
-                    }
+                    $dataType = $parameter['data-type'] ?? 'variable';
 
                     switch ($dataType) {
                         case 'variable':
@@ -2013,17 +2009,19 @@ class ClassMethod
                     );
                     continue;
                 }
+
                 $compilationContext->logger->warning(
                     'Variable "'.$variable->getName().'" declared but not used in '.$completeName.'::'.$this->getName(),
                     ['unused-variable-external', $variable->getOriginal()]
                 );
             }
 
-            if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
+            if ('this_ptr' !== $variable->getName() && 'return_value' !== $variable->getName() && 'return_value_ptr' !== $variable->getName()) {
                 $type = $variable->getType();
                 if (!isset($usedVariables[$type])) {
                     $usedVariables[$type] = [];
                 }
+
                 $usedVariables[$type][] = $variable;
             }
         }
@@ -2033,18 +2031,18 @@ class ClassMethod
          * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
-            if (true == $variable->isExternal() || $variable->isTemporal()) {
+            if ($variable->isExternal() || $variable->isTemporal()) {
                 continue;
             }
 
-            if ('this_ptr' == $variable->getName() || 'return_value' == $variable->getName() || 'return_value_ptr' == $variable->getName() || 'ZEPHIR_LAST_CALL_STATUS' == $variable->getName()) {
+            if ('this_ptr' === $variable->getName() || 'return_value' === $variable->getName() || 'return_value_ptr' === $variable->getName() || 'ZEPHIR_LAST_CALL_STATUS' === $variable->getName()) {
                 continue;
             }
 
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (is_array($node)) {
-                    $expression = isset($node['expr']) ? $node['expr'] : $node;
+                    $expression = $node['expr'] ?? $node;
                     $compilationContext->logger->warning(
                         'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
                         ['unused-variable', $expression]
@@ -2072,19 +2070,19 @@ class ClassMethod
 
             $tempCodePrinter->output(sprintf(
                 "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
-                count($requiredParams),
-                count($requiredParams) + count($optionalParams)
+                $this->parameters->countRequiredParameters(),
+                $this->parameters->count()
             ));
 
             foreach ($requiredParams as $requiredParam) {
-                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext, $tempCodePrinter));
+                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext));
             }
 
             if (!empty($optionalParams)) {
                 $tempCodePrinter->output("\t"."\t".'Z_PARAM_OPTIONAL');
 
                 foreach ($optionalParams as $optionalParam) {
-                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext, $tempCodePrinter));
+                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext));
                 }
             }
 
@@ -2202,7 +2200,7 @@ class ClassMethod
         } else {
             $statements = $statement['statements'];
             foreach ($statements as $item) {
-                $type = isset($item['type']) ? $item['type'] : null;
+                $type = $item['type'] ?? null;
                 if ('return' === $type || 'throw' === $type) {
                     return true;
                 }
@@ -2335,11 +2333,10 @@ class ClassMethod
      *
      * @param array $parameter
      * @param CompilationContext $compilationContext
-     * @param CodePrinter $codePrinter
      * @return string
      * @throws Exception
      */
-    public function detectParam(array $parameter, CompilationContext $compilationContext, CodePrinter $codePrinter): string
+    public function detectParam(array $parameter, CompilationContext $compilationContext): string
     {
         $name = $parameter['name'];
         if (!isset($parameter['data-type'])) {
