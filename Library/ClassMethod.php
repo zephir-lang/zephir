@@ -1787,45 +1787,11 @@ class ClassMethod
             /**
              * Round 2. Fetch the parameters in the method.
              */
-            $params = [];
-            $numberRequiredParams = 0;
-            $numberOptionalParams = 0;
-            foreach ($this->parameters->getParameters() as $parameter) {
-                if (isset($parameter['data-type'])) {
-                    $dataType = $parameter['data-type'];
-                } else {
-                    $dataType = 'variable';
-                }
-
-                switch ($dataType) {
-                    case 'object':
-                    case 'callable':
-                    case 'resource':
-                    case 'variable':
-                        if (!$this->isInternal()) {
-                            $params[] = '&'.$parameter['name'];
-                        } else {
-                            $params[] = $parameter['name'];
-                        }
-                        break;
-
-                    default:
-                        if (!$this->isInternal()) {
-                            $params[] = '&'.$parameter['name'].'_param';
-                        } else {
-                            $params[] = $parameter['name'].'_param';
-                        }
-                        break;
-                }
-
-                if (isset($parameter['default'])) {
-                    $optionalParams[] = $parameter;
-                    ++$numberOptionalParams;
-                } else {
-                    $requiredParams[] = $parameter;
-                    ++$numberRequiredParams;
-                }
-            }
+            $params = $this->parameters->fetchParameters($this->isInternal);
+            $numberRequiredParams = $this->parameters->countRequiredParameters();
+            $numberOptionalParams = $this->parameters->countOptionalParameters();
+            $requiredParams = $this->parameters->getRequiredParameters();
+            $optionalParams = $this->parameters->getOptionalParameters();
 
             /**
              * Pass the write detector to the method statement block to check if the parameter
@@ -1838,11 +1804,7 @@ class ClassMethod
                 }
 
                 foreach ($this->parameters->getParameters() as $parameter) {
-                    if (isset($parameter['data-type'])) {
-                        $dataType = $parameter['data-type'];
-                    } else {
-                        $dataType = 'variable';
-                    }
+                    $dataType = $parameter['data-type'] ?? 'variable';
 
                     switch ($dataType) {
                         case 'variable':
@@ -2039,17 +2001,19 @@ class ClassMethod
                     );
                     continue;
                 }
+
                 $compilationContext->logger->warning(
                     'Variable "'.$variable->getName().'" declared but not used in '.$completeName.'::'.$this->getName(),
                     ['unused-variable-external', $variable->getOriginal()]
                 );
             }
 
-            if ('this_ptr' != $variable->getName() && 'return_value' != $variable->getName() && 'return_value_ptr' != $variable->getName()) {
+            if ('this_ptr' !== $variable->getName() && 'return_value' !== $variable->getName() && 'return_value_ptr' !== $variable->getName()) {
                 $type = $variable->getType();
                 if (!isset($usedVariables[$type])) {
                     $usedVariables[$type] = [];
                 }
+
                 $usedVariables[$type][] = $variable;
             }
         }
@@ -2059,18 +2023,18 @@ class ClassMethod
          * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
-            if (true == $variable->isExternal() || $variable->isTemporal()) {
+            if ($variable->isExternal() || $variable->isTemporal()) {
                 continue;
             }
 
-            if ('this_ptr' == $variable->getName() || 'return_value' == $variable->getName() || 'return_value_ptr' == $variable->getName() || 'ZEPHIR_LAST_CALL_STATUS' == $variable->getName()) {
+            if ('this_ptr' === $variable->getName() || 'return_value' === $variable->getName() || 'return_value_ptr' === $variable->getName() || 'ZEPHIR_LAST_CALL_STATUS' === $variable->getName()) {
                 continue;
             }
 
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (is_array($node)) {
-                    $expression = isset($node['expr']) ? $node['expr'] : $node;
+                    $expression = $node['expr'] ?? $node;
                     $compilationContext->logger->warning(
                         'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
                         ['unused-variable', $expression]
@@ -2092,14 +2056,14 @@ class ClassMethod
          * ZEND_PARSE_PARAMETERS
          */
         $tempCodePrinter = new CodePrinter();
-        if ($this->parameters instanceof ClassMethodParameters && !empty($this->parameters->getParameters())) {
+        if ($this->parameters instanceof ClassMethodParameters && $this->parameters->count() > 0) {
             $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
             $tempCodePrinter->output("\t".'bool is_null_true = 1;');
 
             $tempCodePrinter->output(sprintf(
                 "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
-                count($requiredParams),
-                count($requiredParams) + count($optionalParams)
+                $this->parameters->countRequiredParameters(),
+                $this->parameters->count()
             ));
 
             foreach ($requiredParams as $requiredParam) {
@@ -2228,7 +2192,7 @@ class ClassMethod
         } else {
             $statements = $statement['statements'];
             foreach ($statements as $item) {
-                $type = isset($item['type']) ? $item['type'] : null;
+                $type = $item['type'] ?? null;
                 if ('return' === $type || 'throw' === $type) {
                     return true;
                 }

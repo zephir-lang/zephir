@@ -21,15 +21,34 @@ use Zephir\Exception\CompilerException;
 use function count;
 
 /**
- * Zephir\ClassMethodParameters.
+ * Class Method Parameters
  *
- * Represents the parameters defined in a method
+ * Represents the parameters defined in a method.
  */
 class ClassMethodParameters implements Countable, Iterator, ArrayAccess
 {
+    /**
+     * List of all method's parameters
+     *
+     * @var array
+     */
     private array $parameters = [];
 
     private int $position = 0;
+
+    /**
+     * List of Required parameters
+     *
+     * @var array
+     */
+    private array $requiredParameters = [];
+
+    /**
+     * List of Optional parameters (with default value)
+     *
+     * @var array
+     */
+    private array $optionalParameters = [];
 
     /**
      * ClassMethodParameters constructor.
@@ -61,6 +80,57 @@ class ClassMethodParameters implements Countable, Iterator, ArrayAccess
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    public function getRequiredParameters(): array
+    {
+        return $this->requiredParameters;
+    }
+
+    public function countRequiredParameters(): int
+    {
+        return count($this->requiredParameters);
+    }
+
+    public function getOptionalParameters(): array
+    {
+        return $this->optionalParameters;
+    }
+
+    public function countOptionalParameters(): int
+    {
+        return count($this->optionalParameters);
+    }
+
+    public function fetchParameters(bool $isMethodInternal): array
+    {
+        $parameters = [];
+
+        foreach ($this->parameters as $parameter) {
+            $name = $parameter['name'];
+            $dataType = $parameter['data-type'] ?? 'variable';
+
+            switch ($dataType) {
+                case 'object':
+                case 'callable':
+                case 'resource':
+                case 'variable':
+                    $parameters[] = $isMethodInternal ? $name : '&'.$name;
+                    break;
+
+                default:
+                    $parameters[] = ($isMethodInternal ? $name : '&'.$name).'_param';
+                    break;
+            }
+
+            if (isset($parameter['default'])) {
+                $this->optionalParameters[] = $parameter;
+            } else {
+                $this->requiredParameters[] = $parameter;
+            }
+        }
+
+        return $parameters;
     }
 
     /**
