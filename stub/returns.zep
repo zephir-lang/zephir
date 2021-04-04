@@ -27,6 +27,27 @@ class Returns
 		}
 	}
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1003
+     */
+	public static function issue1003() -> int
+    {
+        var data, dataStr;
+
+        let data = [
+            "test": 1,
+            "value": 2
+        ];
+
+        if isset data["test"] {
+            return 1;
+        } else {
+            let dataStr = implode("-", data);
+
+            return (int)sizeof(data);
+        }
+    }
+
 	public static function returnWithParameter(string parameter)
 	{
 		return "Return back";
