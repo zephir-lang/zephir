@@ -196,16 +196,6 @@ class ClassMethod
     ];
 
     /**
-     * Currently used do detect if function param is type class and is external.
-     * For that, it will be possible to add condition for WIN builds. Because in
-     * when external extension is loaded via .dll it will add prefix '__imp_' to
-     * class entry.
-     *
-     * @var bool
-     */
-    protected bool $isExternalClassEntry = false;
-
-    /**
      * ClassMethod constructor.
      *
      * @param ClassDefinition $classDefinition
@@ -2513,8 +2503,6 @@ class ClassMethod
                     $compilationContext->headersManager->add('ext/psr/' . $file);
                 }
             }
-
-            $this->isExternalClassEntry = true;
 
             return str_replace('\\', '', $className) . '_ce_ptr';
         }
