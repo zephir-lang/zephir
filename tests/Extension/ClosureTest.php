@@ -23,5 +23,6 @@ final class ClosureTest extends TestCase
         $test = new Closures();
 
         $this->assertSame(2, $test->testUseCommand()());
+        $this->assertInstanceOf(\stdClass::class, $test->issue642());
     }
 }

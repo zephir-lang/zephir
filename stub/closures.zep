@@ -64,4 +64,16 @@ class Closures
 		};
 	}
 
+    /**
+     * issue https://github.com/zephir-lang/zephir/issues/642
+     */
+	public function issue642()
+	{
+        var obj, closure;
+
+        let obj = new \stdClass();
+        let closure = function(config) { return config; };
+
+        return call_user_func_array(closure, [obj]);
+	}
 }
