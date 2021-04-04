@@ -483,4 +483,19 @@ class Cast
         return uids;
     }
 
+    public function testIssue828() -> array
+    {
+        array ret = [];
+        var version = "1.0 200 OK", floatVersion, intVersion;
+
+        let ret[] = version;
+
+        let floatVersion = (double)version,
+            intVersion   = (int)version;
+
+        let ret[] = floatVersion;
+        let ret[] = intVersion;
+
+        return ret;
+    }
 }
