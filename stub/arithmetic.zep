@@ -1464,4 +1464,12 @@ class Arithmetic
 	{
 		return (this->tmp1 - 1) / 4;
 	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/812
+     */
+	public function absParam(const uint! val)
+	{
+	    return val;
+	}
 }
