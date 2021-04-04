@@ -1790,6 +1790,8 @@ class ClassMethod
             $params = $this->parameters->fetchParameters($this->isInternal);
             $numberRequiredParams = $this->parameters->countRequiredParameters();
             $numberOptionalParams = $this->parameters->countOptionalParameters();
+            $requiredParams = $this->parameters->getRequiredParameters();
+            $optionalParams = $this->parameters->getOptionalParameters();
 
             /**
              * Pass the write detector to the method statement block to check if the parameter
