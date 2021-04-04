@@ -65,7 +65,7 @@ class Closures
 	}
 
     /**
-     * issue https://github.com/zephir-lang/zephir/issues/642
+     * @issue https://github.com/zephir-lang/zephir/issues/642
      */
 	public function issue642()
 	{
