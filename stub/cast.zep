@@ -486,15 +486,20 @@ class Cast
     public function testIssue828() -> array
     {
         array ret = [];
-        var version = "1.0 200 OK", floatVersion, intVersion;
+        var version = "1.0 200 OK", nonNumericString = "OK", floatVersion, intVersion, floatNonNumeric, intNonNumeric;
 
         let ret[] = version;
+        let ret[] = nonNumericString;
 
         let floatVersion = (double)version,
-            intVersion   = (int)version;
+            intVersion   = (int)version,
+            floatNonNumeric = (double)nonNumericString,
+            intNonNumeric = (int)nonNumericString;
 
         let ret[] = floatVersion;
         let ret[] = intVersion;
+        let ret[] = floatNonNumeric;
+        let ret[] = intNonNumeric;
 
         return ret;
     }

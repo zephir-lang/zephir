@@ -210,9 +210,12 @@ final class CastTest extends TestCase
     {
         $return = $this->test->testIssue828();
 
-        $this->assertSame(['1.0 200 OK', 1.0, 1], $return);
+        $this->assertSame(['1.0 200 OK', 'OK', 1.0, 1, 0.0, 0], $return);
         $this->assertSame('1.0 200 OK', $return[0]);
-        $this->assertSame(1.0, $return[1]);
-        $this->assertSame(1, $return[2]);
+        $this->assertSame('OK', $return[1]);
+        $this->assertSame(1.0, $return[2]);
+        $this->assertSame(1, $return[3]);
+        $this->assertSame(0.0, $return[4]);
+        $this->assertSame(0, $return[5]);
     }
 }
