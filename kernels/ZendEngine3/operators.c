@@ -307,7 +307,7 @@ long zephir_get_intval_ex(const zval *op)
 		case IS_STRING: {
 			ASSUME(Z_STRVAL_P(op) != NULL);
 
-			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, true);
+			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
             switch (type) {
                 case IS_LONG:
                     return long_value;
@@ -384,7 +384,7 @@ double zephir_get_doubleval_ex(const zval *op)
 			return Z_DVAL_P(op);
 
 		case IS_STRING:
-		    type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, true);
+		    type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
             switch (type) {
                 case IS_LONG:
                     return (double) long_value;
