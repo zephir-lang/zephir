@@ -205,4 +205,17 @@ final class CastTest extends TestCase
         $this->assertEquals((array) 'aaa', $this->test->testArrayCastFromVariableString());
         $this->assertEquals((array) ['p1' => 'v1', 'p2' => 'v2'], $this->test->testArrayCastFromVariableStdClass());
     }
+
+    public function testIssue828(): void
+    {
+        $return = $this->test->testIssue828();
+
+        $this->assertSame(['1.0 200 OK', 'OK', 1.0, 1, 0.0, 0], $return);
+        $this->assertSame('1.0 200 OK', $return[0]);
+        $this->assertSame('OK', $return[1]);
+        $this->assertSame(1.0, $return[2]);
+        $this->assertSame(1, $return[3]);
+        $this->assertSame(0.0, $return[4]);
+        $this->assertSame(0, $return[5]);
+    }
 }
