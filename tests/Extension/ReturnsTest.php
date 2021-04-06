@@ -51,4 +51,16 @@ final class ReturnsTest extends TestCase
     {
         $this->assertSame('Return back', Returns::returnWithoutParameter());
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1991
+     */
+    public function testIssue1991ShouldThrow(): void
+    {
+        $tester = new Returns();
+
+        $this->expectException(\TypeError::class);
+
+        $tester->returnNullOnString();
+    }
 }
