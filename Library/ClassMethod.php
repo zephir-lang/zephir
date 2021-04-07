@@ -2370,6 +2370,8 @@ class ClassMethod
                 break;
 
             case 'int':
+            case 'uint':
+            case 'long':
                 if ($hasDefaultNull) {
                     $param = sprintf('Z_PARAM_LONG_OR_NULL(%s, is_null_true)', $name);
                 } else {
