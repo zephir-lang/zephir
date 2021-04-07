@@ -22,7 +22,7 @@ use Zephir\Operators\BaseOperator;
  */
 class TypeHintOperator extends BaseOperator
 {
-    private $strict = false;
+    private bool $strict = false;
 
     /**
      * Sets if the type hint is strict or not.

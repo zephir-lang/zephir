@@ -27,7 +27,7 @@ use Zephir\Operators\BaseOperator;
  */
 class NewInstanceTypeOperator extends BaseOperator
 {
-    protected $literalOnly = false;
+    protected bool $literalOnly = false;
 
     /**
      * Executes the operator.

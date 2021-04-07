@@ -13,9 +13,9 @@ namespace Zephir\Operators\Bitwise;
 
 class ShiftRightOperator extends BitwiseBaseOperator
 {
-    protected $operator = '>>';
+    protected string $operator = '>>';
 
-    protected $bitOperator = '>>';
+    protected string $bitOperator = '>>';
 
-    protected $zvalOperator = 'zephir_shift_right_function';
+    protected string $zvalOperator = 'zephir_shift_right_function';
 }

@@ -24,7 +24,7 @@ use Zephir\Operators\BaseOperator;
  */
 class UnlikelyOperator extends BaseOperator
 {
-    /***
+    /**
      * Compile unlikely operator
      *
      * @param $expression
