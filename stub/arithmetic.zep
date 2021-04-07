@@ -1468,7 +1468,17 @@ class Arithmetic
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/812
      */
-	public function absParam(const uint! val)
+	public function absParam(const uint! val) -> uint
+	{
+	    return val;
+	}
+
+	public function negativeInt(const int val) -> int
+	{
+	    return val;
+	}
+
+	public function negativeLong(const long val) -> long
 	{
 	    return val;
 	}
