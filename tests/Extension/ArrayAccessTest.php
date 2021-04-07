@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -23,5 +23,15 @@ final class ArrayAccessTest extends TestCase
 
         $this->assertTrue($class->exits('one'));
         $this->assertSame(2, $class->get());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/645
+     */
+    public function testIssue645(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame([], $class->issue645());
     }
 }
