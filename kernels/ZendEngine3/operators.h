@@ -201,6 +201,9 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		zval right_tmp; \
 		if (Z_TYPE_P(right) == IS_STRING) { \
 			ZEPHIR_CPY_WRT(left, right); \
+		} else if (Z_TYPE_P(right) == IS_NULL) { \
+		    // TODO: Re-visit this check, when ZEND_PARSE_PARAMETERS_* will be in better condition in Zephir
+		    ZEPHIR_INIT_VAR(left); \
 		} else { \
 			use_copy_right = zephir_make_printable_zval(right, &right_tmp); \
 			if (use_copy_right) { \
