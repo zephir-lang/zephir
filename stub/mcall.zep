@@ -269,7 +269,12 @@ class Mcall
     public function issue1136()
     {
         var _finfo;
-        let _finfo = new \finfo();
+
+        if version_compare(PHP_VERSION, "8.0.0", ">=") {
+            let _finfo = new \finfo();
+        } else {
+            let _finfo = finfo_open();
+        }
 
         return _finfo;
     }

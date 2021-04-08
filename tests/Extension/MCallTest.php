@@ -199,6 +199,10 @@ final class MCallTest extends TestCase
     {
         $test = new Mcall();
 
-        $this->assertInstanceOf(\finfo::class, $test->issue1136());
+        if (version_compare(PHP_VERSION, "8.0.0", ">=")) {
+            $this->assertInstanceOf(\finfo::class, $test->issue1136());
+        } else {
+            $this->assertIsResource($test->issue1136());
+        }
     }
 }
