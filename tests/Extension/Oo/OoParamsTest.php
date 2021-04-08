@@ -57,4 +57,18 @@ final class OoParamsTest extends TestCase
 
         $this->assertInstanceOf('Stub\Oo\Param', $result);
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/938
+     */
+    public function testWrongNumberParamsIssue938(): void
+    {
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->expectException(\ArgumentCountError::class);
+        } else {
+            $this->expectException(\BadMethodCallException::class);
+        }
+
+        $this->test->setAge(17, 'invalid');
+    }
 }
