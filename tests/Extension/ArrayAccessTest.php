@@ -34,4 +34,14 @@ final class ArrayAccessTest extends TestCase
 
         $this->assertSame([], $class->issue645());
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1155
+     */
+    public function testIssue1155(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertFalse($class->issue1155());
+    }
 }
