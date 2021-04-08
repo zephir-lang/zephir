@@ -20,7 +20,7 @@ class ArrayAccessTest
 		return arr["two"];
 	}
 
-	/**
+    /**
      * @issue https://github.com/zephir-lang/zephir/issues/645
      */
     public function issue645() -> array
