@@ -27,7 +27,7 @@ use Zephir\Variable;
  */
 class ArithmeticalBaseOperator extends BaseOperator
 {
-    protected $literalOnly = true;
+    protected bool $literalOnly = true;
 
     /**
      * This tries to perform arithmetical operations.

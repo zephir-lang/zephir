@@ -19,9 +19,9 @@ use Zephir\Statements\LetStatement;
 
 class AndOperator extends LogicalBaseOperator
 {
-    protected $operator = '&&';
+    protected string $operator = '&&';
 
-    protected $bitOperator = '&&';
+    protected string $bitOperator = '&&';
 
     public function compile($expression, CompilationContext $compilationContext)
     {

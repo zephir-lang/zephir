@@ -14,27 +14,29 @@ namespace Zephir\Operators;
 use Zephir\CompilationContext;
 use Zephir\Variable;
 
+/**
+ * TODO: Make it abstract
+ */
 class BaseOperator
 {
-    protected $operator;
+    protected string $operator;
 
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
-    protected $literalOnly = true;
+    protected bool $literalOnly = true;
 
-    /** @var Variable|null */
-    protected $expectingVariable;
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -166,7 +168,7 @@ class BaseOperator
      *
      * @return bool
      */
-    public function isExpecting()
+    public function isExpecting(): bool
     {
         return $this->expecting;
     }
@@ -176,7 +178,7 @@ class BaseOperator
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -186,7 +188,7 @@ class BaseOperator
      *
      * @return bool
      */
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return $this->readOnly;
     }

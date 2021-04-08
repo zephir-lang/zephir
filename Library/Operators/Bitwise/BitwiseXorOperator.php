@@ -13,9 +13,9 @@ namespace Zephir\Operators\Bitwise;
 
 class BitwiseXorOperator extends BitwiseBaseOperator
 {
-    protected $operator = '^';
+    protected string $operator = '^';
 
-    protected $bitOperator = '^';
+    protected string $bitOperator = '^';
 
-    protected $zvalOperator = 'zephir_bitwise_xor_function';
+    protected string $zvalOperator = 'zephir_bitwise_xor_function';
 }

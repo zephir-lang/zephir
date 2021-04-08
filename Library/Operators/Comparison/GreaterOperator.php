@@ -13,17 +13,17 @@ namespace Zephir\Operators\Comparison;
 
 class GreaterOperator extends ComparisonBaseOperator
 {
-    protected $operator = '>';
+    protected string $operator = '>';
 
-    protected $bitOperator = '>';
+    protected string $bitOperator = '>';
 
-    protected $zvalOperator = 'ZEPHIR_GT';
+    protected string $zvalOperator = 'ZEPHIR_GT';
 
-    protected $zvalLongOperator = 'ZEPHIR_GT_LONG';
+    protected string $zvalLongOperator = 'ZEPHIR_GT_LONG';
 
-    protected $zvalLongNegOperator = 'ZEPHIR_LT_LONG';
+    protected string $zvalLongNegOperator = 'ZEPHIR_LT_LONG';
 
-    protected $zvalDoubleOperator = 'ZEPHIR_GT_DOUBLE';
+    protected string $zvalDoubleOperator = 'ZEPHIR_GT_DOUBLE';
 
-    protected $zvalDoubleNegOperator = 'ZEPHIR_LT_DOUBLE';
+    protected string $zvalDoubleNegOperator = 'ZEPHIR_LT_DOUBLE';
 }

@@ -169,4 +169,9 @@ class Strings
 		let x = trim(stripslashes(strip_tags(value)));
 		return trim(stripcslashes(strip_tags(value)));
 	}
+
+	public function issue2186(string val = null) -> bool
+	{
+	    return val === null;
+	}
 }

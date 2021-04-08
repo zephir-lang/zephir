@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Comparison;
 
 use Zephir\CompilationContext;
@@ -24,9 +26,9 @@ use Zephir\Operators\BaseOperator;
  */
 class ComparisonBaseOperator extends BaseOperator
 {
-    protected $literalOnly = true;
+    protected bool $literalOnly = true;
 
-    protected $commutative = false;
+    protected bool $commutative = false;
 
     /**
      * @param $expr
@@ -551,7 +553,7 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
 
-                                return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableCode.', "")', $expression['left']);
+                                return new CompiledExpression('bool', $this->zvalNullOperator.'('.$variableCode.')', $expression['left']);
 
                             case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
