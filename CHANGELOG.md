@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Fixed default value of nullable string parameter [#2180](https://github.com/zephir-lang/zephir/issues/2180)
 - Fixed cast of `string` to `int` and `float` [#828](https://github.com/zephir-lang/zephir/issues/828)
+- Fix `uint` cast to `unsigned int` in function params [#812](https://github.com/zephir-lang/zephir/issues/812)
 - Fixed `null` strict check when variable is `string` type [#2186](https://github.com/zephir-lang/zephir/issues/2186)
 
 ## [0.13.1] - 2021-03-31
