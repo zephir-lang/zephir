@@ -266,7 +266,7 @@ class Mcall
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/1136
      */
-	public function issue1136()
+    public function issue1136()
     {
         var _finfo;
         let _finfo = new \finfo();
