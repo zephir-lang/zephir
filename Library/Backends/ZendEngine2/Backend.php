@@ -1009,9 +1009,11 @@ class Backend extends BaseBackend
         /* Assign param */
         switch ($type) {
             case 'int':
-            case 'uint':
             case 'long':
                 $codePrinter->output($var['name'].' = Z_LVAL_P('.$parameterCode.');');
+                break;
+            case 'uint':
+                $codePrinter->output($var['name'].' = ZEND_ABS(Z_LVAL_P('.$parameterCode.'));');
                 break;
             case 'bool':
                 $codePrinter->output($var['name'].' = '.$this->getBoolCode($parameterVariable, $context, false).';');

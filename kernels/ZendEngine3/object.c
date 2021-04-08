@@ -501,7 +501,8 @@ int zephir_read_property(
 	zval *result,
 	zval *object,
 	const char *property_name,
-	uint32_t property_length, int flags
+	uint32_t property_length,
+	int flags
 ) {
 	zval property, tmp;
 	zval *res;
