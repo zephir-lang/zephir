@@ -291,6 +291,27 @@ final class StringTest extends TestCase
         $this->assertFalse($this->test->issue2186('string'));
         $this->assertFalse($this->test->issue2186('0'));
         $this->assertFalse($this->test->issue2186('1'));
+
+        $this->assertFalse($this->test->issue2186SegFault());
+        $this->assertFalse($this->test->issue2186SegFault(null));
+        $this->assertFalse($this->test->issue2186SegFault(''));
+
+        /**
+         * Assert PHP and Zephir behavior
+         */
+        $zeroString = false;
+        if ('0') {
+            $zeroString = true;
+        }
+
+        $this->assertFalse(!empty('0'));
+        $this->assertFalse($zeroString);
+        $this->assertFalse($this->test->issue2186SegFault('0'));
+
+        $this->assertTrue($this->test->issue2186SegFault('string'));
+
+        $this->assertSame('', $this->test->issue2186SegFaultCall());
+        $this->assertSame('ok all ok', $this->test->issue2186SegFaultCall('ok'));
     }
 
     public function providerHashEquals(): array

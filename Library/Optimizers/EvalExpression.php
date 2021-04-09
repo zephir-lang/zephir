@@ -190,7 +190,7 @@ class EvalExpression
 
                 $this->usedVariables[] = $variableRight->getName();
 
-                /*
+                /**
                  * Evaluate the variable
                  */
                 switch ($variableRight->getType()) {
@@ -203,9 +203,7 @@ class EvalExpression
                         return $variableRight->getName();
 
                     case 'string':
-                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
-
-                        return '!('.$compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false).') && Z_STRLEN_P('.$variableRightCode.')';
+                        return '!('.$compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false).')';
 
                     case 'bool':
                         return $variableRight->getName();
