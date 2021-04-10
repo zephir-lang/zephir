@@ -166,7 +166,7 @@ class Backend extends BaseBackend
             $code .= ' ';
             $groupVariables = [];
 
-            /*
+            /**
              * @var Variable[]
              */
             foreach ($variables as $variable) {

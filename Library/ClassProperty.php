@@ -373,7 +373,8 @@ class ClassProperty
                         $this->getName(),
                         $value,
                         $this->getVisibilityAccessor()
-                    )
+                    ),
+                    false
                 );
                 break;
 
@@ -385,7 +386,8 @@ class ClassProperty
                         $this->getName(),
                         $value,
                         $this->getVisibilityAccessor()
-                    )
+                    ),
+                    false
                 );
                 break;
 
@@ -397,7 +399,8 @@ class ClassProperty
                         $this->getName(),
                         $this->getBooleanCode($value),
                         $this->getVisibilityAccessor()
-                    )
+                    ),
+                    false
                 );
                 break;
 
@@ -410,7 +413,8 @@ class ClassProperty
                         $this->getName(),
                         add_slashes($value),
                         $this->getVisibilityAccessor()
-                    )
+                    ),
+                    false
                 );
                 break;
 
@@ -423,7 +427,8 @@ class ClassProperty
                         $classEntry,
                         $this->getName(),
                         $this->getVisibilityAccessor()
-                    )
+                    ),
+                    false
                 );
                 break;
 

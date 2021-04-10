@@ -1934,8 +1934,6 @@ class ClassMethod
                     $compilationContext->codePrinter = $realCodePrinter;
                 }
             }
-
-            $code .= PHP_EOL;
         }
 
         $code .= $initCode.$initVarCode;
@@ -2079,7 +2077,6 @@ class ClassMethod
             }
 
             $tempCodePrinter->output("\t".'ZEND_PARSE_PARAMETERS_END();');
-            $tempCodePrinter->outputBlankLine();
             $tempCodePrinter->output('#endif');
         }
 
@@ -2140,7 +2137,7 @@ class ClassMethod
         /**
          * Restore the compilation context
          */
-        $oldCodePrinter->output($code);
+        $oldCodePrinter->output($code, false);
         $compilationContext->codePrinter = $oldCodePrinter;
 
         $compilationContext->branchManager = null;

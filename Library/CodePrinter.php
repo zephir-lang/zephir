@@ -89,10 +89,10 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function output($code)
+    public function output(string $code, bool $appendEOL = true): void
     {
         $this->lastLine = $code;
-        $this->code .= str_repeat("\t", $this->level).$code.PHP_EOL;
+        $this->code .= str_repeat("\t", $this->level).$code.($appendEOL ? PHP_EOL : '');
         ++$this->currentPrints;
     }
 
