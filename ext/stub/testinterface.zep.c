@@ -15,8 +15,8 @@
 /**
  * Sample exception class
  */
-ZEPHIR_INIT_CLASS(Stub_TestInterface) {
-
+ZEPHIR_INIT_CLASS(Stub_TestInterface)
+{
 	ZEPHIR_REGISTER_INTERFACE(Stub, TestInterface, stub, testinterface, NULL);
 
 	zephir_declare_class_constant_null(stub_testinterface_ce, SL("C1"));
@@ -32,6 +32,5 @@ ZEPHIR_INIT_CLASS(Stub_TestInterface) {
 	zephir_declare_class_constant_string(stub_testinterface_ce, SL("C6"), "test");
 
 	return SUCCESS;
-
 }
 

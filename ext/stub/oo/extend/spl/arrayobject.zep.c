@@ -15,11 +15,10 @@
 #include "ext/spl/spl_array.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_ArrayObject) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_ArrayObject)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, ArrayObject, stub, oo_extend_spl_arrayobject, spl_ce_ArrayObject, NULL, 0);
 
 	return SUCCESS;
-
 }
 

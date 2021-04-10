@@ -15,18 +15,16 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(stub_2__closure) {
-
+ZEPHIR_INIT_CLASS(stub_2__closure)
+{
 	ZEPHIR_REGISTER_CLASS(stub, 2__closure, stub, 2__closure, stub_2__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(stub_2__closure, __invoke) {
-
+PHP_METHOD(stub_2__closure, __invoke)
+{
 	zval *this_ptr = getThis();
-
 
 
 

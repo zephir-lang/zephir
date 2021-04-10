@@ -18,16 +18,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Factorial) {
-
+ZEPHIR_INIT_CLASS(Stub_Factorial)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Factorial, stub, factorial, stub_factorial_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Factorial, intIterativeFactorial) {
-
+PHP_METHOD(Stub_Factorial, intIterativeFactorial)
+{
 	zend_bool _0;
 	long result, i = 0;
 	zval *n_param = NULL;
@@ -39,12 +38,10 @@ PHP_METHOD(Stub_Factorial, intIterativeFactorial) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
-
 	n = zephir_get_intval(n_param);
 
 
@@ -67,11 +64,10 @@ PHP_METHOD(Stub_Factorial, intIterativeFactorial) {
 		}
 	}
 	RETURN_LONG(result);
-
 }
 
-PHP_METHOD(Stub_Factorial, intRecursiveFactorial) {
-
+PHP_METHOD(Stub_Factorial, intRecursiveFactorial)
+{
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *num_param = NULL, _0, _2, _3;
@@ -86,13 +82,11 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
-
 	num = zephir_get_intval(num_param);
 
 
@@ -105,11 +99,10 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial) {
 		ZVAL_LONG(&_0, 1);
 	} else {
 		ZVAL_LONG(&_3, (num - 1));
-		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", NULL, 30, &_3);
+		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", NULL, 32, &_3);
 		zephir_check_call_status();
 		ZVAL_LONG(&_0, (num * zephir_get_numberval(&_2)));
 	}
 	RETURN_CCTOR(&_0);
-
 }
 

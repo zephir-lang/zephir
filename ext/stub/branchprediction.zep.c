@@ -20,16 +20,15 @@
 /**
  * OO operations
  */
-ZEPHIR_INIT_CLASS(Stub_BranchPrediction) {
-
+ZEPHIR_INIT_CLASS(Stub_BranchPrediction)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, BranchPrediction, stub, branchprediction, stub_branchprediction_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_BranchPrediction, testLikely1) {
-
+PHP_METHOD(Stub_BranchPrediction, testLikely1)
+{
 	zval *this_ptr = getThis();
 
 
@@ -39,11 +38,10 @@ PHP_METHOD(Stub_BranchPrediction, testLikely1) {
 	} else {
 		RETURN_BOOL(0);
 	}
-
 }
 
-PHP_METHOD(Stub_BranchPrediction, testLikely2) {
-
+PHP_METHOD(Stub_BranchPrediction, testLikely2)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -53,12 +51,10 @@ PHP_METHOD(Stub_BranchPrediction, testLikely2) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
 
 
 	if (EXPECTED(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
@@ -66,11 +62,10 @@ PHP_METHOD(Stub_BranchPrediction, testLikely2) {
 	} else {
 		RETURN_BOOL(0);
 	}
-
 }
 
-PHP_METHOD(Stub_BranchPrediction, testUnlikely1) {
-
+PHP_METHOD(Stub_BranchPrediction, testUnlikely1)
+{
 	zval *this_ptr = getThis();
 
 
@@ -80,11 +75,10 @@ PHP_METHOD(Stub_BranchPrediction, testUnlikely1) {
 	} else {
 		RETURN_BOOL(0);
 	}
-
 }
 
-PHP_METHOD(Stub_BranchPrediction, testUnlikely2) {
-
+PHP_METHOD(Stub_BranchPrediction, testUnlikely2)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -94,12 +88,10 @@ PHP_METHOD(Stub_BranchPrediction, testUnlikely2) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
 
 
 	if (EXPECTED(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
@@ -107,6 +99,5 @@ PHP_METHOD(Stub_BranchPrediction, testUnlikely2) {
 	} else {
 		RETURN_BOOL(0);
 	}
-
 }
 

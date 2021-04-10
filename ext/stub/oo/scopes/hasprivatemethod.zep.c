@@ -17,16 +17,15 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_HasPrivateMethod) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_HasPrivateMethod)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo\\Scopes, HasPrivateMethod, stub, oo_scopes_hasprivatemethod, stub_oo_scopes_hasprivatemethod_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod) {
-
+PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -38,16 +37,14 @@ PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod) {
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "isprivate", NULL, 1);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, isPrivate) {
-
+PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, isPrivate)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("isPrivate");
-
 }
 

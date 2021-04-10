@@ -20,16 +20,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_ExtendPdoClass) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_ExtendPdoClass)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo, ExtendPdoClass, stub, oo_extendpdoclass, php_pdo_get_dbh_ce(), stub_oo_extendpdoclass_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct) {
-
+PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -52,13 +51,11 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct) {
 		Z_PARAM_STR_OR_NULL(password)
 		Z_PARAM_ZVAL(attrs)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 3, &dsn_param, &username_param, &password_param, &attrs);
-
 	zephir_get_strval(&dsn, dsn_param);
 	if (!username_param) {
 		ZEPHIR_INIT_VAR(&username);
@@ -88,6 +85,5 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct) {
 	ZEPHIR_CALL_PARENT(NULL, stub_oo_extendpdoclass_ce, getThis(), "__construct", NULL, 0, &dsn, &username, &password, attrs);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
-
 }
 

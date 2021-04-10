@@ -22,16 +22,15 @@
 /**
  * OO operations
  */
-ZEPHIR_INIT_CLASS(Stub_Oo) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Oo, stub, oo, stub_oo_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance1) {
-
+PHP_METHOD(Stub_Oo, testInstance1)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -44,11 +43,10 @@ PHP_METHOD(Stub_Oo, testInstance1) {
 	ZEPHIR_INIT_VAR(&o);
 	object_init(&o);
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance2) {
-
+PHP_METHOD(Stub_Oo, testInstance2)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -61,14 +59,13 @@ PHP_METHOD(Stub_Oo, testInstance2) {
 
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstruct_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 61);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 65);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance3) {
-
+PHP_METHOD(Stub_Oo, testInstance3)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -85,12 +82,12 @@ PHP_METHOD(Stub_Oo, testInstance3) {
 		ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
-	RETURN_CCTOR(&o);
 
+	RETURN_CCTOR(&o);
 }
 
-PHP_METHOD(Stub_Oo, testInstance4) {
-
+PHP_METHOD(Stub_Oo, testInstance4)
+{
 	zval o, a, b;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -109,14 +106,13 @@ PHP_METHOD(Stub_Oo, testInstance4) {
 	ZVAL_STRING(&b, "b");
 	ZEPHIR_INIT_VAR(&o);
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &a, &b);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &a, &b);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance5) {
-
+PHP_METHOD(Stub_Oo, testInstance5)
+{
 	zval o, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -135,14 +131,13 @@ PHP_METHOD(Stub_Oo, testInstance5) {
 	ZVAL_STRING(&_0, "a");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "b");
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance6) {
-
+PHP_METHOD(Stub_Oo, testInstance6)
+{
 	zval o, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -159,14 +154,13 @@ PHP_METHOD(Stub_Oo, testInstance6) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance7) {
-
+PHP_METHOD(Stub_Oo, testInstance7)
+{
 	zval o, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -183,14 +177,13 @@ PHP_METHOD(Stub_Oo, testInstance7) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_BOOL(&_0, 0);
 	ZVAL_BOOL(&_1, 1);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance8) {
-
+PHP_METHOD(Stub_Oo, testInstance8)
+{
 	zval o, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -207,14 +200,13 @@ PHP_METHOD(Stub_Oo, testInstance8) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_DOUBLE(&_0, 1.2);
 	ZVAL_DOUBLE(&_1, 7.30);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance9) {
-
+PHP_METHOD(Stub_Oo, testInstance9)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -229,11 +221,10 @@ PHP_METHOD(Stub_Oo, testInstance9) {
 	ZEPHIR_CALL_CE_STATIC(&o, stub_oo_oodynamica_ce, "getnew", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance10) {
-
+PHP_METHOD(Stub_Oo, testInstance10)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -248,11 +239,10 @@ PHP_METHOD(Stub_Oo, testInstance10) {
 	ZEPHIR_CALL_CE_STATIC(&o, stub_oo_oodynamicb_ce, "getnew", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance11) {
-
+PHP_METHOD(Stub_Oo, testInstance11)
+{
 	zval o, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -269,14 +259,13 @@ PHP_METHOD(Stub_Oo, testInstance11) {
 	object_init_ex(&o, stub_oo_ooconstructparams_ce);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 62, &_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &o, "__construct", NULL, 66, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, testInstance12) {
-
+PHP_METHOD(Stub_Oo, testInstance12)
+{
 	zval o;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -291,11 +280,10 @@ PHP_METHOD(Stub_Oo, testInstance12) {
 	ZEPHIR_CALL_CE_STATIC(&o, stub_oo_oodynamica_ce, "call1", &_0, 0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&o);
-
 }
 
-PHP_METHOD(Stub_Oo, createInstancesInLoop) {
-
+PHP_METHOD(Stub_Oo, createInstancesInLoop)
+{
 	zend_class_entry *_5$$3, *_9$$4;
 	zval result, _0;
 	zval className, instance, fqcn, _1, *_2, _3, _4$$3, _6$$3, _7$$3, _8$$4, _10$$4, _11$$4;
@@ -349,6 +337,7 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop) {
 				ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
 				zephir_check_call_status();
 			}
+
 			ZEPHIR_CALL_METHOD(&_6$$3, &instance, "execute", NULL, 0);
 			zephir_check_call_status();
 			zephir_array_append(&result, &_6$$3, PH_SEPARATE, "stub/oo.zep", 108);
@@ -380,6 +369,7 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop) {
 					ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
 					zephir_check_call_status();
 				}
+
 				ZEPHIR_CALL_METHOD(&_10$$4, &instance, "execute", NULL, 0);
 				zephir_check_call_status();
 				zephir_array_append(&result, &_10$$4, PH_SEPARATE, "stub/oo.zep", 108);
@@ -392,6 +382,5 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop) {
 	}
 	ZEPHIR_INIT_NVAR(&className);
 	RETURN_CTOR(&result);
-
 }
 

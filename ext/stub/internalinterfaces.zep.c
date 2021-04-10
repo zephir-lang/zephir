@@ -15,19 +15,17 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_InternalInterfaces) {
-
+ZEPHIR_INIT_CLASS(Stub_InternalInterfaces)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, InternalInterfaces, stub, internalinterfaces, stub_internalinterfaces_method_entry, 0);
 
 	zend_class_implements(stub_internalinterfaces_ce, 1, zend_ce_countable);
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_InternalInterfaces, count) {
-
+PHP_METHOD(Stub_InternalInterfaces, count)
+{
 	zval *this_ptr = getThis();
-
 
 
 

@@ -19,16 +19,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Globals_Session_Base) {
-
+ZEPHIR_INIT_CLASS(Stub_Globals_Session_Base)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Globals\\Session, Base, stub, globals_session_base, stub_globals_session_base_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Globals_Session_Base, set) {
-
+PHP_METHOD(Stub_Globals_Session_Base, set)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, *value, value_sub, _SESSION;
 	zval index;
@@ -43,25 +42,22 @@ PHP_METHOD(Stub_Globals_Session_Base, set) {
 		Z_PARAM_STR(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
 	zephir_fetch_params(1, 2, 0, &index_param, &value);
-
 	zephir_get_strval(&index, index_param);
 
 
 	zephir_array_update_zval(&_SESSION, &index, value, PH_COPY | PH_SEPARATE);
 	RETVAL_ZVAL(&_SESSION, 1, 0);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Globals_Session_Base, remove) {
-
+PHP_METHOD(Stub_Globals_Session_Base, remove)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *index_param = NULL, _SESSION;
 	zval index;
@@ -74,24 +70,21 @@ PHP_METHOD(Stub_Globals_Session_Base, remove) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
 	zephir_fetch_params(1, 1, 0, &index_param);
-
 	zephir_get_strval(&index, index_param);
 
 
 	zephir_array_unset(&_SESSION, &index, PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Globals_Session_Base, __set) {
-
+PHP_METHOD(Stub_Globals_Session_Base, __set)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *index_param = NULL, *value, value_sub;
@@ -106,24 +99,21 @@ PHP_METHOD(Stub_Globals_Session_Base, __set) {
 		Z_PARAM_STR(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &index_param, &value);
-
 	zephir_get_strval(&index, index_param);
 
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "set", NULL, 0, &index, value);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Globals_Session_Base, __unset) {
-
+PHP_METHOD(Stub_Globals_Session_Base, __unset)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *index_param = NULL;
@@ -136,24 +126,21 @@ PHP_METHOD(Stub_Globals_Session_Base, __unset) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &index_param);
-
 	zephir_get_strval(&index, index_param);
 
 
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "remove", NULL, 0, &index);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Globals_Session_Base, removeSessionData) {
-
+PHP_METHOD(Stub_Globals_Session_Base, removeSessionData)
+{
 	zend_string *_4;
 	zend_ulong _3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -207,6 +194,5 @@ PHP_METHOD(Stub_Globals_Session_Base, removeSessionData) {
 	ZEPHIR_INIT_NVAR(&key);
 	RETVAL_ZVAL(&_SESSION, 1, 0);
 	RETURN_MM();
-
 }
 

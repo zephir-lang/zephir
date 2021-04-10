@@ -18,16 +18,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Globals_Env) {
-
+ZEPHIR_INIT_CLASS(Stub_Globals_Env)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Globals, Env, stub, globals_env, stub_globals_env_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Globals_Env, read) {
-
+PHP_METHOD(Stub_Globals_Env, read)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _ENV, _0;
 	zval name;
@@ -41,14 +40,12 @@ PHP_METHOD(Stub_Globals_Env, read) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_ENV, SL("_ENV"));
 	zephir_fetch_params(1, 1, 0, &name_param);
-
 	zephir_get_strval(&name, name_param);
 
 
@@ -59,6 +56,5 @@ PHP_METHOD(Stub_Globals_Env, read) {
 		ZVAL_BOOL(&_0, 0);
 	}
 	RETURN_CCTOR(&_0);
-
 }
 

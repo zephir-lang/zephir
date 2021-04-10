@@ -22,19 +22,18 @@
 /**
  * Sample exception class
  */
-ZEPHIR_INIT_CLASS(Stub_Exception) {
-
+ZEPHIR_INIT_CLASS(Stub_Exception)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub, Exception, stub, exception, zend_ce_exception, stub_exception_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/915
  */
-PHP_METHOD(Stub_Exception, testRuntimePropertyFetch) {
-
+PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *message_param = NULL;
 	zval message;
@@ -46,13 +45,11 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &message_param);
-
 	if (UNEXPECTED(Z_TYPE_P(message_param) != IS_STRING && Z_TYPE_P(message_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'message' must be of the type string"));
 		RETURN_MM_NULL();
@@ -67,6 +64,5 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch) {
 
 	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message);
 	ZEPHIR_MM_RESTORE();
-
 }
 

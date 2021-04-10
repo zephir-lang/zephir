@@ -18,19 +18,18 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Globals_Server) {
-
+ZEPHIR_INIT_CLASS(Stub_Globals_Server)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Globals, Server, stub, globals_server, stub_globals_server_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
 /**
  * @see https://github.com/zephir-lang/zephir/issues/1961
  */
-PHP_METHOD(Stub_Globals_Server, f1) {
-
+PHP_METHOD(Stub_Globals_Server, f1)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval _SERVER, _0, _1;
@@ -51,11 +50,10 @@ PHP_METHOD(Stub_Globals_Server, f1) {
 	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 12);
 	zend_print_zval(&_1, 0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Globals_Server, f2) {
-
+PHP_METHOD(Stub_Globals_Server, f2)
+{
 	zval _SERVER, _0;
 	zval *this_ptr = getThis();
 
@@ -67,14 +65,13 @@ PHP_METHOD(Stub_Globals_Server, f2) {
 
 	zephir_array_fetch_string(&_0, &_SERVER, SL("SCRIPT_NAME"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 17);
 	zend_print_zval(&_0, 0);
-
 }
 
 /**
  * @see https://github.com/zephir-lang/zephir/issues/1970
  */
-PHP_METHOD(Stub_Globals_Server, check) {
-
+PHP_METHOD(Stub_Globals_Server, check)
+{
 	zval _SERVER, _0;
 	zval *this_ptr = getThis();
 
@@ -86,6 +83,5 @@ PHP_METHOD(Stub_Globals_Server, check) {
 
 	zephir_array_fetch_string(&_0, &_SERVER, SL("HTTP_USER_AGENT"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 25);
 	RETURN_CTORW(&_0);
-
 }
 

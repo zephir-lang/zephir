@@ -15,11 +15,10 @@
 #include "ext/spl/spl_heap.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_PriorityQueue) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_PriorityQueue)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, PriorityQueue, stub, oo_extend_spl_priorityqueue, spl_ce_SplPriorityQueue, NULL, 0);
 
 	return SUCCESS;
-
 }
 

@@ -19,16 +19,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_FunctionExists) {
-
+ZEPHIR_INIT_CLASS(Stub_FunctionExists)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, FunctionExists, stub, functionexists, stub_functionexists_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_FunctionExists, testWithPassedName) {
-
+PHP_METHOD(Stub_FunctionExists, testWithPassedName)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *func_param = NULL;
 	zval func;
@@ -40,22 +39,19 @@ PHP_METHOD(Stub_FunctionExists, testWithPassedName) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(func)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &func_param);
-
 	zephir_get_strval(&func, func_param);
 
 
 	RETURN_MM_BOOL((zephir_function_exists(&func) == SUCCESS));
-
 }
 
-PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions) {
-
+PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
+{
 	zval result, functions;
 	zval func, _0, *_1, _2, _3$$3, _4$$4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -131,16 +127,14 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions) {
 	}
 	ZEPHIR_INIT_NVAR(&func);
 	RETURN_CTOR(&result);
-
 }
 
-PHP_METHOD(Stub_FunctionExists, testWithString) {
-
+PHP_METHOD(Stub_FunctionExists, testWithString)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_BOOL((zephir_function_exists_ex(ZEND_STRL("substr")) == SUCCESS));
-
 }
 

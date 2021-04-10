@@ -277,6 +277,10 @@ void zephir_convert_to_object(zval *op)
  */
 long zephir_get_intval_ex(const zval *op)
 {
+    int type;
+    double double_value = 0;
+    zend_long long_value = 0;
+
 	switch (Z_TYPE_P(op)) {
 		case IS_ARRAY:
 			return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
@@ -301,19 +305,16 @@ long zephir_get_intval_ex(const zval *op)
 			return (long) Z_DVAL_P(op);
 
 		case IS_STRING: {
-			zend_uchar type;
-			double double_value = 0;
-			zend_long long_value = 0;
-
 			ASSUME(Z_STRVAL_P(op) != NULL);
-			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0);
-			if (type == IS_LONG) {
-				return long_value;
-			}
-			if (type == IS_DOUBLE) {
-				return (long) double_value;
-			}
-			return 0;
+
+			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
+            switch (type) {
+                case IS_LONG:
+                    return long_value;
+
+                case IS_DOUBLE:
+                    return (long) double_value;
+            }
 		}
 	}
 
@@ -358,11 +359,10 @@ long zephir_get_charval_ex(const zval *op)
 double zephir_get_doubleval_ex(const zval *op)
 {
 	int type;
-	zend_long long_value = 0;
-	double double_value = 0;
+    double double_value = 0;
+    zend_long long_value = 0;
 
 	switch (Z_TYPE_P(op)) {
-
         case IS_ARRAY:
             return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
 
@@ -384,17 +384,14 @@ double zephir_get_doubleval_ex(const zval *op)
 			return Z_DVAL_P(op);
 
 		case IS_STRING:
-			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0))) {
-				if (type == IS_LONG) {
-					return (double) long_value;
-				} else {
-					if (type == IS_DOUBLE) {
-						return double_value;
-					} else {
-						return 0;
-					}
-				}
-			}
+		    type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
+            switch (type) {
+                case IS_LONG:
+                    return (double) long_value;
+
+                case IS_DOUBLE:
+                    return double_value;
+            }
 	}
 
 	return 0;

@@ -16,16 +16,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(stub_5__closure) {
-
+ZEPHIR_INIT_CLASS(stub_5__closure)
+{
 	ZEPHIR_REGISTER_CLASS(stub, 5__closure, stub, 5__closure, stub_5__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(stub_5__closure, __invoke) {
-
+PHP_METHOD(stub_5__closure, __invoke)
+{
 	zval *param1, param1_sub;
 	zval *this_ptr = getThis();
 
@@ -35,15 +34,12 @@ PHP_METHOD(stub_5__closure, __invoke) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param1)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param1);
 
 
-
 	RETURN_NULL();
-
 }
 

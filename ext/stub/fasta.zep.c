@@ -22,16 +22,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Fasta) {
-
+ZEPHIR_INIT_CLASS(Stub_Fasta)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Fasta, stub, fasta, stub_fasta_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Fasta, fastaRepeat) {
-
+PHP_METHOD(Stub_Fasta, fastaRepeat)
+{
 	zval _2, _5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
@@ -70,13 +69,11 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 		Z_PARAM_ZVAL(n)
 		Z_PARAM_STR(seq)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &n, &seq_param);
-
 	zephir_get_strval(&seq, seq_param);
 
 
@@ -150,20 +147,18 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 		zend_print_zval(&_15$$7, 0);
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Fasta, fastRandom) {
-
+PHP_METHOD(Stub_Fasta, fastRandom)
+{
 	zval *this_ptr = getThis();
 
 
 
-
 }
 
-PHP_METHOD(Stub_Fasta, main) {
-
+PHP_METHOD(Stub_Fasta, main)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -181,13 +176,11 @@ PHP_METHOD(Stub_Fasta, main) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
-
 
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -221,6 +214,5 @@ PHP_METHOD(Stub_Fasta, main) {
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", NULL, 0, &_1, &alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
-
 }
 

@@ -18,82 +18,67 @@
 #include "kernel/array.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Properties_PublicProperties) {
-
+ZEPHIR_INIT_CLASS(Stub_Properties_PublicProperties)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Properties, PublicProperties, stub, properties_publicproperties, stub_properties_publicproperties_method_entry, 0);
 
 	/**
 	 * This is a public property with no initial value
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someNull"), ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with initial null value
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someNullInitial"), ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with initial boolean false
 	 */
 	zend_declare_property_bool(stub_properties_publicproperties_ce, SL("someFalse"), 0, ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with initial boolean true
 	 */
 	zend_declare_property_bool(stub_properties_publicproperties_ce, SL("someTrue"), 1, ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with an initial integer value
 	 */
 	zend_declare_property_long(stub_properties_publicproperties_ce, SL("someInteger"), 10, ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with an initial double value
 	 */
 	zend_declare_property_double(stub_properties_publicproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with an initial string value
 	 */
 	zend_declare_property_string(stub_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC);
-
 	/**
 	 * This is a public property with an initial array value
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArray"), ZEND_ACC_PUBLIC);
-
 	/**
 	 * It's needed to test ide stubs
 	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSpecifyKeys"), ZEND_ACC_PROTECTED);
-
 	/**
 	 * It's needed to test ide stubs
 	 * @link https://github.com/zephir-lang/zephir/issues/731
 	 */
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someArrayWithSubArray"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_properties_publicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_long(stub_properties_publicproperties_ce, SL("testPropertyFromSelfConstantValue"), 123, ZEND_ACC_PUBLIC);
-
 	zend_declare_property_long(stub_properties_publicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC);
-
 	stub_properties_publicproperties_ce->create_object = zephir_init_properties_Stub_Properties_PublicProperties;
 	zephir_declare_class_constant_long(stub_properties_publicproperties_ce, SL("TEST_CONST"), 123);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray) {
-
+PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray)
+{
 	zval *someGetterSetterArray, someGetterSetterArray_sub;
 	zval *this_ptr = getThis();
 
@@ -103,31 +88,27 @@ PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someGetterSetterArray)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &someGetterSetterArray);
 
 
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("someGetterSetterArray"), someGetterSetterArray);
 	RETURN_THISW();
-
 }
 
-PHP_METHOD(Stub_Properties_PublicProperties, getSomeGetterSetterArray) {
-
+PHP_METHOD(Stub_Properties_PublicProperties, getSomeGetterSetterArray)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_MEMBER(getThis(), "someGetterSetterArray");
-
 }
 
-PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
-
+PHP_METHOD(Stub_Properties_PublicProperties, test394Issue)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -140,11 +121,10 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue) {
 	ZEPHIR_OBS_VAR(&_0);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("someTrue"), PH_NOISY_CC);
 	RETURN_CCTOR(&_0);
-
 }
 
-zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type) {
-
+zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_entry *class_type)
+{
 		zval _3$$4, _4$$4, _6$$5, _8$$6;
 	zval _0, _2, _5, _7, _10, _1$$3, _9$$6, _11$$7;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -231,6 +211,5 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);
 	}
-
 }
 

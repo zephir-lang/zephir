@@ -25,16 +25,15 @@
  *
  * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
  */
-ZEPHIR_INIT_CLASS(Stub_Fannkuch) {
-
+ZEPHIR_INIT_CLASS(Stub_Fannkuch)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Fannkuch, stub, fannkuch, stub_fannkuch_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Fannkuch, process) {
-
+PHP_METHOD(Stub_Fannkuch, process)
+{
 	zend_bool _0, _5$$4, _11$$8;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, perm, perm0, perm1, count, temp, _3$$3, _4$$6, _9$$4, _8$$7, _10$$8, _14$$9, _15$$14, _16$$15, _17$$13, _18$$13, _19$$13;
@@ -62,13 +61,11 @@ PHP_METHOD(Stub_Fannkuch, process) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
-
 	n = zephir_get_intval(n_param);
 
 
@@ -212,6 +209,5 @@ PHP_METHOD(Stub_Fannkuch, process) {
 		permCount++;
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 

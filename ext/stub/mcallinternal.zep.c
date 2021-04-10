@@ -22,16 +22,15 @@
 /**
  * Method calls
  */
-ZEPHIR_INIT_CLASS(Stub_McallInternal) {
-
+ZEPHIR_INIT_CLASS(Stub_McallInternal)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, McallInternal, stub, mcallinternal, stub_mcallinternal_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used) {
-
+void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
@@ -42,11 +41,10 @@ void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *ret
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello");
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
-
 }
 
-void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext ) {
-
+void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext )
+{
 	zval *a, a_sub, *b, b_sub;
 		ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
@@ -56,7 +54,6 @@ void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *ret
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -66,21 +63,18 @@ void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *ret
 
 
 
-
-
 }
 
-void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
-
+void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext)
+{
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a)
-		Z_PARAM_ZVAL(b)
+		Z_PARAM_LONG(a)
+		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -88,17 +82,15 @@ void zep_Stub_McallInternal_c(int ht, zend_execute_data *execute_data, zval *ret
 
 	b_param = b_param_ext;
 
-
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
 
 
 	RETURN_LONG((a + b));
-
 }
 
-PHP_METHOD(Stub_McallInternal, e) {
-
+PHP_METHOD(Stub_McallInternal, e)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -111,11 +103,10 @@ PHP_METHOD(Stub_McallInternal, e) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello");
 	RETURN_MM_LONG(zephir_fast_strlen_ev(&_0));
-
 }
 
-PHP_METHOD(Stub_McallInternal, d) {
-
+PHP_METHOD(Stub_McallInternal, d)
+{
 	zval _3$$3;
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -148,11 +139,10 @@ PHP_METHOD(Stub_McallInternal, d) {
 		}
 	}
 	RETURN_MM_LONG(a);
-
 }
 
-PHP_METHOD(Stub_McallInternal, f) {
-
+PHP_METHOD(Stub_McallInternal, f)
+{
 	zval _3$$3;
 	zend_bool _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -186,11 +176,10 @@ PHP_METHOD(Stub_McallInternal, f) {
 		}
 	}
 	RETURN_MM_LONG(a);
-
 }
 
-PHP_METHOD(Stub_McallInternal, g) {
-
+PHP_METHOD(Stub_McallInternal, g)
+{
 	zval _3$$3, _4$$3, _5$$3;
 	zend_bool _0;
 	long i = 0;
@@ -228,20 +217,18 @@ PHP_METHOD(Stub_McallInternal, g) {
 		}
 	}
 	RETURN_MM_LONG(a);
-
 }
 
-void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext) {
-
+void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext)
+{
 	zval *a_param = NULL, *b_param = NULL;
 	long a, b;
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a)
-		Z_PARAM_ZVAL(b)
+		Z_PARAM_LONG(a)
+		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -249,17 +236,15 @@ void zep_Stub_McallInternal_other(int ht, zend_execute_data *execute_data, zval 
 
 	b_param = b_param_ext;
 
-
 	a = zephir_get_intval(a_param);
 	b = zephir_get_intval(b_param);
 
 
 	RETURN_DOUBLE(zephir_safe_div_long_long(a, b));
-
 }
 
-PHP_METHOD(Stub_McallInternal, callFibonacci) {
-
+PHP_METHOD(Stub_McallInternal, callFibonacci)
+{
 	zval _3$$3, _4$$3, _5$$3;
 	zend_bool _0;
 	long i;
@@ -299,20 +284,18 @@ PHP_METHOD(Stub_McallInternal, callFibonacci) {
 		}
 	}
 	RETURN_MM_DOUBLE(p);
-
 }
 
-void zep_Stub_McallInternal_test1956(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used) {
-
+void zep_Stub_McallInternal_test1956(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used)
+{
 	
 
 
 	RETURN_THISW();
-
 }
 
-PHP_METHOD(Stub_McallInternal, issue1956) {
-
+PHP_METHOD(Stub_McallInternal, issue1956)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -324,6 +307,5 @@ PHP_METHOD(Stub_McallInternal, issue1956) {
 	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(this_ptr, zep_Stub_McallInternal_test1956);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 

@@ -14,11 +14,10 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_UnknownClass) {
-
+ZEPHIR_INIT_CLASS(Stub_UnknownClass)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, UnknownClass, stub, unknownclass, NULL, 0);
 
 	return SUCCESS;
-
 }
 

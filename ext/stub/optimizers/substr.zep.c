@@ -18,16 +18,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Optimizers_Substr) {
-
+ZEPHIR_INIT_CLASS(Stub_Optimizers_Substr)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Optimizers, Substr, stub, optimizers_substr, stub_optimizers_substr_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments) {
-
+PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments)
+{
 	zval *str, str_sub, *start, start_sub;
 	zval *this_ptr = getThis();
 
@@ -39,21 +38,18 @@ PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &start);
 
 
-
 	zephir_substr(return_value, str, zephir_get_intval(start), 0, ZEPHIR_SUBSTR_NO_LENGTH);
 	return;
-
 }
 
-PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments) {
-
+PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments)
+{
 	zval *str, str_sub, *start, start_sub, *offset, offset_sub;
 	zval *this_ptr = getThis();
 
@@ -67,16 +63,13 @@ PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments) {
 		Z_PARAM_ZVAL(start)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &str, &start, &offset);
 
 
-
 	zephir_substr(return_value, str, zephir_get_intval(start), zephir_get_intval(offset), 0);
 	return;
-
 }
 

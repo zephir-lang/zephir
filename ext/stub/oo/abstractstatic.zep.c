@@ -15,22 +15,20 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_AbstractStatic) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_AbstractStatic)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, AbstractStatic, stub, oo_abstractstatic, stub_oo_abstractstatic_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_AbstractStatic, getCalledClass) {
-
+PHP_METHOD(Stub_Oo_AbstractStatic, getCalledClass)
+{
 	zval *this_ptr = getThis();
 
 
 
 	zephir_get_called_class(return_value);
 	return;
-
 }
 

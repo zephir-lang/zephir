@@ -20,8 +20,8 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Quantum) {
-
+ZEPHIR_INIT_CLASS(Stub_Quantum)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Quantum, stub, quantum, stub_quantum_method_entry, 0);
 
 	zephir_declare_class_constant_double(stub_quantum_ce, SL("PI"), 3.14159265358979323846);
@@ -29,11 +29,10 @@ ZEPHIR_INIT_CLASS(Stub_Quantum) {
 	zephir_declare_class_constant_long(stub_quantum_ce, SL("MAX"), 751);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Quantum, harmos) {
-
+PHP_METHOD(Stub_Quantum, harmos)
+{
 	zval _8$$4, _10$$4, _11$$4;
 	zend_bool _12, _15$$5, _34$$5, _50$$5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -103,13 +102,11 @@ PHP_METHOD(Stub_Quantum, harmos) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(x)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &x_param);
-
 	x = zephir_get_doubleval(x_param);
 
 
@@ -143,7 +140,7 @@ PHP_METHOD(Stub_Quantum, harmos) {
 	ZVAL_STRING(&_0, "harmos.txt");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "w");
-	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 31, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 33, &_0, &_1);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&fp))) {
 		RETURN_MM_LONG(1);
@@ -348,13 +345,13 @@ PHP_METHOD(Stub_Quantum, harmos) {
 					ZVAL_STRING(&_52$$9, "%16.8lf %16.8lf %16.8lf \n");
 					ZVAL_DOUBLE(&_53$$9, ((double) i * dx));
 					ZVAL_DOUBLE(&_54$$9, ((double) n * dt));
-					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 75, &fp, &_52$$9, &_53$$9, &_54$$9, &_51$$9);
+					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 78, &fp, &_52$$9, &_53$$9, &_54$$9, &_51$$9);
 					zephir_check_call_status();
 					i = (i + 10);
 				}
 				ZEPHIR_INIT_NVAR(&_56$$8);
 				ZVAL_STRING(&_56$$8, "\n");
-				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 75, &fp, &_56$$8);
+				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 78, &fp, &_56$$8);
 				zephir_check_call_status();
 			}
 			j = 1;
@@ -373,6 +370,5 @@ PHP_METHOD(Stub_Quantum, harmos) {
 		}
 	}
 	RETURN_MM_BOOL(1);
-
 }
 

@@ -17,11 +17,10 @@
 /**
  * Class without constructor
  */
-ZEPHIR_INIT_CLASS(Stub_Oo_OoNoConstruct) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_OoNoConstruct)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, OoNoConstruct, stub, oo_oonoconstruct, NULL, 0);
 
 	return SUCCESS;
-
 }
 

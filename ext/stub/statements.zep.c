@@ -22,33 +22,25 @@
 #include "kernel/exception.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Statements) {
-
+ZEPHIR_INIT_CLASS(Stub_Statements)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Statements, stub, statements, stub_statements_method_entry, 0);
 
 	zend_declare_property_string(stub_statements_ce, SL("tmp1"), "test", ZEND_ACC_PUBLIC);
-
 	zend_declare_property_string(stub_statements_ce, SL("tmp2"), "test string", ZEND_ACC_PUBLIC);
-
 	/**
 	 * @issue https://github.com/zephir-lang/zephir/issues/544
 	 */
 	zend_declare_property_long(stub_statements_ce, SL("totalSteps"), 100, ZEND_ACC_PRIVATE);
-
 	zend_declare_property_long(stub_statements_ce, SL("width"), 100, ZEND_ACC_PRIVATE);
-
 	zend_declare_property_string(stub_statements_ce, SL("filledChar"), "=", ZEND_ACC_PRIVATE);
-
 	zend_declare_property_string(stub_statements_ce, SL("unfilledChar"), ".", ZEND_ACC_PRIVATE);
-
 	zend_declare_property_string(stub_statements_ce, SL("arrow"), ">", ZEND_ACC_PRIVATE);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse) {
-
+PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse)
+{
 	zval result1, result2, result3, result4, _0, _1, _2, _3, _4, _5, _6, _7;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -86,11 +78,10 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse) {
 	ZEPHIR_INIT_VAR(&result4);
 	zephir_fast_strpos(&result4, &_6, &_7, 0 );
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Statements, testElseIf) {
-
+PHP_METHOD(Stub_Statements, testElseIf)
+{
 	zval *num_param = NULL;
 	zend_long num;
 	zval *this_ptr = getThis();
@@ -100,12 +91,10 @@ PHP_METHOD(Stub_Statements, testElseIf) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
-
 	num = zephir_get_intval(num_param);
 
 
@@ -118,11 +107,10 @@ PHP_METHOD(Stub_Statements, testElseIf) {
 	} else {
 		RETURN_STRING("less");
 	}
-
 }
 
-PHP_METHOD(Stub_Statements, testElseIf1) {
-
+PHP_METHOD(Stub_Statements, testElseIf1)
+{
 	zval *num_param = NULL;
 	zend_long num, total;
 	zval *this_ptr = getThis();
@@ -132,12 +120,10 @@ PHP_METHOD(Stub_Statements, testElseIf1) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
-
 	num = zephir_get_intval(num_param);
 
 
@@ -149,11 +135,10 @@ PHP_METHOD(Stub_Statements, testElseIf1) {
 	} else {
 		RETURN_STRING("else");
 	}
-
 }
 
-PHP_METHOD(Stub_Statements, testElseIf2) {
-
+PHP_METHOD(Stub_Statements, testElseIf2)
+{
 	zval *num_param = NULL, *total, total_sub;
 	zend_long num;
 	zval *this_ptr = getThis();
@@ -165,12 +150,10 @@ PHP_METHOD(Stub_Statements, testElseIf2) {
 		Z_PARAM_LONG(num)
 		Z_PARAM_ZVAL(total)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &num_param, &total);
-
 	num = zephir_get_intval(num_param);
 
 
@@ -181,11 +164,10 @@ PHP_METHOD(Stub_Statements, testElseIf2) {
 	} else {
 		RETURN_STRING("else");
 	}
-
 }
 
-PHP_METHOD(Stub_Statements, test544Issue) {
-
+PHP_METHOD(Stub_Statements, test544Issue)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_8 = NULL;
 	zval *step_param = NULL, _0, _1, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _9$$3, _10$$3, _11$$3, _12$$4, _13$$4, _14$$5, _15$$5;
@@ -212,13 +194,11 @@ PHP_METHOD(Stub_Statements, test544Issue) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(step)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
-
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));
 		RETURN_MM_NULL();
@@ -236,33 +216,32 @@ PHP_METHOD(Stub_Statements, test544Issue) {
 		unfilledWidth = (((zephir_get_numberval(&_4$$3) - 1)) - filledWidth);
 		zephir_read_property(&_5$$3, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_6$$3, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 21, &_5$$3, &_6$$3);
+		ZEPHIR_CALL_FUNCTION(&_7$$3, "str_repeat", &_8, 22, &_5$$3, &_6$$3);
 		zephir_check_call_status();
 		zephir_read_property(&_6$$3, this_ptr, ZEND_STRL("arrow"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_9$$3, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_10$$3, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 21, &_9$$3, &_10$$3);
+		ZEPHIR_CALL_FUNCTION(&_11$$3, "str_repeat", &_8, 22, &_9$$3, &_10$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_7$$3, &_6$$3, &_11$$3);
 		RETURN_MM();
 	} else if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
 		zephir_read_property(&_12$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_13$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 21, &_12$$4, &_13$$4);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 22, &_12$$4, &_13$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
 		zephir_read_property(&_14$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_15$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 21, &_14$$5, &_15$$5);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 22, &_14$$5, &_15$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-
 }
 
-PHP_METHOD(Stub_Statements, test544IssueWithVariable) {
-
+PHP_METHOD(Stub_Statements, test544IssueWithVariable)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_6 = NULL;
 	zval *step_param = NULL, _0, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _7$$3, _8$$3, _9$$3, _10$$4, _11$$4, _12$$5, _13$$5;
@@ -287,13 +266,11 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(step)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &step_param);
-
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));
 		RETURN_MM_NULL();
@@ -310,28 +287,27 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable) {
 		unfilledWidth = (((zephir_get_numberval(&_2$$3) - 1)) - filledWidth);
 		zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_4$$3, filledWidth);
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 21, &_3$$3, &_4$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "str_repeat", &_6, 22, &_3$$3, &_4$$3);
 		zephir_check_call_status();
 		zephir_read_property(&_4$$3, this_ptr, ZEND_STRL("arrow"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_7$$3, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_8$$3, unfilledWidth);
-		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 21, &_7$$3, &_8$$3);
+		ZEPHIR_CALL_FUNCTION(&_9$$3, "str_repeat", &_6, 22, &_7$$3, &_8$$3);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_5$$3, &_4$$3, &_9$$3);
 		RETURN_MM();
 	} else if (step == totalSteps) {
 		zephir_read_property(&_10$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_11$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 21, &_10$$4, &_11$$4);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 22, &_10$$4, &_11$$4);
 		zephir_check_call_status();
 		RETURN_MM();
 	} else {
 		zephir_read_property(&_12$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_13$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 21, &_12$$5, &_13$$5);
+		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_6, 22, &_12$$5, &_13$$5);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-
 }
 

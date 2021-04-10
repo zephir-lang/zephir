@@ -30,6 +30,7 @@
 #include "stub/arrayaccesstest.zep.h"
 #include "stub/arrayiterator.zep.h"
 #include "stub/arrayiteratortest.zep.h"
+#include "stub/arraymanipulation.zep.h"
 #include "stub/arrayobject.zep.h"
 #include "stub/arraysearch.zep.h"
 #include "stub/assign.zep.h"
@@ -94,6 +95,7 @@
 #include "stub/issue1404.zep.h"
 #include "stub/issue1521.zep.h"
 #include "stub/issue2165/issue.zep.h"
+#include "stub/issue663.zep.h"
 #include "stub/issues.zep.h"
 #include "stub/json.zep.h"
 #include "stub/logical.zep.h"
@@ -188,6 +190,7 @@
 #include "stub/scope.zep.h"
 #include "stub/sort.zep.h"
 #include "stub/spectralnorm.zep.h"
+#include "stub/spl.zep.h"
 #include "stub/spropertyaccess.zep.h"
 #include "stub/statements.zep.h"
 #include "stub/strings.zep.h"
@@ -214,5 +217,6 @@
 #include "stub/10__closure.zep.h"
 #include "stub/11__closure.zep.h"
 #include "stub/12__closure.zep.h"
+#include "stub/13__closure.zep.h"
 
 #endif

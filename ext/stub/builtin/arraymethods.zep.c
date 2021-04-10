@@ -19,16 +19,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_BuiltIn_ArrayMethods) {
-
+ZEPHIR_INIT_CLASS(Stub_BuiltIn_ArrayMethods)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\BuiltIn, ArrayMethods, stub, builtin_arraymethods, stub_builtin_arraymethods_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_BuiltIn_ArrayMethods, getJoin1) {
-
+PHP_METHOD(Stub_BuiltIn_ArrayMethods, getJoin1)
+{
 	zval _1;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -54,11 +53,10 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getJoin1) {
 	ZEPHIR_INIT_NVAR(&_1);
 	zephir_fast_join_str(&_1, SL("-"), &_0);
 	RETURN_CCTOR(&_1);
-
 }
 
-PHP_METHOD(Stub_BuiltIn_ArrayMethods, getReversed1) {
-
+PHP_METHOD(Stub_BuiltIn_ArrayMethods, getReversed1)
+{
 	zval _1, _2;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -83,14 +81,13 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getReversed1) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_LONG(&_1, 3);
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 6, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 7, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
-
 }
 
-PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1) {
-
+PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1)
+{
 	zval _1, _2;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -118,9 +115,8 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, getMap1) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	zephir_create_closure_ex(&_1, NULL, stub_0__closure_ce, SL("__invoke"));
-	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 7, &_1, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 8, &_1, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
-
 }
 

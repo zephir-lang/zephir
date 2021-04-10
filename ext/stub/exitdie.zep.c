@@ -18,16 +18,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_ExitDie) {
-
+ZEPHIR_INIT_CLASS(Stub_ExitDie)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, ExitDie, stub, exitdie, stub_exitdie_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_ExitDie, testExit) {
-
+PHP_METHOD(Stub_ExitDie, testExit)
+{
 	zval *param = NULL, param_sub, __$null;
 	zval *this_ptr = getThis();
 
@@ -39,12 +38,10 @@ PHP_METHOD(Stub_ExitDie, testExit) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &param);
-
 	if (!param) {
 		param = &param_sub;
 		param = &__$null;
@@ -55,11 +52,10 @@ PHP_METHOD(Stub_ExitDie, testExit) {
 		zephir_exit_empty();
 	}
 	zephir_exit(param);
-
 }
 
-PHP_METHOD(Stub_ExitDie, testDie) {
-
+PHP_METHOD(Stub_ExitDie, testDie)
+{
 	zval *param = NULL, param_sub, __$null;
 	zval *this_ptr = getThis();
 
@@ -71,12 +67,10 @@ PHP_METHOD(Stub_ExitDie, testDie) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &param);
-
 	if (!param) {
 		param = &param_sub;
 		param = &__$null;
@@ -87,6 +81,5 @@ PHP_METHOD(Stub_ExitDie, testDie) {
 		zephir_exit_empty();
 	}
 	zephir_exit(param);
-
 }
 

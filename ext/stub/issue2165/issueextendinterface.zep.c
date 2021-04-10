@@ -12,11 +12,10 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Issue2165_IssueExtendInterface) {
-
+ZEPHIR_INIT_CLASS(Stub_Issue2165_IssueExtendInterface)
+{
 	ZEPHIR_REGISTER_INTERFACE(Stub\\Issue2165, IssueExtendInterface, stub, issue2165_issueextendinterface, NULL);
 
 	return SUCCESS;
-
 }
 

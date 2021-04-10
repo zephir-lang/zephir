@@ -19,12 +19,11 @@
 #include "kernel/operators.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_MethodArgs) {
-
+ZEPHIR_INIT_CLASS(Stub_MethodArgs)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, MethodArgs, stub, methodargs, stub_methodargs_method_entry, 0);
 
 	zend_declare_property_null(stub_methodargs_ce, SL("a"), ZEND_ACC_PUBLIC);
-
 	zephir_declare_class_constant_string(stub_methodargs_ce, SL("GET"), "get");
 
 	zephir_declare_class_constant_double(stub_methodargs_ce, SL("MY_DOUBLE"), 1.32);
@@ -34,11 +33,10 @@ ZEPHIR_INIT_CLASS(Stub_MethodArgs) {
 	zephir_declare_class_constant_long(stub_methodargs_ce, SL("MY_INT"), 12345);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_MethodArgs, setCallable) {
-
+PHP_METHOD(Stub_MethodArgs, setCallable)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -48,20 +46,17 @@ PHP_METHOD(Stub_MethodArgs, setCallable) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-
 }
 
-PHP_METHOD(Stub_MethodArgs, setObject) {
-
+PHP_METHOD(Stub_MethodArgs, setObject)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -71,20 +66,17 @@ PHP_METHOD(Stub_MethodArgs, setObject) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-
 }
 
-PHP_METHOD(Stub_MethodArgs, setCallableStrict) {
-
+PHP_METHOD(Stub_MethodArgs, setCallableStrict)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -94,12 +86,10 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
 	if (UNEXPECTED(zephir_is_callable(a) != 1)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable"));
 		RETURN_NULL();
@@ -107,11 +97,10 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict) {
 
 
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-
 }
 
-PHP_METHOD(Stub_MethodArgs, setObjectStrict) {
-
+PHP_METHOD(Stub_MethodArgs, setObjectStrict)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -121,12 +110,10 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_OBJECT)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object"));
 		RETURN_NULL();
@@ -134,11 +121,10 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict) {
 
 
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-
 }
 
-PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
-
+PHP_METHOD(Stub_MethodArgs, setResourceStrict)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -148,12 +134,10 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_RESOURCE(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_RESOURCE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource"));
 		RETURN_NULL();
@@ -161,14 +145,13 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict) {
 
 
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/336
  */
-PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) {
-
+PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *method = NULL, method_sub;
 	zval *this_ptr = getThis();
@@ -180,13 +163,11 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(method)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &method);
-
 	if (!method) {
 		method = &method_sub;
 		ZEPHIR_INIT_VAR(method);
@@ -196,15 +177,14 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 
 	RETVAL_ZVAL(method, 1, 0);
 	RETURN_MM();
-
 }
 
 /**
  * For string parameter
  * @link https://github.com/zephir-lang/zephir/issues/696
  */
-PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess) {
-
+PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *parameter_param = NULL;
 	zval parameter;
@@ -217,13 +197,11 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &parameter_param);
-
 	if (!parameter_param) {
 		ZEPHIR_INIT_VAR(&parameter);
 		ZVAL_STRING(&parameter, "get");
@@ -233,15 +211,14 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 
 
 	RETURN_CTOR(&parameter);
-
 }
 
 /**
  * For double parameter
  * @link https://github.com/zephir-lang/zephir/issues/696
  */
-PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess) {
-
+PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess)
+{
 	zval *parameter_param = NULL;
 	double parameter;
 	zval *this_ptr = getThis();
@@ -252,12 +229,10 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-
 	if (!parameter_param) {
 		parameter = 1.32;
 	} else {
@@ -266,15 +241,14 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 
 
 	RETURN_DOUBLE(parameter);
-
 }
 
 /**
  * For bool parameter
  * @link https://github.com/zephir-lang/zephir/issues/696
  */
-PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess) {
-
+PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess)
+{
 	zval *parameter_param = NULL;
 	zend_bool parameter;
 	zval *this_ptr = getThis();
@@ -285,12 +259,10 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-
 	if (!parameter_param) {
 		parameter = 1;
 	} else {
@@ -299,15 +271,14 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 
 
 	RETURN_BOOL(parameter);
-
 }
 
 /**
  * For int parameter
  * @link https://github.com/zephir-lang/zephir/issues/728
  */
-PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess) {
-
+PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess)
+{
 	zval *parameter_param = NULL;
 	zend_long parameter;
 	zval *this_ptr = getThis();
@@ -318,12 +289,10 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
-
 	if (!parameter_param) {
 		parameter = 12345;
 	} else {
@@ -332,6 +301,5 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 
 
 	RETURN_LONG(parameter);
-
 }
 

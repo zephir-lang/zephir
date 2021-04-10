@@ -17,22 +17,18 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_PropertyAccess) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_PropertyAccess)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, PropertyAccess, stub, oo_propertyaccess, stub_oo_propertyaccess_method_entry, 0);
 
 	zend_declare_property_null(stub_oo_propertyaccess_ce, SL("a"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_oo_propertyaccess_ce, SL("b"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_oo_propertyaccess_ce, SL("privateVariable"), ZEND_ACC_PRIVATE);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
-
+PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
+{
 	zval _0, _6;
 	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -103,14 +99,13 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct) {
 	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
 	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_MM_RESTORE();
-
 }
 
 /**
  * @issue https://github.com/zephir-lang/zephir/issues/1851
  */
-PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
-
+PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
+{
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
@@ -120,29 +115,25 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
 
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("privateVariable"), value);
 	RETURN_THISW();
-
 }
 
 /**
  * @issue https://github.com/zephir-lang/zephir/issues/1851
  */
-PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable) {
-
+PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_MEMBER(getThis(), "privateVariable");
-
 }
 
