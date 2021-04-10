@@ -17,31 +17,28 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Properties_App) {
-
+ZEPHIR_INIT_CLASS(Stub_Properties_App)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Properties, App, stub, properties_app, stub_properties_app_method_entry, 0);
 
 	/** @var \Stub\Properties\StaticPrivateProperties  */
 	zend_declare_property_null(stub_properties_app_ce, SL("instance"), ZEND_ACC_PROTECTED);
-
 	return SUCCESS;
-
 }
 
 /**
  */
-PHP_METHOD(Stub_Properties_App, getInstance) {
-
+PHP_METHOD(Stub_Properties_App, getInstance)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_MEMBER(getThis(), "instance");
-
 }
 
-PHP_METHOD(Stub_Properties_App, __construct) {
-
+PHP_METHOD(Stub_Properties_App, __construct)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -57,6 +54,5 @@ PHP_METHOD(Stub_Properties_App, __construct) {
 	zephir_check_call_status();
 	zephir_update_property_zval(this_ptr, ZEND_STRL("instance"), &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 

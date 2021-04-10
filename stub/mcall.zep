@@ -262,4 +262,20 @@ class Mcall
 		let a = new self;
 		return a->bb();
 	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1136
+     */
+    public function issue1136()
+    {
+        var _finfo;
+
+        if version_compare(PHP_VERSION, "8.0.0", ">=") {
+            let _finfo = new \finfo();
+        } else {
+            let _finfo = finfo_open();
+        }
+
+        return _finfo;
+    }
 }

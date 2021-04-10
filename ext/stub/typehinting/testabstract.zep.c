@@ -14,51 +14,50 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_TypeHinting_TestAbstract) {
-
+ZEPHIR_INIT_CLASS(Stub_TypeHinting_TestAbstract)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\TypeHinting, TestAbstract, stub, typehinting_testabstract, stub_typehinting_testabstract_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, testFunc) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, testFunc)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnOneOfScalar) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnOneOfScalar)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnInt) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnInt)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnUint) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnUint)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnLong) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnLong)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnFloat) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnFloat)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnDouble) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnDouble)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnString) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnString)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnBoolean) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnBoolean)
+{
 }
 
-PHP_METHOD(Stub_TypeHinting_TestAbstract, returnChar) {
-
+PHP_METHOD(Stub_TypeHinting_TestAbstract, returnChar)
+{
 }
 

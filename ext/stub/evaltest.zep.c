@@ -18,16 +18,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_EvalTest) {
-
+ZEPHIR_INIT_CLASS(Stub_EvalTest)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, EvalTest, stub, evaltest, stub_evaltest_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_EvalTest, evalCode) {
-
+PHP_METHOD(Stub_EvalTest, evalCode)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *code_param = NULL;
 	zval code;
@@ -39,18 +38,15 @@ PHP_METHOD(Stub_EvalTest, evalCode) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &code_param);
-
 	zephir_get_strval(&code, code_param);
 
 
 	zephir_eval_php(&code, return_value, "stub/evaltest.zep:7");
 	RETURN_MM();
-
 }
 

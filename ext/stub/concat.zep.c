@@ -18,18 +18,16 @@
 #include "kernel/concat.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Concat) {
-
+ZEPHIR_INIT_CLASS(Stub_Concat)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Concat, stub, concat, stub_concat_method_entry, 0);
 
 	zend_declare_property_null(stub_concat_ce, SL("testProperty"), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Concat, getTestProperty) {
-
+PHP_METHOD(Stub_Concat, getTestProperty)
+{
 	zval _0;
 	zval *this_ptr = getThis();
 
@@ -39,11 +37,10 @@ PHP_METHOD(Stub_Concat, getTestProperty) {
 
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
-
 }
 
-PHP_METHOD(Stub_Concat, testConcatBySelfProperty) {
-
+PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *title_param = NULL, _0;
 	zval title;
@@ -56,13 +53,11 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(title)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &title_param);
-
 	zephir_get_strval(&title, title_param);
 
 
@@ -72,11 +67,10 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty) {
 	zephir_concat_function(&title, &_0, &title);
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &title);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Concat, testConcat1) {
-
+PHP_METHOD(Stub_Concat, testConcat1)
+{
 	zval url, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -93,11 +87,10 @@ PHP_METHOD(Stub_Concat, testConcat1) {
 	ZEPHIR_CONCAT_SV(&_0, "append", &url);
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);
-
 }
 
-PHP_METHOD(Stub_Concat, testConcat2) {
-
+PHP_METHOD(Stub_Concat, testConcat2)
+{
 	zval _1;
 	zval url, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -122,14 +115,13 @@ PHP_METHOD(Stub_Concat, testConcat2) {
 	ZEPHIR_CONCAT_SSV(&_0, "append", "other", &url);
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/1573
  */
-PHP_METHOD(Stub_Concat, testConcat3) {
-
+PHP_METHOD(Stub_Concat, testConcat3)
+{
 	zval a, b;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -146,14 +138,13 @@ PHP_METHOD(Stub_Concat, testConcat3) {
 	ZVAL_STRING(&b, "2");
 	zephir_concat_self(&b, &a);
 	RETURN_CCTOR(&b);
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/1893
  */
-PHP_METHOD(Stub_Concat, testConcat4) {
-
+PHP_METHOD(Stub_Concat, testConcat4)
+{
 	zval query, _1, _3;
 	double min = 0, max = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -171,7 +162,6 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -179,9 +169,7 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 	zephir_fetch_params(1, 1, 0, &value);
 
 
-
 	ZEPHIR_INIT_VAR(&query);
-	ZVAL_STRING(&query, "");
 	min = (zephir_safe_div_zval_long(value, 100) * (double) (25));
 	max = (zephir_safe_div_zval_long(value, 100) * (double) (50));
 	ZEPHIR_INIT_VAR(&_0);
@@ -195,14 +183,13 @@ PHP_METHOD(Stub_Concat, testConcat4) {
 	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
 	zephir_concat_self(&query, &_3);
 	RETURN_CTOR(&query);
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/1893
  */
-PHP_METHOD(Stub_Concat, testConcat5) {
-
+PHP_METHOD(Stub_Concat, testConcat5)
+{
 	zval retval, left;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *number_param = NULL, _0;
@@ -217,13 +204,11 @@ PHP_METHOD(Stub_Concat, testConcat5) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(number)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &number_param);
-
 	number = zephir_get_doubleval(number_param);
 
 
@@ -234,6 +219,5 @@ PHP_METHOD(Stub_Concat, testConcat5) {
 	ZEPHIR_INIT_VAR(&retval);
 	ZEPHIR_CONCAT_VV(&retval, &left, &_0);
 	RETURN_CTOR(&retval);
-
 }
 

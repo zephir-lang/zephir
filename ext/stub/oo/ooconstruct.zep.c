@@ -18,18 +18,16 @@
 /**
  * Class with constructor
  */
-ZEPHIR_INIT_CLASS(Stub_Oo_OoConstruct) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_OoConstruct)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, OoConstruct, stub, oo_ooconstruct, stub_oo_ooconstruct_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_OoConstruct, __construct) {
-
+PHP_METHOD(Stub_Oo_OoConstruct, __construct)
+{
 	zval *this_ptr = getThis();
-
 
 
 

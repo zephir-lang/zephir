@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_ConstantsParent) {
-
+ZEPHIR_INIT_CLASS(Stub_ConstantsParent)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, ConstantsParent, stub, constantsparent, NULL, 0);
 
 	zephir_declare_class_constant_null(stub_constantsparent_ce, SL("P1"));
@@ -31,6 +31,5 @@ ZEPHIR_INIT_CLASS(Stub_ConstantsParent) {
 	zephir_declare_class_constant_string(stub_constantsparent_ce, SL("P6"), "test");
 
 	return SUCCESS;
-
 }
 

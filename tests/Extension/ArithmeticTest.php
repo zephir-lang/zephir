@@ -265,4 +265,19 @@ final class ArithmeticTest extends TestCase
         $this->assertFalse($this->class->letStatementBoolMinus(false));
         $this->assertFalse($this->class->letStatementBoolMinus(0));
     }
+
+    public function testIssue812(): void
+    {
+        $this->assertSame(1, $this->class->absParam(1));
+        $this->assertSame(1, $this->class->absParam(-1));
+        $this->assertSame(1234567, $this->class->absParam(-1234567));
+
+        $this->assertSame(-1, $this->class->negativeInt(-1));
+        $this->assertSame(-1234567, $this->class->negativeInt(-1234567));
+        $this->assertSame(1234567, $this->class->negativeInt(1234567));
+
+        $this->assertSame(-1, $this->class->negativeLong(-1));
+        $this->assertSame(-1234567, $this->class->negativeLong(-1234567));
+        $this->assertSame(1234567, $this->class->negativeLong(1234567));
+    }
 }

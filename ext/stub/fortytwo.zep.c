@@ -23,16 +23,15 @@
 /**
  * FortyTwo
  */
-ZEPHIR_INIT_CLASS(Stub_FortyTwo) {
-
+ZEPHIR_INIT_CLASS(Stub_FortyTwo)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, FortyTwo, stub, fortytwo, stub_fortytwo_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_FortyTwo, proof) {
-
+PHP_METHOD(Stub_FortyTwo, proof)
+{
 	zend_bool _4$$3, _8$$6;
 	zval _0;
 	zval box, side, _1, *_2, _3, _7$$4, _11$$7;
@@ -303,6 +302,5 @@ PHP_METHOD(Stub_FortyTwo, proof) {
 	}
 	ZEPHIR_INIT_NVAR(&side);
 	ZEPHIR_MM_RESTORE();
-
 }
 

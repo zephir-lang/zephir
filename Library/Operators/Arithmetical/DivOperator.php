@@ -23,11 +23,11 @@ use Zephir\Expression;
  */
 class DivOperator extends ArithmeticalBaseOperator
 {
-    protected $operator = '/';
+    protected string $operator = '/';
 
-    protected $bitOperator = '-';
+    protected string $bitOperator = '-';
 
-    protected $zvalOperator = 'div_function';
+    protected string $zvalOperator = 'div_function';
 
     /**
      * Compiles the arithmetical division operation.

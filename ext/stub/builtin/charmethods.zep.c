@@ -18,16 +18,15 @@
 #include "kernel/operators.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_BuiltIn_CharMethods) {
-
+ZEPHIR_INIT_CLASS(Stub_BuiltIn_CharMethods)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\BuiltIn, CharMethods, stub, builtin_charmethods, stub_builtin_charmethods_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_BuiltIn_CharMethods, getHex) {
-
+PHP_METHOD(Stub_BuiltIn_CharMethods, getHex)
+{
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -43,11 +42,10 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHex) {
 	ZVAL_STRING(&_1, "a");
 	zephir_string_to_hex(&_0, &_1);
 	RETURN_CCTOR(&_0);
-
 }
 
-PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString) {
-
+PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
+{
 	long _0;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -65,13 +63,11 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &str_param);
-
 	zephir_get_strval(&str, str_param);
 
 
@@ -86,6 +82,5 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString) {
 		zephir_concat_self(&o, &_2$$3);
 	}
 	RETURN_CCTOR(&o);
-
 }
 

@@ -4,7 +4,8 @@ class ArrayAccessObj implements \ArrayAccess
 {
 	protected test;
 
-	public function __construct() {
+	public function __construct()
+	{
 		let this->test = [
 			"one":1,
 			"two":2,
@@ -21,15 +22,18 @@ class ArrayAccessObj implements \ArrayAccess
 		}
 	}
 	
-	public function offsetExists(offset) {
+	public function offsetExists(offset)
+	{
 		return isset this->test[offset];
 	}
 	
-	public function offsetUnset(offset) {
+	public function offsetUnset(offset)
+	{
 		unset this->test[offset];
 	}
 	
-	public function offsetGet(offset) {
+	public function offsetGet(offset)
+	{
 		return isset this->test[offset] ? this->test[offset] : null;
 	}
 }

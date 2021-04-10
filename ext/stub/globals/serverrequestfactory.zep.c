@@ -19,19 +19,18 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Globals_ServerRequestFactory) {
-
+ZEPHIR_INIT_CLASS(Stub_Globals_ServerRequestFactory)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Globals, ServerRequestFactory, stub, globals_serverrequestfactory, stub_globals_serverrequestfactory_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/1934
  */
-PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
-
+PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -69,7 +68,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 		Z_PARAM_ARRAY_OR_NULL(cookies)
 		Z_PARAM_ARRAY_OR_NULL(files)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -80,7 +78,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 	zephir_get_global(&_FILES, SL("_FILES"));
 	zephir_get_global(&_COOKIE, SL("_COOKIE"));
 	zephir_fetch_params(1, 0, 5, &server_param, &get_param, &post_param, &cookies_param, &files_param);
-
 	if (!server_param) {
 		ZEPHIR_INIT_VAR(&server);
 		array_init(&server);
@@ -138,19 +135,19 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 	if (!(ZEPHIR_IS_EMPTY(&_SERVER))) {
 		ZEPHIR_CPY_WRT(&globalServer, &_SERVER);
 	}
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 44, &server, &globalServer);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 45, &server, &globalServer);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&server, &_0);
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 44, &files, &globalFiles);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 45, &files, &globalFiles);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&files, &_2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 44, &cookies, &globalCookies);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 45, &cookies, &globalCookies);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&cookies, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 44, &get, &globalGet);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 45, &get, &globalGet);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&get, &_4);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 44, &post, &globalPost);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 45, &post, &globalPost);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&post, &_5);
 	zephir_create_array(return_value, 5, 0);
@@ -160,15 +157,14 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load) {
 	zephir_array_update_string(return_value, SL("get"), &get, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("post"), &post, PH_COPY | PH_SEPARATE);
 	RETURN_MM();
-
 }
 
 /**
  * Checks the source if it null and returns the super, otherwise the source
  * array
  */
-PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray) {
-
+PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval super;
 	zval *source, source_sub, *super_param = NULL;
@@ -182,13 +178,11 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray) {
 		Z_PARAM_ZVAL(source)
 		Z_PARAM_ARRAY(super)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &source, &super_param);
-
 	zephir_get_arrval(&super, super_param);
 
 
@@ -197,6 +191,5 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray) {
 	}
 	RETVAL_ZVAL(source, 1, 0);
 	RETURN_MM();
-
 }
 

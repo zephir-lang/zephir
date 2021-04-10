@@ -18,31 +18,28 @@
 /**
  * Class with dynamic new
  */
-ZEPHIR_INIT_CLASS(Stub_Oo_OoDynamicB) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_OoDynamicB)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo, OoDynamicB, stub, oo_oodynamicb, stub_oo_oodynamica_ce, stub_oo_oodynamicb_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_OoDynamicB, execute) {
-
+PHP_METHOD(Stub_Oo_OoDynamicB, execute)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("B");
-
 }
 
-PHP_METHOD(Stub_Oo_OoDynamicB, execute2) {
-
+PHP_METHOD(Stub_Oo_OoDynamicB, execute2)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("BB");
-
 }
 

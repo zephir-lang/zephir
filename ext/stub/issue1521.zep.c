@@ -17,18 +17,16 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Issue1521) {
-
+ZEPHIR_INIT_CLASS(Stub_Issue1521)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Issue1521, stub, issue1521, stub_issue1521_method_entry, 0);
 
 	zend_declare_property_null(stub_issue1521_ce, SL("params"), ZEND_ACC_PUBLIC);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Issue1521, test) {
-
+PHP_METHOD(Stub_Issue1521, test)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -44,6 +42,5 @@ PHP_METHOD(Stub_Issue1521, test) {
 	add_assoc_stringl_ex(&_0, SL("zero"), SL("0"));
 	zephir_update_property_zval(this_ptr, ZEND_STRL("params"), &_0);
 	RETURN_MM_MEMBER(getThis(), "params");
-
 }
 

@@ -15,11 +15,10 @@
 #include "ext/spl/spl_directory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_FileObject) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_FileObject)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, FileObject, stub, oo_extend_spl_fileobject, spl_ce_SplFileObject, NULL, 0);
 
 	return SUCCESS;
-
 }
 

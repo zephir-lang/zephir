@@ -20,26 +20,24 @@
 #include "kernel/array.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Scope) {
-
+ZEPHIR_INIT_CLASS(Stub_Scope)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Scope, stub, scope, stub_scope_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Scope, getStr) {
-
+PHP_METHOD(Stub_Scope, getStr)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("internal_string");
-
 }
 
-PHP_METHOD(Stub_Scope, getDyStr) {
-
+PHP_METHOD(Stub_Scope, getDyStr)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *g_param = NULL, _0;
 	zend_long g;
@@ -51,13 +49,11 @@ PHP_METHOD(Stub_Scope, getDyStr) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(g)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &g_param);
-
 	g = zephir_get_intval(g_param);
 
 
@@ -65,11 +61,10 @@ PHP_METHOD(Stub_Scope, getDyStr) {
 	ZVAL_LONG(&_0, g);
 	ZEPHIR_CONCAT_SV(return_value, "internal_", &_0);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Scope, test1) {
-
+PHP_METHOD(Stub_Scope, test1)
+{
 	zval ret, k, k$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, r;
@@ -85,7 +80,7 @@ PHP_METHOD(Stub_Scope, test1) {
 
 	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
-	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 86);
+	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 89);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
@@ -95,11 +90,10 @@ PHP_METHOD(Stub_Scope, test1) {
 	}
 	ZEPHIR_CONCAT_VV(return_value, &ret, &k);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Scope, test2) {
-
+PHP_METHOD(Stub_Scope, test2)
+{
 	zend_bool _0;
 	zval k, c, _5, _3$$3, _4$$3;
 	zend_long p, _1, _2, p$$3;
@@ -147,11 +141,10 @@ PHP_METHOD(Stub_Scope, test2) {
 	zephir_array_fast_append(return_value, &_5);
 	zephir_array_fast_append(return_value, &k);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Scope, test3) {
-
+PHP_METHOD(Stub_Scope, test3)
+{
 	zend_bool _0;
 	zval k, c, str$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -183,12 +176,11 @@ PHP_METHOD(Stub_Scope, test3) {
 			}
 			ZEPHIR_INIT_NVAR(&c);
 			ZVAL_LONG(&c, _1);
-			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 87, &c);
+			ZEPHIR_CALL_SELF(&str$$3, "getdystr", &_3, 90, &c);
 			zephir_check_call_status();
 			zephir_concat_self(&k, &str$$3);
 		}
 	}
 	RETURN_CCTOR(&k);
-
 }
 

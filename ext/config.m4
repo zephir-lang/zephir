@@ -35,6 +35,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c
 	stub/arrayiteratortest.zep.c
+	stub/arraymanipulation.zep.c
 	stub/arrayobject.zep.c
 	stub/arraysearch.zep.c
 	stub/assign.zep.c
@@ -89,6 +90,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/integration/psr/http/message/messageinterfaceex.zep.c
 	stub/interfaces/implementint.zep.c
 	stub/interfaces/implementinterface.zep.c
+	stub/interfaces/interfacestaticmethod.zep.c
 	stub/internalclasses.zep.c
 	stub/internalinterfaces.zep.c
 	stub/invoke.zep.c
@@ -98,6 +100,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
+	stub/issue663.zep.c
 	stub/issues.zep.c
 	stub/json.zep.c
 	stub/logical.zep.c
@@ -192,6 +195,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/scope.zep.c
 	stub/sort.zep.c
 	stub/spectralnorm.zep.c
+	stub/spl.zep.c
 	stub/spropertyaccess.zep.c
 	stub/statements.zep.c
 	stub/strings.zep.c
@@ -217,7 +221,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/9__closure.zep.c
 	stub/10__closure.zep.c
 	stub/11__closure.zep.c
-	stub/12__closure.zep.c "
+	stub/12__closure.zep.c
+	stub/13__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/bench stub/builtin stub/flow stub/globals stub/globals/session stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting"; do

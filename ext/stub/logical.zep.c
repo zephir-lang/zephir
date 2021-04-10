@@ -22,16 +22,15 @@
 /**
  * Arithmetic operations
  */
-ZEPHIR_INIT_CLASS(Stub_Logical) {
-
+ZEPHIR_INIT_CLASS(Stub_Logical)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Logical, stub, logical, stub_logical_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd1) {
-
+PHP_METHOD(Stub_Logical, testAnd1)
+{
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
@@ -43,11 +42,10 @@ PHP_METHOD(Stub_Logical, testAnd1) {
 		_0 = ((0) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd2) {
-
+PHP_METHOD(Stub_Logical, testAnd2)
+{
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
@@ -59,11 +57,10 @@ PHP_METHOD(Stub_Logical, testAnd2) {
 		_0 = ((1.5 != 0.0) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd3) {
-
+PHP_METHOD(Stub_Logical, testAnd3)
+{
 	zend_bool _0, _1;
 	zval *this_ptr = getThis();
 
@@ -79,11 +76,10 @@ PHP_METHOD(Stub_Logical, testAnd3) {
 		_1 = (('A') ? 1 : 0);
 	}
 	RETURN_BOOL(_1);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd4) {
-
+PHP_METHOD(Stub_Logical, testAnd4)
+{
 	zend_bool _0, _1;
 	zval *this_ptr = getThis();
 
@@ -99,11 +95,10 @@ PHP_METHOD(Stub_Logical, testAnd4) {
 		_1 = 0;
 	}
 	RETURN_BOOL(_1);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd9) {
-
+PHP_METHOD(Stub_Logical, testAnd9)
+{
 	zend_bool _0;
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, _1$$3;
@@ -117,12 +112,10 @@ PHP_METHOD(Stub_Logical, testAnd9) {
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
-
 	b = zephir_get_intval(b_param);
 
 
@@ -135,11 +128,10 @@ PHP_METHOD(Stub_Logical, testAnd9) {
 		RETURN_CTORW(&_1$$3);
 	}
 	RETURN_NULL();
-
 }
 
-PHP_METHOD(Stub_Logical, testOr1) {
-
+PHP_METHOD(Stub_Logical, testOr1)
+{
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
@@ -151,11 +143,10 @@ PHP_METHOD(Stub_Logical, testOr1) {
 		_0 = ((1) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testOr2) {
-
+PHP_METHOD(Stub_Logical, testOr2)
+{
 	zend_bool _0;
 	zval *this_ptr = getThis();
 
@@ -167,11 +158,10 @@ PHP_METHOD(Stub_Logical, testOr2) {
 		_0 = 1;
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed1) {
-
+PHP_METHOD(Stub_Logical, testMixed1)
+{
 	zend_bool _0, _1;
 	zend_long first = 0, second = 0;
 	zval *this_ptr = getThis();
@@ -194,11 +184,10 @@ PHP_METHOD(Stub_Logical, testMixed1) {
 	} else {
 		php_printf("%s", "wrong");
 	}
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed2) {
-
+PHP_METHOD(Stub_Logical, testMixed2)
+{
 	zend_bool _0, _1;
 	zval *match, match_sub, *minLength, minLength_sub, _2;
 	zval *this_ptr = getThis();
@@ -212,12 +201,10 @@ PHP_METHOD(Stub_Logical, testMixed2) {
 		Z_PARAM_ZVAL(match)
 		Z_PARAM_ZVAL(minLength)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &match, &minLength);
-
 
 
 	_0 = Z_TYPE_P(match) == IS_ARRAY;
@@ -233,11 +220,10 @@ PHP_METHOD(Stub_Logical, testMixed2) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed3) {
-
+PHP_METHOD(Stub_Logical, testMixed3)
+{
 	zend_bool a = 0, b = 0, _0, _1, _2, _3;
 	zval *this_ptr = getThis();
 
@@ -263,11 +249,10 @@ PHP_METHOD(Stub_Logical, testMixed3) {
 	}
 	b = _3;
 	RETURN_BOOL(a == b);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed4) {
-
+PHP_METHOD(Stub_Logical, testMixed4)
+{
 	zval *a_param = NULL, *b_param = NULL;
 	zend_bool a, b, _0, _1, _2;
 	zval *this_ptr = getThis();
@@ -278,12 +263,10 @@ PHP_METHOD(Stub_Logical, testMixed4) {
 		Z_PARAM_BOOL(a)
 		Z_PARAM_BOOL(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
-
 	a = zephir_get_boolval(a_param);
 	b = zephir_get_boolval(b_param);
 
@@ -301,6 +284,5 @@ PHP_METHOD(Stub_Logical, testMixed4) {
 		_1 = _2;
 	}
 	RETURN_BOOL(_1);
-
 }
 

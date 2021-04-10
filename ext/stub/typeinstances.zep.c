@@ -22,16 +22,15 @@
 /**
  * Cast tests
  */
-ZEPHIR_INIT_CLASS(Stub_TypeInstances) {
-
+ZEPHIR_INIT_CLASS(Stub_TypeInstances)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, TypeInstances, stub, typeinstances, stub_typeinstances_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_TypeInstances, testInstanceOfString1) {
-
+PHP_METHOD(Stub_TypeInstances, testInstanceOfString1)
+{
 	zval _2;
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -50,11 +49,10 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString1) {
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
 	RETURN_CTOR(&_2);
-
 }
 
-PHP_METHOD(Stub_TypeInstances, testInstanceOfString2) {
-
+PHP_METHOD(Stub_TypeInstances, testInstanceOfString2)
+{
 	zval _2;
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -73,11 +71,10 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString2) {
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
 	RETURN_CTOR(&_2);
-
 }
 
-PHP_METHOD(Stub_TypeInstances, testInstanceOfString3) {
-
+PHP_METHOD(Stub_TypeInstances, testInstanceOfString3)
+{
 	zval _2;
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -96,6 +93,5 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString3) {
 	zephir_check_call_status();
 	zephir_get_strval(&_2, &_1);
 	RETURN_CTOR(&_2);
-
 }
 

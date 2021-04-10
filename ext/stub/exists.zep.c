@@ -18,16 +18,15 @@
 #include "kernel/file.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Exists) {
-
+ZEPHIR_INIT_CLASS(Stub_Exists)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Exists, stub, exists, stub_exists_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Exists, testClassExists) {
-
+PHP_METHOD(Stub_Exists, testClassExists)
+{
 	zend_bool autoload;
 	zval *className, className_sub, *autoload_param = NULL, _0;
 	zval *this_ptr = getThis();
@@ -41,12 +40,10 @@ PHP_METHOD(Stub_Exists, testClassExists) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &className, &autoload_param);
-
 	if (!autoload_param) {
 		autoload = 1;
 	} else {
@@ -56,11 +53,10 @@ PHP_METHOD(Stub_Exists, testClassExists) {
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
 	RETURN_BOOL(zephir_class_exists(className, zephir_is_true(&_0) ));
-
 }
 
-PHP_METHOD(Stub_Exists, testInterfaceExists) {
-
+PHP_METHOD(Stub_Exists, testInterfaceExists)
+{
 	zend_bool autoload;
 	zval *interfaceName, interfaceName_sub, *autoload_param = NULL, _0;
 	zval *this_ptr = getThis();
@@ -74,12 +70,10 @@ PHP_METHOD(Stub_Exists, testInterfaceExists) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &interfaceName, &autoload_param);
-
 	if (!autoload_param) {
 		autoload = 1;
 	} else {
@@ -89,11 +83,10 @@ PHP_METHOD(Stub_Exists, testInterfaceExists) {
 
 	ZVAL_BOOL(&_0, (autoload ? 1 : 0));
 	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true(&_0) ));
-
 }
 
-PHP_METHOD(Stub_Exists, testMethodExists) {
-
+PHP_METHOD(Stub_Exists, testMethodExists)
+{
 	zval *obj, obj_sub, *methodName, methodName_sub;
 	zval *this_ptr = getThis();
 
@@ -105,20 +98,17 @@ PHP_METHOD(Stub_Exists, testMethodExists) {
 		Z_PARAM_ZVAL(obj)
 		Z_PARAM_ZVAL(methodName)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &obj, &methodName);
 
 
-
 	RETURN_BOOL((zephir_method_exists(obj, methodName)  == SUCCESS));
-
 }
 
-PHP_METHOD(Stub_Exists, testFileExists) {
-
+PHP_METHOD(Stub_Exists, testFileExists)
+{
 	zval *fileName, fileName_sub;
 	zval *this_ptr = getThis();
 
@@ -128,15 +118,12 @@ PHP_METHOD(Stub_Exists, testFileExists) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(fileName)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &fileName);
 
 
-
 	RETURN_BOOL((zephir_file_exists(fileName) == SUCCESS));
-
 }
 

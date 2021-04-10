@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+
+## [0.13.2] - 2021-04-10
+### Fixed
+- Fixed default value of nullable string parameter [#2180](https://github.com/zephir-lang/zephir/issues/2180)
+- Fixed cast of `string` to `int` and `float` [#828](https://github.com/zephir-lang/zephir/issues/828)
+- Fix `uint` cast to `unsigned int` in function params [#812](https://github.com/zephir-lang/zephir/issues/812)
+- Fixed `null` strict check when variable is `string` type [#2186](https://github.com/zephir-lang/zephir/issues/2186)
+
 ## [0.13.1] - 2021-03-31
 ### Added
 - Added jobs `-j, --jobs` option for `zephir compile` [#2174](https://github.com/zephir-lang/zephir/issues/2174)
@@ -447,7 +455,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.1...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.2...HEAD
+[0.13.2]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.2
 [0.13.1]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/zephir-lang/zephir/compare/0.12.21...0.13.0
 [0.12.21]: https://github.com/zephir-lang/zephir/compare/0.12.20...0.12.21

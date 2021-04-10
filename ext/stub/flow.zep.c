@@ -25,16 +25,15 @@
 /**
  * Control Flow
  */
-ZEPHIR_INIT_CLASS(Stub_Flow) {
-
+ZEPHIR_INIT_CLASS(Stub_Flow)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Flow, stub, flow, stub_flow_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Flow, testIf1) {
-
+PHP_METHOD(Stub_Flow, testIf1)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -46,11 +45,10 @@ PHP_METHOD(Stub_Flow, testIf1) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf2) {
-
+PHP_METHOD(Stub_Flow, testIf2)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -62,11 +60,10 @@ PHP_METHOD(Stub_Flow, testIf2) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf3) {
-
+PHP_METHOD(Stub_Flow, testIf3)
+{
 	double a = 0;
 	zval *this_ptr = getThis();
 
@@ -78,11 +75,10 @@ PHP_METHOD(Stub_Flow, testIf3) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf4) {
-
+PHP_METHOD(Stub_Flow, testIf4)
+{
 	double a = 0;
 	zval *this_ptr = getThis();
 
@@ -94,11 +90,10 @@ PHP_METHOD(Stub_Flow, testIf4) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf5) {
-
+PHP_METHOD(Stub_Flow, testIf5)
+{
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
@@ -110,11 +105,10 @@ PHP_METHOD(Stub_Flow, testIf5) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf6) {
-
+PHP_METHOD(Stub_Flow, testIf6)
+{
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
@@ -126,11 +120,10 @@ PHP_METHOD(Stub_Flow, testIf6) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf7) {
-
+PHP_METHOD(Stub_Flow, testIf7)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -143,11 +136,10 @@ PHP_METHOD(Stub_Flow, testIf7) {
 	} else {
 		RETURN_LONG(0);
 	}
-
 }
 
-PHP_METHOD(Stub_Flow, testIf8) {
-
+PHP_METHOD(Stub_Flow, testIf8)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -160,11 +152,10 @@ PHP_METHOD(Stub_Flow, testIf8) {
 	} else {
 		RETURN_LONG(0);
 	}
-
 }
 
-PHP_METHOD(Stub_Flow, testIf9) {
-
+PHP_METHOD(Stub_Flow, testIf9)
+{
 	zend_bool c = 0;
 	double b = 0;
 	zend_long a = 0;
@@ -184,11 +175,10 @@ PHP_METHOD(Stub_Flow, testIf9) {
 		}
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf10) {
-
+PHP_METHOD(Stub_Flow, testIf10)
+{
 	zend_bool c = 0;
 	double b = 0;
 	zend_long a = 0;
@@ -213,11 +203,10 @@ PHP_METHOD(Stub_Flow, testIf10) {
 	} else {
 		RETURN_LONG(-3);
 	}
-
 }
 
-PHP_METHOD(Stub_Flow, testIf12) {
-
+PHP_METHOD(Stub_Flow, testIf12)
+{
 	zend_bool c = 0;
 	double b = 0;
 	zend_long a = 0;
@@ -242,11 +231,10 @@ PHP_METHOD(Stub_Flow, testIf12) {
 	} else {
 		RETURN_LONG(0);
 	}
-
 }
 
-PHP_METHOD(Stub_Flow, testIf13) {
-
+PHP_METHOD(Stub_Flow, testIf13)
+{
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
 
@@ -259,11 +247,10 @@ PHP_METHOD(Stub_Flow, testIf13) {
 		RETURN_LONG(-12);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf14) {
-
+PHP_METHOD(Stub_Flow, testIf14)
+{
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
 
@@ -276,11 +263,10 @@ PHP_METHOD(Stub_Flow, testIf14) {
 		RETURN_LONG(74);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf15) {
-
+PHP_METHOD(Stub_Flow, testIf15)
+{
 	zend_long a = 0, b = 0, c = 0;
 	zval *this_ptr = getThis();
 
@@ -294,11 +280,10 @@ PHP_METHOD(Stub_Flow, testIf15) {
 		RETURN_LONG(89);
 	}
 	RETURN_LONG(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf16) {
-
+PHP_METHOD(Stub_Flow, testIf16)
+{
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
@@ -308,23 +293,20 @@ PHP_METHOD(Stub_Flow, testIf16) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 
 
-
 	if (ZEPHIR_IS_EMPTY(a)) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testIf17) {
-
+PHP_METHOD(Stub_Flow, testIf17)
+{
 	zval *b, b_sub;
 	zval *this_ptr = getThis();
 
@@ -334,23 +316,20 @@ PHP_METHOD(Stub_Flow, testIf17) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &b);
 
 
-
 	if (Z_TYPE_P(b) != IS_NULL) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testLoop1) {
-
+PHP_METHOD(Stub_Flow, testLoop1)
+{
 	zend_bool a = 0;
 	zval *this_ptr = getThis();
 
@@ -364,11 +343,10 @@ PHP_METHOD(Stub_Flow, testLoop1) {
 		}
 	}
 	RETURN_BOOL(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testLoop2) {
-
+PHP_METHOD(Stub_Flow, testLoop2)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -383,34 +361,10 @@ PHP_METHOD(Stub_Flow, testLoop2) {
 		}
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testLoop3) {
-
-	zend_long a = 0;
-	zval *this_ptr = getThis();
-
-
-
-
-	a = 1;
-	while (1) {
-		a = (a + 1);
-		if (a == 3) {
-			a = (a + 1);
-			continue;
-		}
-		if (a == 5) {
-			break;
-		}
-	}
-	RETURN_LONG(a);
-
-}
-
-PHP_METHOD(Stub_Flow, testLoop4) {
-
+PHP_METHOD(Stub_Flow, testLoop3)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -429,11 +383,32 @@ PHP_METHOD(Stub_Flow, testLoop4) {
 		}
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile1) {
+PHP_METHOD(Stub_Flow, testLoop4)
+{
+	zend_long a = 0;
+	zval *this_ptr = getThis();
 
+
+
+
+	a = 1;
+	while (1) {
+		a = (a + 1);
+		if (a == 3) {
+			a = (a + 1);
+			continue;
+		}
+		if (a == 5) {
+			break;
+		}
+	}
+	RETURN_LONG(a);
+}
+
+PHP_METHOD(Stub_Flow, testWhile1)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -448,11 +423,10 @@ PHP_METHOD(Stub_Flow, testWhile1) {
 		a = (a - 1);
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile2) {
-
+PHP_METHOD(Stub_Flow, testWhile2)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -467,11 +441,10 @@ PHP_METHOD(Stub_Flow, testWhile2) {
 		a = (a - 1);
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile3) {
-
+PHP_METHOD(Stub_Flow, testWhile3)
+{
 	double c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
@@ -496,11 +469,10 @@ PHP_METHOD(Stub_Flow, testWhile3) {
 	}
 	c = (double) ((a + b));
 	RETURN_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile4) {
-
+PHP_METHOD(Stub_Flow, testWhile4)
+{
 	double c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
@@ -525,11 +497,10 @@ PHP_METHOD(Stub_Flow, testWhile4) {
 	}
 	c = (double) ((a + b));
 	RETURN_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile5) {
-
+PHP_METHOD(Stub_Flow, testWhile5)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -544,11 +515,10 @@ PHP_METHOD(Stub_Flow, testWhile5) {
 		a--;
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile6) {
-
+PHP_METHOD(Stub_Flow, testWhile6)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -563,11 +533,10 @@ PHP_METHOD(Stub_Flow, testWhile6) {
 		a--;
 	}
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile7) {
-
+PHP_METHOD(Stub_Flow, testWhile7)
+{
 	double a = 0;
 	zval *this_ptr = getThis();
 
@@ -582,11 +551,10 @@ PHP_METHOD(Stub_Flow, testWhile7) {
 		a--;
 	}
 	RETURN_DOUBLE(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile8) {
-
+PHP_METHOD(Stub_Flow, testWhile8)
+{
 	double a = 0;
 	zval *this_ptr = getThis();
 
@@ -601,11 +569,10 @@ PHP_METHOD(Stub_Flow, testWhile8) {
 		a--;
 	}
 	RETURN_DOUBLE(a);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile9) {
-
+PHP_METHOD(Stub_Flow, testWhile9)
+{
 	double c = 0;
 	zend_long a = 0, b = 0;
 	zval *this_ptr = getThis();
@@ -630,11 +597,10 @@ PHP_METHOD(Stub_Flow, testWhile9) {
 	}
 	c = (double) ((a + b));
 	RETURN_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile10) {
-
+PHP_METHOD(Stub_Flow, testWhile10)
+{
 	double c = 0;
 	zend_long b = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -647,13 +613,11 @@ PHP_METHOD(Stub_Flow, testWhile10) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a);
-
 	ZEPHIR_SEPARATE_PARAM(a);
 
 
@@ -674,11 +638,10 @@ PHP_METHOD(Stub_Flow, testWhile10) {
 	}
 	c = (double) ((zephir_get_numberval(a) + b));
 	RETURN_MM_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile11) {
-
+PHP_METHOD(Stub_Flow, testWhile11)
+{
 	double c = 0;
 	zend_long b = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -693,13 +656,11 @@ PHP_METHOD(Stub_Flow, testWhile11) {
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(d)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &d);
-
 	ZEPHIR_SEPARATE_PARAM(a);
 
 
@@ -720,11 +681,10 @@ PHP_METHOD(Stub_Flow, testWhile11) {
 	}
 	c = (double) ((zephir_get_numberval(a) + b));
 	RETURN_MM_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile12) {
-
+PHP_METHOD(Stub_Flow, testWhile12)
+{
 	zval _0;
 	zval b;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -747,11 +707,10 @@ PHP_METHOD(Stub_Flow, testWhile12) {
 		zephir_decrement(&b);
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhile13) {
-
+PHP_METHOD(Stub_Flow, testWhile13)
+{
 	zval _0;
 	zend_long a;
 	zval b;
@@ -776,22 +735,20 @@ PHP_METHOD(Stub_Flow, testWhile13) {
 		zephir_decrement(&b);
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testDoWhile1) {
-
+PHP_METHOD(Stub_Flow, testDoWhile1)
+{
 	zval *this_ptr = getThis();
 
 
 
 	do {
 	} while (1);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhileNextTest) {
-
+PHP_METHOD(Stub_Flow, testWhileNextTest)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
@@ -807,7 +764,6 @@ PHP_METHOD(Stub_Flow, testWhileNextTest) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -815,27 +771,25 @@ PHP_METHOD(Stub_Flow, testWhileNextTest) {
 	zephir_fetch_params(1, 1, 0, &variable);
 
 
-
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	while (1) {
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 41, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 42, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(&_0))) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 42, variable);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 43, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "stub/flow.zep", 420);
 	}
 	RETURN_CCTOR(&returnValue);
-
 }
 
-PHP_METHOD(Stub_Flow, testWhileDoNextTest) {
-
+PHP_METHOD(Stub_Flow, testWhileDoNextTest)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
@@ -851,7 +805,6 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -859,24 +812,22 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest) {
 	zephir_fetch_params(1, 1, 0, &variable);
 
 
-
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	do {
-		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 42, variable);
+		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 43, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "stub/flow.zep", 430);
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 41, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 42, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(&_2));
 	RETURN_CCTOR(&returnValue);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor1) {
-
+PHP_METHOD(Stub_Flow, testFor1)
+{
 	zval v, b, _0, *_1, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, c = 0;
@@ -931,11 +882,10 @@ PHP_METHOD(Stub_Flow, testFor1) {
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor2) {
-
+PHP_METHOD(Stub_Flow, testFor2)
+{
 	zend_string *_4;
 	zend_ulong _3;
 	double c = 0;
@@ -1003,11 +953,10 @@ PHP_METHOD(Stub_Flow, testFor2) {
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
 	RETURN_MM_DOUBLE(c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor3) {
-
+PHP_METHOD(Stub_Flow, testFor3)
+{
 	zval v, b, c, _0, *_1, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -1064,11 +1013,10 @@ PHP_METHOD(Stub_Flow, testFor3) {
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_CCTOR(&c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor4) {
-
+PHP_METHOD(Stub_Flow, testFor4)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1102,11 +1050,10 @@ PHP_METHOD(Stub_Flow, testFor4) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor5) {
-
+PHP_METHOD(Stub_Flow, testFor5)
+{
 	zend_bool _0;
 	zend_long a = 0, b = 0, _1, _2;
 	zval *this_ptr = getThis();
@@ -1133,11 +1080,10 @@ PHP_METHOD(Stub_Flow, testFor5) {
 		}
 	}
 	RETURN_LONG(b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor6) {
-
+PHP_METHOD(Stub_Flow, testFor6)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1171,11 +1117,10 @@ PHP_METHOD(Stub_Flow, testFor6) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor7) {
-
+PHP_METHOD(Stub_Flow, testFor7)
+{
 	zend_bool _0;
 	zend_long a = 0, b = 0, _1, _2;
 	zval *this_ptr = getThis();
@@ -1202,11 +1147,10 @@ PHP_METHOD(Stub_Flow, testFor7) {
 		}
 	}
 	RETURN_LONG(b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor8) {
-
+PHP_METHOD(Stub_Flow, testFor8)
+{
 	zend_bool _0;
 	zend_long a = 0, b = 0, c = 0, d = 0, _1, _2;
 	zval *this_ptr = getThis();
@@ -1235,11 +1179,10 @@ PHP_METHOD(Stub_Flow, testFor8) {
 		}
 	}
 	RETURN_LONG(b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor9) {
-
+PHP_METHOD(Stub_Flow, testFor9)
+{
 	zend_bool _0;
 	zend_long a = 0, b = 0, c = 0, d = 0, _1, _2;
 	zval *this_ptr = getThis();
@@ -1268,11 +1211,10 @@ PHP_METHOD(Stub_Flow, testFor9) {
 		}
 	}
 	RETURN_LONG(b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor10) {
-
+PHP_METHOD(Stub_Flow, testFor10)
+{
 	zend_bool _0;
 	zend_long c = 0, d = 0, _1, _2;
 	zval a, b;
@@ -1308,11 +1250,10 @@ PHP_METHOD(Stub_Flow, testFor10) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor11) {
-
+PHP_METHOD(Stub_Flow, testFor11)
+{
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
@@ -1325,7 +1266,6 @@ PHP_METHOD(Stub_Flow, testFor11) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
@@ -1344,11 +1284,10 @@ PHP_METHOD(Stub_Flow, testFor11) {
 		}
 	}
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor12) {
-
+PHP_METHOD(Stub_Flow, testFor12)
+{
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
@@ -1361,7 +1300,6 @@ PHP_METHOD(Stub_Flow, testFor12) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1380,11 +1318,10 @@ PHP_METHOD(Stub_Flow, testFor12) {
 		}
 	}
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor13) {
-
+PHP_METHOD(Stub_Flow, testFor13)
+{
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
@@ -1397,7 +1334,6 @@ PHP_METHOD(Stub_Flow, testFor13) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
@@ -1416,11 +1352,10 @@ PHP_METHOD(Stub_Flow, testFor13) {
 		}
 	}
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor14) {
-
+PHP_METHOD(Stub_Flow, testFor14)
+{
 	zend_bool _0;
 	zval b;
 	char a = 0, _1, _2;
@@ -1433,7 +1368,6 @@ PHP_METHOD(Stub_Flow, testFor14) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
@@ -1452,11 +1386,10 @@ PHP_METHOD(Stub_Flow, testFor14) {
 		}
 	}
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor15) {
-
+PHP_METHOD(Stub_Flow, testFor15)
+{
 	zend_bool _0;
 	zval *c_param = NULL, *d_param = NULL;
 	zend_long c, d, a = 0, b = 0, _1, _2;
@@ -1468,12 +1401,10 @@ PHP_METHOD(Stub_Flow, testFor15) {
 		Z_PARAM_LONG(c)
 		Z_PARAM_LONG(d)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &c_param, &d_param);
-
 	c = zephir_get_intval(c_param);
 	d = zephir_get_intval(d_param);
 
@@ -1497,11 +1428,10 @@ PHP_METHOD(Stub_Flow, testFor15) {
 		}
 	}
 	RETURN_LONG(b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor16) {
-
+PHP_METHOD(Stub_Flow, testFor16)
+{
 	zend_long _2, _3;
 	zend_bool _1;
 	long _0;
@@ -1541,11 +1471,10 @@ PHP_METHOD(Stub_Flow, testFor16) {
 		}
 	}
 	RETURN_CCTOR(&c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor17) {
-
+PHP_METHOD(Stub_Flow, testFor17)
+{
 	zend_long _2, _3;
 	zend_bool _1;
 	long _0;
@@ -1585,11 +1514,10 @@ PHP_METHOD(Stub_Flow, testFor17) {
 		}
 	}
 	RETURN_CCTOR(&c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor18) {
-
+PHP_METHOD(Stub_Flow, testFor18)
+{
 	zend_bool _1;
 	long _0;
 	zval c, _4$$3;
@@ -1628,11 +1556,10 @@ PHP_METHOD(Stub_Flow, testFor18) {
 		}
 	}
 	RETURN_CCTOR(&c);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor19) {
-
+PHP_METHOD(Stub_Flow, testFor19)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1666,11 +1593,10 @@ PHP_METHOD(Stub_Flow, testFor19) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor20) {
-
+PHP_METHOD(Stub_Flow, testFor20)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1704,11 +1630,10 @@ PHP_METHOD(Stub_Flow, testFor20) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor21) {
-
+PHP_METHOD(Stub_Flow, testFor21)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1742,11 +1667,10 @@ PHP_METHOD(Stub_Flow, testFor21) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor22) {
-
+PHP_METHOD(Stub_Flow, testFor22)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b;
@@ -1780,11 +1704,10 @@ PHP_METHOD(Stub_Flow, testFor22) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor23) {
-
+PHP_METHOD(Stub_Flow, testFor23)
+{
 	char _1, _2, _3$$3;
 	zend_bool _0;
 	zval b;
@@ -1799,7 +1722,6 @@ PHP_METHOD(Stub_Flow, testFor23) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1820,11 +1742,10 @@ PHP_METHOD(Stub_Flow, testFor23) {
 		}
 	}
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor24) {
-
+PHP_METHOD(Stub_Flow, testFor24)
+{
 	zval _0;
 	zval b;
 	zval a, _1, *_2, _3;
@@ -1842,7 +1763,6 @@ PHP_METHOD(Stub_Flow, testFor24) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(&b);
-	ZVAL_STRING(&b, "");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);
@@ -1883,11 +1803,10 @@ PHP_METHOD(Stub_Flow, testFor24) {
 	}
 	ZEPHIR_INIT_NVAR(&a);
 	RETURN_CTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor30) {
-
+PHP_METHOD(Stub_Flow, testFor30)
+{
 	long _0;
 	zend_long v = 0;
 	zval b;
@@ -1913,11 +1832,10 @@ PHP_METHOD(Stub_Flow, testFor30) {
 		zephir_array_append(&a, &_1$$3, PH_SEPARATE, "stub/flow.zep", 682);
 	}
 	RETURN_CCTOR(&a);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor31) {
-
+PHP_METHOD(Stub_Flow, testFor31)
+{
 	long _0;
 	zend_long k = 0, v = 0;
 	zval b;
@@ -1944,11 +1862,10 @@ PHP_METHOD(Stub_Flow, testFor31) {
 		zephir_array_update_long(&a, k, &_1$$3, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 	}
 	RETURN_CCTOR(&a);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor32) {
-
+PHP_METHOD(Stub_Flow, testFor32)
+{
 	long sum;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -1963,13 +1880,11 @@ PHP_METHOD(Stub_Flow, testFor32) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(e)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
-
 
 
 	sum = 0;
@@ -1999,11 +1914,10 @@ PHP_METHOD(Stub_Flow, testFor32) {
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	RETURN_MM_LONG(sum);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor33) {
-
+PHP_METHOD(Stub_Flow, testFor33)
+{
 	zend_object_iterator *_0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *e, e_sub, v, result;
@@ -2017,13 +1931,11 @@ PHP_METHOD(Stub_Flow, testFor33) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(e, zend_ce_iterator)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
-
 
 
 	ZEPHIR_INIT_VAR(&result);
@@ -2038,11 +1950,10 @@ PHP_METHOD(Stub_Flow, testFor33) {
 	}
 	zend_iterator_dtor(_0);
 	RETURN_CCTOR(&result);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor34) {
-
+PHP_METHOD(Stub_Flow, testFor34)
+{
 	zend_object_iterator *_0$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *e = NULL, e_sub, __$null, v, result;
@@ -2058,13 +1969,11 @@ PHP_METHOD(Stub_Flow, testFor34) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJECT_OF_CLASS_OR_NULL(e, zend_ce_iterator)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &e);
-
 	if (!e) {
 		e = &e_sub;
 		e = &__$null;
@@ -2086,11 +1995,10 @@ PHP_METHOD(Stub_Flow, testFor34) {
 		RETURN_CCTOR(&result);
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Flow, testFor35Aux) {
-
+PHP_METHOD(Stub_Flow, testFor35Aux)
+{
 	zval *hello, hello_sub;
 	zval *this_ptr = getThis();
 
@@ -2100,20 +2008,17 @@ PHP_METHOD(Stub_Flow, testFor35Aux) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(hello)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &hello);
 
 
-
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor35) {
-
+PHP_METHOD(Stub_Flow, testFor35)
+{
 	zend_bool _0;
 	zval i, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -2149,11 +2054,10 @@ PHP_METHOD(Stub_Flow, testFor35) {
 		}
 	}
 	RETURN_MM_BOOL(1);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor36Aux) {
-
+PHP_METHOD(Stub_Flow, testFor36Aux)
+{
 	zval *hello, hello_sub;
 	zval *this_ptr = getThis();
 
@@ -2163,22 +2067,19 @@ PHP_METHOD(Stub_Flow, testFor36Aux) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(hello)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &hello);
 
 
-
 	zephir_create_array(return_value, 1, 0);
 	zephir_array_fast_append(return_value, hello);
 	return;
-
 }
 
-PHP_METHOD(Stub_Flow, testFor36) {
-
+PHP_METHOD(Stub_Flow, testFor36)
+{
 	zend_bool _0;
 	zval i, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -2214,11 +2115,10 @@ PHP_METHOD(Stub_Flow, testFor36) {
 		}
 	}
 	RETURN_MM_BOOL(1);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor37) {
-
+PHP_METHOD(Stub_Flow, testFor37)
+{
 	zend_bool _0;
 	zend_long i, _1, _2;
 	zval *this_ptr = getThis();
@@ -2245,11 +2145,10 @@ PHP_METHOD(Stub_Flow, testFor37) {
 		}
 	}
 	RETURN_LONG(i);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor38) {
-
+PHP_METHOD(Stub_Flow, testFor38)
+{
 	zend_bool _1;
 	long _0;
 	zval v;
@@ -2285,11 +2184,10 @@ PHP_METHOD(Stub_Flow, testFor38) {
 		}
 	}
 	RETURN_MM_LONG(i);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor39) {
-
+PHP_METHOD(Stub_Flow, testFor39)
+{
 	zval _2;
 	long _1;
 	char _0;
@@ -2310,11 +2208,10 @@ PHP_METHOD(Stub_Flow, testFor39) {
 		i++;
 	}
 	RETURN_MM_LONG(i);
-
 }
 
-PHP_METHOD(Stub_Flow, testFor40) {
-
+PHP_METHOD(Stub_Flow, testFor40)
+{
 	zend_long _1, _2;
 	zend_bool _0;
 	zval a, b, _3$$3;
@@ -2351,11 +2248,10 @@ PHP_METHOD(Stub_Flow, testFor40) {
 		}
 	}
 	RETURN_CCTOR(&b);
-
 }
 
-PHP_METHOD(Stub_Flow, testUnrechable1) {
-
+PHP_METHOD(Stub_Flow, testUnrechable1)
+{
 	char e;
 	zval d;
 	zend_bool c;
@@ -2391,11 +2287,10 @@ PHP_METHOD(Stub_Flow, testUnrechable1) {
 		php_printf("%s", "hello true");
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Flow, testUnrechable2) {
-
+PHP_METHOD(Stub_Flow, testUnrechable2)
+{
 	char e;
 	zval d;
 	zend_bool c;
@@ -2441,11 +2336,10 @@ PHP_METHOD(Stub_Flow, testUnrechable2) {
 		php_printf("%s", "hello false");
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Flow, testUnrechable3) {
-
+PHP_METHOD(Stub_Flow, testUnrechable3)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -2458,6 +2352,5 @@ PHP_METHOD(Stub_Flow, testUnrechable3) {
 		}
 	}
 	RETURN_LONG(a);
-
 }
 

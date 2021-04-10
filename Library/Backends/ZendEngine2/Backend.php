@@ -166,7 +166,7 @@ class Backend extends BaseBackend
             $code .= ' ';
             $groupVariables = [];
 
-            /*
+            /**
              * @var Variable[]
              */
             foreach ($variables as $variable) {
@@ -1009,9 +1009,11 @@ class Backend extends BaseBackend
         /* Assign param */
         switch ($type) {
             case 'int':
-            case 'uint':
             case 'long':
                 $codePrinter->output($var['name'].' = Z_LVAL_P('.$parameterCode.');');
+                break;
+            case 'uint':
+                $codePrinter->output($var['name'].' = ZEND_ABS(Z_LVAL_P('.$parameterCode.'));');
                 break;
             case 'bool':
                 $codePrinter->output($var['name'].' = '.$this->getBoolCode($parameterVariable, $context, false).';');
@@ -1068,11 +1070,11 @@ class Backend extends BaseBackend
     /**
      * Assign value to variable helper.
      *
-     * @param string             $macro
-     * @param string             $variableName
-     * @param string|Variable    $value
-     * @param CompilationContext $context
-     * @param bool               $useCodePrinter
+     * @param string                $macro
+     * @param string                $variableName
+     * @param string|null|Variable  $value
+     * @param CompilationContext    $context
+     * @param bool                  $useCodePrinter
      *
      * @return string
      */
@@ -1083,10 +1085,14 @@ class Backend extends BaseBackend
         CompilationContext $context,
         bool $useCodePrinter
     ): string {
+        if ($value === null && $macro === 'ZVAL_STRING') {
+            return '';
+        }
+
         if ($value instanceof Variable) {
             $value = $value->getName();
         } else {
-            $value = 'ZVAL_STRING' == $macro ? '"'.$value.'"' : $value;
+            $value = 'ZVAL_STRING' === $macro ? '"'.$value.'"' : $value;
         }
 
         $output = $macro.'('.$variableName.', '.$value.');';

@@ -26,16 +26,15 @@
  *
  * @see http://www.haskell.org/haskellwiki/Shootout/Regex_DNA
  */
-ZEPHIR_INIT_CLASS(Stub_RegexDNA) {
-
+ZEPHIR_INIT_CLASS(Stub_RegexDNA)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, RegexDNA, stub, regexdna, stub_regexdna_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_RegexDNA, process) {
-
+PHP_METHOD(Stub_RegexDNA, process)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_3 = NULL;
@@ -65,13 +64,11 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
-
 
 
 	ZEPHIR_INIT_VAR(&discard);
@@ -187,7 +184,7 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	ZEPHIR_CONCAT_SVS(&_1, "/", &stuffToRemove, "/mS");
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "");
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 71, &_1, &_0, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 74, &_1, &_0, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	ZEPHIR_INIT_VAR(&codeLength);
@@ -231,7 +228,7 @@ PHP_METHOD(Stub_RegexDNA, process) {
 		}
 	}
 	ZEPHIR_INIT_NVAR(&regex);
-	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 71, &vIUB, &vIUBnew, &contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, 74, &vIUB, &vIUBnew, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_2);
 	php_printf("%c", '\n');
@@ -242,6 +239,5 @@ PHP_METHOD(Stub_RegexDNA, process) {
 	php_printf("%d", zephir_fast_strlen_ev(&contents));
 	php_printf("%c", '\n');
 	ZEPHIR_MM_RESTORE();
-
 }
 

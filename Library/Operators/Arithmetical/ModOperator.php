@@ -23,11 +23,11 @@ use Zephir\Expression;
  */
 class ModOperator extends ArithmeticalBaseOperator
 {
-    protected $operator = '%';
+    protected string $operator = '%';
 
-    protected $bitOperator = '-';
+    protected string $bitOperator = '-';
 
-    protected $zvalOperator = 'mod_function';
+    protected string $zvalOperator = 'mod_function';
 
     /**
      * Compiles the arithmetical modulus operation.

@@ -17,17 +17,16 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_MethodAbstract) {
-
+ZEPHIR_INIT_CLASS(Stub_MethodAbstract)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, MethodAbstract, stub, methodabstract, stub_methodabstract_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	zend_class_implements(stub_methodabstract_ce, 1, stub_methodinterface_ce);
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_MethodAbstract, testInterfaceMetho) {
-
+PHP_METHOD(Stub_MethodAbstract, testInterfaceMetho)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -39,6 +38,5 @@ PHP_METHOD(Stub_MethodAbstract, testInterfaceMetho) {
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testmethod", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
-
 }
 

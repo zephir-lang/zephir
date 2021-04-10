@@ -19,16 +19,15 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Fibonnaci) {
-
+ZEPHIR_INIT_CLASS(Stub_Fibonnaci)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Fibonnaci, stub, fibonnaci, stub_fibonnaci_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibInt) {
-
+PHP_METHOD(Stub_Fibonnaci, fibInt)
+{
 	zend_long x = 0, y = 0, n = 0, z = 0;
 	zval *this_ptr = getThis();
 
@@ -48,11 +47,10 @@ PHP_METHOD(Stub_Fibonnaci, fibInt) {
 		y = z;
 	}
 	RETURN_LONG(z);
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibDouble) {
-
+PHP_METHOD(Stub_Fibonnaci, fibDouble)
+{
 	double x = 0, y = 0, n = 0, z = 0;
 	zval *this_ptr = getThis();
 
@@ -72,11 +70,10 @@ PHP_METHOD(Stub_Fibonnaci, fibDouble) {
 		y = z;
 	}
 	RETURN_DOUBLE(z);
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibArray) {
-
+PHP_METHOD(Stub_Fibonnaci, fibArray)
+{
 	zend_long i = 0, n = 0, k = 0, j = 0;
 	zval fib, a, b, c, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -115,11 +112,10 @@ PHP_METHOD(Stub_Fibonnaci, fibArray) {
 		i++;
 	}
 	RETURN_CCTOR(&fib);
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibArray2) {
-
+PHP_METHOD(Stub_Fibonnaci, fibArray2)
+{
 	zend_long i = 0, n = 0;
 	zval fib, _0, _1$$3, _2$$3, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -156,11 +152,10 @@ PHP_METHOD(Stub_Fibonnaci, fibArray2) {
 		i++;
 	}
 	RETURN_CCTOR(&fib);
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive) {
-
+PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
@@ -175,13 +170,11 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
-
 	n = zephir_get_intval(n_param);
 
 
@@ -192,20 +185,19 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive) {
 			RETURN_MM_LONG(1);
 		} else {
 			ZVAL_LONG(&_1$$6, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccirecursive", &_2, 39, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccirecursive", &_2, 40, &_1$$6);
 			zephir_check_call_status();
 			ZVAL_LONG(&_1$$6, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccirecursive", &_2, 39, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccirecursive", &_2, 40, &_1$$6);
 			zephir_check_call_status();
 			zephir_add_function(return_value, &_0$$6, &_3$$6);
 			RETURN_MM();
 		}
 	}
-
 }
 
-PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive) {
-
+PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *n_param = NULL, _0$$6, _1$$6, _3$$6;
@@ -220,13 +212,11 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
-
 	n = zephir_get_intval(n_param);
 
 
@@ -237,15 +227,14 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive) {
 			RETURN_MM_LONG(1);
 		} else {
 			ZVAL_LONG(&_1$$6, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccifinalrecursive", &_2, 40, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccifinalrecursive", &_2, 41, &_1$$6);
 			zephir_check_call_status();
 			ZVAL_LONG(&_1$$6, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccifinalrecursive", &_2, 40, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccifinalrecursive", &_2, 41, &_1$$6);
 			zephir_check_call_status();
 			zephir_add_function(return_value, &_0$$6, &_3$$6);
 			RETURN_MM();
 		}
 	}
-
 }
 

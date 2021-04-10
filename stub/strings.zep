@@ -169,4 +169,39 @@ class Strings
 		let x = trim(stripslashes(strip_tags(value)));
 		return trim(stripcslashes(strip_tags(value)));
 	}
+
+	public function issue2186(string val = null) -> bool
+	{
+	    return val === null;
+	}
+
+	public function issue2186SegFault(string val = null) -> bool
+	{
+	    if val {
+	        return true;
+	    }
+
+	    return false;
+	}
+
+	public function issue2186SegFaultCall(string val = null) -> string
+	{
+	    return this->issue2186Child1(val);
+	}
+
+	protected function issue2186Child1(string val = null) -> string
+	{
+	    return this->issue2186Child2(val);
+	}
+
+    protected function issue2186Child2(string val = null) -> string
+    {
+        var output = "";
+
+        if val {
+            let output = val . " all ok";
+        }
+
+        return output;
+    }
 }

@@ -18,16 +18,15 @@
 #include "kernel/math.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Flow_SwitchFlow) {
-
+ZEPHIR_INIT_CLASS(Stub_Flow_SwitchFlow)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Flow, SwitchFlow, stub, flow_switchflow, stub_flow_switchflow_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch1) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch1)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -36,11 +35,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch1) {
 
 	a = 10;
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch2) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch2)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -55,11 +53,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch2) {
 	} while(0);
 
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch3) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch3)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -74,11 +71,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch3) {
 	} while(0);
 
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch4) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch4)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -94,11 +90,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch4) {
 	} while(0);
 
 	RETURN_LONG(3);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch5) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch5)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -114,11 +109,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch5) {
 	} while(0);
 
 	RETURN_LONG(3);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch6) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch6)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -133,11 +127,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch6) {
 	} while(0);
 
 	RETURN_LONG(2);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch7) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch7)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -152,11 +145,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch7) {
 	} while(0);
 
 	RETURN_LONG(2);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch8) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch8)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -171,33 +163,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch8) {
 	} while(0);
 
 	RETURN_LONG(2);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch9) {
-
-	zend_long a = 0;
-	zval *this_ptr = getThis();
-
-
-
-
-	a = 5;
-	do {
-		if (a == 3 || a == 4) {
-			RETURN_LONG(0);
-		}
-		if (a == 10 || a == 4) {
-			RETURN_LONG(1);
-		}
-	} while(0);
-
-	RETURN_LONG(2);
-
-}
-
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch10) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch9)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -215,11 +184,31 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch10) {
 	} while(0);
 
 	RETURN_LONG(2);
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11) {
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch10)
+{
+	zend_long a = 0;
+	zval *this_ptr = getThis();
 
+
+
+
+	a = 5;
+	do {
+		if (a == 3 || a == 4) {
+			RETURN_LONG(0);
+		}
+		if (a == 10 || a == 4) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+}
+
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11)
+{
 	zend_long a = 0;
 	zval *this_ptr = getThis();
 
@@ -234,11 +223,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch11) {
 		RETURN_LONG(1);
 	} while(0);
 
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
+{
 	zend_bool _0, _1, _2;
 	zval *var1, var1_sub, *var2, var2_sub;
 	zval *this_ptr = getThis();
@@ -251,12 +239,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12) {
 		Z_PARAM_ZVAL(var1)
 		Z_PARAM_ZVAL(var2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &var1, &var2);
-
 
 
 	do {
@@ -278,11 +264,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12) {
 		RETURN_LONG(0);
 	} while(0);
 
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
+{
 	zval *a_param = NULL, _0, _1;
 	long a, _2;
 	zval *this_ptr = getThis();
@@ -292,14 +277,12 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13) {
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(a)
+		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-
 	a = zephir_get_intval(a_param);
 
 
@@ -313,11 +296,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13) {
 		RETURN_LONG(0);
 	} while(0);
 
-
 }
 
-PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
-
+PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *result_type = NULL, result_type_sub, ret, _0, _1;
 	zval *this_ptr = getThis();
@@ -332,13 +314,11 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(result_type)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &result_type);
-
 	if (!result_type) {
 		result_type = &result_type_sub;
 		ZEPHIR_INIT_VAR(result_type);
@@ -362,6 +342,5 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14) {
 	} while(0);
 
 	RETURN_CCTOR(&ret);
-
 }
 

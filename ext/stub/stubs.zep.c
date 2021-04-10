@@ -23,19 +23,15 @@
 /**
  * Sample Class Description
  */
-ZEPHIR_INIT_CLASS(Stub_Stubs) {
-
+ZEPHIR_INIT_CLASS(Stub_Stubs)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Stubs, stub, stubs, stub_stubs_method_entry, 0);
 
 	zend_declare_property_string(stub_stubs_ce, SL("propString"), "Zephir public", ZEND_ACC_PUBLIC);
-
 	/** @var integer - declared in Zephir DocBlock */
 	zend_declare_property_long(stub_stubs_ce, SL("propIntDeclared"), 100, ZEND_ACC_PUBLIC);
-
 	zend_declare_property_string(stub_stubs_ce, SL("propStringProtected"), "Zephir protected", ZEND_ACC_PROTECTED);
-
 	zend_declare_property_string(stub_stubs_ce, SL("propStringPrivate"), "Zephir private", ZEND_ACC_PRIVATE);
-
 	zephir_declare_class_constant_long(stub_stubs_ce, SL("INTEGER_CONST"), 1);
 
 	zephir_declare_class_constant_double(stub_stubs_ce, SL("DOUBLE_CONST"), 10.24);
@@ -43,20 +39,18 @@ ZEPHIR_INIT_CLASS(Stub_Stubs) {
 	zephir_declare_class_constant_string(stub_stubs_ce, SL("STRING_CONST"), "Zephir");
 
 	return SUCCESS;
-
 }
 
 /**
  * Sample Method Description with Return type -> string
  */
-PHP_METHOD(Stub_Stubs, testDockBlockAndReturnType) {
-
+PHP_METHOD(Stub_Stubs, testDockBlockAndReturnType)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_MEMBER(getThis(), "propString");
-
 }
 
 /**
@@ -64,14 +58,13 @@ PHP_METHOD(Stub_Stubs, testDockBlockAndReturnType) {
  *
  * @return string - declared in Zephir DocBlock
  */
-PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared) {
-
+PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_MEMBER(getThis(), "propStringProtected");
-
 }
 
 /**
@@ -82,8 +75,8 @@ PHP_METHOD(Stub_Stubs, testDocBlockAndReturnTypeDeclared) {
  * @param int|string $intOrString - declared in Zephir DocBlock
  * @return int|null - declared in Zephir DocBlock
  */
-PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock) {
-
+PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock)
+{
 	zend_long number;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 	zval *this_ptr = getThis();
@@ -96,12 +89,10 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(number)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &intOrString, &number_param);
-
 	if (!number_param) {
 		number = 1;
 	} else {
@@ -110,7 +101,6 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock) {
 
 
 	RETURN_LONG(number);
-
 }
 
 /**
@@ -122,8 +112,8 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock) {
  * @param int $number - declared in Zephir DocBlock
  * @return int|null - declared in Zephir DocBlock
  */
-PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared) {
-
+PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared)
+{
 	zend_long number;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 	zval *this_ptr = getThis();
@@ -136,12 +126,10 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(number)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &intOrString, &number_param);
-
 	if (!number_param) {
 		number = 1;
 	} else {
@@ -150,6 +138,5 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared) {
 
 
 	RETURN_LONG(number);
-
 }
 

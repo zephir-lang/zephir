@@ -19,19 +19,18 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Optimizers_StrReplace) {
-
+ZEPHIR_INIT_CLASS(Stub_Optimizers_StrReplace)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Optimizers, StrReplace, stub, optimizers_strreplace, stub_optimizers_strreplace_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/1055
  */
-PHP_METHOD(Stub_Optimizers_StrReplace, issue1055) {
-
+PHP_METHOD(Stub_Optimizers_StrReplace, issue1055)
+{
 	zval _1, _3;
 	zval _0, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -60,11 +59,10 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1055) {
 	ZEPHIR_INIT_VAR(&_3);
 	zephir_fast_str_replace(&_3, &_0, &_2, &_1);
 	RETURN_CCTOR(&_3);
-
 }
 
-PHP_METHOD(Stub_Optimizers_StrReplace, issue1087) {
-
+PHP_METHOD(Stub_Optimizers_StrReplace, issue1087)
+{
 	zval filtered, sanitize, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -111,11 +109,10 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1087) {
 	zephir_fast_str_replace(&_0, &sanitize, &_1, &filtered);
 	ZEPHIR_CPY_WRT(&filtered, &_0);
 	RETURN_CCTOR(&filtered);
-
 }
 
-PHP_METHOD(Stub_Optimizers_StrReplace, issue732A) {
-
+PHP_METHOD(Stub_Optimizers_StrReplace, issue732A)
+{
 	zval subject;
 	zval _0;
 	zval search, replace;
@@ -169,11 +166,10 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A) {
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_fast_str_replace(&_0, &search, &replace, &subject);
 	RETURN_CCTOR(&_0);
-
 }
 
-PHP_METHOD(Stub_Optimizers_StrReplace, issue732B) {
-
+PHP_METHOD(Stub_Optimizers_StrReplace, issue732B)
+{
 	zval subject;
 	zval _0;
 	zval patterns, replacements;
@@ -213,9 +209,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B) {
 	zephir_array_fast_append(&replacements, &_0);
 	ZEPHIR_INIT_VAR(&subject);
 	ZVAL_STRING(&subject, "The quick brown fox jumped over the lazy dog.");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 71, &patterns, &replacements, &subject);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 74, &patterns, &replacements, &subject);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 

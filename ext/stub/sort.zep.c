@@ -19,16 +19,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Sort) {
-
+ZEPHIR_INIT_CLASS(Stub_Sort)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Sort, stub, sort, stub_sort_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Sort, quick) {
-
+PHP_METHOD(Stub_Sort, quick)
+{
 	zend_bool _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_8 = NULL;
@@ -53,13 +52,11 @@ PHP_METHOD(Stub_Sort, quick) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(arr)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &arr_param);
-
 	zephir_get_arrval(&arr, arr_param);
 
 
@@ -102,18 +99,17 @@ PHP_METHOD(Stub_Sort, quick) {
 			}
 		}
 	}
-	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 88, &left);
+	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 91, &left);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_9);
 	zephir_create_array(&_9, 1, 0);
 	ZEPHIR_INIT_VAR(&_10);
 	ZVAL_LONG(&_10, pivot);
 	zephir_array_fast_append(&_9, &_10);
-	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 88, &right);
+	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 91, &right);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 89, &_7, &_9, &_11);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 92, &_7, &_9, &_11);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 

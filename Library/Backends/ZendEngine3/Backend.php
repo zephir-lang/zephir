@@ -115,7 +115,6 @@ class Backend extends BackendZendEngine2
                 return ['*', 'zend_string'];
         }
 
-        $code = null;
         $pointer = null;
         switch ($type) {
             case 'int':
@@ -532,10 +531,10 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      *
-     * @param Variable           $variable
-     * @param string|Variable    $value
-     * @param CompilationContext $context
-     * @param bool               $useCodePrinter
+     * @param Variable              $variable
+     * @param string|null|Variable  $value
+     * @param CompilationContext    $context
+     * @param bool                  $useCodePrinter
      *
      * @return string
      */
@@ -1160,7 +1159,7 @@ class Backend extends BackendZendEngine2
         if ($var->isDoublePointer()) {
             return parent::ifVariableValueUndefined($var, $context, $useBody, $useCodePrinter);
         }
-        $body = 'Z_TYPE_P('.$this->getVariableCode($var).') == IS_UNDEF';
+        $body = 'ZEPHIR_IS_EMPTY('.$this->getVariableCode($var).')';
         $output = 'if ('.$body.') {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);

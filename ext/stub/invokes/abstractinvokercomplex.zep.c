@@ -17,16 +17,15 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Invokes_AbstractInvokerComplex) {
-
+ZEPHIR_INIT_CLASS(Stub_Invokes_AbstractInvokerComplex)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Invokes, AbstractInvokerComplex, stub, invokes_abstractinvokercomplex, stub_invokes_abstractprotected_ce, stub_invokes_abstractinvokercomplex_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __toString) {
-
+PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __toString)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -41,16 +40,14 @@ PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __toString) {
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderarrayelementscomplex", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __invoke) {
-
+PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __invoke)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_THISW();
-
 }
 

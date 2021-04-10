@@ -3,6 +3,9 @@ namespace Stub;
 
 class Closures
 {
+    protected _argument;
+    protected _function;
+
 	public function simple1()
 	{
 		return function(){ };
@@ -64,4 +67,34 @@ class Closures
 		};
 	}
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/642
+     */
+	public function issue642()
+	{
+        var obj, closure;
+
+        let obj = new \stdClass();
+        let closure = function(config) { return config; };
+
+        return call_user_func_array(closure, [obj]);
+	}
+
+	public function issue1036SetArgument(var argument)
+	{
+	    let this->_argument = argument;
+	}
+
+	public function issue1036SetFunction(callable func)
+	{
+	    let this->_function = func;
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1036
+     */
+	public function issue1036Call()
+	{
+	    return call_user_func(this->_function, this->_argument);
+	}
 }

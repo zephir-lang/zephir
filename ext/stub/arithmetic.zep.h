@@ -165,6 +165,9 @@ PHP_METHOD(Stub_Arithmetic, letStatementBoolMinus);
 PHP_METHOD(Stub_Arithmetic, letStatementVarMinus);
 PHP_METHOD(Stub_Arithmetic, div1);
 PHP_METHOD(Stub_Arithmetic, div2);
+PHP_METHOD(Stub_Arithmetic, absParam);
+PHP_METHOD(Stub_Arithmetic, negativeInt);
+PHP_METHOD(Stub_Arithmetic, negativeLong);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arithmetic_intsum, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -659,6 +662,18 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arithmetic_div1, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arithmetic_div2, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arithmetic_absparam, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arithmetic_negativeint, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arithmetic_negativelong, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arithmetic_method_entry) {
@@ -1436,5 +1451,8 @@ ZEPHIR_INIT_FUNCS(stub_arithmetic_method_entry) {
 #else
 	PHP_ME(Stub_Arithmetic, div2, NULL, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(Stub_Arithmetic, absParam, arginfo_stub_arithmetic_absparam, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Arithmetic, negativeInt, arginfo_stub_arithmetic_negativeint, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Arithmetic, negativeLong, arginfo_stub_arithmetic_negativelong, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -15,11 +15,10 @@
 #include "ext/spl/spl_heap.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_Heap) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_Heap)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, Heap, stub, oo_extend_spl_heap, spl_ce_SplHeap, NULL, 0);
 
 	return SUCCESS;
-
 }
 

@@ -18,18 +18,18 @@
 #include "kernel/object.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
+#include "kernel/concat.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Strings) {
-
+ZEPHIR_INIT_CLASS(Stub_Strings)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Strings, stub, strings, stub_strings_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Strings, camelize) {
-
+PHP_METHOD(Stub_Strings, camelize)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null;
 	zval str;
@@ -45,13 +45,11 @@ PHP_METHOD(Stub_Strings, camelize) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
-
 	zephir_get_strval(&str, str_param);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -61,11 +59,10 @@ PHP_METHOD(Stub_Strings, camelize) {
 
 	zephir_camelize(return_value, &str, delimiter );
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Strings, uncamelize) {
-
+PHP_METHOD(Stub_Strings, uncamelize)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null;
 	zval str;
@@ -81,13 +78,11 @@ PHP_METHOD(Stub_Strings, uncamelize) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
-
 	zephir_get_strval(&str, str_param);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -97,11 +92,10 @@ PHP_METHOD(Stub_Strings, uncamelize) {
 
 	zephir_uncamelize(return_value, &str, delimiter );
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Strings, testTrim) {
-
+PHP_METHOD(Stub_Strings, testTrim)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -111,21 +105,18 @@ PHP_METHOD(Stub_Strings, testTrim) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-
 
 
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_BOTH);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testRtrim) {
-
+PHP_METHOD(Stub_Strings, testRtrim)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -135,21 +126,18 @@ PHP_METHOD(Stub_Strings, testRtrim) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-
 
 
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_RIGHT);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testLtrim) {
-
+PHP_METHOD(Stub_Strings, testLtrim)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -159,21 +147,18 @@ PHP_METHOD(Stub_Strings, testLtrim) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
 
-
 	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_LEFT);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testTrim2Params) {
-
+PHP_METHOD(Stub_Strings, testTrim2Params)
+{
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
@@ -185,21 +170,18 @@ PHP_METHOD(Stub_Strings, testTrim2Params) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
-
 
 
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_BOTH);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testRtrim2Params) {
-
+PHP_METHOD(Stub_Strings, testRtrim2Params)
+{
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
@@ -211,21 +193,18 @@ PHP_METHOD(Stub_Strings, testRtrim2Params) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
-
 
 
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_RIGHT);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testLtrim2Params) {
-
+PHP_METHOD(Stub_Strings, testLtrim2Params)
+{
 	zval *str, str_sub, *charlist, charlist_sub;
 	zval *this_ptr = getThis();
 
@@ -237,21 +216,18 @@ PHP_METHOD(Stub_Strings, testLtrim2Params) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &charlist);
 
 
-
 	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_LEFT);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testImplode) {
-
+PHP_METHOD(Stub_Strings, testImplode)
+{
 	zval *glue, glue_sub, *pieces, pieces_sub;
 	zval *this_ptr = getThis();
 
@@ -263,21 +239,18 @@ PHP_METHOD(Stub_Strings, testImplode) {
 		Z_PARAM_ZVAL(glue)
 		Z_PARAM_ZVAL(pieces)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &glue, &pieces);
 
 
-
 	zephir_fast_join(return_value, glue, pieces);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testStrpos) {
-
+PHP_METHOD(Stub_Strings, testStrpos)
+{
 	zval *haystack, haystack_sub, *needle, needle_sub;
 	zval *this_ptr = getThis();
 
@@ -289,21 +262,18 @@ PHP_METHOD(Stub_Strings, testStrpos) {
 		Z_PARAM_ZVAL(haystack)
 		Z_PARAM_ZVAL(needle)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &haystack, &needle);
 
 
-
 	zephir_fast_strpos(return_value, haystack, needle, 0 );
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testStrposOffset) {
-
+PHP_METHOD(Stub_Strings, testStrposOffset)
+{
 	zend_long offset;
 	zval *haystack, haystack_sub, *needle, needle_sub, *offset_param = NULL, _0;
 	zval *this_ptr = getThis();
@@ -318,23 +288,20 @@ PHP_METHOD(Stub_Strings, testStrposOffset) {
 		Z_PARAM_ZVAL(needle)
 		Z_PARAM_LONG(offset)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &haystack, &needle, &offset_param);
-
 	offset = zephir_get_intval(offset_param);
 
 
 	ZVAL_LONG(&_0, offset);
 	zephir_fast_strpos(return_value, haystack, needle, zephir_get_intval(&_0) );
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testExplode) {
-
+PHP_METHOD(Stub_Strings, testExplode)
+{
 	zval *delimiter, delimiter_sub, *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -346,21 +313,18 @@ PHP_METHOD(Stub_Strings, testExplode) {
 		Z_PARAM_ZVAL(delimiter)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &delimiter, &str);
 
 
-
 	zephir_fast_explode(return_value, delimiter, str, LONG_MAX);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testExplodeStr) {
-
+PHP_METHOD(Stub_Strings, testExplodeStr)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -370,21 +334,18 @@ PHP_METHOD(Stub_Strings, testExplodeStr) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
 
-
 	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testExplodeLimit) {
-
+PHP_METHOD(Stub_Strings, testExplodeLimit)
+{
 	zend_long limit;
 	zval *str, str_sub, *limit_param = NULL, _0;
 	zval *this_ptr = getThis();
@@ -397,23 +358,20 @@ PHP_METHOD(Stub_Strings, testExplodeLimit) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_LONG(limit)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &limit_param);
-
 	limit = zephir_get_intval(limit_param);
 
 
 	ZVAL_LONG(&_0, limit);
 	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0) );
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testSubstr) {
-
+PHP_METHOD(Stub_Strings, testSubstr)
+{
 	zend_long from, len;
 	zval *str, str_sub, *from_param = NULL, *len_param = NULL, _0, _1;
 	zval *this_ptr = getThis();
@@ -428,12 +386,10 @@ PHP_METHOD(Stub_Strings, testSubstr) {
 		Z_PARAM_LONG(from)
 		Z_PARAM_LONG(len)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &str, &from_param, &len_param);
-
 	from = zephir_get_intval(from_param);
 	len = zephir_get_intval(len_param);
 
@@ -442,11 +398,10 @@ PHP_METHOD(Stub_Strings, testSubstr) {
 	ZVAL_LONG(&_1, len);
 	zephir_substr(return_value, str, zephir_get_intval(&_0), zephir_get_intval(&_1), 0);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testSubstr2) {
-
+PHP_METHOD(Stub_Strings, testSubstr2)
+{
 	zend_long from;
 	zval *str, str_sub, *from_param = NULL, _0;
 	zval *this_ptr = getThis();
@@ -459,23 +414,20 @@ PHP_METHOD(Stub_Strings, testSubstr2) {
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_LONG(from)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &from_param);
-
 	from = zephir_get_intval(from_param);
 
 
 	ZVAL_LONG(&_0, from);
 	zephir_substr(return_value, str, zephir_get_intval(&_0), 0, ZEPHIR_SUBSTR_NO_LENGTH);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testSubstr3) {
-
+PHP_METHOD(Stub_Strings, testSubstr3)
+{
 	zval *str, str_sub, _0;
 	zval *this_ptr = getThis();
 
@@ -486,22 +438,19 @@ PHP_METHOD(Stub_Strings, testSubstr3) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
 
-
 	ZVAL_LONG(&_0, -1);
 	zephir_substr(return_value, str, -1 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testSubstr4) {
-
+PHP_METHOD(Stub_Strings, testSubstr4)
+{
 	zval *str, str_sub, _0, _1;
 	zval *this_ptr = getThis();
 
@@ -513,23 +462,20 @@ PHP_METHOD(Stub_Strings, testSubstr4) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-
 
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, -1);
 	zephir_substr(return_value, str, 0 , -1 , 0);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testAddslashes) {
-
+PHP_METHOD(Stub_Strings, testAddslashes)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -539,21 +485,18 @@ PHP_METHOD(Stub_Strings, testAddslashes) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-
 
 
 	zephir_addslashes(return_value, str);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testStripslashes) {
-
+PHP_METHOD(Stub_Strings, testStripslashes)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -563,21 +506,18 @@ PHP_METHOD(Stub_Strings, testStripslashes) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
-
 
 
 	zephir_stripslashes(return_value, str);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testStripcslashes) {
-
+PHP_METHOD(Stub_Strings, testStripcslashes)
+{
 	zval *str, str_sub;
 	zval *this_ptr = getThis();
 
@@ -587,21 +527,18 @@ PHP_METHOD(Stub_Strings, testStripcslashes) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &str);
 
 
-
 	zephir_stripcslashes(return_value, str);
 	return;
-
 }
 
-PHP_METHOD(Stub_Strings, testHashEquals) {
-
+PHP_METHOD(Stub_Strings, testHashEquals)
+{
 	zval *str1, str1_sub, *str2, str2_sub;
 	zval *this_ptr = getThis();
 
@@ -613,40 +550,35 @@ PHP_METHOD(Stub_Strings, testHashEquals) {
 		Z_PARAM_ZVAL(str1)
 		Z_PARAM_ZVAL(str2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str1, &str2);
 
 
-
 	RETURN_BOOL(zephir_hash_equals(str1, str2));
-
 }
 
-PHP_METHOD(Stub_Strings, testHardcodedMultilineString) {
-
+PHP_METHOD(Stub_Strings, testHardcodedMultilineString)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("\n            Hello world\n        ");
-
 }
 
-PHP_METHOD(Stub_Strings, testEchoMultilineString) {
-
+PHP_METHOD(Stub_Strings, testEchoMultilineString)
+{
 	zval *this_ptr = getThis();
 
 
 
 	php_printf("%s", "\n            Hello world\n        ");
-
 }
 
-PHP_METHOD(Stub_Strings, testTrimMultilineString) {
-
+PHP_METHOD(Stub_Strings, testTrimMultilineString)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -660,11 +592,10 @@ PHP_METHOD(Stub_Strings, testTrimMultilineString) {
 	ZVAL_STRING(&_0, "\n            Hello world\n        ");
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Strings, testWellEscapedMultilineString) {
-
+PHP_METHOD(Stub_Strings, testWellEscapedMultilineString)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -678,21 +609,19 @@ PHP_METHOD(Stub_Strings, testWellEscapedMultilineString) {
 	ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\'\n        ");
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_Strings, testInternedString1) {
-
+PHP_METHOD(Stub_Strings, testInternedString1)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_STRING("hello");
-
 }
 
-PHP_METHOD(Stub_Strings, testInternedString2) {
-
+PHP_METHOD(Stub_Strings, testInternedString2)
+{
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -708,11 +637,10 @@ PHP_METHOD(Stub_Strings, testInternedString2) {
 	ZVAL_STRING(&_1, " hello ");
 	zephir_fast_trim(&_0, &_1, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_CCTOR(&_0);
-
 }
 
-PHP_METHOD(Stub_Strings, strToHex) {
-
+PHP_METHOD(Stub_Strings, strToHex)
+{
 	unsigned char _1$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
@@ -732,19 +660,16 @@ PHP_METHOD(Stub_Strings, strToHex) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value_param);
-
 	zephir_get_strval(&value, value_param);
 
 
 	i = 0;
 	ZEPHIR_INIT_VAR(&ret);
-	ZVAL_STRING(&ret, "");
 	while (1) {
 		if (!(i < zephir_fast_strlen_ev(&value))) {
 			break;
@@ -752,19 +677,18 @@ PHP_METHOD(Stub_Strings, strToHex) {
 		_1$$3 = ZEPHIR_STRING_OFFSET(&value, i);
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 97, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 101, &_2$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 10, &_3$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 11, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
 		i++;
 	}
 	RETURN_CTOR(&ret);
-
 }
 
-PHP_METHOD(Stub_Strings, issue1267) {
-
+PHP_METHOD(Stub_Strings, issue1267)
+{
 	zval _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_5 = NULL;
@@ -786,13 +710,11 @@ PHP_METHOD(Stub_Strings, issue1267) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &value);
-
 	ZEPHIR_SEPARATE_PARAM(value);
 
 
@@ -813,21 +735,183 @@ PHP_METHOD(Stub_Strings, issue1267) {
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 513);
-	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 43, value, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 44, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 98, value);
+	ZEPHIR_CALL_FUNCTION(&_4, "strip_tags", &_5, 102, value);
 	zephir_check_call_status();
 	zephir_stripslashes(&_0, &_4);
 	ZEPHIR_INIT_VAR(&x);
 	zephir_fast_trim(&x, &_0, NULL , ZEPHIR_TRIM_BOTH);
 	ZEPHIR_INIT_VAR(&_6);
-	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 98, value);
+	ZEPHIR_CALL_FUNCTION(&_7, "strip_tags", &_5, 102, value);
 	zephir_check_call_status();
 	zephir_stripcslashes(&_6, &_7);
 	zephir_fast_trim(return_value, &_6, NULL , ZEPHIR_TRIM_BOTH);
 	RETURN_MM();
+}
 
+PHP_METHOD(Stub_Strings, issue2186)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *val_param = NULL;
+	zval val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+		zephir_get_strval(&val, val_param);
+	}
+
+
+	RETURN_MM_BOOL(ZEPHIR_IS_NULL(&val));
+}
+
+PHP_METHOD(Stub_Strings, issue2186SegFault)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *val_param = NULL;
+	zval val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+		zephir_get_strval(&val, val_param);
+	}
+
+
+	if (!(ZEPHIR_IS_EMPTY(&val))) {
+		RETURN_MM_BOOL(1);
+	}
+	RETURN_MM_BOOL(0);
+}
+
+PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *val_param = NULL;
+	zval val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+		zephir_get_strval(&val, val_param);
+	}
+
+
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child1", NULL, 0, &val);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Strings, issue2186Child1)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *val_param = NULL;
+	zval val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+		zephir_get_strval(&val, val_param);
+	}
+
+
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child2", NULL, 0, &val);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Strings, issue2186Child2)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *val_param = NULL, output;
+	zval val, _0$$3;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&output);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+		zephir_get_strval(&val, val_param);
+	}
+
+
+	ZEPHIR_INIT_VAR(&output);
+	ZVAL_STRING(&output, "");
+	if (!(ZEPHIR_IS_EMPTY(&val))) {
+		ZEPHIR_INIT_VAR(&_0$$3);
+		ZEPHIR_CONCAT_VS(&_0$$3, &val, " all ok");
+		ZEPHIR_CPY_WRT(&output, &_0$$3);
+	}
+	RETURN_CCTOR(&output);
 }
 

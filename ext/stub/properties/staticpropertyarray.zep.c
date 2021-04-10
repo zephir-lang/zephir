@@ -21,26 +21,23 @@
  * @link https://github.com/zephir-lang/zephir/issues/367
  * @link https://github.com/zephir-lang/zephir/issues/188
  */
-ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray) {
-
+ZEPHIR_INIT_CLASS(Stub_Properties_StaticPropertyArray)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Properties, StaticPropertyArray, stub, properties_staticpropertyarray, NULL, 0);
 
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
 	zend_declare_property_null(stub_properties_staticpropertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
-
 	/**
 	 * This is a public property with an initial array value
 	 */
 	zend_declare_property_null(stub_properties_staticpropertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC);
-
 	return SUCCESS;
-
 }
 
-void zephir_init_static_properties_Stub_Properties_StaticPropertyArray() {
-
+void zephir_init_static_properties_Stub_Properties_StaticPropertyArray()
+{
 	zval _1;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -69,6 +66,5 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray() {
 	array_init(&_1);
 	zephir_update_static_property_ce(stub_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 

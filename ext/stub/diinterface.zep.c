@@ -12,12 +12,11 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_DiInterface) {
-
+ZEPHIR_INIT_CLASS(Stub_DiInterface)
+{
 	ZEPHIR_REGISTER_INTERFACE(Stub, DiInterface, stub, diinterface, stub_diinterface_method_entry);
 
 	return SUCCESS;
-
 }
 
 ZEPHIR_DOC_METHOD(Stub_DiInterface, getShared);

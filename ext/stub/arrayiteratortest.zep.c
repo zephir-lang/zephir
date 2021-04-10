@@ -18,16 +18,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_ArrayIteratorTest) {
-
+ZEPHIR_INIT_CLASS(Stub_ArrayIteratorTest)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, ArrayIteratorTest, stub, arrayiteratortest, stub_arrayiteratortest_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_ArrayIteratorTest, test) {
-
+PHP_METHOD(Stub_ArrayIteratorTest, test)
+{
 	zend_string *_3;
 	zend_ulong _2;
 	zval arr, k, v, *_0, _1;
@@ -83,6 +82,5 @@ PHP_METHOD(Stub_ArrayIteratorTest, test) {
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
-
 }
 

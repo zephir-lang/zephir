@@ -18,22 +18,19 @@
 #include "kernel/array.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Properties_ExtendsPublicProperties) {
-
+ZEPHIR_INIT_CLASS(Stub_Properties_ExtendsPublicProperties)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Properties, ExtendsPublicProperties, stub, properties_extendspublicproperties, stub_properties_publicproperties_ce, NULL, 0);
 
 	zend_declare_property_long(stub_properties_extendspublicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC);
-
 	zend_declare_property_null(stub_properties_extendspublicproperties_ce, SL("someGetterSetterArray"), ZEND_ACC_PROTECTED);
-
 	stub_properties_extendspublicproperties_ce->create_object = zephir_init_properties_Stub_Properties_ExtendsPublicProperties;
 
 	return SUCCESS;
-
 }
 
-zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type) {
-
+zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend_class_entry *class_type)
+{
 		zval _1$$3, _2$$3, _4$$4, _6$$5, _11$$7;
 	zval _0, _3, _5, _8, _10, _7$$5, _9$$6, _12$$7;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -124,6 +121,5 @@ zend_object *zephir_init_properties_Stub_Properties_ExtendsPublicProperties(zend
 		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);
 	}
-
 }
 

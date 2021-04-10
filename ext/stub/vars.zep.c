@@ -22,16 +22,15 @@
 #include "kernel/operators.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Vars) {
-
+ZEPHIR_INIT_CLASS(Stub_Vars)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Vars, stub, vars, stub_vars_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Vars, testParam) {
-
+PHP_METHOD(Stub_Vars, testParam)
+{
 	zend_string *_4;
 	zend_ulong _3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -53,13 +52,11 @@ PHP_METHOD(Stub_Vars, testParam) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(config)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &config_param);
-
 	ZEPHIR_OBS_COPY_OR_DUP(&config, config_param);
 
 
@@ -76,7 +73,7 @@ PHP_METHOD(Stub_Vars, testParam) {
 			}
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _1);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 64, &v);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 68, &v);
 			zephir_check_call_status();
 			zephir_array_update_multi(&config, &_5$$3, SL("sz"), 3, SL("dir"), &k);
 		} ZEND_HASH_FOREACH_END();
@@ -93,7 +90,7 @@ PHP_METHOD(Stub_Vars, testParam) {
 			zephir_check_call_status();
 			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 64, &v);
+				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 68, &v);
 				zephir_check_call_status();
 				zephir_array_update_multi(&config, &_7$$4, SL("sz"), 3, SL("dir"), &k);
 			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
@@ -103,11 +100,10 @@ PHP_METHOD(Stub_Vars, testParam) {
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);
 	RETURN_CTOR(&config);
-
 }
 
-PHP_METHOD(Stub_Vars, testVarDump) {
-
+PHP_METHOD(Stub_Vars, testVarDump)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, _0;
 	zval *this_ptr = getThis();
@@ -134,11 +130,10 @@ PHP_METHOD(Stub_Vars, testVarDump) {
 	zephir_var_dump(&ar);
 	zephir_var_dump(&a);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testVarDump2) {
-
+PHP_METHOD(Stub_Vars, testVarDump2)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *ret, ret_sub, _0;
 	zval *this_ptr = getThis();
@@ -150,7 +145,6 @@ PHP_METHOD(Stub_Vars, testVarDump2) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(ret)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
@@ -158,17 +152,15 @@ PHP_METHOD(Stub_Vars, testVarDump2) {
 	zephir_fetch_params(1, 1, 0, &ret);
 
 
-
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, ZEPHIR_IS_LONG(ret, 1));
 	zephir_var_dump(&_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testVarExport) {
-
+PHP_METHOD(Stub_Vars, testVarExport)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$false, a, ar, ret, _0, _1, _2;
 	zval *this_ptr = getThis();
@@ -206,11 +198,10 @@ PHP_METHOD(Stub_Vars, testVarExport) {
 	ZEPHIR_INIT_NVAR(&ret);
 	zephir_var_export_ex(&ret, &a);
 	RETURN_CCTOR(&ret);
-
 }
 
-PHP_METHOD(Stub_Vars, test88Issue) {
-
+PHP_METHOD(Stub_Vars, test88Issue)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
 	zval param1, param2;
@@ -229,13 +220,11 @@ PHP_METHOD(Stub_Vars, test88Issue) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR_OR_NULL(param2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
-
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
 		RETURN_MM_NULL();
@@ -248,7 +237,6 @@ PHP_METHOD(Stub_Vars, test88Issue) {
 	}
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);
-		ZVAL_STRING(&param2, "");
 	} else {
 		zephir_get_strval(&param2, param2_param);
 	}
@@ -267,11 +255,10 @@ PHP_METHOD(Stub_Vars, test88Issue) {
 	ZEPHIR_CPY_WRT(&_3, &param2);
 	zephir_var_export(&_3);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, test88IssueParam2InitString) {
-
+PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1_param = NULL, *param2_param = NULL, _0;
 	zval param1, param2;
@@ -287,13 +274,11 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(param2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
-
 	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
 		RETURN_MM_NULL();
@@ -316,11 +301,10 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString) {
 	ZEPHIR_CPY_WRT(&_0, &param2);
 	zephir_var_export(&_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testVarDump2param) {
-
+PHP_METHOD(Stub_Vars, testVarDump2param)
+{
 	zval *p1, p1_sub, *p2, p2_sub;
 	zval *this_ptr = getThis();
 
@@ -332,21 +316,18 @@ PHP_METHOD(Stub_Vars, testVarDump2param) {
 		Z_PARAM_ZVAL(p1)
 		Z_PARAM_ZVAL(p2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &p1, &p2);
 
 
-
 	zephir_var_dump(p1);
 	zephir_var_dump(p2);
-
 }
 
-PHP_METHOD(Stub_Vars, testVarDump3param) {
-
+PHP_METHOD(Stub_Vars, testVarDump3param)
+{
 	zval *p1, p1_sub, *p2, p2_sub, *p3, p3_sub;
 	zval *this_ptr = getThis();
 
@@ -360,22 +341,19 @@ PHP_METHOD(Stub_Vars, testVarDump3param) {
 		Z_PARAM_ZVAL(p2)
 		Z_PARAM_ZVAL(p3)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &p1, &p2, &p3);
 
 
-
 	zephir_var_dump(p1);
 	zephir_var_dump(p2);
 	zephir_var_dump(p3);
-
 }
 
-PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport) {
-
+PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar, testVar_sub, _0, _1;
 	zval *this_ptr = getThis();
@@ -388,13 +366,11 @@ PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport) {
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(testVar)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &testVar);
-
 
 
 	ZEPHIR_INIT_VAR(&_0);
@@ -406,11 +382,10 @@ PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport) {
 	ZVAL_LONG(&_1, zephir_fast_count_int(testVar));
 	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport) {
-
+PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar_param = NULL, _0, _1;
 	zval testVar;
@@ -425,13 +400,11 @@ PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport) {
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(testVar)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &testVar_param);
-
 	if (!testVar_param) {
 		ZEPHIR_INIT_VAR(&testVar);
 		array_init(&testVar);
@@ -447,14 +420,13 @@ PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport) {
 	ZEPHIR_CPY_WRT(&_1, &testVar);
 	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/681
  */
-PHP_METHOD(Stub_Vars, testIntVarDump) {
-
+PHP_METHOD(Stub_Vars, testIntVarDump)
+{
 	zval _0, _1;
 	zend_long a = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -476,11 +448,10 @@ PHP_METHOD(Stub_Vars, testIntVarDump) {
 	ZVAL_LONG(&_1, a);
 	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testDoubleVarDump) {
-
+PHP_METHOD(Stub_Vars, testDoubleVarDump)
+{
 	zval _0, _1;
 	double a = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -502,11 +473,10 @@ PHP_METHOD(Stub_Vars, testDoubleVarDump) {
 	ZVAL_DOUBLE(&_1, a);
 	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testBoolVarDump) {
-
+PHP_METHOD(Stub_Vars, testBoolVarDump)
+{
 	zval _0, _1;
 	zend_bool a = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -528,11 +498,10 @@ PHP_METHOD(Stub_Vars, testBoolVarDump) {
 	ZVAL_BOOL(&_1, a);
 	zephir_var_export(&_1);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Vars, testGetDefinedVars) {
-
+PHP_METHOD(Stub_Vars, testGetDefinedVars)
+{
 	double pi;
 	zend_long a;
 	zval *this_ptr = getThis();
@@ -544,6 +513,5 @@ PHP_METHOD(Stub_Vars, testGetDefinedVars) {
 	pi = 3.14;
 	zephir_get_defined_vars(return_value);
 	return;
-
 }
 

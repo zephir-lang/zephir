@@ -73,6 +73,7 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableInteger);
 PHP_METHOD(Stub_Cast, testArrayCastFromVariableFloat);
 PHP_METHOD(Stub_Cast, testArrayCastFromVariableString);
 PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass);
+PHP_METHOD(Stub_Cast, testIssue828);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_testcharcastfromchar, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -286,6 +287,9 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_testarraycastfromvariablestdclass, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_cast_testissue828, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_cast_method_entry) {
 	PHP_ME(Stub_Cast, testCharCastFromChar, arginfo_stub_cast_testcharcastfromchar, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testCharCastFromVariableChar, arginfo_stub_cast_testcharcastfromvariablechar, ZEND_ACC_PUBLIC)
@@ -393,5 +397,6 @@ ZEPHIR_INIT_FUNCS(stub_cast_method_entry) {
 	PHP_ME(Stub_Cast, testArrayCastFromVariableFloat, arginfo_stub_cast_testarraycastfromvariablefloat, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testArrayCastFromVariableString, arginfo_stub_cast_testarraycastfromvariablestring, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Cast, testArrayCastFromVariableStdClass, arginfo_stub_cast_testarraycastfromvariablestdclass, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Cast, testIssue828, arginfo_stub_cast_testissue828, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

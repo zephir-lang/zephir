@@ -15,11 +15,10 @@
 #include "ext/spl/spl_directory.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_DirectoryIterator) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_DirectoryIterator)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, DirectoryIterator, stub, oo_extend_spl_directoryiterator, spl_ce_DirectoryIterator, NULL, 0);
 
 	return SUCCESS;
-
 }
 

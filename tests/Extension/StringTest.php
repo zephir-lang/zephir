@@ -282,6 +282,38 @@ final class StringTest extends TestCase
         $this->assertSame('746573742073656e74656e73652e2e2e', $this->test->strToHex('test sentense...'));
     }
 
+    public function testIssue2186(): void
+    {
+        $this->assertTrue($this->test->issue2186());
+        $this->assertTrue($this->test->issue2186(null));
+
+        $this->assertFalse($this->test->issue2186(''));
+        $this->assertFalse($this->test->issue2186('string'));
+        $this->assertFalse($this->test->issue2186('0'));
+        $this->assertFalse($this->test->issue2186('1'));
+
+        $this->assertFalse($this->test->issue2186SegFault());
+        $this->assertFalse($this->test->issue2186SegFault(null));
+        $this->assertFalse($this->test->issue2186SegFault(''));
+
+        /**
+         * Assert PHP and Zephir behavior
+         */
+        $zeroString = false;
+        if ('0') {
+            $zeroString = true;
+        }
+
+        $this->assertFalse(!empty('0'));
+        $this->assertFalse($zeroString);
+        $this->assertFalse($this->test->issue2186SegFault('0'));
+
+        $this->assertTrue($this->test->issue2186SegFault('string'));
+
+        $this->assertSame('', $this->test->issue2186SegFaultCall());
+        $this->assertSame('ok all ok', $this->test->issue2186SegFaultCall('ok'));
+    }
+
     public function providerHashEquals(): array
     {
         return [

@@ -20,16 +20,15 @@
 #include "math.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Geometry) {
-
+ZEPHIR_INIT_CLASS(Stub_Geometry)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Geometry, stub, geometry, stub_geometry_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Geometry, run) {
-
+PHP_METHOD(Stub_Geometry, run)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
@@ -52,13 +51,11 @@ PHP_METHOD(Stub_Geometry, run) {
 		Z_PARAM_ARRAY(list)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
-
 	zephir_get_arrval(&list, list_param);
 	count = zephir_get_intval(count_param);
 
@@ -81,11 +78,10 @@ PHP_METHOD(Stub_Geometry, run) {
 		i = (i + 1);
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Geometry, runOptimize) {
-
+PHP_METHOD(Stub_Geometry, runOptimize)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
@@ -105,13 +101,11 @@ PHP_METHOD(Stub_Geometry, runOptimize) {
 		Z_PARAM_ARRAY(list)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
-
 	zephir_get_arrval(&list, list_param);
 	count = zephir_get_intval(count_param);
 
@@ -132,11 +126,10 @@ PHP_METHOD(Stub_Geometry, runOptimize) {
 		i++;
 	}
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Geometry, distanceStatic) {
-
+PHP_METHOD(Stub_Geometry, distanceStatic)
+{
 	zval *x1_param = NULL, *y1_param = NULL, *x2_param = NULL, *y2_param = NULL, _0;
 	double x1, y1, x2, y2;
 	zval *this_ptr = getThis();
@@ -150,12 +143,10 @@ PHP_METHOD(Stub_Geometry, distanceStatic) {
 		Z_PARAM_ZVAL(x2)
 		Z_PARAM_ZVAL(y2)
 	ZEND_PARSE_PARAMETERS_END();
-
 #endif
 
 
 	zephir_fetch_params_without_memory_grow(4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
-
 	x1 = zephir_get_doubleval(x1_param);
 	y1 = zephir_get_doubleval(y1_param);
 	x2 = zephir_get_doubleval(x2_param);
@@ -164,6 +155,5 @@ PHP_METHOD(Stub_Geometry, distanceStatic) {
 
 	ZVAL_DOUBLE(&_0, ((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2)))));
 	RETURN_DOUBLE(sqrt(((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2))))));
-
 }
 

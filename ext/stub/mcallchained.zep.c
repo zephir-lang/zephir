@@ -20,48 +20,43 @@
 /**
  * Chained method calls
  */
-ZEPHIR_INIT_CLASS(Stub_McallChained) {
-
+ZEPHIR_INIT_CLASS(Stub_McallChained)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, McallChained, stub, mcallchained, stub_mcallchained_method_entry, 0);
 
 	zend_declare_property_null(stub_mcallchained_ce, SL("temp"), ZEND_ACC_PRIVATE);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_McallChained, testMethod1) {
-
+PHP_METHOD(Stub_McallChained, testMethod1)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_THISW();
-
 }
 
-PHP_METHOD(Stub_McallChained, testMethod2) {
-
+PHP_METHOD(Stub_McallChained, testMethod2)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_THISW();
-
 }
 
-PHP_METHOD(Stub_McallChained, testMethod3) {
-
+PHP_METHOD(Stub_McallChained, testMethod3)
+{
 	zval *this_ptr = getThis();
 
 
 
 	RETURN_THISW();
-
 }
 
-PHP_METHOD(Stub_McallChained, testChained1) {
-
+PHP_METHOD(Stub_McallChained, testChained1)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -77,11 +72,10 @@ PHP_METHOD(Stub_McallChained, testChained1) {
 	ZEPHIR_RETURN_CALL_METHOD(&_0, "testmethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_McallChained, testChained2) {
-
+PHP_METHOD(Stub_McallChained, testChained2)
+{
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -100,11 +94,10 @@ PHP_METHOD(Stub_McallChained, testChained2) {
 	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_McallChained, testChained3) {
-
+PHP_METHOD(Stub_McallChained, testChained3)
+{
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -116,18 +109,17 @@ PHP_METHOD(Stub_McallChained, testChained3) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 58);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 62);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod2", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod1", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 
-PHP_METHOD(Stub_McallChained, testChained4) {
-
+PHP_METHOD(Stub_McallChained, testChained4)
+{
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -146,6 +138,5 @@ PHP_METHOD(Stub_McallChained, testChained4) {
 	ZEPHIR_RETURN_CALL_METHOD(&_1, "testmethod2", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
-
 }
 

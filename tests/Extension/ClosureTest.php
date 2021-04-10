@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -23,5 +23,21 @@ final class ClosureTest extends TestCase
         $test = new Closures();
 
         $this->assertSame(2, $test->testUseCommand()());
+        $this->assertInstanceOf(\stdClass::class, $test->issue642());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1036
+     */
+    public function testIssue1036(): void
+    {
+        $test = new Closures();
+
+        $test->issue1036SetArgument(true);
+        $test->issue1036SetFunction(function ($argument) {
+            return $argument;
+        });
+
+        $this->assertTrue($test->issue1036Call());
     }
 }

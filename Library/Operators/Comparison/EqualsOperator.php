@@ -13,23 +13,25 @@ namespace Zephir\Operators\Comparison;
 
 class EqualsOperator extends ComparisonBaseOperator
 {
-    protected $commutative = true;
+    protected bool $commutative = true;
 
-    protected $operator = '==';
+    protected string $operator = '==';
 
-    protected $bitOperator = '==';
+    protected string $bitOperator = '==';
 
-    protected $zvalOperator = 'ZEPHIR_IS_EQUAL';
+    protected string $zvalOperator = 'ZEPHIR_IS_EQUAL';
 
-    protected $zvalLongOperator = 'ZEPHIR_IS_LONG';
+    protected string $zvalLongOperator = 'ZEPHIR_IS_LONG';
 
-    protected $zvalLongNegOperator = 'ZEPHIR_IS_LONG';
+    protected string $zvalLongNegOperator = 'ZEPHIR_IS_LONG';
 
-    protected $zvalStringOperator = 'ZEPHIR_IS_STRING';
+    protected string $zvalStringOperator = 'ZEPHIR_IS_STRING';
 
-    protected $zvalBoolOperator = 'ZEPHIR_IS_BOOL_VALUE';
+    protected string $zvalBoolOperator = 'ZEPHIR_IS_BOOL_VALUE';
 
-    protected $zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
+    protected string $zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
 
-    protected $zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
+    protected string $zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
+
+    protected string $zvalNullOperator = 'ZEPHIR_IS_NULL';
 }
