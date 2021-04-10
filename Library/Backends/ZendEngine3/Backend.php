@@ -1160,7 +1160,7 @@ class Backend extends BackendZendEngine2
         if ($var->isDoublePointer()) {
             return parent::ifVariableValueUndefined($var, $context, $useBody, $useCodePrinter);
         }
-        $body = 'Z_TYPE_P('.$this->getVariableCode($var).') == IS_UNDEF';
+        $body = 'ZEPHIR_IS_EMPTY('.$this->getVariableCode($var).')';
         $output = 'if ('.$body.') {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
