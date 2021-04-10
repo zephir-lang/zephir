@@ -117,7 +117,7 @@ final class ClassDefinition extends AbstractClassDefinition
     protected array $constants = [];
 
     /**
-     * @var array
+     * @var ClassMethod[]
      */
     protected array $methods = [];
 
@@ -1077,8 +1077,8 @@ final class ClassDefinition extends AbstractClassDefinition
          * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class.
          */
         $initClassName = $this->getCNamespace().'_'.$this->getName();
-        $codePrinter->output('ZEPHIR_INIT_CLASS('.$initClassName.') {');
-        $codePrinter->outputBlankLine();
+        $codePrinter->output('ZEPHIR_INIT_CLASS('.$initClassName.')');
+        $codePrinter->output('{');
         $codePrinter->increaseLevel();
 
         /**
@@ -1257,8 +1257,6 @@ final class ClassDefinition extends AbstractClassDefinition
         }
 
         $codePrinter->output('return SUCCESS;');
-
-        $codePrinter->outputBlankLine();
         $codePrinter->decreaseLevel();
 
         $codePrinter->output('}');
@@ -1275,12 +1273,11 @@ final class ClassDefinition extends AbstractClassDefinition
 
             if (self::TYPE_CLASS === $this->getType()) {
                 if (!$method->isInternal()) {
-                    $codePrinter->output('PHP_METHOD('.$this->getCNamespace().'_'.$this->getName().', '.$method->getName().') {');
+                    $codePrinter->output('PHP_METHOD('.$this->getCNamespace().'_'.$this->getName().', '.$method->getName().')');
                 } else {
-                    $codePrinter->output($compilationContext->backend->getInternalSignature($method, $compilationContext).' {');
+                    $codePrinter->output($compilationContext->backend->getInternalSignature($method, $compilationContext));
                 }
-
-                $codePrinter->outputBlankLine();
+                $codePrinter->output('{');
 
                 if (!$method->isAbstract()) {
                     $method->compile($compilationContext);

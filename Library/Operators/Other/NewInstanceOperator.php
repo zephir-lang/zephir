@@ -257,6 +257,7 @@ class NewInstanceOperator extends BaseOperator
 
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
+            $codePrinter->outputBlankLine();
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

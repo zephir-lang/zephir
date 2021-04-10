@@ -115,7 +115,6 @@ class Backend extends BackendZendEngine2
                 return ['*', 'zend_string'];
         }
 
-        $code = null;
         $pointer = null;
         switch ($type) {
             case 'int':
