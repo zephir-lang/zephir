@@ -16,7 +16,7 @@ namespace Zephir;
  */
 final class Zephir
 {
-    const VERSION = '0.13.0-$Id$';
+    const VERSION = '0.13.2-$Id$';
 
     const LOGO = <<<'ASCII'
  _____              __    _
