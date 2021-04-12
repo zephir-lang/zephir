@@ -44,4 +44,21 @@ final class ArrayAccessTest extends TestCase
 
         $this->assertFalse($class->issue1155());
     }
+
+    public function testIssue1094(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertFalse($class->issue1094Test1());
+        $this->assertFalse($class->issue1094Test1([]));
+        $this->assertFalse($class->issue1094Test1(['test' => 'ok']));
+
+        $this->assertTrue($class->issue1094Test2());
+        $this->assertFalse($class->issue1094Test2([]));
+        $this->assertFalse($class->issue1094Test2(['test' => 'ok']));
+
+        $this->assertTrue($class->issue1094Test3());
+        $this->assertFalse($class->issue1094Test3([]));
+        $this->assertFalse($class->issue1094Test3(['test' => 'ok']));
+    }
 }
