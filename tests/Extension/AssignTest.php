@@ -176,4 +176,17 @@ final class AssignTest extends TestCase
 
         $this->assertCount($getCount + 2, $_GET);
     }
+
+    public function testIssue597()
+    {
+        $_GET = [];
+        $this->test->issue597();
+
+        $this->assertEmpty($_GET);
+
+        $_GET['s'] = 10;
+        $this->test->issue597();
+
+        $this->assertSame(50, $_GET['s']);
+    }
 }

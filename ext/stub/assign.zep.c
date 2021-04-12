@@ -2500,3 +2500,33 @@ PHP_METHOD(Stub_Assign, testAssignSuperGlobalsGET)
 	ZEPHIR_MM_RESTORE();
 }
 
+PHP_METHOD(Stub_Assign, issue597)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval _POST, _GET, s$$4, _0$$4;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_POST);
+	ZVAL_UNDEF(&_GET);
+	ZVAL_UNDEF(&s$$4);
+	ZVAL_UNDEF(&_0$$4);
+
+
+	ZEPHIR_MM_GROW();
+	zephir_get_global(&_GET, SL("_GET"));
+	zephir_get_global(&_POST, SL("_POST"));
+
+	if (zephir_array_isset_string(&_POST, SL("a"))) {
+		if (zephir_array_isset_string(&_GET, SL("r"))) {
+		}
+	}
+	if (zephir_array_isset_string(&_GET, SL("s"))) {
+		zephir_array_fetch_string(&_0$$4, &_GET, SL("s"), PH_NOISY | PH_READONLY, "stub/assign.zep", 953);
+		ZEPHIR_INIT_VAR(&s$$4);
+		ZVAL_LONG(&s$$4, (zephir_get_numberval(&_0$$4) * 5));
+		zephir_array_update_string(&_GET, SL("s"), &s$$4, PH_COPY | PH_SEPARATE);
+		RETURN_CCTOR(&s$$4);
+	}
+	ZEPHIR_MM_RESTORE();
+}
+
