@@ -939,4 +939,21 @@ class Assign
 	{
 	    let _GET = array_merge(_GET, ["g1": "aaa", "g2": "bbb"]);
 	}
+
+	public function issue597()
+	{
+	    if isset _POST["a"] {
+            if isset _GET["r"] {
+                // Nothing here
+            }
+        }
+
+        if isset _GET["s"] {
+            var s;
+            let s = _GET["s"] * 5;
+            let _GET["s"] = s;
+
+            return s;
+        }
+	}
 }
