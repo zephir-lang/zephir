@@ -1,10 +1,5 @@
 # For local development only.
 
-# First development steps after start containers:
-#     - .ci/install-zephir-parser.sh
-#     - php zephir stubs
-#     - cd ext/ && ./install
-
 version: '3'
 
 services:
