@@ -15,7 +15,7 @@ RUN apt update -y && apt install -y \
     libzip-dev && \
     pecl install psr
 
-RUN docker-php-ext-install zip gmp intl && \
+RUN docker-php-ext-install zip gmp intl mysqli && \
     docker-php-ext-enable psr
 
 # Install Zephir parser
