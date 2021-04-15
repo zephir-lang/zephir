@@ -1023,7 +1023,6 @@ class Backend extends BackendZendEngine2
         $codePrinter->output('if (Z_TYPE_P('.$this->getVariableCode($exprVariable).') == IS_ARRAY) {');
         $codePrinter->increaseLevel();
 
-        $macro = null;
         $reverse = $statement['reverse'] ? 'REVERSE_' : '';
 
         if (isset($keyVariable)) {
@@ -1074,7 +1073,7 @@ class Backend extends BackendZendEngine2
             $codePrinter->decreaseLevel();
         }
 
-        /*
+        /**
          * Compile statements in the 'for' block
          */
         if (isset($statement['statements'])) {
@@ -1177,29 +1176,31 @@ class Backend extends BackendZendEngine2
      * {@inheritdoc}
      *
      * @param string             $type
-     * @param CompilationContext $context
+     * @param CompilationContext $compilationContext
      * @param bool               $isLocal
      *
      * @return Variable
      */
     public function getScalarTempVariable(
         string $type,
-        CompilationContext $context,
+        CompilationContext $compilationContext,
         $isLocal = true
     ): Variable {
-        return $context->symbolTable->getTempNonTrackedVariable($type, $context);
+        return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize array
+     *
+     * Init empty array or specific size array.
      *
      * @param Variable           $variable
      * @param CompilationContext $context
-     * @param int                $size
+     * @param int|null           $size
      *
      * @return void
      */
-    public function initArray(Variable $variable, CompilationContext $context, int $size = null)
+    public function initArray(Variable $variable, CompilationContext $context, ?int $size = null): void
     {
         $code = $this->getVariableCode($variable);
 

@@ -114,7 +114,7 @@ final class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
-        $this->assertSame($this->test->testArrayParamWithDefaultNullValue(), []);
+        $this->assertNull($this->test->testArrayParamWithDefaultNullValue());
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue([1]), [1]);
     }
 

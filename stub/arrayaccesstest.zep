@@ -43,4 +43,32 @@ class ArrayAccessTest
 
         return in_array(s, arr);
     }
+
+    public function issue1094Test1(const array items = null) -> bool
+    {
+        bool isItemsNULL;
+
+        // This syntax do not exist in Zephir...
+        //let isItemsNULL = null === items;
+
+        return isItemsNULL;
+    }
+
+    public function issue1094Test2(const array items = null) -> bool
+    {
+        bool isItemsNULL;
+
+        let isItemsNULL = items === null;
+
+        return isItemsNULL;
+    }
+
+    public function issue1094Test3(const array items = null) -> bool
+    {
+        bool isItemsNULL;
+
+        let isItemsNULL = is_null(items);
+
+        return isItemsNULL;
+    }
 }

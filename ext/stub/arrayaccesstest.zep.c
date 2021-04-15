@@ -16,6 +16,7 @@
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/object.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_ArrayAccessTest)
@@ -120,5 +121,97 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1155)
 	ZEPHIR_INIT_VAR(&s);
 	ZVAL_STRING(&s, "true");
 	RETURN_MM_BOOL(zephir_fast_in_array(&s, &arr));
+}
+
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1)
+{
+	zend_bool isItemsNULL = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_param = NULL;
+	zval items;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&items);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ARRAY_OR_NULL(items)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &items_param);
+	if (!items_param) {
+		ZEPHIR_INIT_VAR(&items);
+	} else {
+		zephir_get_arrval(&items, items_param);
+	}
+
+
+	RETURN_MM_BOOL(isItemsNULL);
+}
+
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2)
+{
+	zend_bool isItemsNULL = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_param = NULL;
+	zval items;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&items);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ARRAY_OR_NULL(items)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &items_param);
+	if (!items_param) {
+		ZEPHIR_INIT_VAR(&items);
+	} else {
+		zephir_get_arrval(&items, items_param);
+	}
+
+
+	isItemsNULL = ZEPHIR_IS_NULL(&items);
+	RETURN_MM_BOOL(isItemsNULL);
+}
+
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
+{
+	zend_bool isItemsNULL = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_param = NULL;
+	zval items;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&items);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ARRAY_OR_NULL(items)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &items_param);
+	if (!items_param) {
+		ZEPHIR_INIT_VAR(&items);
+	} else {
+		zephir_get_arrval(&items, items_param);
+	}
+
+
+	isItemsNULL = Z_TYPE_P(&items) == IS_NULL;
+	RETURN_MM_BOOL(isItemsNULL);
 }
 

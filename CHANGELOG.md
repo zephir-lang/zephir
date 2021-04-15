@@ -5,7 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-
+### Fixed
+- Fixed nullable array [#1094](https://github.com/zephir-lang/zephir/issues/1094)
 
 ## [0.13.2] - 2021-04-10
 ### Fixed
