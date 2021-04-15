@@ -1023,7 +1023,6 @@ class Backend extends BackendZendEngine2
         $codePrinter->output('if (Z_TYPE_P('.$this->getVariableCode($exprVariable).') == IS_ARRAY) {');
         $codePrinter->increaseLevel();
 
-        $macro = null;
         $reverse = $statement['reverse'] ? 'REVERSE_' : '';
 
         if (isset($keyVariable)) {
