@@ -96,6 +96,7 @@
 #include "stub/issue1521.zep.h"
 #include "stub/issue2165/issue.zep.h"
 #include "stub/issue663.zep.h"
+#include "stub/issue914.zep.h"
 #include "stub/issues.zep.h"
 #include "stub/json.zep.h"
 #include "stub/logical.zep.h"

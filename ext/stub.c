@@ -130,6 +130,7 @@ zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
 zend_class_entry *stub_issue2165_issue_ce;
 zend_class_entry *stub_issue663_ce;
+zend_class_entry *stub_issue914_ce;
 zend_class_entry *stub_issues_ce;
 zend_class_entry *stub_json_ce;
 zend_class_entry *stub_logical_ce;
@@ -348,6 +349,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue1521);
 	ZEPHIR_INIT(Stub_Issue2165_Issue);
 	ZEPHIR_INIT(Stub_Issue663);
+	ZEPHIR_INIT(Stub_Issue914);
 	ZEPHIR_INIT(Stub_Issues);
 	ZEPHIR_INIT(Stub_Json);
 	ZEPHIR_INIT(Stub_Logical);
