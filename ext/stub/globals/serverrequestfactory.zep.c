@@ -80,31 +80,26 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	zephir_fetch_params(1, 0, 5, &server_param, &get_param, &post_param, &cookies_param, &files_param);
 	if (!server_param) {
 		ZEPHIR_INIT_VAR(&server);
-		array_init(&server);
 	} else {
 		zephir_get_arrval(&server, server_param);
 	}
 	if (!get_param) {
 		ZEPHIR_INIT_VAR(&get);
-		array_init(&get);
 	} else {
 		zephir_get_arrval(&get, get_param);
 	}
 	if (!post_param) {
 		ZEPHIR_INIT_VAR(&post);
-		array_init(&post);
 	} else {
 		zephir_get_arrval(&post, post_param);
 	}
 	if (!cookies_param) {
 		ZEPHIR_INIT_VAR(&cookies);
-		array_init(&cookies);
 	} else {
 		zephir_get_arrval(&cookies, cookies_param);
 	}
 	if (!files_param) {
 		ZEPHIR_INIT_VAR(&files);
-		array_init(&files);
 	} else {
 		zephir_get_arrval(&files, files_param);
 	}

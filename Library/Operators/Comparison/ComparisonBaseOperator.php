@@ -353,12 +353,14 @@ class ComparisonBaseOperator extends BaseOperator
                     true
                 );
                 switch ($right->getType()) {
-                    case 'string':
                     case 'null':
-                        $rightStr = 'null' == $right->getType() ? '' : $right->getCode();
+                        return new CompiledExpression('bool', $this->zvalNullOperator.'('.$variableLeftCode.')', $expression['left']);
+                        break;
+
+                    case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
 
-                        return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableLeftCode.', "'.$rightStr.'")', $expression['left']);
+                        return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableLeftCode.', "'.$right->getCode().'")', $expression['left']);
                         break;
 
                     case 'variable':
@@ -523,9 +525,7 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'array':
                         switch ($right->getType()) {
                             case 'null':
-                                $compilationContext->headersManager->add('kernel/operators');
-
-                                return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableCode.', "")', $expression['left']);
+                                return new CompiledExpression('bool', $this->zvalNullOperator.'('.$variableCode.')', $expression['left']);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);

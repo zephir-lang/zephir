@@ -7,6 +7,9 @@ PHP_METHOD(Stub_ArrayAccessTest, exits);
 PHP_METHOD(Stub_ArrayAccessTest, get);
 PHP_METHOD(Stub_ArrayAccessTest, issue645);
 PHP_METHOD(Stub_ArrayAccessTest, issue1155);
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1);
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2);
+PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -18,6 +21,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue645, 0
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1155, 0, 0, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1094test1, 0, 0, _IS_BOOL, 0)
+	ZEND_ARG_ARRAY_INFO(0, items, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1094test2, 0, 0, _IS_BOOL, 0)
+	ZEND_ARG_ARRAY_INFO(0, items, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1094test3, 0, 0, _IS_BOOL, 0)
+	ZEND_ARG_ARRAY_INFO(0, items, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
@@ -33,5 +48,8 @@ ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 #endif
 	PHP_ME(Stub_ArrayAccessTest, issue645, arginfo_stub_arrayaccesstest_issue645, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1155, arginfo_stub_arrayaccesstest_issue1155, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1094Test1, arginfo_stub_arrayaccesstest_issue1094test1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1094Test2, arginfo_stub_arrayaccesstest_issue1094test2, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1094Test3, arginfo_stub_arrayaccesstest_issue1094test3, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
