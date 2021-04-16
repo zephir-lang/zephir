@@ -56,6 +56,36 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 	RETURN_MM_MEMBER(getThis(), "arrayFillQueue");
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/774
+ */
+PHP_METHOD(Stub_ArrayManipulation, issue774)
+{
+	zval _1;
+	zval obj, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&obj);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&obj);
+	object_init(&obj);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, 0);
+	zephir_update_property_zval(&obj, ZEND_STRL("prop0"), &_0);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(&_0, 1);
+	zephir_update_property_zval(&obj, ZEND_STRL("prop1"), &_0);
+	zephir_get_arrval(&_1, &obj);
+	ZEPHIR_CPY_WRT(&obj, &_1);
+	RETURN_CCTOR(&obj);
+}
+
 zend_object *zephir_init_properties_Stub_ArrayManipulation(zend_class_entry *class_type)
 {
 		zval _0, _1$$3;
