@@ -72,7 +72,7 @@ class ArrayAccessTest
         return isItemsNULL;
     }
 
-    public static function issue1086Test1ArrayStrict(array! params)
+    public static function issue1086AddElementToArrayWithStrictParams(array! params)
     {
         let params["test2"] = 1234;
     }
