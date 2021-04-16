@@ -44,9 +44,9 @@ class HardDisk implements FileSystemInterface
      *
      * Path to where all cached files and folders are collected.
      *
-     * @var string|null
+     * @var string
      */
-    private ?string $basePath;
+    private string $basePath;
 
     /**
      * HardDisk constructor.
