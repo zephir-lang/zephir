@@ -3,7 +3,7 @@ imports:
 
 parameters:
   prototypes_path: "%kernel.project_dir%/prototypes"
-  optimizers_path: "%kernel.root_dir%/Optimizers"
+  optimizers_path: "%kernel.project_dir%/Library/Optimizers"
   kernels_path: "%kernel.project_dir%/kernels"
   templates_path: "%kernel.project_dir%/templates"
   local_cache_path: "%kernel.local_cache_dir%"

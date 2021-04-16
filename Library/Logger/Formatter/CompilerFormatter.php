@@ -43,7 +43,7 @@ final class CompilerFormatter extends LineFormatter
     /**
      * {@inheritdoc}
      */
-    public function format(array $record)
+    public function format(array $record): string
     {
         if ($this->config->get('silent')) {
             return '';

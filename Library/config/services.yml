@@ -36,7 +36,7 @@ services:
       $templatesPath: '%templates_path%'
 
   Zephir\BaseBackend:
-    factory: 'Zephir\Backends\BackendFactory:createBackend'
+    factory: ['@Zephir\Backends\BackendFactory', 'createBackend']
     public: true
 
   Zephir\Compiler:
