@@ -77,31 +77,31 @@ class ArrayAccessTest
         let params["test2"] = 1234;
     }
 
-    public static function issue1086TestArrayStrict() -> array
+    public static function issue1086CanAddAnElementToExistingArrayWithStrictParams() -> array
     {
         array params;
 
         let params = [];
         let params["test"] = 123;
 
-        self::issue1086Test1ArrayStrict(params);
+        self::issue1086AddElementToArrayWithStrictParams(params);
 
         return params;
     }
 
-    public static function issue1086Test1Array(array params)
+    public static function issue1086AddElementToArrayWithoutStrictParams(array params)
     {
         let params["test2"] = 1234;
     }
 
-    public static function issue1086TestArray() -> array
+    public static function issue1086CanAddAnElementToExistingArrayWithoutStrictParams() -> array
     {
         array params;
 
         let params = [];
         let params["test"] = 123;
 
-        self::issue1086Test1Array(params);
+        self::issue1086AddElementToArrayWithoutStrictParams(params);
 
         return params;
     }

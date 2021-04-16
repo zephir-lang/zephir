@@ -62,11 +62,15 @@ final class ArrayAccessTest extends TestCase
         $this->assertFalse($class->issue1094Test3(['test' => 'ok']));
     }
 
-    public function testIssue1086(): void
+    public function testIssue1086CanAddAnElementToExistingArray(): void
     {
         $class = new \Stub\ArrayAccessTest();
 
-        $this->assertSame(['test' => 123], $class->issue1086TestArrayStrict());
-        $this->assertSame(['test' => 123], $class->issue1086TestArray());
+        $actual = $class->issue1086CanAddAnElementToExistingArrayWithStrictParams();
+        $this->assertSame(['test' => 123], $actual);
+        $this->assertSame(['test2' => 1234], $actual);
+        $actual = $class->issue1086CanAddAnElementToExistingArrayWithoutStrictParams();
+        $this->assertSame(['test' => 123], $actual);
+        $this->assertSame(['test2' => 1234], $actual);
     }
 }
