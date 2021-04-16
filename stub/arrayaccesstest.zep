@@ -71,4 +71,38 @@ class ArrayAccessTest
 
         return isItemsNULL;
     }
+
+    public static function issue1086Test1ArrayStrict(array! params)
+    {
+        let params["test2"] = 1234;
+    }
+
+    public static function issue1086TestArrayStrict() -> array
+    {
+        array params;
+
+        let params = [];
+        let params["test"] = 123;
+
+        self::issue1086Test1ArrayStrict(params);
+
+        return params;
+    }
+
+    public static function issue1086Test1Array(array params)
+    {
+        let params["test2"] = 1234;
+    }
+
+    public static function issue1086TestArray() -> array
+    {
+        array params;
+
+        let params = [];
+        let params["test"] = 123;
+
+        self::issue1086Test1Array(params);
+
+        return params;
+    }
 }
