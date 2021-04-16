@@ -619,7 +619,7 @@ final class Compiler
         }
 
         krsort($rankedFiles);
-        foreach ($rankedFiles as $rank => $rankFiles) {
+        foreach ($rankedFiles as $rankFiles) {
             $files = array_merge($files, $rankFiles);
         }
         $this->files = $files;
