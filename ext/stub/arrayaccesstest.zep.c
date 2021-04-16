@@ -217,6 +217,9 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	RETURN_MM_BOOL(isItemsNULL);
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1086
+ */
 PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -245,6 +248,9 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict)
 	ZEPHIR_MM_RESTORE();
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1086
+ */
 PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams)
 {
 	zval _0;
@@ -269,6 +275,9 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStr
 	RETURN_CTOR(&params);
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1086
+ */
 PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -297,6 +306,9 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams)
 	ZEPHIR_MM_RESTORE();
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1086
+ */
 PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams)
 {
 	zval _0;

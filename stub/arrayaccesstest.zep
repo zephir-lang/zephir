@@ -72,11 +72,17 @@ class ArrayAccessTest
         return isItemsNULL;
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1086
+     */
     public static function issue1086Strict(array! params)
     {
         let params["test2"] = 1234;
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1086
+     */
     public static function issue1086WontNullArrayAfterPassViaStaticWithStrictParams() -> array
     {
         array params;
@@ -89,11 +95,17 @@ class ArrayAccessTest
         return params;
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1086
+     */
     public static function issue1086NotStrictParams(array params)
     {
         let params["test2"] = 1234;
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1086
+     */
     public static function issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams() -> array
     {
         array params;
