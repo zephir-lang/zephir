@@ -30,12 +30,12 @@
         "ext-xml": "*",
         "ext-zlib": "*",
         "ocramius/proxy-manager": "^2.10",
-        "oneup/flysystem-bundle": "^1.14 || ^3.0",
-        "symfony/console": "^3.4",
-        "symfony/framework-bundle": "^3.4",
-        "symfony/monolog-bridge": "^3.4",
-        "symfony/monolog-bundle": "^2.12",
-        "symfony/yaml": "^3.4"
+        "oneup/flysystem-bundle": "^3.0",
+        "symfony/console": "^5.2",
+        "symfony/framework-bundle": "^5.2",
+        "symfony/monolog-bridge": "^5.2",
+        "symfony/monolog-bundle": "^3.7",
+        "symfony/yaml": "^5.2"
     },
     "require-dev": {
         "ext-gmp": "*",
