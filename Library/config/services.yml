@@ -18,11 +18,7 @@ services:
     public: true
     lazy: true
     arguments:
-      $filesystem: '@compiler_filesystem'
-    calls:
-    - method: setBasePath
-      arguments:
-        - '%local_cache_path%'
+      $basePath: '%local_cache_path%'
 
   Zephir\Config:
     factory: 'Zephir\Config::fromServer'

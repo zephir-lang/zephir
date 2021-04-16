@@ -43,7 +43,7 @@ final class FullCleanCommand extends AbstractCommand
 
         $io = new SymfonyStyle($input, $output);
 
-        /*
+        /**
          * TODO: Do we need a batch file for Windows like "clean" as used below?
          * TODO: The 'clean' file contains duplicated commands
          */
