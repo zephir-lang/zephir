@@ -10,10 +10,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1155);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086Test1ArrayStrict);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086TestArrayStrict);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086Test1Array);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086TestArray);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutStrictParams);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -39,18 +39,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1094te
 	ZEND_ARG_ARRAY_INFO(0, items, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086test1arraystrict, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithstrictparams, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, params, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086testarraystrict, 0, 0, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithstrictparams, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086test1array, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithoutstrictparams, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, params, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086testarray, 0, 0, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithoutstrictparams, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
@@ -69,9 +69,9 @@ ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test1, arginfo_stub_arrayaccesstest_issue1094test1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test2, arginfo_stub_arrayaccesstest_issue1094test2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test3, arginfo_stub_arrayaccesstest_issue1094test3, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086Test1ArrayStrict, arginfo_stub_arrayaccesstest_issue1086test1arraystrict, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086TestArrayStrict, arginfo_stub_arrayaccesstest_issue1086testarraystrict, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086Test1Array, arginfo_stub_arrayaccesstest_issue1086test1array, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086TestArray, arginfo_stub_arrayaccesstest_issue1086testarray, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams, arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStrictParams, arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END
 };
