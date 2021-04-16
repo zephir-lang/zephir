@@ -25,13 +25,3 @@ monolog:
       level: INFO
       formatter: compiler_log_formatter
 
-oneup_flysystem:
-  adapters:
-    compiler_adapter:
-      local:
-        directory: "%local_cache_path%"
-  filesystems:
-    compiler_local:
-      adapter: compiler_adapter
-      alias: compiler_filesystem
-      visibility: public
