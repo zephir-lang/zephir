@@ -1,6 +1,4 @@
 services:
-  Psr\Log\LoggerInterface:
-    public: true
 
   Zephir\CompilerFile:
     public: true
