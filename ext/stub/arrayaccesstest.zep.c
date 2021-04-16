@@ -217,7 +217,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	RETURN_MM_BOOL(isItemsNULL);
 }
 
-PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams)
+PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *params_param = NULL, _0;
@@ -245,7 +245,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams)
 	ZEPHIR_MM_RESTORE();
 }
 
-PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStrictParams)
+PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams)
 {
 	zval _0;
 	zval params;
@@ -264,12 +264,12 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStri
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 123);
 	zephir_array_update_string(&params, SL("test"), &_0, PH_COPY | PH_SEPARATE);
-	ZEPHIR_CALL_SELF(NULL, "issue1086addelementtoarraywithstrictparams", NULL, 0, &params);
+	ZEPHIR_CALL_SELF(NULL, "issue1086strict", NULL, 0, &params);
 	zephir_check_call_status();
 	RETURN_CTOR(&params);
 }
 
-PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams)
+PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *params_param = NULL, _0;
@@ -297,7 +297,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams)
 	ZEPHIR_MM_RESTORE();
 }
 
-PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutStrictParams)
+PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams)
 {
 	zval _0;
 	zval params;
@@ -316,7 +316,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutS
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 123);
 	zephir_array_update_string(&params, SL("test"), &_0, PH_COPY | PH_SEPARATE);
-	ZEPHIR_CALL_SELF(NULL, "issue1086addelementtoarraywithoutstrictparams", NULL, 0, &params);
+	ZEPHIR_CALL_SELF(NULL, "issue1086notstrictparams", NULL, 0, &params);
 	zephir_check_call_status();
 	RETURN_CTOR(&params);
 }

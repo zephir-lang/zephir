@@ -72,36 +72,36 @@ class ArrayAccessTest
         return isItemsNULL;
     }
 
-    public static function issue1086AddElementToArrayWithStrictParams(array! params)
+    public static function issue1086Strict(array! params)
     {
         let params["test2"] = 1234;
     }
 
-    public static function issue1086CanAddAnElementToExistingArrayWithStrictParams() -> array
+    public static function issue1086WontNullArrayAfterPassViaStaticWithStrictParams() -> array
     {
         array params;
 
         let params = [];
         let params["test"] = 123;
 
-        self::issue1086AddElementToArrayWithStrictParams(params);
+        self::issue1086Strict(params);
 
         return params;
     }
 
-    public static function issue1086AddElementToArrayWithoutStrictParams(array params)
+    public static function issue1086NotStrictParams(array params)
     {
         let params["test2"] = 1234;
     }
 
-    public static function issue1086CanAddAnElementToExistingArrayWithoutStrictParams() -> array
+    public static function issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams() -> array
     {
         array params;
 
         let params = [];
         let params["test"] = 123;
 
-        self::issue1086AddElementToArrayWithoutStrictParams(params);
+        self::issue1086NotStrictParams(params);
 
         return params;
     }

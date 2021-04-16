@@ -10,10 +10,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1155);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStrictParams);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams);
-PHP_METHOD(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -39,18 +39,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1094te
 	ZEND_ARG_ARRAY_INFO(0, items, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithstrictparams, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086strict, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, params, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithstrictparams, 0, 0, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithstrictparams, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithoutstrictparams, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_issue1086notstrictparams, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, params, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithoutstrictparams, 0, 0, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithoutstrictparams, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
@@ -69,9 +69,9 @@ ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test1, arginfo_stub_arrayaccesstest_issue1094test1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test2, arginfo_stub_arrayaccesstest_issue1094test2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test3, arginfo_stub_arrayaccesstest_issue1094test3, ZEND_ACC_PUBLIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086AddElementToArrayWithStrictParams, arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithStrictParams, arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086AddElementToArrayWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086addelementtoarraywithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Stub_ArrayAccessTest, issue1086CanAddAnElementToExistingArrayWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086canaddanelementtoexistingarraywithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086Strict, arginfo_stub_arrayaccesstest_issue1086strict, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams, arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086NotStrictParams, arginfo_stub_arrayaccesstest_issue1086notstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END
 };
