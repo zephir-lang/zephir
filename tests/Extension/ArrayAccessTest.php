@@ -61,4 +61,18 @@ final class ArrayAccessTest extends TestCase
         $this->assertFalse($class->issue1094Test3([]));
         $this->assertFalse($class->issue1094Test3(['test' => 'ok']));
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1086
+     */
+    public function testIssue1086StaticallyCalledFunctionWithArrayAsArgMustReturnArray(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithStrictParams();
+        $this->assertSame(['test' => 123], $actual);
+
+        $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams();
+        $this->assertSame(['test' => 123], $actual);
+    }
 }
