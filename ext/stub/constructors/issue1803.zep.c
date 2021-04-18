@@ -16,6 +16,9 @@
 #include "kernel/memory.h"
 
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1803
+ */
 ZEPHIR_INIT_CLASS(Stub_Constructors_Issue1803)
 {
 	ZEPHIR_REGISTER_CLASS(Stub\\Constructors, Issue1803, stub, constructors_issue1803, stub_constructors_issue1803_method_entry, 0);

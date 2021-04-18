@@ -26,7 +26,11 @@ final class Issue1803Test extends TestCase
         $class = new Issue1803();
 
         $this->assertInstanceOf(Issue1803::class, $class);
-        $this->assertSame('Original value', $class->value);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->assertSame('Original value', $class->value);
+        } else {
+            $this->assertSame("Value that won't be updated on class init", $class->value);
+        }
 
         $class->Issue1803();
 
