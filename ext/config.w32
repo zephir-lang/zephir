@@ -24,6 +24,7 @@ if (PHP_STUB != "no") {
 	ADD_SOURCES(configure_module_dirname + "/stub/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/bench", "foo.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/constructors", "issue1803.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/flow", "switchflow.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/integration/psr/http/message", "messageinterfaceex.zep.c", "stub");

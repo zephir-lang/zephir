@@ -89,6 +89,7 @@ zend_class_entry *stub_constants_ce;
 zend_class_entry *stub_constantsinterface_ce;
 zend_class_entry *stub_constantsinterfacea_ce;
 zend_class_entry *stub_constantsinterfaceb_ce;
+zend_class_entry *stub_constructors_issue1803_ce;
 zend_class_entry *stub_declaretest_ce;
 zend_class_entry *stub_echoes_ce;
 zend_class_entry *stub_emptytest_ce;
@@ -309,6 +310,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_ConstantsInterface);
 	ZEPHIR_INIT(Stub_ConstantsInterfaceA);
 	ZEPHIR_INIT(Stub_ConstantsInterfaceB);
+	ZEPHIR_INIT(Stub_Constructors_Issue1803);
 	ZEPHIR_INIT(Stub_DeclareTest);
 	ZEPHIR_INIT(Stub_Echoes);
 	ZEPHIR_INIT(Stub_EmptyTest);
