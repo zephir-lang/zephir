@@ -3,7 +3,6 @@ namespace Stub\Properties;
 
 class StaticProtectedProperties
 {
-
 	/**
 	 * This is a protected property with no initial value
 	 */
@@ -81,4 +80,20 @@ class StaticProtectedProperties
 		return self::someString;
 	}
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1536
+     */
+    public function compareStaticNull() -> bool
+    {
+        var someNull;
+
+        let someNull = self::someNull;
+
+        if someNull === null {
+            let someNull = true;
+            return someNull;
+        }
+
+        return someNull;
+    }
 }

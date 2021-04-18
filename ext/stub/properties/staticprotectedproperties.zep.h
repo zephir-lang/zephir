@@ -13,6 +13,7 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeTrue);
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeInteger);
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeDouble);
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeString);
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticprotectedproperties_setsomevar, 0, 0, 1)
 	ZEND_ARG_INFO(0, someVar)
@@ -44,6 +45,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticprotectedproperties_getsome
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_properties_staticprotectedproperties_getsomestring, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_properties_staticprotectedproperties_comparestaticnull, 0, 0, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_properties_staticprotectedproperties_method_entry) {
@@ -89,5 +93,6 @@ ZEPHIR_INIT_FUNCS(stub_properties_staticprotectedproperties_method_entry) {
 #else
 	PHP_ME(Stub_Properties_StaticProtectedProperties, getSomeString, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 #endif
+	PHP_ME(Stub_Properties_StaticProtectedProperties, compareStaticNull, arginfo_stub_properties_staticprotectedproperties_comparestaticnull, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

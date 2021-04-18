@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Properties_StaticProtectedProperties)
@@ -191,5 +192,28 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeString)
 
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someString"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
+}
+
+PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull)
+{
+	zval someNull, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&someNull);
+	ZVAL_UNDEF(&_0);
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_OBS_VAR(&_0);
+	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someNull"), PH_NOISY_CC);
+	ZEPHIR_CPY_WRT(&someNull, &_0);
+	if (Z_TYPE_P(&someNull) == IS_NULL) {
+		ZEPHIR_INIT_NVAR(&someNull);
+		ZVAL_BOOL(&someNull, 1);
+		RETURN_CCTOR(&someNull);
+	}
+	RETURN_CCTOR(&someNull);
 }
 

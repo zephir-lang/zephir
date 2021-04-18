@@ -9,12 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-class TestScopePhpMagicExtending extends TestScopePhpMagic
-{
-    private $privateProperty2 = 'private2';
+use Stub\Properties\StaticProtectedProperties;
 
-    public function getPrivateProperty2()
-    {
-        return $this->privateProperty2;
-    }
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1536
+ */
+class TestStaticProtectedProperties extends StaticProtectedProperties
+{
 }
