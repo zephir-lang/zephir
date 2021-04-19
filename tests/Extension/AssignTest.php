@@ -140,6 +140,7 @@ final class AssignTest extends TestCase
             [$arry,                       'testStaticPropertyArrayMulti4'],
             [['test', 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
             [['a' => true, 'b' => false], 'testArrayBoolExpressionAssign'],
+            [['or' => 901, 'and' => 4, 'xor' => 897, 'shiftleft' => 28800, 'shiftright' => 28], 'testAssignBitwiseX', [900, 5]],
         ];
     }
 

@@ -911,6 +911,36 @@ class Assign
 		return this->myArray;
 	}
 
+	public function testAssignBitwiseX(int a, int b)
+	{
+		var op, i;
+		var result = [];
+
+		for op in ["or", "and", "xor", "shiftleft", "shiftright"] {
+			let i = a;
+			switch op {
+				case "or":
+					let i |= b;
+					break;
+				case "and":
+					let i &= b;
+					break;
+				case "xor":
+					let i ^= b;
+					break;
+				case "shiftleft":
+					let i <<= b;
+					break;
+				case "shiftright":
+					let i >>= b;
+					break;
+			}
+			let result[op] = i;
+		}
+
+		return result;
+	}
+
 	/**
 	 * @link https://github.com/zephir-lang/zephir/issues/725
 	 */
@@ -942,68 +972,18 @@ class Assign
 
 	public function issue597()
 	{
-	    if isset _POST["a"] {
-            if isset _GET["r"] {
-                // Nothing here
-            }
-        }
-
-        if isset _GET["s"] {
-            var s;
-            let s = _GET["s"] * 5;
-            let _GET["s"] = s;
-
-            return s;
-        }
-	}
-
-	public function testAssignBitwiseX(string! op, int a, int b)
-	{
-		var i, j;
-		int r;
-		array result = [];
-
-		switch op {
-			case "or":
-				let a |= b;
-				break;
-			case "and":
-				let a &= b;
-				break;
-			case "xor":
-				let a ^= b;
-				break;
-			case "shiftleft":
-				let a <<= b;
-				break;
-			case "shiftright":
-				let a >>= b;
-				break;
-
-			default:
-				throw new \InvalidArgumentException("First argument must have: or, and, xor, shiftleft, shiftright");
-		}
-
-		for i in [0, 1] {
-			for j in [0, 1] {
-				let r = i;
-				switch op {
-					case "or":
-						let r |= j;
-						break;
-					case "and":
-						let r &= j;
-						break;
-					case "xor":
-						let r ^= j;
-						break;
-				}
-
-				let result[] = r;
+		if isset _POST["a"] {
+			if isset _GET["r"] {
+				// Nothing here
 			}
 		}
 
-		let a += array_sum(result);
-		return a;
+		if isset _GET["s"] {
+			var s;
+			let s = _GET["s"] * 5;
+			let _GET["s"] = s;
+
+			return s;
+		}
 	}
 }
