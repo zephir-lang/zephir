@@ -1152,7 +1152,7 @@ int zephir_update_static_property_array_multi_ce(
 	}
 
 	va_start(ap, types_count);
-	SEPARATE_ZVAL_IF_NOT_REF(&tmp_arr);
+	SEPARATE_ZVAL_NOREF(&tmp_arr);
 	zephir_array_update_multi_ex(&tmp_arr, value, types, types_length, types_count, ap);
 	va_end(ap);
 
