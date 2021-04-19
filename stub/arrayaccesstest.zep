@@ -3,6 +3,7 @@ namespace Stub;
 class ArrayAccessTest
 {
     protected data;
+    protected unsetData = ["key_a": "marcin", "key_b": "paula"];
 
 	public static function exits()
 	{
@@ -116,5 +117,34 @@ class ArrayAccessTest
         self::issue1086NotStrictParams(params);
 
         return params;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function issue1259UnsetKeyFromArrayInternalVariable() -> array
+    {
+        array ret = [];
+        array unsetData = ["key_a": "marcin", "key_b": "paula"];
+
+        let ret[] = unsetData;
+        unset(unsetData["key_a"]);
+        let ret[] = unsetData;
+
+        return ret;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function issue1259UnsetKeyFromArrayProperty() -> array
+    {
+        array ret = [];
+
+        let ret[] = this->unsetData;
+        unset(this->unsetData["key_a"]);
+        let ret[] = this->unsetData;
+
+        return ret;
     }
 }

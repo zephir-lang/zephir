@@ -75,4 +75,20 @@ final class ArrayAccessTest extends TestCase
         $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams();
         $this->assertSame(['test' => 123], $actual);
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetKeyFromArray(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $expected = [
+            ['key_a' => 'marcin', 'key_b' => 'paula'],
+            ['key_b' => 'paula'],
+        ];
+
+        $this->assertSame($expected, $class->issue1259UnsetKeyFromArrayInternalVariable());
+        $this->assertSame($expected, $class->issue1259UnsetKeyFromArrayProperty());
+    }
 }
