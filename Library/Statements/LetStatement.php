@@ -93,7 +93,7 @@ class LetStatement extends StatementAbstract
             if (isset($assignment['expr'])) {
                 /**
                  * Replace on direct-assignment if this bitwise-assignment
-                 * @Todo: Replace on supported native bitwise-assignment
+                 * TODO: Replace on supported native bitwise-assignment
                  */
                 $assignment = $this->replaceAssignBitwiseOnDirect($assignment);
 
@@ -267,11 +267,11 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * @param $assignment
-     * @return mixed
+     * @param array $assignment
+     * @return array
      * @throws CompilerException
      */
-    protected function replaceAssignBitwiseOnDirect($assignment)
+    protected function replaceAssignBitwiseOnDirect(array $assignment): array
     {
         switch ($assignment['operator']) {
             case AssignVariableOperator::OPERATOR_BITWISE_AND:
@@ -298,7 +298,7 @@ class LetStatement extends StatementAbstract
                 return $assignment;
         }
 
-        if ($assignment['assign-type'] != 'variable') {
+        if ($assignment['assign-type'] !== 'variable') {
             throw new CompilerException("Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']);
         }
 
