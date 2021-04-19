@@ -62,7 +62,7 @@ class ClosureArrow extends Closure
                 'const' => 0,
                 'data-type' => 'variable',
                 'mandatory' => 0,
-                'reference' => 0,
+                'reference' => $expression['left']['value'],
                 'file' => $expression['left']['file'],
                 'line' => $expression['left']['line'],
                 'char' => $expression['left']['char'],

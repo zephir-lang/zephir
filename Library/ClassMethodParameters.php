@@ -54,21 +54,9 @@ class ClassMethodParameters implements Countable, Iterator, ArrayAccess
      * ClassMethodParameters constructor.
      *
      * @param array $parameters
-     *
-     * @throws CompilerException
      */
     public function __construct(array $parameters)
     {
-        foreach ($parameters as $parameter) {
-            if (isset($parameter['reference']) && $parameter['reference']) {
-                throw new CompilerException(
-                    'Zephir not support reference parameters for now. '.
-                    'Stay tuned for https://github.com/zephir-lang/zephir/issues/203',
-                    $parameter
-                );
-            }
-        }
-
         $this->parameters = $parameters;
     }
 

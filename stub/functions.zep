@@ -24,4 +24,9 @@ class Functions
 
         return false == filter_var(ret, FILTER_VALIDATE_FLOAT, 20480);
     }
+
+    public function passByReference(var& i) -> void
+    {
+        let i += 10;
+    }
 }

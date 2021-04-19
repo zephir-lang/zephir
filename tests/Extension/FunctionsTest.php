@@ -25,4 +25,13 @@ class FunctionsTest extends TestCase
         $this->assertFalse($class->filterVar1());
         $this->assertTrue($class->filterVar2());
     }
+
+    public function testPassByReference(): void
+    {
+        $class = new Functions();
+
+        $i = 10;
+        $class->passByReference($i);
+        $this->assertEquals(20, $i);
+    }
 }
