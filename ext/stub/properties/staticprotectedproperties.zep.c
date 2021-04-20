@@ -194,6 +194,9 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeString)
 	RETURN_CTORW(&_0);
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1536
+ */
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull)
 {
 	zval someNull, _0;

@@ -212,11 +212,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterbooleannull, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparamwithdefaultemptyarray, 0, 0, 0)
-	ZEND_ARG_ARRAY_INFO(0, driverOptions, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, driverOptions, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparamwithdefaultnullvalue, 0, 0, 0)
-	ZEND_ARG_ARRAY_INFO(0, driverOptions, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, driverOptions, IS_ARRAY, 1, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparam, 0, 0, 1)
