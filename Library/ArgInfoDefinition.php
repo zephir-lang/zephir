@@ -379,7 +379,7 @@ class ArgInfoDefinition
 
     private function passByReference(array $parameter)
     {
-        return isset($parameter['reference']) ? $parameter['reference'] : 0;
+        return $parameter['reference'] ?? 0;
     }
 
     private function getReturnType(): string
