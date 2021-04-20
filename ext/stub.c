@@ -127,6 +127,7 @@ zend_class_entry *stub_invoke_ce;
 zend_class_entry *stub_invokes_invokeprotected_ce;
 zend_class_entry *stub_invokes_invokeprotectedcomplex_ce;
 zend_class_entry *stub_issettest_ce;
+zend_class_entry *stub_issue1134_ce;
 zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
 zend_class_entry *stub_issue2165_issue_ce;
@@ -348,6 +349,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Invokes_InvokeProtected);
 	ZEPHIR_INIT(Stub_Invokes_InvokeProtectedComplex);
 	ZEPHIR_INIT(Stub_IssetTest);
+	ZEPHIR_INIT(Stub_Issue1134);
 	ZEPHIR_INIT(Stub_Issue1404);
 	ZEPHIR_INIT(Stub_Issue1521);
 	ZEPHIR_INIT(Stub_Issue2165_Issue);

@@ -93,6 +93,7 @@
 #include "stub/invokes/invokeprotected.zep.h"
 #include "stub/invokes/invokeprotectedcomplex.zep.h"
 #include "stub/issettest.zep.h"
+#include "stub/issue1134.zep.h"
 #include "stub/issue1404.zep.h"
 #include "stub/issue1521.zep.h"
 #include "stub/issue2165/issue.zep.h"

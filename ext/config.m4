@@ -98,6 +98,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/invokes/invokeprotected.zep.c
 	stub/invokes/invokeprotectedcomplex.zep.c
 	stub/issettest.zep.c
+	stub/issue1134.zep.c
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
