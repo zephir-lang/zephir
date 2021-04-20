@@ -21,7 +21,7 @@ if (PHP_STUB != "no") {
 	ADD_SOURCES(configure_module_dirname + "/stub/oo/extend/db/query", "exception.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/oo/scopes", "hasprivatemethod.zep.c scopetesterinterface.zep.c abstractclass.zep.c abstractclassmagic.zep.c privatescopetester.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/ooimpl", "zbeginning.zep.c abeginning.zep.c", "stub");
-	ADD_SOURCES(configure_module_dirname + "/stub/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/properties", "publicproperties.zep.c app.zep.c extendspublicproperties.zep.c getobjectvars.zep.c privateproperties.zep.c propertyarray.zep.c propertyupdate.zep.c protectedproperties.zep.c staticprivateproperties.zep.c staticpropertyarray.zep.c staticprotectedproperties.zep.c staticpublicproperties.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/bench", "foo.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/builtin", "arraymethods.zep.c charmethods.zep.c intmethods.zep.c stringmethods.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/constructors", "issue1803.zep.c", "stub");

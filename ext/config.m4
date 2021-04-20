@@ -171,6 +171,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/pregmatch.zep.c
 	stub/properties/app.zep.c
 	stub/properties/extendspublicproperties.zep.c
+	stub/properties/getobjectvars.zep.c
 	stub/properties/privateproperties.zep.c
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
