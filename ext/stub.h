@@ -98,6 +98,7 @@
 #include "stub/issue2165/issue.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue887.zep.h"
+#include "stub/issue893.zep.h"
 #include "stub/issue914.zep.h"
 #include "stub/issues.zep.h"
 #include "stub/json.zep.h"
