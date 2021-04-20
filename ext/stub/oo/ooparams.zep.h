@@ -94,7 +94,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setenableddefault, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlistdefault, 0, 0, 0)
+#if PHP_VERSION_ID >= 80000
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, someList, IS_ARRAY, 0, "[]")
+#else
+	ZEND_ARG_ARRAY_INFO(0, someList, 0)
+#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setconstage, 0, 0, 1)

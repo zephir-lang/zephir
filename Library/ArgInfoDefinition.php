@@ -238,6 +238,7 @@ class ArgInfoDefinition
                             )
                         );
                     } else {
+                        $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                         $this->codePrinter->output(
                             sprintf(
                                 "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)",
@@ -247,6 +248,17 @@ class ArgInfoDefinition
                                 $this->defaultArrayValue($parameter),
                             )
                         );
+                        $this->codePrinter->output('#else');
+                        // `ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE` does not exist in PHP 7.4
+                        $this->codePrinter->output(
+                            sprintf(
+                                "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
+                                $this->passByReference($parameter),
+                                $parameter['name'],
+                                (int) $this->allowNull($parameter)
+                            )
+                        );
+                        $this->codePrinter->output('#endif');
                     }
                     break;
                 case '0:variable':

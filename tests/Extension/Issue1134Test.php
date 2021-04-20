@@ -34,14 +34,18 @@ final class Issue1134Test extends TestCase
 
         $this->assertSame('config', $params[0]->getName());
         $this->assertTrue($params[0]->isOptional());
-        $this->assertTrue($params[0]->isDefaultValueAvailable());
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->assertTrue($params[0]->isDefaultValueAvailable());
+        }
 
         $arrayWithFilledDefaultValueParam = $ref->getMethod('arrayWithFilledDefaultValue');
         $params2 = $arrayWithFilledDefaultValueParam->getParameters();
 
         $this->assertSame('someDefaultData', $params2[0]->getName());
         $this->assertTrue($params2[0]->isOptional());
-        $this->assertTrue($params2[0]->isDefaultValueAvailable());
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->assertTrue($params2[0]->isDefaultValueAvailable());
+        }
 
         $class = new Issue1134();
         $this->assertSame([], $class->arrayWithFilledDefaultValue());
