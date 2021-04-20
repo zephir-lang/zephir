@@ -104,6 +104,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2165/issue.zep.c
 	stub/issue663.zep.c
 	stub/issue887.zep.c
+	stub/issue893.zep.c
 	stub/issue914.zep.c
 	stub/issues.zep.c
 	stub/json.zep.c
@@ -172,6 +173,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/pregmatch.zep.c
 	stub/properties/app.zep.c
 	stub/properties/extendspublicproperties.zep.c
+	stub/properties/getobjectvars.zep.c
 	stub/properties/privateproperties.zep.c
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
