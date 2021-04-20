@@ -364,7 +364,7 @@ int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
 			return (zend_symtable_del(ht, Z_STR_P(index)) == SUCCESS);
 
 		default:
-			zend_error(E_WARNING, "Illegal offset type");
+			zend_error(E_WARNING, "Passed index has illegal offset type (check zephir_array_unset())");
 			return 0;
 	}
 }
