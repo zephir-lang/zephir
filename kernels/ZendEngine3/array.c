@@ -387,7 +387,7 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
 	}
 
 	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
-		SEPARATE_ARRAY(arr);
+		SEPARATE_ZVAL(arr);
 	}
 
 	return zend_hash_str_del(Z_ARRVAL_P(arr), index, index_length);
