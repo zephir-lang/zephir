@@ -26,7 +26,7 @@ final class Issue1134Test extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function testIssue914(): void
+    public function testIssue914ReflectionParamDefaultValueShouldReturnTrue(): void
     {
         $ref = new ReflectionClass(Issue1134::class);
         $constructor = $ref->getConstructor();
