@@ -36,7 +36,7 @@ class ArgInfoDefinition
     /**
      * @var ClassMethodParameters|null
      */
-    private ?ClassMethodParameters $parameters = null;
+    private ?ClassMethodParameters $parameters;
 
     /**
      * @var CodePrinter
