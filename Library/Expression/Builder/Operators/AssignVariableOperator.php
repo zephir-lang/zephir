@@ -39,6 +39,23 @@ class AssignVariableOperator extends AbstractOperator
     // %=
     const OPERATOR_MOD = 'mod-assign';
 
+    // &=
+    const OPERATOR_BITWISE_AND = 'bitwise-and-assign';
+
+    // |=
+    const OPERATOR_BITWISE_OR = 'bitwise-or-assign';
+
+    // ^=
+    const OPERATOR_BITWISE_XOR = 'bitwise-xor-assign';
+
+    // <<=
+    const OPERATOR_BITWISE_SHIFTLEFT = 'bitwise-shiftleft-assign';
+
+    // >>=
+    const OPERATOR_BITWISE_SHIFTRIGHT = 'bitwise-shiftright-assign';
+
+
+
     private $variable;
     private $operator = self::OPERATOR_ASSIGN;
     private $expression;
