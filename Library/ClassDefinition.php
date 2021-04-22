@@ -1912,14 +1912,37 @@ final class ClassDefinition extends AbstractClassDefinition
                 $classEntry = 'php_pdo_get_exception()';
                 break;
 
+            /**
+             * PHP Ext Date
+             */
+            case 'datetimeinterface':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_interface_ce()';
+                break;
+
             case 'datetime':
                 $compilationContext->headersManager->add('ext/date/php_date');
                 $classEntry = 'php_date_get_date_ce()';
                 break;
 
+            case 'datetimeimmutable':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_immutable_ce()';
+                break;
+
             case 'datetimezone':
                 $compilationContext->headersManager->add('ext/date/php_date');
                 $classEntry = 'php_date_get_timezone_ce()';
+                break;
+
+            case 'dateinterval':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_interval_ce()';
+                break;
+
+            case 'dateperiod':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_period_ce()';
                 break;
 
             /**
