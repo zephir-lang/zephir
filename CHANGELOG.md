@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 ### Fixed
 - Fixed nullable array [#1094](https://github.com/zephir-lang/zephir/issues/1094)
+- Fixed default value detection with Reflection (only PHP 8.0) [#1134](https://github.com/zephir-lang/zephir/issues/1134)
+- Updated supported list of class entries for PHP date extension [#2226](https://github.com/zephir-lang/zephir/issues/2226)
+
+### Added
+- Added support syntax assign-bitwise operators [#1103](https://github.com/zephir-lang/zephir/issues/1103)
 
 ## [0.13.2] - 2021-04-10
 ### Fixed
