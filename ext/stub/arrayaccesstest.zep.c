@@ -68,7 +68,7 @@ PHP_METHOD(Stub_ArrayAccessTest, get)
 	object_init_ex(&arr, stub_arrayaccessobj_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "stub/arrayaccesstest.zep", 21);
+	zephir_array_fetch_string(&_0, &arr, SL("two"), PH_NOISY | PH_READONLY, "stub/arrayaccesstest.zep", 28);
 	RETURN_CTOR(&_0);
 }
 
@@ -357,18 +357,18 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable)
 	zephir_create_array(&unsetData, 2, 0);
 	add_assoc_stringl_ex(&unsetData, SL("key_a"), SL("marcin"));
 	add_assoc_stringl_ex(&unsetData, SL("key_b"), SL("paula"));
-	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 130);
+	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 137);
 	zephir_array_unset_string(&unsetData, SL("key_a"), PH_SEPARATE);
-	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 132);
+	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 139);
 	RETURN_CTOR(&ret);
 }
 
 /**
  * @issue https://github.com/zephir-lang/zephir/issues/1259
  */
-PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayProperty)
+PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 {
-	zval _0, _1, _2;
+	zval _0, _1, _2, _3;
 	zval ret;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
@@ -377,6 +377,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayProperty)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
 
 
 	ZEPHIR_MM_GROW();
@@ -384,11 +385,44 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayProperty)
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 144);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 151);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset_string(&_1, SL("key_a"), PH_SEPARATE);
+	ZVAL_STR(&_1, "key_a");
+	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_2, PH_SEPARATE, "stub/arrayaccesstest.zep", 146);
+	zephir_array_unset_string(&_2, SL("key_a"), PH_SEPARATE);
+	zephir_read_property(&_3, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 153);
+	RETURN_CTOR(&ret);
+}
+
+PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
+{
+	zval _0, _1, _2, _3;
+	zval ret;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&ret);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&ret);
+	array_init(&ret);
+	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 162);
+	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
+	ZVAL_LONG(&_1, 3);
+	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
+	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_unset_long(&_2, 3, PH_SEPARATE);
+	zephir_read_property(&_3, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
+	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 164);
 	RETURN_CTOR(&ret);
 }
 
@@ -409,9 +443,10 @@ zend_object *zephir_init_properties_Stub_ArrayAccessTest(zend_class_entry *class
 		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
 			ZEPHIR_INIT_VAR(&_1$$3);
-			zephir_create_array(&_1$$3, 2, 0);
+			zephir_create_array(&_1$$3, 3, 0);
 			add_assoc_stringl_ex(&_1$$3, SL("key_a"), SL("marcin"));
 			add_assoc_stringl_ex(&_1$$3, SL("key_b"), SL("paula"));
+			add_index_stringl(&_1$$3, 3, SL("long value"));
 			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("unsetData"), &_1$$3);
 		}
 		ZEPHIR_MM_RESTORE();
