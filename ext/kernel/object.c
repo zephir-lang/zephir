@@ -956,6 +956,8 @@ int zephir_unset_property(zval* object, const char* name)
 
 /**
  * Unsets an index in an array property
+ *
+ * TODO: This only works with zephir_read_property() + zephir_array_unset_string(), which might be incorrect
  */
 int zephir_unset_property_array(zval *object, char *property, unsigned int property_length, zval *index)
 {
