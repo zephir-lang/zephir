@@ -14,6 +14,10 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict);
 PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams);
 PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams);
 PHP_METHOD(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams);
+PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable);
+PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty);
+PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty);
+zend_object *zephir_init_properties_Stub_ArrayAccessTest(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -65,6 +69,18 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithoutstrictparams, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1259unsetkeyfromarrayinternalvariable, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1259unsetstringkeyfromarrayproperty, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1259unsetlongkeyfromarrayproperty, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_zephir_init_properties_stub_arrayaccesstest, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 #if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_ArrayAccessTest, exits, arginfo_stub_arrayaccesstest_exits, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
@@ -85,5 +101,8 @@ ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 	PHP_ME(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithStrictParams, arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1086NotStrictParams, arginfo_stub_arrayaccesstest_issue1086notstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams, arginfo_stub_arrayaccesstest_issue1086wontnullarrayafterpassviastaticwithoutstrictparams, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable, arginfo_stub_arrayaccesstest_issue1259unsetkeyfromarrayinternalvariable, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty, arginfo_stub_arrayaccesstest_issue1259unsetstringkeyfromarrayproperty, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty, arginfo_stub_arrayaccesstest_issue1259unsetlongkeyfromarrayproperty, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

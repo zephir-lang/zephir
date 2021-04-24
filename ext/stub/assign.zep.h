@@ -92,6 +92,7 @@ PHP_METHOD(Stub_Assign, testArrayProperty);
 PHP_METHOD(Stub_Assign, testGlobalVarAssign);
 PHP_METHOD(Stub_Assign, testConstantKeyAssign);
 PHP_METHOD(Stub_Assign, testArrayBoolExpressionAssign);
+PHP_METHOD(Stub_Assign, testAssignBitwiseX);
 PHP_METHOD(Stub_Assign, testAssignSuperGlobals);
 PHP_METHOD(Stub_Assign, testAssignSuperGlobalsSERVER);
 PHP_METHOD(Stub_Assign, testAssignSuperGlobalsGET);
@@ -387,6 +388,11 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testarrayboolexpressionassign, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassignbitwisex, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, a, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, b, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_assign_testassignsuperglobals, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
@@ -613,6 +619,7 @@ ZEPHIR_INIT_FUNCS(stub_assign_method_entry) {
 #else
 	PHP_ME(Stub_Assign, testArrayBoolExpressionAssign, NULL, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(Stub_Assign, testAssignBitwiseX, arginfo_stub_assign_testassignbitwisex, ZEND_ACC_PUBLIC)
 #if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Assign, testAssignSuperGlobals, arginfo_stub_assign_testassignsuperglobals, ZEND_ACC_PUBLIC)
 #else

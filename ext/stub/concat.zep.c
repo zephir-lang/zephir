@@ -63,7 +63,7 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC);
-	SEPARATE_ZVAL_IF_NOT_REF(&title);
+	SEPARATE_ZVAL(&title);
 	zephir_concat_function(&title, &_0, &title);
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &title);
 	ZEPHIR_MM_RESTORE();
