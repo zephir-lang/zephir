@@ -130,7 +130,6 @@ class UnsetStatement extends StatementAbstract
                         break;
                 }
                 break;
-
         }
 
         $expr = new Expression($expression['left']['left']);
