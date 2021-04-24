@@ -3,7 +3,14 @@ namespace Stub;
 class ArrayAccessTest
 {
     protected data;
-    protected unsetData = ["key_a": "marcin", "key_b": "paula"];
+    protected unsetData = [
+        "key_a": "marcin",
+        "key_b": "paula",
+        3: "long value"
+        //3.14: "double value", // Syntax error
+        //false: "bool value", // Syntax error
+        //null: "null value"  // Syntax error
+    ];
 
 	public static function exits()
 	{
@@ -137,7 +144,7 @@ class ArrayAccessTest
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/1259
      */
-    public function issue1259UnsetKeyFromArrayProperty() -> array
+    public function issue1259UnsetStringKeyFromArrayProperty() -> array
     {
         array ret = [];
 
@@ -147,4 +154,54 @@ class ArrayAccessTest
 
         return ret;
     }
+
+    public function issue1259UnsetLongKeyFromArrayProperty() -> array
+    {
+        array ret = [];
+
+        let ret[] = this->unsetData;
+        unset(this->unsetData[3]);
+        let ret[] = this->unsetData;
+
+        return ret;
+    }
+
+    /*
+    public function issue1259UnsetDoubleKeyFromArrayProperty() -> array
+    {
+        array ret = [];
+
+        let ret[] = this->unsetData;
+        unset(this->unsetData[3.14]);
+        let ret[] = this->unsetData;
+
+        return ret;
+    }
+    */
+
+    /*
+    public function issue1259UnsetBoolKeyFromArrayProperty() -> array
+    {
+        array ret = [];
+
+        let ret[] = this->unsetData;
+        unset(this->unsetData[false]);
+        let ret[] = this->unsetData;
+
+        return ret;
+    }
+    */
+
+    /*
+    public function issue1259UnsetNullKeyFromArrayProperty() -> array
+    {
+        array ret = [];
+
+        let ret[] = this->unsetData;
+        unset(this->unsetData[null]);
+        let ret[] = this->unsetData;
+
+        return ret;
+    }
+    */
 }

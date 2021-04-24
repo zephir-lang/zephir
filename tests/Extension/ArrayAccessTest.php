@@ -17,6 +17,15 @@ use PHPUnit\Framework\TestCase;
 
 final class ArrayAccessTest extends TestCase
 {
+    private array $defaultUnsetData = [
+        'key_a' => 'marcin',
+        'key_b' => 'paula',
+        3 => 'long value',
+        //3.14 => 'double value', // Not supported yet
+        //false => 'bool value', // Not supported yet
+        //null => 'null value', // Not supported yet
+    ];
+
     public function testTest(): void
     {
         $class = new \Stub\ArrayAccessTest();
@@ -89,6 +98,43 @@ final class ArrayAccessTest extends TestCase
         ];
 
         $this->assertSame($expected, $class->issue1259UnsetKeyFromArrayInternalVariable());
-        $this->assertSame($expected, $class->issue1259UnsetKeyFromArrayProperty());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetStringKeyFromArrayProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame(
+            [
+                $this->defaultUnsetData,
+                [
+                    'key_b' => 'paula',
+                    3 => 'long value',
+                ],
+            ],
+            $class->issue1259UnsetStringKeyFromArrayProperty()
+        );
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetLongKeyFromArrayProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame(
+            [
+                $this->defaultUnsetData,
+                [
+                    'key_a' => 'marcin',
+                    'key_b' => 'paula',
+                ],
+            ],
+            $class->issue1259UnsetLongKeyFromArrayProperty()
+        );
     }
 }
