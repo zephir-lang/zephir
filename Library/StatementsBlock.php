@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
@@ -29,6 +30,8 @@ use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 use Zephir\Statements\WhileStatement;
 
+use function count;
+
 /**
  * StatementsBlock.
  *
@@ -41,9 +44,9 @@ class StatementsBlock
 
     protected $unreachable;
 
-    protected $debug = false;
+    protected bool $debug = false;
 
-    protected $loop = false;
+    protected bool $loop = false;
 
     protected $mutateGatherer;
 
@@ -85,7 +88,7 @@ class StatementsBlock
      *
      * @return StatementsBlock
      */
-    public function isLoop($loop)
+    public function isLoop(bool $loop): StatementsBlock
     {
         $this->loop = $loop;
 
@@ -94,12 +97,14 @@ class StatementsBlock
 
     /**
      * @param CompilationContext $compilationContext
-     * @param bool               $unreachable
-     * @param int                $branchType
+     * @param bool $unreachable
+     * @param int $branchType
      *
      * @return Branch
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN)
+    public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN): Branch
     {
         $compilationContext->codePrinter->increaseLevel();
         ++$compilationContext->currentBranch;
@@ -111,16 +116,14 @@ class StatementsBlock
         $currentBranch->setType($branchType);
         $currentBranch->setUnreachable($unreachable);
 
-        /*
+        /**
          * Activate branch in the branch manager
          */
         $compilationContext->branchManager->addBranch($currentBranch);
-
         $this->unreachable = $unreachable;
-
         $statements = $this->statements;
 
-        /*
+        /**
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
@@ -140,7 +143,7 @@ class StatementsBlock
         }
 
         foreach ($statements as $statement) {
-            /*
+            /**
              * TODO: Generate GDB hints
              */
             if ($this->debug) {
@@ -153,7 +156,7 @@ class StatementsBlock
                 }
             }
 
-            /*
+            /**
              * Show warnings if code is generated when the 'unreachable state' is 'on'
              */
             if (true === $this->unreachable) {
@@ -347,19 +350,18 @@ class StatementsBlock
             }
         }
 
-        /*
+        /**
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
             array_pop($compilationContext->cycleBlocks);
         }
 
-        /*
+        /**
          * Traverses temporal variables created in a specific branch
          * marking them as idle
          */
         $compilationContext->symbolTable->markTemporalVariablesIdle($compilationContext);
-
         $compilationContext->branchManager->removeBranch($currentBranch);
 
         --$compilationContext->currentBranch;
@@ -373,7 +375,7 @@ class StatementsBlock
      *
      * @return array
      */
-    public function getStatements()
+    public function getStatements(): array
     {
         return $this->statements;
     }
@@ -393,7 +395,7 @@ class StatementsBlock
      *
      * @return string
      */
-    public function getLastStatementType()
+    public function getLastStatementType(): string
     {
         return $this->lastStatement['type'];
     }
@@ -413,9 +415,9 @@ class StatementsBlock
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return 0 == \count($this->statements);
+        return 0 === count($this->statements);
     }
 
     /**
@@ -425,7 +427,7 @@ class StatementsBlock
      *
      * @return MutateGathererPass
      */
-    public function getMutateGatherer($pass = false)
+    public function getMutateGatherer(bool $pass = false): MutateGathererPass
     {
         if (!$this->mutateGatherer) {
             $this->mutateGatherer = new MutateGathererPass();

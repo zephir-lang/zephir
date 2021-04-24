@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -64,6 +65,8 @@ use Zephir\Operators\Other\UnlikelyOperator;
 use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 
+use function strlen;
+
 /**
  * Zephir\Expressions.
  *
@@ -71,25 +74,26 @@ use Zephir\Operators\Unary\NotOperator;
  */
 class Expression
 {
-    protected $expression;
+    protected array $expression;
 
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
-    protected $noisy = true;
+    protected bool $noisy = true;
 
     /**
      * @deprecated
-     *
      * @var bool
      */
-    protected $stringOperation = false;
+    protected bool $stringOperation = false;
 
-    /** @var Variable */
-    protected $expectingVariable;
+    /**
+     * @var Variable|null
+     */
+    protected ?Variable $expectingVariable = null;
 
-    protected $evalMode = false;
+    protected bool $evalMode = false;
 
     /**
      * Expression constructor.
@@ -106,7 +110,7 @@ class Expression
      *
      * @return array
      */
-    public function getExpression()
+    public function getExpression(): array
     {
         return $this->expression;
     }
@@ -115,10 +119,10 @@ class Expression
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -129,7 +133,7 @@ class Expression
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -139,7 +143,7 @@ class Expression
      *
      * @return bool
      */
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return $this->readOnly;
     }
@@ -150,7 +154,7 @@ class Expression
      *
      * @return bool
      */
-    public function isExpectingReturn()
+    public function isExpectingReturn(): bool
     {
         return $this->expecting;
     }
@@ -159,9 +163,9 @@ class Expression
      * Returns the variable which is expected to return the
      * result of the expression evaluation.
      *
-     * @return Variable
+     * @return Variable|null
      */
-    public function getExpectingVariable()
+    public function getExpectingVariable(): ?Variable
     {
         return $this->expectingVariable;
     }
@@ -171,7 +175,7 @@ class Expression
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -181,7 +185,7 @@ class Expression
      *
      * @return bool
      */
-    public function isNoisy()
+    public function isNoisy(): bool
     {
         return $this->noisy;
     }
@@ -194,7 +198,7 @@ class Expression
      *
      * @param bool $stringOperation
      */
-    public function setStringOperation($stringOperation)
+    public function setStringOperation(bool $stringOperation): void
     {
         $this->stringOperation = $stringOperation;
     }
@@ -207,7 +211,7 @@ class Expression
      *
      * @return bool
      */
-    public function isStringOperation()
+    public function isStringOperation(): bool
     {
         return $this->stringOperation;
     }
@@ -217,7 +221,7 @@ class Expression
      *
      * @param bool $evalMode
      */
-    public function setEvalMode($evalMode)
+    public function setEvalMode(bool $evalMode): void
     {
         $this->evalMode = $evalMode;
     }
@@ -230,9 +234,9 @@ class Expression
      *
      * @return CompiledExpression
      */
-    public function emptyArray($expression, CompilationContext $compilationContext)
+    public function emptyArray(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -246,14 +250,14 @@ class Expression
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
         }
 
-        /*
+        /**
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable() && 'array' != $symbolVariable->getType()) {
             throw new CompilerException('Cannot use variable: '.$symbolVariable->getName().'('.$symbolVariable->getType().') to create empty array', $expression);
         }
 
-        /*
+        /**
          * Mark the variable as an 'array'
          */
         $symbolVariable->setDynamicTypes('array');
@@ -268,9 +272,9 @@ class Expression
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException|Exception
-     *
      * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): CompiledExpression
     {
@@ -297,11 +301,12 @@ class Expression
                 return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 
             case 'char':
-                if (!\strlen($expression['value'])) {
+                if (!strlen($expression['value'])) {
                     throw new CompilerException('Invalid empty char literal', $expression);
                 }
-                if (\strlen($expression['value']) > 2) {
-                    if (\strlen($expression['value']) > 10) {
+
+                if (strlen($expression['value']) > 2) {
+                    if (strlen($expression['value']) > 10) {
                         throw new CompilerException("Invalid char literal: '".substr($expression['value'], 0, 10)."...'", $expression);
                     } else {
                         throw new CompilerException("Invalid char literal: '".$expression['value']."'", $expression);
@@ -313,7 +318,7 @@ class Expression
             case 'variable':
                 $var = $compilationContext->symbolTable->getVariable($expression['value']);
                 if ($var) {
-                    if ('this' == $var->getRealName()) {
+                    if ('this' === $var->getRealName()) {
                         $var = 'this';
                     } else {
                         $var = $var->getName();
@@ -501,12 +506,13 @@ class Expression
                 break;
 
             case 'list':
-                if ('list' == $expression['left']['type']) {
+                if ('list' === $expression['left']['type']) {
                     $compilationContext->logger->warning(
                         'Unnecessary extra parentheses',
                         ['extra-parentheses', $expression]
                     );
                 }
+
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
                 $expr = new self($expression['left']);
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
@@ -594,6 +600,7 @@ class Expression
         if (!$compilableExpression) {
             throw new CompilerException('Unknown expression passed as compilableExpression', $expression);
         }
+
         $compilableExpression->setReadOnly($this->isReadOnly());
         $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);
 

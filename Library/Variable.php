@@ -832,7 +832,7 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        /*
+        /**
          * Variables are allocated for the first time using ZEPHIR_INIT_VAR
          * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR

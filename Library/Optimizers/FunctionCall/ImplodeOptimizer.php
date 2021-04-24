@@ -9,14 +9,18 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
-use function Zephir\add_slashes;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
+use function Zephir\add_slashes;
 
 /**
  * ImplodeOptimizer.
@@ -40,11 +44,11 @@ class ImplodeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 !== count($expression['parameters'])) {
             return false;
         }
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -54,7 +58,7 @@ class ImplodeOptimizer extends OptimizerAbstract
             throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
         }
 
-        if ('string' == $expression['parameters'][0]['parameter']['type']) {
+        if ('string' === $expression['parameters'][0]['parameter']['type']) {
             $str = add_slashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
