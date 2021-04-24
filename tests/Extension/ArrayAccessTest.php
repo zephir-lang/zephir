@@ -17,6 +17,15 @@ use PHPUnit\Framework\TestCase;
 
 final class ArrayAccessTest extends TestCase
 {
+    private array $defaultUnsetData = [
+        'key_a' => 'marcin',
+        'key_b' => 'paula',
+        3 => 'long value',
+        //3.14 => 'double value', // Not supported yet
+        //false => 'bool value', // Not supported yet
+        //null => 'null value', // Not supported yet
+    ];
+
     public function testTest(): void
     {
         $class = new \Stub\ArrayAccessTest();
@@ -74,5 +83,58 @@ final class ArrayAccessTest extends TestCase
 
         $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithoutStrictParams();
         $this->assertSame(['test' => 123], $actual);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetKeyFromArray(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $expected = [
+            ['key_a' => 'marcin', 'key_b' => 'paula'],
+            ['key_b' => 'paula'],
+        ];
+
+        $this->assertSame($expected, $class->issue1259UnsetKeyFromArrayInternalVariable());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetStringKeyFromArrayProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame(
+            [
+                $this->defaultUnsetData,
+                [
+                    'key_b' => 'paula',
+                    3 => 'long value',
+                ],
+            ],
+            $class->issue1259UnsetStringKeyFromArrayProperty()
+        );
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1259
+     */
+    public function testIssue1259CheckUnsetLongKeyFromArrayProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame(
+            [
+                $this->defaultUnsetData,
+                [
+                    'key_a' => 'marcin',
+                    'key_b' => 'paula',
+                ],
+            ],
+            $class->issue1259UnsetLongKeyFromArrayProperty()
+        );
     }
 }

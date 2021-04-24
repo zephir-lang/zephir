@@ -9,35 +9,47 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
+use function in_array;
+
 /**
- * Class UnsetStatement.
+ * unset() statement
  */
 class UnsetStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
+        $flags = 'PH_SEPARATE';
+
         $compilationContext->headersManager->add('kernel/array');
         $expression = $this->statement['expr'];
 
-        $flags = 'PH_SEPARATE';
-
-        if ('list' == $expression['type']) {
+        if ('list' === $expression['type']) {
             $expression = $expression['left'];
         }
 
         switch ($expression['type']) {
             case 'array-access':
+                /**
+                 * Unset of object property
+                 */
+                if (isset($expression['left']['type']) && $expression['left']['type'] === 'property-access') {
+                    $compilationContext = $this->generateUnsetPropertyFromObject($expression, $compilationContext);
+                }
+
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
@@ -58,7 +70,7 @@ class UnsetStatement extends StatementAbstract
                 $compilationContext->headersManager->add('kernel/object');
                 $compilationContext->codePrinter->output('zephir_unset_property('.$variableCode.', "'.$expression['right']['value'].'");');
 
-                return true;
+                return;
 
             case 'property-dynamic-access':
                 //TODO: fix it
@@ -67,7 +79,7 @@ class UnsetStatement extends StatementAbstract
                 throw new CompilerException('Cannot use expression type: '.$expression['type'].' in "unset"', $expression);
         }
 
-        if (!\in_array($variable->getType(), ['variable', 'array'])) {
+        if (!in_array($variable->getType(), ['variable', 'array'])) {
             throw new CompilerException('Cannot use variable type: '.$variable->gettype().' in "unset"', $expression['left']);
         }
 
@@ -79,5 +91,45 @@ class UnsetStatement extends StatementAbstract
         }
 
         $compilationContext->backend->arrayUnset($variable, $exprIndex, $flags, $compilationContext);
+    }
+
+    /**
+     * @param array $expression
+     * @param CompilationContext $compilationContext
+     * @return CompilationContext
+     * @throws Exception
+     */
+    private function generateUnsetPropertyFromObject(array $expression, CompilationContext $compilationContext): CompilationContext
+    {
+        $expr = new Expression($expression['left']);
+        $expr->setReadOnly(true);
+        $exprVar = $expr->compile($compilationContext);
+        $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
+
+        $temporaryVariableRef = $compilationContext->backend->getVariableCode($variable);
+
+        // TODO: Add more types check when parser will support them, see ArrayAccessTest.zep
+        switch ($expression['right']['type']) {
+            case 'string':
+                $compilationContext->codePrinter->output('ZVAL_STR('.$temporaryVariableRef.', "'.$expression['right']['value'].'");');
+                break;
+
+            case 'int':
+                $compilationContext->codePrinter->output('ZVAL_LONG('.$temporaryVariableRef.', '.$expression['right']['value'].');');
+                break;
+        }
+
+        $expr = new Expression($expression['left']['left']);
+        $expr->setReadOnly(true);
+        $exprVar = $expr->compile($compilationContext);
+        $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->statement);
+        $variableCode = $compilationContext->backend->getVariableCode($variable);
+
+        $compilationContext->headersManager->add('kernel/object');
+        $compilationContext->codePrinter->output(
+            'zephir_unset_property_array('.$variableCode.', ZEND_STRL("'.$expression['left']['right']['value'].'"), '.$temporaryVariableRef.');'
+        );
+
+        return $compilationContext;
     }
 }
