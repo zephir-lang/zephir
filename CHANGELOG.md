@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed cast string from null [#2232](https://github.com/zephir-lang/zephir/issues/2232)
 
 
 ## [0.13.3] - 2021-04-25
