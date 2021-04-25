@@ -59,7 +59,7 @@ void zephir_concat_self(zval *left, zval *right)
 		}
 	}
 
-	SEPARATE_ZVAL_IF_NOT_REF(left);
+	SEPARATE_ZVAL_NOREF(left);
 
 	left_length = Z_STRLEN_P(left);
 	right_length = Z_STRLEN_P(right);
@@ -103,7 +103,7 @@ void zephir_concat_self_char(zval *left, unsigned char right)
 		}
 	}
 
-	SEPARATE_ZVAL_IF_NOT_REF(left);
+	SEPARATE_ZVAL_NOREF(left);
 
 	length = Z_STRLEN_P(left) + 1;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
@@ -138,7 +138,7 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 		}
 	}
 
-	SEPARATE_ZVAL_IF_NOT_REF(left);
+	SEPARATE_ZVAL_NOREF(left);
 	left_length = Z_STRLEN_P(left);
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);

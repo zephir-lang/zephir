@@ -140,6 +140,7 @@ final class AssignTest extends TestCase
             [$arry,                       'testStaticPropertyArrayMulti4'],
             [['test', 1, 1.5, false, []], 'testStaticPropertyArrayAppend'],
             [['a' => true, 'b' => false], 'testArrayBoolExpressionAssign'],
+            [['or' => 901, 'and' => 4, 'xor' => 897, 'shiftleft' => 28800, 'shiftright' => 28], 'testAssignBitwiseX', [900, 5]],
         ];
     }
 
@@ -175,5 +176,18 @@ final class AssignTest extends TestCase
         $this->test->testAssignSuperGlobalsGET();
 
         $this->assertCount($getCount + 2, $_GET);
+    }
+
+    public function testIssue597()
+    {
+        $_GET = [];
+        $this->test->issue597();
+
+        $this->assertEmpty($_GET);
+
+        $_GET['s'] = 10;
+        $this->test->issue597();
+
+        $this->assertSame(50, $_GET['s']);
     }
 }

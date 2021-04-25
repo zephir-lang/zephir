@@ -100,6 +100,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
 
 
+	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), key);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, key, PH_SEPARATE);
 }

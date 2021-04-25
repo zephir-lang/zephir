@@ -3,7 +3,6 @@ namespace Stub;
 
 class ConstantsParent
 {
-
 	const P1 = null;
 
 	const P2 = false;
@@ -15,5 +14,4 @@ class ConstantsParent
 	const P5 = 10.25;
 
 	const P6 = "test";
-
 }

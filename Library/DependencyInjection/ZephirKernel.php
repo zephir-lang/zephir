@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\DependencyInjection;
 
 use Exception;
-use Oneup\FlysystemBundle\OneupFlysystemBundle;
 use RuntimeException;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -57,7 +56,6 @@ final class ZephirKernel extends Kernel
     {
         return [
             new MonologBundle(),
-            new OneupFlysystemBundle(),
         ];
     }
 

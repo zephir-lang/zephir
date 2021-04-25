@@ -911,6 +911,36 @@ class Assign
 		return this->myArray;
 	}
 
+	public function testAssignBitwiseX(int a, int b)
+	{
+		var op, i;
+		var result = [];
+
+		for op in ["or", "and", "xor", "shiftleft", "shiftright"] {
+			let i = a;
+			switch op {
+				case "or":
+					let i |= b;
+					break;
+				case "and":
+					let i &= b;
+					break;
+				case "xor":
+					let i ^= b;
+					break;
+				case "shiftleft":
+					let i <<= b;
+					break;
+				case "shiftright":
+					let i >>= b;
+					break;
+			}
+			let result[op] = i;
+		}
+
+		return result;
+	}
+
 	/**
 	 * @link https://github.com/zephir-lang/zephir/issues/725
 	 */
@@ -938,5 +968,22 @@ class Assign
 	public function testAssignSuperGlobalsGET()
 	{
 	    let _GET = array_merge(_GET, ["g1": "aaa", "g2": "bbb"]);
+	}
+
+	public function issue597()
+	{
+		if isset _POST["a"] {
+			if isset _GET["r"] {
+				// Nothing here
+			}
+		}
+
+		if isset _GET["s"] {
+			var s;
+			let s = _GET["s"] * 5;
+			let _GET["s"] = s;
+
+			return s;
+		}
 	}
 }

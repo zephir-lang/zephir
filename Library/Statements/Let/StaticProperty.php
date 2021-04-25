@@ -281,11 +281,7 @@ class StaticProperty
 
                                 $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);
                                 $tempVariableCode = $compilationContext->backend->getVariableCode($tempVariable);
-                                if ('&' === substr($variableVariableCode, 0, 1)) {
-                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF('.$variableVariableCode.');');
-                                } else {
-                                    $compilationContext->codePrinter->output('SEPARATE_ZVAL_IF_NOT_REF(&'.$variableVariableCode.');');
-                                }
+                                $compilationContext->codePrinter->output('SEPARATE_ZVAL('.$variableVariableCode.');');
                                 $compilationContext->codePrinter->output('zephir_concat_function('.$variableVariableCode.', '.$tempVariableCode.', '.$variableVariableCode.');');
                                 // no break
                             case 'assign':

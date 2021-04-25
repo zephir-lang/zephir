@@ -64,11 +64,11 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Method calls only return zvals so we need to validate the target variable is also a zval
          */
         if ($isExpecting) {
-            /*
+            /**
              * At this point, we don't know the exact dynamic type returned by the static method call
              */
             $symbolVariable->setDynamicTypes('undefined');
@@ -78,7 +78,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
@@ -127,10 +127,12 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Check if the class implements the method
          */
         if (!$dynamicMethod && !$dynamicClass) {
+            // TODO: Consider to check instance of ClassDefinitionRuntime and throw another error, telling that class was not found.
+            // TODO: This will give false if external class does not exists!
             if (!$classDefinition->hasMethod($methodName)) {
                 $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
                 if ($possibleMethod) {
@@ -153,7 +155,7 @@ class StaticCall extends Call
 
                 if (!$classDefinition->hasMethod('__callStatic')) {
                     if ($method instanceof ClassMethod && !$method->isBundled()) {
-                        /*
+                        /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */
                         if (isset($expression['parameters'])) {

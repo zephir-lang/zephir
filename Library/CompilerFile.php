@@ -792,7 +792,7 @@ final class CompilerFile implements FileInterface
             throw new CompilerException('Unable to locate the intermediate representation of the compiled file');
         }
 
-        /*
+        /**
          * External classes should not be compiled as part of the extension
          */
         if ($this->external) {
@@ -804,26 +804,25 @@ final class CompilerFile implements FileInterface
          */
         $compilationContext = new CompilationContext();
 
-        /*
+        /**
          * Set global compiler in the compilation context
          */
         $compilationContext->compiler = $compiler;
 
-        /*
+        /**
          * Set global config in the compilation context
          */
         $compilationContext->config = $this->config;
 
-        /*
+        /**
          * Set global logger in the compilation context
          */
         $compilationContext->logger = $this->logger;
 
-        /*
+        /**
          * Set global strings manager
          */
         $compilationContext->stringsManager = $stringsManager;
-
         $compilationContext->backend = $compiler->backend;
 
         /**
@@ -838,7 +837,7 @@ final class CompilerFile implements FileInterface
         $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
 
-        /*
+        /**
          * Alias manager
          */
         $compilationContext->aliasManager = $this->aliasManager;
@@ -900,7 +899,7 @@ final class CompilerFile implements FileInterface
         }
 
         if ($codePrinter) {
-            /*
+            /**
              * If the file does not exists we create it for the first time
              */
             if (!file_exists($filePath)) {
@@ -929,7 +928,7 @@ final class CompilerFile implements FileInterface
             }
         }
 
-        /*
+        /**
          * Add to file compiled
          */
         $this->compiledFile = $path.'.c';

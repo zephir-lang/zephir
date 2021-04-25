@@ -1285,7 +1285,6 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'null':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
-                        $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
                         break;
 
                     case 'empty-array':

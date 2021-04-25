@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 
 
+## [0.13.3] - 2021-04-25
+### Fixed
+- Fixed nullable array [#1094](https://github.com/zephir-lang/zephir/issues/1094)
+- Fixed default value detection with Reflection (only PHP 8.0) [#1134](https://github.com/zephir-lang/zephir/issues/1134)
+- Updated supported list of class entries for PHP date extension [#2226](https://github.com/zephir-lang/zephir/issues/2226)
+- Fixed unset from class property [#1259](https://github.com/zephir-lang/zephir/issues/1259)
+
+### Added
+- Added support syntax assign-bitwise operators [#1103](https://github.com/zephir-lang/zephir/issues/1103)
+
 ## [0.13.2] - 2021-04-10
 ### Fixed
 - Fixed default value of nullable string parameter [#2180](https://github.com/zephir-lang/zephir/issues/2180)
@@ -455,8 +465,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.2...HEAD
-[0.13.2]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.2
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.3...HEAD
+[0.13.3]: https://github.com/zephir-lang/zephir/compare/0.13.2...0.13.3
+[0.13.2]: https://github.com/zephir-lang/zephir/compare/0.13.1...0.13.2
 [0.13.1]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/zephir-lang/zephir/compare/0.12.21...0.13.0
 [0.12.21]: https://github.com/zephir-lang/zephir/compare/0.12.20...0.12.21

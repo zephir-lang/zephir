@@ -47,6 +47,10 @@ final class CleanCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->filesystem->isInitialized()) {
+            $this->filesystem->initialize();
+        }
+
         $this->filesystem->clean();
         $io = new SymfonyStyle($input, $output);
 

@@ -554,12 +554,12 @@ class Backend extends BaseBackend
                         break;
 
                     default:
-                        throw new CompilerException('Variable type: '.$variableIndex->getType().' cannot be used as array index without cast', $expression['right']);
+                        throw new CompilerException('Variable type: '.$variableIndex->getType().' cannot be used as array index without cast');
                 }
                 break;
 
             default:
-                throw new CompilerException('Cannot use expression: '.$exprIndex->getType().' as array index without cast', $expression['right']);
+                throw new CompilerException('Cannot use expression: '.$exprIndex->getType().' as array index without cast');
         }
     }
 

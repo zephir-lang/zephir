@@ -56,6 +56,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/constantsinterface.zep.c
 	stub/constantsinterfacea.zep.c
 	stub/constantsinterfaceb.zep.c
+	stub/constructors/issue1803.zep.c
 	stub/declaretest.zep.c
 	stub/diinterface.zep.c
 	stub/echoes.zep.c
@@ -97,10 +98,14 @@ if test "$PHP_STUB" = "yes"; then
 	stub/invokes/invokeprotected.zep.c
 	stub/invokes/invokeprotectedcomplex.zep.c
 	stub/issettest.zep.c
+	stub/issue1134.zep.c
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
 	stub/issue663.zep.c
+	stub/issue887.zep.c
+	stub/issue893.zep.c
+	stub/issue914.zep.c
 	stub/issues.zep.c
 	stub/json.zep.c
 	stub/logical.zep.c
@@ -168,6 +173,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/pregmatch.zep.c
 	stub/properties/app.zep.c
 	stub/properties/extendspublicproperties.zep.c
+	stub/properties/getobjectvars.zep.c
 	stub/properties/privateproperties.zep.c
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
@@ -225,7 +231,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/13__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
-	for dir in "stub stub/bench stub/builtin stub/flow stub/globals stub/globals/session stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting"; do
+	for dir in "stub stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting"; do
 		PHP_ADD_BUILD_DIR([$ext_builddir/$dir])
 	done
 	PHP_SUBST(STUB_SHARED_LIBADD)

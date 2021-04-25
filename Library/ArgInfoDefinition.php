@@ -36,7 +36,7 @@ class ArgInfoDefinition
     /**
      * @var ClassMethodParameters|null
      */
-    private ?ClassMethodParameters $parameters = null;
+    private ?ClassMethodParameters $parameters;
 
     /**
      * @var CodePrinter
@@ -228,14 +228,38 @@ class ArgInfoDefinition
             switch ("{$flag}:".$parameter['data-type']) {
                 case '0:array':
                 case '1:array':
-                    $this->codePrinter->output(
-                        sprintf(
-                            "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
-                            $this->passByReference($parameter),
-                            $parameter['name'],
-                            (int) $this->allowNull($parameter)
-                        )
-                    );
+                    if (!isset($parameter['default'])) {
+                        $this->codePrinter->output(
+                            sprintf(
+                                "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
+                                $this->passByReference($parameter),
+                                $parameter['name'],
+                                (int) $this->allowNull($parameter)
+                            )
+                        );
+                    } else {
+                        $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+                        $this->codePrinter->output(
+                            sprintf(
+                                "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)",
+                                $this->passByReference($parameter),
+                                $parameter['name'],
+                                (int) $this->allowNull($parameter),
+                                $this->defaultArrayValue($parameter),
+                            )
+                        );
+                        $this->codePrinter->output('#else');
+                        // `ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE` does not exist in PHP 7.4
+                        $this->codePrinter->output(
+                            sprintf(
+                                "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
+                                $this->passByReference($parameter),
+                                $parameter['name'],
+                                (int) $this->allowNull($parameter)
+                            )
+                        );
+                        $this->codePrinter->output('#endif');
+                    }
                     break;
                 case '0:variable':
                 case '1:variable':
@@ -333,6 +357,25 @@ class ArgInfoDefinition
         return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
     }
 
+    private function defaultArrayValue(array $parameter): string
+    {
+        if ($parameter['default']['type'] === 'empty-array') {
+            return '"[]"';
+        }
+
+        // TODO: Come back later
+        /**
+         * It seems that it is impossible to pass default array with some data inside.
+         * Only empty array, even if manually specify not empty array - it will be ignored,
+         * for example:
+         *
+         * `ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, someDefaultData, IS_ARRAY, 0, "[\"key\" => \"value\"]")`
+         *
+         * Output of default value will be `[]` during method call.
+         */
+        return '"[]"';
+    }
+
     private function allowNull(array $parameter): bool
     {
         if (!isset($parameter['default']) || !\is_array($parameter['default'])) {
@@ -348,7 +391,7 @@ class ArgInfoDefinition
 
     private function passByReference(array $parameter)
     {
-        return isset($parameter['reference']) ? $parameter['reference'] : 0;
+        return $parameter['reference'] ?? 0;
     }
 
     private function getReturnType(): string
