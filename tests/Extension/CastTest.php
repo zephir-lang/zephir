@@ -60,6 +60,11 @@ final class CastTest extends TestCase
          * Variable types
          */
         $this->assertSame('X', $this->test->testStringCastVariableChar());
+
+        /**
+         * Null
+         */
+        $this->assertSame('', $this->test->testStringCastFromNull());
     }
 
     public function testIntCast(): void
