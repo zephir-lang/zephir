@@ -204,4 +204,28 @@ class Strings
 
         return output;
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    public function issue2234Strict(string! val = null) -> bool
+    {
+        return val === null;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    public function issue2234StrictParent(string! val = null)
+    {
+        return this->issue2234StrictChild(val);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    protected function issue2234StrictChild(string! val = null)
+    {
+        return val;
+    }
 }

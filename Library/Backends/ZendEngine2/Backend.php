@@ -1036,7 +1036,6 @@ class Backend extends BaseBackend
                 $codePrinter->output('} else {');
                 $codePrinter->increaseLevel();
                 $this->initVar($inputParamVariable, $context);
-                $codePrinter->output('ZVAL_EMPTY_STRING('.$inputParamCode.');');
                 $codePrinter->decreaseLevel();
                 $codePrinter->output('}');
                 break;
