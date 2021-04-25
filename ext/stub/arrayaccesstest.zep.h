@@ -5,6 +5,8 @@ ZEPHIR_INIT_CLASS(Stub_ArrayAccessTest);
 
 PHP_METHOD(Stub_ArrayAccessTest, exits);
 PHP_METHOD(Stub_ArrayAccessTest, get);
+PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray);
+PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty);
 PHP_METHOD(Stub_ArrayAccessTest, issue645);
 PHP_METHOD(Stub_ArrayAccessTest, issue1155);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1);
@@ -23,6 +25,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_exits, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccesstest_get, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_unsetbykeyfromarray, 0, 2, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, data, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_unsetbykeyfromproperty, 0, 2, IS_ARRAY, 0)
+	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, dataFromProperty, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue645, 0, 0, IS_ARRAY, 0)
@@ -92,6 +104,8 @@ ZEPHIR_INIT_FUNCS(stub_arrayaccesstest_method_entry) {
 #else
 	PHP_ME(Stub_ArrayAccessTest, get, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 #endif
+	PHP_ME(Stub_ArrayAccessTest, unsetByKeyFromArray, arginfo_stub_arrayaccesstest_unsetbykeyfromarray, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, unsetByKeyFromProperty, arginfo_stub_arrayaccesstest_unsetbykeyfromproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue645, arginfo_stub_arrayaccesstest_issue645, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1155, arginfo_stub_arrayaccesstest_issue1155, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test1, arginfo_stub_arrayaccesstest_issue1094test1, ZEND_ACC_PUBLIC)

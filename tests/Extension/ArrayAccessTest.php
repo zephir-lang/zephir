@@ -34,6 +34,22 @@ final class ArrayAccessTest extends TestCase
         $this->assertSame(2, $class->get());
     }
 
+    public function testUnsetByKeyFromArray(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame([], $class->unsetByKeyFromArray('not-exist', []));
+    }
+
+    public function testUnsetByKeyFromProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame([], $class->unsetByKeyFromProperty('ok', ['ok' => true]));
+        $this->assertSame(['another' => 'value'], $class->unsetByKeyFromProperty('ok', ['ok' => true, 'another' => 'value']));
+        $this->assertSame([], $class->unsetByKeyFromProperty('not-exist', []));
+    }
+
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/645
      */

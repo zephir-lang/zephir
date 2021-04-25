@@ -3,6 +3,7 @@ namespace Stub;
 class ArrayAccessTest
 {
     protected data;
+    protected assigedFromMethod;
     protected unsetData = [
         "key_a": "marcin",
         "key_b": "paula",
@@ -26,6 +27,22 @@ class ArrayAccessTest
 
 		let arr = new ArrayAccessObj();
 		return arr["two"];
+	}
+
+	public function unsetByKeyFromArray(string! key, array data) -> array
+	{
+	    unset data[key];
+
+	    return data;
+	}
+
+	public function unsetByKeyFromProperty(string! key, array dataFromProperty) -> array
+	{
+	    let this->assigedFromMethod = dataFromProperty;
+
+	    unset this->assigedFromMethod[key];
+
+	    return this->assigedFromMethod;
 	}
 
     /**

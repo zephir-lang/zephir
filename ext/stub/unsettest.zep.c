@@ -84,12 +84,11 @@ PHP_METHOD(Stub_Unsettest, addValueToProperty)
 
 PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 {
-	zval *key, key_sub, _0, _1;
+	zval *key, key_sub, _0;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&key_sub);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -101,10 +100,9 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 	zephir_fetch_params_without_memory_grow(1, 0, &key);
 
 
+	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), key);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
-	zephir_unset_property_array(this_ptr, ZEND_STRL("property"), &_0);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("property"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_1, key, PH_SEPARATE);
+	zephir_array_unset(&_0, key, PH_SEPARATE);
 }
 
 PHP_METHOD(Stub_Unsettest, testUnsetFromArray)
