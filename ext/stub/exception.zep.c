@@ -58,7 +58,6 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 		zephir_get_strval(&message, message_param);
 	} else {
 		ZEPHIR_INIT_VAR(&message);
-		ZVAL_EMPTY_STRING(&message);
 	}
 
 

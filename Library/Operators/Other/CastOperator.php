@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
@@ -22,7 +24,7 @@ use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Types;
 
 /**
- * Cast.
+ * Cast operator
  *
  * Converts a value into another of a different type
  */
@@ -527,7 +529,7 @@ class CastOperator extends BaseOperator
                                 $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
 
                                 $compilationContext->codePrinter->output(
-                                    sprintf('zephir_get_strval(%s, %s);', $symbol, $resolvedCode)
+                                    sprintf('zephir_cast_to_string(%s, %s);', $symbol, $resolvedCode)
                                 );
 
                                 if ($symbolVariable->isTemporal()) {

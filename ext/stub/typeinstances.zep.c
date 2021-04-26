@@ -47,7 +47,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString1)
 	ZVAL_LONG(&_0, 24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
-	zephir_get_strval(&_2, &_1);
+	zephir_cast_to_string(&_2, &_1);
 	RETURN_CTOR(&_2);
 }
 
@@ -69,7 +69,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString2)
 	ZVAL_LONG(&_0, -24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
-	zephir_get_strval(&_2, &_1);
+	zephir_cast_to_string(&_2, &_1);
 	RETURN_CTOR(&_2);
 }
 
@@ -91,7 +91,7 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString3)
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
 	zephir_check_call_status();
-	zephir_get_strval(&_2, &_1);
+	zephir_cast_to_string(&_2, &_1);
 	RETURN_CTOR(&_2);
 }
 

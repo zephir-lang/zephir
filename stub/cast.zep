@@ -29,7 +29,7 @@ class Cast
     // To string cast
 
     /**
-     * @see https://github.com/zephir-lang/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastChar() -> string
     {
@@ -37,11 +37,21 @@ class Cast
     }
 
     /**
-     * @see https://github.com/zephir-lang/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastVariableChar() -> string
     {
         char a = 'X';
+        return (string) a;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2232
+     */
+    public function testStringCastFromNull() -> string
+    {
+        var a = null;
+
         return (string) a;
     }
 

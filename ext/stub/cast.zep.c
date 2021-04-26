@@ -57,7 +57,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
 }
 
 /**
- * @see https://github.com/zephir-lang/zephir/issues/1988
+ * @issue https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastChar)
 {
@@ -69,7 +69,7 @@ PHP_METHOD(Stub_Cast, testStringCastChar)
 }
 
 /**
- * @see https://github.com/zephir-lang/zephir/issues/1988
+ * @issue https://github.com/zephir-lang/zephir/issues/1988
  */
 PHP_METHOD(Stub_Cast, testStringCastVariableChar)
 {
@@ -86,6 +86,28 @@ PHP_METHOD(Stub_Cast, testStringCastVariableChar)
 	a = 'X';
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, &a, 1);
+	RETURN_CTOR(&_0);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2232
+ */
+PHP_METHOD(Stub_Cast, testStringCastFromNull)
+{
+	zval _0;
+	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&_0);
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&a);
+	ZVAL_NULL(&a);
+	zephir_cast_to_string(&_0, &a);
 	RETURN_CTOR(&_0);
 }
 
@@ -1222,24 +1244,24 @@ PHP_METHOD(Stub_Cast, testIssue828)
 	ZVAL_STRING(&version, "1.0 200 OK");
 	ZEPHIR_INIT_VAR(&nonNumericString);
 	ZVAL_STRING(&nonNumericString, "OK");
-	zephir_array_append(&ret, &version, PH_SEPARATE, "stub/cast.zep", 491);
-	zephir_array_append(&ret, &nonNumericString, PH_SEPARATE, "stub/cast.zep", 492);
+	zephir_array_append(&ret, &version, PH_SEPARATE, "stub/cast.zep", 501);
+	zephir_array_append(&ret, &nonNumericString, PH_SEPARATE, "stub/cast.zep", 502);
 	floatVersion = zephir_get_doubleval(&version);
 	intVersion = zephir_get_intval(&version);
 	floatNonNumeric = zephir_get_doubleval(&nonNumericString);
 	intNonNumeric = zephir_get_intval(&nonNumericString);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, floatVersion);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 499);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 509);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, intVersion);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 500);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 510);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_DOUBLE(&_0, floatNonNumeric);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 501);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 511);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_LONG(&_0, intNonNumeric);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 502);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 512);
 	RETURN_CTOR(&ret);
 }
 

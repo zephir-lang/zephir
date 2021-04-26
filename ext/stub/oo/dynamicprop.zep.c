@@ -57,7 +57,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -94,7 +93,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -129,7 +127,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -164,7 +161,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -202,7 +198,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -241,7 +236,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -279,7 +273,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -315,7 +308,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -353,7 +345,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -391,7 +382,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -430,7 +420,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse)
 		zephir_get_strval(&property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
 	}
 
 
@@ -484,7 +473,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 		zephir_get_strval(&value, value_param);
 	} else {
 		ZEPHIR_INIT_VAR(&value);
-		ZVAL_EMPTY_STRING(&value);
 	}
 
 

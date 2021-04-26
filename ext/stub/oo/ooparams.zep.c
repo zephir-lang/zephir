@@ -273,7 +273,6 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictName)
 		zephir_get_strval(&name, name_param);
 	} else {
 		ZEPHIR_INIT_VAR(&name);
-		ZVAL_EMPTY_STRING(&name);
 	}
 
 
