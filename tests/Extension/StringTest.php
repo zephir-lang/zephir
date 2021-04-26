@@ -286,11 +286,17 @@ final class StringTest extends TestCase
     {
         $this->assertTrue($this->test->issue2186());
         $this->assertTrue($this->test->issue2186(null));
-
         $this->assertFalse($this->test->issue2186(''));
         $this->assertFalse($this->test->issue2186('string'));
         $this->assertFalse($this->test->issue2186('0'));
         $this->assertFalse($this->test->issue2186('1'));
+
+        $this->assertTrue($this->test->issue2234Strict());
+        $this->assertTrue($this->test->issue2234Strict(null));
+        $this->assertFalse($this->test->issue2234Strict(''));
+        $this->assertFalse($this->test->issue2234Strict('string'));
+        $this->assertFalse($this->test->issue2234Strict('0'));
+        $this->assertFalse($this->test->issue2234Strict('1'));
 
         $this->assertFalse($this->test->issue2186SegFault());
         $this->assertFalse($this->test->issue2186SegFault(null));
