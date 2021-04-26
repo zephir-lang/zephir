@@ -472,7 +472,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 [Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.4...HEAD
-[0.13.3]: https://github.com/zephir-lang/zephir/compare/0.13.3...0.13.4
+[0.13.4]: https://github.com/zephir-lang/zephir/compare/0.13.3...0.13.4
 [0.13.3]: https://github.com/zephir-lang/zephir/compare/0.13.2...0.13.3
 [0.13.2]: https://github.com/zephir-lang/zephir/compare/0.13.1...0.13.2
 [0.13.1]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.1
