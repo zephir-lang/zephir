@@ -168,7 +168,6 @@ PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 		zephir_get_strval(&str, str_param);
 	} else {
 		ZEPHIR_INIT_VAR(&str);
-		ZVAL_EMPTY_STRING(&str);
 	}
 
 

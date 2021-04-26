@@ -309,7 +309,7 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 							ZVAL_LONG(&_2$$11, (cursor - marker));
 							ZEPHIR_INIT_NVAR(&_3$$11);
 							zephir_substr(&_3$$11, &pattern, zephir_get_intval(&_1$$11), zephir_get_intval(&_2$$11), 0);
-							zephir_get_strval(&_4$$11, &_3$$11);
+							zephir_cast_to_string(&_4$$11, &_3$$11);
 							ZEPHIR_CPY_WRT(&item, &_4$$11);
 							for (_5$$11 = 0; _5$$11 < Z_STRLEN_P(&item); _5$$11++) {
 								cursorVar = _5$$11; 
@@ -375,12 +375,12 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 										ZVAL_LONG(&_19$$16, cursorVar);
 										ZEPHIR_INIT_NVAR(&_20$$16);
 										zephir_substr(&_20$$16, &item, 0 , zephir_get_intval(&_19$$16), 0);
-										zephir_get_strval(&_21$$16, &_20$$16);
+										zephir_cast_to_string(&_21$$16, &_20$$16);
 										ZEPHIR_CPY_WRT(&variable, &_21$$16);
 										ZVAL_LONG(&_22$$16, (cursorVar + 1));
 										ZEPHIR_INIT_NVAR(&_23$$16);
 										zephir_substr(&_23$$16, &item, zephir_get_intval(&_22$$16), 0, ZEPHIR_SUBSTR_NO_LENGTH);
-										zephir_get_strval(&_24$$16, &_23$$16);
+										zephir_cast_to_string(&_24$$16, &_23$$16);
 										ZEPHIR_CPY_WRT(&regexp, &_24$$16);
 										break;
 									}

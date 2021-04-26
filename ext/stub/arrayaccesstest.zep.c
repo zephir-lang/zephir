@@ -102,7 +102,6 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 		zephir_get_strval(&key, key_param);
 	} else {
 		ZEPHIR_INIT_VAR(&key);
-		ZVAL_EMPTY_STRING(&key);
 	}
 	zephir_get_arrval(&data, data_param);
 
@@ -141,7 +140,6 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 		zephir_get_strval(&key, key_param);
 	} else {
 		ZEPHIR_INIT_VAR(&key);
-		ZVAL_EMPTY_STRING(&key);
 	}
 	zephir_get_arrval(&dataFromProperty, dataFromProperty_param);
 

@@ -174,7 +174,6 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 		zephir_get_strval(&templatePath, templatePath_param);
 	} else {
 		ZEPHIR_INIT_VAR(&templatePath);
-		ZVAL_EMPTY_STRING(&templatePath);
 	}
 
 

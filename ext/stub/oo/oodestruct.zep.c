@@ -205,7 +205,6 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_get_strval(&file, file_param);
 	} else {
 		ZEPHIR_INIT_VAR(&file);
-		ZVAL_EMPTY_STRING(&file);
 	}
 	if (!width_param) {
 		width = 0;

@@ -86,7 +86,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome)
 	zephir_fetch_params(1, 1, 0, &value);
 
 
-	zephir_get_strval(&_0, value);
+	zephir_cast_to_string(&_0, value);
 	zephir_update_property_array_append(this_ptr, SL("someArray"), &_0);
 	ZEPHIR_MM_RESTORE();
 }

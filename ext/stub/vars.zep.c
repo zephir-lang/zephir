@@ -233,7 +233,6 @@ PHP_METHOD(Stub_Vars, test88Issue)
 		zephir_get_strval(&param1, param1_param);
 	} else {
 		ZEPHIR_INIT_VAR(&param1);
-		ZVAL_EMPTY_STRING(&param1);
 	}
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);
@@ -287,7 +286,6 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 		zephir_get_strval(&param1, param1_param);
 	} else {
 		ZEPHIR_INIT_VAR(&param1);
-		ZVAL_EMPTY_STRING(&param1);
 	}
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);

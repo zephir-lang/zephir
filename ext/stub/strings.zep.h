@@ -38,6 +38,9 @@ PHP_METHOD(Stub_Strings, issue2186SegFault);
 PHP_METHOD(Stub_Strings, issue2186SegFaultCall);
 PHP_METHOD(Stub_Strings, issue2186Child1);
 PHP_METHOD(Stub_Strings, issue2186Child2);
+PHP_METHOD(Stub_Strings, issue2234Strict);
+PHP_METHOD(Stub_Strings, issue2234StrictParent);
+PHP_METHOD(Stub_Strings, issue2234StrictChild);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_camelize, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
@@ -188,6 +191,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186child2, 0,
 	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2234strict, 0, 0, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue2234strictparent, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue2234strictchild, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, camelize, arginfo_stub_strings_camelize, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, uncamelize, arginfo_stub_strings_uncamelize, ZEND_ACC_PUBLIC)
@@ -248,5 +263,8 @@ ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, issue2186SegFaultCall, arginfo_stub_strings_issue2186segfaultcall, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue2186Child1, arginfo_stub_strings_issue2186child1, ZEND_ACC_PROTECTED)
 	PHP_ME(Stub_Strings, issue2186Child2, arginfo_stub_strings_issue2186child2, ZEND_ACC_PROTECTED)
+	PHP_ME(Stub_Strings, issue2234Strict, arginfo_stub_strings_issue2234strict, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, issue2234StrictParent, arginfo_stub_strings_issue2234strictparent, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, issue2234StrictChild, arginfo_stub_strings_issue2234strictchild, ZEND_ACC_PROTECTED)
 	PHP_FE_END
 };
