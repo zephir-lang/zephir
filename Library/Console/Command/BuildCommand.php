@@ -43,6 +43,42 @@ final class BuildCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // call generate
+        $command = $this->getApplication()->find('generate');
+        $io = new SymfonyStyle($input, $output);
+
+        $arguments = [
+            'command' => 'generate',
+            '--backend' => $input->getOption('backend'),
+        ];
+
+        try {
+            $command->run(new ArrayInput($arguments), $output);
+        } catch (\Exception $e) {
+            $io->getErrorStyle()->error($e->getMessage());
+
+            return 1;
+        }
+
+        // call compile
+        $command = $this->getApplication()->find('compile');
+        $io = new SymfonyStyle($input, $output);
+
+        $arguments = [
+            'command' => 'compile',
+            '--backend' => $input->getOption('backend'),
+            '--dev' => $this->isDevelopmentModeEnabled($input),
+        ];
+
+        try {
+            $command->run(new ArrayInput($arguments), $output);
+        } catch (\Exception $e) {
+            $io->getErrorStyle()->error($e->getMessage());
+
+            return 1;
+        }
+
+        // call install
         $command = $this->getApplication()->find('install');
         $io = new SymfonyStyle($input, $output);
 
