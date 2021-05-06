@@ -2446,6 +2446,9 @@ class ClassMethod
 
         $isAlias = false;
         $aliasManager = $this->classDefinition->getAliasManager();
+        if (is_null($aliasManager)) {
+            return null;
+        }
         if ($aliasManager->isAlias($className)) {
             $isAlias = true;
             $className = $aliasManager->getAlias($className);
