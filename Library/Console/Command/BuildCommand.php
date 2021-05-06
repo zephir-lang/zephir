@@ -60,7 +60,7 @@ final class BuildCommand extends AbstractCommand
             return 1;
         }
 
-		// call compile
+        // call compile
         $command = $this->getApplication()->find('compile');
         $io = new SymfonyStyle($input, $output);
 
@@ -78,7 +78,7 @@ final class BuildCommand extends AbstractCommand
             return 1;
         }
 
-		// call install
+        // call install
         $command = $this->getApplication()->find('install');
         $io = new SymfonyStyle($input, $output);
 
