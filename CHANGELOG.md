@@ -5,6 +5,9 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed `zephir build` command [#2240](https://github.com/zephir-lang/zephir/pull/2240)
+- Fixed `zephir generate` when processing Closure [#2241](https://github.com/zephir-lang/zephir/pull/2241)
 
 
 ## [0.13.4] - 2021-04-26
