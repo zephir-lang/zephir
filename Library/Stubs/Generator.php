@@ -9,15 +9,22 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
 use Zephir\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Exception;
+
+use function array_key_exists;
+use function count;
+use function in_array;
 
 /**
  * Stubs Generator.
@@ -29,7 +36,7 @@ class Generator
      *
      * @var array
      */
-    protected $ignoreModifiers = [
+    protected array $ignoreModifiers = [
         'inline',
         'internal',
         'scoped',
@@ -39,7 +46,7 @@ class Generator
     /**
      * @var CompilerFile[]
      */
-    protected $files;
+    protected array $files;
 
     /**
      * @param CompilerFile[] $files
@@ -267,7 +274,7 @@ class Generator
 
         $parameters = [];
 
-        if ($methodParameters) {
+        if ($methodParameters instanceof ClassMethodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
@@ -276,17 +283,18 @@ class Generator
                     } else {
                         $cast = $parameter['cast']['value'];
                     }
+
                     $paramStr .= $cast.' ';
-                } elseif (isset($parameter['data-type']) && 'array' == $parameter['data-type']) {
+                } elseif (isset($parameter['data-type']) && 'array' === $parameter['data-type']) {
                     $paramStr .= 'array ';
-                } elseif (isset($parameter['data-type']) && version_compare(PHP_VERSION, '7.0.0', '>=')) {
-                    if (\in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                } elseif (isset($parameter['data-type'])) {
+                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
                         $paramStr .= 'bool ';
                     } elseif ('double' == $parameter['data-type']) {
                         $paramStr .= 'float ';
-                    } elseif (\in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
                         $paramStr .= 'int ';
-                    } elseif (\in_array($parameter['data-type'], ['char', 'string'])) {
+                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
                         $paramStr .= 'string ';
                     }
                 }
@@ -302,16 +310,10 @@ class Generator
         }
 
         $return = '';
-        /**
-         * TODO: Add $method->isVoid() check after removing PHP 7.0 support.
-         *
-         * @see https://github.com/zephir-lang/zephir/issues/1977
-         * @see https://github.com/zephir-lang/zephir/pull/1978
-         */
-        if (version_compare(PHP_VERSION, '7.0.0', '>=') && $method->hasReturnTypes()) {
+        if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (\array_key_exists('object', $method->getReturnTypes()) && 1 == \count($method->getReturnClassTypes())) {
+            if (array_key_exists('object', $method->getReturnTypes()) && 1 === count($method->getReturnClassTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -320,36 +322,36 @@ class Generator
                 $return = 'int';
                 ++$supported;
             }
+
             if ($method->areReturnTypesDoubleCompatible()) {
                 $return = 'float';
                 ++$supported;
             }
+
             if ($method->areReturnTypesBoolCompatible()) {
                 $return = 'bool';
                 ++$supported;
             }
+
             if ($method->areReturnTypesStringCompatible()) {
                 $return = 'string';
                 ++$supported;
             }
-            if (\array_key_exists('array', $method->getReturnTypes())) {
+
+            if (array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
                 ++$supported;
             }
 
             if (!empty($return) && $method->areReturnTypesNullCompatible()) {
-                if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                    $return = '?'.$return;
-                } else {
-                    $return = '';
-                }
+                $return = '?'.$return;
             }
 
             // PHP doesn't support multiple return types (yet?)
             if ($supported > 1) {
                 $return = '';
             }
-        } elseif (version_compare(PHP_VERSION, '7.1.0', '>=') && $method->isVoid()) {
+        } elseif ($method->isVoid()) {
             $return = 'void';
         }
 
@@ -391,7 +393,7 @@ class Generator
                 break;
 
             case 'empty-array':
-                $returnValue = 'array()';
+                $returnValue = '[]';
                 break;
 
             case 'array':
@@ -413,7 +415,7 @@ class Generator
                     ]);
                 }
 
-                $returnValue = 'array('.implode(', ', $parameters).')';
+                $returnValue = '['.implode(', ', $parameters).']';
                 break;
 
             case 'static-constant-access':
@@ -435,6 +437,6 @@ class Generator
                 );
         }
 
-        return $returnValue;
+        return (string)$returnValue;
     }
 }
