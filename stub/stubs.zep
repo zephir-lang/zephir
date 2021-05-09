@@ -65,7 +65,7 @@ class Stubs
 	}
 
 	/**
-	 * @param string $column,...
+	 * @param string ...$column
 	 * @return void
 	 */
 	public function testVariableLength() -> void
