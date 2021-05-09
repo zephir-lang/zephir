@@ -66,7 +66,7 @@ class Generator
      *
      * @throws Exception\LogicException
      */
-    public function generate(string $namespace, string $path, string $indent, string $banner)
+    public function generate(string $namespace, string $path, string $indent, string $banner): void
     {
         if (empty($path)) {
             throw new Exception\LogicException(

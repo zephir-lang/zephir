@@ -97,7 +97,7 @@ class MethodDocBlock extends DocBlock
         return $this->__toString();
     }
 
-    protected function parseMethodReturnType(ClassMethod $method)
+    protected function parseMethodReturnType(ClassMethod $method): void
     {
         $return = [];
         $returnTypes = $method->getReturnTypes();
@@ -188,13 +188,15 @@ class MethodDocBlock extends DocBlock
             $description = $parsedLine['description'] ?? '';
             $type = $parsedLine['type'] ?? '';
 
-            // remember docblock @param to avoid param duplication when parse input args
+            // Remember docblock @param to avoid param duplication when parse input args.
             if ($identifier) {
                 $this->predefinedParams[$identifier] = true;
             }
 
-            // remember docblock @return to avoid duplication
-            // also replace @var to @mixed for PHP docblock
+            /**
+             * Remember docblock `@return` to avoid duplication.
+             * Also replace `@var` to `@mixed` for PHP docblock.
+             */
             if ('return' === $docType) {
                 $this->predefinedParams['return'] = true;
 
