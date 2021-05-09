@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
@@ -22,30 +24,51 @@ use Zephir\Types;
  */
 class MethodDocBlock extends DocBlock
 {
-    private $parameters = [];
+    private array $parameters = [];
 
-    /** Parameters which are described by User into docblock */
-    private $predefinedParams = [];
+    /**
+     * Parameters which are described by User into docblock
+     *
+     * @var array
+     */
+    private array $predefinedParams = [];
 
-    private $return;
+    /**
+     * @var array
+     */
+    private array $return = [];
 
-    private $shortcutName = '';
+    /**
+     * @var string|mixed
+     */
+    private string $shortcutName;
 
-    private $deprecated = false;
+    /**
+     * @var bool
+     */
+    private bool $deprecated;
 
     /**
      * @var AliasManager
      */
-    private $aliasManager;
+    private AliasManager $aliasManager;
 
-    /** @var ClassMethod */
-    private $classMethod;
+    /**
+     * @var ClassMethod
+     */
+    private ClassMethod $classMethod;
 
-    /** @var Types */
-    private $types;
+    /**
+     * @var Types
+     */
+    private Types $types;
 
-    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ', Types $types = null)
-    {
+    public function __construct(
+        ClassMethod $method,
+        AliasManager $aliasManager,
+        string $indent = '    ',
+        ?Types $types = null
+    ) {
         parent::__construct($method->getDocBlock(), $indent);
 
         $this->deprecated = $method->isDeprecated();
@@ -74,7 +97,7 @@ class MethodDocBlock extends DocBlock
         return $this->__toString();
     }
 
-    protected function parseMethodReturnType(ClassMethod $method)
+    protected function parseMethodReturnType(ClassMethod $method): void
     {
         $return = [];
         $returnTypes = $method->getReturnTypes();
@@ -152,7 +175,7 @@ class MethodDocBlock extends DocBlock
         return $matched;
     }
 
-    protected function parseLines()
+    protected function parseLines(): void
     {
         $lines = [];
 
@@ -165,13 +188,15 @@ class MethodDocBlock extends DocBlock
             $description = $parsedLine['description'] ?? '';
             $type = $parsedLine['type'] ?? '';
 
-            // remember docblock @param to avoid param duplication when parse input args
+            // Remember docblock @param to avoid param duplication when parse input args.
             if ($identifier) {
                 $this->predefinedParams[$identifier] = true;
             }
 
-            // remember docblock @return to avoid duplication
-            // also replace @var to @mixed for PHP docblock
+            /**
+             * Remember docblock `@return` to avoid duplication.
+             * Also replace `@var` to `@mixed` for PHP docblock.
+             */
             if ('return' === $docType) {
                 $this->predefinedParams['return'] = true;
 
@@ -187,7 +212,7 @@ class MethodDocBlock extends DocBlock
                 $line = str_replace('@var', '@param', $line);
             }
 
-            if ('var' == $docType && 'set' == $this->shortcutName) {
+            if ('var' === $docType && 'set' === $this->shortcutName) {
                 $docType = 'param';
                 $name = array_keys($this->parameters);
                 $name = $name[0];
@@ -212,7 +237,7 @@ class MethodDocBlock extends DocBlock
         $this->lines = $lines;
     }
 
-    private function appendReturnLine()
+    private function appendReturnLine(): void
     {
         if (!isset($this->predefinedParams['return'])) {
             list($type, $description) = $this->return;
@@ -251,9 +276,13 @@ class MethodDocBlock extends DocBlock
         }
     }
 
-    private function appendParametersLines()
+    private function appendParametersLines(): void
     {
         foreach ($this->parameters as $name => $parameter) {
+            if (empty($name)) {
+                continue;
+            }
+
             if (!isset($this->predefinedParams[trim($name, '$')])) {
                 list($type, $description) = $parameter;
 

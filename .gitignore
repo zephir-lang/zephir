@@ -44,3 +44,6 @@ zephir.phar
 # Use this as your own wish list or a temporary buffer
 LATER
 php-zephir-parser/
+
+box.phar
+zephir.phar
