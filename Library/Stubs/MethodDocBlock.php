@@ -277,6 +277,10 @@ class MethodDocBlock extends DocBlock
     private function appendParametersLines(): void
     {
         foreach ($this->parameters as $name => $parameter) {
+            if (empty($name)) {
+                continue;
+            }
+
             if (!isset($this->predefinedParams[trim($name, '$')])) {
                 list($type, $description) = $parameter;
 
