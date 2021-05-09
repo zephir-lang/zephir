@@ -31,9 +31,11 @@ box.json
 phpcs.xml
 phpmd.xml
 phpunit.xml
+.phpunit.result.cache
 
 # Build artefact
 zephir.phar
+box.phar
 
 # Ignore codecoverage stuff.
 *.profraw
@@ -44,3 +46,4 @@ zephir.phar
 # Use this as your own wish list or a temporary buffer
 LATER
 php-zephir-parser/
+

@@ -109,7 +109,7 @@ PHP_METHOD(Stub_McallChained, testChained3)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 62);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3", NULL, 60);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, &_0, "testmethod2", NULL, 0);
 	zephir_check_call_status();

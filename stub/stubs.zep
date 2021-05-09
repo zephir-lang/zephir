@@ -63,4 +63,15 @@ class Stubs
 	{
 		return number;
 	}
+
+	/**
+	 * @param string ...$column
+	 * @return void
+	 */
+	public function testVariableLength() -> void
+	{
+	    array data = [];
+
+	    let data = array_merge(data, func_get_args());
+	}
 }

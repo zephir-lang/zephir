@@ -15,6 +15,8 @@
 #include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/array.h"
+#include "kernel/main.h"
 
 
 /**
@@ -138,5 +140,33 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared)
 
 
 	RETURN_LONG(number);
+}
+
+/**
+ * @param string ...$column
+ * @return void
+ */
+PHP_METHOD(Stub_Stubs, testVariableLength)
+{
+	zval _0, _1;
+	zval data;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&data);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(&data);
+	array_init(&data);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_VAR(&_1);
+	zephir_get_args(&_1);
+	zephir_fast_array_merge(&_0, &data, &_1);
+	ZEPHIR_CPY_WRT(&data, &_0);
+	ZEPHIR_MM_RESTORE();
 }
 

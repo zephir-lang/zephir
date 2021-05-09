@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Setup Environment Variables
-        run: echo "BOX_VERSION=3.10.0" >> $GITHUB_ENV
+        run: echo "BOX_VERSION=3.12.2" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -37,13 +37,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-
-      - name: Setup GitHub Token
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
-            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
-          fi
 
       - name: Install Project Dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest

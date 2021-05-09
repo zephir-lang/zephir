@@ -9,7 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Stubs;
+
+use function count;
 
 /**
  * @author Gusakov Nikita <dev@nkt.me>
@@ -19,27 +23,27 @@ class DocBlock
     /**
      * @var string
      */
-    protected $indent;
+    protected string $indent;
 
     /**
      * @var string
      */
-    protected $description = '';
+    protected string $description = '';
 
     /**
      * @var array
      */
-    protected $lines = [];
+    protected array $lines = [];
 
     /**
-     * @param string $source Raw doc-block
+     * @param string|null $source Raw doc-block
      * @param string $indent Indent, 4 spaces by default
      */
-    public function __construct($source, $indent = '    ')
+    public function __construct(?string $source, string $indent = '    ')
     {
         $this->indent = $indent;
-        $lines = explode("\n", trim($source));
-        $count = \count($lines);
+        $lines = explode("\n", trim($source ?: ''));
+        $count = count($lines);
 
         foreach ($lines as $i => $line) {
             $line = preg_replace('#^([\s\t]+)?/?([*]+)([\s\t]+)?$#im', '', rtrim($line));
@@ -53,11 +57,11 @@ class DocBlock
             $cleaned = str_replace('$$', '$', $cleaned);
 
             if (0 === strpos($cleaned, '@')) {
-                $this->lines[] = $line = $cleaned;
+                $this->lines[] = $cleaned;
             } else {
                 $line = preg_replace('#([\s\t]+)?[*]#', '', $line);
                 $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * '.$line);
-                $line = preg_replace('#[*]([\s\t]){1,}$#', '*', $line);
+                $line = preg_replace('#[*]([\s\t])+$#', '*', $line);
                 $line = preg_replace('#\t#', $indent, $line);
 
                 $this->lines[] = array_pop($this->lines)."\n{$this->indent}".$line;
@@ -96,7 +100,7 @@ class DocBlock
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $doc = '';
         $indent = $this->indent;

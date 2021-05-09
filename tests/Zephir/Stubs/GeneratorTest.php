@@ -229,7 +229,7 @@ DOC;
                 ['static'], 'string', 'A', 'static private $testProperty = \'A\';',
             ],
             [
-                ['static', 'error'], 'empty-array', null, 'static private $testProperty = array();',
+                ['static', 'error'], 'empty-array', null, 'static private $testProperty = [];',
             ],
             [
                 [], 'null', null, 'private $testProperty = null;',
@@ -298,7 +298,7 @@ DOC;
                 'char', 'A', 'const TEST = \'A\';',
             ],
             [
-                'empty-array', null, 'const TEST = array();',
+                'empty-array', null, 'const TEST = [];',
             ],
             [
                 'static-constant-access', ['left' => '\Pdo', 'right' => 'FETCH_LAZY'], 'const TEST = \\Pdo::FETCH_LAZY;',
@@ -321,7 +321,7 @@ DOC;
                         ],
                     ],
                 ],
-                'const TEST = array(\'first\' => 1, \'second\' => 2, 3 => 0);',
+                'const TEST = [\'first\' => 1, \'second\' => 2, 3 => 0];',
             ],
         ];
     }
