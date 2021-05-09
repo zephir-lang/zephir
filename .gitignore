@@ -34,6 +34,7 @@ phpunit.xml
 
 # Build artefact
 zephir.phar
+box.phar
 
 # Ignore codecoverage stuff.
 *.profraw
@@ -45,5 +46,3 @@ zephir.phar
 LATER
 php-zephir-parser/
 
-box.phar
-zephir.phar
