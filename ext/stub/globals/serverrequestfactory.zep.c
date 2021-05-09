@@ -130,19 +130,19 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	if (!(ZEPHIR_IS_EMPTY(&_SERVER))) {
 		ZEPHIR_CPY_WRT(&globalServer, &_SERVER);
 	}
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 45, &server, &globalServer);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 43, &server, &globalServer);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&server, &_0);
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 45, &files, &globalFiles);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 43, &files, &globalFiles);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&files, &_2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 45, &cookies, &globalCookies);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 43, &cookies, &globalCookies);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&cookies, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 45, &get, &globalGet);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 43, &get, &globalGet);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&get, &_4);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 45, &post, &globalPost);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 43, &post, &globalPost);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&post, &_5);
 	zephir_create_array(return_value, 5, 0);
