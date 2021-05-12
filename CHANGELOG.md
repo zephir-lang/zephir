@@ -5,7 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-
+### Fixed
+- Fixed nullable dynamic argument definition [#2245](https://github.com/zephir-lang/zephir/issues/2245)
 
 ## [0.13.5] - 2021-05-09
 ### Fixed
