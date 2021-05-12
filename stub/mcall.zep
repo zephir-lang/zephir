@@ -278,4 +278,9 @@ class Mcall
 
         return _finfo;
     }
+
+    public function issue2245VarArgumentNullable(var param = null)
+    {
+        return param;
+    }
 }
