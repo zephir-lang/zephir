@@ -2334,8 +2334,12 @@ class ClassMethod
         /**
          * In case of unknown type, just return generic param type.
          */
-        $param = sprintf('Z_PARAM_ZVAL(%s)', $name);
         $hasDefaultNull = isset($parameter['default']['type']) && $parameter['default']['type'] === 'null';
+        if ($hasDefaultNull) {
+            $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s)', $name);
+        } else {
+            $param = sprintf('Z_PARAM_ZVAL(%s)', $name);
+        }
 
         switch ($parameter['data-type']) {
             case 'array':

@@ -205,4 +205,11 @@ final class MCallTest extends TestCase
             $this->assertIsResource($test->issue1136());
         }
     }
+
+    public function testIssue2245DynamicNullableArgMustBeNullableAsDefault(): void
+    {
+        $test = new Mcall();
+
+        $this->assertNull($test->issue2245VarArgumentNullable());
+    }
 }
