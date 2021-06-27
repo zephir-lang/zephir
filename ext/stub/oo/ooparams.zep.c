@@ -576,7 +576,7 @@ PHP_METHOD(Stub_Oo_OoParams, setObjectClassCast)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(parameter, stub_oo_param_ce)
+		Z_PARAM_OBJECT_OF_CLASS(parameter, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Oo\\Param")), NULL, 0))
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

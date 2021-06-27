@@ -828,7 +828,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterVar)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param)
+		Z_PARAM_ZVAL_OR_NULL(param)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1051,7 +1051,7 @@ PHP_METHOD(Stub_Mcall, testObjectParamCastStdClass)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(param, zend_standard_class_def)
+		Z_PARAM_OBJECT_OF_CLASS(param, zend_lookup_class_ex(zend_string_init_fast(SL("\\StdClass")), NULL, 0))
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1072,7 +1072,7 @@ PHP_METHOD(Stub_Mcall, testObjectParamCastOoParam)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(param, stub_oo_param_ce)
+		Z_PARAM_OBJECT_OF_CLASS(param, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Oo\\Param")), NULL, 0))
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1215,5 +1215,32 @@ PHP_METHOD(Stub_Mcall, issue1136)
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_finfo);
+}
+
+PHP_METHOD(Stub_Mcall, issue2245VarArgumentNullable)
+{
+	zval *param = NULL, param_sub, __$null;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&__$null);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_ZVAL_OR_NULL(param)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	zephir_fetch_params_without_memory_grow(0, 1, &param);
+	if (!param) {
+		param = &param_sub;
+		param = &__$null;
+	}
+
+
+	RETVAL_ZVAL(param, 1, 0);
+	return;
 }
 

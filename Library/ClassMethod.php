@@ -2445,7 +2445,7 @@ class ClassMethod
          * are no PHP_INSTALL_HEADERS.
          */
         if (in_array(ltrim(strtolower($className), '\\'), $this->excludedClassEntries)) {
-            return null;
+            //return null;
         }
 
         $isAlias = false;
@@ -2461,7 +2461,7 @@ class ClassMethod
         /**
          * PSR
          */
-        if (strpos($className, 'Psr') === 0 || strpos($className, '\Psr') === 0) {
+        /*if (strpos($className, 'Psr') === 0 || strpos($className, '\Psr') === 0) {
             $className = ltrim($className, '\\');
 
             $psrHeaderFiles = [
@@ -2524,7 +2524,7 @@ class ClassMethod
                 );
         } catch (CompilerException $exception) {
             // Continue below execution
-        }
+        }*/
 
         $classNamespace = explode('\\', $className);
 
@@ -2533,19 +2533,20 @@ class ClassMethod
          */
         if (strpos($className, '\\') === 0) {
             $classNamespace = array_values(array_filter($classNamespace));
+            $className = str_replace('\\', '\\\\', $className);
 
             /**
              * External class
              */
             if (count($classNamespace) === 1) {
-                return null;
+                return 'zend_lookup_class_ex(zend_string_init_fast(SL("'.$className.'")), NULL, 0)';
             }
 
             /**
              * External class, we don't know its ClassEntry in C world.
              */
             if (!preg_match('/^'.$classNamespace[0].'/', $this->classDefinition->getNamespace())) {
-                return null;
+                return 'zend_lookup_class_ex(zend_string_init_fast(SL("'.$className.'")), NULL, 0)';
             }
 
             $className = end($classNamespace);
@@ -2564,6 +2565,9 @@ class ClassMethod
         }
 
         $namespace = join('\\', $classNamespace);
+        $namespace = str_replace('\\', '\\\\', $namespace);
+
+        return 'zend_lookup_class_ex(zend_string_init_fast(SL("\\\\'.$namespace.'\\\\'.$className.'")), NULL, 0)';
 
         return (new ClassDefinition($namespace, $className))->getClassEntry();
     }

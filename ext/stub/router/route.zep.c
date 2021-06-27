@@ -66,8 +66,8 @@ PHP_METHOD(Stub_Router_Route, __construct)
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
-		Z_PARAM_ZVAL(httpMethods)
+		Z_PARAM_ZVAL_OR_NULL(paths)
+		Z_PARAM_ZVAL_OR_NULL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -498,7 +498,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

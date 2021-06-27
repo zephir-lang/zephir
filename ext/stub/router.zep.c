@@ -164,7 +164,7 @@ PHP_METHOD(Stub_Router, setDI)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, stub_diinterface_ce)
+		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\DiInterface")), NULL, 0))
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -566,7 +566,7 @@ PHP_METHOD(Stub_Router, handle)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(uri)
+		Z_PARAM_ZVAL_OR_NULL(uri)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1063,8 +1063,8 @@ PHP_METHOD(Stub_Router, add)
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
-		Z_PARAM_ZVAL(httpMethods)
+		Z_PARAM_ZVAL_OR_NULL(paths)
+		Z_PARAM_ZVAL_OR_NULL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1112,7 +1112,7 @@ PHP_METHOD(Stub_Router, addGet)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1155,7 +1155,7 @@ PHP_METHOD(Stub_Router, addPost)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1198,7 +1198,7 @@ PHP_METHOD(Stub_Router, addPut)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1241,7 +1241,7 @@ PHP_METHOD(Stub_Router, addPatch)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1284,7 +1284,7 @@ PHP_METHOD(Stub_Router, addDelete)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1327,7 +1327,7 @@ PHP_METHOD(Stub_Router, addOptions)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -1370,7 +1370,7 @@ PHP_METHOD(Stub_Router, addHead)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

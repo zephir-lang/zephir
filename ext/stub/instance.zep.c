@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
-#include "ext/spl/spl_array.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
@@ -49,17 +48,17 @@ PHP_METHOD(Stub_Instance, __construct)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(11, 11)
-		Z_PARAM_OBJECT_OF_CLASS(a1, stub_arithmetic_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a2, spl_ce_ArrayObject)
-		Z_PARAM_OBJECT_OF_CLASS(a3, stub_assign_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a4, stub_bitwise_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a5, stub_branchprediction_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a6, stub_cast_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a7, stub_cblock_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a8, stub_chars_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a9, stub_closures_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a10, stub_compare_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a11, stub_concat_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a1, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Arithmetic")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a2, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\ArrayObject")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a3, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Assign")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a4, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Bitwise")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a5, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\BranchPrediction")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a6, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Cast")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a7, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Cblock")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a8, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Chars")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a9, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Closures")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a10, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Compare")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(a11, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Concat")), NULL, 0))
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
