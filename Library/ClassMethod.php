@@ -2389,8 +2389,7 @@ class ClassMethod
                 break;
 
             case 'variable':
-                if (
-                    isset($parameter['cast']) &&
+                if (isset($parameter['cast']) &&
                     $parameter['cast']['type'] === 'variable' &&
                     $parameter['cast']['value'] &&
                     $this->classDefinition !== null
