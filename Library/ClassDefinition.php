@@ -1469,6 +1469,8 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Convert Class/Interface name to C ClassEntry.
      *
+     * @deprecated Use Zephir\Classes\Entry instead
+     *
      * @param string             $className
      * @param CompilationContext $compilationContext
      * @param bool               $check
