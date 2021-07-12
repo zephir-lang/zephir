@@ -22,6 +22,8 @@ use Zephir\Exception;
  */
 class Entry
 {
+    public const NAMESPACE_SEPARATOR = '\\';
+
     /**
      * Class name
      *
@@ -66,20 +68,25 @@ class Entry
     public function get(): string
     {
         $className = $this->compilationContext->getFullName($this->classname);
-        $classNamespace = explode('\\', $className);
+        $classNamespace = explode(self::NAMESPACE_SEPARATOR, $className);
 
         /**
          * External class, we don't know its ClassEntry in C world.
          */
         if (!$this->isInternalClass($classNamespace[0])) {
-            $className = str_replace('\\', '\\\\', $className);
+            $className = str_replace(self::NAMESPACE_SEPARATOR, self::NAMESPACE_SEPARATOR.self::NAMESPACE_SEPARATOR, $className);
 
-            return 'zend_lookup_class_ex(zend_string_init_fast(SL("\\\\'.$className.'")), NULL, 0)';
+            return sprintf(
+                'zend_lookup_class_ex(zend_string_init_fast(SL("%s%s%s")), NULL, 0)',
+                self::NAMESPACE_SEPARATOR,
+                self::NAMESPACE_SEPARATOR,
+                $className
+            );
         }
 
         $className = end($classNamespace);
         array_pop($classNamespace);
-        $namespace = join('\\', $classNamespace);
+        $namespace = join(self::NAMESPACE_SEPARATOR, $classNamespace);
 
         return (new ClassDefinition($namespace, $className))->getClassEntry();
     }
