@@ -13,11 +13,13 @@ namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use function Zephir\escape_class;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use function Zephir\fqcn;
 use Zephir\Operators\BaseOperator;
+
+use function Zephir\escape_class;
+use function Zephir\fqcn;
 
 /**
  * InstanceOf.
@@ -31,11 +33,11 @@ class InstanceOfOperator extends BaseOperator
      * @param CompilationContext $context
      *
      * @throws CompilerException
-     * @throws \Zephir\Exception
+     * @throws Exception
      *
      * @return CompiledExpression
      */
-    public function compile($expression, CompilationContext $context)
+    public function compile($expression, CompilationContext $context): CompiledExpression
     {
         $left = new Expression($expression['left']);
         $resolved = $left->compile($context);
