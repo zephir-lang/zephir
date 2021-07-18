@@ -166,7 +166,7 @@ final class MCallTest extends TestCase
         return $this->reflection;
     }
 
-    public function testSouldThrowTypeErrorForOptionalBoolean1(): void
+    public function testShouldThrowTypeErrorForOptionalBoolean1(): void
     {
         $test = new Mcall();
 
