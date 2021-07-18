@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Classes;
 
+use ReflectionException;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
@@ -34,41 +35,55 @@ class Entry
     private string $classname;
 
     /**
-     * Class namespace
-     *
-     * From where it is called.
-     *
-     * @var string
-     */
-    private string $classNamespace;
-
-    /**
      * @var CompilationContext
      */
     private CompilationContext $compilationContext;
 
     /**
+     * @var bool
+     */
+    private bool $isInternal = false;
+
+    /**
      * Entry constructor.
      *
      * @param string $className
-     * @param string $classNamespace
      * @param CompilationContext $compilationContext
      */
-    public function __construct(string $className, string $classNamespace, CompilationContext $compilationContext)
+    public function __construct(string $className, CompilationContext $compilationContext)
     {
         $this->classname = $className;
-        $this->classNamespace = $classNamespace;
         $this->compilationContext = $compilationContext;
     }
 
     /**
      * @return string
      * @throws Exception
+     * @throws ReflectionException
      */
     public function get(): string
     {
-        $className = $this->compilationContext->getFullName($this->classname);
-        $classNamespace = explode(self::NAMESPACE_SEPARATOR, $className);
+        if (class_exists($this->classname)) {
+            $reflection = new \ReflectionClass($this->classname);
+
+            /**
+             * Check if class is defined internally by an extension, or the core.
+             */
+            if ($reflection->isInternal()) {
+                return sprintf(
+                    'zend_lookup_class_ex(zend_string_init_fast(SL("%s%s%s")), NULL, 0)',
+                    self::NAMESPACE_SEPARATOR,
+                    self::NAMESPACE_SEPARATOR,
+                    $reflection->getName(),
+                );
+            }
+
+            $className = $reflection->getName();
+            $classNamespace = explode(self::NAMESPACE_SEPARATOR, $reflection->getNamespaceName());
+        } else {
+            $className = $this->compilationContext->getFullName($this->classname);
+            $classNamespace = explode(self::NAMESPACE_SEPARATOR, $className);
+        }
 
         /**
          * External class, we don't know its ClassEntry in C world.
@@ -91,6 +106,11 @@ class Entry
         return (new ClassDefinition($namespace, $className))->getClassEntry();
     }
 
+    public function isInternal(): bool
+    {
+        return $this->isInternal;
+    }
+
     /**
      * Detect if start of namespace class
      * belongs to project namespace.
@@ -98,8 +118,10 @@ class Entry
      * @param string $className
      * @return bool
      */
-    public function isInternalClass(string $className): bool
+    private function isInternalClass(string $className): bool
     {
-        return preg_match('/^'.$className.'/', $this->classNamespace) === 1;
+        $this->isInternal = preg_match('/^'.$className.'/', $this->compilationContext->classDefinition->getNamespace()) === 1;
+
+        return $this->isInternal;
     }
 }
