@@ -15,6 +15,7 @@ namespace Zephir;
 
 use ReflectionClass;
 use ReflectionException;
+use Zephir\Classes\Entry;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
@@ -1122,14 +1123,13 @@ final class ClassDefinition extends AbstractClassDefinition
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
+                //$classEntryNew = (new Entry($classExtendsDefinition->getName(), $compilationContext))->get();
             }
 
             if (self::TYPE_CLASS === $this->getType()) {
                 $codePrinter->output('ZEPHIR_REGISTER_CLASS_EX('.$this->getNCNamespace().', '.$this->getName().', '.$namespace.', '.strtolower($this->getSCName($namespace)).', '.$classEntry.', '.$methodEntry.', '.$flags.');');
-                $codePrinter->outputBlankLine();
             } else {
                 $codePrinter->output('ZEPHIR_REGISTER_INTERFACE_EX('.$this->getNCNamespace().', '.$this->getName().', '.$namespace.', '.strtolower($this->getSCName($namespace)).', '.$classEntry.', '.$methodEntry.');');
-                $codePrinter->outputBlankLine();
             }
         } else {
             if (self::TYPE_CLASS === $this->getType()) {
@@ -1137,8 +1137,9 @@ final class ClassDefinition extends AbstractClassDefinition
             } else {
                 $codePrinter->output('ZEPHIR_REGISTER_INTERFACE('.$this->getNCNamespace().', '.$this->getName().', '.$namespace.', '.strtolower($this->getSCName($namespace)).', '.$methodEntry.');');
             }
-            $codePrinter->outputBlankLine();
         }
+
+        $codePrinter->outputBlankLine();
 
         /**
          * Compile properties.
@@ -1193,6 +1194,7 @@ final class ClassDefinition extends AbstractClassDefinition
                     if ($compiler->isBundledInterface($interface)) {
                         $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                         $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName(), $compilationContext);
+                        //$classEntry = (new Entry($classInterfaceDefinition->getName(), $compilationContext))->get();
                     }
                 }
 

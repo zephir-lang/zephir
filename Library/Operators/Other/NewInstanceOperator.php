@@ -9,10 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
+use ReflectionClass;
+use ReflectionException;
+use Zephir\Classes\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
@@ -32,14 +38,14 @@ class NewInstanceOperator extends BaseOperator
     /**
      * Creates a new instance.
      *
-     * @param $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -153,29 +159,22 @@ class NewInstanceOperator extends BaseOperator
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
                     } else {
-                        $reflectionClass = new \ReflectionClass($className);
+                        $reflectionClass = new ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
-                        } else {
-                            if (method_exists($reflectionClass, 'isTrait')) {
-                                if ($reflectionClass->isTrait()) {
-                                    throw new CompilerException('Traits cannot be instantiated', $expression);
-                                }
-                            }
                         }
 
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
-                        if (!$classEntry) {
-                            $classNameToFetch = 'SL("'.escape_class($className).'")';
-                            $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
-                            $classEntry = $zendClassEntry->getName();
-                        } else {
-                            $symbolVariable->setAssociatedClass($reflectionClass);
+                        if (method_exists($reflectionClass, 'isTrait') && $reflectionClass->isTrait()) {
+                            throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
+
+                        $classEntry = (new Entry($reflectionClass->getName(), $compilationContext))->get();
+                        $symbolVariable->setAssociatedClass($reflectionClass);
                     }
 
                     $symbolVariable->setClassTypes($className);
                 }
+
                 $compilationContext->backend->initObject($symbolVariable, $classEntry, $compilationContext);
             }
         }

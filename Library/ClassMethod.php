@@ -2394,7 +2394,7 @@ class ClassMethod
                     $parameter['cast']['value'] &&
                     $this->classDefinition !== null
                 ) {
-                    $classEntry = (new ClassEntry($parameter['cast']['value'], $this->classDefinition->getNamespace(), $compilationContext))->get();
+                    $classEntry = (new ClassEntry($parameter['cast']['value'], $compilationContext))->get();
                     if ($hasDefaultNull) {
                         $param = sprintf('Z_PARAM_OBJECT_OF_CLASS_OR_NULL(%s, %s)', $name, $classEntry);
                     } else {

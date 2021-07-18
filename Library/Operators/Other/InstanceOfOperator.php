@@ -9,8 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
+use Zephir\Classes\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -19,7 +22,6 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 use function Zephir\escape_class;
-use function Zephir\fqcn;
 
 /**
  * InstanceOf.
@@ -57,21 +59,7 @@ class InstanceOfOperator extends BaseOperator
 
         switch ($resolved->getType()) {
             case 'string':
-                $className = fqcn($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
-
-                if ($context->compiler->isClass($className)) {
-                    $classDefinition = $context->compiler->getClassDefinition($className);
-                    $classEntry = $classDefinition->getClassEntry($context);
-                } else {
-                    if (!class_exists($className, false)) {
-                        $code = 'SL("'.$resolvedVariable.'")';
-                    } else {
-                        $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
-                        if (!$classEntry) {
-                            $code = 'SL("'.$resolvedVariable.'")';
-                        }
-                    }
-                }
+                $classEntry = (new Entry($resolvedVariable, $context));
                 break;
             default:
                 switch ($resolved->getType()) {
@@ -84,7 +72,7 @@ class InstanceOfOperator extends BaseOperator
                         } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
                             $className = $context->getFullName($resolvedVariable);
 
-                            if ('Traversable' == $className) {
+                            if ('Traversable' === $className) {
                                 $symbol = $context->backend->getVariableCode($symbolVariable);
 
                                 return new CompiledExpression('bool', 'zephir_zval_is_traversable('.$symbol.')', $expression);
@@ -101,8 +89,10 @@ class InstanceOfOperator extends BaseOperator
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("'.trim(escape_class($className), '\\').'")';
                                     } else {
-                                        $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
-                                        if (!$classEntry) {
+                                        $entry = (new Entry($resolvedVariable, $context));
+                                        $classEntry = $entry->get();
+
+                                        if (!$entry->isInternal()) {
                                             $code = 'SL("'.trim(escape_class($className), '\\').'")';
                                         }
                                     }
@@ -138,7 +128,7 @@ class InstanceOfOperator extends BaseOperator
         return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.')', $expression);
     }
 
-    private function prepareBackendSpecificCode($variable, CompilationContext $context)
+    private function prepareBackendSpecificCode($variable, CompilationContext $context): string
     {
         return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
             ':name' => $variable,
