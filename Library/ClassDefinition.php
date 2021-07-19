@@ -1123,7 +1123,7 @@ final class ClassDefinition extends AbstractClassDefinition
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
-                //$classEntryNew = (new Entry($classExtendsDefinition->getName(), $compilationContext))->get();
+                //$classEntry = (new Entry($classExtendsDefinition->getCompleteName(), $compilationContext))->get();
             }
 
             if (self::TYPE_CLASS === $this->getType()) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\Classes\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -34,10 +35,9 @@ class InstanceOfOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     * @throws Exception
-     *
      * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $context): CompiledExpression
     {

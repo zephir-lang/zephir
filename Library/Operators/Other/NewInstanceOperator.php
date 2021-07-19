@@ -168,7 +168,7 @@ class NewInstanceOperator extends BaseOperator
                             throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
 
-                        $classEntry = (new Entry($reflectionClass->getName(), $compilationContext))->get();
+                        $classEntry = (new Entry($expression['class'], $compilationContext))->get();
                         $symbolVariable->setAssociatedClass($reflectionClass);
                     }
 
