@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Classes;
 
+use ReflectionClass;
 use ReflectionException;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
@@ -44,6 +45,10 @@ class Entry
      */
     private bool $isInternal = false;
 
+    private array $undetectableClassEntries = [
+        'ArrayObject' => 'spl_ce_ArrayObject',
+    ];
+
     /**
      * Entry constructor.
      *
@@ -52,8 +57,8 @@ class Entry
      */
     public function __construct(string $className, CompilationContext $compilationContext)
     {
-        $this->classname = $className;
         $this->compilationContext = $compilationContext;
+        $this->classname = $this->compilationContext->getFullName($className);
     }
 
     /**
@@ -63,25 +68,34 @@ class Entry
      */
     public function get(): string
     {
+        if (isset($this->undetectableClassEntries[$this->classname])) {
+            $this->compilationContext->headersManager->add('ext/spl/spl_array');
+
+            return $this->undetectableClassEntries[$this->classname];
+        }
+
         if (class_exists($this->classname)) {
-            $reflection = new \ReflectionClass($this->classname);
+            $reflection = new ReflectionClass($this->classname);
+            $className = $reflection->getName();
 
             /**
              * Check if class is defined internally by an extension, or the core.
              */
             if ($reflection->isInternal()) {
                 return sprintf(
-                    'zend_lookup_class_ex(zend_string_init_fast(SL("%s%s%s")), NULL, 0)',
-                    self::NAMESPACE_SEPARATOR,
-                    self::NAMESPACE_SEPARATOR,
-                    $reflection->getName(),
+                    'zend_lookup_class_ex(zend_string_init(ZEND_STRL("%s"), 0), NULL, 0)',
+                    sprintf(
+                        '%s%s%s',
+                        self::NAMESPACE_SEPARATOR,
+                        self::NAMESPACE_SEPARATOR,
+                        $reflection->getName(),
+                    ),
                 );
             }
 
-            $className = $reflection->getName();
             $classNamespace = explode(self::NAMESPACE_SEPARATOR, $reflection->getNamespaceName());
         } else {
-            $className = $this->compilationContext->getFullName($this->classname);
+            $className = $this->classname;
             $classNamespace = explode(self::NAMESPACE_SEPARATOR, $className);
         }
 
@@ -92,10 +106,13 @@ class Entry
             $className = str_replace(self::NAMESPACE_SEPARATOR, self::NAMESPACE_SEPARATOR.self::NAMESPACE_SEPARATOR, $className);
 
             return sprintf(
-                'zend_lookup_class_ex(zend_string_init_fast(SL("%s%s%s")), NULL, 0)',
-                self::NAMESPACE_SEPARATOR,
-                self::NAMESPACE_SEPARATOR,
-                $className
+                'zend_lookup_class_ex(zend_string_init(ZEND_STRL("%s"), 0), NULL, 0)',
+                sprintf(
+                    '%s%s%s',
+                    self::NAMESPACE_SEPARATOR,
+                    self::NAMESPACE_SEPARATOR,
+                    $className,
+                ),
             );
         }
 
