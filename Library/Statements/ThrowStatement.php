@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\Classes\Entry;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
@@ -21,6 +22,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
+use function in_array;
 use function Zephir\add_slashes;
 use function Zephir\fqcn;
 
@@ -35,6 +37,7 @@ class ThrowStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -72,7 +75,7 @@ class ThrowStatement extends StatementAbstract
                     }
                 } else {
                     if ($compilationContext->compiler->isBundledClass($className)) {
-                        $classEntry = (new Entry($className, $compilationContext))->get();
+                        $classEntry = (new Entry($expr['class'], $compilationContext))->get();
                         $message = $expr['parameters'][0]['parameter']['value'];
                         $this->throwStringException($codePrinter, $classEntry, $message, $expr);
 
@@ -80,7 +83,7 @@ class ThrowStatement extends StatementAbstract
                     }
                 }
             } else {
-                if (\in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
+                if (in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
                     $class = (new Entry('Exception', $compilationContext))->get();
 
                     $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
@@ -97,7 +100,7 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException($e->getMessage(), $expr, $e->getCode(), $e);
         }
 
-        if (!\in_array($resolvedExpr->getType(), ['variable', 'string'])) {
+        if (!in_array($resolvedExpr->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Expression '".$resolvedExpr->getType().'" cannot be used as exception',
                 $expr
@@ -110,7 +113,7 @@ class ThrowStatement extends StatementAbstract
             $expr
         );
 
-        if (!\in_array($variableVariable->getType(), ['variable', 'string'])) {
+        if (!in_array($variableVariable->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Variable '".$variableVariable->getType()."' cannot be used as exception",
                 $expr
