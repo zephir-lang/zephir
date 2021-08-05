@@ -84,8 +84,8 @@ PHP_METHOD(Stub_SpectralNorm, Au)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(n)
-		Z_PARAM_OBJECT_OF_CLASS(u, zend_lookup_class_ex(zend_string_init_fast(SL("\\SplFixedArray")), NULL, 0))
-		Z_PARAM_OBJECT_OF_CLASS(v, zend_lookup_class_ex(zend_string_init_fast(SL("\\SplFixedArray")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
+		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -167,8 +167,8 @@ PHP_METHOD(Stub_SpectralNorm, Atu)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(n)
-		Z_PARAM_OBJECT_OF_CLASS(u, zend_lookup_class_ex(zend_string_init_fast(SL("\\SplFixedArray")), NULL, 0))
-		Z_PARAM_OBJECT_OF_CLASS(v, zend_lookup_class_ex(zend_string_init_fast(SL("\\SplFixedArray")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
+		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

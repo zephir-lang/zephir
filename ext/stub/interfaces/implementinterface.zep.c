@@ -37,7 +37,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, get)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(obj, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Interfaces\\InterfaceInt")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(obj, stub_interfaces_interfaceint_ce)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -60,7 +60,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, getVoid)
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(obj, zend_lookup_class_ex(zend_string_init_fast(SL("\\Stub\\Interfaces\\InterfaceInt")), NULL, 0))
+		Z_PARAM_OBJECT_OF_CLASS(obj, stub_interfaces_interfaceint_ce)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
