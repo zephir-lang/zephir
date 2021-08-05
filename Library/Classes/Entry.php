@@ -35,6 +35,11 @@ class Entry
     private const EXT_SPL_ITERATORS = 'ext/spl/spl_iterators';
     private const EXT_SPL_OBSERVER = 'ext/spl/spl_observer';
 
+    private const EXT_SESSION = 'ext/session/php_session';
+
+    private const EXT_DATE = 'ext/date/php_date';
+    private const EXT_PDO = 'ext/pdo/php_pdo_driver';
+
     /**
      * Class name
      *
@@ -124,17 +129,17 @@ class Entry
         /**
          * Session
          */
-        'SessionHandlerInterface'           => ['php_session_iface_entry', 'ext/session/php_session'],
+        'SessionHandlerInterface'           => ['php_session_iface_entry', self::EXT_SESSION],
 
         /**
          * Date
          */
-        'DateTimeInterface'                 => ['php_date_get_interface_ce()', 'ext/date/php_date'],
-        'DateTime'                          => ['php_date_get_date_ce()', 'ext/date/php_date'],
-        'DateTimeImmutable'                 => ['php_date_get_immutable_ce()', 'ext/date/php_date'],
-        'DateTimezone'                      => ['php_date_get_timezone_ce()', 'ext/date/php_date'],
-        'DateInterval'                      => ['php_date_get_interval_ce()', 'ext/date/php_date'],
-        'DatePeriod'                        => ['php_date_get_period_ce()', 'ext/date/php_date'],
+        'DateTimeInterface'                 => ['php_date_get_interface_ce()', self::EXT_DATE],
+        'DateTime'                          => ['php_date_get_date_ce()', self::EXT_DATE],
+        'DateTimeImmutable'                 => ['php_date_get_immutable_ce()', self::EXT_DATE],
+        'DateTimezone'                      => ['php_date_get_timezone_ce()', self::EXT_DATE],
+        'DateInterval'                      => ['php_date_get_interval_ce()', self::EXT_DATE],
+        'DatePeriod'                        => ['php_date_get_period_ce()', self::EXT_DATE],
 
         /**
          * Closures
@@ -171,8 +176,8 @@ class Entry
         /**
          * PDO
          */
-        'PDO'                               => ['php_pdo_get_dbh_ce()', 'ext/pdo/php_pdo_driver'],
-        'PDOException'                      => ['php_pdo_get_exception()', 'ext/pdo/php_pdo_driver'],
+        'PDO'                               => ['php_pdo_get_dbh_ce()', self::EXT_PDO],
+        'PDOException'                      => ['php_pdo_get_exception()', self::EXT_PDO],
 
         'stdClass'                          => ['zend_standard_class_def'],
     ];
