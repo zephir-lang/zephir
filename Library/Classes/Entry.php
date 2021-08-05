@@ -214,7 +214,7 @@ class Entry
         if ($className === 'pdostatement') {
             $this->compilationContext->headersManager->add('kernel/main');
 
-            return $this->compilationContext->backend->fetchClassEntry('pdostatement');;
+            return $this->compilationContext->backend->fetchClassEntry('pdostatement');
         }
 
         if (isset($this->classEntries[$className])) {
