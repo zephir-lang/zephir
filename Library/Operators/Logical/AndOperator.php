@@ -9,8 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Logical;
 
+use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -23,14 +26,20 @@ class AndOperator extends LogicalBaseOperator
 
     protected string $bitOperator = '&&';
 
-    public function compile($expression, CompilationContext $compilationContext)
+    /**
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws \Zephir\Exception
+     */
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
-            throw new \Exception('Missing left part of the expression');
+            throw new Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception('Missing right part of the expression');
+            throw new Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -92,7 +101,6 @@ class AndOperator extends LogicalBaseOperator
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->output('if ('.$flagVariable->getName().') {');
-
         $compilationContext->codePrinter->increaseLevel();
 
         $rightExpr = new Expression($expression['right']);
@@ -149,7 +157,6 @@ class AndOperator extends LogicalBaseOperator
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();
-
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('bool', $flagVariable->getName(), $expression);

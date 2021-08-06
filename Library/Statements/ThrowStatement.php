@@ -9,15 +9,21 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
-use function Zephir\add_slashes;
+use ReflectionException;
+use Zephir\Classes\Entry;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+
+use function in_array;
+use function Zephir\add_slashes;
 use function Zephir\fqcn;
 
 /**
@@ -30,7 +36,8 @@ class ThrowStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -68,25 +75,16 @@ class ThrowStatement extends StatementAbstract
                     }
                 } else {
                     if ($compilationContext->compiler->isBundledClass($className)) {
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName(
-                            $className,
-                            $compilationContext,
-                            true
-                        );
-                        if ($classEntry) {
-                            $message = $expr['parameters'][0]['parameter']['value'];
-                            $this->throwStringException($codePrinter, $classEntry, $message, $expr);
+                        $classEntry = (new Entry($expr['class'], $compilationContext))->get();
+                        $message = $expr['parameters'][0]['parameter']['value'];
+                        $this->throwStringException($codePrinter, $classEntry, $message, $expr);
 
-                            return;
-                        }
+                        return;
                     }
                 }
             } else {
-                if (\in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
-                    $class = $compilationContext->classDefinition->getClassEntryByClassName(
-                        'Exception',
-                        $compilationContext
-                    );
+                if (in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
+                    $class = (new Entry('Exception', $compilationContext))->get();
 
                     $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
 
@@ -102,7 +100,7 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException($e->getMessage(), $expr, $e->getCode(), $e);
         }
 
-        if (!\in_array($resolvedExpr->getType(), ['variable', 'string'])) {
+        if (!in_array($resolvedExpr->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Expression '".$resolvedExpr->getType().'" cannot be used as exception',
                 $expr
@@ -115,7 +113,7 @@ class ThrowStatement extends StatementAbstract
             $expr
         );
 
-        if (!\in_array($variableVariable->getType(), ['variable', 'string'])) {
+        if (!in_array($variableVariable->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Variable '".$variableVariable->getType()."' cannot be used as exception",
                 $expr
@@ -151,7 +149,7 @@ class ThrowStatement extends StatementAbstract
      * @param string      $message
      * @param array       $expression
      */
-    private function throwStringException(CodePrinter $printer, $class, $message, $expression)
+    private function throwStringException(CodePrinter $printer, string $class, string $message, array $expression): void
     {
         $message = add_slashes($message);
         $path = Compiler::getShortUserPath($expression['file']);

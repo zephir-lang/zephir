@@ -84,7 +84,7 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(delimiter)
+		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -120,7 +120,7 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(delimiter)
+		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

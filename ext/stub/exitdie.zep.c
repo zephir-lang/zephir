@@ -36,7 +36,7 @@ PHP_METHOD(Stub_ExitDie, testExit)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param)
+		Z_PARAM_ZVAL_OR_NULL(param)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -65,7 +65,7 @@ PHP_METHOD(Stub_ExitDie, testDie)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param)
+		Z_PARAM_ZVAL_OR_NULL(param)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

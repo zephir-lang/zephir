@@ -639,7 +639,7 @@ final class CompilerFile implements FileInterface
         if (!$class && !$interface) {
             throw new CompilerException(
                 'Every file must contain at least a class or an interface',
-                isset($topStatement) ? $topStatement : null
+                $topStatement ?? null
             );
         }
 
@@ -1154,7 +1154,7 @@ final class CompilerFile implements FileInterface
      *
      * @return string
      */
-    protected function getFullName($name)
+    protected function getFullName(string $name): string
     {
         return fqcn($name, $this->namespace, $this->aliasManager);
     }
@@ -1163,11 +1163,11 @@ final class CompilerFile implements FileInterface
      * Create returns type list.
      *
      * @param array $types
-     * @param bool  $annotated
+     * @param bool $annotated
      *
      * @return array
      */
-    protected function createReturnsType(array $types, $annotated = false)
+    protected function createReturnsType(array $types, bool $annotated = false): ?array
     {
         if (!$types) {
             return null;
@@ -1178,7 +1178,7 @@ final class CompilerFile implements FileInterface
         foreach ($types as $type) {
             $list[] = [
                 'type' => $annotated ? 'return-type-annotation' : 'return-type-paramater',
-                'data-type' => 'mixed' == $type ? 'variable' : $type,
+                'data-type' => 'mixed' === $type ? 'variable' : $type,
                 'mandatory' => false,
             ];
         }

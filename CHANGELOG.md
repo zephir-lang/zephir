@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.14.0-beta.1] - 2021-08-06
+### Fixed
+- Fixed nullable dynamic argument definition [#2245](https://github.com/zephir-lang/zephir/issues/2245)
+
+### Changed
+- Changed detection of external class entries [#2213](https://github.com/zephir-lang/zephir/issues/2213)
 
 ## [0.13.5] - 2021-05-09
 ### Fixed
@@ -520,7 +526,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.5...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...HEAD
+[0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.13.5...0.14.0-beta.1
 [0.13.5]: https://github.com/zephir-lang/zephir/compare/0.13.4...0.13.5
 [0.13.4]: https://github.com/zephir-lang/zephir/compare/0.13.3...0.13.4
 [0.13.3]: https://github.com/zephir-lang/zephir/compare/0.13.2...0.13.3

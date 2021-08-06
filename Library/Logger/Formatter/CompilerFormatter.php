@@ -9,29 +9,35 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Logger\Formatter;
 
 use Monolog\Formatter\LineFormatter;
 use Zephir\Config;
+
+use function array_key_exists;
+use function count;
+use function is_array;
 
 /**
  * Formatter for warnings/notices/errors generated in compilation.
  */
 final class CompilerFormatter extends LineFormatter
 {
-    const SIMPLE_FORMAT = " %level_name%: %message% in %file% on line %line% %type%\n";
+    public const SIMPLE_FORMAT = " %level_name%: %message% in %file% on line %line% %type%\n";
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * The contents of the files that are involved in the log message.
      *
      * @var array
      */
-    private $filesContent = [];
+    private array $filesContent = [];
 
     public function __construct(Config $config)
     {
@@ -41,7 +47,8 @@ final class CompilerFormatter extends LineFormatter
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $record
+     * @return string
      */
     public function format(array $record): string
     {
@@ -60,8 +67,8 @@ final class CompilerFormatter extends LineFormatter
 
         // ignore empty context or invalid format
         if (!empty($vars['context']) &&
-            \is_array($vars['context']) &&
-            2 == \count($vars['context'])
+            is_array($vars['context']) &&
+            2 == count($vars['context'])
         ) {
             $type = $vars['context'][0];
             $node = $vars['context'][1];
@@ -70,7 +77,7 @@ final class CompilerFormatter extends LineFormatter
                 return '';
             }
 
-            $vars['type'] = "[{$type}]";
+            $vars['type'] = "[$type]";
 
             if (!isset($node['file'])) {
                 $vars['file'] = 'unknown';
@@ -96,15 +103,14 @@ final class CompilerFormatter extends LineFormatter
         }
 
         $output = $this->replacePlaceholders($vars, $output);
-        $output = $this->cleanExtraPlaceholders($output);
 
-        return $output;
+        return $this->cleanExtraPlaceholders($output);
     }
 
     private function replacePlaceholders(array $vars, $output)
     {
         // WARNING -> Warning
-        if (\array_key_exists('level_name', $vars)) {
+        if (array_key_exists('level_name', $vars)) {
             $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
         }
 
@@ -139,7 +145,7 @@ final class CompilerFormatter extends LineFormatter
      *
      * @return string
      */
-    private function cleanExtraPlaceholders($output)
+    private function cleanExtraPlaceholders(string $output): string
     {
         if (false !== strpos($output, '%')) {
             $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
@@ -158,7 +164,7 @@ final class CompilerFormatter extends LineFormatter
      *
      * @return array
      */
-    private function getFileContents($file)
+    private function getFileContents(string $file): array
     {
         if (!isset($this->filesContent[$file])) {
             $this->filesContent[$file] = file_exists($file) ? file($file) : [];

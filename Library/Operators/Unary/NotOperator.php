@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Unary;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
@@ -23,11 +26,10 @@ class NotOperator extends BaseOperator
      * @param $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
             throw new CompilerException('Missing left part of the expression', $expression);

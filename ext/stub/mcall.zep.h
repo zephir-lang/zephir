@@ -51,6 +51,7 @@ PHP_METHOD(Stub_Mcall, testCallablePass);
 PHP_METHOD(Stub_Mcall, testCallableArrayThisMethodPass);
 PHP_METHOD(Stub_Mcall, aa);
 PHP_METHOD(Stub_Mcall, issue1136);
+PHP_METHOD(Stub_Mcall, issue2245VarArgumentNullable);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testmethod1, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -254,6 +255,10 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_issue1136, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_issue2245varargumentnullable, 0, 0, 0)
+	ZEND_ARG_INFO(0, param)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_mcall_method_entry) {
 #if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_Mcall, testMethod1, arginfo_stub_mcall_testmethod1, ZEND_ACC_PUBLIC)
@@ -363,5 +368,6 @@ ZEPHIR_INIT_FUNCS(stub_mcall_method_entry) {
 #else
 	PHP_ME(Stub_Mcall, issue1136, NULL, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(Stub_Mcall, issue2245VarArgumentNullable, arginfo_stub_mcall_issue2245varargumentnullable, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

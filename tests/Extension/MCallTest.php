@@ -166,7 +166,7 @@ final class MCallTest extends TestCase
         return $this->reflection;
     }
 
-    public function testSouldThrowTypeErrorForOptionalBoolean1(): void
+    public function testShouldThrowTypeErrorForOptionalBoolean1(): void
     {
         $test = new Mcall();
 
@@ -204,5 +204,12 @@ final class MCallTest extends TestCase
         } else {
             $this->assertIsResource($test->issue1136());
         }
+    }
+
+    public function testIssue2245DynamicNullableArgMustBeNullableAsDefault(): void
+    {
+        $test = new Mcall();
+
+        $this->assertNull($test->issue2245VarArgumentNullable());
     }
 }

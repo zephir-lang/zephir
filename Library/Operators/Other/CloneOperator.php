@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
@@ -25,14 +28,13 @@ use Zephir\Operators\BaseOperator;
 class CloneOperator extends BaseOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $compilationContext->headersManager->add('kernel/object');
 
@@ -41,12 +43,12 @@ class CloneOperator extends BaseOperator
         $exprVariable->setExpectReturn(true);
 
         $exprCompiledVariable = $exprVariable->compile($compilationContext);
-        if ('variable' != $exprCompiledVariable->getType()) {
+        if ('variable' !== $exprCompiledVariable->getType()) {
             throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $expression);
         }
 
         $clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
-        if ('variable' != $clonedVariable->getType()) {
+        if ('variable' !== $clonedVariable->getType()) {
             throw new CompilerException('Variable type: '.$exprVariable->getType().' cannot be cloned');
         }
 

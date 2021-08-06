@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Detectors\ReadDetector;
@@ -24,27 +26,54 @@ class Call
     /**
      * Call expression.
      *
-     * @var Expression
+     * @var Expression|null
      */
-    protected $expression;
+    protected ?Expression $expression = null;
 
-    protected $mustInit;
+    /**
+     * @var bool
+     */
+    protected bool $mustInit = false;
 
-    protected $symbolVariable;
+    /**
+     * @var Variable|null
+     */
+    protected ?Variable $symbolVariable = null;
 
-    protected $isExpecting = false;
+    /**
+     * @var bool
+     */
+    protected bool $isExpecting = false;
 
-    protected $resolvedParams;
+    /**
+     * @var array
+     */
+    protected array $resolvedParams = [];
 
-    protected $reflection;
+    /**
+     * @var mixed|null
+     */
+    protected $reflection = null;
 
-    protected $resolvedTypes = [];
+    /**
+     * @var array
+     */
+    protected array $resolvedTypes = [];
 
-    protected $resolvedDynamicTypes = [];
+    /**
+     * @var array
+     */
+    protected array $resolvedDynamicTypes = [];
 
-    protected $temporalVariables = [];
+    /**
+     * @var array
+     */
+    protected array $temporalVariables = [];
 
-    protected $mustCheckForCopy = [];
+    /**
+     * @var array
+     */
+    protected array $mustCheckForCopy = [];
 
     /**
      * Processes the symbol variable that will be used to return
@@ -60,7 +89,6 @@ class Call
         /**
          * Create temporary variable if needed.
          */
-        $mustInit = false;
         $symbolVariable = null;
         $isExpecting = $expr->isExpectingReturn();
         if ($isExpecting) {
@@ -74,14 +102,13 @@ class Call
                         $expression
                     );
                 } else {
-                    $mustInit = true;
+                    $this->mustInit = true;
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
             }
         }
 
-        $this->mustInit = $mustInit;
         $this->symbolVariable = $symbolVariable;
         $this->isExpecting = $isExpecting;
     }
@@ -92,7 +119,7 @@ class Call
      *
      * @param CompilationContext $compilationContext
      */
-    public function processExpectedObservedReturn(CompilationContext $compilationContext)
+    public function processExpectedObservedReturn(CompilationContext $compilationContext): void
     {
         $expr = $this->expression;
         $expression = $expr->getExpression();
@@ -123,47 +150,11 @@ class Call
     }
 
     /**
-     * Processes the symbol variable that will be used to return
-     * the result of the symbol call. If a temporal variable is used
-     * as returned value only the body is freed between calls.
-     *
-     * @param CompilationContext $compilationContext
-     */
-    public function processExpectedComplexLiteralReturn(CompilationContext $compilationContext)
-    {
-        $expr = $this->expression;
-        $expression = $expr->getExpression();
-
-        /**
-         * Create temporary variable if needed.
-         */
-        $mustInit = false;
-        $isExpecting = $expr->isExpectingReturn();
-        if ($isExpecting) {
-            $symbolVariable = $expr->getExpectingVariable();
-            if (\is_object($symbolVariable)) {
-                $readDetector = new ReadDetector();
-                if ($readDetector->detect($symbolVariable->getName(), $expression)) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
-                } else {
-                    $mustInit = true;
-                }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
-            }
-        }
-
-        $this->mustInit = $mustInit;
-        $this->symbolVariable = $symbolVariable;
-        $this->isExpecting = $isExpecting;
-    }
-
-    /**
      * Check if an external expression is expecting the call return a value.
      *
      * @return bool
      */
-    public function isExpectingReturn()
+    public function isExpectingReturn(): bool
     {
         return $this->isExpecting;
     }
@@ -173,7 +164,7 @@ class Call
      *
      * @return bool
      */
-    public function mustInitSymbolVariable()
+    public function mustInitSymbolVariable(): bool
     {
         return $this->mustInit;
     }
@@ -181,12 +172,12 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call.
      *
-     * @param bool                    $useTemp
+     * @param bool $useTemp
      * @param CompilationContext|null $compilationContext
      *
-     * @return Variable
+     * @return Variable|null
      */
-    public function getSymbolVariable($useTemp = false, CompilationContext $compilationContext = null)
+    public function getSymbolVariable(bool $useTemp = false, CompilationContext $compilationContext = null): ?Variable
     {
         $symbolVariable = $this->symbolVariable;
 
@@ -200,17 +191,15 @@ class Call
     /**
      * Resolves parameters.
      *
-     * @param array              $parameters
+     * @param array $parameters
      * @param CompilationContext $compilationContext
-     * @param array              $expression
-     * @param bool               $readOnly
+     * @param array $expression
+     * @param bool $readOnly
      *
-     * @throws CompilerException
-     *
-     * @return array|CompiledExpression[]|null
-     * @return array
+     * @return CompiledExpression[]|null
+     * @throws Exception
      */
-    public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
+    public function getResolvedParamsAsExpr(array $parameters, CompilationContext $compilationContext, array $expression, bool $readOnly = false): ?array
     {
         if (!$this->resolvedParams) {
             $hasParametersByName = false;
@@ -221,7 +210,7 @@ class Call
                 }
             }
 
-            /*
+            /**
              * All parameters must be passed by name
              */
             if ($hasParametersByName) {
@@ -298,16 +287,15 @@ class Call
      * Resolve parameters getting aware that the target function/method could retain or change
      * the parameters.
      *
-     * @param array              $parameters
+     * @param array $parameters
      * @param CompilationContext $compilationContext
-     * @param array              $expression
-     * @param array              $calleeDefinition
-     *
-     * @throws CompilerException
+     * @param array $expression
+     * @param null $calleeDefinition
      *
      * @return array
+     * @throws Exception
      */
-    public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
+    public function getResolvedParams(array $parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null): array
     {
         $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
@@ -319,7 +307,7 @@ class Call
         $readOnlyParameters = [];
         if (\is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod == $calleeDefinition) {
+                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod === $calleeDefinition) {
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         if (isset($parameter['data-type'])) {
                             switch ($parameter['data-type']) {
@@ -344,7 +332,7 @@ class Call
         $types = [];
         $dynamicTypes = [];
         $mustCheck = [];
-        foreach ($exprParams as $position => $compiledExpression) {
+        foreach ($exprParams as $compiledExpression) {
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
                 case 'null':
@@ -399,8 +387,7 @@ class Call
                     $compilationContext->backend->assignString(
                         $parameterVariable,
                         add_slashes($compiledExpression->getCode()),
-                        $compilationContext,
-                        true
+                        $compilationContext
                     );
 
                     $this->temporalVariables[] = $parameterVariable;
@@ -499,15 +486,14 @@ class Call
     /**
      * Resolve parameters using zvals in the stack and without allocating memory for constants.
      *
-     * @param array              $parameters
+     * @param array $parameters
      * @param CompilationContext $compilationContext
-     * @param array              $expression
-     *
-     * @throws CompilerException
+     * @param array $expression
      *
      * @return array
+     * @throws Exception
      */
-    public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, array $expression)
+    public function getReadOnlyResolvedParams(array $parameters, CompilationContext $compilationContext, array $expression): array
     {
         $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
@@ -550,8 +536,7 @@ class Call
                     $compilationContext->backend->assignString(
                         $parameterVariable,
                         add_slashes($compiledExpression->getCode()),
-                        $compilationContext,
-                        true
+                        $compilationContext
                     );
 
                     $this->temporalVariables[] = $parameterVariable;
@@ -681,7 +666,7 @@ class Call
      *
      * @param CompilationContext $compilationContext
      */
-    public function addCallStatusFlag(CompilationContext $compilationContext)
+    public function addCallStatusFlag(CompilationContext $compilationContext): void
     {
         if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
             $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->branchManager->getCurrentBranch());
@@ -697,7 +682,7 @@ class Call
      *
      * @param CompilationContext $compilationContext
      */
-    public function addCallStatusOrJump(CompilationContext $compilationContext)
+    public function addCallStatusOrJump(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/fcall');
         if ($compilationContext->insideTryCatch) {
@@ -716,7 +701,7 @@ class Call
      *
      * @param CompilationContext $compilationContext
      */
-    public function checkTempParameters(CompilationContext $compilationContext)
+    public function checkTempParameters(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/fcall');
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -729,7 +714,7 @@ class Call
      *
      * @return array
      */
-    public function getResolvedTypes()
+    public function getResolvedTypes(): array
     {
         return $this->resolvedTypes;
     }
@@ -739,7 +724,7 @@ class Call
      *
      * @return array
      */
-    public function getResolvedDynamicTypes()
+    public function getResolvedDynamicTypes(): array
     {
         return $this->resolvedDynamicTypes;
     }
@@ -749,7 +734,7 @@ class Call
      *
      * @return Variable[]
      */
-    public function getTemporalVariables()
+    public function getTemporalVariables(): array
     {
         return $this->temporalVariables;
     }
@@ -759,7 +744,7 @@ class Call
      *
      * @return array
      */
-    public function getMustCheckForCopyVariables()
+    public function getMustCheckForCopyVariables(): array
     {
         return $this->mustCheckForCopy;
     }
