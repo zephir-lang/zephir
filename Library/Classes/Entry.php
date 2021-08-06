@@ -63,7 +63,7 @@ class Entry
         $this->compilationContext = $compilationContext;
         $this->classname = $this->compilationContext->getFullName($className);
 
-        $this->classEntries = require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/class-entries.php';
+        $this->classEntries = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/class-entries.php';
 
         foreach ($this->classEntries as $key => $val) {
             unset($this->classEntries[$key]);
