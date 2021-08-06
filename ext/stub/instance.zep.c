@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
-#include "ext/spl/spl_array.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
@@ -50,7 +49,7 @@ PHP_METHOD(Stub_Instance, __construct)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(11, 11)
 		Z_PARAM_OBJECT_OF_CLASS(a1, stub_arithmetic_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a2, spl_ce_ArrayObject)
+		Z_PARAM_OBJECT_OF_CLASS(a2, stub_arrayobject_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a3, stub_assign_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a4, stub_bitwise_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a5, stub_branchprediction_ce)

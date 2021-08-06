@@ -9,10 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
+use ReflectionClass;
+use ReflectionException;
+use Zephir\Classes\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
@@ -32,18 +38,18 @@ class NewInstanceOperator extends BaseOperator
     /**
      * Creates a new instance.
      *
-     * @param $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         $this->literalOnly = false;
@@ -56,7 +62,7 @@ class NewInstanceOperator extends BaseOperator
             throw new CompilerException('Cannot use non-heap variable to store new instance', $expression);
         }
 
-        if ('return_value' != $symbolVariable->getName()) {
+        if ('return_value' !== $symbolVariable->getName()) {
             if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
                 $compilationContext->logger->warning(
                     'Possible attempt to use non-object in "new" operator',
@@ -65,7 +71,7 @@ class NewInstanceOperator extends BaseOperator
             }
         }
 
-        /*
+        /**
          * Mark variables as dynamic objects
          */
         $symbolVariable->setDynamicTypes('object');
@@ -104,7 +110,7 @@ class NewInstanceOperator extends BaseOperator
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
             }
 
-            /*
+            /**
              * Classes inside the same extension
              */
             if ($classDefinition) {
@@ -112,7 +118,7 @@ class NewInstanceOperator extends BaseOperator
                 $symbolVariable->setClassTypes($className);
                 $symbolVariable->setAssociatedClass($classDefinition);
             } else {
-                /*
+                /**
                  * Classes outside the extension
                  */
                 if ($dynamic) {
@@ -121,7 +127,7 @@ class NewInstanceOperator extends BaseOperator
                         throw new CompilerException('Only dynamic/string variables can be used in new operator. '.$classNameVariable->getName(), $expression);
                     }
 
-                    /*
+                    /**
                      * Use a safe string version of the variable to avoid segfaults
                      */
                     $compilationContext->headersManager->add('kernel/object');
@@ -153,39 +159,32 @@ class NewInstanceOperator extends BaseOperator
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
                     } else {
-                        $reflectionClass = new \ReflectionClass($className);
+                        $reflectionClass = new ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
-                        } else {
-                            if (method_exists($reflectionClass, 'isTrait')) {
-                                if ($reflectionClass->isTrait()) {
-                                    throw new CompilerException('Traits cannot be instantiated', $expression);
-                                }
-                            }
                         }
 
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
-                        if (!$classEntry) {
-                            $classNameToFetch = 'SL("'.escape_class($className).'")';
-                            $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
-                            $classEntry = $zendClassEntry->getName();
-                        } else {
-                            $symbolVariable->setAssociatedClass($reflectionClass);
+                        if (method_exists($reflectionClass, 'isTrait') && $reflectionClass->isTrait()) {
+                            throw new CompilerException('Traits cannot be instantiated', $expression);
                         }
+
+                        $classEntry = (new Entry($expression['class'], $compilationContext))->get();
+                        $symbolVariable->setAssociatedClass($reflectionClass);
                     }
 
                     $symbolVariable->setClassTypes($className);
                 }
+
                 $compilationContext->backend->initObject($symbolVariable, $classEntry, $compilationContext);
             }
         }
 
-        /*
+        /**
          * Mark variable initialized
          */
         $symbolVariable->setIsInitialized(true, $compilationContext);
 
-        /*
+        /**
          * Don't check the constructor for stdclass instances
          */
         if ($isStdClass) {
@@ -237,7 +236,7 @@ class NewInstanceOperator extends BaseOperator
             ]);
         }
 
-        /*
+        /**
          * If we are certain that there is a constructor we call it, otherwise we checked it at runtime.
          */
         if ($callConstructor) {

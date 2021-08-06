@@ -43,7 +43,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, camelize)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(str)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(delimiter)
+		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
@@ -78,7 +78,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, uncamelize)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(str)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(delimiter)
+		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 

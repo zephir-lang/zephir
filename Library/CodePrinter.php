@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
@@ -18,20 +20,20 @@ namespace Zephir;
  */
 class CodePrinter
 {
-    protected $code;
+    protected string $code = '';
 
-    protected $lastLine;
+    protected string $lastLine = '';
 
-    protected $level = 0;
+    protected int $level = 0;
 
-    protected $currentPrints = 0;
+    protected int $currentPrints = 0;
 
     /**
      * Adds a line to the output without the automatic line feed.
      *
      * @param string $code
      */
-    public function outputNoLineFeed($code)
+    public function outputNoLineFeed(string $code): void
     {
         $this->lastLine = $code;
         $this->code .= str_repeat("\t", $this->level).$code;
@@ -42,7 +44,7 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function preOutput($code)
+    public function preOutput(string $code): void
     {
         $this->lastLine = $code;
         $this->code = str_repeat("\t", $this->level).$code.PHP_EOL.$this->code;
@@ -54,7 +56,7 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function preOutputNoLineFeed($code)
+    public function preOutputNoLineFeed(string $code): void
     {
         $this->lastLine = $code;
         $this->code = str_repeat("\t", $this->level).$code.$this->code;
@@ -65,7 +67,7 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function preOutputNoLevel($code)
+    public function preOutputNoLevel(string $code): void
     {
         $this->lastLine = $code;
         $this->code = $code.PHP_EOL.$this->code;
@@ -77,7 +79,7 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function outputNoIndent($code)
+    public function outputNoIndent(string $code): void
     {
         $this->lastLine = $code;
         $this->code .= $code.PHP_EOL;
@@ -88,6 +90,7 @@ class CodePrinter
      * Add code to the output.
      *
      * @param string $code
+     * @param bool $appendEOL
      */
     public function output(string $code, bool $appendEOL = true): void
     {
@@ -102,7 +105,7 @@ class CodePrinter
      * @param $docblock
      * @param bool $replaceTab
      */
-    public function outputDocBlock($docblock, $replaceTab = true)
+    public function outputDocBlock($docblock, bool $replaceTab = true): void
     {
         $code = '';
         $docblock = '/'.$docblock.'/';
@@ -125,7 +128,7 @@ class CodePrinter
      *
      * @param string $code
      */
-    public function outputNoLevel($code)
+    public function outputNoLevel(string $code): void
     {
         $this->lastLine = $code;
         $this->code .= $code.PHP_EOL;
@@ -139,7 +142,7 @@ class CodePrinter
      *
      * @param bool $ifPrevNotBlank
      */
-    public function preOutputBlankLine($ifPrevNotBlank = false)
+    public function preOutputBlankLine(bool $ifPrevNotBlank = false): void
     {
         if (!$ifPrevNotBlank) {
             $this->code = PHP_EOL.$this->code;
@@ -161,7 +164,7 @@ class CodePrinter
      *
      * @param bool $ifPrevNotBlank
      */
-    public function outputBlankLine($ifPrevNotBlank = false)
+    public function outputBlankLine(bool $ifPrevNotBlank = false): void
     {
         if (!$ifPrevNotBlank) {
             $this->code .= PHP_EOL;
@@ -179,7 +182,7 @@ class CodePrinter
     /**
      * Increase the indentation level.
      */
-    public function increaseLevel()
+    public function increaseLevel(): void
     {
         ++$this->level;
     }
@@ -187,12 +190,12 @@ class CodePrinter
     /**
      * Decrease the indentation level.
      */
-    public function decreaseLevel()
+    public function decreaseLevel(): void
     {
         --$this->level;
     }
 
-    public function setLevel($level)
+    public function setLevel(int $level): void
     {
         $this->level = $level;
     }
@@ -204,7 +207,7 @@ class CodePrinter
      */
     public function getOutput(): string
     {
-        return (string) $this->code;
+        return $this->code;
     }
 
     /**
@@ -212,7 +215,7 @@ class CodePrinter
      *
      * @return int
      */
-    public function getNumberPrints()
+    public function getNumberPrints(): int
     {
         return $this->currentPrints;
     }
@@ -220,14 +223,14 @@ class CodePrinter
     /**
      * Frees memory used within the code.
      */
-    public function clear()
+    public function clear(): void
     {
-        $this->code = null;
-        $this->lastLine = null;
+        $this->code = '';
+        $this->lastLine = '';
         $this->level = 0;
     }
 
-    public function duplicate()
+    public function duplicate(): CodePrinter
     {
         $printer = new self();
         $printer->setLevel($this->level);

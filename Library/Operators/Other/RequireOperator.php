@@ -9,11 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
@@ -25,24 +27,23 @@ use Zephir\Operators\BaseOperator;
 class RequireOperator extends BaseOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $expr = new Expression($expression['left']);
         $expr->setReadOnly(true);
         $expr->setExpectReturn(true);
 
         $exprPath = $expr->compile($compilationContext);
-        if ('variable' == $exprPath->getType()) {
+        if ('variable' === $exprPath->getType()) {
             $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
             $exprVar = $compilationContext->backend->getVariableCode($exprVariable);
-            if ('variable' == $exprVariable->getType()) {
+            if ('variable' === $exprVariable->getType()) {
                 if ($exprVariable->hasDifferentDynamicType(['undefined', 'string'])) {
                     $compilationContext->logger->warning(
                         'Possible attempt to use invalid type as path in "require" operator',

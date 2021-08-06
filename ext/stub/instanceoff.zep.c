@@ -41,7 +41,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf1)
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init(&a);
-	RETURN_MM_BOOL(zephir_instance_of_ev(&a, zend_standard_class_def));
+	RETURN_MM_BOOL(zephir_is_instance_of(&a, SL("stdClass")));
 }
 
 PHP_METHOD(Stub_Instanceoff, testInstanceOf2)

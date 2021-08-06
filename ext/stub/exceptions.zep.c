@@ -183,19 +183,19 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 
 	do {
 		if (ZEPHIR_IS_STRING(&type, "string")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "Test", "stub/exceptions.zep", 56);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "Test", "stub/exceptions.zep", 56);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "char")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "t", "stub/exceptions.zep", 58);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "t", "stub/exceptions.zep", 58);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "int")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "123", "stub/exceptions.zep", 60);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "123", "stub/exceptions.zep", 60);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(&type, "double")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_exception, "123.123", "stub/exceptions.zep", 62);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "123.123", "stub/exceptions.zep", 62);
 			return;
 		}
 	} while(0);
@@ -293,7 +293,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionRethrow)
 		ZEPHIR_INIT_VAR(&_0);
 		ZVAL_OBJ(&_0, EG(exception));
 		Z_ADDREF_P(&_0);
-		if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
+		if (zephir_is_instance_of(&_0, SL("Exception"))) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			zephir_throw_exception_debug(&e, "stub/exceptions.zep", 83);
@@ -369,7 +369,7 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 				return;
 			}
 		} else {
-			if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
+			if (zephir_is_instance_of(&_0, SL("Exception"))) {
 				zend_clear_exception();
 				ZEPHIR_CPY_WRT(&e, &_0);
 				_3$$7 = zephir_is_callable(&exc);
@@ -451,7 +451,7 @@ PHP_METHOD(Stub_Exceptions, issue1325)
 		ZEPHIR_INIT_VAR(&_0);
 		ZVAL_OBJ(&_0, EG(exception));
 		Z_ADDREF_P(&_0);
-		if (zephir_instance_of_ev(&_0, zend_ce_exception)) {
+		if (zephir_is_instance_of(&_0, SL("Exception"))) {
 			zend_clear_exception();
 			ZEPHIR_CPY_WRT(&e, &_0);
 			ZEPHIR_INIT_NVAR(&status);

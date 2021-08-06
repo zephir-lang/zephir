@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\Builder\Operators\UnaryOperatorBuilder;
@@ -37,9 +39,9 @@ class ShortTernaryOperator extends BaseOperator
      *
      * @return CompiledExpression
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        /*
+        /**
          * This variable is used to check if the compound and expression is evaluated as true or false:
          * Ensure that newly allocated variables are local-only (setReadOnly)
          */
@@ -61,7 +63,7 @@ class ShortTernaryOperator extends BaseOperator
                 $expression['left']
             ),
             new StatementsBlockBuilder([
-                /*
+                /**
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
                 new LetStatementBuilder([
@@ -75,7 +77,7 @@ class ShortTernaryOperator extends BaseOperator
                 ], $expression['extra']),
             ]),
             new StatementsBlockBuilder([
-                /*
+                /**
                  * Create an implicit 'let' operation to update the evaluated right operator
                  */
                 new LetStatementBuilder([

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\Builder\FunctionCallBuilder;
@@ -32,14 +34,13 @@ class NewInstanceTypeOperator extends BaseOperator
     /**
      * Executes the operator.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws CompilerException
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['parameters'])) {
             throw new CompilerException("Invalid 'parameters' for new-type", $expression);

@@ -9,10 +9,14 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Psr\Log\LoggerInterface;
+use Zephir\Cache\FunctionCache;
 use Zephir\Exception\CompilerException;
+use Zephir\Passes\StaticTypeInference;
 
 /**
  * CompilationContext.
@@ -22,181 +26,179 @@ use Zephir\Exception\CompilerException;
 class CompilationContext
 {
     /**
-     * @var EventsManager
+     * @var EventsManager|null
      */
-    public $eventsManager;
+    public ?EventsManager $eventsManager = null;
 
     /**
      * Compiler.
      *
-     * @var Compiler
+     * @var Compiler|null
      */
-    public $compiler;
+    public ?Compiler $compiler = null;
 
     /**
      * Current code printer.
      *
-     * @var CodePrinter
+     * @var CodePrinter|null
      */
-    public $codePrinter;
+    public ?CodePrinter $codePrinter = null;
 
     /**
      * Whether the current method is static or not.
      *
      * @var bool
      */
-    public $staticContext;
+    public bool $staticContext = false;
 
     /**
      * Code printer for the header.
      *
-     * @var CodePrinter
+     * @var CodePrinter|null
      */
-    public $headerPrinter;
+    public ?CodePrinter $headerPrinter = null;
 
     /**
      * Current symbol table.
      *
-     * @var SymbolTable
+     * @var SymbolTable|null
      */
-    public $symbolTable;
+    public ?SymbolTable $symbolTable = null;
 
     /**
      * Type inference data.
      *
-     * @var \Zephir\Passes\StaticTypeInference
+     * @var StaticTypeInference|null
      */
-    public $typeInference;
+    public ?StaticTypeInference $typeInference = null;
 
     /**
      * Represents the class currently being compiled.
      *
-     * @var ClassDefinition
+     * @var ClassDefinition|null
      */
-    public $classDefinition;
+    public ?ClassDefinition $classDefinition = null;
 
     /**
      * Current method or function that being compiled.
      *
-     * @var ClassMethod|FunctionDefinition
+     * @var ClassMethod|FunctionDefinition|null
      */
-    public $currentMethod;
+    public ?ClassMethod $currentMethod = null;
 
     /**
      * Methods warm-up.
      *
-     * @var MethodCallWarmUp
+     * @var MethodCallWarmUp|null
      */
-    public $methodWarmUp;
+    public ?MethodCallWarmUp $methodWarmUp = null;
 
     /**
      * Represents the c-headers added to the file.
      *
-     * @var HeadersManager
+     * @var HeadersManager|null
      */
-    public $headersManager;
+    public ?HeadersManager $headersManager = null;
 
     /**
      * Represents interned strings and concatenations made in the project.
      *
-     * @var StringsManager
+     * @var StringsManager|null
      */
-    public $stringsManager;
+    public ?StringsManager $stringsManager = null;
 
     /**
      * Tells if the the compilation is being made inside a cycle/loop.
      *
      * @var int
      */
-    public $insideCycle = 0;
+    public int $insideCycle = 0;
 
     /**
      * Tells if the the compilation is being made inside a try/catch block.
      *
      * @var int
      */
-    public $insideTryCatch = 0;
+    public int $insideTryCatch = 0;
 
     /**
      * Tells if the the compilation is being made inside a switch.
      *
      * @var int
      */
-    public $insideSwitch = 0;
+    public int $insideSwitch = 0;
 
     /**
      * Current cycle/loop block.
      *
      * @var array
      */
-    public $cycleBlocks = [];
+    public array $cycleBlocks = [];
 
     /**
      * The current branch, variables declared in conditional branches
      * must be market if they're used out of those branches.
      */
-    public $currentBranch = 0;
+    public int $currentBranch = 0;
 
     /**
      * Global consecutive for try/catch blocks.
      *
      * @var int
      */
-    public $currentTryCatch = 0;
+    public int $currentTryCatch = 0;
 
     /**
      * Helps to create graphs of conditional/jump branches in a specific method.
      *
-     * @var BranchManager
+     * @var BranchManager|null
      */
-    public $branchManager;
+    public ?BranchManager $branchManager = null;
 
     /**
      * Manages both function and method call caches.
      *
-     * @var CacheManager
+     * @var CacheManager|null
      */
-    public $cacheManager;
+    public ?CacheManager $cacheManager = null;
 
     /**
      * Manages class renamings using keyword 'use'.
      *
-     * @var AliasManager
+     * @var AliasManager|null
      */
-    public $aliasManager;
+    public ?AliasManager $aliasManager = null;
 
     /**
      * Function Cache.
      *
-     * @var Cache\FunctionCache
+     * @var FunctionCache|null
      */
-    public $functionCache;
+    public ?FunctionCache $functionCache = null;
 
     /**
      * Global config.
      *
-     * @var Config
+     * @var Config|null
      */
-    public $config;
+    public ?Config $config = null;
 
     /**
      * Global logger.
      *
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
-    public $logger;
+    public ?LoggerInterface $logger = null;
 
     /**
      * The current backend.
      *
-     * @var BaseBackend
+     * @var BaseBackend|null
      */
-    public $backend;
+    public ?BaseBackend $backend = null;
 
     /**
      * Transform class/interface name to FQN format.
-     *
-     * TODO: WHY WHY :'(
      *
      * @param string $className
      *

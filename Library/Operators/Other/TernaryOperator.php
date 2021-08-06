@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
@@ -32,9 +34,9 @@ class TernaryOperator extends BaseOperator
      *
      * @return CompiledExpression
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        /*
+        /**
          * This variable is used to check if the compound and expression is evaluated as true or false:
          * Ensure that newly allocated variables are local-only (setReadOnly)
          */

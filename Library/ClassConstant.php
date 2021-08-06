@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
@@ -25,26 +27,26 @@ class ClassConstant
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var array
      */
-    protected $value = [];
+    protected array $value = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $docblock;
+    protected ?string $docblock = null;
 
     /**
      * ClassConstant constructor.
      *
      * @param string $name
      * @param array  $value
-     * @param string $docBlock
+     * @param string|null $docBlock
      */
-    public function __construct($name, array $value, $docBlock)
+    public function __construct(string $name, array $value, ?string $docBlock = null)
     {
         $this->name = $name;
         $this->value = $value;
@@ -56,7 +58,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -68,7 +70,7 @@ class ClassConstant
      *
      * @return array
      */
-    public function getValue()
+    public function getValue(): array
     {
         return $this->value;
     }
@@ -78,7 +80,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getValueType()
+    public function getValueType(): string
     {
         return $this->value['type'];
     }
@@ -90,19 +92,15 @@ class ClassConstant
      */
     public function getValueValue()
     {
-        if (isset($this->value['value'])) {
-            return $this->value['value'];
-        }
-
-        return false;
+        return $this->value['value'] ?? false;
     }
 
     /**
      * Returns the docblock related to the constant.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDocBlock()
+    public function getDocBlock(): ?string
     {
         return $this->docblock;
     }
@@ -112,7 +110,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->value['type'];
     }
@@ -126,7 +124,7 @@ class ClassConstant
      */
     public function processValue(CompilationContext $compilationContext)
     {
-        if ('constant' == $this->value['type']) {
+        if ('constant' === $this->value['type']) {
             $constant = new Constants();
             $compiledExpression = $constant->compile($this->value, $compilationContext);
 
@@ -138,7 +136,7 @@ class ClassConstant
             return;
         }
 
-        if ('static-constant-access' == $this->value['type']) {
+        if ('static-constant-access' === $this->value['type']) {
             $staticConstantAccess = new StaticConstantAccess();
             $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
 
@@ -146,8 +144,6 @@ class ClassConstant
                 'type' => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
-
-            return;
         }
     }
 
@@ -159,16 +155,16 @@ class ClassConstant
      * @throws CompilerException
      * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $this->processValue($compilationContext);
 
-        $constanValue = isset($this->value['value']) ? $this->value['value'] : null;
+        $constantValue = $this->value['value'] ?? null;
 
         $compilationContext->backend->declareConstant(
             $this->value['type'],
             $this->getName(),
-            $constanValue,
+            $constantValue,
             $compilationContext
         );
     }

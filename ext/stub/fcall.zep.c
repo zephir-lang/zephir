@@ -239,7 +239,7 @@ PHP_METHOD(Stub_Fcall, zvalFcallWith1Parameter)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(callback)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param1)
+		Z_PARAM_ZVAL_OR_NULL(param1)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
