@@ -100,9 +100,9 @@ class ClassConstant
     /**
      * Returns the docblock related to the constant.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDocBlock(): string
+    public function getDocBlock(): ?string
     {
         return $this->docblock;
     }
