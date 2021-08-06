@@ -790,7 +790,7 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Set a method and its body.
      *
-     * @param $methodName
+     * @param string $methodName
      * @param ClassMethod $method
      */
     public function setMethod(string $methodName, ClassMethod $method): void
@@ -1293,11 +1293,7 @@ final class ClassDefinition extends AbstractClassDefinition
          * Check whether classes must be exported.
          */
         $exportClasses = $compilationContext->config->get('export-classes', 'extra');
-        if ($exportClasses) {
-            $exportAPI = 'extern ZEPHIR_API';
-        } else {
-            $exportAPI = 'extern';
-        }
+        $exportAPI = $exportClasses ? 'extern ZEPHIR_API' : 'extern';
 
         /**
          * Create a code printer for the header file.

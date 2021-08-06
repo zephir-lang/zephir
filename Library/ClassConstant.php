@@ -25,17 +25,17 @@ class ClassConstant
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var array
      */
-    protected $value = [];
+    protected array $value = [];
 
     /**
      * @var string
      */
-    protected $docblock;
+    protected string $docblock;
 
     /**
      * ClassConstant constructor.
@@ -44,7 +44,7 @@ class ClassConstant
      * @param array  $value
      * @param string $docBlock
      */
-    public function __construct($name, array $value, $docBlock)
+    public function __construct(string $name, array $value, string $docBlock)
     {
         $this->name = $name;
         $this->value = $value;
@@ -56,7 +56,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -68,7 +68,7 @@ class ClassConstant
      *
      * @return array
      */
-    public function getValue()
+    public function getValue(): array
     {
         return $this->value;
     }
@@ -78,7 +78,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getValueType()
+    public function getValueType(): string
     {
         return $this->value['type'];
     }
@@ -102,7 +102,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getDocBlock()
+    public function getDocBlock(): string
     {
         return $this->docblock;
     }
@@ -112,7 +112,7 @@ class ClassConstant
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->value['type'];
     }
@@ -126,7 +126,7 @@ class ClassConstant
      */
     public function processValue(CompilationContext $compilationContext)
     {
-        if ('constant' == $this->value['type']) {
+        if ('constant' === $this->value['type']) {
             $constant = new Constants();
             $compiledExpression = $constant->compile($this->value, $compilationContext);
 
@@ -138,7 +138,7 @@ class ClassConstant
             return;
         }
 
-        if ('static-constant-access' == $this->value['type']) {
+        if ('static-constant-access' === $this->value['type']) {
             $staticConstantAccess = new StaticConstantAccess();
             $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
 
@@ -146,8 +146,6 @@ class ClassConstant
                 'type' => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
-
-            return;
         }
     }
 
@@ -163,12 +161,12 @@ class ClassConstant
     {
         $this->processValue($compilationContext);
 
-        $constanValue = isset($this->value['value']) ? $this->value['value'] : null;
+        $constantValue = $this->value['value'] ?? null;
 
         $compilationContext->backend->declareConstant(
             $this->value['type'],
             $this->getName(),
-            $constanValue,
+            $constantValue,
             $compilationContext
         );
     }
