@@ -119,6 +119,7 @@ zend_class_entry *stub_globals_serverrequestfactory_ce;
 zend_class_entry *stub_globals_session_child_ce;
 zend_class_entry *stub_instance_ce;
 zend_class_entry *stub_instanceoff_ce;
+zend_class_entry *stub_integration_psr_extendexternal_ce;
 zend_class_entry *stub_interfaces_implementint_ce;
 zend_class_entry *stub_interfaces_implementinterface_ce;
 zend_class_entry *stub_internalclasses_ce;
@@ -343,6 +344,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Globals_Session_Child);
 	ZEPHIR_INIT(Stub_Instance);
 	ZEPHIR_INIT(Stub_Instanceoff);
+	ZEPHIR_INIT(Stub_Integration_Psr_ExtendExternal);
 	ZEPHIR_INIT(Stub_Interfaces_ImplementInt);
 	ZEPHIR_INIT(Stub_Interfaces_ImplementInterface);
 	ZEPHIR_INIT(Stub_InternalClasses);

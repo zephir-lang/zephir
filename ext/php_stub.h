@@ -17,18 +17,18 @@
 #define PHP_STUB_ZEPVERSION  "0.14.0-beta.2-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
-typedef struct _zephir_struct_db {
+typedef struct _zephir_struct_db { 
 	zend_bool my_setting_1;
 	int my_setting_2;
 	double my_setting_3;
 } zephir_struct_db;
 
-typedef struct _zephir_struct_orm {
+typedef struct _zephir_struct_orm { 
 	int cache_level;
 	zend_bool cache_enable;
 } zephir_struct_orm;
 
-typedef struct _zephir_struct_extension {
+typedef struct _zephir_struct_extension { 
 	zend_bool test_ini_variable;
 } zephir_struct_extension;
 
@@ -49,7 +49,7 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 	/* Max recursion control */
 	unsigned int recursive_lock;
 
-
+	
 	zephir_struct_db db;
 
 	zephir_struct_orm orm;

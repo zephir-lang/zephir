@@ -107,7 +107,7 @@ class Entry
             if ($reflection->isInternal()) {
                 return sprintf(
                     'zephir_get_internal_ce(SL("%s"))',
-                    strtolower($reflection->getName()),
+                    str_replace(self::NAMESPACE_SEPARATOR, self::NAMESPACE_SEPARATOR.self::NAMESPACE_SEPARATOR, strtolower($reflection->getName())),
                 );
             }
 
