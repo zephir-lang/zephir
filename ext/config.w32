@@ -27,6 +27,7 @@ if (PHP_STUB != "no") {
 	ADD_SOURCES(configure_module_dirname + "/stub/constructors", "issue1803.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/flow", "switchflow.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/globals", "env.zep.c post.zep.c server.zep.c serverrequestfactory.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/integration/psr", "extendexternal.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/integration/psr/http/message", "messageinterfaceex.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/mcall", "caller.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/namespaces/a/b", "sub.zep.c", "stub");

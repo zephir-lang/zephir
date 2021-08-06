@@ -83,6 +83,7 @@
 #include "stub/globals/session/child.zep.h"
 #include "stub/instance.zep.h"
 #include "stub/instanceoff.zep.h"
+#include "stub/integration/psr/extendexternal.zep.h"
 #include "stub/integration/psr/http/message/messageinterfaceex.zep.h"
 #include "stub/interfaces/implementint.zep.h"
 #include "stub/interfaces/implementinterface.zep.h"
