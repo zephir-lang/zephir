@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.14.0-beta.3] - 2021-08-06
+### Fixed
+- Fixed class entry generation of external class [#2261](https://github.com/zephir-lang/zephir/issues/2261)
+
 ## [0.14.0-beta.2] - 2021-08-06
 ### Fixed
 - Fixed missing `config/` directory in `zephir.phar` [#2259](https://github.com/zephir-lang/zephir/issues/2259)
@@ -530,8 +534,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...HEAD
-[0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...HEAD
+[0.14.0-beta.3]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...0.14.0-beta.3
+[0.14.0-beta.2]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2
 [0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.13.5...0.14.0-beta.1
 [0.13.5]: https://github.com/zephir-lang/zephir/compare/0.13.4...0.13.5
 [0.13.4]: https://github.com/zephir-lang/zephir/compare/0.13.3...0.13.4
