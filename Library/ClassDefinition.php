@@ -1122,7 +1122,8 @@ final class ClassDefinition extends AbstractClassDefinition
             if ($classExtendsDefinition instanceof self && !$classExtendsDefinition->isBundled()) {
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
-                $classEntry = (new Entry($classExtendsDefinition->getCompleteName(), $compilationContext))->get();
+                $className = method_exists($classExtendsDefinition, 'getCompleteName') ? $classExtendsDefinition->getCompleteName() : $classExtendsDefinition->getName();
+                $classEntry = (new Entry($className, $compilationContext))->get();
             }
 
             if (self::TYPE_CLASS === $this->getType()) {
