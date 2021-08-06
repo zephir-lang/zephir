@@ -33,18 +33,18 @@ class ClassConstant
     protected array $value = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected string $docblock;
+    protected ?string $docblock = null;
 
     /**
      * ClassConstant constructor.
      *
      * @param string $name
      * @param array  $value
-     * @param string $docBlock
+     * @param string|null $docBlock
      */
-    public function __construct(string $name, array $value, string $docBlock)
+    public function __construct(string $name, array $value, ?string $docBlock = null)
     {
         $this->name = $name;
         $this->value = $value;
