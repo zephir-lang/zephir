@@ -24,6 +24,10 @@
     ],
     "finder": [
         {
+            "in": "config",
+            "name": "*.*"
+        },
+        {
             "in": "kernels",
             "name": "*.*"
         },
