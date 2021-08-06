@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
@@ -90,11 +92,7 @@ class ClassConstant
      */
     public function getValueValue()
     {
-        if (isset($this->value['value'])) {
-            return $this->value['value'];
-        }
-
-        return false;
+        return $this->value['value'] ?? false;
     }
 
     /**
@@ -157,7 +155,7 @@ class ClassConstant
      * @throws CompilerException
      * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $this->processValue($compilationContext);
 

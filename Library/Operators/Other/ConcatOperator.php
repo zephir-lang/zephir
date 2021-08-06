@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use function Zephir\add_slashes;
@@ -29,14 +31,14 @@ class ConcatOperator extends BaseOperator
     /**
      * Performs concat compilation.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
             throw new CompilerException('Missing left part of the expression', $expression);
@@ -108,15 +110,15 @@ class ConcatOperator extends BaseOperator
     }
 
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
-     * @param bool               $isFullString
+     * @param bool $isFullString
      *
      * @return array
      *
      * @throws CompilerException
      */
-    private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)
+    private function _getOptimizedConcat(array $expression, CompilationContext $compilationContext, &$isFullString): array
     {
         $originalExpr = $expression;
         $isFullString = true;
@@ -261,7 +263,7 @@ class ConcatOperator extends BaseOperator
         return [$key, implode(', ', $concatParts)];
     }
 
-    private function compileExpression(Expression $expression, CompilationContext $context, $type)
+    private function compileExpression(Expression $expression, CompilationContext $context, $type): CompiledExpression
     {
         try {
             switch ($type) {

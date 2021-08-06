@@ -1147,7 +1147,7 @@ final class ClassDefinition extends AbstractClassDefinition
         foreach ($this->getProperties() as $property) {
             $docBlock = $property->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock, true);
+                $codePrinter->outputDocBlock($docBlock);
             }
 
             $property->compile($compilationContext);
@@ -1165,7 +1165,7 @@ final class ClassDefinition extends AbstractClassDefinition
         foreach ($this->getConstants() as $constant) {
             $docBlock = $constant->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock, true);
+                $codePrinter->outputDocBlock($docBlock);
             }
 
             $constant->compile($compilationContext);

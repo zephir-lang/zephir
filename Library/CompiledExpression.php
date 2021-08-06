@@ -9,7 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
+
+use Closure;
 
 /**
  * CompiledExpression.
@@ -19,18 +23,18 @@ namespace Zephir;
  */
 class CompiledExpression implements TypeAwareInterface
 {
-    protected $type;
+    protected string $type;
 
-    protected $code;
+    protected ?string $code;
 
-    protected $originalExpr;
+    protected ?array $originalExpr;
 
     /**
      * @param string $type
-     * @param string $code
-     * @param array  $originalExpr
+     * @param string|null $code
+     * @param array|null $originalExpr
      */
-    public function __construct($type, $code, $originalExpr)
+    public function __construct(string $type, ?string $code, ?array $originalExpr = null)
     {
         $this->type = $type;
         $this->code = $code;
@@ -42,7 +46,7 @@ class CompiledExpression implements TypeAwareInterface
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -50,9 +54,9 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Returns the code produced by the compiled expression.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -60,9 +64,9 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Original AST code that produced the code.
      *
-     * @return array
+     * @return array|null
      */
-    public function getOriginal()
+    public function getOriginal(): ?array
     {
         return $this->originalExpr;
     }
@@ -72,7 +76,7 @@ class CompiledExpression implements TypeAwareInterface
      *
      * @return string
      */
-    public function getBooleanCode()
+    public function getBooleanCode(): string
     {
         if ($this->code && ('true' == $this->code || true === $this->code)) {
             return '1';
@@ -90,7 +94,7 @@ class CompiledExpression implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isIntCompatibleType()
+    public function isIntCompatibleType(): bool
     {
         switch ($this->type) {
             case 'int':
@@ -110,7 +114,7 @@ class CompiledExpression implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isCharCompatibleType()
+    public function isCharCompatibleType(): bool
     {
         switch ($this->type) {
             case 'char':
@@ -127,14 +131,14 @@ class CompiledExpression implements TypeAwareInterface
      * because it's missing some bound parts, this method resolves the missing parts
      * returning the generated code.
      *
-     * @param string             $result
+     * @param string|null $result
      * @param CompilationContext $compilationContext
      *
      * @return string
      */
-    public function resolve($result, CompilationContext $compilationContext)
+    public function resolve(?string $result, CompilationContext $compilationContext): string
     {
-        if ($this->code instanceof \Closure) {
+        if ($this->code instanceof Closure) {
             $code = $this->code;
             if (!$result) {
                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(

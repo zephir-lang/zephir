@@ -49,7 +49,7 @@ class NewInstanceOperator extends BaseOperator
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         $this->literalOnly = false;
@@ -62,7 +62,7 @@ class NewInstanceOperator extends BaseOperator
             throw new CompilerException('Cannot use non-heap variable to store new instance', $expression);
         }
 
-        if ('return_value' != $symbolVariable->getName()) {
+        if ('return_value' !== $symbolVariable->getName()) {
             if ($symbolVariable->hasDifferentDynamicType(['unknown', 'undefined', 'object', 'null'])) {
                 $compilationContext->logger->warning(
                     'Possible attempt to use non-object in "new" operator',
@@ -71,7 +71,7 @@ class NewInstanceOperator extends BaseOperator
             }
         }
 
-        /*
+        /**
          * Mark variables as dynamic objects
          */
         $symbolVariable->setDynamicTypes('object');
@@ -236,7 +236,7 @@ class NewInstanceOperator extends BaseOperator
             ]);
         }
 
-        /*
+        /**
          * If we are certain that there is a constructor we call it, otherwise we checked it at runtime.
          */
         if ($callConstructor) {

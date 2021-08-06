@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
@@ -26,14 +29,13 @@ use Zephir\Operators\BaseOperator;
 class FetchOperator extends BaseOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $compilationContext->headersManager->add('kernel/array');
 
@@ -42,11 +44,11 @@ class FetchOperator extends BaseOperator
             throw new CompilerException('Cannot use variable type: '.$variable->gettype().' in "fetch" operator', $expression);
         }
 
-        /*
+        /**
          * return_value must not be observed
          */
-        if ('return_value' != $variable->getName()) {
-            /*
+        if ('return_value' !== $variable->getName()) {
+            /**
              * TODO: use a read detector here
              */
             $readOnly = false;
@@ -73,11 +75,7 @@ class FetchOperator extends BaseOperator
             $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
         }
 
-        if ($readOnly) {
-            $flags = '1';
-        } else {
-            $flags = '0';
-        }
+        $flags = $readOnly ? '1' : '0';
 
         switch ($expression['right']['type']) {
             case 'array-access':

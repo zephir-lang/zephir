@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
@@ -26,14 +29,13 @@ use Zephir\Types;
 class RangeInclusiveOperator extends BaseOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
             throw new CompilerException("Invalid 'left' operand for 'irange' expression", $expression['left']);

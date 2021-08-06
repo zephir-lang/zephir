@@ -53,7 +53,7 @@ class CastOperator extends BaseOperator
             case Types::T_INT:
                 switch ($resolved->getType()) {
                     case Types::T_NULL:
-                        return new CompiledExpression('int', 0, $expression);
+                        return new CompiledExpression('int', '0', $expression);
 
                     case Types::T_CHAR:
                     case Types::T_UCHAR:
@@ -258,7 +258,7 @@ class CastOperator extends BaseOperator
             case Types::T_DOUBLE:
                 switch ($resolved->getType()) {
                     case Types::T_NULL:
-                        return new CompiledExpression('double', 0, $expression);
+                        return new CompiledExpression('double', '0', $expression);
 
                     case Types::T_BOOL:
                         return new CompiledExpression('double', $resolved->getBooleanCode(), $expression);

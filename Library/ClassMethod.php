@@ -750,7 +750,7 @@ class ClassMethod
             return '';
         }
 
-        return (string)$this->parameters->count().', ...';
+        return $this->parameters->count() .', ...';
     }
 
     /**
