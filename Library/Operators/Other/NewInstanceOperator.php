@@ -110,7 +110,7 @@ class NewInstanceOperator extends BaseOperator
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
             }
 
-            /*
+            /**
              * Classes inside the same extension
              */
             if ($classDefinition) {
@@ -118,7 +118,7 @@ class NewInstanceOperator extends BaseOperator
                 $symbolVariable->setClassTypes($className);
                 $symbolVariable->setAssociatedClass($classDefinition);
             } else {
-                /*
+                /**
                  * Classes outside the extension
                  */
                 if ($dynamic) {
@@ -127,7 +127,7 @@ class NewInstanceOperator extends BaseOperator
                         throw new CompilerException('Only dynamic/string variables can be used in new operator. '.$classNameVariable->getName(), $expression);
                     }
 
-                    /*
+                    /**
                      * Use a safe string version of the variable to avoid segfaults
                      */
                     $compilationContext->headersManager->add('kernel/object');
@@ -179,12 +179,12 @@ class NewInstanceOperator extends BaseOperator
             }
         }
 
-        /*
+        /**
          * Mark variable initialized
          */
         $symbolVariable->setIsInitialized(true, $compilationContext);
 
-        /*
+        /**
          * Don't check the constructor for stdclass instances
          */
         if ($isStdClass) {

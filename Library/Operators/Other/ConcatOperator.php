@@ -56,9 +56,9 @@ class ConcatOperator extends BaseOperator
         $optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
         if (\is_array($optimized)) {
             if (!$isFullString) {
-                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+                $expected = $this->getExpectedComplexLiteral($compilationContext);
             } else {
-                $expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
+                $expected = $this->getExpectedComplexLiteral($compilationContext, 'string');
             }
 
             $expected->setDynamicTypes('string');
@@ -89,7 +89,7 @@ class ConcatOperator extends BaseOperator
             $variableRight = $compilationContext->backend->getVariableCode($variableRight);
         }
 
-        $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+        $expected = $this->getExpectedComplexLiteral($compilationContext);
         $expectedCode = $compilationContext->backend->getVariableCode($expected);
 
         if ('string' == $left->getType() && 'variable' == $right->getType()) {

@@ -64,7 +64,7 @@ class InstanceOfOperator extends BaseOperator
             default:
                 switch ($resolved->getType()) {
                     case 'variable':
-                        if ('this' == $resolvedVariable) {
+                        if ('this' === $resolvedVariable) {
                             /**
                              * TODO: It's an optimization variant, but maybe we need to get entry in runtime?
                              */
