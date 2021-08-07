@@ -149,14 +149,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Setup GitHub Token
-        shell: bash
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
-            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
-          fi
-
       - name: Install Project Dependencies
         run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
