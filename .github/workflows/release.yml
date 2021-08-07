@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Project Dependencies
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Install Box
         run: |

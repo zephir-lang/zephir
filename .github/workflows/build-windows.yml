@@ -67,6 +67,7 @@ jobs:
             xdebug.max_nesting_level=256
         env:
           PHPTS: ${{ matrix.build_type }}
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Environment Variables
         run: |
@@ -148,16 +149,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Setup GitHub Token
-        shell: bash
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
-            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
-          fi
-
       - name: Install Project Dependencies
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Initialize Release Variables
         run: |
