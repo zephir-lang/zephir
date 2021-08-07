@@ -127,7 +127,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Project Dependencies for PHP
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Prepare Zephir Executable
         run: sudo ln -s "$(pwd)/zephir" /usr/local/bin/zephir

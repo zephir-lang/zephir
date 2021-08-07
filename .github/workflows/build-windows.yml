@@ -158,7 +158,7 @@ jobs:
           fi
 
       - name: Install Project Dependencies
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Initialize Release Variables
         run: |
