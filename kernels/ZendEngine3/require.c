@@ -45,7 +45,11 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 	}
 #endif
 
-    ret = php_stream_open_for_zend_ex(require_path, &file_handle, USE_PATH|STREAM_OPEN_FOR_INCLUDE);
+#if PHP_VERSION_ID >= 80100
+    ret = php_stream_open_for_zend_ex(&file_handle, USE_PATH|STREAM_OPEN_FOR_INCLUDE);
+#else
+	ret = php_stream_open_for_zend_ex(require_path, &file_handle, USE_PATH|STREAM_OPEN_FOR_INCLUDE);
+#endif
     if (ret != SUCCESS) {
         return FAILURE;
     }
