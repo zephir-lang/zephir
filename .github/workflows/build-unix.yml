@@ -63,7 +63,7 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
         env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMPOSER_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
