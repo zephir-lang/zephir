@@ -55,6 +55,7 @@ use Zephir\Operators\Other\NewInstanceOperator;
 use Zephir\Operators\Other\NewInstanceTypeOperator;
 use Zephir\Operators\Other\RangeExclusiveOperator;
 use Zephir\Operators\Other\RangeInclusiveOperator;
+use Zephir\Operators\Other\RequireOnceOperator;
 use Zephir\Operators\Other\RequireOperator;
 use Zephir\Operators\Other\ShortTernaryOperator;
 use Zephir\Operators\Other\TernaryOperator;
@@ -575,6 +576,10 @@ class Expression
                 $compilableExpression = new RequireOperator();
                 break;
 
+            case 'require_once':
+                $compilableExpression = new RequireOnceOperator();
+                break;
+
             case 'closure':
                 $compilableExpression = new Closure();
                 break;
@@ -591,9 +596,6 @@ class Expression
                 throw new CompilerException('Unknown expression: '.$type, $expression);
         }
 
-        if (!$compilableExpression) {
-            throw new CompilerException('Unknown expression passed as compilableExpression', $expression);
-        }
         $compilableExpression->setReadOnly($this->isReadOnly());
         $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);
 
