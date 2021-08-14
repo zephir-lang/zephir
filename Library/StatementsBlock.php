@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use Zephir\Operators\Other\RequireOnceOperator;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
@@ -21,6 +22,7 @@ use Zephir\Statements\ForStatement;
 use Zephir\Statements\IfStatement;
 use Zephir\Statements\LetStatement;
 use Zephir\Statements\LoopStatement;
+use Zephir\Statements\RequireOnceStatement;
 use Zephir\Statements\RequireStatement;
 use Zephir\Statements\ReturnStatement;
 use Zephir\Statements\SwitchStatement;
@@ -254,6 +256,11 @@ class StatementsBlock
                 case 'require':
                     $requireStatement = new RequireStatement($statement);
                     $requireStatement->compile($compilationContext);
+                    break;
+
+                case 'require_once':
+                    $requireOnceStatement = new RequireOnceStatement($statement);
+                    $requireOnceStatement->compile($compilationContext);
                     break;
 
                 case 'loop':

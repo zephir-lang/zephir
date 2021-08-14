@@ -227,6 +227,7 @@ class MutateGathererPass
             case 'empty':
             case 'instanceof':
             case 'require':
+            case 'require_once':
             case 'clone':
             case 'likely':
             case 'unlikely':
@@ -382,6 +383,7 @@ class MutateGathererPass
                 case 'scall':
                 case 'fcall':
                 case 'require':
+                case 'require_once':
                     $this->passCall($statement['expr']);
                     break;
 
