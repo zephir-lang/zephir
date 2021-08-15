@@ -59,7 +59,7 @@ class RequireOnceOperator extends BaseOperator
 
         $symbolVariable = false;
         if ($this->isExpecting()) {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
         }
 
         $compilationContext->headersManager->add('kernel/memory');
@@ -70,9 +70,9 @@ class RequireOnceOperator extends BaseOperator
         if ($symbolVariable) {
             $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
-            $codePrinter->output('if (zephir_require_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_once_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
         } else {
-            $codePrinter->output('if (zephir_require_zval('.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_once_zval('.$exprVar.') == FAILURE) {');
         }
         $codePrinter->output("\t".'RETURN_MM_NULL();');
         $codePrinter->output('}');

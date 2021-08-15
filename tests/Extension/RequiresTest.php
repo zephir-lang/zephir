@@ -81,7 +81,12 @@ final class RequiresTest extends TestCase
     {
         $this->assertSame(
             [1, 2, 3],
-            $this->test->requireOnce(__DIR__.'/../fixtures/require-me-1.php')
+            $this->test->requireOnce(__DIR__.'/../fixtures/require-me-before-once.php')
+        );
+
+        $this->assertSame(
+            true,
+            $this->test->requireOnce(__DIR__.'/../fixtures/require-me-before-once.php')
         );
 
         $this->assertFalse(defined('REQUIRE_ONCE_ME'));

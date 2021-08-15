@@ -98,7 +98,6 @@ int zephir_require_once_ret(zval *return_value_ptr, const char *require_path)
 	zend_file_handle file_handle;
 	zend_op_array *new_op_array;
 	zval dummy, local_retval;
-	zend_string *resolved_path;
 	int ret;
 
 	ZVAL_UNDEF(&local_retval);
@@ -111,18 +110,25 @@ int zephir_require_once_ret(zval *return_value_ptr, const char *require_path)
 	}
 #endif
 
-	resolved_path = zend_resolve_path(require_path, SL(require_path));
-	if (EXPECTED(resolved_path)) {
-		if (zend_hash_exists(&EG(included_files), resolved_path)) {
-			zend_string_release_ex(resolved_path, 0);
-			return SUCCESS;
-		}
-	}
-
     ret = php_stream_open_for_zend_ex(require_path, &file_handle, USE_PATH|STREAM_OPEN_FOR_INCLUDE);
     if (ret != SUCCESS) {
         return FAILURE;
     }
+
+	if (zend_hash_exists(&EG(included_files), file_handle.opened_path)) {
+		zend_destroy_file_handle(&file_handle);
+
+		if (return_value_ptr) {
+			ZVAL_TRUE(&local_retval);
+
+			zval_ptr_dtor(return_value_ptr);
+			ZVAL_COPY_VALUE(return_value_ptr, &local_retval);
+		} else {
+			zval_ptr_dtor(&local_retval);
+		}
+
+		return SUCCESS;
+	}
 
 	new_op_array = zend_compile_file(&file_handle, ZEND_INCLUDE);
 	if (new_op_array) {
