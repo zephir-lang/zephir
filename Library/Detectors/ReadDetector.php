@@ -9,9 +9,14 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Detectors;
 
 use Zephir\Variable;
+
+use function in_array;
+use function is_array;
 
 /**
  * ReadDetector.
@@ -23,52 +28,49 @@ use Zephir\Variable;
  */
 class ReadDetector
 {
-    public function detect($variable, array $expression)
+    // TODO: Move params from detect() to constructor()
+
+    /**
+     * @param string $variable
+     * @param array $expression
+     * @return bool
+     */
+    public function detect(string $variable, array $expression): bool
     {
         if (!isset($expression['type'])) {
             return false;
         }
 
-        /* Remove branch from variable name */
+        /**
+         * Remove branch from variable name
+         */
         $pos = strpos($variable, Variable::BRANCH_MAGIC);
         if ($pos > -1) {
             $variable = substr($variable, 0, $pos);
         }
 
-        if ('variable' == $expression['type']) {
-            if ($variable == $expression['value']) {
-                return true;
-            }
+        if ('variable' === $expression['type'] && $variable === $expression['value']) {
+            return true;
         }
 
-        if ('fcall' == $expression['type'] || 'mcall' == $expression['type'] || 'scall' == $expression['type']) {
-            if (isset($expression['parameters'])) {
-                foreach ($expression['parameters'] as $parameter) {
-                    if (\is_array($parameter['parameter'])) {
-                        if ('variable' == $parameter['parameter']['type']) {
-                            if ($variable == $parameter['parameter']['value']) {
-                                return true;
-                            }
+        if (in_array($expression['type'], ['fcall', 'mcall', 'scall']) && isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                if (is_array($parameter['parameter'])) {
+                    if ('variable' === $parameter['parameter']['type']) {
+                        if ($variable === $parameter['parameter']['value']) {
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        if (isset($expression['left'])) {
-            if (\is_array($expression['left'])) {
-                if (true === $this->detect($variable, $expression['left'])) {
-                    return true;
-                }
-            }
+        if (isset($expression['left']) && is_array($expression['left']) && $this->detect($variable, $expression['left'])) {
+            return true;
         }
 
-        if (isset($expression['right'])) {
-            if (\is_array($expression['right'])) {
-                if (true === $this->detect($variable, $expression['right'])) {
-                    return true;
-                }
-            }
+        if (isset($expression['right']) && is_array($expression['right']) && $this->detect($variable, $expression['right'])) {
+            return true;
         }
 
         return false;
