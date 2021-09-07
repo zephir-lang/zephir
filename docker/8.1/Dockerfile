@@ -1,4 +1,4 @@
-FROM composer:2.0.8 as composer
+FROM composer:latest as composer
 FROM php:8.1-rc-fpm
 
 RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
