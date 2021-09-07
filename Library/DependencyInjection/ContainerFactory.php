@@ -9,12 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\DependencyInjection;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class ContainerFactory
 {
-    private $environment = '$kernel-environment$';
-    private $debug = false;
+    private string $environment = '$kernel-environment$';
+    private bool $debug = false;
 
     public function __construct()
     {
@@ -32,17 +36,9 @@ final class ContainerFactory
         }
     }
 
-    public function createWithConfigs(array $configs)
+    public function create(array $configs = []): ContainerInterface
     {
         $kernel = new ZephirKernel($this->environment, $this->debug, $configs);
-        $kernel->boot();
-
-        return $kernel->getContainer();
-    }
-
-    public function create()
-    {
-        $kernel = new ZephirKernel($this->environment, $this->debug);
         $kernel->boot();
 
         return $kernel->getContainer();

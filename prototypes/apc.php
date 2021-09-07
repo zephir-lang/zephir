@@ -54,6 +54,7 @@ if (!class_exists('APCIterator', false)) {
         {
         }
 
+        #[ReturnTypeWillChange]
         public function current()
         {
         }

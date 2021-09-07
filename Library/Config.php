@@ -226,25 +226,26 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Gets a $key from the internal container.
      *
-     * @param mixed $key
+     * @param mixed $offset
      *
      * @return mixed|null
      */
-    public function offsetGet($key)
+    #[ReturnTypeWillChange]
+    public function offsetGet($offset)
     {
-        if (!\is_array($key)) {
-            return $this->offsetExists($key) ? $this->container[$key] : null;
+        if (!\is_array($offset)) {
+            return $this->offsetExists($offset) ? $this->container[$offset] : null;
         }
 
-        $namespace = key($key);
-        $key = current($key);
+        $namespace = key($offset);
+        $offset = current($offset);
 
         if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
             return null;
         }
 
-        if (isset($this->container[$namespace][$key]) || \array_key_exists($key, $this->container[$namespace])) {
-            return $this->container[$namespace][$key];
+        if (isset($this->container[$namespace][$offset]) || \array_key_exists($offset, $this->container[$namespace])) {
+            return $this->container[$namespace][$offset];
         }
 
         return null;
