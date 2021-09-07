@@ -30,7 +30,6 @@
         "ext-xml": "*",
         "ext-zlib": "*",
         "league/flysystem": "^2.0",
-        "ocramius/proxy-manager": "^2.10",
         "symfony/console": "^5.2",
         "symfony/framework-bundle": "^5.2",
         "symfony/monolog-bridge": "^5.2",
