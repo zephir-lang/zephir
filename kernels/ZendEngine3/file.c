@@ -66,7 +66,9 @@ int zephir_file_exists(zval *filename)
 	}
 
 #if PHP_VERSION_ID >= 80100
-	php_stat(Z_STRVAL_P(filename), FS_EXISTS, &return_value);
+	zend_string *file = zend_string_init(Z_STRVAL_P(filename), Z_STRLEN_P(filename), 0);
+	php_stat(file, FS_EXISTS, &return_value);
+	zval_ptr_dtor(file);
 #else
 	php_stat(Z_STRVAL_P(filename), (php_stat_len) Z_STRLEN_P(filename), FS_EXISTS, &return_value);
 #endif
