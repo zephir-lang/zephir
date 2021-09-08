@@ -295,7 +295,9 @@ void zephir_filemtime(zval *return_value, zval *path)
 {
 	if (EXPECTED(Z_TYPE_P(path) == IS_STRING)) {
 #if PHP_VERSION_ID >= 80100
-		php_stat(Z_STRVAL_P(path), FS_MTIME, return_value);
+		zend_string *file = zend_string_init(Z_STRVAL_P(path), Z_STRLEN_P(path), 0);
+		php_stat(file, FS_MTIME, &return_value);
+		zval_ptr_dtor(file);
 #else
 		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value);
 #endif
