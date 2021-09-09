@@ -92,7 +92,7 @@ function InstallZephirParser {
             Download and install Zephir parser PHP extension
     #>
 
-    $BaseUri = "https://github.com/zephir/php-zephir-parser/releases/download"
+    $BaseUri = "https://github.com/zephir-lang/php-zephir-parser/releases/download"
     $LocalPart = "zephir-parser-php-${env:PHP_MINOR}-${env:BUILD_TYPE}-win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
     $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}"
